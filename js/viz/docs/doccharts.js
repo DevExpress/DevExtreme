@@ -12,7 +12,7 @@ var dxChart = {
     * @publicName Options
     * @namespace DevExpress.viz.charts
     * @hidden
-    */    
+    */
     /**
     * @name dxchartoptions_seriestemplate
     * @publicName seriesTemplate
@@ -1563,7 +1563,21 @@ var dxChart = {
         * @type boolean
         * @default false
         */
-        inverted: false
+        inverted: false,
+        /**
+        * @name dxchartoptions_commonaxissettings_allowdecimals
+        * @publicName allowDecimals
+        * @type boolean
+        * @default undefined
+        */
+        allowDecimals: undefined,
+        /**
+        * @name dxchartoptions_commonaxissettings_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default undefined
+        */
+        endOnTick: undefined
     },
     /**
     * @name dxchartoptions_argumentaxis
@@ -1793,9 +1807,9 @@ var dxChart = {
         * @name dxchartoptions_argumentaxis_axisdivisionfactor
         * @publicName axisDivisionFactor
         * @type number
-        * @default 50
+        * @default 70
         */
-        axisDivisionFactor: 50,
+        axisDivisionFactor: 70,
         /**
         * @name dxchartoptions_argumentaxis_categories
         * @publicName categories
@@ -2091,9 +2105,9 @@ var dxChart = {
         * @name dxchartoptions_valueaxis_axisdivisionfactor
         * @publicName axisDivisionFactor
         * @type number
-        * @default 30
+        * @default 40
         */
-        axisDivisionFactor: 30,
+        axisDivisionFactor: 40,
         /**
         * @name dxchartoptions_valueaxis_categories
         * @publicName categories
@@ -2129,7 +2143,14 @@ var dxChart = {
         * @type string
         * @default undefined
         */
-        pane: undefined
+        pane: undefined,
+        /**
+        * @name dxchartoptions_valueaxis_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default true
+        */
+        endOnTick: true
     },
     /**
     * @name dxchartoptions_tooltip
@@ -2277,7 +2298,7 @@ var dxPieChart = {
     * @publicName Options
     * @namespace DevExpress.viz.charts
     * @hidden
-    */        
+    */
     /**
     * @name dxpiechartoptions_seriestemplate
     * @publicName seriesTemplate
@@ -2496,7 +2517,7 @@ var dxPolarChart = {
     * @publicName Options
     * @namespace DevExpress.viz.charts
     * @hidden
-    */   
+    */
     /**
     * @name dxpolarchartoptions_seriestemplate
     * @publicName seriesTemplate
@@ -3157,6 +3178,20 @@ var dxPolarChart = {
         * @default false
         */
         inverted: false,
+        /**
+        * @name dxpolarchartoptions_commonaxissettings_allowdecimals
+        * @publicName allowDecimals
+        * @type boolean
+        * @default undefined
+        */
+        allowDecimals: undefined,
+        /**
+        * @name dxpolarchartoptions_commonaxissettings_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default undefined
+        */
+        endOnTick: undefined
     },
     /**
     * @name dxpolarchartoptions_argumentaxis
@@ -3683,7 +3718,7 @@ var BaseChart = {
     * @publicName Options
     * @namespace DevExpress.viz.charts
     * @hidden
-    */   
+    */
     /**
     * @name basechartoptions_ondone
     * @publicName onDone

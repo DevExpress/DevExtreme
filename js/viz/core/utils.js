@@ -3,16 +3,13 @@
 var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
-    inArray = require("../../core/utils/array").inArray,
     each = require("../../core/utils/iterator").each,
-    _isDefined = typeUtils.isDefined,
-    _inArray = inArray,
-    _each = each,
+    isDefined = typeUtils.isDefined,
+    isNumber = typeUtils.isNumeric,
+    isExponential = typeUtils.isExponential,
     _math = Math,
     _round = _math.round,
-    _sqrt = Math.sqrt,
-
-    _extend = extend;
+    _sqrt = Math.sqrt;
 
 var PI = Math.PI,
     MAX_PIXEL_COUNT = 1E10,
@@ -29,31 +26,6 @@ var cosFunc = Math.cos,
     isNaN = window.isNaN,
     Number = window.Number,
     NaN = window.NaN;
-
-var isNumber = typeUtils.isNumeric,
-    isExponential = typeUtils.isExponential;
-
-var getPrecision = function(value) {
-    var stringFraction,
-        stringValue = value.toString(),
-        pointIndex = stringValue.indexOf('.'),
-        startIndex,
-        precision;
-    if(isExponential(value)) {
-        precision = getDecimalOrder(value);
-        if(precision < 0) {
-            return Math.abs(precision);
-        } else {
-            return 0;
-        }
-    }
-    if(pointIndex !== -1) {
-        startIndex = pointIndex + 1;
-        stringFraction = stringValue.substring(startIndex, startIndex + 20);
-        return stringFraction.length;
-    }
-    return 0;
-};
 
 var getLog = function(value, base) {
     if(!value) {
@@ -136,56 +108,6 @@ var getAppropriateFormat = function(start, end, count) {
     return null;
 };
 
-var getFraction = function(value) {
-    var valueString,
-        dotIndex;
-
-    if(isNumber(value)) {
-        valueString = value.toString();
-        dotIndex = valueString.indexOf('.');
-
-        if(dotIndex >= 0) {
-            if(isExponential(value)) {
-                return valueString.substr(dotIndex + 1, valueString.indexOf('e') - dotIndex - 1);
-            } else {
-                valueString = value.toFixed(20);
-                return valueString.substr(dotIndex + 1, valueString.length - dotIndex + 1);
-            }
-        }
-    }
-    return '';
-};
-
-var getSignificantDigitPosition = function(value) {
-    var fraction = getFraction(value),
-        i;
-
-    if(fraction) {
-        for(i = 0; i < fraction.length; i++) {
-            if(fraction.charAt(i) !== '0') {
-                return i + 1;
-            }
-        }
-    }
-    return 0;
-};
-
-var adjustValue = function(value) {
-    var fraction = getFraction(value),
-        nextValue,
-        i;
-
-    if(fraction) {
-        for(i = 1; i <= fraction.length; i++) {
-            nextValue = roundValue(value, i);
-            if(nextValue !== 0 && fraction[i - 2] && fraction[i - 1] && fraction[i - 2] === fraction[i - 1]) {
-                return nextValue;
-            }
-        }
-    }
-    return value;
-};
-
 var roundValue = function(value, precision) {
     if(precision > 20) {
         precision = 20;
@@ -197,13 +119,6 @@ var roundValue = function(value, precision) {
             return Number(value.toFixed(precision));
         }
     }
-};
-
-var applyPrecisionByMinDelta = function(min, delta, value) {
-    var minPrecision = getPrecision(min),
-        deltaPrecision = getPrecision(delta);
-
-    return roundValue(value, minPrecision < deltaPrecision ? deltaPrecision : minPrecision);
 };
 
 var getPower = function(value) {
@@ -234,7 +149,7 @@ function selectByKeys(object, keys) {
 
 function decreaseFields(object, keys, eachDecrease, decrease) {
     var dec = decrease;
-    _each(keys, function(_, key) {
+    each(keys, function(_, key) {
         if(object[key]) {
             object[key] -= eachDecrease;
             dec -= eachDecrease;
@@ -329,7 +244,7 @@ extend(exports, {
 
     patchFontOptions: function(options) {
         var fontOptions = {};
-        _each(options || {}, function(key, value) {
+        each(options || {}, function(key, value) {
             if(/^(cursor|opacity)$/i.test(key)) {
                 //TODO check other properties, add tests
             } else if(key === "color") {
@@ -346,7 +261,7 @@ extend(exports, {
         var shiftAngle = 90,
             cosSin;
 
-        angle = _isDefined(angle) ? angle + startAngle - shiftAngle : 0;
+        angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
         cosSin = getCosAndSin(angle);
 
         return { x: _round(centerCoords.x + radius * cosSin.cos), y: _round(centerCoords.y + radius * cosSin.sin) };
@@ -388,22 +303,21 @@ extend(exports, {
     },
 
     getCategoriesInfo: function(categories, startValue, endValue) {
-        if(!(categories && categories.length > 0)) {
-            return {};
+        if(categories.length === 0) {
+            return { categories: [] };
         }
-        startValue = _isDefined(startValue) ? startValue : categories[0];
-        endValue = _isDefined(endValue) ? endValue : categories[categories.length - 1];
+        startValue = isDefined(startValue) ? startValue : categories[0];
+        endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
 
         var categoriesValue = map(categories, function(category) {
-                return _isDefined(category) ? category.valueOf() : null;
+                return isDefined(category) ? category.valueOf() : null;
             }),
             visibleCategories,
-            indexStartValue = _isDefined(startValue) ? _inArray(startValue.valueOf(), categoriesValue) : 0,
-            indexEndValue = _isDefined(endValue) ? _inArray(endValue.valueOf(), categoriesValue) : categories.length - 1,
+            indexStartValue = categoriesValue.indexOf(startValue.valueOf()),
+            indexEndValue = categoriesValue.indexOf(endValue.valueOf()),
             swapBuf,
-            hasVisibleCategories,
             inverted = false,
-            visibleCategoriesLen;
+            lastIdx;
 
         indexStartValue < 0 && (indexStartValue = 0);
         indexEndValue < 0 && (indexEndValue = categories.length - 1);
@@ -415,12 +329,11 @@ extend(exports, {
         }
 
         visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
-        visibleCategoriesLen = visibleCategories.length;
-        hasVisibleCategories = visibleCategoriesLen > 0;
+        lastIdx = visibleCategories.length - 1;
         return {
-            categories: hasVisibleCategories ? visibleCategories : null,
-            start: hasVisibleCategories ? visibleCategories[inverted ? visibleCategoriesLen - 1 : 0] : null,
-            end: hasVisibleCategories ? visibleCategories[inverted ? 0 : visibleCategoriesLen - 1] : null,
+            categories: visibleCategories,
+            start: visibleCategories[inverted ? lastIdx : 0],
+            end: visibleCategories[inverted ? 0 : lastIdx],
             inverted: inverted
         };
     },
@@ -429,7 +342,7 @@ extend(exports, {
 
     updatePanesCanvases: function(panes, canvas, rotated) {
         var weightSum = 0;
-        _each(panes, function(_, pane) {
+        each(panes, function(_, pane) {
             pane.weight = pane.weight || 1;
             weightSum += pane.weight;
         });
@@ -439,10 +352,10 @@ extend(exports, {
             oneWeight = (paneSpace - padding * (panes.length - 1)) / weightSum,
             startName = rotated ? "left" : "top",
             endName = rotated ? "right" : "bottom";
-        _each(panes, function(_, pane) {
+        each(panes, function(_, pane) {
             var calcLength = _round(pane.weight * oneWeight);
             pane.canvas = pane.canvas || {};
-            _extend(pane.canvas, canvas);
+            extend(pane.canvas, canvas);
             pane.canvas[startName] = canvas[startName] + distributedSpace;
             pane.canvas[endName] = canvas[endName] + (paneSpace - calcLength - distributedSpace);
 
@@ -477,8 +390,6 @@ extend(exports, {
     }
 });
 
-exports.getPrecision = getPrecision;
-
 exports.getLog = getLog;
 exports.raiseTo = raiseTo;
 
@@ -490,12 +401,7 @@ exports.getDecimalOrder = getDecimalOrder;
 exports.getAppropriateFormat = getAppropriateFormat;
 exports.getDistance = getDistance;
 
-exports.getFraction = getFraction;
-exports.adjustValue = adjustValue;
-
 exports.roundValue = roundValue;
-exports.applyPrecisionByMinDelta = applyPrecisionByMinDelta;
-exports.getSignificantDigitPosition = getSignificantDigitPosition;
 exports.getPower = getPower;
 
 exports.rotateBBox = rotateBBox;

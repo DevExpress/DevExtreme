@@ -578,14 +578,6 @@ var dxChart = AdvancedChart.inherit({
         return this._legend && this._legend.getPosition() === "inside";
     },
 
-    _renderAxes: function(drawOptions, panesBorderOptions, rotated) {
-        if(drawOptions && drawOptions.recreateCanvas) {
-            vizUtils.updatePanesCanvases(this.panes, this._canvas, rotated);
-        }
-
-        this._drawAxes(drawOptions, panesBorderOptions);
-    },
-
     _isRotated: function() {
         return this._themeManager.getOptions("rotated");
     },
@@ -645,13 +637,7 @@ var dxChart = AdvancedChart.inherit({
         vizUtils.updatePanesCanvases(this.panes, this._canvas, this._isRotated());
     },
 
-    _restoreOriginalBusinessRange: function() {
-        this._argumentAxes.concat(this._valueAxes).forEach(function(axis) {
-            axis.restoreBusinessRange();
-        });
-    },
-
-    _prepareAxesAndDraw: function(drawOptions, panesBorderOptions) {
+    _renderAxes: function(drawOptions, panesBorderOptions) {
         var that = this,
             rotated = that._isRotated(),
             synchronizeMultiAxes = that._themeManager.getOptions("synchronizeMultiAxes"),
@@ -659,6 +645,8 @@ var dxChart = AdvancedChart.inherit({
             verticalAxes = rotated ? extendedArgAxes : that._valueAxes,
             horizontalAxes = rotated ? that._valueAxes : extendedArgAxes,
             allAxes = verticalAxes.concat(horizontalAxes);
+
+        that._updatePanesCanvases(drawOptions);
 
         var panesCanvases = that.panes.reduce(function(canvases, pane) {
             canvases[pane.name] = _extend({}, pane.canvas);

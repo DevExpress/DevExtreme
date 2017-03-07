@@ -288,6 +288,22 @@ var TestPointerElement = TestElement.inherit({
         assert.deepEqual(scale.shift.getCall(0).args, [{ left: 0, top: -294 }], "shift scale");
         assert.equal(scale.draw.callCount, 2, "draw scale");
         assert.equal(scale.measureLabels.callCount, 2, "measure labels of scale");
+        assert.deepEqual(scale.measureLabels.getCall(0).args[0], {
+            bottom: 0,
+            height: 600,
+            left: 0,
+            right: 0,
+            top: 0,
+            width: 800
+        });
+        assert.deepEqual(scale.measureLabels.getCall(1).args[0], {
+            bottom: 0,
+            height: 600,
+            left: 0,
+            right: 0,
+            top: 0,
+            width: 800
+        });
         assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 0,
             height: 600,
@@ -486,6 +502,22 @@ var TestPointerElement = TestElement.inherit({
         assert.deepEqual(scale.shift.getCall(0).args, [{ left: -401, top: 0 }], "shift scale");
         assert.equal(scale.draw.callCount, 2, "draw scale");
         assert.equal(scale.measureLabels.callCount, 2, "measure labels of scale");
+        assert.deepEqual(scale.measureLabels.getCall(0).args[0], {
+            bottom: 0,
+            height: 600,
+            left: 0,
+            right: 0,
+            top: 0,
+            width: 800
+        });
+        assert.deepEqual(scale.measureLabels.getCall(1).args[0], {
+            bottom: 0,
+            height: 600,
+            left: 0,
+            right: 0,
+            top: 0,
+            width: 800
+        });
         assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 17,
             height: 600,

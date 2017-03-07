@@ -11,7 +11,7 @@ var baseGauge = {
     * @publicName Options
     * @namespace DevExpress.viz.gauges
     * @hidden
-    */           
+    */
     /**
     * @name basegaugeoptions_containerBackgroundColor
     * @publicName containerBackgroundColor
@@ -496,7 +496,14 @@ var baseGauge = {
                 */
                 opacity: 1
             }
-        }
+        },
+        /**
+        * @name basegaugeoptions_scale_allowdecimals
+        * @publicName allowDecimals
+        * @type boolean
+        * @default undefined
+        */
+        allowDecimals: undefined
     },
     /**
     * @name basegaugeoptions_rangeContainer
@@ -650,7 +657,7 @@ var dxCircularGauge = {
     * @publicName Options
     * @namespace DevExpress.viz.gauges
     * @hidden
-    */    
+    */
     /**
     * @name dxcirculargaugeoptions_geometry
     * @publicName geometry
@@ -794,7 +801,7 @@ var dxLinearGauge = {
     * @publicName Options
     * @namespace DevExpress.viz.gauges
     * @hidden
-    */        
+    */
     /**
     * @name dxlineargaugeoptions_geometry
     * @publicName geometry
@@ -955,7 +962,7 @@ var dxBarGauge = {
     * @publicName Options
     * @namespace DevExpress.viz.gauges
     * @hidden
-    */      
+    */
     /**
     * @name dxbargaugeoptions_animation
     * @publicName animation

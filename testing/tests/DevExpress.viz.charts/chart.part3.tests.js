@@ -95,6 +95,9 @@ QUnit.test("Create Horizontal Category Axis, Vertical Continuous axis", function
     assert.equal(this.themeManager.getOptions.withArgs("argumentAxis").lastCall.args[2], false);
     assert.equal(this.themeManager.getOptions.withArgs("valueAxis").callCount, 1);
     assert.equal(this.themeManager.getOptions.withArgs("valueAxis").lastCall.args[2], false);
+
+    assert.equal(chart._argumentAxes[0].isArgumentAxis, true);
+    assert.equal(chart._valueAxes[0].isArgumentAxis, false);
 });
 
 //B254993

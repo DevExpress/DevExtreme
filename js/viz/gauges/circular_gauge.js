@@ -62,7 +62,7 @@ var dxCircularGauge = dxGauge.inherit({
     _updateScaleTickIndent: function(scaleOptions) {
         var indentFromTick = scaleOptions.label.indentFromTick,
             length = scaleOptions.tick.length,
-            textParams = this._scale.measureLabels(),
+            textParams = this._scale.measureLabels(extend({}, this._canvas)),
             tickCorrection = length;
 
         if(scaleOptions.orientation === "inside") {

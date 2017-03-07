@@ -109,12 +109,13 @@ _Translator2d.prototype = {
     reinit: function() {
         //TODO: parseInt canvas
         var that = this,
+            options = that._options,
             range = that._businessRange,
             categories = range.categories || [],
             script = {},
             canvasOptions = that._prepareCanvasOptions(),
             visibleCategories = vizUtils.getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories,
-            categoriesLength = (visibleCategories || categories).length;
+            categoriesLength = visibleCategories.length;
 
         switch(range.axisType) {
             case "logarithmic":
@@ -122,14 +123,14 @@ _Translator2d.prototype = {
                 break;
             case "semidiscrete":
                 script = intervalTranslator;
-                canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (addInterval(canvasOptions.rangeMaxVisible, that._options.interval) - canvasOptions.rangeMinVisible);
+                canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
                 break;
             case "discrete":
                 script = categoryTranslator;
                 that._categories = categories;
-                canvasOptions.interval = that._getDiscreteInterval(range.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
+                canvasOptions.interval = that._getDiscreteInterval(options.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
                 that._categoriesToPoints = makeCategoriesToPoints(categories, canvasOptions.invert);
-                if(visibleCategories && categoriesLength) {
+                if(categoriesLength) {
                     canvasOptions.startPointIndex = that._categoriesToPoints[visibleCategories[0].valueOf()];
                     that.visibleCategories = visibleCategories;
                 }
@@ -143,13 +144,13 @@ _Translator2d.prototype = {
         }
 
         extend(that, script);
-        that._conversionValue = that._options.conversionValue ? function(value) { return value; } : function(value) { return Math.round(value); };
+        that._conversionValue = options.conversionValue ? function(value) { return value; } : function(value) { return Math.round(value); };
 
         that._calculateSpecialValues();
     },
 
     _getDiscreteInterval: function(categoriesLength, canvasOptions) {
-        var correctedCategoriesCount = categoriesLength - (this._businessRange.stick ? 1 : 0);
+        var correctedCategoriesCount = categoriesLength - (this._options.stick ? 1 : 0);
         return correctedCategoriesCount > 0 ? canvasOptions.canvasLength / correctedCategoriesCount : canvasOptions.canvasLength;
     },
 
@@ -259,9 +260,7 @@ _Translator2d.prototype = {
         var canvasOptions = this._canvasOptions;
         return canvasOptions.invert ? canvasOptions.rangeMaxVisible.valueOf() - distance : canvasOptions.rangeMinVisible.valueOf() + distance;
     },
-    getVisibleCategories: function() {
-        return this.visibleCategories;
-    },
+
     getMinBarSize: function(minBarSize) {
         var visibleArea = this.getCanvasVisibleArea(),
             minValue = this.untranslate(visibleArea.min + minBarSize);

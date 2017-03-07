@@ -140,7 +140,7 @@ QUnit.module("selectedRange", function(hook) {
         assert.deepEqual(this.rangeSelector.getSelectedRange(), { startValue: new Date(2), endValue: new Date(5) });
     });
 
-    QUnit.test("parse custom selected range valueType='datetime', one value specified", function(assert) {
+    QUnit.test("parse custom selected range valueType='numeric', one value specified", function(assert) {
         this.rangeSelector.option({
             dataSource: this.dataSource,
             scale: {

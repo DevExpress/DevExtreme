@@ -376,6 +376,12 @@ var dxSparkline = BaseSparkline.inherit({
         return { minIndex: minIndex, maxIndex: maxIndex };
     },
 
+    _getStick: function() {
+        return {
+            stick: this._series.type !== "bar"
+        };
+    },
+
     _updateRange: function() {
         var that = this,
             series = that._series,
@@ -429,8 +435,6 @@ var dxSparkline = BaseSparkline.inherit({
                 argCoef = (rangeData.arg.max - rangeData.arg.min) * DEFAULT_ARGUMENT_RANGE_MARGIN;
                 rangeData.arg.min = rangeData.arg.min - argCoef;
                 rangeData.arg.max = rangeData.arg.max + argCoef;
-            } else {
-                rangeData.arg.stick = true;
             }
         }
 

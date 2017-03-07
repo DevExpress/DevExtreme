@@ -184,6 +184,16 @@ QUnit.module('utils graphic', {
     }
 });
 
+QUnit.test('getCategoriesInfo. Empty categories', function(assert) {
+    //arrange,act
+    var info = utils.getCategoriesInfo([]);
+
+    //assert
+    assert.deepEqual(info, {
+        categories: []
+    });
+});
+
 QUnit.test('getCategoriesInfo (no inverted)', function(assert) {
     //arrange,act
     var info = utils.getCategoriesInfo(this.categories, 'a3', 'a5');

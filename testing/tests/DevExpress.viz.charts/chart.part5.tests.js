@@ -598,7 +598,7 @@ QUnit.module("Pane synchronization", commons.environment);
 QUnit.test("simple chart with two panes", function(assert) {
     //arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } }),
-        stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5, stick: true } } });
+        stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
@@ -636,7 +636,7 @@ QUnit.test("simple chart with two panes", function(assert) {
 QUnit.test("Rotated chart with two panes", function(assert) {
     //arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 } } }),
-        stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5, stick: true } } });
+        stubSeries2 = new MockSeries({ range: { arg: { min: 1, max: 5 } } });
 
     seriesMockData.series.push(stubSeries1);
     seriesMockData.series.push(stubSeries2);
@@ -985,7 +985,7 @@ QUnit.test("chart with visible scrollBar", function(assert) {
     assert.ok(scrollBar, "scroll bar");
 
     assert.ok(scrollBar.init.calledOnce);
-    assert.deepEqual(scrollBar.init.lastCall.args, [range]);
+    assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
 
     assert.ok(scrollBar.setPane.calledOnce);
     assert.equal(scrollBar.setPane.lastCall.args[0], chart._getLayoutTargets());
@@ -1017,7 +1017,7 @@ QUnit.test("chart with visible scrollBar. Rotated", function(assert) {
     assert.ok(scrollBar);
 
     assert.ok(scrollBar.init.calledOnce);
-    assert.deepEqual(scrollBar.init.lastCall.args, [range]);
+    assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
 
     assert.ok(scrollBar.setPane.calledOnce);
     assert.equal(scrollBar.setPane.lastCall.args[0], chart._getLayoutTargets());
@@ -1025,6 +1025,19 @@ QUnit.test("chart with visible scrollBar. Rotated", function(assert) {
     assert.ok(scrollBar.setPosition.calledOnce);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [range.minVisible, range.maxVisible]);
     assert.ok(scrollBar.updateSize.calledOnce);
+});
+
+QUnit.test("chart with visible scrollBar, argumentAxis.valueMarginsEnabled = true - init scrollBar with stick false", function(assert) {
+    this.createChart({
+        scrollBar: {
+            visible: true
+        },
+        argumentAxis: {
+            valueMarginsEnabled: true
+        }
+    });
+
+    assert.strictEqual(scrollBarClassModule.ScrollBar.lastCall.returnValue.init.lastCall.args[1], false);
 });
 
 QUnit.test("T175767. Argument axis has min/max", function(assert) {
@@ -1151,7 +1164,7 @@ QUnit.test("ScrollBar option changed", function(assert) {
     }]);
 
     assert.ok(scrollBar.init.calledOnce);
-    assert.deepEqual(scrollBar.init.lastCall.args, [range]);
+    assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
 
     assert.ok(scrollBar.setPosition.calledOnce);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [range.minVisible, range.maxVisible]);
@@ -1224,7 +1237,7 @@ QUnit.test("Options changed - show scrollBar", function(assert) {
     range = chart._argumentAxes[0].getTranslator().getBusinessRange();
 
     assert.ok(scrollBar.init.calledOnce);
-    assert.deepEqual(scrollBar.init.lastCall.args, [range]);
+    assert.deepEqual(scrollBar.init.lastCall.args, [range, true]);
 
     assert.ok(scrollBar.setPosition.calledOnce);
     assert.deepEqual(scrollBar.setPosition.lastCall.args, [range.minVisible, range.maxVisible]);

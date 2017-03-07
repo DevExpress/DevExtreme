@@ -1,6 +1,7 @@
 "use strict";
 
 var typeUtils = require("./type"),
+    adjust = require("./math").adjust,
     each = require("./iterator").each,
     camelize = require("./inflector").camelize,
 
@@ -68,6 +69,13 @@ var getNextDateUnit = function(unit, withWeeks) {
         default:
             return 0;
     }
+};
+
+var getPrevDateUnit = function(unit, withWeeks) {
+    var interval = getDateUnitInterval(unit),
+        idx = dateUnitIntervals.indexOf(interval);
+
+    return idx > 0 ? dateUnitIntervals[idx - 1] : interval;
 };
 
 var convertMillisecondsToDateUnits = function(value) {
@@ -263,7 +271,7 @@ function addDateInterval(value, interval, dir) {
 
 var addInterval = function(value, interval, isNegative) {
     var dir = isNegative ? -1 : +1;
-    return isDate(value) ? addDateInterval(value, interval, dir) : value + interval * dir;
+    return isDate(value) ? addDateInterval(value, interval, dir) : adjust(value + interval * dir, interval);
 };
 
 var getSequenceByInterval = function(min, max, interval) {
@@ -576,6 +584,7 @@ var dateUtils = {
     convertMillisecondsToDateUnits: convertMillisecondsToDateUnits,
     dateToMilliseconds: dateToMilliseconds,
     getNextDateUnit: getNextDateUnit,
+    getPrevDateUnit: getPrevDateUnit,
     convertDateUnitToMilliseconds: convertDateUnitToMilliseconds,
     getDateUnitInterval: getDateUnitInterval,
     getDateFormatByTickInterval: getDateFormatByTickInterval,   // T375972

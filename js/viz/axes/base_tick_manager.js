@@ -14,7 +14,6 @@ var TickManager,
     _isNumber = typeUtils.isNumeric,
     _addInterval = dateUtils.addInterval,
     utils = require("../core/utils"),
-    _adjustValue = utils.adjustValue,
     _map = utils.map,
 
     _each = each,
@@ -26,6 +25,72 @@ var TickManager,
     DEFAULT_NUMBER_MULTIPLIERS = [1, 2, 3, 5],
     TICKS_COUNT_LIMIT = 2000,
     MIN_ARRANGEMENT_TICKS_COUNT = 2;
+
+
+function getPrecision(value) {
+    var stringFraction,
+        stringValue = value.toString(),
+        pointIndex = stringValue.indexOf('.'),
+        startIndex,
+        precision;
+    if(stringValue.indexOf("e") !== -1) {
+        precision = utils.getDecimalOrder(value);
+        if(precision < 0) {
+            return Math.abs(precision);
+        } else {
+            return 0;
+        }
+    }
+    if(pointIndex !== -1) {
+        startIndex = pointIndex + 1;
+        stringFraction = stringValue.substring(startIndex, startIndex + 20);
+        return stringFraction.length;
+    }
+    return 0;
+}
+
+function applyPrecisionByMinDelta(min, delta, value) {
+    var minPrecision = getPrecision(min),
+        deltaPrecision = getPrecision(delta);
+
+    return utils.roundValue(value, minPrecision < deltaPrecision ? deltaPrecision : minPrecision);
+}
+
+var getFraction = function(value) {
+    var valueString,
+        dotIndex;
+
+    if(typeUtils.isNumeric(value)) {
+        valueString = value.toString();
+        dotIndex = valueString.indexOf('.');
+
+        if(dotIndex >= 0) {
+            if(typeUtils.isExponential(value)) {
+                return valueString.substr(dotIndex + 1, valueString.indexOf('e') - dotIndex - 1);
+            } else {
+                valueString = value.toFixed(20);
+                return valueString.substr(dotIndex + 1, valueString.length - dotIndex + 1);
+            }
+        }
+    }
+    return '';
+};
+
+var adjustValue = function(value) {
+    var fraction = getFraction(value),
+        nextValue,
+        i;
+
+    if(fraction) {
+        for(i = 1; i <= fraction.length; i++) {
+            nextValue = utils.roundValue(value, i);
+            if(nextValue !== 0 && fraction[i - 2] && fraction[i - 1] && fraction[i - 2] === fraction[i - 1]) {
+                return nextValue;
+            }
+        }
+    }
+    return value;
+};
 
 function getUniqueValues(array) {
     var lastValue = array[0],
@@ -418,7 +483,7 @@ TickManager.prototype = {
     },
 
     _adjustNumericTickValue: function(value, interval, min) {
-        return typeUtils.isExponential(value) ? _adjustValue(value) : utils.applyPrecisionByMinDelta(min, interval, value);
+        return typeUtils.isExponential(value) ? adjustValue(value) : applyPrecisionByMinDelta(min, interval, value);
     },
 
     _isTickIntervalCorrect: function(tickInterval, tickCountLimit, businessDelta) {

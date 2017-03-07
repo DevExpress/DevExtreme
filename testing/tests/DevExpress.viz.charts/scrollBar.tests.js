@@ -21,7 +21,6 @@ var canvas = {
         maxVisible: 90,
         categories: [],
         visibleCategories: [],
-        stick: false,
         inverted: true
     },
     environment = {
@@ -79,7 +78,7 @@ QUnit.test("init scrollBar", function(assert) {
         scrollBar = new ScrollBar(this.renderer, group);
     scrollBar.update(this.options).updateSize(canvas);
     //act
-    scrollBar.init(range);
+    scrollBar.init(range, false);
     //Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
     var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
@@ -93,12 +92,12 @@ QUnit.test("init scrollBar", function(assert) {
         maxVisible: null,
         min: 10,
         minVisible: null,
-        visibleCategories: null,
-        stick: false
+        visibleCategories: null
     },
         canvas,
     {
-        isHorizontal: true
+        isHorizontal: true,
+        stick: false
     }]
     );
 });
@@ -109,7 +108,7 @@ QUnit.test("init scrollBar. Rotated", function(assert) {
     this.options.rotated = true;
     scrollBar.update(this.options).updateSize(canvas);
     //act
-    scrollBar.init(range);
+    scrollBar.init(range, false);
     //Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
     var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
@@ -123,12 +122,12 @@ QUnit.test("init scrollBar. Rotated", function(assert) {
         maxVisible: null,
         min: 10,
         minVisible: null,
-        visibleCategories: null,
-        stick: false
+        visibleCategories: null
     },
         canvas,
     {
-        isHorizontal: false
+        isHorizontal: false,
+        stick: false
     }]
     );
 });
@@ -204,9 +203,8 @@ QUnit.test("setPosition by arguments. Both arguments in range", function(assert)
 QUnit.test("setPosition by arguments. Discrete axis. stick false", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
-            axisType: "discrete",
-            stick: false
-        }), canvas),
+            axisType: "discrete"
+        }), false),
         scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
@@ -236,9 +234,8 @@ QUnit.test("setPosition by arguments. Discrete axis. stick false", function(asse
 QUnit.test("setPosition by arguments. Discrete axis. stick true", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
-            axisType: "discrete",
-            stick: true
-        }), canvas),
+            axisType: "discrete"
+        }), true),
         scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
@@ -267,9 +264,7 @@ QUnit.test("setPosition by arguments. Discrete axis. stick true", function(asser
 
 QUnit.test("setPosition by arguments. Stick false", function(assert) {
     var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
-            stick: false
-        }), canvas),
+        scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range), false),
         scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();
@@ -298,9 +293,7 @@ QUnit.test("setPosition by arguments. Stick false", function(assert) {
 
 QUnit.test("setPosition by arguments.Stick true", function(assert) {
     var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range, {
-            stick: true
-        }), canvas),
+        scrollBar = new ScrollBar(this.renderer, group).update(this.options).init($.extend({}, range), true),
         scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
 
     scrollTranslator.translate = sinon.stub();

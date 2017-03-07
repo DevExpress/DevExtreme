@@ -6,7 +6,6 @@ var vizUtils = require("../core/utils"),
     typeUtils = require("../../core/utils/type"),
     _isDefined = typeUtils.isDefined,
     _addInterval = dateUtils.addInterval,
-    _adjustValue = vizUtils.adjustValue,
     tickManagerContinuous = require("./numeric_tick_manager").continuous,
     _getLog = vizUtils.getLog,
     _raiseTo = vizUtils.raiseTo,
@@ -17,18 +16,54 @@ var vizUtils = require("../core/utils"),
     _floor = _math.floor,
     _round = _math.round;
 
+var getFraction = function(value) {
+    var valueString,
+        dotIndex;
+
+    if(typeUtils.isNumeric(value)) {
+        valueString = value.toString();
+        dotIndex = valueString.indexOf('.');
+
+        if(dotIndex >= 0) {
+            if(typeUtils.isExponential(value)) {
+                return valueString.substr(dotIndex + 1, valueString.indexOf('e') - dotIndex - 1);
+            } else {
+                valueString = value.toFixed(20);
+                return valueString.substr(dotIndex + 1, valueString.length - dotIndex + 1);
+            }
+        }
+    }
+    return '';
+};
+
+var adjustValue = function(value) {
+    var fraction = getFraction(value),
+        nextValue,
+        i;
+
+    if(fraction) {
+        for(i = 1; i <= fraction.length; i++) {
+            nextValue = vizUtils.roundValue(value, i);
+            if(nextValue !== 0 && fraction[i - 2] && fraction[i - 1] && fraction[i - 2] === fraction[i - 1]) {
+                return nextValue;
+            }
+        }
+    }
+    return value;
+};
+
 exports.logarithmic = extend({}, tickManagerContinuous, {
 
     _correctMax: function() {
         var base = this._options.base;
 
-        this._max = _adjustValue(_raiseTo(_ceil(_adjustValue(_getLog(this._max, base))), base));
+        this._max = adjustValue(_raiseTo(_ceil(adjustValue(_getLog(this._max, base))), base));
     },
 
     _correctMin: function() {
         var base = this._options.base;
 
-        this._min = _adjustValue(_raiseTo(_floor(_adjustValue(_getLog(this._min, base))), base));
+        this._min = adjustValue(_raiseTo(_floor(adjustValue(_getLog(this._min, base))), base));
     },
 
     _findBusinessDelta: function(min, max, isTickIntervalWithPow) {
@@ -48,7 +83,7 @@ exports.logarithmic = extend({}, tickManagerContinuous, {
     },
 
     _findTickIntervalForCustomTicks: function() {
-        return _adjustValue(_getLog(this._customTicks[1] / this._customTicks[0], this._options.base));
+        return adjustValue(_getLog(this._customTicks[1] / this._customTicks[0], this._options.base));
     },
 
     _getInterval: function(deltaCoef) {
@@ -71,7 +106,7 @@ exports.logarithmic = extend({}, tickManagerContinuous, {
             }
         }
 
-        return _adjustValue(result);
+        return adjustValue(result);
     },
 
 
@@ -98,7 +133,7 @@ exports.logarithmic = extend({}, tickManagerContinuous, {
             nextTickValue = value + tickInterval;
         } else {
             pow = _addInterval(_getLog(value, that._options.base), tickInterval, that._min > that._max);
-            nextTickValue = _adjustValue((_raiseTo(pow, that._options.base)));
+            nextTickValue = adjustValue((_raiseTo(pow, that._options.base)));
         }
 
         return nextTickValue;

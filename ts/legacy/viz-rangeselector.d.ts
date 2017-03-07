@@ -273,6 +273,12 @@ declare module DevExpress.viz.rangeSelector {
 
             /** @docid dxrangeselectoroptions_scale_categories */
             categories?: Array<any>;
+
+            /** @docid dxrangeselectoroptions_scale_allowdecimals */
+            allowDecimals?: Boolean;
+
+            /** @docid dxrangeselectoroptions_scale_endontick */
+            endOnTick?: Boolean;
         };
 
         /** @docid dxrangeselectoroptions_selectedrange */

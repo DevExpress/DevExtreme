@@ -11,7 +11,7 @@ var dxRangeSelector = {
     * @publicName Options
     * @namespace DevExpress.viz.rangeSelector
     * @hidden
-    */      
+    */
     /**
     * @name dxrangeselectoroptions_scale
     * @publicName scale
@@ -416,7 +416,21 @@ var dxRangeSelector = {
         * @publicName categories
         * @type Array<number,string,Date>
         */
-        categories: []
+        categories: [],
+        /**
+        * @name dxrangeselectoroptions_scale_allowdecimals
+        * @publicName allowDecimals
+        * @type boolean
+        * @default undefined
+        */
+        allowDecimals: undefined,
+        /**
+        * @name dxrangeselectoroptions_scale_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default undefined
+        */
+        endOnTick: undefined
     },
     /**
     * @name dxrangeselectoroptions_slidermarker

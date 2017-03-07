@@ -2,8 +2,8 @@
 
 var vizUtils = require("../core/utils"),
     _noop = require("../../core/utils/common").noop,
-    _isDefined = require("../../core/utils/type").isDefined,
-    _adjustValue = vizUtils.adjustValue,
+    typeUtils = require("../../core/utils/type"),
+    _isDefined = typeUtils.isDefined,
 
     _math = Math,
     _abs = _math.abs,
@@ -12,6 +12,42 @@ var vizUtils = require("../core/utils"),
 
     MINOR_TICKS_COUNT_LIMIT = 200,
     DEFAULT_MINOR_NUMBER_MULTIPLIERS = [2, 4, 5, 8, 10];
+
+var getFraction = function(value) {
+    var valueString,
+        dotIndex;
+
+    if(typeUtils.isNumeric(value)) {
+        valueString = value.toString();
+        dotIndex = valueString.indexOf('.');
+
+        if(dotIndex >= 0) {
+            if(typeUtils.isExponential(value)) {
+                return valueString.substr(dotIndex + 1, valueString.indexOf('e') - dotIndex - 1);
+            } else {
+                valueString = value.toFixed(20);
+                return valueString.substr(dotIndex + 1, valueString.length - dotIndex + 1);
+            }
+        }
+    }
+    return '';
+};
+
+var adjustValue = function(value) {
+    var fraction = getFraction(value),
+        nextValue,
+        i;
+
+    if(fraction) {
+        for(i = 1; i <= fraction.length; i++) {
+            nextValue = vizUtils.roundValue(value, i);
+            if(nextValue !== 0 && fraction[i - 2] && fraction[i - 1] && fraction[i - 2] === fraction[i - 1]) {
+                return nextValue;
+            }
+        }
+    }
+    return value;
+};
 
 exports.continuous = {
     _hasUnitBeginningTickCorrection: _noop,
@@ -25,7 +61,7 @@ exports.continuous = {
     },
 
     _findBusinessDelta: function(min, max) {
-        return _adjustValue(_abs(min - max));
+        return adjustValue(_abs(min - max));
     },
 
     _findTickIntervalForCustomTicks: function() {
@@ -72,7 +108,7 @@ exports.continuous = {
             }
         }
 
-        return _adjustValue(result);
+        return adjustValue(result);
     },
 
     _getDefaultMinorInterval: function(screenDelta, businessDelta) {
@@ -84,7 +120,7 @@ exports.continuous = {
         for(i; i >= 0; i--) {
             result = businessDelta / multipliers[i];
             if(deltaCoef <= result) {
-                return _adjustValue(result);
+                return adjustValue(result);
             }
         }
 

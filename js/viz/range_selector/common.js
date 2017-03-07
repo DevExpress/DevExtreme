@@ -1,6 +1,6 @@
 "use strict";
 
-var _format = require("../core/format"),
+var _format = require("../axes/smart_formatter").smartFormatter,
     isFunction = require("../../core/utils/type").isFunction,
     HEIGHT_COMPACT_MODE = 24,
     POINTER_SIZE = 4,
@@ -19,10 +19,16 @@ var consts = {
     pointerSize: POINTER_SIZE
 };
 
-var formatValue = function(value, formatOptions) {
+var formatValue = function(value, formatOptions, tickIntervalsInfo, valueType, type) {
     var formatObject = {
         value: value,
-        valueText: _format(value, formatOptions)
+        valueText: _format(value, {
+            labelOptions: formatOptions,
+            ticks: tickIntervalsInfo ? tickIntervalsInfo.ticks : [],
+            tickInterval: tickIntervalsInfo ? tickIntervalsInfo.tickInterval : undefined,
+            dataType: valueType,
+            type: type
+        })
     };
     return String(isFunction(formatOptions.customizeText) ? formatOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText);
 };

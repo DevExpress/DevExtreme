@@ -11,7 +11,7 @@ module.exports = {
             stickDelta,
             specialValue = that.translateSpecialCase(category),
             startPointIndex = canvasOptions.startPointIndex || 0,
-            stickInterval = that._businessRange.stick ? 0 : 0.5;
+            stickInterval = that._options.stick ? 0 : 0.5;
 
         if(isDefined(specialValue)) {
             return specialValue;
@@ -34,7 +34,7 @@ module.exports = {
             categories = that.visibleCategories || that._categories,
             categoriesLength = categories.length,
             result = 0,
-            stickInterval = that._businessRange.stick ? 0.5 : 0;
+            stickInterval = that._options.stick ? 0.5 : 0;
 
         if(!enableOutOfCanvas && (pos < startPoint || pos > canvasOptions.endPoint)) {
             return null;
@@ -65,7 +65,7 @@ module.exports = {
     zoom: function(translate, scale) {
         var that = this,
             canvasOptions = that._canvasOptions,
-            stick = that._businessRange.stick,
+            stick = that._options.stick,
             invert = canvasOptions.invert,
             interval = canvasOptions.interval * scale,
             translateCategories = translate / interval,
@@ -122,7 +122,7 @@ module.exports = {
         var that = this,
             canvasOptions = that._canvasOptions,
             visibleArea = that.getCanvasVisibleArea(),
-            stickOffset = !that._businessRange.stick && 1,
+            stickOffset = !that._options.stick && 1,
             minPoint = isDefined(min) ? that.translate(min, -stickOffset) : null,
             maxPoint = isDefined(max) ? that.translate(max, +stickOffset) : null;
 
@@ -147,21 +147,18 @@ module.exports = {
 
     to: function(value, direction) {
         var canvasOptions = this._canvasOptions,
-            businessRange = this._businessRange,
             categoryIndex = this._categoriesToPoints[value.valueOf()],
             startPointIndex = canvasOptions.startPointIndex || 0,
-            stickInterval = businessRange.stick ? 0 : 0.5,
-            stickDelta = categoryIndex + stickInterval - startPointIndex + (businessRange.invert ? -1 : +1) * direction * 0.5;
+            stickDelta = categoryIndex + (this._options.stick ? 0 : 0.5) - startPointIndex + (this._businessRange.invert ? -1 : +1) * direction * 0.5;
         return round(this._calculateProjection(canvasOptions.interval * stickDelta));
     },
 
     from: function(position, direction) {
         var canvasOptions = this._canvasOptions,
-            businessRange = this._businessRange,
             startPoint = canvasOptions.startPoint,
             categories = this._categories,
             categoriesLength = categories.length,
-            stickInterval = businessRange.stick ? 0.5 : 0,
+            stickInterval = this._options.stick ? 0.5 : 0,
             // It is strange - while "businessRange.invert" check is required in "to" here it is not.
             // Check that translator.from(translator.to(x, -1), -1) equals x.
             // And check that translator.untranslate(translator.translate(x, -1), -1) does not equal x - is it really supposed to be so?

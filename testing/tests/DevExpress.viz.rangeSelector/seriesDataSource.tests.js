@@ -448,94 +448,6 @@ QUnit.test("getBoundRange valueAxis inverted", function(assert) {
     assert.equal(boundRange.val.max, 200);
 });
 
-QUnit.test("getBoundRange if series does not have non-stick series", function(assert) {
-    //arrange, act
-    var seriesDataSource = new SeriesDataSource({
-        dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
-        chart: {
-            series: [{ type: "line" }, { type: "area" }]
-        },
-        renderer: new vizMocks.Renderer()
-    });
-
-    var boundRange = seriesDataSource.getBoundRange();
-    //assert
-    assert.strictEqual(boundRange.arg.stick, undefined);
-});
-
-QUnit.test("getBoundRange if series has bar", function(assert) {
-    //arrange, act
-    var seriesDataSource = new SeriesDataSource({
-        dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
-        chart: {
-            series: [{ type: "stackedbar" }, { type: "area" }]
-        },
-        renderer: new vizMocks.Renderer()
-    });
-
-    var boundRange = seriesDataSource.getBoundRange();
-    //assert
-    assert.strictEqual(boundRange.arg.stick, false);
-});
-
-QUnit.test("getBoundRange if series has bubble", function(assert) {
-    //arrange, act
-    var seriesDataSource = new SeriesDataSource({
-        dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
-        chart: {
-            series: [{ type: "bubble" }, { type: "area" }]
-        },
-        incidentOccurred: noop,
-        renderer: new vizMocks.Renderer()
-    });
-
-    var boundRange = seriesDataSource.getBoundRange();
-    //assert
-    assert.strictEqual(boundRange.arg.stick, false);
-});
-
-QUnit.test("getBoundRange if series has candlestick", function(assert) {
-    //arrange, act
-    var seriesDataSource = new SeriesDataSource({
-        dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
-        chart: {
-            series: [{ type: "candlestick" }, { type: "area" }]
-        },
-        incidentOccurred: noop,
-        renderer: new vizMocks.Renderer()
-    });
-
-    var boundRange = seriesDataSource.getBoundRange();
-    //assert
-    assert.strictEqual(boundRange.arg.stick, false);
-});
-
-QUnit.test("getBoundRange if series has stock", function(assert) {
-    //arrange, act
-    var seriesDataSource = new SeriesDataSource({
-        dataSource: [{ arg: 1, val: 0 },
-                    { arg: 3, val: 200 },
-                    { arg: 5, val: 12 }],
-        chart: {
-            series: [{ type: "stock" }, { type: "area" }]
-        },
-        incidentOccurred: noop,
-        renderer: new vizMocks.Renderer()
-    });
-
-    var boundRange = seriesDataSource.getBoundRange();
-    //assert
-    assert.strictEqual(boundRange.arg.stick, false);
-});
-
 QUnit.test("getBoundRange with topIndent, bottomIndent, valueAxis inverted", function(assert) {
     //arrange, act
     var seriesDataSource = new SeriesDataSource({
@@ -1287,4 +1199,114 @@ QUnit.test("seriesDataSource with negativesAsZeroes (correct + misspelled) optio
         renderer: new vizMocks.Renderer()
     });
     assert.deepEqual(seriesDataSource._seriesFamilies[0].options.negativesAsZeroes, "correct-option");
+});
+
+QUnit.module("Merge marginOptions");
+
+QUnit.test("Return max size", function(assert) {
+    //arrange
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [{ arg: 1, val: 0 }],
+        chart: {
+            commonSeriesSettings: {
+                type: "line",
+                point: {
+                    visible: true
+                }
+            },
+            series: [
+                { point: { size: 20 } },
+                { point: { size: 30 } }
+            ]
+        },
+        renderer: new vizMocks.Renderer()
+    });
+    //act
+    var marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 100 });
+    //assert
+    assert.deepEqual(marginOptions, {
+        size: 38,
+        checkInterval: undefined
+    });
+});
+
+QUnit.test("If there is bar series return checkInterval option", function(assert) {
+    //arrange
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [{ arg: 1, val: 0 }],
+        chart: {
+            commonSeriesSettings: {
+                type: "line",
+                point: {
+                    visible: true
+                }
+            },
+            series: [
+                { type: "line" },
+                { type: "bar" }
+            ]
+        },
+        renderer: new vizMocks.Renderer()
+    });
+    //act
+    var marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 100 });
+    //assert
+    assert.deepEqual(marginOptions, {
+        size: 20,
+        checkInterval: true
+    });
+});
+
+QUnit.test("Calculate size for bubble - height < width", function(assert) {
+    //arrange
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [{ arg: 1, val: 0, size: 1 }],
+        chart: {
+            commonSeriesSettings: {
+                type: "line",
+                point: {
+                    visible: true
+                }
+            },
+            maxBubbleSize: 0.2,
+            series: [
+                { type: "bubble" }
+            ]
+        },
+        renderer: new vizMocks.Renderer()
+    });
+    //act
+    var marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 50 });
+    //assert
+    assert.deepEqual(marginOptions, {
+        size: 10,
+        checkInterval: undefined
+    });
+});
+
+QUnit.test("Calculate size for bubble - height < width", function(assert) {
+    //arrange
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [{ arg: 1, val: 0, size: 1 }],
+        chart: {
+            commonSeriesSettings: {
+                type: "line",
+                point: {
+                    visible: true
+                }
+            },
+            maxBubbleSize: 0.2,
+            series: [
+                { type: "bubble" }
+            ]
+        },
+        renderer: new vizMocks.Renderer()
+    });
+    //act
+    var marginOptions = seriesDataSource.getMarginOptions({ width: 100, height: 150 });
+    //assert
+    assert.deepEqual(marginOptions, {
+        size: 20,
+        checkInterval: undefined
+    });
 });

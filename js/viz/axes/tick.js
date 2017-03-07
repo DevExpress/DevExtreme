@@ -1,8 +1,7 @@
 "use strict";
 
 var isDefined = require("../../core/utils/type").isDefined,
-    extend = require("../../core/utils/extend").extend,
-    constants = require("./axes_constants");
+    extend = require("../../core/utils/extend").extend;
 
 function getPathStyle(options) {
     return { stroke: options.color, "stroke-width": options.width, "stroke-opacity": options.opacity };
@@ -36,6 +35,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
             value: value,
             initCoords: function() {
                 this.coords = axis._getTranslatedValue(value, tickOffset);
+                this.labelCoords = axis._getTranslatedValue(value);
             },
             drawMark: function() {
                 if(!tickOptions.visible || skippedCategory === value) {
@@ -44,6 +44,10 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 //DEPRECATED IN 15_2
                 if(this.withoutPath) {
+                    return;
+                }
+
+                if(axis.areCoordsOutsideAxis(this.coords)) {
                     return;
                 }
 
@@ -61,7 +65,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 this.coords.angle && axis._rotateTick(this.mark, this.coords);
             },
-            drawLabel: function() {
+            drawLabel: function(range) {
                 if(!labelOptions.visible || skipLabels) {
                     return;
                 }
@@ -71,8 +75,11 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     return;
                 }
 
-                var axisBounds = { min: axis._minBound, max: axis._maxBound },
-                    text = constants.formatLabel(value, labelOptions, axisBounds),
+                if(axis.areCoordsOutsideAxis(this.labelCoords)) {
+                    return;
+                }
+
+                var text = axis.formatLabel(value, labelOptions, range),
                     labelHint;
 
                 if(isDefined(text) && text !== "" && !emptyStrRegExp.test(text)) {
@@ -85,7 +92,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                     this.updateLabelPosition();
 
-                    labelHint = constants.formatHint(this.value, labelOptions, axisBounds);
+                    labelHint = axis.formatHint(this.value, labelOptions, range);
                     if(isDefined(labelHint) && labelHint !== "") {
                         this.label.setTitle(labelHint);
                     }
@@ -96,12 +103,9 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     return;
                 }
 
-                var coords = axis._getTranslatedValue(value);
-                this.labelCoords = coords;
-
                 this.label.attr({
-                    x: coords.x,
-                    y: coords.y
+                    x: this.labelCoords.x,
+                    y: this.labelCoords.y
                 });
             },
             drawGrid: function(drawLine) {
