@@ -147,6 +147,7 @@
         "dxPivotGrid-sortColumnBySummary": "この列で \"{0}\" を並べ替え",
         "dxPivotGrid-sortRowBySummary": "この行で {0} を並べ替え",
         "dxPivotGrid-removeAllSorting": "すべての並べ替えを削除",
+        "dxPivotGrid-dataNotAvailable": "N/A",
         "dxPivotGrid-rowFields": "行のフィールド",
         "dxPivotGrid-columnFields": "列のフィールド",
         "dxPivotGrid-dataFields": "データ  フィールド",

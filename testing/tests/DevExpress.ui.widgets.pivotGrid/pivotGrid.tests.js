@@ -3582,6 +3582,7 @@ QUnit.test("DataController creation", function(assert) {
         grandTotal: "GrandTotal",
         exportToExcel: "Export to Excel file",
         noData: "NoData",
+        dataNotAvailable: "Error",
         removeAllSorting: "RemoveAllSorting",
         showFieldChooser: "ShowFieldChooser",
         sortColumnBySummary: "SortColumnBySummary",

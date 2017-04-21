@@ -41,7 +41,8 @@ QUnit.module("dxPivotGrid DataController", moduleConfig);
 
 var texts = {
     grandTotal: 'Grand Total',
-    total: '{0} Total'
+    total: '{0} Total',
+    dataNotAvailable: "Error"
 };
 
 QUnit.test("Without options", function(assert) {
@@ -3366,6 +3367,24 @@ QUnit.test("Hide totals on data row header field level", function(assert) {
 
 });
 
+//T504918
+QUnit.test("Format cell with error value", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "column", caption: 'column' },
+                { caption: 'value', format: 'fixedPoint', area: "data" }
+            ],
+            rows: [],
+            columns: [{ value: 'columnValue1', displayText: '', index: 0 }],
+            values: [[1, "#N/A"]]
+        },
+        texts: texts
+    });
+
+    assert.equal(dataController.getCellsInfo()[0][0].text, "1");
+    assert.equal(dataController.getCellsInfo()[0][1].text, "Error");
+});
 
 QUnit.module("Showing total on the top", moduleConfig);
 

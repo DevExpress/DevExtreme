@@ -162,6 +162,7 @@
         "dxPivotGrid-sortColumnBySummary": "Sort \"{0}\" by This Column",
         "dxPivotGrid-sortRowBySummary": "Sort \"{0}\" by This Row",
         "dxPivotGrid-removeAllSorting": "Remove All Sorting",
+        "dxPivotGrid-dataNotAvailable": "N/A",
         "dxPivotGrid-rowFields": "Row Fields",
         "dxPivotGrid-columnFields": "Column Fields",
         "dxPivotGrid-dataFields": "Data Fields",
