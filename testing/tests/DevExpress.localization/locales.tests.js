@@ -38,7 +38,8 @@ var compareLocales = function(first, second, assert) {
             "dxDataGrid-falseText",
             "dxDataGrid-headerFilterOK",
             "dxForm-optionalMark",
-            "dxScheduler-switcherAgenda"
+            "dxScheduler-switcherAgenda",
+            "dxPivotGrid-dataNotAvailable"
         ];
 
     $.each(firstLocaleMessages, function(name, value) {

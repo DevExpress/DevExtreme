@@ -2351,6 +2351,8 @@ declare module DevExpress.ui {
             removeAllSorting?: string;
             /** @docid dxPivotGridOptions_texts_exportToExcel */
             exportToExcel?: string;
+            /** @docid dxPivotGridOptions_texts_dataNotAvailable */
+            dataNotAvailable?: string;
         };
 
         /** @docid dxPivotGridOptions_loadPanel */

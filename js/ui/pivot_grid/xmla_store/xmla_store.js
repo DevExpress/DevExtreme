@@ -456,17 +456,23 @@ exports.XmlaStore = Class.inherit((function() {
             measureIndex,
             cellsOriginal = [],
             cellElements = xml.getElementsByTagName("Cell"),
+            errorDictionary = {},
             row;
-
 
         for(var i = 0; i < cellElements.length; i++) {
             var xmlCell = cellElements[i],
                 valueElement = xmlCell.getElementsByTagName("Value")[0],
-                text = getNodeText(valueElement),
+                errorElements = valueElement && valueElement.getElementsByTagName("Error") || [],
+                text = errorElements.length === 0 ? getNodeText(valueElement) : "#N/A",
                 value = parseFloat(text),
-                isNumeric = (text - value + 1) > 0;
+                isNumeric = (text - value + 1) > 0,
+                cellOrdinal = getNumber(xmlCell.getAttribute("CellOrdinal"));
 
-            cellsOriginal[getNumber(xmlCell.getAttribute("CellOrdinal"))] = {
+            if(errorElements.length) {
+                errorDictionary[getNodeText(errorElements[0].getElementsByTagName("ErrorCode")[0])] = getNodeText(errorElements[0].getElementsByTagName("Description")[0]);
+            }
+
+            cellsOriginal[cellOrdinal] = {
                 value: isNumeric ? value : text || null
             };
         }
@@ -485,6 +491,10 @@ exports.XmlaStore = Class.inherit((function() {
                 cell.push(cellsOriginal[index] ? cellsOriginal[index].value : null);
                 index++;
             });
+        });
+
+        Object.keys(errorDictionary).forEach(function(key) {
+            errors.log("W4002", errorDictionary[key]);
         });
 
         return cells;
@@ -635,7 +645,8 @@ exports.XmlaStore = Class.inherit((function() {
     }
 
     function checkError(xml) {
-        var errorElement = $(xml).find("Error"),
+        var faultElement = xml.getElementsByTagName("Fault"),
+            errorElement = $(faultElement).find("Error"),
             description,
             error;
 
