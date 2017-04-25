@@ -1,0 +1,77 @@
+.dx-dropdownlist-popup-wrapper {
+    height: 100%;
+
+    .dx-overlay-content {
+        position: absolute;
+        padding: 0px;
+        max-height: 50%;
+    }
+
+    .dx-popup-content {
+        margin: 0px;
+        padding: 0px;
+        height: 100%;
+        border: 2px solid @WIN8_ACCENT_COLOR;
+    }
+
+    .dx-list {
+        height: 100%;
+        background-color: @WIN8_WHITE_COLOR;
+
+        &:not(.dx-list-select-decorator-enabled) .dx-list-item {
+            font-weight: normal;
+        }
+
+        &:not(.dx-list-select-decorator-enabled) .dx-list-item-content {
+            padding: .45em .23em;
+        }
+    }
+
+    .dx-list-item, .dx-list-select-all {
+        background-color: @WIN8_WHITE_COLOR;
+        color: @WIN8_BLACK_COLOR;
+
+        &.dx-state-active {
+            color: @WIN8_BLACK_COLOR;
+        }
+
+        &.dx-state-focused {
+            background-color: @WIN8_ACCENT_COLOR_ACTIVE;
+        }
+
+        .dx-checkbox-icon {
+            border-color: @WIN8_DROPDOWNLIST_CHECKBOX_COLOR;
+        }
+
+        .dx-checkbox-checked {
+            .dx-checkbox-icon {
+                color: @WIN8_DROPDOWNLIST_CHECKBOX_COLOR;
+            }
+        }
+
+        .dx-checkbox-indeterminate {
+            .dx-checkbox-icon {
+                background-color: @WIN8_DROPDOWNLIST_CHECKBOX_BACKGROUND_COLOR;
+
+                &:before {
+                    background-color: @WIN8_DROPDOWNLIST_CHECKBOX_COLOR;
+                }
+            }
+        }
+    }
+
+    .dx-list-item-selected {
+        color: @WIN8_WHITE_COLOR;
+    }
+}
+
+.dx-device-phone {
+    .dx-dropdownlist-popup-wrapper {
+        .dx-list-item {
+
+            &.dx-state-active .dx-list-item-content {
+                .translate(3px, 1px);
+            }
+        }
+    }
+}

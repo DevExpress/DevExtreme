@@ -1,0 +1,52 @@
+.dx-gallery {
+    background-color: @WIN10_GALLERY_BACKGROUND_COLOR;
+}
+
+.dx-gallery-nav-button-prev,
+.dx-gallery-nav-button-next {
+    margin: -25px 12px 0;
+    width: 50px;
+    height: 50px;
+
+    &:before {
+        display: block;
+        color: @WIN10_GALLERY_BUTTON_COLOR;
+        font-size: 36px;
+        width: 36px;
+        height: 36px;
+        margin: 7px;
+    }
+
+    &.dx-state-active:before {
+        color: @WIN10_GALLERY_BUTTON_STATE_ACTIVE_COLOR;
+    }
+
+    &.dx-state-hover:before {
+        color: @WIN10_GALLERY_BUTTON_STATE_HOVER_COLOR;
+    }
+}
+
+.dx-gallery-nav-button-prev {
+    .dx-icon-chevronleft;
+}
+
+.dx-gallery-nav-button-next {
+    .dx-icon-chevronright;
+}
+
+.dx-gallery-indicator {
+    text-align: center;
+}
+
+.dx-gallery-indicator-item {
+    width: 16px;
+    height: 6px;
+    margin: 1px 2px 2px 2px; /* chrome accessibility hack T321837 */
+    background-color: @WIN10_GALLERY_INDICATOR_COLOR;
+    border: 1px solid @WIN10_BACKGROUND_COLOR;
+}
+
+.dx-gallery-indicator-item-selected {
+    background-color: @WIN10_GALLERY_ACCENT_COLOR;
+    margin: 0px 2px 2px 2px; /* chrome accessibility hack T321837 */
+}

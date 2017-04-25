@@ -1,0 +1,102 @@
+@WIN10_FIELDSET_FIELD_VALUE_PADDING_SPECIAL: 6px 0;
+
+.dx-fieldset {
+    padding-left: 12px;
+    padding-right: 12px;
+
+    .dx-rtl&,
+    .dx-rtl & {
+        .dx-field-label {
+            float: none;
+        }
+
+        .dx-field-value {
+            float: none;
+        }
+    }
+}
+
+.dx-rtl .dx-fieldset,
+.dx-fieldset.dx-rtl {
+    .dx-field-label {
+        float: none;
+    }
+
+    .dx-field-value {
+        float: none;
+    }
+}
+
+.dx-fieldset-header {
+    font-size: 24px;
+    padding-top: 12px;
+    padding-bottom: 14px;
+}
+
+.dx-field {
+    width: 100%;
+    padding: 0 0 20px;
+}
+
+.dx-field-label {
+    color: @WIN10_BASE_TEXT_COLOR;
+    padding: 4px 0 8px;
+    float: none;
+    width: 100%;
+    text-overflow: clip;
+    white-space: normal;
+    .dx-overflow(visible);
+}
+
+.dx-field-value {
+    display: inline-block;
+    float: none;
+    .dx-overflow(visible);
+    width: 100%;
+
+    &.dx-widget,
+    > .dx-widget {
+        width: 100%;
+        margin: 0;
+
+        &.dx-switch,
+        &.dx-checkbox,
+        &.dx-button,
+        &.dx-radiogroup {
+            display: inline-block;
+            width: auto;
+        }
+    }
+
+    &.dx-button {
+        min-width: auto;
+    }
+
+    &.dx-switch,
+    & > .dx-switch,
+    &.dx-checkbox,
+    & > .dx-checkbox {
+        padding: @WIN10_FIELDSET_FIELD_VALUE_PADDING_SPECIAL;
+    }
+
+    &.dx-attention {
+        color: @WIN10_FIELDSET_FIELD_ATTENTION_COLOR;
+        padding: @WIN10_FIELDSET_FIELD_VALUE_PADDING_SPECIAL;
+
+        &:before {
+            display: inline-block;
+            content: '';
+            width: 15px;
+            height: 12px;
+            background: @WIN10_FIELDSET_ATTENTION_BACKGROUND_IMAGE;
+        }
+    }
+}
+
+.dx-field-value-static {
+    float: none;
+    padding: 0 0 @WIN10_FIELDSET_FIELD_VALUE_PADDING_SPECIAL;
+    font-weight: 200;
+
+    .dx-overflow(visible);
+}

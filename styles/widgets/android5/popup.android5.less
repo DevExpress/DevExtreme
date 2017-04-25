@@ -1,0 +1,137 @@
+@ANDROID5_POPUP_CONTENT_PADDING: 24px;
+
+@ANDROID5_POPUP_TITLE_TOOLBAR_HEIGHT: 64px;
+@ANDROID5_POPUP_TITLE_PADDING_BASE: 24px;
+@ANDROID5_POPUP_TITLE_PADDING_TOP: 8px;
+@ANDROID5_POPUP_TITLE_TOOLBAR_LABEL_FONT_SIZE: 20px;
+
+@ANDROID5_POPUP_BOTTOM_TOOLBAR_HEIGHT: 52px;
+@ANDROID5_POPUP_BOTTOM_TOOLBAR_PADDING_AFTER: 4px;
+@ANDROID5_POPUP_BOTTOM_TOOLBAR_PADDING_BEFORE: 20px;
+@ANDROID5_POPUP_BOTTOM_TOOLBAR_ITEM_PADDING: 8px 4px;
+@ANDROID5_POPUP_BOTTOM_BUTTONS_MIN_WIDTH: 64px;
+
+
+.dx-popup-wrapper {
+    & > .dx-overlay-content {
+        background: @ANDROID5_POPUP_CONTENT_BACKGROUND;
+        color: @ANDROID5_POPUP_TEXT_COLOR;
+        .shadow-z4();
+    }
+}
+
+.dx-popup-title {
+    padding: 0;
+}
+
+.dx-popup-normal {
+    .dx-popup-title {
+        background: none;
+        height: @ANDROID5_POPUP_TITLE_TOOLBAR_HEIGHT;
+        padding: @ANDROID5_POPUP_TITLE_PADDING_TOP @ANDROID5_POPUP_TITLE_PADDING_BASE 0;
+        .box-shadow(none);
+
+        &,
+        .dx-toolbar-label,
+        .dx-toolbar-button .dx-button-text,
+        .dx-icon {
+            color: @ANDROID5_POPUP_TEXT_COLOR;
+        }
+
+            &.dx-toolbar {
+                .dx-button-content {
+                    padding: @ANDROID5_BUTTON_CONTENT_PADDING_TOP @ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL @ANDROID5_BUTTON_CONTENT_PADDING_BOTTOM;
+                }
+            }
+
+        .dx-button-content {
+            .border-radius(@ANDROID5_BUTTON_RADIUS);
+        }
+
+        .dx-toolbar-label {
+            padding-left: 0;
+            font-weight: bold;
+            font-size: @ANDROID5_POPUP_TITLE_TOOLBAR_LABEL_FONT_SIZE;
+        }
+    }
+}
+
+.dx-popup-bottom {
+    height: @ANDROID5_POPUP_BOTTOM_TOOLBAR_HEIGHT;
+    padding-right: @ANDROID5_POPUP_BOTTOM_TOOLBAR_PADDING_AFTER;
+    padding-left: @ANDROID5_POPUP_BOTTOM_TOOLBAR_PADDING_BEFORE;
+    background: none;
+    .box-shadow(none);
+
+    .dx-button {
+        min-width: @ANDROID5_POPUP_BOTTOM_BUTTONS_MIN_WIDTH;
+        .border-radius(@ANDROID5_BUTTON_RADIUS);
+    }
+
+    .dx-button-content {
+        padding: @ANDROID5_BUTTON_CONTENT_PADDING_TOP @ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL @ANDROID5_BUTTON_CONTENT_PADDING_BOTTOM;
+        .border-radius(@ANDROID5_BUTTON_RADIUS);
+    }
+
+    .dx-button-text {
+        color: @ANDROID5_POPUP_BOTTOM_BUTTONS_TEXT_COLOR;
+    }
+
+    .dx-toolbar-label {
+        color: @ANDROID5_WIDGET_TEXT;
+    }
+
+    .dx-toolbar-item {
+        padding: @ANDROID5_POPUP_BOTTOM_TOOLBAR_ITEM_PADDING;
+    }
+}
+
+.dx-popup-content {
+    &,
+    &.dx-dialog-content {
+        padding: @ANDROID5_POPUP_TITLE_PADDING_BASE;
+    }
+
+    .dx-popup-title + & {
+        padding-top: 0;
+    }
+}
+
+.dx-dialog {
+    .dx-button-text {
+        color: @ANDROID5_POPUP_BOTTOM_BUTTONS_TEXT_COLOR;
+    }
+}
+
+.dx-dialog-message {
+    padding: 0;
+}
+
+.dx-rtl {
+    .dx-popup-normal {
+        .dx-popup-title {
+            padding: @ANDROID5_POPUP_TITLE_PADDING_TOP @ANDROID5_POPUP_TITLE_PADDING_BASE 0;
+
+            .dx-toolbar-label {
+                padding-right: 0;
+            }
+        }
+    }
+
+    .dx-popup-bottom {
+        padding-right: @ANDROID5_POPUP_BOTTOM_TOOLBAR_PADDING_BEFORE;
+        padding-left: @ANDROID5_POPUP_BOTTOM_TOOLBAR_PADDING_AFTER;
+
+        .dx-button {
+            float: left;
+        }
+    }
+
+    .dx-dialog {
+        .dx-popup-bottom {
+            .dx-toolbar-center {
+                float: left;
+            }
+        }
+    }
+}

@@ -1,0 +1,73 @@
+{
+    "type": "FeatureCollection",
+    "bbox": [-12.5, -7.5, 17.5, 17.5],
+    "features": [{
+        "type": "Feature",
+        "geometry": {
+            "type": "MultiLineString",
+            "coordinates": [
+                [
+                    [-10, 15],
+                    [-12.5, 2.5],
+                    [-5, -7.5],
+                    [17.5, -5],
+                    [15, 10]
+                ]            
+            ]
+        },
+        "properties": {
+            "Name": "Figure-1",
+            "Count": 15,
+            "Date": "2008-05-06",
+            "Ratio": 1.34
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "MultiLineString",
+            "coordinates": [
+                [
+                    [5, 15],
+                    [12.5, 17.5],
+                    [7.5, 2.5],
+                    [12.5, -2.5]                
+                ]
+            ]
+        },
+        "properties": {
+            "Name": "Figure-2",
+            "Count": 25,
+            "Date": "2009-04-05",
+            "Ratio": 5.12
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "MultiLineString",
+            "coordinates": [
+                [
+                    [-2.5, 12.5],
+                    [0, 15],
+                    [7.5, 12.5],
+                    [7.5, 7.5],
+                    [5, 0],
+                    [0, -5]
+                ],            
+                [
+                    [-7.5, 12.5],
+                    [5, 10],
+                    [-2.5, -2.5],
+                    [-2.5, 5],
+                    [-10, 7.5],
+                    [-7.5, 12.5]
+                ]            
+            ]
+        },
+        "properties": {
+            "Name": "Figure-3",
+            "Count": 35,
+            "Date": "2010-03-30",
+            "Ratio": 9.15
+        }
+    }]
+}

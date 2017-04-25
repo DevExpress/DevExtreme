@@ -1,0 +1,179 @@
+@ANDROID5_TEXTEDITOR_FADED_INVALID_BORDER: 1px solid @ANDROID5_FADED_INVALID_COLOR;
+@ANDROID5_TEXTEDITOR_BORDER: 1px solid @ANDROID5_BOXBORDER_BACKGROUND;
+@ANDROID5_TEXTEDITOR_DISABLED_BORDER: 1px dashed @ANDROID5_BOXBORDER_BACKGROUND;
+@ANDROID5_TEXTEDITOR_INPUT_PADDING: 8px 0 7px;
+@ANDROID5_TEXTEDITOR_ICON_SIZE: 20px;
+@ANDROID5_TEXTEDITOR_ICON_TOP: 6px;
+@ANDROID5_TEXTEDITOR_CLEAR_ICON_TOP: @ANDROID5_TEXTEDITOR_ICON_TOP;
+@ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE: @ANDROID5_TEXTEDITOR_ICON_SIZE;
+@ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT: 7px;
+@ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH: @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT * 2;
+@ANDROID5_TEXTEDITOR_FONT_SIZE: 14px;
+@ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH: @ANDROID5_TEXTEDITOR_ICON_SIZE;
+
+.dx-invalid-android-5-badge() {
+    pointer-events: none;
+    font-weight: bold;
+    background-color: @ANDROID5_INVALID_COLOR;
+    color: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+    content: '!';
+    position: absolute;
+    top: @ANDROID5_TEXTEDITOR_ICON_TOP;
+    width: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
+    height: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
+    .border-radius(@radius: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH / 2);
+    text-align: center;
+    line-height: @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
+}
+
+.validation-icon-position(@padding: 0) {
+    &.dx-invalid {
+        .dx-texteditor-input {
+            padding-right: @padding + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH * 1.5;
+        }
+
+        &.dx-rtl .dx-texteditor-input {
+            padding-right: 0;
+            padding-left: @padding + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH * 1.5;
+        }
+
+        .dx-texteditor-container {
+            &:after {
+                right: @padding;
+
+                .dx-rtl & {
+                    left: @padding;
+                    right: auto;
+                }
+            }
+        }
+    }
+}
+
+.dx-texteditor {
+    .validation-icon-position();
+    .dx-icons-dark;
+
+    &.dx-show-clear-button:not(.dx-texteditor-empty) {
+        .validation-icon-position(@ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH);
+    }
+
+    &.dx-invalid {
+        .dx-texteditor-container {
+            border-bottom: @ANDROID5_TEXTEDITOR_FADED_INVALID_BORDER;
+
+            &:after {
+                .dx-invalid-android-5-badge();
+            }
+        }
+
+        &.dx-state-focused {
+            .dx-texteditor-container {
+                &:before {
+                    .transform(scale(1));
+                    background-color: @ANDROID5_INVALID_COLOR;
+                    .transition-transform(0.3s, cubic-bezier(0.2, 0, 0.03, 1));
+                }
+            }
+        }
+    }
+}
+
+.dx-placeholder {
+    color: @ANDROID5_TEXTEDITOR_PLACEHOLDER_COLOR;
+
+    &:before {
+        padding: @ANDROID5_TEXTEDITOR_INPUT_PADDING;
+        font-size: @ANDROID5_TEXTEDITOR_FONT_SIZE;
+        line-height: 16px;
+    }
+}
+
+.dx-texteditor-input {
+    padding: @ANDROID5_TEXTEDITOR_INPUT_PADDING;
+    background: @ANDROID5_TEXTEDITOR_BACKGROUND;
+    color: @ANDROID5_TEXTEDITOR_COLOR;
+    font-size: @ANDROID5_TEXTEDITOR_FONT_SIZE;
+    &:-moz-ui-invalid:not(output) {
+        .box-shadow(none);
+    }
+}
+
+.dx-texteditor-container {
+    position: relative;
+    margin: 8px 0;
+    border-bottom: @ANDROID5_TEXTEDITOR_BORDER;
+    .dx-overflow(visible);
+    display: inline-block;
+
+    &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -1px;
+        height: 2px;
+        width: 100%;
+        .transform(scale(0, 2));
+    }
+}
+
+.dx-show-clear-button .dx-texteditor-input {
+    padding-right: @ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+}
+
+.dx-clear-button-area {
+    width: @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+
+    .dx-icon-clear {
+        top: @ANDROID5_TEXTEDITOR_CLEAR_ICON_TOP;
+        right: 0;
+        color: @ANDROID5_TEXTEDITOR_CLEAR_ICON_COLOR;
+
+        .dx-icon-sizing(20px);
+    }
+}
+
+.dx-state-focused.dx-texteditor {
+    .dx-texteditor-container {
+        &:before {
+            .transform(scale(1));
+            background-color: @ANDROID5_TEXTEDITOR_FOCUSED_BORDER_COLOR;
+            .transition-transform(0.3s, cubic-bezier(0.2, 0, 0.03, 1));
+        }
+    }
+}
+
+.dx-state-disabled {
+    .dx-texteditor-container {
+        border-bottom: @ANDROID5_TEXTEDITOR_DISABLED_BORDER;
+    }
+
+    .dx-texteditor-input {
+        color: @ANDROID5_TEXTEDITOR_INPUT_COLOR;
+    }
+}
+
+.dx-texteditor.dx-state-readonly .dx-texteditor-input{
+    color: @ANDROID5_TEXTEDITOR_INPUT_COLOR;
+}
+
+.dx-rtl {
+    .dx-texteditor,
+    &.dx-texteditor {
+        .dx-texteditor-input {
+            padding-right: 0;
+        }
+
+        .dx-placeholder,
+        .dx-placeholder:before {
+            right: 0;
+            left: auto;
+        }
+
+        .dx-clear-button-area .dx-icon-clear {
+            left: 0;
+            right: auto;
+        }
+    }
+}

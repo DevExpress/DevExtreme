@@ -1,0 +1,144 @@
+<div id="toolbar-commands-test">
+    <div class="command" data-bind="dxCommand: { onExecute: onExecute, id: 'back', title:'Back', icon: 'back-icon', disabled: true, visible: false }"></div>
+    <div class="command" data-bind="dxCommand: { onExecute: onExecute, id: 'add', title: 'Add', icon: 'add-icon' }"></div>
+    <div class="command" data-bind="dxCommand: { onExecute: onExecute, id: 'delete', title: 'Delete', icon: 'delete-icon' }"></div>
+    <div class="toolbar" data-bind="dxToolbar: { }" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="toolbar-option-location">
+    <div data-bind="dxCommand: { id: 'cmdLeft' }"></div>
+    <div data-bind="dxCommand: { id: 'cmdCenter' }"></div>
+    <div data-bind="dxCommand: { id: 'cmdRight' }"></div>
+    <div data-bind="dxCommand: { id: 'cmdMenu' }"></div>
+    <div class="toolbar" data-bind="dxToolbar: { }" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="toolbar-option-show-text">
+    <div data-bind="dxCommand: { id: 'cmdAutoMenu' }"></div>
+    <div data-bind="dxCommand: { id: 'cmdAutoMenuWithoutText', showText: false }"></div>
+    <div class="toolbar" data-bind="dxToolbar: {}" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="toolbar-option-location-menu">
+    <div data-bind="dxCommand: { id: 'cmdMenu' }"></div>
+    <div data-bind="dxCommand: { id: 'cmdAutoMenu' }"></div>
+    <div data-bind="dxCommand: { id: 'cmdDeprecatedMenu' }"></div>
+    <div class="toolbar" data-bind="dxToolbar: {}" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="toolbar-resolve-text-icon">
+    <div data-bind="dxCommand: { id: 'noicon', title:'No Icon' }"></div>
+    <div data-bind="dxCommand: { id: 'notext', icon: 'no-text' }"></div>
+    <div class="toolbar" data-bind="dxToolbar: { }" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="toolbar-default-options">
+    <div class="command" data-bind="dxCommand: { id: 'cmd' }"></div>
+    <div class="toolbar" data-bind="dxToolbar: { }" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="toolbar-replace-default-options">
+    <div data-bind="dxCommand: { id: 'cmd', icon: 'icon-first', title:'title1', type: 'type1', anyOther: 'test value' }"></div>
+    <div class="toolbar" data-bind="dxToolbar: { }" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="toolbar-commands-change-option">
+    <div data-bind="dxCommand: { onExecute: '#uri', id: 'back', title: backTitle }"></div>
+    <div class="toolbar" data-bind="dxToolbar: { }" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="toolbar-commands-change-visible-option">
+    <div data-bind="dxCommand: { onExecute: '#uri', id: 'test', title: 'Test', visible: testVisible }"></div>
+    <div class="toolbar" data-bind="dxToolbar: { }" data-options="dxCommandContainer: { id: 'toolbar' }">
+    </div>
+</div>
+
+<div id="list-commands-test">
+    <div data-bind="dxCommand: { onExecute: onExecute, id: 'back', title: 'Back', icon: 'back-icon' }"></div>
+    <div data-bind="dxCommand: { onExecute: onExecute, id: 'add', title: 'Add', icon: 'add-icon' }"></div>
+    <div class="list" data-bind="dxList: {}" data-options="dxCommandContainer: { id: 'list' }">
+        <div data-options="dxTemplate: { name: 'item' }" data-bind="dxonExecute: onClick">
+        </div>
+    </div>
+</div>
+
+<div id="list-commands-test-default-template">
+    <div data-bind="dxCommand: { onExecute: onExecute, id: 'back', title: 'Back', icon: 'back-icon' }"></div>
+    <div data-bind="dxCommand: { onExecute: onExecute, id: 'add', title: 'Add', icon: 'add-icon' }"></div>
+    <div class="list" data-bind="dxList: {}" data-options="dxCommandContainer: { id: 'list' }">
+    </div>
+</div>
+
+<div id="list-default-options">
+    <div data-bind="dxCommand: { id: 'cmd' }"></div>
+    <div class="list" data-bind="dxList: { }" data-options="dxCommandContainer: { id: 'list' }">
+    </div>
+</div>
+
+<div id="list-replace-default-options">
+    <div data-bind="dxCommand: { id: 'cmd', icon: 'icon-first', title:'title1' }"></div>
+    <div class="list" data-bind="dxList: { }" data-options="dxCommandContainer: { id: 'list' }">
+    </div>
+</div>
+
+<div id="list-commands-change-option">
+    <div data-bind="dxCommand: { onExecute: '#uri', id: 'back', title: backTitle }"></div>
+    <div class="list" data-bind="dxList: { }" data-options="dxCommandContainer: { id: 'list' }"></div>
+</div>
+
+<div id="navBar-commands-test">
+    <div data-bind="dxCommand: { onExecute: onExecute, id: 'back', title:'Back', icon: 'back-icon' }"></div>
+    <div data-bind="dxCommand: { onExecute: onExecute, id: 'add', title: 'Add', icon: 'add-icon', highlighted: true }"></div>
+    <div class="navBar" data-bind="dxNavBar: { }" data-options="dxCommandContainer: { id: 'navBar' }">
+    </div>
+</div>
+
+<div id="navbar-default-options">
+    <div data-bind="dxCommand: { id: 'cmd' }"></div>
+    <div class="navbar" data-bind="dxNavBar: { }" data-options="dxCommandContainer: { id: 'navBar' }">
+    </div>
+</div>
+
+<div id="navbar-replace-default-options">
+    <div data-bind="dxCommand: { id: 'cmd', icon: 'icon-first', title:'title1' }"></div>
+    <div class="navbar" data-bind="dxNavBar: { }" data-options="dxCommandContainer: { id: 'navBar' }">
+    </div>
+</div>
+
+<div id="navBar-commands-change-option">
+    <div class="command" data-bind="dxCommand: { onExecute: '#uri', id: 'back', title: backTitle }"></div>
+    <div class="navBar" data-bind="dxNavBar: { }" data-options="dxCommandContainer: { id: 'navBar' }">
+    </div>
+</div>
+
+<div id="pivot-commands-visibility">
+    <div class="command c1" data-bind="dxCommand: { id: 'c1', title: 'c1' }"></div>
+    <div class="command c2" data-bind="dxCommand: { id: 'c2', title: 'c2' }"></div>
+    <div class="pivot" data-bind="dxPivot: {}" data-options="dxCommandContainer: { id: 'pivot' }"></div>
+</div>
+
+<div id="clear-widget-items">
+    <div class="command c1" data-bind="dxCommand: { id: 'c1', title: 'c1' }"></div>
+    <div class="command c2" data-bind="dxCommand: { id: 'c2', title: 'c2' }"></div>
+    <div class="pivot" data-bind="dxPivot: {}" data-options="dxCommandContainer: { id: 'pivot' }"></div>
+</div>
+
+<div id="pivot-selected-item-change">
+    <div class="command c1" data-bind="dxCommand: { id: 'c1', title: 'c1' }"></div>
+    <div class="command c2" data-bind="dxCommand: { id: 'c2', title: 'c2' }"></div>
+    <div class="pivot" data-bind="dxPivot: {}" data-options="dxCommandContainer: { id: 'pivot' }"></div>
+</div>
+
+<div id="slideOut-commands">
+    <div class="command c1" data-bind="dxCommand: { onExecute: renderContent, id: 'c1', title: 'c1' }"></div>
+    <div class="command c2" data-bind="dxCommand: { onExecute: renderContent, id: 'c2', title: 'c2' }"></div>
+    <div class="slideOut" data-bind="dxSlideOut: {}" data-options="dxCommandContainer: { id: 'slideOut' }"></div>
+</div>

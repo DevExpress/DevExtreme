@@ -1,0 +1,87 @@
+@WIN10_NUMBERBOX_SPIN_CONTAINER_WIDTH: 34px;
+@WIN10_NUMBERBOX_SPIN_CONTAINER_PADDING: 2px;
+@WIN10_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: @WIN10_NUMBERBOX_SPIN_CONTAINER_WIDTH * 2;
+@WIN10_NUMBERBOX_SPIN_BUTTON_ICON_SIZE: 12px;
+
+.dx-numberbox-spin-container {
+    width: @WIN10_NUMBERBOX_SPIN_CONTAINER_WIDTH;
+    padding: @WIN10_NUMBERBOX_SPIN_CONTAINER_PADDING;
+
+    .dx-numberbox-spin-touch-friendly & {
+        width: @WIN10_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    }
+}
+
+.dx-numberbox-spin-up-icon {
+    .dx-icon-chevronup;
+}
+
+.dx-numberbox-spin-down-icon {
+    .dx-icon-chevrondown;
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+    .dx-icon-font-centered-sizing(@WIN10_NUMBERBOX_SPIN_BUTTON_ICON_SIZE);
+
+    &:before {
+        font-size: 12px;
+    }
+}
+
+.dx-numberbox-spin {
+    .dx-texteditor-input {
+        padding-right: @WIN10_NUMBERBOX_SPIN_CONTAINER_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+        .dx-rtl&,
+        .dx-rtl & {
+            padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            padding-left: @WIN10_NUMBERBOX_SPIN_CONTAINER_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+        }
+    }
+
+    &.dx-show-clear-button {
+        .dx-texteditor-input {
+            padding-right: @WIN10_NUMBERBOX_SPIN_CONTAINER_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+            .dx-rtl&,
+            .dx-rtl & {
+                padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+                padding-left: @WIN10_NUMBERBOX_SPIN_CONTAINER_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            }
+        }
+    }
+}
+
+.dx-numberbox-spin-touch-friendly {
+    .dx-texteditor-input {
+        padding-right: @WIN10_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+        .dx-rtl&,
+        .dx-rtl & {
+            padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            padding-left: @WIN10_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+        }
+    }
+
+    &.dx-show-clear-button {
+        .dx-texteditor-input {
+            padding-right: @WIN10_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+            .dx-rtl&,
+            .dx-rtl & {
+                padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+                padding-left: @WIN10_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            }
+        }
+    }
+}
+
+.dx-numberbox-spin-button {
+    color: @WIN10_NUMBERBOX_SPIN_BUTTON_COLOR;
+
+    &.dx-state-active {
+        background-color: @WIN10_NUMBERBOX_SPIN_BUTTON_ACTIVE_BACKGROUND_COLOR;
+        color: @WIN10_NUMBERBOX_SPIN_BUTTON_ACTIVE_COLOR;
+    }
+}

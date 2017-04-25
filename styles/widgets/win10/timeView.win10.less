@@ -1,0 +1,54 @@
+.dx-timeview {
+    height: 300px;
+
+    .dx-numberbox {
+        width: 80px;
+        margin: 4px 0;
+
+        .dx-texteditor-container {
+            margin: 0;
+        }
+    }
+}
+
+.dx-timeview-clock {
+    background: @WIN10_TIME_VIEW_CLOCK_IMAGE no-repeat 50% 50%;
+
+    .dx-state-disabled & {
+        opacity: .4;
+    }
+}
+
+.dx-timeview-hourarrow {
+    background-image: @WIN10_TIME_VIEW_HOUR_ARROW_IMAGE;
+}
+
+.dx-timeview-minutearrow {
+    background-image: @WIN10_TIME_VIEW_MINUTE_ARROW_IMAGE;
+}
+
+.dx-timeview-field {
+    .dx-box-item {
+        line-height: 16px;
+    }
+
+    .dx-box-item:first-child .dx-numberbox {
+        margin-right: 3px;
+    }
+
+    .dx-box-item:last-child .dx-numberbox {
+        margin-left: 3px;
+    }
+
+    &.dx-rtl {
+        .dx-box-item:first-child .dx-numberbox {
+            margin-left: 3px;
+            margin-right: 0;
+        }
+
+        .dx-box-item:last-child .dx-numberbox {
+            margin-left: 0;
+            margin-right: 3px;
+        }
+    }
+}

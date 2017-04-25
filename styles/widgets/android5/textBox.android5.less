@@ -1,0 +1,57 @@
+@ANDROID5_ICON_SIZE: 20px;
+@ANDROID5_ICON_PADDING: 6px;
+
+.dx-searchbox {
+    background-color: transparent;
+
+    .dx-texteditor-input {
+        padding-left: @ANDROID5_ICON_SIZE + @ANDROID5_ICON_PADDING;
+    }
+
+    .dx-icon-search {
+        position: absolute;
+        .dx-icon-search;
+        .dx-icon-sizing(@ANDROID5_ICON_SIZE, @ANDROID5_ICON_SIZE);
+        width: @ANDROID5_ICON_SIZE + @ANDROID5_ICON_PADDING;
+        height: @ANDROID5_ICON_SIZE + @ANDROID5_ICON_PADDING * 2;
+
+        &:before {
+            padding: @ANDROID5_ICON_PADDING;
+            padding-left: 0;
+            vertical-align: middle;
+            position: static;
+            text-indent: 0;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                padding-left: @ANDROID5_ICON_PADDING;
+                padding-right: 0;
+            }
+        }
+
+        .dx-rtl &,
+        .dx-rtl& {
+            left: auto;
+            right: 0;
+        }
+    }
+
+    .dx-placeholder {
+        padding-left: @ANDROID5_ICON_SIZE + 2 * @ANDROID5_ICON_PADDING;
+    }
+
+    &.dx-texteditor-empty .dx-placeholder:before {
+        display: block;
+    }
+}
+
+.dx-rtl {
+    .dx-searchbox,
+    &.dx-searchbox {
+        .dx-texteditor-input,
+        .dx-placeholder:before {
+            padding-left: 0;
+            padding-right: @ANDROID5_ICON_SIZE + 2 * @ANDROID5_ICON_PADDING;
+        }
+    }
+}

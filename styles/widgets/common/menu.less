@@ -1,0 +1,82 @@
+.dx-menu {
+    position: relative;
+}
+
+.dx-menu-horizontal {
+    .vertical-middle();
+
+    .dx-menu-item-wrapper {
+        display: inline-block;
+    }
+
+    .dx-menu-separator {
+        display: inline-block;
+        margin: 0px 15px 0px 0px;
+    }
+}
+
+
+.dx-menu-vertical {
+    .vertical-middle();
+
+    .dx-menu-item-wrapper {
+        display: block;
+    }
+
+    .dx-menu-separator {
+        margin: 0px 0px 15px 0px;
+    }
+}
+
+.dx-rtl.dx-menu {
+    text-align: right;
+}
+
+.dx-context-menu-container-border {
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	position: absolute;
+}
+
+.dx-context-menu-content-delimiter {
+    position: absolute;
+    display: none;
+    z-index: 2000;
+    cursor: pointer;
+}
+
+.dx-menu-adaptive-mode {
+    .dx-treeview {
+        .dx-treeview-toggle-item-visibility {
+            left: auto;
+            right: 0;
+
+            .dx-rtl &, .dx-rtl& {
+                left: 0;
+                right: auto;
+            }
+        }
+
+        .dx-treeview-item {
+            cursor: pointer;
+        }
+    }
+
+    .dx-treeview-node-container:first-child > .dx-treeview-node {
+        padding: 1px;
+
+        .dx-item-content {
+            padding-left: 15px;
+
+            .dx-rtl &, .dx-rtl& {
+                padding-right: 15px;
+            }
+        }
+
+        &:last-child {
+            border-bottom: none;
+        }
+    }
+}

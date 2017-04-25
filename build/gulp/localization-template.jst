@@ -1,0 +1,30 @@
+(function(root, factory) {
+    /* global DevExpress, define */
+    if(typeof define === 'function' && define.amd) {
+        define(function(require) {
+            factory(require("devextreme/localization")<%
+                if(isDeprecated) {
+                    %>, require("devextreme/core/errors")<%
+                } %>);
+        });
+    } else {
+        factory(DevExpress.localization<%
+        if(isDeprecated) {
+            %>, DevExpress.errors<%
+        } %>);
+    }
+}(this, function(localization<%
+    if(isDeprecated) {
+        %>, errors<%
+    } %>) {
+    <%
+    if(isDeprecated) {
+        %>errors.log("W0013", "devextreme/dist/js/localization/dx.<%=
+            distribution %>.<%=
+            locale %>.js", "16.2", "Use the 'devextreme/dist/js/localization/dx.messages.<%=
+            locale %>.js' file instead.");
+<%
+    } %>
+    localization.loadMessages(<%= json %>);
+
+}));

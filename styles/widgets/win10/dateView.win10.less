@@ -1,0 +1,83 @@
+.dx-dateview {
+    height: 324px;
+    color: @WIN10_DATEVIEW_TEXT_COLOR;
+
+    &.dx-state-disabled {
+        color: @WIN10_DATEVIEW_DISABLED_TEXT_COLOR;
+
+        .dx-dateview-rollers:before {
+            background-color: @WIN10_DATEVIEW_SELECTED_DISABLED_COLOR;
+        }
+    }
+
+    .dx-scrollable-content {
+        &:before, &:after {
+            display: block;
+            height: 146px;
+        }
+    }
+}
+
+.dx-dateview-time {
+    width: 320px;
+}
+
+.dx-dateview-datetime {
+    width: 466px;
+}
+
+.dx-dateview-date {
+    width: 324px;
+}
+
+.dx-dateview-wrapper {
+    height: 100%;
+}
+
+.dx-dateview-rollers {
+    height: 100%;
+    position: relative;
+    background-color: @WIN10_DATEVIEW_BACKGROUND_COLOR;
+
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        height: 32px;
+        width: 100%;
+        top: 146px;
+        background-color: @WIN10_DATEVIEW_SELECTED_ITEM_COLOR;
+    }
+}
+
+.dx-dateviewroller + .dx-dateviewroller {
+    border-left: 2px solid @WIN10_DATEVIEW_ROLLER_BORDER_COLOR;
+}
+
+.dx-dateview-item {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    text-align: center;
+}
+
+.dx-dateviewroller-month {
+    .dx-dateview-item {
+        padding-left: 9%;
+        text-align: left;
+    }
+}
+
+.dx-dateview.dx-rtl {
+    .dx-dateviewroller + .dx-dateviewroller {
+        border-left: none;
+        border-right: 2px solid @WIN10_DATEVIEW_ROLLER_BORDER_COLOR;
+    }
+
+    .dx-dateviewroller-month {
+        .dx-dateview-item {
+            margin-left: auto;
+            margin-right: 9%;
+            text-align: right;
+        }
+    }
+}

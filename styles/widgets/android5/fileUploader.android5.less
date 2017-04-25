@@ -1,0 +1,50 @@
+@ANDROID5_FILEUPLOADER_WRAPPER_PADDING: 20px;
+
+.dx-fileuploader {
+    &.dx-fileuploader-empty {
+        .dx-fileuploader-files-container {
+            padding-top: 0;
+        }
+    }
+
+    &.dx-invalid {
+        .dx-fileuploader-input-wrapper {
+            padding-bottom: 10px;
+        }
+
+        .dx-fileuploader-files-container {
+            padding-top: 54px;
+        }
+    }
+}
+
+.dx-fileuploader-wrapper {
+    padding: @ANDROID5_FILEUPLOADER_WRAPPER_PADDING;
+}
+
+.dx-fileuploader-input-container {
+    pointer-events: none;
+    opacity: 0;
+}
+
+.dx-fileuploader-files-container {
+    .dx-fileuploader-button {
+        .flat-button();
+
+        .dx-button-content {
+            padding: 0;
+        }
+    }
+}
+
+.dx-fileuploader-file {
+    line-height: 16px;
+}
+
+.dx-fileuploader-file-name {
+    color: @ANDROID5_FILEUPLOADER_FILENAME_TEXT_COLOR;
+}
+
+.dx-fileuploader-file-status-message, .dx-fileuploader-file-size {
+    color: @ANDROID5_FILEUPLOADER_STATUS_TEXT_COLOR;
+}

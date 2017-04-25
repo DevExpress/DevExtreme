@@ -1,0 +1,49 @@
+@WIN8_TOAST_CONTENT_PADDING: 15px;
+
+.dx-toast-content {
+    padding-bottom: @WIN8_TOAST_CONTENT_PADDING;
+    padding-top: @WIN8_TOAST_CONTENT_PADDING;
+}
+
+.dx-toast-icon {
+    width: 25px;
+    height: 25px;
+    .background-size-prop(contain);
+}
+
+.dx-toast-default-color {
+    background-color: @WIN8_ACCENT_COLOR;
+    color: @WIN8_WHITE_COLOR;
+}
+
+.dx-toast-info {
+    .dx-toast-default-color;
+
+    .dx-toast-icon {
+        background-image: @WIN8_TOAST_INFO_BACKGROUND;
+    }
+}
+
+.dx-toast-warning {
+    .dx-toast-default-color;
+
+    .dx-toast-icon {
+        background-image: @WIN8_TOAST_WARNING_BACKGROUND;
+    }
+}
+
+.dx-toast-error {
+    .dx-toast-default-color;
+
+    .dx-toast-icon {
+        background-image: @WIN8_TOAST_ERROR_BACKGROUND;
+    }
+}
+
+.dx-toast-success {
+    .dx-toast-default-color;
+
+    .dx-toast-icon {
+        background-image: @WIN8_TOAST_SUCCESS_BACKGROUND;
+    }
+}

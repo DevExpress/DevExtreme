@@ -1,0 +1,104 @@
+@WIN8_BUTTON_FOCUS_BACKGROUND: @WIN8_SELECTED_BACKGROUND_COLOR;
+@WIN8_BUTTON_FOCUS_DANGER_BACKGROUND: @WIN8_BUTTON_ACTIVE_DANGER_BACKGROUND;
+@WIN8_BUTTON_FOCUS_SUCCESS_BACKGROUND: @WIN8_BUTTON_ACTIVE_SUCCESS_BACKGROUND;
+
+@WIN8_BUTTON_HOVER_BACKGROUND: #2bb0ca;
+@WIN8_BUTTON_HOVER_DANGER_BACKGROUND: lighten(@WIN8_DANGER_COLOR, 8%);
+@WIN8_BUTTON_HOVER_SUCCESS_BACKGROUND: lighten(@WIN8_SUCCESS_COLOR, 8%);
+
+@WIN8_BUTTON_ACTIVE_BACKGROUND: @WIN8_ACCENT_COLOR;
+
+
+.dx-button {
+    border: 2px solid @WIN8_BASE_TEXT;
+    padding: @WIN8_BUTTON_PADDING;
+    padding-top: 1px;
+    font-size: 11pt;
+
+    .dx-icon {
+        .dx-icon-sizing(@WIN8_ICON_SIZE * .7, @WIN8_ICON_SIZE);
+    }
+}
+
+.dx-button-text {
+    color: @WIN8_BASE_TEXT;
+    font-weight: 600;
+    line-height: 27px;
+    padding: @WIN8_BUTTON_TEXT_PADDING;
+    text-transform: lowercase;
+}
+
+.dx-button-back {
+    border-radius: 50%;
+    padding: @WIN8_BUTTON_BACK_PADDING;
+
+    .dx-icon {
+        .dx-icon-sizing(@WIN8_ICON_SIZE * .7, @WIN8_ICON_SIZE);
+    }
+
+    .dx-button-text {
+        display: none !important;
+    }
+}
+
+.dx-button-danger {
+    background: @WIN8_DANGER_COLOR;
+}
+
+.dx-button-success {
+    background: @WIN8_SUCCESS_COLOR;
+}
+
+.dx-device-phone {
+    .dx-button {
+        .dx-icon {
+            .dx-icon-sizing(@WIN8PHONE_ICON_SIZE * .7, @WIN8PHONE_ICON_SIZE);
+        }
+    }
+
+    .dx-button-text {
+        padding: @WIN8PHONE_BUTTON_TEXT_PADDING;
+    }
+}
+
+.dx-state-focused {
+    &.dx-button {
+        background: @WIN8_BUTTON_FOCUS_BACKGROUND;
+    }
+
+    &.dx-button-danger {
+        background: @WIN8_BUTTON_FOCUS_DANGER_BACKGROUND;
+    }
+
+    &.dx-button-success {
+        background: @WIN8_BUTTON_FOCUS_SUCCESS_BACKGROUND;
+    }
+}
+
+.dx-state-hover {
+    &.dx-button {
+        background: @WIN8_BUTTON_HOVER_BACKGROUND;
+    }
+
+    &.dx-button-danger {
+        background: @WIN8_BUTTON_HOVER_DANGER_BACKGROUND;
+    }
+
+    &.dx-button-success {
+        background: @WIN8_BUTTON_HOVER_SUCCESS_BACKGROUND;
+    }
+}
+
+.dx-state-active {
+    &.dx-button {
+        background: @WIN8_BUTTON_ACTIVE_BACKGROUND;
+    }
+
+    &.dx-button-danger {
+        background: @WIN8_BUTTON_ACTIVE_DANGER_BACKGROUND;
+    }
+
+    &.dx-button-success {
+        background: @WIN8_BUTTON_ACTIVE_SUCCESS_BACKGROUND;
+    }
+}

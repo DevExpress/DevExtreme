@@ -1,0 +1,799 @@
+@IOS7_DATAGRID_CELL_PADDING: 7px;
+@IOS7_DATAGRID_BORDER: 1px solid @DATAGRID_BORDER_COLOR;
+@IOS7_DATAGRID_BORDER_HIDDEN: 1px solid transparent;
+@IOS7_DATAGRID_DRAG_HEADER_BORDER: 1px solid @IOS7_DATAGRID_DRAG_HEADER_BORDER_COLOR;
+@IOS7_DATAGRID_NODATA_FONT_SIZE: 17px;
+@IOS7_DATAGRID_HEADER_PANEL_PADDING_BOTTOM: 10px;
+@IOS7_DATAGRID_FILTER_OPERATION_IMAGE_SIZE: 16px;
+@IOS7_DATAGRID_ROW_BORDER: 1px solid transparent;
+@IOS7_DATAGRID_FILTER_OPERATIONS_BORDER: @IOS7_DATAGRID_BORDER;
+@IOS7_DATAGRID_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px @IOS7_DATAGRID_DRAG_HEADER_FIRST_SHADOW_COLOR;
+@IOS7_DATAGRID_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px @IOS7_DATAGRID_DRAG_HEADER_SECOND_SHADOW_COLOR;
+@IOS7_DATAGRID_BUTTON_SIZE: 21px;
+@IOS7_DATAGRID_GROUP_COLUMN_ICONS_SIZE: 24px;
+@IOS7_DATAGRID_CONTEXT_MENU_SORT_ICON_SIZE: 20px;
+@IOS7_DATAGRID_COMMAND_EDIT_COLUMN_WIDTH: 100px;
+@IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING: 8px;
+
+.dx-datagrid-checkbox-size {
+    .dx-checkbox-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon::before {
+            width: 10px;
+            height: 10px;
+        }
+    }
+}
+
+.dx-datagrid {
+    &.dx-datagrid-borders {
+        > .dx-datagrid-headers, > .dx-datagrid-rowsview, > .dx-datagrid-total-footer {
+            border-left: @IOS7_DATAGRID_BORDER;
+            border-right: @IOS7_DATAGRID_BORDER;
+        }
+
+        > .dx-datagrid-rowsview, > .dx-datagrid-total-footer {
+            border-bottom: @IOS7_DATAGRID_BORDER;
+        }
+
+        > .dx-datagrid-pager, > .dx-datagrid-headers {
+            border-top: @IOS7_DATAGRID_BORDER;
+        }
+    }
+
+    .dx-menu-items-container {
+        .dx-menu-item {
+            .dx-icon-context-menu-sort-asc {
+                .dx-icon-sortuptext;
+                .dx-icon-sizing(@IOS7_DATAGRID_CONTEXT_MENU_SORT_ICON_SIZE);
+            }
+
+            .dx-icon-context-menu-sort-desc {
+                .dx-icon-sortdowntext;
+                .dx-icon-sizing(@IOS7_DATAGRID_CONTEXT_MENU_SORT_ICON_SIZE);
+            }
+        }
+    }
+
+    .dx-menu {
+        .dx-menu-item.dx-state-focused,
+        .dx-menu-item.dx-state-active {
+            background-color: transparent;
+        }
+
+        .dx-menu-horizontal {
+            .dx-menu-item-content {
+                padding: 8px 0px 6px 7px;
+            }
+        }
+    }
+
+    .dx-menu-item-content .dx-icon {
+        color: @IOS7_DATAGRID_FILTER_OPERATION_COLOR;
+    }
+
+    .dx-icon-filter-operation-equals {
+        .dx-icon-equal;
+    }
+
+    .dx-icon-filter-operation-default {
+        .dx-icon-find;
+    }
+
+    .dx-icon-filter-operation-not-equals {
+        .dx-icon-notequal;
+    }
+
+    .dx-icon-filter-operation-less {
+        .dx-icon-less;
+    }
+
+    .dx-icon-filter-operation-less-equal {
+        .dx-icon-lessorequal;
+    }
+
+    .dx-icon-filter-operation-greater {
+        .dx-icon-greater;
+    }
+
+    .dx-icon-filter-operation-greater-equal {
+        .dx-icon-greaterorequal;
+    }
+
+    .dx-icon-filter-operation-contains {
+        .dx-icon-contains;
+    }
+
+    .dx-icon-filter-operation-not-contains {
+        .dx-icon-doesnotcontain;
+    }
+
+    .dx-icon-filter-operation-starts-with {
+        .dx-icon-startswith;
+    }
+
+    .dx-icon-filter-operation-ends-with {
+        .dx-icon-endswith;
+    }
+
+    .dx-menu-items-container .dx-menu-item-has-icon .dx-icon-filter-operation-between {
+        background-image: @IOS7_DATAGRID_FILTER_OPERATION_BETWEEN_IMAGE;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: 14px 5px;
+    }
+
+    .dx-row-alt {
+        & > td {
+            background-color: @IOS7_DATAGRID_ROW_ALTERNATION_COLOR;
+        }
+
+        &.dx-row:not(.dx-row-removed) {
+            border-bottom-color: @IOS7_DATAGRID_ROW_ALTERNATION_COLOR;
+        }
+    }
+
+    .dx-row-lines > td {
+        border-bottom: @IOS7_DATAGRID_BORDER;
+    }
+
+    .dx-column-lines > td {
+        border-left-width: 0px;
+    }
+
+
+    .dx-editor-cell {
+        .dx-texteditor {
+            .dx-texteditor-container {
+                border: none;
+            }
+
+            .dx-texteditor-input {
+                .border-radius(0px);
+                border-width: 0px;
+                background: @IOS7_DATAGRID_EDITOR_BACKGROUND;
+            }
+
+            &.dx-numberbox-spin .dx-texteditor-input {
+                padding-right: @SPIN_BUTTON_AREA_WIDTH;
+            }
+
+            &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
+                padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+            }
+
+            &.dx-searchbox {
+                .dx-texteditor-input,
+                .dx-placeholder:before {
+                    padding-left: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET * 2;
+
+                    .dx-rtl &,
+                    .dx-rtl& {
+                        padding-right: @SEARCH_ICON_SIZE + @SEARCH_ICON_OFFSET * 2;
+                    }
+                }
+            }
+        }
+
+        .dx-dropdowneditor-icon {
+            .box-shadow(none);
+        }
+    }
+
+    .dx-error-row {
+        td {
+            background-color: @IOS7_DATAGRID_ERROR_ROW_BACKGROUND_COLOR;
+            color: @IOS7_DATAGRID_ERROR_ROW_TEXT_COLOR;
+            padding: @IOS7_DATAGRID_CELL_PADDING;
+
+            .dx-error-message {
+                white-space: normal;
+                word-wrap: break-word;
+                padding-right: 35px;
+            }
+
+            .dx-closebutton {
+                float: right;
+                margin-top: 1px;
+                margin-right: 1px;
+                .dx-icon-close;
+                .dx-icon-sizing(24px);
+            }
+        }
+    }
+}
+
+.dx-datagrid-content .dx-datagrid-table {
+    .dx-row {
+        .dx-command-edit {
+            width: @IOS7_DATAGRID_COMMAND_EDIT_COLUMN_WIDTH;
+            min-width: @IOS7_DATAGRID_COMMAND_EDIT_COLUMN_WIDTH;
+        }
+    }
+}
+
+.dx-datagrid-filter-range-overlay .dx-overlay-content {
+    border: @IOS7_DATAGRID_BORDER;
+    overflow: inherit;
+    .box-shadow(2px 2px 3px fade(black, 15%));
+
+    .dx-texteditor-container {
+        border: none;
+    }
+
+    &, .dx-texteditor-container {
+        .border-radius(0px);
+    }
+
+    .dx-editor-container.dx-highlight-outline::after {
+        border-color: @IOS7_DATAGRID_DATA_MODIFIED_COLOR;
+        left: 0px;
+    }
+
+    .dx-texteditor {
+        .dx-texteditor-input {
+            background-color: @DATAGRID_BASE_BACKGROUND_COLOR;
+            padding: @IOS7_DATAGRID_CELL_PADDING;
+        }
+
+        &.dx-state-focused:after {
+            border: 2px solid @IOS7_DATAGRID_FOCUS_COLOR;
+        }
+    }
+}
+
+.dx-datagrid-headers, .dx-datagrid-rowsview {
+    .dx-texteditor-input {
+       padding: @IOS7_DATAGRID_CELL_PADDING;
+    }
+
+    .dx-dropdowneditor-button-visible {
+        &.dx-show-clear-button .dx-texteditor-input {
+            padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
+        }
+
+        .dx-texteditor-input {
+            padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
+        }
+    }
+}
+
+.dx-datagrid-export-menu {
+    .dx-menu-items-container {
+        .dx-icon {
+            color: @IOS7_DATAGRID_CONTEXT_MENU_ICONS_COLOR;
+        }
+    }
+}
+
+.dx-datagrid-header-text{
+    text-transform: uppercase;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+.dx-datagrid-column-chooser-list {
+    .dx-empty-message {
+        bottom: 40%;
+        color: @DATAGRID_BASE_COLOR;
+        padding: 0 10px;
+    }
+}
+
+.dx-datagrid-column-chooser {
+    &.dx-datagrid-column-chooser-mode-select {
+        .dx-popup-content {
+            padding-right: 10px;
+            padding-left: 10px;
+        }
+
+        .dx-overlay-content .dx-toolbar {
+            margin-bottom: 9px;
+        }
+    }
+
+    .dx-overlay-content {
+        .border-radius(0px);
+        .box-shadow(0px 1px 3px rgba(0, 0, 0, 0.2));
+
+        .dx-popup-content {
+            padding-top: 20px;
+
+            .dx-list-item-content::after {
+                height: 0px;
+            }
+
+            .dx-column-chooser-item {
+                padding: 0px;
+                border: @IOS7_DATAGRID_BORDER;
+                .box-shadow(0px 1px 3px -1px rgba(0, 0, 0, 0.2));
+                background-color: @IOS7_DATAGRID_HEADERS_BACKGROUND_COLOR;
+
+                .dx-treeview-item-content {
+                    .dx-datagrid-header-text;
+                    color: @IOS7_DATAGRID_HEADERS_COLOR;
+                    padding: @IOS7_DATAGRID_CELL_PADDING;
+
+                    &::after {
+                        margin-top: 0px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dx-datagrid-drag-header {
+    .box-shadow(@IOS7_DATAGRID_DRAG_HEADER_FIRST_SHADOW, @IOS7_DATAGRID_DRAG_HEADER_SECOND_SHADOW);
+    .dx-datagrid-header-text;
+    color: @IOS7_DATAGRID_HEADERS_COLOR;
+    background-color: @IOS7_DATAGRID_DRAG_HEADER_BACKGROUND_COLOR;
+    padding: @IOS7_DATAGRID_CELL_PADDING;
+    border: @IOS7_DATAGRID_DRAG_HEADER_BORDER;
+}
+
+.dx-datagrid-columns-separator {
+    background-color: @IOS7_DATAGRID_HEADERS_SEPARATOR_COLOR;
+}
+
+.dx-datagrid-columns-separator-transparent {
+    background-color: transparent;
+}
+
+.dx-datagrid-focus-overlay {
+    border: 2px solid @IOS7_DATAGRID_FOCUS_COLOR;
+}
+
+.dx-data-row.dx-state-hover {
+    &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+        & > td:not(.dx-focused) {
+            background-color: @IOS7_DATAGRID_HOVER_BACKGROUND;
+
+            &.dx-datagrid-group-space {
+                border-right-color: @IOS7_DATAGRID_HOVER_BACKGROUND;
+            }
+        }
+
+        & > .dx-datagrid-readonly .dx-texteditor {
+            .dx-texteditor-input {
+                background-color: @IOS7_DATAGRID_HOVER_BACKGROUND;
+            }
+        }
+
+        &.dx-row:not(.dx-row-lines) {
+            border-bottom-color: @IOS7_DATAGRID_HOVER_BACKGROUND;
+        }
+
+        & > td.dx-pointer-events-none {
+            background-color: transparent;
+        }
+    }
+}
+
+.dx-datagrid-headers {
+    color: @IOS7_DATAGRID_HEADERS_COLOR;
+    .touch-action(pinch-zoom);
+
+    .dx-header-row {
+        .dx-datagrid-header-text;
+    }
+
+    .dx-datagrid-table {
+        .dx-row {
+            &.dx-header-row > td {
+                background-color: @IOS7_DATAGRID_HEADERS_BACKGROUND_COLOR;
+            }
+
+            & > td {
+                border-bottom: @IOS7_DATAGRID_BORDER;
+            }
+        }
+    }
+
+    .dx-datagrid-drop-highlight.dx-row {
+        & > td {
+            background-color: @IOS7_DATAGRID_HEADERS_DROP_HIGHLIGHT_BACKGROUND_COLOR;
+        }
+    }
+
+    .dx-column-lines > td {
+        border-left: @IOS7_DATAGRID_BORDER;
+        border-right: @IOS7_DATAGRID_BORDER;
+    }
+}
+
+.dx-datagrid-filter-row {
+    .dx-menu .dx-overlay-content {
+        color: @IOS7_FONT_COLOR;
+    }
+
+    .dx-menu-item {
+        &.dx-state-focused {
+            background-color: transparent;
+
+            &:after {
+                border: 2px solid @IOS7_DATAGRID_FOCUS_COLOR;
+            }
+
+            &.dx-menu-item-expanded {
+                 &:after {
+                    border-color: transparent;
+                }
+            }
+        }
+    }
+
+    .dx-highlight-outline{
+        &::after {
+            border-color: @IOS7_DATAGRID_DATA_MODIFIED_COLOR;
+        }
+    }
+}
+
+.dx-datagrid-header-panel {
+    border-bottom: @IOS7_DATAGRID_BORDER;
+
+    .dx-toolbar {
+        background: @DATAGRID_BASE_BACKGROUND_COLOR;
+        padding-bottom:  @IOS7_DATAGRID_HEADER_PANEL_PADDING_BOTTOM;
+        height: 49px;
+    }
+
+    .dx-toolbar-item {
+        padding: 0 0 0 5px;
+    }
+
+    .dx-toolbar-button:not(.dx-state-disabled) {
+        .dx-apply-button {
+            .dx-button-content {
+                background-color: @IOS7_DATAGRID_APPLY_BUTTON_COLOR;
+            }
+        }
+    }
+
+    .dx-link {
+        padding: @IOS7_DATAGRID_CELL_PADDING 0px @IOS7_DATAGRID_CELL_PADDING 10px;
+    }
+}
+
+.dx-datagrid-button(@icon){
+    background: @icon;
+    background-position: center;
+    width: @IOS7_DATAGRID_BUTTON_SIZE;
+    height: @IOS7_DATAGRID_BUTTON_SIZE;
+}
+
+.dx-datagrid-toolbar-button {
+    .dx-icon-column-chooser {
+        .dx-icon-columnchooser;
+    }
+
+    .dx-icon-edit-button-addrow {
+        .dx-icon-add;
+    }
+
+
+    .dx-icon-edit-button-cancel {
+        .dx-icon-revert;
+    }
+
+    .dx-icon-edit-button-save {
+        .dx-icon-save;
+    }
+
+    .dx-icon-apply-filter {
+        .dx-icon-filter;
+    }
+
+    .dx-icon-export-to {
+        .dx-icon-export;
+    }
+
+    .dx-icon-export-excel-button {
+        .dx-icon-exportxlsx;
+    }
+
+    .dx-icon {
+        .dx-icon-sizing(@IOS7_DATAGRID_BUTTON_SIZE);
+        color: #7f7f7f;
+    }
+}
+
+.dx-datagrid-group-panel {
+    .touch-action(pinch-zoom);
+
+    .dx-group-panel-message {
+        color: @IOS7_DATAGRID_HEADERS_COLOR;
+        padding: @IOS7_DATAGRID_CELL_PADDING;
+        border-top: @IOS7_DATAGRID_BORDER_HIDDEN;
+        border-bottom: @IOS7_DATAGRID_BORDER_HIDDEN;
+    }
+
+    .dx-group-panel-item {
+        .dx-datagrid-header-text;
+        background-color: @IOS7_DATAGRID_HEADERS_BACKGROUND_COLOR;
+        color: @IOS7_DATAGRID_HEADERS_COLOR;
+        border: @IOS7_DATAGRID_BORDER;
+        padding: @IOS7_DATAGRID_CELL_PADDING;
+    }
+
+    .dx-block-separator {
+        padding: @IOS7_DATAGRID_CELL_PADDING;
+        padding-top: @IOS7_DATAGRID_CELL_PADDING - 1px;
+        background-color: @IOS7_DATAGRID_SELECTION_BACKGROUND;
+    }
+}
+
+.dx-datagrid-search-panel {
+    margin-left: 20px;
+}
+
+.dx-datagrid-rowsview {
+    .dx-row {
+        border-top: @IOS7_DATAGRID_ROW_BORDER;
+        border-bottom: @IOS7_DATAGRID_ROW_BORDER;
+
+        &.dx-edit-row > td {
+            border-top: @IOS7_DATAGRID_BORDER;
+            border-bottom: @IOS7_DATAGRID_BORDER;
+        }
+    }
+
+    .dx-data-row {
+        .dx-validator.dx-datagrid-invalid {
+            .dx-highlight-outline::after {
+                border: 1px solid @IOS7_DATAGRID_DATA_FADED_INVALID_COLOR;
+            }
+
+            &.dx-focused > .dx-highlight-outline::after {
+                border: 1px solid @IOS7_DATAGRID_DATA_INVALID_COLOR;
+            }
+        }
+
+        .dx-invalid-message {
+            .dx-overlay-content {
+                padding: 10px 17px 9px;
+                .border-radius(0px);
+            }
+        }
+
+        .dx-cell-modified {
+            .dx-highlight-outline {
+                &::after {
+                    border-color: @IOS7_DATAGRID_DATA_MODIFIED_COLOR;
+                }
+            }
+        }
+    }
+
+    .dx-adaptive-detail-row {
+        .dx-adaptive-item-text {
+            padding-top: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING;
+            padding-bottom: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING;
+            padding-left: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING;
+        }
+    }
+
+    .dx-adaptive-detail-row {
+        .dx-datagrid-invalid {
+            .border-radius(6px);
+            border: 1px solid @IOS7_DATAGRID_DATA_INVALID_COLOR;
+
+            &.dx-adaptive-item-text {
+                padding-top: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING - 1;
+                padding-bottom: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING - 1;
+                padding-left: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING - 1;
+            }
+        }
+    }
+
+    .dx-item-modified {
+        .border-radius(6px);
+        border: 2px solid @IOS7_DATAGRID_DATA_MODIFIED_COLOR;
+
+        &.dx-adaptive-item-text {
+            padding-top: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING - 2;
+            padding-bottom: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING - 2;
+            padding-left: @IOS7_DATAGRID_ADAPTIVE_TEXT_PADDING - 2;
+        }
+    }
+
+    .dx-row-removed > td {
+        background-color: @IOS7_DATAGRID_DATA_MODIFIED_COLOR;
+        border-top: 1px solid @IOS7_DATAGRID_DATA_MODIFIED_COLOR;
+        border-bottom: 1px solid @IOS7_DATAGRID_DATA_MODIFIED_COLOR;
+    }
+
+    .dx-row.dx-group-row {
+        color: @IOS7_DATAGRID_GROUP_ROW_COLOR;
+
+        td {
+            border-top-color: @DATAGRID_BORDER_COLOR;
+            border-bottom-color: @DATAGRID_BORDER_COLOR;
+        }
+    }
+
+    .dx-selection, .dx-selection.dx-row:hover {
+        & > td {
+            background-color: @IOS7_DATAGRID_SELECTION_BACKGROUND;
+
+            &.dx-editor-cell {
+                background-color: @IOS7_SELECTION_BACKGROUND;
+            }
+
+            &.dx-datagrid-group-space {
+                border-right-color: @IOS7_DATAGRID_SELECTION_BACKGROUND;
+            }
+        }
+
+        & > td.dx-focused {
+            background-color: transparent;
+        }
+
+        &:not(.dx-row-lines) {
+            border-bottom-color: @IOS7_DATAGRID_SELECTION_BACKGROUND;
+        }
+    }
+
+    .dx-master-detail-row {
+        & > td {
+            border-top: @IOS7_DATAGRID_BORDER;
+            border-bottom: @IOS7_DATAGRID_BORDER;
+        }
+    }
+
+    .dx-master-detail-row:not(.dx-datagrid-edit-form) {
+        > .dx-datagrid-group-space, .dx-master-detail-cell {
+            background-color: @IOS7_DATAGRID_MASTER_DETAIL_CELL_BACKGROUND_COLOR;
+        }
+    }
+}
+
+.dx-datagrid-group-opened {
+    .dx-icon-chevrondown;
+    .dx-icon-sizing(@IOS7_DATAGRID_GROUP_COLUMN_ICONS_SIZE);
+}
+
+.dx-datagrid-group-closed {
+    .dx-icon-chevronright;
+    .dx-icon-sizing(@IOS7_DATAGRID_GROUP_COLUMN_ICONS_SIZE);
+}
+
+.dx-datagrid-group-opened, .dx-datagrid-group-closed{
+    color: #9A9A9A;
+    width: 100%;
+}
+
+.dx-datagrid-search-text {
+    background-color: @IOS7_DATAGRID_SEARCH_TEXT_BACKGROUND;
+}
+
+.dx-datagrid-nodata {
+    color: @IOS7_DATAGRID_NODATA_COLOR;
+    font-size: @IOS7_DATAGRID_NODATA_FONT_SIZE;
+}
+
+.dx-datagrid-export-menu {
+    .dx-menu-item {
+        .dx-checkbox {
+            .dx-checkbox-text{
+                padding-left: 32px;
+            }
+        }
+    }
+}
+
+.dx-datagrid-bottom-load-panel {
+    border-top: @IOS7_DATAGRID_BORDER;
+}
+
+.dx-datagrid-pager{
+    border-top: 3px double @DATAGRID_BORDER_COLOR;
+    &.dx-widget {
+        color: @DATAGRID_BASE_COLOR;
+    }
+}
+
+.dx-datagrid-total-footer{
+    border-top: @IOS7_DATAGRID_BORDER;
+}
+
+.dx-row.dx-datagrid-group-footer > td{
+    &.dx-column-lines {
+        border-bottom: @IOS7_DATAGRID_BORDER;
+    }
+    & > td {
+        border-top: @IOS7_DATAGRID_BORDER;
+        border-left-width: 0;
+        border-right-width: 0;
+    }
+}
+
+.dx-datagrid-revert-tooltip {
+    .dx-overlay-content{
+        min-width: 32px;
+
+        .dx-popup-content{
+            .border-radius(4px);
+        }
+    }
+
+    .dx-revert-button {
+        background-color: @IOS7_DATAGRID_DATA_INVALID_COLOR;
+        padding: 6px;
+        &.dx-button-has-icon{
+            .dx-icon {
+                margin: 0;
+                color: @VALIDATION_MESSAGE_COLOR;
+
+                .dx-icon-sizing(20px);
+            }
+        }
+    }
+}
+
+.dx-rtl {
+    .dx-datagrid-header-panel {
+        .dx-toolbar-item {
+            padding: 0 5px 0 0;
+        }
+    }
+
+    .dx-data-row.dx-state-hover {
+        &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+            & > td:not(.dx-focused) {
+                &.dx-datagrid-group-space {
+                    border-left-color: @IOS7_DATAGRID_HOVER_BACKGROUND;
+                }
+            }
+        }
+    }
+
+    .dx-datagrid {
+        .dx-menu {
+            .dx-menu-horizontal {
+                .dx-menu-item-content {
+                    padding: 8px 11px 7px 0px;
+                }
+            }
+        }
+    }
+
+    .dx-editor-cell {
+        .dx-texteditor.dx-numberbox-spin,
+        .dx-dropdowneditor.dx-dropdowneditor-button-visible {
+            .dx-texteditor-input {
+                padding-right: @IOS7_DATAGRID_CELL_PADDING;
+            }
+        }
+    }
+
+    .dx-datagrid-rowsview {
+        .dx-selection, .dx-selection.dx-row:hover {
+            & > td:not(.dx-focused) {
+                &.dx-datagrid-group-space {
+                    border-left-color: @IOS7_DATAGRID_SELECTION_BACKGROUND;
+                }
+            }
+        }
+    }
+
+    .dx-datagrid-search-panel {
+        margin-left: 0;
+        margin-right: 20px;
+    }
+}
+
+.dx-datagrid-table-fixed {
+    .dx-row.dx-group-row {
+        background-color: @IOS7_DATAGRID_GROUP_ROW_BACKGROUND_COLOR;
+
+        td {
+            background-color: @IOS7_DATAGRID_GROUP_ROW_BACKGROUND_COLOR;
+        }
+    }
+}

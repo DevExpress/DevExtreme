@@ -1,0 +1,779 @@
+@WIN8_THEME_MARKER: "dx.win8.white";
+/**
+* @name 30. Active state background color
+* @type color
+* @group base.common
+*/
+@WIN8_ACCENT_COLOR: #00b8ff;
+
+/**
+* @name 31. Hovered state background color
+* @type color
+* @group base.common
+*/
+@WIN8_HOVERED_BACKGROUND_COLOR: @WIN8_ACCENT_COLOR;
+
+/**
+* @name 32. Selected state background color
+* @type color
+* @group base.common
+*/
+@WIN8_SELECTED_BACKGROUND_COLOR: #80dbff;
+
+@WIN8_ACCENT_COLOR_ACTIVE: fadeout(@WIN8_ACCENT_COLOR,  40%);
+
+/**
+* @name 10. Base dark color
+* @type color
+* @group base.common
+*/
+@WIN8_BLACK_COLOR: #000;
+
+/**
+* @name 20. Base light color
+* @type color
+* @group base.common
+*/
+@WIN8_WHITE_COLOR: #ffffff;
+
+/**
+* @name 1. Invalid widget state - active color
+* @type color
+* @group editors.validation
+*/
+@WIN8_INVALID_COLOR: #EA4444;
+
+@VALIDATION_MESSAGE_COLOR: #fff;
+@VALIDATION_MESSAGE_BACKGROUND_COLOR: @WIN8_INVALID_COLOR;
+
+@VALIDATION_SUMMARY_COLOR: @WIN8_INVALID_COLOR;
+
+/**
+* @name 2. Invalid widget state - border color
+* @type color
+* @group editors.validation
+*/
+@WIN8_FADED_INVALID_COLOR: fade(@WIN8_INVALID_COLOR, 40%);
+@WIN8_FIELD_ATTENTION_COLOR: #e78747;
+/**
+* @name 20. Link color
+* @type color
+* @group base.typography
+*/
+@WIN8_LINK: #bb1000;
+/**
+* @name 30. Label color
+* @type color
+* @group base.typography
+*/
+@WIN8_LABEL_TEXT: #888;
+
+@WIN8_ICON_COLOR: darken(@WIN8_WHITE_COLOR, 48%);
+@WIN8_ICON_INVERTED_COLOR: @WIN8_BLACK_COLOR;
+
+
+
+// Badges
+/**
+* @name 10. Badge background color
+* @type color
+* @group badges
+*/
+@WIN8_BADGE_BACKGROUND: @WIN8_ACCENT_COLOR;
+/**
+* @name 20. Badge text color
+* @type color
+* @group badges
+*/
+@WIN8_BADGE_TEXT_COLOR: @WIN8_WHITE_COLOR;
+
+/**
+* @name 10. Background color
+* @type color
+* @group buttons.danger
+*/
+@WIN8_DANGER_COLOR: #c91d4a;
+/**
+* @name 10. Background color
+* @type color
+* @group buttons.success
+*/
+@WIN8_SUCCESS_COLOR: #099f21;
+
+@WIN8_BUTTON_ACTIVE_DANGER_BACKGROUND: lighten(@WIN8_DANGER_COLOR, 15%);
+@WIN8_BUTTON_ACTIVE_SUCCESS_BACKGROUND: lighten(@WIN8_SUCCESS_COLOR, 15%);
+@WIN8_DATAPICKER_ITEM_COLOR: darken(@WIN8_WHITE_COLOR, 35%);
+/**
+* @name 10. Background color
+* @type color
+* @group editors.texteditors
+*/
+@WIN8_TEXTEDITOR_BACKGROUND: darken(@WIN8_WHITE_COLOR, 15%);
+/**
+* @name 20. Placeholder color
+* @type color
+* @group editors.texteditors
+*/
+@WIN8_TEXTEDITOR_PLACEHOLDER_COLOR: rgba(0,0,0,0.3);
+/**
+* @name 10. Popup background color
+* @type color
+* @group overlays.common
+*/
+@WIN8_POPUP_COLOR: @WIN8_WHITE_COLOR;
+/**
+* @name 30. Tooltip background color
+* @type color
+* @group overlays.common
+*/
+@WIN8_TOOLTIP_COLOR: darken(@WIN8_WHITE_COLOR, 13%);
+@WIN8_SCROLLABLE_SCROLL_BACKGROUND: darken(@WIN8_WHITE_COLOR, 19%);
+/**
+* @name 10. Scroller background color
+* @type color
+* @group scrollview
+*/
+@WIN8_SCROLLABLE_SCROLL_BACKGROUND: darken(@WIN8_WHITE_COLOR, 19%);
+/**
+* @name 10. Slider bar background color
+* @type color
+* @group sliders
+*/
+@WIN8_SLIDER_BAR_BACKGROUND: darken(@WIN8_WHITE_COLOR, 17%);
+
+//ProgressBar
+
+/**
+* @name 10. Bar background color
+* @type color
+* @group progressbars
+*/
+@WIN8_PROGRESSBAR_CONTAINER_COLOR: @WIN8_SLIDER_BAR_BACKGROUND;
+/**
+* @name 20. Selected range background color
+* @type color
+* @group progressbars
+*/
+@WIN8_PROGRESSBAR_RANGE_COLOR: @WIN8_ACCENT_COLOR;
+@WIN8_PROGRESSBAR_DISABLED_STATE_RANGE_COLOR: gray;
+
+@WIN8_BASE_BACKGROUND: @WIN8_WHITE_COLOR;
+/**
+* @name 10. Text color
+* @type color
+* @group base.typography
+*/
+@WIN8_BASE_TEXT: @WIN8_BLACK_COLOR;
+@WIN8_TEXTEDITOR_BORDER_COLOR: @WIN8_TEXTEDITOR_BACKGROUND;
+@WIN8_PIVOTTABS_TEXT_COLOR: @WIN8_LABEL_TEXT;
+@WIN8_LOAD_INDICATOR_BACKGROUND: @WIN8_POPUP_COLOR;
+@WIN8_TOOLBAR_BACKGROUND_COLOR: @WIN8_POPUP_COLOR;
+/**
+* @name 20. Dialog background color
+* @type color
+* @group overlays.common
+*/
+@WIN8_DIALOG_BACKGROUND: @WIN8_BASE_BACKGROUND;
+
+// Icon
+@WIN8_ICON_SIZE: 40px;
+@WIN8PHONE_ICON_SIZE: 20px;
+
+// PivotTabs
+@WIN8_PIVOTTABS_HEIGHT: 66px;
+
+// Button paddings
+@WIN8_BUTTON_PADDING: 2px 8px;
+@WIN8_BUTTON_TEXT_PADDING: 0 5px;
+@WIN8_BUTTON_BACK_PADDING: 4px;
+@WIN8PHONE_BUTTON_TEXT_PADDING: 0 3px;
+
+// Tabs
+@WIN8_TABS_MARGIN_RIGHT: 25px;
+
+/**
+* @name 10. Icon color
+* @type color
+* @group navigations.tabs
+*/
+@WIN8_TABS_ICON_COLOR: @WIN8_BASE_TEXT;
+
+// TabPanel
+@WIN8_TABPANEL_BORDER_COLOR: darken(@WIN8_WHITE_COLOR, 22%);
+
+// Toolbar
+@WIN8_TOOLBAR_ITEM_PADDING:  0 9px;
+@WIN8_TOOLBAR_BUTTON_PADDING: 0 9px;
+@WIN8_TOOLBAR_HEIGHT: 88px;
+@WIN8_TOOLBAR_BUTTON_FONTSIZE: 12px;
+@WIN8PHONE_TOOLBAR_ITEM_PADDING:  0 3px;
+@WIN8PHONE_TOOLBAR_BUTTON_PADDING: 0 4px;
+@WIN8PHONE_TOOLBAR_HEIGHT: 60px;
+@WIN8PHONE_TOOLBAR_BUTTON_FONTSIZE: 8pt;
+
+// Typography
+@WIN8_H1: 42pt;
+@WIN8_H2: 32pt;
+@WIN8_H3: 24pt;
+@WIN8_H4: 20pt;
+@WIN8_H5: 12pt;
+@WIN8_H6: 8pt;
+@WIN8PHONE_H1: 22pt;
+@WIN8PHONE_H2: 20pt;
+@WIN8PHONE_H3: 16pt;
+@WIN8PHONE_H4: 14pt;
+@WIN8PHONE_H5: 12pt;
+@WIN8PHONE_H6: 8pt;
+
+// SlideOutView
+@WIN8_SLIDEOUTVIEW_MENU_BACKGROUND: #f2f2f2;
+
+// Color View
+/**
+* @name 10. Overlay background
+* @type color
+* @group editors.colorbox
+*/
+@WIN8_COLOR_VIEW_OVERLAY_BACKGROUND_COLOR: @WIN8_WHITE_COLOR;
+/**
+* @name 20. Overlay border color
+* @type color
+* @group editors.colorbox
+*/
+@WIN8_COLOR_VIEW_OVERLAY_BORDER_COLOR: darken(@WIN8_WHITE_COLOR, 18%);
+@WIN8_COLOR_VIEW_PALETTE_CELL_BACKGROUND_COLOR: saturate(darken(@WIN8_WHITE_COLOR, 3.9%), 52%);
+
+
+// Accordion
+@WIN8_ACCORDION_ACTIVE_ITEM_TITLE_TEXT: @WIN8_WHITE_COLOR;
+@WIN8_ACCORDION_ACTIVE_STATE_TEXT_COLOR: @WIN8_ACCENT_COLOR;
+@WIN8_ACCORDION_ACTIVE_ITEM_TITLE_BACKGROUND: @WIN8_ACCENT_COLOR;
+@WIN8_ACCORDION_BORDER_COLOR: darken(@WIN8_WHITE_COLOR, 20%);
+@WIN8_ACCORDION_ARROW_UP_COLOR: @WIN8_WHITE_COLOR;
+@WIN8_ACCORDION_ARROW_DOWN_COLOR: @WIN8_BLACK_COLOR;
+
+// Button
+@WIN8_BUTTON_DONE_ICON: url(images/widgets/win8/color-schemes/white/button/done.png) 50% 50% no-repeat;
+@WIN8_BUTTON_CLOSE_ICON: url(images/widgets/win8/color-schemes/white/button/close.png) 50% 50% no-repeat;
+@WIN8_BUTTON_TODAY_ICON: url(images/widgets/win8/color-schemes/white/button/today.png) 50% 50% no-repeat;
+
+// Calendar
+@WIN8_CALENDAR_BACKGROUND: @WIN8_WHITE_COLOR;
+@WIN8_CALENDAR_COLOR: @WIN8_BASE_TEXT;
+@WIN8_CALENDAR_ACTIVE: @WIN8_ACCENT_COLOR;
+@WIN8_DATEBOX_BORDER_STYLE: solid;
+@WIN8_DATEBOX_BORDER_WIDTH: 1px;
+@WIN8_DATEBOX_BORDER_COLOR: @WIN8_BLACK_COLOR;
+
+// Popover
+@WIN8_POPOVER_BORDER_COLOR: @WIN8_BLACK_COLOR;
+
+/**
+* @name 10. Other month text color
+* @type color
+* @group editors.calendar
+*/
+@WIN8_CALENDAR_OTHER_DAYS: darken(@WIN8_WHITE_COLOR, 27%);
+
+// Checkbox
+@WIN8_CHECKBOX_BASE_COLOR: @WIN8_BLACK_COLOR;
+
+// DropDownEditor
+@WIN8_DROPDOWNEDITOR_ICON_COLOR: @WIN8_BLACK_COLOR;
+
+// DropDownList
+@WIN8_DROPDOWNLIST_CHECKBOX_COLOR: @WIN8_BLACK_COLOR;
+@WIN8_DROPDOWNLIST_CHECKBOX_BACKGROUND_COLOR: @WIN8_WHITE_COLOR;
+
+// DropDownMenu
+@WIN8_DROPDOWN_BORDER: 2px solid @WIN8_BLACK_COLOR;
+@WIN8_DROPDOWN_ARROW_BACKGROUND: @WIN8_BLACK_COLOR;
+
+//Lookup
+@WIN8_LOOKUP_ARROW_ICON_COLOR: @WIN8_BLACK_COLOR;
+
+// Fileuploader
+/**
+* @name 10. Filename text color
+* @type color
+* @group editors.fileuploader
+*/
+@WIN8_FILEUPLOADER_FILENAME_TEXT_COLOR: @WIN8_BLACK_COLOR;
+
+/**
+* @name 20. File status text color
+* @type color
+* @group editors.fileuploader
+*/
+@WIN8_FILEUPLOADER_STATUS_TEXT_COLOR: #949494;
+
+
+// List
+/**
+* @name 10. Item text color
+* @type color
+* @group list
+*/
+@WIN8_LIST_ITEM_TEXT_COLOR: @WIN8_BASE_TEXT;
+
+/**
+* @name 20. Group header text color
+* @type color
+* @group list
+*/
+@WIN8_LIST_HEADER_TEXT_COLOR: @WIN8_BASE_TEXT;
+
+@WIN8_LIST_ITEM_VERTICAL_PADDING: 13px;
+@WIN8_LIST_ITEM_HORIZONTAL_PADDING: 10px;
+@WIN8_LIST_ITEM_TOGGLE_DELETE_SIZE: 25px;
+@WIN8PHONE_LIST_ITEM_TOGGLE_DELETE_SIZE: 19px;
+@WIN8_LIST_ITEM_GHOST_BACKGROUND: rgba(255, 255, 255, .7);
+
+// RadioGroup
+@WIN8_RADIOGROUP_SHADOW: ~"inset #9c9c9c 0 0 3px";
+
+// Scrollable
+@WIN8_SCROLLABLE_SCROLL_OUTLINE: 1px rgba(0,0,0,0.05) solid;
+@WIN8_SCROLLABLE_SCROLL_SIZE: 3px;
+@WIN8_SCROLLABLE_SCROLL_OUTLINE: 1px rgba(0,0,0,0.05) solid;
+
+//ScrollView
+
+// Tabs
+@WIN8_TABS_IMG_BORDER: 2px solid @WIN8_BASE_TEXT;
+@WIN8_TABS_FONT_SIZE: @WIN8_H4;
+@WIN8PHONE_TABS_FONT_SIZE: @WIN8PHONE_H5;
+
+// FieldSet
+@WIN8_FIELD_LABEL_PADDING: 5px;
+@WIN8_FIELD_VALUE_FONTSIZE: 11pt;
+@WIN8PHONE_FIELD_VALUE_FONTSIZE: 9pt;
+
+// Dialog
+@WIN8_DIALOG_PADDING: 15px 0;
+@WIN8_DIALOG_TITLE_PADDING: 0 10px;
+@WIN8_DIALOG_TITLE_FONT_SIZE: 150%;
+@WIN8_DIALOG_BUTTONS_HEIGHT: 30px;
+@WIN8PHONE_DIALOG_WIDTH: ~"100% !important";
+
+// SearchBox
+/**
+* @name 30. Active search button background color
+* @type color
+* @group editors.texteditors
+*/
+@WIN8_SEARCHBOX_ICON_BACKGROUND_COLOR: darken(@WIN8_WHITE_COLOR, 48%);
+
+// TagBox
+@WIN8_TAGBOX_TAG_BACKGROUND: @WIN8_ACCENT_COLOR;
+@WIN8_TAGBOX_TAG_FOCUSED_BACKGROUND: darken(@WIN8_TAGBOX_TAG_BACKGROUND, 20%);
+@WIN8_TAGBOX_SELECT_ALL_BORDER_COLOR: #000000;
+
+//DataGrid
+/**
+* @name 10. Text color`
+* @type color
+* @group datagrid
+*/
+@DATAGRID_BASE_COLOR: @WIN8_BLACK_COLOR;
+/**
+* @name 11. Background color
+* @type color
+* @group datagrid
+*/
+@DATAGRID_BASE_BACKGROUND_COLOR: @WIN8_WHITE_COLOR;
+/**
+* @name 20. Border color
+* @type color
+* @group datagrid
+*/
+@DATAGRID_BORDER_COLOR: darken(@WIN8_WHITE_COLOR, 22%);
+@WIN8_DATAGRID_BORDER: 1px solid @DATAGRID_BORDER_COLOR;
+@WIN8_DATAGRID_BORDER_HIDDEN: 1px solid transparent;
+@WIN8_DATAGRID_HEADERS_BORDER: 1px solid #b3b5c2;
+/**
+* @name 30. Header text color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_HEADERS_COLOR: @WIN8_BLACK_COLOR;
+/**
+* @name 40. Header separator color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_HEADERS_SEPARATOR_COLOR: @WIN8_ACCENT_COLOR;
+@WIN8_DATAGRID_DRAG_HEADER_BACKGROUND_COLOR: @WIN8_ACCENT_COLOR;
+@WIN8_DATAGRID_ROW_BORDER: 1px solid transparent;
+/**
+* @name 50. Selected row background color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_SELECTION_BACKGROUND: @WIN8_SELECTED_BACKGROUND_COLOR;
+/**
+* @name 60. Selected row text color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_SELECTION_COLOR: @WIN8_BLACK_COLOR;
+/**
+* @name 70. Hovered row text color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_HOVER_COLOR: @WIN8_WHITE_COLOR;
+/**
+* @name 80. Hovered row background color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_HOVER_BACKGROUND: @WIN8_HOVERED_BACKGROUND_COLOR;
+/**
+* @name 110. Modified data color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_DATA_MODIFIED_COLOR: rgba(24, 167, 90, .4);
+/**
+* @name 120. NoData message color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_NODATA_COLOR: darken(@WIN8_WHITE_COLOR, 34%);
+@WIN8_DATAGRID_NODATA_FONT_SIZE: 17px;
+/**
+* @name 130. Invalidate data color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_DATA_INVALID_COLOR: @WIN8_INVALID_COLOR;
+/**
+* @name 131. Invalidate data faded color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_DATA_FADED_INVALID_COLOR: @WIN8_FADED_INVALID_COLOR;
+/**
+* @name 90. Group row text color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_GROUP_ROW_COLOR: #52ccff;
+/**
+* @name 90. Group row background color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_GROUP_ROW_BACKGROUND_COLOR: @WIN8_WHITE_COLOR;
+@WIN8_DATAGRID_GROUP_COLUMN_ICON_COLOR: #7C7C7C;
+@WIN8_DATAGRID_MASTER_DETAIL_BACKGROUND_COLOR: #f2f2f2;
+@WIN8_DATAGRID_HEADER_PANEL_MARGIN_BOTTOM: 10px;
+@WIN8_DATAGRID_FILTER_OPERATIONS_BORDER: @WIN8_DATAGRID_BORDER;
+@WIN8_DATAGRID_FILTER_OPERATION_IMAGE_SIZE: 16px;
+
+@HEADER_FILTER_COLOR: @WIN8_DATAGRID_HEADERS_COLOR;
+@HEADER_FILTER_COLOR_EMPTY: fade(@WIN8_DATAGRID_HEADERS_COLOR, 50%);
+/**
+* @name 30. Context menu icons color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_CONTEXT_MENU_ICONS_COLOR: #242424;
+
+@WIN8_DATAGRID_FILTER_OPERATION_COLOR: @WIN8_DATAGRID_CONTEXT_MENU_ICONS_COLOR;
+/**
+* @name 130. Focused cell border color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@WIN8_DATAGRID_FOCUS_COLOR: @WIN8_SELECTED_BACKGROUND_COLOR;
+/**
+* @name 131. Editor background
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_EDITOR_BACKGROUND: @WIN8_BASE_BACKGROUND;
+@WIN8_DATAGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: rgba(0,0,0,.1);
+@WIN8_DATAGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: rgba(0,0,0,.2);
+/**
+* @name 100. Row alternation background color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_ROW_ALTERNATION_COLOR: darken(@WIN8_WHITE_COLOR, 4%);
+@WIN8_DATAGRID_HEADERS_DROP_HIGHLIGHT_BACKGROUND_COLOR: @WIN8_DATAGRID_SELECTION_BACKGROUND;
+/**
+* @name 150. Highlighted text background color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@WIN8_DATAGRID_SEARCH_TEXT_BACKGROUND: @WIN8_SELECTED_BACKGROUND_COLOR;
+/**
+* @name 160. Highlighted text color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@WIN8_DATAGRID_SEARCH_TEXT_COLOR: @WIN8_BLACK_COLOR;
+/**
+* @name 170. Error row text color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_ERROR_ROW_TEXT_COLOR: @WIN8_WHITE_COLOR;
+/**
+* @name 180. Error row background color
+* @type color
+* @group datagrid
+*/
+@WIN8_DATAGRID_ERROR_ROW_BACKGROUND_COLOR: #f28f8f;
+
+@WIN8_EXPORT_MENU_SEPARATOP_COLOR: @WIN8_BLACK_COLOR;
+@WIN8_EXPORT_MENU_POPUP_TEXT_COLOR: @WIN8_BLACK_COLOR;
+@WIN8_EXPORT_MENU_POPUP_BACKGROUND: @WIN8_WHITE_COLOR;
+@WIN8_EXPORT_MENU_POPUP_BORDER: @WIN8_BLACK_COLOR;
+
+// Pager
+
+/**
+* @name 170. Pager selected item background color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@WIN8_PAGER_SELECTION_BACKGROUND: @WIN8_SELECTED_BACKGROUND_COLOR;
+@WIN8_PAGER_SELECTION_COLOR: @WIN8_BLACK_COLOR;
+
+@WIN8_DATAGRID_FILTER_OPERATION_BETWEEN_IMAGE: url(images/widgets/win8/color-schemes/white/grid/filter-between.png);
+@WIN8_DATAGRID_FILTER_OPERATION_BETWEEN_SELECTED_IMAGE: url(images/widgets/win8/color-schemes/white/grid/filter-between-selected.png);
+
+//
+// dxPivotGrid
+//
+
+@PIVOTGRID_AREA_BACKGROUND: @WIN8_WHITE_COLOR;
+
+@PIVOTGRID_BORDER_COLOR: darken(@WIN8_WHITE_COLOR, 20%);
+@PIVOTGRID_AREA_COLOR: darken(@WIN8_WHITE_COLOR, 54%);
+@PIVOTGRID_DATA_AREA_COLOR: darken(@WIN8_WHITE_COLOR, 89%);
+@PIVOTGRID_TOTALCOLOR: darken(@WIN8_WHITE_COLOR, 3%);
+@PIVOTGRID_GRANDTOTALCOLOR: darken(@WIN8_WHITE_COLOR, 8%);
+
+@PIVOTGRID_ACCENT_COLOR: rgb(96, 96, 96);
+@PIVOTGRID_SHADOW_COLOR: black;
+@PIVOTGRID_DRAG_HEADER_BORDER_COLOR: fade(@PIVOTGRID_ACCENT_COLOR, 50%);
+@PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: fade(@PIVOTGRID_SHADOW_COLOR, 10%);
+@PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: fade(@PIVOTGRID_SHADOW_COLOR, 20%);
+
+@PIVOTGRID_AREA_ALL_IMAGE: url(images/widgets/win8/color-schemes/white/grid/area-all.png);
+@PIVOTGRID_AREA_FILTER_IMAGE: url(images/widgets/win8/color-schemes/white/grid/area-filter.png);
+@PIVOTGRID_AREA_COLUMN_IMAGE: url(images/widgets/win8/color-schemes/white/grid/area-column.png);
+@PIVOTGRID_AREA_ROW_IMAGE: url(images/widgets/win8/color-schemes/white/grid/area-row.png);
+@PIVOTGRID_AREA_DATA_IMAGE: url(images/widgets/win8/color-schemes/white/grid/area-data.png);
+
+@PIVOTGRID_DIMENSION_IMAGE: url(images/widgets/win8/color-schemes/white/grid/dimension.png);
+@PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/win8/color-schemes/white/grid/hierarchy.png);
+
+@PIVOTGRID_COMMON_LEFT_RIGHT_PADDING: 10px;
+@PIVOTGRID_COMMON_TOP_BOTTOM_PADDING: 7px;
+@PIVOTGRID_FIELD_INDICATORS_OFFSET: 6px;
+@PIVOTGRID_EXPAND_ICON_OFFSET: -3px;
+@PIVOTGRID_EXPAND_ICON_TEXT_OFFSET: 2px;
+
+@PIVOTGRID_FIELD_AREA_TEXT_COLOR: lighten(@PIVOTGRID_AREA_COLOR, 26.2%);
+
+//dxScheduler
+@SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR: fade(@WIN8_BLACK_COLOR, 10%);
+
+/**
+* @name 15. Border color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_BASE_BORDER_COLOR: fade(@WIN8_BLACK_COLOR, 10%);
+
+/**
+* @name 20. Hour separator color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_ACCENT_BORDER_COLOR: fade(@WIN8_BLACK_COLOR, 50%);
+
+/**
+* @name 30. Appointment background color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_BASE_COLOR: #65bccd;
+
+/**
+* @name 35. Start appointment color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_START_COLOR: fade(black, 30%);
+
+/**
+* @name 40. Appointment text color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_TEXT_COLOR: @WIN8_WHITE_COLOR;
+
+/**
+* @name 35. Focused cell color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: #a9d9e2;
+
+/**
+* @name 10. Text color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_PANEL_TEXT_COLOR: @WIN8_BLACK_COLOR;
+
+/**
+* @name 5. Workspace color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_WORKSPACE_BACKGROUND_COLOR: @WIN8_WHITE_COLOR;
+
+@SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR: @WIN8_BLACK_COLOR;
+@SCHEDULER_TIME_PANEL_BACKGROUND_COLOR: @WIN8_WHITE_COLOR;
+
+@SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR;
+@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: @SCHEDULER_BASE_BORDER_COLOR;
+@SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
+@SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
+//Menu
+/**
+* @name 10. Background color
+* @type color
+* @group navigations.menu
+*/
+@WIN8_MENU_BACKGROUND: @WIN8_WHITE_COLOR;
+/**
+* @name 20. Popup background color
+* @type color
+* @group navigations.menu
+*/
+@WIN8_MENU_POPUP_BACKGROUND: @WIN8_WHITE_COLOR;
+/**
+* @name 80. Hovered item background color
+* @type color
+* @group navigations.menu
+* @paletteColorOpacity .15
+*/
+@WIN8_MENU_ITEM_HOVERED_BACKGROUND: @WIN8_HOVERED_BACKGROUND_COLOR;
+/**
+* @name 60. Selected item background color
+* @type color
+* @group navigations.menu
+* @paletteColorOpacity 1
+*/
+@WIN8_MENU_ITEM_SELECTED_BACKGROUND: @WIN8_SELECTED_BACKGROUND_COLOR;
+/**
+* @name 70. Selected item text color
+* @type color
+* @group navigations.menu
+*/
+@WIN8_MENU_ITEM_SELECTED_COLOR: @WIN8_BLACK_COLOR;
+/**
+* @name 50. Text color
+* @type color
+* @group navigations.menu
+*/
+@WIN8_MENU_TEXT_COLOR: @WIN8_ACCENT_COLOR;
+/**
+* @name 90. Disabled item text color
+* @type color
+* @group navigations.menu
+*/
+@WIN8_MENU_ITEM_DISABLED_COLOR: darken(@WIN8_WHITE_COLOR, 35%);
+/**
+* @name 30. Popup text color
+* @type color
+* @group navigations.menu
+*/
+@WIN8_MENU_POPUP_TEXT_COLOR: @WIN8_BLACK_COLOR;
+/**
+* @name 40. Border color
+* @type color
+* @group navigations.menu
+*/
+@WIN8_MENU_POPUP_BORDER_COLOR: @WIN8_BLACK_COLOR;
+
+@WIN8_SEPARATOP_COLOR: @WIN8_BLACK_COLOR;
+
+// TreeView
+@WIN8_TREE_VIEW_TEXT_COLOR: @WIN8_BLACK_COLOR;
+@WIN8_TREE_VIEW_HOVERED_STATE_BACKGROUND: @WIN8_HOVERED_BACKGROUND_COLOR;
+@WIN8_TREE_VIEW_HOVERED_STATE_COLOR: @WIN8_WHITE_COLOR;
+@WIN8_TREE_VIEW_FOCUSED_BACKGROUND: @WIN8_SELECTED_BACKGROUND_COLOR;
+@WIN8_TREE_VIEW_FOCUSED_COLOR: @WIN8_WHITE_COLOR;
+/**
+* @name 110. Border color
+* @type color
+* @group navigations.treeview
+*/
+@WIN8_TREE_VIEW_BORDER_COLOR: @WIN8_BLACK_COLOR;
+
+//Switch
+@WIN8_SWITCH_OFF_FOCUS_BACKGROUND: lighten(@WIN8_BLACK_COLOR, 69.7%);
+@WIN8_SWITCH_OFF_HOVER_BACKGROUND: lighten(@WIN8_BLACK_COLOR, 60%);
+
+// TimeView
+@WIN8_TIME_VIEW_CLOCK_IMAGE: url(images/widgets/win8/color-schemes/white/timeView/clock-bg.png);
+@WIN8_TIME_VIEW_HOUR_ARROW_IMAGE: url(images/widgets/win8/color-schemes/white/timeView/hour-arrow.png);
+@WIN8_TIME_VIEW_MINUTE_ARROW_IMAGE: url(images/widgets/win8/color-schemes/white/timeView/min-arrow.png);
+
+//Gallery
+
+@WIN8_GALLERY_NAV_BUTTON_COLOR: @WIN8_ICON_COLOR;
+@WIN8_GALLERY_NAV_BUTTON_BORDER: 2px solid @WIN8_ICON_COLOR;
+@WIN8_GALLERY_NAV_BUTTON_BACKGROUND_COLOR: fade(@WIN8_BASE_TEXT, 40);
+
+//ColorView
+@COLORVIEW_HANDLE_COLOR: #FFF;
+@COLORVIEW_HANDLE_BORDER_COLOR: fade(#000, 20%);
+
+//Calendar
+@WIN8_SCHEDULER_CALENDAR_COLOR: @WIN8_POPUP_COLOR;
+
+//Form
+
+/**
+* @name 10. Label text color
+* @type color
+* @group form
+*/
+@WIN8_FORM_LABEL_COLOR: @WIN8_LABEL_TEXT;
+/**
+* @name 20. Group border color
+* @type color
+* @group form
+*/
+@WIN8_FORM_GROUP_BORDER_COLOR: darken(@WIN8_WHITE_COLOR, 22%);
+@WIN8_FORM_REQUIRED_MARK_COLOR: #0078d7;
+@WIN8_FORM_OPTIONAL_MARK_COLOR: #888;
+
+// Icons
+@WIN8_LIST_DELETE_SWITCH_BACKGROUND: url(images/widgets/win8/color-schemes/white/list/delete.png);
+@WIN8_LIST_REORDER_HANDLE_BACKGROUND: url(images/widgets/win8/color-schemes/white/list/reorder_handle.png);
+@WIN8_SCROLLVIEW_PULLDOWN_BACKGROUND: url(images/widgets/win8/color-schemes/white/pulldown.black.png) 0 0 no-repeat;
+@WIN8_LOADINDICATOR_BACKGROUND: url(images/widgets/win8/color-schemes/white/loader64.gif);
+@WIN8_TOAST_INFO_BACKGROUND: url(images/widgets/win8/color-schemes/white/toast/info.png);
+@WIN8_TOAST_WARNING_BACKGROUND: url(images/widgets/win8/color-schemes/white/toast/warning.png);
+@WIN8_TOAST_ERROR_BACKGROUND: url(images/widgets/win8/color-schemes/white/toast/error.png);
+@WIN8_TOAST_SUCCESS_BACKGROUND: url(images/widgets/win8/color-schemes/white/toast/success.png);
+@WIN8PHONE_SCROLLVIEW_PULLDOWN_BACKGROUND: url(images/widgets/win8/color-schemes/black/pulldown.png) 0 -5px no-repeat;
+
+@WIN8_COLORBOX_NOCOLOR_IMG: url(images/widgets/win8/color-schemes/white/colorbox/nocolor.png);
+@WIN8_CALENDAR_EMPTY_CELL_IMAGE: url(images/widgets/win8/color-schemes/white/calendar/empty-cell.png) center center no-repeat;
+@WIN8_ATTENTION_IMAGE: url(images/widgets/win8/color-schemes/white/attention.png);

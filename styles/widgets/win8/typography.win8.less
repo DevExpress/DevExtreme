@@ -1,0 +1,72 @@
+.dx-theme-win8-typography {
+    background: @WIN8_BASE_BACKGROUND;
+    .dx-base-typography();
+
+    h1, .dx-font-xl {
+        font-weight: 400;
+        font-size: @WIN8_H1;
+        line-height: 1.1429;
+    }
+
+    h2, .dx-font-l {
+        font-weight: 200;
+        font-size: @WIN8_H2;
+        line-height: 1.1429;
+    }
+
+    h3, .dx-font-m {
+        font-weight: 200;
+        font-size: @WIN8_H3;
+        line-height: 1.3636;
+    }
+
+    h4 {
+        font-weight: 200;
+        font-size: @WIN8_H4;
+        line-height: 1.2;
+    }
+
+    h5, .dx-font-s {
+        font-weight: 200;
+        font-size: @WIN8_H5;
+        line-height: 1.2;
+    }
+
+    h6, small, .dx-font-xs {
+        font-weight: 200;
+        font-size: @WIN8_H6;
+        line-height: 1.6667;
+    }
+
+    b, strong {
+        font-weight: 700;
+    }
+
+    &.dx-device-phone {
+        font-size: 11pt;
+
+        h1, .dx-font-xl {
+            font-size: @WIN8PHONE_H1;
+        }
+
+        h2, .dx-font-l {
+            font-size: @WIN8PHONE_H2;
+        }
+
+        h3, .dx-font-m {
+            font-size: @WIN8PHONE_H3;
+        }
+
+        h4, .dx-font-s {
+            font-size: @WIN8PHONE_H4;
+        }
+
+        h5 {
+            font-size: @WIN8PHONE_H5;
+        }
+
+        h6, small, .dx-font-xs {
+            font-size: @WIN8PHONE_H6;
+        }
+    }
+}

@@ -1,0 +1,74 @@
+@WIN10_ACCORDION_ITEM_TITLE_ICON_SIZE: 20px;
+@WIN10_ACCORDION_ITEM_PADDING_HORIZONTAL: 12px;
+@WIN10_ACCORDION_ITEM_PADDING_VERTICAL: 10px;
+@WIN10_ACCORDION_ITEM_ICON_TOP_CORRECTION: 2px;
+
+.dx-accordion-item {
+    border-bottom: 1px solid @WIN10_ACCORDION_ITEM_BORDER_COLOR;
+
+    &.dx-state-hover, &.dx-state-focused {
+        & > .dx-accordion-item-title {
+            background-color: @WIN10_ACCORDION_ITEM_HOVER_TITLE_BACKGROUND_COLOR;
+        }
+
+        &.dx-accordion-item-opened {
+            & > .dx-accordion-item-title {
+                background-color: @WIN10_ACCORDION_ITEM_OPENED_HOVER_TITLE_BACKGROUND_COLOR;
+            }
+        }
+    }
+
+    &.dx-state-active {
+        & > .dx-accordion-item-title {
+            background-color: @WIN10_ACCORDION_ITEM_ACTIVE_TITLE_BACKGROUND_COLOR;
+        }
+
+        &.dx-accordion-item-opened {
+            & > .dx-accordion-item-title {
+                background-color: @WIN10_ACCORDION_ITEM_OPENED_ACTIVE_TITLE_BACKGROUND_COLOR;
+            }
+        }
+    }
+}
+
+.dx-accordion-item-title {
+    padding: @WIN10_ACCORDION_ITEM_PADDING_VERTICAL @WIN10_ACCORDION_ITEM_PADDING_HORIZONTAL;
+
+    &:before {
+        content: "\f016";
+        font-size: @WIN10_ACCORDION_ITEM_TITLE_ICON_SIZE;
+        font-family: DXIcons;
+        margin-top: @WIN10_ACCORDION_ITEM_ICON_TOP_CORRECTION;
+    }
+
+    .dx-icon {
+        margin-right: @WIN10_ACCORDION_ITEM_PADDING_HORIZONTAL;
+        .dx-icon-sizing(@WIN10_ACCORDION_ITEM_TITLE_ICON_SIZE);
+    }
+
+    .dx-accordion-item-opened > & {
+        color: @WIN10_ACCORDION_ITEM_OPENED_TITLE_COLOR;
+        background-color: @WIN10_ACCORDION_ITEM_OPENED_TITLE_BACKGROUND_COLOR;
+
+        &:before {
+            content: "\f014";
+        }
+    }
+
+    .dx-rtl.dx-accordion&,
+    .dx-rtl .dx-accordion & {
+        .dx-icon {
+            margin-right: 0;
+            margin-left: @WIN10_ACCORDION_ITEM_PADDING_HORIZONTAL;
+        }
+
+        &:before {
+            right: auto;
+            left: @WIN10_ACCORDION_ITEM_PADDING_HORIZONTAL;
+        }
+    }
+}
+
+.dx-accordion-item-body {
+    padding: @WIN10_ACCORDION_ITEM_PADDING_VERTICAL @WIN10_ACCORDION_ITEM_PADDING_HORIZONTAL 2 * @WIN10_ACCORDION_ITEM_PADDING_VERTICAL;
+}

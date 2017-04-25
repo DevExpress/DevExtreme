@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (web)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceRoot}/bin/Debug/netcoreapp1.0/runner.dll",
+      "args": [],
+      "cwd": "${workspaceRoot}",
+      "externalConsole": true,
+      "sourceFileMap": {
+        "/Views": "${workspaceRoot}/Views"
+      }
+    }
+  ]
+}

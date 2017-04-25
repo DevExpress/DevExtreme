@@ -1,0 +1,201 @@
+@WIN8_POPUP_TITLE_CLOSEBUTTON_ICON_SIZE: 30px;
+@WIN8_POPUP_TITLE_CLOSEBUTTON_ICON_PADDING: 1px;
+@WIN8_POPUP_TITLE_CLOSEBUTTON_FOCUS_BACKGROUND: @WIN8_SELECTED_BACKGROUND_COLOR;
+@WIN8_POPUP_TITLE_CLOSEBUTTON_HOVER_BACKGROUND: #2bb0ca;
+
+.dx-popup-wrapper {
+    & > .dx-overlay-content {
+        background-color: @WIN8_POPUP_COLOR;
+        color: @WIN8_BASE_TEXT;
+    }
+
+    .dx-button-has-text {
+        min-width: 100px;
+    }
+
+    .dx-button-has-icon {
+        min-width: 0;
+    }
+}
+
+.dx-popup-fullscreen {
+    padding: 0;
+}
+
+.dx-popup-fullscreen-width {
+    .dx-popup-title {
+        margin: 0 20%;
+
+        &.dx-toolbar {
+            width: 60%;
+        }
+    }
+
+    .dx-popup-content {
+        margin: 0 20%;
+    }
+
+    .dx-popup-bottom {
+        margin: 0 20%;
+
+        &.dx-toolbar {
+            width: 60%;
+        }
+    }
+}
+
+.dx-popup-title {
+    &.dx-toolbar {
+        opacity: 1;
+        padding: 10px;
+    }
+
+    .dx-toolbar-label {
+        line-height: normal;
+        font-size: inherit;
+        padding: 0px;
+    }
+
+    .dx-closebutton {
+        .dx-icon {
+            width: @WIN8_POPUP_TITLE_CLOSEBUTTON_ICON_SIZE;
+            height: @WIN8_POPUP_TITLE_CLOSEBUTTON_ICON_SIZE;
+            padding: @WIN8_POPUP_TITLE_CLOSEBUTTON_ICON_PADDING;
+            font-size: @WIN8PHONE_ICON_SIZE;
+        }
+
+        &.dx-state-focused {
+            background-color: transparent;
+            .dx-icon {
+                background-color: @WIN8_POPUP_TITLE_CLOSEBUTTON_FOCUS_BACKGROUND;
+            }
+        }
+
+        &.dx-state-hover {
+            background-color: transparent;
+            .dx-icon {
+                background-color: @WIN8_POPUP_TITLE_CLOSEBUTTON_HOVER_BACKGROUND;
+            }
+        }
+    }
+}
+
+.dx-popup-bottom {
+    .dx-clearfix-mixin();
+    float: right;
+    min-height: @WIN8_DIALOG_BUTTONS_HEIGHT;
+
+    &.dx-toolbar {
+        height: 56px;
+        line-height: normal;
+        margin-bottom: 4px;
+        padding-top: 14px;
+    }
+
+    .dx-toolbar-button {
+        padding: 0;
+
+        .dx-button {
+            border: 2px solid @WIN8_BASE_TEXT;
+            padding: 0 4px;
+            height: 32px;
+            margin: 0 8px 14px;
+
+            .dx-button-text {
+                display: inline;
+                line-height: 28px;
+            }
+
+            &.dx-state-active {
+                background: @WIN8_ACCENT_COLOR;
+            }
+        }
+    }
+}
+
+.dx-popup-cancel-visible, .dx-popup-clear-visible, .dx-popup-done-visible {
+    .dx-popup-content {
+        bottom: 60px;
+    }
+}
+
+.dx-dialog {
+    .dx-toolbar {
+        background: none;
+    }
+
+    .dx-toolbar-center {
+        margin: 0;
+        float: right;
+    }
+
+    .dx-rtl {
+        .dx-toolbar-center {
+            float: left;
+        }
+    }
+}
+
+.dx-dialog-root {
+    .dx-overlay-shader {
+        background-color: @WIN8_BASE_BACKGROUND;
+    }
+
+    .dx-overlay-content {
+        padding: @WIN8_DIALOG_PADDING;
+        background: @WIN8_DIALOG_BACKGROUND;
+        color: @WIN8_BASE_TEXT;
+    }
+
+    .dx-popup-title {
+        padding: @WIN8_DIALOG_TITLE_PADDING;
+        border: none;
+        background: none;
+        background-image: none;
+        height: 29px;
+
+        .dx-toolbar-label {
+            font-weight: 600;
+            font-size: @WIN8_DIALOG_TITLE_FONT_SIZE;
+            line-height: 29px;
+        }
+    }
+}
+
+.dx-device-phone {
+    .dx-popup-title, .dx-popup-content, .dx-popup-bottom {
+        margin: 0;
+    }
+
+    .dx-popup-title, .dx-popup-bottom {
+        &.dx-toolbar {
+            width: 100%;
+            background: none;
+        }
+    }
+
+    .dx-popup-bottom.dx-toolbar .dx-toolbar-button .dx-button .dx-button-text {
+        line-height: 28px;
+    }
+
+    .dx-dialog-root {
+        .dx-overlay-content {
+            width: @WIN8PHONE_DIALOG_WIDTH;
+        }
+    }
+
+    .dx-dialog-message {
+        padding-top: 15px;
+    }
+
+    .dx-popup-title .dx-toolbar-label {
+        padding: 0;
+    }
+}
+
+.dx-rtl {
+    .dx-toolbar-item.dx-toolbar-button {
+        margin-left: 5px;
+        margin-right: 0;
+    }
+}

@@ -1,0 +1,182 @@
+"use strict";
+
+var $ = require("jquery"),
+    CalendarStrategy = require("./ui.date_box.strategy.calendar"),
+    TimeView = require("./ui.time_view"),
+    Box = require("../box");
+
+var SHRINK_VIEW_SCREEN_WIDTH = 573,
+    DATEBOX_ADAPTIVITY_MODE_CLASS = "dx-datebox-adaptivity-mode";
+
+var CalendarWithTimeStrategy = CalendarStrategy.inherit({
+
+    NAME: "CalendarWithTime",
+
+    getDefaultOptions: function() {
+        return $.extend(this.callBase(), {
+            applyValueMode: "useButtons",
+            buttonsLocation: "bottom after",
+            showPopupTitle: false
+        });
+    },
+
+    getDisplayFormat: function(displayFormat) {
+        return displayFormat || "shortdateshorttime";
+    },
+
+    _renderWidget: function() {
+        this.callBase();
+
+        this._timeView = this.dateBox._createComponent($("<div>"), TimeView, {
+            value: this.dateBoxValue(),
+            _showClock: !this._isShrinkView(),
+            onValueChanged: $.proxy(this._valueChangedHandler, this)
+        });
+    },
+
+    renderOpenedState: function() {
+        this.callBase();
+        var popup = this._getPopup();
+
+        if(popup) {
+            popup._wrapper().toggleClass(DATEBOX_ADAPTIVITY_MODE_CLASS, this._isSmallScreen());
+        }
+
+        clearTimeout(this._repaintTimer);
+
+        this._repaintTimer = setTimeout($.proxy(function() {
+            this._getPopup() && this._getPopup().repaint();
+        }, this), 0);
+    },
+
+    isAdaptivityChanged: function() {
+        var isAdaptiveMode = this._isShrinkView();
+
+        if(isAdaptiveMode !== this._currentAdaptiveMode) {
+            this._currentAdaptiveMode = isAdaptiveMode;
+            return true;
+        }
+
+        return this.callBase();
+    },
+
+    _updateValue: function(preventDefaultValue) {
+        var date = this.dateBoxValue();
+
+        if(!date && !preventDefaultValue) {
+            date = new Date();
+        }
+
+        this.callBase();
+
+        if(this._timeView && date) {
+            this._timeView.option("value", date);
+        }
+    },
+
+    _isSmallScreen: function() {
+        return $(window).width() <= SHRINK_VIEW_SCREEN_WIDTH;
+    },
+
+    _isShrinkView: function() {
+        return this.dateBox.option("adaptivityEnabled") && this._isSmallScreen();
+    },
+
+    _getBoxItems: function() {
+        var items = [{ ratio: 0, shrink: 0, baseSize: "auto", name: "calendar" }];
+
+        if(!this._isShrinkView()) {
+            items.push({ ratio: 0, shrink: 0, baseSize: "auto", name: "time" });
+        }
+
+        return items;
+    },
+
+    renderPopupContent: function() {
+        this.callBase();
+        this._currentAdaptiveMode = this._isShrinkView();
+
+        var $popupContent = this._getPopup().content();
+
+        this._box = this.dateBox._createComponent($("<div>").appendTo($popupContent), Box, {
+            direction: "row",
+            crossAlign: "start",
+            items: this._getBoxItems(),
+            itemTemplate: $.proxy(function(data) {
+                var $container = $("<div>");
+
+                switch(data.name) {
+                    case "calendar":
+                        $container.append(this._widget.element());
+                        if(this._isShrinkView()) $container.append(this._timeView.element());
+                        break;
+                    case "time":
+                        $container.append(this._timeView.element());
+                        break;
+                }
+
+                return $container;
+            }, this)
+        });
+
+        this._attachTabHandler();
+    },
+
+    popupConfig: function(popupConfig) {
+        var calendarPopupConfig = this.callBase(popupConfig),
+            result = $.extend(calendarPopupConfig, {
+                onShowing: $.proxy(function() {
+                    if(this._box.option("_layoutStrategy") === "fallback") {
+                        var clockMinWidth = this._getPopup().content().find(".dx-timeview-clock").css("minWidth");
+
+                        this._timeView.element().css("width", clockMinWidth);
+                    }
+                }, this),
+            });
+
+        return result;
+    },
+
+    getFirstPopupElement: function() {
+        return this._timeView._hourBox.element().find("input");
+    },
+
+    _attachTabHandler: function() {
+        var dateBox = this.dateBox,
+            handler = function(e) {
+                if(e.shiftKey) {
+                    e.preventDefault();
+                    dateBox.focus();
+                }
+            };
+
+        this._timeView._hourBox.registerKeyHandler("tab", handler);
+    },
+
+    _preventFocusOnPopup: function(e) {
+        if(!$(e.target).hasClass("dx-texteditor-input")) {
+            this.callBase.apply(this, arguments);
+            if(!this.dateBox._hasFocusClass()) {
+                this.dateBox.focus();
+            }
+        }
+    },
+
+    getValue: function() {
+        var date = this._widget.option("value"),
+            time = this._timeView.option("value");
+
+        date = date ? new Date(date) : new Date();
+        date.setHours(time.getHours(), time.getMinutes(), time.getSeconds());
+
+        return date;
+    },
+
+    dispose: function() {
+        clearTimeout(this._removeMinWidthTimer);
+        clearTimeout(this._repaintTimer);
+        this.callBase();
+    }
+});
+
+module.exports = CalendarWithTimeStrategy;

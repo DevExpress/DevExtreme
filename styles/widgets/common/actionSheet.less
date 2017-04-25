@@ -1,0 +1,35 @@
+.dx-actionsheet-popup-wrapper {
+    .dx-overlay-content {
+        padding-top: 0;
+        padding-bottom: 0;
+        .user-drag(none);
+    }
+}
+.dx-actionsheet-popup-wrapper,
+.dx-actionsheet-popover-wrapper {
+    .dx-popup-content {
+        .dx-button {
+            width: 100%;
+            margin-right: 0;
+            margin-left: 0;
+        }
+    }
+}
+
+.dx-actionsheet-item, .dx-actionsheet-cancel {
+    width: 100%;
+}
+
+.dx-state-disabled, &.dx-state-disabled {
+    .dx-actionsheet-container {
+        .dx-button {
+            .dx-button-disabled;
+        }
+    }
+}
+
+.dx-actionsheet-popup-wrapper, .dx-actionsheet-popover-wrapper {
+    .dx-popup-title {
+        word-wrap: break-word;
+    }
+}

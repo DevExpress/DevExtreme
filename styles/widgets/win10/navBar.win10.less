@@ -1,0 +1,78 @@
+@WIN10_NAVBAR_ICON_SIZE: 26px;
+@WIN10_NAVBAR_BADGE_OFFET_TOP: -32px;
+@WIN10_NAVBAR_ITEM_PADDING_TOP: 16px;
+@WIN10_NAVBAR_ITEM_PADDING_BOTTOM: 14px;
+
+.dx-navbar {
+    padding: 0 10px;
+    background-color: @WIN10_NAVBAR_BACKGROUND_COLOR;
+
+    .dx-tabs-wrapper {
+        width: 100%;
+        table-layout: fixed;
+        display: table-row;
+    }
+
+    &.dx-tabs .dx-icon {
+        width: @WIN10_NAVBAR_ICON_SIZE;
+        height: @WIN10_NAVBAR_ICON_SIZE;
+    }
+}
+
+.dx-nav-item {
+    vertical-align: middle;
+    color: @WIN10_NAVBAR_ITEM_TEXT_COLOR;
+    border: none;
+    padding: @WIN10_NAVBAR_ITEM_PADDING_TOP 2px @WIN10_NAVBAR_ITEM_PADDING_BOTTOM;
+
+    .dx-tab-text {
+        padding: 12px 0 16px;
+    }
+
+    .dx-icon  {
+        .dx-icon-sizing(@WIN10_NAVBAR_ICON_SIZE);
+
+        & + .dx-tab-text {
+            padding: 4px 0 0 0;
+        }
+    }
+
+    &.dx-tab-selected {
+        background-color: @WIN10_NAVBAR_BACKGROUND_COLOR;
+        color: @WIN10_NAVBAR_ITEM_SELECTED_TEXT_COLOR;
+        box-shadow: inset 0 -3px 0 @WIN10_NAVBAR_ITEM_SELECTED_TEXT_COLOR;
+    }
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+        background-color: @WIN10_NAVBAR_ITEM_HOVERED_BACKGROUND_COLOR;
+    }
+
+    .dx-device-phone & {
+        padding-top: @WIN10_NAVBAR_ITEM_PADDING_TOP + 1px;
+        padding-bottom: @WIN10_NAVBAR_ITEM_PADDING_BOTTOM + 2px;
+        font-size: 13px;
+    }
+}
+
+.dx-navbar-item-badge {
+    top: 50%;
+    right: auto;
+    left: 50%;
+    margin-right: 0;
+    margin-top: @WIN10_NAVBAR_BADGE_OFFET_TOP;
+    box-shadow: 0 0 0 1px @WIN10_NAVBAR_BACKGROUND_COLOR;
+
+    .dx-rtl.dx-navbar &,
+    .dx-rtl .dx-navbar & {
+        right: 50%;
+        left: auto;
+    }
+}
+
+.dx-state-disabled {
+    &.dx-nav-item,
+    .dx-nav-item {
+        color: @WIN10_NAVBAR_ITEM_DISABLED_TEXT_COLOR;
+    }
+}

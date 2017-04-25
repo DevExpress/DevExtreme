@@ -1,0 +1,61 @@
+<div class="master-detail-layout" data-options="dxLayout : { name: 'split', tablet: true, platform: 'ios' }">
+    <div class="master-pane dx-splitter">
+    </div>
+
+    <div class="detail-pane">
+    </div>
+
+</div>
+
+<div class="master-detail-layout" data-options="dxLayout : { name: 'split', tablet: true, platform: 'android' }">
+    <div class="header-toolbar" data-bind="dxToolbar: { items: [{ text: title, align: 'center' }] }" data-options="dxCommandContainer : { id: 'android-simple-toolbar' }" >
+    </div>
+    <div class="main-area">
+        <div class="master-pane dx-splitter">
+        </div>
+        <div class="detail-pane">
+        </div>
+    </div>
+</div>
+
+<div class="split-layout" data-options="dxLayout : { name: 'split', platform: 'win', phone: false, version: [8] } " >
+    <div class="layout-header">
+        <div class="header-toolbar" data-bind="dxToolbar: { items: [{ text: title, location: 'center' }] }" data-options="dxCommandContainer : { id: 'win8-master-detail-toolbar' }" >
+        </div>
+    </div>
+
+    <div class="left-content">
+    </div>
+
+    <div class="right-content">
+    </div>
+
+    <div class="dx-app-bar">
+        <div class="footer-toolbar" data-bind="dxToolbar: { }" data-options="dxCommandContainer : { id: 'win8-appbar' }">
+        </div>
+    </div>
+
+</div>
+
+<div class="split-layout" data-options="dxLayout : { name: 'split', platform: 'win', phone: false } ">
+    <div class="layout-header">
+        <div class="header-toolbar" data-bind="dxToolbar: { items: [{ text: title, location: 'center' }] }" data-options="dxCommandContainer : { id: 'win10-appbar' }">
+        </div>
+    </div>
+
+    <div class="left-content">
+    </div>
+
+    <div class="right-content">
+    </div>
+
+</div>
+
+<div class="master-detail-layout" data-options="dxLayout : { name: 'split', tablet: true, platform: 'generic' }">
+    <div class="master-pane dx-splitter">
+    </div>
+
+    <div class="detail-pane">
+    </div>
+
+</div>

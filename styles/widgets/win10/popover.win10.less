@@ -1,0 +1,19 @@
+@WIN10_POPOVER_WITH_TITLE_CONTENT_PADDING_TOP: 6px;
+
+.dx-popover-wrapper {
+    .dx-overlay-content {
+        .dx-popover-arrow {
+            display: none;
+            height: 4px;
+            width: 4px;
+
+            &:after {
+                content: none;
+            }
+        }
+    }
+
+    .dx-popup-title + .dx-popup-content {
+        padding-top: @WIN10_POPOVER_WITH_TITLE_CONTENT_PADDING_TOP;
+    }
+}

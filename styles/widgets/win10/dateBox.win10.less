@@ -1,0 +1,128 @@
+.dx-datebox {
+    &.dx-datebox-calendar .dx-dropdowneditor-icon {
+        .dx-icon-event;
+        .dx-icon-sizing(18px);
+    }
+}
+
+.dx-datebox-calendar,
+.dx-datebox-list,
+.dx-datebox-native {
+    &.dx-state-focused,
+    &.dx-state-active {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_FOCUSED_BORDER_COLOR;
+        }
+
+        .dx-texteditor-input {
+            background-color: @WIN10_TEXTEDITOR_FOCUSED_INPUT_BACKGROUND_COLOR;
+            color: @WIN10_TEXTEDITOR_FOCUSED_TEXT_COLOR;
+        }
+    }
+}
+
+.dx-datebox-wrapper {
+    .dx-calendar {
+        background-color: @WIN10_DROPDOWNEDITOR_POPUP_BACKGROUND_COLOR;
+    }
+}
+
+.dx-datebox-wrapper-rollers {
+    &.dx-dropdowneditor-overlay .dx-overlay-content {
+        border: 2px solid @WIN10_DATEBOX_ROLLERS_POPUP_BORDER_COLOR;
+    }
+
+    .dx-popup-title {
+        display: none;
+
+        &.dx-toolbar {
+            height: 0;
+            min-height: 0;
+        }
+    }
+
+    .dx-popup-content {
+        padding: 0;
+    }
+
+    .dx-popup-bottom {
+        height: 34px;
+        padding: 0;
+        border-top: 2px solid @WIN10_DATEBOX_BOTTOM_TOOLBAR_BORDER_COLOR;
+
+        .dx-toolbar-center {
+            width: 100%;
+        }
+
+        .dx-toolbar-button {
+            padding: 0;
+
+            .dx-button {
+                width: 100%;
+
+                .dx-button-content {
+                    background-color: @WIN10_DATEBOX_ROLLERS_BUTTON_BACKGROUND_COLOR;
+                    border-color: @WIN10_DATEBOX_ROLLERS_BUTTON_BACKGROUND_COLOR;
+                }
+
+                &.dx-state-hover .dx-button-content {
+                    background-color: @WIN10_DATEBOX_ROLLERS_BUTTON_HOVER_BACKGROUND_COLOR;
+                    border-color: @WIN10_DATEBOX_ROLLERS_BUTTON_HOVER_BACKGROUND_COLOR;
+                }
+
+                &.dx-state-active .dx-button-content {
+                    background-color: @WIN10_DATEBOX_ROLLERS_BUTTON_ACTIVE_BACKGROUND_COLOR;
+                    border-color: @WIN10_DATEBOX_ROLLERS_BUTTON_ACTIVE_BACKGROUND_COLOR;
+                }
+            }
+
+            .dx-popup-cancel,
+            .dx-popup-done {
+                height: 32px;
+
+                .dx-button-text {
+                    display: none;
+                }
+            }
+
+            .dx-popup-cancel .dx-button-content {
+                .dx-icon-close;
+            }
+
+            .dx-popup-done .dx-button-content {
+                .dx-icon-check;
+            }
+        }
+    }
+
+    .dx-rtl.dx-overlay-content {
+        .dx-popup-bottom .dx-toolbar-button {
+            padding: 0;
+        }
+    }
+}
+
+.dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
+    .dx-popup-content {
+        padding-left: 37px;
+        margin-bottom: -10px;
+    }
+
+    .dx-popup-bottom {
+        padding-bottom: 5px;
+    }
+
+    .dx-rtl.dx-overlay-content {
+        .dx-popup-content {
+            padding-left: 12px;
+            padding-right: 37px;
+            margin-bottom: -10px;
+        }
+    }
+}
+
+.dx-device-phone {
+    .dx-datebox-wrapper .dx-dateview {
+        width: 100%;
+    }
+}

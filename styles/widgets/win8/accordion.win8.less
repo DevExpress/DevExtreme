@@ -1,0 +1,61 @@
+@WIN8_ACCORDION_BODY_PADDING: 8px 12px 22px;
+@WIN8_ACCORDION_TITLE_PADDING: 9px 12px;
+
+@WIN8_ACCORDION_ICON_SIZE: 22px;
+@WIN8_ACCORDION_ARROW_LINE_HEIGHT: 22px;
+
+.dx-accordion-item {
+    border-bottom: 1px solid @WIN8_ACCORDION_BORDER_COLOR;
+
+    &.dx-state-active:not(.dx-accordion-item-opened) {
+        & > .dx-accordion-item-title {
+            color: @WIN8_ACCORDION_ACTIVE_STATE_TEXT_COLOR;
+        }
+    }
+}
+
+.dx-accordion-item-opened > .dx-accordion-item-title {
+    color: @WIN8_ACCORDION_ACTIVE_ITEM_TITLE_TEXT;
+    background-color: @WIN8_ACCORDION_ACTIVE_ITEM_TITLE_BACKGROUND;
+    font-weight: bold;
+
+    &:before {
+        color: @WIN8_ACCORDION_ARROW_UP_COLOR;
+        content: "\f014";
+    }
+}
+
+.dx-accordion-item-title {
+    padding: @WIN8_ACCORDION_TITLE_PADDING;
+
+    .dx-icon {
+        .dx-icon-sizing(@WIN8_ACCORDION_ICON_SIZE);
+        .dx-icon-margin(@WIN8_ACCORDION_ICON_SIZE/2);
+        display: inline-block;
+    }
+
+
+    &:before {
+        font-size: @WIN8_ACCORDION_ICON_SIZE;
+        font-weight: normal;
+        font-family: DXIcons;
+        content: "\f016";
+        color: @WIN8_ACCORDION_ARROW_DOWN_COLOR;
+        margin-left: @WIN8_ACCORDION_ICON_SIZE/2;
+        margin-right: 0;
+        line-height: @WIN8_ACCORDION_ARROW_LINE_HEIGHT;
+    }
+}
+
+.dx-accordion-item-body {
+    padding: @WIN8_ACCORDION_BODY_PADDING;
+}
+
+.dx-rtl {
+    .dx-accordion-item-title {
+        &:before {
+            margin-right: @WIN8_ACCORDION_ICON_SIZE/2;
+            margin-left: 0;
+        }
+    }
+}

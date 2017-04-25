@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+
+<script src="@Url.Content("~/vendor/jquery/jquery-2.2.3.min.js")"></script>
+<script src="@Url.Content("~/vendor/knockout/knockout-3.4.0.js")"></script>
+
+<style>
+
+    a,
+    .link
+    {
+        text-decoration: none;
+        color: Blue;
+        cursor: pointer;
+    }
+
+    #cat_block,
+    #suite_block
+    {
+        border: solid 1px silver;
+        padding: 10px;
+        margin: 10px;
+        float: left;
+    }
+
+    #cat_block li .explicit
+    {
+        color: gray;
+    }
+
+</style>
+
+<body>
+    <div id="cat_block">
+        <div>
+            <b>Categories</b>
+        </div>
+        <hr />
+        <div>
+            Select:
+                <span class="link" data-bind="click: handleSelectAll">all</span>,
+                <span class="link" data-bind="click: handleUnselectAll">none</span>
+            | <a target="_blank" href="" data-bind="attr: { href: runSelectedUrl }">RUN</a>
+        </div>
+        <div>
+            <label>
+                Force combined styles: <input type="checkbox" data-bind="checked: combinedStyles" />
+            </label>
+        </div>
+        <div>
+            <label>
+                IE mode: <select data-bind="options: IE_MODES, value: ieMode"></select>
+            </label>
+        </div>
+        <div>
+            <label>
+                Check for globals: <input type="checkbox" data-bind="checked: noGlobals" />
+            </label>
+        </div>
+        <div>
+            <label>
+                No try catch: <input type="checkbox" data-bind="checked: noTryCatch" />
+            </label>
+        </div>
+        <div>
+            <label>
+                Check for timers: <input type="checkbox" data-bind="checked: noTimers" />
+            </label>
+        </div>
+        <div>
+            <label>
+                jQuery: <select data-bind="options: JQUERY_VERSION, optionsText: 'name', optionsValue: 'value', value: jqueryVersion"></select>
+            </label>
+        </div>
+
+        <ul data-bind="foreach: cats">
+            <li>
+                <input type=checkbox data-bind="checked: selected">
+                <span class="link" data-bind="text: name, css: { explicit: explicit }, click: handleChoose"></span>
+            </li>
+        </ul>
+        <div>
+            <small>Greyed are explicit tests</small>
+        </div>
+    </div>
+
+    <div id="suite_block" data-bind="visible: chosenCat">
+        <div>
+            <b>Suites for category &quot;<span data-bind="text: chosenCat"></span>&quot;</b>
+            <span class="link" data-bind="click: handleRefreshSuies">(Refresh)</span>
+        </div>
+        <hr />
+        <div>
+            <a target="_blank" href="" data-bind="attr: { href: runAllInCatUrl }">Run all suites</a>
+        </div>
+        <ul data-bind="foreach: suites">
+            <li>
+                <a data-bind="text: shortName, attr: { href: url }"></a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+
+<script>
+    $(function() {
+        "use strict";
+
+        var ROOT_URL = "@Url.Content("~/")";
+
+        // Category model
+
+        var CatModel = function(data) {
+            this.name = data.Name;
+            this.explicit = data.Explicit;
+            this.selected = ko.observable(CatModel.shouldSelectByDefault(this));
+        };
+
+        CatModel.shouldSelectByDefault = function(cat) {
+            return !cat.explicit;
+        };
+
+        CatModel.prototype = {
+            handleChoose: function(cat, e) {
+                vm.chosenCat(cat);
+                cat.loadSuites();
+            },
+
+            loadSuites: function() {
+                $.getJSON(@Html.Raw(@Json.Serialize(Url.Action("SuitesJson"))) + "/" + this.name)
+                    .done(function(suites) {
+                        suites = $.map(suites, function(s) { return new SuiteModel(s) });
+                        vm.suites(suites);
+
+                    });
+            },
+
+            toString: function() {
+                return this.name;
+            }
+        };
+
+
+        // Suite model
+
+        var SuiteModel = function(data) {
+            this.shortName = data.ShortName;
+            this.url = ko.computed(function() {
+                var mainModel = ko.dataFor(document.getElementById("cat_block")), // (ko sucks?)
+                    qs = {};
+                $.extend(qs, mainModel._runUrlExtraParams());
+                return data.Url + "?" + $.param(qs);
+            });
+        }
+
+
+        // Main model
+
+        var MainModel = function() {
+            this.cats = ko.observableArray();
+            this.chosenCat = ko.observable();
+            this.suites = ko.observableArray();
+            this.combinedStyles = ko.observable(false);
+            this.IE_MODES = ["edge", "10", "9"];
+            this.ieMode = ko.observable(this.IE_MODES[0]);
+            this.noTryCatch = ko.observable(false);
+            this.noGlobals = ko.observable(false);
+            this.noTimers = ko.observable(true);
+            this.JQUERY_VERSION = [
+                { name: "", value: null },
+                { name: "2.x", value: "2" },
+                { name: "1.x", value: "1" }
+            ];
+            this.jqueryVersion = ko.observable(null);
+
+            this.hasChosenCat = ko.computed(
+                function() { return !!this.chosenCat() },
+                this
+            );
+
+            this.runAllInCatUrl = ko.computed(
+                function() {
+                    if(!this.hasChosenCat())
+                        return;
+                    return this._formatRunAllUrl([this.chosenCat().name]);
+                },
+                this
+            );
+
+            this.runSelectedUrl = ko.computed(
+                function() {
+                    var names = this.selectedCatNames();
+                    return this._formatRunAllUrl(names);
+                },
+                this
+            );
+        };
+
+        MainModel.prototype = {
+
+            handleRefreshSuies: function(s, e) {
+                this.chosenCat().loadSuites();
+            },
+
+            handleSelectAll: function(s, e) {
+                s._selectAllCore(CatModel.shouldSelectByDefault);
+            },
+
+            handleUnselectAll: function(s, e) {
+                s._selectAllCore(function() { return false });
+            },
+
+            selectedCatNames: function() {
+                return $.map(
+                    $.grep(this.cats(), function(c) { return c.selected() }),
+                    function(c) { return c.name }
+                );
+            },
+
+            implicitCategoriesCount: function() {
+                return $.grep(this.cats(), function(c) { return !c.explicit }).length;
+            },
+
+            _runUrlExtraParams: function() {
+                var result = {};
+                if(this.combinedStyles())
+                    result.combinedStyles = "true";
+                if(this.ieMode() !== "edge")
+                    result.ieMode = this.ieMode();
+                if(this.noGlobals())
+                    result.noglobals = "true";
+                if(this.noTryCatch())
+                    result.notrycatch = "true";
+                if(this.noTimers())
+                    result.notimers = "true";
+                if(this.jqueryVersion())
+                    result.jquery = this.jqueryVersion();
+                return result;
+            },
+
+            _formatRunAllUrl: function(include) {
+                var qs = { };
+                if(include && include.length) {
+                    if(include.length !== this.implicitCategoriesCount())
+                        qs.include = include.join();
+                }
+                $.extend(qs, this._runUrlExtraParams());
+                return ROOT_URL + "run?" + $.param(qs);
+            },
+
+            _selectAllCore: function(func) {
+                $.each(this.cats(), function() { this.selected(func(this)) });
+            }
+        };
+
+        var vm = new MainModel;
+
+        $.getJSON(@Html.Raw(@Json.Serialize(Url.Action("CategoriesJson"))))
+            .done(function(cats) {
+                cats = $.map(cats, function(c) { return new CatModel(c) });
+                vm.cats(cats);
+            });
+
+        ko.applyBindings(vm);
+    });
+</script>

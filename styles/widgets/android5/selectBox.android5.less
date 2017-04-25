@@ -1,0 +1,46 @@
+.dx-selectbox {
+    .dx-texteditor-buttons-container {
+        .dx-dropdowneditor-button {
+            pointer-events: none;
+        }
+    }
+
+    .dx-dropdowneditor-input-wrapper {
+        overflow: hidden;
+        display: block;
+
+        .dx-inkripple-wave {
+            background-color: @ANDROID5_BUTTON_INK_COLOR;
+        }
+    }
+}
+
+.dx-selectbox-container {
+    overflow: hidden;
+}
+
+.dx-selectbox-popup-wrapper {
+    .dx-list {
+        background-color: @ANDROID5_SELECTBOX_BACKGROUND;
+    }
+
+    .dx-overlay-content {
+        .shadow-z1();
+    }
+}
+
+.dx-rtl .dx-selectbox,
+.dx-rtl.dx-selectbox {
+    .dx-dropdowneditor-button {
+        right: initial;
+        left: 0px;
+        border-right: 10px solid transparent;
+        border-left: none;
+    }
+
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
+            padding-left: @ANDROID5_TEXTEDITOR_INPUT_PADDING;
+        }
+    }
+}

@@ -1,0 +1,680 @@
+[
+  {
+    "name": "data/array_store",
+    "exports": {
+      "default": "data.ArrayStore"
+    }
+  },
+  {
+    "name": "data/custom_store",
+    "exports": {
+      "default": "data.CustomStore"
+    }
+  },
+  {
+    "name": "data/data_source",
+    "exports": {
+      "default": "data.DataSource"
+    }
+  },
+  {
+    "name": "data/odata/utils",
+    "exports": {
+      "EdmLiteral": "data.EdmLiteral",
+      "keyConverters": "data.utils.odata.keyConverters"
+    }
+  },
+  {
+    "name": "data/endpoint_selector",
+    "exports": {
+      "default": "EndpointSelector"
+    }
+  },
+  {
+    "name": "core/guid",
+    "exports": {
+      "default": "data.Guid"
+    }
+  },
+  {
+    "name": "data/local_store",
+    "exports": {
+      "default": "data.LocalStore"
+    }
+  },
+  {
+    "name": "data/odata/context",
+    "exports": {
+      "default": "data.ODataContext"
+    }
+  },
+  {
+    "name": "data/odata/store",
+    "exports": {
+      "default": "data.ODataStore"
+    }
+  },
+  {
+    "name": "ui/pivot_grid/data_source",
+    "exports": {
+      "default": "data.PivotGridDataSource"
+    }
+  },
+  {
+    "name": "data/utils",
+    "exports": {
+      "base64_encode": "data.base64_encode"
+    }
+  },
+  {
+    "name": "utils",
+    "exports": {
+      "compileGetter": "data.utils.compileGetter",
+      "compileSetter": "data.utils.compileSetter"
+    }
+  },
+  {
+    "name": "data/errors",
+    "exports": {
+      "errorHandler": "data.errorHandler"
+    }
+  },
+  {
+    "name": "data/query",
+    "exports": {
+      "default": "data.query"
+    }
+  },
+  {
+    "name": "ui/pivot_grid/xmla_store",
+    "exports": {
+      "default": "data.XmlaStore"
+    }
+  },
+  {
+    "name": "framework/html/html_application",
+    "exports": {
+      "default": "framework.html.HtmlApplication"
+    }
+  },
+  {
+    "name": "framework/router",
+    "exports": {
+      "default": "framework.Router"
+    }
+  },
+  {
+    "name": "framework/state_manager",
+    "exports": {
+      "default": "framework.StateManager"
+    }
+  },
+  {
+    "name": "framework/view_cache",
+    "exports": {
+      "default": "framework.ViewCache"
+    }
+  },
+  {
+    "name": "framework/command",
+    "exports": {
+      "default": "framework.dxCommand"
+    }
+  },
+  {
+    "name": "framework/html/command_container"
+  },
+  {
+    "name": "framework/html/view_engine_components"
+  },
+  {
+    "name": "animation/presets",
+    "exports": {
+      "default": "animationPresets"
+    }
+  },
+  {
+    "name": "core/config",
+    "exports": {
+      "default": "config"
+    }
+  },
+  {
+    "name": "animation/fx",
+    "exports": {
+      "default": "fx"
+    }
+  },
+  {
+    "name": "mobile/hide_top_overlay",
+    "exports": {
+      "default": "hideTopOverlay"
+    }
+  },
+  {
+    "name": "localization",
+    "exports": {
+      "loadMessages": "localization.loadMessages",
+      "locale": "localization.locale"
+    }
+  },
+  {
+    "name": "mobile/process_hardware_back_button",
+    "exports": {
+      "default": "processHardwareBackButton"
+    }
+  },
+  {
+    "name": "animation/transition_executor",
+    "exports": {
+      "default": "TransitionExecutor"
+    }
+  },
+  {
+    "name": "ui/dialog",
+    "exports": {
+      "alert": "ui.dialog.alert",
+      "confirm": "ui.dialog.confirm",
+      "custom": "ui.dialog.custom"
+    }
+  },
+  {
+    "name": "ui/notify",
+    "exports": {
+      "default": "ui.notify"
+    }
+  },
+  {
+    "name": "ui/set_template_engine",
+    "exports": {
+      "default": "ui.setTemplateEngine"
+    }
+  },
+  {
+    "name": "ui/themes",
+    "exports": {
+      "default": "ui.themes"
+    }
+  },
+  {
+    "name": "animation/frame",
+    "exports": {
+      "cancel": "utils.cancelAnimationFrame",
+      "request": "utils.requestAnimationFrame"
+    }
+  },
+  {
+    "name": "mobile/init_mobile_viewport",
+    "exports": {
+      "default": "utils.initMobileViewport"
+    }
+  },
+  {
+    "name": "ui/validation_engine",
+    "exports": {
+      "default": "validationEngine"
+    }
+  },
+  {
+    "name": "viz/vector_map/projection",
+    "exports": {
+      "projection": "viz.map.projection"
+    }
+  },
+  {
+    "name": "core/devices",
+    "exports": {
+      "default": "devices"
+    }
+  },
+  {
+    "name": "ui/accordion",
+    "exports": {
+      "default": "ui.dxAccordion"
+    }
+  },
+  {
+    "name": "ui/action_sheet",
+    "exports": {
+      "default": "ui.dxActionSheet"
+    }
+  },
+  {
+    "name": "ui/autocomplete",
+    "exports": {
+      "default": "ui.dxAutocomplete"
+    }
+  },
+  {
+    "name": "ui/box",
+    "exports": {
+      "default": "ui.dxBox"
+    }
+  },
+  {
+    "name": "ui/button",
+    "exports": {
+      "default": "ui.dxButton"
+    }
+  },
+  {
+    "name": "ui/calendar",
+    "exports": {
+      "default": "ui.dxCalendar"
+    }
+  },
+  {
+    "name": "ui/check_box",
+    "exports": {
+      "default": "ui.dxCheckBox"
+    }
+  },
+  {
+    "name": "ui/color_box",
+    "exports": {
+      "default": "ui.dxColorBox"
+    }
+  },
+  {
+    "name": "ui/context_menu",
+    "exports": {
+      "default": "ui.dxContextMenu"
+    }
+  },
+  {
+    "name": "ui/data_grid",
+    "exports": {
+      "default": "ui.dxDataGrid"
+    }
+  },
+  {
+    "name": "ui/date_box",
+    "exports": {
+      "default": "ui.dxDateBox"
+    }
+  },
+  {
+    "name": "ui/defer_rendering",
+    "exports": {
+      "default": "ui.dxDeferRendering"
+    }
+  },
+  {
+    "name": "ui/file_uploader",
+    "exports": {
+      "default": "ui.dxFileUploader"
+    }
+  },
+  {
+    "name": "ui/form",
+    "exports": {
+      "default": "ui.dxForm"
+    }
+  },
+  {
+    "name": "ui/gallery",
+    "exports": {
+      "default": "ui.dxGallery"
+    }
+  },
+  {
+    "name": "ui/list",
+    "exports": {
+      "default": "ui.dxList"
+    }
+  },
+  {
+    "name": "ui/load_indicator",
+    "exports": {
+      "default": "ui.dxLoadIndicator"
+    }
+  },
+  {
+    "name": "ui/load_panel",
+    "exports": {
+      "default": "ui.dxLoadPanel"
+    }
+  },
+  {
+    "name": "ui/lookup",
+    "exports": {
+      "default": "ui.dxLookup"
+    }
+  },
+  {
+    "name": "ui/map",
+    "exports": {
+      "default": "ui.dxMap"
+    }
+  },
+  {
+    "name": "ui/menu",
+    "exports": {
+      "default": "ui.dxMenu"
+    }
+  },
+  {
+    "name": "ui/multi_view",
+    "exports": {
+      "default": "ui.dxMultiView"
+    }
+  },
+  {
+    "name": "ui/nav_bar",
+    "exports": {
+      "default": "ui.dxNavBar"
+    }
+  },
+  {
+    "name": "ui/number_box",
+    "exports": {
+      "default": "ui.dxNumberBox"
+    }
+  },
+  {
+    "name": "ui/panorama",
+    "exports": {
+      "default": "ui.dxPanorama"
+    }
+  },
+  {
+    "name": "ui/pivot",
+    "exports": {
+      "default": "ui.dxPivot"
+    }
+  },
+  {
+    "name": "ui/pivot_grid",
+    "exports": {
+      "default": "ui.dxPivotGrid"
+    }
+  },
+  {
+    "name": "ui/pivot_grid_field_chooser",
+    "exports": {
+      "default": "ui.dxPivotGridFieldChooser"
+    }
+  },
+  {
+    "name": "ui/popover",
+    "exports": {
+      "default": "ui.dxPopover"
+    }
+  },
+  {
+    "name": "ui/popup",
+    "exports": {
+      "default": "ui.dxPopup"
+    }
+  },
+  {
+    "name": "ui/progress_bar",
+    "exports": {
+      "default": "ui.dxProgressBar"
+    }
+  },
+  {
+    "name": "ui/radio_group",
+    "exports": {
+      "default": "ui.dxRadioGroup"
+    }
+  },
+  {
+    "name": "ui/range_slider",
+    "exports": {
+      "default": "ui.dxRangeSlider"
+    }
+  },
+  {
+    "name": "ui/resizable",
+    "exports": {
+      "default": "ui.dxResizable"
+    }
+  },
+  {
+    "name": "ui/responsive_box",
+    "exports": {
+      "default": "ui.dxResponsiveBox"
+    }
+  },
+  {
+    "name": "ui/scheduler",
+    "exports": {
+      "default": "ui.dxScheduler"
+    }
+  },
+  {
+    "name": "ui/scroll_view",
+    "exports": {
+      "default": "ui.dxScrollView"
+    }
+  },
+  {
+    "name": "ui/select_box",
+    "exports": {
+      "default": "ui.dxSelectBox"
+    }
+  },
+  {
+    "name": "ui/slide_out",
+    "exports": {
+      "default": "ui.dxSlideOut"
+    }
+  },
+  {
+    "name": "ui/slide_out_view",
+    "exports": {
+      "default": "ui.dxSlideOutView"
+    }
+  },
+  {
+    "name": "ui/slider",
+    "exports": {
+      "default": "ui.dxSlider"
+    }
+  },
+  {
+    "name": "ui/switch",
+    "exports": {
+      "default": "ui.dxSwitch"
+    }
+  },
+  {
+    "name": "ui/tab_panel",
+    "exports": {
+      "default": "ui.dxTabPanel"
+    }
+  },
+  {
+    "name": "ui/tabs",
+    "exports": {
+      "default": "ui.dxTabs"
+    }
+  },
+  {
+    "name": "ui/tag_box",
+    "exports": {
+      "default": "ui.dxTagBox"
+    }
+  },
+  {
+    "name": "ui/text_area",
+    "exports": {
+      "default": "ui.dxTextArea"
+    }
+  },
+  {
+    "name": "ui/text_box",
+    "exports": {
+      "default": "ui.dxTextBox"
+    }
+  },
+  {
+    "name": "ui/tile_view",
+    "exports": {
+      "default": "ui.dxTileView"
+    }
+  },
+  {
+    "name": "ui/toast",
+    "exports": {
+      "default": "ui.dxToast"
+    }
+  },
+  {
+    "name": "ui/toolbar",
+    "exports": {
+      "default": "ui.dxToolbar"
+    }
+  },
+  {
+    "name": "ui/tooltip",
+    "exports": {
+      "default": "ui.dxTooltip"
+    }
+  },
+  {
+    "name": "ui/tree_view",
+    "exports": {
+      "default": "ui.dxTreeView"
+    }
+  },
+  {
+    "name": "ui/validation_group",
+    "exports": {
+      "default": "ui.dxValidationGroup"
+    }
+  },
+  {
+    "name": "ui/validation_summary",
+    "exports": {
+      "default": "ui.dxValidationSummary"
+    }
+  },
+  {
+    "name": "ui/validator",
+    "exports": {
+      "default": "ui.dxValidator"
+    }
+  },
+  {
+    "name": "events/click"
+  },
+  {
+    "name": "events/contextmenu"
+  },
+  {
+    "name": "events/dblclick"
+  },
+  {
+    "name": "events/drag"
+  },
+  {
+    "name": "events/hold"
+  },
+  {
+    "name": "events/hover"
+  },
+  {
+    "name": "events/transform"
+  },
+  {
+    "name": "events/pointer"
+  },
+  {
+    "name": "events/swipe"
+  },
+  {
+    "name": "viz/bar_gauge",
+    "exports": {
+      "default": "viz.dxBarGauge"
+    }
+  },
+  {
+    "name": "viz/bullet",
+    "exports": {
+      "default": "viz.dxBullet"
+    }
+  },
+  {
+    "name": "viz/chart",
+    "exports": {
+      "default": "viz.dxChart"
+    }
+  },
+  {
+    "name": "viz/circular_gauge",
+    "exports": {
+      "default": "viz.dxCircularGauge"
+    }
+  },
+  {
+    "name": "viz/linear_gauge",
+    "exports": {
+      "default": "viz.dxLinearGauge"
+    }
+  },
+  {
+    "name": "viz/pie_chart",
+    "exports": {
+      "default": "viz.dxPieChart"
+    }
+  },
+  {
+    "name": "viz/polar_chart",
+    "exports": {
+      "default": "viz.dxPolarChart"
+    }
+  },
+  {
+    "name": "viz/range_selector",
+    "exports": {
+      "default": "viz.dxRangeSelector"
+    }
+  },
+  {
+    "name": "viz/sparkline",
+    "exports": {
+      "default": "viz.dxSparkline"
+    }
+  },
+  {
+    "name": "viz/tree_map",
+    "exports": {
+      "default": "viz.dxTreeMap"
+    }
+  },
+  {
+    "name": "viz/vector_map",
+    "exports": {
+      "default": "viz.dxVectorMap"
+    }
+  },
+  {
+    "name": "viz/utils",
+    "exports": {
+      "refreshPaths": "viz.refreshPaths"
+    }
+  },
+  {
+    "name": "viz/palette",
+    "exports": {
+      "currentPalette": "viz.currentPalette",
+      "getPalette": "viz.getPalette",
+      "registerPalette": "viz.registerPalette"
+    }
+  },
+  {
+    "name": "viz/themes",
+    "exports": {
+      "currentTheme": "viz.currentTheme",
+      "registerTheme": "viz.registerTheme"
+    }
+  },
+  {
+    "name": "viz/export",
+    "exports": {
+      "exportFromMarkup": "viz.exportFromMarkup"
+    }
+  }
+]

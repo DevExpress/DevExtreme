@@ -1,0 +1,503 @@
+@model RunAllViewModel
+<!DOCTYPE html>
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=@Model.IEMode" >
+    <title>QUnit All Suites test page</title>
+    <meta name="MobileOptimized" content="480">
+</head>
+
+<style>
+    html, body
+    {
+        height: 100%;
+    }
+
+    body
+    {
+        padding: 0;
+        margin: 0;
+        background: gray;
+    }
+
+    iframe
+    {
+        background: white;
+    }
+
+    #workers .worker
+    {
+        float: left;
+        margin: 4px;
+    }
+
+    #workers .worker iframe
+    {
+
+        width: 400px;
+        height: 300px;
+        border: solid 2px black;
+    }
+
+    #reportFrame
+    {
+        border: 0;
+        width: 100%;
+        height: 100%;
+        display: none;
+    }
+
+    h1, h2 {
+        margin: 0;
+        padding: 0;
+    }
+
+</style>
+
+<script src="@Url.Content("~/vendor/jquery/jquery-2.2.3.min.js")"></script>
+
+<script>
+    $(function() {
+        "use strict";
+
+        var ROOT_URL = "@Url.Content("~/")";
+
+        var TEST_TIMEOUT_SECONDS = 30,
+            TEST_TIMEOUT = TEST_TIMEOUT_SECONDS * 1000,
+            WORKER_NAME_PREFIX = "workerFrame",
+            busyCount = 0,
+            suitesDescription = {
+                constellation: "@(Model.Constellation)",
+                categoriesList: "@(Model.CategoriesList)",
+                version: "@(Model.Version)"
+            },
+            suitesInProgress = [ ],
+            urls = @Html.Raw(Json.Serialize(Model.Suites)),
+            originalUrls = urls.slice(0),
+            forceCombinedStyles = @Html.Raw(Json.Serialize(Model.ForceCombinedStyles)),
+            ieMode = @Html.Raw(Json.Serialize(Model.IEMode)),
+            noTryCatch = @Html.Raw(Json.Serialize(Model.NoTryCatch)),
+            noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
+            noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
+            jqueryVersion = @Html.Raw(Json.Serialize(Model.JQueryVersion)),
+            farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
+            DX_HTTP_CACHE = $.now(),
+            lastTestCaseDoneTime = 0,
+            runWorkerInNewWindow = @Html.Raw(Json.Serialize(Model.WorkerInWindow)),
+
+            WORKER_COUNT;
+
+        var isWinPhone = /iemobile/i.test(navigator.userAgent) || /Windows Phone 10/.test(navigator.userAgent);
+
+        var trimIEMemory = (function() {
+            var lastCollectTime = $.now();
+
+            if(!isWinPhone || !$.isFunction(window.CollectGarbage))
+                return $.noop;
+
+            return function(force) {
+                var now = $.now();
+                if(force || now - lastCollectTime > 1234) {
+                    CollectGarbage();
+                    lastCollectTime = now;
+                }
+            }
+        })();
+
+        var calcWorkerFrameCount = function() {
+            if(runWorkerInNewWindow)
+                return 1; // NOTE: more than 1 window cause problems with tests that use focus
+
+            var ua = navigator.userAgent;
+
+            if(window.ActiveXObject !== undefined || /firefox/i.test(ua) || isWinPhone)
+                return 1;
+
+            return 2;
+        };
+
+        WORKER_COUNT = calcWorkerFrameCount();
+
+        var testResults = {
+            name: "QUnit runner output",
+            total: 0,
+            failures: 0,
+            suites: [
+                {
+                    __type: "suite",
+                    name: "Root suite",
+                    results: [ ],
+                    pureTime: 0
+                }
+            ]
+        };
+
+        var rootSuite = testResults.suites[0],
+            rootStartTime = new Date();
+
+        var titleElement  = document.getElementById("title");
+        if (suitesDescription.constellation) {
+            titleElement.innerText = suitesDescription.constellation;
+            titleElement.style.color = "yellow";
+        } else {
+            titleElement.innerText = suitesDescription.categoriesList;
+            titleElement.style.color = "white";
+        }
+
+        document.getElementById("branch").innerText = suitesDescription.version;
+
+
+        var saveResults = function() {
+            $.ajax({
+                url: @Html.Raw(Json.Serialize(Url.Action("SaveResults"))),
+                type: "post",
+                contentType: "application/json",
+                data: JSON.stringify(testResults)
+            }).done(function() {
+                notifyDeviceTestManager("QUnit.saveResults.done");
+                removeWorkers();
+
+                var frame = document.getElementById("reportFrame");
+                frame.style.display = "block";
+                frame.setAttribute("src", @Html.Raw(Json.Serialize(Url.Action("DisplayResults"))));
+            });
+        };
+
+        var resultSaving = false;
+
+        var nextUrl = function(i) {
+            if(!urls.length) {
+                //$.ajax(ROOT_URL + "run/something/FrameHasFinishedRunningASuite.js?frame=" + i);
+                if(!resultSaving && !busyCount) {
+                    resultSaving = true;
+                    rootSuite.time = roundTime((new Date() - rootStartTime) / 1000);
+                    rootSuite.pureTime = roundTime(rootSuite.pureTime);
+                    saveResults();
+                    window.onbeforeunload = $.noop;
+                }
+                return;
+            }
+
+            notifyDeviceTestManager("QUnit.nextUrl");
+
+            var that = this,
+                _i = i,
+                urlInfo = urls.shift(),
+                worker = workerByIndex(i),
+                additionalParams = { };
+
+            if(forceCombinedStyles)
+                additionalParams.combinedStyles = "true";
+            if(ieMode !== "edge")
+                additionalParams.ieMode = ieMode;
+            if(noTryCatch)
+                additionalParams.notrycatch = "true";
+            if(noGlobals)
+                additionalParams.noglobals = "true";
+            if(noTimers)
+                additionalParams.notimers = "true";
+            if(jqueryVersion)
+                additionalParams.jquery = jqueryVersion;
+
+            additionalParams.DX_HTTP_CACHE = DX_HTTP_CACHE;
+            additionalParams.frame = i;
+
+            suitesInProgress[i] = {
+                __type: "suite",
+
+                name: urlInfo.FullName,
+                url: urlInfo.Url,
+                results: [ ],
+
+                startTime: new Date(),
+                pureTime: 0,
+
+                finalize: function(success) {
+                    this.time = roundTime((new Date() - this.startTime) / 1000);
+                    this.pureTime = roundTime(this.pureTime);
+                    delete this.startTime;
+
+                    delete this.finalize;
+                    delete this.url;
+
+                    rootSuite.results.push(this);
+                    suitesInProgress[i] = null;
+                    busyCount--;
+
+                    setTimeout(function() { nextUrl.call(that, _i); }, 0);
+                }
+            };
+
+            worker.name = WORKER_NAME_PREFIX + i;
+            worker.location = urlInfo.Url + "?" + $.param(additionalParams);
+            busyCount++;
+
+            trimIEMemory(true);
+        };
+
+        var workers = [ ];
+
+        var createWorkers = function() {
+            var worker;
+
+            for(var i = 0; i < WORKER_COUNT; i++) {
+                if(runWorkerInNewWindow) {
+                    worker = window.open("about:blank", "popup" + $.now(), "left=0,top=0,width=500,height=500");
+                } else {
+                    var workerWrapper = $("<div class=worker></div>")
+                        .attr("id", "worker" + i)
+                        .append(
+                            $("<iframe scrolling=no></iframe")
+                        )
+                        .appendTo("#workers")
+
+                    worker = workerWrapper.children("iframe").get(0).contentWindow;
+                }
+                workers.push(worker);
+            }
+        };
+
+        var removeWorkers = function() {
+            if(runWorkerInNewWindow) {
+                for(var i = 0; i < workers.length; i++) {
+                    workers[i].close();
+                };
+            } else {
+                $("#workers").remove();
+            }
+            workers = [];
+        };
+
+        var workerByIndex = function(index) {
+            return workers[index];
+        };
+
+        var indexFromWorkerName = function(worker) {
+            return Number(worker.name.substr(WORKER_NAME_PREFIX.length));
+        };
+
+        var runFirstBatch = function() {
+            notifyDeviceTestManager("QUnit.runFirstBatch");
+            $.ajax(@Html.Raw(Json.Serialize(Url.Action("NotifyTestsStarted"))));
+            for(var i = 0; i < WORKER_COUNT; i++)
+                nextUrl(i);
+        };
+
+        var getTestCaseName = function(testSuite, qunitData) {
+            var result = testSuite.name + " - ";
+            if(qunitData.module)
+                result += qunitData.module + ": ";
+            result += qunitData.name;
+            return result;
+        };
+
+        var getTestCaseUrl = function(testSuite, qunitData) {
+            return testSuite.url + "?filter=" + encodeURIComponent(qunitData.name);
+        };
+
+        window.RUNNER_ON_TEST_START = function(worker, qunitData) {
+            var i = indexFromWorkerName(worker),
+                testSuite = suitesInProgress[i];
+
+            var testCase = {
+                __type: "case",
+
+                startTime: new Date(),
+                currentAssert: 0,
+
+                stopWatch: launchStopWatch(),
+
+                finalize: function(success) {
+                    clearTimeout(this.stopWatch);
+                    delete this.stopWatch;
+
+                    var time = (new Date() - this.startTime) / 1000;
+                    this.time = this.time || time;
+
+                    testSuite.pureTime += time;
+                    rootSuite.pureTime += time;
+
+                    testResults.total++;
+                    if(!success) {
+                        testResults.failures++;
+                    }
+
+                    delete this.startTime;
+                    delete this.currentAssert;
+                    delete this.finalize;
+                }
+            };
+
+            function launchStopWatch() {
+                return setTimeout(function() {
+                    testCase.finalize(false, 0);
+                    testCase.name = getTestCaseName(testSuite, qunitData);
+                    testCase.url = getTestCaseUrl(testSuite, qunitData);
+                    testCase.failure = testCase.failure || { };
+                    testCase.failure.message = "Test timed out after " + TEST_TIMEOUT_SECONDS + " seconds!";
+                    testSuite.finalize(false, 0);
+                }, TEST_TIMEOUT);
+            }
+
+            if(testSuite) {
+                testSuite.results.push(testCase);
+            } else {
+                window.RUNNER_ON_MISC_ERROR(qunitData.suiteUrl,
+                    "The test suite has already been finalized when an test has executed in the following test" +
+                    "\nModule: " + qunitData.module +
+                    "\nTest: " + qunitData.name + "\n" +
+                    new Error().stack
+                );
+            }
+        };
+
+        var indicateTestStatusInTitle = function(failed) {
+            document.title = [
+                    (failed ? "\u2716" : "\u2714"),
+                    document.title.replace(/^[\u2714\u2716] /i, "")
+            ].join(" ");
+        };
+
+        window.RUNNER_ON_TEST_LOG = function(worker, qunitData) {
+            var i = indexFromWorkerName(worker),
+                testSuite = suitesInProgress[i];
+
+            if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
+                var testCases = testSuite.results,
+                    testCase = testCases[testCases.length - 1];
+
+                ++testCase.currentAssert;
+                if(!qunitData.result) {
+                    testCase.failure = testCase.failure || { message: "" };
+                    testCase.failure.message += testCase.currentAssert + ". " + (qunitData.message || "failed") + "\n";
+                    if(qunitData.hasOwnProperty("actual") && qunitData.hasOwnProperty("expected")) {
+                        testCase.failure.message += "Expected: " + JSON.stringify(qunitData.expected) + "\n"
+                                                  + "Result: " + JSON.stringify(qunitData.actual) + "\n"
+                    }
+                    testCase.failure.message += "Source:\n" + qunitData.source + "\n\n";
+                    testCase.name = getTestCaseName(testSuite, qunitData);
+                    testCase.url = getTestCaseUrl(testSuite, qunitData);
+
+                    testCase.failure.message = stripDXCache(testCase.failure.message);
+
+                    indicateTestStatusInTitle(!qunitData.failed);
+                }
+                else if(qunitData.message && qunitData.message.indexOf && qunitData.message.indexOf("TIME: ") === 0 && qunitData.actual){
+                    testCase.name = getTestCaseName(testSuite, qunitData);
+                    testCase.time = qunitData.actual;
+                }
+            } else {
+                window.RUNNER_ON_MISC_ERROR(qunitData.suiteUrl,
+                       "The test suite has already been finalized when an assert has executed in the following test" +
+                       "\nModule: " + qunitData.module +
+                       "\nTest: " + qunitData.name + "\n" +
+                       new Error().stack
+                );
+            }
+        };
+
+        window.RUNNER_ON_TEST_DONE = function(worker, qunitData) {
+            trimIEMemory();
+
+            var i = indexFromWorkerName(worker),
+                testSuite = suitesInProgress[i],
+                testCases,
+                testCase;
+
+            if($.now() - lastTestCaseDoneTime > 1000) {
+                lastTestCaseDoneTime = $.now();
+                notifyDeviceTestManager("QUnit.testCaseDone");
+            }
+
+            if(testSuite && StringEndsWith(qunitData.suiteUrl, escape(testSuite.name))) {
+                testCases = suitesInProgress[i].results;
+                testCase = testCases[testCases.length - 1];
+
+                if(qunitData.skipped) {
+                    var reason = "Unknown reason",
+                        name = qunitData.name;
+
+                    if(name.indexOf("[") > -1) {
+                        reason = name.substring(name.indexOf("[") + 1, name.indexOf("]"));
+                        name = name.substring(0, name.indexOf("["));
+                    }
+                    testCase.reason = { message: reason };
+                    qunitData.name = name;
+                    testCase.name = getTestCaseName(testSuite, qunitData);
+                    testCase.url = getTestCaseUrl(testSuite, qunitData);
+                    testCase.executed = false;
+                }
+                testCase.finalize(!qunitData.failed, qunitData.total);
+            } else {
+                window.RUNNER_ON_MISC_ERROR(qunitData.suiteUrl,
+                    "The test suite has already been finalized when the following test has finished running" +
+                    "\nModule: " + qunitData.module +
+                    "\nTest: " + qunitData.name + "\n" +
+                    new Error().stack
+                );
+            }
+        };
+
+        window.RUNNER_ON_DONE = function(worker, qunitData) {
+            var suite = suitesInProgress[indexFromWorkerName(worker)],
+                passed = !qunitData.failed;
+
+            if(suite) {
+                suite.finalize(passed, qunitData.total);
+                notifySuiteFinalized(suite.name, passed);
+            }
+        };
+
+        window.RUNNER_ON_MISC_ERROR = function(worker, msg) {
+            msg = String(worker.location || worker) + ": " + msg;
+            $.post(@Html.Raw(Json.Serialize(Url.Action("LogMiscError"))), { msg: msg });
+        };
+
+        window.onbeforeunload = function(e) {
+            if(!isWinPhone) {
+                var confirmationMessage = "Tests are Running!";
+                (e || window.event).returnValue = confirmationMessage;
+                return confirmationMessage;
+            }
+        };
+
+        function StringEndsWith(phrase, ending) {
+            return phrase.indexOf(ending, phrase.length - ending.length) !== -1;
+        };
+
+        function stripDXCache(text) {
+            return String(text).replace(/[?&]DX_HTTP_CACHE=\w+/g, "");
+        }
+
+        function notifyDeviceTestManager(text) {
+            if(window.external && "notify" in external) {
+                external.notify(text);
+            } else if("DevExtremeTestWorkerBridge" in window) {
+                DevExtremeTestWorkerBridge.notify(text);
+            }
+        }
+
+        function notifySuiteFinalized(name, passed) {
+            var url = @Html.Raw(Json.Serialize(Url.Action("NotifySuiteFinalized")));
+            $.post(url, { name: name, passed: passed });
+        }
+
+        function roundTime(time) {
+            return +(time.toFixed(3));
+        }
+
+        createWorkers();
+        runFirstBatch();
+    });
+</script>
+
+<div id="workers">
+
+</div>
+<div>
+    <div>
+        <h1 id="title"></h1>
+        <h2 id="branch"></h2>
+    </div>
+</div>
+<iframe id="reportFrame" name="reportFrame"></iframe>

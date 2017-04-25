@@ -1,0 +1,16 @@
+*       text eol=lf
+
+# images
+*.gif   binary
+*.jpg   binary
+*.png   binary
+
+# fonts
+*.eot   binary
+*.ttf   binary
+*.woff  binary
+
+# verctor-map shape files
+*.dbf   binary
+*.shp   binary
+*.shx   binary

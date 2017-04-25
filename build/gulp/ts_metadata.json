@@ -1,0 +1,46 @@
+[
+  {
+    "widgetName": "dxTreeMap",
+    "optionsPath": "viz.treeMap.dxTreeMapOptions"
+  },
+  {
+    "widgetName": "dxChart",
+    "optionsPath": "viz.charts.dxChartOptions"
+  },
+  {
+    "widgetName": "dxPieChart",
+    "optionsPath": "viz.charts.dxPieChartOptions"
+  },
+  {
+    "widgetName": "dxPolarChart",
+    "optionsPath": "viz.charts.dxPolarChartOptions"
+  },
+  {
+    "widgetName": "dxBullet",
+    "optionsPath": "viz.sparklines.dxBulletOptions"
+  },
+  {
+    "widgetName": "dxSparkline",
+    "optionsPath": "viz.sparklines.dxSparklineOptions"
+  },
+  {
+    "widgetName": "dxVectorMap",
+    "optionsPath": "viz.map.dxVectorMapOptions"
+  },
+  {
+    "widgetName": "dxRangeSelector",
+    "optionsPath": "viz.rangeSelector.dxRangeSelectorOptions"
+  },
+  {
+    "widgetName": "dxLinearGauge",
+    "optionsPath": "viz.gauges.dxLinearGaugeOptions"
+  },
+  {
+    "widgetName": "dxCircularGauge",
+    "optionsPath": "viz.gauges.dxCircularGaugeOptions"
+  },
+  {
+    "widgetName": "dxBarGauge",
+    "optionsPath": "viz.gauges.dxBarGaugeOptions"
+  }
+]

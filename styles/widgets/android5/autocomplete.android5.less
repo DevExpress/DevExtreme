@@ -1,0 +1,50 @@
+.dx-autocomplete {
+    &.dx-show-clear-button .dx-texteditor-input {
+        padding-right: @ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+    }
+}
+
+.dx-autocomplete-popup-wrapper {
+    .dx-overlay-content {
+        .shadow-z1();
+    }
+
+    .dx-scrollable-content {
+        margin: 0;
+    }
+
+    .dx-list-item {
+        border: none;
+    }
+
+    .dx-list {
+        background-color: @ANDROID5_AUTOCOMPLETE_BACKGROUND;
+    }
+}
+
+.dx-invalid.dx-autocomplete.dx-dropdowneditor {
+    .dx-texteditor-container {
+        &:after {
+            right: 0px;
+        }
+    }
+}
+
+
+.dx-rtl {
+    .dx-autocomplete, &.dx-autocomplete {
+        &.dx-show-clear-button .dx-texteditor-input {
+            padding-left: @ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+            padding-right: 0;
+        }
+
+        &.dx-invalid.dx-dropdowneditor {
+            .dx-texteditor-container {
+                &:after {
+                    left: 0px;
+                    right: auto;
+                }
+            }
+        }
+    }
+}

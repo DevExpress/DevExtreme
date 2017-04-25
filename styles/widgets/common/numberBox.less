@@ -1,0 +1,85 @@
+@SPIN_CONTAINER_WIDTH: 22px;
+@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 64px;
+@SPIN_WIDTH: 6px;
+
+.dx-numberbox {
+    position: relative;
+    .user-select(none);
+
+    input[type=number] {
+        -moz-appearance: textfield;
+
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0
+        }
+    }
+}
+
+.dx-numberbox-spin .dx-texteditor-input {
+    padding-right: @SPIN_CONTAINER_WIDTH + @SPIN_WIDTH;
+}
+
+.dx-numberbox-spin-container {
+    float: right;
+    width: @SPIN_CONTAINER_WIDTH;
+    height: 100%;
+}
+
+.dx-numberbox-spin-down,
+.dx-numberbox-spin-up {
+    position: relative;
+    width: 100%;
+    height: 50%;
+    cursor: pointer;
+}
+
+.dx-numberbox-spin-touch-friendly {
+    .dx-texteditor-input {
+        padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @SPIN_WIDTH;
+    }
+
+    .dx-numberbox-spin-container {
+        width: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    }
+
+    .dx-numberbox-spin-down,
+    .dx-numberbox-spin-up {
+        width: 50%;
+        height: 100%;
+        display: inline-block;
+    }
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+    width: 100%;
+    height: 100%;
+}
+
+.dx-state-disabled {
+    .dx-numberbox-spin-container {
+        opacity: .2;
+    }
+}
+
+
+.dx-rtl {
+    .dx-numberbox-spin-container {
+        float: left;
+        right: auto;
+        left: 0;
+    }
+
+    .dx-numberbox-spin,
+    &.dx-numberbox-spin {
+        .dx-texteditor-input {
+            padding-left: @SPIN_CONTAINER_WIDTH + @SPIN_WIDTH;
+        }
+    }
+
+    &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
+        padding-left: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @SPIN_WIDTH;
+    }
+}

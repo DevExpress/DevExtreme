@@ -1,0 +1,221 @@
+@FIELD_PADDING_TOP: 11px;
+@FIELD_PADDING_BOTTOM: 8px;
+@ANDROID5_CURRENT_SWITCH_HEIGHT: 19px;
+@ANDROID5_FIELDSET_HEADER_FONT_SIZE: 14px;
+@ANDROID5_FIELDSET_PADDING: 16px;
+
+.dx-fieldset {
+    padding-left: @ANDROID5_FIELDSET_PADDING;
+    padding-right: @ANDROID5_FIELDSET_PADDING;
+}
+
+.dx-fieldset-header {
+    color: @ANDROID5_COLOR_BASE;
+    line-height: 24px;
+    padding: 12px 0px;
+    font-weight: bold;
+    font-size: @ANDROID5_FIELDSET_HEADER_FONT_SIZE;
+}
+
+.dx-field {
+    padding: .42em .4em;
+}
+
+.dx-field-label {
+    padding: @FIELD_PADDING_TOP 0 @FIELD_PADDING_BOTTOM 0;
+    min-height: 26px;
+    font-size: 12px;
+    color: @ANDROID5_FIELDSET_LABEL_TEXT_COLOR;
+}
+
+.dx-field-value {
+    position: relative;
+    padding-top: @FIELD_PADDING_TOP;
+    padding-bottom: @FIELD_PADDING_BOTTOM;
+
+    &.dx-attention {
+        color: @ANDROID5_FIELD_ATTENTION_COLOR;
+
+        &:before {
+            display: inline-block;
+            content: '';
+            width: 15px;
+            height: 12px;
+            background: @ANDROID5_ATTENTION_IMAGE;
+        }
+    }
+
+    &.dx-widget {
+        padding-left: 0;
+    }
+
+    &.dx-texteditor,
+    &.dx-checkbox,
+    &.dx-radiogroup,
+    &.dx-slider {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    &.dx-texteditor {
+        margin-top: -1px;
+    }
+
+    &.dx-button {
+        margin-top: 5px;
+        margin-bottom: 3px;
+        padding: 0;
+    }
+
+    .dx-button,
+    &.dx-button {
+        .flat-button();
+
+        &.dx-button-has-icon:not(.dx-button-has-text),
+        &.dx-button-back {
+            .flat-button(true);
+        }
+    }
+
+
+    &.dx-checkbox,
+    &.dx-button,
+    &.dx-switch,
+    &.dx-radiogroup {
+        overflow: visible;
+    }
+
+    &.dx-radiogroup {
+        padding-top: 3px;
+    }
+
+    &.dx-checkbox {
+        padding-top: 14px;
+    }
+
+    &.dx-lookup {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    &.dx-slider {
+        overflow: visible;
+        margin-top: 7px;
+        margin-bottom: 2px;
+    }
+
+    &.dx-switch {
+        height: @ANDROID5_CURRENT_SWITCH_HEIGHT + @FIELD_PADDING_TOP + @FIELD_PADDING_BOTTOM;
+        padding-top: 14px;
+    }
+
+    &:not(.dx-widget) {
+        overflow: visible;
+
+        & > .dx-texteditor:not(.dx-tagbox):not(.dx-textarea),
+        & > .dx-checkbox,
+        & > .dx-switch,
+        & > .dx-lookup,
+        & > .dx-slider {
+            position: absolute;
+            top: 50%;
+            right: -1px;
+        }
+
+        & > .dx-switch {
+            padding-top: 3px;
+        }
+
+        & > .dx-checkbox {
+            padding-top: 3px;
+        }
+
+        & > .dx-texteditor,
+        & > .dx-lookup,
+        & > .dx-slider {
+            width: 100%;
+        }
+
+        & > .dx-texteditor {
+            margin-top: -11px;
+        }
+
+        & > .dx-tagbox {
+            margin-top: -12px;
+            margin-bottom: -12px;
+        }
+
+        & > .dx-autocomplete {
+            margin-right: 1px;
+            margin-left: 1px;
+        }
+
+        & > .dx-lookup {
+            margin-top: -11px;
+        }
+
+        & > .dx-slider {
+            margin-top: -3px;
+        }
+
+        & > .dx-slider-tooltip-position-top,
+        & > .dx-slider-tooltip-position-bottom {
+            position: static;
+            margin: -9px 0 -8px 0;
+        }
+
+        & > .dx-selectbox.dx-selectbox-multiselect {
+            margin-bottom: -9px;
+            margin-left: -9px;
+        }
+
+        & > .dx-button,
+        & > .dx-radiogroup {
+            margin-top: -6px;
+            margin-bottom: -8px;
+        }
+
+        & > .dx-button {
+            float: right;
+            margin-left: 3px;
+            .dx-clearfix-mixin();
+        }
+
+        & > .dx-tagbox {
+            margin-left: 0;
+        }
+        & > .dx-textarea {
+            margin-top: -13px;
+            margin-left: 1px;
+        }
+    }
+}
+.dx-field-value-static {
+    padding-top: @FIELD_PADDING_TOP;
+    padding-bottom: @FIELD_PADDING_BOTTOM;
+}
+
+.dx-field-value:not(.dx-switch):not(.dx-checkbox):not(.dx-button),
+.dx-field-value-static {
+    width: 60%;
+}
+
+.dx-rtl .dx-field-value,
+.dx-rtl.dx-field-value {
+    &:not(.dx-widget) {
+        & > .dx-texteditor,
+        & > .dx-checkbox,
+        & > .dx-switch,
+        & > .dx-lookup,
+        & > .dx-slider {
+            left: -1px;
+            right: auto;
+        }
+
+        & > .dx-button {
+            float: left;
+            margin-left: 0;
+            margin-right: 3px;
+        }
+    }
+}

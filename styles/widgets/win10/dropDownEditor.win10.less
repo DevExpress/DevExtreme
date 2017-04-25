@@ -1,0 +1,91 @@
+@WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH: 28px;
+@WIN10_DROPDOWNEDITOR_DROPDOWN_ICON_SIZE: 15px;
+
+.dx-dropdowneditor {
+    &.dx-state-hover {
+        .dx-texteditor-container {
+            border-color: @WIN10_DROPDOWNEDITOR_HOVER_BORDER_COLOR;
+        }
+    }
+
+    &.dx-state-focused {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_FOCUSED_BORDER_COLOR;
+        }
+
+        .dx-texteditor-input {
+            background-color: @WIN10_TEXTEDITOR_INPUT_BACKGROUND_COLOR;
+            color: @WIN10_TEXTEDITOR_INPUT_COLOR;
+        }
+    }
+
+    &.dx-state-active {
+        .dx-texteditor-container {
+            border-color: @WIN10_DROPDOWNEDITOR_ACTIVE_BORDER_COLOR;
+        }
+
+        .dx-texteditor-input {
+            background-color: @WIN10_DROPDOWNEDITOR_ACTIVE_BACKGROUND_COLOR;
+        }
+
+        .dx-placeholder {
+            color: @WIN10_DROPDOWNEDITOR_ACTIVE_PLACEHOLDER_COLOR;
+        }
+    }
+
+    &.dx-invalid {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_INVALID_BORDER_COLOR;
+        }
+    }
+}
+
+.dx-dropdowneditor-button {
+    width: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH;
+}
+
+.dx-dropdowneditor-button-visible {
+    .dx-texteditor-input {
+        padding-right: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+        .dx-rtl & {
+            padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            padding-left: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+        }
+    }
+
+    &.dx-show-clear-button {
+        .dx-texteditor-input {
+            padding-right: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+            .dx-rtl&,
+            .dx-rtl & {
+                padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+                padding-left: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            }
+        }
+    }
+}
+
+.dx-dropdowneditor-icon {
+    color: @WIN10_DROPDOWNEDITOR_DROPDOWN_ICON_COLOR;
+    .dx-icon-chevrondown;
+    .dx-icon-font-centered-sizing(@WIN10_DROPDOWNEDITOR_DROPDOWN_ICON_SIZE);
+
+    .dx-dropdowneditor-active & {
+        opacity: 1;
+    }
+
+    .dx-state-disabled & {
+        color: @WIN10_DROPDOWNEDITOR_DISABLED_DROPDOWN_ICON_COLOR;
+        opacity: 1;
+    }
+}
+
+.dx-dropdowneditor-overlay.dx-popup-wrapper {
+    .dx-overlay-content {
+        background-color: @WIN10_DROPDOWNEDITOR_POPUP_BACKGROUND_COLOR;
+        border: none;
+        .box-shadow(none);
+    }
+}

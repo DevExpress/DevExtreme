@@ -1,0 +1,61 @@
+@SPIN_CONTAINER_WIDTH: 34px;
+@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 72px;
+@SPIN_WIDTH: 6px;
+@NUMBERBOX_PADDING: 4px;
+@WIN8_NUMBERBOX_SPIN_ICON_SIZE: 12.5px;
+
+.dx-numberbox-spin-container {
+    padding: @NUMBERBOX_PADDING 0;
+    width: @SPIN_CONTAINER_WIDTH;
+
+    .dx-numberbox-spin-touch-friendly & {
+        width: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    }
+}
+
+.dx-numberbox-spin-up-icon {
+    .dx-icon-chevronup;
+}
+
+.dx-numberbox-spin-down-icon {
+    .dx-icon-chevrondown;
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+    .dx-icon-font-centered-sizing(@WIN8_NUMBERBOX_SPIN_ICON_SIZE);
+
+    &:before {
+        font-size: 12px;
+        color: @WIN8_BLACK_COLOR;
+        font-weight: bold;
+    }
+}
+
+.dx-numberbox-spin.dx-show-clear-button .dx-texteditor-input {
+    padding-right: @SPIN_CONTAINER_WIDTH + @SPIN_WIDTH + @CLEAR_BUTTON_WIDTH;
+}
+
+.dx-numberbox-spin.dx-numberbox-spin-touch-friendly.dx-show-clear-button .dx-texteditor-input {
+    padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @SPIN_WIDTH + @CLEAR_BUTTON_WIDTH;
+}
+
+.dx-state-active {
+    &.dx-numberbox-spin-button {
+        background-color: @WIN8_ACCENT_COLOR;
+    }
+}
+
+.dx-rtl {
+    .dx-numberbox,
+    &.dx-numberbox {
+        &.dx-numberbox-spin-touch-friendly.dx-show-clear-button .dx-texteditor-input {
+            padding-left: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @SPIN_WIDTH + @CLEAR_BUTTON_WIDTH;
+        }
+
+        &.dx-numberbox-spin.dx-show-clear-button .dx-texteditor-input {
+            padding-left: @SPIN_CONTAINER_WIDTH + @SPIN_WIDTH + @CLEAR_BUTTON_WIDTH;
+            padding-right: @NUMBERBOX_PADDING;
+        }
+    }
+}

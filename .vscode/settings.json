@@ -1,0 +1,10 @@
+{
+  "search.exclude": {
+    "artifacts": true,
+    "build/style-compiler/{bin,obj}": true,
+    "node_modules": true,
+    "testing/runner/{bin,obj}": true,
+    "vendor": true
+  },
+  "typescript.tsdk": "./node_modules/typescript/lib"
+}

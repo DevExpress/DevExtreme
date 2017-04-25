@@ -1,0 +1,19 @@
+.dx-size-default() {
+    @GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE: 8px;
+}
+.dx-size-compact() {
+    @GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE: 4px;
+}
+
+@GENERIC_SLIDEOUT_MENU_ICON_SIZE: @GENERIC_BASE_ICON_SIZE + @GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE;
+
+.dx-slideout-sizing() {
+    .dx-slideout-menu .dx-list-item .dx-icon {
+        .dx-icon-sizing(@GENERIC_SLIDEOUT_MENU_ICON_SIZE);
+        .dx-icon-margin(@GENERIC_SLIDEOUT_MENU_ICON_SIZE/2);
+        margin-top: -@GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE/2;
+        margin-bottom: -@GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE/2;
+    }
+}
+
+.dx-slideout-sizing();

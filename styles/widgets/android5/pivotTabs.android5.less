@@ -1,0 +1,22 @@
+@ANDROID5_PIVOTTABS_HEIGHT: 48px;
+@ANDROID5_PIVOTTABS_SELECTED_BORDER_SHADOW: inset 0 -2px @ANDROID5_PIVOTTABS_SELECTED_BORDER_SHADOW_COLOR;
+
+.dx-pivottabs {
+    height: @ANDROID5_PIVOTTABS_HEIGHT;
+    background: @ANDROID5_PIVOTTABS_BACKGROUND_COLOR;
+}
+
+.dx-pivottabs-tab, .dx-pivottabs-ghosttab {
+    padding: 10px 15px;
+    height: 100%;
+    font-size: 16px;
+    color: @ANDROID5_PIVOTTABS_TEXT_COLOR;
+}
+
+.dx-pivottabs-tab-selected {
+    .box-shadow(@ANDROID5_PIVOTTABS_SELECTED_BORDER_SHADOW);
+}
+
+.dx-pivottabs-tab-content {
+    text-transform: capitalize;
+}

@@ -1,0 +1,139 @@
+@CLEAR_ICON_SIZE: 19px;
+@CLEAR_ICON_PADDING: 4px;
+@CLEAR_ICON_OFFSET: 3px;
+@CLEAR_BUTTON_WIDTH: 25px;
+@TEXTEDITOR_INPUT_MIN_HEIGHT: 33px;
+@TEXTEDITOR_INPUT_MIN_WIDTH: 64px;
+@TEXTEDITOR_INPUT_MARGIN: 4px 0;
+@TEXTEDITOR_INPUT_BORDER_WIDTH: 2px;
+@TEXTEDITOR_INPUT_BORDER: @TEXTEDITOR_INPUT_BORDER_WIDTH solid @WIN8_TEXTEDITOR_BORDER_COLOR;
+@TEXTEDITOR_INPUT_PADDING: 4px;
+@TEXTEDITOR_FONT_WEIGHT: 400;
+@TEXTEDITOR_FONT_SIZE: 11pt;
+@TEXTEDITOR_LINE_HEIGHT: 1.3636;
+@TEXTEDITOR_PLACEHOLDER_PADDING: 6px;
+@CLEAR_BUTTON_AREA_WIDTH: 34px;
+
+.dx-texteditor {
+    margin: 0;
+    /* NOTE: T105163 (WinJS has priority over style) */
+    .dx-texteditor-input {
+        width: 100%;
+        margin: 0;
+    }
+
+    .dx-texteditor-container {
+        margin: 4px 0;
+    }
+
+    &.dx-state-readonly .dx-texteditor-input{
+        background-color: @WIN8_TEXTEDITOR_BACKGROUND;
+    }
+}
+
+/* for view in IE9 */
+.dx-placeholder {
+    color: @WIN8_TEXTEDITOR_PLACEHOLDER_COLOR;
+
+    &:before {
+        padding: @TEXTEDITOR_PLACEHOLDER_PADDING;
+        font-weight: @TEXTEDITOR_FONT_WEIGHT;
+        font-size: @TEXTEDITOR_FONT_SIZE;
+        text-indent: 0;
+    }
+}
+
+.dx-texteditor-input {
+    margin: @TEXTEDITOR_INPUT_MARGIN;
+    padding: @TEXTEDITOR_INPUT_PADDING;
+    min-width: @TEXTEDITOR_INPUT_MIN_WIDTH;
+    min-height: @TEXTEDITOR_INPUT_MIN_HEIGHT;
+    border: @TEXTEDITOR_INPUT_BORDER;
+    background-color: @WIN8_TEXTEDITOR_BACKGROUND;
+    color: @WIN8_BLACK_COLOR;
+    font-weight: @TEXTEDITOR_FONT_WEIGHT;
+    font-size: @TEXTEDITOR_FONT_SIZE;
+    line-height: @TEXTEDITOR_LINE_HEIGHT;
+    font-family: Segoe UI, Helvetica, Arial, sans-serif;
+
+    &:focus {
+        border-color: @WIN8_ACCENT_COLOR;
+        background: @WIN8_WHITE_COLOR;
+    }
+
+    &:invalid {
+        box-shadow: none;
+    }
+}
+
+.dx-show-clear-button {
+    .dx-texteditor-input {
+        padding-right: @CLEAR_ICON_SIZE + @CLEAR_ICON_PADDING * 2 + @CLEAR_ICON_OFFSET * 2;
+    }
+}
+
+.dx-clear-button-area {
+    width: @CLEAR_ICON_SIZE + @CLEAR_ICON_OFFSET;
+
+    .dx-icon-clear {
+        .dx-icon-close;
+        .dx-icon-sizing(@CLEAR_ICON_SIZE, @CLEAR_ICON_SIZE);
+        right: @CLEAR_ICON_OFFSET;
+        width: @CLEAR_ICON_SIZE + @CLEAR_ICON_PADDING * 2;
+        height: @CLEAR_ICON_SIZE + @CLEAR_ICON_PADDING * 2;
+        top: @CLEAR_ICON_OFFSET;
+        line-height: 23px;
+
+        &:before {
+            vertical-align: middle;
+            position: static;
+            text-indent: 0;
+            color: @WIN8_ICON_COLOR;
+        }
+
+        .dx-state-focused & {
+            background-color: @WIN8_SEARCHBOX_ICON_BACKGROUND_COLOR;
+
+            &:before {
+                color: @WIN8_ICON_INVERTED_COLOR;
+            }
+        }
+
+        .dx-rtl &,
+        .dx-rtl& {
+            right: auto;
+            left: @CLEAR_ICON_OFFSET;
+        }
+    }
+}
+
+.dx-invalid {
+    .dx-texteditor-input {
+        border: @TEXTEDITOR_INPUT_BORDER_WIDTH @WIN8_FADED_INVALID_COLOR solid;
+    }
+
+    &.dx-state-focused {
+        .dx-texteditor-input {
+            border-color: @WIN8_INVALID_COLOR;
+        }
+    }
+}
+
+.dx-rtl .dx-texteditor,
+.dx-rtl.dx-texteditor {
+    .dx-texteditor-input {
+        padding-right: @TEXTEDITOR_INPUT_PADDING;
+    }
+
+    &.dx-show-clear-button {
+        .dx-texteditor-input {
+            padding-left: @CLEAR_ICON_SIZE + @CLEAR_ICON_PADDING * 2 + @CLEAR_ICON_OFFSET * 2;
+        }
+    }
+
+    .dx-placeholder,
+    .dx-placeholder:before {
+        right: 0;
+        left: auto;
+    }
+}

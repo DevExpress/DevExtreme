@@ -1,0 +1,169 @@
+@WIN10_SCHEDULER_HEADER_HEIGHT: 42px;
+@WIN10_SCHEDULER_NAVIGATOR_HEIGHT: @WIN10_SCHEDULER_HEADER_HEIGHT * 0.8;
+@WIN10_SCHEDULER_TOOLTIP_WIDTH: 280px;
+
+@WIN10_NAVIGATOR_ICON_SIZE: 16px;
+@WIN10_SCHEDULER_SWITCHER_LABEL_OFFSET: 70px;
+@WIN10_SCHEDULER_RECURRENCE_NUMBERBOX_WIDTH: 85px;
+
+.dx-scheduler {
+    background-color: @SCHEDULER_BACKGROUND_COLOR;
+}
+
+.dx-scheduler-header,
+.dx-scheduler-work-space {
+    border: @SCHEDULER_ACCENT_BORDER;
+}
+
+.dx-scheduler-work-space {
+    padding-top: @WIN10_SCHEDULER_HEADER_HEIGHT;
+    margin-top: -@WIN10_SCHEDULER_HEADER_HEIGHT;
+}
+
+.dx-scheduler-header {
+    height: @WIN10_SCHEDULER_HEADER_HEIGHT;
+}
+
+.dx-scheduler-view-switcher.dx-tabs {
+    text-align: center;
+}
+
+.dx-scheduler-view-switcher-reduced {
+    &.dx-tabs {
+        .dx-tab {
+            height: @WIN10_SCHEDULER_HEADER_HEIGHT;
+        }
+    }
+    .dx-tabs-scrollable,
+    .dx-tabs-wrapper {
+        height: @WIN10_SCHEDULER_HEADER_HEIGHT;
+    }
+}
+
+.dx-scheduler-navigator,
+.dx-scheduler-appointment-tooltip {
+    .dx-button .dx-icon {
+        width: @WIN10_NAVIGATOR_ICON_SIZE;
+        height: @WIN10_NAVIGATOR_ICON_SIZE;
+        font-size: @WIN10_NAVIGATOR_ICON_SIZE - 4px;
+        line-height: @WIN10_NAVIGATOR_ICON_SIZE;
+        padding: 0;
+    }
+}
+
+.dx-scheduler-navigator {
+    height: @WIN10_SCHEDULER_NAVIGATOR_HEIGHT;
+
+    .dx-scheduler-navigator-previous,
+    .dx-scheduler-navigator-next {
+        padding: 2px 1px;
+    }
+
+    .dx-scheduler-navigator-caption {
+        border-left: none;
+        border-right: none;
+    }
+
+    .dx-button-has-icon .dx-button-content {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}
+
+.dx-scheduler-navigator-calendar {
+    background-color: @WIN10_SCHEDULER_CALENDAR_COLOR;
+    min-height: 0;
+}
+
+.dx-scheduler-navigator,
+.dx-scheduler-view-switcher.dx-dropdownmenu {
+    margin-top: (@WIN10_SCHEDULER_HEADER_HEIGHT - @WIN10_SCHEDULER_NAVIGATOR_HEIGHT) * 0.2;
+}
+
+.dx-scheduler-view-switcher-label {
+    margin-top: (@WIN10_SCHEDULER_HEADER_HEIGHT - @WIN10_SCHEDULER_NAVIGATOR_HEIGHT) * 0.8;
+    right: @WIN10_SCHEDULER_SWITCHER_LABEL_OFFSET;
+
+    .dx-rtl & {
+        left: @WIN10_SCHEDULER_SWITCHER_LABEL_OFFSET;
+        right: auto;
+    }
+}
+
+.dx-scheduler-appointment-tooltip {
+    margin-right: 0;
+    width: @WIN10_SCHEDULER_TOOLTIP_WIDTH;
+
+    .dx-button {
+        padding: 0;
+        margin-right: 20px;
+
+        .dx-rtl & {
+            margin-right: 0;
+            margin-left: 20px;
+        }
+    }
+}
+
+.dx-scheduler-all-day-title {
+    top: @WIN10_SCHEDULER_HEADER_HEIGHT;
+}
+
+.dx-scheduler-work-space-day {
+    &:not(.dx-scheduler-work-space-grouped) {
+        .dx-scheduler-all-day-title {
+            top: @WIN10_SCHEDULER_HEADER_HEIGHT + 1;
+        }
+    }
+}
+
+.dx-scheduler-all-day-title-mixin(@WIN10_SCHEDULER_HEADER_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP);
+
+.dx-scheduler-work-space-week,
+.dx-scheduler-work-space-work-week {
+    .dx-scheduler-all-day-title {
+        top: @WIN10_SCHEDULER_HEADER_HEIGHT + 50px;
+    }
+
+    .dx-scheduler-all-day-title-mixin(@WIN10_SCHEDULER_HEADER_HEIGHT + 50px);
+}
+
+.dx-scheduler-work-space-both-scrollbar {
+    .dx-scheduler-all-day-title {
+        background-color: @WIN10_BACKGROUND_COLOR;
+
+        &:before {
+            background-color: @WIN10_BACKGROUND_COLOR;
+        }
+    }
+}
+
+.dx-recurrence-radiogroup-repeat-type-label,
+.dx-recurrence-repeat-end-label {
+    line-height: 30px;
+}
+
+.dx-scheduler-dropdown-appointments {
+    &.dx-button,
+    &.dx-button.dx-state-hover,
+    &.dx-button.dx-state-active {
+        min-height: 10px;
+
+        .dx-button-content {
+            padding: 0;
+            min-height: 10px;
+            line-height: 10px;
+        }
+    }
+}
+
+.dx-recurrence-editor-container {
+    margin-top: 15px;
+    padding-top: 17px;
+}
+
+.dx-recurrence-numberbox-interval,
+.dx-recurrence-numberbox-day-of-month,
+.dx-recurrence-numberbox-repeat-count {
+    width: @WIN10_SCHEDULER_RECURRENCE_NUMBERBOX_WIDTH !important;
+}

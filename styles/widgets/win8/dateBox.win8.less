@@ -1,0 +1,186 @@
+@BOTTOM_BUTTON_BORDER_RADIUS: 50%;
+@BOTTOM_BUTTON_WIDTH: 32px;
+@BOTTOM_BUTTON_HEIGHT: 32px;
+
+.dx-datebox-wrapper {
+    .dx-popup-content {
+        margin: 0 -10%;
+        padding: 0;
+        text-align: center;
+    }
+
+    @media (max-width: 320px) {
+        .dx-popup-fullscreen-width .dx-popup-content {
+            margin: 0;
+        }
+    }
+
+    .dx-popup-bottom {
+        left: 0;
+        margin: 0;
+        width: 100%;
+        background-color: @WIN8_POPUP_COLOR;
+        text-align: center;
+
+        &.dx-toolbar {
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        .dx-toolbar-before {
+            .dx-button-today {
+                float: left;
+                margin-left: 5px;
+
+                .dx-button-content {
+                    background: @WIN8_BUTTON_TODAY_ICON;
+                    background-size: 19px 19px;
+                }
+            }
+        }
+
+        .dx-toolbar-after {
+            right: auto;
+            left: 0;
+            width: 70%;
+            margin-left: 15%;
+            margin-right: 15%;
+
+            .dx-toolbar-item {
+                width: 50%;
+            }
+        }
+
+        .dx-toolbar-button {
+            .dx-button {
+                margin-bottom: 5px;
+                padding: 0;
+                border-width: 2px;
+                min-width: 0;
+                width: @BOTTOM_BUTTON_WIDTH;
+                height: @BOTTOM_BUTTON_HEIGHT;
+                .border-radius(@BOTTOM_BUTTON_BORDER_RADIUS);
+
+                .dx-button-text {
+                    display: none;
+                }
+            }
+        }
+
+        .dx-popup-done {
+            float: right;
+            margin-right: 5px;
+
+            .dx-button-content {
+                background: @WIN8_BUTTON_DONE_ICON;
+                background-size: 19px 19px;
+            }
+        }
+
+        .dx-popup-cancel {
+            float: left;
+            margin-left: 5px;
+
+            .dx-button-content {
+                background: @WIN8_BUTTON_CLOSE_ICON;
+                background-size: 19px 19px;
+            }
+        }
+    }
+}
+
+.dx-datebox-wrapper, &.dx-datebox-wrapper {
+    .dx-rtl {
+        .dx-popup-bottom {
+            .dx-popup-done {
+                float: left;
+                margin-left: 5px;
+                margin-right: 0;
+            }
+
+            .dx-popup-cancel {
+                float: right;
+                margin-left: 0;
+                margin-right: 5px;
+            }
+        }
+    }
+}
+
+.dx-datebox {
+    .dx-texteditor-input {
+        &::-webkit-clear-button,
+        &::-webkit-inner-spin-button,
+        &::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+    }
+}
+
+.dx-dropdowneditor-icon {
+    .dx-datebox-calendar &,
+    .dx-datebox-date &,
+    .dx-datebox-datetime & {
+        .dx-icon-event;
+        .dx-icon-font-centered-sizing(18px);
+    }
+
+    .dx-datebox-time & {
+        .dx-icon-clock;
+        .dx-icon-font-centered-sizing(18px);
+        font-weight: bold;
+    }
+}
+
+.dx-datebox-calendar-container {
+    margin: 30px;
+}
+
+.dx-datebox-wrapper-calendar {
+    .dx-calendar {
+        background-color: @WIN8_POPUP_COLOR;
+    }
+
+    .dx-overlay-content {
+        border: @WIN8_DATEBOX_BORDER_WIDTH @WIN8_DATEBOX_BORDER_STYLE @WIN8_DATEBOX_BORDER_COLOR;
+    }
+
+    .dx-popup-content {
+        margin: -1px;
+        padding: 0;
+    }
+}
+
+    .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
+        .dx-datebox-calendar-container {
+            margin: 14px 0 14px 30px;
+        }
+
+        .dx-timeview {
+            margin-top: 60px;
+            margin-right: 5px;
+        }
+
+        .dx-datebox-container-cell {
+            padding: 8px 30px 20px;
+
+            .dx-button {
+                border-color: @WIN8_ACCENT_COLOR;
+                background-color: @WIN8_ACCENT_COLOR;
+                width: 106px;
+            }
+
+            .dx-button-text {
+                color: @WIN8_WHITE_COLOR;
+            }
+        }
+    }
+
+.dx-rtl {
+    .dx-calendar-with-time-picker {
+        .dx-datebox-calendar-container {
+            margin-left: 0;
+            margin-right: 30px;
+        }
+    }
+}

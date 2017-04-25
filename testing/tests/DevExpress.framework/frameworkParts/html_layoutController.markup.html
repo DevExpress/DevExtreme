@@ -1,0 +1,194 @@
+
+<style>
+    /* make $layout.is(":visible") work */
+    .dx-layout {
+        min-height: 100px;
+        min-width: 100px;
+    }
+
+    .dx-some-animation {
+        -moz-transition-property: all;
+        -o-transition-property: all;
+        -webkit-transition-property: all;
+        transition-property: all;
+        -moz-transition-duration: 100ms;
+        -o-transition-duration: 100ms;
+        -webkit-transition-duration: 100ms;
+        transition-duration: 100ms;
+        -moz-transition-delay: 100ms;
+        -o-transition-delay: 100ms;
+        -webkit-transition-delay: 100ms;
+        transition-delay: 100ms;
+        -moz-transition-timing-function: ease;
+        -o-transition-timing-function: ease;
+        -webkit-transition-timing-function: ease;
+        transition-timing-function: ease;
+    }
+</style>
+
+<div id="qunit-fixture">
+    <div id="viewPort" class="dx-viewport">
+
+    </div>
+
+    <div id="templates-root">
+
+        <div data-options="dxLayout: { name: 'layout-model-binding' }">
+            <div class="content" data-bind="text: text"></div>
+        </div>
+
+        <div data-options="dxLayout: { name: 'content-only' }">
+            <div class="content" data-options="dxContentPlaceholder: { name: 'content' }">
+            </div>
+        </div>
+
+        <div data-options="dxLayout: { name: 'default' }">
+            <div class="header" data-options="dxContentPlaceholder: { name: 'header' }">
+                <div class="view-title" data-bind="text: title"></div>
+            </div>
+            <div class="content" data-options="dxContentPlaceholder: { name: 'content' }">
+                <div class="loading-state-content">Loading state content</div>
+            </div>
+        </div>
+
+        <div data-options="dxLayout: { name: 'with-content-for-view-placeholder' }">
+            <div class="layout-placeholder" data-options="dxContentPlaceholder: { name: 'content' }">
+            </div>
+            <div data-options="dxContent: { targetPlaceholder: 'inside-view' }">
+                <div class="command-container" data-bind="dxToolbar: {}" data-options="dxCommandContainer: { id: 'test-container' }"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'view-with-content-placeholder' }">
+            <div data-bind="dxCommand: { id: 'command', title: 'test command' }"></div>
+            <div class="view-placeholder" data-options="dxContent: { targetPlaceholder: 'content' }" data-bind="dxDeferRendering: { onRendered: onRendered }">
+                <div class="view-content" data-options="dxContentPlaceholder: { name: 'inside-view' }">
+                </div>
+            </div>
+        </div>
+
+        <div data-options="dxLayout: { name: 'create-navigation' }">
+            <div class="global-navigation" data-bind="dxNavBar: {}" data-options="dxCommandContainer: { id: 'global-navigation' }"></div>
+        </div>
+
+        <div data-options="dxLayout: { name: 'recreate-navigation' }">
+            <div class="global-navigation" data-bind="dxNavBar: {}" data-options="dxCommandContainer: { id: 'global-navigation' }"></div>
+        </div>
+
+        <div data-options="dxLayout: { name: 'binding-navbar' }">
+            <div class="global-navigation" data-bind="dxNavBar: {}" data-options="dxCommandContainer: { id: 'global-navigation' }"></div>
+        </div>
+
+        <div data-options="dxLayout: { name: 'with-transition' }">
+            <div data-options="dxTransition: { name: 'main', type: 'slide' }">
+                <div class="transition-title" data-bind="text: title"></div>
+
+                <div data-options="dxContentPlaceholder: { name: 'content' }"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'simple' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div class="view-content" data-bind="text: content"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'withDeferRendering' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div data-bind="dxDeferRendering: { onRendered: onRendered1 }">
+                    <div class="view-content1" data-bind="text: content"></div>
+                </div>
+                <div data-bind="dxDeferRendering: { onRendered: onRendered2 }">
+                    <div class="view-content2" data-bind="text: content"></div>
+                </div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'withDeferRenderingOnRootElement' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }" data-bind="dxDeferRendering: { onRendered: onRendered }">
+                <div class="view-content" data-bind="text: content"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView : { name: 'T131399' } ">
+            <!--ko with: complexObject-->
+            <div class="view-content" data-bind="text: message"></div>
+            <!-- /ko-->
+        </div>
+
+        <div data-options="dxLayout: { name: 'with-container' }">
+            <div class="header" data-options="dxContentPlaceholder: { name: 'header' }">
+                <div class="command-container" data-bind="dxToolbar: {}" data-options="dxCommandContainer: { id: 'test-container' }"></div>
+            </div>
+            <div class="content" data-options="dxContentPlaceholder: { name: 'content' }">
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-command' }">
+            <div data-bind="dxCommand: { id: 'command', title: title, action: action }"></div>
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div class="view-content"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-back-command' }">
+            <div data-bind="dxCommand: { id: 'back', action: '#_back', type: 'back' }"></div>
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div class="view-content"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'commands-render-stage' }">
+            <div data-bind="dxCommand: { id: 'command1', title: 'command1', renderStage: 'onViewRendering' }"></div>
+            <div data-bind="dxCommand: { id: 'command2', title: 'command2', renderStage: 'onViewShown' }"></div>
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-rubbish-markup' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div class="view-content">content</div>
+            </div>
+            <div class="not-inside-dxContent">rubbish</div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-proper-rubbish-markup' }">
+            <div class="proper-rubbish">rubbish 1</div>
+            <div class="proper-rubbish">rubbish 2</div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-inputs' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <input class="test-item" type="text" />
+                <input class="test-item" type="text" disabled />
+                <input class="test-item" type="text" disabled="disabled" />
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-ids' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div id="id" class="test-item"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-orientation', orientation: 'landscape' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div class="view-content landscape"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-orientation', orientation: 'portrait' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div class="view-content portrait"></div>
+            </div>
+        </div>
+
+        <div data-options="dxView: { name: 'with-visibility-handlers' }">
+            <div data-options="dxContent: { targetPlaceholder: 'content' }">
+                <div id="some-widget" class="dx-visibility-change-handler"></div>
+                <div id="another-widget" class="dx-visibility-change-handler"></div>
+            </div>
+        </div>
+
+    </div>
+</div>

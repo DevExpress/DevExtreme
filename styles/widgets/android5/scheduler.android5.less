@@ -1,0 +1,149 @@
+@ANDROID5_SCHEDULER_HEADER_HEIGHT: 50px;
+@ANROID5_SCHEDULER_NAVIGATOR_HEIGHT: @ANDROID5_SCHEDULER_HEADER_HEIGHT * 0.5;
+
+@ANDROID5_NAVIGATOR_ICON_SIZE: 26px;
+@ANDROID5_SCHEDULER_SWITCHER_LABEL_OFFSET: 80px;
+
+.dx-scheduler-scrollable-appointments {
+    width: 0;
+}
+
+.dx-scheduler-header {
+    background-color: @ANDROID5_SCHEDULER_HEADER_BACKGROUND_COLOR;
+    height: @ANDROID5_SCHEDULER_HEADER_HEIGHT;
+
+    .dx-dropdownmenu-button {
+        .dx-icon {
+            color: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+        }
+    }
+}
+
+.dx-scheduler-time-panel,
+.dx-scheduler-header-panel-cell {
+    font-size: 18px;
+}
+
+.dx-scheduler-time-panel-cell {
+
+    &:after {
+        background-color: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+    }
+}
+
+.dx-scheduler-appointment-tooltip-buttons {
+    .dx-button-text,
+    .dx-icon {
+        color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+    }
+}
+
+.dx-scheduler-navigator {
+    height: @ANROID5_SCHEDULER_NAVIGATOR_HEIGHT;
+
+    .dx-button {
+        .flat-button();
+        background-color: @ANDROID5_SCHEDULER_HEADER_BACKGROUND_COLOR;
+
+        .dx-icon,
+        .dx-button-text {
+            color: @ANDROID5_SCHEDULER_HEADER_TEXT_COLOR;
+        }
+
+        .dx-icon {
+            width: @ANDROID5_NAVIGATOR_ICON_SIZE;
+            height: @ANDROID5_NAVIGATOR_ICON_SIZE;
+            font-size: @ANDROID5_NAVIGATOR_ICON_SIZE - 8px;
+            line-height: @ANDROID5_NAVIGATOR_ICON_SIZE;
+        }
+    }
+
+    .dx-scheduler-navigator-previous,
+    .dx-scheduler-navigator-next {
+        padding: 3px 1px;
+    }
+
+    .dx-scheduler-navigator-caption {
+        border-left: none;
+        border-right: none;
+    }
+}
+
+.dx-scheduler-navigator,
+.dx-scheduler-view-switcher.dx-dropdownmenu {
+    margin-top: (@ANDROID5_SCHEDULER_HEADER_HEIGHT - @ANROID5_SCHEDULER_NAVIGATOR_HEIGHT) * 0.25;
+}
+
+.dx-scheduler-view-switcher-label {
+    right: @ANDROID5_SCHEDULER_SWITCHER_LABEL_OFFSET;
+    margin-top: (@ANDROID5_SCHEDULER_HEADER_HEIGHT - @ANROID5_SCHEDULER_NAVIGATOR_HEIGHT) * 0.5;
+    color: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+
+    .dx-rtl & {
+        left: @ANDROID5_SCHEDULER_SWITCHER_LABEL_OFFSET;
+        right: auto;
+    }
+}
+
+
+.dx-scheduler-work-space {
+    padding-top: @ANDROID5_SCHEDULER_HEADER_HEIGHT;
+    margin-top: -@ANDROID5_SCHEDULER_HEADER_HEIGHT;
+}
+
+.dx-scheduler-view-switcher.dx-tabs {
+    color: @ANDROID5_SCHEDULER_HEADER_TEXT_COLOR;
+}
+
+.dx-scheduler-appointment-popup {
+    .dx-recurrence-repeat-end-label,
+    .dx-recurrence-radiogroup-repeat-type-label {
+        padding-top: 13px;
+    }
+}
+
+.dx-scheduler-all-day-title {
+    top: @ANDROID5_SCHEDULER_HEADER_HEIGHT;
+}
+
+.dx-scheduler-work-space-day {
+    &:not(.dx-scheduler-work-space-grouped) {
+        .dx-scheduler-all-day-title {
+            top: @ANDROID5_SCHEDULER_HEADER_HEIGHT + 1;
+        }
+    }
+}
+
+.dx-scheduler-all-day-title-mixin(@ANDROID5_SCHEDULER_HEADER_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP);
+
+.dx-scheduler-work-space-week,
+.dx-scheduler-work-space-work-week {
+    .dx-scheduler-all-day-title {
+        top: @ANDROID5_SCHEDULER_HEADER_HEIGHT + 50px;
+    }
+    .dx-scheduler-all-day-title-mixin(@ANDROID5_SCHEDULER_HEADER_HEIGHT + 50px);
+}
+
+.dx-scheduler-work-space-both-scrollbar {
+    .dx-scheduler-all-day-title {
+        background-color: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+
+        &:before {
+            background-color: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+        }
+    }
+}
+
+.dx-scheduler-dropdown-appointments {
+    &.dx-button,
+    &.dx-button.dx-state-hover,
+    &.dx-button.dx-state-active {
+        min-height: 10px;
+
+        .dx-button-content {
+            padding: 0;
+            min-height: 10px;
+            line-height: 10px;
+        }
+    }
+}

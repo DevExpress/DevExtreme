@@ -1,0 +1,40 @@
+.dx-tabpanel {
+    border: 1px solid @WIN10_TABPANEL_BORDER_COLOR;
+
+    .dx-tabs {
+        overflow: visible;
+
+        .dx-tabs-wrapper {
+            margin-left: -1px;
+            margin-right: -1px;
+        }
+    }
+
+    .dx-tab {
+        overflow: visible;
+        border-top: none;
+        border-bottom: none;
+    }
+
+    .dx-tab-selected {
+        background-color: transparent;
+
+        &:before {
+            content: '';
+            display: block;
+            border-bottom: 1px solid @WIN10_TABPANEL_TAB_SELECTED_BOTTOM_BORDER_COLOR;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+        }
+    }
+
+    .dx-multiview-wrapper {
+        border-top: 1px solid @WIN10_TABPANEL_BORDER_COLOR;
+
+        .dx-empty-collection& {
+            border-top: none;
+        }
+    }
+}

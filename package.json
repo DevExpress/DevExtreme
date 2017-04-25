@@ -1,0 +1,67 @@
+{
+  "name": "devextreme",
+  "version": "16.2.6",
+  "homepage": "https://js.devexpress.com/",
+  "license": "https://js.devexpress.com/Licensing/",
+  "dependencies": {
+    "jszip": "^2.0.0 || ^3.0.0"
+  },
+  "peerDependencies": {
+    "jquery": "^2.0.0 || ^3.0.0"
+  },
+  "devDependencies": {
+    "@types/jquery": "^2.0.34",
+    "bootstrap": "^3.3.7",
+    "del": "^2.2.2",
+    "eslint": "^3.12.2",
+    "eslint-plugin-spellcheck": "0.0.6",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-eol": "^0.1.2",
+    "gulp-file": "^0.3.0",
+    "gulp-footer": "^1.0.5",
+    "gulp-header": "^1.7.1",
+    "gulp-if": "^2.0.0",
+    "gulp-jsbeautifier": "^2.0.3",
+    "gulp-ll": "^1.0.4",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-template": "^4.0.0",
+    "gulp-typescript": "^3.0.2",
+    "gulp-uglify": "^1.5.3",
+    "jquery-mockjax": "^2.2.1",
+    "jshint": "^2.9.3",
+    "lazypipe": "^1.0.1",
+    "less": "^2.7.1",
+    "merge-stream": "^1.0.0",
+    "qunitjs": "^2.0.1",
+    "run-sequence": "^1.1.5",
+    "systemjs": "<=0.19.41",
+    "systemjs-plugin-css": "^0.1.23",
+    "systemjs-plugin-json": "0.2.2",
+    "systemjs-plugin-text": "0.0.8",
+    "through2": "^2.0.1",
+    "typescript": "^2.0.3",
+    "vinyl-named": "^1.1.0",
+    "webpack": "^1.13.0",
+    "webpack-stream": "^3.2.0",
+    "yargs": "^4.6.0"
+  },
+  "bin": {
+    "devextreme-bundler-init": "bin/bundler-init.js",
+    "devextreme-bundler": "bin/bundler.js"
+  },
+  "scripts": {
+    "lint": "jshint --verbose . && eslint .",
+
+    "build-style-compiler": "cd build/style-compiler && dotnet restore -v minimal && dotnet publish -o bin/Debug/dist",
+    "build-test-runner": "cd testing/runner && dotnet restore -v minimal && dotnet publish -o bin/Debug/dist",
+    "build-dotnet": "npm run -s build-style-compiler && npm run -s build-test-runner",
+
+    "build": "npm run -s build-dotnet && gulp default",
+    "build-dist": "npm run -s build-dotnet && gulp default --uglify",
+    "build-themes": "gulp style-compiler-themes"
+  }
+}

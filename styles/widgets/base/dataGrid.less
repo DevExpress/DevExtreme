@@ -1,0 +1,111 @@
+
+.dx-datagrid {
+    color: @DATAGRID_BASE_COLOR;
+    background-color: @DATAGRID_BASE_BACKGROUND_COLOR;
+
+    .dx-sort-up {
+        .dx-icon-sortup;
+    }
+
+    .dx-sort-down {
+        .dx-icon-sortdown;
+    }
+
+    .dx-header-filter {
+        position: relative;
+        color: @HEADER_FILTER_COLOR;
+        .dx-icon-filter;
+    }
+
+    .dx-header-filter-empty {
+        color: @HEADER_FILTER_COLOR_EMPTY;
+    }
+
+    &.dx-filter-menu {
+        .dx-menu-item-content .dx-icon {
+            .dx-icon-sizing(14px);
+        }
+    }
+
+    .dx-datagrid-content-fixed {
+        .dx-datagrid-table {
+            .dx-col-fixed {
+                background-color: @DATAGRID_BASE_BACKGROUND_COLOR;
+            }
+        }
+    }
+
+    .dx-datagrid-rowsview .dx-data-row, .dx-datagrid-rowsview .dx-freespace-row, .dx-datagrid-headers .dx-row {
+        td.dx-pointer-events-none {
+            border-left: 2px solid @DATAGRID_BORDER_COLOR;
+            border-right: 2px solid @DATAGRID_BORDER_COLOR;
+
+            &.dx-first-cell {
+                border-left: none;
+            }
+
+            &.dx-last-cell {
+                border-right: none;
+            }
+        }
+    }
+
+    .dx-datagrid-rowsview {
+        .dx-datagrid-edit-form {
+            background-color: @DATAGRID_BASE_BACKGROUND_COLOR;
+        }
+    }
+
+    .dx-datagrid-filter-row .dx-filter-range-content {
+        color: @DATAGRID_BASE_COLOR;
+    }
+}
+
+.dx-datagrid-form-buttons-container {
+    float: right;
+    .dx-button {
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+}
+
+.dx-datagrid-column-chooser {
+    .dx-base-typography();
+}
+
+.dx-datagrid-export-menu {
+    .dx-menu-item .dx-icon-exportxlsx {
+        .dx-icon-sizing(16px);
+    }
+}
+
+.dx-datagrid-adaptive-more {
+    cursor: pointer;
+    .dx-icon-more;
+    .dx-icon-sizing(21px);
+}
+
+.dx-rtl {
+    .dx-datagrid {
+        .dx-datagrid-rowsview .dx-data-row, .dx-datagrid-rowsview .dx-freespace-row, .dx-datagrid-headers .dx-row {
+            td.dx-pointer-events-none {
+                border-left: 2px solid @DATAGRID_BORDER_COLOR;
+
+                &.dx-first-cell {
+                    border-right: none;
+                }
+
+                &.dx-last-cell {
+                    border-left: none;
+                }
+            }
+        }
+    }
+    .dx-datagrid-form-buttons-container {
+        float: left;
+        .dx-button {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+    }
+}

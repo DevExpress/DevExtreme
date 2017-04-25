@@ -1,0 +1,143 @@
+@WIN8_FIELDSET_HEADER_FONT_SIZE: 19pt;
+
+.dx-fieldset {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.dx-fieldset-header {
+    text-transform: lowercase;
+    font-size: @WIN8_FIELDSET_HEADER_FONT_SIZE;
+}
+
+.dx-field {
+    min-height: 40px;
+    padding: .3em 0;
+}
+
+.dx-field-label {
+    color: @WIN8_LABEL_TEXT;
+    padding: @WIN8_FIELD_LABEL_PADDING 0;
+    float: none;
+    width: 100%;
+}
+
+.dx-field-value {
+    float: none;
+    overflow: visible;
+    &:not(.dx-checkbox) {
+        padding-top: @WIN8_FIELD_LABEL_PADDING;
+        padding-bottom: 9px;
+    }
+
+    &.dx-attention {
+        color: @WIN8_FIELD_ATTENTION_COLOR;
+        &:before {
+            display: inline-block;
+            content: '';
+            width: 15px;
+            height: 12px;
+            background: @WIN8_ATTENTION_IMAGE;
+        }
+    }
+
+    &:not(.dx-checkbox):not(.dx-switch):not(.dx-button) {
+        width: 100%;
+    }
+
+    &.dx-checkbox {
+        margin: 9px 0;
+        float: none;
+    }
+
+    .dx-switch, .dx-checkbox {
+        float: none;
+    }
+
+    &.dx-texteditor {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    &.dx-button {
+        margin-top: 7px;
+    }
+
+    &.dx-autocomplete {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    &.dx-selectbox {
+        margin-top: 3px;
+    }
+
+    &.dx-lookup {
+        padding: 0;
+        margin: 4px 0;
+    }
+
+    &:not(.dx-widget) {
+        & > .dx-texteditor {
+            margin-top: -@WIN8_FIELD_LABEL_PADDING;
+            margin-bottom: -9px;
+        }
+    }
+}
+
+.dx-field-value-static {
+    float: none;
+    overflow: visible;
+    padding-top: @WIN8_FIELD_LABEL_PADDING;
+    padding-bottom: 9px;
+}
+
+.dx-edit-mode {
+    .dx-field-label {
+        float: none;
+    }
+
+    .dx-field-value {
+        float: none;
+        max-width: 300px;
+    }
+}
+
+.dx-fieldset-readonly {
+    .dx-field-label {
+        color: @WIN8_BASE_TEXT;
+        font-size: @WIN8_H4;
+        text-transform: lowercase;
+    }
+
+    .dx-field-value {
+        color: @WIN8_LABEL_TEXT;
+        font-size: @WIN8_FIELD_VALUE_FONTSIZE;
+    }
+}
+
+
+.dx-device-phone .dx-fieldset-readonly {
+    .dx-field-label {
+        font-size: @WIN8PHONE_H4;
+    }
+
+    .dx-field-value {
+        font-size: @WIN8PHONE_FIELD_VALUE_FONTSIZE;
+    }
+}
+
+.dx-device-phone .dx-field-value .dx-button-back .dx-button-content {
+    line-height: 0;
+}
+
+.dx-rtl .dx-fieldset,
+.dx-fieldset.dx-rtl {
+    .dx-field-label {
+        float: none;
+    }
+
+    .dx-field-value {
+        float: none;
+    }
+}
