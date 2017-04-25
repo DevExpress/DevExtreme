@@ -1,0 +1,65 @@
+@WIN8_NAVBAR_ICON_SIZE: @WIN8_ICON_SIZE;
+@WIN8_NAVBAR_ICON_PART: 0.56;
+@WIN8_NAVBAR_ICON_BORDER_WIDTH: 4px;
+
+.dx-tabs {
+    &.dx-navbar {
+        text-align: left;
+
+        .dx-icon {
+            display: none;
+            .dx-icon-sizing(@WIN8_NAVBAR_ICON_SIZE * @WIN8_NAVBAR_ICON_PART, @WIN8_NAVBAR_ICON_SIZE, @WIN8_NAVBAR_ICON_BORDER_WIDTH);
+        }
+
+        .dx-tab-text {
+            font-size: 18px;
+        }
+    }
+}
+
+.dx-navbar-item-badge {
+    top: 0;
+    margin-right: -22px;
+}
+
+.dx-navbar-text-item .dx-navbar-item-badge {
+    right: 0;
+    margin-right: 5px;
+}
+
+.dx-device-phone {
+    .dx-navbar-item-badge {
+        font-size: 10px;
+        margin-right: 0;
+        line-height: 13px;
+        height: 14px;
+    }
+
+    .dx-navbar-text-item .dx-navbar-item-badge {
+        margin-right: 5px;
+    }
+
+    .dx-rtl.dx-tabs .dx-navbar-item-badge {
+        margin-right: 0;
+        margin-left: -14px;
+    }
+}
+
+.dx-rtl .dx-tabs,
+.dx-rtl.dx-tabs {
+    &.dx-navbar {
+        text-align: right;
+    }
+
+    .dx-navbar-item-badge {
+        margin-right: 0;
+        margin-left: -22px;
+    }
+
+    .dx-navbar-text-item .dx-navbar-item-badge {
+        right: auto;
+        left: 0;
+        margin-right: 0;
+        margin-left: 5px;
+    }
+}

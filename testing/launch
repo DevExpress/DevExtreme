@@ -1,0 +1,58 @@
+#!/usr/bin/env node
+
+"use strict";
+// jshint esversion:6
+
+var path = require("path"),
+    http = require("http"),
+    childProcess = require("child_process"),
+    os = require("os");
+
+var PORT = require("./../ports.json").qunit;
+
+if(parseInt(process.versions.node.split('.')[0]) < 6)
+    throw "Node version is too low";
+
+childProcess.spawn(
+    "dotnet",
+    [ path.join(__dirname, "runner/bin/Debug/dist/runner.dll") ],
+    { stdio: "inherit" }
+);
+
+waitForRunner();
+
+function waitForRunner() {
+    http.request({ port: PORT }, res => openBrowser())
+        .on("error", e => {
+            console.log("waiting...");
+            waitForRunner();
+        })
+        .end();
+}
+
+function openBrowser() {
+    childProcess.spawn(
+        getBrowserCommand(),
+        [ "http://localhost:" + PORT ],
+        {
+            shell: true,
+            detached: true
+        }
+    );
+}
+
+
+function getBrowserCommand() {
+    switch(os.platform()) {
+        case "win32":
+            return "start";
+
+        case "darwin":
+            return "open";
+
+        case "linux":
+            return "xdg-open";
+    }
+
+    throw "Not implemented";
+}

@@ -1,0 +1,123 @@
+@WIN8_REMOVE_BUTTON_ACTIVE_COLOR: lighten(@WIN8_ACCENT_COLOR, 40%);
+
+.dx-show-clear-button {
+    .dx-tag-container {
+        margin-right: @CLEAR_ICON_SIZE + 2 * @CLEAR_ICON_OFFSET;
+    }
+}
+
+.dx-tag-container {
+    margin: @TEXTEDITOR_INPUT_MARGIN;
+    background-color: @WIN8_TEXTEDITOR_BACKGROUND;
+    border: @TEXTEDITOR_INPUT_BORDER;
+    color: @WIN8_BLACK_COLOR;
+    font-weight: @TEXTEDITOR_FONT_WEIGHT;
+    font-size: @TEXTEDITOR_FONT_SIZE;
+    line-height: @TEXTEDITOR_LINE_HEIGHT;
+}
+
+.dx-tagbox .dx-texteditor-input {
+    min-height: 27px;
+    margin: 1px;
+    padding: 0;
+}
+
+.dx-tagbox .dx-placeholder:before{
+    top: 0;
+    padding: 4px;
+}
+
+.dx-tag-content {
+    margin: 1px 3px 1px 0;
+    padding: 3px 28px 4px 6px;
+    min-width: 40px;
+    background-color: @WIN8_TAGBOX_TAG_BACKGROUND;
+    color: @WIN8_WHITE_COLOR;
+}
+
+.dx-tag-remove-button {
+    padding: 5px 8px;
+    width: 32px;
+    height: 24px;
+
+    &:before, &:after {
+        left: 17px;
+        margin-top: -5px;
+        width: 3px;
+        height: 13px;
+        background: @WIN8_WHITE_COLOR;
+    }
+
+    &:after {
+        left: 12px;
+        margin-top: 0;
+        width: 13px;
+        height: 3px;
+    }
+
+    &:active {
+        &:before, &:after {
+            background: @WIN8_REMOVE_BUTTON_ACTIVE_COLOR;
+        }
+    }
+}
+
+.dx-tagbox {
+    .dx-texteditor-input {
+        width: auto;
+        border: none;
+        background: none;
+
+        &:focus {
+            border: none;
+            background: none;
+        }
+    }
+}
+
+.dx-tag.dx-state-focused {
+    .dx-tag-content {
+        background: @WIN8_TAGBOX_TAG_FOCUSED_BACKGROUND;
+    }
+}
+
+.dx-tagbox-popup-wrapper {
+    .dx-list-select-all {
+        border-bottom: 1px solid @WIN8_TAGBOX_SELECT_ALL_BORDER_COLOR;
+    }
+
+    .dx-list-select-all-checkbox {
+        margin-top: 0;
+    }
+
+    .dx-list-select-all-label {
+        vertical-align: baseline;
+    }
+}
+
+.dx-rtl {
+    .dx-dropdowneditor.dx-tagbox,
+    &.dx-dropdowneditor.dx-tagbox {
+        .dx-tag-content {
+            padding-right: 6px;
+            padding-left: 28px;
+        }
+    }
+
+    .dx-tag-remove-button {
+        &:before {
+            left: 11px;
+        }
+
+        &:after {
+            left: 6px;
+        }
+    }
+
+    &.dx-show-clear-button {
+        .dx-tag-container {
+            margin-left: 22px;
+            margin-right: 0;
+        }
+    }
+}

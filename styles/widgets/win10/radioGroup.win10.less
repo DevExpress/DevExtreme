@@ -1,0 +1,29 @@
+.dx-radiogroup {
+    &.dx-invalid {
+        .dx-radiobutton-icon {
+            border-color: @WIN10_RADIOBUTTON_INVALID_BORDER_COLOR;
+        }
+    }
+}
+
+.dx-radiobutton {
+    line-height: 18px;
+
+    .dx-radiogroup-vertical & {
+        margin-bottom: 10px;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+    }
+
+    .dx-radiogroup-horizontal & {
+        margin-right: 12px;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            margin-right: 0;
+            margin-left: 12px;
+        }
+    }
+}

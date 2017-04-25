@@ -1,0 +1,181 @@
+@ANDROID5_LOOKUP_HEIGHT: 48px;
+@ANDROID5_LOOKUP_POPUP_TITLE_HEIGHT: 47px;
+@ANDROID5_LOOKUP_POPUP_NO_TITLE_CONTENT_TOP: 20px;
+@ANDROID5_LOOKUP_POPUP_CONTENT_PADDING: 0;
+@ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING: 24px;
+@ANDROID5_LOOKUP_SEARCH_HEIGHT: 48px;
+@ANDROID5_LOOKUP_VALIDATION_MESSAGE_MARGIN_VERTICAL: 10px;
+@ANDROID5_LOOKUP_VALIDATION_MESSAGE_PADDING_VERTICAL: 13px;
+@ANDROID5_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE: 14px;
+
+.dx-lookup {
+    height: @ANDROID5_LOOKUP_HEIGHT;
+    color: @ANDROID5_LOOKUP_COLOR;
+
+    &.dx-state-active {
+        background: @ANDROID5_LOOKUP_SELECTED_ITEM_COLOR;
+
+        .dx-lookup-field {
+            color: @ANDROID5_WIDGET_TEXT;
+        }
+    }
+
+    &.dx-state-disabled {
+        opacity: .75;
+
+        .dx-lookup-field:before {
+            opacity: .5;
+        }
+    }
+
+    .dx-inkripple {
+        overflow: hidden;
+    }
+
+    .dx-inkripple-wave {
+        background-color: @ANDROID5_BUTTON_INK_COLOR;
+    }
+}
+
+.dx-lookup-empty {
+    .dx-lookup-field {
+        color: @ANDROID5_TEXTEDITOR_PLACEHOLDER_COLOR;
+    }
+}
+
+.dx-lookup-field {
+    line-height: @ANDROID5_LOOKUP_HEIGHT;
+    padding: 0 @ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING 0 0;
+    text-align: left;
+    height: 100%;
+
+    .dx-rtl &,
+    .dx-rtl& {
+        padding-right: 0;
+        padding-left: @ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING;
+        text-align: right;
+
+        &:before {
+            right: auto;
+            left: -3px;
+            .rotate(180deg);
+        }
+    }
+}
+
+.dx-lookup-arrow {
+    .dx-icon-chevronnext;
+    .dx-icon-font-centered-sizing(20px);
+    width: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH;
+    font-size: 16px;
+    right: 2px;
+
+    &:before {
+        color: @ANDROID5_DARK_ICON_COLOR;
+        margin-left: 0;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            right: 50%;
+        }
+    }
+}
+
+.dx-lookup-popup-wrapper {
+    .dx-popup-title {
+        height: @ANDROID5_LOOKUP_POPUP_TITLE_HEIGHT;
+    }
+
+    .dx-popup-content {
+        top: @ANDROID5_LOOKUP_POPUP_NO_TITLE_CONTENT_TOP;
+        padding: @ANDROID5_LOOKUP_POPUP_CONTENT_PADDING;
+    }
+
+    .dx-popup-title + .dx-popup-content {
+        top: @ANDROID5_LOOKUP_POPUP_TITLE_HEIGHT;
+    }
+
+    .dx-list-item-content {
+        padding-right: @ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING;
+        padding-left: @ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING;
+    }
+
+    .dx-rtl {
+        .dx-popup-content {
+            padding-right: @ANDROID5_POPUP_CONTENT_PADDING;
+        }
+    }
+}
+
+.dx-lookup-popup-search {
+    .dx-list {
+        height: calc(~'100% - 48px');
+    }
+
+    .dx-list {
+        .dx-scrollable-container {
+            border: none;
+        }
+    }
+}
+
+.dx-lookup-search-wrapper {
+    width: auto;
+    padding-left: @ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING;
+    padding-right: @ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING;
+}
+
+.dx-invalid.dx-lookup .dx-lookup-field-wrapper {
+    &:after {
+        right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+        .dx-invalid-android-5-badge();
+        top: 14px;
+    }
+
+    .dx-rtl &:after {
+        left: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+        right: auto;
+    }
+}
+
+.dx-lookup-validation-message {
+    background-color: @ANDROID5_INVALID_COLOR;
+    color: white;
+    font-size: @ANDROID5_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE;
+    line-height: @ANDROID5_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE;
+    padding: @ANDROID5_LOOKUP_VALIDATION_MESSAGE_PADDING_VERTICAL @ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING;
+    margin: 0 0 @ANDROID5_LOOKUP_VALIDATION_MESSAGE_MARGIN_VERTICAL -@ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING;
+
+    .dx-popup-title + .dx-popup-content & {
+        margin-top: @ANDROID5_LOOKUP_VALIDATION_MESSAGE_MARGIN_VERTICAL;
+    }
+
+    .dx-rtl & {
+        margin-right: -@ANDROID5_LOOKUP_LIST_HORIZONTAL_PADDING;
+        margin-left: 0;
+    }
+}
+
+.dx-popup-content.dx-lookup-invalid {
+    top: 0;
+
+    .dx-lookup-validation-message {
+        display: inline-block;
+    }
+
+    .dx-list {
+        top: @ANDROID5_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE + 2 * @ANDROID5_LOOKUP_VALIDATION_MESSAGE_PADDING_VERTICAL + @ANDROID5_LOOKUP_VALIDATION_MESSAGE_MARGIN_VERTICAL;
+    }
+
+    .dx-popup-title + & {
+        .dx-list {
+            top: @ANDROID5_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE + 2 * @ANDROID5_LOOKUP_VALIDATION_MESSAGE_PADDING_VERTICAL + 2 * @ANDROID5_LOOKUP_VALIDATION_MESSAGE_MARGIN_VERTICAL;
+        }
+    }
+
+    .dx-lookup-popup-search & {
+        .dx-list {
+            top: @ANDROID5_LOOKUP_SEARCH_HEIGHT + @ANDROID5_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE + 2 * @ANDROID5_LOOKUP_VALIDATION_MESSAGE_PADDING_VERTICAL + 2 * @ANDROID5_LOOKUP_VALIDATION_MESSAGE_MARGIN_VERTICAL;
+        }
+    }
+}

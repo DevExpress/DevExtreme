@@ -1,0 +1,168 @@
+@IOS7_LOOKUP_HEIGHT: 27px;
+@IOS7_LOOKUP_SELECTED_ICON_MARGIN: 20px;
+
+@IOS7_LOOKUP_WITH_SEARCH_LIST_OFFSET_TOP: 42px;
+@IOS7_LOOKUP_LIST_ITEM_PADDING_AFTER: 20px;
+@IOS7_LOOKUP_LIST_ITEM_SELECTED_FONT_SIZE: 24px;
+@IOS7_LOOKUP_LIST_ITEM_SELECTED_LINE_HEIGHT: 20px;
+
+@IOS7_LOOKUP_FIELD_PADDING_AFTER: 17px;
+@IOS7_LOOKUP_FIELD_PADDING: 4px @IOS7_LOOKUP_FIELD_PADDING_AFTER 4px 0;
+
+@IOS7_LOOKUP_VALIDATION_MESSAGE_PADDING: 13px;
+@IOS7_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE: 14px;
+
+.dx-lookup {
+    height: @IOS7_LOOKUP_HEIGHT;
+
+    &.dx-state-active {
+        background: @IOS7_LOOKUP_FIELD_ACTIVE_BACKGROUND;
+
+        .dx-lookup-field:before {
+            border-color: @IOS7_LOOKUP_ARROW_ACTIVE;
+        }
+    }
+}
+
+.dx-lookup-field {
+    padding: @IOS7_LOOKUP_FIELD_PADDING;
+    color: @IOS7_LOOKUP_FIELD_TEXT;
+
+    .dx-rtl &,
+    .dx-rtl& {
+        padding-right: 0;
+        padding-left: @IOS7_LOOKUP_FIELD_PADDING_AFTER;
+    }
+}
+
+.dx-lookup-arrow {
+    .dx-icon-chevronnext;
+    .dx-icon-font-centered-sizing(16px);
+    font-weight: 600;
+    width: @DROPDOWNEDITOR_BUTTON_WIDTH;
+
+    &:before {
+        color: @IOS7_INPUT_PLACEHOLDER;
+    }
+}
+
+.dx-lookup-popover-mode {
+    .dx-lookup-field:before {
+        display: none;
+    }
+}
+
+.dx-lookup-empty {
+    .dx-lookup-field {
+        color: @IOS7_INPUT_PLACEHOLDER;
+    }
+}
+
+.dx-state-disabled {
+    .dx-lookup-field {
+        color: @IOS7_TEXTEDITOR_DISABLE;
+    }
+}
+
+.dx-lookup-validation-message {
+    padding: @IOS7_LOOKUP_VALIDATION_MESSAGE_PADDING;
+    color: @IOS7_INVALID_COLOR;
+    font-size: @IOS7_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE;
+    line-height: @IOS7_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE;
+    background-color: @IOS7_LOOKUP_VALIDATION_MESSAGE_BACKGROUND;
+    height: 2 * @IOS7_LOOKUP_VALIDATION_MESSAGE_PADDING + @IOS7_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE;
+    box-sizing: border-box;
+    border-bottom: 1px solid #B5B5B5;
+}
+
+.dx-lookup-popup-wrapper {
+    .dx-popup-content {
+        padding: 0;
+    }
+
+    .dx-rtl .dx-list-item {
+        &:before {
+            float: left;
+        }
+    }
+
+    .dx-lookup-invalid {
+        .dx-list {
+            top: @IOS7_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE + 2 * @IOS7_LOOKUP_VALIDATION_MESSAGE_PADDING;
+        }
+    }
+
+    .dx-list-item-selected {
+        .dx-list-item-content {
+            padding-right: @IOS7_LOOKUP_LIST_ITEM_PADDING_AFTER;
+
+            &:before {
+                color: @IOS7_LINK;
+                display: inline-block;
+                font-weight: bold;
+                content: "\f005";
+                font-family: DXIcons;
+                font-size: @IOS7_LOOKUP_LIST_ITEM_SELECTED_FONT_SIZE;
+                margin-right: @IOS7_LOOKUP_SELECTED_ICON_MARGIN;
+                line-height: @IOS7_LOOKUP_LIST_ITEM_SELECTED_LINE_HEIGHT;
+                float: right;
+            }
+
+            .dx-rtl &,
+            .dx-rtl& {
+                &:before {
+                    float: left;
+                    margin-left: @IOS7_LOOKUP_SELECTED_ICON_MARGIN;
+                }
+            }
+        }
+
+        .dx-rtl & {
+            .dx-list-item-content {
+                padding-right: @IOS7_LIST_ITEM_HORIZONTAL_PADDING;
+                padding-left: @IOS7_LOOKUP_LIST_ITEM_PADDING_AFTER;
+            }
+        }
+    }
+}
+
+.dx-lookup-popup-wrapper .dx-list {
+    padding-bottom: 8px;
+}
+
+.dx-lookup-popup-search .dx-list {
+    height: calc(~'100% - 50px');
+}
+
+.dx-lookup-popup-search {
+    .dx-lookup-invalid {
+        .dx-list {
+            top: @IOS7_LOOKUP_WITH_SEARCH_LIST_OFFSET_TOP + @IOS7_LOOKUP_VALIDATION_MESSAGE_FONT_SIZE + 2 * @IOS7_LOOKUP_VALIDATION_MESSAGE_PADDING;
+        }
+    }
+
+    .dx-lookup-validation-message {
+        border-bottom: none;
+    }
+}
+
+.dx-lookup-search-wrapper {
+    .dx-searchbar;
+    border-top: 1px solid #7E7E7E;
+    border-bottom: 1px solid #B5B5B5;
+}
+
+.dx-invalid.dx-lookup {
+    .dx-lookup-field {
+        &:after {
+            right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET + 1;
+            .dx-invalid-ios7-badge();
+
+            .dx-rtl &,
+            .dx-rtl& {
+                left: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET + 1;
+                right: auto;
+            }
+        }
+    }
+}

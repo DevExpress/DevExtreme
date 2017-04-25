@@ -1,0 +1,68 @@
+@WIN8_MENU_POPUP_BORDER: 2px solid @WIN8_MENU_POPUP_BORDER_COLOR;
+@WIN8_MENU_POPOUT_ICON_SIZE: 11px;
+
+.dx-context-menu {
+    color: @WIN8_MENU_POPUP_TEXT_COLOR;
+
+    .dx-submenu > .dx-menu-items-container {
+        background-color: @WIN8_MENU_POPUP_BACKGROUND;
+        border: @WIN8_MENU_POPUP_BORDER;
+    }
+
+    .dx-menu-separator {
+        background-color: @WIN8_SEPARATOP_COLOR;
+    }
+
+    .dx-menu-item.dx-state-focused,
+    .dx-menu-item.dx-menu-item-expanded,
+    .dx-menu-item.dx-state-active {
+        background-color: @WIN8_MENU_ITEM_HOVERED_BACKGROUND;
+
+        & > .dx-menu-item-content {
+            color: @WIN8_MENU_ITEM_SELECTED_COLOR;
+        }
+    }
+
+    .dx-menu-item-selected,
+    .dx-menu-item-selected.dx-state-focused {
+        background-color: @WIN8_MENU_ITEM_SELECTED_BACKGROUND;
+    }
+
+        .dx-menu-item-selected.dx-menu-item > .dx-menu-item-content,
+        .dx-menu-item-selected.dx-state-focused.dx-menu-item > .dx-menu-item-content {
+            color: @WIN8_MENU_ITEM_SELECTED_COLOR;
+        }
+
+    .dx-menu-item-content {
+        padding: 15px 12px 15px 8px;
+
+        .dx-menu-item-text {
+            padding-right: 22px;
+        }
+
+        .dx-menu-item-popout {
+            .dx-icon-chevronright;
+            .dx-icon-font-centered-sizing(@WIN8_MENU_POPOUT_ICON_SIZE);
+        }
+    }
+
+    &.dx-rtl {
+        .dx-menu-item-content {
+            padding: 15px 12px 15px 8px;
+
+            .dx-menu-item-text {
+                padding-left: 22px;
+                padding-right: 0px;
+            }
+
+            .dx-menu-item-popout-container {
+                margin-left: 0px;
+                margin-right: auto;
+
+                .dx-menu-item-popout {
+                    .flip-horizontally();
+                }
+            }
+        }
+    }
+}

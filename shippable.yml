@@ -1,0 +1,27 @@
+language: none
+
+env:
+  matrix:
+    - TARGET=lint
+    - TARGET=test CONSTEL=misc
+    - TARGET=test CONSTEL=ui
+    - TARGET=test CONSTEL=ui.editors
+    - TARGET=test CONSTEL=ui.grid
+    - TARGET=test CONSTEL=ui.scheduler
+    - TARGET=test CONSTEL=viz
+
+build:
+
+  pre_ci_boot:
+    image_name: docker.io/devexpress/devextreme-build
+    image_tag: 17_1
+    pull: true
+
+  ci:
+    - ./docker-ci.sh
+
+  cache: true
+  cache_dir_list:
+    - $SHIPPABLE_BUILD_DIR/.git
+    - $SHIPPABLE_BUILD_DIR/node_modules
+    - /root/.nuget

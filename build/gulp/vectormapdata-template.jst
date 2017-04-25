@@ -1,0 +1,12 @@
+(function(root, factory) {
+    /* global DevExpress, define */
+    if(typeof define === "function" && define.amd) {
+        define(function(require, exports, module) {
+            factory(exports);
+        });
+    } else {
+        factory(DevExpress.viz.map.sources);
+    }
+}(this, function(sources) {
+    sources.<%= data %>
+}));

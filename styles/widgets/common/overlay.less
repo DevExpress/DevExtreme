@@ -1,0 +1,44 @@
+@OVERLAY_ZINDEX: 1000;
+
+.dx-overlay-wrapper {
+    top: 0;
+    left: 0;
+    z-index: @OVERLAY_ZINDEX;
+
+    &, *, &:before, &:after, *:before, *:after {
+        .box-sizing(border-box);
+    }
+}
+
+.dx-overlay-modal {
+    width: 100%;
+    height: 100%;
+}
+
+.dx-overlay-shader {
+    background-color: rgba(128, 128, 128, .5);
+}
+
+.dx-overlay-content {
+    position: absolute;
+    z-index: @OVERLAY_ZINDEX;
+    outline: 0;
+    overflow: hidden;
+
+    & > .dx-template-wrapper {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.dx-device-android {
+    .dx-overlay-content {
+        .backface-visibility(hidden);
+    }
+
+    .dx-scrollable-native {
+        .dx-overlay-content {
+            .backface-visibility(visible);
+        }
+    }
+}

@@ -1,0 +1,57 @@
+.dx-actionsheet-popup-wrapper,
+.dx-actionsheet-popover-wrapper {
+    .dx-popup-content {
+        padding: 0;
+        padding-top: 12px;
+        padding-bottom: 12px;
+
+        .dx-button {
+            color: @WIN10_ACTIONSHEET_BUTTON_TEXT_COLOR;
+
+            &.dx-state-hover .dx-button-content {
+                background-color: @WIN10_ACTIONSHEET_BUTTON_HOVER_BACKGROUND_COLOR;
+            }
+
+            &.dx-state-active .dx-button-content {
+                background-color: @WIN10_ACTIONSHEET_BUTTON_ACTIVE_BACKGROUND_COLOR;
+            }
+        }
+
+        .dx-button-content {
+            background-color: transparent;
+            border: none;
+            padding: 15px 12px;
+            text-align: left;
+        }
+    }
+
+    .dx-toolbar-label {
+        font-size: 16px;
+        padding-top: 8px;
+    }
+
+    .dx-overlay-content.dx-rtl {
+        .dx-button-content {
+            text-align: right;
+        }
+    }
+}
+
+.dx-actionsheet-popup-wrapper {
+    .dx-overlay-content {
+        border: none;
+        .box-shadow(none);
+    }
+}
+
+.dx-actionsheet-container {
+     .dx-button {
+        &.dx-state-disabled, .dx-state-disabled& {
+            color: @WIN10_ACTIONSHEET_BUTTON_DISABLED_TEXT_COLOR;
+
+            .dx-button-content {
+                background-color: transparent;
+            }
+        }
+    }
+}

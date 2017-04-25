@@ -1,0 +1,16 @@
+@WIN10_TOOLTIP_PADDING_BASE: 12px;
+@WIN10_TOOLTIP_FONT_SIZE: 16px;
+
+.dx-tooltip-wrapper {
+    .dx-overlay-content {
+        background-color: @WIN10_TOOLTIP_BACKGROUND_COLOR;
+        border-color: @WIN10_TOOLTIP_BORDER_COLOR;
+        .box-shadow(none);
+
+        .dx-popup-content {
+            font-size: @WIN10_TOOLTIP_FONT_SIZE;
+            line-height: @WIN10_TOOLTIP_FONT_SIZE;
+            padding: (@WIN10_TOOLTIP_PADDING_BASE / 2) @WIN10_TOOLTIP_PADDING_BASE;
+        }
+    }
+}

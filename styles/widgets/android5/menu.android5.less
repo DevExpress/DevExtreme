@@ -1,0 +1,108 @@
+@ANDROID5_MENU_ARROW_ICON_SIZE: 24px;
+@ANDROID5_MENU_ARROW_COLOR: #757575;
+@ANDROID5_MENU_ADAPTIVE_SEPARATOR_COLOR: #cdcdcd;
+@ANDROID5_MENU_ADAPTIVE_EXPANDER_WIDTH: 45px;
+
+.dx-menu {
+    background-color: @ANDROID5_MENU_BACKGROUND;
+
+    .dx-menu-item-expanded {
+        background-color: @ANDROID5_MENU_POPUP_BACKGROUND;
+
+        .dx-menu-item-content {
+            background-color: @ANDROID5_MENU_ITEM_HOVERED_BACKGROUND;
+        }
+    }
+
+    .dx-menu-item-popout {
+        .dx-icon-spindown;
+        .dx-icon-font-centered-sizing(@ANDROID5_MENU_ARROW_ICON_SIZE);
+        color: @ANDROID5_MENU_ARROW_COLOR;
+    }
+
+    .dx-menu-vertical {
+        .dx-menu-item-popout {
+            .dx-icon-spinright;
+            .dx-icon-font-centered-sizing(@ANDROID5_MENU_ARROW_ICON_SIZE);
+
+            .dx-rtl &,
+            .dx-rtl& {
+                .dx-icon-spinleft;
+                .dx-icon-font-centered-sizing(@ANDROID5_MENU_ARROW_ICON_SIZE);
+            }
+        }
+    }
+
+    .dx-menu-item-content {
+        padding: 5px 7px;
+    }
+
+    .dx-menu-item-has-icon.dx-menu-item-has-submenu {
+        .dx-icon {
+            margin-right: 20px;
+            margin-left: auto;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                margin-left: 20px;
+                margin-right: auto;
+            }
+        }
+
+        &.dx-menu-item-has-text {
+            .dx-icon {
+                margin-right: 6px;
+                margin-left: auto;
+
+                .dx-rtl &,
+                .dx-rtl& {
+                    margin-left: 6px;
+                    margin-right: auto;
+                }
+            }
+        }
+    }
+
+    .dx-menu-item-has-text.dx-menu-item-has-submenu {
+        .dx-menu-item-text {
+            padding-right: 20px;
+            padding-left: 0px;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                padding-left: 20px;
+                padding-right: 0px;
+            }
+        }
+    }
+
+    &.dx-rtl {
+        .dx-menu-item-has-icon {
+            &.dx-menu-item-has-text {
+                .dx-icon {
+                    margin-left: 9px;
+                    margin-right: auto;
+                }
+            }
+        }
+    }
+}
+
+.dx-menu-adaptive-mode {
+    background-color: @ANDROID5_MENU_POPUP_BACKGROUND;
+
+    &.dx-overlay-content {
+        .shadow-z1();
+        position: absolute;
+    }
+
+    .dx-treeview {
+        .dx-treeview-toggle-item-visibility {
+            width: @ANDROID5_MENU_ADAPTIVE_EXPANDER_WIDTH;
+        }
+    }
+
+    .dx-treeview-node-container:first-child > .dx-treeview-node {
+        border-bottom: 1px solid @ANDROID5_MENU_ADAPTIVE_SEPARATOR_COLOR;
+    }
+}

@@ -1,0 +1,108 @@
+@IOS7_SWITCH_HEIGHT: 31px;
+@IOS7_SWITCH_WIDTH: 51px;
+@IOS7_SWITCH_RADIUS: 16px;
+@IOS7_SWITCH_BORDER_WIDTH: 2px;
+@IOS7_SWITCH_HANDLE_SIZE: @IOS7_SWITCH_HEIGHT - 2 * @IOS7_SWITCH_BORDER_WIDTH;
+@IOS7_SWITCH_ACTIVE_HANDLE_SIZE: 35px;
+
+.dx-switch {
+    &.dx-state-disabled {
+        opacity: @IOS7_SWITCH_DISABLED_OPACITY;
+    }
+}
+
+.dx-switch-on, .dx-switch-off {
+    display: none;
+}
+
+.dx-switch-container {
+    position: relative;
+    overflow: visible;
+    min-width: @IOS7_SWITCH_WIDTH;
+    width: 100%;
+    height: @IOS7_SWITCH_HEIGHT;
+    .border-radius(@IOS7_SWITCH_RADIUS);
+    background: @IOS7_SWITCH_OFF_BACKGROUND;
+    .transition(~"all .24s ease");
+
+    &:before {
+        position: absolute;
+        display: block;
+        top: @IOS7_SWITCH_BORDER_WIDTH;
+        right: @IOS7_SWITCH_BORDER_WIDTH;
+        bottom: @IOS7_SWITCH_BORDER_WIDTH;
+        left: @IOS7_SWITCH_BORDER_WIDTH;
+        content: " ";
+        .border-radius(@IOS7_SWITCH_RADIUS);
+        background: @IOS7_SWITCH_OFF_INNER_BACKGROUND;
+        .transition(~"all .24s ease");
+    }
+}
+
+.dx-switch-handle {
+    width: @IOS7_SWITCH_HANDLE_SIZE;
+    height: @IOS7_SWITCH_HANDLE_SIZE;
+    position: absolute;
+    top: @IOS7_SWITCH_BORDER_WIDTH;
+    left: 0;
+    margin-left: @IOS7_SWITCH_BORDER_WIDTH;
+    bottom: @IOS7_SWITCH_BORDER_WIDTH;
+    .border-radius(@IOS7_SWITCH_RADIUS);
+    background: @IOS7_SWITCH_HANDLE_BACKGROUND;
+    box-shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 5px rgba(0,0,0,.2);
+    .transition(~"margin-left .24s ease 0s, left .24s ease 0s, width .14s ease .1s, transform .14s ease .1s");
+
+    .dx-state-active & {
+        width: @IOS7_SWITCH_ACTIVE_HANDLE_SIZE;
+    }
+}
+
+.dx-switch-on-value {
+    .dx-switch-container {
+        background: @IOS7_SWITCH_ON_BACKGROUND;
+
+        &:before {
+            top: 50%;
+            right: 50%;
+            bottom: 50%;
+            left: 50%;
+            .transition(~"all .06s ease");
+        }
+    }
+
+    .dx-switch-handle {
+        left: 100%;
+        margin-left: 0 - @IOS7_SWITCH_BORDER_WIDTH - @IOS7_SWITCH_HANDLE_SIZE;
+
+        .dx-state-active& {
+            .translate(@IOS7_SWITCH_HANDLE_SIZE - @IOS7_SWITCH_ACTIVE_HANDLE_SIZE);
+        }
+    }
+}
+
+
+
+.dx-rtl {
+    .dx-switch-handle {
+        left: auto;
+        right: 0;
+        .transition(~"margin-right .24s ease 0s, right .24s ease 0s, width .14s ease .1s, transform .14s ease .1s");
+
+        .dx-state-active& {
+            .translate(0);
+        }
+    }
+
+    .dx-switch-on-value& {
+        .dx-switch-handle {
+            left: auto;
+            right: 100%;
+            margin-left: 0;
+            margin-right: 0 - @IOS7_SWITCH_BORDER_WIDTH - @IOS7_SWITCH_HANDLE_SIZE;
+
+            .dx-state-active& {
+                .translate(@IOS7_SWITCH_ACTIVE_HANDLE_SIZE - @IOS7_SWITCH_HANDLE_SIZE);
+            }
+        }
+    }
+}

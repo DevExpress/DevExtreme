@@ -1,0 +1,14 @@
+{
+  "extends": "../.jshintrc",
+
+  "multistr": true,
+
+  "predef": [
+    "define",
+    "Promise",
+    "SystemJS",
+    "DevExpress",
+    "QUnit",
+    "sinon"
+  ]
+}

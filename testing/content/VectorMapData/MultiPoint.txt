@@ -1,0 +1,56 @@
+{
+    "type": "FeatureCollection",
+    "bbox": [-10.0, -7.5, 15.0, 15.0],
+    "features": [{
+        "type": "Feature",
+        "geometry": {
+            "type": "MultiPoint",
+            "coordinates": [
+                [10, 15],
+                [15, 10],
+                [10, 7.5],
+                [5, 12.5]            
+            ]
+        },
+        "properties": {
+            "Name": "Figure-1",
+            "Count": 10,
+            "Date": "2010-01-02",
+            "Ratio": 12.1
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "MultiPoint",
+            "coordinates": [
+                [-10, 7.5],
+                [-5, 12.5],
+                [-2.5, 7.5]           
+            ]
+        },
+        "properties": {
+            "Name": "Figure-2",
+            "Count": 30,
+            "Date": "2009-02-10",
+            "Ratio": 3.13
+        }
+    }, {
+        "type": "Feature",
+        "geometry": {
+            "type": "MultiPoint",
+            "coordinates": [
+                [2.5, 2.5],
+                [2.5, -2.5],
+                [2.5, -7.5],
+                [7.5, -5],
+                [-2.5, -2.5]           
+            ]
+        },
+        "properties": {
+            "Name": "Figure-3",
+            "Count": 20,
+            "Date": "2008-10-05",
+            "Ratio": 5.14
+        }
+    }]
+}

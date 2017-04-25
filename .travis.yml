@@ -1,0 +1,35 @@
+dist: trusty
+sudo: required
+language: generic
+
+services:
+  - docker
+
+env:
+  matrix:
+    - TARGET=lint
+    - TARGET=test CONSTEL=misc
+    - TARGET=test CONSTEL=ui
+    - TARGET=test CONSTEL=ui.editors
+    - TARGET=test CONSTEL=ui.grid
+    - TARGET=test CONSTEL=ui.scheduler
+    - TARGET=test CONSTEL=viz
+
+cache:
+  directories:
+    - node_modules
+    - dotnet_packages
+
+script:
+
+  # clean bloated PATH to prevent conflicts
+  - export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+
+  - >
+    docker run -t
+    -e TARGET=$TARGET
+    -e CONSTEL=$CONSTEL
+    -e NUGET_PACKAGES=/devextreme/dotnet_packages
+    -v $TRAVIS_BUILD_DIR:/devextreme
+    docker.io/devexpress/devextreme-build:17_1
+    ./docker-ci.sh

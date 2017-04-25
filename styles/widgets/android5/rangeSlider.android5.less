@@ -1,0 +1,22 @@
+@ANDROID5_SLIDER_HANDLE_MARGIN: -14px;
+
+.dx-rangeslider-start-handle {
+    margin-left: @ANDROID5_SLIDER_HANDLE_MARGIN;
+}
+
+.dx-state-disabled {
+    .dx-rangeslider-start-handle
+    {
+        margin-left: -5px;
+    }
+}
+
+.dx-rtl {
+    .dx-rangeslider-start-handle {
+        margin-right: @ANDROID5_SLIDER_HANDLE_MARGIN;
+    }
+
+    &.dx-state-disabled .dx-rangeslider-start-handle {
+            margin-right: -5px;
+   }
+}

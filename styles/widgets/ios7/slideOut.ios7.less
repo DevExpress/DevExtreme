@@ -1,0 +1,43 @@
+.dx-slideout-menu {
+    min-height: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+
+    .dx-list-item {
+        color: #000;
+
+        .dx-icon {
+            color: @IOS7_LINK;
+            margin-top: -4px;
+            margin-bottom: -4px;
+            .dx-icon-sizing(24px);
+            .dx-icon-margin(10px);
+        }
+    }
+}
+
+.dx-state-disabled {
+    .dx-slideout-menu {
+        .dx-list-item {
+            opacity: 0.6;
+        }
+    }
+}
+
+.dx-state-active {
+    .dx-slideout-menu {
+        .dx-list-item {
+            background: rgba(1,122,255,.2);
+        }
+    }
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .dx-slideout-menu {
+        .dx-list-item {
+            .dx-icon {
+                margin-top: -1px;
+                margin-bottom: -7px;
+            }
+        }
+    }
+}

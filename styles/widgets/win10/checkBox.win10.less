@@ -1,0 +1,96 @@
+@WIN10_CHECKBOX_SIZE: 20px;
+@WIN10_CHECKBOX_TEXT_PADDING: @WIN10_CHECKBOX_SIZE + 10px;
+
+.dx-checkbox {
+    line-height: 0;
+}
+
+.dx-checkbox-text {
+    margin-left: -@WIN10_CHECKBOX_SIZE;
+    padding-left: @WIN10_CHECKBOX_TEXT_PADDING;
+}
+
+.dx-checkbox-icon {
+    width: @WIN10_CHECKBOX_SIZE;
+    height: @WIN10_CHECKBOX_SIZE;
+    border: 2px solid @WIN10_CHECKBOX_UNCHECKED_BORDER_COLOR;
+    background-color: @WIN10_CHECKBOX_UNCHECKED_BACKGROUND_COLOR;
+}
+
+.dx-checkbox-checked {
+    .dx-checkbox-icon {
+        border-color: @WIN10_CHECKBOX_CHECKED_COLOR;
+        background-color: @WIN10_CHECKBOX_CHECKED_COLOR;
+        color: @WIN10_CHECKBOX_CHECKED_ICON_COLOR;
+        .dx-icon-check();
+
+        &:before {
+            font-size: 16px;
+        }
+    }
+}
+
+.dx-checkbox-indeterminate .dx-checkbox-icon:after {
+    content: '';
+    display: block;
+    height: 8px;
+    width: 8px;
+    margin: 4px;
+    border: 2px solid @WIN10_CHECKBOX_UNCHECKED_BORDER_COLOR;
+}
+
+.dx-checkbox.dx-state-active {
+    .dx-checkbox-icon {
+        border-color: @WIN10_CHECKBOX_ACTIVE_COLOR;
+        background-color: @WIN10_CHECKBOX_ACTIVE_COLOR;
+
+        &:after {
+            border-color: @WIN10_CHECKBOX_ACTIVE_BORDER_COLOR;
+            background-color: @WIN10_CHECKBOX_ACTIVE_COLOR;
+        }
+    }
+}
+
+.dx-state-hover, .dx-state-focused {
+    &.dx-checkbox .dx-checkbox-icon {
+        border-color: @WIN10_CHECKBOX_HOVER_COLOR;
+
+        &:after {
+            border-color: @WIN10_CHECKBOX_HOVER_COLOR;
+        }
+    }
+}
+
+.dx-invalid.dx-checkbox {
+    .dx-checkbox-icon {
+        border-color: @WIN10_CHECKBOX_INVALID_BORDER_COLOR;
+    }
+}
+
+.dx-state-disabled {
+    .dx-checkbox,
+    &.dx-checkbox {
+        .dx-checkbox-icon {
+            background-color: @WIN10_CHECKBOX_DISABLED_BACKGROUND_COLOR;
+            color: @WIN10_CHECKBOX_DISABLED_COLOR;
+            border-color: @WIN10_CHECKBOX_DISABLED_COLOR;
+
+            &:after {
+                background-color: @WIN10_CHECKBOX_DISABLED_BACKGROUND_COLOR;
+                border-color: @WIN10_CHECKBOX_DISABLED_COLOR;
+            }
+        }
+    }
+}
+
+.dx-rtl {
+    .dx-checkbox,
+    &.dx-checkbox {
+        .dx-checkbox-text {
+            margin-right: -@WIN10_CHECKBOX_SIZE;
+            margin-left: 0;
+            padding-right: @WIN10_CHECKBOX_TEXT_PADDING;
+            padding-left: 0;
+        }
+    }
+}

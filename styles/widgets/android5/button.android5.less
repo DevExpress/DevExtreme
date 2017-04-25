@@ -1,0 +1,221 @@
+@ANDROID5_BUTTON_DISABLE_OPACITY: .5;
+
+@ANDROID5_BUTTON_RADIUS: 2px;
+
+@ANDROID5_BUTTON_TEXT_FONT_SIZE: 14px;
+@ANDROID5_BUTTON_TEXT_LINE_HEIGHT: @ANDROID5_BUTTON_TEXT_FONT_SIZE;
+
+@ANDROID5_BUTTON_MIN_WIDTH: 88px;
+@ANDROID5_BUTTON_MIN_HEIGHT: 36px;
+
+@ANDROID5_BUTTON_CONTENT_PADDING_TOP: 8px;
+@ANDROID5_BUTTON_CONTENT_PADDING_BOTTOM: 7px;
+@ANDROID5_TEXT_BUTTON_CONTENT_PADDING_VERTICAL: (@ANDROID5_BUTTON_MIN_HEIGHT - @ANDROID5_BUTTON_TEXT_LINE_HEIGHT) / 2;
+@ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL: 8px;
+@ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL_RAISED: 2 * @ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL;
+
+@ANDROID5_ICON_BUTTON_SIZE_CORRECTION: 4px;
+
+.dx-button-disabled {
+    color: @ANDROID5_BUTTON_TEXT;
+    background-color: @ANDROID5_BUTTON_DISABLED_BACKGROUND;
+    opacity: @ANDROID5_BUTTON_DISABLE_OPACITY;
+    .box-shadow(none);
+}
+
+.dx-state-disabled {
+    &.dx-button, .dx-button {
+        .dx-button-disabled;
+    }
+}
+
+.dx-button {
+    color: @ANDROID5_BUTTON_TEXT;
+    background-color: @ANDROID5_BUTTON_BACKGROUND;
+    min-width: @ANDROID5_BUTTON_MIN_WIDTH;
+    min-height: @ANDROID5_BUTTON_MIN_HEIGHT;
+    .border-radius(@ANDROID5_BUTTON_RADIUS);
+    .shadow-transition();
+    .shadow-z1();
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+        background-color: @ANDROID5_BUTTON_HOVERED_STATE_BACKGROUND_COLOR;
+    }
+
+    &.dx-state-active {
+        .shadow-z2();
+    }
+
+    .dx-icon {
+        .dx-icon-sizing(@ANDROID_BASE_ICON_SIZE);
+        .dx-icon-margin(@ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL)
+    }
+
+    .dx-inkripple {
+        overflow: hidden;
+    }
+
+    .dx-inkripple-wave {
+        background-color: @ANDROID5_BUTTON_INK_COLOR;
+    }
+}
+
+.dx-button-content {
+    position: relative;
+    line-height: 0;
+    min-height: @ANDROID5_BUTTON_MIN_HEIGHT;
+    padding: @ANDROID5_TEXT_BUTTON_CONTENT_PADDING_VERTICAL @ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL_RAISED;
+    .border-radius(@ANDROID5_BUTTON_RADIUS);
+}
+
+.dx-button-text {
+    position: relative;
+    text-transform: uppercase;
+    font-size: @ANDROID5_BUTTON_TEXT_FONT_SIZE;
+    line-height: @ANDROID5_BUTTON_TEXT_LINE_HEIGHT;
+}
+
+.dx-button-back {
+    .dx-button-text {
+        display: none;
+    }
+}
+
+.dx-button-default {
+    color: @ANDROID5_BUTTON_DEFAULT_TEXT;
+    background-color: @ANDROID5_BUTTON_DEFAULT_BACKGROUND;
+    .box-shadow(@ANDROID5_BUTTON_CUSTOM_BOX_SHADOW);
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+        background-color: @ANDROID5_BUTTON_DEFAULT_HOVER_BACKGROUND;
+    }
+
+    .dx-inkripple-wave {
+        background-color: fade(@ANDROID5_BUTTON_DEFAULT_INK_COLOR, 54%);
+    }
+}
+
+.dx-button-danger {
+    color: @ANDROID5_BUTTON_DANGER_TEXT;
+    background-color: @ANDROID5_BUTTON_DANGER_BACKGROUND;
+    .box-shadow(@ANDROID5_BUTTON_CUSTOM_BOX_SHADOW);
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+        background-color: @ANDROID5_BUTTON_DANGER_HOVER_BACKGROUND;
+    }
+
+    .dx-inkripple-wave {
+        background-color: fade(@ANDROID5_BUTTON_DANGER_INK_COLOR, 54%);
+    }
+}
+
+.dx-button-success {
+    color: @ANDROID5_BUTTON_SUCCESS_TEXT;
+    background-color: @ANDROID5_BUTTON_SUCCESS_BACKGROUND;
+    .box-shadow(@ANDROID5_BUTTON_CUSTOM_BOX_SHADOW);
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+        background-color: @ANDROID5_BUTTON_SUCCESS_HOVER_BACKGROUND;
+    }
+
+    .dx-inkripple-wave {
+        background-color: fade(@ANDROID5_BUTTON_SUCCESS_INK_COLOR, 54%);
+    }
+}
+
+.flat-button(@noHoverFocus) when (@noHoverFocus = true) {
+    background-color: @ANDROID5_BUTTON_FLAT_BACKGROUND_COLOR;
+    .box-shadow(none);
+
+    .dx-button-content {
+        padding-right: @ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL;
+        padding-left: @ANDROID5_BUTTON_CONTENT_PADDING_HORIZONTAL;
+    }
+
+    &.dx-button-success {
+        color: @ANDROID5_BUTTON_SUCCESS_BACKGROUND;
+
+        .dx-inkripple-wave {
+            background-color: fade(@ANDROID5_BUTTON_SUCCESS_INK_COLOR, 26%);
+        }
+    }
+
+    &.dx-button-danger {
+        color: @ANDROID5_BUTTON_DANGER_BACKGROUND;
+
+        .dx-inkripple-wave {
+            background-color: fade(@ANDROID5_BUTTON_DANGER_INK_COLOR, 26%);
+        }
+    }
+
+    &.dx-button-default {
+        color: @ANDROID5_BUTTON_DEFAULT_BACKGROUND;
+
+        .dx-inkripple-wave {
+            background-color: fade(@ANDROID5_BUTTON_DEFAULT_INK_COLOR, 26%);
+        }
+    }
+}
+
+.flat-button() {
+    .flat-button(true);
+
+    &.dx-state-hover,
+    &.dx-state-focused {
+        background-color: @ANDROID5_BUTTON_FLAT_HOVERED_BACKGROUND_COLOR;
+    }
+
+    &.dx-button-success {
+        &.dx-state-hover,
+        &.dx-state-focused {
+            background-color: fade(@ANDROID5_BUTTON_SUCCESS_HOVER_BACKGROUND, 6%);
+        }
+    }
+
+    &.dx-button-danger {
+        &.dx-state-hover,
+        &.dx-state-focused {
+            background-color: fade(@ANDROID5_BUTTON_DANGER_HOVER_BACKGROUND, 6%);
+        }
+    }
+
+    &.dx-button-default {
+        &.dx-state-hover,
+        &.dx-state-focused {
+            background-color: fade(@ANDROID5_BUTTON_DEFAULT_HOVER_BACKGROUND, 6%);
+        }
+    }
+}
+
+.dx-button-has-icon.dx-button-has-text {
+    .dx-button-content {
+        padding-top: @ANDROID5_BUTTON_CONTENT_PADDING_TOP;
+        padding-bottom: @ANDROID5_BUTTON_CONTENT_PADDING_BOTTOM;
+    }
+}
+
+.dx-button-has-icon:not(.dx-button-has-text),
+.dx-button.dx-button-back {
+    color: @ANDROID5_DARK_ICON_COLOR;
+    min-width: 0;
+    .flat-button(true);
+
+    .dx-button-content {
+        overflow: visible;
+        padding-top: @ANDROID5_BUTTON_CONTENT_PADDING_TOP - @ANDROID5_ICON_BUTTON_SIZE_CORRECTION / 2;
+        padding-bottom: @ANDROID5_BUTTON_CONTENT_PADDING_BOTTOM - @ANDROID5_ICON_BUTTON_SIZE_CORRECTION / 2;
+    }
+
+    .dx-inkripple {
+        overflow: visible;
+    }
+
+    .dx-icon {
+        .dx-icon-sizing(@ANDROID_BASE_ICON_SIZE + @ANDROID5_ICON_BUTTON_SIZE_CORRECTION);
+        .dx-icon-margin(0);
+    }
+}

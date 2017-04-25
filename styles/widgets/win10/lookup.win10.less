@@ -1,0 +1,134 @@
+@WIN10_LOOKUP_HEIGHT: 32px;
+@WIN10_LOOKUP_ARROW_SIZE: @WIN10_LOOKUP_HEIGHT;
+@WIN10_LOOKUP_ARROW_ICON_SIZE: @WIN10_LOOKUP_ARROW_SIZE / 2;
+@WIN10_LOOKUP_FIELD_PADDING: @WIN10_TEXEDITOR_INPUT_PADDING_VERTICAL @WIN10_LOOKUP_ARROW_SIZE @WIN10_TEXEDITOR_INPUT_PADDING_VERTICAL @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+@WIN10_LOOKUP_POPUP_SEARCH_FIELD_HEIGHT: 32px;
+@WIN10_LOOKUP_POPUP_PADDING_BASE: @WIN10_POPUP_PADDING_BASE;
+@WIN10_INVALID_MWSSAGE_HEIGHT: 20px;
+
+.dx-lookup-field {
+    border: @WIN10_TEXTEDITOR_BORDER_WIDTH solid @WIN10_TEXTEDITOR_BORDER_COLOR;
+    background-color: @WIN10_TEXTEDITOR_INPUT_BACKGROUND_COLOR;
+    padding: @WIN10_LOOKUP_FIELD_PADDING;
+    color: @WIN10_TEXTEDITOR_INPUT_COLOR;
+
+    .dx-rtl & {
+        padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+        padding-left: @WIN10_LOOKUP_ARROW_SIZE;
+    }
+
+    .dx-lookup-empty & {
+        color: @WIN10_TEXTEDITOR_PLACEHOLDER_COLOR;
+
+        .dx-state-focused& {
+            color: @WIN10_TEXTEDITOR_FOCUSED_PLACEHOLDER_COLOR;
+        }
+    }
+}
+
+.dx-lookup {
+    height: @WIN10_LOOKUP_HEIGHT;
+
+    &.dx-state-hover {
+        .dx-lookup-field {
+            border-color: @WIN10_TEXTEDITOR_HOVER_BORDER_COLOR;
+        }
+    }
+
+    &.dx-state-focused {
+        .dx-lookup-field {
+            border-color: @WIN10_TEXTEDITOR_FOCUSED_BORDER_COLOR;
+        }
+    }
+
+    &.dx-state-active {
+        .dx-lookup-field {
+            background-color: @WIN10_DROPDOWNEDITOR_ACTIVE_BACKGROUND_COLOR;
+            border-color: @WIN10_DROPDOWNEDITOR_ACTIVE_BORDER_COLOR;
+        }
+
+        &.dx-lookup-empty {
+            .dx-lookup-field {
+                color: @WIN10_DROPDOWNEDITOR_ACTIVE_PLACEHOLDER_COLOR;
+            }
+        }
+    }
+
+    .dx-state-disabled &,
+    &.dx-state-disabled {
+        .dx-lookup-field {
+            border-color: @WIN10_TEXTEDITOR_DISABLED_BACKGROUND_COLOR;
+            background-color: @WIN10_TEXTEDITOR_DISABLED_BACKGROUND_COLOR;
+            color: @WIN10_TEXTEDITOR_DISABLED_INPUT_COLOR;
+        }
+
+        .dx-lookup-arrow {
+            color: @WIN10_TEXTEDITOR_DISABLED_INPUT_COLOR;
+        }
+    }
+
+    .dx-invalid& {
+        .dx-lookup-field {
+            border-color: @WIN10_TEXTEDITOR_INVALID_BORDER_COLOR;
+        }
+    }
+}
+
+.dx-lookup-search-wrapper {
+    width: auto;
+    left: @WIN10_POPUP_PADDING_BASE;
+    right: @WIN10_POPUP_PADDING_BASE;
+}
+
+.dx-lookup-arrow {
+    width: @WIN10_LOOKUP_ARROW_SIZE;
+    color: @WIN10_TEXTEDITOR_BUTTON_ICON_COLOR;
+    .dx-icon-spinnext();
+
+    &:before {
+        font-size: @WIN10_LOOKUP_ARROW_ICON_SIZE;
+        line-height: @WIN10_LOOKUP_ARROW_ICON_SIZE;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -@WIN10_LOOKUP_ARROW_ICON_SIZE / 2;
+        margin-left: -@WIN10_LOOKUP_ARROW_ICON_SIZE / 2;
+    }
+}
+
+.dx-lookup-popup-search .dx-list {
+    height: calc(~'100% - 32px');
+    padding-top: 14px;
+}
+
+.dx-lookup-popup-wrapper {
+    .dx-popup-content {
+        padding-bottom: 0;
+        position: relative;
+    }
+
+    &.dx-popup-wrapper {
+        .dx-overlay-content {
+            border: 1px solid @WIN10_POPUP_BORDER_COLOR;
+            .box-shadow(0 5px 25px 0 @WIN10_POPUP_SHADOW_COLOR);
+        }
+    }
+
+    .dx-popup-bottom {
+        background-color: @WIN10_LOOKUP_POPUP_BOTTOM_BACKGROUND_COLOR;
+    }
+}
+
+.dx-lookup-validation-message {
+    height: @WIN10_INVALID_MWSSAGE_HEIGHT;
+    color: @WIN10_LOOKUP_POPUP_INVALID_MESSAGE_COLOR;
+}
+
+.dx-lookup-popup-search {
+    .dx-lookup-invalid {
+        .dx-list {
+            top: @WIN10_LOOKUP_POPUP_SEARCH_FIELD_HEIGHT + 2 * @WIN10_LOOKUP_POPUP_PADDING_BASE + @WIN10_INVALID_MWSSAGE_HEIGHT;
+        }
+    }
+}

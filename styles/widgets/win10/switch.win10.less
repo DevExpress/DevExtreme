@@ -1,0 +1,114 @@
+@WIN10_SWITCH_HEIGHT: 20px;
+@WIN10_SWITCH_MIN_WIDTH: 44px;
+@WIN10_SWITCH_HANDLE_SIZE: @WIN10_SWITCH_HEIGHT / 2;
+@WIN10_SWITCH_BORDER_WIDTH: 2px;
+@WIN10_SWITCH_CONTAINER_PADDING: (@WIN10_SWITCH_HEIGHT - @WIN10_SWITCH_HANDLE_SIZE) / 2 - @WIN10_SWITCH_BORDER_WIDTH;
+@WIN10_SWITCH_CONTAINER_BORDER_RADIUS: @WIN10_SWITCH_HEIGHT / 2;
+
+
+.dx-switch-container {
+    height: @WIN10_SWITCH_HEIGHT;
+    min-width: @WIN10_SWITCH_MIN_WIDTH;
+    border: @WIN10_SWITCH_BORDER_WIDTH solid @WIN10_SWITCH_OFF_COLOR;
+    background-color: @WIN10_SWITCH_OFF_ALTERNATE_COLOR;
+    padding: @WIN10_SWITCH_CONTAINER_PADDING;
+    margin-top: -5px;
+    .border-radius(@WIN10_SWITCH_CONTAINER_BORDER_RADIUS);
+}
+
+.dx-switch-inner {
+    height: 100%;
+    width: 100%;
+}
+
+.dx-switch-on, .dx-switch-off {
+    display: none;
+}
+
+.dx-switch-handle {
+    height: @WIN10_SWITCH_HANDLE_SIZE;
+    width: @WIN10_SWITCH_HANDLE_SIZE + 2 * (@WIN10_SWITCH_BORDER_WIDTH + @WIN10_SWITCH_CONTAINER_PADDING);
+    position: relative;
+    float: right;
+
+    .dx-rtl & {
+        float: left;
+    }
+
+    &:before {
+        content: "";
+        display: block;
+        position: absolute;
+        right: 0;
+        top: 0;
+        height: @WIN10_SWITCH_HANDLE_SIZE;
+        width: @WIN10_SWITCH_HANDLE_SIZE;
+        background-color: @WIN10_SWITCH_OFF_COLOR;
+        .border-radius(50%);
+    }
+}
+
+.dx-switch-on-value {
+    .dx-switch-container {
+        border-color: @WIN10_SWITCH_ON_COLOR;
+        background-color: @WIN10_SWITCH_ON_COLOR;
+    }
+
+    .dx-switch-handle:before {
+        background-color: @WIN10_SWITCH_ON_ALTERNATE_COLOR;
+    }
+}
+
+.dx-state-hover, .dx-state-focused {
+    &.dx-switch {
+        .dx-switch-container {
+            border-color: @WIN10_SWITCH_OFF_HOVER_COLOR;
+        }
+
+        .dx-switch-handle:before {
+            background-color: @WIN10_SWITCH_OFF_HOVER_COLOR;
+        }
+    }
+
+    &.dx-switch-on-value {
+        .dx-switch-container {
+            background-color: @WIN10_SWITCH_ON_HOVER_COLOR;
+            border-color: @WIN10_SWITCH_ON_HOVER_COLOR;
+        }
+
+        .dx-switch-handle:before {
+            background-color: @WIN10_SWITCH_ON_ALTERNATE_COLOR;
+        }
+    }
+}
+
+.dx-switch.dx-state-active {
+    .dx-switch-container {
+        background-color: @WIN10_SWITCH_ACTIVE_WRAPPER_BACKGROUND_COLOR;
+        border-color: @WIN10_SWITCH_ACTIVE_WRAPPER_BACKGROUND_COLOR;
+    }
+
+    .dx-switch-handle:before {
+        background-color: @WIN10_SWITCH_ACTIVE_HANDLE_BACKGROUND_COLOR;
+    }
+}
+
+.dx-switch.dx-state-disabled {
+    .dx-switch-container {
+        border-color: @WIN10_SWITCH_DISABLED_COLOR;
+    }
+
+    .dx-switch-handle:before {
+        background-color: @WIN10_SWITCH_DISABLED_COLOR;
+    }
+
+    &.dx-switch-on-value {
+        .dx-switch-container {
+            background-color: @WIN10_SWITCH_DISABLED_COLOR;
+        }
+
+        .dx-switch-handle:before {
+            background-color: @WIN10_SWITCH_ON_DISABLED_HANDLE_COLOR;
+        }
+    }
+}

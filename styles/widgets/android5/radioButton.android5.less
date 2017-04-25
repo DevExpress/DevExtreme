@@ -1,0 +1,65 @@
+@ANDROID5_RADIOBUTTON_SIZE: 20px;
+
+.dx-radiobutton .dx-inkripple-wave {
+    background-color: fade(@ANDROID5_RADIOBUTTON_BACKGROUND, 12%);
+}
+
+.dx-radiobutton-checked .dx-inkripple-wave {
+    background-color: fade(@ANDROID5_RADIOBUTTON_CHECKED_BACKGROUND, 12%);
+}
+
+.dx-radiobutton-icon {
+    border: 2px solid @ANDROID5_RADIOBUTTON_BACKGROUND;
+    width: @ANDROID5_RADIOBUTTON_SIZE;
+    height: @ANDROID5_RADIOBUTTON_SIZE;
+    position: relative;
+    .transition(~"border-color .14s");
+    .border-radius(50%);
+}
+
+.dx-radiobutton-icon-dot {
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    background-color: @ANDROID5_RADIOBUTTON_CHECKED_BACKGROUND;
+    .border-radius(50%);
+    .scale(0);
+    .transition(~"transform .14s");
+}
+
+.dx-radiobutton-checked {
+    .dx-radiobutton-icon {
+        border-color: @ANDROID5_RADIOBUTTON_CHECKED_BACKGROUND;
+    }
+
+    .dx-radiobutton-icon-dot {
+        .scale(1);
+    }
+}
+
+.dx-state-disabled {
+    .dx-radiobutton-icon {
+        border-color: @ANDROID5_RADIOBUTTON_DISABLED_BACKGROUND;
+    }
+
+    .dx-radiobutton-checked {
+        .dx-radiobutton-icon:after {
+            background-color: @ANDROID5_RADIOBUTTON_DISABLED_BACKGROUND;
+        }
+    }
+}
+
+.dx-invalid {
+    .dx-radiobutton-icon {
+        border-color: @ANDROID5_FADED_INVALID_COLOR;
+    }
+
+    .dx-state-focused  {
+        .dx-radiobutton-icon {
+            border-color: @ANDROID5_INVALID_COLOR;
+        }
+    }
+}
+

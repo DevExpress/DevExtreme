@@ -1,0 +1,136 @@
+@WIN10_BUTTON_WITH_ICON_TEXT_PADDING: 8px;
+
+.dx-button {
+    font-size: 15px;
+
+    .dx-icon {
+        .dx-icon-sizing(16px);
+    }
+}
+
+.dx-button-text {
+    line-height: 16px;
+}
+
+.win10-button-defaults() {
+    .dx-button-content {
+        line-height: 16px;
+        padding: 6px 15px 6px;
+        border: 2px solid @WIN10_BUTTON_BACKGROUND_COLOR;
+        background-color: @WIN10_BUTTON_BACKGROUND_COLOR;
+    }
+
+    .dx-button-has-icon,
+    .dx-button-has-text {
+        .dx-button-content {
+            line-height: 0;
+        }
+    }
+
+    .dx-button-has-icon {
+        &,
+        &.dx-button-back {
+            .dx-button-content {
+                padding-left: 15px;
+                padding-right: 15px;
+            }
+        }
+    }
+
+    .dx-button-has-text {
+        .dx-button-content {
+            padding-left: 22px;
+            padding-right: 22px;
+        }
+    }
+
+    .dx-button-has-icon.dx-button-has-text {
+        .dx-button-text {
+            padding-left: @WIN10_BUTTON_WITH_ICON_TEXT_PADDING;
+        }
+
+        &.dx-rtl .dx-button-text {
+            padding-left: 0;
+            padding-right: @WIN10_BUTTON_WITH_ICON_TEXT_PADDING;
+        }
+    }
+
+    .dx-state-active {
+        &.dx-button .dx-button-content {
+            background-color: @WIN10_BUTTON_STATE_ACTIVE_COLOR;
+            border-color: @WIN10_BUTTON_STATE_ACTIVE_COLOR;
+        }
+    }
+
+    .dx-state-hover, .dx-state-focused {
+        &.dx-button .dx-button-content {
+            border-color: @WIN10_BUTTON_STATE_HOVER_BORDER_COLOR;
+        }
+    }
+
+    .dx-button-danger {
+        color: @WIN10_DANGER_BUTTON_COLOR;
+
+        .dx-button-content {
+            background-color: @WIN10_DANGER_BUTTON_BACKGROUND_COLOR;
+            border-color: @WIN10_DANGER_BUTTON_BACKGROUND_COLOR;
+        }
+
+        &.dx-state-hover .dx-button-content {
+            border-color: @WIN10_DANGER_BUTTON_STATE_HOVER_BACKGROUND_COLOR;
+        }
+
+        &.dx-state-active .dx-button-content {
+            background-color: @WIN10_DANGER_BUTTON_STATE_ACTIVE_BACKGROUND_COLOR;
+            border-color: @WIN10_DANGER_BUTTON_STATE_ACTIVE_BACKGROUND_COLOR;
+        }
+    }
+
+    .dx-button-success {
+        color: @WIN10_SUCCESS_BUTTON_COLOR;
+
+        .dx-button-content {
+            background-color: @WIN10_SUCCESS_BUTTON_BACKGROUND_COLOR;
+            border-color: @WIN10_SUCCESS_BUTTON_BACKGROUND_COLOR;
+        }
+
+        &.dx-state-hover .dx-button-content {
+            border-color: @WIN10_SUCCESS_BUTTON_STATE_HOVER_BACKGROUND_COLOR;
+        }
+
+        &.dx-state-active .dx-button-content {
+            background-color: @WIN10_SUCCESS_BUTTON_STATE_ACTIVE_BACKGROUND_COLOR;
+            border-color: @WIN10_SUCCESS_BUTTON_STATE_ACTIVE_BACKGROUND_COLOR;
+        }
+    }
+
+    .dx-button, .dx-button-danger, .dx-button-success {
+        &.dx-state-disabled {
+            color: @WIN10_BUTTON_STATE_DISABLED_TEXT_COLOR;
+
+            .dx-button-content {
+                background-color: @WIN10_BUTTON_BACKGROUND_COLOR;
+                border-color: @WIN10_BUTTON_BACKGROUND_COLOR;
+            }
+        }
+    }
+}
+
+.win10-button-defaults();
+
+
+.dx-button-back {
+    .dx-button-text {
+        display: none;
+    }
+
+    .dx-icon-back {
+        .dx-icon-arrowleft;
+        .dx-icon-sizing(16px);
+    }
+
+    &.dx-rtl .dx-icon-back {
+        .dx-icon-arrowright;
+        .dx-icon-sizing(16px);
+    }
+}

@@ -1,0 +1,9 @@
+.idea
+/artifacts
+/dotnet_packages
+/js/bundles/dx.custom.js
+/js/localization/default_messages.js
+bin
+node_modules
+obj
+project.lock.json

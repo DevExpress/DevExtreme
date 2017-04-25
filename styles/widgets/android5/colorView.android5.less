@@ -1,0 +1,34 @@
+.dx-colorview-container {
+    overflow: visible;
+
+    label {
+        &.dx-colorview-alpha-channel-label {
+            margin-left: 42px;
+            width: 116px;
+        }
+    }
+}
+
+.dx-colorview-container-row {
+    overflow: visible;
+    float: right;
+}
+
+.dx-colorview-container label .dx-texteditor {
+    margin-top: -6px;
+}
+
+.dx-colorview-palette-cell,
+.dx-colorview-hue-scale-wrapper,
+.dx-colorview-alpha-channel-border,
+.dx-colorview-color-preview-container {
+    padding: 1px;
+    margin: 1px;
+    margin-top: 0;
+    box-shadow: 0 0 0 1px @ANDROID5_COLOR_VIEW_PALETTE_CELL_BORDER_COLOR;
+    background-color: @ANDROID5_COLOR_VIEW_PALETTE_CELL_BACKGROUND_COLOR;
+}
+
+.dx-colorview-color-preview-container {
+    margin-bottom: 34px;
+}

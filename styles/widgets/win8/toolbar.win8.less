@@ -1,0 +1,224 @@
+@WIN8_BUTTON_FOCUS_BACKGROUND: @WIN8_SELECTED_BACKGROUND_COLOR;
+@WIN8_BUTTON_HOVER_BACKGROUND: #2bb0ca;
+
+@WIN8_TOOLBAR_BUTTON_ICON_CONTAINER_SIZE: 50px;
+@WIN8_TOOLBAR_BUTTON_ICON_SIZE: 24px;
+@WIN8_TOOLBAR_BUTTON_ICON_BORDER_WIDTH: 4px;
+
+@WIN8_TOOLBAR_PHONE_BUTTON_ICON_CONTAINER_SIZE: 32px;
+@WIN8_TOOLBAR_PHONE_BUTTON_ICON_SIZE: 14px;
+@WIN8_TOOLBAR_PHONE_BUTTON_ICON_BORDER_WIDTH: @WIN8_TOOLBAR_BUTTON_ICON_BORDER_WIDTH;
+
+.dx-toolbar {
+    overflow: visible;
+    height: @WIN8_TOOLBAR_HEIGHT;
+    background: @WIN8_TOOLBAR_BACKGROUND_COLOR;
+    line-height: @WIN8_TOOLBAR_HEIGHT;
+    opacity: .95;
+
+    .dx-overlay-wrapper {
+        width: 100%;
+    }
+
+    .dx-overlay-content {
+        background: @WIN8_BASE_BACKGROUND;
+        overflow: visible;
+
+        .dx-toolbar-items-container {
+            overflow: visible;
+            height: @WIN8_TOOLBAR_HEIGHT;
+        }
+
+        .dx-toolbar-menu-container {
+            padding: 0 5px 0 5px;
+            vertical-align: auto;
+            line-height: 0;
+        }
+
+        .dx-toolbar-menu-button {
+            &.dx-button {
+                padding: 0;
+                height: 100%;
+                border: none;
+            }
+
+            .dx-button-content {
+                overflow: visible;
+            }
+
+            .dx-button-text {
+                padding: 0 5px;
+                height: @WIN8_TOOLBAR_HEIGHT;
+                font-size: 250%;
+                line-height: 0;
+                display: inline-block;
+            }
+        }
+    }
+
+    .dx-button-text {
+        display: block;
+    }
+}
+
+.dx-toolbar-background {
+    background-color: @WIN8_TOOLBAR_BACKGROUND_COLOR;
+}
+
+.dx-toolbar-bottom {
+    position: absolute;
+    bottom: 0;
+    opacity: 1;
+}
+
+.dx-toolbar-mini {
+    height: 40px;
+
+    .dx-toolbar-items-container {
+        height: 40px;
+    }
+}
+
+.dx-toolbar-item {
+    padding: @WIN8_TOOLBAR_ITEM_PADDING;
+    vertical-align: middle;
+
+    .dx-button-danger, .dx-button-success {
+        background: none;
+    }
+
+    .dx-tabs {
+        padding: 12px 0;
+    }
+}
+
+.dx-toolbar-button, .dx-toolbar .dx-dropdownmenu-button {
+    padding: @WIN8_TOOLBAR_BUTTON_PADDING;
+
+    .dx-icon {
+        .box-sizing();
+        .dx-icon-sizing(@WIN8_TOOLBAR_BUTTON_ICON_SIZE, @WIN8_TOOLBAR_BUTTON_ICON_CONTAINER_SIZE, @WIN8_TOOLBAR_BUTTON_ICON_BORDER_WIDTH);
+        border: 2px solid @WIN8_BASE_TEXT;
+        .border-radius(50%);
+    }
+
+    .dx-button-has-icon {
+        &.dx-state-active { /*B230608*/
+            background: none;
+
+            .dx-icon {
+                background-color: @WIN8_ACCENT_COLOR;
+            }
+        }
+
+        &.dx-state-hover {
+            background: none;
+
+            .dx-icon {
+                background-color: @WIN8_BUTTON_HOVER_BACKGROUND;
+            }
+        }
+
+        &.dx-state-focused {
+            background: none;
+
+            .dx-icon {
+                background-color: @WIN8_BUTTON_FOCUS_BACKGROUND;
+            }
+        }
+    }
+
+    .dx-button {
+        padding: 4px;
+        border: none;
+    }
+
+    .dx-button-text {
+        line-height: 24px;
+        font-size: @WIN8_TOOLBAR_BUTTON_FONTSIZE;
+        font-weight: 400;
+        text-transform: capitalize;
+    }
+}
+
+.dx-toolbar-label {
+    color: @WIN8_BASE_TEXT;
+    font-size: @WIN8_H1;
+}
+
+.dx-device-phone {
+    .dx-toolbar {
+        height: @WIN8PHONE_TOOLBAR_HEIGHT;
+        background: @WIN8_BASE_BACKGROUND;
+        line-height: @WIN8PHONE_TOOLBAR_HEIGHT;
+        opacity: 1;
+
+        &.dx-toolbar-bottom {
+            height: @WIN8PHONE_TOOLBAR_HEIGHT - 20px;
+
+            .dx-overlay-wrapper {
+                .dx-toolbar-items-container {
+                    height: @WIN8PHONE_TOOLBAR_HEIGHT;
+                }
+
+                .dx-toolbar-menu-button {
+                    .dx-button-text {
+                        padding: 0 5px;
+                        height: @WIN8PHONE_TOOLBAR_HEIGHT;
+                        font-size: 150%;
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+
+        .dx-toolbar-item {
+            padding: @WIN8PHONE_TOOLBAR_ITEM_PADDING;
+
+            &.dx-toolbar-button {
+                .dx-button {
+                    .dx-button-text {
+                        line-height: 20px;
+                        font-size: @WIN8PHONE_TOOLBAR_BUTTON_FONTSIZE;
+                        font-weight: 600;
+                        text-transform: lowercase;
+                    }
+                }
+            }
+        }
+
+        .dx-toolbar-button, .dx-dropdownmenu-button {
+            padding: @WIN8PHONE_TOOLBAR_BUTTON_PADDING;
+
+            .dx-icon {
+                .dx-icon-sizing(@WIN8_TOOLBAR_PHONE_BUTTON_ICON_SIZE, @WIN8_TOOLBAR_PHONE_BUTTON_ICON_CONTAINER_SIZE, @WIN8_TOOLBAR_PHONE_BUTTON_ICON_BORDER_WIDTH);
+            }
+        }
+
+        .dx-toolbar-label {
+            font-size: @WIN8PHONE_H2;
+        }
+    }
+
+    .dx-toolbar-after .dx-lookup-clear.dx-button {
+        border: none;
+    }
+
+    .dx-toolbar-mini {
+        line-height: 40px;
+    }
+}
+
+.dx-toolbar .dx-toolbar-button .dx-icon {
+    .box-sizing();
+}
+
+.dx-toolbar-menu-section {
+    .dx-button {
+        color: @WIN8_LABEL_TEXT;
+    }
+
+    .dx-button-text {
+        color: @WIN8_LABEL_TEXT;
+    }
+}

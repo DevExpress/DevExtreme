@@ -1,0 +1,111 @@
+/* Layout */
+
+.navbar-layout-phone .layout-content,
+.navbar-layout-phone .layout-content > div {
+    -position: absolute;
+    height: 100%;
+    width: 100%;
+}
+
+/* Windows phone 8 */
+.dx-theme-win8 .pivot-layout {
+    height: 100%;
+    position: relative;
+}
+
+.dx-theme-win8 .navbar-layout-phone {
+    height: 100%;
+    position: relative;
+}
+
+.dx-theme-win8 .pivot-layout .dx-toolbar.layout-toolbar-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.dx-theme-win8 .pivot-layout .layout-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+}
+
+.dx-theme-win8 .pivot-layout.has-toolbar-bottom .layout-footer {
+    height: 40px;
+}
+
+.dx-theme-win8 .pivot-layout.dx-animating:not(.dx-enter):not(.dx-leave) {
+    display: none;
+}
+
+
+.dx-theme-win8 .navbar-layout-phone .layout-content {
+    overflow: hidden;
+    width: 100%;
+}
+
+.dx-theme-win8 .has-toolbar-bottom .dx-pivot {
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    top: 0;
+    bottom: 40px;
+    position: absolute;
+}
+
+.dx-theme-win8 .navbar-layout-phone .layout-header .dx-toolbar {
+    opacity: 1;
+}
+
+
+/* Windows phone 10 */
+.dx-theme-win10 .pivot-layout {
+    height: 100%;
+    position: relative;
+}
+
+.dx-theme-win10 .navbar-layout-phone {
+    height: 100%;
+    position: relative;
+}
+
+.dx-theme-win10 .pivot-layout .dx-toolbar.layout-toolbar-bottom {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.dx-theme-win10 .pivot-layout .layout-footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 0;
+}
+
+.dx-theme-win10 .pivot-layout.has-toolbar-bottom .layout-footer {
+    height: 48px;
+}
+
+.dx-theme-win10 .pivot-layout.dx-animating:not(.dx-enter):not(.dx-leave) {
+    display: none;
+}
+
+
+.dx-theme-win10 .navbar-layout-phone .layout-content {
+    overflow: hidden;
+    width: 100%;
+}
+
+.dx-theme-win10 .has-toolbar-bottom .dx-pivot {
+    overflow: hidden;
+    width: 100%;
+    height: auto;
+    top: 0;
+    bottom: 48px;
+    position: absolute;
+}
+
+.dx-theme-win10 .navbar-layout-phone .layout-header .dx-toolbar {
+    opacity: 1;
+}

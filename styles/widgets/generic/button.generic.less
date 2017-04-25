@@ -1,0 +1,213 @@
+.dx-size-default() {
+    @GENERIC_BUTTON_HORIZONTAL_PADDING: 18px;
+    @GENERIC_BUTTON_ICON_HORIZONTAL_PADDING: 8px;
+    @GENERIC_BUTTON_BOX_SHADOW_SIZE: 0 1px 3px;
+}
+.dx-size-compact() {
+    @GENERIC_BUTTON_HORIZONTAL_PADDING: 10px;
+    @GENERIC_BUTTON_ICON_HORIZONTAL_PADDING: 5px;
+    @GENERIC_BUTTON_BOX_SHADOW_SIZE: 0 1px 2px;
+}
+
+@GENERIC_BUTTON_BORDER_WEIGHT: @GENERIC_BASE_BORDER_WIDTH;
+@GENERIC_BUTTON_PADDING:
+    @GENERIC_BASE_INLINE_WIDGET_TOP_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT
+    @GENERIC_BUTTON_HORIZONTAL_PADDING
+    @GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING - @GENERIC_BUTTON_BORDER_WEIGHT;
+@GENERIC_BUTTON_ICONONLY_PADDING: @GENERIC_BUTTON_ICON_HORIZONTAL_PADDING;
+@GENERIC_BUTTON_ICON_SIZE: @GENERIC_BASE_ICON_SIZE;
+
+
+.dx-button-content {
+    line-height: 0;
+}
+
+.dx-button-text {
+    display: inline-block;
+    line-height: normal;
+}
+
+.dx-button a {
+    text-decoration: none;
+}
+
+.dx-button-sizing(@PADDING, @ICON_SIZE, @ICON_MARGIN) {
+    .dx-button-content {
+        padding: @PADDING;
+    }
+
+    .dx-icon {
+        color: @button-icon-color;
+        .dx-icon-sizing(@ICON_SIZE);
+        .dx-icon-margin(@ICON_MARGIN);
+    }
+}
+
+.dx-button-onlyicon-sizing() {
+    .dx-button-sizing(@GENERIC_BUTTON_ICONONLY_PADDING, @GENERIC_BUTTON_ICON_SIZE, 0);
+}
+
+.dx-button-withtext-sizing() {
+    .dx-button-sizing(@GENERIC_BUTTON_PADDING, @GENERIC_BUTTON_ICON_SIZE, @GENERIC_BUTTON_ICON_SIZE/2);
+}
+
+.dx-button {
+    .dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-icon {
+    .dx-button-onlyicon-sizing();
+}
+
+.dx-button-has-text {
+    .dx-button-withtext-sizing();
+}
+
+.dx-button-back {
+    .dx-button-onlyicon-sizing();
+
+    .dx-button-text {
+        display: none;
+    }
+}
+
+// NOTE: Button styles
+
+.dx-button-styling-variant(
+    @background-color, @border-color, @text-color,
+    @hover-background-color, @hover-border-color,
+    @focused-background-color, @focused-border-color,
+    @active-background-color, @active-border-color, @active-text-color,
+    @icon-color
+) {
+    background-color: @background-color;
+    border-color: @border-color;
+    color: @text-color;
+
+    .dx-icon {
+        color: @icon-color;
+    }
+
+    &.dx-state-hover {
+        background-color: @hover-background-color;
+        border-color: @hover-border-color;
+    }
+
+    &.dx-state-focused {
+        background-color: @focused-background-color;
+        border-color: @focused-border-color;
+    }
+
+    &.dx-state-active {
+        background-color: @active-background-color;
+        border-color: @active-border-color;
+        color: @active-text-color;
+    }
+}
+
+@GENERIC_NORMAL_BUTTON_SHADOW: @GENERIC_BUTTON_BOX_SHADOW_SIZE @button-normal-shadow-color;
+@GENERIC_NORMAL_BUTTON_ACTIVE_STATE_SHADOW: @GENERIC_BUTTON_BOX_SHADOW_SIZE @button-normal-active-shadow-color;
+@GENERIC_NORMAL_BUTTON_HOVERED_STATE_SHADOW: @GENERIC_BUTTON_BOX_SHADOW_SIZE @button-normal-hover-shadow-color;
+@GENERIC_NORMAL_BUTTON_FOCUSED_STATE_SHADOW: @GENERIC_BUTTON_BOX_SHADOW_SIZE @button-normal-focused-shadow-color;
+
+.dx-button-styling() {
+    .border-radius(@button-border-radius);
+    .box-shadow(@GENERIC_NORMAL_BUTTON_SHADOW);
+    border-width: @GENERIC_BUTTON_BORDER_WEIGHT;
+    border-style: solid;
+
+    &.dx-state-hover {
+        .box-shadow(@GENERIC_NORMAL_BUTTON_HOVERED_STATE_SHADOW);
+    }
+
+    &.dx-state-focused {
+        .box-shadow(@GENERIC_NORMAL_BUTTON_FOCUSED_STATE_SHADOW);
+    }
+
+    &.dx-state-active {
+        .box-shadow(@GENERIC_NORMAL_BUTTON_ACTIVE_STATE_SHADOW);
+    }
+
+    .dx-state-disabled&,
+    .dx-state-disabled & {
+        .dx-icon {
+            opacity: @button-disabled-icon-opacity;
+        }
+
+        .dx-button-text {
+            opacity: @button-disabled-text-opacity;
+        }
+    }
+
+    .dx-button-styling-variant(
+        @button-normal-bg,
+        @button-normal-border-color,
+        @button-normal-color,
+        @button-normal-hover-bg,
+        @button-normal-hover-border-color,
+        @button-normal-focused-bg,
+        @button-normal-focused-border-color,
+        @button-normal-active-bg,
+        @button-normal-active-border-color,
+        @button-normal-active-color,
+        @button-normal-icon-color
+    );
+}
+
+.dx-button-styling-clear() {
+    .box-shadow(none);
+    background: transparent;
+    border-color: transparent;
+}
+
+.dx-button {
+    .dx-button-styling();
+}
+
+.dx-button-danger {
+    .dx-button-styling-variant(
+        @button-danger-bg,
+        @button-danger-border-color,
+        @button-danger-color,
+        @button-danger-hover-bg,
+        @button-danger-hover-border-color,
+        @button-danger-focused-bg,
+        @button-danger-focused-border-color,
+        @button-danger-active-bg,
+        @button-danger-active-border-color,
+        @button-danger-color,
+        @button-danger-icon-color
+    );
+}
+
+.dx-button-success {
+    .dx-button-styling-variant(
+        @button-success-bg,
+        @button-success-border-color,
+        @button-success-color,
+        @button-success-hover-bg,
+        @button-success-hover-border-color,
+        @button-success-focused-bg,
+        @button-success-focused-border-color,
+        @button-success-active-bg,
+        @button-success-active-border-color,
+        @button-success-color,
+        @button-success-icon-color
+    );
+}
+
+.dx-button-default {
+    .dx-button-styling-variant(
+        @button-default-bg,
+        @button-default-border-color,
+        @button-default-color,
+        @button-default-hover-bg,
+        @button-default-hover-border-color,
+        @button-default-focused-bg,
+        @button-default-focused-border-color,
+        @button-default-active-bg,
+        @button-default-active-border-color,
+        @button-default-color,
+        @button-default-icon-color
+    );
+}

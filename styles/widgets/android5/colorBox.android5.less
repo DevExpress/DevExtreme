@@ -1,0 +1,65 @@
+@ANDROID5_COLORBOX_INPUT_PADDING: 30px;
+
+.dx-colorbox {
+    &.dx-dropdowneditor-active .dx-texteditor-container {
+        &:before, &:after {
+            content: none;
+        }
+    }
+
+    .dx-placeholder {
+        left: @ANDROID5_COLORBOX_INPUT_PADDING;
+    }
+}
+
+.dx-colorbox-input-container {
+    &:after {
+        left: 1px;
+    }
+
+    &.dx-colorbox-color-is-not-defined {
+        .dx-colorbox-color-result-preview {
+            background: @ANDROID5_COLORBOX_NOCOLOR_IMG no-repeat 0 0;
+        }
+    }
+
+    .dx-colorbox-input {
+        padding-left: @ANDROID5_COLORBOX_INPUT_PADDING;
+    }
+}
+
+.dx-colorbox-color-result-preview {
+    border-color: @ANDROID5_COLOR_VIEW_PALETTE_CELL_BORDER_COLOR;
+    left: 0;
+}
+
+.dx-colorbox-overlay {
+    .dx-popup-bottom {
+        padding: 0;
+        height: 52px;
+    }
+}
+
+.dx-rtl .dx-colorbox,
+.dx-rtl.dx-colorbox {
+    &.dx-dropdowneditor {
+        .dx-colorbox-color-result-preview {
+            left: auto;
+            right: 0;
+        }
+
+        .dx-colorbox-input-container:after {
+            left: auto;
+            right: 1px;
+        }
+    }
+
+    .dx-placeholder {
+        left: auto;
+        right: @ANDROID5_COLORBOX_INPUT_PADDING;
+    }
+
+    &.dx-dropdowneditor .dx-colorbox-input-container .dx-colorbox-input {
+        padding-right: @ANDROID5_COLORBOX_INPUT_PADDING;
+    }
+}

@@ -1,0 +1,1076 @@
+@ANDROID5_THEME_MARKER: "dx.android5.light";
+
+// Common
+/**
+* @name 10. Text color
+* @type color
+* @group base.typography
+*/
+@ANDROID5_TEXT: rgba(0, 0, 0, .87);
+
+/**
+* @name 20. Dark icon color
+* @type color
+* @group base.typography
+*/
+@ANDROID5_DARK_ICON_COLOR: #646464;
+
+/**
+* @name 30. Light icon color
+* @type color
+* @group base.typography
+*/
+@ANDROID5_LIGHT_ICON_COLOR: #ffffff;
+
+/**
+* @name 10. Widget text color
+* @type color
+* @group base.common
+*/
+@ANDROID5_WIDGET_TEXT: rgba(0, 0, 0, .87);
+/**
+* @name 20. Widget alternative text color
+* @type color
+* @group base.common
+*/
+@ANDROID5_WIDGET_TEXT_ALTERNATIVE: #FFF;
+/**
+* @name 30. Widget text color in disabled state
+* @type color
+* @group base.common
+*/
+@ANDROID5_DISABLED_TEXT_COLOR: rgba(0, 0, 0, .26);
+/**
+* @name 40. Primary color
+* @type color
+* @group base.common
+*/
+@ANDROID5_COLOR_BASE: #00BCD4;
+/**
+* @name 50. Accent color
+* @type color
+* @group base.common
+*/
+@ANDROID5_ACCENT_COLOR: #FFFF8D;
+/**
+* @name 60. Selected state color
+* @type color
+* @group base.common
+*/
+@ANDROID5_SELECT_COLOR: rgba(0, 0, 0, .06);
+/**
+* @name 61. Hovered state background color
+* @type color
+* @group base.common
+*/
+@ANDROID5_HOVERED_STATE_BACKGROUND_COLOR: @ANDROID5_SELECT_COLOR;
+/**
+* @name 62. Selected state background color
+* @type color
+* @group base.common
+*/
+@ANDROID5_SELECTED_STATE_BACKGROUND_COLOR: @ANDROID5_SELECT_COLOR;
+/**
+* @name 70. Dividers color
+* @type color
+* @group base.common
+*/
+@ANDROID5_DIVIDERS_COLOR: rgba(0, 0, 0, .12);
+
+
+/**
+* @name 1. Invalid widget state - active color
+* @type color
+* @group editors.validation
+*/
+@ANDROID5_INVALID_COLOR: #EA4444;
+
+@VALIDATION_MESSAGE_COLOR: #fff;
+@VALIDATION_SUMMARY_COLOR: @ANDROID5_INVALID_COLOR;
+
+@VALIDATION_MESSAGE_BACKGROUND_COLOR: @ANDROID5_INVALID_COLOR;
+
+/**
+* @name 2. Invalid widget state - border color
+* @type color
+* @group editors.validation
+*/
+@ANDROID5_FIELD_ATTENTION_COLOR: #e78747;
+
+@ANDROID5_FIELDSET_LABEL_TEXT_COLOR: #999999;
+@ANDROID5_FADED_INVALID_COLOR: fade(@ANDROID5_INVALID_COLOR, 40%);
+
+// Badges
+/**
+* @name 10. Badge background color
+* @type color
+* @group badges
+*/
+@ANDROID5_BADGE_BACKGROUND: #00838F;
+/**
+* @name 20. Badge text color
+* @type color
+* @group badges
+*/
+@ANDROID5_BADGE_TEXT_COLOR: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+
+/**
+* @name 10. Scroller background color
+* @type color
+* @group scrollview
+*/
+@ANDROID5_SCROLL: rgba(71, 74, 79, .5);
+/**
+* @name 10. Background color
+* @type color
+* @group editors.texteditors
+*/
+@ANDROID5_INPUT_BACKGROUND: transparent;
+@ANDROID5_INPUT_TEXT: @ANDROID5_WIDGET_TEXT;
+/**
+* @name 20. Placeholder text color
+* @type color
+* @group editors.texteditors
+*/
+@ANDROID5_INPUT_PLACEHOLDER: rgba(0, 0, 0, 0.26);
+/**
+* @name 30. Border color
+* @type color
+* @group editors.texteditors
+*/
+@ANDROID5_BOXBORDER_BACKGROUND: @ANDROID5_DIVIDERS_COLOR;
+@ANDROID5_TEXTEDITOR_CLEAR_ICON_COLOR: lighten(@ANDROID5_DARK_ICON_COLOR, 20%);
+/**
+* @name 80. Content background color
+* @type color
+* @group base.common
+*/
+@ANDROID5_TYPOGRAPHY_BACKGROUND: #FAFAFA;
+
+// Pivot
+@ANDROID5_PIVOTTABS_BACKGROUND_COLOR: @ANDROID5_COLOR_BASE;
+@ANDROID5_PIVOTTABS_TEXT_COLOR: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+@ANDROID5_PIVOTTABS_SELECTED_BORDER_SHADOW_COLOR: @ANDROID5_ACCENT_COLOR;
+
+// DropDownList
+@ANDROID5_DROPDOWNLIST_BACKGROUND: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+
+
+// Accordion
+@ANDROID5_ACCORDION_COLOR: rgba(0,0,0,.54);
+@ANDROID5_ACCORDION_BORDER_COLOR: rgba(0, 0, 0,.12);
+@ANDROID5_ACCORDION_FOCUSED_BACKGROUND: @ANDROID5_SELECTED_STATE_BACKGROUND_COLOR;
+
+// Autocomplete
+/**
+* @name 10. Item background color
+* @type color
+* @group editors.autocomplete
+*/
+@ANDROID5_AUTOCOMPLETE_BACKGROUND: @ANDROID5_DROPDOWNLIST_BACKGROUND;
+
+// ActionSheet
+/**
+* @name 10. Item background color
+* @type color
+* @group overlays.actionsheet
+*/
+@ANDROID5_ACTIONSHEET_BACKGROUND_COLOR: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+@ANDROID5_ACTIONSHEET_TITLE_COLOR: rgba(0, 0, 0, .54);
+
+// Button
+/**
+* @name 20. Background color
+* @type color
+* @group buttons.normal
+*/
+@ANDROID5_BUTTON_BACKGROUND: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+/**
+* @name 40. Ink color
+* @type color
+* @group buttons.normal
+*/
+@ANDROID5_BUTTON_INK_COLOR: rgba(0, 0, 0, 0.2);
+/**
+* @name 10. Text color
+* @type color
+* @group buttons.normal
+*/
+@ANDROID5_BUTTON_TEXT: #000000;
+
+/**
+* @name 30. Hoved state background color
+* @type color
+* @group buttons.normal
+*/
+@ANDROID5_BUTTON_HOVERED_STATE_BACKGROUND_COLOR: darken(@ANDROID5_BUTTON_BACKGROUND, 6%);
+
+/**
+* @name 10. Text color
+* @type color
+* @group buttons.default
+*/
+@ANDROID5_BUTTON_DEFAULT_TEXT: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+/**
+* @name 20. Background color
+* @type color
+* @group buttons.default
+*/
+@ANDROID5_BUTTON_DEFAULT_BACKGROUND:  #2196f3;
+/**
+* @name 30. Hoved state background color
+* @type color
+* @group buttons.default
+*/
+@ANDROID5_BUTTON_DEFAULT_HOVER_BACKGROUND: #1E88E5;
+/**
+* @name 40. Ink color
+* @type color
+* @group buttons.default
+*/
+@ANDROID5_BUTTON_DEFAULT_INK_COLOR: #1976D2;
+/**
+* @name 10. Text color
+* @type color
+* @group buttons.danger
+*/
+@ANDROID5_BUTTON_DANGER_TEXT: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+/**
+* @name 10. Text color
+* @type color
+* @group buttons.success
+*/
+@ANDROID5_BUTTON_SUCCESS_TEXT: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+/**
+* @name 20. Background color
+* @type color
+* @group buttons.danger
+*/
+@ANDROID5_BUTTON_DANGER_BACKGROUND:  #ff5252;
+/**
+* @name 30. Hoved state background color
+* @type color
+* @group buttons.danger
+*/
+@ANDROID5_BUTTON_DANGER_HOVER_BACKGROUND: #dd191d;
+/**
+* @name 40. Ink color
+* @type color
+* @group buttons.danger
+*/
+@ANDROID5_BUTTON_DANGER_INK_COLOR: #b0120a;
+/**
+* @name 20. Background color
+* @type color
+* @group buttons.success
+*/
+@ANDROID5_BUTTON_SUCCESS_BACKGROUND: #0f9d58;
+/**
+* @name 30. Hoved state background color
+* @type color
+* @group buttons.success
+*/
+@ANDROID5_BUTTON_SUCCESS_HOVER_BACKGROUND: #0a8f08;
+/**
+* @name 40. Ink color
+* @type color
+* @group buttons.success
+*/
+@ANDROID5_BUTTON_SUCCESS_INK_COLOR: #0d5302;
+@ANDROID5_BUTTON_CUSTOM_BOX_SHADOW: ~"0 1px 3px 0 rgba(0,0,0,.3)";
+@ANDROID5_BUTTON_DISABLED_BACKGROUND: rgba(153, 153, 153, .4);
+
+/**
+* @name 10. Background color
+* @type color
+* @group buttons.flat
+*/
+@ANDROID5_BUTTON_FLAT_BACKGROUND_COLOR: transparent;
+
+/**
+* @name 10. Hovered state background color
+* @type color
+* @group buttons.flat
+*/
+@ANDROID5_BUTTON_FLAT_HOVERED_BACKGROUND_COLOR: rgba(0, 0, 0, 0.1);
+
+// Calendar
+/**
+* @name 10. Background color
+* @type color
+* @group editors.calendar
+*/
+@ANDROID5_CALENDAR_BACKGROUND: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+/**
+* @name 20. Text color
+* @type color
+* @group editors.calendar
+*/
+@ANDROID5_CALENDAR_COLOR: @ANDROID5_WIDGET_TEXT;
+/**
+* @name 30. Other month text color
+* @type color
+* @group editors.calendar
+*/
+@ANDROID5_CALENDAR_OTHER_MONTH_COLOR: @ANDROID5_DISABLED_TEXT_COLOR;
+@ANDROID5_CALENDAR_ACTIVE_COLOR: darken(@ANDROID5_CALENDAR_BACKGROUND, 5.5%);
+@ANDROID5_CALENDAR_SELECTED_TEXT_COLOR: #fff;
+@ANDROID5_CALENDAR_CONTOURED_COLOR: #d7d7d7;
+@ANDROID5_CALENDAR_HEADER_TEXT_COLOR: #8f8f8f;
+@ANDROID5_CALENDAR_SELECTED_CELL_BACKGROUND: #fff;
+
+
+// Checkbox
+@ANDROID5_CHECKBOX_BACKGROUND: rgba(0, 0, 0, .54);
+@ANDROID5_CHECKBOX_CHECKED_BACKGROUND: @ANDROID5_COLOR_BASE;
+@ANDROID5_CHECKBOX_DISABLED_BACKGROUND: rgba(0, 0, 0, .26);
+
+
+//RadioButton
+@ANDROID5_RADIOBUTTON_BACKGROUND: rgba(0, 0, 0, .54);
+@ANDROID5_RADIOBUTTON_CHECKED_BACKGROUND: @ANDROID5_COLOR_BASE;
+@ANDROID5_RADIOBUTTON_DISABLED_BACKGROUND: rgba(0, 0, 0, .26);
+
+// Gallery
+/**
+* @name 10. Indicator color
+* @type color
+* @group gallery
+*/
+@ANDROID5_GALLERY_INDICATOR_ITEM_BACKGROUND: #fff;
+/**
+* @name 20. Selected indicator item background color
+* @type color
+* @group gallery
+*/
+@ANDROID5_GALLERY_INDICATOR_ITEM_SELECTED_BACKGROUND: #00bcd4;
+@ANDROID5_GALLERY_NAV_BUTTON_BACKGROUND_COLOR: fade(@ANDROID5_DARK_ICON_COLOR, 70);
+@ANDROID5_GALLERY_NAV_BUTTON_ACTIVE: fade(@ANDROID5_COLOR_BASE, 60);
+
+// FileUploader
+/**
+* @name 10. Filename text color
+* @type color
+* @group editors.fileuploader
+*/
+@ANDROID5_FILEUPLOADER_FILENAME_TEXT_COLOR: @ANDROID5_WIDGET_TEXT;
+
+/**
+* @name 20. File status text color
+* @type color
+* @group editors.fileuploader
+*/
+@ANDROID5_FILEUPLOADER_STATUS_TEXT_COLOR: @ANDROID5_TEXT;
+
+
+// List
+/**
+* @name 30. Group header text color
+* @type color
+* @group list
+*/
+@ANDROID5_LIST_GROUP_HEADER_COLOR: rgba(0, 0, 0, 0.54);
+/**
+* @name 40. Group header border color
+* @type color
+* @group list
+*/
+@ANDROID5_LIST_GROUP_HEADER_BORDER_BOTTOM_COLOR: @ANDROID5_DIVIDERS_COLOR;
+@ANDROID5_LIST_NORESULT_COLOR: @ANDROID5_WIDGET_TEXT;
+/**
+* @name 10. Item border color
+* @type color
+* @group list
+*/
+@ANDROID5_LIST_ITEM_BORDER_BOTTOM_COLOR: @ANDROID5_DIVIDERS_COLOR;
+
+@ANDROID5_LIST_DISABLE_COLOR: rgba(0, 0, 0, .26);
+@ANDROID5_LIST_ITEM_GHOST_BACKGROUND: rgba(255, 255, 255, .5);
+@ANDROID5_LIST_ITEM_HOVER_BACKGROUND: @ANDROID5_HOVERED_STATE_BACKGROUND_COLOR;
+@ANDROID5_LIST_ITEM_SELECTED_BACKGROUND: @ANDROID5_SELECTED_STATE_BACKGROUND_COLOR;
+
+// LoadIndicator
+/**
+* @name 20. Loading indicator color
+* @type color
+* @group overlays.common
+*/
+@ANDROID5_LOAD_INDICATOR_SEGMENT_BACKGROUND_COLOR: @ANDROID5_COLOR_BASE;
+@ANDROID5_LOAD_INDICATOR_BACKGROUND: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+
+//Lookup
+/**
+* @name 10. Text color
+* @type color
+* @group editors.lookup
+*/
+@ANDROID5_LOOKUP_COLOR: @ANDROID5_WIDGET_TEXT;
+/**
+* @name 20. Active state background color
+* @type color
+* @group editors.lookup
+*/
+@ANDROID5_LOOKUP_SELECTED_ITEM_COLOR: @ANDROID5_SELECTED_STATE_BACKGROUND_COLOR;
+
+// Popup
+@ANDROID5_POPUP_CONTENT_BACKGROUND: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+@ANDROID5_POPUP_TEXT_COLOR: @ANDROID5_WIDGET_TEXT;
+@ANDROID5_POPUP_CONTENT_SHADOW: ~"0 10px 32px rgba(0, 0, 0, .54)";
+@ANDROID5_POPUP_BOTTOM_BUTTONS_TEXT_COLOR: @ANDROID5_COLOR_BASE;
+
+//DatePicker
+@ANDROID5_DATE_PICKER_GRADIENT_COLOR: rgba(243, 243, 243, 0);
+
+//SelectBox
+/**
+* @name 20. Selected item background color
+* @type color
+* @group editors.selectbox
+*/
+@ANDROID5_SELECTBOX_BACKGROUND: @ANDROID5_DROPDOWNLIST_BACKGROUND;
+
+// Scrollable
+@ANDROID5_SCROLLABLE_PULL_DOWN_COLOR: @ANDROID5_WIDGET_TEXT;
+
+//ScrollView
+@ANDROID5_SCROLLVIEW_PULLDOWN_COLOR: #fff;
+
+// Slider
+/**
+* @name 10. Slider bar background color
+* @type color
+* @group sliders
+*/
+@ANDROID5_SLIDER_BAR_BACKGROUND: rgba(0, 0, 0, .26);
+@ANDROID5_SLIDER_BACKGROUND: @ANDROID5_COLOR_BASE;
+@ANDROID5_SLIDER_ACTIVE: fade(@ANDROID5_COLOR_BASE, 26%);
+@ANDROID5_SLIDER_DISABLED_BACKGROUND: rgba(0, 0, 0, .26);
+
+//ProgressBar
+/**
+* @name 10. Bar background color
+* @type color
+* @group progressbars
+*/
+@ANDROID5_PROGRESSBAR_RANGE_COLOR: @ANDROID5_COLOR_BASE;
+@ANDROID5_PROGRESSBAR_DISABLED_STATE_RANGE_COLOR: #adadad;
+@ANDROID5_PROGRESSBAR_CONTAINER_COLOR: fade(@ANDROID5_PROGRESSBAR_RANGE_COLOR, 26%);
+
+// Switch
+/**
+* @name 10. Background handle color in 'OFF' state
+* @type color
+* @group editors.switch
+*/
+@ANDROID5_SWITCH_OFF_HANDLE_COLOR: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+/**
+* @name 20. 'OFF' state switch color
+* @type color
+* @group editors.switch
+*/
+@ANDROID5_SWITCH_OFF_TRACK_COLOR: rgba(0, 0, 0, .26);
+/**
+* @name 30. Background handle color in 'ON' state
+* @type color
+* @group editors.switch
+*/
+@ANDROID5_SWITCH_ON_HANDLE_COLOR: @ANDROID5_COLOR_BASE;
+/**
+* @name 40. 'ON' state switch color
+* @type color
+* @group editors.switch
+*/
+@ANDROID5_SWITCH_ON_TRACK_COLOR: fade(@ANDROID5_COLOR_BASE, 50%);
+
+@ANDROID5_SWITCH_DISABLED_HANDLE_COLOR: #BDBDBD;
+@ANDROID5_SWITCH_DISABLED_TRACK_COLOR: rgba(0, 0, 0, .12);
+
+// Tabs
+/**
+* @name 10. Background color
+* @type color
+* @group navigations.tabs
+*/
+@ANDROID5_TABS_BACKGROUND: @ANDROID5_COLOR_BASE;
+@ANDROID5_TABS_TEXT_COLOR: fade(@ANDROID5_WIDGET_TEXT_ALTERNATIVE, 60%);
+@ANDROID5_TABS_SELECTED_TEXT_COLOR: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+@ANDROID5_TABS_SELECTED_COLOR: @ANDROID5_ACCENT_COLOR;
+@ANDROID5_TABS_SELECTED_BOX_SHADOW: ~"inset 0px -3px 0px" @ANDROID5_TABS_SELECTED_COLOR;
+@ANDROID5_TABS_FONT_SIZE: 14px;
+
+// TabPanel
+@ANDROID5_TABPANEL_BORDER_COLOR: @ANDROID5_DIVIDERS_COLOR;
+
+// TagBox
+@ANDROID5_TAGBOX_TAG_BACKGROUND: @ANDROID5_COLOR_BASE;
+@ANDROID5_TAGBOX_TAG_FOCUSED_BACKGROUND: darken(@ANDROID5_COLOR_BASE, 10%);
+
+// TextEditor
+@ANDROID5_TEXTEDITOR_BACKGROUND: @ANDROID5_INPUT_BACKGROUND;
+@ANDROID5_TEXTEDITOR_COLOR: @ANDROID5_INPUT_TEXT;
+@ANDROID5_TEXTEDITOR_PLACEHOLDER_COLOR: @ANDROID5_INPUT_PLACEHOLDER;
+@ANDROID5_TEXTEDITOR_INPUT_COLOR: lighten(@ANDROID5_INPUT_TEXT, 40%);
+@ANDROID5_TEXTEDITOR_FOCUSED_BORDER_COLOR: @ANDROID5_COLOR_BASE;
+
+// Toolbar
+/**
+* @name 10. Background color
+* @type color
+* @group navigations.toolbar
+*/
+@ANDROID5_TOOLBAR_BACKGROUND: @ANDROID5_COLOR_BASE;
+@ANDROID5_TOOLBAR_TEXT_COLOR: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+/**
+* @name 20. Label text color
+* @type color
+* @group navigations.toolbar
+*/
+@ANDROID5_TOOLBAR_LABEL_COLOR: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+@ANDROID5_TOOLBAR_BUTTON_SHADOW: none;
+@ANDROID5_TOOLBAR_BUTTON_BACKGROUND: transparent;
+
+//SlideOutView
+@ANDROID5_SLIDEOUTVIEW_CONTENT_BACKGROUND: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+@ANDROID5_SLIDEOUTVIEW_MENU_TOP_BACKGROUND: darken(@ANDROID5_COLOR_BASE, 5%);
+@ANDROID_SLIDEOUTVIEW_BORDER_WIDTH: 1px;
+@ANDROID_SLIDEOUTVIEW_BORDER_COLOR: rgba(0, 0, 0, 0.1);
+
+// Toast
+/**
+* @name 10. Text color
+* @type color
+* @group overlays.toasts
+*/
+@ANDROID5_TOAST_TEXT_COLOR: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+@ANDROID5_TOAST_BACKGROUND: rgba(0, 0, 0, .9);
+
+// Pager
+
+/**
+* @name 160. Pager selected item background color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@ANDROID5_PAGER_SELECTION_BACKGROUND: @ANDROID5_SELECTED_STATE_BACKGROUND_COLOR;
+
+// Color View
+/**
+* @name 10. Overlay border color
+* @type color
+* @group editors.colorbox
+*/
+@ANDROID5_COLOR_VIEW_PALETTE_CELL_BORDER_COLOR: @ANDROID5_DIVIDERS_COLOR;
+@ANDROID5_COLOR_VIEW_PALETTE_CELL_BACKGROUND_COLOR: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+
+//DataGrid
+/**
+* @name 10. Text color
+* @type color
+* @group datagrid
+*/
+@datagrid-base-color: @ANDROID5_WIDGET_TEXT;
+/**
+* @name 60. Background color
+* @type color
+* @group datagrid
+*/
+@datagrid-base-background-color: white;
+/**
+* @name 50. Border color
+* @type color
+* @group datagrid
+*/
+@datagrid-border-color: #CBCBCB;
+@datagrid-border: 1px solid @datagrid-border-color;
+@datagrid-border-hidden: 1px solid transparent;
+/**
+* @name 20. Header text color
+* @type color
+* @group datagrid
+*/
+@datagrid-headers-color: #7E7E7E;
+/**
+* @name 30. Header background color
+* @type color
+* @group datagrid
+*/
+@datagrid-headers-background-color: #E0E0E0;
+/**
+* @name 40. Header separator color
+* @type color
+* @group datagrid
+*/
+@datagrid-headers-separator-color: #33B5E5;
+/**
+* @name 71. Draggable header border color
+* @type color
+* @group datagrid
+*/
+@datagrid-drag-header-border-color: #7FCDEA;
+@datagrid-drag-header-border: 1px solid @datagrid-drag-header-border-color;
+@datagrid-drag-header-background: #B8E0EE;
+@datagrid-row-border: 1px solid transparent;
+
+@HEADER_FILTER_COLOR: @datagrid-headers-color;
+@HEADER_FILTER_COLOR_EMPTY: fade(@datagrid-headers-color, 50%);
+
+/**
+* @name 70. Selected row background color
+* @type color
+* @group datagrid
+*/
+@datagrid-selection-background: mix(@ANDROID5_COLOR_BASE, white, 15%);
+
+/**
+* @name 80. Hovered row background color
+* @type color
+* @group datagrid
+*/
+@datagrid-hover-background: mix(black, white, 6%); //@ANDROID5_HOVERED_STATE_BACKGROUND_COLOR
+@datagrid-data-modified-color-r: 21;
+@datagrid-data-modified-color-g: 194;
+@datagrid-data-modified-color-b: 111;
+/**
+* @name 130. Modified data color
+* @type color
+* @group datagrid
+*/
+@datagrid-data-modified-color: rgba(@datagrid-data-modified-color-r,@datagrid-data-modified-color-g,@datagrid-data-modified-color-b,.5);
+@datagrid-apply-button-color: rgb(@datagrid-data-modified-color-r + 27,@datagrid-data-modified-color-g,@datagrid-data-modified-color-b+22);
+/**
+* @name 70. Context menu icons color
+* @type color
+* @group datagrid
+*/
+@datagrid-context-menu-icons-color: #898989;
+/**
+* @name 140. Invalidate data color
+* @type color
+* @group datagrid
+*/
+@datagrid-data-invalid-color: @ANDROID5_INVALID_COLOR;
+/**
+* @name 141. Invalidate data faded color
+* @type color
+* @group datagrid
+*/
+@datagrid-data-faded-invalid-color: @ANDROID5_FADED_INVALID_COLOR;
+@datagrid-data-revert-button-active-state-color: #dd191d;
+/**
+* @name 120. NoData message color
+* @type color
+* @group datagrid
+*/
+@datagrid-nodata-color: #A8A8A8;
+@datagrid-nodata-font-size: 17px;
+/**
+* @name 90. Group row text color
+* @type color
+* @group datagrid
+*/
+@datagrid-group-row-color: #33b5e5;
+/**
+* @name 90. Group row text color
+* @type color
+* @group datagrid
+*/
+@datagrid-group-row-background-color: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+@datagrid-master-detail-background-color: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+@datagrid-header-panel-margin-bottom: 10px;
+@datagrid-filter-operation-image-size: 16px;
+
+/**
+* @name 110. Focused cell border color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@datagrid-focus-color: #b8e0ee;
+/**
+* @name 111. Editor background
+* @type color
+* @group datagrid
+*/
+@datagrid-editor-background: @ANDROID5_TEXTEDITOR_BACKGROUND;
+@datagrid-drag-header-first-shadow-color: rgba(0,0,0,.1);
+@datagrid-drag-header-second-shadow-color: rgba(0,0,0,.2);
+/**
+* @name 100. Row alternation background color
+* @type color
+* @group datagrid
+*/
+@datagrid-row-alternation-color: #E5E5E5;
+@datagrid-headers-drop-highlight-background-color: @datagrid-selection-background;
+/**
+* @name 150. Highlighted text background color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@datagrid-search-text-background: #b8e0ee;
+/**
+* @name 160. Error row text color
+* @type color
+* @group datagrid
+*/
+@datagrid-error-row-text-color: white;
+/**
+* @name 170. Error row background color
+* @type color
+* @group datagrid
+*/
+@datagrid-error-row-background-color: #f28f8f;
+
+@datagrid-filter-operation-between-image: url(images/widgets/android5/color-schemes/light/grid/filter-between.png);
+
+
+//TreeList
+/**
+* @name 10. Text color
+* @type color
+* @group treelist
+*/
+@treelist-base-color: @ANDROID5_WIDGET_TEXT;
+/**
+* @name 60. Background color
+* @type color
+* @group treelist
+*/
+@treelist-base-background-color: white;
+/**
+* @name 50. Border color
+* @type color
+* @group treelist
+*/
+@treelist-border-color: #CBCBCB;
+@treelist-border: 1px solid @treelist-border-color;
+/**
+* @name 20. Header text color
+* @type color
+* @group treelist
+*/
+@treelist-headers-color: #7E7E7E;
+/**
+* @name 30. Header background color
+* @type color
+* @group treelist
+*/
+@treelist-headers-background-color: #E0E0E0;
+/**
+* @name 40. Header separator color
+* @type color
+* @group treelist
+*/
+@treelist-headers-separator-color: #33B5E5;
+/**
+* @name 71. Draggable header border color
+* @type color
+* @group treelist
+*/
+@treelist-drag-header-border-color: #7FCDEA;
+@treelist-drag-header-border: 1px solid @treelist-drag-header-border-color;
+@treelist-drag-header-background: #B8E0EE;
+@treelist-row-border: 1px solid transparent;
+/**
+* @name 70. Selected row background color
+* @type color
+* @group treelist
+*/
+@treelist-selection-background: mix(@ANDROID5_COLOR_BASE, white, 15%);
+
+/**
+* @name 80. Hovered row background color
+* @type color
+* @group treelist
+*/
+@treelist-hover-background: mix(black, white, 6%); //@ANDROID5_HOVERED_STATE_BACKGROUND_COLOR
+@treelist-data-modified-color-r: 21;
+@treelist-data-modified-color-g: 194;
+@treelist-data-modified-color-b: 111;
+/**
+* @name 130. Modified data color
+* @type color
+* @group treelist
+*/
+@treelist-data-modified-color: rgba(@treelist-data-modified-color-r,@treelist-data-modified-color-g,@treelist-data-modified-color-b,.5);
+@treelist-apply-button-color: rgb(@treelist-data-modified-color-r + 27,@treelist-data-modified-color-g,@treelist-data-modified-color-b+22);
+/**
+* @name 70. Context menu icons color
+* @type color
+* @group treelist
+*/
+@treelist-context-menu-icons-color: #898989;
+/**
+* @name 140. Invalidate data color
+* @type color
+* @group treelist
+*/
+@treelist-data-invalid-color: @ANDROID5_INVALID_COLOR;
+/**
+* @name 141. Invalidate data faded color
+* @type color
+* @group treelist
+*/
+@treelist-data-faded-invalid-color: @ANDROID5_FADED_INVALID_COLOR;
+@treelist-data-revert-button-active-state-color: #dd191d;
+/**
+* @name 120. NoData message color
+* @type color
+* @group treelist
+*/
+@treelist-nodata-color: #A8A8A8;
+@treelist-nodata-font-size: 17px;
+@treelist-master-detail-background-color: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+@treelist-header-panel-margin-bottom: 10px;
+@treelist-filter-operation-image-size: 16px;
+/**
+* @name 110. Focused cell border color
+* @type color
+* @group treelist
+* @paletteColorOpacity 1
+*/
+@treelist-focus-color: #b8e0ee;
+/**
+* @name 111. Editor background
+* @type color
+* @group treelist
+*/
+@treelist-editor-background: @ANDROID5_TEXTEDITOR_BACKGROUND;
+@treelist-drag-header-first-shadow-color: rgba(0,0,0,.1);
+@treelist-drag-header-second-shadow-color: rgba(0,0,0,.2);
+/**
+* @name 100. Row alternation background color
+* @type color
+* @group treelist
+*/
+@treelist-row-alternation-color: #E5E5E5;
+@treelist-headers-drop-highlight-background-color: @treelist-selection-background;
+/**
+* @name 150. Highlighted text background color
+* @type color
+* @group treelist
+* @paletteColorOpacity 1
+*/
+@treelist-search-text-background: #b8e0ee;
+/**
+* @name 160. Error row text color
+* @type color
+* @group treelist
+*/
+@treelist-error-row-text-color: white;
+/**
+* @name 170. Error row background color
+* @type color
+* @group treelist
+*/
+@treelist-error-row-background-color: #f28f8f;
+
+@treelist-filter-operation-between-image: url(images/widgets/android5/color-schemes/light/grid/filter-between.png);
+
+
+//
+// dxPivotGrid
+//
+
+@PIVOTGRID_AREA_BACKGROUND: #fff;
+
+@PIVOTGRID_BORDER_COLOR: #CCCCCC;
+@PIVOTGRID_AREA_COLOR: #767676;
+@PIVOTGRID_DATA_AREA_COLOR: #1B1B1B;
+@PIVOTGRID_TOTALCOLOR: #F7F7F7;
+@PIVOTGRID_GRANDTOTALCOLOR: #EBEBEB;
+
+@PIVOTGRID_ACCENT_COLOR: rgb(96, 96, 96);
+@PIVOTGRID_SHADOW_COLOR: black;
+@PIVOTGRID_DRAG_HEADER_BORDER_COLOR: fade(@PIVOTGRID_ACCENT_COLOR, 50%);
+@PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: fade(@PIVOTGRID_SHADOW_COLOR, 10%);
+@PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: fade(@PIVOTGRID_SHADOW_COLOR, 20%);
+
+@PIVOTGRID_AREA_ALL_IMAGE: url(images/widgets/android5/color-schemes/light/grid/area-all.png);
+@PIVOTGRID_AREA_FILTER_IMAGE: url(images/widgets/android5/color-schemes/light/grid/area-filter.png);
+@PIVOTGRID_AREA_COLUMN_IMAGE: url(images/widgets/android5/color-schemes/light/grid/area-column.png);
+@PIVOTGRID_AREA_ROW_IMAGE: url(images/widgets/android5/color-schemes/light/grid/area-row.png);
+@PIVOTGRID_AREA_DATA_IMAGE: url(images/widgets/android5/color-schemes/light/grid/area-data.png);
+
+@PIVOTGRID_DIMENSION_IMAGE: url(images/widgets/android5/color-schemes/light/grid/dimension.png);
+@PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/android5/color-schemes/light/grid/hierarchy.png);
+
+@PIVOTGRID_COMMON_LEFT_RIGHT_PADDING: 10px;
+@PIVOTGRID_COMMON_TOP_BOTTOM_PADDING: 7px;
+@PIVOTGRID_FIELD_INDICATORS_OFFSET: 6px;
+
+@PIVOTGRID_EXPAND_ICON_OFFSET: -3px;
+@PIVOTGRID_EXPAND_ICON_TEXT_OFFSET: 2px;
+
+@PIVOTGRID_FIELD_AREA_TEXT_COLOR: lighten(@PIVOTGRID_AREA_COLOR, 26.2%);
+
+//dxScheduler
+@SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR: #f5f5f5;
+
+/**
+* @name 15. Border color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_BASE_BORDER_COLOR: #d3d3d3;
+
+/**
+* @name 20. Hour separator color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_ACCENT_BORDER_COLOR: darken(@SCHEDULER_BASE_BORDER_COLOR, 30%);
+
+/**
+* @name 30. Appointment background color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_BASE_COLOR: #65bccd;
+
+/**
+* @name 35. Start appointment color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_START_COLOR: fade(black, 30%);
+
+/**
+* @name 40. Appointment text color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_TEXT_COLOR: @ANDROID5_WIDGET_TEXT_ALTERNATIVE;
+
+/**
+* @name 35. Focused cell color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: #a9d9e2;
+
+/**
+* @name 10. Text color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_PANEL_TEXT_COLOR: @ANDROID5_TEXT;
+
+/**
+* @name 5. Workspace color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_WORKSPACE_BACKGROUND_COLOR: white;
+
+@SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR;
+@SCHEDULER_TIME_PANEL_BACKGROUND_COLOR: white;
+
+@SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR ;
+@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: @SCHEDULER_BASE_BORDER_COLOR ;
+
+@ANDROID5_SCHEDULER_HEADER_BACKGROUND_COLOR: @ANDROID5_COLOR_BASE;
+@ANDROID5_SCHEDULER_HEADER_TEXT_COLOR: white;
+@SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
+@SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
+//Menu
+/**
+* @name 10. Background color
+* @type color
+* @group navigations.menu
+*/
+@ANDROID5_MENU_BACKGROUND: transparent;
+/**
+* @name 20. Popup background color
+* @type color
+* @group navigations.menu
+*/
+@ANDROID5_MENU_POPUP_BACKGROUND: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+/**
+* @name 80. Hovered item background color
+* @type color
+* @group navigations.menu
+* @paletteColorOpacity .15
+*/
+@ANDROID5_MENU_ITEM_HOVERED_BACKGROUND: @ANDROID5_HOVERED_STATE_BACKGROUND_COLOR;
+/**
+* @name 60. Selected item background color
+* @type color
+* @group navigations.menu
+* @paletteColorOpacity 1
+*/
+@ANDROID5_MENU_ITEM_SELECTED_BACKGROUND: @ANDROID5_SELECTED_STATE_BACKGROUND_COLOR;
+
+/**
+* @name 40. Text color
+* @type color
+* @group navigations.menu
+*/
+@ANDROID5_MENU_TEXT_COLOR: @ANDROID5_WIDGET_TEXT;
+
+@ANDRIOD5_SEPARATOP_COLOR: #DDDDDD;
+
+
+// TreeView
+/**
+* @name 110. Text color
+* @type color
+* @group navigations.treeview
+*/
+@ANDROID5_TREE_VIEW_TEXT_COLOR: @ANDROID5_WIDGET_TEXT;
+@ANDROID5_TREE_VIEW_HOVERED_STATE_BACKGROUND: @ANDROID5_HOVERED_STATE_BACKGROUND_COLOR;
+@ANDROID5_TREE_VIEW_FOCUSED_BACKGROUND: @ANDROID5_SELECTED_STATE_BACKGROUND_COLOR;
+/**
+* @name 120. Border color
+* @type color
+* @group navigations.treeview
+*/
+@ANDROID5_TREE_VIEW_BORDER_COLOR: @ANDROID5_DIVIDERS_COLOR;
+
+//TimeView
+@ANDROID5_TIME_VIEW_CLOCK_IMAGE: url(images/widgets/android5/color-schemes/light/timeView/clock-bg.png);
+@ANDROID5_TIME_VIEW_HOUR_ARROW_IMAGE: url(images/widgets/android5/color-schemes/light/timeView/hour-arrow.png);
+@ANDROID5_TIME_VIEW_MINUTE_ARROW_IMAGE: url(images/widgets/android5/color-schemes/light/timeView/min-arrow.png);
+
+//ColorView
+@COLORVIEW_HANDLE_COLOR: #FFF;
+@COLORVIEW_HANDLE_BORDER_COLOR: fade(#000, 20%);
+
+//Form
+
+/**
+* @name 10. Label text color
+* @type color
+* @group form
+*/
+@ANDROID5_FORM_LABEL_COLOR: @ANDROID5_TEXT;
+/**
+* @name 20. Group border color
+* @type color
+* @group form
+*/
+@ANDROID5_FORM_GROUP_BORDER_COLOR: #ececec;
+@ANDROID5_FORM_GROUP_CAPTION_COLOR: #757575;
+@ANDROID5_FORM_REQUIRED_MARK_COLOR: #00bcd4;
+@ANDROID5_FORM_OPTIONAL_MARK_COLOR: #ccc;
+
+// Images
+@ANDROID5_LIST_DELETE_SWITCH_BACKGROUND: url(images/widgets/android5/color-schemes/light/list/delete.png);
+@ANDROID5_LIST_REORDER_HANDLE_BACKGROUND: url(images/widgets/android5/color-schemes/light/list/reorder_handle.png);
+@ANDROID5_SCROLLVIEW_PULLDOWN_BACKGROUND: url(images/widgets/android5/color-schemes/light/pulldown.png);
+@ANDROID5_LOADINDICATOR_BACKGROUND: url(images/widgets/android5/color-schemes/light/loader64.png);
+
+@ANDROID5_COLORBOX_NOCOLOR_IMG: url(images/widgets/android5/color-schemes/light/colorbox/nocolor.png);
+@ANDROID5_ATTENTION_IMAGE: url(images/widgets/android5/color-schemes/light/attention.png);
+
+// SPA
+
+// Master-detail
+
+/**
+* @name 10. Splitter color
+* @type color
+* @group layouts.split
+*/
+@ANDROID5_SPLIT_LAYOUT_MASTER_PANE_SPLITTER_COLOR: #808080;

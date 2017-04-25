@@ -1,0 +1,165 @@
+@ROLLER_ITEM_HEIGHT: 76px;
+@ROLLER_ITEM_MARGIN: 5px;
+@ROLLER_HEIGHT: @ROLLER_ITEM_HEIGHT * 5;
+@ROLLER_PADDING: (@ROLLER_HEIGHT - @ROLLER_ITEM_HEIGHT) / 2;
+@ROLLER_ITEM_PHONE_WIDTH: 64px;
+@ROLLER_ITEM_TIME_PHONE_WIDTH: 54px;
+
+
+.dx-dateview-rollers {
+    justify-content: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    margin: 0 auto;
+    width: auto;
+}
+
+.dx-dateviewroller {
+    height: @ROLLER_HEIGHT;
+    .flex-item(0, 1, auto);
+
+    .dx-scrollable-content:before,
+    .dx-scrollable-content:after {
+        display: block;
+        height: @ROLLER_PADDING;
+        content: "";
+    }
+
+    .dx-button {
+        display: none;
+    }
+
+    &.dx-dateviewroller-current {
+        .dx-dateview-item-selected-frame {
+            display: none;
+        }
+    }
+
+    &.dx-state-active {
+        .dx-dateview-item {
+            &.dx-dateview-item-selected {
+                border-color: @WIN8_DATAPICKER_ITEM_COLOR;
+                background-color: transparent;
+                color: @WIN8_DATAPICKER_ITEM_COLOR;
+            }
+        }
+    }
+
+    .dx-scrollable-scrollbar {
+        display: none;
+    }
+}
+
+.dx-dateview-item-selected-frame {
+    height: 0;
+
+    &:before {
+        position: absolute;
+        top: 0;
+        display: block;
+        width: @ROLLER_ITEM_HEIGHT + @ROLLER_ITEM_MARGIN;
+        height: @ROLLER_PADDING;
+        background-color: @WIN8_POPUP_COLOR;
+        content: "";
+    }
+
+    &:after {
+        position: absolute;
+        bottom: 0;
+        display: block;
+        width: @ROLLER_ITEM_HEIGHT + @ROLLER_ITEM_MARGIN;
+        height: @ROLLER_PADDING;
+        background-color: @WIN8_POPUP_COLOR;
+        content: "";
+    }
+}
+
+.dx-dateview-item {
+    overflow: hidden;
+    margin: @ROLLER_ITEM_MARGIN;
+    margin-left: 0px;
+    padding-left: @ROLLER_ITEM_MARGIN;
+    width: @ROLLER_ITEM_HEIGHT + @ROLLER_ITEM_MARGIN;
+    height: @ROLLER_ITEM_HEIGHT - @ROLLER_ITEM_MARGIN;
+    border: 1px solid @WIN8_DATAPICKER_ITEM_COLOR;
+    color: @WIN8_DATAPICKER_ITEM_COLOR;
+    text-align: left;
+    font-weight: 600;
+    font-size: 26px;
+    line-height: @ROLLER_ITEM_HEIGHT;
+
+    &.dx-dateview-item-selected {
+        border-color: @WIN8_ACCENT_COLOR;
+        background-color: @WIN8_ACCENT_COLOR;
+        color: @WIN8_WHITE_COLOR;
+    }
+}
+
+.dx-dateview-formatter-container {
+    display: table;
+    padding-top: 29px;
+    line-height: 20px;
+
+    .dx-dateview-value-formatter,
+    .dx-dateview-name-formatter {
+        display: table-row;
+    }
+}
+
+.dx-dateview-name-formatter {
+    font-weight: 100;
+    font-size: 12px;
+}
+
+.dx-device-phone {
+    .dx-dateview-datetime {
+        .dx-dateview-item {
+            width: @ROLLER_ITEM_PHONE_WIDTH;
+        }
+
+        .dx-dateviewroller-hours,
+        .dx-dateviewroller-minutes {
+            .dx-dateview-item {
+                width: @ROLLER_ITEM_TIME_PHONE_WIDTH;
+            }
+        }
+
+        .dx-dateviewroller-year,
+        .dx-dateviewroller-month,
+        .dx-dateviewroller-day {
+            .dx-dateview-item {
+                padding: 0;
+            }
+
+            .dx-dateview-value-formatter {
+                text-indent: @ROLLER_ITEM_MARGIN;
+            }
+        }
+    }
+}
+
+.dx-rtl {
+    .dx-dateview-item {
+        padding-left: 0;
+        padding-right: @ROLLER_ITEM_MARGIN;
+        text-align: right;
+    }
+}
+
+@media (max-height: 479px) {
+    .dx-dateviewroller {
+        height: @ROLLER_ITEM_HEIGHT * 3;
+    }
+
+    .dx-dateviewroller .dx-scrollable-content {
+        &:before, &:after {
+            height: @ROLLER_ITEM_HEIGHT;
+        }
+    }
+
+    .dx-dateview-item-selected-frame{
+        &:before, &:after {
+            height: @ROLLER_ITEM_HEIGHT;
+        }
+    }
+}

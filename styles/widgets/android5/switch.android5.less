@@ -1,0 +1,150 @@
+@ANDROID5_SWITCH_HEIGHT: 20px;
+@ANDROID5_SWITCH_RADIUS: @ANDROID5_SWITCH_HEIGHT / 2;
+@ANDROID5_SWITCH_OFF_HOVER_SHADOW_COLOR: rgba(0,0,0,.06);
+
+.dx-switch {
+    width: 36px;
+    height: @ANDROID5_SWITCH_HEIGHT;
+    line-height: 20px;
+}
+
+.dx-switch-wrapper {
+    position: relative;
+}
+
+.dx-switch-container {
+    height: @ANDROID5_SWITCH_HEIGHT;
+    margin-top: -3px;
+    overflow: visible;
+
+    &:after, :after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: block;
+        content: '';
+    }
+
+    &:before {
+        position: absolute;
+        content: '';
+        width: 100%;
+        height: 14px;
+        .border-radius(500px);
+        background-color: @ANDROID5_SWITCH_OFF_TRACK_COLOR;
+        margin: 3px 0;
+    }
+}
+
+.dx-switch-inner {
+    width: 100%;
+    height: 100%;
+}
+
+.dx-switch-on, .dx-switch-off {
+    float: left;
+    margin-left: -@ANDROID5_SWITCH_RADIUS;
+    padding: 4px 0;
+    width: 50%;
+    height: @ANDROID5_SWITCH_HEIGHT;
+    color: rgba(0,0,0,0);
+    text-align: center;
+    line-height: 100%;
+}
+
+.dx-switch-on {
+    background: transparent;
+    width: 100%;
+}
+
+.dx-switch-off {
+    display: none;
+    padding-bottom: 10px;
+    background-color: transparent;
+}
+
+.dx-switch-handle {
+    position: relative;
+    float: left;
+    margin-left: -@ANDROID5_SWITCH_RADIUS;
+    width: @ANDROID5_SWITCH_HEIGHT;
+    height: @ANDROID5_SWITCH_HEIGHT;
+    background-color: @ANDROID5_SWITCH_OFF_HANDLE_COLOR;
+    .border-radius(50%);
+    .shadow-z1();
+
+    &:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: block;
+        content: '';
+        .border-radius(50%);
+    }
+
+    .dx-inkripple-wave {
+        background-color: @ANDROID5_SWITCH_OFF_HOVER_SHADOW_COLOR;
+    }
+}
+
+.dx-switch-on-value {
+    .dx-switch-handle {
+        border: none;
+        background-color: @ANDROID5_SWITCH_ON_HANDLE_COLOR;
+    }
+
+    .dx-inkripple-wave {
+        background-color: fade(@ANDROID5_SWITCH_ON_HANDLE_COLOR, 12%);
+    }
+
+    .dx-switch-container:before {
+        background-color: @ANDROID5_SWITCH_ON_TRACK_COLOR;
+    }
+}
+
+.dx-state-disabled {
+    .dx-switch-container:before {
+        background-color: @ANDROID5_SWITCH_DISABLED_TRACK_COLOR;
+    }
+
+    &.dx-switch-on-value .dx-switch-handle {
+        background-color: @ANDROID5_SWITCH_DISABLED_TRACK_COLOR;
+    }
+
+    .dx-switch-handle {
+
+        &:after {
+            background-color: @ANDROID5_SWITCH_DISABLED_HANDLE_COLOR;
+        }
+    }
+}
+
+.dx-rtl .dx-switch,
+.dx-switch.dx-rtl {
+    .dx-switch-container {
+    }
+
+    .dx-switch-on, .dx-switch-off {
+        float: right;
+        margin-right: -@ANDROID5_SWITCH_RADIUS;
+        margin-left: 0px;
+    }
+
+    .dx-switch-handle {
+        float: right;
+        margin-right: -@ANDROID5_SWITCH_RADIUS;
+        margin-left: 0;
+
+        &:before {
+            left: 16px;
+        }
+    }
+
+    &.dx-switch-on-value .dx-switch-handle:before {
+        left: 14px;
+    }
+}

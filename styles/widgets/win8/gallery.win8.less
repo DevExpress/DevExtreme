@@ -1,0 +1,44 @@
+.dx-gallery-nav-button-prev,
+.dx-gallery-nav-button-next {
+    margin: -25px 12px 0;
+    width: 50px;
+    height: 50px;
+    background-repeat: no-repeat;
+}
+
+.dx-gallery-nav-button-prev {
+    .dx-icon-arrowleft;
+}
+
+.dx-gallery-nav-button-next {
+    .dx-icon-arrowright;
+}
+
+.dx-gallery-nav-button-prev,
+.dx-gallery-nav-button-next {
+    .dx-icon-font-centered-sizing(36px);
+    .border-radius(50%);
+    border: @WIN8_GALLERY_NAV_BUTTON_BORDER;
+    color: @WIN8_GALLERY_NAV_BUTTON_COLOR;
+
+    &.dx-state-active {
+        background-color: @WIN8_GALLERY_NAV_BUTTON_BACKGROUND_COLOR;
+    }
+}
+
+.dx-gallery-indicator {
+    text-align: center;
+}
+
+.dx-gallery-indicator-item {
+    margin: 2px;
+    width: 15px;
+    height: 6px;
+    background: @WIN8_WHITE_COLOR;
+    .box-shadow(~"0 0 1px 1px rgba(50,50,50,.3)");
+}
+
+.dx-gallery-indicator-item-selected {
+    background: @WIN8_ACCENT_COLOR;
+    margin: 1px 2px 2px 2px; /* chrome accessibility hack T321837 */
+}

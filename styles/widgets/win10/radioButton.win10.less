@@ -1,0 +1,72 @@
+.dx-radiobutton-icon {
+    height: 20px;
+    width: 20px;
+    border: 2px solid @WIN10_RADIOBUTTON_UNCHECKED_BORDER_COLOR;
+    border-radius: 50%;
+    background-color: @WIN10_RADIOBUTTON_BACKGROUND_COLOR;
+}
+
+.dx-radiobutton-checked {
+    .dx-radiobutton-icon {
+        border-color: @WIN10_RADIOBUTTON_CHECKED_BORDER_COLOR;
+    }
+
+    .dx-radiobutton-icon-dot {
+        height: 10px;
+        width: 10px;
+        margin: 3px;
+        border-radius: 50%;
+        background-color: @WIN10_RADIOBUTTON_DOT_BACKGROUND_COLOR;
+    }
+}
+
+.dx-state-hover, .dx-state-focused {
+    &.dx-radiobutton .dx-radiobutton-icon {
+        border-color: @WIN10_RADIOBUTTON_HOVER_STATE_COLOR;
+    }
+}
+
+.dx-state-hover, .dx-state-focused {
+    &.dx-radiobutton-checked {
+        .dx-radiobutton-icon {
+            border-color: @WIN10_RADIOBUTTON_CHECKED_BORDER_COLOR;
+        }
+
+        .dx-radiobutton-icon-dot {
+            background-color: @WIN10_RADIOBUTTON_HOVER_STATE_COLOR;
+        }
+    }
+}
+
+.dx-state-active.dx-radiobutton .dx-radiobutton-icon {
+    border-color: @WIN10_RADIOBUTTON_ACTIVE_COLOR;
+    background-color: @WIN10_RADIOBUTTON_ACTIVE_BACKGROUND_COLOR;
+}
+
+.dx-state-active.dx-radiobutton-checked .dx-radiobutton-icon-dot {
+    background-color: @WIN10_RADIOBUTTON_ACTIVE_COLOR;
+}
+
+.dx-radiobutton {
+    &.dx-invalid {
+        .dx-radiobutton-icon {
+            border-color: @WIN10_RADIOBUTTON_INVALID_BORDER_COLOR;
+        }
+    }
+}
+
+.dx-state-disabled {
+    .dx-radiobutton,
+    &.dx-radiobutton {
+        .dx-radiobutton-icon {
+            border-color: @WIN10_RADIOBUTTON_DISABLED_COLOR;
+        }
+    }
+
+    .dx-radiobutton-checked,
+    &.dx-radiobutton-checked {
+        .dx-radiobutton-icon-dot {
+            background-color: @WIN10_RADIOBUTTON_DISABLED_COLOR;
+        }
+    }
+}

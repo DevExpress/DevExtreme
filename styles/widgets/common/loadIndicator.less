@@ -1,0 +1,109 @@
+@LOADINDICATOR_WIDTH: 32px;
+@LOADINDICATOR_HEIGHT: 32px;
+
+.dx-loadindicator {
+    width: @LOADINDICATOR_WIDTH;
+    height: @LOADINDICATOR_HEIGHT;
+    display: inline-block;
+    overflow: hidden;
+    border: none;
+    background-color: transparent;
+}
+
+.dx-loadindicator-wrapper {
+    width: 100%;
+    height: 100%;
+    font-size: @LOADINDICATOR_HEIGHT;
+    margin: auto;
+}
+
+.dx-loadindicator-image {
+    .background-size-prop(contain);
+    .transform-origin(50% 50%);
+    background-position: 50%;
+    background-repeat: no-repeat;
+}
+
+.dx-loadindicator-icon {
+    direction: ltr;
+}
+
+.dx-loadindicator-icon-custom {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    .background-size();
+    .transform-origin(50% 50%);
+    .animation(dx-loadindicator-icon-custom-rotate 1.5s infinite linear);
+
+    @-webkit-keyframes dx-loadindicator-icon-custom-rotate {
+        from {
+            -webkit-transform: rotate(0deg);
+        }
+
+        to {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @-moz-keyframes dx-loadindicator-icon-custom-rotate {
+        from {
+            -moz-transform: rotate(0deg);
+        }
+
+        to {
+            -moz-transform: rotate(360deg);
+        }
+    }
+
+    @-ms-keyframes dx-loadindicator-icon-custom-rotate {
+        from {
+            -ms-transform: rotate(0deg);
+        }
+
+        to {
+            -ms-transform: rotate(360deg);
+        }
+    }
+
+    @-o-keyframes dx-loadindicator-icon-custom-rotate {
+        from {
+            -o-transform: rotate(0deg);
+        }
+
+        to {
+            -o-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes dx-loadindicator-icon-custom-rotate {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+}
+
+.dx-loadindicator-container {
+    >.dx-loadindicator {
+        top: 50%;
+        left: 50%;
+        position: absolute;
+        margin-top: -1 * @LOADINDICATOR_HEIGHT / 2;
+        margin-left: -1 * @LOADINDICATOR_WIDTH / 2;
+
+        &.dx-loadindicator {
+            margin-top: -1 * @LOADINDICATOR_HEIGHT / 2;
+            margin-left: -1 * @LOADINDICATOR_WIDTH / 2;
+        }
+    }
+}
+
+.dx-loadindicator-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}

@@ -1,0 +1,27 @@
+.dx-navbar {
+    .dx-inkripple {
+        overflow: hidden;
+    }
+
+    .dx-tab-selected {
+        .box-shadow(~"inset 0px 3px 0px" @ANDROID5_ACCENT_COLOR);
+    }
+
+    .dx-state-active.dx-tab:before {
+        .scale(1.8);
+    }
+
+    .dx-tab-content {
+        padding: 15px 12px 17px;
+
+        .dx-icon {
+            .dx-icon-sizing(32px);
+        }
+    }
+}
+
+.dx-device-phone {
+    .dx-navbar .dx-tab-text {
+        font-size: 10px;
+    }
+}

@@ -1,0 +1,64 @@
+.dx-datebox {
+    .dx-texteditor-input {
+        &::-webkit-clear-button,
+        &::-webkit-inner-spin-button,
+        &::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+
+        font-family: RobotoDraft,'Helvetica Neue',Helvetica,Arial;
+    }
+}
+
+.dx-datebox-wrapper-calendar .dx-popup-content {
+    padding: 0;
+}
+
+.dx-datebox-calendar {
+    &.dx-dropdowneditor-active .dx-texteditor-container {
+        &:before, &:after {
+            content: none;
+        }
+    }
+
+    .dx-dropdowneditor-icon {
+        .dx-icon-event;
+        .dx-icon-font-centered-sizing(18px);
+    }
+}
+
+.dx-datebox-wrapper-calendar {
+    .dx-datebox-container-cell {
+        margin-right: 30px;
+        margin-bottom: 30px;
+    }
+}
+
+.dx-datebox-wrapper-list .dx-popup-content {
+    padding: 0;
+}
+
+.dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime {
+    .dx-timeview {
+        margin-top: 82px;
+    }
+
+    .dx-calendar {
+        margin-right: 23px;
+    }
+
+    .dx-datebox-container-cell {
+        margin: -14px 40px 30px 0;
+    }
+}
+
+.dx-rtl {
+    .dx-datebox-wrapper-calendar.dx-datebox-wrapper-datetime .dx-calendar {
+        margin-left: 23px;
+        margin-right: 30px;
+    }
+}
+
+.dx-device-ios .dx-datebox.dx-texteditor-empty .dx-texteditor-input {
+    min-height: 31px;
+}

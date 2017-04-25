@@ -1,0 +1,77 @@
+@WIN10_SLIDER_WRAPPER_HEIGHT: 24px;
+@WIN10_SLIDER_HANDLE_HEIGHT: @WIN10_SLIDER_WRAPPER_HEIGHT;
+@WIN10_SLIDER_HANDLE_WIDTH: 8px;
+
+@WIN10_SLIDER_BAR_HEIGHT: 2px;
+@WIN10_SLIDER_BAR_MARGIN_VERTICAL: (@WIN10_SLIDER_WRAPPER_HEIGHT - @WIN10_SLIDER_BAR_HEIGHT) / 2;
+@WIN10_SLIDER_BAR_MARGIN_HORIZONTAL: @WIN10_SLIDER_HANDLE_WIDTH / 2;
+
+@WIN10_SLIDER_LABEL_FONT_SIZE: 11px;
+@WIN10_SLIDER_HANLDE_TOOLTIP_OFFSET: (@WIN10_SLIDER_BAR_MARGIN_VERTICAL + @WIN10_SLIDER_BAR_HEIGHT + @WIN10_SLIDER_LABEL_FONT_SIZE / 2) + 2px;
+@WIN10_SLIDER_LABEL_POSITION_TOP: -(@WIN10_SLIDER_BAR_MARGIN_VERTICAL + @WIN10_SLIDER_BAR_HEIGHT + @WIN10_SLIDER_LABEL_FONT_SIZE / 2);
+@WIN10_SLIDER_LABEL_POSITION_BOTTOM: -(@WIN10_SLIDER_BAR_MARGIN_VERTICAL - @WIN10_SLIDER_BAR_HEIGHT + @WIN10_SLIDER_LABEL_FONT_SIZE / 2);
+
+.dx-slider-wrapper {
+    height: @WIN10_SLIDER_WRAPPER_HEIGHT;
+}
+
+.dx-slider-bar {
+    height: @WIN10_SLIDER_BAR_HEIGHT;
+    margin: @WIN10_SLIDER_BAR_MARGIN_VERTICAL @WIN10_SLIDER_BAR_MARGIN_HORIZONTAL;
+}
+
+.dx-slider-range {
+    background-color: transparent;
+
+    &.dx-slider-range-visible {
+        background-color: @WIN10_SLIDER_ACCENT_COLOR;
+    }
+}
+
+.dx-slider-handle {
+    height: @WIN10_SLIDER_HANDLE_HEIGHT;
+    width: @WIN10_SLIDER_HANDLE_WIDTH;
+    top: -@WIN10_SLIDER_HANDLE_HEIGHT / 2;
+    right: -@WIN10_SLIDER_HANDLE_WIDTH / 2;
+    border-radius: @WIN10_SLIDER_HANDLE_WIDTH;
+    background-color: @WIN10_SLIDER_ACCENT_COLOR;
+
+    &.dx-rtl {
+        left: -@WIN10_SLIDER_HANDLE_WIDTH / 2;
+        right: auto;
+    }
+
+    &.dx-state-hover, &.dx-state-focused {
+        background-color: @WIN10_SLIDER_HANDLE_HOVER_BACKGROUND_COLOR;
+    }
+
+    &.dx-state-active {
+        background-color: @WIN10_SLIDER_HANDLE_ACTIVE_BACKGROUND_COLOR;
+    }
+
+    &.dx-state-disabled,
+    .dx-state-disabled & {
+        background-color: @WIN10_SLIDER_HANDLE_DISABLED_BACKGROUND_COLOR;
+    }
+
+    .dx-tooltip {
+        .dx-tooltip-wrapper {
+            .dx-popover-arrow {
+                height: @WIN10_SLIDER_HANLDE_TOOLTIP_OFFSET;
+            }
+        }
+    }
+}
+
+.dx-slider-label {
+    font-size: @WIN10_SLIDER_LABEL_FONT_SIZE;
+    line-height: @WIN10_SLIDER_LABEL_FONT_SIZE;
+
+    .dx-slider-label-position-top & {
+        top: @WIN10_SLIDER_LABEL_POSITION_TOP;
+    }
+
+    .dx-slider-label-position-bottom & {
+        bottom: @WIN10_SLIDER_LABEL_POSITION_BOTTOM;
+    }
+}

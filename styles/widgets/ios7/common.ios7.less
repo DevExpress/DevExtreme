@@ -1,0 +1,50 @@
+.dx-theme-marker {
+    font-family: @IOS7_THEME_MARKER;
+}
+
+.dx-base-typography() {
+    color: @IOS7_FONT_COLOR;
+    font-weight: normal;
+    font-size: 1em;
+    font-family: @IOS7_FONT;
+
+    a {
+        color: @IOS7_FONT_COLOR;
+        text-decoration: underline;
+    }
+
+    img {
+        border-style: none;
+    }
+}
+
+.disabled-widget(@opacity: @IOS7_DISABLED_OPACITY) {
+    opacity: @opacity;
+    .user-select(none);
+    zoom: 1;
+    cursor: default;
+}
+
+.dx-icon {
+    background-position: 50% 50%;
+}
+
+&.dx-ios-stripes {
+    background: @IOS7_STRIPES_BACKGROUND;
+}
+
+.dx-black-background {
+    background: @IOS7_BLACK_BACKGROUND;
+}
+
+.dx-content-background {
+    background-color: @IOS7_BACKGROUND;
+}
+
+.dx-content-content {
+    background-color: @IOS7_BACKGROUND;
+}
+
+.dx-form-background {
+    background-color: @IOS7_BACKGROUND_WIDGET;
+}

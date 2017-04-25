@@ -1,0 +1,129 @@
+@ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH: 30px;
+@DROPDOWNEDITOR_INVALID_BADGE_OFFSET: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 3px;
+
+.dx-dropdowneditor {
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
+            padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH;
+        }
+
+        &.dx-rtl .dx-texteditor-input {
+            padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH;
+            padding-right: 0;
+        }
+    }
+
+    &.dx-dropdowneditor-active,
+    &.dx-state-disabled {
+        .dx-dropdowneditor-icon {
+            opacity: 1;
+        }
+    }
+}
+
+    .dx-dropdowneditor.dx-show-clear-button {
+        .dx-texteditor-input {
+            padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+        }
+
+        &.dx-rtl .dx-texteditor-input {
+            padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+            padding-right: 0;
+        }
+    }
+
+.dx-invalid.dx-dropdowneditor-button-visible {
+    .dx-texteditor-input {
+        padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
+    }
+}
+
+.dx-invalid.dx-show-clear-button.dx-dropdowneditor-button-visible {
+    .dx-texteditor-input {
+        padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+    }
+}
+
+.dx-dropdowneditor-button {
+    width: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH;
+    z-index: 1;
+    overflow: hidden;
+
+    .dx-button-content {
+        padding: 0;
+        text-align: right;
+        min-height: initial;
+    }
+}
+
+.dx-dropdowneditor-input-wrapper {
+    overflow: initial;
+}
+
+.dx-dropdowneditor-icon {
+    .dx-icon-spindown;
+    .dx-icon-font-centered-sizing(11.5px);
+    color: @ANDROID5_DARK_ICON_COLOR;
+
+    &:before {
+        font-size: 21px;
+        color: @ANDROID5_DARK_ICON_COLOR;
+        margin-left: -3.75px;
+    }
+}
+
+.dx-invalid.dx-dropdowneditor {
+    .dx-texteditor-container:after {
+        right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+    }
+
+    &.dx-show-clear-button:not(.dx-texteditor-empty) .dx-texteditor-container:after {
+        right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET + @ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+    }
+}
+
+.dx-rtl {
+    .dx-dropdowneditor,
+    &.dx-dropdowneditor {
+        &.dx-dropdowneditor-button-visible {
+            &.dx-invaild .dx-texteditor-input {
+                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
+                padding-right: 0;
+            }
+
+            &.dx-invalid.dx-show-clear-button .dx-texteditor-input {
+                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+                padding-right: 0;
+            }
+
+            &.dx-show-clear-button {
+                .dx-texteditor-input {
+                    padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+                    padding-right: 0;
+                }
+            }
+        }
+
+        .dx-dropdowneditor-icon {
+            background-position: 0% 50%;
+        }
+    }
+
+    &.dx-invalid.dx-dropdowneditor {
+        .dx-texteditor-container {
+            &:after {
+                left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH;
+                right: auto;
+            }
+        }
+
+        &.dx-show-clear-button:not(.dx-texteditor-empty) {
+            .dx-texteditor-container {
+                &:after {
+                    left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+                    right: auto;
+                }
+            }
+        }
+    }
+}

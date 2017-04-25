@@ -1,0 +1,241 @@
+@WIN10_CALENDAR_MIN_WIDTH: 278px;
+@WIN10_CALENDAR_MIN_HEIGHT: 278px;
+
+@WIN10_CALENDAR_NAVIGATOR_HEIGHT: 40px;
+@WIN10_CALENDAR_NAVIGATOR_MARGIN: 4%;
+@WIN10_CALENDAR_NAVIGATOR_WIDTH: 100% - 2 * @WIN10_CALENDAR_NAVIGATOR_MARGIN;
+@WIN10_CALENDAR_NAVIGATOR_BUTTON_WIDTH: 40px;
+@WIN10_CALENDAR_NAVIGATOR_BUTTON_ICON_SIZE: 25px;
+@WIN10_CALENDAR_NAVIGATOR_CAPTION_FONT_SIZE: 20px;
+
+@WIN10_CALENDAR_DAY_TITLE_FONT_SIZE: 12px;
+@WIN10_CALENDAR_CELL_FONT_SIZE: 20px;
+@WIN10_CALENDAR_CELL_BORDER_WIDTH: 2px;
+
+@WIN10_CALENDAR_FOOTER_HEIGHT: 40px;
+@WIN10_CALENDAR_FOOTER_PADDING: 4px 0;
+
+
+.dx-calendar {
+    width: @WIN10_CALENDAR_MIN_WIDTH;
+    min-width: @WIN10_CALENDAR_MIN_WIDTH;
+    min-height: @WIN10_CALENDAR_MIN_HEIGHT;
+    border: 2px solid transparent;
+    background-color: @WIN10_CALENDAR_BACKGROUND_COLOR;
+
+    &.dx-invalid {
+        border-color: @WIN10_CALENDAR_INVALID_BORDER_COLOR;
+    }
+}
+
+.dx-calendar-navigator {
+    height: @WIN10_CALENDAR_NAVIGATOR_HEIGHT;
+    width: @WIN10_CALENDAR_NAVIGATOR_WIDTH;
+    margin: 0 @WIN10_CALENDAR_NAVIGATOR_MARGIN;
+
+    .dx-button-content {
+        background: none;
+        border: none;
+    }
+
+    .dx-button {
+        color: @WIN10_CALENDAR_NAVIGATOR_BUTTON_COLOR;
+
+        .dx-button-content {
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        &.dx-state-active {
+            color: @WIN10_CALENDAR_NAVIGATOR_BUTTON_ACTIVE_COLOR;
+
+            .dx-button-content {
+                background: none;
+            }
+        }
+    }
+}
+
+.dx-calendar-caption-button {
+    font-size: @WIN10_CALENDAR_NAVIGATOR_CAPTION_FONT_SIZE;
+    font-weight: 600;
+    left: 0;
+
+    .dx-rtl&,
+    .dx-rtl & {
+        right: 0;
+        left: auto;
+    }
+}
+
+.dx-calendar-navigator-next-view {
+    right: 0;
+    width: @WIN10_CALENDAR_NAVIGATOR_BUTTON_WIDTH;
+
+    .dx-rtl&,
+    .dx-rtl & {
+        right: auto;
+        left: 0;
+    }
+
+    .dx-icon {
+        font-size: @WIN10_CALENDAR_NAVIGATOR_BUTTON_ICON_SIZE;
+
+        &:before {
+            content: "\f016";
+        }
+    }
+}
+
+.dx-calendar-navigator-previous-view {
+    right: @WIN10_CALENDAR_NAVIGATOR_BUTTON_WIDTH;
+    width: @WIN10_CALENDAR_NAVIGATOR_BUTTON_WIDTH;
+
+    .dx-rtl&,
+    .dx-rtl & {
+        right: auto;
+        left: @WIN10_CALENDAR_NAVIGATOR_BUTTON_WIDTH;
+    }
+
+    .dx-icon {
+        font-size: @WIN10_CALENDAR_NAVIGATOR_BUTTON_ICON_SIZE;
+
+        &:before {
+            content: "\f014";
+        }
+    }
+}
+
+.dx-calendar-body {
+    top: @WIN10_CALENDAR_NAVIGATOR_HEIGHT;
+
+    table {
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 2px;
+    }
+
+    th {
+        font-size: @WIN10_CALENDAR_DAY_TITLE_FONT_SIZE;
+        color: @WIN10_CALENDAR_DAY_TITLE_COLOR;
+        font-weight: 400;
+    }
+
+    .dx-calendar-with-footer & {
+        bottom: @WIN10_CALENDAR_FOOTER_HEIGHT;
+    }
+
+    .dx-calendar-empty-cell {
+        cursor: default;
+    }
+}
+
+.dx-calendar-cell {
+    text-align: center;
+    font-size: @WIN10_CALENDAR_CELL_FONT_SIZE;
+    font-weight: 600;
+    line-height: @WIN10_CALENDAR_CELL_FONT_SIZE;
+    color: @WIN10_CALENDAR_CELL_COLOR;
+    border: @WIN10_CALENDAR_CELL_BORDER_WIDTH solid transparent;
+
+    &.dx-state-hover, &.dx-calendar-contoured-date {
+        border-color: @WIN10_CALENDAR_CELL_HOVER_BORDER_COLOR;
+        border-style: solid;
+    }
+
+    &.dx-state-active {
+        border-color: @WIN10_CALENDAR_CELL_ACTIVE_BORDER_COLOR;
+        border-style: solid;
+        background-color: @WIN10_CALENDAR_BACKGROUND_COLOR;
+        color: @WIN10_CALENDAR_CELL_ACTIVE_COLOR;
+    }
+}
+
+.dx-calendar-other-view {
+    color: @WIN10_CALENDAR_CELL_OTHER_VIEW_COLOR;
+}
+
+.dx-calendar-selected-date {
+    &,
+    &.dx-calendar-contoured-date,
+    &.dx-state-active {
+        border-color: @WIN10_CALENDAR_CELL_SELECTED_BORDER_COLOR;
+        border-style: solid;
+        color: @WIN10_CALENDAR_CELL_COLOR;
+
+        &.dx-state-hover, &.dx-calendar-contoured-date {
+            border-color: @WIN10_CALENDAR_CELL_SELECTED_HOVER_BORDER_COLOR;
+        }
+
+        &.dx-calendar-today {
+            background-color: @WIN10_CALENDAR_CELL_TODAY_BASE_COLOR;
+        }
+    }
+}
+
+.dx-calendar-empty-cell {
+    background: @WIN10_CALENDAR_EMPTY_CELL_BACKGROUND;
+    background-size: 70% 70%;
+    color: @WIN10_CALENDAR_CELL_EMPTY_COLOR;
+
+    &.dx-state-hover, &.dx-state-active {
+        border-color: transparent;
+    }
+}
+
+.dx-calendar-today {
+    border-color: @WIN10_CALENDAR_CELL_TODAY_BASE_COLOR;
+    border-style: solid;
+    background-color: @WIN10_CALENDAR_CELL_TODAY_BASE_COLOR;
+    color: @WIN10_CALENDAR_CELL_TODAY_COLOR;
+
+    &.dx-calendar-selected-date {
+        outline: @WIN10_CALENDAR_CELL_BORDER_WIDTH solid @WIN10_CALENDAR_BACKGROUND_COLOR;
+        outline-offset: -2 * @WIN10_CALENDAR_CELL_BORDER_WIDTH;
+    }
+
+    &.dx-state-hover, &.dx-calendar-contoured-date {
+        border-color: @WIN10_CALENDAT_CELL_TODAY_HOVER_BORDER_COLOR;
+        outline: @WIN10_CALENDAR_CELL_BORDER_WIDTH solid @WIN10_CALENDAR_BACKGROUND_COLOR;
+        outline-offset: -2 * @WIN10_CALENDAR_CELL_BORDER_WIDTH;
+    }
+}
+
+.dx-calendar-footer {
+    width: 100%;
+    text-align: center;
+    height: @WIN10_CALENDAR_FOOTER_HEIGHT;
+    padding: @WIN10_CALENDAR_FOOTER_PADDING;
+
+    .dx-calendar-today-button {
+        color: @WIN10_CALENDAR_TODAY_BUTTON_COLOR;
+        text-decoration: none;
+    }
+}
+
+.dx-state-disabled {
+    .dx-calendar,
+    &.dx-calendar {
+        .dx-calendar-navigator {
+            .dx-button-content {
+                background: none;
+                color: @WIN10_CALENDAR_DISABLED_BASE_COLOR;
+            }
+        }
+
+        th,
+        .dx-calendar-cell {
+            color: @WIN10_CALENDAR_DISABLED_BASE_COLOR;
+        }
+
+        .dx-calendar-selected-date {
+            border-color: @WIN10_CALENDAR_DISABLED_BASE_COLOR;
+        }
+
+        .dx-calendar-today {
+            color: @WIN10_CALENDAR_DISABLED_CELL_SELECTED_COLOR;
+            border-color: @WIN10_CALENDAR_DISABLED_BASE_COLOR;
+            background-color: @WIN10_CALENDAR_DISABLED_BASE_COLOR;
+        }
+    }
+}

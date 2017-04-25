@@ -1,0 +1,21 @@
+.dx-slideoutview-wrapper:before {
+    content: "";
+    display: block;
+    height: 56px;
+    background: @ANDROID5_SLIDEOUTVIEW_MENU_TOP_BACKGROUND;
+}
+
+.dx-slideoutview-menu-content {
+    background: darken(@ANDROID5_SLIDEOUTVIEW_CONTENT_BACKGROUND, 5%);
+    top: 56px;
+    bottom: 0;
+    height: auto;
+}
+
+.dx-slideoutview-content {
+    .box-sizing(content-box);
+    .background-clip(content-box);
+    background-color: @ANDROID5_SLIDEOUTVIEW_CONTENT_BACKGROUND;
+    margin-left:-@ANDROID_SLIDEOUTVIEW_BORDER_WIDTH;
+    border-left: @ANDROID_SLIDEOUTVIEW_BORDER_WIDTH solid @ANDROID_SLIDEOUTVIEW_BORDER_COLOR;
+}

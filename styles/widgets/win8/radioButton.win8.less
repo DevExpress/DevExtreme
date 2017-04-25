@@ -1,0 +1,71 @@
+@WIN8_RADIOBUTTON_FOCUS_BACKGROUND: @WIN8_WHITE_COLOR;
+@WIN8_RADIOBUTTON_HOVER_BACKGROUND: fadeout(@WIN8_WHITE_COLOR, 10%);
+@WIN8_RADIOBUTTON_ACTIVE_BACKGROUND: @WIN8_WHITE_COLOR;
+
+.dx-radiobutton-icon {
+    width: 16px;
+    height: 16px;
+
+    &:before {
+        display: block;
+        width: 16px;
+        height: 16px;
+        background-color: @WIN8_TEXTEDITOR_BACKGROUND;
+        content: "";
+        .border-radius(8px);
+    }
+}
+
+.dx-radiobutton-checked .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+    margin: -12px 0 0 4px;
+    width: 8px;
+    height: 8px;
+    background: @WIN8_BLACK_COLOR;
+    .border-radius(4px);
+}
+
+.dx-radio-value-container {
+    padding-top: 2px;
+}
+
+.dx-state-focused {
+    &.dx-radiobutton .dx-radiobutton-icon:before {
+        background-color: @WIN8_RADIOBUTTON_FOCUS_BACKGROUND;
+        .box-shadow(@WIN8_RADIOGROUP_SHADOW);
+    }
+}
+
+.dx-state-hover {
+    &.dx-radiobutton .dx-radiobutton-icon:before {
+        background-color: @WIN8_RADIOBUTTON_HOVER_BACKGROUND;
+        .box-shadow(@WIN8_RADIOGROUP_SHADOW);
+    }
+}
+
+.dx-state-active {
+    &.dx-radiobutton .dx-radiobutton-icon:before {
+        background-color: @WIN8_RADIOBUTTON_ACTIVE_BACKGROUND;
+        .box-shadow(@WIN8_RADIOGROUP_SHADOW);
+    }
+}
+
+.dx-invalid {
+    .dx-radiobutton-icon:before {
+        border: 1px solid @WIN8_FADED_INVALID_COLOR;
+    }
+
+    .dx-state-focused {
+        .dx-radiobutton-icon:before {
+            border-color: @WIN8_INVALID_COLOR;
+        }
+    }
+}
+
+
+.dx-rtl .dx-radiobutton-checked,
+.dx-rtl.dx-radiobutton-checked {
+    .dx-radiobutton-icon .dx-radiobutton-icon-dot {
+        margin-right: 4px;
+        margin-left: 0;
+    }
+}

@@ -1,0 +1,5 @@
+{ 
+    "constellation": "perf",
+    "explicit": true,
+    "runOnDevices": false
+}

@@ -1,0 +1,49 @@
+.dx-switch {
+    display: inline-block;
+    cursor: pointer;
+    .user-select(none);
+    .user-drag(none);
+}
+
+.dx-switch-wrapper {
+    display: inline-block;
+    text-align: left;
+    height: 100%;
+    width: 100%;
+
+    &:before {
+        display: inline-block;
+        height: 100%;
+        content: '';
+        vertical-align: middle;
+    }
+}
+
+.dx-switch-container {
+    display: inline-block;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.dx-switch-inner {
+    margin-left: -50px;
+}
+
+.dx-state-disabled {
+    &.dx-switch, .dx-switch {
+        cursor: default;
+    }
+}
+
+.dx-rtl {
+    &.dx-switch-inner, .dx-switch-inner {
+        margin-right: -50px;
+        margin-left: 0px;
+    }
+
+    &.dx-switch-wrapper, .dx-switch-wrapper {
+        text-align: right;
+    }
+}

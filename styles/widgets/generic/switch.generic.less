@@ -1,0 +1,163 @@
+.dx-size-default() {
+    @GENERIC_SWITCH_HEIGHT: 24px;
+    @GENERIC_SWITCH_WIDTH: 44px;
+    @GENERIC_SWITCH_HANDLE_WIDTH: 16px;
+    @GENERIC_SWITCH_HANDLE_OFFSET: 2px;
+    @GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 4px;
+    @GENERIC_SWITCH_FONT_SIZE: 9px;
+}
+
+.dx-size-compact() {
+    @GENERIC_SWITCH_HEIGHT: 18px;
+    @GENERIC_SWITCH_WIDTH: 36px;
+    @GENERIC_SWITCH_HANDLE_WIDTH: 14px;
+    @GENERIC_SWITCH_HANDLE_OFFSET: 1px;
+    @GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 3px;
+    @GENERIC_SWITCH_FONT_SIZE: 9px;
+}
+
+@GENERIC_SWITCH_BORDER_WEIGHT: 1px;
+@GENERIC_SWITCH_INNER_SIZE: @GENERIC_SWITCH_HEIGHT - @GENERIC_SWITCH_BORDER_WEIGHT*2;
+@GENERIC_SWITCH_ON_OFF_ADDING_PADDING: 2px;
+
+.dx-switch {
+    width: @GENERIC_SWITCH_WIDTH;
+    height: @GENERIC_SWITCH_HEIGHT;
+
+    &.dx-state-readonly {
+        .dx-switch-container {
+            border-color: @switch-readonly-border-color;
+            background-color: @switch-container-readonly-bg;
+        }
+    }
+
+    &.dx-state-active {
+        .dx-switch-handle:before {
+            background-color: @switch-handle-active-bg;
+        }
+
+        .dx-switch-container {
+            border-color: @switch-active-border-color;
+            background-color: @switch-container-active-bg;
+        }
+    }
+
+    &.dx-state-hover {
+        .dx-switch-handle:before {
+            background-color: @switch-handle-bg;
+        }
+
+        .dx-switch-container {
+            background-color: @switch-hover-bg;
+            border-color: @switch-hover-border-color;
+        }
+    }
+
+    &.dx-state-focused {
+        .box-shadow(none);
+
+        .dx-switch-container {
+            border-color: @switch-focused-border-color;
+        }
+
+        .dx-switch-handle:before {
+            background-color: @switch-handle-bg;
+        }
+
+        &.dx-state-active {
+            .dx-switch-handle:before {
+                background-color: @switch-handle-active-bg;
+            }
+        }
+    }
+}
+
+.dx-switch-container {
+    overflow: hidden;
+    margin: 0 -@GENERIC_SWITCH_CONTAINER_ADJUSTMENT 0 0;
+    height: @GENERIC_SWITCH_HEIGHT;
+    border: @GENERIC_SWITCH_BORDER_WEIGHT solid @switch-border-color;
+    background: @switch-bg;
+    .border-radius(@switch-border-radius);
+}
+
+.dx-switch-inner {
+    width: 200%;
+    height: 100%;
+}
+
+.dx-switch-on,
+.dx-switch-off {
+    float: left;
+    width: 50%;
+    padding-right: @GENERIC_SWITCH_HANDLE_WIDTH + @GENERIC_SWITCH_ON_OFF_ADDING_PADDING;
+    padding-left: @GENERIC_SWITCH_HANDLE_OFFSET;
+    line-height: @GENERIC_SWITCH_INNER_SIZE;
+    text-align: center;
+    font-size: @GENERIC_SWITCH_FONT_SIZE;
+    font-weight: 600;
+    .dx-overflow();
+    .box-sizing();
+}
+
+.dx-switch-off {
+    margin-left: -@GENERIC_SWITCH_HANDLE_OFFSET;
+    color: @switch-off-color;
+}
+
+.dx-switch-on {
+    color: @switch-on-color;
+}
+
+.dx-switch-handle {
+    position: relative;
+    float: left;
+    width: @GENERIC_SWITCH_HANDLE_WIDTH;
+    height: @GENERIC_SWITCH_INNER_SIZE - @GENERIC_SWITCH_HANDLE_OFFSET*2;
+    padding-right: @GENERIC_SWITCH_HANDLE_OFFSET;
+    margin-top: @GENERIC_SWITCH_HANDLE_OFFSET;
+    margin-left: -@GENERIC_SWITCH_HANDLE_WIDTH;
+    .box-sizing();
+
+    &:before {
+        display: block;
+        content: ' ';
+        width: 100%;
+        height: 100%;
+        background-color: @switch-handle-off-bg;
+        .border-radius(@switch-handle-border-radius);
+    }
+}
+
+.dx-switch-on-value {
+    .dx-switch-handle:before {
+        background-color: @switch-handle-bg;
+    }
+}
+
+.dx-rtl .dx-switch,
+.dx-switch.dx-rtl {
+    .dx-switch-on,
+    .dx-switch-off {
+        float: right;
+        padding-left: @GENERIC_SWITCH_HANDLE_WIDTH + @GENERIC_SWITCH_ON_OFF_ADDING_PADDING;
+        padding-right: @GENERIC_SWITCH_HANDLE_OFFSET;
+    }
+
+    .dx-switch-off {
+        margin-left: 0;
+        margin-right: -@GENERIC_SWITCH_HANDLE_OFFSET;
+    }
+
+    .dx-switch-handle {
+        float: right;
+        padding-left: @GENERIC_SWITCH_HANDLE_OFFSET;
+        padding-right: 0;
+        margin-left: 0;
+        margin-right: -@GENERIC_SWITCH_HANDLE_WIDTH;
+    }
+
+    .dx-switch-container {
+        margin: 0 0 0 -@GENERIC_SWITCH_CONTAINER_ADJUSTMENT;
+    }
+}

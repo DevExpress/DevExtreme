@@ -1,0 +1,29 @@
+@WIN8_DISABLED_OPACITY: .45;
+
+.dx-theme-marker {
+    font-family: @WIN8_THEME_MARKER;
+}
+
+.dx-base-typography() {
+    color: @WIN8_BASE_TEXT;
+    font-size: 11pt;
+    font-weight: 300;
+    font-family: Segoe UI, Helvetica, Arial, sans-serif;
+    line-height: 1.3636;
+
+    a {
+        text-decoration: underline;
+        color: @WIN8_LINK;
+    }
+
+    img {
+        border-style: none;
+    }
+}
+
+.disabled-widget(@opacity: @WIN8_DISABLED_OPACITY) {
+    opacity: @opacity;
+    .user-select(none);
+    zoom: 1;
+    cursor: default;
+}

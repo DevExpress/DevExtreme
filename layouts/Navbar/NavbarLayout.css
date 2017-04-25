@@ -1,0 +1,275 @@
+/* Layout */
+
+.navbar-layout,
+.navbar-layout-tablet {
+    height: 100%;
+    width: 100%;
+    position: relative;
+}
+
+.navbar-layout .layout-header {
+    position: absolute;
+    width: 100%;
+}
+
+.navbar-layout .layout-content {
+    position: absolute;
+    width: 100%;
+    overflow: hidden;
+}
+
+.navbar-layout .layout-content > div,
+.navbar-layout .transition-frame {
+    height: 100%;
+    width: 100%;
+}
+
+.navbar-layout .layout-footer {
+    width: 100%;
+    position: absolute;
+}
+
+.navbar-layout .view-footer {
+    position: static;
+}
+
+.navbar-layout .view-footer .dx-toolbar {
+    background: transparent;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.navbar-layout .view-footer .dx-toolbar .dx-toolbar-center {
+    width: 100%;
+}
+
+/* ios7 */
+
+.dx-theme-ios7 .navbar-layout .layout-header {
+    top: 0;
+    height: 44px;
+}
+
+.dx-theme-ios7 .navbar-layout .layout-content {
+    top: 44px;
+    bottom: 0;
+}
+
+.dx-theme-ios7 .navbar-layout.has-navbar .layout-content {
+    bottom: 59px;
+}
+
+.dx-theme-ios7 .navbar-layout.has-navbar .layout-footer {
+    height: 59px;
+    bottom: 0;
+}
+
+.dx-theme-ios7 .navbar-layout .view-footer .dx-toolbar {
+    height: 57px;
+}
+
+.dx-theme-ios7 .navbar-layout .view-footer .dx-button .dx-button-content .dx-button-text {
+    font-size: 20px;
+    line-height: 38px;
+}
+
+/* android5 */
+
+.dx-theme-android5 .navbar-layout .layout-header .dx-navbar {
+    top: 0;
+    height: 80px;
+}
+
+.dx-theme-android5 .navbar-layout .layout-content {
+    top: 0;
+    bottom: 0;
+}
+
+.dx-theme-android5 .navbar-layout.has-toolbar .layout-content {
+    bottom: 56px;
+}
+
+.dx-theme-android5 .navbar-layout.has-navbar .layout-content {
+    top: 80px;
+}
+
+.dx-theme-android5 .navbar-layout .layout-footer {
+    height: 56px;
+    bottom: -9999px;
+    left: -9999px;
+    visibility: hidden;
+}
+
+.dx-theme-android5 .navbar-layout.has-toolbar .layout-footer {
+    bottom: 0;
+    left: 0;
+    visibility: visible;
+}
+
+/* win8 */
+
+.dx-theme-win8 .navbar-layout-tablet {
+    height: 100%;
+}
+
+.dx-theme-win8 .navbar-layout-tablet .layout-header,
+.dx-theme-win8 .navbar-layout-tablet .layout-content {
+    position: static;
+    width: auto;
+}
+
+.dx-theme-win8 .navbar-layout-tablet .layout-content,
+.dx-theme-win8 .navbar-layout-tablet .layout-content .dx-content {
+    height: 100%;
+}
+
+.dx-theme-win8 .navbar-layout-tablet  {
+    display: -ms-grid;
+    -ms-grid-columns: 1fr;
+    -ms-grid-rows: 274px 1fr;
+    overflow: hidden;
+}
+
+.dx-theme-win8 .navbar-layout-tablet .layout-header {
+    -ms-grid-column: 1;
+    -ms-grid-row: 1;
+    height: 180px;
+    padding: 60px; /* #B230682 */
+}
+
+.dx-theme-win8 .navbar-layout-tablet .layout-header h1 {
+    margin-bottom: 40px;
+}
+
+.dx-theme-win8 .navbar-layout-tablet .layout-content-wrapper {
+    padding: 0 60px 60px 60px; /* #B230682 */
+    /* for IE */
+    -ms-grid-column: 1;
+    -ms-grid-row: 2;
+    /* end for IE */
+}
+
+.dx-theme-win8 .navbar-layout-tablet.dx-animating:not(.dx-enter):not(.dx-leave) {
+    display: none;
+}
+
+/* win10 */
+
+.dx-theme-win10 .navbar-layout-tablet {
+    height: 100%;
+}
+
+.dx-theme-win10 .navbar-layout-tablet .layout-header,
+.dx-theme-win10 .navbar-layout-tablet .layout-content {
+    position: static;
+    width: auto;
+}
+
+.dx-theme-win10 .navbar-layout-tablet .layout-content,
+.dx-theme-win10 .navbar-layout-tablet .layout-content .dx-content {
+    height: 100%;
+}
+
+.dx-theme-win10 .navbar-layout-tablet  {
+    display: -ms-grid;
+    -ms-grid-columns: 1fr;
+    -ms-grid-rows: 300px 1fr;
+    overflow: hidden;
+}
+
+.dx-theme-win10 .navbar-layout-tablet .layout-header {
+    -ms-grid-column: 1;
+    -ms-grid-row: 1;
+}
+
+.dx-theme-win10 .navbar-layout-tablet .layout-header .dx-content-placeholder-header {
+    padding: 60px 60px 0;
+}
+
+.dx-theme-win10 .navbar-layout-tablet .layout-header .navbar-container {
+    height: 80px;
+}
+
+.dx-theme-win10 .navbar-layout-tablet .layout-header h1 {
+    margin-bottom: 60px;
+}
+
+.dx-theme-win10 .navbar-layout-tablet .layout-content-wrapper {
+    padding: 0 60px 60px 60px;
+    /* for IE */
+    -ms-grid-column: 1;
+    -ms-grid-row: 2;
+    /* end for IE */
+}
+
+.dx-theme-win10 .navbar-layout-tablet.dx-animating:not(.dx-enter):not(.dx-leave),
+.dx-theme-win10 .navbar-layout.dx-animating:not(.dx-enter):not(.dx-leave) {
+    display: none;
+}
+
+.dx-theme-win10 .navbar-layout .layout-header {
+    top: 0;
+    height: 80px;
+}
+
+.dx-theme-win10 .navbar-layout .layout-content {
+    top: 80px;
+    bottom: 0;
+}
+
+.dx-theme-win10 .navbar-layout.has-toolbar .layout-content {
+    bottom: 48px;
+}
+
+.dx-theme-win10 .navbar-layout .layout-footer {
+    bottom: 0;
+    height: 48px;
+}
+
+
+/* generic */
+
+.dx-theme-generic .navbar-layout .layout-content {
+    top: 56px;
+    bottom: 0px;
+}
+
+.dx-theme-generic.dx-device-mobile .navbar-layout .layout-header {
+    height: 56px;
+}
+
+.dx-theme-generic.dx-device-mobile .navbar-layout .layout-header .dx-toolbar {
+    background: none;
+}
+
+.dx-theme-generic .navbar-layout .layout-header .dx-toolbar {
+    padding: 0 10px;
+}
+
+.dx-theme-generic .navbar-layout .layout-header .dx-toolbar-items-container {
+    height: 56px;
+}
+
+.dx-theme-generic .navbar-layout.has-navbar .layout-content {
+    bottom: 68px;
+}
+
+.dx-theme-generic .navbar-layout .layout-footer,
+.dx-theme-generic .navbar-layout .layout-footer .dx-navbar {
+    bottom: 0;
+    height: 68px;
+}
+
+.dx-theme-generic .navbar-layout.has-toolbar .layout-footer {
+    display: block;
+}
+
+.dx-theme-generic .navbar-layout .dx-tabs.dx-navbar {
+    padding: 0;
+}
+
+.dx-theme-generic .navbar-layout .view-footer .dx-button {
+    width: 97%;
+    overflow: visible;
+}
+

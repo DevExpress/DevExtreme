@@ -1,0 +1,9 @@
+.dx-draggable {
+    left: 0;
+    cursor: pointer;
+    .user-select(none);
+
+    &.dx-state-disabled, .dx-state-disabled & {
+        cursor: default;
+    }
+}

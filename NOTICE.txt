@@ -1,0 +1,33 @@
+The following open source libraries are used and included within this product:
+
+jQuery JavaScript Library (Open Source - MIT License)
+Copyright (C) jQuery Foundation and other contributors
+http://jquery.com/
+
+Knockout JavaScript Library (Open Source - MIT License)
+Copyright (C) Knockoutjs.com
+http://knockoutjs.com/
+http://opensource.org/licenses/mit-license.php
+
+Globalize JavaScript Library (Open Source - MIT License)
+Copyright (C) jQuery Foundation and other contributors
+http://jquery.org/license
+
+cldrjs JavaScript Library (Open Source - MIT License)
+Copyright (C) Rafael Xavier de Souza
+http://rafael.xavier.blog.br
+https://github.com/rxaviers/cldrjs/blob/master/LICENSE-MIT
+
+CLDR - Unicode Common Locale Data Repository
+Copyright (C) 1991-2017 Unicode, Inc
+http://unicode.org/copyright.html
+
+AngularJS JavaScript Library (Open Source - MIT License)
+Copyright (C) Google, Inc.
+http://angularjs.org/
+
+JSZip JavaScript Library (Open Source - MIT License)
+Copyright (C) Stuart Knightley, David Duponchel, Franz Buchinger, António Afonso
+https://stuk.github.io/jszip/
+
+The open source libraries included in this product are done so pursuant to each individual open source library license and subject to the disclaimers and limitations on liability set forth in each open source library license.

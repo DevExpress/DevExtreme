@@ -1,0 +1,91 @@
+@NUMBERBOX_SPIN_CONTAINER_WIDTH: 25px;
+@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 50px;
+@TEXTEDITOR_CLEAR_BUTTON_AREA: 27px;
+@ANDROID5_NUMBERBOX_SPIN_ICON_SIZE: 11.5px;
+
+.dx-numberbox-spin-container {
+    padding: 4px 0;
+    width: @NUMBERBOX_SPIN_CONTAINER_WIDTH;
+}
+
+.dx-numberbox-spin-up-icon {
+    .dx-icon-spinup;
+
+    .dx-numberbox-spin-touch-friendly & {
+        &:before {
+            margin-left: -@ANDROID5_NUMBERBOX_SPIN_ICON_SIZE;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.dx-numberbox-spin-down-icon {
+    .dx-icon-spindown;
+}
+
+.dx-numberbox-spin-up-icon,
+.dx-numberbox-spin-down-icon {
+    .dx-icon-font-centered-sizing(@ANDROID5_NUMBERBOX_SPIN_ICON_SIZE);
+
+    &:before {
+        font-size: 21px;
+        color: @ANDROID5_DARK_ICON_COLOR;
+    }
+}
+
+.dx-numberbox-spin-touch-friendly {
+    .dx-numberbox-spin-container {
+        width: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+    }
+}
+
+.dx-numberbox-spin {
+    .validation-icon-position(@NUMBERBOX_SPIN_CONTAINER_WIDTH);
+
+    &.dx-show-clear-button:not(.dx-texteditor-empty) {
+        .validation-icon-position(@NUMBERBOX_SPIN_CONTAINER_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_AREA + @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT);
+    }
+
+    .dx-show-clear-button .dx-texteditor-input {
+        padding-right: @NUMBERBOX_SPIN_CONTAINER_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_AREA + @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+    }
+}
+
+.dx-numberbox-spin-touch-friendly {
+    .validation-icon-position(@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH);
+
+    &.dx-show-clear-button:not(.dx-texteditor-empty) {
+        .validation-icon-position(@TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_AREA + @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT);
+    }
+
+    .dx-show-clear-button .dx-texteditor-input {
+        padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_AREA + @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+    }
+}
+
+.dx-state-active {
+    &.dx-numberbox-spin-button {
+        opacity: .6;
+    }
+}
+
+.dx-rtl {
+    .dx-numberbox-spin,
+    &.dx-numberbox-spin {
+        &.dx-numberbox-spin-touch-friendly.dx-show-clear-button .dx-texteditor-input {
+            padding-left: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_AREA + @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+        }
+
+        &.dx-show-clear-button .dx-texteditor-input {
+            padding-left: @NUMBERBOX_SPIN_CONTAINER_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+        }
+
+        .dx-texteditor-input {
+            padding-right: 0;
+        }
+    }
+}
