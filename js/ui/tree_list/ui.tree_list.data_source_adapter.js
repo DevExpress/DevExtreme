@@ -347,18 +347,19 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             this.callBase(options);
         },
 
-        _fillNodes: function(nodes, options, level) {
+        _fillNodes: function(nodes, options, expandedRowsData, level) {
             level = level || 0;
             for(var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
                 //node.hasChildren = false;
-                this._fillNodes(nodes[i].children, options, level + 1);
+                this._fillNodes(nodes[i].children, options, expandedRowsData, level + 1);
 
                 node.level = level;
                 node.hasChildren = this._calculateHasItems(node, options);
 
                 if(node.visible && node.hasChildren && options.expandVisibleNodes) {
-                    this.option("expandedRowKeys").push(node.key);
+                    expandedRowsData.keys.push(node.key);
+                    expandedRowsData.isKeysUpdated = true;
                 }
 
                 if(node.visible || node.hasChildren) {
@@ -368,7 +369,11 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         },
 
         _processTreeStructure: function(options, visibleItems) {
-            var data = options.data;
+            var data = options.data,
+                expandedRowsData = {
+                    keys: this.option("expandedRowKeys"),
+                    isKeysUpdated: false
+                };
 
             if(options.fullData && options.fullData.length > options.data.length) {
                 data = options.fullData;
@@ -380,9 +385,12 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 options.data = $.Deferred().reject(errors.Error("E1046", this.getKeyExpr()));
                 return;
             }
-            this._fillNodes(this._rootNode.children, options);
+            this._fillNodes(this._rootNode.children, options, expandedRowsData);
 
             this._isNodesInitializing = true;
+            if(expandedRowsData.isKeysUpdated) {
+                this.option("expandedRowKeys", expandedRowsData.keys);
+            }
             this.executeAction("onNodesInitialized", { root: this._rootNode });
             this._isNodesInitializing = false;
 
@@ -473,13 +481,16 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         },
 
         _changeRowExpandCore: function(key) {
-            var indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, this.option("expandedRowKeys"), null);
+            var expandedRowKeys = this.option("expandedRowKeys"),
+                indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, expandedRowKeys, null);
 
             if(indexExpandedNodeKey < 0) {
-                this.option("expandedRowKeys").push(key);
+                expandedRowKeys.push(key);
             } else {
-                this.option("expandedRowKeys").splice(indexExpandedNodeKey, 1);
+                expandedRowKeys.splice(indexExpandedNodeKey, 1);
             }
+
+            this.option("expandedRowKeys", expandedRowKeys);
         },
 
         changeRowExpand: function(key) {
