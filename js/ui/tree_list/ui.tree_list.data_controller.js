@@ -167,7 +167,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                     break;
                 case "expandedRowKeys":
                 case "onNodesInitialized":
-                    this._dataSource && this._dataSource.load();
+                    this._dataSource && !this._dataSource._isNodesInitializing && this._dataSource.load();
                     args.handled = true;
                     break;
                 default:
