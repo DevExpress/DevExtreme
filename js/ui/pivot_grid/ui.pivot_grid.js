@@ -1749,6 +1749,7 @@ var PivotGrid = Widget.inherit({
 
                 if(!hasColumnsScroll && hasRowsScroll && scrollBarWidth) {
                     adjustSizeArray(resultWidths, scrollBarWidth);
+                    totalWidth -= scrollBarWidth;
                 }
 
                 if(descriptionCellHeight > columnsAreaHeight) {
