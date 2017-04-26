@@ -24,14 +24,45 @@
 </head>
 
 <body>
-    <div id="button"></div>
+    <div id="scheduler"></div>
 
     <script>
         $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
+            var data = [
+    {
+        text: "Website Re-Design Plan",
+        ownerId: [4],
+        startDate: new Date(2015, 4, 25, 9, 30),
+        endDate: new Date(2015, 4, 25, 11, 30)
+    }, {
+        text: "Book Flights to San Fran for Sales Trip",
+        ownerId: [2],
+        startDate: new Date(2015, 4, 25, 12, 0),
+        endDate: new Date(2015, 4, 25, 13, 0),
+        allDay: true
+    }, {
+        text: "Install New Router in Dev Room",
+        ownerId: [1],
+        startDate: new Date(2015, 4, 25, 14, 30),
+        endDate: new Date(2015, 4, 25, 15, 30)
+    }, {
+        text: "Approve Personal Computer Upgrade Plan",
+        ownerId: [3],
+        startDate: new Date(2015, 4, 26, 10, 0),
+        endDate: new Date(2015, 4, 26, 11, 0)
+    }];
+            var scheduler = $("#scheduler").dxScheduler({
+        dataSource: data,
+        views: ["agenda", "month", "week", "workWeek", "day"],
+        currentView: "workWeek",
+        currentDate: new Date(2015, 4, 25),
+        useDropDownViewSwitcher: false,
+        firstDayOfWeek: 0,
+        startDayHour: 8,
+        endDayHour: 19,
+        width: "100%",
+        height: 600
+    }).dxScheduler("instance");
         });
     </script>
 </body>
