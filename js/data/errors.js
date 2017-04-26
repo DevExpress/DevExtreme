@@ -153,7 +153,13 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     * @name Errors and Warnings_W4001
     * @publicName W4001
     */
-    W4001: "The {0} field is listed in both \"keyType\" and \"fieldTypes\". The value of \"fieldTypes\" is used."
+    W4001: "The {0} field is listed in both \"keyType\" and \"fieldTypes\". The value of \"fieldTypes\" is used.",
+
+    /**
+    * @name Errors and Warnings_W4002
+    * @publicName W4002
+    */
+    W4002: "Data loading has failed for some cells due to the following error: {0}"
 });
 
 // todo: add some logic

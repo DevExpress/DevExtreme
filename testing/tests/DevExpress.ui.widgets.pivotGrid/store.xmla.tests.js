@@ -12,6 +12,7 @@ var $ = require("jquery"),
     pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
     pivotGridDataSource = require("ui/pivot_grid/data_source"),
     Store = require("ui/pivot_grid/xmla_store"),
+    errors = require("data/errors").errors,
     testEnvironment = {
         beforeEach: function() {
             this.store = new Store(this.dataSource);
@@ -89,6 +90,7 @@ var $ = require("jquery"),
     stubsEnvironment = {
         beforeEach: function() {
             var that = this;
+            sinon.spy(errors, "log");
 
             testEnvironment.beforeEach.call(that);
             that.sendDeferred = $.Deferred();
@@ -99,6 +101,7 @@ var $ = require("jquery"),
         },
         afterEach: function() {
             this.sendRequest.restore();
+            errors.log.restore();
             //testEnvironment.afterEach.call(this);
         },
         dataSource: testEnvironment.dataSource,
@@ -3540,6 +3543,61 @@ QUnit.test("Parse error response on load", function(assert) {
         .fail(function(error) {
             assert.ok(error.message.indexOf("Query (1, 77) The Fiscal hierarchy is used more than once in the Crossjoin function.") > -1);
         });
+});
+
+QUnit.test("T504918. Error in cell", function(assert) {
+    this.sendDeferred.resolve('<root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><Axes><Axis name="Axis0"><Tuples><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Fact Product Sales Count]</UName><Caption>Fact Product Sales Count</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>0</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Fact Product Sales Count</MEMBER_VALUE></Member></Tuple><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Product Actual Cost]</UName><Caption>Product Actual Cost</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>131072</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Product Actual Cost</MEMBER_VALUE></Member></Tuple></Tuples></Axis><Axis name="SlicerAxis"><Tuples><Tuple><Member Hierarchy="[Dim Stores].[Store ID]"><UName>[Dim Stores].[Store ID].[All]</UName><Caption>All</Caption><LName>[Dim Stores].[Store ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Sales Person].[Sales Person ID]"><UName>[Dim Sales Person].[Sales Person ID].[All]</UName><Caption>All</Caption><LName>[Dim Sales Person].[Sales Person ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Customer].[Customer ID]"><UName>[Dim Customer].[Customer ID].[All]</UName><Caption>All</Caption><LName>[Dim Customer].[Customer ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Key]"><UName>[Dim Product].[Product Key].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Name]"><UName>[Dim Product].[Product Name].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Hierarchy]"><UName>[Dim Date].[Hierarchy].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Hierarchy].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Date Key]"><UName>[Dim Date].[Date Key].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Date Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Full Date UK]"><UName>[Dim Date].[Full Date UK].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Full Date UK].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month]"><UName>[Dim Date].[Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month Name]"><UName>[Dim Date].[Month Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter]"><UName>[Dim Date].[Quarter].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter Name]"><UName>[Dim Date].[Quarter Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Week Of Month]"><UName>[Dim Date].[Week Of Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Week Of Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Year]"><UName>[Dim Date].[Year].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Year].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Time].[Time Key]"><UName>[Dim Time].[Time Key].[All]</UName><Caption>All</Caption><LName>[Dim Time].[Time Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member></Tuple></Tuples></Axis></Axes><CellData><Cell CellOrdinal="0"><Value xsi:type="xsd:int">25</Value><Language>1033</Language></Cell><Cell CellOrdinal="1"><Value><Error><ErrorCode>3238658133</ErrorCode><Description>Read access to the cell is denied.</Description></Error></Value></Cell></CellData></root>');
+    this.store.load({
+        columns: [],
+        rows: [],
+        values: [
+            { dataField: "[Measures].[Fact Product Sales Count]" },
+			{ dataField: "[Measures].[Product Actual Cost]" }
+        ]
+    }).done(function(data) {
+        assert.deepEqual(data.values, [[[25, "#N/A"]]], "cell data");
+        assert.equal(errors.log.callCount, 1);
+        assert.deepEqual(errors.log.lastCall.args, ["W4002", "Read access to the cell is denied."]);
+    }).fail(function() {
+        assert.ok(false);
+    });
+});
+
+QUnit.test("Same errors in defferent cells", function(assert) {
+    this.sendDeferred.resolve('<root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><Axes><Axis name="Axis0"><Tuples><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Fact Product Sales Count]</UName><Caption>Fact Product Sales Count</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>0</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Fact Product Sales Count</MEMBER_VALUE></Member></Tuple><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Product Actual Cost]</UName><Caption>Product Actual Cost</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>131072</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Product Actual Cost</MEMBER_VALUE></Member></Tuple></Tuples></Axis><Axis name="SlicerAxis"><Tuples><Tuple><Member Hierarchy="[Dim Stores].[Store ID]"><UName>[Dim Stores].[Store ID].[All]</UName><Caption>All</Caption><LName>[Dim Stores].[Store ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Sales Person].[Sales Person ID]"><UName>[Dim Sales Person].[Sales Person ID].[All]</UName><Caption>All</Caption><LName>[Dim Sales Person].[Sales Person ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Customer].[Customer ID]"><UName>[Dim Customer].[Customer ID].[All]</UName><Caption>All</Caption><LName>[Dim Customer].[Customer ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Key]"><UName>[Dim Product].[Product Key].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Name]"><UName>[Dim Product].[Product Name].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Hierarchy]"><UName>[Dim Date].[Hierarchy].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Hierarchy].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Date Key]"><UName>[Dim Date].[Date Key].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Date Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Full Date UK]"><UName>[Dim Date].[Full Date UK].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Full Date UK].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month]"><UName>[Dim Date].[Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month Name]"><UName>[Dim Date].[Month Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter]"><UName>[Dim Date].[Quarter].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter Name]"><UName>[Dim Date].[Quarter Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Week Of Month]"><UName>[Dim Date].[Week Of Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Week Of Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Year]"><UName>[Dim Date].[Year].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Year].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Time].[Time Key]"><UName>[Dim Time].[Time Key].[All]</UName><Caption>All</Caption><LName>[Dim Time].[Time Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member></Tuple></Tuples></Axis></Axes><CellData><Cell CellOrdinal="0"><Value><Error><ErrorCode>3238658133</ErrorCode><Description>Read access to the cell is denied.</Description></Error></Value><Language>1033</Language></Cell><Cell CellOrdinal="1"><Value><Error><ErrorCode>3238658133</ErrorCode><Description>Read access to the cell is denied.</Description></Error></Value></Cell></CellData></root>');
+    this.store.load({
+        columns: [],
+        rows: [],
+        values: [
+            { dataField: "[Measures].[Fact Product Sales Count]" },
+			{ dataField: "[Measures].[Product Actual Cost]" }
+        ]
+    }).done(function(data) {
+        assert.deepEqual(data.values, [[["#N/A", "#N/A"]]], "cell data");
+        assert.equal(errors.log.callCount, 1);
+        assert.deepEqual(errors.log.lastCall.args, ["W4002", "Read access to the cell is denied."]);
+    }).fail(function() {
+        assert.ok(false);
+    });
+});
+
+QUnit.test("Differrent errors in defferent cells", function(assert) {
+    this.sendDeferred.resolve('<root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><Axes><Axis name="Axis0"><Tuples><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Fact Product Sales Count]</UName><Caption>Fact Product Sales Count</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>0</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Fact Product Sales Count</MEMBER_VALUE></Member></Tuple><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Product Actual Cost]</UName><Caption>Product Actual Cost</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>131072</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Product Actual Cost</MEMBER_VALUE></Member></Tuple></Tuples></Axis><Axis name="SlicerAxis"><Tuples><Tuple><Member Hierarchy="[Dim Stores].[Store ID]"><UName>[Dim Stores].[Store ID].[All]</UName><Caption>All</Caption><LName>[Dim Stores].[Store ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Sales Person].[Sales Person ID]"><UName>[Dim Sales Person].[Sales Person ID].[All]</UName><Caption>All</Caption><LName>[Dim Sales Person].[Sales Person ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Customer].[Customer ID]"><UName>[Dim Customer].[Customer ID].[All]</UName><Caption>All</Caption><LName>[Dim Customer].[Customer ID].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Key]"><UName>[Dim Product].[Product Key].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Product].[Product Name]"><UName>[Dim Product].[Product Name].[All]</UName><Caption>All</Caption><LName>[Dim Product].[Product Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Hierarchy]"><UName>[Dim Date].[Hierarchy].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Hierarchy].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Date Key]"><UName>[Dim Date].[Date Key].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Date Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Full Date UK]"><UName>[Dim Date].[Full Date UK].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Full Date UK].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month]"><UName>[Dim Date].[Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Month Name]"><UName>[Dim Date].[Month Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Month Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter]"><UName>[Dim Date].[Quarter].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Quarter Name]"><UName>[Dim Date].[Quarter Name].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Quarter Name].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Week Of Month]"><UName>[Dim Date].[Week Of Month].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Week Of Month].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Date].[Year]"><UName>[Dim Date].[Year].[All]</UName><Caption>All</Caption><LName>[Dim Date].[Year].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member><Member Hierarchy="[Dim Time].[Time Key]"><UName>[Dim Time].[Time Key].[All]</UName><Caption>All</Caption><LName>[Dim Time].[Time Key].[(All)]</LName><LNum>0</LNum><DisplayInfo>1000</DisplayInfo></Member></Tuple></Tuples></Axis></Axes><CellData><Cell CellOrdinal="0"><Value><Error><ErrorCode>323865234</ErrorCode><Description>Unknown Error.</Description></Error></Value><Language>1033</Language></Cell><Cell CellOrdinal="1"><Value><Error><ErrorCode>3238658133</ErrorCode><Description>Read access to the cell is denied.</Description></Error></Value></Cell></CellData></root>');
+    this.store.load({
+        columns: [],
+        rows: [],
+        values: [
+            { dataField: "[Measures].[Fact Product Sales Count]" },
+			{ dataField: "[Measures].[Product Actual Cost]" }
+        ]
+    }).done(function(data) {
+        assert.deepEqual(data.values, [[["#N/A", "#N/A"]]], "cell data");
+        assert.equal(errors.log.callCount, 2);
+        assert.deepEqual(errors.log.getCall(0).args, ["W4002", "Unknown Error."]);
+        assert.deepEqual(errors.log.getCall(1).args, ["W4002", "Read access to the cell is denied."]);
+    }).fail(function() {
+        assert.ok(false);
+    });
 });
 
 QUnit.test("Parse time type cell data", function(assert) {

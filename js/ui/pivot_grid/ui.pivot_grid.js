@@ -650,7 +650,14 @@ var PivotGrid = Widget.inherit({
                  * @type string
                  * @default "Export to Excel file"
                  */
-                exportToExcel: messageLocalization.format("dxDataGrid-exportToExcel")
+                exportToExcel: messageLocalization.format("dxDataGrid-exportToExcel"),
+                /**
+                 * @name dxPivotGridOptions_texts_dataNotAvailable
+                 * @publicName dataNotAvailable
+                 * @type string
+                 * @default "N/A"
+                 */
+                dataNotAvailable: messageLocalization.format("dxPivotGrid-dataNotAvailable")
             },
             /**
             * @name dxPivotGridOptions_onCellClick
