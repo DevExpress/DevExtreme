@@ -5,7 +5,9 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     inArray = require("../../core/utils/array").inArray,
     errors = require("../widget/ui.errors"),
-    messageLocalization = require("../../localization/message");
+    messageLocalization = require("../../localization/message"),
+
+    WIDGET_WITH_LEGACY_CONTAINER_NAME = "dxDataGrid";
 
 var CallBacks = function(options) {
     options = options || {};
@@ -196,6 +198,12 @@ var ModuleItem = Class.inherit({
         var componentName = this.component.NAME;
 
         return "dx-" + componentName.slice(2).toLowerCase() + (className ? "-" + className : "");
+    },
+
+    getWidgetContainerClass: function() {
+        var containerName = this.component.NAME === WIDGET_WITH_LEGACY_CONTAINER_NAME ? null : "container";
+
+        return this.addWidgetPrefix(containerName);
     }
 });
 

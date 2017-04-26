@@ -283,7 +283,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                         }
                     });
 
-                    return contentElement.addClass(that.addWidgetPrefix());
+                    return contentElement.addClass(that.getWidgetContainerClass());
                 },
                 onShown: function(e) {
                     var $editor = e.component.content().find("." + EDITOR_CONTAINER_CLASS).first();
@@ -461,7 +461,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 integrationOptions: {},
                 activeStateEnabled: false,
                 selectionMode: "single",
-                cssClass: that.addWidgetPrefix() + " " + CELL_FOCUS_DISABLED_CLASS + " " + FILTER_MENU,
+                cssClass: that.getWidgetContainerClass() + " " + CELL_FOCUS_DISABLED_CLASS + " " + FILTER_MENU,
                 showFirstSubmenuMode: "onHover",
                 hideSubmenuOnMouseLeave: true,
                 items: [{

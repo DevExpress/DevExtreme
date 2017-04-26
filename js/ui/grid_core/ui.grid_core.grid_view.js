@@ -325,7 +325,7 @@ var ResizingController = modules.ViewController.inherit({
             importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
 
         if(that._hasHeight === undefined && $rootElement && $rootElement.is(":visible")) {
-            $groupElement = $rootElement.children("." + that.addWidgetPrefix());
+            $groupElement = $rootElement.children("." + that.getWidgetContainerClass());
             if($groupElement.length) {
                 $groupElement.detach();
             }
@@ -573,7 +573,7 @@ var GridView = modules.View.inherit({
     render: function($rootElement) {
         var that = this,
             isFirstRender = !that._groupElement,
-            $groupElement = that._groupElement || $("<div>").addClass(that.addWidgetPrefix());
+            $groupElement = that._groupElement || $("<div>").addClass(that.getWidgetContainerClass());
 
         $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option("showBorders"));
 

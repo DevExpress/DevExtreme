@@ -243,7 +243,7 @@ module.exports = {
                         that.callBase.apply(that, arguments);
 
                         if(that._isFixedColumns && options.rowType === "detail" && options.column.command === "detail") {
-                            $cell.find("." + that.addWidgetPrefix()).each(function() {
+                            $cell.find("." + that.getWidgetContainerClass()).each(function() {
                                 var dataGrid = $(this).parent().data("dxDataGrid");
 
                                 if(dataGrid) {
