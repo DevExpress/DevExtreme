@@ -198,6 +198,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _init: function() {
+        this._selectedItemContentRendered = false;
         this.callBase();
         this.element().addClass(SLIDEOUT_CLASS);
         this._initSlideOutView();
@@ -315,6 +316,7 @@ var SlideOut = CollectionWidget.inherit({
             selectedIndex = this.option("selectedIndex");
 
         if(items.length && selectedIndex > -1) {
+            this._selectedItemContentRendered = true;
             var selectedItem = this._list.getItemByIndex(selectedIndex);
             this._renderItems([selectedItem]);
         }
@@ -380,8 +382,7 @@ var SlideOut = CollectionWidget.inherit({
                 break;
             case "items":
                 this._changeMenuOption("items", this.option("items"));
-
-                if(!args.previousValue.length && this._dataSource) {
+                if(!this._selectedItemContentRendered) {
                     this._renderSelection();
                 }
                 break;
