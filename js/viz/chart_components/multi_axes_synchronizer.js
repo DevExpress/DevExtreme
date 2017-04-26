@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     debug = require("../../core/utils/console").debug,
-    Range = require("../translators/range").Range,
     commonUtils = require("../../core/utils/common"),
     vizUtils = require("../core/utils"),
     _adjustValue = vizUtils.adjustValue,
@@ -31,18 +30,6 @@ var getValueAxesPerPanes = function(valueAxes) {
     });
 
     return result;
-};
-
-var restoreOriginalBusinessRange = function(axis) {
-    var businessRange,
-        translator = axis.getTranslator();
-
-    if(!translator._originalBusinessRange) {
-        translator._originalBusinessRange = new Range(translator.getBusinessRange());
-    } else {
-        businessRange = new Range(translator._originalBusinessRange);
-        translator.updateBusinessRange(businessRange);
-    }
 };
 
 var linearConverter = {
@@ -112,7 +99,6 @@ var convertAxisInfo = function(axisInfo, converter) {
 
 var populateAxesInfo = function(axes) {
     return _map(axes, function(axis) {
-        restoreOriginalBusinessRange(axis);
         var ticksValues = axis.getTicksValues(),
             majorTicks = ticksValues.majorTicksValues,
             options = axis.getOptions(),

@@ -36,16 +36,7 @@ var baseRangeSeries = {
         options.tagField = that.getTagField() + name;
     },
 
-    _processRange: function(point, prevPoint) {
-        rangeCalculator.processTwoValues(this, point, prevPoint, "value", "minValue");
-    },
-
-    _getRangeData: function(zoomArgs, calcIntervalFunction) {
-        rangeCalculator.calculateRangeData(this, zoomArgs, calcIntervalFunction, "value", "minValue");
-        rangeCalculator.addRangeSeriesLabelPaddings(this);
-
-        return this._rangeData;
-    },
+    getValueRangeInitialValue: scatterSeries.getValueRangeInitialValue,
 
     _getPointData: function(data, options) {
         return {
@@ -69,6 +60,10 @@ var baseRangeSeries = {
 
     getValueFields: function() {
         return [this._options.rangeValue1Field || "val1", this._options.rangeValue2Field || "val2"];
+    },
+
+    _processRange: function(range) {
+        rangeCalculator.addRangeSeriesLabelPaddings(this, range.val);
     }
 };
 

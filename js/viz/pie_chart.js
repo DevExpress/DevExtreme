@@ -87,34 +87,40 @@ var dxPieChart = BaseChart.inherit({
         };
     },
 
-    _populateBusinessRange: function() {
-        var businessRanges = [],
-            series = this.series,
-            singleSeriesRange;
+    _getArgumentAxis: function() {
+        return null;
+    },
 
-        this.businessRanges = null;
-        _each(series, function(_, singleSeries) {
+    _getValueAxis: function() {
+        var translator = (new translator1DModule.Translator1D())
+            .setCodomain(360, 0);
+
+        return {
+            getTranslator: function() {
+                return translator;
+            },
+            setBusinessRange: function(range) {
+                translator.setDomain(range.min, range.max);
+            }
+        };
+    },
+
+    _populateBusinessRange: function() {
+        this.businessRanges = this.series.map(function(series) {
             var range = new rangeModule.Range();
-            singleSeriesRange = singleSeries.getRangeData();
-            range.addRange(singleSeriesRange.val);
+            range.addRange(series.getRangeData().val);
             if(!range.isDefined()) {
                 range.setStubData();
             }
-            businessRanges.push(range);
+            series.getValueAxis().setBusinessRange(range);
+            return range;
         });
-        this.businessRanges = businessRanges;
     },
 
     _specialProcessSeries: function() {
         _each(this.series, function(_, singleSeries) {
             singleSeries.arrangePoints();
         });
-    },
-
-    _createTranslator: function(range) {
-        return (new translator1DModule.Translator1D())
-            .setDomain(range.min, range.max)
-            .setCodomain(360, 0);
     },
 
     _checkPaneName: function() {
@@ -155,14 +161,8 @@ var dxPieChart = BaseChart.inherit({
         return items;
     },
 
-    _getAxisDrawingMethods: _noop,
-
     _getLayoutTargets: function() {
         return [{ canvas: this._canvas }];
-    },
-
-    _getAxesForTransform: function() {
-        return { verticalAxes: [], horizontalAxes: [] };
     },
 
     _getLayoutSeries: function(series, drawOptions) {
@@ -172,9 +172,9 @@ var dxPieChart = BaseChart.inherit({
             drawnLabels = false;
 
         layout = that.layoutManager.applyPieChartSeriesLayout(canvas, series, true);
-        series.forEach(function(singleSeries, i) {
+        series.forEach(function(singleSeries) {
             singleSeries.correctPosition(layout, canvas);
-            drawnLabels = singleSeries.drawLabelsWOPoints(that._createTranslator(that.businessRanges[i])) || drawnLabels;
+            drawnLabels = singleSeries.drawLabelsWOPoints() || drawnLabels;
         });
 
         if(drawnLabels) {
@@ -238,10 +238,6 @@ var dxPieChart = BaseChart.inherit({
         }
 
         this._renderSeriesElements(drawOptions, isRotated, isLegendInside);
-    },
-
-    _prepareTranslators: function(_, i) {
-        return this._createTranslator(this.businessRanges[i]);
     },
 
     _getLegendCallBack: function() {

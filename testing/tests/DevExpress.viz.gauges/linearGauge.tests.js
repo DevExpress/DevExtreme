@@ -9,8 +9,7 @@ var $ = require("jquery"),
     axisModule = require("viz/axes/base_axis"),
     Class = require("core/class"),
     rangeModule = require("viz/translators/range"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    translator2DModule = require("viz/translators/translator2d");
+    rendererModule = require("viz/core/renderers/renderer");
 
 $('<div id="test-container">').appendTo("#qunit-fixture");
 
@@ -105,8 +104,7 @@ var TestPointerElement = TestElement.inherit({
 });
 
 (function linearGauge() {
-    var stubTranslator = vizMocks.stubClass(translator2DModule.Translator2D),
-        stubRange = vizMocks.stubClass(rangeModule.Range);
+    var stubRange = vizMocks.stubClass(rangeModule.Range);
 
     rendererModule.Renderer = sinon.stub();
 
@@ -129,14 +127,6 @@ var TestPointerElement = TestElement.inherit({
         return new stubRange(parameters);
     });
 
-    sinon.stub(translator2DModule, "Translator2D", function(range, canvas, options) {
-        var translator = new stubTranslator(range, canvas, options);
-        sinon.stub(translator, "getBusinessRange", function() {
-            return range;
-        });
-        return translator;
-    });
-
     var environment = {
         beforeEach: function() {
             this.renderer = new vizMocks.Renderer();
@@ -149,7 +139,6 @@ var TestPointerElement = TestElement.inherit({
             this.container.remove();
             axisModule.Axis.reset();
             rangeModule.Range.reset();
-            translator2DModule.Translator2D.reset();
             rendererModule.Renderer.reset();
             this.renderer = null;
             delete this.container;
@@ -161,13 +150,12 @@ var TestPointerElement = TestElement.inherit({
     QUnit.test("Gauge creation", function(assert) {
         new dxLinearGauge(this.container, {});
 
+        var range = rangeModule.Range.getCall(0).returnValue,
+            scale = axisModule.Axis.getCall(0).returnValue;
+
         assert.strictEqual(rendererModule.Renderer.firstCall.args[0]["cssClass"], "dxg dxg-linear-gauge", "root class");
-
-        assert.deepEqual(translator2DModule.Translator2D.getCall(0).args[0], rangeModule.Range.getCall(0).returnValue, "range for first translator");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).args[0], rangeModule.Range.getCall(0).returnValue, "range for second translator");
-
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).args[1], { bottom: 0, top: 0, left: 0, right: 0, height: 600, width: 800 }, "canvas for second translator");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).args[1], { bottom: 0, top: 0, left: 0, right: 0, height: 600, width: 800 }, "canvas for second translator");
+        assert.deepEqual(scale.setBusinessRange.lastCall.args[0], range, "range passed to scale");
+        assert.deepEqual(scale.draw.getCall(0).args[0], { bottom: 0, top: 0, left: 0, right: 0, height: 600, width: 800 }, "canvas passed to scale");
     });
 
     QUnit.test("Ticks indent with negative value. Horizontal. Top vertical orientation of ticks", function(assert) {
@@ -260,38 +248,6 @@ var TestPointerElement = TestElement.inherit({
         assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].label.indentFromAxis, -45, "indent");
     });
 
-    QUnit.test("Get component for vertical gauge", function(assert) {
-        var argTranslator,
-            valTranslator;
-
-        new dxLinearGauge(this.container, {
-            geometry: {
-                orientation: "vertical"
-            }
-        });
-
-        valTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
-        argTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
-
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.setTranslator.getCall(0).args, [valTranslator, argTranslator], "translators");
-    });
-
-    QUnit.test("Get component for horizontal gauge", function(assert) {
-        var argTranslator,
-            valTranslator;
-
-        new dxLinearGauge(this.container, {
-            geometry: {
-                orientation: "horizontal"
-            }
-        });
-
-        valTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
-        argTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
-
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.setTranslator.getCall(0).args, [argTranslator, valTranslator], "translators");
-    });
-
     QUnit.module("HorizontalGauge - positioning of elements", environment);
 
     QUnit.test("Default", function(assert) {
@@ -329,26 +285,18 @@ var TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, 289, "sub pointers set y");
 
         var scale = axisModule.Axis.getCall(0).returnValue;
-        assert.deepEqual(scale.shift.getCall(0).args, [0, 294], "shift scale");
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: 0, top: -294 }], "shift scale");
         assert.equal(scale.draw.callCount, 2, "draw scale");
-        assert.equal(scale.setTranslator.callCount, 2, "draw scale");
         assert.equal(scale.measureLabels.callCount, 2, "measure labels of scale");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 0,
             height: 600,
             left: 17,
             right: 17,
             top: 0,
             width: 800
-        }, "new canvas for translator");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(0).returnValue.stub("updateCanvas").getCall(0).args[0], {
-            bottom: 0,
-            height: 600,
-            left: 17,
-            right: 17,
-            top: 0,
-            width: 800
-        }, "new canvas for additional translator");
+        }, "new canvas for scale");
+
     });
 
     QUnit.test("Scale vertical orientation = middle", function(assert) {
@@ -374,16 +322,17 @@ var TestPointerElement = TestElement.inherit({
                 indent: 17
             }
         });
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.shift.getCall(0).args, [0, 295], "scale shifting");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: 0, top: -295 }], "scale shifting");
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 0,
             height: 600,
             left: 15,
             right: 15,
             top: 0,
             width: 800
-        }, "new canvas for translator");
+        }, "new canvas for scale");
     });
 
     QUnit.test("Scale vertical orientation = top", function(assert) {
@@ -409,16 +358,17 @@ var TestPointerElement = TestElement.inherit({
                 indent: 17
             }
         });
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.shift.getCall(0).args, [0, 296], "scale shifting");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: 0, top: -296 }], "scale shifting");
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 0,
             height: 600,
             left: 15,
             right: 15,
             top: 0,
             width: 800
-        }, "new canvas for translator");
+        }, "new canvas for scale");
     });
 
     QUnit.test("Scale vertical orientation = bottom", function(assert) {
@@ -444,16 +394,17 @@ var TestPointerElement = TestElement.inherit({
                 indent: 17
             }
         });
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.shift.getCall(0).args, [0, 294], "scale shifting");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: 0, top: -294 }], "scale shifting");
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 0,
             height: 600,
             left: 15,
             right: 15,
             top: 0,
             width: 800
-        }, "new canvas for translator");
+        }, "new canvas for scale");
     });
 
     //  B232105
@@ -481,19 +432,20 @@ var TestPointerElement = TestElement.inherit({
             value: 50,
             subvalues: [10, 20]
         });
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
         assert.strictEqual(gauge._translator.getCodomainStart(), 17, "translator codomain start");
         assert.strictEqual(gauge._translator.getCodomainEnd(), 783, "translator codomain end");
 
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.shift.getCall(0).args, [0, 307], "scale shifting");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: 0, top: -307 }], "scale shifting");
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 0,
             height: 600,
             left: 17,
             right: 17,
             top: 0,
             width: 800
-        }, "new canvas for translator");
+        }, "new canvas for scale");
 
         assert.strictEqual(gauge._rangeContainer.options.y, 307, "range container y");
         assert.strictEqual(gauge._valueIndicator.options.y, 307, "main pointer y");
@@ -531,26 +483,17 @@ var TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._translator.getCodomainEnd(), 17, "translator codomain end");
 
         var scale = axisModule.Axis.getCall(0).returnValue;
-        assert.deepEqual(scale.shift.getCall(0).args, [401, 0], "shift scale");
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: -401, top: 0 }], "shift scale");
         assert.equal(scale.draw.callCount, 2, "draw scale");
-        assert.equal(scale.setTranslator.callCount, 2, "draw scale");
         assert.equal(scale.measureLabels.callCount, 2, "measure labels of scale");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(0).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 17,
             height: 600,
             left: 0,
             right: 0,
             top: 17,
             width: 800
-        }, "new canvas for translator");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(1).returnValue.stub("updateCanvas").getCall(0).args[0], {
-            bottom: 17,
-            height: 600,
-            left: 0,
-            right: 0,
-            top: 17,
-            width: 800
-        }, "new canvas for additional translator");
+        }, "new canvas for scale");
 
         assert.strictEqual(gauge._rangeContainer.options.x, 421, "range container x");
 
@@ -582,16 +525,17 @@ var TestPointerElement = TestElement.inherit({
                 indent: 17
             }
         });
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.shift.getCall(0).args, [404, 0], "scale shifting");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(0).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: -404, top: 0 }], "scale shifting");
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 7.5,
             height: 600,
             left: 0,
             right: 0,
             top: 7.5,
             width: 800
-        }, "new canvas for translator");
+        }, "new canvas for scale");
     });
 
     QUnit.test("Scale horizontal orientation = center", function(assert) {
@@ -617,16 +561,17 @@ var TestPointerElement = TestElement.inherit({
                 indent: 17
             }
         });
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.shift.getCall(0).args, [402, 0], "scale shifting");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(0).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: -402, top: 0 }], "scale shifting");
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 7.5,
             height: 600,
             left: 0,
             right: 0,
             top: 7.5,
             width: 800
-        }, "new canvas for translator");
+        }, "new canvas for scale");
     });
 
     QUnit.test("Scale horizontal orientation = right", function(assert) {
@@ -652,16 +597,17 @@ var TestPointerElement = TestElement.inherit({
                 indent: 17
             }
         });
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.shift.getCall(0).args, [401, 0], "scale shifting");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(0).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: -401, top: 0 }], "scale shifting");
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 7.5,
             height: 600,
             left: 0,
             right: 0,
             top: 7.5,
             width: 800
-        }, "new canvas for translator");
+        }, "new canvas for scale");
     });
 
     //  B232105
@@ -688,19 +634,20 @@ var TestPointerElement = TestElement.inherit({
             value: 50,
             subvalues: [10, 20]
         });
+        var scale = axisModule.Axis.getCall(0).returnValue;
 
         assert.strictEqual(gauge._translator.getCodomainStart(), 583, "translator codomain start");
         assert.strictEqual(gauge._translator.getCodomainEnd(), 17, "translator codomain end");
 
-        assert.deepEqual(axisModule.Axis.getCall(0).returnValue.shift.getCall(0).args, [414, 0], "scale shifting");
-        assert.deepEqual(translator2DModule.Translator2D.getCall(0).returnValue.updateCanvas.getCall(0).args[0], {
+        assert.deepEqual(scale.shift.getCall(0).args, [{ left: -414, top: 0 }], "scale shifting");
+        assert.deepEqual(scale.draw.lastCall.args[0], {
             bottom: 17,
             height: 600,
             left: 0,
             right: 0,
             top: 17,
             width: 800
-        }, "new canvas for translator");
+        }, "new canvas for scale");
 
         assert.strictEqual(gauge._rangeContainer.options.x, 414, "range container x");
 

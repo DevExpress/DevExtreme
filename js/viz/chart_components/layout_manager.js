@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+var commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
     layoutElementModule = require("../core/layout_element"),
     _isNumber = commonUtils.isNumeric,
@@ -9,26 +8,10 @@ var $ = require("../../core/renderer"),
     _max = Math.max,
     _floor = Math.floor,
     _sqrt = Math.sqrt,
-    _each = $.each,
     _extend = extend,
     consts = require("../components/consts"),
     pieLabelIndent = consts.pieLabelIndent,
     pieLabelSpacing = consts.pieLabelSpacing;
-
-function updateAxis(axes, side, needRemoveSpace) {
-    if(axes && needRemoveSpace[side] > 0) {
-        _each(axes, function(i, axis) {
-            var bBox = axis.getBoundingRect();
-            axis.updateSize();
-            needRemoveSpace[side] -= bBox[side] - axis.getBoundingRect()[side];
-        });
-        if(needRemoveSpace[side] > 0) {
-            _each(axes, function(_, axis) {
-                axis.updateSize(true);
-            });
-        }
-    }
-}
 
 function getNearestCoord(firstCoord, secondCoord, pointCenterCoord) {
     var nearestCoord;
@@ -50,12 +33,12 @@ function getLabelLayout(point) {
 
 function getPieRadius(series, paneCenterX, paneCenterY, accessibleRadius, minR) {
     var radiusIsFound = false;
-    _each(series, function(_, singleSeries) {
+    series.forEach(function(singleSeries) {
         if(radiusIsFound) {
             return false;
         }
 
-        _each(singleSeries.getVisiblePoints(), function(_, point) {
+        singleSeries.getVisiblePoints().forEach(function(point) {
             var labelBBox = getLabelLayout(point);
             if(labelBBox) {
                 var xCoords = getNearestCoord(labelBBox.x, labelBBox.x + labelBBox.width, paneCenterX),
@@ -73,9 +56,9 @@ function getPieRadius(series, paneCenterX, paneCenterY, accessibleRadius, minR) 
 function getSizeLabels(series) {
     var sizes = [],
         commonWidth = 0;
-    _each(series, function(_, singleSeries) {
+    series.forEach(function(singleSeries) {
         var maxWidth = 0;
-        _each(singleSeries.getVisiblePoints(), function(_, point) {
+        singleSeries.getVisiblePoints().forEach(function(point) {
             var labelBBox = getLabelLayout(point);
             if(labelBBox) {
                 maxWidth = _max(labelBBox.width + pieLabelSpacing, maxWidth);
@@ -126,80 +109,6 @@ function getInnerRadius(series) {
         innerRadius = innerRadius > 0.8 ? 0.8 : innerRadius;
     }
     return innerRadius;
-}
-
-function isValidBox(box) {
-    return !!(box.x || box.y || box.width || box.height);
-}
-
-function correctDeltaMarginValue(panes, marginSides) {
-    var canvas,
-        deltaSide,
-        requireAxesRedraw = false;
-
-    _each(panes, function(_, pane) {
-        canvas = pane.canvas;
-        _each(marginSides, function(_, side) {
-            deltaSide = "delta" + side;
-            canvas[deltaSide] = _max(canvas[deltaSide] - (canvas[side.toLowerCase()] - canvas["original" + side]), 0);
-            if(canvas[deltaSide] > 0) {
-                requireAxesRedraw = true;
-            }
-        });
-    });
-
-    return requireAxesRedraw;
-}
-
-function getPane(name, panes) {
-    var findPane = panes[0];
-    _each(panes, function(_, pane) {
-        if(name === pane.name) {
-            findPane = pane;
-        }
-    });
-    return findPane;
-}
-
-function applyFoundExceedings(panes, rotated) {
-    var stopDrawAxes = false,
-        maxLeft = 0,
-        maxRight = 0,
-        maxTop = 0,
-        maxBottom = 0;
-
-    _each(panes, function(_, pane) {
-        maxLeft = _max(maxLeft, pane.canvas.deltaLeft);
-        maxRight = _max(maxRight, pane.canvas.deltaRight);
-        maxTop = _max(maxTop, pane.canvas.deltaTop);
-        maxBottom = _max(maxBottom, pane.canvas.deltaBottom);
-    });
-
-    if(rotated) {
-        _each(panes, function(_, pane) {
-            pane.canvas.top += maxTop;
-            pane.canvas.bottom += maxBottom;
-            pane.canvas.right += pane.canvas.deltaRight;
-            pane.canvas.left += pane.canvas.deltaLeft;
-        });
-    } else {
-        _each(panes, function(_, pane) {
-            pane.canvas.top += pane.canvas.deltaTop;
-            pane.canvas.bottom += pane.canvas.deltaBottom;
-            pane.canvas.right += maxRight;
-            pane.canvas.left += maxLeft;
-        });
-    }
-
-    _each(panes, function(_, pane) {
-        if(pane.canvas.top + pane.canvas.bottom > pane.canvas.height) {
-            stopDrawAxes = true;
-        }
-        if(pane.canvas.left + pane.canvas.right > pane.canvas.width) {
-            stopDrawAxes = true;
-        }
-    });
-    return stopDrawAxes;
 }
 
 var inverseAlign = {
@@ -256,7 +165,7 @@ function correctAvailableRadius(availableRadius, canvas, series, minPiePercentag
 
     if(fullRadiusWithLabels < minR) {
         availableRadius = minR;
-        _each(sizeLabels.sizes, function(_, size) {
+        sizeLabels.sizes.forEach(function(size) {
             size !== 0 && countSeriesWithOuterLabels++;
         });
         averageWidthLabels = (paneCenterX - availableRadius - canvas.left) / countSeriesWithOuterLabels;
@@ -273,123 +182,6 @@ LayoutManager.prototype = {
 
     setOptions: function(options) {
         this._options = options;
-    },
-
-    applyVerticalAxesLayout: function(axes, panes, rotated) {
-        this._applyAxesLayout(axes, panes, rotated);
-    },
-
-    applyHorizontalAxesLayout: function(axes, panes, rotated) {
-        axes.reverse();
-        this._applyAxesLayout(axes, panes, rotated);
-        axes.reverse();
-    },
-
-    _applyAxesLayout: function(axes, panes, rotated) {
-        var that = this,
-            canvas,
-            axisPosition,
-            box,
-            delta,
-            axis,
-            axisLength,
-            direction,
-            directionMultiplier,
-            someDirection = [],
-            pane,
-            i;
-
-        _each(panes, function(_, pane) {
-            _extend(pane.canvas, { deltaLeft: 0, deltaRight: 0, deltaTop: 0, deltaBottom: 0 });
-        });
-
-        for(i = 0; i < axes.length; i++) {
-            axis = axes[i];
-            axisPosition = axis.getOptions().position || "left";
-            axis.delta = {};
-            box = axis.getBoundingRect();
-
-            pane = getPane(axis.pane, panes);
-            canvas = pane.canvas;
-
-            if(!isValidBox(box)) {
-                continue;
-            }
-
-            direction = "delta" + axisPosition.slice(0, 1).toUpperCase() + axisPosition.slice(1);
-
-            switch(axisPosition) {
-                case "right":
-                    directionMultiplier = 1;
-                    canvas.deltaLeft += axis.padding ? axis.padding.left : 0;
-                    break;
-                case "left":
-                    directionMultiplier = -1;
-                    canvas.deltaRight += axis.padding ? axis.padding.right : 0;
-                    break;
-                case "top":
-                    directionMultiplier = -1;
-                    canvas.deltaBottom += axis.padding ? axis.padding.bottom : 0;
-                    break;
-                case "bottom":
-                    directionMultiplier = 1;
-                    canvas.deltaTop += axis.padding ? axis.padding.top : 0;
-                    break;
-            }
-
-            switch(axisPosition) {
-                case "right":
-                case "left":
-                    if(!box.isEmpty) {
-                        delta = (box.y + box.height) - (canvas.height - canvas.originalBottom);
-                        if(delta > 0) {
-                            that.requireAxesRedraw = true;
-                            canvas.deltaBottom += delta;
-                        }
-
-                        delta = canvas.originalTop - box.y;
-                        if(delta > 0) {
-                            that.requireAxesRedraw = true;
-                            canvas.deltaTop += delta;
-                        }
-                    }
-                    axisLength = box.width;
-                    someDirection = ["Left", "Right"];
-                    break;
-                case "top":
-                case "bottom":
-                    if(!box.isEmpty) {
-                        delta = (box.x + box.width) - (canvas.width - canvas.originalRight);
-                        if(delta > 0) {
-                            that.requireAxesRedraw = true;
-                            canvas.deltaRight += delta;
-                        }
-
-                        delta = canvas.originalLeft - box.x;
-                        if(delta > 0) {
-                            that.requireAxesRedraw = true;
-                            canvas.deltaLeft += delta;
-                        }
-
-                    }
-                    someDirection = ["Bottom", "Top"];
-                    axisLength = box.height;
-                    break;
-            }
-
-            if(!axis.delta[axisPosition] && canvas[direction] > 0) {
-                canvas[direction] += axis.getMultipleAxesSpacing();
-            }
-
-            axis.delta[axisPosition] = axis.delta[axisPosition] || 0;
-            axis.delta[axisPosition] += canvas[direction] * directionMultiplier;
-
-            canvas[direction] += axisLength;
-        }
-
-        that.requireAxesRedraw = correctDeltaMarginValue(panes, someDirection) || that.requireAxesRedraw;
-
-        that.stopDrawAxes = applyFoundExceedings(panes, rotated);
     },
 
     applyPieChartSeriesLayout: function(canvas, series, hideLayoutLabels) {
@@ -436,7 +228,7 @@ LayoutManager.prototype = {
             needHorizontalSpace = 0,
             needVerticalSpace = 0;
 
-        _each(panes, function(_, pane) {
+        panes.forEach(function(pane) {
             var paneCanvas = pane.canvas,
                 minSize = percentageIsValid ? _min(paneCanvas.width, paneCanvas.height) * piePercentage : undefined,
                 needPaneHorizontalSpace = (percentageIsValid ? minSize : width) - (paneCanvas.width - paneCanvas.left - paneCanvas.right),
@@ -454,18 +246,18 @@ LayoutManager.prototype = {
         return needHorizontalSpace > 0 || needVerticalSpace > 0 ? { width: needHorizontalSpace, height: needVerticalSpace } : false;
     },
 
-    layoutElements: function(elements, canvas, funcAxisDrawer, panes, rotated, axes) {
+    layoutElements: function(elements, canvas, funcAxisDrawer, panes, rotated) {
         this._elements = elements;
 
         this._probeDrawing(canvas);
         this._drawElements(canvas);
 
         funcAxisDrawer && funcAxisDrawer();
-        this._processAdaptiveLayout(panes, rotated, canvas, axes, funcAxisDrawer);
+        this._processAdaptiveLayout(panes, rotated, canvas, funcAxisDrawer);
         this._positionElements(canvas);
     },
 
-    _processAdaptiveLayout: function(panes, rotated, canvas, axes, funcAxisDrawer) {
+    _processAdaptiveLayout: function(panes, rotated, canvas, funcAxisDrawer) {
         var that = this,
             size = that.needMoreSpaceForPanesCanvas(panes, rotated),
             items = this._elements;
@@ -479,7 +271,7 @@ LayoutManager.prototype = {
             }
         }
 
-        $.each(items.slice().reverse(), function(_, item) {
+        items.slice().reverse().forEach(function(item) {
             var layoutOptions = _extend({}, item.getLayoutOptions()),
                 sizeObject;
 
@@ -499,15 +291,12 @@ LayoutManager.prototype = {
             }
         });
 
-        updateAxis(axes.verticalAxes, "width", size);
-        updateAxis(axes.horizontalAxes, "height", size);
-
-        funcAxisDrawer && funcAxisDrawer(true);
+        funcAxisDrawer && funcAxisDrawer(size);
     },
 
     _probeDrawing: function(canvas) {
         var that = this;
-        $.each(this._elements, function(_, item) {
+        this._elements.forEach(function(item) {
             var layoutOptions = item.getLayoutOptions(),
                 sizeObject;
 
@@ -528,7 +317,7 @@ LayoutManager.prototype = {
     },
 
     _drawElements: function(canvas) {
-        $.each(this._elements.slice().reverse(), function(_, item) {
+        this._elements.slice().reverse().forEach(function(item) {
             var layoutOptions = item.getLayoutOptions(),
                 sizeObject,
                 cutSide,
@@ -558,7 +347,7 @@ LayoutManager.prototype = {
             bottom: 0
         };
 
-        $.each(this._elements.slice().reverse(), function(_, item) {
+        this._elements.slice().reverse().forEach(function(item) {
             var layoutOptions = item.getLayoutOptions(),
                 position,
                 cutSide,

@@ -351,6 +351,8 @@
                 series.type = options.type;
                 series.axis = options.axis;
                 series.pane = options.pane;
+                series._valueAxis = renderSettings.valueAxis;
+                series._argumentAxis = renderSettings.argumentAxis;
                 series.options = series.options || {};
                 $.extend(true, series.options, options);
                 series.userOptions = options;
@@ -361,6 +363,7 @@
                 series.userOptions.point.userOptions = true;
                 series.renderer = renderSettings.renderer;
                 series._extGroups = renderSettings;
+                series.renderSettings = renderSettings;
                 return series;
             }
             currentAssert().ok(false, "Unexpected series request (request #" + seriesMockData.currentSeries + ")");
@@ -433,7 +436,7 @@
                 if(failOnWrongData && result === undefined) {
                     currentAssert().ok(false, "getCanvasVisibleArea = undefined");
                 }
-                return result;
+                return result || {};
             },
             getBusinessRange: function() {
                 return this._businessRange || innerData;
@@ -490,6 +493,8 @@
             _visible: options.visible,
             _options: options,
             _extGroups: {},
+            _valueAxis: options.valueAxis,
+            _argumentAxis: options.argumentAxis,
             pointsByArgument: (function() {
                 var pointsByArgument = {};
 
@@ -505,7 +510,13 @@
             styles: {
                 themeColor: "seriesThemeColor", point: {}, pointStyles: []
             },
-            draw: sinon.spy(function(tr, animationEnabled, hideLayoutLabels, legendCallback) {
+            getValueAxis: function() {
+                return this._valueAxis;
+            },
+            getArgumentAxis: function() {
+                return this._argumentAxis;
+            },
+            draw: sinon.spy(function(animationEnabled, hideLayoutLabels, legendCallback) {
                 this.wasDrawn = true;
                 this.hideLayoutLabels = hideLayoutLabels;
                 this.drawArguments = $.makeArray(arguments);
@@ -523,6 +534,7 @@
 
                 range.arg = range.arg || {};
                 range.val = range.val || {};
+                range.viewport = range.viewport || {};
 
                 var minSelector = "minVisible",
                     maxSelector = "maxVisible";
@@ -563,7 +575,7 @@
                 return options.stack;
             },
             isFullStackedSeries: function() {
-                return this.type.indexOf("fullstacked") !== -1;
+                return this.type && this.type.indexOf("fullstacked") !== -1;
             },
             isStackedSeries: function() {
                 return this.type.indexOf("stacked") === 0;
@@ -653,7 +665,8 @@
             adjustLabels: sinon.spy(),
             correctPosition: sinon.spy(),
             correctRadius: sinon.spy(),
-            updateDataType: sinon.spy()
+            updateDataType: sinon.spy(),
+            getViewport: sinon.stub().returns({})
         };
     };
 
@@ -915,20 +928,23 @@
             draw: function() {
                 this.wasDrawn = true;
             },
-            getBoundingRect: function() {
-                return this._options.boundingRect || { width: 100, height: 40 };
-            },
-            setBoundingRect: function(rect) {
-                this._options.boundingRect = rect;
-            },
             shift: function(x, y) {
                 this.shifted = { x: x, y: y };
             },
-            setTranslator: function(translator, orthogonalTranslator) {
-                this._translator = translator;
-                this._orthogonalTranslator = orthogonalTranslator;
-                this._majorTicks = null;
+            estimateMargins: function() {
+                return { left: 0, top: 0, right: 0, bottom: 0 };
             },
+            getMargins: function() {
+                return { left: 0, top: 0, right: 0, bottom: 0 };
+            },
+            updateSize: sinon.stub(),
+
+            setBusinessRange: sinon.stub(),
+
+            restoreBusinessRange: sinon.stub(),
+
+            updateCanvas: sinon.stub(),
+
             setPane: function(pane) {
                 this.pane = pane;
                 this._options.pane = pane;
@@ -950,48 +966,41 @@
                 delete this._orthogonalTranslator;
                 delete this.shifted;
             },
-            setPercentLabelFormat: function() {
-                this.percentLabelFormat = true;
-            },
-            resetAutoLabelFormat: function() {
-                this.resetAutoFormat = true;
-            },
+            setPercentLabelFormat: sinon.stub(),
+            resetAutoLabelFormat: sinon.stub(),
             getTicksValues: function() {
-                return {
-                    majorTicksValues: $.map(this.getMajorTicks(), function(item) { return item.value; }),
-                    minorTicksValues: $.map(this._minorTicks || [], function(item) { return item.value; })
-                };
-            },
-            getMajorTicks: function() {
-                var that = this;
                 if(!this._minorTicks) {
-                    this._minorTicks = $.map(that._options.mockMinorTicks || [], function(item) { return { value: item }; });
+                    this._minorTicks = $.map(this._options.mockMinorTicks || [], function(item) { return { value: item }; });
                 }
                 if(!this._majorTicks) {
-                    this._majorTicks = $.map(that._options.mockTickValues || [], function(item) { return { value: item }; });
+                    this._majorTicks = $.map(this._options.mockTickValues || [], function(item) { return { value: item }; });
                 }
                 this._tickManager = {
-                    _tickInterval: that._options.mockTickInterval,
+                    _tickInterval: this._options.mockTickInterval,
                     getTickInterval: function() {
-                        return that._options.mockTickInterval;
+                        return this._tickInterval;
                     }
                 };
-                return this._majorTicks;
+                return {
+                    majorTicksValues: $.map(this._majorTicks, function(item) { return item.value; }),
+                    minorTicksValues: $.map(this._minorTicks || [], function(item) { return item.value; })
+                };
             },
             setTicks: function(ticks) {
                 this._majorTicks = $.map(ticks.majorTicks, function(item) { return { value: item }; });
                 this._minorTicks = $.map(ticks.minorTicks, function(item) { return { value: item }; });
             },
-            resetTicks: function() {
-                this.ticksReset = true;
-                this._majorTicks = this._minorTicks = null;
-                this.clipRectApplied = null;
+            createTicks: function() {
+
             },
             getMultipleAxesSpacing: function() {
                 return this._options.mockAxesSpacing || 5;
             },
             getTranslator: function() {
-                return this._translator;
+                var businessRange = this.setBusinessRange.lastCall && this.setBusinessRange.lastCall.args[0] || {};
+                businessRange.minVisible = businessRange.minVisible || businessRange.min;
+                businessRange.maxVisible = businessRange.maxVisible || businessRange.max;
+                return this._options && this._options.mockTranslator || new exports.MockTranslator(businessRange);
             },
             _isHorizontal: renderOptions.isHorizontal,
             _incidentOccurred: renderOptions.incidentOccurred,
@@ -1013,13 +1022,13 @@
             validateUnit: function(value) {
                 return value;
             },
-            zoom: function(min, max) {
+            zoom: sinon.spy(function(min, max) {
                 return { min: min, max: max };
-            },
+            }),
+            getViewport: sinon.stub().returns({}),
             resetZoom: function() {
 
             },
-            drawGrids: function() { },
             resetTypes: sinon.spy()
         };
     };

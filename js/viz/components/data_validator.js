@@ -379,9 +379,9 @@ function checkType(data, groupsData, checkTypeForAllData) {
         argumentTypeGroup = groupsData.argumentOptions && axisTypeParser(groupsData.argumentOptions.argumentType),
         groupsIndexes;
 
-    groupsData.groups.some(function(group) {
+    groupsData.groups.forEach(function(group) {
         if(!group.series.length) {
-            return true;
+            return;
         }
 
         var valueTypeGroup = group.valueOptions && axisTypeParser(group.valueOptions.valueType);

@@ -309,10 +309,8 @@ Point.prototype = {
         that._updateLabelOptions(newPointTypeMixin);
     },
 
-    translate: function(translators) {
-        var that = this;
-        that.translators = translators || that.translators;
-        that.translators && that.hasValue() && that._translate(that.translators);
+    translate: function() {
+        this.hasValue() && this._translate();
     },
 
     _checkCustomize: function(oldOptions, newOptions) {
@@ -382,27 +380,30 @@ Point.prototype = {
     },
 
     _getVisibleArea: function() {
-        return this.series._visibleArea;
+        return this.series.getVisibleArea();
+    },
+
+    _getArgTranslator: function() {
+        return this.series.getArgumentAxis().getTranslator();
+    },
+
+    _getValTranslator: function() {
+        return this.series.getValueAxis().getTranslator();
     },
 
     _calculateVisibility: function(x, y, width, height) {
         var that = this,
-            visibleAreaX,
-            visibleAreaY,
+            visibleArea = that._getVisibleArea(),
             rotated = that._options.rotated;
 
-        if(that.translators) {
-            visibleAreaX = that.translators.x.getCanvasVisibleArea();
-            visibleAreaY = that.translators.y.getCanvasVisibleArea();
-            if(((visibleAreaX.min) > (x + (width || 0)) || ((visibleAreaX.max) < x) ||
-                ((visibleAreaY.min) > (y + (height || 0))) || ((visibleAreaY.max) < y)) ||
-               (rotated && _isDefined(width) && width !== 0 && (visibleAreaX.min === (x + width) || visibleAreaX.max === x)) ||
-            (!rotated && _isDefined(height) && height !== 0 && (visibleAreaY.min === (y + height) || visibleAreaY.max === y))
-                ) {
-                that.inVisibleArea = false;
-            } else {
-                that.inVisibleArea = true;
-            }
+        if(((visibleArea.minX) > (x + (width || 0)) || ((visibleArea.maxX) < x) ||
+            ((visibleArea.minY) > (y + (height || 0))) || ((visibleArea.maxY) < y)) ||
+            (rotated && _isDefined(width) && width !== 0 && (visibleArea.minX === (x + width) || visibleArea.maxX === x)) ||
+        (!rotated && _isDefined(height) && height !== 0 && (visibleArea.minY === (y + height) || visibleArea.maxY === y))
+            ) {
+            that.inVisibleArea = false;
+        } else {
+            that.inVisibleArea = true;
         }
     },
 
@@ -436,12 +437,14 @@ Point.prototype = {
     drawLabel: _noop,
     correctLabelPosition: _noop,
     setMaxLabelLength: _noop,
+    getMinValue: _noop,
+    getMaxValue: _noop,
     dispose: function() {
         var that = this;
         that.deleteMarker();
         that.deleteLabel();
         that._errorBar && this._errorBar.dispose();
-        that._options = that._styles = that.series = that.translators = that._errorBar = null;
+        that._options = that._styles = that.series = that._errorBar = null;
     },
 
     getTooltipFormatObject: function(tooltip) {
