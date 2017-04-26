@@ -20,8 +20,7 @@ var context,
     knownThemes,
     currentThemeName,
     pendingThemeName,
-    pendingThemeTimerId,
-    isJQueryReady;
+    pendingThemeTimerId;
 
 var THEME_MARKER_PREFIX = "dx.";
 
@@ -54,12 +53,12 @@ function waitForThemeLoad(themeName, callback) {
     cancelWaitForThemeLoad();
     pendingThemeName = themeName;
 
+    holdReady(true);
+
     function handleLoaded() {
         pendingThemeName = null;
         resizeCallbacks.fire();
-        if(!isJQueryReady) {
-            holdReady(false);
-        }
+        holdReady(false);
         callback && callback();
     }
 
@@ -213,15 +212,8 @@ function current(options) {
         $activeThemeLink.attr("href", knownThemes[currentThemeName].url);
 
         waitForThemeLoad(currentThemeName, loadCallback);
-    } else {
-        if(isAutoInit) {
-            holdReady(false);
-            if(loadCallback) {
-                loadCallback();
-            }
-        } else {
-            throw errors.Error("E0021", currentThemeName);
-        }
+    } else if(!isAutoInit) {
+        throw errors.Error("E0021", currentThemeName);
     }
 
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
@@ -294,12 +286,6 @@ function attachCssClasses(element, themeName) {
 function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
-
-holdReady(true);
-
-$(function() {
-    isJQueryReady = true;
-});
 
 init({
     _autoInit: true
