@@ -2363,6 +2363,83 @@ QUnit.test('Apply column editorOptions to cell editor', function(assert) {
     assert.ok(textEditor.option("disabled"), "disabled true");
 });
 
+if(browser.msie && parseInt(browser.version) <= 11) {
+    QUnit.test("Update value immediately on the keyup event for row edit mode", function(assert) {
+        //arrange
+        this.options.editing = {
+            allowUpdating: true,
+            mode: 'row'
+        };
+
+        this.editingController._editRowIndex = 0;
+
+        var resultValue,
+            $editor = $("<div/>").appendTo($("#container")),
+            template = this.editingController.getColumnTemplate({
+                rowType: "data",
+                row: {
+                    rowIndex: 0
+                },
+                column: {
+                    allowEditing: true,
+                    setCellValue: $.noop
+                }
+            });
+
+        //act
+        template($editor, {
+            setValue: function(value) {
+                resultValue = value;
+            }
+        });
+        var $input = $editor.find("input").first();
+
+        $input
+            .val("new value")
+            .trigger("keyup");
+
+        //assert
+        assert.equal(resultValue, "new value");
+    });
+
+    QUnit.test("Update value immediately on the keyup event for form edit mode", function(assert) {
+        //arrange
+        this.options.editing = {
+            allowUpdating: true,
+            mode: 'form'
+        };
+
+        this.editingController._editRowIndex = 0;
+
+        var resultValue,
+            $editor = $("<div/>").appendTo($("#container")),
+            template = this.editingController.getColumnTemplate({
+                rowType: "data",
+                row: {
+                    rowIndex: 0
+                },
+                column: {
+                    allowEditing: true,
+                    setCellValue: $.noop
+                }
+            });
+
+        //act
+        template($editor, {
+            setValue: function(value) {
+                resultValue = value;
+            }
+        });
+        var $input = $editor.find("input").first();
+
+        $input
+            .val("new value")
+            .trigger("keyup");
+
+        //assert
+        assert.equal(resultValue, "new value");
+    });
+}
 
 QUnit.module('Editing with real dataController', {
     beforeEach: function() {

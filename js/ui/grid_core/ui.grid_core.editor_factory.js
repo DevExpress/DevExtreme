@@ -72,7 +72,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
                 window.clearTimeout(data.valueChangeTimeout);
 
-                if(e.jQueryEvent && e.jQueryEvent.type === "keyup") {
+                if(e.jQueryEvent && e.jQueryEvent.type === "keyup" && !options.updateValueImmediately) {
                     if(options.parentType === "filterRow" || options.parentType === "searchPanel") {
                         sharedData.valueChangeTimeout = data.valueChangeTimeout = window.setTimeout(function() {
                             updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);

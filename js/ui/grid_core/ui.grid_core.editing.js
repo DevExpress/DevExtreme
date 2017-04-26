@@ -94,7 +94,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 parentType: "dataRow",
                 width: null,
                 readOnly: !options.setValue,
-                id: options.id
+                id: options.id,
+                updateValueImmediately: isRowEditMode(that)
             }));
         };
     };
