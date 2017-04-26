@@ -34,6 +34,12 @@ QUnit.test('get date by day recurrence', function(assert) {
     assert.deepEqual(dates, [new Date(2015, 0, 1), new Date(2015, 0, 2), new Date(2015, 0, 3)], 'dates are right');
 });
 
+QUnit.test('get date by day recurrence, endDate of part is min', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY', start: new Date(2015, 4, 26), end: new Date(2015, 4, 27), min: new Date(2015, 4, 31), max: new Date(2015, 5, 2) });
+
+    assert.deepEqual(dates, [new Date(2015, 4, 31), new Date(2015, 5, 1), new Date(2015, 5, 2)], 'dates are right');
+});
+
 QUnit.test('get date by week recurrence', function(assert) {
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY', start: new Date(2015, 0, 15), min: new Date(2015, 0, 15), max: new Date(2015, 1, 5) });
 

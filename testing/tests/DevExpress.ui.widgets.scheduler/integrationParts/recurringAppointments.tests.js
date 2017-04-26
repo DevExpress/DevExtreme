@@ -851,3 +851,23 @@ QUnit.test("Recurrence editor should work correctly after switch off the recurre
 
     assert.ok(true, "recurrence editor works correctly");
 });
+
+
+QUnit.test("AllDay recurrence appointments should be rendered correctly after changing currentDate", function(assert) {
+    var tasks = [
+            { text: "One", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 17), allDay: true, recurrenceRule: "FREQ=DAILY" }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentView: "week",
+        startDayHour: 8,
+        endDayHour: 19,
+        currentDate: new Date(2015, 2, 16),
+        dataSource: dataSource
+    });
+
+    this.instance.option("currentDate", new Date(2015, 2, 23));
+    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 7, "appointments are OK");
+});
