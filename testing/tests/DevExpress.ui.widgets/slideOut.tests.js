@@ -429,10 +429,46 @@ QUnit.test("First slideout item should be selected if menu grouping is used", fu
         dataSource: [
             { key: "Group 1", items: [{ text: "Item 11" }, { text: "Item 12" }] }
         ],
+        selectedIndex: 1,
+        itemTemplate: function(itemData) {
+            return itemData.text;
+        },
         menuGrouped: true
     });
 
-    assert.equal(this.$element.find(".dx-item-selected").length, 1, "content is not empty");
+    assert.equal(this.$element.find(".dx-list-item-selected").text(), "Item 12", "item is selected");
+    assert.equal(this.$element.find(".dx-slideout-item-content").text(), "Item 12", "content was loaded");
+});
+
+QUnit.test("First slideout item content should be loaded when deferred data source is used", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    try {
+        this.$element.dxSlideOut({
+            dataSource: {
+                load: function() {
+                    var d = $.Deferred();
+
+                    setTimeout(function() {
+                        d.resolve([{ text: "Item 1" }, { text: "Item 2" }]);
+                    }, 100);
+
+                    return d.promise();
+                }
+            },
+            selectedIndex: 1,
+            itemTemplate: function(itemData) {
+                return itemData.text;
+            }
+        });
+
+        clock.tick(100);
+
+        assert.equal(this.$element.find(".dx-list-item-selected").text(), "Item 2", "item is selected");
+        assert.equal(this.$element.find(".dx-slideout-item-content").text(), "Item 2", "content was loaded");
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test("select item action execution", function(assert) {
