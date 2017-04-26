@@ -145,6 +145,7 @@
         "dxPivotGrid-sortColumnBySummary": "\"{0}\" nach dieser Spalte sortieren",
         "dxPivotGrid-sortRowBySummary": "\"{0}\" nach dieser Zeile sortieren",
         "dxPivotGrid-removeAllSorting": "Sortierungen entfernen",
+        "dxPivotGrid-dataNotAvailable": "Entf.",
         "dxPivotGrid-rowFields": "Zeilenfelder",
         "dxPivotGrid-columnFields": "Spaltenfelder",
         "dxPivotGrid-dataFields": "Datenfelder",

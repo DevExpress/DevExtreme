@@ -16,7 +16,8 @@ var $ = require("jquery"),
     math = Math,
     GRAND_TOTAL_TYPE = "GT",
     TOTAL_TYPE = "T",
-    DATA_TYPE = "D";
+    DATA_TYPE = "D",
+    NOT_AVAILABLE = "#N/A";
 
 var proxyMethod = function(instance, methodName, defaultResult) {
     if(!instance[methodName]) {
@@ -45,6 +46,10 @@ exports.DataController = Class.inherit((function() {
         }
 
         return text;
+    }
+
+    function formatCellValue(value, dataField, errorText) {
+        return value === NOT_AVAILABLE ? errorText : formatValue(value, dataField);
     }
 
     var createHeaderInfo = (function() {
@@ -483,7 +488,7 @@ exports.DataController = Class.inherit((function() {
         lastProcessedIndexes[rowIndex] = colIndex;
     }
 
-    function createCellsInfo(rowsInfo, columnsInfo, data, dataFields, dataFieldArea) {
+    function createCellsInfo(rowsInfo, columnsInfo, data, dataFields, dataFieldArea, errorText) {
         var info = [],
             dataFieldAreaInRows = dataFieldArea === "row",
             dataSourceCells = data.values;
@@ -512,7 +517,7 @@ exports.DataController = Class.inherit((function() {
                         * @publicName text
                         * @type string
                         */
-                        text: formatValue(cellValue, dataField),
+                        text: formatCellValue(cellValue, dataField, errorText),
                        /**
                        * @name dxPivotGridPivotGridCell_value
                        * @publicName value
@@ -1100,9 +1105,10 @@ exports.DataController = Class.inherit((function() {
         getCellsInfo: function(getAllData) {
             var rowsInfo = this.getRowsInfo(getAllData),
                 columnsInfo = this.getColumnsInfo(getAllData),
-                data = this._dataSource.getData();
+                data = this._dataSource.getData(),
+                texts = this._options.texts || {};
 
-            return createCellsInfo(rowsInfo, columnsInfo, data, this._dataSource.getAreaFields("data"), this._options.dataFieldArea);
+            return createCellsInfo(rowsInfo, columnsInfo, data, this._dataSource.getAreaFields("data"), this._options.dataFieldArea, texts.dataNotAvailable);
         },
 
         dispose: function() {

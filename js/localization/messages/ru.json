@@ -145,6 +145,7 @@
         "dxPivotGrid-sortColumnBySummary": "Сортировать \"{0}\" по этой колонке",
         "dxPivotGrid-sortRowBySummary": "Сортировать \"{0}\" по этой строке",
         "dxPivotGrid-removeAllSorting": "Сбросить все сортировки",
+        "dxPivotGrid-dataNotAvailable": "Н/Д",
         "dxPivotGrid-rowFields": "Поля строк",
         "dxPivotGrid-columnFields": "Поля столбцов",
         "dxPivotGrid-dataFields": "Поля данных",

@@ -147,7 +147,13 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     * @name Errors and Warnings_W4000
     * @publicName W4000
     */
-    W4000: "Data returned from the server has an incorrect structure"
+    W4000: "Data returned from the server has an incorrect structure",
+
+    /**
+    * @name Errors and Warnings_W4002
+    * @publicName W4002
+    */
+    W4002: "Data loading has failed for some cells due to the following error: {0}"
 });
 
 // todo: add some logic
