@@ -69,7 +69,7 @@
     line-height: 0px;
 }
 
-.dx-treelist-cell-expandable, .dx-treelist-editor-cell  {
+.dx-treelist-cell-expandable, .dx-treelist-select-all  {
     .dx-checkbox {
         position: absolute;
 
@@ -91,7 +91,7 @@
     }
 }
 
-.dx-treelist-editor-cell {
+.dx-treelist-select-all {
     position: relative;
 
     .dx-checkbox {
@@ -102,7 +102,7 @@
     }
 }
 
-.dx-treelist-headers .dx-header-row > .dx-treelist-editor-cell {
+.dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
     padding-left: @TREELIST_EDITOR_CELL_PADDING_LEFT;
 }
 
@@ -119,14 +119,14 @@
         }
     }
 
-    .dx-treelist-editor-cell .dx-checkbox {
+    .dx-treelist-select-all .dx-checkbox {
         left: 100%;
         padding-right: @TREELIST_CHECKBOX_PADDING_LEFT;
         margin-left: -@TREELIST_CHECKBOX_MARGIN_LEFT;
         padding-left: 0px;
     }
 
-    .dx-treelist-headers .dx-header-row > .dx-treelist-editor-cell {
+    .dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
         padding-right: @TREELIST_EDITOR_CELL_PADDING_LEFT;
         padding-left: @GENERIC_GRID_BASE_CELL_PADDING;
     }
