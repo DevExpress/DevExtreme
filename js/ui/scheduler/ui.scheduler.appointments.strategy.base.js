@@ -442,7 +442,7 @@ var BaseRenderingStrategy = Class.inherit({
 
             if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate < viewStartDate) {
                 var headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartStartDate.getTime(),
-                    tailDuration = fullDuration - headDuration;
+                    tailDuration = fullDuration - headDuration || fullDuration;
 
                 endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);
             }
