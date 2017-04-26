@@ -80,7 +80,6 @@
             noGlobals = @Html.Raw(Json.Serialize(Model.NoGlobals)),
             noTimers = @Html.Raw(Json.Serialize(Model.NoTimers)),
             jqueryVersion = @Html.Raw(Json.Serialize(Model.JQueryVersion)),
-            noJQuery = @Html.Raw(Json.Serialize(Model.NoJQuery)),
             farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration)),
             DX_HTTP_CACHE = $.now(),
             lastTestCaseDoneTime = 0,
@@ -199,8 +198,6 @@
                 additionalParams.notimers = "true";
             if(jqueryVersion)
                 additionalParams.jquery = jqueryVersion;
-            if(noJQuery)
-                additionalParams.nojquery = "true";
 
             additionalParams.DX_HTTP_CACHE = DX_HTTP_CACHE;
             additionalParams.frame = i;
