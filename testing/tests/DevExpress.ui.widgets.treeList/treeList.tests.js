@@ -44,8 +44,12 @@ var createTreeList = function(options) {
 };
 
 QUnit.test("Empty options", function(assert) {
-    var treeList = createTreeList({});
+    var treeList = createTreeList({}),
+        $treeListElement = treeList.element();
+
     assert.ok(treeList);
+    assert.ok($treeListElement.hasClass("dx-treelist"), "widget class on the root element");
+    assert.ok($treeListElement.children().hasClass("dx-treelist-container"), "container class on the child");
 });
 
 QUnit.test("Sorting should be applied on header cell click", function(assert) {

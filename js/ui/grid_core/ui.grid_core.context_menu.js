@@ -96,7 +96,7 @@ var ContextMenuView = modules.View.inherit({
                     params.itemData.onItemClick && params.itemData.onItemClick(params);
                 },
 
-                cssClass: that.addWidgetPrefix(),
+                cssClass: that.getWidgetContainerClass(),
                 target: that.component.element()
             });
     }

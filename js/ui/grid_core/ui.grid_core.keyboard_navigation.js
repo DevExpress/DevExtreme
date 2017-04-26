@@ -92,7 +92,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _clickHandler: function(e) {
         var event = e.jQueryEvent,
             $cell = $(event.currentTarget),
-            $grid = $(event.target).closest("." + this.addWidgetPrefix()).parent(),
+            $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent(),
             data = event.data;
 
         if($grid.is(this.component.element()) && this._isCellValid($cell)) {
@@ -423,7 +423,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _isMasterDetailCell: function(element) {
         var $masterDetailCell = $(element).closest("." + MASTER_DETAIL_CELL_CLASS),
-            $masterDetailGrid = $masterDetailCell.closest("." + this.addWidgetPrefix()).parent();
+            $masterDetailGrid = $masterDetailCell.closest("." + this.getWidgetContainerClass()).parent();
 
         return $masterDetailCell.length && $masterDetailGrid.is(this.component.element());
     },

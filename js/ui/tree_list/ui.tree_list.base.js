@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     treeListCore = require("./ui.tree_list.core"),
     callModuleItemsMethod = treeListCore.callModuleItemsMethod;
 
-var DATAGRID_ROW_SELECTOR = ".dx-row";
+var DATAGRID_ROW_SELECTOR = ".dx-row",
+    TREELIST_CLASS = "dx-treelist";
 
 require("./ui.tree_list.column_headers");
 require("./ui.tree_list.columns_controller");
@@ -105,7 +106,9 @@ var TreeList = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this.getView("gridView").render(this.element());
+        var $element = this.element().addClass(TREELIST_CLASS);
+
+        this.getView("gridView").render($element);
     },
 
     _renderContent: function() {
