@@ -15,6 +15,7 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     messageLocalization = require("localization/message"),
     device = devices.current(),
+    themes = require("ui/themes"),
 
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     frameworkMocks = require("../../helpers/frameworkMocks.js"),
@@ -125,6 +126,7 @@ QUnit.module("HtmlApplication", {
         $(".dx-viewport").attr("class", "dx-viewport");
         animationPresetsModule.presets = new animationPresetsModule.PresetCollection();
         TransitionExecutorModule.TransitionExecutor = savedTransitionExecutor;
+        themes.cancelWaitForThemeLoad();
     }
 });
 
@@ -1205,6 +1207,7 @@ QUnit.module("HtmlApplication viewCache", {
         devices.current(device);
         executeAsyncMock.teardown();
         $(".dx-viewport").attr("class", "dx-viewport");
+        themes.cancelWaitForThemeLoad();
     }
 });
 

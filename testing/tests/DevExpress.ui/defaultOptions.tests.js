@@ -81,6 +81,7 @@ var testComponentDefaults = function(componentClass, forcedDevices, options, bef
 
         after.call(this);
         devices._currentDevice = originalDevice;
+        themes.cancelWaitForThemeLoad();
     });
 };
 

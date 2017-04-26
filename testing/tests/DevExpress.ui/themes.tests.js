@@ -6,6 +6,7 @@ var $ = require("jquery"),
     themes = require("ui/themes"),
     viewPortUtils = require("core/utils/view_port"),
     viewPortChanged = viewPortUtils.changeCallback,
+    resizeCallbacks = require("core/utils/window").resizeCallbacks,
     devices = require("core/devices");
 
 require("style-compiler-test-server/known-css-files");
@@ -156,6 +157,7 @@ require("style-compiler-test-server/known-css-files");
         }
 
         function teardown() {
+            themes.cancelWaitForThemeLoad();
             $frame.remove();
         }
 
@@ -313,6 +315,54 @@ require("style-compiler-test-server/known-css-files");
             theme: "sampleTheme.sampleColorScheme",
             loadCallback: function() {
                 assert.expect(0);
+                done();
+            }
+        });
+    });
+
+    QUnit.test("fire resizeCallbacks on theme init", function(assert) {
+        var done = assert.async();
+        var url = ROOT_URL + "testing/helpers/themeMarker.css";
+        var resizeCallbackFired = 0;
+
+        var originalFire = resizeCallbacks.fire;
+        resizeCallbacks.fire = function() {
+            resizeCallbackFired++;
+        };
+
+        this.writeToFrame("<link rel=dx-theme data-theme=sampleTheme.sampleColorScheme href='" + url + "' />");
+
+        themes.init({
+            context: this.frameDoc(),
+            theme: "sampleTheme.sampleColorScheme",
+            loadCallback: function() {
+                assert.equal(resizeCallbackFired, 1);
+                resizeCallbacks.fire = originalFire;
+                done();
+            }
+        });
+    });
+
+    QUnit.test("fire resizeCallbacks on theme changed", function(assert) {
+        var done = assert.async();
+        var resizeCallbackFired = 0;
+        assert.expect(1);
+        var url = ROOT_URL + "testing/helpers/themeMarker.css";
+        //arrange
+        this.writeToFrame("<link rel='dx-theme' data-theme='sampleTheme.sampleColorScheme'  href='" + url + "'/>");
+        //act
+        themes.init({ context: this.frameDoc(), _autoInit: true });
+
+        var originalFire = resizeCallbacks.fire;
+        resizeCallbacks.fire = function() {
+            resizeCallbackFired++;
+        };
+
+        themes.current({
+            theme: "sampleTheme.sampleColorScheme",
+            loadCallback: function() {
+                assert.equal(resizeCallbackFired, 1);
+                resizeCallbacks.fire = originalFire;
                 done();
             }
         });

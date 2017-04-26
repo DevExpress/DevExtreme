@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     domUtils = require("../core/utils/dom"),
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
+    resizeCallbacks = require("../core/utils/window").resizeCallbacks,
     viewPort = viewPortUtils.value,
     viewPortChanged = viewPortUtils.changeCallback,
     holdReady = $.holdReady || $.fn.holdReady;
@@ -18,7 +19,9 @@ var context,
     $activeThemeLink,
     knownThemes,
     currentThemeName,
-    pendingThemeName;
+    pendingThemeName,
+    pendingThemeTimerId,
+    isJQueryReady;
 
 var THEME_MARKER_PREFIX = "dx.";
 
@@ -46,21 +49,25 @@ function readThemeMarker() {
 // http://stackoverflow.com/q/2635814
 // http://stackoverflow.com/a/3078636
 function waitForThemeLoad(themeName, callback) {
-    var timerId,
-        waitStartTime;
+    var waitStartTime;
 
+    cancelWaitForThemeLoad();
     pendingThemeName = themeName;
 
     function handleLoaded() {
         pendingThemeName = null;
-        callback();
+        resizeCallbacks.fire();
+        if(!isJQueryReady) {
+            holdReady(false);
+        }
+        callback && callback();
     }
 
     if(isPendingThemeLoaded()) {
         handleLoaded();
     } else {
         waitStartTime = $.now();
-        timerId = setInterval(function() {
+        pendingThemeTimerId = setInterval(function() {
             var isLoaded = isPendingThemeLoaded(),
                 isTimeout = !isLoaded && $.now() - waitStartTime > 15 * 1000;
 
@@ -69,11 +76,15 @@ function waitForThemeLoad(themeName, callback) {
             }
 
             if(isLoaded || isTimeout) {
-                clearInterval(timerId);
+                cancelWaitForThemeLoad();
                 handleLoaded();
             }
         }, 10);
     }
+}
+
+function cancelWaitForThemeLoad() {
+    clearInterval(pendingThemeTimerId);
 }
 
 function isPendingThemeLoaded() {
@@ -200,15 +211,11 @@ function current(options) {
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr("href", knownThemes[currentThemeName].url);
-        if(loadCallback) {
-            waitForThemeLoad(currentThemeName, loadCallback);
-        } else {
-            if(pendingThemeName) {
-                pendingThemeName = currentThemeName;
-            }
-        }
+
+        waitForThemeLoad(currentThemeName, loadCallback);
     } else {
         if(isAutoInit) {
+            holdReady(false);
             if(loadCallback) {
                 loadCallback();
             }
@@ -289,11 +296,13 @@ function detachCssClasses(element) {
 }
 
 holdReady(true);
+
+$(function() {
+    isJQueryReady = true;
+});
+
 init({
-    _autoInit: true,
-    loadCallback: function() {
-        holdReady(false);
-    }
+    _autoInit: true
 });
 
 domUtils.ready(function() {
@@ -336,6 +345,7 @@ exports.detachCssClasses = detachCssClasses;
 
 exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
+exports.cancelWaitForThemeLoad = cancelWaitForThemeLoad;
 
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr("href", "about:blank");
