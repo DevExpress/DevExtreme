@@ -2606,6 +2606,72 @@ QUnit.test('Stretch columns when scrolling has size', function(assert) {
     assert.strictEqual(table.width(), 1005, "table width");
 });
 
+QUnit.test('Stretch columns when scrolling has size. Virtual scrolling', function(assert) {
+    var createPivotGridOptions = function(options) {
+        var rowItems = [
+            {
+                value: 'C1', index: 2,
+                children: [{ value: 'P1', index: 0 }, { value: 'P2', index: 1 }]
+            }, {
+                value: 'C2', index: 5,
+                children: [{ value: 'P3', index: 3 }, { value: 'P4', index: 4 }]
+            }];
+
+        var columnItems = [
+            {
+                value: '2010', index: 2,
+                children: [
+                    { value: '1', index: 0 },
+                    { value: '2', index: 1 }
+                ]
+            }, {
+                value: '2012', index: 5,
+                children: [
+                    { value: '2', index: 3 },
+                    { value: '3', index: 4 }
+                ]
+            }];
+
+
+        var cellSet = [
+        [[100000000, 0.1], [8, 0.8], [15, 0.15], [22, 0.22], [29, 0.29], [36, 0.36], [43, 0.43]],
+        [[2, 0.2], [9, 0.9], [16, 0.16], [23, 0.23], [30, 0.3], [37, 0.37], [44, 0.44]],
+        [[3, 0.3], [10, 0.1], [17, 0.17], [24, 0.24], [31, 0.31], [38, 0.38], [45, 0.45]],
+        [[4, 0.4], [11, 0.11], [18, 0.18], [25, 0.25], [32, 0.32], [39, 0.39], [46, 0.46]],
+        [[5, 0.5], [12, 0.12], [19, 0.19], [26, 0.26], [33, 0.33], [40, 0.4], [47, 0.47]],
+        [[6, 0.6], [13, 0.13], [20, 0.2], [27, 0.27], [34, 0.34], [41, 0.41], [48, 0.48]],
+        [[7, 0.7], [14, 0.14], [21, 0.21], [28, 0.28], [35, 0.35], [42, 0.42], [49, 0.49]]];
+
+        var pivotGridOptions = $.extend(true, {
+            scrolling: {
+                useNative: true,
+                mode: "virtual"
+            },
+            dataSource: {
+                fields: [
+                    { area: "row" }, { area: "row" },
+                    { format: 'decimal', area: "column" }, { format: { format: 'quarter', dateType: 'full' }, area: "column" },
+                    { caption: 'Sum1', format: 'currency', area: "data" }, { caption: 'Sum2', format: 'percent', area: "data" }
+                ],
+                rows: rowItems,
+                columns: columnItems,
+                values: cellSet
+            }
+        }, options);
+
+        return pivotGridOptions;
+    };
+
+    var pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1005, height: 250 }), assert);
+
+    this.clock.tick();
+
+    //assert
+    var columnsArea = pivotGrid._columnsArea;
+    assert.ok(!columnsArea.hasScroll(), 'no columnAreaScroll');
+    assert.ok(pivotGrid._rowsArea.hasScroll());
+});
+
 QUnit.test('No size reservation for scrolling when changed size to no scroll', function(assert) {
     var createPivotGridOptions = function(options) {
         var rowItems = [
