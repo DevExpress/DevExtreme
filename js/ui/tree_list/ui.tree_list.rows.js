@@ -43,6 +43,8 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
             }
 
             $container.addClass(TREELIST_CELL_EXPANDABLE_CLASS);
+
+            return $iconContainer;
         },
 
         _renderCellCommandContent: function(container, model) {

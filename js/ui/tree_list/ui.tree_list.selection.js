@@ -68,14 +68,14 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
             },
 
             rowsView: {
-                _renderCellCommandContent: function(container, model) {
-                    var result = this.callBase(container, model);
+                _renderExpandIcon: function($container, options) {
+                    var $iconContainer = this.callBase($container, options);
 
-                    if(result && this.option("selection.mode") === "multiple") {
-                        this.getController("selection").renderSelectCheckBoxContainer(container, model);
+                    if(this.option("selection.mode") === "multiple") {
+                        this.getController("selection").renderSelectCheckBoxContainer($iconContainer, options);
                     }
 
-                    return result;
+                    return $iconContainer;
                 },
 
                 _rowClick: function(e) {

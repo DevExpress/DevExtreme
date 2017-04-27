@@ -124,6 +124,7 @@ QUnit.test("Checkboxes should be rendered in right place", function(assert) {
 
     //assert
     assert.equal($gridCell.find(".dx-select-checkbox").length, 1, "Select checkbox was rendered in right place");
+    assert.ok($gridCell.find(".dx-select-checkbox").parent().hasClass("dx-treelist-icon-container"), "Checkbox inside icon container");
 });
 
 QUnit.test("Checkboxes should not be rendered if selection is not multiple", function(assert) {

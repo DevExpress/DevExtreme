@@ -7,11 +7,12 @@
     @GRID_BASE_CONTEXT_MENU_SORT_ICON_SIZE: 20px;
     @GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 100px;
     @GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
+    @GRID_BASE_CHECKBOX_ICON_SIZE: 20px;
 
     .dx-@{widgetName}-checkbox-size {
         .dx-checkbox-icon {
-            width: 20px;
-            height: 20px;
+            width: @GRID_BASE_CHECKBOX_ICON_SIZE;
+            height: @GRID_BASE_CHECKBOX_ICON_SIZE;
         }
 
         &.dx-checkbox-indeterminate {
