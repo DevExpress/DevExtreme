@@ -239,7 +239,7 @@ var getDatesByRecurrence = function(options) {
     rule.interval = normalizeInterval(rule.freq, rule.interval);
     dateRules = splitDateRules(rule);
 
-    var duration = options.end ? options.end.getTime() - options.start.getTime() : 0;
+    var duration = options.end ? options.end.getTime() - options.start.getTime() : toMs("day");
 
     getDatesByRules(dateRules, new Date(recurrenceStartDate), rule)
         .forEach(function(currentDate, i) {
@@ -255,7 +255,7 @@ var getDatesByRecurrence = function(options) {
                 }
 
                 if(!dateIsRecurrenceException(currentDate, options.exception)) {
-                    if(currentDate.getTime() >= recurrenceStartDate.getTime() && (currentDate.getTime() + duration) >= options.min.getTime()) {
+                    if(currentDate.getTime() >= recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > options.min.getTime()) {
                         if(checkDateByRule(currentDate, [dateRules[i]], rule["wkst"])) {
                             iterationResult[iteration].push(currentDate);
                         }
