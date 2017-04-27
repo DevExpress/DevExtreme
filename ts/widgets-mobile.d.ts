@@ -155,6 +155,9 @@ declare module DevExpress.ui {
 
         /** @docid dxSlideOutOptions_contentTemplate */
         contentTemplate?: any;
+
+        /** @docid dxSlideOutOptions_selectedIndex */
+        selectedIndex?: number;
     }
 
     /** @docid dxSlideout */
