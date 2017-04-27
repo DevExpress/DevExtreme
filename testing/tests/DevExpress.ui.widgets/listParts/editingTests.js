@@ -55,6 +55,38 @@ QUnit.test("index should be correct for grouped list", function(assert) {
     assert.equal(list.getFlatIndexByItemElement($item), 5, "index correct");
 });
 
+QUnit.test("it should be possible to select an item in the grouped list by primitive index", function(assert) {
+    var items = [
+        {
+            key: 'first',
+            items: [{ a: 0 }, { a: 1 }]
+        },
+        {
+            key: 'second',
+            items: [{ a: 2 }, { a: 3 }]
+        }
+    ];
+
+    var $list = $("#templated-list").dxList({
+            items: items,
+            selectionMode: "single",
+            selectedIndex: 2,
+            grouped: true
+        }),
+        list = $list.dxList("instance");
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS));
+
+    assert.ok($items.eq(2).hasClass(LIST_ITEM_SELECTED_CLASS), "correct item is selected");
+    assert.deepEqual(list.option("selectedItem"), { key: 'second', items: [{ a: 2 }] }, "selectedItem is correct");
+    assert.deepEqual(list.option("selectedItems"), [{ key: 'second', items: [{ a: 2 }] }], "selectedItems is correct");
+
+    list.option("selectedIndex", 1);
+    assert.ok($items.eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), "correct item is selected");
+    assert.deepEqual(list.option("selectedItem"), { key: 'first', items: [{ a: 1 }] }, "selectedItem is correct");
+    assert.deepEqual(list.option("selectedItems"), [{ key: 'first', items: [{ a: 1 }] }], "selectedItems is correct");
+});
+
 QUnit.test("item should be correct for plain list", function(assert) {
     var items = [{ a: 0 }, { a: 1 }];
 
