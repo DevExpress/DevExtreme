@@ -68,6 +68,10 @@ var GroupedEditStrategy = EditStrategy.inherit({
     getItemDataByIndex: function(index) {
         var items = this._collectionWidget.option("items");
 
+        if($.isNumeric(index)) {
+            return this.itemsGetter()[index];
+        }
+
         return (index && items[index.group] && items[index.group].items[index.item]) || null;
     },
 

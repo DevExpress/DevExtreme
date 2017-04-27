@@ -470,7 +470,7 @@ var ListEdit = ListBase.inherit({
     */
     // TODO: rename & rework because method return itemData but named as itemElement
     getItemByIndex: function(index) {
-        return this._getItemData(this._itemElements().eq(index));
+        return this._editStrategy.getItemDataByIndex(index);
     }
 
     /**

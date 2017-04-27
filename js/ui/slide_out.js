@@ -129,6 +129,15 @@ var SlideOut = CollectionWidget.inherit({
             contentTemplate: "content",
 
             selectionMode: "single",
+
+            /**
+             * @name dxSlideOutOptions_selectedIndex
+             * @publicName selectedIndex
+             * @type number
+             * @default 0
+             */
+            selectedIndex: 0,
+
             selectionRequired: true
 
             /**
@@ -188,6 +197,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _init: function() {
+        this._selectedItemContentRendered = false;
         this.callBase();
         this.element().addClass(SLIDEOUT_CLASS);
         this._initSlideOutView();
@@ -253,6 +263,7 @@ var SlideOut = CollectionWidget.inherit({
         this._list = this._createComponent($list, List, {
             itemTemplateProperty: "menuTemplate",
             selectionMode: this.option("selectionMode"),
+            selectedIndex: this.option("selectedIndex"),
             selectionRequired: this.option("selectionRequired"),
             indicateLoading: false,
             onItemClick: $.proxy(this._listItemClickHandler, this),
@@ -304,6 +315,7 @@ var SlideOut = CollectionWidget.inherit({
             selectedIndex = this.option("selectedIndex");
 
         if(items.length && selectedIndex > -1) {
+            this._selectedItemContentRendered = true;
             var selectedItem = this._list.getItemByIndex(selectedIndex);
             this._renderItems([selectedItem]);
         }
@@ -369,6 +381,9 @@ var SlideOut = CollectionWidget.inherit({
                 break;
             case "items":
                 this._changeMenuOption("items", this.option("items"));
+                if(!this._selectedItemContentRendered) {
+                    this._renderSelection();
+                }
                 break;
             case "dataSource":
             case "selectedIndex":
