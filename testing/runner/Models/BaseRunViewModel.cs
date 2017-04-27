@@ -6,7 +6,6 @@ namespace Runner.Models
         public bool NoTryCatch { get; set; }
         public bool NoGlobals { get; set; }
         public bool NoTimers { get; set; }
-        public bool NoJQuery { get; set; }
         public string JQueryVersion { get; set; }
         public bool ForceCombinedStyles { get; set; }
         public bool WorkerInWindow { get; set; }
