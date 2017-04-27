@@ -1458,7 +1458,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     _attachClickEvent: function() {
         var that = this,
             clickSelector = "." + this._itemClass(),
-            pointerDownSelector = clickSelector + ", .dx-checkbox",
+            pointerDownSelector = "." + NODE_CLASS,
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             pointerDownEvent = eventUtils.addNamespace(pointerEvents.down, this.NAME);
 

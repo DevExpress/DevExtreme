@@ -240,32 +240,3 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
     assert.ok(nodes[0].items[0].selected, "item was selected");
     assert.strictEqual(nodes[0].selected, undefined, "item selection has undefined state");
 });
-
-QUnit.test("Checkbox should be clicked when treeview in not in focus", function(assert) {
-    var data = [
-        { id: 1, parentId: 0, text: "Cats" },
-        { id: 2, parentId: 0, text: "Dogs" },
-        { id: 3, parentId: 0, text: "Tigers" },
-        { id: 4, parentId: 0, text: "Birds" },
-        { id: 5, parentId: 0, text: "Hippos" },
-        { id: 6, parentId: 0, text: "Elefants" },
-        { id: 7, parentId: 0, text: "Cows" }
-    ];
-
-    var $treeView = initTree({
-        dataSource: data,
-        dataStructure: "plain",
-        showCheckBoxesMode: "normal",
-        height: 100
-    });
-
-    var treeView = $treeView.dxTreeView("instance");
-    var pointerDownStub = sinon.stub(treeView, "_itemPointerDownHandler");
-
-    var $node = $treeView.find("." + internals.NODE_CLASS).eq(5),
-        $checkBox = $node.find(".dx-checkbox");
-
-    $checkBox.trigger("dxpointerdown");
-
-    assert.equal(pointerDownStub.callCount, 1, "checkBox should be part of node");
-});
