@@ -656,7 +656,12 @@ input.dx-hidden {
 .dx-datagrid-group-panel {
     display: inline-block;
     white-space: nowrap;
+    width: 100%;
     .touch-action(pinch-zoom);
+
+    .dx-group-panel-message {
+        .dx-overflow();
+    }
 
     .dx-group-panel-item {
         display: inline-block;
