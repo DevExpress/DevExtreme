@@ -38,21 +38,32 @@ var DropDownBox = DropDownEditor.inherit({
         });
     },
 
-    _getFirstTabbable: function($elements) {
-        var $result = null;
+    _getFirstLastTabbable: function($elements) {
+        var tabbable = {},
+            length = $elements.length;
 
-        $elements.each(function(_, contentElement) {
-            if(selectors.tabbable(_, contentElement)) {
-                $result = contentElement;
-                return false;
+        for(var i = 0; i < length; i++) {
+            var $forwardCurrent = $elements[i],
+                $backwardCurrent = $elements[length - i - 1];
+
+            if(!tabbable.first && selectors.tabbable(null, $forwardCurrent)) {
+                tabbable.first = $forwardCurrent;
             }
-        });
 
-        return $result;
+            if(!tabbable.last && selectors.tabbable(null, $backwardCurrent)) {
+                tabbable.last = $backwardCurrent;
+            }
+
+            if(tabbable.first && tabbable.last) {
+                break;
+            }
+        }
+
+        return tabbable;
     },
 
     _getFirstPopupElement: function() {
-        return this._getFirstTabbable(this.content().find("*"));
+        return this._getFirstLastTabbable(this.content().find("*")).first;
     },
 
     _getDefaultOptions: function() {
@@ -198,18 +209,23 @@ var DropDownBox = DropDownEditor.inherit({
         this._popup && !this.option("dropDownOptions.width") && this._updatePopupWidth();
     },
 
-    _popupKeyboardHandler: function(e) {
+    _popupElementTabHandler: function(e) {
         if(e.key !== "tab") return;
 
-        var that = this;
+        var $elements = this.content().find("*"),
+            tabbable = this._getFirstLastTabbable($elements),
+            $target = e.originalEvent.target,
+            moveBackward = !!($target === tabbable.first && e.shift),
+            moveForward = !!($target === tabbable.last && !e.shift);
 
-        this._focusTimer = setImmediate(function() {
-            var hasFocused = !!that.content().find(":focus").length;
-            if(hasFocused) return;
+        if(moveBackward || moveForward) {
+            this.close();
+            this._input().focus();
 
-            that.close();
-            that._input().focus().focusin();
-        });
+            if(moveBackward) {
+                e.originalEvent.preventDefault();
+            }
+        }
     },
 
     _renderPopup: function(e) {
@@ -218,7 +234,7 @@ var DropDownBox = DropDownEditor.inherit({
         if(this.option("focusStateEnabled")) {
             this._popup._keyboardProcessor.push(new KeyboardProcessor({
                 element: this.content(),
-                handler: this._popupKeyboardHandler,
+                handler: this._popupElementTabHandler,
                 context: this
             }));
         }
@@ -229,7 +245,7 @@ var DropDownBox = DropDownEditor.inherit({
             width: this.element().outerWidth(),
             height: "auto",
             tabIndex: -1,
-            focusStateEnabled: true,
+            focusStateEnabled: this.option("focusStateEnabled"),
             onPositioned: null,
             maxHeight: this._getMaxHeight.bind(this)
         }, this.option("dropDownOptions"));
@@ -263,11 +279,6 @@ var DropDownBox = DropDownEditor.inherit({
             }
             return true;
         }, this);
-    },
-
-    _clean: function() {
-        this.callBase();
-        clearImmediate(this._focusTimer);
     },
 
     _optionChanged: function(args) {

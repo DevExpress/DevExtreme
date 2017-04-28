@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
+    fx = require("animation/fx"),
     DropDownBox = require("ui/drop_down_box");
 
 require("common.css!");
@@ -17,18 +18,12 @@ QUnit.testStart(function() {
 
 var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
     DX_TEXTEDITOR_INPUT_CLASS = "dx-texteditor-input",
+    TAB_KEY_CODE = 9,
     DX_STATE_FOCUSED_CLASS = "dx-state-focused";
-
-setImmediate = function(callback) {
-    return setTimeout(callback, 0);
-};
-
-clearImmediate = function(id) {
-    return clearTimeout(id);
-};
 
 var moduleConfig = {
     beforeEach: function() {
+        fx.off = true;
         this.clock = sinon.useFakeTimers();
         this.$element = $("#dropDownBox");
         this.simpleItems = [
@@ -38,6 +33,7 @@ var moduleConfig = {
         ];
     },
     afterEach: function() {
+        fx.off = false;
         this.clock.restore();
     }
 };
@@ -269,11 +265,12 @@ QUnit.test("dimensionChanged should be called once when different popup options 
 
 QUnit.module("keyboard navigation", moduleConfig);
 
-QUnit.test("first focusable element inside of content should get focused after tab pressing", function(assert) {
+QUnit.testInActiveWindow("first focusable element inside of content should get focused after tab pressing", function(assert) {
     var $input1 = $("<input>", { id: "input1", type: "text" }),
         $input2 = $("<input>", { id: "input2", type: "text" }),
         instance = new DropDownBox(this.$element, {
             opened: true,
+            focusStateEnabled: true,
             contentTemplate: function(component, $content) {
                 $content.append($input1, $input2);
             }
@@ -288,10 +285,11 @@ QUnit.test("first focusable element inside of content should get focused after t
     assert.ok($input1.is(":focus"), "first focusable content element got focused");
 });
 
-QUnit.test("widget should be closed after tab pressing on the last content element", function(assert) {
+QUnit.testInActiveWindow("widget should be closed after tab pressing on the last content element", function(assert) {
     var $input1 = $("<input>", { id: "input1", type: "text" }),
         $input2 = $("<input>", { id: "input2", type: "text" }),
         instance = new DropDownBox(this.$element, {
+            focusStateEnabled: true,
             opened: true,
             contentTemplate: function(component, $content) {
                 $content.append($input1, $input2);
@@ -305,20 +303,21 @@ QUnit.test("widget should be closed after tab pressing on the last content eleme
     assert.notOk(instance.option("opened"), "popup was closed");
 });
 
-QUnit.test("input should get focused when shift+tab pressed on first content element", function(assert) {
+QUnit.testInActiveWindow("input should get focused when shift+tab pressed on first content element", function(assert) {
     var $input1 = $("<input>", { id: "input1", type: "text" }),
         $input2 = $("<input>", { id: "input2", type: "text" }),
         instance = new DropDownBox(this.$element, {
+            focusStateEnabled: true,
             opened: true,
             contentTemplate: function(component, $content) {
                 $content.append($input1, $input2);
             }
         }),
-        keyboard = keyboardMock($input1);
+        event = $.Event("keydown", { which: TAB_KEY_CODE, shiftKey: true });
 
-    keyboard.press("shift+tab");
-    this.clock.tick();
+    $input1.focus().trigger(event);
 
     assert.notOk(instance.option("opened"), "popup was closed");
     assert.ok(this.$element.hasClass(DX_STATE_FOCUSED_CLASS), "input is focused");
+    assert.ok(event.isDefaultPrevented(), "prevent default for focusing it's own input but not an input of the previous editor on the page");
 });
