@@ -99,7 +99,9 @@ var Switch = Editor.inherit({
             */
             value: false,
 
-            useInkRipple: false
+            useInkRipple: false,
+
+            useOldRendering: false
 
                 /**
                 * @name dxSwitchOptions_name
@@ -135,6 +137,15 @@ var Switch = Editor.inherit({
                 options: {
                     useInkRipple: true
                 }
+            },
+            {
+                device: function() {
+                    var device = devices.real();
+                    return (device.platform === "android") && (device.version[0] < 4 || (device.version[0] === 4 && device.version[1] < 4));
+                },
+                options: {
+                    useOldRendering: true
+                }
             }
         ]);
     },
@@ -160,8 +171,18 @@ var Switch = Editor.inherit({
         this.callBase();
 
         this._handleWidth = this._$handle.outerWidth();
+        this._getHandleOffset = this.option("useOldRendering") ? this._getPixelOffset : this._getCalcOffset;
         this._renderValue();
         this._renderClick();
+    },
+
+    _getCalcOffset: function(value, offset) {
+        var ratio = offset - Number(!value);
+        return "calc(" + 100 * ratio + "% + " + -this._handleWidth * ratio + "px)";
+    },
+
+    _getPixelOffset: function(value, offset) {
+        return this._getMarginBound() * (offset - Number(!value));
     },
 
     _renderSwitchInner: function() {
@@ -294,7 +315,6 @@ var Switch = Editor.inherit({
     },
 
     _clickHandler: function(args) {
-        this.time = new Date();
         var e = args.jQueryEvent;
 
         this._saveValueChangeEvent(e);
@@ -354,11 +374,6 @@ var Switch = Editor.inherit({
 
     _swipeUpdateHandler: function(e) {
         this._renderPosition(this.option("value"), this._offsetDirection() * e.jQueryEvent.offset);
-    },
-
-    _getHandleOffset: function(value, offset) {
-        var ratio = offset - Number(!value);
-        return "calc(" + 100 * ratio + "% + " + -this._handleWidth * ratio + "px)";
     },
 
     _swipeEndHandler: function(e) {
