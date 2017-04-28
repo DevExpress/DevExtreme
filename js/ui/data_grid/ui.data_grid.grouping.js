@@ -410,7 +410,6 @@ var GroupingHeaderPanelExtender = (function() {
 
             if(that._isGroupPanelVisible()) {
                 var toolbarItem = {
-                    text: "text",
                     html: "<div class='" + DATAGRID_GROUP_PANEL_CLASS + "'></div>",
                     name: "groupPanel",
                     onItemRendered: groupPanelRenderedCallback,
