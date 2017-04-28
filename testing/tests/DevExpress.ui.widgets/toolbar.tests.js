@@ -123,7 +123,6 @@ QUnit.test("items - long labels", function(assert) {
     var maxLabelWidth = this.element.width() - beforeSectionWidth - afterSectionWidth;
 
     assert.ok(parseFloat($label.css("max-width")) < maxLabelWidth);
-
 });
 
 QUnit.test("items - custom html", function(assert) {
@@ -136,6 +135,35 @@ QUnit.test("items - custom html", function(assert) {
     var label = this.element.find("b");
     assert.equal(label.length, 1);
     assert.equal(label.text(), "Label");
+    assert.ok(this.element.find("." + TOOLBAR_ITEM_CLASS).hasClass(TOOLBAR_LABEL_CLASS));
+});
+
+QUnit.test("items - long custom html", function(assert) {
+    this.element.dxToolbar({
+        items: [
+            { location: 'before', widget: 'button', options: { text: 'Before Button' } },
+            { location: 'before', widget: 'button', options: { text: 'Second Before Button' } },
+            { location: 'after', widget: 'button', options: { text: 'After Button' } },
+            { location: 'center', html: '<b>Very very very very very very very very very very very long label</b>' }
+        ],
+        width: 400
+    });
+
+    var $label = this.element.find("." + TOOLBAR_LABEL_CLASS);
+
+    assert.equal($label.children().eq(0).css("text-overflow"), "ellipsis");
+    assert.equal($label.children().eq(0).css("overflow"), "hidden");
+
+    var $centerSection = this.element.find("." + TOOLBAR_CENTER_CONTAINER_CLASS),
+        beforeSectionWidth = this.element.find("." + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width,
+        afterSectionWidth = this.element.find("." + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+
+    assert.roughEqual(parseFloat($centerSection.css("margin-left")), beforeSectionWidth, 0.1);
+    assert.roughEqual(parseFloat($centerSection.css("margin-right")), afterSectionWidth, 0.1);
+
+    var maxLabelWidth = this.element.width() - beforeSectionWidth - afterSectionWidth;
+
+    assert.ok(parseFloat($label.css("max-width")) < maxLabelWidth);
 });
 
 QUnit.test("items - location", function(assert) {
