@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     selectionModule = require("../grid_core/ui.grid_core.selection"),
     extend = require("../../core/utils/extend").extend;
 
-var TREELIST_EDITOR_CELL_CLASS = "dx-treelist-editor-cell";
+var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all";
 
 var originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
 
@@ -60,7 +60,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 renderSelectAll: function($cell, options) {
-                    $cell.addClass(TREELIST_EDITOR_CELL_CLASS);
+                    $cell.addClass(TREELIST_SELECT_ALL_CLASS);
 
                     var $checkbox = this._renderSelectAllCheckBox($cell);
                     this._attachSelectAllCheckBoxClickEvent($checkbox);
@@ -68,14 +68,14 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
             },
 
             rowsView: {
-                _renderCellCommandContent: function(container, model) {
-                    var result = this.callBase(container, model);
+                _renderExpandIcon: function($container, options) {
+                    var $iconContainer = this.callBase($container, options);
 
-                    if(result && this.option("selection.mode") === "multiple") {
-                        this.getController("selection").renderSelectCheckBoxContainer(container, model);
+                    if(this.option("selection.mode") === "multiple") {
+                        this.getController("selection").renderSelectCheckBoxContainer($iconContainer, options);
                     }
 
-                    return result;
+                    return $iconContainer;
                 },
 
                 _rowClick: function(e) {

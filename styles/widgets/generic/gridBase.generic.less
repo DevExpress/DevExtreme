@@ -41,6 +41,7 @@
     @GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid ~"@{@{widgetName}-drag-header-border-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-shadow-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
+    @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
     .dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
         .dx-selection .dx-checkbox-icon {
@@ -336,8 +337,8 @@
         line-height: normal;
 
         .dx-checkbox-icon {
-            height: 16px;
-            width: 16px;
+            height: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
+            width: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
         }
     }
 
