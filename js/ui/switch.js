@@ -159,7 +159,7 @@ var Switch = Editor.inherit({
 
         this.callBase();
 
-        this._updateMarginBound();
+        this._handleWidth = this._$handle.outerWidth();
         this._renderValue();
         this._renderClick();
     },
@@ -251,11 +251,10 @@ var Switch = Editor.inherit({
         this._renderInkWave(this._$handle, e, value, 1);
     },
 
-    _updateMarginBound: function() {
-        this._marginBound = this._$switchContainer.outerWidth(true) - this._$handle.outerWidth();
-    },
-
     _getMarginBound: function() {
+        if(!this._marginBound) {
+            this._marginBound = this._$switchContainer.outerWidth(true) - this._handleWidth;
+        }
         return this._marginBound;
     },
 
@@ -268,11 +267,10 @@ var Switch = Editor.inherit({
     },
 
     _renderPosition: function(state, swipeOffset) {
-        var stateInt = state ? 1 : 0,
-            marginDirection = this._marginDirection(),
+        var marginDirection = this._marginDirection(),
             resetMarginDirection = marginDirection === "Left" ? "Right" : "Left";
 
-        this._$switchInner.css("margin" + marginDirection, this._getMarginBound() * (stateInt + swipeOffset - 1));
+        this._$switchInner.css("margin" + marginDirection, this._getHandleOffset(state, swipeOffset));
         this._$switchInner.css("margin" + resetMarginDirection, 0);
     },
 
@@ -325,8 +323,8 @@ var Switch = Editor.inherit({
             toConfig = {};
 
         this._$switchInner.css("margin" + resetMarginDirection, 0);
-        fromConfig["margin" + marginDirection] = (Number(startValue) - 1) * this._getMarginBound();
-        toConfig["margin" + marginDirection] = (Number(endValue) - 1) * this._getMarginBound();
+        fromConfig["margin" + marginDirection] = this._getHandleOffset(startValue, 0);
+        toConfig["margin" + marginDirection] = this._getHandleOffset(endValue, 0);
 
         fx.animate(this._$switchInner, {
             from: fromConfig,
@@ -358,12 +356,17 @@ var Switch = Editor.inherit({
         this._renderPosition(this.option("value"), this._offsetDirection() * e.jQueryEvent.offset);
     },
 
+    _getHandleOffset: function(value, offset) {
+        var ratio = offset - Number(!value);
+        return "calc(" + 100 * ratio + "% + " + -this._handleWidth * ratio + "px)";
+    },
+
     _swipeEndHandler: function(e) {
         var that = this,
             offsetDirection = this._offsetDirection(),
             toConfig = {};
 
-        toConfig["margin" + this._marginDirection()] = this._getMarginBound() * (that.option("value") + offsetDirection * e.jQueryEvent.targetOffset - 1);
+        toConfig["margin" + this._marginDirection()] = this._getHandleOffset(that.option("value"), offsetDirection * e.jQueryEvent.targetOffset);
 
         fx.animate(this._$switchInner, {
             to: toConfig,
@@ -397,19 +400,13 @@ var Switch = Editor.inherit({
         this._$labelOff.text(this.option("offText"));
     },
 
-    _visibilityChanged: function(visible) {
-        if(visible) {
-            this.repaint();
-        }
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "useInkRipple":
                 this._invalidate();
                 break;
-            case "visible":
             case "width":
+                delete this._marginBound;
                 this._refresh();
                 break;
             case "onText":
