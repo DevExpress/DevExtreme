@@ -416,6 +416,7 @@ var Switch = Editor.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case "useOldRendering":
             case "useInkRipple":
                 this._invalidate();
                 break;
