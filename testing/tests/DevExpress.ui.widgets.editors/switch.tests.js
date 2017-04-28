@@ -15,6 +15,7 @@ QUnit.testStart(function() {
             <div id="switch"></div>\
             <div id="switch2"></div>\
             <div id="widget"></div>\
+            <div style="display:none" id="invisibleSwitch"></div>\
             <div id="widthRootStyle" style="width: 300px;"></div>\
         </div>';
 
@@ -190,6 +191,27 @@ QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action"
     switcher.option("value", true);
 });
 
+QUnit.module("invisible container", {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+});
+
+QUnit.test("the position of handle for invisible and visible switch should be equal", function(assert) {
+    var $visibleElement = $("#switch").dxSwitch(),
+        $invisibleElement = $("#invisibleSwitch").dxSwitch();
+
+    if($visibleElement.dxSwitch("option", "useOldRendering")) {
+        assert.ok("not supported");
+        return;
+    }
+
+    $invisibleElement.css("display", "block");
+    assert.equal($visibleElement.find("." + HANDLE_CLASS).position().left, $invisibleElement.find("." + HANDLE_CLASS).position().left);
+});
 
 QUnit.module("hidden input");
 
