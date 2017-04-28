@@ -210,6 +210,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             that.callBase(e);
         },
 
+        _renderCore: function() {
+            this._filterRangeOverlayInstance = null;
+            this.callBase.apply(this, arguments);
+        },
+
         _resizeCore: function() {
             this.callBase.apply(this, arguments);
             this._filterRangeOverlayInstance && this._filterRangeOverlayInstance.repaint();

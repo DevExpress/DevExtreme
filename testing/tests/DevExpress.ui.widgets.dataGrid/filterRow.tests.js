@@ -1934,6 +1934,33 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
     assert.ok(dateBox.option("isValid"), "isValid option");
 });
 
+//T502318
+QUnit.test("There are no errors on repaint a filter row when filter range popup is visible", function(assert) {
+    //arrange
+    var that = this,
+        $testElement = $('#container').addClass("dx-datagrid-borders");
+
+    that.options.columns[1] = { dataField: "age", selectedFilterOperation: "between" };
+    setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+        initViews: true
+    });
+
+    that.columnHeadersView.render($testElement);
+
+    $testElement.find("td").last().find(".dx-filter-range-content").trigger("focusin");
+    that.clock.tick();
+
+    //assert
+    assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 1, "has overlay wrapper");
+
+    //act
+    that.columnHeadersView.render($testElement);
+    that.columnHeadersView.resize();
+
+    //assert
+    assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 0, "hasn't overlay wrapper");
+});
+
 if(device.deviceType === "desktop") {
     //T306751
     QUnit.testInActiveWindow("Filter range - keyboard navigation", function(assert) {
