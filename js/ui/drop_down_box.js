@@ -55,10 +55,6 @@ var DropDownBox = DropDownEditor.inherit({
         return this._getFirstTabbable(this.content().find("*"));
     },
 
-    _getLastPopupElement: function() {
-        return this._getFirstTabbable(this.content().find("*").reverse());
-    },
-
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
