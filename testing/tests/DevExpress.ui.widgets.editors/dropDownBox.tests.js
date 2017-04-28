@@ -285,6 +285,25 @@ QUnit.testInActiveWindow("first focusable element inside of content should get f
     assert.ok($input1.is(":focus"), "first focusable content element got focused");
 });
 
+QUnit.testInActiveWindow("last focusable element inside of content should get focused after shift+tab pressing", function(assert) {
+    var $input1 = $("<input>", { id: "input1", type: "text" }),
+        $input2 = $("<input>", { id: "input2", type: "text" }),
+        instance = new DropDownBox(this.$element, {
+            opened: true,
+            focusStateEnabled: true,
+            contentTemplate: function(component, $content) {
+                $content.append($input1, $input2);
+            }
+        }),
+        $input = this.$element.find("." + DX_TEXTEDITOR_INPUT_CLASS),
+        event = $.Event("keydown", { which: TAB_KEY_CODE, shiftKey: true });
+
+    $input.focus().trigger(event);
+
+    assert.ok(instance.option("opened"), "popup was not closed after shift+tab key pressed");
+    assert.ok($input2.is(":focus"), "first focusable content element got focused");
+});
+
 QUnit.testInActiveWindow("widget should be closed after tab pressing on the last content element", function(assert) {
     var $input1 = $("<input>", { id: "input1", type: "text" }),
         $input2 = $("<input>", { id: "input2", type: "text" }),

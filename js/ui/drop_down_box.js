@@ -30,7 +30,9 @@ var DropDownBox = DropDownEditor.inherit({
                     return;
                 }
 
-                var $focusableElement = this._getFirstPopupElement();
+                var $focusableElement = e.shiftKey
+                    ? this._getLastPopupElement()
+                    : this._getFirstPopupElement();
 
                 $focusableElement && $focusableElement.focus();
                 e.preventDefault();
@@ -64,6 +66,10 @@ var DropDownBox = DropDownEditor.inherit({
 
     _getFirstPopupElement: function() {
         return this._getFirstLastTabbable(this.content().find("*")).first;
+    },
+
+    _getLastPopupElement: function() {
+        return this._getFirstLastTabbable(this.content().find("*")).last;
     },
 
     _getDefaultOptions: function() {
