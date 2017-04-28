@@ -200,7 +200,7 @@ QUnit.module("invisible container", {
     }
 });
 
-QUnit.test("the position of handle for invisible and visible switch should be equal", function(assert) {
+QUnit.skip("the position of handle for invisible and visible switch should be equal", function(assert) {
     var $visibleElement = $("#switch").dxSwitch(),
         $invisibleElement = $("#invisibleSwitch").dxSwitch();
 
