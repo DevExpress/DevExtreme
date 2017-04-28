@@ -405,9 +405,7 @@ var GroupingHeaderPanelExtender = (function() {
         _appendGroupingItem: function(items) {
             var that = this,
                 groupPanelRenderedCallback = function(e) {
-                    if(e.itemData.name && e.itemData.name === "groupPanel") {
-                        that._updateGroupPanelContent(e.itemElement.find("." + DATAGRID_GROUP_PANEL_CLASS));
-                    }
+                    that._updateGroupPanelContent(e.itemElement.find("." + DATAGRID_GROUP_PANEL_CLASS));
                 };
 
             if(that._isGroupPanelVisible()) {
