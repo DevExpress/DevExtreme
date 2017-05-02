@@ -1,0 +1,123 @@
+.grid-base(treelist);
+
+.dx-treelist-rowsview {
+    .dx-treelist-table:not(.dx-treelist-table-fixed) {
+        .dx-treelist-empty-space {
+            width: 14px;
+        }
+
+        .dx-treelist-cell-expandable {
+            white-space: nowrap;
+
+            .dx-treelist-text-content {
+                display: inline-block;
+                white-space: normal;
+            }
+        }
+    }
+
+    .dx-treelist-icon-container {
+        display: inline-block;
+        white-space: nowrap;
+        vertical-align: top;
+    }
+
+    .dx-treelist-table-fixed {
+        .dx-treelist-icon-container {
+            float: left;
+        }
+    }
+
+    .dx-treelist-empty-space {
+        position: relative;
+        display: inline-block;
+        color: @treelist-spin-icon-color;
+        .dx-icon-spinright;
+
+        &:before {
+            visibility: hidden;
+        }
+    }
+
+    .dx-treelist-expanded span {
+        .dx-icon-spindown;
+        .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+        cursor: pointer;
+
+        &:before {
+            left: 0;
+            margin-left: -@TREELIST_EXPANDED_ICON_MARGIN_LEFT;
+            margin-top: -@TREELIST_ICON_MARGIN_TOP;
+        }
+    }
+
+    .dx-treelist-collapsed span {
+        .dx-icon-spinright;
+        .dx-icon-font-centered-sizing(@GENERIC_BASE_ICON_SIZE);
+        cursor: pointer;
+
+        &:before {
+            left: 0;
+            margin-left: -@TREELIST_COLLAPSED_ICON_MARGIN_LEFT;
+            margin-top: -@TREELIST_ICON_MARGIN_TOP;
+        }
+    }
+
+    &.dx-treelist-nowrap .dx-treelist-table {
+        .dx-treelist-cell-expandable {
+            .dx-treelist-text-content {
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
+.dx-treelist-editor-cell {
+     .dx-select-checkbox {
+          padding-right: @TREELIST_SELECT_CHECKBOX_PADDING_RIGHT;
+          padding-left: @TREELIST_SELECT_CHECKBOX_PADDING_LEFT;
+     }
+}
+
+.dx-treelist-cell-expandable .dx-select-checkbox {
+        float: left;
+        padding-right: @TREELIST_SELECT_CHECKBOX_PADDING_RIGHT;
+}
+
+.dx-treelist-cell-expandable,
+    .dx-treelist-editor-cell  {
+        .dx-checkbox {
+            &.dx-checkbox-checked {
+                .dx-checkbox-icon {
+                    font-size: @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE;
+                }
+            }
+        }
+    }
+.dx-rtl {
+    .dx-treelist-rowsview {
+        .dx-treelist-icon-container {
+            .flip-horizontally();
+        }
+
+        .dx-treelist-table-fixed {
+            .dx-treelist-icon-container {
+                direction: ltr;
+                float: right;
+            }
+        }
+    }
+
+    .dx-treelist-editor-cell {
+        .dx-select-checkbox {
+            padding-left: @TREELIST_SELECT_CHECKBOX_PADDING_RIGHT;
+            padding-right: @TREELIST_SELECT_CHECKBOX_PADDING_LEFT;
+        }
+    }
+
+    .dx-treelist-cell-expandable .dx-select-checkbox {
+        float: right;
+        padding-left: @TREELIST_SELECT_CHECKBOX_PADDING_RIGHT;
+        padding-right: 0;
+    }
+}

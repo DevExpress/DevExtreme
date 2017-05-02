@@ -1,0 +1,91 @@
+.dx-actionsheet-popup-wrapper, .dx-actionsheet-popover-wrapper {
+    .dx-popup-content {
+        .dx-button {
+            display: block;
+            padding: 0;
+            width: 100%;
+            border: 0;
+            background: transparent;
+            color: @WIN8_BASE_TEXT;
+            text-align: left;
+            .backface-visibility(hidden);
+            .transition-duration(100ms);
+            .dx-theme-win8-typography.dx-font-s;
+            .transition-property(transform);
+            line-height: 1.7;
+
+            &.dx-state-active {
+                .translate(2px, 2px);
+            }
+        }
+
+        .dx-button-text {
+            font-weight: 200;
+        }
+    }
+
+    .dx-popup-title, .dx-popup-content {
+        width: 100%;
+        margin: 0;
+    }
+}
+
+.dx-actionsheet-popup-wrapper {
+    .dx-toolbar {
+        height: 40px;
+    }
+
+    .dx-toolbar-item{
+        padding: 0;
+        margin: 0;
+    }
+
+    .dx-popup-title {
+        padding-left: 16px;
+        text-transform: uppercase;
+    }
+}
+
+.dx-actionsheet-popover-wrapper {
+    .dx-popup-title {
+        font-size: @WIN8PHONE_H4;
+    }
+}
+
+.dx-actionsheet-container {
+    .dx-item-content {
+        margin-bottom: 5px;
+    }
+}
+
+.dx-device-phone {
+    .dx-actionsheet-popup-wrapper {
+        .dx-popup-title {
+            padding-left: 13px;
+
+            .dx-toolbar-item-content {
+                font-size: @WIN8PHONE_H3;
+            }
+        }
+
+        .dx-popup-content {
+            .dx-button {
+                font-size: @WIN8PHONE_H4;
+            }
+        }
+    }
+
+    .dx-actionsheet-popover-wrapper {
+        .dx-toolbar-item-content {
+            font-size: @WIN8PHONE_H4;
+        }
+    }
+}
+
+.dx-rtl {
+    .dx-actionsheet-item, .dx-actionsheet-cancel {
+        .dx-button-content {
+            text-align: right;
+        }
+    }
+}

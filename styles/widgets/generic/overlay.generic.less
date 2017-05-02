@@ -1,0 +1,15 @@
+.dx-overlay-shader {
+    background-color: @overlay-shader-bg;
+}
+
+.dx-overlay-wrapper {
+    .dx-base-typography();
+}
+
+.dx-popup-wrapper {
+    .dx-state-focused {
+        &.dx-overlay-content {
+            border: 1px solid @overlay-focus-border-color;
+        }
+    }
+}

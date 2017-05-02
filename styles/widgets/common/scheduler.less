@@ -1,0 +1,124 @@
+@SCHEDULER_DROP_DOWN_APPOINTMENT_HEIGHT: 65px;
+@SCHEDULER_DROP_DOWN_BUTTON_HEIGHT: 20px;
+@SCHEDULER_DROP_DOWN_BUTTON_PADDING: 2px;
+@SCHEDULER_DROP_DOWN_BUTTON_BORDER_WIDTH: 1px;
+@SCHEDULER_DROP_DOWN_BUTTON_BLOCK_WIDTH: 75px;
+
+.dx-scheduler .dx-empty-message {
+    line-height: normal;
+}
+
+
+.dx-scheduler-all-day-panel {
+    td {
+        padding: 0;
+    }
+}
+
+.dx-scheduler-dropdown-appointments {
+    position: absolute;
+    display: block;
+    height: @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT;
+    text-align: center;
+    cursor: pointer;
+    .border-radius(3px);
+
+    .dx-scheduler-dropdown-appointments-content {
+        span:last-child {
+            display: inline-block;
+            vertical-align: middle;
+            line-height: @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT / 2;
+            height: @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT;
+            padding-left: 2px;
+        }
+    }
+
+    &.dx-button {
+        padding: 0;
+        max-width: none;
+    }
+}
+
+.dx-scheduler-work-space-mouse-selection {
+    .dx-scheduler-fixed-appointments, .dx-scheduler-scrollable-appointments {
+        pointer-events: none;
+    }
+}
+
+.dx-dropdownmenu-popup-wrapper {
+    .dx-scheduler-dropdown-appointment {
+        max-width: 400px;
+        height: @SCHEDULER_DROP_DOWN_APPOINTMENT_HEIGHT;
+        position: relative;
+
+        &.dx-list-item-content {
+            padding: 5px;
+            width: 100%;
+        }
+    }
+}
+
+.dx-scheduler-dropdown-appointment-info-block {
+    max-width: 300px;
+    margin-right: @SCHEDULER_DROP_DOWN_BUTTON_BLOCK_WIDTH;
+    margin-top: 7px;
+}
+
+.dx-scheduler-dropdown-appointment-buttons-block {
+    position: absolute;
+    top: (@SCHEDULER_DROP_DOWN_APPOINTMENT_HEIGHT - @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT - @SCHEDULER_DROP_DOWN_BUTTON_PADDING * 2 - @SCHEDULER_DROP_DOWN_BUTTON_BORDER_WIDTH * 2) / 2;
+    right: 0;
+    width: @SCHEDULER_DROP_DOWN_BUTTON_BLOCK_WIDTH;
+    text-align: right;
+}
+
+.dx-scheduler-dropdown-appointment-title {
+    .dx-overflow();
+}
+
+.dx-popup-content {
+    .dx-button {
+        &.dx-scheduler-dropdown-appointment-remove-button,
+        &.dx-scheduler-dropdown-appointment-edit-button {
+            padding: @SCHEDULER_DROP_DOWN_BUTTON_PADDING;
+            margin: 0 10px 0 0;
+
+            .dx-button-content {
+                padding: 0;
+            }
+
+            .dx-icon {
+                font-size: 14px;
+                width: 18px;
+                height: 18px;
+                line-height: 18px;
+            }
+        }
+    }
+}
+
+.dx-scheduler-dropdown-appointment-date {
+    font-size: 12px;
+}
+
+.dx-rtl {
+    .dx-scheduler-dropdown-appointment-info-block {
+        margin-left: @SCHEDULER_DROP_DOWN_BUTTON_BLOCK_WIDTH;
+        margin-right: auto;
+    }
+
+    .dx-scheduler-dropdown-appointment-buttons-block {
+        left: 0;
+        right: auto;
+        text-align: left;
+    }
+
+    .dx-popup-content {
+        .dx-button {
+            &.dx-scheduler-dropdown-appointment-remove-button,
+            &.dx-scheduler-dropdown-appointment-edit-button {
+                margin: 0 0 0 10px;
+            }
+        }
+    }
+}

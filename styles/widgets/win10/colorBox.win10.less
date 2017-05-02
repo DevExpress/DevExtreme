@@ -1,0 +1,70 @@
+@WIN10_COLOBOX_COLORPREVIEW_SIZE: 17px;
+
+.dx-colorbox {
+    .dx-placeholder {
+        left: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL + @WIN10_COLOBOX_COLORPREVIEW_SIZE;
+
+        .dx-rtl&,
+        .dx-rtl & {
+            right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL + @WIN10_COLOBOX_COLORPREVIEW_SIZE;
+            left: auto;
+        }
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_FOCUSED_BORDER_COLOR;
+        }
+
+        .dx-texteditor-input {
+            background-color: @WIN10_TEXTEDITOR_FOCUSED_INPUT_BACKGROUND_COLOR;
+            color: @WIN10_TEXTEDITOR_FOCUSED_TEXT_COLOR;
+        }
+    }
+}
+
+.dx-colorbox-input-container {
+    &:after {
+        left: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+        .dx-rtl.dx-colorbox.dx-dropdowneditor &,
+        .dx-rtl .dx-colorbox.dx-dropdowneditor & {
+            right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            left: auto;
+        }
+    }
+
+    .dx-colorbox-input {
+        padding-left: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL * 2 + @WIN10_COLOBOX_COLORPREVIEW_SIZE;
+
+        .dx-rtl.dx-colorbox &.dx-texteditor-input,
+        .dx-rtl .dx-colorbox &.dx-texteditor-input {
+            padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL * 2 + @WIN10_COLOBOX_COLORPREVIEW_SIZE;
+        }
+    }
+}
+
+.dx-colorbox-color-result-preview {
+    left: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+    .dx-rtl.dx-colorbox.dx-dropdowneditor &,
+    .dx-rtl .dx-colorbox.dx-dropdowneditor & {
+        right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+        left: auto;
+    }
+}
+
+.dx-colorbox-color-is-not-defined {
+    .dx-colorbox-color-result-preview {
+        background: @WIN10_COLORBOX_NOCOLOR_IMG no-repeat 0 0;
+    }
+}
+
+.dx-colorbox-overlay {
+    padding: 0;
+
+    .dx-popup-content {
+        padding: @WIN10_POPUP_PADDING_BASE;
+    }
+}

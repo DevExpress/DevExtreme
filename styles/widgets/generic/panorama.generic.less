@@ -1,0 +1,27 @@
+.dx-size-default() {
+    @GENERIC_PANORAMA_TITLE_HEIGHT: 70px;
+    @GENERIC_PANORAMA_ITEM_TITLE_HEIGHT: 45px;
+}
+.dx-size-compact() {
+    @GENERIC_PANORAMA_TITLE_HEIGHT: 60px;
+    @GENERIC_PANORAMA_ITEM_TITLE_HEIGHT: 35px;
+}
+
+
+.dx-panorama-title,
+.dx-panorama-ghosttitle {
+    height: @GENERIC_PANORAMA_TITLE_HEIGHT;
+    font-size: @GENERIC_PANORAMA_TITLE_HEIGHT - 5px;
+}
+
+.dx-panorama-itemscontainer {
+    top: @GENERIC_PANORAMA_TITLE_HEIGHT;
+}
+
+.dx-panorama-item-title {
+    font-size: @GENERIC_PANORAMA_ITEM_TITLE_HEIGHT / 1.5;
+}
+
+.dx-panorama-item-content {
+    top: @GENERIC_PANORAMA_ITEM_TITLE_HEIGHT;
+}

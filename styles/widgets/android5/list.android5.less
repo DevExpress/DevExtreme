@@ -1,0 +1,268 @@
+@ANDROID5_LIST_ITEM_PADDING: 16px;
+@ANDROID5_LIST_ITEM_BORDER_BOTTOM: 1px solid @ANDROID5_LIST_ITEM_BORDER_BOTTOM_COLOR;
+@ANDROID5_LIST_GROUP_HEADER_BORDER_BOTTOM: 2px solid @ANDROID5_LIST_GROUP_HEADER_BORDER_BOTTOM_COLOR;
+
+.dx-list {
+    .dx-empty-message {
+        text-align: center;
+    }
+
+    .dx-scrollable-container {
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    .dx-scrollview-content {
+        overflow: hidden;
+    }
+}
+
+.dx-list-group-header {
+    padding: 1em 16px;
+    .dx-theme-android5-typography.dx-font-xs;
+    font-weight: bold;
+    color: @ANDROID5_LIST_GROUP_HEADER_COLOR;
+    &:before {
+        border-top-color: @ANDROID5_LIST_GROUP_HEADER_COLOR;
+        margin-top: 16px;
+    }
+
+    .dx-list-group-collapsed &:before {
+        border-bottom-color: @ANDROID5_LIST_GROUP_HEADER_COLOR;
+    }
+}
+
+.dx-list-group-collapsed {
+    .dx-list-group-header {
+        &:before {
+            margin-top: 12px;
+        }
+    }
+}
+
+.dx-list-item {
+    position: relative;
+    .dx-icons-dark;
+
+    &:last-child,
+    &:only-child {
+        border-bottom: 0;
+    }
+
+    .dx-icon-toggle-delete {
+        background-image: @ANDROID5_LIST_DELETE_SWITCH_BACKGROUND;
+        .background-size-prop(100%);
+    }
+
+    &.dx-state-active {
+        background-color: @ANDROID5_LIST_ITEM_HOVER_BACKGROUND;
+    }
+
+    .dx-inkripple {
+        overflow: hidden;
+    }
+
+    .dx-inkripple-wave {
+        background-color: @ANDROID5_LIST_ITEM_HOVER_BACKGROUND;
+    }
+
+    &.dx-state-focused,
+    &.dx-state-hover {
+        background-color: @ANDROID5_LIST_ITEM_HOVER_BACKGROUND;
+    }
+
+    .dx-list-item-separator-hidden & {
+        border-bottom: none;
+    }
+}
+
+.dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-selected {
+    background-color: @ANDROID5_LIST_ITEM_SELECTED_BACKGROUND;
+}
+
+.dx-list-item-chevron {
+    border-color: @ANDROID5_WIDGET_TEXT;
+}
+
+.dx-list-border-visible {
+    border: @ANDROID5_LIST_ITEM_BORDER_BOTTOM;
+}
+
+.dx-list-item,
+.dx-list .dx-empty-message {
+    color: @ANDROID5_LIST_NORESULT_COLOR;
+    line-height: 24px;
+}
+
+.dx-list-item-content,
+.dx-list .dx-empty-message {
+    padding: @ANDROID5_LIST_ITEM_PADDING;
+}
+
+.dx-list-item-before-bag {
+    &.dx-list-toggle-delete-switch-container {
+        width: @ANDROID5_LIST_ITEM_PADDING + 40px;
+
+        .dx-button {
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+    }
+
+    &.dx-list-select-checkbox-container,
+    &.dx-list-select-radiobutton-container {
+        width: @ANDROID5_LIST_ITEM_PADDING + 25px - 5px;
+    }
+
+    .dx-list-toggle-delete-switch {
+        border: none;
+        background-color: transparent;
+        .box-shadow(none);
+    }
+
+    .dx-button-content:before {
+        content: none;
+    }
+
+    .dx-icon-toggle-delete {
+        width: 21px;
+        height: 21px;
+    }
+
+    .dx-list-select-checkbox {
+        margin-left: @ANDROID5_LIST_ITEM_PADDING;
+    }
+
+    .dx-list-select-radiobutton {
+        margin-left: @ANDROID5_LIST_ITEM_PADDING;
+    }
+}
+
+.dx-list-select-all {
+    padding: 1em 0;
+    border-bottom: @ANDROID5_LIST_ITEM_BORDER_BOTTOM;
+}
+
+.dx-list-select-all-checkbox {
+    margin-top: 4px;
+    margin-bottom: -3px;
+    margin-left: @ANDROID5_LIST_ITEM_PADDING;
+    float: left;
+}
+
+.dx-list-select-all-label {
+    padding: 0 11px;
+    vertical-align: middle;
+}
+
+// static delete button
+
+.dx-list-static-delete-button-container {
+    width: 57px;
+
+    .dx-list-static-delete-button {
+        margin: 0 8px;
+        padding: 0;
+    }
+}
+
+// reorder
+
+.dx-list-item-after-bag {
+    &.dx-list-reorder-handle-container {
+        width: @ANDROID5_LIST_ITEM_PADDING + 30px;
+    }
+
+    .dx-list-reorder-handle {
+        width: 35px;
+        height: 35px;
+        background-image: @ANDROID5_LIST_REORDER_HANDLE_BACKGROUND;
+    }
+}
+
+.dx-list-item-ghost-reordering {
+    border-top: @ANDROID5_LIST_ITEM_BORDER_BOTTOM;
+    border-bottom: @ANDROID5_LIST_ITEM_BORDER_BOTTOM;
+    background-color: @ANDROID5_LIST_ITEM_GHOST_BACKGROUND;
+}
+
+.dx-list-slide-menu-button {
+    color: @ANDROID5_WIDGET_TEXT;
+}
+
+.dx-list-slide-menu-button-delete {
+    background-color: @ANDROID5_BUTTON_DANGER_BACKGROUND;
+}
+
+.dx-list-slide-menu-button-menu {
+    background-color: @ANDROID5_BUTTON_BACKGROUND;
+}
+
+.dx-list-group {
+    border-bottom: @ANDROID5_LIST_GROUP_HEADER_BORDER_BOTTOM;
+    border-bottom-width: 1px;
+
+    .dx-list-item:last-child {
+        border-bottom: none;
+    }
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.dx-list-switchable-delete-button {
+    margin-right: @ANDROID5_LIST_ITEM_PADDING;
+}
+
+
+.dx-list-context-menucontent {
+    background-color: @ANDROID5_POPUP_CONTENT_BACKGROUND;
+    .box-shadow(~"0 3px 4px rgba(0,0,0,.15)");
+
+    .dx-scrollable-container {
+        border: none;
+    }
+
+    .dx-list-item-content {
+        color: @ANDROID5_COLOR_BASE;
+    }
+}
+
+.dx-state-disabled {
+    &.dx-list {
+        opacity: 1;
+    }
+
+    &.dx-list-item, .dx-list-item {
+        color: @ANDROID5_LIST_DISABLE_COLOR;
+    }
+}
+
+.dx-rtl {
+    .dx-list,
+    &.dx-list {
+        .dx-list-item-before-bag {
+            .dx-list-select-checkbox {
+                margin-right: @ANDROID5_LIST_ITEM_PADDING;
+                margin-left: 1px;
+            }
+
+            .dx-list-select-radiobutton {
+                margin-right: @ANDROID5_LIST_ITEM_PADDING;
+                margin-left: 1px;
+            }
+        }
+
+        .dx-list-select-all-checkbox {
+            margin-right: @ANDROID5_LIST_ITEM_PADDING;
+            margin-left: 1px;
+            float: right;
+        }
+
+        .dx-list-switchable-delete-button {
+            margin-right: 0px;
+            margin-left: @ANDROID5_LIST_ITEM_PADDING;
+        }
+    }
+}

@@ -1,0 +1,22 @@
+@WIN10_SCROLLABLE_SCROLL_SIZE: 4px;
+
+.dx-scrollable-scroll {
+    margin: 0;
+    background-color: @WIN10_SCROLLABLE_SCROLL_BACKGROUND_COLOR;
+}
+
+.dx-scrollbar-vertical {
+    padding-right: @WIN10_SCROLLABLE_SCROLL_SIZE;
+
+    .dx-scrollable-scroll {
+        width: @WIN10_SCROLLABLE_SCROLL_SIZE;
+    }
+}
+
+.dx-scrollbar-horizontal {
+    padding-bottom: @WIN10_SCROLLABLE_SCROLL_SIZE;
+
+    .dx-scrollable-scroll {
+        height: @WIN10_SCROLLABLE_SCROLL_SIZE;
+    }
+}

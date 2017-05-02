@@ -1,0 +1,53 @@
+@ANDROID5_GALLERY_INDICATOR_ITEM_RADIUS: 50%;
+
+.dx-gallery-nav-button-prev,
+.dx-gallery-nav-button-next {
+    margin: -25px 12px 0;
+    width: 38px;
+    height: 56px;
+    background-repeat: no-repeat;
+}
+
+.dx-gallery-nav-button-prev {
+    .dx-icon-chevronleft;
+}
+
+.dx-gallery-nav-button-next {
+    .dx-icon-chevronright;
+}
+
+.dx-gallery-nav-button-prev,
+.dx-gallery-nav-button-next {
+    .dx-icon-font-centered-sizing(36px);
+    .border-radius(20%);
+    color: @ANDROID5_LIGHT_ICON_COLOR;
+    background-color: @ANDROID5_GALLERY_NAV_BUTTON_BACKGROUND_COLOR;
+
+    &.dx-state-active {
+        background-color: @ANDROID5_GALLERY_NAV_BUTTON_ACTIVE;
+    }
+}
+
+.dx-gallery-indicator {
+    text-align: center;
+}
+
+.dx-gallery-indicator-item {
+    margin: 1px 6px;
+    width: 8px;
+    height: 8px;
+    background: @ANDROID5_GALLERY_INDICATOR_ITEM_BACKGROUND;
+    .border-radius(@ANDROID5_GALLERY_INDICATOR_ITEM_RADIUS);
+    border: 1px solid @ANDROID5_GALLERY_INDICATOR_ITEM_SELECTED_BACKGROUND;
+}
+
+.dx-gallery-indicator-item-selected {
+    border: solid 1px fade(@ANDROID5_GALLERY_INDICATOR_ITEM_BACKGROUND, 80%);
+    background: @ANDROID5_GALLERY_INDICATOR_ITEM_SELECTED_BACKGROUND;
+    margin: 0px 6px 1px 6px; /* chrome accessibility hack T321837 */
+}
+
+.dx-state-disabled .dx-gallery,
+.dx-state-disabled.dx-gallery {
+    opacity: .45;
+}

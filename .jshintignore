@@ -1,0 +1,4 @@
+artifacts/*
+js/viz/docs/*
+node_modules/*
+vendor/*

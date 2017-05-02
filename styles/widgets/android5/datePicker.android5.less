@@ -1,0 +1,126 @@
+@ROLLER_HEIGHT: 182px;
+@ROLLER_ITEM_HEIGHT: 36px;
+@ROLLER_PADDING: (@ROLLER_HEIGHT - @ROLLER_ITEM_HEIGHT) / 2;
+@ANDROID5_POPUP_TITLE_BORDER_BOTTOM: solid 2px @ANDROID5_SELECT_COLOR;
+@ANDROID5_DATEPICKER_SHADOW_UP: bottom, @ANDROID5_DATE_PICKER_GRADIENT_COLOR 0%, @ANDROID5_POPUP_CONTENT_BACKGROUND 60%;
+@ANDROID5_DATEPICKER_SHADOW_DOWN: top, @ANDROID5_DATE_PICKER_GRADIENT_COLOR 0%, @ANDROID5_POPUP_CONTENT_BACKGROUND 60%;
+
+.dx-datepicker-wrapper {
+    .dx-popup-content {
+        text-align: center;
+    }
+}
+
+
+.dx-datepicker-rollers {
+    width: 100%;
+}
+
+.dx-datepicker-roller {
+    text-align: center;
+    min-width: 10%\9;
+
+    .dx-scrollable-content:before,
+    .dx-scrollable-content:after {
+        content: "";
+        height: @ROLLER_PADDING;
+        display: block;
+    }
+
+    .dx-scrollable-container {
+        height: @ROLLER_HEIGHT;
+    }
+
+    &.dx-state-active {
+        .dx-button {
+            display: none;
+        }
+    }
+}
+
+.dx-datepicker-item {
+    height: @ROLLER_ITEM_HEIGHT;
+    line-height: @ROLLER_ITEM_HEIGHT;
+    text-align: center;
+}
+
+.dx-datepicker-item-selected-frame {
+    position: absolute;
+    top: @ROLLER_PADDING;
+    width: 80%;
+    margin: 0 10%;
+
+    &:before, &:after {
+        .backface-visibility(hidden);
+        content: "";
+        display: block;
+        width: 100%;
+        position: absolute;
+        height: @ROLLER_PADDING;
+    }
+
+    &:before {
+        top: -@ROLLER_PADDING;
+        // NOTE: use transpared rgba insted 'transparent' for preventing incorrect gradient color
+        .gradient-linear(@ANDROID5_DATEPICKER_SHADOW_UP);
+    }
+
+    &:after {
+        top: @ROLLER_ITEM_HEIGHT;
+        // NOTE: use transpared rgba insted 'transparent' for preventing incorrect gradient color
+        .gradient-linear(@ANDROID5_DATEPICKER_SHADOW_DOWN);
+    }
+}
+.dx-datepicker-item-selected-border {
+    display: block;
+    border-top: @ANDROID5_POPUP_TITLE_BORDER_BOTTOM;
+    border-bottom: @ANDROID5_POPUP_TITLE_BORDER_BOTTOM;
+    height: 34px;
+    width: 80%;
+    margin: 0 10%;
+}
+.dx-datepicker-button-down,
+.dx-datepicker-button-up {
+    text-align: left;
+    width: 100%;
+    height: 0;
+    padding: 0;
+    left: 0;
+    position: absolute;
+    visibility: hidden;
+    z-index: 2;
+
+    &:after {
+        .backface-visibility(hidden);
+        width: 0;
+        margin: auto;
+        content: "";
+        display: block;
+        visibility: visible;
+        border-color: @ANDROID5_BUTTON_BACKGROUND transparent;
+        border-style: solid;
+        border-width: 0 10px;
+    }
+
+    &.dx-state-active {
+        &:after {
+            border-color: @ANDROID5_ACCENT_COLOR transparent;
+        }
+    }
+}
+
+.dx-datepicker-button-down {
+    bottom: 21px;
+
+    &:after {
+        border-width: 10px 10px 0;
+    }
+}
+
+.dx-datepicker-button-up {
+    top: 14px;
+
+    &:after {
+        border-width: 0 10px 10px;
+    }
+}

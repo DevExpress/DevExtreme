@@ -1,0 +1,87 @@
+@ANDROID5_TOOLBAR_HEIGHT: 56px;
+
+@ANDROID5_TOOLBAR_BUTTON_CONTENT_PADDING: 17px 16px 18px;
+@ANDROID5_TOOLBAR_BUTTON_LINE_HEIGHT: @ANDROID_BASE_ICON_SIZE;
+
+@ANDROID5_TOOLBAR_LABEL_FONT_SIZE: 18px;
+@ANDROID5_TOOLBAR_LABEL_PADDING: 16px 16px 15px;
+
+.dx-toolbar {
+    height: @ANDROID5_TOOLBAR_HEIGHT;
+    background: @ANDROID5_TOOLBAR_BACKGROUND;
+    color: @ANDROID5_TOOLBAR_TEXT_COLOR;
+    .dx-icons-white();
+}
+
+.dx-toolbar-background {
+    background-color: @ANDROID5_TOOLBAR_BACKGROUND;
+}
+
+.dx-toolbar-item,
+.dx-toolbar-menu-container {
+    padding: 0;
+}
+
+.dx-toolbar-button {
+    .dx-button {
+        min-width: 0;
+        position: relative;
+        overflow: hidden;
+        border: none;
+        background: @ANDROID5_TOOLBAR_BUTTON_BACKGROUND;
+        .box-shadow(@ANDROID5_TOOLBAR_BUTTON_SHADOW);
+        .border-radius(0);
+
+        .dx-icon {
+            .dx-icon-sizing(@ANDROID_BASE_ICON_SIZE);
+        }
+    }
+
+    .dx-button-content,
+    .dx-button-has-icon .dx-button-content {
+        padding: @ANDROID5_TOOLBAR_BUTTON_CONTENT_PADDING;
+    }
+
+    .dx-button-text {
+        line-height: @ANDROID5_TOOLBAR_BUTTON_LINE_HEIGHT;
+        color: @ANDROID5_TOOLBAR_TEXT_COLOR;
+    }
+}
+
+.dx-toolbar-label {
+    color: @ANDROID5_TOOLBAR_LABEL_COLOR;
+    font-weight: normal;
+    font-size: @ANDROID5_TOOLBAR_LABEL_FONT_SIZE;
+    padding: @ANDROID5_TOOLBAR_LABEL_PADDING;
+}
+
+.dx-toolbar-menu-section {
+    .dx-toolbar-item-auto-hide {
+        padding: 5px 10px;
+    }
+}
+
+.dx-toolbar-menu-section .dx-toolbar-hidden-button {
+    .dx-list-item-content {
+        padding: 0;
+    }
+
+    .dx-button.dx-state-hover {
+        background-color: transparent;
+    }
+
+    .dx-button .dx-button-content {
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
+.dx-toolbar-hidden-button .dx-button-text {
+    text-transform: none;
+}
+
+.dx-toolbar-text-auto-hide .dx-button {
+    .dx-icon {
+        margin: 0;
+    }
+}

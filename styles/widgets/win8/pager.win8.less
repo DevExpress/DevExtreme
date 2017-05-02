@@ -1,0 +1,36 @@
+.dx-pager {
+    &.dx-light-mode {
+        .dx-page-sizes {
+            min-width: 18px;
+        }
+
+        .dx-page-index {
+            min-width: 15px;
+        }
+    }
+
+    .dx-pages {
+        .dx-navigate-button {
+            padding: 8px 13px;
+        }
+
+        .dx-prev-button {
+            .dx-icon-chevronleft;
+        }
+
+        .dx-next-button {
+            .dx-icon-chevronright;
+        }
+
+        .dx-prev-button, .dx-next-button {
+            .dx-icon-font-centered-sizing(21px);
+        }
+    }
+
+    .dx-pages, .dx-page-sizes {
+        .dx-selection {
+            color: @WIN8_PAGER_SELECTION_COLOR;
+            background-color: @WIN8_PAGER_SELECTION_BACKGROUND;
+        }
+    }
+}

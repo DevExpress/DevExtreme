@@ -1,0 +1,44 @@
+.dx-pivot {
+    height: 100%;
+    .touch-action(pinch-zoom);
+}
+
+.dx-pivot-wrapper {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+.dx-pivot-itemcontainer {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+}
+
+.dx-pivot-itemwrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.dx-pivot-item,
+.dx-pivot-item-content {
+    width: 100%;
+    height: 100%;
+}
+
+.dx-pivot-item-hidden {
+    display: none;
+}
+
+.dx-pivot-autoheight {
+
+    .dx-pivot-itemcontainer {
+        position: static;
+    }
+
+    .dx-pivot-itemwrapper {
+        position: static;
+    }
+
+}

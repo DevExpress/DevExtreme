@@ -1,0 +1,42 @@
+@ANDROID5_TOAST_RADIUS: 2px;
+
+.dx-toast-content {
+    .box-shadow(none);
+}
+
+.dx-toast-wrapper .dx-overlay-content {
+    padding: 16px 24px 12px 24px;
+    background-color: @ANDROID5_TOAST_BACKGROUND;
+    color: @ANDROID5_TOAST_TEXT_COLOR;
+    .shadow-z1();
+}
+
+.dx-device-tablet, .dx-device-desktop {
+    .dx-toast-wrapper .dx-overlay-content {
+        min-width: 288px;
+        max-width: 568px;
+        .border-radius(@ANDROID5_TOAST_RADIUS);
+    }
+}
+
+.dx-device-phone {
+    .dx-toast-wrapper .dx-overlay-content {
+        width: 100%;
+        .border-radius(0);
+    }
+}
+
+.dx-toast-icon {
+    display: none;
+}
+
+.dx-toast-message {
+    padding-left: 0;
+    line-height: 20px;
+}
+
+.dx-rtl {
+    .dx-toast-message {
+        padding-right: 0;
+    }
+}

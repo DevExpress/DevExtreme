@@ -1,0 +1,46 @@
+@SEARCH_ICON_SIZE: 19px;
+@SEARCH_ICON_OFFSET: 3px;
+@SEARCH_ICON_PADDING: 4px;
+
+.dx-searchbox {
+    .dx-icon-search {
+        position: absolute;
+        .dx-icon-search;
+        .dx-icon-sizing(@SEARCH_ICON_SIZE, @SEARCH_ICON_SIZE);
+        right: @SEARCH_ICON_OFFSET;
+        width: @SEARCH_ICON_SIZE + @SEARCH_ICON_PADDING * 2;
+        height: @SEARCH_ICON_SIZE + @SEARCH_ICON_PADDING * 2;
+        top: @SEARCH_ICON_OFFSET;
+        line-height: 23px;
+
+        .dx-state-focused& {
+            background-color: @WIN8_SEARCHBOX_ICON_BACKGROUND_COLOR;
+
+            &:before {
+                color: @WIN8_ICON_INVERTED_COLOR;
+            }
+        }
+
+        &:before {
+            vertical-align: middle;
+            position: static;
+            text-indent: 0;
+            display: none;
+            color: @WIN8_ICON_COLOR;
+        }
+
+        .dx-rtl &,
+        .dx-rtl& {
+            right: auto;
+            left: @SEARCH_ICON_OFFSET;
+        }
+    }
+}
+
+.dx-placeholder {
+    text-indent: 4px;
+}
+
+.dx-texteditor-empty .dx-icon-search:before {
+    display: inline-block;
+}

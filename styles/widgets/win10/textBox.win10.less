@@ -1,0 +1,29 @@
+@WIN10_TEXTBOX_SEARCH_ICON_SIZE: 16px;
+@WIN10_TEXTBOX_SEARCH_ICON_CONTAINER_SIZE: 28px;
+
+.dx-searchbox {
+    .dx-icon-search {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        margin-top: -@WIN10_TEXTBOX_SEARCH_ICON_CONTAINER_SIZE / 2;
+        .dx-icon-search;
+        .dx-icon-sizing(@WIN10_TEXTBOX_SEARCH_ICON_SIZE, @WIN10_TEXTBOX_SEARCH_ICON_CONTAINER_SIZE);
+
+        &:before {
+            text-indent: 0;
+            position: static;
+            display: none;
+        }
+
+        .dx-rtl&,
+        .dx-rtl & {
+            right: auto;
+            left: 0;
+        }
+    }
+}
+
+.dx-texteditor-empty .dx-icon-search:before {
+    display: inline-block;
+}

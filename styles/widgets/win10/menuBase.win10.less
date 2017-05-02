@@ -1,0 +1,118 @@
+@WIN10_MENUBASE_ITEM_LEFT_PADDING: 8px;
+@WIN10_MENUBASE_ITEM_RIGHT_PADDING: 8px;
+@WIN10_MENUBASE_ITEM_PADDING: 7px @WIN10_MENUBASE_ITEM_RIGHT_PADDING 9px @WIN10_MENUBASE_ITEM_LEFT_PADDING;
+@WIN10_MENUBASE_ITEM_WITH_ICON_LEFT_PADDING: 8px;
+@WIN10_MENUBASE_ITEM_SUBMENU_PADDING: 36px;
+
+@WIN10_MENUBASE_ICON_SIZE: 16px;
+@WIN10_MENUBASE_ICON_PADDING: 8px;
+
+@WIN10_MENUBASE_SEPARATOR_MARGIN: 3px 0;
+
+@WIN10_MENUBASE_CHEVRON_CONTAINER_WIDTH: 24px;
+@WIN10_MENUBASE_CHEVRON_SIZE: 20px;
+
+@WIN10_MENUBASE_POPOUT_CONTAINER_PADDING: 10px;
+
+.dx-menu-base {
+    .dx-base-typography();
+
+    .dx-menu-item {
+        .dx-menu-item-content {
+            padding: @WIN10_MENUBASE_ITEM_PADDING;
+            padding-left: @WIN10_MENUBASE_ITEM_LEFT_PADDING + @WIN10_MENUBASE_ICON_SIZE + @WIN10_MENUBASE_ICON_PADDING;
+        }
+
+        &.dx-menu-item-has-icon .dx-menu-item-content {
+            padding-left: @WIN10_MENUBASE_ITEM_WITH_ICON_LEFT_PADDING;
+        }
+
+        &.dx-menu-item-has-submenu .dx-menu-item-content {
+            padding-right: @WIN10_MENUBASE_ITEM_SUBMENU_PADDING;
+        }
+
+        &.dx-state-focused {
+            background-color: @WIN10_MENUBASE_ITEM_FOCUSED_COLOR;
+        }
+
+        .dx-menu-item-content .dx-menu-item-popout-container {
+            width: @WIN10_MENUBASE_CHEVRON_CONTAINER_WIDTH;
+            right: 0;
+            padding-right: @WIN10_MENUBASE_POPOUT_CONTAINER_PADDING;
+        }
+    }
+
+    .dx-menu-no-icons > .dx-menu-item-wrapper > .dx-menu-item > .dx-menu-item-content {
+        padding-left: @WIN10_MENUBASE_ITEM_LEFT_PADDING;
+    }
+
+    .dx-icon {
+        .dx-icon-sizing(@WIN10_MENUBASE_ICON_SIZE);
+    }
+
+    .dx-menu-item-has-text {
+        .dx-icon {
+            margin-right: @WIN10_MENUBASE_ICON_PADDING;
+        }
+    }
+
+    .dx-menu-item-popout {
+        position: relative;
+        .dx-icon-chevronright;
+        .dx-icon-sizing(@WIN10_MENUBASE_CHEVRON_SIZE);
+
+        &:before {
+            display: block;
+            position: absolute;
+            top: 50%;
+            margin-top: -@WIN10_MENUBASE_CHEVRON_SIZE / 2;
+        }
+    }
+
+    .dx-menu-separator {
+        height: 1px;
+        width: auto;
+        margin: @WIN10_MENUBASE_SEPARATOR_MARGIN;
+        background-color: @WIN10_MENUBASE_SEPARATOR_COLOR;
+    }
+
+    &.dx-rtl {
+        .dx-menu-item {
+            .dx-menu-item-content {
+                padding-left: @WIN10_MENUBASE_ITEM_RIGHT_PADDING;
+                padding-right: @WIN10_MENUBASE_ITEM_LEFT_PADDING + @WIN10_MENUBASE_ICON_SIZE + @WIN10_MENUBASE_ICON_PADDING;
+            }
+
+            &.dx-menu-item-has-submenu .dx-menu-item-content {
+                padding-left: @WIN10_MENUBASE_ITEM_SUBMENU_PADDING;
+            }
+
+            &.dx-menu-item-has-icon .dx-menu-item-content {
+                padding-right: @WIN10_MENUBASE_ITEM_WITH_ICON_LEFT_PADDING;
+            }
+
+            .dx-menu-item-content .dx-menu-item-popout-container {
+                left: 0;
+                right: auto;
+                padding-left: @WIN10_MENUBASE_POPOUT_CONTAINER_PADDING;
+                padding-right: 0;
+            }
+        }
+
+        .dx-menu-no-icons > .dx-menu-item-wrapper > .dx-menu-item > .dx-menu-item-content {
+            padding-right: @WIN10_MENUBASE_ITEM_LEFT_PADDING;
+        }
+
+        .dx-menu-item-has-text.dx-menu-item-has-icon {
+            .dx-icon {
+                margin-left: @WIN10_MENUBASE_ICON_PADDING;
+                margin-right: 0;
+            }
+        }
+
+        .dx-menu-item-popout {
+            .dx-icon-chevronleft;
+            .dx-icon-sizing(@WIN10_MENUBASE_CHEVRON_SIZE);
+        }
+    }
+}

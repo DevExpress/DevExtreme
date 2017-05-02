@@ -1,0 +1,191 @@
+@ANDROID5_CHECKBOX_SIZE: 18px;
+@ANDROID5_CHECKBOX_BORDER_RADIUS: 2px;
+
+.dx-checkbox {
+    line-height: 0;
+
+    .dx-checkbox-container {
+        z-index: 0;
+    }
+
+    .dx-inkripple-wave {
+        background-color: fade(@ANDROID5_CHECKBOX_BACKGROUND, 6%);
+    }
+}
+
+.dx-checkbox-container {
+    position: relative;
+    .dx-overflow(visible);
+}
+
+.dx-checkbox-text {
+    position: relative;
+    overflow: hidden;
+    margin-left: -18px;
+    padding-left: 23px;
+
+    .dx-rtl &,
+    .dx-rtl& {
+        margin-right: -18px;
+        padding-right: 23px;
+    }
+}
+
+.dx-checkbox-icon {
+    width: @ANDROID5_CHECKBOX_SIZE;
+    height: @ANDROID5_CHECKBOX_SIZE;
+    border: 2px solid @ANDROID5_CHECKBOX_BACKGROUND;
+    .border-radius(@ANDROID5_CHECKBOX_BORDER_RADIUS);
+    background-color: transparent;
+    .transition(~"background-color .14s linear, border-color .14s linear");
+}
+
+.dx-checkbox-checked {
+    .dx-checkbox-icon {
+        border-color: @ANDROID5_CHECKBOX_CHECKED_BACKGROUND;
+        background-color: @ANDROID5_CHECKBOX_CHECKED_BACKGROUND;
+
+        &:after {
+            content: "";
+            display: block;
+            border-bottom: 2px solid #fff;
+            border-right: 2px solid #fff;
+            position: absolute;
+            .rotate(45deg);
+            .animation(checkbox-icon-extension 140ms ease-out forwards);
+            .box-sizing(content-box);
+            width: 35%;
+            height: 70%;
+            top: -1px;
+            left: 4px;
+        }
+    }
+
+    .dx-inkripple-wave {
+        background-color: fade(@ANDROID5_CHECKBOX_CHECKED_BACKGROUND, 8%);
+    }
+}
+
+.dx-checkbox-indeterminate {
+    .dx-checkbox-icon {
+        border-color: @ANDROID5_CHECKBOX_CHECKED_BACKGROUND;
+        .box-shadow(inset 0px 0px 0px 2px @ANDROID5_CHECKBOX_CHECKED_BACKGROUND);
+    }
+
+    &.dx-state-focused, &.dx-state-active {
+        .dx-checkbox-icon:before {
+            background-color: fade(@ANDROID5_CHECKBOX_CHECKED_BACKGROUND, 12%);
+        }
+    }
+}
+
+.dx-state-disabled {
+    &.dx-checkbox, .dx-checkbox {
+        .dx-checkbox-icon {
+            border-color: @ANDROID5_CHECKBOX_DISABLED_BACKGROUND;
+        }
+
+        &.dx-checkbox-checked {
+            .dx-checkbox-icon {
+                border-color: transparent;
+                background-color: @ANDROID5_CHECKBOX_DISABLED_BACKGROUND;
+            }
+        }
+
+        &.dx-checkbox-indeterminate {
+            .dx-checkbox-icon {
+                .box-shadow(inset 0px 0px 0px 2px @ANDROID5_CHECKBOX_DISABLED_BACKGROUND);
+            }
+        }
+    }
+}
+
+.dx-invalid {
+    .dx-checkbox-container {
+        .dx-checkbox-icon {
+            border: 1px @ANDROID5_FADED_INVALID_COLOR solid;
+        }
+    }
+    &.dx-state-focused {
+        .dx-checkbox-container {
+            .dx-checkbox-icon {
+                border-color: @ANDROID5_INVALID_COLOR;
+            }
+        }
+    }
+}
+
+@-webkit-keyframes checkbox-icon-extension {
+    0% {
+        top: 9px;
+        left: 6px;
+        width: 0;
+        height: 0;
+    }
+    100% {
+        top: -1px;
+        left: 4px;
+        width: 35%;
+        height: 70%;
+    }
+}
+
+@-webkit-keyframes checkbox-icon-extension {
+    0% {
+        top: 9px;
+        left: 6px;
+        width: 0;
+        height: 0;
+    }
+    100% {
+        top: -1px;
+        left: 4px;
+        width: 35%;
+        height: 70%;
+    }
+}
+
+@-moz-keyframes checkbox-icon-extension {
+    0% {
+        top: 9px;
+        left: 6px;
+        width: 0;
+        height: 0;
+    }
+    100% {
+        top: -1px;
+        left: 4px;
+        width: 35%;
+        height: 70%;
+    }
+}
+
+@-ms-keyframes checkbox-icon-extension {
+    0% {
+        top: 9px;
+        left: 6px;
+        width: 0;
+        height: 0;
+    }
+    100% {
+        top: -1px;
+        left: 4px;
+        width: 35%;
+        height: 70%;
+    }
+}
+
+@keyframes checkbox-icon-extension {
+    0% {
+        top: 9px;
+        left: 6px;
+        width: 0;
+        height: 0;
+    }
+    100% {
+        top: -1px;
+        left: 4px;
+        width: 35%;
+        height: 70%;
+    }
+}

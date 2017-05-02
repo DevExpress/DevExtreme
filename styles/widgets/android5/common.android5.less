@@ -1,0 +1,105 @@
+@ANDROID5_DISABLED_OPACITY: .5;
+
+.dx-theme-marker {
+    font-family: @ANDROID5_THEME_MARKER;
+}
+
+// Base sizes
+@ANDROID_BASE_ICON_SIZE: 21px;
+@ANDROID_BASE_LARGE_ICON_SIZE: 24px;
+
+.dx-inkripple {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+.dx-inkripple-wave {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.16);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    pointer-events: none;
+}
+
+.dx-inkripple-showing {
+    transition: transform 0.1s linear;
+    opacity: 1;
+    transform: scale(1);
+}
+
+.dx-inkripple-hiding {
+    transition: transform 0.1s linear, opacity 0.1s linear;
+    transform: scale(1.01);
+    opacity: 0;
+}
+
+.dx-base-typography() {
+    color: @ANDROID5_TEXT;
+    font-weight: 400;
+    font-size: 14px;
+    font-family: RobotoDraft, 'Helvetica Neue', Helvetica, Arial;
+    line-height: 25px;
+
+    a {
+        color: @ANDROID5_COLOR_BASE;
+        text-decoration: underline;
+    }
+
+    img {
+        border-style: none;
+    }
+}
+
+.dx-content-background() {
+    background-color: @ANDROID5_TYPOGRAPHY_BACKGROUND;
+}
+
+.disabled-widget(@opacity: @ANDROID5_DISABLED_OPACITY) {
+    opacity: @opacity;
+    .user-select(none);
+    zoom: 1;
+    cursor: default;
+}
+
+.shadow-transition() {
+    transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    -moz-transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    -ms-transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:before {
+        transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+        -webkit-transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+        -moz-transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+        -ms-transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+}
+
+.shadow-z1() {
+    .box-shadow(0 1px 4px 0 rgba(0, 0, 0, 0.37));
+}
+
+.shadow-z2() {
+    .box-shadow(0 4px 13px 0 rgba(0, 0, 0, 0.3), 0 2px 2px 0 rgba(0, 0, 0, 0.2));
+}
+
+.shadow-z3() {
+    .box-shadow(0 3px 25px 0 rgba(0, 0, 0, 0.3), 0 11px 7px 0 rgba(0, 0, 0, 0.19));
+}
+
+.shadow-z4() {
+    .box-shadow(0 7px 40px 0 rgba(0, 0, 0, 0.3), 0 14px 12px 0 rgba(0, 0, 0, 0.17));
+}
+
+.shadow-z5() {
+    .box-shadow(0 27px 55px 0 rgba(0, 0, 0, 0.3), 0 17px 17px 0 rgba(0, 0, 0, 0.15));
+}
+
+.dx-content-background {
+    .dx-content-background();
+}

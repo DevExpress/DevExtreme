@@ -1,0 +1,97 @@
+@ANDROID5_ACCORDION_BODY_PADDING: 8px 16px 20px;
+@ANDROID5_ACCORDION_TITLE_PADDING: 12px 16px;
+
+@ANDROID5_ACCORDION_ACCORDION_ARROW_LINE_HEIGHT: 21px;
+@ANDROID5_ACCORDION_ARROW_SIZE: 17px;
+
+.dx-accordion {
+    color: @ANDROID5_ACCORDION_COLOR;
+}
+
+.dx-accordion-item {
+    & > .dx-accordion-item-title {
+        border-collapse: collapse;
+        border: 1px solid transparent;
+    }
+
+    .dx-icon {
+        .dx-icon-sizing(@ANDROID_BASE_ICON_SIZE);
+    }
+
+    &.dx-state-active {
+        & > .dx-accordion-item-title {
+            color: @ANDROID5_COLOR_BASE;
+        }
+    }
+
+    &.dx-state-focused {
+        & > .dx-accordion-item-title {
+            background-color: @ANDROID5_ACCORDION_FOCUSED_BACKGROUND;
+        }
+    }
+
+    &:first-child {
+        & > .dx-accordion-title {
+            border-top-color: transparent;
+        }
+    }
+
+    &:last-child {
+        & > .dx-accordion-body {
+            border-bottom-color: transparent;
+        }
+    }
+}
+
+.dx-accordion-item-opened {
+    & > .dx-accordion-item-title {
+        border-top: 1px solid @ANDROID5_ACCORDION_BORDER_COLOR;
+        color: @ANDROID5_COLOR_BASE;
+
+        &:before {
+            content: "\f014";
+        }
+    }
+
+    & > .dx-accordion-item-body {
+        border-bottom: 1px solid @ANDROID5_ACCORDION_BORDER_COLOR;
+    }
+}
+
+    .dx-accordion-item-opened + .dx-accordion-item-opened {
+        & > .dx-accordion-item-title {
+            border-top: none;
+        }
+    }
+
+.dx-accordion-item-title {
+    padding: @ANDROID5_ACCORDION_TITLE_PADDING;
+
+    &:before {
+        font-weight: normal;
+        content: "\f016";
+        font-family: DXIcons;
+        font-size: @ANDROID5_ACCORDION_ARROW_SIZE;
+        margin-left: @ANDROID_BASE_ICON_SIZE/2;
+        margin-right: 0;
+        line-height: @ANDROID5_ACCORDION_ACCORDION_ARROW_LINE_HEIGHT;
+    }
+
+    .dx-icon {
+        .dx-icon-margin(@ANDROID_BASE_ICON_SIZE/2);
+        display: inline-block;
+    }
+}
+
+.dx-accordion-item-body {
+    padding: @ANDROID5_ACCORDION_BODY_PADDING;
+}
+
+.dx-rtl {
+    .dx-accordion-item-title {
+        &:before {
+            margin-right: @ANDROID_BASE_ICON_SIZE/2;
+            margin-left: 0;
+        }
+    }
+}

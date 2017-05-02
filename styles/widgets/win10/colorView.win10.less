@@ -1,0 +1,71 @@
+@WIN10_COLORVIEW_COLOR_PREVIEW_CONTAINER_MARGIN_BEFORE: 2px;
+@WIN10_COLORVIEW_ALPHA_CHANNEL_LABEL_MARGIN_BEFORE: 36px;
+@WIN10_COLORVIEW_CONTROLS_WRAPPER_CONTAINER_MARGIN_BEFORE: 24px;
+
+.dx-colorview-palette-cell,
+.dx-colorview-hue-scale-wrapper,
+.dx-colorview-color-preview-container,
+.dx-colorview-alpha-channel-border {
+    padding: 1px;
+    margin: 1px;
+    margin-top: 0;
+    box-shadow: 0 0 0 1px @WIN10_COLORVIEW_CONTAINER_CELL_BORDER_COLOR;
+}
+
+.dx-colorview-color-preview {
+    width: 100%;
+}
+
+.dx-colorview-color-preview-container {
+    margin-bottom: 34px;
+    margin-left: @WIN10_COLORVIEW_COLOR_PREVIEW_CONTAINER_MARGIN_BEFORE;
+    width: 90px;
+
+    .dx-rtl & {
+        margin-right: @WIN10_COLORVIEW_COLOR_PREVIEW_CONTAINER_MARGIN_BEFORE;
+        margin-left: 0;
+    }
+}
+
+.dx-colorview-container {
+    label {
+        .dx-texteditor {
+            line-height: normal;
+            width: 74px;
+        }
+
+        &.dx-colorview-alpha-channel-label {
+            margin-left: @WIN10_COLORVIEW_ALPHA_CHANNEL_LABEL_MARGIN_BEFORE;
+            width: 122px;
+
+            .dx-rtl & {
+                margin-right: @WIN10_COLORVIEW_ALPHA_CHANNEL_LABEL_MARGIN_BEFORE;
+            }
+        }
+    }
+}
+
+.dx-colorview-controls-container {
+    width: 93px;
+    margin-left: @WIN10_COLORVIEW_CONTROLS_WRAPPER_CONTAINER_MARGIN_BEFORE;
+
+    .dx-rtl & {
+        margin-right: @WIN10_COLORVIEW_CONTROLS_WRAPPER_CONTAINER_MARGIN_BEFORE;
+    }
+}
+
+.dx-state-disabled {
+    & .dx-colorview,
+    &.dx-colorview {
+        .dx-colorview-palette-cell,
+        .dx-colorview-hue-scale-cell,
+        .dx-colorview-color-preview-container,
+        .dx-colorview-alpha-channel-cell {
+            opacity: .5;
+        }
+    }
+
+    label {
+        color: @WIN10_COLORVIEW_DISABLED_LABEL_COLOR;
+    }
+}

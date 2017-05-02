@@ -1,0 +1,50 @@
+// Desktop layout
+.dx-desktop-layout-main-menu {
+    background: @desktop-layout-main-menu-bg;
+
+    .dx-nav-item {
+        background: @desktop-layout-main-menu-bg;
+        &.dx-tab-selected {
+            background: @desktop-layout-menu-selected-bg;
+            border-top: 1px solid @desktop-layout-toolbar-border-color;
+
+            .dx-tab-text {
+                color: @tabs-tab-selected-color;
+            }
+
+            &.dx-state-hover {
+                background: @desktop-layout-menu-selected-bg;
+
+                .dx-tab-text {
+                    color: @tabs-tab-selected-color;
+                }
+            }
+        }
+
+        &.dx-state-hover {
+            background: @desktop-layout-menu-hover-bg;
+
+            .dx-tab-text {
+                color: @desktop-layout-menu-color;
+            }
+        }
+
+        .dx-tab-text {
+            color: @desktop-layout-menu-color;
+        }
+    }
+}
+
+.dx-desktop-layout-copyright {
+    color: @desktop-layout-copyright-color;
+}
+
+.dx-desktop-layout-toolbar {
+    background: @desktop-layout-menu-selected-bg;
+    border-bottom-color: @desktop-layout-toolbar-border-color;
+}
+
+// Master-detail layout
+.dx-splitter {
+    border-right-color: @desktop-splitlayout-border-color;
+}

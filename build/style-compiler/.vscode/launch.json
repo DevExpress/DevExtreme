@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceRoot}/bin/Debug/netcoreapp1.0/style-compiler.dll",
+      "args": [ "TODO" ],
+      "cwd": "${workspaceRoot}",
+      "externalConsole": true
+    }
+  ]
+}

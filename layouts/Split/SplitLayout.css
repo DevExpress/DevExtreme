@@ -1,0 +1,210 @@
+.dx-viewport {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.dx-theme-win8 .split-layout {
+    display: -ms-grid;
+    -ms-grid-columns: 620px 1fr;
+    -ms-grid-rows: 104px 1fr;
+    width: 100%;
+    height: 100%;
+}
+
+.dx-theme-win8 .split-layout .layout-header {
+    -ms-grid-column: 1;
+    -ms-grid-row: 1;
+    -ms-grid-column-span: 2;
+    padding: 60px 120px;
+}
+
+.dx-theme-win8 .split-layout .layout-header .dx-toolbar {
+    margin-left: -63px;
+    background: transparent;
+}
+
+.dx-theme-win8 .dx-rtl .split-layout .layout-header .dx-toolbar,
+.dx-theme-win8 .dx-rtl.split-layout .layout-header .dx-toolbar {
+    margin-left: 0px;
+}
+
+.dx-theme-win8 .split-layout .layout-header .dx-toolbar-center {
+    margin: 0 0 0 70px;
+    text-align: left;
+}
+
+.dx-theme-win8 .dx-rtl .split-layout .layout-header .dx-toolbar-center,
+.dx-theme-win8 .dx-rtl.split-layout .layout-header .dx-toolbar-center {
+    margin-right: 7px;
+    margin-left: 0;
+    text-align: right;
+}
+
+.dx-theme-win8 .split-layout .layout-header .dx-toolbar-after {
+    margin: 10px 120px 0 0;
+}
+
+.dx-theme-win8 .dx-rtl .split-layout .layout-header .dx-toolbar-after,
+.dx-theme-win8 .dx-rtl.split-layout .layout-header .dx-toolbar-after {
+    margin-right: 0;
+    margin-left: 120px;
+}
+
+.dx-theme-win8 .split-layout .left-content {
+    -ms-grid-column: 1;
+    -ms-grid-row: 2;
+    padding: 60px 0 0 120px;
+}
+
+.dx-theme-win8 .dx-rtl .split-layout .left-content,
+.dx-theme-win8 .dx-rtl.split-layout .left-content {
+    padding-right: 120px;
+    padding-left: 0;
+}
+
+.dx-theme-win8 .split-layout .right-content {
+    -ms-grid-column: 2;
+    -ms-grid-row: 2;
+    padding: 60px 0 0 0;
+}
+
+/*.dx-theme-win8 .split-layout .right-content .content {
+    margin-left: 40px;
+}*/
+
+.dx-theme-win8 .split-layout .right-content .dx-scrollview-content {
+    padding-right: 40px;
+    padding-left: 40px;
+}
+
+.dx-theme-win8 .split-layout .dx-app-bar {
+    position: fixed;
+    z-index: 1000;
+    width: 100%;
+    bottom: -104px;
+    transition: bottom .4s;
+}
+
+.dx-theme-win8 .split-layout .dx-app-bar.dx-app-bar-visible {
+    bottom: 0;
+}
+
+.dx-theme-win8 .split-layout.dx-animating:not(.dx-enter):not(.dx-leave) {
+    display: none;
+}
+
+.dx-theme-win8 .content, .dx-theme-win8 .content>div {
+    height: 100%;
+    position: relative;
+}
+
+.dx-theme-win8 .have-static-appbar .left-content,
+.dx-theme-win8 .have-static-appbar .right-content {
+    margin-bottom: 82px;
+}
+
+.split-layout .left-content > .dx-content-placeholder,
+.split-layout .left-content > .dx-content-placeholder > .dx-content {
+    height: 100%;
+}
+
+
+/* Win 10 */
+
+.dx-theme-win10 .split-layout {
+    display: -ms-grid;
+    -ms-grid-columns: 1fr 3fr;
+    -ms-grid-rows: 60px 1fr;
+    width: 100%;
+    height: 100%;
+}
+
+.dx-theme-win10 .split-layout .layout-header {
+    -ms-grid-column: 1;
+    -ms-grid-row: 1;
+    -ms-grid-column-span: 2;
+}
+
+.dx-theme-win10 .split-layout .layout-header .dx-toolbar-center {
+    margin: 0 0 0 70px;
+    text-align: left;
+}
+
+.dx-theme-win10 .dx-rtl .split-layout .layout-header .dx-toolbar-center,
+.dx-theme-win10 .dx-rtl.split-layout .layout-header .dx-toolbar-center {
+    margin-right: 70px;
+    margin-left: 0;
+    text-align: right;
+}
+
+.dx-theme-win10 .split-layout .left-content {
+    -ms-grid-column: 1;
+    -ms-grid-row: 2;
+    background-color: #171717;
+}
+
+.dx-theme-win10 .split-layout .right-content {
+    -ms-grid-column: 2;
+    -ms-grid-row: 2;
+}
+
+.dx-theme-win10 .split-layout .right-content .dx-scrollview-content {
+    padding-right: 40px;
+    padding-left: 40px;
+    padding-top: 20px;
+}
+
+.dx-theme-win10 .split-layout.dx-animating:not(.dx-enter):not(.dx-leave) {
+    display: none;
+}
+
+.dx-theme-win10 .content, .dx-theme-win10 .content>div {
+    height: 100%;
+    position: relative;
+}
+
+
+/* Master-Detail */
+.master-detail-layout {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.master-detail-layout .master-pane {
+    width: 320px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    border-right-width: 1px;
+    border-right-style: solid;
+}
+
+.master-detail-layout .detail-pane {
+    position: absolute;
+    left: 320px;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    overflow: hidden;
+}
+
+.master-detail-layout .header-toolbar {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 46px;
+}
+
+.master-detail-layout .main-area {
+    position: absolute;
+    left: 0;
+    top: 48px;
+    bottom: 0;
+    width: 100%;
+}

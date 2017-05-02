@@ -1,0 +1,198 @@
+@TAGBOX_CLOSE_BUTTON_ACTIVE_STATE_COLOR: #fff;
+@TAGBOX_CLEAR_BUTTON_PADDING: @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+@TAGBOX_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE: 20px;
+
+.dx-tagbox {
+    line-height: 10px;
+
+    .dx-texteditor-container,
+    &.dx-state-focused .dx-texteditor-container {
+        border-bottom: @ANDROID5_TEXTEDITOR_BORDER;
+    }
+
+    &.dx-show-clear-button {
+        .dx-texteditor-input {
+            padding-right: 0;
+        }
+
+        .dx-tag-container {
+            padding-right: @TAGBOX_CLEAR_BUTTON_PADDING;
+        }
+
+        .dx-icon-clear {
+            position: absolute;
+            top: 50%;
+            margin-top: -@ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE/2;
+            right: auto;
+        }
+    }
+}
+
+.dx-dropdowneditor-button-visible {
+    .dx-tag-container {
+        padding-right: @TAGBOX_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+    }
+
+    &.dx-show-clear-button .dx-tag-container {
+        padding-right: @TAGBOX_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @TAGBOX_CLEAR_BUTTON_PADDING;
+    }
+}
+
+.dx-tag-container {
+    padding: 0;
+}
+
+.dx-tagbox-single-line {
+    &.dx-tagbox-only-select {
+        .dx-texteditor-input {
+            padding-right: 0;
+        }
+    }
+
+    .dx-texteditor-container {
+        &:before {
+            bottom: 8px;
+        }
+    }
+
+    &.dx-dropdowneditor-button-visible {
+        .dx-tag-container {
+            padding-right: @TAGBOX_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+        }
+
+        &.dx-show-clear-button .dx-tag-container {
+            padding-right: @TAGBOX_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @TAGBOX_CLEAR_BUTTON_PADDING;
+        }
+    }
+
+    &.dx-dropdowneditor-button-visible {
+        .dx-tag-container {
+            width: calc(~"100% - "@TAGBOX_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE);
+
+            .dx-texteditor-buttons-container {
+                &:before {
+                    position: absolute;
+                    content: "";
+                    height: 1px;
+                    width: 21px;
+                    background-color: @ANDROID5_BOXBORDER_BACKGROUND;
+                    top: 39px;
+                }
+            }
+
+            .dx-dropdowneditor-button {
+                width: 21px;
+                height: 25px;
+                top: 12px;
+
+                .dx-dropdowneditor-icon {
+                    &:before {
+                        margin-left: -10.25px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.dx-tag-content {
+    padding: 8px 20px 7px 5px;
+    margin: 3px 3px 0 0;
+    min-width: 50px;
+    border-radius: 2px;
+    background-color: @ANDROID5_TAGBOX_TAG_BACKGROUND;
+    color: #fff;
+    font-size: 0.9em;
+}
+
+.dx-tag-remove-button {
+    padding: 8px 5px;
+    width: 21px;
+    height: 25px;
+
+    &:before {
+        right: 9px;
+        margin-top: -5px;
+        width: 2px;
+        height: 10px;
+        background: @TAGBOX_CLOSE_BUTTON_ACTIVE_STATE_COLOR;
+    }
+
+    &:after {
+        right: 5px;
+        margin-top: -1px;
+        width: 10px;
+        height: 2px;
+        background: @TAGBOX_CLOSE_BUTTON_ACTIVE_STATE_COLOR;
+    }
+
+    &:active {
+        &:before, &:after {
+            background: darken(@TAGBOX_CLOSE_BUTTON_ACTIVE_STATE_COLOR, 20%);
+        }
+    }
+}
+
+.dx-tag.dx-state-focused {
+    .dx-tag-content {
+        background-color: @ANDROID5_TAGBOX_TAG_FOCUSED_BACKGROUND;
+    }
+}
+
+.dx-rtl .dx-tagbox,
+.dx-rtl.dx-tagbox {
+    .dx-tag-content {
+        margin-right: 0;
+        margin-left: 4px;
+        padding-right: 5px;
+        padding-left: 20px;
+    }
+
+    &.dx-show-clear-button {
+        .dx-tag-container {
+            padding-right: 0;
+            padding-left: @TAGBOX_CLEAR_BUTTON_PADDING;
+        }
+
+        .dx-icon-clear {
+            left: auto;
+            right: auto;
+        }
+
+        .dx-texteditor-input {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    &.dx-dropdowneditor-button-visible {
+        .dx-tag-container {
+            padding-right: 0;
+            padding-left: @TAGBOX_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+        }
+
+        &.dx-show-clear-button .dx-tag-container {
+            padding-right: 0;
+            padding-left: @TAGBOX_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @TAGBOX_CLEAR_BUTTON_PADDING;
+        }
+    }
+
+    &.dx-show-clear-button, &.dx-dropdowneditor-button-visible, &.dx-show-clear-button.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+
+    .dx-tag-remove-button {
+        &:before {
+            left: 9px;
+            right: auto;
+        }
+
+        &:after {
+            left: 5px;
+            right: auto;
+        }
+    }
+}

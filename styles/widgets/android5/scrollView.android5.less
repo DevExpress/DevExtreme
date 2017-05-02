@@ -1,0 +1,37 @@
+.dx-scrollable-native.dx-scrollable-native-android {
+    .dx-scrollview-pull-down {
+        background-color: @ANDROID5_SCROLLVIEW_PULLDOWN_COLOR;
+        .shadow-z1();
+        position: static;
+    }
+
+    .dx-scrollview-pull-down-refreshing .dx-icon-pulldown {
+        opacity: 0.3;
+    }
+
+    .dx-icon-pulldown {
+        color: @ANDROID5_COLOR_BASE;
+    }
+}
+
+.dx-scrollview-pull-down-image {
+    background-image: @ANDROID5_SCROLLVIEW_PULLDOWN_BACKGROUND;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+}
+
+.dx-scrollview-pull-down-text {
+    color: @ANDROID5_SCROLLABLE_PULL_DOWN_COLOR;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 16px;
+}
+
+.dx-scrollview-scrollbottom-indicator {
+    // T107287
+    margin-left: -1px;
+}
+
+.dx-scrollview-pull-down-indicator {
+    margin-top: -20px;
+}

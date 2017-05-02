@@ -1,0 +1,135 @@
+.dx-toolbar {
+    width: 100%;
+
+    .dx-button-content:after {
+        display: none;
+    }
+}
+
+.dx-toolbar .dx-button .dx-icon {
+    .box-sizing(content-box);
+}
+
+.dx-toolbar-items-container {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+}
+
+.dx-toolbar-item {
+    display: table-cell;
+    padding: 0 5px;
+    vertical-align: middle;
+    .box-sizing(content-box);
+
+    .dx-tabs {
+        table-layout: auto;
+    }
+
+    img {
+        display: block;
+    }
+}
+
+.dx-toolbar-menu-container {
+    .dx-toolbar-item;
+}
+
+.dx-toolbar-group {
+    float: left;
+    margin: 0 10px;
+}
+
+.dx-toolbar-before, .dx-toolbar-after {
+    position: absolute;
+}
+
+.dx-toolbar-center:empty {
+    display: none;
+}
+
+.dx-toolbar-before {
+    left: 0;
+}
+
+.dx-toolbar-after {
+    right: 0;
+}
+
+.dx-toolbar-label {
+    white-space: nowrap;
+    .user-drag(none);
+
+    .dx-toolbar-item-content > div {
+        .dx-overflow();
+    }
+}
+
+.dx-toolbar-label > div {
+    .dx-overflow();
+
+    // NOTE: Prevent croping of italic text in label (T126187)
+    margin: 0 -5px;
+    padding: 0 5px;
+}
+
+.dx-toolbar-center {
+    margin: 0 auto;
+    height: 100%;
+    text-align: center;
+}
+// B232272
+.dx-toolbar-center, .dx-toolbar-before, .dx-toolbar-after {
+    top: 0;
+    display: table;
+    height: 100%;
+}
+
+.dx-rtl {
+    .dx-toolbar-before {
+        right: 0;
+        left: auto;
+    }
+
+    .dx-toolbar-after {
+        right: auto;
+        left: 0;
+    }
+}
+
+.dx-toolbar-menu-section:empty {
+    display: none;
+}
+
+.dx-dropdownmenu-popup-wrapper .dx-toolbar-menu-custom > .dx-list-item-content {
+    padding: 0;
+}
+
+.dx-toolbar-menu-section.dx-toolbar-menu-last-section {
+    border-bottom: none;
+}
+
+.dx-toolbar-menu-section .dx-toolbar-hidden-button .dx-button {
+    border: none;
+    background: none;
+    margin: 0;
+    width: 100%;
+    text-align: left;
+
+    .dx-button-content {
+        text-align: left;
+    }
+}
+
+.dx-toolbar-text-auto-hide .dx-button .dx-button-text {
+    display: none;
+}
+
+.dx-toolbar .dx-texteditor {
+    width: 150px;
+}
+
+.dx-toolbar-item-invisible {
+    display: none;
+}

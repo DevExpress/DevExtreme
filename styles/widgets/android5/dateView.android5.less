@@ -1,0 +1,89 @@
+@ROLLER_HEIGHT: 182px;
+@ROLLER_ITEM_HEIGHT: 36px;
+@ROLLER_PADDING: (@ROLLER_HEIGHT - @ROLLER_ITEM_HEIGHT) / 2;
+@ANDROID5_DATEVIEW_ITEM_SELECTED_BORDER: solid 2px @ANDROID5_COLOR_BASE;
+@ANDROID5_DATEVIEW_SHADOW_UP: bottom, @ANDROID5_DATE_PICKER_GRADIENT_COLOR 0%, @ANDROID5_POPUP_CONTENT_BACKGROUND 60%;
+@ANDROID5_DATEVIEW_SHADOW_DOWN: top, @ANDROID5_DATE_PICKER_GRADIENT_COLOR 0%, @ANDROID5_POPUP_CONTENT_BACKGROUND 60%;
+
+.dx-dateview {
+    color: inherit;
+}
+
+.dx-dateview-wrapper {
+    .dx-popup-content {
+        text-align: center;
+    }
+}
+
+.dx-dateview-rollers {
+    width: 100%;
+}
+
+.dx-dateviewroller {
+    text-align: center;
+    min-width: 10%\9;
+
+    .dx-scrollable-content:before,
+    .dx-scrollable-content:after {
+        content: "";
+        height: @ROLLER_PADDING;
+        display: block;
+    }
+
+    .dx-scrollable-container {
+        height: @ROLLER_HEIGHT;
+    }
+
+    &.dx-state-active {
+        .dx-button {
+            display: none;
+        }
+    }
+}
+
+.dx-dateview-item {
+    height: @ROLLER_ITEM_HEIGHT;
+    line-height: @ROLLER_ITEM_HEIGHT;
+    text-align: center;
+}
+
+.dx-dateview-item-selected-frame {
+    position: absolute;
+    top: @ROLLER_PADDING;
+    width: 80%;
+    margin: 0 10%;
+
+    &:before, &:after {
+        .backface-visibility(hidden);
+        content: "";
+        display: block;
+        width: 100%;
+        position: absolute;
+        height: @ROLLER_PADDING;
+    }
+
+    &:before {
+        top: -@ROLLER_PADDING;
+        // NOTE: use transpared rgba insted 'transparent' for preventing incorrect gradient color
+        .gradient-linear(@ANDROID5_DATEVIEW_SHADOW_UP);
+    }
+
+    &:after {
+        top: @ROLLER_ITEM_HEIGHT;
+        // NOTE: use transpared rgba insted 'transparent' for preventing incorrect gradient color
+        .gradient-linear(@ANDROID5_DATEVIEW_SHADOW_DOWN);
+    }
+}
+.dx-dateview-item-selected-border {
+    display: block;
+    border-top: @ANDROID5_DATEVIEW_ITEM_SELECTED_BORDER;
+    border-bottom: @ANDROID5_DATEVIEW_ITEM_SELECTED_BORDER;
+    height: 38px;
+    width: 80%;
+    margin: 0 10%;
+}
+
+.dx-dateview-button-down,
+.dx-dateview-button-up {
+    display: none !important;
+}

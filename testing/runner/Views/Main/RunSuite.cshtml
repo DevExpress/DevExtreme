@@ -1,0 +1,260 @@
+@model RunSuiteViewModel
+<!DOCTYPE html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=@Model.IEMode">
+    <title>@Model.Title - QUnit test page</title>
+    <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.css")" />
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/qunitjs/qunit/qunit.js")"></script>
+
+    <script>
+        window.ROOT_URL = "@Url.Content("~/")";
+        window.farmMode = @Html.Raw(Json.Serialize(Model.IsContinuousIntegration));
+        window.INTRANET = @Html.Raw(Json.Serialize(Model.IsIntranet));
+
+        QUnit.config.autostart = false;
+    </script>
+    <script src="@Url.ContentWithCacheBuster("~/testing/helpers/qunitExtensions.js")"></script>
+
+    <style>
+        #qunit-fixture.qunit-fixture-visible {
+            position: fixed !important;
+            left: 0 !important;
+            top: 0 !important;
+            pointer-events: none;
+        }
+
+        #qunit-fixture.qunit-fixture-visible * {
+            pointer-events: auto;
+        }
+
+        a.up {
+            width: 30px;
+            height: 30px;
+            margin-top: 12px;
+            margin-left: 10px;
+            background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAQAAABKfvVzAAAAvklEQVQ4y2NgoAa4yvjH9bc0Ccr/Jv//+O/Qbxlilaf8//D///9/RGmBK/8P1nLwtyxh5e//IwB+LRjK8WvBqhyfln9ucOVfofSv/98hWv7vwqLhfzpU2ZV/dVDWxX/1UC1PcGu48sf4vw9Uw8kfHEAtP/BpuPrH+AUDQgMDA1QLDg1X/xi9ALGQNEC13MXmadc/hi8gWlE0MDB8Z/+XhkXDC8YXMLvQNICCHG98Y2ogAEamBqX/RWAYxTAgAACFCjwy8XB3SQAAAABJRU5ErkJggg==) no-repeat;
+            display: inline-block;
+            float: left;
+        }
+    </style>
+
+    <script>
+        (function() {
+            "use strict";
+
+            var doneCount = 0,
+                parentWindow = window.opener || window.parent;
+
+            QUnit.done(function(data) {
+                if(doneCount == 1)
+                    notifyExtraDoneCall();
+
+                if(!doneCount && parentWindow && parentWindow.RUNNER_ON_DONE)
+                    parentWindow.RUNNER_ON_DONE(window, data);
+
+                doneCount++;
+            });
+
+            QUnit.testStart(function(data) {
+                data.suiteUrl = location.pathname;
+                if(parentWindow && parentWindow.RUNNER_ON_TEST_START)
+                    parentWindow.RUNNER_ON_TEST_START(window, data);
+            });
+
+            QUnit.log(function(data) {
+                data.suiteUrl = location.pathname;
+                if (parentWindow && parentWindow.RUNNER_ON_TEST_LOG)
+                    parentWindow.RUNNER_ON_TEST_LOG(window, data);
+            });
+
+            QUnit.testDone(function(data) {
+                data.suiteUrl = location.pathname;
+                if(parentWindow && parentWindow.RUNNER_ON_TEST_DONE )
+                    parentWindow.RUNNER_ON_TEST_DONE(window, data);
+            });
+
+            QUnit.config.urlConfig.push({
+                id: "combinedStyles",
+                label: "Combined Styles",
+                tooltip: "Force using styles combined by packer. Stored as query-strings."
+            });
+
+            QUnit.config.urlConfig.push({
+                id: "jquery",
+                label: "jQuery",
+                tooltip: "Select jQuery version.",
+                value: {
+                    "2": "2.x",
+                    "1": "1.x"
+                }
+            });
+
+             QUnit.config.urlConfig.push({
+                id: "nojquery",
+                label: "No jQuery",
+                tooltip: "Don't use jQuery for widget rendering"
+            });
+
+            function notifyExtraDoneCall() {
+                var msg = "QUnit.done called several times. Possible causes: extra start() calls, assertion outside test context";
+
+                if(parentWindow && parentWindow.RUNNER_ON_MISC_ERROR) {
+                    parentWindow.RUNNER_ON_MISC_ERROR(window, msg);
+                } else {
+                    alert("ALARM! DO NOT IGNORE THIS!\n" + msg);
+                }
+            }
+        })();
+    </script>
+
+    <script src="@Url.ContentWithCacheBuster("~/vendor/jquery/jquery-2.2.3.js")"></script>
+
+    <script src="@Url.ContentWithCacheBuster("~/vendor/sinon/sinon.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/vendor/sinon/sinon-timers-ie.js")"></script>
+
+    <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
+    <script>
+        (function() {
+            "use strict";
+
+            jQuery.noConflict();
+
+            var cacheBuster = '@Url.CacheBuster()';
+            if(cacheBuster.length) {
+                var systemLocate = SystemJS.locate;
+                SystemJS.locate = function(load) {
+                    return Promise.resolve(systemLocate.call(this, load)).then(function(address) {
+                        return address + ( address.indexOf('?') === -1 ? '?' : '&') + cacheBuster;
+                    });
+                }
+            }
+
+            window.useJQueryRenderer = !@Html.Raw(Json.Serialize(Model.NoJQuery));
+            var jqueryVersion = '@(Model.JQueryVersion != null ? Model.JQueryVersion.ToString().ToLowerInvariant() : "default")';
+            var jqueryIncludeStrings = {
+                "1": '@Url.Content("~/vendor/jquery/jquery-1.12.3.js")',
+                "2": '@Url.Content("~/vendor/jquery/jquery-2.2.3.js")',
+                "default": '@Url.Content("~/vendor/jquery/jquery-3.1.0.js")'
+            };
+            SystemJS.config({
+                baseURL: '@Url.Content("~/js")',
+                map: {
+                    // Deps
+                    'globalize': '@Url.Content("~/vendor/globalize/globalize")',
+                    'cldr': '@Url.Content("~/vendor/cldr/cldr")',
+                    'jquery': jqueryIncludeStrings[jqueryVersion],
+                    'knockout': '@Url.Content("~/vendor/knockout/knockout-3.4.0.debug.js")',
+                    'angular': '@Url.Content("~/vendor/angular-1.5/angular.js")',
+                    'angular-route': '@Url.Content("~/vendor/angular-1.5/angular-route.js")',
+                    'angular-sanitize': '@Url.Content("~/vendor/angular-1.5/angular-sanitize.js")',
+                    'jszip': '@Url.Content("~/vendor/jszip/jszip.js")',
+
+                    // Global CSS
+                    'style-compiler-test-server': '@Model.StyleCompilerTestServerUrl',
+
+                    'common.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&common=true',
+                    'spa.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=spa&common=true',
+
+                    'generic_light.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=generic&cs=light&ss=default',
+                    'android5_light.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=android5&cs=light',
+                    'ios7_default.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=ios7&cs=default',
+                    'win8_black.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=win8&cs=black',
+                    'win10_black.css': '@(Model.StyleCompilerTestServerUrl)/less-handler?d=&t=win10&cs=black',
+
+                    // SystemJS plugins
+                    'css': '@Url.Content("~/node_modules/systemjs-plugin-css/css.js")',
+                    'text': '@Url.Content("~/node_modules/systemjs-plugin-text/text.js")',
+                    'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")'
+                },
+                packages: {
+                    '': {
+                        defaultExtension: 'js'
+                    },
+
+                    // Deps
+                    'globalize': {
+                        main: '../globalize.js',
+                        defaultExtension: 'js'
+                    },
+                    'cldr': {
+                        main: '../cldr.js',
+                        defaultExtension: 'js'
+                    }
+                },
+                meta: {
+                    '@Url.Content("~/vendor/knockout/knockout-3.4.0.debug.js")': {
+                        format: 'global',
+                        deps: ['jquery'],
+                        exports: 'ko'
+                    },
+
+                    '@Url.Content("~/vendor/angular-1.5/angular.js")': {
+                        deps: ['jquery'],
+                        format: 'global',
+                        expots: 'angular'
+                    },
+                    '@Url.Content("~/vendor/angular-1.5/angular-sanitize.js")': {
+                        deps: ['angular'],
+                        format: 'global',
+                        expots: 'angular'
+                    },
+                    '@Url.Content("~/vendor/angular-1.5/angular-route.js")': {
+                        deps: ['angular'],
+                        format: 'global',
+                        expots: 'angular'
+                    },
+
+                    '../../node_modules/jquery-mockjax/dist/jquery.mockjax.js': {
+                        format: 'global'
+                    }
+                }
+            });
+
+            // Combined css
+            var forceCombinedStyles = @Html.Raw(Json.Serialize(Model.ForceCombinedStyles));
+            if(forceCombinedStyles || farmMode) {
+                SystemJS.config({
+                    map: {
+                        'common.css': '@Url.Content("~/artifacts/css/dx.common.css")',
+                        'spa.css': '@Url.Content("~/artifacts/css/dx.spa.css")',
+
+                        'generic_light.css': '@Url.Content("~/artifacts/css/dx.light.css")',
+                        'android5_light.css': '@Url.Content("~/artifacts/css/dx.android5.light.css")',
+                        'ios7_default.css': '@Url.Content("~/artifacts/css/dx.ios7.default.css")',
+                        'win8_black.css': '@Url.Content("~/artifacts/css/dx.win8.black.css")',
+                        'win10_black.css': '@Url.Content("~/artifacts/css/dx.win10.black.css")'
+                    }
+                });
+            }
+        })();
+    </script>
+</head>
+
+<a class="up" href="@Url.Action("Index")"></a>
+<div id="qunit"></div>
+<div id="qunit-fixture"></div>
+
+<script>
+    (function() {
+        "use strict";
+
+        // IE11 hack for promises error (http://stackoverflow.com/questions/35651193/ie11-promise-strange-behaviour)
+        jQuery.each([1, 2, 3, 5, 8, 13, 20, 40, 100], function(_, timeout) {
+            new Promise(function (resolve) {
+                window.setTimeout(resolve, timeout * 1000);
+            });
+        });
+
+        Promise.all([
+            SystemJS.import("@Url.Content(Model.ScriptVirtualPath)"),
+            new Promise(function(resolve) { jQuery(resolve); })
+        ]).then(function() {
+            QUnit.start();
+        }).catch(function (err) {
+            QUnit.start();
+            QUnit.test("load failed", function(assert) {
+                throw err;
+            });
+        });
+    })();
+</script>

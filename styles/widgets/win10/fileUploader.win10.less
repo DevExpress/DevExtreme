@@ -1,0 +1,54 @@
+.dx-fileuploader {
+    position: relative;
+    padding: 10px;
+
+    .dx-button-has-icon .dx-button-content {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    &.dx-invalid {
+        .dx-fileuploader-input-wrapper {
+            padding-bottom: 10px;
+        }
+
+        .dx-fileuploader-files-container {
+            padding-top: 46px;
+        }
+    }
+}
+
+.dx-fileuploader-input-container {
+    pointer-events: none;
+    opacity: 0;
+}
+
+.dx-fileuploader-files-container {
+    .dx-fileuploader-button {
+        padding: 0;
+
+        .dx-icon {
+            width: 100%;
+            height: 100%;
+            font-size: 18px;
+            padding: 0;
+
+            &:before {
+                position: relative;
+                top: -2px;
+            }
+        }
+    }
+}
+
+.dx-fileuploader-empty .dx-fileuploader-files-container {
+    padding: 0;
+}
+
+.dx-fileuploader-file-name {
+    color: @WIN10_FILEUPLOADER_FILENAME_TEXT_COLOR;
+}
+
+.dx-fileuploader-file-size, .dx-fileuploader-file-status-message {
+    color: @WIN10_FILEUPLOADER_STATUS_TEXT_COLOR;
+}

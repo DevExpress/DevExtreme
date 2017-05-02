@@ -1,0 +1,88 @@
+<div class="navbar-layout" data-options="dxLayout : { name: 'navbar', platform: 'ios' } ">
+    <div class="layout-header dx-toolbar-background" data-options="dxContentPlaceholder : { name: 'header', animation: 'view-header-toolbar' }">
+        <div data-bind="dxToolbar: { items: [ { text: title, location: 'center' } ] }" data-options="dxCommandContainer : { id: 'ios-header-toolbar' }">
+        </div>
+    </div>
+
+    <div class="layout-content" data-options="dxContentPlaceholder : { name: 'content', animation: 'view-content-change' }">
+    </div>
+
+    <div class="layout-footer">
+        <div class="navbar-container" data-bind="dxNavBar: { }" data-options="dxCommandContainer: { id: 'global-navigation' }">
+        </div>
+    </div>
+
+    <div class="view-footer" data-options="dxContent : { targetPlaceholder: 'view-footer' } ">
+        <div class="view-toolbar-bottom" data-bind="dxToolbar: { visible: false }" data-options="dxCommandContainer : { id: 'ios-view-footer' } ">
+        </div>
+    </div>
+
+</div>
+
+<div class="navbar-layout" data-options="dxLayout : { name: 'navbar', platform: 'android' } ">
+
+    <div class="layout-header">
+        <div class="navbar-container dx-navbar-layout-header" data-bind="dxNavBar: {}" data-options="dxCommandContainer: { id: 'global-navigation' }">
+        </div>
+    </div>
+
+    <div class="layout-content" data-options="dxContentPlaceholder : { name: 'content', animation: 'view-content-change' }">
+    </div>
+
+    <div class="layout-footer" data-options="dxContentPlaceholder: { name: 'footer' } ">
+        <div data-bind="dxToolbar: { visible: false }" data-options="dxCommandContainer : { id: 'android-footer-toolbar' } "></div>
+    </div>
+
+</div>
+
+<div class="navbar-layout" data-options="dxLayout : { name: 'navbar', platform: 'generic' } ">
+
+    <div class="layout-header dx-toolbar-background" data-options="dxContentPlaceholder : { name: 'header', animation: 'view-header-toolbar' }">
+        <div data-bind="dxToolbar: { items: [{ text: title, location: 'center' }] }" data-options="dxCommandContainer : { id: 'generic-header-toolbar' }">
+        </div>
+    </div>
+
+    <div class="layout-content" data-options="dxContentPlaceholder : { name: 'content', animation: 'view-content-change' }">
+    </div>
+
+    <div class="layout-footer">
+        <div class="navbar-container" data-bind="dxNavBar: {}" data-options="dxCommandContainer: { id: 'global-navigation' }">
+        </div>
+    </div>
+
+    <div class="view-footer" data-options="dxContent : { targetPlaceholder: 'view-footer' } ">
+        <div class="view-toolbar-bottom" data-bind="dxToolbar: { visible: false }" data-options="dxCommandContainer : { id: 'generic-view-footer' } ">
+        </div>
+    </div>
+
+</div>
+
+<div class="navbar-layout-tablet" data-options="dxLayout : { name: 'navbar', platform: 'win', phone: false }">
+    <div class="layout-header">
+        <div data-options="dxContentPlaceholder : { name: 'header', contentCssPosition: 'static' }">
+            <h1 class="view-title" data-bind="text: title"></h1>
+        </div>
+        <div class="navbar-container" data-bind="dxNavBar: { selectionMode: 'none' }" data-options="dxCommandContainer : { id: 'global-navigation' }"></div>
+    </div>
+    <div class="layout-content-wrapper">
+        <div class="layout-content" data-options="dxContentPlaceholder : { name: 'content', contentCssPosition: 'static' }">
+        </div>
+    </div>
+</div>
+
+<div class="navbar-layout" data-options="dxLayout : { name: 'navbar', platform: 'win', phone: true } ">
+
+    <div class="layout-header">
+        <div class="navbar-container dx-navbar-layout-header" data-bind="dxNavBar: {}" data-options="dxCommandContainer: { id: 'global-navigation' }">
+        </div>
+    </div>
+
+    <div class="layout-content" data-options="dxContentPlaceholder : { name: 'content', animation: 'view-content-change' }">
+    </div>
+
+    <div class="layout-footer" data-options="dxContentPlaceholder : { name: 'footer' }">
+        <div class="layout-toolbar-bottom" data-bind="dxToolbar: { items: [], renderAs: 'bottomToolbar', visible: false }" data-options="dxCommandContainer : { id: 'win10-phone-appbar' } "></div>
+    </div>
+
+</div>
+

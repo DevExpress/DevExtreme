@@ -1,0 +1,148 @@
+@WIN10_POPUP_TITLE_HEIGHT: 29px;
+@WIN10_POPUP_PADDING_BASE: @WIN10_POPUP_TITLE_HEIGHT - 17px;
+@WIN10_POPUP_TITLE_LABEL_FONT_SIZE: 12px;
+@WIN10_POPUP_TITLE_BUTTON_MIN_WIDTH: 45px;
+@WIN10_POUP_TITLE_BUTTON_PADDING_BASE: @WIN10_POPUP_PADDING_BASE / 2;
+@WIN10_POUP_TITLE_ICON_SIZE: 14px;
+
+.dx-popup-wrapper {
+    & > .dx-overlay-content {
+        background-color: @WIN10_POPUP_BACKGROUND_COLOR;
+        border: 1px solid @WIN10_POPUP_BORDER_COLOR;
+        .box-shadow(0 5px 25px 0 @WIN10_POPUP_SHADOW_COLOR);
+    }
+}
+
+.dx-popup-fullscreen {
+    border: none;
+}
+
+.dx-popup-title {
+    padding: @WIN10_POPUP_PADDING_BASE @WIN10_POPUP_PADDING_BASE 0 @WIN10_POPUP_PADDING_BASE;
+
+    &.dx-toolbar {
+        padding: 0;
+        height: @WIN10_POPUP_TITLE_HEIGHT;
+        background-color: transparent;
+    }
+
+    .dx-toolbar-label {
+        font-size: @WIN10_POPUP_TITLE_LABEL_FONT_SIZE;
+        text-transform: none;
+        padding-left: @WIN10_POPUP_PADDING_BASE;
+
+        .dx-rtl &,
+        .dx-rtl& {
+            padding-right: @WIN10_POPUP_PADDING_BASE;
+            padding-left: 0;
+        }
+    }
+
+    .dx-toolbar-button {
+        .dx-button {
+            height: @WIN10_POPUP_TITLE_HEIGHT;
+            width: auto;
+            min-width: @WIN10_POPUP_TITLE_BUTTON_MIN_WIDTH;
+        }
+
+        .dx-button-content {
+            font-size: @WIN10_POPUP_TITLE_LABEL_FONT_SIZE;
+        }
+
+        .dx-button-text {
+            display: inline;
+            text-overflow: clip;
+            padding-bottom: 0;
+        }
+
+        .dx-button-back,
+        .dx-button-has-text,
+        .dx-button-has-icon,
+        .dx-button-has-icon.dx-button-has-text {
+            .dx-button-content {
+                padding: @WIN10_POUP_TITLE_BUTTON_PADDING_BASE;
+            }
+        }
+
+        .dx-button-has-icon.dx-button-has-text {
+            .dx-button-text {
+                padding-left: @WIN10_POUP_TITLE_BUTTON_PADDING_BASE;
+
+                .dx-rtl &,
+                .dx-rtl& {
+                    padding-right: @WIN10_POUP_TITLE_BUTTON_PADDING_BASE;
+                    padding-left: 0;
+                }
+            }
+        }
+
+        .dx-icon {
+            width: @WIN10_POUP_TITLE_ICON_SIZE;
+            height: 100%;
+            .dx-icon-font-centered-sizing(@WIN10_POUP_TITLE_ICON_SIZE);
+        }
+
+        .dx-closebutton {
+            &.dx-state-hover {
+                .dx-button-content {
+                    background-color: @WIN10_POPUP_CLOSEBUTTON_HOVER_BACKGROUND_COLOR;
+                    color: @WIN10_POPUP_CLOSEBUTTON_HOVER_COLOR;
+                }
+            }
+
+            &.dx-state-active {
+                .dx-button-content {
+                    background-color: @WIN10_POPUP_CLOSEBUTTON_ACTIVE_BACKGROUND_COLOR;
+                }
+            }
+        }
+    }
+}
+
+.dx-popup-content {
+    padding: @WIN10_POPUP_PADDING_BASE;
+}
+
+.dx-popup-bottom {
+    padding: 12px;
+
+    &.dx-toolbar {
+        background-color: transparent;
+    }
+
+    .dx-toolbar-button {
+        padding: 0 @WIN10_POUP_TITLE_BUTTON_PADDING_BASE;
+
+        &:first-child {
+            padding-left: 0;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                padding-right: 0;
+                padding-left: @WIN10_POUP_TITLE_BUTTON_PADDING_BASE;
+            }
+        }
+
+        &:last-child {
+            padding-right: 0;
+
+            .dx-rtl &,
+            .dx-rtl& {
+                padding-right: @WIN10_POUP_TITLE_BUTTON_PADDING_BASE;
+                padding-left: 0;
+            }
+        }
+
+        .dx-button {
+            width: auto;
+            height: auto;
+        }
+
+        .dx-button-text {
+            display: inline;
+            text-overflow: clip;
+        }
+
+        .win10-button-defaults();
+    }
+}

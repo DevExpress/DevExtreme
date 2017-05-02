@@ -1,0 +1,65 @@
+@WIN10_MENU_HORIZONTAL_CHEVRON_SIZE: 30px;
+@WIN10_MENU_HORIZONTAL_SEPARATOR_MARGIN: 0 3px;
+
+.dx-menu {
+    .dx-menu-horizontal {
+        .dx-menu-item .dx-menu-item-content {
+            padding-left: @WIN10_MENUBASE_ITEM_WITH_ICON_LEFT_PADDING;
+        }
+
+        .dx-menu-item-content .dx-menu-item-popout-container {
+            width: @WIN10_MENU_HORIZONTAL_CHEVRON_SIZE;
+        }
+
+        .dx-menu-separator {
+            height: 100%;
+            width: 1px;
+            margin: @WIN10_MENU_HORIZONTAL_SEPARATOR_MARGIN;
+        }
+
+        .dx-menu-item-popout {
+            .dx-icon-chevrondown;
+            .dx-icon-sizing(@WIN10_MENUBASE_CHEVRON_SIZE);
+        }
+    }
+
+    &.dx-rtl {
+        .dx-menu-horizontal {
+            .dx-menu-item .dx-menu-item-content {
+                padding-right: @WIN10_MENUBASE_ITEM_WITH_ICON_LEFT_PADDING;
+            }
+        }
+    }
+}
+
+.dx-menu-adaptive-mode {
+
+    &.dx-overlay-content {
+        border: 1px solid @WIN10_CONTEXTMENU_CONTAINER_BORDER_COLOR;
+    }
+
+    .dx-treeview {
+        background-color: @WIN10_CONTEXTMENU_CONTAINER_BACKGROUND_COLOR;
+
+        .dx-state-focused,
+        .dx-state-hover,
+        .dx-state-active {
+            & > .dx-treeview-item,
+            &.dx-treeview-item {
+                color: inherit;
+            }
+        }
+
+        .dx-treeview-toggle-item-visibility {
+            width: 32px;
+        }
+
+        .dx-treeview-node {
+            padding-left: 35px;
+        }
+    }
+
+    .dx-treeview-node-container:first-child > .dx-treeview-node {
+        border-bottom: 1px solid @WIN10_CONTEXTMENU_CONTAINER_BORDER_COLOR;
+    }
+}

@@ -1,0 +1,108 @@
+@WIN8_TAB_ICON_SIZE: 25px;
+@WIN8_TAB_ICON_PART: 0.56;
+@WIN8_TAB_ICON_BORDER_WIDTH: 4px;
+@WIN8_TAB_ICON_OFFSET_WIDTH: 4px;
+
+.dx-tabs {
+    text-align: left;
+
+    .dx-icon-chevronprev, .dx-icon-chevronnext {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        font-size: 18px;
+    }
+
+    .dx-icon-chevronprev {
+        text-align: left;
+        padding-left: 2px;
+    }
+
+    .dx-icon-chevronnext {
+        text-align: right;
+        padding-right: 8px;
+    }
+}
+
+.dx-tabs-wrapper {
+    display: table;
+    padding: 0 8px;
+
+    &:before {
+        display: inline-block;
+        height: 100%;
+        content: '';
+        vertical-align: middle;
+    }
+}
+
+.dx-tabs-scrollable {
+    .dx-tabs-nav-buttons & {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
+}
+
+.dx-tabs-nav-button {
+    height: 100%;
+    padding: 0;
+}
+
+
+.dx-tab {
+    padding-right: @WIN8_TABS_MARGIN_RIGHT;
+
+    .dx-icon {
+        display: inline-block;
+        vertical-align: middle;
+        .dx-icon-sizing(@WIN8_TAB_ICON_SIZE * @WIN8_TAB_ICON_PART, @WIN8_TAB_ICON_SIZE, @WIN8_TAB_ICON_BORDER_WIDTH);
+        border: @WIN8_TABS_IMG_BORDER;
+        margin: 0 5px 0 0;
+        .border-radius(50%);
+        color: @WIN8_TABS_ICON_COLOR;
+    }
+}
+
+
+.dx-tab-text {
+    vertical-align: middle;
+    color: @WIN8_BASE_TEXT;
+    text-transform: uppercase;
+    font-weight: lighter;
+    font-size: @WIN8_TABS_FONT_SIZE;
+}
+
+.dx-tab-selected {
+    .dx-icon {
+        color: @WIN8_ACCENT_COLOR;
+        border-color: @WIN8_ACCENT_COLOR;
+    }
+
+    .dx-tab-text {
+        color: @WIN8_ACCENT_COLOR;
+    }
+}
+
+.dx-device-phone {
+    .dx-tabs {
+        .dx-tab {
+            .dx-icon {
+                .dx-icon-sizing(@WIN8PHONE_ICON_SIZE - @WIN8_TAB_ICON_BORDER_WIDTH - @WIN8_TAB_ICON_OFFSET_WIDTH, @WIN8PHONE_ICON_SIZE, @WIN8_TAB_ICON_BORDER_WIDTH);
+            }
+
+            .dx-tab-text {
+                font-size: @WIN8PHONE_TABS_FONT_SIZE;
+            }
+        }
+    }
+}
+
+.dx-rtl .dx-tabs,
+.dx-rtl.dx-tabs {
+    text-align: right;
+
+    .dx-tab {
+        padding-right: 0;
+        padding-left: @WIN8_TABS_MARGIN_RIGHT;
+    }
+}

@@ -1,0 +1,19 @@
+@ANDROID5_POPOVER_CONTENT_BASE_PADDING: 24px;
+
+.dx-popover-arrow {
+    &:after {
+        background: @ANDROID5_POPUP_CONTENT_BACKGROUND;
+    }
+}
+
+.dx-popover-wrapper {
+    .dx-popup-content {
+        padding-right: @ANDROID5_POPOVER_CONTENT_BASE_PADDING;
+        padding-left: @ANDROID5_POPOVER_CONTENT_BASE_PADDING;
+        padding-bottom: @ANDROID5_POPOVER_CONTENT_BASE_PADDING;
+    }
+
+    .dx-overlay-content {
+        .shadow-z3();
+    }
+}

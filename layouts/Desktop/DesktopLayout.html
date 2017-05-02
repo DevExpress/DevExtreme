@@ -1,0 +1,35 @@
+<div class="desktop-layout" data-options="dxLayout : { name: 'desktop', platform: 'generic' } " >
+    <div class="page">
+        <div class="wrapper">
+            <header>
+                <div class="logo" />
+            </header>
+        </div>
+        <div class="main-menu dx-desktop-layout-main-menu">
+            <div class="wrapper">
+                <nav id="navBar" data-bind="dxNavBar: {}" data-options="dxCommandContainer : { id: 'global-navigation', contentCssPosition: 'static' }" ></nav>
+            </div>
+        </div>
+        <div class="toolbar dx-desktop-layout-toolbar">
+            <div class="wrapper" data-options="dxContentPlaceholder : { name: 'header', contentCssPosition: 'static' } " >
+                <div data-bind="dxToolbar: { items: [{ text: title, location: 'before', template: 'titleTemplate' }] }"
+                     data-options="dxCommandContainer : { id: 'desktop-toolbar' }"
+                    >
+                    <div data-options="dxTemplate:{name:'titleTemplate'}">
+                        <h2 data-bind="text: text"></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="content-wrapper">
+                <div class="content" data-options="dxContentPlaceholder : { name: 'content', contentCssPosition: 'static' } " ></div>
+            </div>
+
+            <div class="footer-gap"></div>
+        </div>
+        <footer>
+            <div class="wrapper copyright dx-desktop-layout-copyright">2017&nbsp;&copy;&nbsp;Copyright Text</div>
+        </footer>
+    </div>
+</div>

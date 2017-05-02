@@ -1,0 +1,73 @@
+.dx-tabpanel {
+    .dx-tabs {
+        display: block;
+        border-bottom: none;
+        background-color: @tabs-tab-bg;
+
+        .dx-empty-collection& {
+            border-top: none;
+        }
+    }
+
+    .dx-tab {
+        width: 140px;
+
+        &:not(.dx-tab-selected):not(.dx-state-hover){
+            background: none;
+        }
+
+    }
+
+    /*NOTE: fractional pixels for ie*/
+    .dx-tab-selected:before {
+        content: "";
+        pointer-events: none;
+        position: absolute;
+        top: 100%;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        height: 0;
+        border-bottom: 1.5px solid @tabs-tab-selected-bg;
+        bottom: -1.4px;
+    }
+
+    .dx-tabs-wrapper {
+        display: block;
+    }
+
+    &.dx-state-focused {
+        .dx-multiview-wrapper {
+            border: @GENERIC_TAB_FOCUS_BORDER;
+        }
+
+        .dx-tab:not(.dx-tab-selected):before {
+            content: "";
+            pointer-events: none;
+            position: absolute;
+            top: 100%;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            z-index: 2;
+            height: 0;
+            border-bottom: 1.5px solid @tabs-focused-border-color;
+            bottom: -1.4px;
+        }
+
+        .dx-tab-selected:after {
+            border-top: @GENERIC_TAB_FOCUS_BORDER;
+            border-right: @GENERIC_TAB_FOCUS_BORDER;
+            border-left: @GENERIC_TAB_FOCUS_BORDER;
+        }
+
+        .dx-tabs-scrollable .dx-tab-selected:after {
+            border-bottom: 1.5px solid @tabs-tab-bg;
+        }
+    }
+
+    .dx-multiview-wrapper {
+        border: 1px solid @tabs-border-color;
+    }
+}

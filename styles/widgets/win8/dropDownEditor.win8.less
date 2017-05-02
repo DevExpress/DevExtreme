@@ -1,0 +1,48 @@
+@DROPDOWNEDITOR_BUTTON_WIDTH: 34px;
+@CLEAR_BUTTON_AREA_WIDTH: 34px;
+@WIN8_DROPDOWNEDITOR_ICON_SIZE: 15px;
+
+.dx-dropdowneditor {
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
+            padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
+        }
+    }
+}
+
+.dx-dropdowneditor-button {
+    width: @DROPDOWNEDITOR_BUTTON_WIDTH;
+}
+
+.dx-dropdowneditor-button-visible.dx-show-clear-button .dx-texteditor-input {
+    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_BUTTON_AREA_WIDTH;
+}
+
+.dx-dropdowneditor-icon {
+    .dx-icon-chevrondown;
+    .dx-icon-font-centered-sizing(@WIN8_DROPDOWNEDITOR_ICON_SIZE);
+    font-weight: bold;
+
+    &:before {
+        color: @WIN8_DROPDOWNEDITOR_ICON_COLOR;
+    }
+}
+
+.dx-rtl {
+    .dx-dropdowneditor,
+    &.dx-dropdowneditor {
+        .dx-texteditor-input {
+            padding-right: @TEXTEDITOR_INPUT_PADDING;
+        }
+
+        &.dx-dropdowneditor-button-visible {
+            .dx-texteditor-input {
+                padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH;
+            }
+        }
+    }
+
+    &.dx-dropdowneditor-button-visible.dx-show-clear-button .dx-texteditor-input {
+        padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_BUTTON_AREA_WIDTH;
+    }
+}

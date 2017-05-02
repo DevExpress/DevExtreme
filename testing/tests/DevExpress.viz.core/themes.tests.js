@@ -1,0 +1,414 @@
+"use strict";
+
+var $ = require("jquery"),
+    themeModule = require("viz/themes");
+
+require("viz/core/default");
+require("viz/core/ios");
+require("viz/core/android");
+require("viz/core/win");
+
+QUnit.moduleStart(function() {
+    $.each([
+        { platform: "platform" },
+        { name: "platform1", isCustomTheme: true },
+        { name: "platform1.dark" },
+        { name: "platform2" },
+        { name: "platform2.dark" },
+        { name: "platform2.light" },
+        { name: "platform3" },
+        { name: "platform3.holo-light" },
+        { name: "platform3.holo-dark" }
+    ], function(_, options) {
+        themeModule.registerTheme(options);
+    });
+
+    themeModule.registerThemeSchemeAlias("platform3.light", "platform3.holo-light");
+    themeModule.registerThemeSchemeAlias("platform3.dark", "platform3.holo-dark");
+});
+
+QUnit.testStart(function() {
+    themeModule.currentTheme("generic");
+});
+
+QUnit.module("Register theme");
+
+QUnit.test("registerTheme", function(assert) {
+    themeModule.registerTheme({
+        name: "custom theme",
+        isCustomTheme1: true
+    });
+
+    var theme = themeModule.findTheme("custom theme");
+
+    assert.ok(theme);
+    assert.ok(theme.isCustomTheme1);
+});
+
+QUnit.test("registerTheme based on theme", function(assert) {
+    themeModule.registerTheme({
+        name: "platform",
+        isCustomTheme: true
+    }, "platform");
+
+    themeModule.registerTheme({
+        name: "custom theme 2",
+        isCustomTheme2: true
+    }, "platform");
+
+    var theme = themeModule.findTheme("custom theme 2");
+
+    assert.ok(theme);
+    assert.ok(theme.isCustomTheme);
+    assert.ok(!theme.isCustomTheme1);
+    assert.ok(theme.isCustomTheme2);
+});
+
+QUnit.test("registerTheme with options", function(assert) {
+    var lightTheme = {
+        platform: "platform",
+        version: "5",
+        tone: "light",
+        name: "platform5.light"
+    };
+
+    themeModule.registerTheme(lightTheme);
+
+    $.each(lightTheme, function(key, value) {
+        assert.equal(themeModule.findTheme("platform5.light")[key], value);
+    });
+});
+
+QUnit.test("Patched properties on register theme", function(assert) {
+    var theme = {
+        name: "custom theme",
+        defaultPalette: "custom palette",
+        backgroundColor: "background color",
+        primaryTitleColor: "primary title color",
+        secondaryTitleColor: "secondary title color",
+        axisColor: "axis color",
+        axisLabelColor: "axis label color",
+        redrawOnResize: "redraw on resize",
+        tooltip: { some: "tooltip settings" },
+        "export": {
+            some: "export settings",
+            font: {
+                some: "font settings"
+            }
+        },
+        loadingIndicator: { some: "loadingIndicator settings" },
+        legend: { some: "legend settings" },
+        title: {
+            some: "title settings",
+            subtitle: {
+                some: "subtitle settings"
+            }
+        },
+        "chart:common:axis": { some: "common axis settings" },
+        "chart:common": { some: "common chart settings" },
+        map: {
+            layer: { "layer-tag": 1 },
+            "layer:marker": { "layer:marker-tag": 2 }
+        }
+    };
+    themeModule.resetCurrentTheme();
+
+    //act
+    themeModule.registerTheme(theme);
+
+    //assert
+    theme = themeModule.findTheme("custom theme");
+
+    //backgroundColor
+    assert.strictEqual(theme.loadingIndicator.backgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.chart.commonSeriesSettings.candlestick.innerColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.map.background.color, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.map.legend.backgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.chart.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.pie.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.polar.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.gauge.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.barGauge.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.map.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.rangeSelector.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.sparkline.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.bullet.containerBackgroundColor, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.gauge.scale.tick.color, theme.backgroundColor, "backgroundColor");
+    assert.strictEqual(theme.gauge.scale.minorTick.color, theme.backgroundColor, "backgroundColor");
+
+    //commonAxisSettings
+    assert.deepEqual(theme.chart.commonAxisSettings, theme["chart:common:axis"], "commonAxisSettings");
+    assert.deepEqual(theme.polar.commonAxisSettings, theme["chart:common:axis"], "commonAxisSettings");
+
+    //primaryTitleColor
+    assert.strictEqual(theme.title.font.color, theme.primaryTitleColor, "primaryTitleColor");
+
+    //secondaryTitleColor
+    assert.strictEqual(theme.legend.font.color, theme.secondaryTitleColor, "secondaryTitleColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.title.font.color, theme.secondaryTitleColor, "secondaryTitleColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.title.font.color, theme.secondaryTitleColor, "secondaryTitleColor");
+
+    //axisColor
+    assert.strictEqual(theme.legend.border.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.grid.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.minorGrid.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.tick.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.minorTick.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.grid.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.minorGrid.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.tick.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.minorTick.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.rangeSelector.scale.tick.color, theme.axisColor, "axisColor");
+    assert.deepEqual(theme.rangeSelector.scale.minorTick.color, theme.axisColor, "axisColor");
+
+    //axisLabelColor
+    assert.strictEqual(theme.gauge.scale.label.font.color, theme.axisLabelColor, "axisLabelColor");
+    assert.strictEqual(theme.rangeSelector.scale.label.font.color, theme.axisLabelColor, "axisLabelColor");
+    assert.deepEqual(theme.chart.commonAxisSettings.label.font.color, theme.axisLabelColor, "axisLabelColor");
+    assert.deepEqual(theme.polar.commonAxisSettings.label.font.color, theme.axisLabelColor, "axisLabelColor");
+
+    //redrawOnResize
+    assert.strictEqual(theme.chart.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+    assert.strictEqual(theme.pie.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+    assert.strictEqual(theme.polar.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+    assert.strictEqual(theme.gauge.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+    assert.strictEqual(theme.barGauge.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+    assert.strictEqual(theme.map.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+    assert.strictEqual(theme.rangeSelector.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+    assert.strictEqual(theme.sparkline.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+    assert.strictEqual(theme.bullet.redrawOnResize, theme.redrawOnResize, "redrawOnResize");
+
+    //tooltip
+    assert.deepEqual(theme.chart.tooltip, theme.tooltip, "tooltip");
+    assert.deepEqual(theme.pie.tooltip, theme.tooltip, "tooltip");
+    assert.deepEqual(theme.polar.tooltip, theme.tooltip, "tooltip");
+    assert.deepEqual(theme.gauge.tooltip, theme.tooltip, "tooltip");
+    assert.deepEqual(theme.barGauge.tooltip, theme.tooltip, "tooltip");
+    assert.deepEqual(theme.map.tooltip, theme.tooltip, "tooltip");
+    assert.deepEqual(theme.rangeSelector.tooltip, theme.tooltip, "tooltip");
+    assert.deepEqual(theme.sparkline.tooltip, theme.tooltip, "tooltip");
+    assert.deepEqual(theme.bullet.tooltip, theme.tooltip, "tooltip");
+
+    //loadingIndicator
+    assert.deepEqual(theme.chart.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
+    assert.deepEqual(theme.pie.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
+    assert.deepEqual(theme.polar.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
+    assert.deepEqual(theme.gauge.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
+    assert.deepEqual(theme.barGauge.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
+    assert.deepEqual(theme.map.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
+    assert.deepEqual(theme.rangeSelector.loadingIndicator, theme.loadingIndicator, "loadingIndicator");
+
+    //export
+    assert.deepEqual(theme.chart.export, theme.export, "export");
+    assert.deepEqual(theme.pie.export, theme.export, "export");
+    assert.deepEqual(theme.polar.export, theme.export, "export");
+    assert.deepEqual(theme.gauge.export, theme.export, "export");
+    assert.deepEqual(theme.barGauge.export, theme.export, "export");
+    assert.deepEqual(theme.map.export, theme.export, "export");
+    assert.deepEqual(theme.rangeSelector.export, theme.export, "export");
+
+    //legend
+    assert.deepEqual(theme.chart.legend, theme.legend, "legend");
+    assert.deepEqual(theme.pie.legend, theme.legend, "legend");
+    assert.deepEqual(theme.polar.legend, theme.legend, "legend");
+    assert.deepEqual(theme.gauge.legend, theme.legend, "legend");
+    assert.deepEqual(theme.barGauge.legend, theme.legend, "legend");
+    assert.deepEqual(theme.map.legend, $.extend({}, theme.legend, { backgroundColor: theme.backgroundColor }), "legend");
+    assert.deepEqual(theme.rangeSelector.legend, theme.legend, "legend");
+
+    //title
+    assert.deepEqual(theme.chart.title, theme.title, "title");
+    assert.deepEqual(theme.pie.title, theme.title, "title");
+    assert.deepEqual(theme.polar.title, theme.title, "title");
+    assert.deepEqual(theme.gauge.title, theme.title, "title");
+    assert.deepEqual(theme.barGauge.title, theme.title, "title");
+    assert.deepEqual(theme.map.title, theme.title, "title");
+
+    //common chart settings
+    assert.deepEqual(theme.chart, $.extend(true, {}, theme.chart, theme["chart:common"]), "common chart settings");
+    assert.deepEqual(theme.pie, $.extend(true, {}, theme.pie, theme["chart:common"]), "common chart settings");
+    assert.deepEqual(theme.polar, $.extend(true, {}, theme.polar, theme["chart:common"]), "common chart settings");
+
+    //rangeSelector commonSeriesSettings
+    assert.deepEqual(theme.rangeSelector.chart.commonSeriesSettings, theme.chart.commonSeriesSettings, "rangeSelector commonSeriesSettings");
+
+    //rangeSelector dataPrepareSettings
+    assert.deepEqual(theme.rangeSelector.chart.dataPrepareSettings, theme.chart.dataPrepareSettings, "rangeSelector dataPrepareSettings");
+
+    // map
+    $.each(["area", "line", "marker:dot", "marker:bubble", "marker:pie", "marker:image"], function(_, name) {
+        assert.strictEqual(theme.map["layer:" + name]["layer-tag"], 1, "map layer:" + name + " from layer");
+    });
+    $.each(["dot", "bubble", "pie", "image"], function(_, name) {
+        assert.strictEqual(theme.map["layer:marker:" + name]["layer:marker-tag"], 2, "map layer:marker:" + name + " from layer:marker");
+    });
+
+    // treeMap
+    assert.strictEqual(theme.treeMap.group.border.color, theme.axisColor, "treeMap - group.border.color");
+    assert.strictEqual(theme.treeMap.tile.selectionStyle.border.color, theme.primaryTitleColor, "treeMap - tile.selectionStyle.border.color");
+    assert.strictEqual(theme.treeMap.group.selectionStyle.border.color, theme.primaryTitleColor, "treeMap - group.selectionStyle.border.color");
+    assert.strictEqual(theme.treeMap.group.label.font.color, theme.secondaryTitleColor, "treeMap - group.label.font.color");
+});
+
+
+QUnit.module("Themes functions");
+
+QUnit.test("findTheme", function(assert) {
+    var theme = themeModule.findTheme("platform1");
+
+    assert.ok(theme);
+    assert.ok(theme.isCustomTheme);
+});
+
+QUnit.test("findTheme not exists", function(assert) {
+    assert.strictEqual(themeModule.findTheme("not exists").name, "generic.light");
+});
+
+QUnit.module("currentTheme method.");
+
+QUnit.test("Get default theme", function(assert) {
+    assert.strictEqual(themeModule.currentTheme(), "generic.light", "valid default theme");
+});
+
+QUnit.test("get platform with version", function(assert) {
+    themeModule.currentTheme({
+        platform: "platform",
+        version: "1"
+    });
+
+    assert.equal(themeModule.currentTheme(), "platform1");
+});
+
+QUnit.test("get theme with tone", function(assert) {
+    themeModule.currentTheme({
+        platform: "platform",
+        version: "2"
+    }, "light");
+
+    assert.equal(themeModule.currentTheme(), "platform2.light");
+});
+
+QUnit.test("get theme with tone. another name", function(assert) {
+    themeModule.currentTheme({
+        platform: "platform",
+        version: "3"
+    }, "dark");
+
+    assert.equal(themeModule.currentTheme(), "platform3.holo-dark");
+});
+
+QUnit.test("not exist version", function(assert) {
+    themeModule.currentTheme({
+        platform: "platform",
+        version: "100"
+    });
+
+    assert.equal(themeModule.currentTheme(), "platform");
+});
+
+QUnit.module("currentTheme method. deprecated arguments");
+
+QUnit.test("Get default theme", function(assert) {
+    var currentTheme = themeModule.currentTheme();
+
+    assert.strictEqual(currentTheme, "generic.light", "valid default theme");
+});
+
+QUnit.test("Get/set custom theme(ios)", function(assert) {
+    themeModule.currentTheme("ios");
+
+    assert.strictEqual(themeModule.currentTheme(), "ios7.default", "valid custom theme");
+});
+
+QUnit.test("Get/set custom theme(android)", function(assert) {
+    themeModule.currentTheme("android");
+
+    assert.strictEqual(themeModule.currentTheme(), "android5.light", "valid custom theme");
+});
+
+QUnit.test("Set custom theme (with colorScheme)", function(assert) {
+    themeModule.currentTheme("win8", "light");
+
+    assert.strictEqual(themeModule.currentTheme(), "win8.white", "valid custom theme");
+});
+
+QUnit.test("Set custom theme with wrong colorScheme", function(assert) {
+    themeModule.currentTheme("win8", "dark");
+
+    assert.strictEqual(themeModule.currentTheme(), "win8.black", "valid custom theme");
+});
+
+QUnit.test("Invalid input data", function(assert) {
+    themeModule.currentTheme("invalid_data");
+
+    assert.strictEqual(themeModule.currentTheme(), "generic.light");
+});
+
+QUnit.test("Invalid input data (with color scheme)", function(assert) {
+    themeModule.currentTheme("invalid_data", "light");
+
+    assert.strictEqual(themeModule.currentTheme(), "generic.light");
+});
+
+QUnit.module("deprecated theme");
+
+QUnit.test("Set custom theme (with colorScheme)", function(assert) {
+    themeModule.currentTheme("desktop-dark");
+
+    assert.strictEqual(themeModule.currentTheme(), "generic.dark", "valid custom theme");
+});
+
+QUnit.test("Set custom theme (with colorScheme)", function(assert) {
+    themeModule.currentTheme("android-holo-light");
+
+    assert.strictEqual(themeModule.currentTheme(), "android5.light", "valid custom theme");
+});
+
+QUnit.test("Set custom theme (with colorScheme)", function(assert) {
+    themeModule.currentTheme("win8-white");
+
+    assert.strictEqual(themeModule.currentTheme(), "win8.white", "valid custom theme");
+});
+
+QUnit.module("refresh all", {
+    createItem: function() {
+        return {
+            refresh: function() {
+                this.refreshed = true;
+            }
+        };
+    }
+});
+
+QUnit.test("added items are refresh", function(assert) {
+    var item1 = this.createItem(),
+        item2 = this.createItem(),
+        item3 = this.createItem();
+    themeModule.addCacheItem(item1);
+    themeModule.addCacheItem(item2);
+    themeModule.addCacheItem(item3);
+
+    themeModule.refreshAll();
+
+    assert.ok(item1.refreshed, "item 1");
+    assert.ok(item2.refreshed, "item 2");
+    assert.ok(item3.refreshed, "item 3");
+});
+
+QUnit.test("removed items are not refreshed", function(assert) {
+    var item1 = this.createItem(),
+        item2 = this.createItem(),
+        item3 = this.createItem();
+    themeModule.addCacheItem(item1);
+    themeModule.addCacheItem(item2);
+    themeModule.addCacheItem(item3);
+    themeModule.removeCacheItem(item2);
+
+    themeModule.refreshAll();
+
+    assert.ok(item1.refreshed, "item 1");
+    assert.ok(!item2.refreshed, "item 2");
+    assert.ok(item3.refreshed, "item 3");
+});

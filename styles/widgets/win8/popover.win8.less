@@ -1,0 +1,39 @@
+@WIN8_POPOVER_BORDER: 1px solid @WIN8_POPOVER_BORDER_COLOR;
+
+.dx-popover-wrapper {
+    .dx-overlay-content {
+        border: @WIN8_POPOVER_BORDER;
+        padding: 0 20px;
+
+        &.dx-popover-fullscreen {
+            padding: 0;
+        }
+    }
+
+    .dx-popup-title {
+        margin: 0;
+
+        &.dx-toolbar {
+            width: 100%;
+            height: 40px;
+        }
+
+        .dx-toolbar-item {
+            padding: 0;
+        }
+
+        .dx-toolbar-label > div {
+            padding: 0;
+            margin: 0;
+        }
+    }
+
+    .dx-popup-content {
+        margin: 0;
+    }
+}
+
+.dx-popover-arrow:after {
+    border: @WIN8_POPOVER_BORDER;
+    background-color: @WIN8_POPUP_COLOR;
+}

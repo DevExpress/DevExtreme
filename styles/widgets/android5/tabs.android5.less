@@ -1,0 +1,113 @@
+.dx-tabs {
+    .dx-icons-white();
+    padding: 0;
+    background-color: @ANDROID5_TABS_BACKGROUND;
+    position: relative;
+
+    .dx-inkripple {
+        overflow: hidden;
+    }
+
+    .dx-tabs-item-badge {
+        vertical-align: middle;
+    }
+
+    .dx-tabs-nav-button {
+        position: absolute;
+
+        .dx-button-content {
+            padding: 0;
+            line-height: 0;
+            overflow: hidden;
+        }
+    }
+}
+
+.dx-tabs-nav-button {
+    background-color: @ANDROID5_TABS_BACKGROUND;
+    .box-shadow(none);
+
+    .dx-icon {
+        margin: auto;
+        .dx-icon-sizing(16px);
+    }
+
+    &.dx-button {
+        .border-radius(0);
+    }
+
+    &.dx-state-hover {
+        background-color: transparent;
+    }
+}
+
+.dx-tab {
+    min-width: 80px;
+    height: 100%;
+    background-color: @ANDROID5_TABS_BACKGROUND;
+
+    .dx-inkripple-wave {
+        background-color: fade(@ANDROID5_TABS_SELECTED_COLOR, 54%);
+    }
+
+    .dx-icon {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+        margin-bottom: 2px;
+        .dx-icon-sizing(@ANDROID_BASE_ICON_SIZE);
+    }
+
+    .dx-tab-text {
+        display: inline-block;
+        vertical-align: middle;
+    }
+}
+
+.dx-tabs-nav-button-left {
+    left: 0;
+}
+
+.dx-tabs-nav-button-right {
+    right: 0;
+}
+
+.dx-state-active {
+    &.dx-tab {
+        .dx-tab-text {
+            color: @ANDROID5_TABS_SELECTED_TEXT_COLOR;
+        }
+    }
+
+    &.dx-tabs-nav-button {
+        background-color: fade(@ANDROID5_TABS_SELECTED_COLOR, 54%);
+        .box-shadow(none);
+    }
+}
+
+.dx-tab-content {
+    line-height: 44px;
+    padding: 0 12px 4px;
+}
+
+.dx-tab-text {
+    color: @ANDROID5_TABS_TEXT_COLOR;
+    text-transform: uppercase;
+    font-size: @ANDROID5_TABS_FONT_SIZE;
+    line-height: 16px;
+}
+
+.dx-tab-selected {
+    .box-shadow(@ANDROID5_TABS_SELECTED_BOX_SHADOW);
+
+    .dx-tab-text {
+        color: @ANDROID5_TABS_SELECTED_TEXT_COLOR;
+    }
+}
+
+.dx-state-disabled {
+    .dx-tab,
+    &.dx-tab {
+        opacity: .5;
+    }
+}

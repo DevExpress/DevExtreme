@@ -1,0 +1,65 @@
+<div id="testViewPort">
+    <div id="execute-test">
+        <div data-bind="dxCommand: { onExecute: test }"></div>
+    </div>
+
+    <div id="navigate-test">
+        <div data-bind="dxCommand: { onExecute: '#test-uri' }"></div>
+    </div>
+
+    <div id="navigate-with-template-test">
+        <div data-bind="dxCommand: { onExecute: '#test-uri/{id}' }"></div>
+    </div>
+
+    <div id="global-commands-test">
+        <div class="test" data-options="dxCommandContainer: { id: 'test' }"></div>
+    </div>
+
+    <div id="model-commands-test">
+        <div class="test" data-options="dxCommandContainer: { id: 'test' }"></div>
+    </div>
+
+    <div id="override-commands-test">
+        <div class="test" data-options="dxCommandContainer: { id: 'test' }"></div>
+        <div data-bind="dxCommand: { id: 'c3', title: 'c3_markup' }"></div>
+        <div data-bind="dxCommand: { title: 'no_id_markup' }"></div>
+    </div>
+
+    <div id="complex-test-old">
+        <div class="render-result">
+            <div data-options="dxCommandContainer: { id: 'add' }">
+            </div>
+            <div class="add" data-bind="dxCommand: { onExecute: work, disabled: cantWork, id: 'add' }"></div>
+        </div>
+    </div>
+
+    <div id="missedIdcommand">
+        <div data-bind="dxCommand: { onExecute: work, disabled: cantWork }"></div>
+    </div>
+
+    <div id="complex-test">
+        <div class="render-result">
+            <div data-options="dxCommandContainer: { id: 'add-container' }">
+            </div>
+            <div class="add" data-bind="dxCommand: { onExecute: work, disabled: cantWork, id: 'add-command' }"></div>
+        </div>
+    </div>
+
+    <div id="complex-test-with-observable">
+        <div class="render-result">
+            <div class="toolbar" data-bind="dxToolbar: {}" data-options="dxCommandContainer: { id: 'add' }"></div>
+            <div class="add" data-bind="dxCommand: { id: 'add', title: title }"></div>
+        </div>
+    </div>
+
+    <div id="platform-options-for-container">
+        <div class="render-result">
+            <div class="ios" data-options="dxCommandContainer: { id: 'ios' }"></div>
+            <div class="android" data-options="dxCommandContainer: { id: 'android' }"></div>
+
+            <div class="add" data-bind="dxCommand: { id: 'add', title: 'Add', icon: 'add-icon' }"></div>
+            <div class="edit" data-bind="dxCommand: { id: 'edit', title: 'Edit', icon: 'edit-icon' }"></div>
+        </div>
+    </div>
+
+</div>

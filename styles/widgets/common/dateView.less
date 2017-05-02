@@ -1,0 +1,31 @@
+.dx-dateview-item {
+    margin: 0;
+}
+
+.dx-dateview-rollers {
+    .user-select(none);
+    .flex-container(row, nowrap);
+}
+
+.dx-dateviewroller {
+    position: relative;
+    vertical-align: top;
+    cursor: pointer;
+    .flex-item();
+}
+
+.dx-dateview-item-selected-frame {
+    &:before,
+    &:after {
+        pointer-events: none;
+    }
+}
+
+.dx-dateview-item-selected-border {
+    display: none;
+}
+
+.dx-dateviewroller-month .dx-dateview-value-formatter,
+.dx-dateviewroller-day .dx-dateview-name-formatter {
+    display: none;
+}

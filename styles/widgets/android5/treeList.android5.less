@@ -1,0 +1,118 @@
+.grid-base(treelist);
+
+@TREELIST_COLLAPSED_ICON_MARGIN_LEFT: 2px;
+@TREELIST_ICON_MARGIN_TOP: @GRID_BASE_GROUP_COLUMN_ICONS_SIZE/2;
+@TREELIST_SELECT_CHECKBOX_PADDING_RIGHT: @GRID_BASE_CELL_PADDING;
+@TREELIST_SELECT_CHECKBOX_PADDING_LEFT: 17px;
+
+.dx-treelist-rowsview {
+    .dx-treelist-table:not(.dx-treelist-table-fixed) {
+        .dx-treelist-empty-space {
+            width: 14px;
+        }
+
+        .dx-treelist-cell-expandable {
+            white-space: nowrap;
+
+            .dx-treelist-text-content {
+                display: inline-block;
+                white-space: normal;
+            }
+        }
+    }
+
+    .dx-treelist-icon-container {
+        display: inline-block;
+        white-space: nowrap;
+        vertical-align: top;
+    }
+
+    .dx-treelist-table-fixed {
+        .dx-treelist-icon-container {
+            float: left;
+        }
+    }
+
+    .dx-treelist-empty-space {
+        .dx-icon-spinright;
+        position: relative;
+        display: inline-block;
+        margin-right: 3px;
+
+        &:before {
+            visibility: hidden;
+        }
+    }
+
+    .dx-treelist-expanded span {
+        .dx-icon-chevrondown;
+        .dx-icon-font-centered-sizing(@GRID_BASE_GROUP_COLUMN_ICONS_SIZE);
+        cursor: pointer;
+
+        &:before {
+            left: 0;
+            margin-left: 0px;
+            margin-top: -@TREELIST_ICON_MARGIN_TOP;
+        }
+    }
+
+    .dx-treelist-collapsed span {
+        .dx-icon-chevronright;
+        .dx-icon-font-centered-sizing(@GRID_BASE_GROUP_COLUMN_ICONS_SIZE);
+        cursor: pointer;
+
+        &:before {
+            left: 0;
+            margin-left: -@TREELIST_COLLAPSED_ICON_MARGIN_LEFT;
+            margin-top: -@TREELIST_ICON_MARGIN_TOP;
+        }
+    }
+
+    &.dx-treelist-nowrap .dx-treelist-table {
+        .dx-treelist-cell-expandable {
+            .dx-treelist-text-content {
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
+.dx-treelist-editor-cell {
+     .dx-select-checkbox {
+          padding-right: @TREELIST_SELECT_CHECKBOX_PADDING_RIGHT;
+          padding-left: @TREELIST_SELECT_CHECKBOX_PADDING_LEFT;
+     }
+}
+
+.dx-treelist-cell-expandable .dx-select-checkbox {
+        float: left;
+        padding-right: @TREELIST_SELECT_CHECKBOX_PADDING_RIGHT;
+}
+
+.dx-rtl {
+    .dx-treelist-rowsview {
+        .dx-treelist-icon-container {
+            .flip-horizontally();
+        }
+
+        .dx-treelist-table-fixed {
+            .dx-treelist-icon-container {
+                direction: ltr;
+                float: right;
+            }
+        }
+    }
+
+    .dx-treelist-editor-cell {
+        .dx-select-checkbox {
+            padding-left: @TREELIST_SELECT_CHECKBOX_PADDING_RIGHT;
+            padding-right: @TREELIST_SELECT_CHECKBOX_PADDING_LEFT;
+        }
+    }
+
+    .dx-treelist-cell-expandable .dx-select-checkbox {
+        float: right;
+        padding-left: @TREELIST_SELECT_CHECKBOX_PADDING_RIGHT;
+        padding-right: 0;
+    }
+}

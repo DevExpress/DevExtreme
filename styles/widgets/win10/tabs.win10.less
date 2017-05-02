@@ -1,0 +1,110 @@
+.dx-tabs {
+    .dx-icon-chevronprev, .dx-icon-chevronnext {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        font-size: 18px;
+        line-height: 26px;
+    }
+
+    .dx-icon-chevronprev {
+        text-align: left;
+        padding-left: 2px;
+    }
+
+    .dx-icon-chevronnext {
+        text-align: right;
+        padding-right: 8px;
+    }
+}
+
+
+.dx-tabs-wrapper {
+    display: table;
+}
+
+.dx-tabs-nav-buttons .dx-tabs-nav-button {
+    .dx-button-content {
+        border-width: 1px;
+        border-color: transparent;
+        padding-left: 0;
+        padding-right: 0;
+        background-color: transparent;
+    }
+
+    &.dx-state-hover, &.dx-state-focused, &.dx-state-active {
+        .dx-button-content {
+            border-color: @WIN10_TABS_HOVER_BORDER_COLOR;
+        }
+    }
+
+    &.dx-state-active {
+        .dx-button-content {
+            background-color: @WIN10_TABS_SELECTED_BACKGROUND_COLOR;
+        }
+    }
+}
+
+.dx-tab {
+    padding: 8px 14px;
+    border: 1px solid transparent;
+
+    .dx-icon {
+        display: inline-block;
+        vertical-align: middle;
+        font-size: 16px;
+        .border-radius(50%);
+    }
+
+    &.dx-state-hover, &.dx-state-focused {
+        border-color: @WIN10_TABS_HOVER_BORDER_COLOR;
+    }
+}
+
+.dx-icon + .dx-tab-text {
+    padding-left: 6px;
+}
+
+.dx-tab-text {
+    vertical-align: middle;
+}
+
+.dx-tabs-item-badge {
+    vertical-align: top;
+    margin: -4px -8px 0 2px;
+}
+
+.dx-tab-selected {
+    border-color: @WIN10_TABS_SELECTED_BORDER_COLOR;
+    background-color: @WIN10_TABS_SELECTED_BACKGROUND_COLOR;
+}
+
+.dx-tab, .dx-tabs {
+    &.dx-state-disabled {
+        .dx-tab-content {
+            color: @WIN10_TABS_DISABLED_TEXT_COLOR;
+        }
+    }
+}
+
+
+
+.dx-rtl {
+    .dx-tabs-item-badge {
+        margin-left: -8px;
+        margin-right: 2px;
+    }
+
+    .dx-icon + .dx-tab-text {
+        padding-left: 0;
+        padding-right: 6px;
+    }
+
+    .dx-tabs-nav-button-left {
+        .dx-icon-chevronleft;
+    }
+
+    .dx-tabs-nav-button-right {
+        .dx-icon-chevronright;
+    }
+}

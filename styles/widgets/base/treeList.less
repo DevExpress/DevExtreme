@@ -1,0 +1,110 @@
+.dx-treelist {
+    color: @treelist-base-color;
+    background-color: @treelist-base-background-color;
+
+    .dx-sort-up {
+        .dx-icon-sortup;
+    }
+
+    .dx-sort-down {
+        .dx-icon-sortdown;
+    }
+
+    .dx-header-filter {
+        position: relative;
+        color: @HEADER_FILTER_COLOR;
+        .dx-icon-filter;
+    }
+
+    .dx-header-filter-empty {
+        color: @HEADER_FILTER_COLOR_EMPTY;
+    }
+
+    &.dx-filter-menu {
+        .dx-menu-item-content .dx-icon {
+            .dx-icon-sizing(14px);
+        }
+    }
+
+    .dx-treelist-content-fixed {
+        .dx-treelist-table {
+            .dx-col-fixed {
+                background-color: @treelist-base-background-color;
+            }
+        }
+    }
+
+    .dx-treelist-rowsview .dx-data-row, .dx-treelist-rowsview .dx-freespace-row, .dx-treelist-headers .dx-row {
+        td.dx-pointer-events-none {
+            border-left: 2px solid @treelist-border-color;
+            border-right: 2px solid @treelist-border-color;
+
+            &.dx-first-cell {
+                border-left: none;
+            }
+
+            &.dx-last-cell {
+                border-right: none;
+            }
+        }
+    }
+
+    .dx-treelist-rowsview {
+        .dx-treelist-edit-form {
+            background-color: @treelist-base-background-color;
+        }
+    }
+
+    .dx-treelist-filter-row .dx-filter-range-content {
+        color: @treelist-base-color;
+    }
+}
+
+.dx-treelist-form-buttons-container {
+    float: right;
+    .dx-button {
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+}
+
+.dx-treelist-column-chooser {
+    .dx-base-typography();
+}
+
+.dx-treelist-export-menu {
+    .dx-menu-item .dx-icon-exportxlsx {
+        .dx-icon-sizing(16px);
+    }
+}
+
+.dx-treelist-adaptive-more {
+    cursor: pointer;
+    .dx-icon-more;
+    .dx-icon-sizing(21px);
+}
+
+.dx-rtl {
+    .dx-treelist {
+        .dx-treelist-rowsview .dx-data-row, .dx-treelist-rowsview .dx-freespace-row, .dx-treelist-headers .dx-row {
+            td.dx-pointer-events-none {
+                border-left: 2px solid @treelist-border-color;
+
+                &.dx-first-cell {
+                    border-right: none;
+                }
+
+                &.dx-last-cell {
+                    border-left: none;
+                }
+            }
+        }
+    }
+    .dx-treelist-form-buttons-container {
+        float: left;
+        .dx-button {
+            margin-left: 0;
+            margin-right: 10px;
+        }
+    }
+}

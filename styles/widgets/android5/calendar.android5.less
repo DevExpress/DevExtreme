@@ -1,0 +1,284 @@
+@ANDROID5_CALENDAR_WIDTH: 320px;
+@ANDROID5_CALENDAR_HEIGHT: 356px;
+@ANDROID5_CALENDAR_FOOTER_HEIGHT: 40px;
+@ANDROID5_CALENDAR_FOOTER_BUTTON_WIDTH: 100px;
+@IOS7_CALENDAR_RADIUS_CELL_FIRST: 90%;
+@IOS7_CALENDAR_RADIUS_CELL_SECOND: 95%;
+
+.dx-calendar {
+    padding: 14px;
+    font-size: 14px;
+    height: @ANDROID5_CALENDAR_HEIGHT;
+    min-height: 260px;
+    width: @ANDROID5_CALENDAR_WIDTH + 2 * 14px;
+    min-width: 290px;
+
+    background: @ANDROID5_CALENDAR_BACKGROUND;
+
+    &.dx-calendar-with-footer {
+        height: @ANDROID5_CALENDAR_HEIGHT + @ANDROID5_CALENDAR_FOOTER_HEIGHT;
+        min-height: @ANDROID5_CALENDAR_HEIGHT + @ANDROID5_CALENDAR_FOOTER_HEIGHT;
+
+        .dx-calendar-body {
+            bottom: @ANDROID5_CALENDAR_FOOTER_HEIGHT;
+        }
+
+        .dx-calendar-footer {
+            margin-left: -14px;
+            max-height: @ANDROID5_CALENDAR_FOOTER_HEIGHT;
+            width: 100%;
+
+            .dx-calendar-today-button {
+                position: relative;
+                left: 50%;
+                margin-left: -@ANDROID5_CALENDAR_FOOTER_BUTTON_WIDTH/2;
+                width: @ANDROID5_CALENDAR_FOOTER_BUTTON_WIDTH;
+                padding: 2px 0;
+                .flat-button();
+                text-decoration: none;
+
+                .dx-button-text {
+                    font-weight: bold;
+                    text-transform: uppercase;
+                    font-size: 16px;
+                    color: @ANDROID5_COLOR_BASE;
+                }
+            }
+        }
+    }
+
+    &.dx-state-disabled {
+        &.dx-widget {
+            opacity: .5;
+        }
+    }
+}
+
+@media (max-width: 320px) {
+  .dx-calendar {
+        width: @ANDROID5_CALENDAR_WIDTH;
+        min-width: @ANDROID5_CALENDAR_WIDTH;
+  }
+}
+
+.dx-calendar-views-wrapper {
+    -webkit-backface-visibility: hidden;
+}
+
+.dx-calendar-navigator {
+    display: inline-block;
+    height: 50px;
+
+    .dx-calendar-caption-button {
+        margin: 0 auto;
+        width: auto;
+        position: relative;
+        .flat-button();
+
+        .dx-button-content {
+            .dx-button-text {
+                font-weight: bold;
+                font-size: 20px;
+                text-transform: capitalize;
+                color: @ANDROID5_COLOR_BASE;
+            }
+        }
+    }
+
+    .dx-calendar-navigator-previous-view,
+    .dx-calendar-navigator-next-view {
+        display: none;
+    }
+}
+
+.dx-calendar-view-month {
+    .dx-calendar-cell {
+        &.dx-state-active:not(.dx-calendar-empty-cell) {
+            .gradient-radial-circle(@ANDROID5_CALENDAR_ACTIVE_COLOR, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, 0), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
+        }
+
+        &.dx-calendar-selected-date {
+            &,
+            &.dx-calendar-contoured-date,
+            &.dx-state-active {
+                color: @ANDROID5_CALENDAR_SELECTED_CELL_BACKGROUND;
+                .gradient-radial-circle(@ANDROID5_COLOR_BASE, @IOS7_CALENDAR_RADIUS_CELL_FIRST, rgba(255, 255, 255, 0), @IOS7_CALENDAR_RADIUS_CELL_SECOND);
+                background-repeat: no-repeat;
+                background-position: center center;
+            }
+        }
+    }
+
+    td.dx-calendar-cell {
+        padding: 0;
+    }
+
+    td.dx-calendar-contoured-date {
+        .gradient-radial-circle2(transparent, @IOS7_CALENDAR_RADIUS_CELL_FIRST, @ANDROID5_CALENDAR_CONTOURED_COLOR, @IOS7_CALENDAR_RADIUS_CELL_SECOND, transparent, 100%);
+    }
+}
+
+.dx-calendar-body {
+    top: 52px;
+    left: 14px;
+    right: 14px;
+    bottom: 0;
+
+    table {
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    td, th {
+        padding: 8px;
+        text-align: center;
+    }
+
+    td {
+        color: @ANDROID5_CALENDAR_COLOR;
+        font-weight: 100;
+    }
+
+    th {
+        height: 46px;
+        line-height: normal;
+        font-size: 0;
+        color: @ANDROID5_CALENDAR_HEADER_TEXT_COLOR;
+
+        &:first-letter {
+            font-size: 14px;
+        }
+    }
+
+    .dx-calendar-today {
+        color: @ANDROID5_COLOR_BASE;
+    }
+}
+
+.mixin-body() {
+    .dx-calendar-body {
+        margin-top: 25px;
+
+        .dx-calendar-cell {
+            font-size: 18px;
+            text-transform: uppercase;
+        }
+    }
+
+    .dx-calendar-contoured-date {
+        span {
+            border-color: @ANDROID5_CALENDAR_CONTOURED_COLOR;
+        }
+    }
+
+    .dx-calendar-selected-date {
+        &,
+        &.dx-state-active {
+            color: @ANDROID5_CALENDAR_SELECTED_TEXT_COLOR;
+
+            span {
+                background-color: @ANDROID5_COLOR_BASE;
+                border-color: @ANDROID5_COLOR_BASE;
+            }
+        }
+    }
+
+    .dx-calendar-body .dx-state-active:not(.dx-calendar-empty-cell) {
+        span {
+            background-color: @ANDROID5_CALENDAR_ACTIVE_COLOR;
+            border-color: @ANDROID5_CALENDAR_ACTIVE_COLOR;
+        }
+    }
+}
+
+.dx-calendar-view-year,
+.dx-calendar-view-decade,
+.dx-calendar-view-century {
+    .dx-calendar-cell {
+        span {
+            border: 1px solid transparent;
+            .border-radius(10px);
+            display: inline-block;
+        }
+    }
+}
+
+.dx-calendar-view-year,
+.dx-calendar-view-decade {
+    .dx-calendar-cell {
+        padding: 0;
+
+        span {
+            padding: 9px 11px;
+            line-height: 18px;
+            min-width: 60px;
+        }
+    }
+
+    .mixin-body();
+}
+
+.dx-calendar-view-century {
+    .dx-calendar-cell {
+        padding: 0;
+
+        span {
+            padding: 9px 0;
+            line-height: 14px;
+        }
+    }
+
+    .mixin-body();
+
+    .dx-calendar-body {
+        .dx-calendar-cell {
+            font-size: 14px;
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+}
+
+.dx-calendar-cell {
+    &.dx-calendar-empty-cell {
+        cursor: default;
+        color: @ANDROID5_CALENDAR_OTHER_MONTH_COLOR;
+    }
+
+    &.dx-calendar-other-view {
+        &,
+        &.dx-calendar-empty-cell {
+            color: transparent;
+            background: none;
+            pointer-events: none;
+
+
+            &.dx-calendar-today {
+                color: transparent;
+            }
+        }
+
+            &.dx-calendar-selected-date {
+                background: none;
+            }
+    }
+}
+
+.dx-state-disabled {
+    .dx-calendar,
+    &.dx-calendar {
+        opacity: .3;
+    }
+}
+
+.dx-invalid {
+    &.dx-calendar {
+        border: 1px solid @ANDROID5_FADED_INVALID_COLOR;
+    }
+
+    &.dx-state-focused {
+        .dx-calendar-body {
+            border-color: @ANDROID5_INVALID_COLOR;
+        }
+    }
+}

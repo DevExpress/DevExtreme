@@ -1,0 +1,40 @@
+@WIN10_TOAST_CONTENT_PADDING: 10px;
+@WIN10_TOAST_CONTENT_MIN_WIDTH: 250px;
+
+.dx-toast-content {
+    padding-bottom: @WIN10_TOAST_CONTENT_PADDING;
+    padding-top: @WIN10_TOAST_CONTENT_PADDING;
+    background-color: @WIN10_TOAST_BACKGROUND_COLOR;
+    color: @WIN10_TOAST_TEXT_COLOR;
+    min-width: @WIN10_TOAST_CONTENT_MIN_WIDTH;
+}
+
+.dx-toast-icon {
+    width: 25px;
+    height: 25px;
+    .background-size-prop(contain);
+}
+
+.dx-toast-info {
+    .dx-toast-icon {
+        background-image: @WIN10_TOAST_INFO_BACKGROUND;
+    }
+}
+
+.dx-toast-warning {
+    .dx-toast-icon {
+        background-image: @WIN10_TOAST_WARNING_BACKGROUND;
+    }
+}
+
+.dx-toast-error {
+    .dx-toast-icon {
+        background-image: @WIN10_TOAST_ERROR_BACKGROUND;
+    }
+}
+
+.dx-toast-success {
+    .dx-toast-icon {
+        background-image: @WIN10_TOAST_SUCCESS_BACKGROUND;
+    }
+}

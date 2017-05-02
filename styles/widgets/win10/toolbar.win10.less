@@ -1,0 +1,177 @@
+@WIN10_TOOLBAR_HEIGHT: 60px;
+@WIN10_TOOLBAR_BUTTON_HEIGHT: @WIN10_TOOLBAR_HEIGHT;
+@WIN10_TOOLBAR_BUTTON_WIDTH: 68px;
+@WIN10_TOOLBAR_MENU_BUTTON_WIDTH: 48px;
+@WIN10_TOOLBAR_BOTTOM_HEIGHT: 48px;
+@WIN10_TOOLBAR_BOTTOM_EXPANDED_HEIGHT: 60px;
+@WIN10_TOOLBAR_BOTTOM_BUTTON_HEIGHT: @WIN10_TOOLBAR_BOTTOM_EXPANDED_HEIGHT;
+
+.dx-toolbar {
+    height: @WIN10_TOOLBAR_HEIGHT;
+    background-color: @WIN10_TOOLBAR_BACKGROUND_COLOR;
+
+    .dx-overlay-wrapper {
+        width: 100%;
+    }
+
+    .dx-list {
+        background-color: @WIN10_TOOLBAR_LIST_BACKGROUND_COLOR;
+        border-top: 1px solid @WIN10_TOOLBAR_LIST_BORDER_COLOR;
+    }
+}
+
+.dx-toolbar-label {
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+.dx-toolbar-button {
+    padding: 0;
+
+    .dx-button {
+        height: @WIN10_TOOLBAR_BUTTON_HEIGHT;
+        width: @WIN10_TOOLBAR_BUTTON_WIDTH;
+
+        &.dx-state-hover,
+        &.dx-state-focused {
+            .dx-button-content {
+                background-color: @WIN10_TOOLBAR_BUTTON_HOVER_COLOR;
+            }
+        }
+
+        &.dx-state-active {
+            .dx-button-content {
+                background-color: @WIN10_TOOLBAR_BUTTON_ACTIVE_COLOR;
+            }
+        }
+    }
+
+    .dx-button-content {
+        padding: 21px 4px;
+        background-color: transparent;
+        border: none;
+    }
+
+    .dx-button-text {
+        width: 100%;
+        text-overflow: ellipsis;
+    }
+
+    .dx-button-has-icon {
+        .dx-button-content {
+            padding: 20px 4px;
+        }
+
+        .dx-icon {
+            .dx-icon-sizing(20px);
+        }
+    }
+
+    .dx-button-text,
+    .dx-button-icon {
+        display: block;
+    }
+
+    .dx-button-has-text.dx-button-has-icon {
+        &.dx-button-back {
+            .dx-button-content {
+                padding: 20px 4px;
+            }
+
+            .dx-button-text {
+                display: none;
+            }
+        }
+
+        .dx-button-content {
+            padding: 12px 4px 8px;
+        }
+
+        .dx-button-text {
+            padding-top: 4px;
+            padding-left: 0;
+            font-size: 12px;
+        }
+
+        &.dx-rtl .dx-button-text {
+            padding-right: 0;
+        }
+    }
+}
+
+.dx-toolbar-menu-button {
+    .dx-button-text {
+        font-size: 28px;
+        line-height: 0;
+        letter-spacing: 1px;
+    }
+}
+
+.dx-toolbar-bottom {
+    height: @WIN10_TOOLBAR_BOTTOM_HEIGHT;
+    position: absolute;
+    bottom: 0;
+
+    .dx-toolbar-items-container {
+        height: @WIN10_TOOLBAR_BOTTOM_EXPANDED_HEIGHT;
+        background-color: inherit;
+    }
+
+    .dx-button {
+        height: @WIN10_TOOLBAR_BOTTOM_BUTTON_HEIGHT;
+    }
+
+    .dx-button-content {
+        padding: 16px 4px 26px;
+    }
+
+    .dx-button-has-icon {
+        .dx-button-content {
+            padding: 14px 4px 22px;
+        }
+    }
+
+    .dx-button-has-text.dx-button-has-icon {
+        &,
+        &.dx-button-back {
+            .dx-button-content {
+                padding: 14px 4px 6px;
+            }
+        }
+
+        .dx-button-text {
+            padding-top: 4px;
+            visibility: hidden;
+
+            .dx-toolbar-list-visible& {
+                visibility: visible;
+            }
+        }
+    }
+
+    .dx-toolbar-menu-button {
+        width: @WIN10_TOOLBAR_MENU_BUTTON_WIDTH;
+    }
+}
+
+.dx-toolbar-menu-section {
+    border-bottom: 1px solid @WIN10_TOOLBAR_LIST_BORDER_COLOR;
+
+    .dx-toolbar-hidden-button .dx-list-item-content {
+        padding: 0;
+    }
+
+    .dx-toolbar-hidden-button .dx-button .dx-button-content {
+        background: none;
+        border: none;
+        padding: 2px;
+    }
+
+    .dx-toolbar-item-auto-hide {
+        padding: 10px;
+    }
+}
+
+.dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon .dx-button-content {
+    padding: 20px 4px;
+}

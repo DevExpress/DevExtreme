@@ -1,0 +1,96 @@
+@ANDROID5_ACTIONSHEET_TITLTE_HEIGHT: 56px;
+@ANDROID5_ACTIONSHEET_BUTTON_HEIGHT: 48px;
+@ANDROID5_ACTIONSHEET_FONTSIZE: 16px;
+@ANDROID5_ACTIONSHEET_BASE_VERTICAL_PADDING: 8px;
+@ANDROID5_ACTIONSHEET_BASE_HORIZONTAL_PADDING: 16px;
+
+@ANDROID5_ACTIONSHEET_POPOVER_CONTENT_HORIZONTAL_PADDING: -24px;
+@ANDROID5_ACTIONSHEET_POPOVER_BUTTON_CONTENT_PADDING: 0 19px;
+
+
+.dx-actionsheet-popup-wrapper {
+    .dx-popup-title {
+        height: @ANDROID5_ACTIONSHEET_TITLTE_HEIGHT;
+        padding: 0 @ANDROID5_ACTIONSHEET_BASE_HORIZONTAL_PADDING;
+
+        .dx-toolbar-before,
+        .dx-toolbar-after {
+            padding: 0;
+        }
+
+        .dx-toolbar-label {
+            font-size: @ANDROID5_ACTIONSHEET_FONTSIZE;
+            font-weight: normal;
+            color: @ANDROID5_ACTIONSHEET_TITLE_COLOR;
+        }
+
+        .dx-button-text {
+            text-transform: none;
+        }
+    }
+
+    .dx-popup-content {
+        padding: @ANDROID5_ACTIONSHEET_BASE_VERTICAL_PADDING 0 0;
+
+        .dx-button-content {
+            padding: 0 @ANDROID5_ACTIONSHEET_BASE_HORIZONTAL_PADDING;
+        }
+
+        .dx-button-text {
+            text-transform: none;
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+
+    .dx-overlay-content {
+        background: @ANDROID5_ACTIONSHEET_BACKGROUND_COLOR;
+        padding-bottom: @ANDROID5_ACTIONSHEET_BASE_VERTICAL_PADDING;
+    }
+
+    .dx-popup-title + .dx-popup-content {
+        padding-top: 0;
+    }
+}
+
+.dx-actionsheet-popover-wrapper {
+    .dx-popup-title {
+        .dx-toolbar-before {
+            width: 100%;
+        }
+    }
+
+    .dx-popup-content {
+        margin-right: @ANDROID5_ACTIONSHEET_POPOVER_CONTENT_HORIZONTAL_PADDING;
+        margin-left: @ANDROID5_ACTIONSHEET_POPOVER_CONTENT_HORIZONTAL_PADDING;
+
+
+        .dx-button-content {
+            padding: @ANDROID5_ACTIONSHEET_POPOVER_BUTTON_CONTENT_PADDING;
+        }
+    }
+}
+
+.dx-actionsheet-item,
+.dx-actionsheet-cancel {
+    .dx-button-content {
+        text-align: left;
+        height: @ANDROID5_ACTIONSHEET_BUTTON_HEIGHT;
+        font-size: @ANDROID5_ACTIONSHEET_FONTSIZE;
+        .border-radius(0);
+    }
+}
+
+.dx-rtl {
+    .dx-actionsheet-popup-wrapper {
+        .dx-popup-title {
+            padding: 0 @ANDROID5_ACTIONSHEET_BASE_HORIZONTAL_PADDING;
+        }
+    }
+
+    .dx-actionsheet-item, .dx-actionsheet-cancel {
+        .dx-button-content {
+            text-align: right;
+        }
+    }
+}

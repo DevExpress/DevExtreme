@@ -1,0 +1,165 @@
+<div id="find-test">
+    <div data-options="dxLayout: { name: 'index', platform: 'ios' }" class="layout-index-ios"></div>
+    <div data-options="dxView: { name: 'index', platform: 'ios' }" class="view-index-ios"></div>
+    <div data-options="dxView: { name: 'index', platform: 'android' }" class="view-index-android"></div>
+    <div data-options="dxView: { name: 'withOrientation', platform: 'ios', orientation: 'portrait' }" class="view-with-orientation-ios portrait"></div>
+    <div data-options="dxView: { name: 'withOrientation', platform: 'ios', orientation: 'landscape' }" class="view-with-orientation-ios landscape"></div>
+    <div data-options="dxView: { name: 'about' }" class="view-about"></div>
+    <div data-options="dxView: { name: 'about', platform: 'ios' }" class="view-about-ios"></div>
+    <div data-options="dxTemplate: { name: 'custom' }" class="widget-template"></div>
+</div>
+
+<div id="child-component-creation">
+    <div data-options="dxView: { name: 'index' }" class="view-index">
+        <div data-options="dxContent : { targetPlaceholder: 'content' } "></div>
+    </div>
+</div>
+
+<div id="duplicated-view-test">
+    <div data-options="dxLayout: { name: 'index', platform: 'ios' }"></div>
+    <div data-options="dxView: { name: 'index1', layout: 'empty' }"></div>
+    <div data-options="dxView: { name: 'index1', platform: 'ios' }"></div>
+    <div data-options="dxView: { name: 'index', platform: 'ios' }"></div>
+    <div data-options="dxView: { platform: 'ios', name: 'index' }"></div>
+</div>
+
+<div id="extend-model">
+    <div data-options="dxView: { name: 'index', title: 'view title', custom: 'custom data', notoverride: 'girl' }">
+        ios-index
+    </div>
+</div>
+
+<div id="view-without-layout">
+    <div data-options="dxView: { name: 'index' }">
+        <div class="markup"></div>
+    </div>
+</div>
+
+<div id="apply-layout">
+    <div data-options="dxLayout: { name: 'default' }">
+        <div class="header">header</div>
+        <div data-options="dxContentPlaceholder: { name: 'content' }" class="content-holder"></div>
+        <div class="footer">footer</div>
+    </div>
+    <div data-options="dxView: { name: 'index' }">
+        <div class="rest-markup"></div>
+        <div data-options="dxContent: { targetPlaceholder: 'content' }" class="content">content</div>
+    </div>
+</div>
+
+<div id="apply-layout-no-view-placeholders">
+    <div data-options="dxLayout: { name: 'default' }">
+        <div data-options="dxContentPlaceholder: { name: 'content' }" class="content-holder"></div>
+    </div>
+    <div data-options="dxView: { name: 'index' }">
+        <div class="view-content">content</div>
+    </div>
+</div>
+
+<div id="override-layout-placeholder-content">
+    <div data-options="dxLayout: { name: 'default' }">
+        <div class="header" data-options="dxContentPlaceholder: { name: 'header' }">header</div>
+        <div data-options="dxContentPlaceholder: { name: 'content' }" class="content-holder"></div>
+    </div>
+    <div data-options="dxView: { name: 'index' }">
+        <div data-options="dxContent: { targetPlaceholder: 'header' }">view specific header</div>
+        <div data-options="dxContent: { targetPlaceholder: 'content' }" class="content">content</div>
+    </div>
+</div>
+
+<div id="apply-layout-placeholder-in-view">
+    <div data-options="dxLayout: { name: 'default' }">
+        <div class="header">header</div>
+        <div data-options="dxContentPlaceholder: { name: 'content' }" class="content-holder"></div>
+        <div class="footer">footer</div>
+        <div data-options="dxContent: { name: 'content-footer' }">content-footer</div>
+    </div>
+    <div data-options="dxView: { name: 'index' }">
+        <div data-options="dxContent: { targetPlaceholder: 'content' }" class="content">
+            content
+            <div data-options="dxContentPlaceholder: { name: 'content-footer' }" class="content-footer"></div>
+        </div>
+    </div>
+</div>
+
+<div id="apply-layout-placeholder-in-view-unused">
+    <div data-options="dxLayout: { name: 'default' }">
+        <div class="header">header</div>
+        <div data-options="dxContentPlaceholder: { name: 'content' }" class="content-holder"></div>
+        <div class="footer">footer</div>
+        <div class="view-content" data-options="dxContent: { name: 'content-footer' }">content-footer</div>
+    </div>
+    <div data-options="dxView: { name: 'index' }">
+        <div data-options="dxContent: { targetPlaceholder: 'content' }" class="content">
+            content
+        </div>
+    </div>
+</div>
+
+<div id="render-partial">
+    <div data-options="dxView: { name: 'index' }">
+        <div data-options="dxContentPlaceholder: { name: 'content' }">
+            <div data-options="dxViewPlaceholder: { viewName: 'view' }"></div>
+            <div class="content">content</div>
+            <div data-options="dxViewPlaceholder: { viewName: 'view' }"></div>
+        </div>
+    </div>
+    <div data-options="dxView: { name: 'view' }">
+        <div class="partial">
+            partial
+            <div data-options="dxViewPlaceholder: { viewName: 'partial-view-nested' }"></div>
+        </div>
+    </div>
+    <div data-options="dxView: { name: 'partial-view-nested' }">
+        <div class="nested">nested</div>
+    </div>
+</div>
+
+<div id="render-partial-T147582">
+    <div class="view2" data-options="dxView: { name: 'view2' }">
+        <div></div>
+    </div>
+    <div data-options="dxView: { name: 'view1' }">
+        <div>
+            <div data-options="dxTemplate: { name: 'title' }">
+                <div data-options="dxViewPlaceholder: { viewName: 'view2' }"></div>
+            </div>
+        </div>
+    </div>
+    <div data-options="dxView : { name: 'home' } ">
+        <div data-options="dxContent : { targetPlaceholder: 'content' } ">
+            <div data-options="dxViewPlaceholder: { viewName: 'view1' }"></div>
+        </div>
+    </div>
+</div>
+
+<div id="render-view-complex">
+    <div data-options="dxLayout: { name: 'default', platform: 'blackberry' }">
+        <div class="header blackberry">blackberry header</div>
+        <div data-options="dxContentPlaceholder: { name: 'content' }"></div>
+        <div data-options="dxViewPlaceholder: { viewName: 'footer' }"></div>
+    </div>
+    <div data-options="dxLayout: { name: 'default', platform: 'ios' }">
+        <div class="header ios">ios header</div>
+        <div data-options="dxContentPlaceholder: { name: 'content' }"></div>
+        <div data-options="dxViewPlaceholder: { viewName: 'footer' }"></div>
+    </div>
+    <div data-options="dxLayout: { name: 'default', platform: 'android' }">
+        <div class="header android">android header</div>
+        <div data-options="dxContentPlaceholder: { name: 'content' }"></div>
+        <div data-options="dxViewPlaceholder: { viewName: 'footer' }"></div>
+    </div>
+    <div data-options="dxView: { name: 'index', layout: 'default', title: 'Index view' }">
+        <div data-options="dxContent: { targetPlaceholder: 'content' }" class="content">view content</div>
+    </div>
+    <div data-options="dxView: { name: 'footer' }" class="footer">footer</div>
+</div>
+
+<div id="access-width" style="width: 100px;">
+    <!-- Commands go here -->
+</div>
+
+<div id="simple-markup">
+    <div data-options="dxLayout: { name: 'simple' }"></div>
+    <div data-options="dxView: { name: 'home', layout: 'simple' }"></div>
+</div>

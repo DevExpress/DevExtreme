@@ -1,0 +1,241 @@
+.dx-list {
+    .dx-empty-message {
+        padding: 0 @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+    }
+
+    &:not(.dx-list-select-decorator-enabled) {
+        .dx-list-item {
+            &.dx-state-hover {
+                background-color: @WIN8_ACCENT_COLOR_ACTIVE;
+            }
+        }
+    }
+}
+
+.dx-list-toggle-delete-switch-container {
+    .dx-state-focused {
+        background-color: transparent;
+    }
+}
+
+.dx-state-hover {
+    &.dx-list-toggle-delete-switch {
+        background-color: transparent;
+    }
+}
+
+
+.dx-list-group-header {
+    padding: .5em @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+    color: @WIN8_LIST_HEADER_TEXT_COLOR;
+    text-transform: uppercase;
+    .dx-theme-win8-typography.dx-font-xs;
+
+    &:before {
+        border-top-color: @WIN8_LIST_HEADER_TEXT_COLOR;
+    }
+
+    .dx-list-group-collapsed &:before {
+        border-bottom-color: @WIN8_LIST_HEADER_TEXT_COLOR;
+    }
+}
+
+.dx-list-item {
+    color: @WIN8_LIST_ITEM_TEXT_COLOR;
+    .dx-theme-win8-typography.dx-font-s;
+
+    &.dx-state-active .dx-list-item-content {
+        .translate(5px, 1px);
+
+        .dx-rtl & {
+            .translate(-5px, 1px);
+        }
+    }
+}
+
+.dx-list:not(.dx-list-select-decorator-enabled) .dx-list-item-selected {
+    background-color: @WIN8_ACCENT_COLOR;
+}
+
+
+.dx-list-item-content {
+    padding: @WIN8_LIST_ITEM_VERTICAL_PADDING @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+}
+
+.dx-list-item-chevron {
+    border-color: @WIN8_LIST_ITEM_TEXT_COLOR;
+}
+
+.dx-list-item-before-bag {
+    &.dx-list-toggle-delete-switch-container {
+        width: @WIN8_LIST_ITEM_HORIZONTAL_PADDING + @WIN8_LIST_ITEM_TOGGLE_DELETE_SIZE;
+    }
+
+    &.dx-list-select-checkbox-container,
+    &.dx-list-select-radiobutton-container {
+        width: @WIN8_LIST_ITEM_HORIZONTAL_PADDING + 22px;
+    }
+
+    .dx-list-toggle-delete-switch {
+        border: none;
+
+        &.dx-state-active {
+            background: transparent;
+        }
+    }
+
+    .dx-icon-toggle-delete {
+        margin: @WIN8_LIST_ITEM_VERTICAL_PADDING / 2 @WIN8_LIST_ITEM_HORIZONTAL_PADDING / 2 @WIN8_LIST_ITEM_VERTICAL_PADDING / 2 @WIN8_LIST_ITEM_HORIZONTAL_PADDING / 2;
+        width: @WIN8_LIST_ITEM_TOGGLE_DELETE_SIZE;
+        height: @WIN8_LIST_ITEM_TOGGLE_DELETE_SIZE;
+        background-image: @WIN8_LIST_DELETE_SWITCH_BACKGROUND;
+        background-position: center;
+        background-repeat: no-repeat;
+        .background-size-prop(100%);
+    }
+
+    .dx-list-select-checkbox,
+    .dx-list-select-radiobutton {
+        margin-top: 2px;
+        margin-left: @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+    }
+}
+
+.dx-list-select-all {
+    padding: @WIN8_LIST_ITEM_VERTICAL_PADDING 0;
+}
+
+.dx-list-select-all-checkbox {
+    float: left;
+    margin-top: 3px;
+    margin-left: @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+}
+
+.dx-list-select-all-label {
+    vertical-align: middle;
+    line-height: 1;
+    padding: 0 15px 0 13px;
+}
+
+.dx-list-item-after-bag {
+    &.dx-list-reorder-handle-container {
+        width: @WIN8_LIST_ITEM_HORIZONTAL_PADDING + 42px;
+    }
+
+    .dx-list-reorder-handle {
+        width: 45px;
+        height: 45px;
+        background-image: @WIN8_LIST_REORDER_HANDLE_BACKGROUND;
+    }
+}
+
+.dx-list-item-ghost-reordering {
+    background: @WIN8_LIST_ITEM_GHOST_BACKGROUND;
+}
+
+.dx-list-slide-menu-button {
+    bottom: 1px;
+    background-color: @WIN8_ACCENT_COLOR;
+    color: @WIN8_WHITE_COLOR;
+}
+
+.dx-list-static-delete-button-container {
+    width: 35px;
+
+    .dx-list-static-delete-button {
+        padding: 0;
+
+        .dx-icon {
+            .dx-icon-sizing(22px, 30px);
+
+            .dx-device-phone & {
+                .dx-icon-sizing(18px, 22px);
+            }
+        }
+    }
+}
+
+.dx-list-switchable-delete-button-container {
+    padding-left: 5px;
+    background-color: transparent;
+}
+
+.dx-list-switchable-delete-button {
+    margin-right: @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+}
+
+.dx-list-context-menucontent {
+    background-color: @WIN8_BASE_TEXT;
+
+    .dx-list-item {
+        color: @WIN8_BASE_BACKGROUND;
+    }
+}
+
+.dx-device-phone {
+    .dx-list-group-header {
+        font-size: @WIN8PHONE_H6;
+    }
+
+    .dx-list-item {
+        font-size: @WIN8PHONE_H4;
+
+        .dx-list-toggle-delete-button .dx-button-text {
+            line-height: 2;
+        }
+    }
+
+    .dx-list-item-content {
+        padding: (@WIN8_LIST_ITEM_VERTICAL_PADDING - 4px) @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+    }
+
+    .dx-list-item-before-bag {
+        .dx-icon-toggle-delete {
+            width: @WIN8PHONE_LIST_ITEM_TOGGLE_DELETE_SIZE;
+            height: @WIN8PHONE_LIST_ITEM_TOGGLE_DELETE_SIZE;
+        }
+    }
+}
+
+.dx-state-focused {
+    &.dx-list-item {
+        background-color: @WIN8_ACCENT_COLOR_ACTIVE;
+    }
+}
+
+.dx-rtl .dx-list,
+.dx-rtl.dx-list {
+    .dx-list-item-before-bag {
+        .dx-icon-toggle-delete {
+            margin-right: @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+            margin-left: @WIN8_LIST_ITEM_HORIZONTAL_PADDING / 2;
+        }
+    }
+
+    .dx-list-select-checkbox,
+    .dx-list-select-radiobutton {
+        margin-right: @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+        margin-left: 1px;
+    }
+
+    .dx-list-select-all-checkbox {
+        margin-right: @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+        margin-left: 1px;
+        float: right;
+    }
+
+    .dx-list-switchable-delete-button-container {
+        padding-right: 5px;
+        padding-left: 0px;
+    }
+
+    .dx-list-switchable-delete-button {
+        margin-right: 0;
+        margin-left: @WIN8_LIST_ITEM_HORIZONTAL_PADDING;
+    }
+
+    .dx-list-slide-item-wrapper.dx-state-active {
+        right: auto;
+        left: 0;
+    }
+}

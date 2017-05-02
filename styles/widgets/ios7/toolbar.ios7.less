@@ -1,0 +1,61 @@
+.dx-toolbar {
+    margin: 0;
+    height: 44px;
+    border-bottom: 1px solid @IOS7_TOOLBAR_BORDER;
+    background: @IOS7_TOOLBAR_BACKGROUND;
+
+    .dx-hairlines & {
+        border-bottom-width: .5px;
+    }
+
+    .dx-tabs {
+        table-layout: auto;
+    }
+    /* B230408 + B231118 */
+    .dx-tabs-wrapper { /*TODO: may be remove ? */
+        margin: 0;
+        padding: 0;
+    }
+}
+
+.dx-toolbar-background {
+    background-color: @IOS7_TOOLBAR_BACKGROUND;
+}
+
+.dx-toolbar-bottom {
+    border-bottom: none;
+}
+
+.dx-toolbar-label {
+    color: @IOS7_TOOLBAR_TEXT;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.dx-toolbar .dx-navbar {
+    height: 30px;
+    white-space: nowrap;
+    border: none;
+
+    .dx-nav-item .dx-tab-text {
+        padding-top: 0;
+    }
+}
+
+.dx-toolbar-menu-section {
+    border-bottom: 1px solid @IOS7_TOOLBAR_BORDER;
+
+    .dx-toolbar-hidden-button .dx-list-item-content {
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+
+    .dx-button {
+        color: @IOS7_TOOLBAR_TEXT;
+    }
+
+    .dx-toolbar-item-auto-hide {
+        padding: 5px 10px;
+    }
+}

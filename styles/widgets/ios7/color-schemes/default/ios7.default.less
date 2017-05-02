@@ -1,0 +1,1166 @@
+@IOS7_THEME_MARKER: "dx.ios7.default";
+// Common
+
+/**
+* @name 10. Background color
+* @type color
+* @group base.common
+*/
+@IOS7_BACKGROUND: #fff;
+
+/**
+* @name 20. Selected state background color
+* @type color
+* @group base.common
+*/
+@IOS7_SELECTION_BACKGROUND: #dfdfdf;
+
+@IOS7_BACKGROUND_WIDGET: #e5e5e5;
+@IOS7_BORDER: #c8c8c8;
+@IOS7_FIELD_ATTENTION_COLOR: #e78747;
+
+
+/**
+* @name 1. Invalid widget state - active color
+* @type color
+* @group editors.validation
+*/
+@IOS7_INVALID_COLOR: #FF392C;
+
+@VALIDATION_MESSAGE_COLOR: #fff;
+@VALIDATION_MESSAGE_BACKGROUND_COLOR: @IOS7_INVALID_COLOR;
+
+@VALIDATION_SUMMARY_COLOR: @IOS7_INVALID_COLOR;
+
+/**
+* @name 2. Invalid widget state - border color
+* @type color
+* @group editors.validation
+*/
+@IOS7_FADED_INVALID_COLOR: fade(#FF392C, 40%);
+/**
+* @name 10. Text color
+* @type color
+* @group base.typography
+*/
+@IOS7_FONT_COLOR: #000;
+/**
+* @name 20. Light text color
+* @type color
+* @group base.typography
+*/
+@IOS7_FONT_LIGHTEN: #8e8e93;
+
+@IOS7_FONT: -apple-system-font, "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;
+
+@IOS7_DISABLED_OPACITY: .65;
+
+// Badges
+/**
+* @name 10. Badge text color
+* @type color
+* @group badges
+*/
+@IOS7_BADGE_TEXT_COLOR: #fff;
+@IOS7_SELECTED_BADGE_TEXT_COLOR: #007aff;
+
+/**
+* @name 20. Badge background color
+* @type color
+* @group badges
+*/
+@IOS7_BADGE_BACKGROUND: #ff3b30;
+@IOS7_SELECTED_BADGE_BACKGROUND: #fff;
+
+@IOS7_LINK: #017aff;
+@IOS7_TAB_COLOR: #007aff;
+@IOS7_INPUT_TEXT: @IOS7_FONT_COLOR;
+/**
+* @name 20. Placeholder text color
+* @type color
+* @group editors.texteditors
+*/
+@IOS7_INPUT_PLACEHOLDER: #c7c7cd;
+
+// Pivot Tabs
+@IOS7_PIVOTTABS_TEXT_COLOR: @IOS7_FONT_LIGHTEN;
+@IOS7_PIVOTTABS_SELECTED_TEXT_COLOR: @IOS7_FONT_COLOR;
+@IOS7_PIVOTTABS_HEIGHT: 66px;
+
+// ActionSheet
+/**
+* @name 10. Background color
+* @type color
+* @group overlays.actionsheet
+*/
+@IOS7_ACTIONSHEET_BACKGROUND: #f2f2f2;
+@IOS7_ACTIONSHEET_CANCEL_BACKGROUND: #ffffff;
+/**
+* @name 40. Selected item background color
+* @type color
+* @group overlays.actionsheet
+*/
+@IOS7_ACTIONSHEET_BACKGROUND_ACTIVE: rgba(231,231,231,1);
+/**
+* @name 20. Title text color
+* @type color
+* @group overlays.actionsheet
+*/
+@IOS7_ACTIONSHEET_TITLE: #8a8a8a;
+/**
+* @name 30. Item border color
+* @type color
+* @group overlays.actionsheet
+*/
+
+@IOS7_ACTIONSHEET_BORDER: @IOS7_BORDER;
+@IOS7_ACTIONSHEET_BUTTON: @IOS7_LINK;
+
+
+// Accordion
+/**
+* @name 10. Item border color
+* @type color
+* @group navigations.accordion
+*/
+@IOS7_ACCORDION_BORDER_COLOR: rgb(200, 200, 200);
+@IOS7_ACCORDION_ITEM_ACTIVE_STATE_BORDER_COLOR: #2b90ff;
+
+
+// DropDownList
+@IOS7_DROPDOWNLIST_BACKGROUND: @IOS7_BACKGROUND;
+@IOS7_DROPDOWNLIST_SELECTED: #F4F4F4;
+@IOS7_DROPDOWNLIST_BORDERCOLOR: #D9D9D9;
+@IOS7_DROPDOWNLIST_SHADOW: ~"0 1px 15px -3px rgba(0,0,0,.35)";
+
+
+// Autocomplete
+@IOS7_AUTOCOMPLETE_BACKGROUND: @IOS7_DROPDOWNLIST_BACKGROUND;
+/**
+* @name 10. Item border color
+* @type color
+* @group editors.autocomplete
+*/
+@IOS7_AUTOCOMPLETE_BORDERCOLOR: @IOS7_DROPDOWNLIST_BORDERCOLOR;
+@IOS7_AUTOCOMPLETE_SHADOW: @IOS7_DROPDOWNLIST_SHADOW;
+
+
+// SelectBox
+@IOS7_SELECTBOX_BACKGROUND: @IOS7_DROPDOWNLIST_BACKGROUND;
+/**
+* @name 10. Item border color
+* @type color
+* @group editors.selectbox
+*/
+@IOS7_SELECTBOX_BORDERCOLOR: @IOS7_DROPDOWNLIST_BORDERCOLOR;
+@IOS7_SELECTBOX_SHADOW: @IOS7_DROPDOWNLIST_SHADOW;
+
+// TagBox
+/**
+* @name 30. Tag background color
+* @type color
+* @group editors.tagbox
+*/
+@IOS7_TAGBOX_TAG_ITEM_BACKGROUND_COLOR: #007aff;
+@IOS7_TAGBOX_TAG_FOCUSED_BACKGROUND: darken(@IOS7_TAGBOX_TAG_ITEM_BACKGROUND_COLOR, 10%);
+
+// Button
+/**
+* @name 10. Text color
+* @type color
+* @group buttons.default
+*/
+@IOS7_BUTTON_TEXT: @IOS7_LINK;
+
+@IOS7_BUTTON_DISABLE: #b9b9b9;
+/**
+* @name 10. Text color
+* @type color
+* @group buttons.danger
+*/
+@IOS7_BUTTON_DANGER: #fd472b;
+
+/**
+* @name 10. Text color
+* @type color
+* @group buttons.success
+*/
+@IOS7_BUTTON_SUCCESS: #00e367;
+
+@IOS7_ACTIONSHEET_BUTTON_DISABLE: @IOS7_BUTTON_DISABLE;
+@IOS7_ACTIONSHEET_BUTTON_DANGER: @IOS7_BUTTON_DANGER;
+@IOS7_ACTIONSHEET_BUTTON_SUCCESS: @IOS7_BUTTON_SUCCESS;
+
+// Calendar
+/**
+* @name 10. Background color
+* @type color
+* @group editors.calendar
+*/
+@IOS7_CALENDAR_BACKGROUND: #ffffff;
+/**
+* @name 40. Month and year text color
+* @type color
+* @group editors.calendar
+*/
+@IOS7_CALENDAR_HEADER_COLOR: #2b2b2b;
+/**
+* @name 30. Header text color
+* @type color
+* @group editors.calendar
+*/
+@IOS7_CALENDAR_DAYS_COLOR: #232323;
+/**
+* @name 20. Text color
+* @type color
+* @group editors.calendar
+*/
+@IOS7_CALENDAR_COLOR: #000;
+/**
+* @name 50. Border color
+* @type color
+* @group editors.calendar
+*/
+@IOS7_CALENDAR_BORDER: #cbcbcb;
+/**
+* @name 60. Selected date background color
+* @type color
+* @group editors.calendar
+*/
+@IOS7_CALENDAR_ACTIVE: #dd5739;
+/**
+* @name 35. Other month text xolor
+* @type color
+* @group editors.calendar
+*/
+@IOS7_CALENDAR_OTHER_VIEW_TEXT_COLOR: #a0a0a0;
+@IOS7_CALENDAR_SELECTED: #fff;
+@IOS7_CALENDAR_DISABLE: #b9b9b9;
+@IOS7_CALENDAR_LINE_COLOR: #cbcbcb;
+@IOS7_CALENDAR_ACTIVE_BACKGROUND_COLOR: #e5e5e5;
+@IOS7_CALENDAR_TODAY_CELL_BACKGROUND_COLOR: #000;
+
+
+// Checkbox
+/**
+* @name 10. Background color
+* @type color
+* @group editors.checkbox
+*/
+@IOS7_CHECKBOX_COLOR: #007aff;
+@IOS7_CHECKBOX_BORDER: @IOS7_CHECKBOX_COLOR;
+@IOS7_CHECKBOX_BACKGROUND_COLOR: white;
+@IOS7_CHECKBOX_CHECKED_BACKGROUND: @IOS7_CHECKBOX_COLOR;
+@IOS7_CHECKBOX_ACTIVE_BACKGROUND: @IOS7_CHECKBOX_COLOR;
+
+// DropDownMenu
+@IOS7_DROPDOWN_BORDER: #c2c2c2;
+@IOS7_DROPDOWN_ACTIVE: #d0e3f6;
+@IOS7_DROPDOWNMENU_BACKGROUND: @IOS7_BACKGROUND;
+
+// TextEditor
+@IOS7_TEXTEDITOR_BACKGROUND: @IOS7_BACKGROUND;
+@IOS7_TEXTEDITOR_TEXT: @IOS7_INPUT_TEXT;
+/**
+* @name 10. Border color
+* @type color
+* @group editors.texteditors
+*/
+@IOS7_TEXTEDITOR_BORDER: #ccc;
+@IOS7_TEXTEDITOR_DISABLE: @IOS7_FONT_LIGHTEN;
+@IOS7_TEXTEDITOR_DISABLE_BORDER: #ddd;
+@IOS7_TEXTEDITOR_READONLY_COLOR: fade(@IOS7_TEXTEDITOR_DISABLE, @IOS7_DISABLED_OPACITY * 100%);
+
+// Fieldset
+@IOS7_FIELDSET_BORDER: #b7b6bb;
+@IOS7_FIELDSET_BACKGROUND: @IOS7_BACKGROUND;
+@IOS7_FIELDSET_TEXTEDITOR: @IOS7_INPUT_TEXT;
+@IOS7_FIELDSET_LABEL: @IOS7_FONT_COLOR;
+@IOS7_FIELDSET_VALUE: @IOS7_FONT_LIGHTEN;
+
+// Gallery
+/**
+* @name 10. Indicator color
+* @type color
+* @group gallery
+*/
+@IOS7_GALLERY_INDICATOR_BACKGROUND: #fff;
+@IOS7_GALLERY_INDICATOR_RADIUS: 50%;
+@IOS7_GALLERY_INDICATOR_SELECTED_BACKGROUND: @IOS7_LINK;
+
+
+// FileUploader
+/**
+* @name 10. Filename text color
+* @type color
+* @group editors.fileuploader
+*/
+@IOS7_FILEUPLOADER_FILENAME_TEXT_COLOR: @IOS7_FONT_COLOR;
+
+/**
+* @name 20. File status text color
+* @type color
+* @group editors.fileuploader
+*/
+@IOS7_FILEUPLOADER_STATUS_TEXT_COLOR: #949494;
+
+
+// Date Picker
+@IOS7_DATE_PICKER_TEXT_COLOR: #a2a3a5;
+@IOS7_DATE_PICKER_SELECTED_TEXT_COLOR: #2f2f2f;
+@IOS7_DATE_PICKER_FRAME_BORDER_COLOR: #d7d7d7;
+
+// Color View
+/**
+* @name 10. Overlay background
+* @type color
+* @group editors.colorbox
+*/
+@IOS7_COLOR_VIEW_OVERLAY_BACKGROUND_COLOR: #ffffff;
+/**
+* @name 20. Overlay border color
+* @type color
+* @group editors.colorbox
+*/
+@IOS7_COLOR_VIEW_OVERLAY_BORDER_COLOR: #d1d1d1;
+@IOS7_COLOR_VIEW_PALETTE_CELL_BACKGROUND_COLOR: #faefef;
+
+// List
+@IOS7_LIST_BACKGROUND: @IOS7_BACKGROUND;
+/**
+* @name 10. Item border color
+* @type color
+* @group list
+*/
+@IOS7_LIST_ITEM_BORDER: #b7b6bb;
+@IOS7_LIST_ITEM_TEXT: @IOS7_FONT_COLOR;
+/**
+* @name 30. Group header background color
+* @type color
+* @group list
+*/
+@IOS7_LIST_GROUP_BACKGROUND: #efeef3;
+/**
+* @name 40. Group header text color
+* @type color
+* @group list
+*/
+@IOS7_LIST_GROUP_TEXT: #232323;
+@IOS7_LIST_DISABLE: @IOS7_FONT_LIGHTEN;
+/**
+* @name 20. Active item background color
+* @type color
+* @group list
+*/
+@IOS7_LIST_ITEM_ACTIVE_BACKGROUND: #d9d9d9;
+@IOS7_LIST_ITEM_ACTIVE_TEXT: @IOS7_FONT_COLOR;
+@IOS7_LIST_ITEM_VERTICAL_PADDING: 13px;
+@IOS7_LIST_ITEM_HORIZONTAL_PADDING: 15px;
+@IOS7_LIST_ITEM_MENU_BUTTON_BACKGROUND: #aaaaaa;
+@IOS7_LIST_ITEM_DELETE_BUTTON_BACKGROUND: #ff3b2f;
+@IOS7_LIST_ITEM_REORDER_HANDLE_COLOR: rgb(200, 200, 202);
+@IOS7_HOLDMENU_BACKGROUND: @IOS7_BACKGROUND;
+@IOS7_HOLDMENU_BORDERCOLOR: #AAAAAA;
+@IOS7_HOLDMENU_SHADOW: ~"0 1px 15px -3px rgba(0,0,0,.35)";
+/**
+* @name 21. Selected item background color
+* @type color
+* @group editors.selectbox
+*/
+@IOS7_LIST_ITEM_SELECTED: @IOS7_DROPDOWNLIST_SELECTED;
+
+
+// LoadIndicator
+/**
+* @name 30. Loading indicator background color
+* @type color
+* @group overlays.common
+*/
+@IOS7_LOAD_INDICATOR_BACKGROUND: #f6f6f6;
+/**
+* @name 50. Loading indicator color
+* @type color
+* @group overlays.common
+*/
+@IOS7_LOAD_INDICATOR_SEGMENT: #787878;
+@IOS7_LOADINDICATOR_BACKGROUND: url(images/widgets/ios7/color-schemes/default/loader64.gif);
+
+// Lookup
+/**
+* @name 20. Active arrow color
+* @type color
+* @group editors.lookup
+*/
+@IOS7_LOOKUP_ARROW_ACTIVE: #aeaeae;
+@IOS7_LOOKUP_FIELD_ACTIVE_BACKGROUND: @IOS7_LIST_ITEM_ACTIVE_BACKGROUND;
+@IOS7_LOOKUP_FIELD_TEXT: @IOS7_FONT_LIGHTEN;
+@IOS7_LOOKUP_VALIDATION_MESSAGE_BACKGROUND: #f8f8f8;
+/**
+* @name 30. Search box background color
+* @type color
+* @group editors.lookup
+*/
+@IOS7_LOOKUP_SEARCHBOX_WRAPPER_BACKGROUND: #C9C9CE;
+@IOS7_LOOKUP_SEARCHBOX_BACKGROUND: @IOS7_BACKGROUND;
+
+// Navbar
+/**
+* @name 30. Background color
+* @type color
+* @group navigations.navbar
+*/
+@IOS7_NAVBAR_BACKGROUND: #f8f8f8;
+/**
+* @name 20. Border color
+* @type color
+* @group navigations.navbar
+*/
+@IOS7_NAVBAR_BORDER: #ababab;
+/**
+* @name 10. Text color
+* @type color
+* @group navigations.navbar
+*/
+@IOS7_NAVBAR_TEXT: #929292;
+/**
+* @name 40. Selected item text color
+* @type color
+* @group navigations.navbar
+*/
+@IOS7_NAVBAR_SELECTED_TAB_TEXT: @IOS7_TAB_COLOR;
+/**
+* @name 50. Disabled item text color
+* @type color
+* @group navigations.navbar
+*/
+@IOS7_NAVBAR_DISABLE_TEXT: rgb(128, 128, 128);
+
+/**
+* @name 60. Icon color
+* @type color
+* @group navigations.navbar
+*/
+@IOS7_NAVBAR_ICON_COLOR: @IOS7_NAVBAR_TEXT;
+
+// Popup
+@IOS7_POPUP_BORDER_RADIUS: 6px;
+/**
+* @name 20. Popup border color
+* @type color
+* @group overlays.common
+*/
+@IOS7_POPUP_BORDER_COLOR: #cccccc;
+@IOS7_POPUP_BORDER: 1px solid @IOS7_POPUP_BORDER_COLOR;
+@IOS7_POPUP_BACKGROUND: @IOS7_BACKGROUND;
+@IOS7_POPUP_TITLE_BORDER: none;
+@IOS7_POPUP_TITLE_TEXT: @IOS7_FONT_COLOR;
+
+// Scrollable
+/**
+* @name 10. Scroller background color
+* @type color
+* @group scrollview
+*/
+@IOS7_SCROLL: rgba(1, 1, 1, .165);
+
+//ScrollView
+/**
+* @name 20. Pulldown text color
+* @type color
+* @group scrollview
+*/
+@IOS7_SCROLLVIEW_PULLDOWN_TEXT: #9a9a9a;
+
+// Slider
+/**
+* @name 10. Slider bar background color
+* @type color
+* @group sliders
+*/
+@IOS7_SLIDER_BAR_BACKGROUND: #b7b6bb;
+/**
+* @name 40. Selected range background color
+* @type color
+* @group sliders
+*/
+@IOS7_SLIDER_RANGE_BACKGROUND: #0b6aff;
+/**
+* @name 20. Handle background color
+* @type color
+* @group sliders
+*/
+@IOS7_SLIDER_HANDLE_BACKGROUND: #fcfcfc;
+@IOS7_SLIDER_HANDLE_SHADOW: 0 2px 6px rgba(0,0,0,.2);
+/**
+* @name 30. Handle border color
+* @type color
+* @group sliders
+*/
+@IOS7_SLIDER_HANDLE_BORDER_COLOR: #b7b6bb;
+
+//ProgressBar
+/**
+* @name 10. Bar background color
+* @type color
+* @group progressbars
+*/
+@IOS7_PROGRESSBAR_CONTAINER_COLOR: #d8d8d8;
+/**
+* @name 20. Selected range background color
+* @type color
+* @group progressbars
+*/
+@IOS7_PROGRESSBAR_RANGE_COLOR: @IOS7_SLIDER_RANGE_BACKGROUND;
+@IOS7_PROGRESSBAR_BORDER_COLOR: #d0cfce;
+@IOS7_PROGRESSBAR_INTERDETERMINATE_STATE_COLOR: #74b9ff;
+@IOS7_PROGRESSBAR_DISABLED_STATE_RANGE_COLOR: #b7b6bb;
+
+// RadioGroup
+/**
+* @name 10. Background color
+* @type color
+* @group editors.radiogroup
+*/
+@IOS7_RADIOGROUP_BACKGROUND_COLOR: @IOS7_BACKGROUND;
+/**
+* @name 20. Checked state background color
+* @type color
+* @group editors.radiogroup
+*/
+@IOS7_RADIOGROUP_CHECK_BACKGROUND_COLOR: @IOS7_CHECKBOX_COLOR;
+
+//SlideOutView
+@IOS7_SLIDEOUTVIEW_BORDER_WIDTH: 1px;
+@IOS7_SLIDEOUTVIEW_BORDER_COLOR: #e0e0e0;
+
+// Switch
+@IOS7_SWITCH_DISABLED_OPACITY: .35;
+
+/**
+* @name 10. 'ON' state background color
+* @type color
+* @group editors.switch
+*/
+@IOS7_SWITCH_ON_BACKGROUND: rgb(74,214,96);
+/**
+* @name 30. 'OFF' state background color
+* @type color
+* @group editors.switch
+*/
+@IOS7_SWITCH_OFF_BACKGROUND: #e5e5e5;
+@IOS7_SWITCH_OFF_INNER_BACKGROUND: @IOS7_BACKGROUND;
+@IOS7_SWITCH_HANDLE_BACKGROUND: @IOS7_BACKGROUND;
+
+// Tabs
+/**
+* @name 30. Item text color
+* @type color
+* @group navigations.tabs
+*/
+@IOS7_TABS_TEXT: @IOS7_TAB_COLOR;
+@IOS7_TABS_FONT_SIZE: 13px;
+/**
+* @name 10. Background color
+* @type color
+* @group navigations.tabs
+*/
+@IOS7_TABS_BACKGROUND: @IOS7_BACKGROUND;
+/**
+* @name 20. Border color
+* @type color
+* @group navigations.tabs
+*/
+@IOS7_TABS_TAB_BORDER: @IOS7_TAB_COLOR;
+/**
+* @name 50. Selected item background color
+* @type color
+* @group navigations.tabs
+*/
+@IOS7_TABS_SELECTED: @IOS7_TAB_COLOR;
+/**
+* @name 40. Selected item text color
+* @type color
+* @group navigations.tabs
+*/
+@IOS7_TABS_SELECTED_TEXT: #fff;
+/**
+* @name 60. Active item background color
+* @type color
+* @group navigations.tabs
+*/
+@IOS7_TABS_ACTIVE_TEXT: @IOS7_TABS_TEXT;
+/**
+* @name 70. Disabled item text color
+* @type color
+* @group navigations.tabs
+*/
+@IOS7_TABS_DISABLE: rgb(200, 200, 200);
+
+/**
+* @name 80. Icon color
+* @type color
+* @group navigations.tabs
+*/
+@IOS7_TABS_ICON_COLOR: @IOS7_TAB_COLOR;
+
+// TabPanel
+@IOS7_TABPANEL_BORDER_COLOR: #e0e0e0;
+
+// Toolbar
+@IOS7_TOOLBAR_BACKGROUND: #f8f8f8;
+/**
+* @name 10. Border color
+* @type color
+* @group navigations.toolbar
+*/
+@IOS7_TOOLBAR_BORDER: #ababab;
+@IOS7_TOOLBAR_TEXT: @IOS7_FONT_COLOR;
+
+// Dialog
+@IOS7_DIALOG_BORDER_RADIUS: 10px;
+/**
+* @name 10. Popup background color
+* @type color
+* @group overlays.common
+*/
+@IOS7_DIALOG_BACKGROUND: #fff;
+@IOS7_DIALOG_TEXTBOX_PADDING: 0 10px;
+@IOS7_DIALOG_BUTTONS_WIDTH: 100%;
+@IOS7_DIALOG_BUTTONS_MARGIN: 12px 0 0 0;
+/**
+* @name 60. Dialogs buttons border color
+* @type color
+* @group overlays.common
+*/
+@IOS7_DIALOG_BUTTONS_BORDER: #b9b9b9;
+@IOS7_DIALOG_BUTTON_BORDER: @IOS7_DIALOG_BUTTONS_BORDER;
+@IOS7_DIALOG_MESSAGE_PADDING: 8px 10px 10px 10px;
+@IOS7_DIALOG_MESSAGE_FONT_SIZE: 90%;
+
+//SearchBox
+/**
+* @name 30. Search mode background color
+* @type color
+* @group editors.texteditors
+*/
+@IOS7_SEARCHBOX_BACKGROUND: #F7F7F7;
+
+// Pager
+
+/**
+* @name 150. Pager selected item background color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@IOS7_PAGER_SELECTION_BACKGROUND: @IOS7_SELECTION_BACKGROUND;
+
+//DataGrid
+/**
+* @name 10. Text color
+* @type color
+* @group datagrid
+*/
+@datagrid-base-color: black;
+/**
+* @name 60. Background color
+* @type color
+* @group datagrid
+*/
+@datagrid-base-background-color: @IOS7_BACKGROUND;
+/**
+* @name 50. Border color
+* @type color
+* @group datagrid
+*/
+@datagrid-border-color: #C8C8C8;
+@datagrid-border: 1px solid @datagrid-border-color;
+@datagrid-border-hidden: 1px solid transparent;
+/**
+* @name 20. Header text color
+* @type color
+* @group datagrid
+*/
+@datagrid-headers-color: #4D4D4D;
+/**
+* @name 40. Header separator color
+* @type color
+* @group datagrid
+*/
+@datagrid-headers-separator-color: #5ac8fa;
+
+/**
+* @name 71. Draggable header border color
+* @type color
+* @group datagrid
+*/
+@datagrid-drag-header-border-color: #5ac8fa;
+@datagrid-drag-header-border: 1px solid @datagrid-drag-header-border-color;
+@datagrid-drag-header-background-color: white;
+@datagrid-row-border: 1px solid transparent;
+
+@HEADER_FILTER_COLOR: @datagrid-headers-color;
+@HEADER_FILTER_COLOR_EMPTY: fade(@datagrid-headers-color, 50%);
+
+/**
+* @name 60. Selected row background color
+* @type color
+* @group datagrid
+*/
+@datagrid-selection-background: @IOS7_SELECTION_BACKGROUND;
+/**
+* @name 70. Hovered row background color
+* @type color
+* @group datagrid
+*/
+@datagrid-hover-background: @IOS7_SELECTION_BACKGROUND;
+@datagrid-data-modified-color-r: 90;
+@datagrid-data-modified-color-b: 200;
+@datagrid-data-modified-color-g: 250;
+/**
+* @name 120. Modified data color
+* @type color
+* @group datagrid
+*/
+@datagrid-data-modified-color: rgba(@datagrid-data-modified-color-r, @datagrid-data-modified-color-b, @datagrid-data-modified-color-g, .7);
+@datagrid-apply-button-color: rgba(@datagrid-data-modified-color-r, @datagrid-data-modified-color-b, @datagrid-data-modified-color-g, .5);
+/**
+* @name 70. Context menu icons color
+* @type color
+* @group datagrid
+*/
+@datagrid-context-menu-icons-color: #898989;
+/**
+* @name 130. Invalidate data color
+* @type color
+* @group datagrid
+*/
+@datagrid-data-invalid-color: @IOS7_INVALID_COLOR;
+/**
+* @name 131. Invalidate data faded color
+* @type color
+* @group datagrid
+*/
+@datagrid-data-faded-invalid-color: @IOS7_FADED_INVALID_COLOR;
+/**
+* @name 110. NoData message color
+* @type color
+* @group datagrid
+*/
+@datagrid-nodata-color: #A8A8A8;
+@datagrid-nodata-font-size: 17px;
+/**
+* @name 80. Group row text color
+* @type color
+* @group datagrid
+*/
+@datagrid-group-row-color: #007aff;
+@datagrid-group-row-background-color: @IOS7_BACKGROUND;
+@datagrid-header-panel-padding-bottom: 10px;
+@datagrid-filter-operation-color: #969696;
+/**
+* @name 100. Focused cell border color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@datagrid-focus-color: #007aff;
+/**
+* @name 101. Editor background
+* @type color
+* @group datagrid
+*/
+@datagrid-editor-background: @IOS7_TEXTEDITOR_BACKGROUND;
+@datagrid-drag-header-first-shadow-color: rgba(0,0,0,.1);
+@datagrid-drag-header-second-shadow-color: rgba(0,0,0,.2);
+/**
+* @name 90. Row alternation background color
+* @type color
+* @group datagrid
+*/
+@datagrid-row-alternation-color: #F7F7F7;
+
+/**
+* @name 30. Header background color
+* @type color
+* @group datagrid
+*/
+@datagrid-headers-background-color: #E5E5E5;
+@datagrid-headers-drop-highlight-background-color: @datagrid-selection-background;
+/**
+* @name 140. Highlighted text background color
+* @type color
+* @group datagrid
+* @paletteColorOpacity 1
+*/
+@datagrid-search-text-background: #5ac8fa;
+/**
+* @name 150. Error row text color
+* @type color
+* @group datagrid
+*/
+@datagrid-error-row-text-color: white;
+/**
+* @name 160. Error row background color
+* @type color
+* @group datagrid
+*/
+@datagrid-error-row-background-color: #f28f8f;
+
+@datagrid-filter-operation-between-image: url(images/widgets/ios7/color-schemes/default/grid/filter-between.png);
+
+
+//TreeList
+/**
+* @name 10. Text color
+* @type color
+* @group treelist
+*/
+@treelist-base-color: black;
+/**
+* @name 60. Background color
+* @type color
+* @group treelist
+*/
+@treelist-base-background-color: @IOS7_BACKGROUND;
+/**
+* @name 50. Border color
+* @type color
+* @group treelist
+*/
+@treelist-border-color: #C8C8C8;
+@treelist-border: 1px solid @treelist-border-color;
+/**
+* @name 20. Header text color
+* @type color
+* @group treelist
+*/
+@treelist-headers-color: #4D4D4D;
+/**
+* @name 40. Header separator color
+* @type color
+* @group treelist
+*/
+@treelist-headers-separator-color: #5ac8fa;
+
+/**
+* @name 71. Draggable header border color
+* @type color
+* @group treelist
+*/
+@treelist-drag-header-border-color: #5ac8fa;
+@treelist-drag-header-border: 1px solid @treelist-drag-header-border-color;
+@treelist-drag-header-background-color: white;
+@treelist-row-border: 1px solid transparent;
+/**
+* @name 60. Selected row background color
+* @type color
+* @group treelist
+*/
+@treelist-selection-background: @IOS7_SELECTION_BACKGROUND;
+/**
+* @name 70. Hovered row background color
+* @type color
+* @group treelist
+*/
+@treelist-hover-background: @IOS7_SELECTION_BACKGROUND;
+@treelist-data-modified-color-r: 90;
+@treelist-data-modified-color-b: 200;
+@treelist-data-modified-color-g: 250;
+/**
+* @name 120. Modified data color
+* @type color
+* @group treelist
+*/
+@treelist-data-modified-color: rgba(@treelist-data-modified-color-r, @treelist-data-modified-color-b, @treelist-data-modified-color-g, .7);
+@treelist-apply-button-color: rgba(@treelist-data-modified-color-r, @treelist-data-modified-color-b, @treelist-data-modified-color-g, .5);
+/**
+* @name 70. Context menu icons color
+* @type color
+* @group treelist
+*/
+@treelist-context-menu-icons-color: #898989;
+/**
+* @name 130. Invalidate data color
+* @type color
+* @group treelist
+*/
+@treelist-data-invalid-color: @IOS7_INVALID_COLOR;
+/**
+* @name 131. Invalidate data faded color
+* @type color
+* @group treelist
+*/
+@treelist-data-faded-invalid-color: @IOS7_FADED_INVALID_COLOR;
+/**
+* @name 110. NoData message color
+* @type color
+* @group treelist
+*/
+@treelist-nodata-color: #A8A8A8;
+@treelist-nodata-font-size: 17px;
+@treelist-header-panel-padding-bottom: 10px;
+@treelist-filter-operation-color: #969696;
+/**
+* @name 100. Focused cell border color
+* @type color
+* @group treelist
+* @paletteColorOpacity 1
+*/
+@treelist-focus-color: #007aff;
+/**
+* @name 101. Editor background
+* @type color
+* @group treelist
+*/
+@treelist-editor-background: @IOS7_TEXTEDITOR_BACKGROUND;
+@treelist-drag-header-first-shadow-color: rgba(0,0,0,.1);
+@treelist-drag-header-second-shadow-color: rgba(0,0,0,.2);
+/**
+* @name 90. Row alternation background color
+* @type color
+* @group treelist
+*/
+@treelist-row-alternation-color: #F7F7F7;
+
+/**
+* @name 30. Header background color
+* @type color
+* @group treelist
+*/
+@treelist-headers-background-color: #E5E5E5;
+@treelist-headers-drop-highlight-background-color: @treelist-selection-background;
+/**
+* @name 140. Highlighted text background color
+* @type color
+* @group treelist
+* @paletteColorOpacity 1
+*/
+@treelist-search-text-background: #5ac8fa;
+/**
+* @name 150. Error row text color
+* @type color
+* @group treelist
+*/
+@treelist-error-row-text-color: white;
+/**
+* @name 160. Error row background color
+* @type color
+* @group treelist
+*/
+@treelist-error-row-background-color: #f28f8f;
+
+@treelist-filter-operation-between-image: url(images/widgets/ios7/color-schemes/default/grid/filter-between.png);
+@treelist-master-detail-cell-background-color: #FAFAFA;
+
+
+//
+// dxPivotGrid
+//
+
+@PIVOTGRID_AREA_BACKGROUND: #fff;
+
+@PIVOTGRID_BORDER_COLOR: #CCCCCC;
+@PIVOTGRID_AREA_COLOR: #767676;
+@PIVOTGRID_DATA_AREA_COLOR: #1B1B1B;
+@PIVOTGRID_TOTALCOLOR: #F7F7F7;
+@PIVOTGRID_GRANDTOTALCOLOR: #EBEBEB;
+
+@PIVOTGRID_ACCENT_COLOR: rgb(96, 96, 96);
+@PIVOTGRID_SHADOW_COLOR: black;
+@PIVOTGRID_DRAG_HEADER_BORDER_COLOR: fade(@PIVOTGRID_ACCENT_COLOR, 50%);
+@PIVOTGRID_DRAG_HEADER_FIRST_SHADOW_COLOR: fade(@PIVOTGRID_SHADOW_COLOR, 10%);
+@PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR: fade(@PIVOTGRID_SHADOW_COLOR, 20%);
+
+@PIVOTGRID_AREA_ALL_IMAGE: url(images/widgets/ios7/color-schemes/default/grid/area-all.png);
+@PIVOTGRID_AREA_FILTER_IMAGE: url(images/widgets/ios7/color-schemes/default/grid/area-filter.png);
+@PIVOTGRID_AREA_COLUMN_IMAGE: url(images/widgets/ios7/color-schemes/default/grid/area-column.png);
+@PIVOTGRID_AREA_ROW_IMAGE: url(images/widgets/ios7/color-schemes/default/grid/area-row.png);
+@PIVOTGRID_AREA_DATA_IMAGE: url(images/widgets/ios7/color-schemes/default/grid/area-data.png);
+
+@PIVOTGRID_DIMENSION_IMAGE: url(images/widgets/ios7/color-schemes/default/grid/dimension.png);
+@PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/ios7/color-schemes/default/grid/hierarchy.png);
+@PIVOTGRID_COMMON_LEFT_RIGHT_PADDING: 10px;
+@PIVOTGRID_COMMON_TOP_BOTTOM_PADDING: 7px;
+@PIVOTGRID_FIELD_INDICATORS_OFFSET: 6px;
+@PIVOTGRID_EXPAND_ICON_OFFSET: -3px;
+@PIVOTGRID_EXPAND_ICON_TEXT_OFFSET: 2px;
+
+@PIVOTGRID_FIELD_AREA_TEXT_COLOR: lighten(@PIVOTGRID_AREA_COLOR, 26.2%);
+
+//dxScheduler
+@SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR: #f5f5f5;
+
+/**
+* @name 15. Border color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_BASE_BORDER_COLOR: fade(@IOS7_BORDER, 60%);
+
+/**
+* @name 20. Hour separator color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_ACCENT_BORDER_COLOR: darken(@IOS7_BORDER, 10.2%);
+
+/**
+* @name 30. Appointment background color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_BASE_COLOR: #65bccd;
+
+/**
+* @name 35. Start appointment color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_START_COLOR: fade(black, 30%);
+
+/**
+* @name 40. Appointment text color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_APPOINTMENT_TEXT_COLOR: @IOS7_FONT_COLOR;
+
+/**
+* @name 35. Focused cell color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: #a9d9e2;
+
+/**
+* @name 10. Text color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_PANEL_TEXT_COLOR: darken(@IOS7_BORDER, 10.2%);
+
+/**
+* @name 5. Workspace color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_WORKSPACE_BACKGROUND_COLOR: @IOS7_BACKGROUND;
+
+@SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR: darken(@IOS7_BORDER, 20%);
+
+@SCHEDULER_TIME_PANEL_BACKGROUND_COLOR: white;
+
+@SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR ;
+@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: @SCHEDULER_BASE_BORDER_COLOR ;
+
+@IOS7_SCHEDULER_HEADER_BACKGROUND_COLOR: #f5f5f5;
+@SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
+@SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
+//Menu
+/**
+* @name 20. Background color
+* @type color
+* @group navigations.menu
+*/
+@IOS7_MENU_BACKGROUND: transparent;
+/**
+* @name 30. Popup background color
+* @type color
+* @group navigations.menu
+*/
+@IOS7_MENU_POPUP_BACKGROUND: #f3f3f3;
+
+/**
+* @name 70. Selected item background color
+* @type color
+* @group navigations.menu
+* @paletteColorOpacity 1
+*/
+@IOS7_MENU_ITEM_SELECTED_BACKGROUND: @IOS7_SELECTION_BACKGROUND;
+/**
+* @name 50. Item text color
+* @type color
+* @group navigations.menu
+*/
+@IOS7_CONTEXT_MENU_TEXT_COLOR:  black;
+/**
+* @name 100. Disabled item background color
+* @type color
+* @group navigations.menu
+*/
+@IOS7_MENU_ITEM_DISABLED_COLOR: #FFFFFF;
+@IOS7_MENU_ITEM_BORDER_COLOR: #dfdfdf;
+/**
+* @name 10. Text color
+* @type color
+* @group navigations.menu
+*/
+@IOS7_MENU_TEXT_COLOR:  #0964E4;
+
+@IOS7_SEPARATOP_COLOR: #aaaaaa;
+
+// TreeView
+@IOS7_TREE_VIEW_FOCUSED_BACKGROUND: @IOS7_SELECTION_BACKGROUND;
+/**
+* @name 80. Border color
+* @type color
+* @group navigations.treeview
+*/
+@IOS7_TREE_VIEW_BORDER_COLOR: @IOS7_LIST_ITEM_BORDER;
+
+//TimeView
+@IOS7_TIME_VIEW_CLOCK_IMAGE: url(images/widgets/ios7/color-schemes/default/timeView/clock-bg.png);
+@IOS7_TIME_VIEW_HOUR_ARROW_IMAGE: url(images/widgets/ios7/color-schemes/default/timeView/hour-arrow.png);
+@IOS7_TIME_VIEW_MINUTE_ARROW_IMAGE: url(images/widgets/ios7/color-schemes/default/timeView/min-arrow.png);
+
+//DateView
+@IOS_DATEVIEW_SHADOW_UP: bottom, fade(@IOS7_BACKGROUND, 0%) 0%, fade(@IOS7_BACKGROUND, 80%) 80%;
+@IOS_DATEVIEW_SHADOW_DOWN: top, fade(@IOS7_BACKGROUND, 0%) 0%, fade(@IOS7_BACKGROUND, 80%) 80%;
+
+//ColorView
+@COLORVIEW_HANDLE_COLOR: #FFF;
+@COLORVIEW_HANDLE_BORDER_COLOR: fade(#000, 20%);
+
+//Form
+
+/**
+* @name 10. Label text color
+* @type color
+* @group form
+*/
+@IOS7_FORM_LABEL_COLOR: @IOS7_FIELDSET_LABEL;
+/**
+* @name 20. Group border color
+* @type color
+* @group form
+*/
+@IOS7_FORM_GROUP_BORDER_COLOR: #ececec;
+@IOS7_FORM_GROUP_CAPTION_COLOR: #6d6d72;
+@IOS7_FORM_REQUIRED_MARK_COLOR: #dd5739;
+@IOS7_FORM_OPTIONAL_MARK_COLOR: #ccc;
+
+// Icons
+@IOS7_LIST_DELETE_SWITCH_BACKGROUND: url(images/widgets/ios7/color-schemes/default/list/delete_flat.png);
+@IOS7_SCROLLVIEW_PULLDOWN_BACKGROUND: url(images/widgets/ios7/color-schemes/default/pulldown.png) 0 0 no-repeat;
+@IOS7_TOAST_INFO_BACKGROUND: url(images/widgets/ios7/color-schemes/default/toast/info.png);
+@IOS7_TOAST_WARNING_BACKGROUND: url(images/widgets/ios7/color-schemes/default/toast/warning.png);
+@IOS7_TOAST_ERROR_BACKGROUND: url(images/widgets/ios7/color-schemes/default/toast/error.png);
+@IOS7_TOAST_SUCCESS_BACKGROUND: url(images/widgets/ios7/color-schemes/default/toast/success.png);
+@IOS7_BLACK_BACKGROUND: #eeeeee;
+@IOS7_STRIPES_BACKGROUND: #E5E5E5;
+
+@IOS7_COLORBOX_NOCOLOR_IMG: url(images/widgets/ios7/color-schemes/default/colorbox/nocolor.png);
+@IOS7_ATTENTION_IMAGE: url(images/widgets/ios7/color-schemes/default/attention.png);
+
+// SPA
+
+// Master-detail
+
+/**
+* @name 10. Splitter color
+* @type color
+* @group layouts.split
+*/
+@IOS7_SPLIT_LAYOUT_MASTER_PANE_SPLITTER_COLOR: #c8c8c8;
+@datagrid-master-detail-cell-background-color: #FAFAFA;

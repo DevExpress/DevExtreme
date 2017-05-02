@@ -1,0 +1,129 @@
+@WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL: 10px;
+@WIN10_TEXEDITOR_INPUT_PADDING_VERTICAL: 4px;
+@WIN10_TEXEDITOR_INPUT_PADDING: @WIN10_TEXEDITOR_INPUT_PADDING_VERTICAL @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+@WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH: 28px;
+@WIN10_TEXTEDITOR_CLEAR_ICON_SIZE: 16px;
+@WIN10_TEXTEDITOR_BORDER_WIDTH: 2px;
+
+.dx-texteditor-container {
+    border: @WIN10_TEXTEDITOR_BORDER_WIDTH solid @WIN10_TEXTEDITOR_BORDER_COLOR;
+}
+
+.dx-texteditor {
+    /* NOTE: Required for WinJS */
+    .dx-texteditor-input {
+        padding: @WIN10_TEXEDITOR_INPUT_PADDING;
+        margin: 0;
+        border: none;
+        width: 100%;
+        line-height: normal;
+        .dx-base-typography();
+
+        &,
+        &:hover {
+            background-color: @WIN10_TEXTEDITOR_INPUT_BACKGROUND_COLOR;
+            color: @WIN10_TEXTEDITOR_INPUT_COLOR;
+        }
+
+        .dx-show-clear-button & {
+            padding-right: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+            .dx-rtl&,
+            .dx-rtl & {
+                padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+                padding-left: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            }
+        }
+
+        &::-ms-value {
+            margin: 0;
+        }
+    }
+
+    .dx-icon {
+        color: @WIN10_TEXTEDITOR_BUTTON_ICON_COLOR;
+
+        .dx-state-focused &,
+        .dx-state-focused& {
+            color: @WIN10_TEXTEDITOR_BUTTON_ICON_FOCUSED_COLOR;
+        }
+
+        .dx-state-disabled &,
+        .dx-state-disabled& {
+            color: @WIN10_TEXTEDITOR_BUTTON_ICON_DISABLED_COLOR;
+        }
+    }
+
+    &.dx-state-hover {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_HOVER_BORDER_COLOR;
+        }
+    }
+
+    &.dx-state-focused {
+        outline: 0;
+    }
+
+    &.dx-state-readonly {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_READONLY_BORDER_COLOR;
+        }
+    }
+
+    &.dx-state-focused,
+    &.dx-state-active {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_FOCUSED_BORDER_COLOR;
+        }
+
+        .dx-texteditor-input {
+            background-color: @WIN10_TEXTEDITOR_FOCUSED_INPUT_BACKGROUND_COLOR;
+            color: @WIN10_TEXTEDITOR_FOCUSED_TEXT_COLOR;
+        }
+    }
+
+    .dx-state-disabled &,
+    &.dx-state-disabled {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_DISABLED_BACKGROUND_COLOR;
+            background-color: @WIN10_TEXTEDITOR_DISABLED_BACKGROUND_COLOR;
+        }
+
+        .dx-texteditor-input {
+            color: @WIN10_TEXTEDITOR_DISABLED_INPUT_COLOR;
+            background-color: transparent;
+        }
+    }
+
+    .dx-invalid& {
+        .dx-texteditor-container {
+            border-color: @WIN10_TEXTEDITOR_INVALID_BORDER_COLOR;
+        }
+    }
+}
+
+.dx-clear-button-area {
+    width: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+    color: @WIN10_TEXTEDITOR_BUTTON_ICON_COLOR;
+
+    .dx-icon-clear {
+        height: 100%;
+        width: 100%;
+        .dx-icon-close;
+        .dx-icon-font-centered-sizing(@WIN10_TEXTEDITOR_CLEAR_ICON_SIZE);
+    }
+}
+
+.dx-placeholder {
+    color: @WIN10_TEXTEDITOR_PLACEHOLDER_COLOR;
+    padding: 0px @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+    .dx-texteditor.dx-state-focused & {
+        color: @WIN10_TEXTEDITOR_FOCUSED_PLACEHOLDER_COLOR;
+    }
+
+    .dx-state-disabled &,
+    .dx-texteditor.dx-state-disabled & {
+        color: @WIN10_TEXTEDITOR_DISABLED_INPUT_COLOR;
+    }
+}

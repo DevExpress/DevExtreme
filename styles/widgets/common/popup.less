@@ -1,0 +1,42 @@
+.dx-popup-title {
+    padding: 10px;
+    min-height: 19px;
+    .user-drag(none);
+    .user-select(none);
+    white-space: normal;
+}
+
+.dx-popup-draggable .dx-popup-title {
+    cursor: move;
+}
+
+.dx-overlay-content {
+    & > .dx-template-wrapper.dx-popup-title {
+        height: auto;
+        width: auto;
+    }
+
+    & .dx-popup-content > .dx-template-wrapper {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.dx-popup-content {
+    padding: 10px;
+    .user-drag(none);
+
+    &.dx-dialog-content {
+        padding: 0;
+    }
+}
+
+.dx-dialog-root {
+    .dx-overlay-shader {
+        background-color: #444;
+    }
+}
+
+.dx-dialog-message {
+    padding: 10px 10px 5px 10px;
+}
