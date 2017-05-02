@@ -1,24 +1,25 @@
 .dx-size-default() {
     @GENERIC_SWITCH_HEIGHT: 24px;
     @GENERIC_SWITCH_WIDTH: 44px;
-    @GENERIC_SWITCH_HANDLE_WIDTH: 18px;
+    @GENERIC_SWITCH_HANDLE_WIDTH: 14px;
     @GENERIC_SWITCH_HANDLE_OFFSET: 2px;
-    @GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 2px;
+    @GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 6px;
     @GENERIC_SWITCH_FONT_SIZE: 9px;
+    @GENERIC_SWITCH_ON_OFF_ADDING_PADDING: 2px;
 }
 
 .dx-size-compact() {
     @GENERIC_SWITCH_HEIGHT: 18px;
     @GENERIC_SWITCH_WIDTH: 36px;
-    @GENERIC_SWITCH_HANDLE_WIDTH: 16px;
+    @GENERIC_SWITCH_HANDLE_WIDTH: 14px;
     @GENERIC_SWITCH_HANDLE_OFFSET: 1px;
-    @GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 0px;
+    @GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 4px;
     @GENERIC_SWITCH_FONT_SIZE: 9px;
+    @GENERIC_SWITCH_ON_OFF_ADDING_PADDING: 0;
 }
 
 @GENERIC_SWITCH_BORDER_WEIGHT: 1px;
 @GENERIC_SWITCH_INNER_SIZE: @GENERIC_SWITCH_HEIGHT - @GENERIC_SWITCH_BORDER_WEIGHT*2;
-@GENERIC_SWITCH_ON_OFF_ADDING_PADDING: 2px;
 
 .dx-switch {
     width: @GENERIC_SWITCH_WIDTH;
@@ -75,6 +76,7 @@
 .dx-switch-container {
     overflow: hidden;
     margin: 0 -@GENERIC_SWITCH_CONTAINER_ADJUSTMENT 0 0;
+    padding: 0 @GENERIC_SWITCH_HANDLE_OFFSET;
     height: @GENERIC_SWITCH_HEIGHT;
     border: @GENERIC_SWITCH_BORDER_WEIGHT solid @switch-border-color;
     background: @switch-bg;
@@ -91,7 +93,6 @@
     float: left;
     width: 50%;
     padding-right: @GENERIC_SWITCH_HANDLE_WIDTH + @GENERIC_SWITCH_ON_OFF_ADDING_PADDING;
-    padding-left: @GENERIC_SWITCH_HANDLE_OFFSET;
     line-height: @GENERIC_SWITCH_INNER_SIZE;
     text-align: center;
     font-size: @GENERIC_SWITCH_FONT_SIZE;
@@ -101,7 +102,7 @@
 }
 
 .dx-switch-off {
-    margin-left: -@GENERIC_SWITCH_HANDLE_OFFSET;
+    padding-left: @GENERIC_SWITCH_HANDLE_OFFSET;
     color: @switch-off-color;
 }
 
@@ -114,8 +115,6 @@
     float: left;
     width: @GENERIC_SWITCH_HANDLE_WIDTH;
     height: @GENERIC_SWITCH_INNER_SIZE - @GENERIC_SWITCH_HANDLE_OFFSET*2;
-    padding-right: @GENERIC_SWITCH_HANDLE_OFFSET;
-    padding-left: @GENERIC_SWITCH_HANDLE_OFFSET;
     margin-top: @GENERIC_SWITCH_HANDLE_OFFSET;
     margin-left: -@GENERIC_SWITCH_HANDLE_WIDTH;
     .box-sizing();
@@ -147,13 +146,10 @@
 
     .dx-switch-off {
         margin-left: 0;
-        margin-right: -@GENERIC_SWITCH_HANDLE_OFFSET;
     }
 
     .dx-switch-handle {
         float: right;
-        padding-left: @GENERIC_SWITCH_HANDLE_OFFSET;
-        padding-right: 0;
         margin-left: 0;
         margin-right: -@GENERIC_SWITCH_HANDLE_WIDTH;
     }
