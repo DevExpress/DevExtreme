@@ -2911,6 +2911,30 @@ QUnit.test("last page does not be loaded several times then totalCount % pageSiz
     assert.ok(this.dataController.isLoaded());
 });
 
+//T507750
+QUnit.test("last page does not be loaded several times then totalCount equals pageSize", function(assert) {
+    var changedArgs = [];
+
+    this.dataController.changed.add(function(e) {
+        changedArgs.push(e);
+    });
+
+    this.dataController.viewportSize(20);
+    this.dataController.pageSize(50);
+
+    //act
+    this.dataController.setViewportItemIndex(30);
+
+    //assert
+    assert.deepEqual(this.dataController.items().length, 50);
+    assert.equal(changedArgs.length, 2);
+    assert.deepEqual(changedArgs[0].changeType, 'refresh');
+    assert.deepEqual(changedArgs[0].items[0].key, 0);
+    assert.deepEqual(changedArgs[1].changeType, 'append');
+    assert.deepEqual(changedArgs[1].items, []);
+    assert.ok(this.dataController.isLoaded());
+});
+
 QUnit.module("Infinite scrolling (ScrollingDataSource)", {
     beforeEach: function() {
 
