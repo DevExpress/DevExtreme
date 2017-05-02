@@ -91,9 +91,9 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                 },
                 optionNameToModelMap = {};
 
-            var applyModelValueToOption = function(optionName, modelValue) {
+            var applyModelValueToOption = function(optionName, modelValue, unwrap) {
                 var locks = $element.data(LOCKS_DATA_KEY),
-                    optionValue = ko.unwrap(modelValue); // must unwrap always to keep computeds alive
+                    optionValue = unwrap ? ko.unwrap(modelValue) : modelValue; // must unwrap always to keep computeds alive
 
                 if(ko.isWriteableObservable(modelValue)) {
                     optionNameToModelMap[optionName] = modelValue;
@@ -166,7 +166,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
 
                     ko.computed(function() {
                         var propertyValue = currentModel[propertyName];
-                        applyModelValueToOption(propertyPath, propertyValue);
+                        applyModelValueToOption(propertyPath, propertyValue, true);
                         unwrappedPropertyValue = ko.unwrap(propertyValue);
                     }, null, { disposeWhenNodeIsRemoved: domNode });
 
@@ -176,7 +176,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                         }
                     }
                 } else {
-                    ctorOptions[propertyPath] = currentModel[propertyName];
+                    applyModelValueToOption(propertyPath, currentModel[propertyName], false);
                 }
             };
 
