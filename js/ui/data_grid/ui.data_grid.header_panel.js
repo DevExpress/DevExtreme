@@ -145,13 +145,6 @@ exports.HeaderPanel = columnsView.ColumnsView.inherit({
 
     isVisible: function() {
         return this._toolbarOptions && this._toolbarOptions.visible;
-    },
-
-    _resizeCore: function() {
-        this.callBase.apply(this, arguments);
-        if(this._toolbar) {
-            domUtils.triggerResizeEvent(this.element());
-        }
     }
 });
 
