@@ -305,8 +305,10 @@ module.exports = gridCore.Controller.inherit((function() {
                 that._currentTotalCount = Math.max(that._currentTotalCount, currentTotalCount);
                 if(itemsCount === 0 && dataSource.pageIndex() >= that.pageCount()) {
                     dataSource.pageIndex(that.pageCount() - 1);
-                    dataSource.load();
-                    isLoading = true;
+                    if(that.option("scrolling.mode") !== "infinite") {
+                        dataSource.load();
+                        isLoading = true;
+                    }
                 }
             }
 
