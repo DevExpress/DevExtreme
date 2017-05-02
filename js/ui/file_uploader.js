@@ -685,9 +685,23 @@ var FileUploader = Editor.inherit({
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
             .append(file.uploadButton.element());
     },
+    
+    getFiles: function()
+    {
+        return this._files;
+    },
+    
+    removeFile: function(file)
+    {
+        this._removeFile(file);
+    },
 
-    _removeFile: function(file) {
-        file.$file.parent().remove();
+    _removeFile: function(file)
+    {
+        if (ko.utils.unwrapObservable(this.option("showFileList")))
+        {
+            file.$file.parent().remove();
+        }
 
         this._files.splice(inArray(file, this._files), 1);
 
