@@ -365,18 +365,16 @@ var GroupingHeaderPanelExtender = (function() {
         },
 
         _appendGroupingItem: function(items) {
-            var that = this;
+            var that = this,
+                groupPanelRenderedCallback = function(e) {
+                    that._updateGroupPanelContent(e.itemElement.find("." + DATAGRID_GROUP_PANEL_CLASS));
+                };
 
             if(that._isGroupPanelVisible()) {
                 var toolbarItem = {
-                    template: function(data, index, $container) {
-                        var $groupPanel = $("<div />")
-                                .addClass(DATAGRID_GROUP_PANEL_CLASS)
-                                .appendTo($container);
-
-                        that._updateGroupPanelContent($groupPanel);
-                    },
+                    html: "<div class='" + DATAGRID_GROUP_PANEL_CLASS + "'></div>",
                     name: "groupPanel",
+                    onItemRendered: groupPanelRenderedCallback,
                     location: "before",
                     locateInMenu: "never"
                 };
@@ -385,21 +383,6 @@ var GroupingHeaderPanelExtender = (function() {
             }
 
             return items;
-        },
-
-        _updateGroupPanelContent: function($groupPanel) {
-            var that = this,
-                groupColumns = that.getController("columns").getGroupColumns(),
-                groupPanelOptions = that.option("groupPanel");
-
-            that._renderGroupPanelItems($groupPanel, groupColumns);
-
-            if(groupPanelOptions.allowColumnDragging && !groupColumns.length) {
-                $("<div />")
-                    .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
-                    .text(groupPanelOptions.emptyPanelText)
-                    .appendTo($groupPanel);
-            }
         },
 
         _isGroupPanelVisible: function() {
@@ -447,6 +430,21 @@ var GroupingHeaderPanelExtender = (function() {
                 }
             }
             this.callBase();
+        },
+
+        _updateGroupPanelContent: function($groupPanel) {
+            var that = this,
+                groupColumns = that.getController("columns").getGroupColumns(),
+                groupPanelOptions = that.option("groupPanel");
+
+            that._renderGroupPanelItems($groupPanel, groupColumns);
+
+            if(groupPanelOptions.allowColumnDragging && !groupColumns.length) {
+                $("<div />")
+                    .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
+                    .text(groupPanelOptions.emptyPanelText)
+                    .appendTo($groupPanel);
+            }
         },
 
         allowDragging: function(column) {
