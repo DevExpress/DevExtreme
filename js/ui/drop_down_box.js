@@ -3,6 +3,8 @@
 var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     DataExpressionMixin = require("./editor/ui.data_expression"),
     commonUtils = require("../core/utils/common"),
+    selectors = require("./widget/jquery.selectors"),
+    KeyboardProcessor = require("./widget/ui.keyboard_processor"),
     when = require("../integration/jquery/deferred").when,
     $ = require("../core/renderer"),
     grep = require("../core/utils/common").grep,
@@ -20,6 +22,55 @@ var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
  * @export default
  */
 var DropDownBox = DropDownEditor.inherit({
+
+    _supportedKeys: function() {
+        return extend({}, this.callBase(), {
+            tab: function(e) {
+                if(!this.option("opened")) {
+                    return;
+                }
+
+                var $focusableElement = e.shiftKey
+                    ? this._getLastPopupElement()
+                    : this._getFirstPopupElement();
+
+                $focusableElement && $focusableElement.focus();
+                e.preventDefault();
+            }
+        });
+    },
+
+    _getFirstLastTabbable: function($elements) {
+        var tabbable = {},
+            length = $elements.length;
+
+        for(var i = 0; i < length; i++) {
+            var $forwardCurrent = $elements[i],
+                $backwardCurrent = $elements[length - i - 1];
+
+            if(!tabbable.first && selectors.tabbable(null, $forwardCurrent)) {
+                tabbable.first = $forwardCurrent;
+            }
+
+            if(!tabbable.last && selectors.tabbable(null, $backwardCurrent)) {
+                tabbable.last = $backwardCurrent;
+            }
+
+            if(tabbable.first && tabbable.last) {
+                break;
+            }
+        }
+
+        return tabbable;
+    },
+
+    _getFirstPopupElement: function() {
+        return this._getFirstLastTabbable(this.content().find("*")).first;
+    },
+
+    _getLastPopupElement: function() {
+        return this._getFirstLastTabbable(this.content().find("*")).last;
+    },
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -164,10 +215,43 @@ var DropDownBox = DropDownEditor.inherit({
         this._popup && !this.option("dropDownOptions.width") && this._updatePopupWidth();
     },
 
+    _popupElementTabHandler: function(e) {
+        if(e.key !== "tab") return;
+
+        var $elements = this.content().find("*"),
+            tabbable = this._getFirstLastTabbable($elements),
+            $target = e.originalEvent.target,
+            moveBackward = !!($target === tabbable.first && e.shift),
+            moveForward = !!($target === tabbable.last && !e.shift);
+
+        if(moveBackward || moveForward) {
+            this.close();
+            this._input().focus();
+
+            if(moveBackward) {
+                e.originalEvent.preventDefault();
+            }
+        }
+    },
+
+    _renderPopup: function(e) {
+        this.callBase();
+
+        if(this.option("focusStateEnabled")) {
+            this._popup._keyboardProcessor.push(new KeyboardProcessor({
+                element: this.content(),
+                handler: this._popupElementTabHandler,
+                context: this
+            }));
+        }
+    },
+
     _popupConfig: function() {
         return extend(this.callBase(), {
             width: this.element().outerWidth(),
             height: "auto",
+            tabIndex: -1,
+            focusStateEnabled: this.option("focusStateEnabled"),
             onPositioned: null,
             maxHeight: this._getMaxHeight.bind(this)
         }, this.option("dropDownOptions"));
