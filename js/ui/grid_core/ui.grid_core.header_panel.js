@@ -3,7 +3,8 @@
 var $ = require("../../core/renderer"),
     Toolbar = require("../toolbar"),
     columnsView = require("./ui.grid_core.columns_view"),
-    commonUtils = require("../../core/utils/common");
+    commonUtils = require("../../core/utils/common"),
+    domUtils = require("../../core/utils/dom");
 
 require("../drop_down_menu");
 var HEADER_PANEL_CLASS = "header-panel",
@@ -28,7 +29,14 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         var toolbarItems,
             options = {
                 toolbarOptions: {
-                    items: this._getToolbarItems()
+                    items: this._getToolbarItems(),
+                    onItemRendered: function(e) {
+                        var itemRenderedCallback = e.itemData.onItemRendered;
+
+                        if(itemRenderedCallback) {
+                            itemRenderedCallback(e);
+                        }
+                    }
                 }
             };
 
@@ -157,5 +165,20 @@ module.exports = {
     },
     views: {
         headerPanel: HeaderPanel
+    },
+    extenders: {
+        controllers: {
+            resizing: {
+                _updateDimensionsCore: function() {
+                    this.callBase.apply(this, arguments);
+
+                    var $headerPanelElement = this.getView("headerPanel").element();
+
+                    if($headerPanelElement) {
+                        domUtils.triggerResizeEvent($headerPanelElement);
+                    }
+                }
+            }
+        }
     }
 };
