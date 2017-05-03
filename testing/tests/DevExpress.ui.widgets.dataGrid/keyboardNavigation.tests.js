@@ -2099,6 +2099,49 @@ QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
 });
 
+//T499640
+QUnit.testInActiveWindow("Navigation using tab inside edit form in the added row", function(assert) {
+    //arrange
+    this.options = {
+        errorRowEnabled: true,
+        editing: {
+            mode: 'form',
+            allowAdding: true,
+            allowUpdating: true
+        },
+        commonColumnSettings: {
+            allowEditing: true
+        },
+        columns: this.columns,
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: [
+                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
+                { name: 'Dan', age: 16, lastName: "Skip", phone: "8-800-555-35-35", room: 2 }
+            ]
+        }
+    };
+
+    setupModules(this, { initViews: true });
+
+    var testElement = $('#container');
+
+    this.gridView.render(testElement);
+
+    this.addRow();
+
+    this.clock.tick();
+
+    var $focusedEditor = testElement.find(".dx-texteditor.dx-state-focused");
+    assert.equal($focusedEditor.length, 1, "focused editor exists");
+
+    //act
+    this.triggerKeyDown("tab", false, false, $focusedEditor.get(0));
+
+    //assert
+    assert.ok(true, "exception should not be occured");
+});
+
 //T448310
 QUnit.testInActiveWindow("Navigation using shift+tab inside edit form in the first row", function(assert) {
     //arrange
