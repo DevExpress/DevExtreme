@@ -29,7 +29,8 @@ var DropDownBox = DropDownEditor.inherit({
                     return;
                 }
 
-                var $focusableElement = this._getTabbable(e.shiftKey);
+                var $tabbableElements = this._getTabbableElements(),
+                    $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
                 $focusableElement && $focusableElement.focus();
                 e.preventDefault();
@@ -37,21 +38,8 @@ var DropDownBox = DropDownEditor.inherit({
         });
     },
 
-    _getTabbable: function(getLast) {
-        var $elements = this._getElements(),
-            length = $elements.length,
-            tabbable;
-
-        for(var i = 0; i < length; i++) {
-            var $element = getLast ? $elements[length - i - 1] : $elements[i];
-
-            if(!tabbable && selectors.tabbable(null, $element)) {
-                tabbable = $element;
-                break;
-            }
-        }
-
-        return tabbable;
+    _getTabbableElements: function() {
+        return this._getElements().filter(selectors.tabbable);
     },
 
     _getElements: function() {
@@ -204,9 +192,9 @@ var DropDownBox = DropDownEditor.inherit({
     _popupElementTabHandler: function(e) {
         if(e.key !== "tab") return;
 
-        var $firstTabbable = this._getTabbable(),
-            $lastTabbable = this._getTabbable(true),
-            $target = e.originalEvent.target,
+        var $firstTabbable = this._getTabbableElements().first().get(0),
+            $lastTabbable = this._getTabbableElements().last().get(0),
+            $target = $(e.originalEvent.target),
             moveBackward = !!($target === $firstTabbable && e.shift),
             moveForward = !!($target === $lastTabbable && !e.shift);
 
