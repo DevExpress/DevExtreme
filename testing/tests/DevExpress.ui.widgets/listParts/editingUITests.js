@@ -2343,6 +2343,34 @@ QUnit.test("selectAll checkbox should be updated after load next page", function
     assert.equal($selectAll.dxCheckBox("option", "value"), undefined, "selectAll checkbox is selected");
 });
 
+QUnit.test("onContentReady event should be called after update the state Select All checkbox", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $list = $("#list").dxList({
+            dataSource: {
+                load: function() {
+                    var d = $.Deferred();
+
+                    setTimeout(function() {
+                        d.resolve([0, 1]);
+                    }, 100);
+
+                    return d.promise();
+                }
+            },
+            showSelectionControls: true,
+            selectionMode: "all",
+            onContentReady: function(e) {
+                e.element.find(".dx-list-select-all-checkbox").dxCheckBox("instance").option("value", undefined);
+            }
+        });
+
+    clock.tick(100);
+
+    assert.ok($list.find(".dx-list-select-all-checkbox").hasClass("dx-checkbox-indeterminate"), "checkbox in an indeterminate state");
+
+    clock.restore();
+});
+
 
 QUnit.module("item select decorator with single selection mode");
 

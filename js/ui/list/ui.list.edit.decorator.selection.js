@@ -81,10 +81,6 @@ registerDecorator(
             this._selectAllCheckBox.option("value", this._list.isSelectAll());
         },
 
-        handleDataSourceChanged: function() {
-            this._updateSelectAllState();
-        },
-
         afterRender: function() {
             if(this._list.option("selectionMode") !== "all") {
                 return;
@@ -92,6 +88,8 @@ registerDecorator(
 
             if(!this._$selectAll) {
                 this._renderSelectAll();
+            } else {
+                this._updateSelectAllState();
             }
         },
 
