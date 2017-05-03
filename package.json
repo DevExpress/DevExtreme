@@ -2,7 +2,7 @@
   "name": "devextreme",
   "version": "17.1.3",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
-  "keywords": [ "html5", "controls", "jquery controls", "knockout controls", "angular controls", "asp.net client side controls", "web controls", "ui controls", "widgets", "jquery widgets", "knockout widgets", "angular widgets", "asp.net client side widgets", "web widgets", "ui widgets" ],
+  "keywords": [ "html5", "controls", "widgets", "components", "jquery", "knockout", "angular", "web", "ui", "datagrid", "pivotgrid", "scheduler", "treelist", "chart" ],
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
   "author": "Developer Express Inc.",
