@@ -194,7 +194,7 @@ var DropDownBox = DropDownEditor.inherit({
 
         var $firstTabbable = this._getTabbableElements().first().get(0),
             $lastTabbable = this._getTabbableElements().last().get(0),
-            $target = $(e.originalEvent.target),
+            $target = e.originalEvent.target,
             moveBackward = !!($target === $firstTabbable && e.shift),
             moveForward = !!($target === $lastTabbable && !e.shift);
 
