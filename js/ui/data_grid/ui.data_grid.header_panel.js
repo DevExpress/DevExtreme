@@ -4,7 +4,8 @@ var $ = require("jquery"),
     gridCore = require("./ui.data_grid.core"),
     Toolbar = require("../toolbar"),
     columnsView = require("./ui.data_grid.columns_view"),
-    commonUtils = require("../../core/utils/common");
+    commonUtils = require("../../core/utils/common"),
+    domUtils = require("../../core/utils/dom");
 
 require("../drop_down_menu");
 var DATAGRID_HEADER_PANEL_CLASS = "dx-datagrid-header-panel",
@@ -29,7 +30,14 @@ exports.HeaderPanel = columnsView.ColumnsView.inherit({
         var toolbarItems,
             options = {
                 toolbarOptions: {
-                    items: this._getToolbarItems()
+                    items: this._getToolbarItems(),
+                    onItemRendered: function(e) {
+                        var itemRenderedCallback = e.itemData.onItemRendered;
+
+                        if(itemRenderedCallback) {
+                            itemRenderedCallback(e);
+                        }
+                    }
                 }
             };
 
@@ -156,5 +164,20 @@ gridCore.registerModule("headerPanel", {
     },
     views: {
         headerPanel: exports.HeaderPanel
+    },
+    extenders: {
+        controllers: {
+            resizing: {
+                _updateDimensionsCore: function() {
+                    this.callBase.apply(this, arguments);
+
+                    var $headerPanelElement = this.getView("headerPanel").element();
+
+                    if($headerPanelElement) {
+                        domUtils.triggerResizeEvent($headerPanelElement);
+                    }
+                }
+            }
+        }
     }
 });
