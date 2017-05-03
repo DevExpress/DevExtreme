@@ -431,8 +431,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _handleTabKeyOnMasterDetailCell: function(target, direction) {
         if(this._isMasterDetailCell(target)) {
             this._updateFocusedCellPosition($(target).closest("." + MASTER_DETAIL_CELL_CLASS));
-            this._getNextCell(direction, "row")
-                .attr("tabindex", 0);
+            var $nextCell = this._getNextCell(direction, "row");
+            $nextCell && $nextCell.attr("tabindex", 0);
 
             return true;
         }
