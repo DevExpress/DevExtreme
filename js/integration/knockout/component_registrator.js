@@ -93,7 +93,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
 
             var applyModelValueToOption = function(optionName, modelValue, unwrap) {
                 var locks = $element.data(LOCKS_DATA_KEY),
-                    optionValue = unwrap ? ko.unwrap(modelValue) : modelValue; // must unwrap always to keep computeds alive
+                    optionValue = unwrap ? ko.unwrap(modelValue) : modelValue;
 
                 if(ko.isWriteableObservable(modelValue)) {
                     optionNameToModelMap[optionName] = modelValue;
