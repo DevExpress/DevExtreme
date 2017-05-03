@@ -47,9 +47,6 @@ var DropDownBox = DropDownEditor.inherit({
 
             if(!tabbable && selectors.tabbable(null, $element)) {
                 tabbable = $element;
-            }
-
-            if(tabbable) {
                 break;
             }
         }
