@@ -107,8 +107,71 @@ QUnit.test("Select all rows", function(assert) {
     this.selectAll();
 
     //assert
-    assert.deepEqual(this.getSelectedRowKeys(), [1, 2]);
-    assert.deepEqual(this.option("selectedRowKeys"), [1, 2]);
+    assert.deepEqual(this.getController("selection").isSelectAll(), true, "select all state");
+    assert.deepEqual(this.getSelectedRowKeys(), [1], "only visible rows are selected");
+    assert.deepEqual(this.option("selectedRowKeys"), [1], "only visible rows are selected");
+
+    //act
+    this.expandRow(1);
+
+    //assert
+    assert.deepEqual(this.getController("selection").isSelectAll(), undefined, "select all state is changed after expand");
+});
+
+QUnit.test("Deselect all rows", function(assert) {
+   //arrange
+    var $testElement = $('#treeList');
+
+    this.options.selectedRowKeys = [1, 2];
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.deselectAll();
+
+    //assert
+    assert.deepEqual(this.getController("selection").isSelectAll(), false, "select all state");
+    assert.deepEqual(this.getSelectedRowKeys(), [2], "visible rows are deselected");
+    assert.deepEqual(this.option("selectedRowKeys"), [2], "visible rows are deselected");
+});
+
+QUnit.test("Select all rows if autoExpandAll is true", function(assert) {
+   //arrange
+    var $testElement = $('#treeList');
+
+    this.options.autoExpandAll = true;
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectAll();
+
+    //assert
+    assert.deepEqual(this.getSelectedRowKeys(), [1, 2], "all visible rows are selected");
+    assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "all visible rows are selected");
+});
+
+QUnit.test("Select all rows if filter is applied", function(assert) {
+   //arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource.push({ id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) });
+
+    this.options.expandNodesOnFiltering = true;
+    this.options.columns[0].filterValue = "test2";
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectAll();
+
+    //assert
+    assert.deepEqual(this.getController("selection").isSelectAll(), true, "select all state");
+    assert.deepEqual(this.getSelectedRowKeys(), [1, 2], "all visible rows are selected");
+    assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "all visible rows are selected");
 });
 
 QUnit.test("Checkboxes should be rendered in right place", function(assert) {
@@ -177,7 +240,7 @@ QUnit.test("Click on selectAll checkbox should works correctly", function(assert
 
     //assert
     assert.equal($checkbox.dxCheckBox("instance").option("value"), true, "SelectAll checkbox value is OK");
-    assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "Right rows are selected");
+    assert.deepEqual(this.option("selectedRowKeys"), [1], "Right rows are selected");
 });
 
 QUnit.test("Click on selectAll checkbox should check row checkboxes", function(assert) {
