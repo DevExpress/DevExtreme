@@ -5350,6 +5350,32 @@ if(!devices.win8) {
         assert.equal(testElement.find('tbody > tr').first().find('td').eq(1).text(), "66");
     });
 
+    //T501819
+    QUnit.test('Change array cell value in batch edit mode', function(assert) {
+        //arrange
+        var that = this,
+            rowsView = this.rowsView,
+            testElement = $('#container');
+
+        that.options.editing = {
+            mode: "batch",
+            allowUpdating: true
+        };
+
+        that.array[0].arr = [1, 3];
+
+        that.addColumn("arr");
+
+        rowsView.render(testElement);
+
+        //act
+        that.cellValue(0, "arr", [3]);
+
+        //assert
+        assert.deepEqual(that.cellValue(0, "arr"), [3], "value in grid is changed correctly");
+        assert.deepEqual(that.array[0].arr, [1, 3], "value in array is not changed");
+    });
+
     //T440578
     QUnit.test('cellValue should works with beginUpdate/endUpdate', function(assert) {
         //arrange
