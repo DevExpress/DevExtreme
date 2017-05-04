@@ -230,10 +230,6 @@ var EditProvider = Class.inherit({
 
     handleContextMenu: function($itemElement, e) {
         return this._eventHandler("handleContextMenu", $itemElement, e);
-    },
-
-    handleDataSourceChanged: function() {
-        return this._eventHandler("handleDataSourceChanged");
     }
 });
 
