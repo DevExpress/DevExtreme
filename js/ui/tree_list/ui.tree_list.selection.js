@@ -10,6 +10,14 @@ var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all";
 
 var originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
 
+function foreachNodes(nodes, func) {
+    for(var i = 0; i < nodes.length; i++) {
+        if(func(nodes[i]) !== false && nodes[i].hasChildren && nodes[i].children.length) {
+            foreachNodes(nodes[i].children, func);
+        }
+    }
+}
+
 treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
     defaultOptions: function() {
         return extend(true, selectionModule.defaultOptions(), {
@@ -30,7 +38,48 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     rowsView._attachCheckBoxClickEvent($checkbox);
                 },
 
-                _updateSelectColumn: noop
+                _updateSelectColumn: noop,
+
+                _getVisibleNodeKeys: function() {
+                    var component = this.component,
+                        root = component.getRootNode(),
+                        keys = [];
+
+                    root && foreachNodes(root.children, function(node) {
+                        if(node.key !== undefined && node.visible) {
+                            keys.push(node.key);
+                        }
+
+                        return component.isRowExpanded(node.key);
+                    });
+
+                    return keys;
+                },
+
+                isSelectAll: function() {
+                    var component = this.component,
+                        visibleKeys = this._getVisibleNodeKeys();
+
+                    var selectedVisibleKeys = visibleKeys.filter(function(key) {
+                        return component.isRowSelected(key);
+                    });
+
+                    if(!selectedVisibleKeys.length) {
+                        return false;
+                    } else if(selectedVisibleKeys.length === visibleKeys.length) {
+                        return true;
+                    }
+                },
+
+                selectAll: function() {
+                    var visibleKeys = this._getVisibleNodeKeys();
+                    return this.selectRows(visibleKeys, true);
+                },
+
+                deselectAll: function() {
+                    var visibleKeys = this._getVisibleNodeKeys();
+                    return this.deselectRows(visibleKeys);
+                }
             }
         },
         views: {
