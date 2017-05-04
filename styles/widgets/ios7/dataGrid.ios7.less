@@ -1,7 +1,8 @@
 .grid-base(datagrid);
 
 .dx-datagrid-group-panel {
-    font-size: @IOS7_BASE_FONT_SIZE;
+    font-size: 1rem;
+    padding-top: 3px;
     .touch-action(pinch-zoom);
 
     .dx-group-panel-message {
@@ -9,6 +10,7 @@
         padding: @GRID_BASE_CELL_PADDING;
         border-top: @datagrid-border-hidden;
         border-bottom: @datagrid-border-hidden;
+        font-weight: normal;
     }
 
     .dx-group-panel-item {
@@ -17,6 +19,7 @@
         color: @datagrid-headers-color;
         border: @datagrid-border;
         padding: @GRID_BASE_CELL_PADDING;
+        margin-top: 1px;
     }
 
     .dx-block-separator {
