@@ -8,7 +8,8 @@
                 require("jquery"),
                 require("./ui/set_template_engine"),
                 require("./ui/widget/ui.template_base").renderedCallbacks,
-                require("./core/guid")
+                require("./core/guid"),
+                require("./ui/validation_engine")
             );
         });
     } else {
@@ -18,10 +19,11 @@
             window.jQuery,
             ui && ui.setTemplateEngine,
             ui && ui.templateRendered,
-            DevExpress.data.Guid
+            DevExpress.data.Guid,
+            DevExpress.validationEngine
         );
     }
-})(function($, setTemplateEngine, templateRendered, Guid) {
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine) {
     var templateCompiler = createTemplateCompiler();
 
     function createTemplateCompiler() {
@@ -105,6 +107,34 @@
         };
     }
 
+    function getValidationSummary(validationGroup) {
+        var result;
+        $(".dx-validationsummary").each(function(_, element) {
+            var summary = $(element).data("dxValidationSummary");
+            if(summary && summary.option("validationGroup") === validationGroup) {
+                result = summary;
+                return false;
+            }
+        });
+        return result;
+    }
+
+    function createValidationSummaryItemsFromValidators(validators, editorNames) {
+        var items = [];
+
+        $.each(validators, function(_, validator) {
+            var widget = validator.element().data("dx-validation-target");
+            if(widget && $.inArray(widget.option("name"), editorNames) > -1) {
+                items.push({
+                    text: widget.option("validationError.message"),
+                    validator: validator
+                });
+            }
+        });
+
+        return items;
+    }
+
     return {
         renderComponent: function(name, options, id, validatorOptions) {
             id = id || ("dx-" + new Guid());
@@ -136,6 +166,20 @@
 
         setTemplateEngine: function() {
             setTemplateEngine(createTemplateEngine());
+        },
+
+        createValidationSummaryItems: function(validationGroup, editorNames) {
+            var summary = getValidationSummary(validationGroup),
+                groupConfig,
+                items;
+
+            if(summary) {
+                groupConfig = validationEngine.getGroupConfig(validationGroup);
+                if(groupConfig) {
+                    items = createValidationSummaryItemsFromValidators(groupConfig.validators, editorNames);
+                    items.length && summary.option("items", items);
+                }
+            }
         }
     };
 });
