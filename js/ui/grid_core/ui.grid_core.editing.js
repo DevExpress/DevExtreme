@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
-    objectUtils = require("../../core/utils/object"),
+    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     extend = require("../../core/utils/extend").extend,
     modules = require("./ui.grid_core.modules"),
     clickEvent = require("../../events/click"),
@@ -371,12 +371,12 @@ var EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         item.modified = true;
                         item.oldData = item.data;
-                        item.data = extend(true, {}, item.data, data);
+                        item.data = deepExtendArraySafe(deepExtendArraySafe({}, item.data), data);
                         item.modifiedValues = generateDataValues(data, columns);
                         break;
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         if(editMode === EDIT_MODE_BATCH) {
-                            item.data = extend(true, {}, item.data, data);
+                            item.data = deepExtendArraySafe(deepExtendArraySafe({}, item.data), data);
                         }
                         item.removed = true;
                         break;
@@ -1222,9 +1222,9 @@ var EditingController = modules.ViewController.inherit((function() {
             }
             if(that._editData[editDataIndex]) {
                 options.type = that._editData[editDataIndex].type || options.type;
-                objectUtils.deepExtendArraySafe(that._editData[editDataIndex], { data: options.data, type: options.type });
+                deepExtendArraySafe(that._editData[editDataIndex], { data: options.data, type: options.type });
                 if(row) {
-                    row.data = objectUtils.deepExtendArraySafe(objectUtils.deepExtendArraySafe({}, row.data), options.data);
+                    row.data = deepExtendArraySafe(deepExtendArraySafe({}, row.data), options.data);
                 }
             }
 
