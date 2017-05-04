@@ -46,9 +46,10 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         keys = [];
 
                     root && foreachNodes(root.children, function(node) {
-                        if(node.key === undefined) return false;
+                        if(node.key !== undefined && node.visible) {
+                            keys.push(node.key);
+                        }
 
-                        keys.push(node.key);
                         return component.isRowExpanded(node.key);
                     });
 

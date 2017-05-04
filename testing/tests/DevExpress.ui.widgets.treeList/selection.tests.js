@@ -157,7 +157,7 @@ QUnit.test("Select all rows if filter is applied", function(assert) {
    //arrange
     var $testElement = $('#treeList');
 
-    this.options.dataSource.push({ id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) });
+    this.options.dataSource.push({ id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) });
 
     this.options.expandNodesOnFiltering = true;
     this.options.columns[0].filterValue = "test2";
