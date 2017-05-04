@@ -2671,9 +2671,13 @@ QUnit.testStart(function() {
 (function() {
     QUnit.module("Small size", {
         beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
             this.createInstance = function(options) {
                 this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
             };
+        },
+        afterEach: function() {
+            this.clock.restore();
         }
     });
 
@@ -2695,6 +2699,31 @@ QUnit.testStart(function() {
         assert.ok(this.instance.element().hasClass("dx-scheduler-small"), "Scheduler has 'dx-scheduler-small' css class");
         this.instance.option("width", 600);
         assert.notOk(this.instance.element().hasClass("dx-scheduler-small"), "Scheduler has no 'dx-scheduler-small' css class");
+    });
+
+    QUnit.test("Rendering small scheduler inside invisible element", function(assert) {
+        try {
+            domUtils.triggerHidingEvent($("#scheduler"));
+            this.createInstance({
+                width: 300,
+                currentView: "week",
+                dataSource: [{
+                    text: "a",
+                    startDate: new Date(2015, 6, 5, 0, 0),
+                    endDate: new Date(2015, 6, 5, 3, 0),
+                }],
+                currentDate: new Date(2015, 6, 6)
+            });
+            $("#scheduler").hide();
+        } finally {
+            $("#scheduler").show();
+            domUtils.triggerShownEvent($("#scheduler"));
+            this.instance.option("width", 600);
+            this.clock.tick();
+
+            var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+            assert.roughEqual($appointment.position().left, 100, 1.001, "Appointment is rendered correctly");
+        }
     });
 
 })("Small size");
