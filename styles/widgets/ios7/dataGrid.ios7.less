@@ -60,7 +60,7 @@
     }
 
     .dx-datagrid-group-panel {
-        font-size: @IOS7_BASE_FONT_SIZE;
+        font-size: 1rem;
     }
 
     .dx-menu {
@@ -509,12 +509,14 @@
 
 .dx-datagrid-group-panel {
     .touch-action(pinch-zoom);
+    padding-top: 3px;
 
     .dx-group-panel-message {
         color: @IOS7_DATAGRID_HEADERS_COLOR;
         padding: @IOS7_DATAGRID_CELL_PADDING;
         border-top: @IOS7_DATAGRID_BORDER_HIDDEN;
         border-bottom: @IOS7_DATAGRID_BORDER_HIDDEN;
+        font-weight: normal;
     }
 
     .dx-group-panel-item {
@@ -523,6 +525,7 @@
         color: @IOS7_DATAGRID_HEADERS_COLOR;
         border: @IOS7_DATAGRID_BORDER;
         padding: @IOS7_DATAGRID_CELL_PADDING;
+        margin-top: 1px;
     }
 
     .dx-block-separator {
