@@ -57,7 +57,7 @@ DevExtreme supports deep integration with the following client-side technologies
 
 And server-side frameworks:
 
-- [ASP.NET MVC & ASP.NET Core](https://js.devexpress.com/Documentation/Guide/ASP.NET_MVC_Wrappers/Fundamentals/)
+- [ASP.NET MVC & ASP.NET Core](https://js.devexpress.com/Documentation/Guide/ASP.NET_MVC_Controls/Fundamentals/)
 
 ## Learn
 
