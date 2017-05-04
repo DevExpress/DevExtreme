@@ -135,6 +135,8 @@ exports.columnStateMixin = {
             $cell,
             i;
 
+        if(!$cells.length) return;
+
         for(i = 0; i < columns.length; i++) {
             $cell = $cells.eq(i);
             that._updateIndicator($cell, columns[i], indicatorName);
