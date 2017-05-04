@@ -379,12 +379,6 @@ var ListEdit = ListBase.inherit({
         this.callBase();
     },
 
-    _dataSourceChangedHandler: function(newItems) {
-        this.callBase(newItems);
-
-        this._editProvider && this._editProvider.handleDataSourceChanged();
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "selectAllMode":
