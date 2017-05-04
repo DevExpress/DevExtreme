@@ -1518,9 +1518,13 @@ QUnit.test("Checking filterValues of the column after deselect item of a loaded 
 
     this.headerFilterController.showHeaderFilterMenu(0);
 
-    //act
     $popupContent = this.headerFilterView.getPopupContainer().content();
     $popupContent.find(".dx-list-item").first().trigger("dxclick"); // deselect first item
+
+    //assert
+    assert.ok($popupContent.find(".dx-list-select-all-checkbox").hasClass("dx-checkbox-indeterminate"), "checkbox in an indeterminate state");
+
+    //act
     $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // apply filter
     this.clock.tick(500);
 
