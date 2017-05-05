@@ -8,20 +8,14 @@ var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
     SelectionStrategy = require("./selection.strategy");
 
-function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKeys) {
+function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKeys, keyOf) {
 
-    this.getFilter = function() {
-        return this._filter || this.getExpr() || this.getFunction();
-    };
-
-    this.getFunction = function() {
-        if(!isFunction()) return;
-
+    this.getLocalFilter = function() {
         return functionFilter;
     };
 
     this.getExpr = function() {
-        if(isFunction()) return;
+        if(!keyExpr) return;
 
         var filterExpr;
         for(var i = 0, length = selectedItemKeys.length; i < length; i++) {
@@ -41,6 +35,9 @@ function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKey
             }
 
             filterExpr.push(filterExprPart);
+        }
+        if(filterExpr && filterExpr.length === 1) {
+            filterExpr = filterExpr[0];
         }
 
         this._filter = filterExpr;
@@ -64,17 +61,13 @@ function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKey
         return combinedFilter;
     };
 
-    var isFunction = function() {
-        return !keyExpr;
-    };
-
     var functionFilter = function(item) {
         for(var i = 0; i < selectedItemKeys.length; i++) {
-            if(equalKeys(selectedItemKeys[i], item)) {
+            if(equalKeys(selectedItemKeys[i], keyOf(item))) {
                 return !isSelectAll;
             }
         }
-        return isSelectAll;
+        return !!isSelectAll;
     };
 
     var getFilterForPlainKey = function(keyValue, key) {
@@ -180,7 +173,7 @@ module.exports = SelectionStrategy.inherit({
             return this._clearSelection();
         }
 
-        var selectionFilterCreator = new SelectionFilterCreator(key(), keys, isSelectAll, this.equalKeys.bind(this)),
+        var selectionFilterCreator = new SelectionFilterCreator(key(), keys, isSelectAll, this.equalKeys.bind(this), this.options.keyOf),
             combinedFilter = selectionFilterCreator.getCombinedFilter(this.options.filter());
 
         var deselectedItems = [];
@@ -190,16 +183,14 @@ module.exports = SelectionStrategy.inherit({
 
         var filteredItems = deselectedItems.length ? deselectedItems : this.options.plainItems().filter(this.options.isSelectableItem).map(this.options.getItemData);
 
-        var filter = selectionFilterCreator.getFilter();
+        var localFilter = selectionFilterCreator.getLocalFilter();
 
-        if(filter) {
-            filteredItems = dataQuery(filteredItems).filter(filter).toArray();
-        }
+        filteredItems = filteredItems.filter(localFilter);
 
         if(!isSelectAll && (deselectedItems.length || filteredItems.length === keys.length)) {
             deferred.resolve(filteredItems);
         } else {
-            deferred = this._loadFilteredData(combinedFilter, selectionFilterCreator.getFilter());
+            deferred = this._loadFilteredData(combinedFilter, localFilter);
         }
 
         return deferred;
