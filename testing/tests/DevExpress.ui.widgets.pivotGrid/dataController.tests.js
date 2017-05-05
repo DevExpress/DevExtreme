@@ -3386,6 +3386,50 @@ QUnit.test("Format cell with error value", function(assert) {
     assert.equal(dataController.getCellsInfo()[0][1].text, "Error");
 });
 
+QUnit.test("T492326. Not set colspan in rowInfo item if all values and totals are hidden", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "row" },
+                { area: "row" },
+                { area: "column" },
+                {
+                    caption: 'Sum', format: 'decimal', area: "data",
+                    showValues: false,
+                    showTotals: false,
+                    showGrandTotals: true,
+                }
+            ],
+            rows: [{
+                index: 0,
+                value: "1",
+                children: [
+                    {
+                        value: "2",
+                        index: 1
+                    }
+                ]
+            }],
+            columns: [{
+                value: 'A', index: 1
+            }],
+            values: [
+                [[1], [3], [5]],
+                [[1], [3], [5]]
+            ]
+        }
+    });
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{
+            "isLast": true,
+            "text": undefined,
+            "type": "GT"
+        }]
+    ]);
+});
+
+
 QUnit.module("Showing total on the top", moduleConfig);
 
 QUnit.test("Get header info. Show column totals near", function(assert) {

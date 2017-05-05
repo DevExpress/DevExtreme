@@ -190,6 +190,10 @@ exports.DataController = Class.inherit((function() {
                 var hideTotals = options.showTotals === false || dataFields.length > 0 && (dataFields.length === options.hiddenTotals.length),
                     hideData = dataFields.length > 0 && options.hiddenValues.length === dataFields.length;
 
+                if(hideData && hideTotals) {
+                    depthSize = 1;
+                }
+
                 if(!hideTotals || options.layout === "tree") {
                     addAdditionalTotalHeaderItems(viewHeaderItems, headerDescriptions, options.showTotalsPrior, options.layout === "tree");
                 }
@@ -588,7 +592,7 @@ exports.DataController = Class.inherit((function() {
         return info;
     }
 
-    function getHeaderIndexedItems(headerItems, maxDepth, options) {
+    function getHeaderIndexedItems(headerItems, options) {
         var visibleIndex = 0,
             indexedItems = [];
 
@@ -950,10 +954,10 @@ exports.DataController = Class.inherit((function() {
                 };
 
             if(!commonUtils.isDefined(data.grandTotalRowIndex)) {
-                data.grandTotalRowIndex = getHeaderIndexedItems(data.rows, rowFields.length - 1, rowOptions).length;
+                data.grandTotalRowIndex = getHeaderIndexedItems(data.rows, rowOptions).length;
             }
             if(!commonUtils.isDefined(data.grandTotalColumnIndex)) {
-                data.grandTotalColumnIndex = getHeaderIndexedItems(data.columns, columnFields.length - 1, columnOptions).length;
+                data.grandTotalColumnIndex = getHeaderIndexedItems(data.columns, columnOptions).length;
             }
 
             dataSource._changeLoadingCount(1, 0.8);
