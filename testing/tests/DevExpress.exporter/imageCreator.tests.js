@@ -226,7 +226,7 @@ function setupCanvasStub(drawnElements, paths) {
     sinon.stub(prototype, "rotate");
 
     //line dash
-    sinon.stub(prototype, "setLineDash");
+    prototype.setLineDash && sinon.stub(prototype, "setLineDash");
 }
 
 function teardownCanvasStub() {
@@ -267,7 +267,7 @@ function teardownCanvasStub() {
     prototype.rotate.restore();
 
     //line dash
-    prototype.setLineDash.restore();
+    prototype.setLineDash && prototype.setLineDash.restore();
 }
 
 function getData(markup, isFullMode) {
