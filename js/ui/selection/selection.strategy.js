@@ -86,7 +86,7 @@ module.exports = Class.inherit({
                     }
 
                     if(localFilter) {
-                        filteredItems = dataQuery(filteredItems).filter(localFilter).toArray();
+                        filteredItems = filteredItems.filter(localFilter);
                     }
 
                     deferred.resolve(filteredItems);
