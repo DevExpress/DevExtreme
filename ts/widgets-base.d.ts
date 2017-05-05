@@ -1001,7 +1001,8 @@ declare module DevExpress.ui {
         /** @docid dxOverlaymethods_toggle */
         toggle(showing: boolean): JQueryPromise<void>;
 
-        /** @docid dxOverlayMethods_baseZIndex */
+        /** @docid ui_dxOverlay */
+        /** @docid ui_dxOverlayMethods_baseZIndex */
         static baseZIndex(zIndex: number): void;
     }
 
