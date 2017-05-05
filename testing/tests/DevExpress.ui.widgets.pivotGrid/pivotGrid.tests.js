@@ -2815,6 +2815,22 @@ QUnit.test('B253995 - dxPivotGrid height is wrong when rows area has text wrappe
     assert.strictEqual(Math.round(tableElement.outerHeight()), 250);
 });
 
+QUnit.test("T510943. Row area width is higher than a container's width", function(assert) {
+    this.dataSource.fields[0].dataField = "Big big big big big big big big title";
+    var pivotGrid = createPivotGrid({
+        dataSource: this.dataSource,
+        fieldPanel: {
+            visible: true
+        },
+        width: 150
+    }, assert);
+
+    this.clock.tick();
+    //assert
+    var dataArea = pivotGrid._dataArea;
+    assert.strictEqual(parseFloat(dataArea.groupElement()[0].style.width).toFixed(2), dataArea.tableElement().width().toFixed(2));
+});
+
 QUnit.test('Pivot grid with border', function(assert) {
     var columnItems = [
         {
