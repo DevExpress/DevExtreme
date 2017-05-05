@@ -84,7 +84,7 @@ var SchedulerAppointmentForm = {
                                 return;
                             }
 
-                            var startDate = new Date(startDateEditor.option("value"));
+                            var startDate = dateSerialization.deserializeDate(startDateEditor.option("value"));
 
                             if(value) {
                                 startDateEditor.option("value", that._getAllDayStartDate(startDate));
