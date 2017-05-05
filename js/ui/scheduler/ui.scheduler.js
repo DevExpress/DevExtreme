@@ -1959,6 +1959,7 @@ var Scheduler = Widget.inherit({
     _cleanPopup: function() {
         if(this._$popup) {
             this._popup.element().remove();
+            delete this._$popup;
         }
 
         delete this._popup;
