@@ -173,6 +173,21 @@ QUnit.test("Changing startDateBox value should change endDateBox value if needed
     assert.deepEqual(endDateBox.option("value"), new Date(2015, 1, 6), "endDate value is right");
 });
 
+QUnit.test("Changing startDateBox value should change endDateBox value if needed(when startDate and endDate are strings)", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: "1/1/2015", endDate: "1/3/2015", text: "caption" });
+    var form = this.instance.getAppointmentDetailsForm(),
+        startDateBox = form.getEditor("startDate"),
+        endDateBox = form.getEditor("endDate");
+
+    startDateBox.option("value", new Date(2015, 1, 4));
+
+    assert.deepEqual(endDateBox.option("value"), new Date(2015, 1, 6), "endDate value is right");
+
+    startDateBox.option("value", new Date(2015, 1, 3));
+
+    assert.deepEqual(endDateBox.option("value"), new Date(2015, 1, 6), "endDate value is right");
+});
+
 QUnit.test("startDateBox value should be valid", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 3), text: "caption" });
     var form = this.instance.getAppointmentDetailsForm(),
@@ -197,6 +212,22 @@ QUnit.test("Changing endDateBox value should change startDateBox value if needed
     endDateBox.option("value", new Date(2015, 1, 10));
 
     assert.deepEqual(startDateBox.option("value"), new Date(2015, 1, 6), "startDate value is right");
+});
+
+QUnit.test("Changing endDateBox value should change startDateBox value if needed(when startDate and endDate are strings)", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: "1/10/2015", endDate: "1/13/2015", text: "caption" });
+
+    var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
+        startDateBox = $popupContent.find(".dx-datebox").eq(0).dxDateBox("instance"),
+        endDateBox = $popupContent.find(".dx-datebox").eq(1).dxDateBox("instance");
+
+    endDateBox.option("value", new Date(2015, 0, 9));
+
+    assert.deepEqual(startDateBox.option("value"), new Date(2015, 0, 6), "startDate value is right");
+
+    endDateBox.option("value", new Date(2015, 0, 10));
+
+    assert.deepEqual(startDateBox.option("value"), new Date(2015, 0, 6), "startDate value is right");
 });
 
 QUnit.test("endDateBox value should be valid", function(assert) {
