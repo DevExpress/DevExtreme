@@ -1457,7 +1457,12 @@ var Overlay = Widget.inherit({
 });
 
 /**
-* @name dxOverlayMethods_baseZIndex
+* @name ui_dxOverlay
+* @publicName dxOverlay
+* @section utils
+*/
+/**
+* @name ui_dxOverlayMethods_baseZIndex
 * @publicName baseZIndex(zIndex)
 * @param1 zIndex:number
 */
