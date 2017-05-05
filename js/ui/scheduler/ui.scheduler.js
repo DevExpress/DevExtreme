@@ -1960,10 +1960,9 @@ var Scheduler = Widget.inherit({
         if(this._$popup) {
             this._popup.element().remove();
             delete this._$popup;
+            delete this._popup;
+            delete this._appointmentForm;
         }
-
-        delete this._popup;
-        delete this._appointmentForm;
     },
 
     _doneButtonClickHandler: function(args) {
