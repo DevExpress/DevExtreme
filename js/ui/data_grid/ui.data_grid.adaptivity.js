@@ -455,7 +455,7 @@ exports.AdaptiveColumnsController = gridCore.ViewController.inherit({
             that._hidingColumnsQueue.reverse();
         } else if(that.option("columnHidingEnabled")) {
             for(i = 0; i < hideableColumns.length; i++) {
-                var visibleIndex = that._columnsController.columnOption(getColumnId(hideableColumns[i]), "visibleIndex");
+                var visibleIndex = that._columnsController.getVisibleIndex(hideableColumns[i].index);
                 that._hidingColumnsQueue[visibleIndex] = hideableColumns[i];
             }
         }

@@ -4649,6 +4649,24 @@ QUnit.test("Reset column changes when option is changed inside a columns changed
     assert.equal(columnsChangedArgs.length, 1);
 });
 
+QUnit.test("Reset columns cache when the columnOption method is fired with the notFireEvent parameter", function(assert) {
+    this.applyOptions(
+        {
+            columns: [
+                "field1",
+                "field2", {
+                    dataField: "field3",
+                    visible: false
+                }
+            ]
+        });
+
+    this.columnsController.getVisibleColumns();
+    this.columnsController.columnOption("field3", "visible", true, true);
+
+    assert.equal(this.columnsController.getVisibleColumns().length, 3, "visible columns count");
+});
+
 QUnit.module("Sorting/Grouping", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("disabled sorting", function(assert) {
