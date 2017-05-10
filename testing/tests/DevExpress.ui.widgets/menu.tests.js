@@ -1787,7 +1787,7 @@ QUnit.test("Adaptive menu is invisible at first", function(assert) {
 
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     assert.ok($button.is(":visible"), "hamburger button is visible on init");
     assert.ok($treeview.is(":hidden"), "treeview is hidden on init");
@@ -1805,7 +1805,7 @@ QUnit.test("Adaptive menu with 'templatesRenderAsynchronously' option should tri
         templatesRenderAsynchronously: true
     });
 
-    var $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+    var $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     assert.ok($itemsContainer.is(":visible"), "non adaptive container is visible yet");
 
@@ -1839,7 +1839,7 @@ QUnit.test("Adaptive elements should be removed after disabling adaptivity", fun
     var $adaptiveContainer = this.$element.find("." + DX_ADAPTIVE_MODE_CLASS),
         $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     assert.equal($button.length, 0, "button was not rendered");
     assert.equal($treeview.length, 0, "treeview was not rendered");
@@ -2149,7 +2149,7 @@ QUnit.test("Adaptive menu should be shown when hamburger button clicked", functi
 
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $button.trigger("dxclick");
 
@@ -2167,7 +2167,7 @@ QUnit.test("Adaptive menu should disappear after the second click on the hamburg
 
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $button.trigger("dxclick");
     $button.trigger("dxclick");
@@ -2268,7 +2268,7 @@ QUnit.test("Menu should toggle it's view between adaptive and non adaptive on vi
             adaptivityEnabled: true,
             visible: false
         }),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $("#qunit-fixture").width(50);
     menu.option("visible", true);
@@ -2284,7 +2284,7 @@ QUnit.test("Adaptive mode should depend on summary item width but not on item co
             adaptivityEnabled: true,
             visible: false
         }),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $("#qunit-fixture").width(50);
     $itemsContainer.width(50);
@@ -2302,7 +2302,7 @@ QUnit.test("Adaptive mode should not show on visibility change when adaptivity i
             adaptivityEnabled: false,
             visible: false
         }),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $("#qunit-fixture").width(50);
     menu.option("visible", true);
