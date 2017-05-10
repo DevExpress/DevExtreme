@@ -24,6 +24,7 @@ npm install -g webpack
 npm install -g devextreme
 ```
 
+NOTE: DevExtreme doesn't use semantic versioning. The increment of the first or middle number means a major release and can contain changes, which break backward compatibility. If you want to use only minor updates in your application, specify an appropriate range in the package.json (a patch release in semver corresponds to a minor DevExtreme version). For example, to use the DevExtreme package from 17.1.5 and above without breaking changes, the range will be: 17.1 or 17.1.x or ~17.1.5. 
 
 ## Basic Usage
 
