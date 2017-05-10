@@ -418,9 +418,6 @@ var Menu = MenuBase.inherit({
             shading: false,
             animation: false,
             closeOnTargetScroll: true,
-            onPositioned: (function() {
-                this._overlay.option("height", this._overlay.content().outerHeight());
-            }).bind(this),
             onHidden: (function() {
                 this._toggleHamburgerActiveState(false);
             }).bind(this),
@@ -459,9 +456,16 @@ var Menu = MenuBase.inherit({
         });
 
         return extend(menuOptions, {
+            animationEnabled: !!this.option("animation"),
             onItemClick: that._treeviewItemClickHandler.bind(that),
-            onItemExpanded: (function(e) { this._actions["onSubmenuShown"](e); }).bind(that),
-            onItemCollapsed: (function(e) { this._actions["onSubmenuHidden"](e); }).bind(that),
+            onItemExpanded: (function(e) {
+                this._overlay.repaint();
+                this._actions["onSubmenuShown"](e);
+            }).bind(that),
+            onItemCollapsed: (function(e) {
+                this._overlay.repaint();
+                this._actions["onSubmenuHidden"](e);
+            }).bind(that),
             selectNodesRecursive: false,
             selectByClick: this.option("selectByClick"),
             expandEvent: "click"
@@ -997,6 +1001,12 @@ var Menu = MenuBase.inherit({
                 }
                 this.callBase(args);
                 this._dimensionChanged();
+                break;
+            case "animation":
+                if(this._isAdaptivityEnabled()) {
+                    this._treeView.option("animationEnabled", !!args.value);
+                }
+                this.callBase(args);
                 break;
             default:
                 if(this._isAdaptivityEnabled()) {
