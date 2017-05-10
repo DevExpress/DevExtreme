@@ -672,14 +672,13 @@ var environmentWithSinonStubPoint = {
 
         assert.deepEqual(series._bordersGroup._stored_settings, {
             "class": "dxc-borders",
-            "clip-path": undefined,
-            "dashStyle": "b-n dashStyle",
-            "stroke": "b-n color",
-            "stroke-width": "b-n width"
+            "clip-path": undefined
         });
 
         $.each(series._bordersGroup.children, function(_, path) {
             assert.equal(path._stored_settings["stroke-width"], 'b-n width');
+            assert.equal(path._stored_settings["dashStyle"], 'b-n dashStyle');
+            assert.equal(path._stored_settings["stroke"], 'b-n color');
         });
     });
 
@@ -698,14 +697,10 @@ var environmentWithSinonStubPoint = {
             hatching: "h-hatching"
         });
 
-        assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            "dashStyle": "b-h dashStyle",
-            "stroke": "b-h color",
-            "stroke-width": "b-h width"
-        });
-
         $.each(series._bordersGroup.children, function(_, path) {
             assert.equal(path._stored_settings["stroke-width"], 'b-h width');
+            assert.equal(path._stored_settings["dashStyle"], 'b-h dashStyle');
+            assert.equal(path._stored_settings["stroke"], 'b-h color');
         });
     });
 
@@ -725,14 +720,10 @@ var environmentWithSinonStubPoint = {
             hatching: undefined
         });
 
-        assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            "dashStyle": "b-n dashStyle",
-            "stroke": "b-n color",
-            "stroke-width": "b-n width"
-        });
-
         $.each(series._bordersGroup.children, function(_, path) {
             assert.equal(path._stored_settings["stroke-width"], 'b-n width');
+            assert.equal(path._stored_settings["dashStyle"], 'b-n dashStyle');
+            assert.equal(path._stored_settings["stroke"], 'b-n color');
         });
     });
 
@@ -751,14 +742,10 @@ var environmentWithSinonStubPoint = {
             hatching: "s-hatching"
         });
 
-        assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            "dashStyle": "b-s dashStyle",
-            "stroke": "b-s color",
-            "stroke-width": 0
-        });
-
         $.each(series._bordersGroup.children, function(_, path) {
-            assert.equal(path._stored_settings["stroke-width"], 0);
+            assert.equal(path._stored_settings["stroke-width"], 'b-s width');
+            assert.equal(path._stored_settings["dashStyle"], 'b-s dashStyle');
+            assert.equal(path._stored_settings["stroke"], 'none');
         });
     });
 
@@ -777,14 +764,10 @@ var environmentWithSinonStubPoint = {
             hatching: "s-hatching"
         });
 
-        assert.deepEqual(series._bordersGroup.attr.lastCall.args[0], {
-            "dashStyle": "b-s dashStyle",
-            "stroke": "b-s color",
-            "stroke-width": 0
-        });
-
         $.each(series._bordersGroup.children, function(_, path) {
-            assert.equal(path._stored_settings["stroke-width"], 0);
+            assert.equal(path._stored_settings["stroke-width"], 'b-s width');
+            assert.equal(path._stored_settings["dashStyle"], 'b-s dashStyle');
+            assert.equal(path._stored_settings["stroke"], 'none');
         });
     });
 })();
