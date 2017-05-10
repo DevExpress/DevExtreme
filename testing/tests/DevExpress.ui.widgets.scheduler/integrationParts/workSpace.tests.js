@@ -1237,3 +1237,23 @@ QUnit.test("ScrollTo of dateTable & header scrollable should are called when hea
     assert.ok(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was called");
     assert.notOk(headerScrollToSpy.calledOnce, "header scrollTo wasn't called");
 });
+
+QUnit.test("ScrollTo of sidebar scrollable shouldn't be called when sidebar scrollable scroll and crossScrollingEnabled is turn on", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 3, 16),
+        dataSource: [],
+        crossScrollingEnabled: true,
+        currentView: "week",
+        height: 500
+    });
+
+    var sideBarScrollable = this.instance.element().find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
+        dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+        sideBarScrollToSpy = sinon.spy(sideBarScrollable, "scrollTo"),
+        dateTableScrollToSpy = sinon.spy(dateTableScrollable, "scrollTo");
+
+    sideBarScrollable.scrollBy(1000);
+
+    assert.notOk(sideBarScrollToSpy.calledOnce, "sidebar scrollTo was not called");
+    assert.ok(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was called");
+});
