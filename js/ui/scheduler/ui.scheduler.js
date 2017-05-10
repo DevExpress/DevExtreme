@@ -1851,7 +1851,7 @@ var Scheduler = Widget.inherit({
             var startDateEditorOptions = this._appointmentForm.itemOption(startDateExpr).editorOptions,
                 endDateEditorOptions = this._appointmentForm.itemOption(endDateExpr).editorOptions;
 
-            if(formData.allDay) {
+            if(allDay) {
                 startDateEditorOptions.type = endDateEditorOptions.type = "date";
             } else {
                 startDateEditorOptions.type = endDateEditorOptions.type = "datetime";
