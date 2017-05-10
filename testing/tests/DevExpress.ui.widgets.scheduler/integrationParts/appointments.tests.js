@@ -4171,7 +4171,7 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
             text: "AllDay task",
             start: new Date(2017, 2, 13),
             end: new Date(2017, 2, 13, 0, 30),
-            allDay: true
+            AllDay: true
         }, {
             text: "Short task",
             start: new Date(2017, 2, 13),
@@ -4181,7 +4181,8 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
         currentView: "week",
         views: ["week"],
         startDateExpr: "start",
-        endDateExpr: "end"
+        endDateExpr: "end",
+        allDayExpr: "AllDay"
     });
 
     pointerMock(this.instance.element().find(".dx-scheduler-all-day-appointment").eq(0)).start().click().click();
