@@ -491,11 +491,15 @@ var ColumnsController = gridCore.Controller.inherit((function() {
         updateColumnVisibleIndexes(that, column);
     };
 
-    var assignColumns = function(that, columns) {
-        that._columns = columns;
+    var resetColumnsCache = function(that) {
         that._visibleColumns = undefined;
         that._fixedColumns = undefined;
         that._rowCount = undefined;
+    };
+
+    var assignColumns = function(that, columns) {
+        that._columns = columns;
+        resetColumnsCache(that);
         that.updateColumnDataTypes();
     };
 
@@ -526,9 +530,7 @@ var ColumnsController = gridCore.Controller.inherit((function() {
             delete columnChanges.columnIndex;
         }
         that._columnChanges = columnChanges;
-        that._visibleColumns = undefined;
-        that._fixedColumns = undefined;
-        that._rowCount = undefined;
+        resetColumnsCache(that);
     };
 
     var fireColumnsChanged = function(that) {
@@ -590,6 +592,8 @@ var ColumnsController = gridCore.Controller.inherit((function() {
                     }
                 }
                 updateColumnChanges(that, changeType, optionName, columnIndex);
+            } else {
+                resetColumnsCache(that);
             }
         }
     };
