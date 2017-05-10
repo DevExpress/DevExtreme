@@ -4096,3 +4096,38 @@ QUnit.test("Appointment startDate should be preprocessed before position calcula
 
     assert.equal($appointment.length, 2, "appointment is rendered");
 });
+
+QUnit.test("Appointment startDate and endDate should have correct format in the details view after allDay appoitment opening, (T505119)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "AllDay task",
+            start: new Date(2017, 2, 13),
+            end: new Date(2017, 2, 13, 0, 30),
+            AllDay: true
+        }, {
+            text: "Short task",
+            start: new Date(2017, 2, 13),
+            end: new Date(2017, 2, 13, 0, 30)
+        }],
+        currentDate: new Date(2017, 2, 13),
+        currentView: "week",
+        views: ["week"],
+        startDateExpr: "start",
+        endDateExpr: "end",
+        allDayExpr: "AllDay"
+    });
+
+    pointerMock(this.instance.element().find(".dx-scheduler-all-day-appointment").eq(0)).start().click().click();
+    var $popup = $(".dx-scheduler-appointment-popup");
+    $popup.hide();
+
+    pointerMock(this.instance.element().find(".dx-scheduler-appointment").eq(1)).start().click().click();
+
+    var detailsForm = this.instance.getAppointmentDetailsForm(),
+        startDateEditor = detailsForm.getEditor("start"),
+        endDateEditor = detailsForm.getEditor("end");
+
+    assert.equal(startDateEditor.option("type"), "datetime", "start date is correct");
+    assert.equal(endDateEditor.option("type"), "datetime", "end date is correct");
+});
+
