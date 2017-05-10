@@ -1001,11 +1001,15 @@ module.exports = {
                 updateColumnVisibleIndexes(that, column);
             };
 
-            var assignColumns = function(that, columns) {
-                that._columns = columns;
+            var resetColumnsCache = function(that) {
                 that._visibleColumns = undefined;
                 that._fixedColumns = undefined;
                 that._rowCount = undefined;
+            };
+
+            var assignColumns = function(that, columns) {
+                that._columns = columns;
+                resetColumnsCache(that);
                 that.updateColumnDataTypes();
             };
 
@@ -1037,9 +1041,7 @@ module.exports = {
                     delete columnChanges.columnIndex;
                 }
                 that._columnChanges = columnChanges;
-                that._visibleColumns = undefined;
-                that._fixedColumns = undefined;
-                that._rowCount = undefined;
+                resetColumnsCache(that);
             };
 
             var fireColumnsChanged = function(that) {
@@ -1101,6 +1103,8 @@ module.exports = {
                             }
                         }
                         updateColumnChanges(that, changeType, optionName, columnIndex);
+                    } else {
+                        resetColumnsCache(that);
                     }
                 }
             };
