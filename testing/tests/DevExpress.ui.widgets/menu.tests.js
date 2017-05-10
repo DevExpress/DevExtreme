@@ -2119,6 +2119,21 @@ QUnit.test("selectByClick option should be transferred to the treeview", functio
     assert.ok(treeview.option("selectByClick"), "selectByClick is correct on option changed");
 });
 
+QUnit.test("animationEnabled option should be true in the dxTreeView if animation option in the dxMenu is not null", function(assert) {
+    var menu = new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        }),
+        $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
+        treeview = $treeview.dxTreeView("instance");
+
+    assert.strictEqual(treeview.option("animationEnabled"), true, "animation is enabled in the dxTreeView by default");
+
+    menu.option("animation", null);
+
+    assert.strictEqual(treeview.option("animationEnabled"), false, "animation has been changed to disabled");
+});
+
 
 QUnit.module("adaptivity: behavior", {
     beforeEach: function() {
@@ -2361,7 +2376,7 @@ QUnit.test("TreeView should disappear when menu transform to common view", funct
     assert.ok($treeview.is(":hidden"), "treeview is hidden");
 });
 
-QUnit.test("TreeView should scroll after expand item", function(assert) {
+QUnit.test("Overlay should change dimensions after any node expanded or collapsed", function(assert) {
     new Menu(this.$element, {
         items: this.items,
         adaptivityEnabled: true
@@ -2370,15 +2385,22 @@ QUnit.test("TreeView should scroll after expand item", function(assert) {
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
         $item2 = $treeview.find(".dx-treeview-item").eq(1),
-        $overlay = this.$element.find(".dx-overlay-content").first();
+        overlay = this.$element.find(".dx-overlay").dxOverlay("instance"),
+        overlayPositioned = sinon.stub(),
+        $overlayContent = overlay.content();
+
+    overlay.on("positioned", overlayPositioned);
 
     $button.trigger("dxclick");
-
-    var height = $overlay.outerHeight();
+    var height = $overlayContent.outerHeight();
 
     $item2.trigger("dxclick");
+    assert.ok($overlayContent.outerHeight() > height, "overlay should be enlarged");
+    assert.equal(overlayPositioned.callCount, 2, "overlay's position should be recalculated");
 
-    assert.equal(height, $overlay.outerHeight(), "overlay should not change it's height");
+    $item2.trigger("dxclick");
+    assert.equal($overlayContent.outerHeight(), height, "overlay should be shrinked");
+    assert.equal(overlayPositioned.callCount, 3, "overlay's position should be recalculated");
 });
 
 QUnit.test("Adaptive width limit should contain only root items", function(assert) {
