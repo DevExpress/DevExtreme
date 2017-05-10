@@ -357,8 +357,8 @@ var calculatePosition = function(what, options) {
         if($.isWindow(of[0])) {
             h.atLocation = of.scrollLeft();
             v.atLocation = of.scrollTop();
-            h.atSize = of.width(); //Vertical scrollbar should not be included
-            v.atSize = of[0].innerHeight; //Including horizontal scrollbar is better than incorrect positioning on mobile safari
+            h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : of.width();
+            v.atSize = of[0].innerHeight > of[0].outerHeight ? of[0].innerHeight : of.height();
         } else if(of[0].nodeType === 9) {
             h.atLocation = 0;
             v.atLocation = 0;

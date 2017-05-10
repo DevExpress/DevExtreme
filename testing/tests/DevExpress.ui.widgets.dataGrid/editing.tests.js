@@ -4944,6 +4944,131 @@ QUnit.testInActiveWindow('Hide focus overlay before update on editing cell', fun
     assert.ok(testElement.find('.dx-datagrid-focus-overlay').is(":visible"), 'visible focus overlay');
 });
 
+QUnit.test("Get first editable column index when form edit mode", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.masterDetail = {
+        enabled: true
+    };
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "form"
+    };
+
+    rowsView.render(testElement);
+
+    that.editRow(0);
+
+    //act
+    var editableIndex = this.editingController.getFirstEditableColumnIndex();
+
+    //assert
+    assert.equal(editableIndex, 0, "editable index");
+});
+
+QUnit.test("Get first editable column index when form edit mode and custom form items is defined", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.masterDetail = {
+        enabled: true
+    };
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "form",
+        form: {
+            items: [
+                {
+                    itemType: "group",
+                    items: ["phone", "room"]
+                },
+                {
+                    itemType: "group",
+                    items: ["name", "age"]
+                }
+            ]
+        }
+    };
+
+    rowsView.render(testElement);
+
+    that.editRow(0);
+
+    //act
+    var editableIndex = this.editingController.getFirstEditableColumnIndex();
+
+    //assert
+    assert.equal(editableIndex, 3, "editable index");
+});
+
+QUnit.test("Get correct first editable column index when form edit mode and form items are changed dynamically", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.masterDetail = {
+        enabled: true
+    };
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "form"
+    };
+
+    rowsView.render(testElement);
+
+    that.editRow(0);
+
+    //act
+    this.editingController.option("editing.form", { items: ["phone", "room"] });
+    this.editingController.optionChanged({ name: "editing" });
+
+    that.editRow(0);
+
+    var editableIndex = this.editingController.getFirstEditableColumnIndex();
+
+    //assert
+    assert.equal(editableIndex, 3, "editable index");
+});
+
+QUnit.test("Get correct first editable column index when visible option for item set via formItem option", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.masterDetail = {
+        enabled: true
+    };
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "form"
+    };
+
+    rowsView.render(testElement);
+
+    that.columnsController.columnOption("name", {
+        formItem: {
+            visible: false
+        }
+    });
+
+    that.editRow(0);
+
+    var editableIndex = this.editingController.getFirstEditableColumnIndex();
+
+    //assert
+    assert.equal(editableIndex, 1, "editable index");
+});
 
 if(device.ios || device.android) {
     //T322738
@@ -5348,6 +5473,32 @@ if(!devices.win8) {
 
         //assert
         assert.equal(testElement.find('tbody > tr').first().find('td').eq(1).text(), "66");
+    });
+
+    //T501819
+    QUnit.test('Change array cell value in batch edit mode', function(assert) {
+        //arrange
+        var that = this,
+            rowsView = this.rowsView,
+            testElement = $('#container');
+
+        that.options.editing = {
+            mode: "batch",
+            allowUpdating: true
+        };
+
+        that.array[0].arr = [1, 3];
+
+        that.addColumn("arr");
+
+        rowsView.render(testElement);
+
+        //act
+        that.cellValue(0, "arr", [3]);
+
+        //assert
+        assert.deepEqual(that.cellValue(0, "arr"), [3], "value in grid is changed correctly");
+        assert.deepEqual(that.array[0].arr, [1, 3], "value in array is not changed");
     });
 
     //T440578

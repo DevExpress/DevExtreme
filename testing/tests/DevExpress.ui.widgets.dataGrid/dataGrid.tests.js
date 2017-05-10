@@ -6296,6 +6296,23 @@ QUnit.test("Change expand column width in onInitialized", function(assert) {
     assert.equal($commandColumnCells.eq(0).width(), 15, "expand command column width");
 });
 
+//T508818
+QUnit.test("Change sortOrder via columnOption when data is not loaded", function(assert) {
+    //arrange
+    var dataGrid = createDataGrid({
+        dataSource: [{ a: 1 }, { a: 2 }],
+        columns: ["a"]
+    });
+
+    //act
+    dataGrid.columnOption(0, "sortOrder", "desc");
+    this.clock.tick();
+
+    //assert
+    assert.equal(dataGrid.cellValue(0, 0), 2, "first row value");
+    assert.equal(dataGrid.cellValue(1, 0), 1, "second row value");
+});
+
 //T394873
 QUnit.test("Column widths must be kept after cell edit", function(assert) {
     //arrange

@@ -424,7 +424,9 @@ function createFilter(element) {
 
         switch(attr.result.value) {
             case "gaussianBlurResult":
-                filterOptions.blur = _number(attr.stdDeviation.value);
+                if(attr.stdDeviation) { //T511738, IE10
+                    filterOptions.blur = _number(attr.stdDeviation.value);
+                }
                 break;
             case "offsetResult":
                 filterOptions.offsetX = _number(attr.dx.value);
@@ -482,7 +484,7 @@ function drawCanvasElements(elements, context, parentOptions) {
 function setLineDash(context, options) {
     var matches = options["stroke-dasharray"] && options["stroke-dasharray"].match(/(\d+)/g);
 
-    if(matches && matches.length) {
+    if(matches && matches.length && context.setLineDash) { //IE10 does not have setLineDash
         matches = $.map(matches, function(item) {
             return _number(item);
         });

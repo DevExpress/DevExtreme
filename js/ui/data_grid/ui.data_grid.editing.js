@@ -3,7 +3,7 @@
 var $ = require("jquery"),
     Guid = require("../../core/guid"),
     commonUtils = require("../../core/utils/common"),
-    objectUtils = require("../../core/utils/object"),
+    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     gridCore = require("./ui.data_grid.core"),
     clickEvent = require("../../events/click"),
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
@@ -180,15 +180,19 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
 
         getFirstEditableColumnIndex: function() {
             var columnsController = this.getController("columns"),
-                visibleColumns = columnsController.getVisibleColumns(),
                 columnIndex;
 
-            $.each(visibleColumns, function(index, column) {
-                if(column.allowEditing) {
-                    columnIndex = index;
-                    return false;
-                }
-            });
+            if(getEditMode(this) === DATAGRID_EDIT_MODE_FORM && this._firstFormItem) {
+                columnIndex = this._firstFormItem.column.index;
+            } else {
+                var visibleColumns = columnsController.getVisibleColumns();
+                $.each(visibleColumns, function(index, column) {
+                    if(column.allowEditing) {
+                        columnIndex = index;
+                        return false;
+                    }
+                });
+            }
 
             return columnIndex;
         },
@@ -344,12 +348,12 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         item.modified = true;
                         item.oldData = item.data;
-                        item.data = $.extend(true, {}, item.data, data);
+                        item.data = deepExtendArraySafe(deepExtendArraySafe({}, item.data), data);
                         item.modifiedValues = generateDataValues(data, columns);
                         break;
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         if(editMode === DATAGRID_EDIT_MODE_BATCH) {
-                            item.data = $.extend(true, {}, item.data, data);
+                            item.data = deepExtendArraySafe(deepExtendArraySafe({}, item.data), data);
                         }
                         item.removed = true;
                         break;
@@ -1074,9 +1078,9 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
             }
             if(that._editData[editDataIndex]) {
                 options.type = that._editData[editDataIndex].type || options.type;
-                objectUtils.deepExtendArraySafe(that._editData[editDataIndex], { data: options.data, type: options.type });
+                deepExtendArraySafe(that._editData[editDataIndex], { data: options.data, type: options.type });
                 if(row) {
-                    row.data = objectUtils.deepExtendArraySafe(objectUtils.deepExtendArraySafe({}, row.data), options.data);
+                    row.data = deepExtendArraySafe(deepExtendArraySafe({}, row.data), options.data);
                 }
             }
 
@@ -1138,6 +1142,8 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                     });
                 }
 
+                that._firstFormItem = undefined;
+
                 that._createComponent($("<div>").appendTo($container), Form, $.extend({}, editFormOptions, {
                     items: items,
                     formID: new Guid(),
@@ -1151,6 +1157,11 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                             item.column = column;
                             if(column.formItem) {
                                 $.extend(item, column.formItem);
+                            }
+
+                            var itemVisible = commonUtils.isDefined(item.visible) ? item.visible : true;
+                            if(!that._firstFormItem && itemVisible) {
+                                that._firstFormItem = item;
                             }
                         }
                         userCustomizeItem && userCustomizeItem.call(this, item);

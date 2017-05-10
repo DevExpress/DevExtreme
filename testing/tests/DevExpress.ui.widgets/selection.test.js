@@ -593,6 +593,181 @@ QUnit.test("selection should work with custom store without filter implementatio
     }
 });
 
+QUnit.test("selection should works with case-sensitive keys if select item is on current page", function(assert) {
+    var loadingArgs = [];
+    var selectionChangedCallCount = 0;
+    var dataSource = new DataSource({
+        pageSize: 2,
+        store: {
+            type: "array",
+            onLoading: function(e) {
+                loadingArgs.push(e);
+            },
+            data: [
+                { id: "a", text: "Item 1" },
+                { id: "A", text: "Item 2" },
+                { id: "b", text: "Item 3" },
+                { id: "B", text: "Item 4" },
+            ],
+            key: "id"
+        }
+    });
+
+    var selection = new Selection({
+        onSelectionChanged: function(args) {
+            selectionChangedCallCount++;
+            assert.deepEqual(args.selectedItems, [{ id: "A", text: "Item 2" }], "selectedItems is right");
+            assert.deepEqual(args.selectedItemKeys, ["A"], "selectedItemsKeys is right");
+            assert.deepEqual(args.addedItemKeys, ["A"], "addedItemKeys is right");
+            assert.deepEqual(args.removedItemKeys, [], "removedItemKeys is right");
+        },
+        key: function() {
+            var store = dataSource && dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            var store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        load: function(options) {
+            return dataSource && dataSource.store().load(options);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        filter: function() {
+            return dataSource && dataSource.filter();
+        }
+    });
+
+    dataSource.load();
+    loadingArgs = [];
+
+    //act
+    selection.selectedItemKeys(["A"]);
+
+    //assert
+    assert.equal(selectionChangedCallCount, 1, "selectionChanged is called once");
+    assert.equal(loadingArgs.length, 0, "no loadings during selection");
+});
+
+QUnit.test("selection should works with case-sensitive keys if select item is not on current page", function(assert) {
+    var loadingArgs = [];
+    var selectionChangedCallCount = 0;
+    var dataSource = new DataSource({
+        pageSize: 2,
+        store: {
+            type: "array",
+            onLoading: function(e) {
+                loadingArgs.push(e);
+            },
+            data: [
+                { id: "a", text: "Item 1" },
+                { id: "A", text: "Item 2" },
+                { id: "b", text: "Item 3" },
+                { id: "B", text: "Item 4" },
+            ],
+            key: "id"
+        }
+    });
+
+    var selection = new Selection({
+        onSelectionChanged: function(args) {
+            selectionChangedCallCount++;
+            assert.deepEqual(args.selectedItems, [{ id: "b", text: "Item 3" }], "selectedItems is right");
+            assert.deepEqual(args.selectedItemKeys, ["b"], "selectedItemsKeys is right");
+            assert.deepEqual(args.addedItemKeys, ["b"], "addedItemKeys is right");
+            assert.deepEqual(args.removedItemKeys, [], "removedItemKeys is right");
+        },
+        key: function() {
+            var store = dataSource && dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            var store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        load: function(options) {
+            return dataSource && dataSource.store().load(options);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        filter: function() {
+            return dataSource && dataSource.filter();
+        }
+    });
+
+    dataSource.load();
+    loadingArgs = [];
+
+    //act
+    selection.selectedItemKeys(["b"]);
+
+    //assert
+    assert.equal(selectionChangedCallCount, 1, "selectionChanged is called once");
+    assert.equal(loadingArgs.length, 1, "one loading during selection");
+    assert.deepEqual(loadingArgs[0].filter, ["id", "=", "b"], "loading filter");
+});
+
+QUnit.test("selection should works with complex key", function(assert) {
+    var selectionChangedArgs = [];
+    var dataSource = new DataSource({
+        pageSize: 2,
+        store: {
+            type: "array",
+            data: [
+                { data: { id: 1 }, text: "Item 1" },
+                { data: { id: 2 }, text: "Item 2" },
+                { data: { id: 3 }, text: "Item 3" }
+            ],
+            key: "data.id"
+        }
+    });
+
+    var selection = new Selection({
+        onSelectionChanged: function(args) {
+            selectionChangedArgs.push(args);
+        },
+        key: function() {
+            var store = dataSource && dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            var store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        load: function(options) {
+            return dataSource && dataSource.store().load(options);
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        },
+        filter: function() {
+            return dataSource && dataSource.filter();
+        }
+    });
+
+    dataSource.load();
+
+    //act
+    selection.selectedItemKeys([2]);
+
+    //assert
+    assert.equal(selectionChangedArgs.length, 1, "selectionChanged is called once");
+    assert.deepEqual(selectionChangedArgs[0].selectedItemKeys, [2], "selectedItemsKeys is right");
+    assert.deepEqual(selectionChangedArgs[0].selectedItems, [{ data: { id: 2 }, text: "Item 2" }], "selectedItems is right");
+});
+
 QUnit.test("selection module should support object returned by load method", function(assert) {
     var selectionChangedHandler = sinon.spy();
 

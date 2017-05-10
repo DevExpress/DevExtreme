@@ -1174,7 +1174,7 @@ QUnit.test("Update when select all items", function(assert) {
 
     assert.equal(that.columnsController.updateOptions[0].columnIndex, 0, "column index");
     assert.deepEqual(that.columnsController.updateOptions[0].optionName, {
-        filterValues: undefined,
+        filterValues: null, //T500956
         filterType: "exclude"
     }, "column options");
 });
@@ -1517,9 +1517,13 @@ QUnit.test("Checking filterValues of the column after deselect item of a loaded 
 
     this.headerFilterController.showHeaderFilterMenu(0);
 
-    //act
     $popupContent = this.headerFilterView.getPopupContainer().content();
     $popupContent.find(".dx-list-item").first().trigger("dxclick"); // deselect first item
+
+    //assert
+    assert.ok($popupContent.find(".dx-list-select-all-checkbox").hasClass("dx-checkbox-indeterminate"), "checkbox in an indeterminate state");
+
+    //act
     $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // apply filter
     this.clock.tick(500);
 
@@ -3128,7 +3132,7 @@ QUnit.test("Not apply filter when selected all items", function(assert) {
     column = that.columnsController.getVisibleColumns()[0];
     assert.ok(!$popupContent.is(":visible"), "not visible popup");
     assert.ok(!callApplyFilter, "not apply filter");
-    assert.strictEqual(column.filterValues, undefined, "filterValues of the first column");
+    assert.strictEqual(column.filterValues, null, "filterValues of the first column");
     assert.strictEqual(column.filterType, "exclude", "filterType of the first column");
 });
 

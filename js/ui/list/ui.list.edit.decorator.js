@@ -89,8 +89,6 @@ var EditDecorator = Class.inherit({
 
     handleContextMenu: $.noop,
 
-    handleDataSourceChanged: $.noop,
-
     _swipeStartHandler: $.noop,
 
     _swipeUpdateHandler: $.noop,
