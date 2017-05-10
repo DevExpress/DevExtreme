@@ -82,7 +82,7 @@ exports.HeaderFilterView = modules.View.inherit({
         }
 
         if(options.filterValues && !options.filterValues.length) {
-            options.filterValues = undefined;
+            options.filterValues = null; //T500956
         }
 
         options.apply();
