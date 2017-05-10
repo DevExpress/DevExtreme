@@ -1190,16 +1190,13 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _updateExpandedItem: function(node, state, e) {
-        var $node = this._getNodeElement(node),
-            $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS);
-
-        this._animateNodeContainer($nodeContainer, state);
-        this.setAria("expanded", state, $node);
-        this._fireExpandedStateUpdatedEvent(state, node, e);
+        this._animateNodeContainer(node, state, e);
     },
 
-    _animateNodeContainer: function($nodeContainer, state) {
-        var nodeHeight = $nodeContainer.height();
+    _animateNodeContainer: function(node, state, e) {
+        var $node = this._getNodeElement(node),
+            $nodeContainer = $node.children("." + NODE_CONTAINER_CLASS),
+            nodeHeight = $nodeContainer.height();
 
         fx.stop($nodeContainer, true);
         fx.animate($nodeContainer, {
@@ -1217,7 +1214,9 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             complete: (function() {
                 $nodeContainer.css("max-height", "none");
                 $nodeContainer.toggleClass(OPENED_NODE_CONTAINER_CLASS, state);
+                this.setAria("expanded", state, $node);
                 this._scrollableContainer.update();
+                this._fireExpandedStateUpdatedEvent(state, node, e);
             }).bind(this)
         });
     },
