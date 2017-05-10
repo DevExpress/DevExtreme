@@ -375,7 +375,7 @@ var Menu = MenuBase.inherit({
     },
 
     _toggleAdaptiveMode: function(state) {
-        var $menuItemsContainer = this.element().find("." + DX_MENU_ITEMS_CONTAINER_CLASS),
+        var $menuItemsContainer = this.element().find("." + DX_MENU_HORIZONTAL_CLASS),
             $adaptiveElements = this.element().find("." + DX_ADAPTIVE_MODE_CLASS);
 
         if(state) {
