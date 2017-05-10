@@ -1159,7 +1159,8 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                                 $.extend(item, column.formItem);
                             }
 
-                            if(!that._firstFormItem) {
+                            var itemVisible = commonUtils.isDefined(item.visible) ? item.visible : true;
+                            if(!that._firstFormItem && itemVisible) {
                                 that._firstFormItem = item;
                             }
                         }

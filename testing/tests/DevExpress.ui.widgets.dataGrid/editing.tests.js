@@ -5039,6 +5039,37 @@ QUnit.test("Get correct first editable column index when form edit mode and form
     assert.equal(editableIndex, 3, "editable index");
 });
 
+QUnit.test("Get correct first editable column index when visible option for item set via formItem option", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.masterDetail = {
+        enabled: true
+    };
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "form"
+    };
+
+    rowsView.render(testElement);
+
+    that.columnsController.columnOption("name", {
+        formItem: {
+            visible: false
+        }
+    });
+
+    that.editRow(0);
+
+    var editableIndex = this.editingController.getFirstEditableColumnIndex();
+
+    //assert
+    assert.equal(editableIndex, 1, "editable index");
+});
+
 if(device.ios || device.android) {
     //T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {
