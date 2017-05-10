@@ -269,6 +269,23 @@ var Fixture = Class.inherit({
         instance.option("name", expectedName);
         assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value ");
     });
+
+    QUnit.test("the 'name' attribute should not be rendered if name is an empty string", function(assert) {
+        new this.EditorInheritor(this.$element);
+
+        var input = this.$element.find("input[type='hidden']").get(0);
+        assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
+    });
+
+    QUnit.test("the 'name' attribute should be removed after name is changed to an empty string", function(assert) {
+        var instance = new this.EditorInheritor(this.$element, {
+                name: "some_name"
+            }),
+            input = this.$element.find("input[type='hidden']").get(0);
+
+        instance.option("name", "");
+        assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
+    });
 })("the 'name' option");
 
 
