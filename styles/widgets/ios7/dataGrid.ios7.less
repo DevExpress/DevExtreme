@@ -459,6 +459,11 @@
         }
     }
 
+    .dx-toolbar-label {
+        font-size: inherit;
+        font-weight: normal;
+    }
+
     .dx-link {
         padding: @IOS7_DATAGRID_CELL_PADDING 0px @IOS7_DATAGRID_CELL_PADDING 10px;
     }
@@ -508,6 +513,7 @@
 }
 
 .dx-datagrid-group-panel {
+    vertical-align: middle;
     .touch-action(pinch-zoom);
 
     .dx-group-panel-message {
@@ -515,6 +521,7 @@
         padding: @IOS7_DATAGRID_CELL_PADDING;
         border-top: @IOS7_DATAGRID_BORDER_HIDDEN;
         border-bottom: @IOS7_DATAGRID_BORDER_HIDDEN;
+        text-align: left;
     }
 
     .dx-group-panel-item {
@@ -523,6 +530,7 @@
         color: @IOS7_DATAGRID_HEADERS_COLOR;
         border: @IOS7_DATAGRID_BORDER;
         padding: @IOS7_DATAGRID_CELL_PADDING;
+        font-weight: bold;
     }
 
     .dx-block-separator {
@@ -789,6 +797,10 @@
     .dx-datagrid-search-panel {
         margin-left: 0;
         margin-right: 20px;
+    }
+
+    .dx-group-panel-message {
+        text-align: right;
     }
 }
 

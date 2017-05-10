@@ -425,6 +425,12 @@
         padding: @WIN10_DATAGRID_CELL_PADDING 0px @WIN10_DATAGRID_CELL_PADDING 10px;
     }
 
+    .dx-toolbar-label {
+        padding: 0;
+        font-weight: inherit;
+        text-transform: none;
+    }
+
     .dx-toolbar-button:not(.dx-state-disabled) {
         .dx-apply-:not(.dx-state-hover) {
             .dx-button-content {
@@ -478,6 +484,7 @@
 .dx-datagrid-group-panel {
     margin-bottom: @WIN10_DATAGRID_HEADER_PANEL_MARGIN_BOTTOM;
     margin-top: 8px;
+    vertical-align: middle;
     .touch-action(pinch-zoom);
 
     .dx-group-panel-message {
