@@ -6294,6 +6294,25 @@ QUnit.test("Change sortOrder via columnOption when data is not loaded", function
     assert.equal(dataGrid.cellValue(1, 0), 1, "second row value");
 });
 
+//T494138
+QUnit.test("Change expand column width in onInitialized", function(assert) {
+    //arrange, act
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        onInitialized: function(e) {
+            e.component.columnOption("command:expand", "width", 15);
+        },
+        masterDetail: {
+            enabled: true
+        },
+        dataSource: [{ id: 1111 }]
+    });
+
+    //assert
+    var $commandColumnCells = dataGrid.element().find(".dx-command-expand");
+    assert.equal($commandColumnCells.eq(0).width(), 15, "expand command column width");
+});
+
 //T394873
 QUnit.test("Column widths must be kept after cell edit", function(assert) {
     //arrange
