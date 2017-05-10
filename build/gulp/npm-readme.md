@@ -33,44 +33,52 @@ NOTE: DevExtreme doesn't use semantic versioning. The increment of the first or 
     <link rel="stylesheet" type="text/css" href="node_modules/devextreme/dist/css/dx.common.css" />
     <link rel="stylesheet" type="text/css" href="node_modules/devextreme/dist/css/dx.light.css" />
     ```
-    You can replace ``dx.light.css`` with one of [Predefined themes](https://js.devexpress.com/Documentation/16_1/Guide/Themes/Predefined_Themes/).
+    You can replace ``dx.light.css`` with one of [Predefined themes](https://js.devexpress.com/Documentation/Guide/Themes/Predefined_Themes/).
 
 *   If you use **WebPack**, use this syntax to specify required modules:
     ```js
     var $ = require('jquery');
     require('devextreme/ui/button');
+    var dialog = require('devextreme/ui/dialog');
     ```
      
     If you use **jspm**, use this syntax instead:
     ```js
     import $ from 'jquery';
     import 'devextreme/ui/button';
+    import dialog from 'devextreme/ui/dialog';
     ```
 
-For more information about different approaches and available modules, please read [this documentation article](https://js.devexpress.com/Documentation/16_1/Guide/Common/Modularity/).
+*   Add a markup container:
+    ```html
+    <div id="myButton"></div>
+    ```
+    and initialize a widget:
+    ```js
+    $("#myButton").dxButton({
+        text: "Say hello",
+        onClick: function() {
+            dialog.alert('Hello world!', '', false);
+        }
+    });
+    ```
+
+For more information about different approaches and available modules, please read [this documentation article](https://js.devexpress.com/Documentation/Guide/Common/Modularity/).
 
 
 ## Documentation
 
-To start with DevExtreme, go through the steps given on the [start page](http://js.devexpress.com/Documentation/) of the documentation.
-
-While using DevExtreme, the [videos](http://js.devexpress.com/Documentation/Videos/), [tutorials](http://js.devexpress.com/Documentation/Tutorials/), [guides](http://js.devexpress.com/Documentation/Guide/) and [API reference](http://js.devexpress.com/Documentation/ApiReference/) provided with the documentation will be helpful.
+To start with DevExtreme, choose your favorite technology and use the links on the [start page](http://js.devexpress.com/Documentation/) of the documentation.
 
 
 ## Demos
 
-Take a look at the DevExtreme demos.
-
-- [Web apps](http://js.devexpress.com/Demos/)  
-Sample real-world apps built using the DevExtreme tools.
-
-- [Widgets Gallery](http://js.devexpress.com/Demos/WidgetsGallery/)  
-A vast collection of code samples illustrating the usage of DevExtreme widgets.
+Take a look at the DevExtreme demos. Sample real-world apps built using the DevExtreme tools and a vast collection of code samples illustrating the usage of DevExtreme widgets can be found [here](https://js.devexpress.com/Demos/WidgetsGallery/).
 
 
 ## License
 
-Read about DevExtreme licensing here: [https://js.devexpress.com/Licensing](https://js.devexpress.com/Licensing).
+Read about DevExtreme licensing here: [https://js.devexpress.com/Licensing/](https://js.devexpress.com/Licensing/).
 
 
 ## Support
