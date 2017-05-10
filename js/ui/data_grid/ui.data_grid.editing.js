@@ -1142,6 +1142,8 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                     });
                 }
 
+                that._firstFormItem = undefined;
+
                 that._createComponent($("<div>").appendTo($container), Form, $.extend({}, editFormOptions, {
                     items: items,
                     formID: new Guid(),
