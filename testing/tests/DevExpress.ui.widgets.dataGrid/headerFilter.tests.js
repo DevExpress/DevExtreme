@@ -1174,7 +1174,7 @@ QUnit.test("Update when select all items", function(assert) {
 
     assert.equal(that.columnsController.updateOptions[0].columnIndex, 0, "column index");
     assert.deepEqual(that.columnsController.updateOptions[0].optionName, {
-        filterValues: undefined,
+        filterValues: null, //T500956
         filterType: "exclude"
     }, "column options");
 });
@@ -3132,7 +3132,7 @@ QUnit.test("Not apply filter when selected all items", function(assert) {
     column = that.columnsController.getVisibleColumns()[0];
     assert.ok(!$popupContent.is(":visible"), "not visible popup");
     assert.ok(!callApplyFilter, "not apply filter");
-    assert.strictEqual(column.filterValues, undefined, "filterValues of the first column");
+    assert.strictEqual(column.filterValues, null, "filterValues of the first column");
     assert.strictEqual(column.filterType, "exclude", "filterType of the first column");
 });
 
