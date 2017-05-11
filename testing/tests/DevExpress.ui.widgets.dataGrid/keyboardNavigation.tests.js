@@ -4047,6 +4047,43 @@ QUnit.testInActiveWindow("Move up when a focused cell is located on invalid posi
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 6 });
 });
 
+QUnit.testInActiveWindow('Tab index is not applied when focus is located inside edit form and master detail is enabled', function(assert) {
+    //arrange
+    this.options = {
+        editing: {
+            mode: 'form',
+            allowAdding: true,
+        },
+        commonColumnSettings: {
+            allowEditing: true
+        },
+        columns: ["name", "age", "phone"],
+        dataSource: [],
+        masterDetail: {
+            enabled: true
+        }
+    };
+
+    setupModules(this, { initViews: true });
+
+    var $testElement = $('#container');
+
+    this.gridView.render($testElement);
+    this.editingController.addRow();
+
+    //act
+    var $input = $testElement.find(".dx-texteditor-input").first();
+
+    $input.trigger("dxpointerdown.dxDataGridKeyboardNavigation");
+    this.clock.tick();
+
+    this.triggerKeyDown("tab", false, false, $testElement.find(":focus").get(0));
+    this.clock.tick();
+
+    //assert
+    assert.ok(!$(".dx-datagrid-edit-form-item[tabindex=\"0\"]").length, "tabIndex is not applied");
+});
+
 QUnit.module("Rows view", {
     beforeEach: function() {
         this.items = [
