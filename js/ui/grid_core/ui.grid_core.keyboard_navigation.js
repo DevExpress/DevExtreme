@@ -421,6 +421,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
+    _isInsideEditForm: function(element) {
+        return $(element).closest("." + this.addWidgetPrefix(EDIT_FORM_CLASS)).length > 0;
+    },
+
     _isMasterDetailCell: function(element) {
         var $masterDetailCell = $(element).closest("." + MASTER_DETAIL_CELL_CLASS),
             $masterDetailGrid = $masterDetailCell.closest("." + this.getWidgetContainerClass()).parent();
@@ -431,8 +435,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _handleTabKeyOnMasterDetailCell: function(target, direction) {
         if(this._isMasterDetailCell(target)) {
             this._updateFocusedCellPosition($(target).closest("." + MASTER_DETAIL_CELL_CLASS));
+
             var $nextCell = this._getNextCell(direction, "row");
-            $nextCell && $nextCell.attr("tabindex", 0);
+            if(!this._isInsideEditForm($nextCell)) {
+                $nextCell && $nextCell.attr("tabindex", 0);
+            }
 
             return true;
         }
