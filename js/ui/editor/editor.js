@@ -260,7 +260,16 @@ var Editor = Widget.inherit({
 
     _setSubmitElementName: function(name) {
         var $submitElement = this._getSubmitElement();
-        $submitElement && $submitElement.attr("name", name);
+
+        if(!$submitElement) {
+            return;
+        }
+
+        if(name.length > 0) {
+            $submitElement.attr("name", name);
+        } else {
+            $submitElement.removeAttr("name");
+        }
     },
 
     _getSubmitElement: function() {
