@@ -24,7 +24,7 @@ npm install -g webpack
 npm install -g devextreme
 ```
 
-NOTE: DevExtreme doesn't use semantic versioning. The increment of the first or middle number means a major release and can contain changes, which break backward compatibility. If you want to use only minor updates in your application, specify an appropriate range in the package.json (a patch release in semver corresponds to a minor DevExtreme version). For example, to use the DevExtreme package from 17.1.5 and above without breaking changes, the range will be: 17.1 or 17.1.x or ~17.1.5. 
+NOTE: DevExtreme doesn't use semantic versioning. The increment of the first or middle number means a major release and can contain changes in behavior. If you want to use only minor updates in your application, specify an appropriate range in the package.json (a patch release in semver corresponds to a minor DevExtreme version). For example, to use the DevExtreme package from 17.1.5 and above without breaking changes, the range will be: 17.1 or 17.1.x or ~17.1.5. 
 
 ## Basic Usage
 
@@ -35,14 +35,14 @@ NOTE: DevExtreme doesn't use semantic versioning. The increment of the first or 
     ```
     You can replace ``dx.light.css`` with one of [Predefined themes](https://js.devexpress.com/Documentation/Guide/Themes/Predefined_Themes/).
 
-*   If you use **WebPack**, use this syntax to specify required modules:
+*   Specify required modules if you use **WebPack**:
     ```js
     var $ = require('jquery');
     require('devextreme/ui/button');
     var dialog = require('devextreme/ui/dialog');
     ```
      
-    If you use **jspm**, use this syntax instead:
+    For **jspm**, use this syntax instead:
     ```js
     import $ from 'jquery';
     import 'devextreme/ui/button';
@@ -68,7 +68,7 @@ For more information about different approaches and available modules, please re
 
 ## Documentation
 
-To start with DevExtreme, choose your favorite technology and use the links on the [start page](http://js.devexpress.com/Documentation/) of the documentation.
+To start with DevExtreme, use the links corresponding to the technology you use on the [start page](http://js.devexpress.com/Documentation/) of the documentation. 
 
 
 ## Demos
