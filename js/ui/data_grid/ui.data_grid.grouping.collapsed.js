@@ -6,7 +6,6 @@ var $ = require("jquery"),
     groupingCore = require("./ui.data_grid.grouping.core"),
     createGroupFilter = groupingCore.createGroupFilter,
     createOffsetFilter = groupingCore.createOffsetFilter,
-    dataQuery = require("../../data/query"),
     errors = require("../widget/ui.errors"),
     dataErrors = require("../../data/errors").errors,
     when = require("../../integration/jquery/deferred").when;
