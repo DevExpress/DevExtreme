@@ -495,13 +495,19 @@ var SchedulerWorkSpace = Widget.inherit({
 
         config.direction = "both";
         config.onScroll = $.proxy(function(e) {
-            this._headerScrollWasHandled = true;
-            this._sidebarScrollable.scrollTo({
-                top: e.scrollOffset.top
-            });
-            this._headerScrollable.scrollTo({
-                left: e.scrollOffset.left
-            });
+            if(!this._dateTableScrollWasHandled) {
+                this._sidebarScrollable.scrollTo({
+                    top: e.scrollOffset.top
+                });
+                this._headerScrollable.scrollTo({
+                    left: e.scrollOffset.left
+                });
+
+                this._headerScrollWasHandled = true;
+                this._sideBarScrollWasHandled = true;
+            } else {
+                this._dateTableScrollWasHandled = false;
+            }
         }, this);
         config.onEnd = $.proxy(function() {
             this.notifyObserver("updateResizableArea", {});
@@ -574,9 +580,14 @@ var SchedulerWorkSpace = Widget.inherit({
             bounceEnabled: false,
             pushBackValue: 0,
             onScroll: $.proxy(function(e) {
-                this._dateTableScrollable.scrollTo({
-                    top: e.scrollOffset.top
-                });
+                if(!this._sideBarScrollWasHandled) {
+                    this._dateTableScrollWasHandled = true;
+                    this._dateTableScrollable.scrollTo({
+                        top: e.scrollOffset.top
+                    });
+                } else {
+                    this._sideBarScrollWasHandled = false;
+                }
             }, this)
         });
     },
