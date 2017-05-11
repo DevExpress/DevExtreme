@@ -242,30 +242,34 @@ var getDatesByRecurrence = function(options) {
 
     var duration = options.end ? options.end.getTime() - options.start.getTime() : toMs("day");
 
-    getDatesByRules(dateRules, new Date(recurrenceStartDate), rule)
-        .forEach(function(currentDate, i) {
-            var iteration = 0;
+    if(dateRules.length && rule.count) {
+        getDatesByCount(dateRules, new Date(recurrenceStartDate), rule);
+    } else {
+        getDatesByRules(dateRules, new Date(recurrenceStartDate), rule)
+            .forEach(function(currentDate, i) {
+                var iteration = 0;
 
-            while(doNextIteration(currentDate, recurrenceStartDate, options.max, rule, iterationCount)) {
+                while(doNextIteration(currentDate, recurrenceStartDate, options.max, rule, iterationCount)) {
 
-                iterationCount++;
-                iteration++;
+                    iterationCount++;
+                    iteration++;
 
-                if(!iterationResult[iteration]) {
-                    iterationResult[iteration] = [];
-                }
+                    if(!iterationResult[iteration]) {
+                        iterationResult[iteration] = [];
+                    }
 
-                if(!dateIsRecurrenceException(currentDate, options.exception)) {
-                    if(currentDate.getTime() >= recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > options.min.getTime()) {
-                        if(checkDateByRule(currentDate, [dateRules[i]], rule["wkst"])) {
-                            iterationResult[iteration].push(currentDate);
+                    if(!dateIsRecurrenceException(currentDate, options.exception)) {
+                        if(currentDate.getTime() >= recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > options.min.getTime()) {
+                            if(checkDateByRule(currentDate, [dateRules[i]], rule["wkst"])) {
+                                iterationResult[iteration].push(currentDate);
+                            }
                         }
                     }
-                }
 
-                currentDate = incrementDate(currentDate, recurrenceStartDate, rule, i);
-            }
-        });
+                    currentDate = incrementDate(currentDate, recurrenceStartDate, rule, i);
+                }
+            });
+    }
 
     if(rule["bysetpos"]) {
         $.each(iterationResult, function(iterationIndex, iterationDates) {
@@ -654,6 +658,35 @@ var getDatesByRules = function(dateRules, startDate, rule) {
 
     if(!result.length) {
         result.push(startDate);
+    }
+
+    return result;
+};
+
+var getDatesByCount = function(dateRules, startDate, rule) {
+    var result = [],
+        count = rule.count || 1,
+        counter = 0,
+        date = new Date(startDate),
+        iteration = 0;
+
+    while(counter < count) {
+        var dates = getDatesByRules(dateRules, date, rule),
+            length = dates.length;
+
+        counter = counter + length;
+
+        var delCount = counter - count;
+        if(counter > count) {
+            dates.splice(length - delCount, delCount);
+        }
+
+        for(var i = 0; i < dates.length; i++) {
+            result.push(dates[i]);
+        }
+        iteration++;
+        //date.setDate(date.getDate() + 7);
+        date = incrementDate(date, startDate, rule, iteration);
     }
 
     return result;
