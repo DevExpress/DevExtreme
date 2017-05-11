@@ -29,6 +29,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
 
         expandedInfo.items = expandedInfo.items || [];
         expandedInfo.paths = expandedInfo.paths || [];
+        expandedInfo.counts = expandedInfo.counts || [];
         expandedInfo.count = expandedInfo.count || 0;
         expandedInfo.lastCount = expandedInfo.lastCount || 0;
 
@@ -54,6 +55,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                     } else if(groupsCount === 1 && item.count && (!isCustomLoading || isLastGroupExpanded)) {
                         expandedInfo.items.push(item);
                         expandedInfo.paths.push(path.slice(0));
+                        expandedInfo.counts.push(item.count);
                         expandedInfo.count += expandedInfo.lastCount;
                         expandedInfo.lastCount = item.count;
                     }
@@ -311,10 +313,11 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
 
         when(expandedInfo.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions)).done(function(items, extra) {
             $.each(expandedInfo.items, function(index, item) {
-                dataQuery(items).filter(expandedFilters[index]).enumerate().done(function(expandedItems) {
-                    applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);
-                    item.items = expandedItems;
-                });
+                var itemCount = expandedInfo.counts[index] - (index === 0 && loadOptions.skip || 0),
+                    expandedItems = items.splice(0, itemCount);
+
+                applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);
+                item.items = expandedItems;
             });
             options.data.resolve(data);
         }).fail(options.data.reject);
