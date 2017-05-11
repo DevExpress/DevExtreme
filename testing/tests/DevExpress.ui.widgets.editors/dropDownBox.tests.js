@@ -262,6 +262,17 @@ QUnit.test("dimensionChanged should be called once when different popup options 
     assert.equal(dimensionChangedSpy.callCount, 1, "dimensionChanged was called once");
 });
 
+QUnit.test("popup should not be draggable by default", function(assert) {
+    this.$element.dxDropDownBox({
+        opened: true
+    });
+
+    var popup = this.$element.find(".dx-popup").dxPopup("instance");
+
+    assert.strictEqual(popup.option("dragEnabled"), false, "dragging is disabled");
+});
+
+
 QUnit.module("keyboard navigation", moduleConfig);
 
 QUnit.testInActiveWindow("first focusable element inside of content should get focused after tab pressing", function(assert) {
@@ -340,3 +351,17 @@ QUnit.testInActiveWindow("input should get focused when shift+tab pressed on fir
     assert.ok(event.isDefaultPrevented(), "prevent default for focusing it's own input but not an input of the previous editor on the page");
 });
 
+QUnit.test("inner input should be focused after popup opening", function(assert) {
+    var inputFocusedHandler = sinon.stub(),
+        $input = $("<input>", { id: "input1", type: "text" }).on("focus", inputFocusedHandler),
+        instance = new DropDownBox(this.$element, {
+            focusStateEnabled: true,
+            contentTemplate: function(component, $content) {
+                $content.append($input);
+            }
+        });
+
+    instance.open();
+
+    assert.ok(inputFocusedHandler.callCount, 1, "input get focused");
+});

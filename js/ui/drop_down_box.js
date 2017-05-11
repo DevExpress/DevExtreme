@@ -225,6 +225,7 @@ var DropDownBox = DropDownEditor.inherit({
             width: this.element().outerWidth(),
             height: "auto",
             tabIndex: -1,
+            dragEnabled: false,
             focusStateEnabled: this.option("focusStateEnabled"),
             onPositioned: null,
             maxHeight: this._getMaxHeight.bind(this)
@@ -238,6 +239,12 @@ var DropDownBox = DropDownEditor.inherit({
             maxHeight = windowHeight - offset.top - $element.outerHeight();
 
         return maxHeight * 0.9;
+    },
+
+    _popupShownHandler: function() {
+        this.callBase();
+        var $firstElement = this._getTabbableElements().first();
+        $firstElement.focus();
     },
 
     _popupOptionChanged: function(args) {
