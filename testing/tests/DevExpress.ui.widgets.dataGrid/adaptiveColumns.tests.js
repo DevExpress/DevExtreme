@@ -1272,6 +1272,30 @@ QUnit.test("Cell of master detail is not hidden when first column of data grid i
     assert.equal($(".dx-master-detail-row .dx-master-detail-cell.dx-datagrid-hidden-column").length, 0, "master detail cell is not hidden");
 });
 
+QUnit.test("Adaptive command column should be shown when columns contains banded columns", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(200);
+    this.columns = [
+        { dataField: 'firstName', index: 1 },
+        { dataField: 'lastName', index: 0 },
+        { caption: "band", columns: [{ dataField: "band", index: 2 }] }
+    ];
+
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", band: "test banded column 1" },
+        { firstName: 'Super', lastName: "Star", band: "test banded column 2" }
+    ];
+
+    setupDataGrid(this);
+
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-data-row .dx-command-adaptive:not(.dx-datagrid-hidden-column)").length, 2, "the adaptive column is shown");
+});
+
 QUnit.module("API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
