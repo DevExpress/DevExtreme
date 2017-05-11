@@ -196,15 +196,19 @@ var EditingController = modules.ViewController.inherit((function() {
 
         getFirstEditableColumnIndex: function() {
             var columnsController = this.getController("columns"),
-                visibleColumns = columnsController.getVisibleColumns(),
                 columnIndex;
 
-            $.each(visibleColumns, function(index, column) {
-                if(column.allowEditing) {
-                    columnIndex = index;
-                    return false;
-                }
-            });
+            if(getEditMode(this) === EDIT_MODE_FORM && this._firstFormItem) {
+                columnIndex = this._firstFormItem.column.index;
+            } else {
+                var visibleColumns = columnsController.getVisibleColumns();
+                $.each(visibleColumns, function(index, column) {
+                    if(column.allowEditing) {
+                        columnIndex = index;
+                        return false;
+                    }
+                });
+            }
 
             return columnIndex;
         },
@@ -1289,6 +1293,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     });
                 }
 
+                that._firstFormItem = undefined;
+
                 that._createComponent($("<div>").appendTo($container), Form, extend({ scrollingEnabled: isScrollingEnabled }, editFormOptions, {
                     items: items,
                     formID: "dx-" + new Guid(),
@@ -1302,6 +1308,11 @@ var EditingController = modules.ViewController.inherit((function() {
                             item.column = column;
                             if(column.formItem) {
                                 extend(item, column.formItem);
+                            }
+
+                            var itemVisible = commonUtils.isDefined(item.visible) ? item.visible : true;
+                            if(!that._firstFormItem && itemVisible) {
+                                that._firstFormItem = item;
                             }
                         }
                         userCustomizeItem && userCustomizeItem.call(this, item);
