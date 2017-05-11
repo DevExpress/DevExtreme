@@ -7,7 +7,7 @@
   "bugs": "https://www.devexpress.com/support/",
   "author": "Developer Express Inc.",
   "repository": "https://github.com/DevExpress/DevExtreme",
-  "license": "https://js.devexpress.com/Licensing/",
+  "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "jszip": "^2.0.0 || ^3.0.0"
   },
