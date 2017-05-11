@@ -247,15 +247,16 @@ var getDatesByRecurrence = function(options) {
 
         getDatesByCount(dateRules, new Date(recurrenceStartDate), rule)
             .forEach(function(currentDate, i) {
-
-                if(!iterationResult[iteration]) {
-                    iterationResult[iteration] = [];
-                }
-                if(!dateIsRecurrenceException(currentDate, options.exception)) {
-                    if(currentDate.getTime() >= recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > options.min.getTime()) {
-                        if(checkDateByRule(currentDate, [dateRules[i]], rule["wkst"])) {
-                            iterationResult[iteration].push(currentDate);
-                            iteration++;
+                if(currentDate.getTime() < options.max.getTime()) {
+                    if(!iterationResult[iteration]) {
+                        iterationResult[iteration] = [];
+                    }
+                    if(!dateIsRecurrenceException(currentDate, options.exception)) {
+                        if(currentDate.getTime() >= recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > options.min.getTime()) {
+                            if(checkDateByRule(currentDate, [dateRules[i]], rule["wkst"])) {
+                                iterationResult[iteration].push(currentDate);
+                                iteration++;
+                            }
                         }
                     }
                 }
