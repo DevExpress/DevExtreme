@@ -74,14 +74,14 @@ var fakeFile1 = {
 
 var getNewFile = function() {
     var randomSize = Math.round(Math.random() * 10000),
-        randomId = Math.round(Math.random() * 10000)
+        randomId = Math.round(Math.random() * 10000);
 
     return {
         name: "fakefile" + randomId,
         size: randomSize,
         type: "image/jpeg",
         lastModifiedDate: $.now()
-    }
+    };
 };
 
 
