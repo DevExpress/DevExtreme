@@ -6,7 +6,6 @@ var $ = require("jquery"),
     groupingCore = require("./ui.data_grid.grouping.core"),
     createGroupFilter = groupingCore.createGroupFilter,
     createOffsetFilter = groupingCore.createOffsetFilter,
-    dataQuery = require("../../data/query"),
     errors = require("../widget/ui.errors"),
     dataErrors = require("../../data/errors").errors,
     when = require("../../integration/jquery/deferred").when;
@@ -310,10 +309,11 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
 
         when(expandedInfo.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions)).done(function(items, extra) {
             $.each(expandedInfo.items, function(index, item) {
-                dataQuery(items).filter(expandedFilters[index]).enumerate().done(function(expandedItems) {
-                    applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);
-                    item.items = expandedItems;
-                });
+                var itemCount = item.count - (index === 0 && loadOptions.skip || 0),
+                    expandedItems = items.splice(0, itemCount);
+
+                applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);
+                item.items = expandedItems;
             });
             options.data.resolve(data);
         }).fail(options.data.reject);
