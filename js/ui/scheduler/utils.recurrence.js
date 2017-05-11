@@ -243,7 +243,23 @@ var getDatesByRecurrence = function(options) {
     var duration = options.end ? options.end.getTime() - options.start.getTime() : toMs("day");
 
     if(dateRules.length && rule.count) {
-        getDatesByCount(dateRules, new Date(recurrenceStartDate), rule);
+        var iteration = 0;
+
+        getDatesByCount(dateRules, new Date(recurrenceStartDate), rule)
+            .forEach(function(currentDate, i) {
+
+                if(!iterationResult[iteration]) {
+                    iterationResult[iteration] = [];
+                }
+                if(!dateIsRecurrenceException(currentDate, options.exception)) {
+                    if(currentDate.getTime() >= recurrenceStartDate.getTime() && (currentDate.getTime() + duration) > options.min.getTime()) {
+                        if(checkDateByRule(currentDate, [dateRules[i]], rule["wkst"])) {
+                            iterationResult[iteration].push(currentDate);
+                            iteration++;
+                        }
+                    }
+                }
+            });
     } else {
         getDatesByRules(dateRules, new Date(recurrenceStartDate), rule)
             .forEach(function(currentDate, i) {
@@ -685,8 +701,8 @@ var getDatesByCount = function(dateRules, startDate, rule) {
             result.push(dates[i]);
         }
         iteration++;
-        //date.setDate(date.getDate() + 7);
-        date = incrementDate(date, startDate, rule, iteration);
+        date.setDate(date.getDate() + 7);
+       // date = incrementDate(date, startDate, rule, iteration);
     }
 
     return result;
