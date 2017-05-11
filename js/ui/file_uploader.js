@@ -484,8 +484,11 @@ var FileUploader = Editor.inherit({
     },
 
     _changeValue: function(value) {
-        var files = this._shouldFileListBeExtended() ? this.option("value").slice() : [],
+        var files = this._shouldFileListBeExtended() ? this.option("value").slice() : [];
+
+        if(this.option("uploadMode") !== "instantly") {
             value = this._removeDuplicates(files, value);
+        }
 
         this.option("value", files.concat(value));
     },
