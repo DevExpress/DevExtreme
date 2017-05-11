@@ -701,8 +701,7 @@ var getDatesByCount = function(dateRules, startDate, rule) {
             result.push(dates[i]);
         }
         iteration++;
-        date.setDate(date.getDate() + 7);
-       // date = incrementDate(date, startDate, rule, iteration);
+        date = dateUtils.addInterval(date, rule.interval);
     }
 
     return result;
