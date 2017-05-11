@@ -72,6 +72,18 @@ var fakeFile1 = {
     lastModifiedDate: $.now()
 };
 
+var getNewFile = function() {
+    var randomSize = Math.round(Math.random() * 10000),
+        randomId = Math.round(Math.random() * 10000)
+
+    return {
+        name: "fakefile" + randomId,
+        size: randomSize,
+        type: "image/jpeg",
+        lastModifiedDate: $.now()
+    }
+};
+
 
 var moduleConfig = {
     beforeEach: function() {
@@ -362,8 +374,8 @@ QUnit.test("files count in list is correct if the 'extendSelection' option is tr
         multiple: true
     });
 
-    simulateFileChoose($fileUploader, [fakeFile, fakeFile]);
-    simulateFileChoose($fileUploader, [fakeFile, fakeFile, fakeFile]);
+    simulateFileChoose($fileUploader, [getNewFile(), getNewFile()]);
+    simulateFileChoose($fileUploader, [getNewFile(), getNewFile(), getNewFile()]);
 
     assert.equal($fileUploader.find("." + FILEUPLOADER_FILE_CLASS).length, 5, "files count is correct");
 });
