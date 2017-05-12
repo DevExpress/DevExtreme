@@ -141,3 +141,22 @@ QUnit.test("item should not leak watchers", function(assert) {
     scope.$apply(function() { scope.items = []; });
     assert.equal(scope.$$watchers.length, startWatchersCount, "watchers cleared");
 });
+
+QUnit.test("onItemRendered event should have a completely rendered itemElement", function(assert) {
+    $("<div></div>")
+        .attr("dx-test-collection", "{ bindingOptions: { items: 'items', onItemRendered: 'onItemRendered' }}")
+        .appendTo(this.$controller);
+
+    var itemElementText;
+
+    this.testApp.controller("my-controller", function($scope) {
+        $scope.items = [{ text: "test" }];
+        $scope.onItemRendered = function(e) {
+            itemElementText = e.itemElement.text();
+        };
+    });
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    assert.equal(itemElementText, "test", "itemElement has a rendered text on 'itemRendered' event");
+});

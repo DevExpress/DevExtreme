@@ -396,6 +396,10 @@ var ComponentBuilder = Class.inherit({
                     skipCallback = false;
                 }, options.deep);
 
+                if(!skipCallback) {
+                    callback(fn());
+                }
+
                 return disposeWatcher;
             },
             templates: {
