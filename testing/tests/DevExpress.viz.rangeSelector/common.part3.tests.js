@@ -1401,14 +1401,25 @@ QUnit.test("custom backgroundColor", function(assert) {
 
 QUnit.module("API", commons.environment);
 
-QUnit.test("render", function(assert) {
+QUnit.test("Render. Container size is changed - redraw widget", function(assert) {
     var spy = sinon.spy(),
         widget = this.createWidget({ onDrawn: spy });
 
     widget.element().height(widget.element().height() + 1);
-    widget.render(true);
+    spy.reset();
+    widget.render();
 
-    assert.strictEqual(spy.callCount, 3);
+    assert.strictEqual(spy.callCount, 1);
+});
+
+QUnit.test("Render. Container size is not changed - do not redraw widget", function(assert) {
+    var spy = sinon.spy(),
+        widget = this.createWidget({ onDrawn: spy });
+
+    spy.reset();
+    widget.render();
+
+    assert.strictEqual(spy.callCount, 0);
 });
 
 QUnit.module("dataSource integration", commons.environment);

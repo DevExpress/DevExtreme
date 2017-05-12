@@ -1010,12 +1010,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     _setContentSize: function() {
         this.__isResizing = this._changes.count() === 2;
         this.callBase.apply(this, arguments);
-    },
-
-    render: function(isResizing) {
-        this.__isResizing = isResizing;
-        this.callBase.apply(this, arguments);
-        this._requestChange(["MOSTLY_TOTAL"]);
     }
 });
 
