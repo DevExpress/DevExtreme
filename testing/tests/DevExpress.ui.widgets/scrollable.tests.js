@@ -4416,11 +4416,11 @@ if(support.styleProp("touchAction")) {
 
         $content.width(50).height(100);
         scrollable.update();
-        assert.equal($container.css("touchAction"), "none");
+        assert.equal($container.css("touchAction"), "pan-x");
 
         $content.width(100).height(50);
         scrollable.update();
-        assert.equal($container.css("touchAction"), "none");
+        assert.equal($container.css("touchAction"), "pan-y");
 
         $content.width(50).height(50);
         scrollable.update();
