@@ -292,7 +292,7 @@ var getDatesByRecurrence = function(options) {
     return result;
 };
 
-var checker = function(currentDate, i, config) {
+var checkDate = function(currentDate, i, config) {
     if(!dateIsRecurrenceException(currentDate, config.exception)) {
         if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + config.duration) > config.min.getTime()) {
             if(checkDateByRule(currentDate, [config.dateRules[i]], config.rule["wkst"])) {
@@ -309,7 +309,7 @@ var pushToResult = function(iteration, iterationResult, currentDate, i, config) 
         iterationResult[iteration] = [];
     }
 
-    if(checker(currentDate, i, config)) {
+    if(checkDate(currentDate, i, config)) {
         iterationResult[iteration].push(currentDate);
     }
 
