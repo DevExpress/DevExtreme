@@ -1013,8 +1013,10 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemEventHandlerImpl: function(initiator, action, actionArgs) {
-        var $itemElement = this._closestItemElement($(initiator));
-        return action($.extend(this._extendActionArgs($itemElement), actionArgs));
+        var $itemElement = this._closestItemElement($(initiator)),
+            args = $.extend({}, actionArgs);
+
+        return action($.extend(actionArgs, this._extendActionArgs($itemElement), args));
     },
 
     _extendActionArgs: function($itemElement) {
