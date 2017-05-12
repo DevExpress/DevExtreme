@@ -123,6 +123,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:jQuery
             * @type_function_param1_field6 itemIndex:number | object
+            * @type_function_param1_field7 cancel:boolean | Promise
             * @type_function_return Promise
             * @action
             * @hidden
@@ -596,7 +597,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         $itemElement.data(ITEM_DELETING_DATA_KEY, true);
 
         var deferred = $.Deferred(),
-            deletePromise = this._itemEventHandler($itemElement, "onItemDeleting", {}, { excludeValidators: ["disabled", "readOnly"] });
+            deletingActionArgs = { cancel: false },
+            deletePromise = this._itemEventHandler($itemElement, "onItemDeleting", deletingActionArgs, { excludeValidators: ["disabled", "readOnly"] });
 
         when(deletePromise).always((function(value) {
             var deletePromiseExists = !deletePromise,
@@ -605,9 +607,14 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
                 shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
 
-            $itemElement.data(ITEM_DELETING_DATA_KEY, false);
-
-            shouldDelete ? deferred.resolve() : deferred.reject();
+            when(deletingActionArgs.cancel)
+                .always(function() {
+                    $itemElement.data(ITEM_DELETING_DATA_KEY, false);
+                })
+                .done(function(cancel) {
+                    shouldDelete && !cancel ? deferred.resolve() : deferred.reject();
+                })
+                .fail(deferred.reject);
         }).bind(this));
 
         return deferred.promise();
