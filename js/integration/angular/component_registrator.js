@@ -391,6 +391,7 @@ var ComponentBuilder = Class.inherit({
             watchMethod: function(fn, callback, options) {
                 options = options || {};
 
+                var immediateValue;
                 var skipCallback = options.skipImmediate;
                 var disposeWatcher = scope.$watch(function() {
                     var value = fn();
@@ -399,11 +400,17 @@ var ComponentBuilder = Class.inherit({
                     }
                     return value;
                 }, function(newValue) {
-                    if(!skipCallback) {
+                    var isSameValue = immediateValue === newValue;
+                    if(!skipCallback && (!isSameValue || isSameValue && options.deep)) {
                         callback(newValue);
                     }
                     skipCallback = false;
                 }, options.deep);
+
+                if(!skipCallback) {
+                    immediateValue = fn();
+                    callback(immediateValue);
+                }
 
                 return disposeWatcher;
             },
