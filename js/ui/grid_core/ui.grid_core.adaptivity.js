@@ -11,7 +11,10 @@ var $ = require("../../core/renderer"),
     Form = require("../form"),
     gridCoreUtils = require("./ui.grid_core.utils"),
 
-    COLUMN_VIEWS = ["columnHeadersView", "rowsView", "footerView"],
+    COLUMN_HEADERS_VIEW = "columnHeadersView",
+    ROWS_VIEW = "rowsView",
+    FOOTER_VIEW = "footerView",
+    COLUMN_VIEWS = [COLUMN_HEADERS_VIEW, ROWS_VIEW, FOOTER_VIEW],
 
     ADAPTIVE_NAMESPACE = "dxDataGridAdaptivity",
     HIDDEN_COLUMNS_WIDTH = "adaptiveHidden",
@@ -283,19 +286,26 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     _addCssClassToColumn: function(cssClassName, visibleIndex) {
         var i,
             view,
+            viewName,
             rowsCount,
             rowIndex,
             $cellElement,
+            currentVisibleIndex,
+            column = this._columnsController.getVisibleColumns()[visibleIndex],
             editFormRowIndex = this._editingController && this._editingController.getEditFormRowIndex();
 
         for(i = 0; i < COLUMN_VIEWS.length; i++) {
-            view = this.getView(COLUMN_VIEWS[i]);
-            if(view && view.isVisible()) {
+            viewName = COLUMN_VIEWS[i];
+            view = this.getView(viewName);
+            if(view && view.isVisible() && column) {
                 rowsCount = view.getRowsCount();
                 for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-                    if(rowIndex !== editFormRowIndex) {
-                        $cellElement = view.getCellElements(rowIndex).eq(visibleIndex);
-                        this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
+                    if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
+                        currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
+                        if(currentVisibleIndex >= 0) {
+                            $cellElement = view.getCellElements(rowIndex).eq(currentVisibleIndex);
+                            this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
+                        }
                     }
                 }
             }

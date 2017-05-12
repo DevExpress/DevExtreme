@@ -1113,6 +1113,32 @@ QUnit.test("Apply the css styles for a hidden columns inside the column headers 
     assert.ok($cells.eq(1).hasClass("dx-datagrid-hidden-column"));
 });
 
+//T507252
+QUnit.test("Apply the css styles for a hidden columns inside the column headers view with bands", function(assert) {
+    //arrange, act
+    $(".dx-datagrid").width(200);
+    this.options = { showColumnHeaders: true };
+    this.columns = [{ dataField: "test", hidingPriority: 0 }, { caption: "Band", columns: ["firstName", { dataField: "lastName", hidingPriority: 1 }] }];
+
+    setupDataGrid(this);
+    this.columnHeadersView.render($("#container"));
+    this.rowsView.render($("#container2"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    var $cols = $(".dx-datagrid-headers table").eq(0).find("col"),
+        $headerRows = $(".dx-datagrid-headers .dx-header-row");
+
+    assert.ok(checkAdaptiveWidth($cols.get(0).style.width), "first column is hidden");
+    assert.notOk(checkAdaptiveWidth($cols.get(1).style.width), "second column is not hidden");
+    assert.ok(checkAdaptiveWidth($cols.get(2).style.width), "third column is hidden");
+    assert.equal($headerRows.length, 2, "two header rows");
+    assert.ok($headerRows.eq(0).children().eq(0).hasClass("dx-datagrid-hidden-column"), "first cell in first header row is hidden");
+    assert.ok($headerRows.eq(1).children().eq(1).hasClass("dx-datagrid-hidden-column"), "second cell in second header row is hidden");
+    assert.equal($headerRows.find(".dx-datagrid-hidden-column").length, 2, "only two cells in header rows are hidden");
+});
+
 QUnit.test("Remove the css styles from a hidden columns inside the column headers view", function(assert) {
     //arrange
     $(".dx-datagrid").width(200);
