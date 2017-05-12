@@ -692,10 +692,9 @@ var getDatesByRules = function(dateRules, startDate, rule) {
 
 var getDatesByCount = function(dateRules, startDate, rule) {
     var result = [],
-        count = rule.count || 1,
+        count = rule.count,
         counter = 0,
-        date = new Date(startDate),
-        iteration = 0;
+        date = new Date(startDate);
 
     while(counter < count) {
         var dates = getDatesByRules(dateRules, date, rule),
@@ -711,7 +710,6 @@ var getDatesByCount = function(dateRules, startDate, rule) {
         for(var i = 0; i < dates.length; i++) {
             result.push(dates[i]);
         }
-        iteration++;
         date = dateUtils.addInterval(date, rule.interval);
     }
 
