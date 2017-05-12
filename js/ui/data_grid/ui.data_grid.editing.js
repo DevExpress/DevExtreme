@@ -1055,9 +1055,11 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
 
                 if(options.column.showEditorAlways && getEditMode(that) === DATAGRID_EDIT_MODE_CELL && options.row && !options.row.inserted) {
                     that.saveEditData().always(function() {
-                        that._editColumnIndex = options.columnIndex;
-                        that._editRowIndex = options.row.rowIndex + that._dataController.getRowIndexOffset();
-                        that._focusEditingCell();
+                        if(that._editRowIndex < 0) {
+                            that._editColumnIndex = options.columnIndex;
+                            that._editRowIndex = options.row.rowIndex + that._dataController.getRowIndexOffset();
+                            that._focusEditingCell();
+                        }
                     });
                 } else if(options.row && (forceUpdateRow || options.column.setCellValue !== options.column.defaultSetCellValue)) {
                     that._dataController.updateItems({
