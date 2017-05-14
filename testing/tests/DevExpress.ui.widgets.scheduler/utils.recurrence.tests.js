@@ -76,6 +76,12 @@ QUnit.test('getDatesByRecurrence should handle strings with COUNT', function(ass
     assert.deepEqual(dates, [new Date(2015, 0, 1), new Date(2015, 0, 4)], 'date are right');
 });
 
+QUnit.test('getDatesByRecurrence should handle strings with COUNT without range', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=4', start: new Date(2015, 0, 1), min: new Date(2015, 0, 1), max: new Date(2015, 0, 21) });
+
+    assert.deepEqual(dates, [new Date(2015, 0, 2), new Date(2015, 0, 5), new Date(2015, 0, 7), new Date(2015, 0, 9)], 'date are right');
+});
+
 QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYDAY', function(assert) {
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10', start: new Date(2015, 0, 1), min: new Date(2015, 0, 1), max: new Date(2015, 0, 20) });
 

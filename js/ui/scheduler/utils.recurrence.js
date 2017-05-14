@@ -253,11 +253,11 @@ var getDatesByRecurrence = function(options) {
     if(dateRules.length && rule.count) {
         var iteration = 0;
 
-        getDatesByCount(dateRules, new Date(recurrenceStartDate), rule)
+        getDatesByCount(dateRules, new Date(recurrenceStartDate), new Date(recurrenceStartDate), rule)
             .forEach(function(currentDate, i) {
                 if(currentDate.getTime() < options.max.getTime()) {
                     iteration++;
-                    iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config);
+                    iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config, true);
                 }
             });
     } else {
@@ -292,24 +292,22 @@ var getDatesByRecurrence = function(options) {
     return result;
 };
 
-var checkDate = function(currentDate, i, config) {
+var checkDate = function(currentDate, i, config, verifiedField) {
     if(!dateIsRecurrenceException(currentDate, config.exception)) {
         if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + config.duration) > config.min.getTime()) {
-            if(checkDateByRule(currentDate, [config.dateRules[i]], config.rule["wkst"])) {
-                return true;
-            }
+            return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule["wkst"]);
         }
     }
 
     return false;
 };
 
-var pushToResult = function(iteration, iterationResult, currentDate, i, config) {
+var pushToResult = function(iteration, iterationResult, currentDate, i, config, verifiedField) {
     if(!iterationResult[iteration]) {
         iterationResult[iteration] = [];
     }
 
-    if(checkDate(currentDate, i, config)) {
+    if(checkDate(currentDate, i, config, verifiedField)) {
         iterationResult[iteration].push(currentDate);
     }
 
@@ -690,25 +688,32 @@ var getDatesByRules = function(dateRules, startDate, rule) {
     return result;
 };
 
-var getDatesByCount = function(dateRules, startDate, rule) {
+var getDatesByCount = function(dateRules, startDate, recurrenceStartDate, rule) {
     var result = [],
         count = rule.count,
         counter = 0,
         date = new Date(startDate);
 
     while(counter < count) {
-        var dates = getDatesByRules(dateRules, date, rule),
-            length = dates.length;
+        var dates = getDatesByRules(dateRules, date, rule);
+
+        var checkedDates = [];
+        for(var i = 0; i < dates.length; i++) {
+            if(dates[i].getTime() >= recurrenceStartDate.getTime()) {
+                checkedDates.push(dates[i]);
+            }
+        }
+        var length = checkedDates.length;
 
         counter = counter + length;
 
         var delCount = counter - count;
         if(counter > count) {
-            dates.splice(length - delCount, delCount);
+            checkedDates.splice(length - delCount, delCount);
         }
 
-        for(var i = 0; i < dates.length; i++) {
-            result.push(dates[i]);
+        for(i = 0; i < checkedDates.length; i++) {
+            result.push(checkedDates[i]);
         }
         date = dateUtils.addInterval(date, rule.interval);
     }
