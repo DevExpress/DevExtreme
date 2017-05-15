@@ -891,8 +891,7 @@ var SimulatedStrategy = Class.inherit({
         return when(result, commonUtils.deferUpdate(function() {
             var allowedDirections = that._allowedDirections();
             commonUtils.deferRender(function() {
-                var touchDirection = "";
-                touchDirection = allowedDirections.vertical ? "pan-x" : touchDirection;
+                var touchDirection = allowedDirections.vertical ? "pan-x" : "";
                 touchDirection = allowedDirections.horizontal ? "pan-y" : touchDirection;
                 touchDirection = allowedDirections.vertical && allowedDirections.horizontal ? "none" : touchDirection;
                 that._$container.css("touchAction", touchDirection);
