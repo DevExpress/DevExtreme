@@ -292,16 +292,6 @@ var getDatesByRecurrence = function(options) {
     return result;
 };
 
-var checkDate = function(currentDate, i, config, verifiedField) {
-    if(!dateIsRecurrenceException(currentDate, config.exception)) {
-        if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + config.duration) > config.min.getTime()) {
-            return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule["wkst"]);
-        }
-    }
-
-    return false;
-};
-
 var pushToResult = function(iteration, iterationResult, currentDate, i, config, verifiedField) {
     if(!iterationResult[iteration]) {
         iterationResult[iteration] = [];
@@ -312,6 +302,16 @@ var pushToResult = function(iteration, iterationResult, currentDate, i, config, 
     }
 
     return iterationResult;
+};
+
+var checkDate = function(currentDate, i, config, verifiedField) {
+    if(!dateIsRecurrenceException(currentDate, config.exception)) {
+        if(currentDate.getTime() >= config.recurrenceStartDate.getTime() && (currentDate.getTime() + config.duration) > config.min.getTime()) {
+            return verifiedField || checkDateByRule(currentDate, [config.dateRules[i]], config.rule["wkst"]);
+        }
+    }
+
+    return false;
 };
 
 var filterDatesBySetPos = function(dates, bySetPos) {
