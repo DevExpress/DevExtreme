@@ -22,11 +22,15 @@ childProcess.spawn(
 waitForRunner();
 
 function waitForRunner() {
+    var timestamp = Date.now();
     http.request({ port: PORT }, res => openBrowser())
-        .on("error", e => {
-            console.log("waiting...");
-            waitForRunner();
-        })
+        .on("error", e => setTimeout(
+            function() {
+                console.log("waiting...");
+                waitForRunner();
+            },
+            Math.max(0, 300 - Date.now() + timestamp)
+        ))
         .end();
 }
 
