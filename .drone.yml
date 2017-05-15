@@ -4,12 +4,6 @@
 
 pipeline:
 
-  cache-restore:
-    image: private/blob-cache-plugin
-    restore: true
-    when:
-      event: [ push, pull_request, tag ]
-
   clone:
     image: plugins/git
 
@@ -17,12 +11,6 @@ pipeline:
     image: devexpress/devextreme-build:17_1
     pull: true
     commands: ./docker-ci.sh
-
-  cache-rebuild:
-    image: private/blob-cache-plugin
-    rebuild: true
-    when:
-      event: [ push ]
 
 matrix:
   include:
