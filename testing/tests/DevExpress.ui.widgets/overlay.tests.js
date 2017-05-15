@@ -1334,6 +1334,18 @@ QUnit.test("overlay should not be hidden after click inside was present", functi
     assert.equal(overlay.option("visible"), true, "overlay is not hidden");
 });
 
+//T494814
+QUnit.test("overlay should not be hidden after click in detached element (Angular NgZone)", function(assert) {
+    var overlay = $("#overlay").dxOverlay({
+        closeOnOutsideClick: true,
+        visible: true
+    })
+    .dxOverlay("instance");
+
+    $(document).trigger($.Event("dxpointerdown", { target: document.createElement("div") }));
+    assert.equal(overlay.option("visible"), true, "overlay is not hidden");
+});
+
 QUnit.test("overlay should not propagate events after click outside was present", function(assert) {
     $("#overlay").dxOverlay({
         closeOnOutsideClick: true,
