@@ -1318,6 +1318,51 @@ var runTests = function() {
         instance.deleteItem(1);
     });
 
+    QUnit.test("item should not be deleted if 'cancel' flag in onItemDeleting is true", function(assert) {
+        var instance = new TestComponent($("#cmp"), {
+            items: [0],
+            onItemDeleting: function(e) {
+                e.cancel = true;
+            }
+        });
+
+        var $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        $item = instance.itemElements().eq(0);
+        assert.equal($item.length, 1, "item not removed");
+    });
+
+    QUnit.test("item should not be deleted if 'cancel' flag in onItemDeleting is resolved with true", function(assert) {
+        var instance = new TestComponent($("#cmp"), {
+            items: [0],
+            onItemDeleting: function(e) {
+                e.cancel = $.Deferred().resolve(true);
+            }
+        });
+
+        var $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        $item = instance.itemElements().eq(0);
+        assert.equal($item.length, 1, "item not removed");
+    });
+
+    QUnit.test("item should be deleted if 'cancel' flag in onItemDeleting is resolved", function(assert) {
+        var instance = new TestComponent($("#cmp"), {
+            dataSource: [0],
+            onItemDeleting: function(e) {
+                e.cancel = $.Deferred().resolve();
+            }
+        });
+
+        var $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        $item = instance.itemElements().eq(0);
+        assert.equal($item.length, 0, "item removed");
+    });
+
 
     QUnit.module("deleting with confirmation");
 
