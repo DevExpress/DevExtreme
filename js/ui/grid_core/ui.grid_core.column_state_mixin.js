@@ -38,7 +38,7 @@ module.exports = {
     _getColumnAlignment: function(alignment, rtlEnabled) {
         rtlEnabled = rtlEnabled || this.option("rtlEnabled");
 
-        return alignment !== "center" ? alignment : getDefaultAlignment(rtlEnabled);
+        return alignment && alignment !== "center" ? alignment : getDefaultAlignment(rtlEnabled);
     },
 
     _createIndicatorContainer: function(options, ignoreIndicatorAlignment) {
