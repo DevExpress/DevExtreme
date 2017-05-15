@@ -1816,6 +1816,29 @@ QUnit.test("Header without sorting and headerFilter - alignment cell content", f
     assert.notOk($headerCellContent.eq(2).hasClass("dx-text-content-alignment-right"), "third cell content has margin left");
 });
 
+//T497346
+QUnit.test("Header should have alignment if there's no dataSource and sorting is enabled", function(assert) {
+    //arrange
+    var $headerCellContent,
+        $testElement = $("#container");
+
+    this.options.sorting = { mode: "single" };
+    $.extend(this.columns, [
+        { caption: 'Column 1', allowSorting: true },
+        { caption: 'Column 2', allowSorting: true },
+        { caption: 'Column 3', allowSorting: true }
+    ]);
+
+    //act
+    this.columnHeadersView.render($testElement);
+
+    //assert
+    $headerCellContent = $testElement.find(".dx-header-row .dx-datagrid-text-content");
+    assert.ok($headerCellContent.eq(0).hasClass("dx-text-content-alignment-left"), "alignment is left");
+    assert.ok($headerCellContent.eq(1).hasClass("dx-text-content-alignment-left"), "alignment is left");
+    assert.ok($headerCellContent.eq(2).hasClass("dx-text-content-alignment-left"), "alignment is left");
+});
+
 QUnit.module('Headers with grouping', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

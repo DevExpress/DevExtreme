@@ -96,7 +96,7 @@ exports.columnStateMixin = {
     _getColumnAlignment: function(alignment, rtlEnabled) {
         rtlEnabled = rtlEnabled || this.option("rtlEnabled");
 
-        return alignment !== "center" ? alignment : commonUtils.getDefaultAlignment(rtlEnabled);
+        return alignment && alignment !== "center" ? alignment : commonUtils.getDefaultAlignment(rtlEnabled);
     },
 
     _createIndicatorContainer: function(options, ignoreIndicatorAlignment) {
