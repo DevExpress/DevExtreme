@@ -159,6 +159,7 @@ var DropDownBox = DropDownEditor.inherit({
         }).bind(this));
 
         when.apply(this, itemLoadDeferreds).done((function() {
+            this.option("displayValue", values);
             callBase(values.length && values);
         }).bind(this))
             .fail(callBase);
@@ -269,6 +270,7 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _optionChanged: function(args) {
+        this._dataExpressionOptionChanged(args);
         switch(args.name) {
             case "width":
                 this.callBase(args);
@@ -276,6 +278,12 @@ var DropDownBox = DropDownEditor.inherit({
                 break;
             case "dropDownOptions":
                 this._popupOptionChanged(args);
+                break;
+            case "dataSource":
+                this._renderInputValue();
+                break;
+            case "displayValue":
+                this.option("text", args.value);
                 break;
             default:
                 this.callBase(args);
