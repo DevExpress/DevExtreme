@@ -462,7 +462,9 @@ var PARSERS = {
 
         var date = new Date(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]));
 
-        if(parts[2].length < 4) date.setFullYear(parts[2]);
+        if(parts[2].length < 3) {
+            date.setFullYear(parts[2], Number(parts[0]) - 1, Number(parts[1]));
+        }
 
         return date;
     },
