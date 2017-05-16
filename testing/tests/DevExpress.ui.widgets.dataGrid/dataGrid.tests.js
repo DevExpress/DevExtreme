@@ -1362,6 +1362,8 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         headersCols,
         resizeController;
 
+    sinon.spy(instance, "updateDimensions");
+
     //act
     resizeController = instance.getController("columnsResizer");
     resizeController._isResizing = true;
@@ -1373,12 +1375,26 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         jQueryEvent: {
             data: resizeController,
             type: "mousemove",
+            pageX: startPosition - 10,
+            preventDefault: commonUtils.noop
+        }
+    });
+    resizeController._moveSeparator({
+        jQueryEvent: {
+            data: resizeController,
+            type: "mousemove",
             pageX: startPosition - 20,
             preventDefault: commonUtils.noop
         }
     });
+    resizeController._endResizing({
+        jQueryEvent: {
+            data: resizeController
+        }
+    });
 
     //assert
+    assert.strictEqual(instance.updateDimensions.callCount, 1, "updateDimensions called once T514559");
     assert.strictEqual(instance.element().children().width(), 280);
     assert.strictEqual(instance.columnOption(0, "width"), 80);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
@@ -1433,6 +1449,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             type: "mousemove",
             pageX: startPosition - 60,
             preventDefault: commonUtils.noop
+        }
+    });
+    resizeController._endResizing({
+        jQueryEvent: {
+            data: resizeController
         }
     });
 
@@ -1493,6 +1514,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             preventDefault: commonUtils.noop
         }
     });
+    resizeController._endResizing({
+        jQueryEvent: {
+            data: resizeController
+        }
+    });
 
     instance.updateDimensions();
 
@@ -1542,6 +1568,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             type: "mousemove",
             pageX: startPosition - 20,
             preventDefault: commonUtils.noop
+        }
+    });
+    resizeController._endResizing({
+        jQueryEvent: {
+            data: resizeController
         }
     });
 
