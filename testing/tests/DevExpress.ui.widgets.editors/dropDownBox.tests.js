@@ -212,6 +212,21 @@ QUnit.test("dropDownBox should work with the slow dataSource", function(assert) 
     assert.equal(instance.option("value"), 2, "value was applied");
 });
 
+QUnit.test("dropDownBox should update display text after dataSource changed", function(assert) {
+    var items = [{ id: 1, name: "item 1" }, { id: 2, name: "item 2" }, { id: 3, name: "item 3" }],
+        instance = new DropDownBox(this.$element, {
+            dataSource: [],
+            displayExpr: "name",
+            valueExpr: "id",
+            value: [2, 3]
+        }),
+        $input = this.$element.find("input");
+
+    instance.option("dataSource", items);
+
+    assert.equal($input.val(), "item 2, item 3", "input text has been updated");
+});
+
 
 QUnit.module("popup options", moduleConfig);
 
