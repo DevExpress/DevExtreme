@@ -124,7 +124,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @type_function_param1_field5 itemElement:jQuery
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 cancel:boolean | Promise
-            * @type_function_return Promise
             * @action
             * @hidden
             */
