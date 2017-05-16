@@ -148,6 +148,64 @@ QUnit.test("root node should have correct key and level", function(assert) {
     assert.strictEqual(rootNode.level, -1, "root node level");
 });
 
+//T514552
+QUnit.test("nodes should not be recreated after expand", function(assert) {
+    //arrange
+    var array = [
+            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
+        ],
+        dataSource = createDataSource(array);
+
+    var nodesInitialized = sinon.stub();
+
+    this.applyOptions({
+        onNodesInitialized: nodesInitialized
+    });
+
+    this.dataController.setDataSource(dataSource);
+
+    dataSource.load();
+    var rootNode = this.getRootNode();
+
+    //act
+    this.expandRow(2);
+
+    //assert
+    assert.strictEqual(nodesInitialized.callCount, 1, "nodesInitialized called once on first load");
+    assert.strictEqual(this.getRootNode(), rootNode, "root node is not changed");
+});
+
+QUnit.test("nodes should be recreated after change sorting", function(assert) {
+    //arrange
+    var array = [
+            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 },
+            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 }
+        ],
+        dataSource = createDataSource(array);
+
+    var nodesInitialized = sinon.stub();
+
+    this.applyOptions({
+        onNodesInitialized: nodesInitialized
+    });
+
+    this.dataController.setDataSource(dataSource);
+
+    dataSource.load();
+    var rootNode = this.getRootNode();
+
+    //act
+    dataSource.sort({ selector: "name", desc: false });
+    dataSource.load();
+
+    //assert
+    assert.strictEqual(nodesInitialized.callCount, 2, "nodesInitialized called after change sorting");
+    assert.notStrictEqual(this.getRootNode(), rootNode, "root node is changed");
+});
+
 QUnit.test("Initialize from dataSource with hierarchical structure", function(assert) {
     //arrange
     var items,
