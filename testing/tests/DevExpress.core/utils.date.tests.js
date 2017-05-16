@@ -30,6 +30,37 @@ QUnit.test('normalizeDateByWeek', function(assert) {
     assert.deepEqual(dateUtils.normalizeDateByWeek(dateOfPrevWeek, date), new Date(2016, 0, 16));
 });
 
+QUnit.module('dateInRange', {
+    beforeEach: function() {
+        this.dateInRange = dateUtils.dateInRange;
+    }
+});
+
+QUnit.test('dateInRange, date is in range', function(assert) {
+    var date = new Date(2016, 0, 15),
+        min = new Date(2016, 0, 12),
+        max = new Date(2016, 0, 17);
+
+    assert.ok(this.dateInRange(date, min, max, "date"));
+});
+
+QUnit.test('dateInRange, date is out of range', function(assert) {
+    var date = new Date(2016, 0, 11),
+        min = new Date(2016, 0, 12),
+        max = new Date(2016, 0, 17);
+
+    assert.notOk(this.dateInRange(date, min, max, "date"));
+});
+
+QUnit.test('dateInRange, year of date is less than 100', function(assert) {
+    var date = new Date(99, 0, 11),
+        min = new Date(1900, 0, 12),
+        max = new Date(2016, 0, 17);
+
+    date.setFullYear(99);
+    assert.notOk(this.dateInRange(date, min, max, "date"));
+});
+
 QUnit.module('DateTime functions', {
     beforeEach: function() {
         this.getDateIntervalByString = dateUtils.getDateIntervalByString;

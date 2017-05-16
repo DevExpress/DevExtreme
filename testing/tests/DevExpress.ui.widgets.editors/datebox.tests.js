@@ -3409,6 +3409,22 @@ QUnit.test("Internal validation shouldn't be reset value if localization return 
     assert.equal(dateBox.option("text"), "abc2/1/2016", "text option shouldn't be reset");
 });
 
+QUnit.test("Validation should be correct when year of the value less than 100", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        min: new Date(2015, 6, 10),
+        max: new Date(2015, 6, 14),
+        value: new Date(2015, 6, 12),
+        valueChangeEvent: "change",
+    }).dxDateBox("instance");
+
+    var $input = dateBox.element().find("." + TEXTEDITOR_INPUT_CLASS);
+    $input.val("1/1/99");
+    $input.change();
+
+    assert.notOk(dateBox.option("isValid"), "datebox is invalid");
+    var validationError = dateBox.option("validationError").message;
+    assert.equal(validationError, "Value is out of range", "validation message is correct");
+});
 
 QUnit.module("DateBox number and string value support", {
     beforeEach: function() {
