@@ -65,7 +65,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             allowFieldDragging: true,
             headerFilter: {
                 width: 252,
-                height: 300,
+                height: 325,
                 texts: {
                     emptyValue: messageLocalization.format("dxDataGrid-headerFilterEmptyValue"),
                     ok: messageLocalization.format("dxDataGrid-headerFilterOK"),
