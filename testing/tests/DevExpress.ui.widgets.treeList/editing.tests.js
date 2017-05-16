@@ -221,12 +221,17 @@ QUnit.test("Insert row", function(assert) {
     assert.notOk(items[1].node.parent.key, "second item hasn't parentKey");
 });
 
-QUnit.test("Add links should be rendered in rows when allowAdding is true", function(assert) {
+QUnit.test("Edit batch - add links should be rendered in rows when allowAdding is true", function(assert) {
     //arrange, act
     var $testElement = $('#treeList');
 
-    this.options.editing.allowAdding = true;
-    this.options.editing.texts = { addRowToNode: "Add" };
+    this.options.editing = {
+        mode: "batch",
+        allowAdding: true,
+        texts: {
+            addRowToNode: "Add"
+        }
+    };
 
     this.setupTreeList();
     this.rowsView.render($testElement);
@@ -566,4 +571,49 @@ QUnit.test("Edit cell when edit mode is 'batch' and multiple selection is enable
     //assert
     $cellElement = $testElement.find("tbody > tr").first().children().first();
     assert.ok(!$cellElement.find(".dx-select-checkbox").length, "hasn't checkbox");
+});
+
+//T514550
+QUnit.test("Edit batch - inserted row should not have add link", function(assert) {
+    //arrange
+    var $commandEditCellElement,
+        $testElement = $('#treeList');
+
+    this.options.editing = {
+        mode: "batch",
+        allowAdding: true
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.addRow();
+
+    //assert
+    $commandEditCellElement = $testElement.find("tbody > .dx-row-inserted").first().find(".dx-command-edit");
+    assert.equal($commandEditCellElement.length, 1, "has command edit cell");
+    assert.equal($commandEditCellElement.find(".dx-link-add").length, 0, "link add isn't rendered");
+});
+
+QUnit.test("Edit batch - removed row should not have add link", function(assert) {
+    //arrange
+    var $commandEditCellElement,
+        $testElement = $('#treeList');
+
+    this.options.editing = {
+        mode: "batch",
+        allowAdding: true
+    };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.deleteRow(0);
+
+    //assert
+    $commandEditCellElement = $testElement.find("tbody > .dx-row-removed").first().find(".dx-command-edit");
+    assert.equal($commandEditCellElement.length, 1, "has command edit cell");
+    assert.equal($commandEditCellElement.find(".dx-link-add").length, 0, "link add isn't rendered");
 });
