@@ -754,9 +754,7 @@ dataGridCore.registerModule("export", {
                                 locateInMenu: "auto"
                             });
                         }
-
-                        items = items.concat(exportItems);
-                        that._correctSearchPanelPosition(items);
+                        items = that._correctItemsPosition(items, exportItems);
                     }
 
                     return items;
@@ -825,18 +823,33 @@ dataGridCore.registerModule("export", {
 
                 },
 
-                _correctSearchPanelPosition: function(items) {
-                    items.sort(function(itemA, itemB) {
-                        var result = 0;
+                _correctItemsPosition: function(items, exportItems) {
+                    var columnChooserButtonIndex,
+                        searchPanelIndex,
+                        searchPanel;
 
-                        if(itemA.name === "searchPanel" || (itemA.name === "columnChooserButton" && itemB.name !== "searchPanel")) {
-                            result = 1;
-                        } else if(itemB.name === "searchPanel") {
-                            result = -1;
+                    items.filter(function(item, index) {
+                        if(item.name === "searchPanel") {
+                            searchPanelIndex = index;
                         }
-
-                        return result;
+                        if(item.name === "columnChooserButton") {
+                            columnChooserButtonIndex = index;
+                        }
                     });
+
+                    if(columnChooserButtonIndex > -1) {
+                        searchPanel = items.splice(columnChooserButtonIndex, searchPanelIndex > -1 ? 2 : 1);
+                    } else if(searchPanelIndex > -1) {
+                        searchPanel = items.splice(searchPanelIndex, 1);
+                    }
+
+                    items = items.concat(exportItems);
+
+                    if(commonUtils.isDefined(searchPanel)) {
+                        items = items.concat(searchPanel);
+                    }
+
+                    return items;
                 },
 
                 _renderExportMenu: function($buttonContainer) {

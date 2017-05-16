@@ -1054,7 +1054,6 @@ QUnit.test("Get total summary value when selected items are defined. Deferred se
     assert.equal(dataProvider.getRowsCount(), 0);
 });
 
-
 QUnit.test("Get group summary value", function(assert) {
     //arrange
     this.setupModules({
@@ -2241,11 +2240,12 @@ QUnit.test("data wrapText enabled. wrapTextEnabled option is set to true", funct
     assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].wrapText, false, "data");
 });
 
+
 QUnit.module("Export menu", {
     beforeEach: function() {
         this.setupModules = function(options, initDefaultOptions) {
             this.options = options.options;
-            setupDataGridModules(this, ["data", "columns", "rows", "headerPanel", "editing", "stateStoring", "export"], {
+            setupDataGridModules(this, ["data", "columns", "rows", "headerPanel", "editing", "stateStoring", "export", "editorFactory", "search", "columnChooser"], {
                 initViews: true,
                 initDefaultOptions: initDefaultOptions,
                 options: options
@@ -2283,6 +2283,35 @@ QUnit.test("The export to button is shown", function(assert) {
     $button = $container.find(".dx-datagrid-export-button");
     assert.equal($button.length, 1, "export button is contained in a DOM");
     assert.equal($button.first().attr("title"), "Export", "hint of button");
+});
+
+QUnit.test("Search panel should be replaced after export button", function(assert) {
+    //arrange
+    this.setupModules({
+        "export": {
+            enabled: true
+        },
+        columnChooser: {
+            enabled: true
+        },
+        searchPanel: {
+            visible: true
+        }
+    }, true);
+
+    //act
+    var $container = $("#container"),
+        $toolbarItems;
+
+    this.headerPanel.render($container);
+
+    //assert
+    $toolbarItems = $container.find(".dx-toolbar-item");
+    assert.equal($toolbarItems.length, 3, "2 buttons + 1 editor");
+
+    assert.equal($toolbarItems.eq(0).find(".dx-datagrid-export-button").length, 1);
+    assert.equal($toolbarItems.eq(1).find(".dx-datagrid-column-chooser-button").length, 1);
+    assert.equal($toolbarItems.eq(2).find(".dx-datagrid-search-panel").length, 1);
 });
 
 QUnit.test("The export button is not shown", function(assert) {
@@ -2387,7 +2416,6 @@ QUnit.test("Export menu elements doesn't leak", function(assert) {
 
     assert.equal($exportMenu.length, 1, "only one export menu element is contained in a DOM");
 });
-
 
 QUnit.test("Export button disable on editing", function(assert) {
     //arrange
@@ -2698,7 +2726,6 @@ QUnit.test("Context menu is hidden when item with export selected is clicked", f
     assert.ok(!menuInstance.option("visible"), "menu is hidden");
 });
 
-
 // T364045: dxDataGrid - Export to Excel is not working when the Export button text is localized
 QUnit.test("Export to Excel button call`s exportTo when the button text is localized", function(assert) {
     //arrange
@@ -2749,6 +2776,7 @@ QUnit.test("Export to Excel button call`s exportTo when the button text is local
     assert.ok(exportToCalled, "exportTo Called");
     this.headerPanel._exportController.exportToExcel = _exportToExcel;
 });
+
 
 QUnit.module("Real dataGrid ExportController tests", {
     beforeEach: function() {
