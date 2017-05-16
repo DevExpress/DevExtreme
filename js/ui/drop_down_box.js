@@ -282,6 +282,9 @@ var DropDownBox = DropDownEditor.inherit({
             case "dataSource":
                 this._renderInputValue();
                 break;
+            case "displayValue":
+                this.option("text", args.value);
+                break;
             default:
                 this.callBase(args);
         }

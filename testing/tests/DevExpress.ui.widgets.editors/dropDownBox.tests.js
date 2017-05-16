@@ -227,6 +227,13 @@ QUnit.test("dropDownBox should update display text after dataSource changed", fu
     assert.equal($input.val(), "item 2, item 3", "input text has been updated");
 });
 
+QUnit.test("text option should follow the displayValue option", function(assert) {
+    var instance = new DropDownBox(this.$element, {});
+    instance.option("displayValue", "test");
+
+    assert.equal(instance.option("text"), "test", "text option has been changed");
+});
+
 
 QUnit.module("popup options", moduleConfig);
 
