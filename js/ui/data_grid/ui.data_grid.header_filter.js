@@ -473,16 +473,16 @@ gridCore.registerModule("headerFilter", {
                  * @name dxDataGridOptions_headerFilter_width
                  * @publicName width
                  * @type number
-                 * @default 250
+                 * @default 252
                  */
                 width: 252,
                 /**
                  * @name dxDataGridOptions_headerFilter_height
                  * @publicName height
                  * @type number
-                 * @default 300
+                 * @default 325
                  */
-                height: 300,
+                height: 325,
                 /**
                  * @name dxDataGridOptions_headerFilter_texts
                  * @publicName texts
