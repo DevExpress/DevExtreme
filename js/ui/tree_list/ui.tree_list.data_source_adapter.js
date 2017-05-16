@@ -7,8 +7,6 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
     ArrayStore = require("../../data/array_store"),
-    dataQuery = require("../../data/query"),
-    storeHelper = require("../../data/store_helper"),
     DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter");
 
 var DEFAULT_KEY_EXPRESSION = "id";
