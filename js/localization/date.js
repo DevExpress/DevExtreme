@@ -455,12 +455,18 @@ var PARSERS = {
         return PARSERS.year(year);
     },
     "shortdate": function(text) {
-        if(!/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/\d{4}/.test(text)) {
+        if(!/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/\d{1,4}/.test(text)) {
             return;
         }
         var parts = text.split("/");
 
-        return new Date(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]));
+        var date = new Date(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]));
+
+        if(parts[2].length < 3) {
+            date.setFullYear(parts[2], Number(parts[0]) - 1, Number(parts[1]));
+        }
+
+        return date;
     },
 
     "longtime": function(text) {
