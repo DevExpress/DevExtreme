@@ -506,9 +506,9 @@ var normalizeDateByWeek = function(date, currentDate) {
 
 var dateInRange = function(date, min, max, format) {
     if(format === "date") {
-        min = min && new Date(min.getFullYear(), min.getMonth(), min.getDate());
-        max = max && new Date(max.getFullYear(), max.getMonth(), max.getDate());
-        date = date && new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        min = min && dateUtils.correctDateWithUnitBeginning(min, "day");
+        max = max && dateUtils.correctDateWithUnitBeginning(max, "day");
+        date = date && dateUtils.correctDateWithUnitBeginning(date, "day");
     }
 
     return normalizeDate(date, min, max) === date;
