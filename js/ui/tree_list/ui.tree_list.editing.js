@@ -43,11 +43,18 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
             return this.callBase.apply(this, arguments);
         },
 
+        _isEditColumnVisible: function() {
+            var result = this.callBase.apply(this, arguments),
+                editingOptions = this.option("editing");
+
+            return result || editingOptions && editingOptions.allowAdding;
+        },
+
         _createEditingLinks: function(container, options, editingOptions) {
             var callBase = this.callBase,
                 editingTexts = editingOptions.texts || {};
 
-            if(editingOptions.allowAdding) {
+            if(editingOptions.allowAdding && !(options.row.removed || options.row.inserted)) {
                 this._createLink(container, editingTexts.addRowToNode, "addRowByRowIndex", options, "dx-link-add");
             }
 
