@@ -1393,7 +1393,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-row-error-bg: fade(@base-invalid-color, 60%);
+@datagrid-row-error-bg: mix(@base-invalid-color, @datagrid-base-background-color, 60%);
 
 /**
 * @name 40. Link color
@@ -1595,7 +1595,7 @@
 * @type color
 * @group treelist
 */
-@treelist-row-error-bg: fade(@base-invalid-color, 60%);
+@treelist-row-error-bg: mix(@base-invalid-color, @treelist-base-background-color, 60%);
 
 /**
 * @name 40. Link color
