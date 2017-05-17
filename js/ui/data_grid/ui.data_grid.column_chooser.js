@@ -234,22 +234,6 @@ exports.ColumnChooserView = columnsView.ColumnsView.inherit({
         };
     },
 
-    _isListItemSelected: function(key) {
-        if(this._columnChooserList) {
-            var nodes = this._columnChooserList.getNodes(),
-                resultNode;
-
-            $.each(nodes, function(_, node) {
-                if(node.key === key) {
-                    resultNode = node;
-                    return false;
-                }
-            });
-
-            return resultNode && resultNode.selected;
-        }
-    },
-
     _columnOptionChanged: function(e) {
         var optionNames = e.optionNames,
             isSelectMode = this.option("columnChooser.mode") === "select";
@@ -257,8 +241,7 @@ exports.ColumnChooserView = columnsView.ColumnsView.inherit({
         this.callBase(e);
 
         if(isSelectMode) {
-            var visible = this._columnsController.columnOption(e.columnIndex, "visible");
-            if(optionNames.showInColumnChooser || (optionNames.visible && this._isListItemSelected(e.columnIndex) !== visible)) {
+            if(optionNames.showInColumnChooser || optionNames.visible) {
                 this.render(null, true);
             }
         }
