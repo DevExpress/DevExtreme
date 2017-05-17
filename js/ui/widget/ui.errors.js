@@ -267,6 +267,6 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_W1007
      * @publicName W1007
      */
-    W1007: "Item with key '{0}' was not found in the data source but this key value is used as the parent key for the item '{1}'"
+    W1007: "No item with key {0} was found in the data source, but this key was used as the parent key for item {1}"
 
 });
