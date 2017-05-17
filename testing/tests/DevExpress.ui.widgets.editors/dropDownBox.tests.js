@@ -373,7 +373,7 @@ QUnit.testInActiveWindow("input should get focused when shift+tab pressed on fir
     assert.ok(event.isDefaultPrevented(), "prevent default for focusing it's own input but not an input of the previous editor on the page");
 });
 
-QUnit.test("inner input should be focused after popup opening", function(assert) {
+QUnit.testInActiveWindow("inner input should be focused after popup opening", function(assert) {
     var inputFocusedHandler = sinon.stub(),
         $input = $("<input>", { id: "input1", type: "text" }).on("focus", inputFocusedHandler),
         instance = new DropDownBox(this.$element, {
