@@ -437,7 +437,8 @@ gridCore.registerModule("columnChooser", {
                                 showText: "inMenu",
                                 location: "after",
                                 name: "columnChooserButton",
-                                locateInMenu: "auto"
+                                locateInMenu: "auto",
+                                sortIndex: 30
                             };
 
                         items.push(toolbarItem);

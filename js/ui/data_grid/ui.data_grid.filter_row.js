@@ -895,7 +895,8 @@ gridCore.registerModule("filterRow", {
                                 name: "applyFilterButton",
                                 disabled: disabled,
                                 location: "after",
-                                locateInMenu: "auto"
+                                locateInMenu: "auto",
+                                sortIndex: 1
                             };
 
                         filterItem.push(toolbarItem);
