@@ -1,10 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    patchFontOptions = require("./utils").patchFontOptions,
     _extend = extend,
-    _each = $.each,
 
     clientExporter = require("../../client_exporter"),
     messageLocalization = require("../../localization/message"),
@@ -77,6 +76,119 @@ function print(data, backgroundColor) {
     vizWindow.close();
 }
 
+function getItemAttributes(options, type, itemIndex) {
+    var path,
+        attr = {},
+        x = BUTTON_SIZE - LIST_WIDTH,
+        y = BUTTON_SIZE + LIST_PADDING_TOP + itemIndex * MENU_ITEM_HEIGHT;
+
+    attr.rect = {
+        width: LIST_WIDTH - LIST_STROKE_WIDTH * 2,
+        height: MENU_ITEM_HEIGHT,
+        x: x + LIST_STROKE_WIDTH,
+        y: y
+    };
+    attr.text = {
+        x: x + HORIZONTAL_TEXT_MARGIN,
+        y: y + MENU_ITEM_HEIGHT - VERTICAL_TEXT_MARGIN,
+        align: "left"
+    };
+
+    if(type === "printing") {
+        path = "M " + x + " " + (y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH) + " " +
+                   "L " + (x + LIST_WIDTH) + " " + (y + MENU_ITEM_HEIGHT - LIST_STROKE_WIDTH);
+
+        attr.separator = {
+            stroke: options.button.default.borderColor,
+            "stroke-width": LIST_STROKE_WIDTH,
+            cursor: "pointer",
+            sharp: "v",
+            d: path
+        };
+    }
+
+    return attr;
+}
+
+function createMenuItem(renderer, options, settings) {
+    var itemData = {},
+        menuItem,
+        type = settings.type,
+        format = settings.format,
+        attr = getItemAttributes(options, type, settings.itemIndex),
+        fontStyle = patchFontOptions(options.font),
+        rect = renderer.rect(),
+        text = renderer.text(settings.text);
+    fontStyle["pointer-events"] = "none";
+
+    menuItem = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-list-item" });
+
+    itemData[EXPORT_DATA_KEY] = type;
+    if(format) {
+        itemData[FORMAT_DATA_KEY] = format;
+    }
+
+    rect.attr(attr.rect).
+        css({
+            cursor: "pointer",
+            "pointer-events": "all"
+        }).
+        data(itemData);
+
+    rect.on(hoverEvent.start + ".export", function() { rect.attr({ fill: options.button.hover.backgroundColor }); })
+        .on(hoverEvent.end + ".export", function() { rect.attr({ fill: null }); });
+
+    rect.append(menuItem);
+
+    text.css(fontStyle).
+        attr(attr.text).
+        append(menuItem);
+
+    if(type === "printing") {
+        renderer.path(null, "line").
+            attr(attr.separator).
+            append(menuItem);
+    }
+
+    return {
+        g: menuItem,
+        rect: rect,
+        resetState: function() {
+            rect.attr({ fill: null });
+        }
+    };
+}
+
+function createMenuItems(renderer, options) {
+    var formats = options.formats,
+        items = [];
+
+    if(options.printingEnabled) {
+        items.push(createMenuItem(renderer, options, {
+            type: "printing",
+            text: messageLocalization.format("vizExport-printingButtonText"),
+            itemIndex: items.length
+        }));
+    }
+
+    items = formats.reduce(function(r, format) {
+        format = validateFormat(format);
+
+        if(format) {
+            r.push(createMenuItem(renderer, options, {
+                type: "exporting",
+                text: messageLocalization.getFormatter("vizExport-exportButtonText")(format),
+                format: format,
+                itemIndex: r.length
+            }));
+        }
+
+        return r;
+    }, items);
+
+    return items;
+}
+
 exports.exportFromMarkup = function(markup, options) {
     options.format = validateFormat(options.format) || "PNG";
     options.fileName = options.fileName || "file";
@@ -109,6 +221,16 @@ exports.ExportMenu = function(params) {
     that._group = renderer.g().attr({ "class": EXPORT_CSS_CLASS }).linkOn(renderer.root, { name: "export-menu", after: "peripheral" });
     that._buttonGroup = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-button" }).append(that._group);
     that._listGroup = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-list" }).append(that._group);
+
+    that._overlay = renderer.rect(-LIST_WIDTH + BUTTON_SIZE, BUTTON_SIZE + LIST_PADDING_TOP, LIST_WIDTH, 0);
+    that._overlay.attr({
+        "stroke-width": LIST_STROKE_WIDTH,
+        cursor: "pointer",
+        rx: 4,
+        ry: 4,
+        filter: that._shadow.id
+    });
+    that._overlay.data({ "export-element-type": "list" });
 
     that._subscribeEvents();
 };
@@ -216,6 +338,9 @@ _extend(exports.ExportMenu.prototype, {
         this._listGroup.remove();
         this._listShown = false;
         this._setButtonState("default");
+        this._menuItems.forEach(function(item) {
+            item.resetState();
+        });
     },
 
     _showList: function() {
@@ -233,7 +358,6 @@ _extend(exports.ExportMenu.prototype, {
         });
 
         this._icon.attr({ fill: style.color });
-
     },
 
     _subscribeEvents: function() {
@@ -322,203 +446,30 @@ _extend(exports.ExportMenu.prototype, {
         }
     },
 
-    _getItemStyle: function(options) {
-        var font = options.font,
-            style = {
-                rect: {
-                    cursor: "pointer",
-                    "pointer-events": "all"
-                },
-                text: {
-                    "pointer-events": "none"
-                }
-            };
-
-        style.text["font-size"] = font.size;
-        style.text["font-family"] = font.family;
-        style.text.fill = font.color;
-        style.text["font-weight"] = font.weight;
-
-        return style;
-    },
-
-    _getItemAttributes: function(options, items) {
-        var path,
-            attr = {},
-            x = BUTTON_SIZE - LIST_WIDTH,
-            y = BUTTON_SIZE + LIST_PADDING_TOP + (items.length + 1) * MENU_ITEM_HEIGHT;
-
-        attr.rect = {
-            width: LIST_WIDTH - LIST_STROKE_WIDTH * 2,
-            height: MENU_ITEM_HEIGHT,
-            x: x + LIST_STROKE_WIDTH,
-            y: y - MENU_ITEM_HEIGHT
-        };
-        attr.text = {
-            x: x + HORIZONTAL_TEXT_MARGIN,
-            y: y - VERTICAL_TEXT_MARGIN,
-            align: "left"
-        };
-
-        if(options.type === "printing") {
-            path = "M " + x + " " + (y - LIST_STROKE_WIDTH) + " " +
-                   "L " + (x + LIST_WIDTH) + " " + (y - LIST_STROKE_WIDTH);
-
-            attr.separator = {
-                stroke: options.stroke,
-                "stroke-width": LIST_STROKE_WIDTH,
-                cursor: "pointer",
-                sharp: "v",
-                d: path
-            };
-        }
-
-        return attr;
-    },
-
-    _addMenuItem: function(renderer, options, items) {
+    _updateList: function() {
         var that = this,
-            itemData = {},
-            menuItem,
-            hoverFill = options.hoverFill,
-            fill = options.fill,
-            type = options.type,
-            format = options.format,
-            style = that._getItemStyle(options),
-            attr = that._getItemAttributes(options, items);
-
-        menuItem = renderer.g().attr({ "class": EXPORT_CSS_CLASS + "-list-item" });
-
-        itemData[EXPORT_DATA_KEY] = type;
-        if(format) {
-            itemData[FORMAT_DATA_KEY] = format;
-        }
-
-        var rect = renderer.rect(),
-            text = renderer.text(options.text);
-
-        rect.attr(attr.rect).
-            css(style.rect).
-            data(itemData);
-
-        rect.on(hoverEvent.start + ".export", function() {
-            rect.attr({ "fill": hoverFill });
-        }).
-            on(hoverEvent.end + ".export", function() {
-                rect.attr({ "fill": fill });
-            });
-
-        rect.append(menuItem);
-
-        text.css(style.text).
-            attr(attr.text).
-            append(menuItem);
-
-        if(type === "printing") {
-            renderer.path(null, "line").
-                attr(attr.separator).
-                append(menuItem);
-        }
-
-        items.push({
-            g: menuItem,
-            rect: rect
-        });
-    },
-
-    _getMenuItems: function(options) {
-        var that = this,
+            options = that._options,
             buttonDefault = options.button.default,
-            buttonHover = options.button.hover,
-            formats = options.formats,
-            renderer = that._renderer,
-            items = [];
-
-        if(options.printingEnabled) {
-            that._addMenuItem(renderer, {
-                font: options.font,
-                type: "printing",
-                fill: buttonDefault.backgroundColor,
-                stroke: buttonDefault.borderColor,
-                hoverFill: buttonHover.backgroundColor,
-                text: messageLocalization.format("vizExport-printingButtonText")
-            }, items);
-        }
-
-        _each(formats, function(_, format) {
-            format = validateFormat(format);
-
-            if(format) {
-                that._addMenuItem(renderer, {
-                    font: options.font,
-                    fill: buttonDefault.backgroundColor,
-                    stroke: buttonDefault.borderColor,
-                    hoverFill: buttonHover.backgroundColor,
-                    type: "exporting",
-                    text: messageLocalization.getFormatter("vizExport-exportButtonText")(format),
-                    format: format
-                }, items);
-            }
-        });
-
-        items && that._setCornerRadius(items);
-
-        return items;
-    },
-
-    _getMenuOverlay: function(options, items) {
-        var that = this,
-            listPadding = BUTTON_SIZE + LIST_PADDING_TOP,
-            renderer = that._renderer,
-            rect,
-            listHeight,
-            xCoord = -LIST_WIDTH + BUTTON_SIZE;
-
-        listHeight = items.length * MENU_ITEM_HEIGHT;
-        rect = renderer.rect(xCoord, listPadding, LIST_WIDTH, listHeight);
+            listGroup = that._listGroup,
+            items = createMenuItems(that._renderer, options);
 
         that._shadow.attr({
             color: options.shadowColor
         });
 
-        rect.attr({
-            fill: options.button.default.backgroundColor,
-            stroke: options.button.default.borderColor,
-            "stroke-width": LIST_STROKE_WIDTH,
-            cursor: "pointer",
-            rx: 4,
-            ry: 4,
-            filter: that._shadow.id
+        that._overlay.attr({
+            height: items.length * MENU_ITEM_HEIGHT,
+            fill: buttonDefault.backgroundColor,
+            stroke: buttonDefault.borderColor
         });
-        rect.data({ "export-element-type": "list" });
-
-        return rect;
-    },
-
-    _setCornerRadius: function(items) {
-        var firstRect = items[0].rect,
-            lastRect = items[items.length - 1].rect;
-
-        firstRect.attr({
-            y: parseInt(firstRect.attr("y")) + 2 * LIST_STROKE_WIDTH,
-            height: parseInt(firstRect.attr("height")) - 2 * LIST_STROKE_WIDTH
-        });
-
-        lastRect.attr({ height: parseInt(lastRect.attr("height")) - 2 * LIST_STROKE_WIDTH });
-    },
-
-    _updateList: function() {
-        var that = this,
-            options = that._options,
-            listGroup = that._listGroup,
-            items = that._getMenuItems(options),
-            menuOverlay = that._getMenuOverlay(options, items);
 
         listGroup.clear();
-        menuOverlay.append(listGroup);
-        _each(items, function(_, item) {
+        that._overlay.append(listGroup);
+        items.forEach(function(item) {
             item.g.append(listGroup);
         });
+
+        that._menuItems = items;
     }
 });
 

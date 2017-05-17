@@ -226,7 +226,7 @@ QUnit.test("Create clipRects", function(assert) {
     assert.equal(chart._canvasClipRect._stored_settings.x, 80);
     assert.equal(chart._canvasClipRect._stored_settings.y, 10);
 
-    checkRectCommon(assert, chart, 0, undefined, undefined, undefined, undefined, {
+    checkRectCommon(assert, chart, 1, undefined, undefined, undefined, undefined, {
         fill: "gray",
         opacity: 0.0001
     });
