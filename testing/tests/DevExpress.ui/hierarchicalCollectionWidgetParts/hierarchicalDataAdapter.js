@@ -940,6 +940,30 @@ QUnit.test("Parent nodes should be expanded", function(assert) {
     assert.ok(!result[8].internalFields.expanded, "YX 2", "The entry is OK");
 });
 
+QUnit.test("Search should work with warning when the parent node is lost", function(assert) {
+    var items = [
+        { id: 1, parentId: 0, text: "Cars" },
+        { id: 5, parentId: 154, text: "X1" },
+        { id: 6, parentId: 1, text: "X5" }
+        ],
+        warningHandler = sinon.spy(errors, "log");
+
+    try {
+        var dataAdapter = initDataAdapter({
+            dataType: "plain",
+            items: items
+        });
+
+        dataAdapter.search("X");
+
+        assert.equal(warningHandler.callCount, 1, "warning has been called once");
+        assert.equal(warningHandler.getCall(0).args[0], "W1007", "warning has correct error id");
+        assert.equal(warningHandler.getCall(0).args[1], 154, "warning has correct parentId");
+        assert.equal(warningHandler.getCall(0).args[2], 5, "warning has correct id");
+    } finally {
+        warningHandler.restore();
+    }
+});
 
 QUnit.test("Node changed should fire if any node was changed", function(assert) {
     var handler = sinon.spy(),
