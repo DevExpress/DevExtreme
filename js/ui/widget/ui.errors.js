@@ -261,6 +261,12 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @name Errors and Warnings_W1006
     * @publicName W1006
     */
-    W1006: "The map service returned the '{0}' error"
+    W1006: "The map service returned the '{0}' error",
+
+    /**
+     * @name Errors and Warnings_W1007
+     * @publicName W1007
+     */
+    W1007: "Item with key '{0}' was not found in the data source but this key value is used as the parent key for the item '{1}'"
 
 });

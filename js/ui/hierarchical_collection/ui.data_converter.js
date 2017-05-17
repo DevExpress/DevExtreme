@@ -87,7 +87,7 @@ var DataConverter = Class.inherit({
         $.each(this._dataStructure, function(_, node) {
             if(node.internalFields.parentKey === that._rootValue) return;
 
-            var parent = that._getByKey(node.internalFields.parentKey);
+            var parent = that.getParentNode(node);
             parent && parent.internalFields.childrenKeys.push(node.internalFields.key);
         });
     },
@@ -154,6 +154,10 @@ var DataConverter = Class.inherit({
 
     _getByKey: function(key) {
         return this._dataStructure[this.getIndexByKey(key)] || null;
+    },
+
+    getParentNode: function(node) {
+        return this._getByKey(node.internalFields.parentKey);
     },
 
     getByKey: function(data, key) {
