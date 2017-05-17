@@ -242,8 +242,10 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
 
         this.callBase(e);
 
-        if(isSelectMode && optionNames.showInColumnChooser) {
-            this.render(null, true);
+        if(isSelectMode) {
+            if(optionNames.showInColumnChooser || optionNames.visible) {
+                this.render(null, true);
+            }
         }
     },
 
