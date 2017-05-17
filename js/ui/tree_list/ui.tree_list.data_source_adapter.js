@@ -7,8 +7,6 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
     ArrayStore = require("../../data/array_store"),
-    dataQuery = require("../../data/query"),
-    storeHelper = require("../../data/store_helper"),
     DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter");
 
 var DEFAULT_KEY_EXPRESSION = "id";
@@ -206,6 +204,8 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 }
             }
 
+            this._isReload = this._isReload || isReload || operationTypes.reload;
+
             if((isReload || operationTypes.filtering) && !options.isCustomLoading) {
                 this._hasItemsMap = {};
 
@@ -339,9 +339,6 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             options.data = this._convertDataToPlainStructure(options.data);
             if(!options.remoteOperations.filtering) {
                 options.fullData = options.data;
-                if(options.loadOptions.sort) {
-                    options.fullData = storeHelper.queryByOptions(dataQuery(options.fullData), { sort: options.loadOptions.sort }).toArray();
-                }
             }
             this._updateHasItemsMap(options);
             this.callBase(options);
@@ -375,24 +372,27 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                     isKeysUpdated: false
                 };
 
-            if(options.fullData && options.fullData.length > options.data.length) {
-                data = options.fullData;
-                visibleItems = visibleItems || options.data;
-            }
+            if(!options.fullData || this._isReload) {
+                if(options.fullData && options.fullData.length > options.data.length) {
+                    data = options.fullData;
+                    visibleItems = visibleItems || options.data;
+                }
 
-            this._rootNode = this._createNodesByItems(data, visibleItems);
-            if(!this._rootNode) {
-                options.data = $.Deferred().reject(errors.Error("E1046", this.getKeyExpr()));
-                return;
-            }
-            this._fillNodes(this._rootNode.children, options, expandedRowsData);
+                this._rootNode = this._createNodesByItems(data, visibleItems);
+                if(!this._rootNode) {
+                    options.data = $.Deferred().reject(errors.Error("E1046", this.getKeyExpr()));
+                    return;
+                }
+                this._fillNodes(this._rootNode.children, options, expandedRowsData);
 
-            this._isNodesInitializing = true;
-            if(expandedRowsData.isKeysUpdated) {
-                this.option("expandedRowKeys", expandedRowsData.keys);
+                this._isNodesInitializing = true;
+                if(expandedRowsData.isKeysUpdated) {
+                    this.option("expandedRowKeys", expandedRowsData.keys);
+                }
+                this.executeAction("onNodesInitialized", { root: this._rootNode });
+                this._isNodesInitializing = false;
+                this._isReload = false;
             }
-            this.executeAction("onNodesInitialized", { root: this._rootNode });
-            this._isNodesInitializing = false;
 
             data = this._createVisibleItemsByNodes(this._rootNode.children, options);
 
