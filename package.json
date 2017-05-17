@@ -2,13 +2,32 @@
   "name": "devextreme",
   "version": "18.1.0",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
-  "keywords": [ "html5", "controls", "widgets", "components", "jquery", "knockout", "angular", "web", "ui", "datagrid", "pivotgrid", "scheduler", "treelist", "chart" ],
+  "keywords": [
+    "html5",
+    "controls",
+    "widgets",
+    "components",
+    "jquery",
+    "knockout",
+    "angular",
+    "web",
+    "ui",
+    "datagrid",
+    "pivotgrid",
+    "scheduler",
+    "treelist",
+    "chart"
+  ],
   "homepage": "https://js.devexpress.com/",
   "bugs": "https://www.devexpress.com/support/",
   "author": "Developer Express Inc.",
   "repository": "https://github.com/DevExpress/DevExtreme",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-systemjs": "0.0.1",
+    "babel-preset-env": "^1.6.1",
     "jszip": "^2.0.0 || ^3.0.0"
   },
   "devDependencies": {
@@ -50,7 +69,7 @@
     "through2": "^2.0.1",
     "typescript": "^2.0.3",
     "vinyl-named": "^1.1.0",
-    "webpack": "^1.13.0",
+    "webpack": "^1.15.0",
     "webpack-stream": "^3.2.0",
     "yargs": "^4.6.0"
   },
@@ -61,7 +80,6 @@
   "scripts": {
     "lint": "jshint --verbose . && eslint .",
     "lint-staged": "lint-staged",
-
     "build": "dotnet build build/build-dotnet.sln && gulp default",
     "build-dist": "dotnet build build/build-dotnet.sln && gulp default --uglify",
     "build-themes": "gulp style-compiler-themes"

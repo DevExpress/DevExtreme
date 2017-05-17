@@ -22,17 +22,153 @@
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
 </head>
+<style>
+  html, body {
+      margin: 0;
+      height: 100%;
+      width: 100%
+  }
 
+  .demo-container, #page{
+      height: 100%;
+      min-height: 300px;
+  }
+
+</style>
 <body>
-    <div id="button"></div>
+    <div id="page">
+        <div id="responsive-box">
+
+            <div class="section1status" data-options="dxItem: {
+                    location: [{
+                        row: 0,
+                        col: 0
+                    }]
+                }">
+                <div id="section1Gauge" style="height: 100%;width: 100%;"></div>
+                <div id="section1status" class="power_off"></div>
+            </div>
+            <div class="header" data-options="dxItem: {
+                    location: [{
+                        row: 1,
+                        col: 0
+                    }]
+                }">
+
+                <div id="section2Gauge" style="height: 100%;width: 100%;"></div>
+                <div id="section2status" class="power_off"></div>
+            </div>
+            <div class="header" data-options="dxItem: {
+                    location: [{
+                        row: 2,
+                        col: 0
+                    }]
+                }">
+
+                <div id="section3Gauge" style="height: 100%;width: 100%;"></div>
+                <div id="section3status" class="power_off"></div>
+            </div>
+
+        </div>
+    </div>
+
 
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
-        });
+$(function () {
+    $("#responsive-box").dxResponsiveBox({
+        rows: [
+            { ratio: 1 },
+            { ratio: 1 },
+            { ratio: 1 }
+        ],
+        cols: [
+            { ratio: 1 }
+        ],
+        height: function (height) {
+            alert($(window).width())
+            return ($(window).width() < 1000) ? 1600 + 'px' : $(window).height() - 60 + 'px';
+        },
+        singleColumnScreen: "sm",
+        screenByWidth: function (width) {
+            return (width < 650) ? 'sm' : 'lg';
+        }
+    });
+    section1Gauge = $("#section1Gauge").dxCircularGauge({
+        scale: {
+            startValue: 0,
+            endValue: 70,
+            tickInterval: 5,
+            label: {
+                useRangeColors: true
+            }
+        },
+        rangeContainer: {
+            palette: "pastel",
+            ranges: [
+                { startValue: 0, endValue: 20 },
+                { startValue: 20, endValue: 35 },
+                { startValue: 35, endValue: 70 }
+            ]
+        },
+        title: {
+            text: " 1",
+            font: { size: 18 }
+        },
+        value: 40,
+        onInitialized: function (e) {
+            debugger;
+        }
+
+    }).dxCircularGauge("instance");
+
+    section2Gauge = $("#section2Gauge").dxCircularGauge({
+        scale: {
+            startValue: 0,
+            endValue: 70,
+            tickInterval: 5,
+            label: {
+                useRangeColors: true
+            }
+        },
+        rangeContainer: {
+            palette: "pastel",
+            ranges: [
+                { startValue: 0, endValue: 20 },
+                { startValue: 20, endValue: 35 },
+                { startValue: 35, endValue: 70 }
+            ]
+        },
+        title: {
+            text: " 2",
+            font: { size: 18 }
+        },
+        value: 40,
+    }).dxCircularGauge("instance");
+
+    section3Gauge = $("#section3Gauge").dxCircularGauge({
+        scale: {
+            startValue: 0,
+            endValue: 70,
+            tickInterval: 5,
+            label: {
+                useRangeColors: true
+            }
+        },
+        rangeContainer: {
+            palette: "pastel",
+            ranges: [
+                { startValue: 0, endValue: 20 },
+                { startValue: 20, endValue: 35 },
+                { startValue: 35, endValue: 70 }
+            ]
+        },
+        title: {
+            text: " 3",
+            font: { size: 18 }
+        },
+        value: 40
+    }).dxCircularGauge("instance");
+});
     </script>
 </body>
 </html>
