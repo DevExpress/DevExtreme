@@ -375,7 +375,7 @@ QUnit.testInActiveWindow("input should get focused when shift+tab pressed on fir
 
 QUnit.testInActiveWindow("inner input should be focused after popup opening", function(assert) {
     var inputFocusedHandler = sinon.stub(),
-        $input = $("<input>", { id: "input1", type: "text" }).on("focus", inputFocusedHandler),
+        $input = $("<input>", { id: "input1", type: "text" }).on("focusin", inputFocusedHandler),
         instance = new DropDownBox(this.$element, {
             focusStateEnabled: true,
             contentTemplate: function(component, $content) {
