@@ -1,8 +1,7 @@
 "use strict";
 
 //there are area, steparea, stackedarea, fullstackedarea, splinearea
-var $ = require("../../core/renderer"),
-    objectUtils = require("../../core/utils/object"),
+var objectUtils = require("../../core/utils/object"),
     extend = require("../../core/utils/extend").extend,
     rangeCalculator = require("./helpers/range_data_calculator"),
     scatterSeries = require("./scatter_series").chart,
@@ -59,7 +58,7 @@ var baseAreaMethods = {
 
     _drawElement: function(segment) {
         return {
-            line: this._bordersGroup && this._createBorderElement(segment.line, { "stroke-width": this._styles.normal.border["stroke-width"] }).append(this._bordersGroup),
+            line: this._bordersGroup && this._createBorderElement(segment.line, this._styles.normal.border).append(this._bordersGroup),
             area: this._createMainElement(segment.area).append(this._elementsGroup)
         };
     },
@@ -68,9 +67,8 @@ var baseAreaMethods = {
         var that = this;
 
         that._elementsGroup && that._elementsGroup.smartAttr(style.elements);
-        that._bordersGroup && that._bordersGroup.attr(style.border);
-        $.each(that._graphics || [], function(_, graphic) {
-            graphic.line && graphic.line.attr({ 'stroke-width': style.border["stroke-width"] }).sharp();
+        (that._graphics || []).forEach(function(graphic) {
+            graphic.line && graphic.line.attr(style.border).sharp();
         });
     },
 
@@ -78,7 +76,7 @@ var baseAreaMethods = {
         var borderOptions = options.border || {},
             borderStyle = chartLineSeries._parseLineOptions(borderOptions, defaultBorderColor);
 
-        borderStyle["stroke-width"] = borderOptions.visible ? borderStyle["stroke-width"] : 0;
+        borderStyle.stroke = borderOptions.visible ? borderStyle.stroke : "none";
         return {
             border: borderStyle,
             elements: {
