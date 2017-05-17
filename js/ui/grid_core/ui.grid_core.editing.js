@@ -1421,7 +1421,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 },
                 buttonItems = [];
 
-            var prepareButtonItem = function(name, methodName) {
+            var prepareButtonItem = function(name, methodName, sortIndex) {
                 var className = classNameButtonByNames[name],
                     onInitialized = function(e) {
                         e.element.addClass(headerPanel._getToolbarButtonClass(EDIT_BUTTON_CLASS + " " + that.addWidgetPrefix(className) + "-button"));
@@ -1445,17 +1445,18 @@ var EditingController = modules.ViewController.inherit((function() {
                     name: name + "Button",
                     disabled: isButtonDisabled,
                     location: "after",
-                    locateInMenu: "auto"
+                    locateInMenu: "auto",
+                    sortIndex: sortIndex
                 };
             };
 
             if(editingOptions.allowAdding) {
-                buttonItems.push(prepareButtonItem("addRow", "addRow"));
+                buttonItems.push(prepareButtonItem("addRow", "addRow", 10));
             }
 
             if((editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting) && getEditMode(that) === EDIT_MODE_BATCH) {
-                buttonItems.push(prepareButtonItem("save", "saveEditData"));
-                buttonItems.push(prepareButtonItem("revert", "cancelEditData"));
+                buttonItems.push(prepareButtonItem("save", "saveEditData", 11));
+                buttonItems.push(prepareButtonItem("revert", "cancelEditData", 12));
             }
 
             return buttonItems;

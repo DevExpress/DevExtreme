@@ -211,7 +211,8 @@ module.exports = {
                                 },
                                 name: "searchPanel",
                                 location: "after",
-                                locateInMenu: "never"
+                                locateInMenu: "never",
+                                sortIndex: 40
                             };
 
                             items.push(toolbarItem);

@@ -738,7 +738,8 @@ dataGridCore.registerModule("export", {
                                 name: "exportButton",
                                 allowExportSelected: true,
                                 location: "after",
-                                locateInMenu: "auto"
+                                locateInMenu: "auto",
+                                sortIndex: 20
                             });
 
                         } else {
@@ -751,10 +752,12 @@ dataGridCore.registerModule("export", {
                                 },
                                 name: "exportButton",
                                 location: "after",
-                                locateInMenu: "auto"
+                                locateInMenu: "auto",
+                                sortIndex: 20
                             });
                         }
-                        items = that._correctItemsPosition(items, exportItems);
+                        items = items.concat(exportItems);
+                        that._correctItemsPosition(items);
                     }
 
                     return items;
@@ -823,33 +826,10 @@ dataGridCore.registerModule("export", {
 
                 },
 
-                _correctItemsPosition: function(items, exportItems) {
-                    var columnChooserButtonIndex,
-                        searchPanelIndex,
-                        searchPanel;
-
-                    items.filter(function(item, index) {
-                        if(item.name === "searchPanel") {
-                            searchPanelIndex = index;
-                        }
-                        if(item.name === "columnChooserButton") {
-                            columnChooserButtonIndex = index;
-                        }
+                _correctItemsPosition: function(items) {
+                    items.sort(function(itemA, itemB) {
+                        return itemA.sortIndex - itemB.sortIndex;
                     });
-
-                    if(columnChooserButtonIndex > -1) {
-                        searchPanel = items.splice(columnChooserButtonIndex, searchPanelIndex > -1 ? 2 : 1);
-                    } else if(searchPanelIndex > -1) {
-                        searchPanel = items.splice(searchPanelIndex, 1);
-                    }
-
-                    items = items.concat(exportItems);
-
-                    if(commonUtils.isDefined(searchPanel)) {
-                        items = items.concat(searchPanel);
-                    }
-
-                    return items;
                 },
 
                 _renderExportMenu: function($buttonContainer) {
