@@ -787,6 +787,10 @@ QUnit.test("CheckBox mode - not update treeview when selected items", function(a
 
     this.renderColumnChooser();
     columnChooserView._columnsController.columnOption = function(columnIndex, optionName, value) {
+        if(!commonUtils.isDefined(value)) {
+            return;
+        }
+
         //assert
         assert.equal(columnIndex, 0, "column index");
         assert.strictEqual(optionName, "visible", "option name is 'visible'");
@@ -883,4 +887,30 @@ QUnit.test("CheckBox mode - check hidden band column", function(assert) {
     assert.ok($checkBoxElements.eq(0).hasClass("dx-checkbox-checked"), "checkbox is checked");
     assert.ok($checkBoxElements.eq(1).hasClass("dx-checkbox-checked"), "checkbox is checked");
     assert.ok(!$checkBoxElements.eq(2).hasClass("dx-checkbox-checked"), "checkbox isn't checked");
+});
+
+QUnit.test("CheckBox mode - Update a selection state when column visibility is changed via API", function(assert) {
+    //arrange
+    var $testElement = $("#container");
+
+    this.options.columnChooser.mode = "select";
+    $.extend(this.columns, [{ caption: "Column 1", index: 0, visible: true, showInColumnChooser: true }, { caption: "Column 2", index: 1, visible: true, showInColumnChooser: true }]);
+    this.setTestElement($testElement);
+
+    //act
+    this.columnChooserView.showColumnChooser();
+    this.clock.tick(1000);
+
+    this.columnsController.columnOption(0, "visible", false);
+    this.columnsController.columnsChanged.fire({
+        columnIndex: 0,
+        optionNames: {
+            visible: true
+        }
+    });
+
+    //assert
+    assert.ok(!this.columnChooserView._columnChooserList.getNodes()[0].selected, "first item is not selected");
+
+    this.columnChooserView.hideColumnChooser();
 });
