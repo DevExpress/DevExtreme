@@ -148,10 +148,14 @@ QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value < 0
     assert.deepEqual(dates, [new Date(2015, 0, 31), new Date(2015, 1, 28), new Date(2015, 2, 31), new Date(2015, 3, 30), new Date(2015, 4, 31)], 'dates are right');
 });
 
-QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value = -1 (T515652)', function(assert) {
-    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=-1', start: new Date(2017, 4, 31), min: new Date(2017, 4, 31), max: new Date(2017, 6, 1) });
+QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value = -1, recStart - last day of Month (31st) (T515652)', function(assert) {
+    var firstRecurrence = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=-1', start: new Date(2017, 4, 31), min: new Date(2017, 4, 31), max: new Date(2017, 6, 1) });
 
-    assert.deepEqual(dates, [new Date(2017, 4, 31), new Date(2017, 5, 30)], 'dates are right');
+    assert.deepEqual(firstRecurrence, [new Date(2017, 4, 31), new Date(2017, 5, 30)], 'dates are right');
+
+    var secondRecurrence = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=-1', start: new Date(2017, 2, 31), min: new Date(2017, 2, 31), max: new Date(2017, 4, 1) });
+
+    assert.deepEqual(secondRecurrence, [new Date(2017, 2, 31), new Date(2017, 3, 30)], 'dates are right');
 });
 
 QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value = -31', function(assert) {
