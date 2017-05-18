@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    errors = require("../../ui/widget/ui.errors"),
     query = require("../../data/query"),
     HierarchicalDataConverter = require("./ui.data_converter");
 
@@ -124,7 +125,7 @@ var DataAdapter = Class.inherit({
 
         for(var i = length - 1; i >= 0; i--) {
             var node = this._dataStructure[i],
-                parent = this.options.dataConverter._getByKey(node.internalFields.parentKey);
+                parent = this.options.dataConverter.getParentNode(node);
 
             if(parent && node.internalFields.parentKey !== this.options.rootValue) {
                 var newParentState = this._calculateSelectedState(parent);
@@ -158,8 +159,8 @@ var DataAdapter = Class.inherit({
         var that = this;
 
         $.each(node.internalFields.childrenKeys, function(_, key) {
-            var child = that.options.dataConverter._getByKey(key);
-            $.isFunction(callback) && callback(child);
+            var child = that.getNodeByKey(key);
+            commonUtils.isFunction(callback) && callback(child);
             if(child.internalFields.childrenKeys.length && recursive) {
                 that._iterateChildren(child, recursive, callback);
             }
@@ -171,7 +172,7 @@ var DataAdapter = Class.inherit({
             return;
         }
 
-        var parent = this.options.dataConverter._getByKey(node.internalFields.parentKey);
+        var parent = this.options.dataConverter.getParentNode(node);
         if(parent) {
             $.isFunction(callback) && callback(parent);
             if(parent.internalFields.parentKey !== this.options.rootValue) {
@@ -187,7 +188,7 @@ var DataAdapter = Class.inherit({
             result = false;
 
         for(var i = 0; i <= itemsCount - 1; i++) {
-            var childNode = this.options.dataConverter._getByKey(node.internalFields.childrenKeys[i]),
+            var childNode = this.getNodeByKey(node.internalFields.childrenKeys[i]),
                 isChildInvisible = childNode.internalFields.item.visible === false,
                 childState = childNode.internalFields.selected;
 
@@ -361,7 +362,7 @@ var DataAdapter = Class.inherit({
     },
 
     toggleSelection: function(key, state, selectRecursive) {
-        var node = !selectRecursive ? this._getByKey(this._dataStructure, key) : this._getByKey(this._initialDataStructure, key);
+        var node = this._getByKey(selectRecursive ? this._initialDataStructure : this._dataStructure, key);
         this._setFieldState(node, SELECTED, state);
 
         if(this.options.recursiveSelection && !selectRecursive) {
@@ -373,7 +374,7 @@ var DataAdapter = Class.inherit({
     },
 
     toggleNodeDisabledState: function(key, state) {
-        var node = this._getByKey(this._dataStructure, key);
+        var node = this.getNodeByKey(key);
         this._setFieldState(node, DISABLED, state);
     },
 
@@ -402,7 +403,7 @@ var DataAdapter = Class.inherit({
     },
 
     toggleExpansion: function(key, state) {
-        var node = this._getByKey(this._dataStructure, key);
+        var node = this.getNodeByKey(key);
         this._setFieldState(node, EXPANDED, state);
         if(state) {
             this._updateExpansion(key);
@@ -434,15 +435,20 @@ var DataAdapter = Class.inherit({
             var length = matches.length;
 
             while(index < length) {
-                var parentKey = matches[index].internalFields.parentKey,
-                    parent;
+                var node = matches[index];
 
-                if(parentKey === that.options.rootValue) {
+                if(node.internalFields.parentKey === that.options.rootValue) {
                     index++;
                     continue;
                 }
 
-                parent = dataConverter._getByKey(parentKey);
+                var parent = dataConverter.getParentNode(node);
+
+                if(!parent) {
+                    errors.log("W1007", node.internalFields.parentKey, node.internalFields.key);
+                    index++;
+                    continue;
+                }
 
                 if(!parent.internalFields.expanded) {
                     that._setFieldState(parent, EXPANDED, true);
