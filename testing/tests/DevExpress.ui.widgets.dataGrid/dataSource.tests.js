@@ -6,10 +6,12 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store"),
     CustomStore = require("data/custom_store"),
     ODataStore = require("data/odata/store"),
+    dataQuery = require("data/query"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     loadTotalCount = require("ui/data_grid/ui.data_grid.grouping.expanded").loadTotalCount,
+    createOffsetFilter = require("ui/data_grid/ui.data_grid.grouping.core").createOffsetFilter,
     getContinuationGroupCount = require("ui/data_grid/ui.data_grid.grouping.collapsed").getContinuationGroupCount,
     ExpandedGroupingHelper = require("ui/data_grid/ui.data_grid.grouping.expanded").GroupingHelper,
     CollapsedGroupingHelper = require("ui/data_grid/ui.data_grid.grouping.collapsed").GroupingHelper;
@@ -620,6 +622,34 @@ QUnit.test("No error when store returned non-array", function(assert) {
 
     //assert
     assert.ok(true, "There are no exceptions");
+});
+
+QUnit.test("createOffsetFilter should generate filters with =/<> filter operations for boolean values", function(assert) {
+    //arrange
+
+    var booleanValues = [null, false, true];
+    var descValues = [false, true];
+
+    function checkFilter(filter) {
+        if(Array.isArray(filter)) {
+            if(Array.isArray(filter[0])) {
+                filter.forEach(checkFilter);
+            } else {
+                if(filter[1] !== "=" && filter[1] !== "<>") {
+                    assert.ok(false, "filter contains incorrect filter operation '" + filter[1] + "'");
+                }
+            }
+        }
+    }
+
+    descValues.forEach(function(desc) {
+        booleanValues.forEach(function(value, index) {
+            var filter = createOffsetFilter([value], { group: [{ selector: "this", desc: desc }] });
+
+            checkFilter(filter);
+            assert.deepEqual(dataQuery(booleanValues).filter(filter).toArray(), desc ? booleanValues.slice(index + 1) : booleanValues.slice(0, index), "filter for value " + value + " and desc " + false + " is correct");
+        });
+    });
 });
 
 QUnit.module("DataSource when not requireTotalCount", {
