@@ -353,7 +353,7 @@ var ComponentBuilder = Class.inherit({
 
         result._optionChangedCallbacks = this._optionChangedCallbacks;
         result._disposingCallbacks = this._componentDisposing;
-        result.onActionCreated = function(component, action, config) {
+        result.beforeActionExecute = function(component, action, config) {
             if(config && inArray(config.category, SKIP_APPLY_ACTION_CATEGORIES) > -1) {
                 return action;
             }
@@ -377,7 +377,7 @@ var ComponentBuilder = Class.inherit({
             return {
                 templatesRenderAsynchronously: component.option("templatesRenderAsynchronously"),
                 modelByElement: component.option("modelByElement"),
-                onActionCreated: component.option("onActionCreated"),
+                beforeActionExecute: component.option("beforeActionExecute"),
                 nestedComponentOptions: component.option("nestedComponentOptions")
             };
         };
