@@ -249,16 +249,29 @@ module.exports = Class.inherit((function() {
         return store;
     }
 
-    function getExpandedPaths(dataSource, loadOptions, dimensionName) {
+    function equalFields(fields, prevFields, count) {
+        for(var i = 0; i < count; i++) {
+            if(!fields[i] || !prevFields[i] || fields[i].index !== prevFields[i].index) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function getExpandedPaths(dataSource, loadOptions, dimensionName, prevLoadOptions) {
         var result = [],
-            fields = (loadOptions && loadOptions[dimensionName]) || [];
+            fields = (loadOptions && loadOptions[dimensionName]) || [],
+            prevFields = (prevLoadOptions && prevLoadOptions[dimensionName]) || [];
 
         foreachTree(dataSource[dimensionName], function(items) {
             var item = items[0],
                 path = createPath(items);
 
             if(item.children && fields[path.length - 1] && !fields[path.length - 1].expanded) {
-                (path.length < fields.length) && result.push(path.slice());
+                if(path.length < fields.length && (!prevLoadOptions || equalFields(fields, prevFields, path.length))) {
+                    result.push(path.slice());
+                }
             }
         }, true);
         return result;
@@ -1286,8 +1299,8 @@ module.exports = Class.inherit((function() {
 
             if(store) {
                 extend(options, descriptions);
-                options.columnExpandedPaths = options.columnExpandedPaths || getExpandedPaths(this._data, options, "columns");
-                options.rowExpandedPaths = options.rowExpandedPaths || getExpandedPaths(this._data, options, "rows");
+                options.columnExpandedPaths = options.columnExpandedPaths || getExpandedPaths(this._data, options, "columns", that._lastLoadOptions);
+                options.rowExpandedPaths = options.rowExpandedPaths || getExpandedPaths(this._data, options, "rows", that._lastLoadOptions);
 
                 if(headerName) {
                     options.headerName = headerName;
@@ -1302,6 +1315,7 @@ module.exports = Class.inherit((function() {
                         that.applyPartialDataSource(options.area, options.path, data, deferred);
                     } else {
                         extend(that._data, data);
+                        that._lastLoadOptions = options;
                         that._update(deferred);
                     }
                 }).fail(deferred.reject);
