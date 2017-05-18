@@ -2,7 +2,7 @@
   "name": "devextreme",
   "version": "17.1.3",
   "homepage": "https://js.devexpress.com/",
-  "license": "https://js.devexpress.com/Licensing/",
+  "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "jszip": "^2.0.0 || ^3.0.0"
   },

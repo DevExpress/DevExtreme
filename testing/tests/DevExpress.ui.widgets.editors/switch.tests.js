@@ -200,12 +200,12 @@ QUnit.module("invisible container", {
     }
 });
 
-QUnit.skip("the position of handle for invisible and visible switch should be equal", function(assert) {
+QUnit.test("the position of handle for invisible and visible switch should be equal", function(assert) {
     var $visibleElement = $("#switch").dxSwitch(),
         $invisibleElement = $("#invisibleSwitch").dxSwitch();
 
     if($visibleElement.dxSwitch("option", "useOldRendering")) {
-        assert.ok("not supported");
+        assert.ok(true, "not supported");
         return;
     }
 

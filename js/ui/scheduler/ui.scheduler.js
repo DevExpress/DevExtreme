@@ -1300,6 +1300,8 @@ var Scheduler = Widget.inherit({
     _dimensionChanged: function() {
         var filteredItems = this.getFilteredItems();
 
+        this._toggleSmallClass();
+
         if(this.option("currentView") !== "agenda" && filteredItems && this._isVisible()) {
             this._workSpace._cleanAllowedPositions();
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
@@ -1307,10 +1309,7 @@ var Scheduler = Widget.inherit({
             var appointments = this._layoutManager.createAppointmentsMap(filteredItems);
 
             this._appointments.option("items", appointments);
-
         }
-
-        this._toggleSmallClass();
 
         this.hideAppointmentTooltip();
     },
@@ -1960,10 +1959,10 @@ var Scheduler = Widget.inherit({
     _cleanPopup: function() {
         if(this._$popup) {
             this._popup.element().remove();
+            delete this._$popup;
+            delete this._popup;
+            delete this._appointmentForm;
         }
-
-        delete this._popup;
-        delete this._appointmentForm;
     },
 
     _doneButtonClickHandler: function(args) {
