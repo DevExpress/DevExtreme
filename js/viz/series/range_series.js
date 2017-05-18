@@ -142,6 +142,7 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
 
         if(bottomBorderElement) {
             animate ? bottomBorderElement.animate(bottomLineParams, animateParams) : bottomBorderElement.attr(bottomLineParams);
+            bottomBorderElement.attr(this._styles.normal.border);
         }
     }
 }, baseRangeSeries);

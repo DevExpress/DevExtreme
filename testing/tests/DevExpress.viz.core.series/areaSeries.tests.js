@@ -407,18 +407,20 @@ function setDiscreteType(series) {
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
 
+        var path = this.renderer.stub("path").getCall(0).returnValue;
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], this.points.slice(0, 2), true, "first line element on creating");
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
-        assert.ok(this.renderer.stub("path").getCall(0).returnValue.sharp.calledOnce);
-        assert.ok(this.renderer.stub("path").getCall(0).returnValue.sharp.firstCall.calledAfter(this.renderer.stub("path").getCall(0).returnValue.attr.lastCall));
+        assert.ok(path.sharp.calledOnce);
+        assert.ok(path.sharp.firstCall.calledAfter(path.attr.getCall(path.attr.callCount - 2)));
 
         checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], this.points.slice(0, 2).concat([[2, 0], [1, 0]]), true, "first area element on creating");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
 
+        path = this.renderer.stub("path").getCall(2).returnValue;
         checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[3.5, 40], [4.5, 40]], true, "second line element on creating");
         assert.equal(this.renderer.stub("path").getCall(2).args[1], "line");
-        assert.ok(this.renderer.stub("path").getCall(2).returnValue.sharp.calledOnce);
-        assert.ok(this.renderer.stub("path").getCall(2).returnValue.sharp.firstCall.calledAfter(this.renderer.stub("path").getCall(2).returnValue.attr.lastCall));
+        assert.ok(path.sharp.calledOnce);
+        assert.ok(path.sharp.firstCall.calledAfter(path.attr.getCall(path.attr.callCount - 2)));
 
         checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[3.5, 40], [4.5, 40], [4.5, 0], [3.5, 0]], true, "second area element on creating");
         assert.equal(this.renderer.stub("path").getCall(3).args[1], "area");
@@ -823,6 +825,22 @@ function setDiscreteType(series) {
         });
     });
 
+    QUnit.test("Second draw - Normal State for border elements", function(assert) {
+        var series = createSeries(this.options);
+        series.updateData(this.data);
+
+        series.draw(this.translators);
+        series.draw(this.translators);
+
+        $.each(series._bordersGroup.children, function(_, path) {
+            assert.deepEqual(path.attr.lastCall.args, [{
+                dashStyle: "b-n dashStyle",
+                stroke: "b-n color",
+                "stroke-width": "b-n width"
+            }]);
+        });
+    });
+
     QUnit.test("Apply hover state", function(assert) {
         this.options.hoverStyle.hatching = {
             direction: "h-h direction",
@@ -1067,7 +1085,7 @@ function setDiscreteType(series) {
         var series = createSeries({
                 type: "area"
             }),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
+            newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
 
         series.updateData(this.data);
         series.draw(this.translators, false);
@@ -1244,16 +1262,18 @@ function setDiscreteType(series) {
         assert.equal(this.renderer.stub("path").callCount, 4);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[1, 10], [2, 10], [2, 20]], true, "first line element on creating");
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
-        assert.ok(this.renderer.stub("path").getCall(0).returnValue.sharp.calledOnce);
-        assert.ok(this.renderer.stub("path").getCall(0).returnValue.sharp.firstCall.calledAfter(this.renderer.stub("path").getCall(0).returnValue.attr.lastCall));
+        var path = this.renderer.stub("path").getCall(0).returnValue;
+        assert.ok(path.sharp.calledOnce);
+        assert.ok(path.sharp.firstCall.calledAfter(path.attr.getCall(path.attr.callCount - 2)));
 
         checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], [[1, 10], [2, 10], [2, 20], [2, 0], [2, 0], [1, 0]], true, "first area element on creating");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "area");
 
         checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[4, 40], [5, 40]], true, "second line element on creating");
         assert.equal(this.renderer.stub("path").getCall(2).args[1], "line");
-        assert.ok(this.renderer.stub("path").getCall(2).returnValue.sharp.calledOnce);
-        assert.ok(this.renderer.stub("path").getCall(2).returnValue.sharp.firstCall.calledAfter(this.renderer.stub("path").getCall(2).returnValue.attr.lastCall));
+        path = this.renderer.stub("path").getCall(2).returnValue;
+        assert.ok(path.sharp.calledOnce);
+        assert.ok(path.sharp.firstCall.calledAfter(path.attr.getCall(path.attr.callCount - 2)));
 
         checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[4, 40], [5, 40], [5, 0], [4, 0]], true, "second area element on creating");
         assert.equal(this.renderer.stub("path").getCall(3).args[1], "area");
@@ -1498,7 +1518,7 @@ function setDiscreteType(series) {
         var series = createSeries({
                 type: "steparea"
             }),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
+            newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
 
         series.updateData(this.data);
         series.draw(this.translators, false);
@@ -1784,16 +1804,18 @@ function setDiscreteType(series) {
         assert.equal(this.renderer.stub("path").callCount, 4);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[0, 5], [0, 5], [3, 5], [3, 5]], true, "first line element on creating");
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "bezier");
-        assert.ok(this.renderer.stub("path").getCall(0).returnValue.sharp.calledOnce);
-        assert.ok(this.renderer.stub("path").getCall(0).returnValue.sharp.firstCall.calledAfter(this.renderer.stub("path").getCall(0).returnValue.attr.lastCall));
+        var path = this.renderer.stub("path").getCall(0).returnValue;
+        assert.ok(path.sharp.calledOnce);
+        assert.ok(path.sharp.firstCall.calledAfter(path.attr.getCall(path.attr.callCount - 2)));
 
         checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], [[0, 5], [0, 5], [3, 5], [3, 5], [3, 5], [3, 5], [3, 5], [3, 5], [0, 5], [0, 5]], true, "first area element on creating");
         assert.equal(this.renderer.stub("path").getCall(1).args[1], "bezierarea");
 
         checkElementPoints(assert, this.renderer.stub("path").getCall(2).args[0], [[9, 5], [9, 5], [12, 5], [12, 5]], true, "second line element on creating");
         assert.equal(this.renderer.stub("path").getCall(2).args[1], "bezier");
-        assert.ok(this.renderer.stub("path").getCall(2).returnValue.sharp.calledOnce);
-        assert.ok(this.renderer.stub("path").getCall(2).returnValue.sharp.firstCall.calledAfter(this.renderer.stub("path").getCall(2).returnValue.attr.lastCall));
+        path = this.renderer.stub("path").getCall(2).returnValue;
+        assert.ok(path.sharp.calledOnce);
+        assert.ok(path.sharp.firstCall.calledAfter(path.attr.getCall(path.attr.callCount - 2)));
 
         checkElementPoints(assert, this.renderer.stub("path").getCall(3).args[0], [[9, 5], [9, 5], [12, 5], [12, 5], [12, 5], [12, 5], [12, 5], [12, 5], [9, 5], [9, 5]], true, "second area element on creating");
         assert.equal(this.renderer.stub("path").getCall(3).args[1], "bezierarea");
@@ -2350,7 +2372,7 @@ function setDiscreteType(series) {
         var series = createSeries({
                 type: "splinearea"
             }),
-            newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
+            newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
 
         series.updateData(this.data);
         series.draw(this.translators, false);

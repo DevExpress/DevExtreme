@@ -49,6 +49,7 @@ var baseAreaMethods = {
             borderElement && borderElement.attr(lineParams);
             element.area.attr(areaParams);
         }
+        borderElement && borderElement.attr(this._styles.normal.border);
     },
 
     _removeElement: function(element) {
