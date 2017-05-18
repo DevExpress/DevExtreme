@@ -412,6 +412,8 @@ var ComponentBuilder = Class.inherit({
                     callback(immediateValue);
                 }
 
+                safeApply(function() {}, scope);
+
                 return disposeWatcher;
             },
             templates: {

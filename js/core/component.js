@@ -437,11 +437,12 @@ var Component = Class.inherit({
                 action = that._createAction(actionFunc, config);
                 that._resumeDeprecatedWarnings();
             }
+
+            var onActionCreated = that.option("onActionCreated") || noop;
+            action = onActionCreated(that, action, config) || action;
+
             return action.apply(that, arguments);
         };
-
-        var onActionCreated = that.option("onActionCreated") || noop;
-        result = onActionCreated(that, result, config) || result;
 
         return result;
     },
