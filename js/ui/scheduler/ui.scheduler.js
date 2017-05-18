@@ -1924,9 +1924,6 @@ var Scheduler = Widget.inherit({
                     container: options.container
                 });
             }),
-            onShowing: function(e) {
-                AppointmentForm.fixFormVisibility(e.component.content());
-            },
             defaultOptionsRules: [
                 {
                     device: function() {
