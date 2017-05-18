@@ -682,6 +682,22 @@ var environmentWithSinonStubPoint = {
         });
     });
 
+    QUnit.test("Second draw - Normal State for border elements", function(assert) {
+        var series = createSeries(this.options);
+        series.updateData(this.data);
+
+        series.draw(this.translators);
+        series.draw(this.translators);
+
+        $.each(series._bordersGroup.children, function(_, path) {
+            assert.deepEqual(path.attr.lastCall.args, [{
+                dashStyle: "b-n dashStyle",
+                stroke: "b-n color",
+                "stroke-width": "b-n width"
+            }]);
+        });
+    });
+
     QUnit.test("Apply hover state", function(assert) {
         var series = createSeries(this.options);
         series.updateData(this.data);
