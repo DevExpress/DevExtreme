@@ -169,7 +169,7 @@ var Switch = Editor.inherit({
 
         this.callBase();
 
-        this._handleWidth = this._$handle.outerWidth();
+        this._handleWidth = parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
         this._getHandleOffset = this.option("useOldRendering") ? this._getPixelOffset : this._getCalcOffset;
         this._renderValue();
         this._renderClick();

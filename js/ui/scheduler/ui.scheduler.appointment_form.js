@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("jquery"),
-    Form = require("../form"),
+var Form = require("../form"),
     dateSerialization = require("../../core/utils/date_serialization"),
     messageLocalization = require("../../localization/message"),
     clickEvent = require("../../events/click");
@@ -223,17 +222,6 @@ var SchedulerAppointmentForm = {
 
     concatResources: function(resources) {
         this._editors = this._editors.concat(resources);
-    },
-
-    fixFormVisibility: function($element) {
-        var $switches = $element.find(".dx-switch");
-
-        $.each($switches, function(_, $switch) {
-            var switchElement = $($switch).dxSwitch("instance");
-
-            switchElement.option("visible", false);
-            switchElement.option("visible", true);
-        });
     }
 
 };
