@@ -526,6 +526,38 @@ QUnit.test("Getting key when there are keyExpr and store hasn't key", function(a
     assert.equal(this.keyOf(array[0]), 3, "key of first item");
 });
 
+//T511779
+QUnit.test("The expandRowKeys should be not changed when loading data when there is a filter", function(assert) {
+    //arrange
+    var that = this,
+        expandedRowKeys = [];
+
+    //act
+    that.applyOptions({
+        dataSource: {
+            store: {
+                type: "array",
+                data: [
+                    { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+                    { name: 'SubCategory1', phone: '55-55-55', id: 2, parentId: 1 },
+                    { name: 'Category2', phone: '98-75-21', id: 3, parentId: 0 },
+                    { name: 'SubCategory2', phone: '55-66-77', id: 4, parentId: 3 },
+                ],
+                onLoading: function() {
+                    expandedRowKeys = that.option("expandedRowKeys").slice(0);
+                }
+            },
+            filter: ["name", "=", "SubCategory2"]
+        },
+        expandNodesOnFiltering: true,
+        expandedRowKeys: [1]
+    });
+
+    //assert
+    assert.deepEqual(expandedRowKeys, [1], "expandedRowKeys value when data isn't loaded");
+    assert.deepEqual(that.option("expandedRowKeys"), [3], "expandedRowKeys value when data is loaded");
+});
+
 
 QUnit.module("Expand/Collapse nodes", { beforeEach: setupModule, afterEach: teardownModule });
 

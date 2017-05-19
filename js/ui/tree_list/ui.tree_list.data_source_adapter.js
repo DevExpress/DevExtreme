@@ -214,10 +214,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 }
             }
 
-            if(expandVisibleNodes) {
-                this.option("expandedRowKeys").splice(0);
-                options.expandVisibleNodes = true;
-            }
+            options.expandVisibleNodes = expandVisibleNodes;
         },
 
         _getParentIdsToLoad: function(parentIds) {
@@ -344,19 +341,18 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             this.callBase(options);
         },
 
-        _fillNodes: function(nodes, options, expandedRowsData, level) {
+        _fillNodes: function(nodes, options, expandedRowKeys, level) {
             level = level || 0;
             for(var i = 0; i < nodes.length; i++) {
                 var node = nodes[i];
                 //node.hasChildren = false;
-                this._fillNodes(nodes[i].children, options, expandedRowsData, level + 1);
+                this._fillNodes(nodes[i].children, options, expandedRowKeys, level + 1);
 
                 node.level = level;
                 node.hasChildren = this._calculateHasItems(node, options);
 
                 if(node.visible && node.hasChildren && options.expandVisibleNodes) {
-                    expandedRowsData.keys.push(node.key);
-                    expandedRowsData.isKeysUpdated = true;
+                    expandedRowKeys.push(node.key);
                 }
 
                 if(node.visible || node.hasChildren) {
@@ -367,10 +363,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         _processTreeStructure: function(options, visibleItems) {
             var data = options.data,
-                expandedRowsData = {
-                    keys: this.option("expandedRowKeys"),
-                    isKeysUpdated: false
-                };
+                expandedRowKeys = [];
 
             if(!options.fullData || this._isReload) {
                 if(options.fullData && options.fullData.length > options.data.length) {
@@ -383,11 +376,11 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                     options.data = $.Deferred().reject(errors.Error("E1046", this.getKeyExpr()));
                     return;
                 }
-                this._fillNodes(this._rootNode.children, options, expandedRowsData);
+                this._fillNodes(this._rootNode.children, options, expandedRowKeys);
 
                 this._isNodesInitializing = true;
-                if(expandedRowsData.isKeysUpdated) {
-                    this.option("expandedRowKeys", expandedRowsData.keys);
+                if(expandedRowKeys.length) {
+                    this.option("expandedRowKeys", expandedRowKeys);
                 }
                 this.executeAction("onNodesInitialized", { root: this._rootNode });
                 this._isNodesInitializing = false;
