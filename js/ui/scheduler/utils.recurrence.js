@@ -78,7 +78,13 @@ var dateSetterMap = {
 };
 
 var setDateByNegativeValue = function(date, month, value) {
+    var initialDate = new Date(date);
     date.setMonth(date.getMonth() + month);
+
+    if((date.getMonth() - initialDate.getMonth()) > month) {
+        date.setDate(value + 1);
+    }
+
     date.setDate(value + 1);
 };
 
