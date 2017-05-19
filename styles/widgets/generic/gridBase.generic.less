@@ -37,7 +37,6 @@
     @GENERIC_GRID_BASE_NODATA_FONT_SIZE: 17px;
     @GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
     @GENERIC_GRID_BASE_BORDER_COLOR: ~"@{@{widgetName}-border-color}";
-    @GENERIC_GRID_BASE_BORDER: 1px solid @GENERIC_GRID_BASE_BORDER_COLOR;
     @GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid ~"@{@{widgetName}-drag-header-border-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-shadow-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
@@ -51,21 +50,6 @@
 
     .dx-@{widgetName} {
         line-height: inherit;
-
-        &.dx-@{widgetName}-borders {
-            > .dx-@{widgetName}-headers, > .dx-@{widgetName}-rowsview, > .dx-@{widgetName}-total-footer {
-                border-left: @GENERIC_GRID_BASE_BORDER;
-                border-right: @GENERIC_GRID_BASE_BORDER;
-            }
-
-            > .dx-@{widgetName}-rowsview, > .dx-@{widgetName}-total-footer {
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
-            }
-
-            > .dx-@{widgetName}-pager, > .dx-@{widgetName}-headers, > .dx-@{widgetName}-rowsview {
-                border-top: @GENERIC_GRID_BASE_BORDER;
-            }
-        }
 
         .dx-menu {
             background-color: transparent;
@@ -192,12 +176,12 @@
         }
 
         .dx-row-lines > td {
-            border-bottom: @GENERIC_GRID_BASE_BORDER;
+            border-bottom: ~"@{@{widgetName}-border}";
         }
 
         .dx-column-lines > td {
-            border-left: @GENERIC_GRID_BASE_BORDER;
-            border-right: @GENERIC_GRID_BASE_BORDER;
+            border-left: ~"@{@{widgetName}-border}";
+            border-right: ~"@{@{widgetName}-border}";
         }
 
         .dx-error-row {
@@ -384,7 +368,7 @@
                     background-color: ~"@{@{widgetName}-columnchooser-item-bg}";
                     color: ~"@{@{widgetName}-columnchooser-item-color}";
                     font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
-                    border: @GENERIC_GRID_BASE_BORDER;
+                    border: ~"@{@{widgetName}-border}";
                     padding: @GENERIC_GRID_BASE_CELL_PADDING;
                     .box-shadow(0px 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}");
                 }
@@ -474,7 +458,7 @@
             }
 
             .dx-row > td {
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
+                border-bottom: ~"@{@{widgetName}-border}";
             }
         }
     }
@@ -523,7 +507,7 @@
 
     .dx-@{widgetName}-filter-range-overlay {
         .dx-overlay-content {
-            border: @GENERIC_GRID_BASE_BORDER;
+            border: ~"@{@{widgetName}-border}";
             overflow: inherit;
             .box-shadow(2px 2px 3px ~"@{@{widgetName}-overlay-content-shadow-color}");
 
@@ -566,7 +550,7 @@
     }
 
     .dx-@{widgetName}-header-panel {
-        border-bottom: @GENERIC_GRID_BASE_BORDER;
+        border-bottom: ~"@{@{widgetName}-border}";
 
         .dx-toolbar {
             margin-bottom: @GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM;
@@ -627,7 +611,7 @@
     }
 
     .dx-@{widgetName}-rowsview {
-        border-top: @GENERIC_GRID_BASE_BORDER;
+        border-top: ~"@{@{widgetName}-border}";
 
         .dx-row {
             border-top: @GENERIC_GRID_BASE_ROW_BORDER;
@@ -635,19 +619,19 @@
 
             &.dx-edit-row:first-child > td {
                 border-top-width: 0px;
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
+                border-bottom: ~"@{@{widgetName}-border}";
             }
 
             &.dx-edit-row > td {
-                border-top: @GENERIC_GRID_BASE_BORDER;
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
+                border-top: ~"@{@{widgetName}-border}";
+                border-bottom: ~"@{@{widgetName}-border}";
             }
         }
 
         .dx-master-detail-row {
             > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
-                border-top: @GENERIC_GRID_BASE_BORDER;
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
+                border-top: ~"@{@{widgetName}-border}";
+                border-bottom: ~"@{@{widgetName}-border}";
             }
         }
 
@@ -772,7 +756,7 @@
     }
 
     .dx-@{widgetName}-bottom-load-panel {
-        border-top: @GENERIC_GRID_BASE_BORDER;
+        border-top: ~"@{@{widgetName}-border}";
     }
 
     .dx-@{widgetName}-pager {
@@ -788,7 +772,7 @@
     }
 
     .dx-@{widgetName}-total-footer {
-        border-top: @GENERIC_GRID_BASE_BORDER;
+        border-top: ~"@{@{widgetName}-border}";
     }
 
     .dx-@{widgetName}-revert-tooltip {
