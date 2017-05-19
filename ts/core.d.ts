@@ -497,6 +497,17 @@ declare module DevExpress {
             requireTotalCount?: boolean;
         }
 
+        export interface DataGridLoadOptions extends LoadOptions {
+            totalSummary?: Object;
+            groupSummary?: Object;
+            requireGroupCount?: boolean;
+        }
+
+        export interface PivotGridLoadOptions extends LoadOptions {
+            totalSummary?: Object;
+            groupSummary?: Object;
+        }
+
         /** @docid Store */
         export class Store implements EventsMixin<Store> {
             constructor(options?: StoreOptions);
