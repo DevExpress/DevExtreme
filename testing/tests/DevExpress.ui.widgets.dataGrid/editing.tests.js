@@ -9700,3 +9700,19 @@ QUnit.test("EditorPreparing event have the correct parameters", function(assert)
         assert.ok(spyArgs[0].hasOwnProperty(item), "The '" + item + "' property existed");
     });
 });
+
+QUnit.test("Show full screen editing popup on mobile devices", function(assert) {
+    var that = this;
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    //act
+    that.editRow(0);
+    that.clock.tick();
+    that.preparePopupHelpers();
+
+    //assert
+    var isFullScreen = devices.current().deviceType !== "desktop";
+    assert.equal(that.editPopupInstance.option("fullScreen"), isFullScreen, "'fullScreen' option value is 'false' on a desktop and 'true' on a mobile device");
+});

@@ -546,9 +546,11 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _showEditPopup: function(rowIndex) {
             var that = this,
+                isMobileDevice = devices.current().deviceType !== "desktop",
                 popupOptions = extend(
                     {
                         showTitle: false,
+                        fullScreen: isMobileDevice,
                         toolbarItems: [
                             { toolbar: 'bottom', location: 'after', widget: 'dxButton', options: that._getSaveButtonConfig() },
                             { toolbar: 'bottom', location: 'after', widget: 'dxButton', options: that._getCancelButtonConfig() }
