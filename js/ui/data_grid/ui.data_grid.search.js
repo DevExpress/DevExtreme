@@ -215,7 +215,7 @@ gridCore.registerModule("search", {
                                 name: "searchPanel",
                                 location: "after",
                                 locateInMenu: "never",
-                                sortIndex: 40
+                                sortIndex: 50
                             };
 
                             items.push(toolbarItem);
