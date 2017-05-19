@@ -349,7 +349,7 @@ var ComponentBuilder = Class.inherit({
         }
 
         result._optionChangedCallbacks = this._optionChangedCallbacks;
-        result._disposingCallbacks = this._componentDisposing;        
+        result._disposingCallbacks = this._componentDisposing;
         result.beforeActionExecute = function(component, action, config) {
             if(config && $.inArray(config.category, SKIP_APPLY_ACTION_CATEGORIES) > -1) {
                 return action;
