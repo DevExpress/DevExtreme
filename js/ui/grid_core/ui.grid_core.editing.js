@@ -1464,12 +1464,12 @@ var EditingController = modules.ViewController.inherit((function() {
             };
 
             if(editingOptions.allowAdding) {
-                buttonItems.push(prepareButtonItem("addRow", "addRow", 10));
+                buttonItems.push(prepareButtonItem("addRow", "addRow", 20));
             }
 
             if((editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting) && getEditMode(that) === EDIT_MODE_BATCH) {
-                buttonItems.push(prepareButtonItem("save", "saveEditData", 11));
-                buttonItems.push(prepareButtonItem("revert", "cancelEditData", 12));
+                buttonItems.push(prepareButtonItem("save", "saveEditData", 21));
+                buttonItems.push(prepareButtonItem("revert", "cancelEditData", 22));
             }
 
             return buttonItems;

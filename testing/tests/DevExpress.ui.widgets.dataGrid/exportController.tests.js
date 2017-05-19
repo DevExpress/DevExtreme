@@ -2245,7 +2245,7 @@ QUnit.module("Export menu", {
     beforeEach: function() {
         this.setupModules = function(options, initDefaultOptions) {
             this.options = options.options;
-            setupDataGridModules(this, ["data", "columns", "rows", "headerPanel", "editing", "stateStoring", "export", "editorFactory", "search", "columnChooser"], {
+            setupDataGridModules(this, ["data", "columns", "rows", "headerPanel", "editing", "stateStoring", "export", "editorFactory", "search", "columnChooser", "grouping"], {
                 initViews: true,
                 initDefaultOptions: initDefaultOptions,
                 options: options
@@ -2296,6 +2296,9 @@ QUnit.test("Search panel should be replaced after export button", function(asser
         },
         searchPanel: {
             visible: true
+        },
+        groupPanel: {
+            visible: true
         }
     }, true);
 
@@ -2307,11 +2310,12 @@ QUnit.test("Search panel should be replaced after export button", function(asser
 
     //assert
     $toolbarItems = $container.find(".dx-toolbar-item");
-    assert.equal($toolbarItems.length, 3, "2 buttons + 1 editor");
+    assert.equal($toolbarItems.length, 4, "groupPanel + 2 buttons + 1 editor");
 
-    assert.equal($toolbarItems.eq(0).find(".dx-datagrid-export-button").length, 1);
-    assert.equal($toolbarItems.eq(1).find(".dx-datagrid-column-chooser-button").length, 1);
-    assert.equal($toolbarItems.eq(2).find(".dx-datagrid-search-panel").length, 1);
+    assert.equal($toolbarItems.eq(0).find(".dx-datagrid-group-panel").length, 1);
+    assert.equal($toolbarItems.eq(1).find(".dx-datagrid-export-button").length, 1);
+    assert.equal($toolbarItems.eq(2).find(".dx-datagrid-column-chooser-button").length, 1);
+    assert.equal($toolbarItems.eq(3).find(".dx-datagrid-search-panel").length, 1);
 });
 
 QUnit.test("The export button is not shown", function(assert) {

@@ -739,7 +739,7 @@ dataGridCore.registerModule("export", {
                                 allowExportSelected: true,
                                 location: "after",
                                 locateInMenu: "auto",
-                                sortIndex: 20
+                                sortIndex: 30
                             });
 
                         } else {
@@ -753,7 +753,7 @@ dataGridCore.registerModule("export", {
                                 name: "exportButton",
                                 location: "after",
                                 locateInMenu: "auto",
-                                sortIndex: 20
+                                sortIndex: 30
                             });
                         }
                         items = items.concat(exportItems);

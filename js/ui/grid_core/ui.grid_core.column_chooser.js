@@ -440,7 +440,7 @@ module.exports = {
                                 location: "after",
                                 name: "columnChooserButton",
                                 locateInMenu: "auto",
-                                sortIndex: 30
+                                sortIndex: 40
                             };
 
                         items.push(toolbarItem);

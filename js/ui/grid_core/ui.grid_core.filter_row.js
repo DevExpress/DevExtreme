@@ -895,7 +895,7 @@ module.exports = {
                                 disabled: disabled,
                                 location: "after",
                                 locateInMenu: "auto",
-                                sortIndex: 1
+                                sortIndex: 10
                             };
 
                         filterItem.push(toolbarItem);
