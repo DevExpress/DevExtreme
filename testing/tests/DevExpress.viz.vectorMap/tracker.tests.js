@@ -245,6 +245,12 @@ $.each(['mouse', 'touch', 'MSPointer', 'pointer'], function(_, type) {
         assert.strictEqual(this.onClick.lastCall, null);
     });
 
+    QUnit.test('not raised if end on element without data', function(assert) {
+        this.trigger('start', { x: 10, y: 20 }).triggerNoData('end', { x: 10, y: 20 });
+
+        assert.strictEqual(this.onClick.lastCall, null);
+    });
+
     if(type !== 'mouse') {
         QUnit.test('not raised when disabled', function(assert) {
             this.tracker.setOptions({ touchEnabled: false });
