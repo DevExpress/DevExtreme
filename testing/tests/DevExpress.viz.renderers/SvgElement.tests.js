@@ -5013,6 +5013,21 @@ function checkDashStyle(assert, elem, result, style, value) {
         ], { x: 1, y: 2 });
     });
 
+    QUnit.test("T514698. Text contains html comments-like structures without any other html-like strings - do not parse as HTML", function(assert) {
+        var text = this.createText().attr({ text: "Regular text <!--html comment like-->", x: 1, y: 2 });
+
+        this.checkSimple(assert, text, { text: "Regular text <!--html comment like-->" }, { x: 1, y: 2 });
+    });
+
+    QUnit.test("T514698. Text contains html comments-like and other html-like strings - parse HTML and skip comments", function(assert) {
+        var text = this.createText().attr({ text: "Regular text<br/><b>Html text</b><!--html comment like-->", x: 20, y: 30 });
+
+        this.checkTspans(assert, text, [
+            { x: 20, y: 30, text: "Regular text" },
+            { x: 20, dy: 12, text: "Html text" }
+        ], { x: 20, y: 30 });
+    });
+
     QUnit.test("Simple text after multiline text", function(assert) {
         //arrange
         var text = this.createText().attr({ text: "simple text\r\nwith multiple\nlines", x: 1, y: 2 }),
@@ -5457,8 +5472,7 @@ function checkDashStyle(assert, elem, result, style, value) {
     });
 
     QUnit.test("security of renderer", function(assert) {
-        var plain = this.createText().attr({ text: "some <plain text without full tag", x: 20, y: 30 }),
-            withoutClosingTags = this.createText().attr({ text: "text >with <angle brackets > without closing", x: 20, y: 30 }),
+        var withoutClosingTags = this.createText().attr({ text: "text >with <angle brackets > without closing", x: 20, y: 30 }),
             withClosing = this.createText().attr({ text: "text <with>angle brackets </with >closing", x: 20, y: 30 }),
             withSimpleMarkup = this.createText().attr({ text: "text with markup1<a class=\"className\"></a>", x: 20, y: 30 }),
             withSimpleStyleTag = this.createText().attr({ text: '<b href="mref" src="s" onerror="(function(){})()" style="font-size:11px;" >aa</b>', x: 20, y: 30 }),
@@ -5477,7 +5491,6 @@ function checkDashStyle(assert, elem, result, style, value) {
                 text: "<b src='e' style='font-size:11px;fill:#767676;font-family:\"Segoe UI\", \"Helvetica Neue\";font-weight:400;cursor:default;' >aa</b>", x: 20, y: 30
             });
 
-        assert.strictEqual(plain.DEBUG_parsedHtml, "some <plain text without full tag");
         assert.strictEqual(withoutClosingTags.DEBUG_parsedHtml, "text >with <angle brackets > without closing");
         assert.strictEqual(withClosing.DEBUG_parsedHtml, "text <with>angle brackets </with >closing");
         assert.strictEqual(withSimpleMarkup.DEBUG_parsedHtml, "text with markup1<a class=\"className\"></a>");
