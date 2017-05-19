@@ -2417,6 +2417,45 @@ QUnit.test("Remove field when expanded items exist", function(assert) {
     }], "changed Fields");
 });
 
+//T496854
+QUnit.test("Reorder field when expanded items exist", function(assert) {
+    this.testStore.load.returns($.Deferred().resolve({
+        columns: [],
+        rows: [{
+            index: 1,
+            value: 1,
+            children: [{
+                value: 2,
+                index: 2,
+                children: [{
+                    value: 3,
+                    index: 3
+                }]
+            }]
+        }],
+        values: [],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    }));
+
+    var dataSource = createDataSource({
+        fields: [
+            { dataField: "Field1", area: "row", areaIndex: 0 },
+            { dataField: "Field2", area: "row", areaIndex: 1 },
+            { dataField: "Field3", area: "row", areaIndex: 2 },
+        ],
+        store: this.testStore
+    });
+    this.testStore.load.returns($.Deferred().reject());
+
+    //act
+    dataSource.field(2, { area: "row", areaIndex: 1 });
+    dataSource.load();
+
+    //assert
+    assert.deepEqual(this.testStore.load.lastCall.args[0].rowExpandedPaths, [[1]], "Expanded rows paths");
+});
+
 QUnit.test("Change field when fields not loaded", function(assert) {
     var def = $.Deferred(),
         retrieveFieldsDef = $.Deferred();
