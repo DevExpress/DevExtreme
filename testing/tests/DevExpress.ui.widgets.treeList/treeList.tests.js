@@ -330,7 +330,7 @@ QUnit.test("Expading of all items should work correctly after clearing filter", 
     });
 
     this.clock.tick();
-    assert.equal(treeList.element().find(".dx-data-row").length, 2, "two filtered rows are rendered");
+    assert.equal(treeList.element().find(".dx-data-row").length, 3, "two filtered rows are rendered");
 
     //act
     treeList.clearFilter();
