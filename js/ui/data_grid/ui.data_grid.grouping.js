@@ -376,7 +376,8 @@ var GroupingHeaderPanelExtender = (function() {
                     name: "groupPanel",
                     onItemRendered: groupPanelRenderedCallback,
                     location: "before",
-                    locateInMenu: "never"
+                    locateInMenu: "never",
+                    sortIndex: 1
                 };
 
                 items.push(toolbarItem);
