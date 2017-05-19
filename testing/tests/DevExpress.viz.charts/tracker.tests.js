@@ -993,7 +993,8 @@ QUnit.test("dxpointermove on series, mouseout from series but in point tracker r
 });
 
 QUnit.test("On touch devices on click get series from clicked target, not sticked series. T514138", function(assert) {
-    var series2 = createSeries(),
+    var clickEvent = getEvent("dxclick", { pageX: 90, pageY: 50, target: this.seriesGroup.element, pointerType: "touch" }),
+        series2 = createSeries(),
         series2Element = this.renderer.g();
 
     series2Element.element["chart-data-series"] = series2;
@@ -1004,7 +1005,7 @@ QUnit.test("On touch devices on click get series from clicked target, not sticke
     //Act
     $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50, target: series2Element.element, pointerType: "touch" }));
     this.clock.tick(this.tracker.__trackerDelay);
-    $(this.renderer.root.element).trigger(getEvent("dxclick", { pageX: 90, pageY: 50, target: this.seriesGroup.element, pointerType: "touch" }));
+    $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(this.options.eventTrigger.withArgs("seriesClick").calledOnce);
     assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, jQueryEvent: clickEvent }, "series event arg");
