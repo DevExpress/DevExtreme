@@ -305,8 +305,8 @@ QUnit.test("dxpointermove without series over when shared tooltip", function(ass
     this.updateTracker([this.series, series2]);
 
     //Act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 40 }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, pointerType: "mouse" }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 40, pointerType: "mouse" }));
 
     //Assert
     assert.ok(!series2.stub("hover").called);
@@ -336,8 +336,8 @@ QUnit.test("dxpointermove without series over when shared tooltip. another serie
     this.updateTracker([this.series, series2]);
 
     //Act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50 }));
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 40 }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, pointerType: "mouse" }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 40, pointerType: "mouse" }));
 
     //Assert
     assert.ok(!this.series.stub("hover").called);
@@ -368,9 +368,9 @@ QUnit.test("dxpointermove without series over when shared tooltip, series has tw
     this.options.tooltip.stub("isShared").returns(true);
     this.updateTracker([this.series, series2]);
 
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 30 }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 30, pointerType: "mouse" }));
     //Act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 80 }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 80, pointerType: "mouse" }));
 
     //Assert
     assert.ok(!this.series.stub("hover").called);
@@ -427,9 +427,9 @@ QUnit.test("move on series between two point", function(assert) {
     this.point.stub("getCrosshairData").withArgs(92, 45).returns({ x: 92, y: 45, xValue: 10, yValue: 20 });
 
     //Act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 95, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 95, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
 
     //Assert
     assert.ok(this.series.hover.calledOnce);
@@ -518,9 +518,9 @@ QUnit.test("mouseover on series - mouseout from series", function(assert) {
     this.series.getNeighborPoint.withArgs(99, 40).returns(this.point);
 
     //act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 45 }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 102, pageY: 45, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
 
     //assert
@@ -541,10 +541,10 @@ QUnit.test("mouse out from series before hover", function(assert) {
 
 QUnit.test("mouse move over series after hover series", function(assert) {
     //act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 99, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 99, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
 
     //assert
@@ -555,10 +555,10 @@ QUnit.test("mouse move over series after hover series", function(assert) {
 
 QUnit.test("mouse move over series cross point after hover series", function(assert) {
     //act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 99, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element, pointerType: "mouse" }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 99, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
 
     //assert
     assert.strictEqual(this.series.hover.callCount, 1);
@@ -593,9 +593,9 @@ QUnit.test("mouse move over series and point", function(assert) {
 
 QUnit.test("mouseout from canvas after dxpointermove on point", function(assert) {
     //act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.pointElement.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 2, pageY: 5 }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 2, pageY: 5, pointerType: "mouse" }));
 
     //assert
     assert.strictEqual(this.point.clearHover.callCount, 1, "point unhovered");
@@ -682,80 +682,80 @@ QUnit.test("mouseout from canvas after dxpointermove on series some times. Check
         pageX: 100, pageY: 50, target: this.seriesGroup.element, test: {
             action: "hover",
             name: "left side begin"
-        }
+        }, pointerType: "mouse"
     }));
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 14, pageY: 40, test: {
             action: "pointHover",
             name: "left in"
-        }
+        }, pointerType: "mouse"
     }));
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 12, pageY: 40, test: {
             action: "unhover",
             name: "left out"
-        }
+        }, pointerType: "mouse"
     }));
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 100, pageY: 50, target: this.seriesGroup.element, test: {
             action: "hover",
             name: "top side begin"
-        }
+        }, pointerType: "mouse"
     }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 100, pageY: 20, test: {
             action: "pointHover",
             name: "top in"
-        }
+        }, pointerType: "mouse"
     }));
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 100, pageY: 19, test: {
             action: "unhover",
             name: "top out"
-        }
+        }, pointerType: "mouse"
     }));
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 100, pageY: 50, target: this.seriesGroup.element, test: {
             action: "hover",
             name: "right side begin"
-        }
+        }, pointerType: "mouse"
     }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 103, pageY: 40, test: {
             action: "pointHover",
             name: "right in"
-        }
+        }, pointerType: "mouse"
     }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 104, pageY: 40, test: {
             action: "unhover",
             name: "right out"
-        }
+        }, pointerType: "mouse"
     }));
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 100, pageY: 50, target: this.seriesGroup.element, test: {
             action: "hover",
             name: "bottom side begin"
-        }
+        }, pointerType: "mouse"
     }));
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 100, pageY: 155, test: {
             action: "pointHover",
             name: "bottom in"
-        }
+        }, pointerType: "mouse"
     }));
 
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", {
         pageX: 100, pageY: 156, test: {
             action: "unhover",
             name: "bottom out"
-        }
+        }, pointerType: "mouse"
     }));
     //teardown
     $(this.renderer.root.element).off();
@@ -973,13 +973,13 @@ QUnit.test("no stop propagation event after dispose tracker on pointClick, if se
 });
 
 QUnit.test("dxpointermove on series, mouseout from series but in point tracker radius, click", function(assert) {
-    var clickEvent = getEvent("dxclick", { pageX: 90, pageY: 50 });
+    var clickEvent = getEvent("dxclick", { pageX: 90, pageY: 50, pointerType: "mouse" });
     this.series.getPointByCoord.withArgs(87, 45).returns(this.point);
 
     //Act
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element, pointerType: "mouse" }));
     this.clock.tick(this.tracker.__trackerDelay);
-    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 50 }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 50, pointerType: "mouse" }));
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(this.options.eventTrigger.withArgs("pointClick").calledOnce);
@@ -987,6 +987,24 @@ QUnit.test("dxpointermove on series, mouseout from series but in point tracker r
     assert.ok(!this.options.eventTrigger.withArgs("seriesClick").calledOnce);
 
     this.options.eventTrigger.withArgs("pointClick").lastCall.args[2]();
+
+    assert.ok(this.options.eventTrigger.withArgs("seriesClick").calledOnce);
+    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, jQueryEvent: clickEvent }, "series event arg");
+});
+
+QUnit.test("On touch devices on click get series from clicked target, not sticked series. T514138", function(assert) {
+    var series2 = createSeries(),
+        series2Element = this.renderer.g();
+
+    series2Element.element["chart-data-series"] = series2;
+    this.options.series = [this.series, series2];
+
+    this.tracker.update(this.options);
+
+    //Act
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 100, pageY: 50, target: series2Element.element, pointerType: "touch" }));
+    this.clock.tick(this.tracker.__trackerDelay);
+    $(this.renderer.root.element).trigger(getEvent("dxclick", { pageX: 90, pageY: 50, target: this.seriesGroup.element, pointerType: "touch" }));
 
     assert.ok(this.options.eventTrigger.withArgs("seriesClick").calledOnce);
     assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, jQueryEvent: clickEvent }, "series event arg");
