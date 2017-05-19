@@ -1,3 +1,17 @@
+.dx-datagrid-borders {
+    > .dx-datagrid-headers, > .dx-datagrid-rowsview, > .dx-datagrid-total-footer {
+        border-left: @datagrid-border;
+        border-right: @datagrid-border;
+    }
+
+    > .dx-datagrid-rowsview, > .dx-datagrid-total-footer {
+        border-bottom: @datagrid-border;
+    }
+
+    > .dx-datagrid-pager, > .dx-datagrid-headers {
+        border-top: @datagrid-border;
+    }
+}
 
 .dx-datagrid {
     color: @datagrid-base-color;
