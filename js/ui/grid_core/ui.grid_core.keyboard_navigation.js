@@ -534,7 +534,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
             var $cell = this._getCellElementFromTarget(eventArgs.originalEvent.target);
             this._updateFocusedCellPosition($cell);
             if(!this._isRowEditMode()) {
-                this._editingController.closeEditCell();
+                if(this._editingController.getEditMode() === "cell") {
+                    this._editingController.cancelEditData();
+                } else {
+                    this._editingController.closeEditCell();
+                }
             } else {
                 this._focusEditFormCell($cell);
                 this._editingController.cancelEditData();

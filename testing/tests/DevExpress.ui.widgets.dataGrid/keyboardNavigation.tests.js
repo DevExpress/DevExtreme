@@ -873,7 +873,7 @@ function setupModules(that, modulesOptions) {
     };
 
     that.columns = that.columns || [
-        { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1", setCellValue: defaultSetCellValue },
+        { caption: 'Column 1', visible: true, allowEditing: true, dataField: "Column1", calculateCellValue: function(data) { return data.Column1; }, setCellValue: defaultSetCellValue },
         { caption: 'Column 2', visible: true, allowEditing: true, dataField: "Column2", setCellValue: defaultSetCellValue },
         { caption: 'Column 3', visible: true, allowEditing: true, dataField: "Column3", setCellValue: defaultSetCellValue },
         { caption: 'Column 4', visible: true, allowEditing: true, dataField: "Column4", setCellValue: defaultSetCellValue }
@@ -890,11 +890,15 @@ function setupModules(that, modulesOptions) {
     };
     that.selectionOptions = {};
     that.dataControllerOptions = that.dataControllerOptions || {
+        store: {
+            update: function() { return $.Deferred().resolve(); },
+            key: $.noop
+        },
         pageCount: 10,
         pageIndex: 0,
         pageSize: 6,
         items: [
-            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 0 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 0, data: {} },
             { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 1 },
             { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'detail', key: 2 },
             { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 3 },
@@ -2732,6 +2736,73 @@ QUnit.testInActiveWindow("Escape for cancel row editing", function(assert) {
     assert.ok(this.dataControllerOptions.itemsUpdated, "items are updated after cancel editing row");
     assert.ok(!this.keyboardNavigationController._isEditing, "editing is canceled");
     assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition");
+    assert.ok(!this.editingController.isEditing(), "editing canceled");
+});
+
+QUnit.testInActiveWindow("Escape for cancel batch editing", function(assert) {
+    //arrange
+    var $container = $("#container"),
+        isPreventDefaultCalled;
+
+    setupModules(this);
+
+    this.options.editing = {
+        allowUpdating: true,
+        mode: "batch"
+    };
+
+    this.gridView.render($container);
+    this.focusFirstCell();
+    this.triggerKeyDown("enter");
+    this.clock.tick();
+
+    var $input = $(".dx-row input").eq(0);
+    assert.ok($input.length, 'input found');
+
+    $input.val('Test update cell');
+    keyboardMock($container.find("input").eq(0));
+    $input.trigger('change');
+
+    //act
+    isPreventDefaultCalled = this.triggerKeyDown("escape", false, false, $container.find("input")[0]).preventDefault;
+    this.clock.tick();
+
+    //assert
+    assert.ok(!this.editingController.isEditing(), "editing is not active");
+    assert.ok(this.editingController.hasEditData(), "grid has unsaved data");
+});
+
+QUnit.testInActiveWindow("Escape for cancel cell editing", function(assert) {
+    //arrange
+    var $container = $("#container"),
+        isPreventDefaultCalled;
+
+    setupModules(this);
+
+    this.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+
+    this.gridView.render($container);
+    this.focusFirstCell();
+    this.triggerKeyDown("enter");
+    this.clock.tick();
+
+    var $input = $(".dx-row input").eq(0);
+    assert.ok($input.length, 'input found');
+
+    $input.val('Test update cell');
+    keyboardMock($container.find("input").eq(0));
+    $input.trigger('change');
+
+    //act
+    isPreventDefaultCalled = this.triggerKeyDown("escape", false, false, $container.find("input")[0]).preventDefault;
+    this.clock.tick();
+
+    //assert
+    assert.ok(!this.editingController.isEditing(), "editing is not active");
+    assert.ok(!this.editingController.hasEditData(), "grid hasn't unsaved data");
 });
 
 QUnit.testInActiveWindow("Editing by enter key is not worked when editing is disabled", function(assert) {
