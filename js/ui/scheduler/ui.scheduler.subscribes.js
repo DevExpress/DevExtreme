@@ -562,14 +562,15 @@ var subscribes = {
         return this._getTimezoneOffsetByOption();
     },
 
-    getClientTimezoneOffset: function() {
-        return SchedulerTimezones.getClientTimezoneOffset();
+    getClientTimezoneOffset: function(date) {
+        date = date || new Date();
+        return SchedulerTimezones.getClientTimezoneOffset(date);
     },
 
     convertDateByTimezone: function(date, appointmentTimezone) {
         date = new Date(date);
 
-        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"]() / 3600000);
+        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / 3600000);
 
         var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
 
@@ -593,7 +594,7 @@ var subscribes = {
     convertDateByTimezoneBack: function(date, appointmentTimezone) {
         date = new Date(date);
 
-        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"]() / 3600000);
+        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / 3600000);
 
         var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
 
