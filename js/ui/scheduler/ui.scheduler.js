@@ -1998,7 +1998,7 @@ var Scheduler = Widget.inherit({
 
         function convert(obj, dateFieldName) {
             var date = new Date(this.fire("getField", dateFieldName, obj));
-            var tzDiff = this._getTimezoneOffsetByOption() * 3600000 + this.fire("getClientTimezoneOffset");
+            var tzDiff = this._getTimezoneOffsetByOption() * 3600000 + this.fire("getClientTimezoneOffset", date);
 
             return new Date(date.getTime() + tzDiff);
         }
@@ -2069,23 +2069,25 @@ var Scheduler = Widget.inherit({
         exceptionDate = new Date(exceptionDate);
 
         function processAppointmentDates(appointment, commonTimezoneOffset) {
-            var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"]() / 3600000);
-
+            var startDate = this.fire("getField", "startDate", appointment);
             var processedStartDate = this.fire(
                 "convertDateByTimezoneBack",
-                this.fire("getField", "startDate", appointment),
+                startDate,
                 this.fire("getField", "startDateTimeZone", appointment)
                 );
 
+            var endDate = this.fire("getField", "endDate", appointment);
             var processedEndDate = this.fire(
                 "convertDateByTimezoneBack",
-                this.fire("getField", "endDate", appointment),
+                endDate,
                 this.fire("getField", "endDateTimeZone", appointment)
                 );
 
             if(typeof commonTimezoneOffset === "number" && !isNaN(commonTimezoneOffset)) {
-                var processedStartDateInUTC = processedStartDate.getTime() - clientTzOffset * 3600000,
-                    processedEndDateInUTC = processedEndDate.getTime() - clientTzOffset * 3600000;
+                var startDateClientTzOffset = -(this._subscribes["getClientTimezoneOffset"](startDate) / 3600000);
+                var endDateClientTzOffset = -(this._subscribes["getClientTimezoneOffset"](endDate) / 3600000);
+                var processedStartDateInUTC = processedStartDate.getTime() - startDateClientTzOffset * 3600000,
+                    processedEndDateInUTC = processedEndDate.getTime() - endDateClientTzOffset * 3600000;
 
                 processedStartDate = new Date(processedStartDateInUTC + commonTimezoneOffset * 3600000);
                 processedEndDate = new Date(processedEndDateInUTC + commonTimezoneOffset * 3600000);
