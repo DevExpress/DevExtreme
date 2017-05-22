@@ -368,7 +368,7 @@ QUnit.test("Items should be collapsed after clearing filter, autoExpandAll = fal
     this.clock.tick();
 
     //assert
-    assert.equal(treeList.element().find(".dx-data-row").length, 2, "six filtered rows are rendered");
+    assert.equal(treeList.element().find(".dx-data-row").length, 2, "two rows are rendered");
 });
 
 QUnit.test("Search Panel", function(assert) {
