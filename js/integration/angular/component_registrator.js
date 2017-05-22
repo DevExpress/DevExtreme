@@ -350,7 +350,7 @@ var ComponentBuilder = Class.inherit({
 
         result._optionChangedCallbacks = this._optionChangedCallbacks;
         result._disposingCallbacks = this._componentDisposing;
-        result.beforeActionExecute = function(component, action, config) {
+        result.onActionCreated = function(component, action, config) {
             if(config && $.inArray(config.category, SKIP_APPLY_ACTION_CATEGORIES) > -1) {
                 return action;
             }
@@ -374,7 +374,7 @@ var ComponentBuilder = Class.inherit({
             return {
                 templatesRenderAsynchronously: component.option("templatesRenderAsynchronously"),
                 modelByElement: component.option("modelByElement"),
-                beforeActionExecute: component.option("beforeActionExecute"),
+                onActionCreated: component.option("onActionCreated"),
                 nestedComponentOptions: component.option("nestedComponentOptions")
             };
         };
@@ -401,8 +401,6 @@ var ComponentBuilder = Class.inherit({
                     immediateValue = fn();
                     callback(immediateValue);
                 }
-
-                safeApply(function() {}, scope);
 
                 return disposeWatcher;
             },
