@@ -7523,7 +7523,7 @@ QUnit.testInActiveWindow("Insert row using extern button when edit mode cell", f
         onClick: function() {
             that.addRow();
         }
-    })
+    });
 
     rowsView.render(testElement);
 
