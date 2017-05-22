@@ -7543,6 +7543,10 @@ QUnit.test("Insert row when set validate in column and edit mode cell", function
 
 //T497279
 QUnit.testInActiveWindow("Insert row using extern button when edit mode cell", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "focus is not actual for mobile devices");
+        return;
+    }
     //arrange
     var that = this,
         rowsView = this.rowsView,
