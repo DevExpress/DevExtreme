@@ -659,7 +659,7 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
         list.push({ value: node.wholeText, style: parentStyle, className: parentClassName /* EXPERIMENTAL */, line: line, height: parentStyle[KEY_FONT_SIZE] || 0 });
     } else if(node.tagName === "BR") {
         ++line;
-    } else {
+    } else if(node.nodeType === Node.ELEMENT_NODE) {
         extend(style = {}, parentStyle);
         switch(node.tagName) {
             case "B":
@@ -842,7 +842,7 @@ function createTextNodes(wrapper, text, isStroked) {
     if(text === null) return;
 
     text = "" + text;
-    if(!wrapper.renderer.encodeHtml && (text.indexOf("<") !== -1 || text.indexOf("&") !== -1)) {
+    if(!wrapper.renderer.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf("&") !== -1)) {
         parsedHtml = removeExtraAttrs(text);
         items = parseHTML(parsedHtml);
         ///#DEBUG
