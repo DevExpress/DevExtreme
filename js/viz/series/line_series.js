@@ -52,7 +52,7 @@ var lineMethods = {
             style = that._styles.normal;
 
         that._applyGroupSettings(style.elements, { "class": "dxc-elements" }, that._elementsGroup);
-        that._bordersGroup && that._applyGroupSettings({}, { "class": "dxc-borders" }, that._bordersGroup);
+        that._bordersGroup && that._applyGroupSettings(style.border, { "class": "dxc-borders" }, that._bordersGroup);
 
         chartScatterSeries._setGroupsSettings.call(that, animationEnabled);
         animationEnabled && that._markersGroup && that._markersGroup.attr({ opacity: 0.001 });

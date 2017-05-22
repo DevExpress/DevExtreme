@@ -119,19 +119,21 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
     _drawElement: function(segment, group) {
         var that = this,
             drawnElement = areaSeries._drawElement.call(that, segment, group);
-        drawnElement.bottomLine = that._bordersGroup && that._createBorderElement(segment.bottomLine, that._styles.normal.border).append(that._bordersGroup);
+        drawnElement.bottomLine = that._bordersGroup && that._createBorderElement(segment.bottomLine, { "stroke-width": that._styles.normal.border["stroke-width"] }).append(that._bordersGroup);
 
         return drawnElement;
     },
 
     _applyStyle: function(style) {
         var that = this,
-            elementsGroup = that._elementsGroup;
+            elementsGroup = that._elementsGroup,
+            bordersGroup = that._bordersGroup;
 
         elementsGroup && elementsGroup.smartAttr(style.elements);
+        bordersGroup && bordersGroup.attr(style.border);
         (that._graphics || []).forEach(function(graphic) {
-            graphic.line && graphic.line.attr(style.border);
-            graphic.bottomLine && graphic.bottomLine.attr(style.border);
+            graphic.line && graphic.line.attr({ "stroke-width": style.border["stroke-width"] });
+            graphic.bottomLine && graphic.bottomLine.attr({ "stroke-width": style.border["stroke-width"] });
         });
     },
 
@@ -142,7 +144,6 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
 
         if(bottomBorderElement) {
             animate ? bottomBorderElement.animate(bottomLineParams, animateParams) : bottomBorderElement.attr(bottomLineParams);
-            bottomBorderElement.attr(this._styles.normal.border);
         }
     }
 }, baseRangeSeries);
