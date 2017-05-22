@@ -209,7 +209,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             if((isReload || operationTypes.filtering) && !options.isCustomLoading) {
                 this._hasItemsMap = {};
 
-                if(options.storeLoadOptions.filter && this.option("expandNodesOnFiltering")) {
+                if((options.storeLoadOptions.filter || (operationTypes.filtering && this.option("autoExpandAll"))) && this.option("expandNodesOnFiltering")) {
                     expandVisibleNodes = true;
                 }
             }
