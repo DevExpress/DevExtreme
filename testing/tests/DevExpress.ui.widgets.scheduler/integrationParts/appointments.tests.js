@@ -22,8 +22,8 @@ require("ui/switch");
 
 var APPOINTMENT_DEFAULT_OFFSET = 15;
 
-function getDeltaTz(schedulerTz) {
-    var defaultTz = new Date().getTimezoneOffset() * 60000;
+function getDeltaTz(schedulerTz, date) {
+    var defaultTz = date.getTimezoneOffset() * 60000;
     return schedulerTz * 3600000 + defaultTz;
 }
 
@@ -599,7 +599,7 @@ QUnit.test("Appts should be filtered correctly if there is a custom tz and start
         $appt = $element.find(".dx-scheduler-appointment"),
         cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight(),
         apptPosition = translator.locate($appt.eq(0)),
-        clientTzOffset = new Date().getTimezoneOffset() / 60;
+        clientTzOffset = new Date("2015-05-27T23:00:00+01:00").getTimezoneOffset() / 60;
 
     var cellsCount = (new Date(
         new Date("2015-05-27T23:00:00+01:00").setHours(
@@ -1056,7 +1056,7 @@ QUnit.test("Appointment startDate and endDate should be correct in the details v
 
     var detailsForm = this.instance.getAppointmentDetailsForm(),
         formData = detailsForm.option("formData"),
-        deltaTz = getDeltaTz(timezone);
+        deltaTz = getDeltaTz(timezone, startDate);
 
     assert.deepEqual(formData.Start, new Date(startDate.getTime() + deltaTz), "start date is correct");
     assert.deepEqual(formData.End, new Date(endDate.getTime() + deltaTz), "end date is correct");
@@ -1088,7 +1088,7 @@ QUnit.test("Appointment startDate and endDate should be correct in the details v
 
     var detailsForm = this.instance.getAppointmentDetailsForm(),
         formData = detailsForm.option("formData"),
-        deltaTz = getDeltaTz(5);
+        deltaTz = getDeltaTz(5, startDate);
 
     assert.deepEqual(formData.Start, new Date(startDate.getTime() + deltaTz), "start date is correct");
     assert.deepEqual(formData.End, new Date(endDate.getTime() + deltaTz), "end date is correct");
@@ -2183,8 +2183,9 @@ QUnit.test("Task dragging", function(assert) {
 });
 
 QUnit.test("Task dragging when custom timeZone is set", function(assert) {
+    this.clock.restore();
     var timezone = -5,
-        timezoneDifference = getDeltaTz(timezone),
+        timezoneDifference = getDeltaTz(timezone, new Date(2015, 1, 9)),
         startDate = new Date(new Date(2015, 1, 9).getTime() - timezoneDifference),
         endDate = new Date(new Date(2015, 1, 9, 1).getTime() - timezoneDifference);
 
@@ -3650,7 +3651,7 @@ QUnit.test("Appointment should be rendered correctly when custom timezone was se
 
     assert.equal($recAppointment.find(".dx-scheduler-appointment-content div").eq(0).text(), "abc", "Text is correct on init");
 
-    var deltaTz = getDeltaTz(timezone);
+    var deltaTz = getDeltaTz(timezone, startDate);
     assert.equal($recAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), "shorttime"), "Start Date is correct on init");
     assert.equal($recAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime"), "End Date is correct on init");
     assert.equal($recAppointment.find(".dx-scheduler-appointment-recurrence-icon").length, 1, "Recurrence icon is rendered");
@@ -3684,7 +3685,7 @@ QUnit.test("Appointment should be rendered correctly when custom timezone was se
 
     assert.equal($recAppointment.find(".dx-scheduler-appointment-content div").eq(0).text(), "abc", "Text is correct on init");
 
-    var deltaTz = getDeltaTz(5);
+    var deltaTz = getDeltaTz(5, startDate);
     assert.equal($recAppointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), dateLocalization.format(new Date(startDate.getTime() + deltaTz), "shorttime"), "Start Date is correct on init");
     assert.equal($recAppointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), dateLocalization.format(new Date(endDate.getTime() + deltaTz), "shorttime"), "End Date is correct on init");
     assert.equal($recAppointment.find(".dx-scheduler-appointment-recurrence-icon").length, 1, "Recurrence icon is rendered");
@@ -3777,7 +3778,7 @@ QUnit.test("Appointment should be rendered correctly when appointment timezone a
 
     var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
 
-    var deltaTz = getDeltaTz(6);
+    var deltaTz = getDeltaTz(6, startDate);
 
     assert.equal($appointment.find(".dx-scheduler-appointment-content div").eq(0).text(), "abc", "Text is correct on init");
 
@@ -3787,7 +3788,7 @@ QUnit.test("Appointment should be rendered correctly when appointment timezone a
 
 QUnit.test("All-day Appointment should be rendered correctly when custom timezone was set", function(assert) {
     var timezone = 5,
-        timezoneDifference = getDeltaTz(timezone),
+        timezoneDifference = getDeltaTz(timezone, new Date(2016, 4, 4)),
         startDate = new Date(new Date(2016, 4, 4).getTime() - timezoneDifference),
         endDate = new Date(new Date(2016, 4, 5).getTime() - timezoneDifference);
 
