@@ -7541,6 +7541,39 @@ QUnit.test("Insert row when set validate in column and edit mode cell", function
     assert.equal(testElement.find('tbody > tr').length, 5, "count rows");
 });
 
+//T497279
+QUnit.testInActiveWindow("Insert row using extern button when edit mode cell", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    var $addRowButton = $("<div>").appendTo("#qunit-fixture").dxButton({
+        text: "Add Row",
+        onClick: function() {
+            that.addRow();
+        }
+    });
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "cell",
+            allowUpdating: false
+        }
+    });
+
+    //act
+    $addRowButton.trigger("dxclick");
+    this.clock.tick();
+
+    //assert
+    assert.equal(testElement.find('.dx-row-inserted').length, 1, "inserted row is rendered");
+    assert.ok(testElement.find('.dx-row-inserted').children().eq(0).hasClass("dx-focused"), 1, "first cell in inserted row is focused");
+    assert.ok(getInputElements(testElement).length, 1, "one editor is rendered");
+});
+
 QUnit.test('Edit cell with edit mode batch and change page', function(assert) {
     //arrange
     var that = this,

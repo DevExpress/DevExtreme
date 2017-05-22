@@ -3559,6 +3559,27 @@ QUnit.testInActiveWindow("Focus next cell after tab key when first cell focused 
     assert.equal(this.keyboardNavigationController._getFocusedCell().text(), "test2", "at now we are focused at second cell");
 });
 
+//T497279
+QUnit.testInActiveWindow("Focus next editor after tab key for inserted row when editing mode is cell and allowUpdating is false", function(assert) {
+    //arrange
+    setupModules(this);
+    this.options.editing = { allowUpdating: false, mode: "cell" };
+    this.dataControllerOptions.items[0].inserted = true;
+    this.gridView.render($("#container"));
+
+    //act
+    this.editingController.editCell(0, 0);
+    this.clock.tick();
+
+    this.triggerKeyDown("tab", false, false, $("#container").find('input'));
+    this.clock.tick();
+
+    //assert
+    assert.equal(this.editingController._editRowIndex, 0, "we are do not editing anything");
+    assert.equal(this.editingController._editColumnIndex, 1, "we are do not editing anything");
+    assert.equal(this.keyboardNavigationController._getFocusedCell().find("input").length, 1, "focused cell contains editor");
+});
+
 QUnit.testInActiveWindow("Move to next cell via tab key when edit command column is shown (when editing)", function(assert) {
     //arrange
     this.columns = [
