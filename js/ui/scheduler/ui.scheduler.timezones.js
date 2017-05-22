@@ -135,15 +135,15 @@ var SchedulerTimezones = {
         return this.getTimezonesIdsByWinIndex(displayNameIndex);
     },
 
-    getClientTimezoneOffset: function() {
-        return new Date().getTimezoneOffset() * 60000;
+    getClientTimezoneOffset: function(date) {
+        return date.getTimezoneOffset() * 60000;
     },
 
     processDateDependOnTimezone: function(date, tzOffset) {
         var result = new Date(date);
 
         if(tzOffset) {
-            var tzDiff = tzOffset + this.getClientTimezoneOffset() / 3600000;
+            var tzDiff = tzOffset + this.getClientTimezoneOffset(date) / 3600000;
             result = new Date(result.setHours(result.getHours() + tzDiff));
         }
 
