@@ -391,7 +391,7 @@ var baseTrackerPrototype = {
             if(series !== that.hoveredSeries) {
                 that._setTimeout(function() {
                     that._setHoveredSeries(series);
-                    that._stuckSeries = series;
+                    that._setStuckSeries(e, series, x, y);
                     that._pointerComplete(point, x, y);
                 }, series);
                 return;
@@ -399,13 +399,13 @@ var baseTrackerPrototype = {
         } else if(point) {
             if(that.hoveredSeries) {
                 that._setTimeout(function() {
-                    that._pointerOnPoint(point, x, y);
+                    that._pointerOnPoint(point, x, y, e);
                 }, point);
             } else {
-                that._pointerOnPoint(point, x, y);
+                that._pointerOnPoint(point, x, y, e);
             }
             return;
-        } else if(that._setStuckSeries(x, y)) {
+        } else if(that._setStuckSeries(e, undefined, x, y)) {
             series = that._stuckSeries;
             point = series.getNeighborPoint(x, y);
             that._releaseHoveredSeries();
@@ -736,8 +736,12 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         }
     },
 
-    _setStuckSeries: function(x, y) {
-        this._stuckSeries = this._stuckSeries || this._getSeriesForShared(x, y);
+    _setStuckSeries: function(e, series, x, y) {
+        if(e.pointerType !== "mouse") {
+            this._stuckSeries = null;
+        } else {
+            this._stuckSeries = (series || this._stuckSeries) || this._getSeriesForShared(x, y);
+        }
         return !!this._stuckSeries;
     },
 
@@ -777,13 +781,10 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         baseTrackerPrototype._hoverLegendItem.call(this, x, y);
     },
 
-    _pointerOnPoint: function(point, x, y) {
-        var that = this,
-            seriesFromPoint = point.series;
-
-        that._stuckSeries = seriesFromPoint;
-        that._releaseHoveredSeries();
-        baseTrackerPrototype._pointerOnPoint.call(that, point, x, y);
+    _pointerOnPoint: function(point, x, y, e) {
+        this._setStuckSeries(e, point.series, x, y);
+        this._releaseHoveredSeries();
+        baseTrackerPrototype._pointerOnPoint.call(this, point, x, y, e);
     },
 
     _notifyLegendOnHoverArgument: false,
