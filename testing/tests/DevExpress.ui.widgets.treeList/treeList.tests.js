@@ -312,6 +312,64 @@ QUnit.test("Header Filter", function(assert) {
     assert.equal(treeList.element().find(".dx-header-filter").length, 2, "two header filter icons area rendered");
 });
 
+QUnit.test("Expanding of all items should work correctly after clearing filter", function(assert) {
+    var treeList = createTreeList({
+        headerFilter: {
+            visible: true
+        },
+        autoExpandAll: true,
+        columns: ["name", { dataField: "age", filterValues: [19], allowFiltering: true }, "gender"],
+        dataSource: [
+            { id: 1, parentId: 0, name: "Name 3", age: 19, gender: "male" },
+            { id: 2, parentId: 1, name: "Name 1", age: 19, gender: "female" },
+            { id: 3, parentId: 1, name: "Name 2", age: 18, gender: "male" },
+            { id: 4, parentId: 2, name: "Name 4", age: 19, gender: "male" },
+            { id: 5, parentId: 2, name: "Name 5", age: 20, gender: "female" },
+            { id: 6, parentId: 3, name: "Name 6", age: 18, gender: "male" }
+        ]
+    });
+
+    this.clock.tick();
+    assert.equal(treeList.element().find(".dx-data-row").length, 3, "filtered rows are rendered");
+    treeList.filter("gender", "=", "male");
+    this.clock.tick();
+    assert.equal(treeList.element().find(".dx-data-row").length, 3, "filtered rows are rendered");
+
+    //act
+    treeList.clearFilter();
+    this.clock.tick();
+
+    //assert
+    assert.equal(treeList.element().find(".dx-data-row").length, 6, "six filtered rows are rendered");
+});
+
+QUnit.test("Items should be collapsed after clearing filter, autoExpandAll = false", function(assert) {
+    var treeList = createTreeList({
+        headerFilter: {
+            visible: true
+        },
+        autoExpandAll: false,
+        columns: ["name", { dataField: "age", filterValues: [19], allowFiltering: true }],
+        dataSource: [
+            { id: 1, parentId: 0, name: "Name 3", age: 19 },
+            { id: 2, parentId: 1, name: "Name 1", age: 19 },
+            { id: 3, parentId: 2, name: "Name 2", age: 18 },
+            { id: 4, parentId: 0, name: "Name 4", age: 19 },
+            { id: 5, parentId: 4, name: "Name 5", age: 20 },
+            { id: 6, parentId: 5, name: "Name 6", age: 18 }
+        ]
+    });
+
+    this.clock.tick();
+    assert.equal(treeList.element().find(".dx-data-row").length, 2, "filtered rows are rendered");
+
+    //act
+    treeList.clearFilter();
+    this.clock.tick();
+
+    //assert
+    assert.equal(treeList.element().find(".dx-data-row").length, 2, "two rows are rendered");
+});
 
 QUnit.test("Search Panel", function(assert) {
     var treeList = createTreeList({
