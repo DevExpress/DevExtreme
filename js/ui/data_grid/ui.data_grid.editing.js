@@ -420,7 +420,9 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
             });
 
             $firstCell = that.getFirstEditableCellInRow(insertKey.rowIndex);
+            that._editCellInProgress = true;
             that._delayedInputFocus($firstCell, function() {
+                that._editCellInProgress = false;
                 var $cell = that.getFirstEditableCellInRow(insertKey.rowIndex);
                 $cell && $cell.trigger(clickEvent.name);
             });
@@ -1719,7 +1721,8 @@ gridCore.registerModule("editing", {
                         editingController = that._editingController,
                         $targetElement = $(e.jQueryEvent.target),
                         columnIndex = that._getColumnIndexByElement($targetElement),
-                        allowUpdating = that.option("editing.allowUpdating"),
+                        row = that._dataController.items()[e.rowIndex],
+                        allowUpdating = that.option("editing.allowUpdating") || row && row.inserted,
                         column = that._columnsController.getVisibleColumns()[columnIndex],
                         allowEditing = column && (column.allowEditing || editingController.isEditCell(e.rowIndex, columnIndex));
 
