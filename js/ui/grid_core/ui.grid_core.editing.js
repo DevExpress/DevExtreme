@@ -259,6 +259,8 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         refresh: function() {
+            if(getEditMode(this) === EDIT_MODE_CELL) return;
+
             if(getEditMode(this) !== EDIT_MODE_BATCH) {
                 this.init();
             } else {
@@ -980,8 +982,10 @@ var EditingController = modules.ViewController.inherit((function() {
                 result = $.Deferred();
 
             var resetEditIndices = function(that) {
-                that._editColumnIndex = -1;
-                that._editRowIndex = -1;
+                if(editMode !== EDIT_MODE_CELL) {
+                    that._editColumnIndex = -1;
+                    that._editRowIndex = -1;
+                }
             };
 
             if(that._beforeSaveEditData() || that._saving) {
@@ -1140,6 +1144,8 @@ var EditingController = modules.ViewController.inherit((function() {
             if(!isRowEditMode(that)) {
                 setTimeout(function() {
                     if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
+                        that._editRowIndex = -1;
+                        that._editColumnIndex = -1;
                         that.saveEditData();
                     } else if(oldEditRowIndex >= 0) {
                         var rowIndices = [oldEditRowIndex];
@@ -1206,11 +1212,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._updateEditButtons();
 
                 if(options.column.showEditorAlways && getEditMode(that) === EDIT_MODE_CELL && options.row && !options.row.inserted) {
-                    that.saveEditData().always(function() {
-                        that._editColumnIndex = options.columnIndex;
-                        that._editRowIndex = options.row.rowIndex + that._dataController.getRowIndexOffset();
-                        that._focusEditingCell();
-                    });
+                    that.saveEditData();
                 } else if(options.row && (forceUpdateRow || options.column.setCellValue !== options.column.defaultSetCellValue)) {
                     that._dataController.updateItems({
                         changeType: "update",
