@@ -5382,6 +5382,41 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     assert.ok(dataGrid.element().find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
 
+QUnit.testInActiveWindow("Tab key on editor should focus next cell if editing mode is cell", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    //arrange
+    var dataGrid = createDataGrid({
+            dataSource: [{ name: "name 1", value: 1 }, { name: "name 2", value: 2 }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
+        }),
+        navigationController = dataGrid.getController("keyboardNavigation");
+
+    this.clock.tick();
+    dataGrid.focus(dataGrid.getCellElement(0, 0));
+    this.clock.tick();
+
+    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    this.clock.tick();
+
+
+    //act
+    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    dataGrid.getCellElement(0, 1).find(".dx-numberbox").dxNumberBox("instance").option("value", 10);
+    this.clock.tick();
+
+    //assert
+    assert.equal(dataGrid.getCellElement(0, 1).find(".dx-texteditor-input").eq(0).val(), "10", "editor value is changed");
+    assert.ok(dataGrid.getCellElement(1, 0).hasClass("dx-focused"), "first cell in second row is focused");
+});
+
 //T460276
 QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell at the end of table", function(assert) {
     if(devices.real().deviceType !== "desktop") {
