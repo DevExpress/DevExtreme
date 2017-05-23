@@ -1362,6 +1362,9 @@ declare module DevExpress {
         /** @docid vizmethods_registerTheme */
         export function registerTheme(customTheme: Object, baseTheme: string): void;
 
+        /** @docid vizmethods_refreshTheme */
+        export function refreshTheme(): void;
+
         /** @docid vizmethods_exportFromMarkup */
         export function exportFromMarkup(markup: string, options: Object): void;
 
