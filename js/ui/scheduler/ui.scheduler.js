@@ -1689,7 +1689,7 @@ var Scheduler = Widget.inherit({
         this._recalculateWorkspace();
     },
 
-    _recalculateWorkspace : function() {
+    _recalculateWorkspace: function() {
         var recalculateHandler = (function() {
             domUtils.triggerResizeEvent(this.element());
         }).bind(this);
