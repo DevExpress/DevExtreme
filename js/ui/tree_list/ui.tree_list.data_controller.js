@@ -170,6 +170,9 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                     this._dataSource && !this._dataSource._isNodesInitializing && this._dataSource.load();
                     args.handled = true;
                     break;
+                case "maxFilterLengthInRequest":
+                    args.handled = true;
+                    break;
                 default:
                     this.callBase(args);
             }
@@ -252,7 +255,8 @@ treeListCore.registerModule("data", {
             * @extends Action
             * @action
             */
-            onNodesInitialized: null
+            onNodesInitialized: null,
+            maxFilterLengthInRequest: 1500
         });
     },
     controllers: {
