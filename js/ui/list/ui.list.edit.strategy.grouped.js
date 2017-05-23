@@ -121,9 +121,12 @@ var GroupedEditStrategy = EditStrategy.inherit({
             index = -1,
             that = this;
 
-        $.each(groups, function(groupIndex, group) {
-            if(!group.items) return;
-            var keys = that.getKeysByItems(group.items);
+        $.each(groups, function(groupIndex, groupItem) {
+            var items = groupItem.items || [groupItem];
+
+            if(!items.length) return;
+
+            var keys = that.getKeysByItems(items);
 
             $.each(keys, function(keyIndex, itemKey) {
                 if(that._equalKeys(itemKey, key)) {
@@ -149,18 +152,21 @@ var GroupedEditStrategy = EditStrategy.inherit({
         $.each(keys, function(_, key) {
             var getItemMeta = function(groups) {
                 var index = this.getIndexByKey(key, groups);
-                var group = index && groups[index.group];
+                var groupItem = index && groups[index.group];
 
-                if(!group) return;
+                if(!groupItem) return;
+
+                var item = groupItem.items ? groupItem.items[index.item] : groupItem;
 
                 return {
-                    groupKey: group.key,
-                    item: group.items[index.item]
+                    groupKey: groupItem.key,
+                    item: item
                 };
             }.bind(this);
 
             var itemMeta = getItemMeta(this._collectionWidget.option("items")) ||
                            getItemMeta(this._collectionWidget.option("selectedItems"));
+
             var groupKey = itemMeta.groupKey;
             var item = itemMeta.item;
 
