@@ -4206,3 +4206,26 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
     assert.equal(startDateEditor.option("type"), "datetime", "start date is correct");
     assert.equal(endDateEditor.option("type"), "datetime", "end date is correct");
 });
+
+QUnit.test("Appointments should be rendered correctly at asynchronous rendering (T515894)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Task 1",
+            startDate: new Date(2017, 4, 22, 16),
+            endDate: new Date(2017, 4, 24, 1)
+        }],
+        currentDate: new Date(2017, 4, 23),
+        currentView: "week",
+        views: ["week", "month"],
+        crossScrollingEnabled: true,
+        width: 600
+    });
+
+    this.instance.option("templatesRenderAsynchronously", true);
+    this.instance.option("currentView", "month");
+    this.clock.tick();
+
+    var appointmentWidth = this.instance.element().find(".dx-scheduler-appointment").eq(0).outerWidth();
+    assert.equal(appointmentWidth, 255, "appointment was render correctly");
+});
+
