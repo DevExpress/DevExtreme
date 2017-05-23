@@ -2105,46 +2105,53 @@ QUnit.test("Appointment with 'Etc/UTC' tz should be rendered correctly(T394991)"
 });
 
 QUnit.test("Recurrence appointment with 'Etc/UTC' tz should be updated correctly via drag(T394991)", function(assert) {
-    this.createInstance({
-        currentDate: new Date(2015, 11, 25),
-        startDayHour: 16,
-        views: ["week"],
-        currentView: "week",
-        editing: true,
-        timeZone: "Etc/UTC", // 0
-        recurrenceEditMode: "occurrence",
-        firstDayOfWeek: 1,
-        dataSource: [{
-            text: "a",
-            startDate: "2015-12-25T17:00:00.000Z",
-            endDate: "2015-12-25T17:30:00.000Z",
-            recurrenceRule: "FREQ=DAILY"
-        }]
-    });
+    var tzOffsetStub;
+    try {
+        this.clock.restore();
+        tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(new Date("2015-12-25T17:00:00.000Z").getTimezoneOffset() * 60000);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
-        $cell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(21),
-        initialAppointmentHeight = $appointment.outerHeight();
+        this.createInstance({
+            currentDate: new Date(2015, 11, 25),
+            startDayHour: 16,
+            views: ["week"],
+            currentView: "week",
+            editing: true,
+            timeZone: "Etc/UTC", // 0
+            recurrenceEditMode: "occurrence",
+            firstDayOfWeek: 1,
+            dataSource: [{
+                text: "a",
+                startDate: "2015-12-25T17:00:00.000Z",
+                endDate: "2015-12-25T17:30:00.000Z",
+                recurrenceRule: "FREQ=DAILY"
+            }]
+        });
 
-    $appointment.trigger(dragEvents.start);
-    $cell.trigger(dragEvents.enter);
-    $appointment.trigger(dragEvents.end);
+        var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
+            $cell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(21),
+            initialAppointmentHeight = $appointment.outerHeight();
 
-    $appointment = this.instance.element().find(".dx-scheduler-appointment").not(".dx-scheduler-appointment-recurrence");
+        $appointment.trigger(dragEvents.start);
+        $cell.trigger(dragEvents.enter);
+        $appointment.trigger(dragEvents.end);
 
-    assert.roughEqual($appointment.position().top, $cell.outerHeight() * 3, 2.001, "Appointment top is OK");
-    assert.equal($appointment.outerHeight(), initialAppointmentHeight, "Appointment height is OK");
+        $appointment = this.instance.element().find(".dx-scheduler-appointment").not(".dx-scheduler-appointment-recurrence");
+
+        assert.roughEqual($appointment.position().top, $cell.outerHeight() * 3, 2.001, "Appointment top is OK");
+        assert.equal($appointment.outerHeight(), initialAppointmentHeight, "Appointment height is OK");
 
 
-    var startDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
-        endDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(),
-        cellData = $cell.data("dxCellData"),
-        startDate = cellData.startDate,
-        endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
+        var startDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
+            endDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(),
+            cellData = $cell.data("dxCellData"),
+            startDate = cellData.startDate,
+            endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
 
-    assert.equal(startDateText, dateLocalization.format(startDate, "shorttime"), "Appointment start date is OK");
-    assert.equal(endDateText, dateLocalization.format(endDate, "shorttime"), "Appointment end date is OK");
-
+        assert.equal(startDateText, dateLocalization.format(startDate, "shorttime"), "Appointment start date is OK");
+        assert.equal(endDateText, dateLocalization.format(endDate, "shorttime"), "Appointment end date is OK");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
 
 // TODO: also need test when task is dragging outside the area. updated dates should be equal to old dates
