@@ -1050,7 +1050,7 @@ var Scheduler = Widget.inherit({
                     this._appointments.option("allowAllDayResize", value !== "day");
                     this._reloadDataSource();
                 }).bind(this));
-                this._workSpaceRecalculationHandler();
+                this._recalculateWorkspace();
                 break;
             case "appointmentTemplate":
                 this._appointments.option("itemTemplate", value);
@@ -1686,10 +1686,10 @@ var Scheduler = Widget.inherit({
         this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this.option("currentView")].workSpace, this._workSpaceConfig(groups));
         this._workSpace.getWorkArea().append(this._appointments.element());
 
-        this._workSpaceRecalculationHandler();
+        this._recalculateWorkspace();
     },
 
-    _workSpaceRecalculationHandler: function() {
+    _recalculateWorkspace : function() {
         var recalculateHandler = (function() {
             domUtils.triggerResizeEvent(this.element());
         }).bind(this);

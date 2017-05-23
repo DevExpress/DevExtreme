@@ -4199,7 +4199,7 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
     assert.equal(endDateEditor.option("type"), "datetime", "end date is correct");
 });
 
-QUnit.test("Appointments should be rendered correctly at asynchronous rendering", function(assert) {
+QUnit.test("Appointments should be rendered correctly at asynchronous rendering (T515894)", function(assert) {
     this.createInstance({
         dataSource: [{
             text: "Task 1",
