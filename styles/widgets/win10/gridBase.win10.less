@@ -54,7 +54,8 @@
         }
     }
 
-    .dx-@{widgetName} {
+
+    .dx-@{widgetName}, .dx-@{widgetName}-container {
         .dx-menu-items-container {
             .dx-menu-item {
                 .dx-icon-context-menu-sort-asc {
@@ -67,14 +68,6 @@
                     .dx-icon-sizing(@GRID_BASE_CONTEXT_MENU_SORT_ICON_SIZE);
                 }
             }
-        }
-
-        .dx-menu-base .dx-menu-item.dx-menu-item-has-submenu .dx-menu-item-content {
-            padding: 7px 12px;
-        }
-
-        .dx-menu {
-            background-color: transparent;
         }
 
         .dx-icon-filter-operation-equals {
@@ -126,6 +119,16 @@
             background-repeat: no-repeat;
             background-position: center center;
             background-size: 14px 5px;
+        }
+    }
+
+    .dx-@{widgetName} {
+        .dx-menu-base .dx-menu-item.dx-menu-item-has-submenu .dx-menu-item-content {
+            padding: 7px 12px;
+        }
+
+        .dx-menu {
+            background-color: transparent;
         }
 
         .dx-row-alt {
