@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
     Class = require("../../core/class"),
     type = require("../../core/utils/common").type,
@@ -373,11 +374,13 @@ var ComponentBuilder = Class.inherit({
 
             return wrappedAction;
         };
+        result.beforeActionExecute = result.onActionCreated;
         result.nestedComponentOptions = function(component) {
             return {
                 templatesRenderAsynchronously: component.option("templatesRenderAsynchronously"),
                 modelByElement: component.option("modelByElement"),
                 onActionCreated: component.option("onActionCreated"),
+                beforeActionExecute: component.option("beforeActionExecute"),
                 nestedComponentOptions: component.option("nestedComponentOptions")
             };
         };
@@ -410,6 +413,10 @@ var ComponentBuilder = Class.inherit({
                 if(!skipCallback) {
                     immediateValue = fn();
                     callback(immediateValue);
+                }
+
+                if(Config().wrapActionsBeforeExecute) {
+                    safeApply(function() {}, scope);
                 }
 
                 return disposeWatcher;
