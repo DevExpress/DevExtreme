@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
     ArrayStore = require("../../data/array_store"),
+    query = require("../../data/query"),
     DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter");
 
 var DEFAULT_KEY_EXPRESSION = "id";
@@ -256,7 +257,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             }
         },
 
-        _generateParentIdsToLoad: function(data) {
+        _generateParentInfoToLoad: function(data) {
             var that = this,
                 keyMap = {},
                 parentIdMap = {},
@@ -276,31 +277,52 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 }
             }
 
-            return parentIds;
+            return {
+                parentIdMap: parentIdMap,
+                parentIds: parentIds
+            };
         },
 
         _loadParents: function(data, options) {
             var that = this,
-                parentIds = that._generateParentIdsToLoad(data),
+                store,
+                filter,
+                filterLength,
+                needLocalFiltering,
+                parentInfo = that._generateParentInfoToLoad(data),
+                parentIds = parentInfo.parentIds,
+                parentIdMap = parentInfo.parentIdMap,
                 d = $.Deferred(),
                 isRemoteFiltering = options.remoteOperations.filtering,
-                loadOptions = isRemoteFiltering ? options.storeLoadOptions : options.loadOptions,
-                filter;
+                maxFilterLengthInRequest = that.option("maxFilterLengthInRequest"),
+                loadOptions = isRemoteFiltering ? options.storeLoadOptions : options.loadOptions;
 
             if(!parentIds.length) {
                 return d.resolve(data);
             }
 
             filter = that._createIdFilter(that.getKeyExpr(), parentIds);
+            filterLength = encodeURI(JSON.stringify(filter)).length;
+
+            if(filterLength > maxFilterLengthInRequest) {
+                filter = function(itemData) {
+                    return parentIdMap[that._keyGetter(itemData)];
+                };
+
+                needLocalFiltering = isRemoteFiltering;
+            }
 
             loadOptions = extend({}, loadOptions, {
-                filter: filter
+                filter: !needLocalFiltering ? filter : null
             });
 
-            var store = options.fullData ? new ArrayStore(options.fullData) : that._dataSource.store();
+            store = options.fullData ? new ArrayStore(options.fullData) : that._dataSource.store();
 
             store.load(loadOptions).done(function(loadedData) {
                 if(loadedData.length) {
+                    if(needLocalFiltering) {
+                        loadedData = query(loadedData).filter(filter).toArray();
+                    }
                     that._loadParents(data.concat(loadedData), options).done(d.resolve).fail(d.reject);
                 } else {
                     d.resolve(data);
