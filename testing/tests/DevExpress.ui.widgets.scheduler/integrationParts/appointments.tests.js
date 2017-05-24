@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    errors = require("ui/widget/ui.errors"),
     translator = require("animation/translator"),
     dateLocalization = require("localization/date"),
     messageLocalization = require("localization/message"),
@@ -4231,3 +4232,27 @@ QUnit.test("Appointments should be rendered correctly at asynchronous rendering 
     assert.roughEqual(appointmentWidth, cellWidth * 3, 2.001, "appointment was render correctly");
 });
 
+QUnit.test("Scheduler schouldn't throw error at deferred appointment loading (T518327)", function(assert) {
+    var data = [{ text: "Task 1", startDate: new Date(2017, 4, 22, 16), endDate: new Date(2017, 4, 24, 1) }];
+
+    this.createInstance({
+        dataSource: new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    var d = $.Deferred();
+                    d.resolve(data);
+                    return d.promise();
+                }
+            })
+        }),
+        currentDate: new Date(2017, 4, 20),
+        views: ["week", "day"],
+        currentView: "week"
+    });
+
+    var errorLogStub = sinon.stub(errors, "log");
+    this.instance.option("currentView", "day");
+
+    assert.notOk(errorLogStub.called, "Error was not thrown");
+    errorLogStub.restore();
+});
