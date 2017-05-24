@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
     ArrayStore = require("../../data/array_store"),
+    query = require("../../data/query"),
     DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter");
 
 var DEFAULT_KEY_EXPRESSION = "id";
@@ -320,9 +321,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             store.load(loadOptions).done(function(loadedData) {
                 if(loadedData.length) {
                     if(needLocalFiltering) {
-                        new ArrayStore(loadedData).load({ filter: filter }).done(function(items) {
-                            loadedData = items;
-                        });
+                        loadedData = query(loadedData).filter(filter).toArray();
                     }
                     that._loadParents(data.concat(loadedData), options).done(d.resolve).fail(d.reject);
                 } else {
