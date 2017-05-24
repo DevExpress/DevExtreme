@@ -3824,6 +3824,8 @@ QUnit.test("searching should work correctly in grouped tagBox (T516798)", functi
     });
 
     this.clock.tick();
+    $tagBox.dxTagBox("instance").open();
+
     var $input = $tagBox.find("input"),
         keyboard = keyboardMock($input);
 

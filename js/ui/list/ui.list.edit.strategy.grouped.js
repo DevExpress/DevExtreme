@@ -121,12 +121,9 @@ var GroupedEditStrategy = EditStrategy.inherit({
             index = -1,
             that = this;
 
-        $.each(groups, function(groupIndex, groupItem) {
-            var items = groupItem.items || [groupItem];
-
-            if(!items.length) return;
-
-            var keys = that.getKeysByItems(items);
+        $.each(groups, function(groupIndex, group) {
+            if(!group.items) return;
+            var keys = that.getKeysByItems(group.items);
 
             $.each(keys, function(keyIndex, itemKey) {
                 if(that._equalKeys(itemKey, key)) {
@@ -152,15 +149,13 @@ var GroupedEditStrategy = EditStrategy.inherit({
         $.each(keys, function(_, key) {
             var getItemMeta = function(groups) {
                 var index = this.getIndexByKey(key, groups);
-                var groupItem = index && groups[index.group];
+                var group = index && groups[index.group];
 
-                if(!groupItem) return;
-
-                var item = groupItem.items ? groupItem.items[index.item] : groupItem;
+                if(!group) return;
 
                 return {
-                    groupKey: groupItem.key,
-                    item: item
+                    groupKey: group.key,
+                    item: group.items[index.item]
                 };
             }.bind(this);
 

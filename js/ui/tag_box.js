@@ -966,13 +966,6 @@ var TagBox = SelectBox.inherit({
         }
     },
 
-    _refreshSelected: function() {
-        this._list && this._suppressingSelectionChanged(function() {
-            this._setListOption("selectedItems", this._selectedItems.slice());
-            this.callBase();
-        });
-    },
-
     _resetListDataSourceFilter: function() {
         var dataSource = this._getDataSource();
 
