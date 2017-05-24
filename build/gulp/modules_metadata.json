@@ -233,7 +233,8 @@
     "name": "viz/themes",
     "exports": {
       "currentTheme": "viz.currentTheme",
-      "registerTheme": "viz.registerTheme"
+      "registerTheme": "viz.registerTheme",
+      "refreshTheme": "viz.refreshTheme"
     }
   },
   {
