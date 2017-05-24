@@ -21,7 +21,8 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var LIST_ITEM_CLASS = "dx-list-item",
+var LIST_CLASS = "dx-list",
+    LIST_ITEM_CLASS = "dx-list-item",
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
     TEXTBOX_CLASS = "dx-texteditor-input",
     EMPTY_INPUT_CLASS = "dx-texteditor-empty",
@@ -3305,6 +3306,25 @@ QUnit.test("tags container should be scrolled to the end on focusin (T390041)", 
 
     $input.trigger("focusin");
     assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
+});
+
+QUnit.test("list should save it's scroll position after value changed", function(assert) {
+    this.instance.option({
+        opened: true,
+        showSelectionControls: true
+    });
+
+    var $content = this.instance.content(),
+        $list = $content.find("." + LIST_CLASS),
+        list = $list.dxList("instance"),
+        scrollView = $list.dxScrollView("instance");
+
+    this.instance._popup.option("height", 100);
+
+    list.scrollTo(2);
+    this.instance.option("value", [this.items[2]]);
+
+    assert.equal(scrollView.scrollTop(), 2, "list should not be scrolled to the top after value changed");
 });
 
 QUnit.testInActiveWindow("tag container should be scrolled to the start after rendering and focusout in the RTL mode (T390041)", function(assert) {
