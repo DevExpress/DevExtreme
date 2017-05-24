@@ -727,6 +727,10 @@ var Popup = Overlay.inherit({
         }
     },
 
+    refreshPosition: function() {
+        this._renderPosition();
+    },
+
     _renderPosition: function() {
         if(this.option("fullScreen")) {
             translator.move(this._$content, {
