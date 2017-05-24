@@ -252,7 +252,7 @@ var Tabs = CollectionWidget.inherit({
         this.callBase();
         if(this.option("templatesRenderAsynchronously")) {
             this._resizeEventTimer = setTimeout(function() {
-                domUtils.triggerResizeEvent(that.element());
+                domUtils.triggerResizeEvent(that._$content);
             }, 0);
         }
     },
