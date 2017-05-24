@@ -580,6 +580,68 @@ QUnit.test("scrollView should be updated after group collapsed", function(assert
     }
 });
 
+QUnit.test("scrollView should update its position after a group has been collapsed", function(assert) {
+    try {
+        List.mockScrollView(this.originalScrollView);
+        $.fx.off = true;
+
+        var $element = this.element.dxList({
+                pageLoadMode: "scrollBottom",
+                height: 130,
+                scrollingEnabled: true,
+                dataSource: {
+                    load: function(options) {
+                        var d = $.Deferred(),
+                            items = [{
+                                key: 'first',
+                                items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+                            },
+                            {
+                                key: 'second',
+                                items: [{ a: 3 }, { a: 4 }, { a: 5 }]
+                            },
+                            {
+                                key: 'third',
+                                items: [{ a: 6 }, { a: 7 }, { a: 8 }]
+                            }];
+                        setTimeout(function() {
+
+                            d.resolve(items.slice(options.skip, options.skip + options.take));
+                        }, 50);
+                        return d.promise();
+                    },
+                    group: "key",
+                    pageSize: 1,
+                },
+                grouped: true,
+                collapsibleGroups: true,
+                groupTemplate: function(data) {
+                    return $("<div>").text(data.key);
+                },
+                itemTemplate: function(data) {
+                    return $("<div>").text(data.a);
+                }
+            }),
+            instance = $element.dxList("instance"),
+            releaseSpy = sinon.spy(instance._scrollView, "release");
+
+        this.clock.tick(50);
+
+        instance.scrollTo(200);
+        this.clock.tick(50);
+
+        instance.scrollTo(200);
+        this.clock.tick(50);
+
+        instance.collapseGroup(2);
+        this.clock.tick(50);
+
+        assert.ok(releaseSpy.lastCall.args[0], "The last call of 'release' hides load indicator");
+    } finally {
+        $.fx.off = false;
+    }
+});
+
 
 QUnit.module("next button", moduleSetup);
 
