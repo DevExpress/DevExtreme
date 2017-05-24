@@ -612,6 +612,12 @@ var TagBox = SelectBox.inherit({
             : this.callBase();
     },
 
+    _suppressingSelectionChanged: function(callback) {
+        this._setListOption("onSelectionChanged", commonUtils.noop);
+        callback.call(this);
+        this._setListOption("onSelectionChanged", this._getSelectionChangeHandler());
+    },
+
     _initSelectAllValueChangedAction: function() {
         this._selectAllValueChangeAction = this._createActionByOption("onSelectAllValueChanged");
     },
@@ -958,6 +964,12 @@ var TagBox = SelectBox.inherit({
         if(this._popup && this.option("opened") && this._isEditable() && currentHeight !== originalHeight) {
             this._popup.repaint();
         }
+    },
+
+    _refreshSelected: function() {
+        this._list && this._suppressingSelectionChanged(function() {
+            this.callBase();
+        });
     },
 
     _resetListDataSourceFilter: function() {
