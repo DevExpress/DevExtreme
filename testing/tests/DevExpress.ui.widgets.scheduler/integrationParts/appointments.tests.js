@@ -4225,7 +4225,9 @@ QUnit.test("Appointments should be rendered correctly at asynchronous rendering 
     this.instance.option("currentView", "month");
     this.clock.tick();
 
-    var appointmentWidth = this.instance.element().find(".dx-scheduler-appointment").eq(0).outerWidth();
-    assert.equal(appointmentWidth, 255, "appointment was render correctly");
+    var appointmentWidth = this.instance.element().find(".dx-scheduler-appointment").eq(0).outerWidth(),
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+
+    assert.roughEqual(appointmentWidth, cellWidth * 3, 2.001, "appointment was render correctly");
 });
 
