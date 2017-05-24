@@ -38,6 +38,14 @@ var TextBox = TextEditor.inherit({
             mode: "text",
 
             /**
+            * @name dxTextBoxOptions_valueChangeEvent
+            * @publicName valueChangeEvent
+            * @type string
+            * @default "change focusout"
+            */
+            valueChangeEvent: "change focusout",
+
+            /**
             * @name dxTextBoxOptions_maxlength
             * @publicName maxLength
             * @type string|number
