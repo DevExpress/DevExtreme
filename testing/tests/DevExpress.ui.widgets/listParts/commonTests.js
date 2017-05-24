@@ -589,6 +589,7 @@ QUnit.test("scrollView should update its position after a group has been collaps
                 pageLoadMode: "scrollBottom",
                 height: 130,
                 scrollingEnabled: true,
+                useNativeScrolling: false,
                 dataSource: {
                     load: function(options) {
                         var d = $.Deferred(),
@@ -605,7 +606,6 @@ QUnit.test("scrollView should update its position after a group has been collaps
                                 items: [{ a: 6 }, { a: 7 }, { a: 8 }]
                             }];
                         setTimeout(function() {
-
                             d.resolve(items.slice(options.skip, options.skip + options.take));
                         }, 50);
                         return d.promise();
