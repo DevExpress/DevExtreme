@@ -415,9 +415,6 @@ declare module DevExpress.ui {
 
         /** @docid dxTextBoxOptions_mode */
         mode?: string;
-
-        /** @docid dxTextBoxOptions_valueChangeEvent */
-        valueChangeEvent?: string;
     }
 
     /** @docid dxTextbox */
