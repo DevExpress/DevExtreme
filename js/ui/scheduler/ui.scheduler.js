@@ -1382,9 +1382,9 @@ var Scheduler = Widget.inherit({
     _initAppointmentTemplate: function() {
         var that = this;
 
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
+        this._defaultTemplates["item"] = new BindableTemplate(function($container, data, model) {
             var appointmentsInst = that.getAppointmentsInstance();
-            appointmentsInst._renderAppointmentTemplate.call(appointmentsInst, $container, data);
+            appointmentsInst._renderAppointmentTemplate.call(appointmentsInst, $container, data, model);
         }, [
             "html",
             "text", "startDate", "endDate", "allDay", "description", "recurrenceRule", "recurrenceException", "startDateTimeZone", "endDateTimeZone"

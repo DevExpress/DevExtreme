@@ -322,29 +322,29 @@ var SchedulerAppointments = CollectionWidget.inherit({
         });
     },
 
-    _renderAppointmentTemplate: function($container, data) {
-        data = data.appointmentData || data;
-
+    _renderAppointmentTemplate: function($container, data, model) {
         var startDate = new Date(data.startDate),
             endDate = new Date(data.endDate);
 
+        var appointmentData = model.appointmentData || data;
+
         $("<div>")
-            .text(this._createAppointmentTitle(data))
+            .text(this._createAppointmentTitle(appointmentData))
             .addClass(APPOINTMENT_TITLE_CLASS)
             .appendTo($container);
 
-        if(typeUtils.isPlainObject(data)) {
-            if(data.html) {
-                $container.html(data.html);
+        if(typeUtils.isPlainObject(appointmentData)) {
+            if(appointmentData.html) {
+                $container.html(appointmentData.html);
             }
         }
 
-        var recurrenceRule = data.recurrenceRule,
-            allDay = data.allDay,
+        var recurrenceRule = appointmentData.recurrenceRule,
+            allDay = appointmentData.allDay,
             $contentDetails = $("<div>").addClass(APPOINTMENT_CONTENT_DETAILS_CLASS);
 
-        var apptStartTz = data.startDateTimeZone,
-            apptEndTz = data.endDateTimeZone;
+        var apptStartTz = appointmentData.startDateTimeZone,
+            apptEndTz = appointmentData.endDateTimeZone;
 
         startDate = this.invoke("convertDateByTimezone", startDate, apptStartTz);
         endDate = this.invoke("convertDateByTimezone", endDate, apptEndTz);
