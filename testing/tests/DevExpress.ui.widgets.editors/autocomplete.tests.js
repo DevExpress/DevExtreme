@@ -896,6 +896,7 @@ QUnit.module("Overlay integration", {
     beforeEach: function() {
         executeAsyncMock.setup();
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
         this.element = $("#autocomplete").dxAutocomplete({
             value: "text",
             dataSource: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
@@ -906,8 +907,6 @@ QUnit.module("Overlay integration", {
         this.$input = this.element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.popup = this.instance._popup.element();
         this.keyboard = keyboardMock(this.$input);
-
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         executeAsyncMock.teardown();
