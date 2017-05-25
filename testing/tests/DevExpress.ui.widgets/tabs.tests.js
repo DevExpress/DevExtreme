@@ -207,6 +207,7 @@ QUnit.test("select action should not be triggered when disabled item is disabled
 QUnit.test("tabs with 'templatesRenderAsynchronously' option should trigger resize event when content ready (T351071)", function(assert) {
     var resizeCount = 0,
         clock = sinon.useFakeTimers(),
+        resizeStub = sinon.spy(domUtils, "triggerResizeEvent"),
         tabsEl = $("#tabs").dxTabs({
             items: [
                 { text: "1" },
@@ -221,7 +222,7 @@ QUnit.test("tabs with 'templatesRenderAsynchronously' option should trigger resi
 
     clock.tick(0);
     assert.equal(resizeCount, 1, "resize event triggered");
-
+    assert.deepEqual(resizeStub.args[0][0], tabsEl, "resize event was called on the tabs element");
     clock.restore();
 });
 
