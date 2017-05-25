@@ -3808,3 +3808,40 @@ QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first tim
 
     assert.equal(tagBox.option("selectedItems").length, 1, "selectedItems was changed correctly");
 });
+
+QUnit.test("Searching should work correctly in grouped tagBox (T516798)", function(assert) {
+    var items = [{
+        "ID": 1,
+        "Name": "Item1",
+        "Category": "Category1"
+    }, {
+        "ID": 3,
+        "Name": "Item3",
+        "Category": "Category2"
+    }];
+
+    var $tagBox = $("#tagBox").dxTagBox({
+        dataSource: new DataSource({
+            store: items,
+            group: "Category"
+        }),
+        valueExpr: "ID",
+        displayExpr: "Name",
+        value: [items[0].ID],
+        searchEnabled: true,
+        opened: true,
+        grouped: true
+    });
+
+    var $input = $tagBox.find("input"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("3");
+    this.clock.tick(TIME_TO_WAIT);
+    keyboard.press('enter');
+
+    var $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS);
+
+    assert.equal($tagContainer.find("." + TAGBOX_TAG_CONTENT_CLASS).length, 2, "selected tags rendered");
+    assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
+});
