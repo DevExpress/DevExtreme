@@ -663,7 +663,7 @@ var TagBox = SelectBox.inherit({
         this._renderInputSize();
         this._clearFilter();
         this._renderTags();
-        this._popup && this._popup.repaint();
+        this._popup && this._popup.refreshPosition();
     },
 
     _listItemClickHandler: function(e) {
