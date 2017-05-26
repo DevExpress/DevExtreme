@@ -200,30 +200,6 @@ QUnit.test("Tasks should be filtered by date before render", function(assert) {
     assert.deepEqual(dataSource.items(), tasks, "Items are OK");
 });
 
-QUnit.test("Tasks should be filtered by date before render after dataSource changing", function(assert) {
-    var tasks = [
-        { text: "One", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 1) },
-        { text: "Two", startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 1) }
-    ];
-    var dataSource = new DataSource({
-        store: tasks,
-        filter: ["text", "Two"]
-    });
-    this.createInstance({
-        currentDate: new Date(2015, 2, 17),
-        dataSource: dataSource,
-        currentView: "week",
-        remoteFiltering: true
-    });
-
-    assert.deepEqual(dataSource.items(), [tasks[1]], "Items are OK");
-    dataSource = new DataSource({
-        store: tasks
-    });
-    this.instance.option("dataSource", dataSource);
-    assert.deepEqual(dataSource.items(), tasks, "Items are OK");
-});
-
 QUnit.test("Tasks should be filtered by start day hour before render", function(assert) {
     var tasks = [
             { text: "One", startDate: new Date(2015, 2, 16, 5), endDate: new Date(2015, 2, 16, 5, 30) },

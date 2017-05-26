@@ -257,7 +257,7 @@ var AppointmentModel = Class.inherit({
     setDataSource: function(dataSource, remoteFiltering) {
         this._dataSource = dataSource;
 
-        if(this._filterMaker && remoteFiltering) {
+        if(this._filterMaker) {
             this._filterMaker.clearRegistry();
         }
     },
