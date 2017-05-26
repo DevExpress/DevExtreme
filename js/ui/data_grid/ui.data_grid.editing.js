@@ -722,8 +722,7 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
         },
         _saveEditDataCore: function(deferreds, processedKeys) {
             var that = this,
-                store = that._dataController.store(),
-                hasCanceledData = false;
+                store = that._dataController.store();
 
             function executeEditingAction(actionName, params, func) {
                 var deferred = $.Deferred();
@@ -797,8 +796,6 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                     deferreds.push(doneDeferred.promise());
                 }
             });
-
-            return hasCanceledData;
         },
         _processSaveEditDataResult: function(results, processedKeys) {
             var that = this,
