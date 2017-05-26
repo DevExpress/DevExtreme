@@ -20,7 +20,6 @@ var HoldEmitter = Emitter.inherit({
 
     _startTimer: function(e) {
         var holdTimeout = ("timeout" in this) ? this.timeout : HOLD_TIMEOUT;
-
         this._holdTimer = setTimeout((function() {
             this._requestAccept(e);
             this._fireEvent(HOLD_EVENT_NAME, e, {
@@ -51,6 +50,10 @@ var HoldEmitter = Emitter.inherit({
     },
 
     cancel: function() {
+        this._stopTimer();
+    },
+
+    dispose: function() {
         this._stopTimer();
     }
 
