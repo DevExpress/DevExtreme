@@ -91,26 +91,6 @@ QUnit.test("Save base64 via proxyUrl for IE < 10", function(assert) {
     }
 });
 
-QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
-    //arrange
-    if(!browser.msie && commonUtils.isFunction(window.Blob)) {
-        var _winJSBlobSave = fileSaver._winJSBlobSave,
-            isCalled = false;
-
-        window.WinJS = {};
-        fileSaver._winJSBlobSave = function() { isCalled = true; };
-
-        //act
-        fileSaver.saveAs("test", "EXCEL", [], "testUrl");
-
-        //assert
-        assert.ok(isCalled);
-        fileSaver._winJSBlobSave = _winJSBlobSave;
-    } else {
-        assert.ok(true, "This test is for not IE browsers");
-    }
-});
-
 QUnit.test("Save base 64 for Safari", function(assert) {
     if(!commonUtils.isFunction(window.Blob)) {
         if(browser.msie) {
@@ -134,7 +114,7 @@ QUnit.test("Save base 64 for Safari", function(assert) {
     }
 });
 
-QUnit.test("Ipad do not sand error E1034", function(assert) {
+QUnit.test("Ipad does not send error E1034", function(assert) {
     if(!commonUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
         assert.ok(true, "This test for iPad devices");
         return;
@@ -147,7 +127,8 @@ QUnit.test("Ipad do not sand error E1034", function(assert) {
     //act
     fileSaver._linkDownloader = function() { return; };
     errors.log = function(errorCode) { warningSend = errorCode; return; };
-    fileSaver.saveAs("test", "EXCEL", new ArrayBuffer(10));
+
+    fileSaver.saveAs("test", "EXCEL", new Blob([], { type: "test/plain" }));
 
     //assert
     assert.ok(warningSend !== "E1034", "Warning E1034 wasn't sent");
