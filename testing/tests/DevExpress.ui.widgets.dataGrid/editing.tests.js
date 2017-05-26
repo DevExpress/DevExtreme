@@ -8148,6 +8148,42 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
     assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
 });
 
+//T506863
+QUnit.testInActiveWindow("Show the revert button when a row updating is canceled", function(assert) {
+    //arrange
+    var rowsView = this.rowsView,
+        testElement = $('#container');
+
+    this.applyOptions({
+        editing: {
+            allowUpdating: true,
+            mode: 'cell'
+        },
+        onRowUpdating: function(params) {
+            params.cancel = true;
+        }
+    });
+
+    this.editingController.optionChanged({
+        name: "onRowUpdating",
+        value: function(params) {
+            params.cancel = true;
+        }
+    });
+    rowsView.render(testElement);
+    var $cell = testElement.find('td').first();
+    $cell.trigger('dxclick'); //Edit
+    this.clock.tick();
+
+    var $input = getInputElements(testElement).first();
+    $input.val(101);
+    $input.trigger('change');
+
+    this.editingController.saveEditData();
+    this.clock.tick();
+
+    assert.ok(testElement.find(".dx-revert-button").length, "the revert button is shown");
+});
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
