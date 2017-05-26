@@ -947,10 +947,17 @@ QUnit.module("Keyboard keys", {
                 preventDefault: false,
                 stopPropagation: false
             };
+            var alt = false;
+            if(typeof ctrl === "object") {
+                alt = ctrl.alt;
+                shift = ctrl.shift;
+                ctrl = ctrl.ctrl;
+            }
             that.keyboardNavigationController._keyDownProcessor.process({
                 which: keys[key],
                 ctrlKey: ctrl,
                 shiftKey: shift,
+                altKey: alt,
                 target: target && target[0] || target,
                 preventDefault: function() {
                     result.preventDefault = true;
@@ -4085,6 +4092,23 @@ QUnit.testInActiveWindow("Select all rows by Ctrl + A when allowSelectAll is tru
     //assert
     assert.ok(this.selectionOptions.isSelectAllCalled, "selection rows count");
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
+});
+
+//T518574
+QUnit.testInActiveWindow("Select all should not work on AltGr + A when allowSelectAll is true", function(assert) {
+    //arrange, act
+    setupModules(this);
+
+    this.options.selection = { mode: "multiple", allowSelectAll: true };
+    this.gridView.render($("#container"));
+
+    this.focusFirstCell();
+
+    var isPreventDefaultCalled = this.triggerKeyDown("A", { ctrl: true, alt: true }).preventDefault;
+
+    //assert
+    assert.notOk(this.selectionOptions.isSelectAllCalled, "selectAll is not called");
+    assert.notOk(isPreventDefaultCalled, "preventDefault is not called");
 });
 
 QUnit.testInActiveWindow("Ctrl + A when cell is editing does not prevent default handler", function(assert) {
