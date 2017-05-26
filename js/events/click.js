@@ -18,7 +18,7 @@ var isInput = function(element) {
     return $(element).is("input, textarea, select, button ,:focus, :focus *");
 };
 
-var misc = { requestAnimationFrame: animationFrame.requestAnimationFrame };
+var misc = { requestAnimationFrame: animationFrame.requestAnimationFrame, cancelAnimationFrame: animationFrame.cancelAnimationFrame };
 
 var ClickEmitter = Emitter.inherit({
 
@@ -51,7 +51,7 @@ var ClickEmitter = Emitter.inherit({
         }
 
         this._accept(e);
-        misc.requestAnimationFrame((function() {
+        this._clickAnimationFrame = misc.requestAnimationFrame((function() {
             this._fireClickEvent(e);
         }).bind(this));
     },
@@ -70,6 +70,10 @@ var ClickEmitter = Emitter.inherit({
         this._fireEvent(CLICK_EVENT_NAME, e, {
             target: domUtils.closestCommonParent(this._startTarget, e.target)
         });
+    },
+
+    dispose: function() {
+        misc.cancelAnimationFrame(this._clickAnimationFrame);
     }
 
 });
