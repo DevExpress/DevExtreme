@@ -530,7 +530,6 @@ declare module DevExpress.ui {
 
     export interface dxColorBoxOptions extends dxDropDownEditorOptions {
         /** @docid_ignore dxColorBoxOptions_fieldEditEnabled */
-        /** @docid_ignore dxColorBoxOptions_acceptCustomValue */
         /** @docid_ignore dxColorBoxOptions_maxLength */
         /** @docid_ignore dxColorBoxOptions_showClearButton */
         /** @docid_ignore dxColorBoxOptions_valueChangeEvent */
