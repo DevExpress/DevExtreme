@@ -722,6 +722,7 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
         },
         _saveEditDataCore: function(deferreds, processedKeys) {
             var that = this,
+                isDataSaved = true,
                 store = that._dataController.store();
 
             function executeEditingAction(actionName, params, func) {
@@ -786,9 +787,7 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                     doneDeferred = $.Deferred();
                     deferred
                         .always(function(data) {
-                            if(data === "cancel" && getEditMode(that) === DATAGRID_EDIT_MODE_CELL) {
-                                that._focusEditingCell();
-                            }
+                            isDataSaved = data !== "cancel";
                             processedKeys.push(editData.key);
                         })
                         .always(doneDeferred.resolve);
@@ -796,6 +795,8 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                     deferreds.push(doneDeferred.promise());
                 }
             });
+
+            return isDataSaved;
         },
         _processSaveEditDataResult: function(results, processedKeys) {
             var that = this,
@@ -877,7 +878,9 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                 return result.resolve().promise();
             }
 
-            that._saveEditDataCore(deferreds, processedKeys);
+            if(!that._saveEditDataCore(deferreds, processedKeys) && editMode === DATAGRID_EDIT_MODE_CELL) {
+                that._focusEditingCell();
+            }
 
             if(deferreds.length) {
                 that._saving = true;
