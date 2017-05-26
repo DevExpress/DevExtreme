@@ -39,7 +39,7 @@
     "qunitjs": "^2.0.1",
     "run-sequence": "^1.1.5",
     "systemjs": "<=0.19.41",
-    "systemjs-plugin-css": "^0.1.23",
+    "systemjs-plugin-css": "0.1.33",
     "systemjs-plugin-json": "0.2.2",
     "systemjs-plugin-text": "0.0.8",
     "through2": "^2.0.1",
