@@ -147,7 +147,7 @@ QUnit.test("Ipad do not sand error E1034", function(assert) {
     //act
     fileSaver._linkDownloader = function() { return; };
     errors.log = function(errorCode) { warningSend = errorCode; return; };
-    fileSaver.saveAs("test", "EXCEL");
+    fileSaver.saveAs("test", "EXCEL", new ArrayBuffer(10));
 
     //assert
     assert.ok(warningSend !== "E1034", "Warning E1034 wasn't sent");

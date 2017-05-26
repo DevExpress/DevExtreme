@@ -937,13 +937,13 @@ QUnit.test("Text offset position calculation(other Devices)", function(assert) {
             assert.equal(that.drawnElements[1].args[1], 0, "Text out of tspanElement position X");
             assert.equal(that.drawnElements[1].args[2], 50, "Text out of tspanElement position Y");
 
-            assert.roughEqual(that.drawnElements[2].args[1], 42, 1, "tSpan text element without x,y,dx,dy attributes position X");
+            assert.roughEqual(that.drawnElements[2].args[1], 42, 4, "tSpan text element without x,y,dx,dy attributes position X");
             assert.equal(that.drawnElements[2].args[2], 50, "tSpan text element without x,y,dx,dy attributes position Y");
 
-            assert.roughEqual(that.drawnElements[3].args[1], 84, 2, "tSpan text element with dx,dy attributes position X");
+            assert.roughEqual(that.drawnElements[3].args[1], 84, 4, "tSpan text element with dx,dy attributes position X");
             assert.equal(that.drawnElements[3].args[2], 65, "tSpan text element with dx,dy attributes position Y");
 
-            assert.roughEqual(that.drawnElements[4].args[1], 127, 2, "Text out of tspanElement in the middle text block position X");
+            assert.roughEqual(that.drawnElements[4].args[1], 127, 4, "Text out of tspanElement in the middle text block position X");
             assert.equal(that.drawnElements[4].args[2], 65, "Text out of tspanElement in the middle text block position Y");
 
             assert.equal(that.drawnElements[5].args[1], 200, "tSpan text element with x,y attributes position X");
