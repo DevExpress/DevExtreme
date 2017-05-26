@@ -6205,6 +6205,11 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
 });
 
 QUnit.test("Scroll positioned correct with fixed columns and editing", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is not actual for not desktop devices");
+        return;
+    }
+
     //arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,
