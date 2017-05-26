@@ -405,7 +405,7 @@ exports.KeyboardNavigationController = gridCore.ViewController.inherit({
     },
 
     _ctrlAKeyHandler: function(eventArgs, isEditing) {
-        if(!isEditing && eventArgs.ctrl && this.option("selection.mode") === "multiple" && this.option("selection.allowSelectAll")) {
+        if(!isEditing && eventArgs.ctrl && !eventArgs.alt && this.option("selection.mode") === "multiple" && this.option("selection.allowSelectAll")) {
             this._selectionController.selectAll();
             eventArgs.originalEvent.preventDefault();
         }
