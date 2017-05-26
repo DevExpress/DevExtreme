@@ -786,7 +786,12 @@ exports.EditingController = gridCore.ViewController.inherit((function() {
                 if(deferred) {
                     doneDeferred = $.Deferred();
                     deferred
-                        .always(function() { processedKeys.push(editData.key); })
+                        .always(function(data) {
+                            if(data === "cancel" && getEditMode(that) === DATAGRID_EDIT_MODE_CELL) {
+                                that._focusEditingCell();
+                            }
+                            processedKeys.push(editData.key);
+                        })
                         .always(doneDeferred.resolve);
 
                     deferreds.push(doneDeferred.promise());
