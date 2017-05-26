@@ -1008,7 +1008,7 @@ var Scheduler = Widget.inherit({
             case "dataSource":
                 this._initDataSource();
                 this._customizeStoreLoadOptions();
-                this._appointmentModel.setDataSource(this._dataSource);
+                this._appointmentModel.setDataSource(this._dataSource, this.option("remoteFiltering"));
                 this._loadResources().done((function() {
                     this._filterAppointmentsByDate();
                     this._updateOption("workSpace", "showAllDayPanel", this.option("showAllDayPanel"));

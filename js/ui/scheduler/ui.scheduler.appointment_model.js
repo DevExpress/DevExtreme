@@ -23,6 +23,12 @@ var FilterMaker = Class.inherit({
         return !!this._filterRegistry;
     },
 
+    clearRegistry: function() {
+        if(this._filterRegistry) {
+            delete this._filterRegistry;
+        }
+    },
+
     make: function(type, args) {
 
         if(!this._filterRegistry) {
@@ -248,8 +254,12 @@ var AppointmentModel = Class.inherit({
         this.setDataAccessors(dataAccessors);
     },
 
-    setDataSource: function(dataSource) {
+    setDataSource: function(dataSource, remoteFiltering) {
         this._dataSource = dataSource;
+
+        if(this._filterMaker && remoteFiltering) {
+            this._filterMaker.clearRegistry();
+        }
     },
 
     setDataAccessors: function(dataAccessors) {
