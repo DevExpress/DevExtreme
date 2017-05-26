@@ -4205,6 +4205,25 @@ QUnit.test("update column parameter from undefined to null", function(assert) {
     assert.strictEqual(changedCount, 0, "columnsChanged is not fired");
 });
 
+//T516687
+QUnit.test("update buffered column options from undefined to null", function(assert) {
+    this.applyOptions({ columns: ["field1", "field2", "field3"] });
+
+    var changedCount = 0;
+    this.columnsController.columnsChanged.add(function() {
+        changedCount++;
+    });
+
+    //act
+    this.columnsController.columnOption(0, "bufferedFilterValue", null);
+    this.columnsController.columnOption(0, "bufferedSelectedFilterOperation", null);
+
+    //assert
+    assert.strictEqual(this.columnsController.getColumns()[0].bufferedFilterValue, null, "bufferedFilterValue is changed");
+    assert.strictEqual(this.columnsController.getColumns()[0].bufferedSelectedFilterOperation, null, "bufferedSelectedFilterOperation is changed");
+    assert.strictEqual(changedCount, 2, "columnsChanged is fired for each buffered option");
+});
+
 //T125988
 QUnit.test("update column groupIndex", function(assert) {
     this.applyOptions({ columns: [{ dataField: "field1", groupIndex: 0 }, { dataField: "field2", groupIndex: 1 }, "field3"] });
