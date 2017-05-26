@@ -495,7 +495,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                             options[isOnClickMode ? "bufferedFilterValue" : "filterValue"] = null;
                         }
                     } else {
-                        options[isOnClickMode ? "bufferedSelectedFilterOperation" : "selectedFilterOperation"] = column.defaultSelectedFilterOperation;
+                        options[isOnClickMode ? "bufferedSelectedFilterOperation" : "selectedFilterOperation"] = column.defaultSelectedFilterOperation || null;
                         options[isOnClickMode ? "bufferedFilterValue" : "filterValue"] = null;
                     }
 
