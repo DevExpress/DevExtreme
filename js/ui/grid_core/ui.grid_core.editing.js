@@ -839,7 +839,7 @@ var EditingController = modules.ViewController.inherit((function() {
         _saveEditDataCore: function(deferreds, processedKeys) {
             var that = this,
                 store = that._dataController.store(),
-                hasCanceledData = false;
+                isDataSaved = true;
 
             function executeEditingAction(actionName, params, func) {
                 var deferred = $.Deferred();
@@ -902,14 +902,17 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(deferred) {
                     doneDeferred = $.Deferred();
                     deferred
-                        .always(function() { processedKeys.push(editData.key); })
+                        .always(function(data) {
+                            isDataSaved = data !== "cancel";
+                            processedKeys.push(editData.key);
+                        })
                         .always(doneDeferred.resolve);
 
                     deferreds.push(doneDeferred.promise());
                 }
             });
 
-            return hasCanceledData;
+            return isDataSaved;
         },
         _processSaveEditDataResult: function(results, processedKeys) {
             var that = this,
@@ -993,7 +996,9 @@ var EditingController = modules.ViewController.inherit((function() {
                 return result.resolve().promise();
             }
 
-            that._saveEditDataCore(deferreds, processedKeys);
+            if(!that._saveEditDataCore(deferreds, processedKeys) && editMode === EDIT_MODE_CELL) {
+                that._focusEditingCell();
+            }
 
             if(deferreds.length) {
                 that._saving = true;
