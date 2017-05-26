@@ -52,6 +52,59 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
         assert.deepEqual(dataSource.items(), [appointments[1]], "filterByDate work correctly");
     });
 
+    QUnit.test("Appointment model filterByDate should filter dataSource correctly after changing user filter", function(assert) {
+        var data = [
+            {
+                text: "Appointment 1",
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Appointment 2",
+                startDate: new Date(2015, 1, 10, 11, 0),
+                endDate: new Date(2015, 1, 10, 13, 0)
+            }
+        ];
+        var dataSource = new DataSource({
+            store: data,
+            filter: ["text", "=", "Appointment 2"]
+        });
+        var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
+            startDateExpr: "startDate",
+            endDateExpr: "endDate"
+        });
+        var dateFilter = [
+            [
+                ["endDate", ">", new Date(2015, 1, 9, 0)],
+                ["startDate", "<", new Date(2015, 1, 11)]
+            ],
+            "or",
+            [
+                ["endDate", new Date(2015, 1, 9)],
+                ["startDate", new Date(2015, 1, 9)]
+            ]
+        ];
+        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+
+        var expectedFilter = [dateFilter, [
+            "text",
+            "=",
+            "Appointment 2"
+        ]];
+        var actualFilter = dataSource.filter();
+        assert.deepEqual(expectedFilter, actualFilter, "filter is right");
+
+        var changedDataSource = new DataSource({
+            store: data
+        });
+        appointmentModel.setDataSource(changedDataSource, true);
+        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+
+        expectedFilter = [dateFilter];
+        actualFilter = changedDataSource.filter();
+        assert.deepEqual(actualFilter, expectedFilter, "filter is right");
+    });
+
     QUnit.test("Appointment model filterByDate should return filter with dateSerializationFormat and without forceIsoDateParsing", function(assert) {
         var defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = false;
