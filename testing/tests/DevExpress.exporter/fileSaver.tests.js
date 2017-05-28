@@ -114,7 +114,7 @@ QUnit.test("Save base 64 for Safari", function(assert) {
     }
 });
 
-QUnit.test("Ipad does not send error E1034", function(assert) {
+QUnit.test("No E1034 on iPad", function(assert) {
     if(!commonUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
         assert.ok(true, "This test for iPad devices");
         return;
