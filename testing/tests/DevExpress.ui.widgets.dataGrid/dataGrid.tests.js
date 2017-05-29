@@ -57,7 +57,6 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
     logger = require("core/utils/console").logger,
     errors = require("ui/widget/ui.errors"),
-    browser = require("core/utils/browser"),
     commonUtils = require("core/utils/common"),
     devices = require("core/devices"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
@@ -68,8 +67,13 @@ var $ = require("jquery"),
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
 
-browser.webkit = false;
 fx.off = true;
+
+DataGrid.defaultOptions({
+    options: {
+        loadingTimeout: 0
+    }
+});
 
 require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
 
@@ -3597,31 +3601,6 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
     //assert
     var $loadPanel = dataGrid.element().find(".dx-loadpanel");
     assert.ok(!$loadPanel.length, "load panel is visible");
-});
-
-//T344031
-QUnit.test("Loading timeout in chrome", function(assert) {
-    var oldWebkit = browser.webkit;
-    browser.webkit = true;
-
-    var clock = sinon.useFakeTimers(),
-        dataGrid = createDataGrid({
-            dataSource: [{}]
-        });
-
-    clock.tick(29);
-
-    assert.equal(dataGrid.getController("data").items().length, 0, "no items");
-
-    //act
-    clock.tick(1);
-
-    //assert
-    assert.equal(dataGrid.getController("data").items().length, 1, "items is loaded");
-
-    clock.restore();
-
-    browser.webkit = oldWebkit;
 });
 
 //T389866
