@@ -14,6 +14,7 @@ require("integration/angular");
 
 require("ui/text_box");
 require("ui/popup");
+require("ui/popover");
 require("ui/data_grid");
 require("ui/toolbar");
 require("ui/box");
@@ -62,7 +63,7 @@ QUnit.module("Widgets wich calculate own sizes", {
 
 QUnit.test("dxPopup", function(assert) {
     var $markup = $("\
-        <div id='popup' dx-popup='popupOptions'>\
+        <div dx-popup='popupOptions'>\
             <div data-options='dxTemplate: { name: \"custom\" }'>\
 		        {{VeryVeryVeryLongField.value1}}\
 		        {{VeryVeryVeryLongField.value2}}\
@@ -88,11 +89,36 @@ QUnit.test("dxPopup", function(assert) {
 
     initMarkup($markup, controller, this);
 
-    var content = $markup.data("dxPopup").content();
+    this.clock.tick();
+
+    assert.equal($(".dx-popup-content").height(), 18);
+});
+
+QUnit.test("dxPopover", function(assert) {
+    var $markup = $("\
+        <a id=\"link1\">testLink</a>\
+        <div id=\"popover\" dx-popover='popoverOptions'>\
+            {{popoverContent}} {{popoverContent}}\
+        </div>\
+    ");
+
+    var controller = function($scope) {
+        $scope.popoverOptions = {
+            target: "#link1",
+            animation: null,
+            width: 100,
+            height: undefined,
+            position: { at: "right top", my: "left top" },
+            visible: true
+        };
+        $scope.popoverContent = "1";
+    };
+
+    initMarkup($markup, controller, this);
 
     this.clock.tick();
 
-    assert.equal(content.height(), 18);
+    assert.equal($(".dx-popup-content").height(), 18);
 });
 
 QUnit.test("dxDataGrid", function(assert) {
