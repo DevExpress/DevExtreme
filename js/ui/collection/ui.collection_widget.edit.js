@@ -590,6 +590,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             case "onItemDeleting":
             case "onItemDeleted":
             case "onItemReordered":
+            case "maxFilterLengthInRequest":
                 break;
             default:
                 this.callBase(args);
