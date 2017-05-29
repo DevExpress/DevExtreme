@@ -72,6 +72,30 @@ QUnit.test("Proxy Url exportForm generate", function(assert) {
     assert.equal(testForm.children("input[name=data]").eq(0).val(), "testData", "Set data in form Post data");
 });
 
+QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
+    //arrange
+    if(!browser.msie && commonUtils.isFunction(window.Blob)) {
+        var _winJSBlobSave = fileSaver._winJSBlobSave,
+            isCalled = false;
+        try {
+            window.WinJS = {};
+            fileSaver._winJSBlobSave = function() { isCalled = true; };
+
+            //act
+            fileSaver.saveAs("test", "EXCEL", [], "testUrl");
+
+            //assert
+            assert.ok(isCalled);
+        } finally {
+            delete window.WinJS;
+            fileSaver._winJSBlobSave = _winJSBlobSave;
+        }
+    } else {
+        assert.ok(true, "This test is for not IE browsers");
+    }
+});
+
+
 QUnit.test("Save base64 via proxyUrl for IE < 10", function(assert) {
     //act
     if(browser.msie && parseInt(browser.version) < 10) {
