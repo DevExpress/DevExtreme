@@ -1,22 +1,10 @@
 "use strict";
 
 var $ = require("jquery"),
-    browser = require("core/utils/browser"),
-    caret = require("ui/text_box/utils.caret"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+    keyboardMock = require("../../../helpers/keyboardMock.js"),
+    caretWorkaround = require("./caretWorkaround.js");
 
 require("ui/text_box/ui.text_editor");
-
-var setCaretForEdge15 = function($input) {
-    //NOTE: We desided to return to this problem when the Edge will update to the 16 version
-    //Edge 15 sets caret to the end of the mask editor when iframe is used and focus was triggered by focus() method
-    var isEdge15 = browser.msie && browser.version >= 15 && browser.version < 16;
-
-    if(isEdge15) {
-        $input.focus();
-        caret($input, 0);
-    }
-};
 
 var testMaskRule = function(title, config) {
     QUnit.test(title, function(assert) {
@@ -29,7 +17,7 @@ var testMaskRule = function(title, config) {
         var $input = $textEditor.find(".dx-texteditor-input");
         var keyboard = keyboardMock($input);
 
-        setCaretForEdge15($input);
+        caretWorkaround($input);
 
         keyboard.type(config.text);
 
@@ -81,7 +69,7 @@ QUnit.test("accept only allowed chars", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("y");
     assert.equal($input.val(), "_");
@@ -101,7 +89,7 @@ QUnit.test("prevent typing at the end", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x").type("x");
     assert.equal($input.val(), "x");
@@ -119,7 +107,7 @@ QUnit.test("two chars with different maskRules", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x").type("y");
     assert.equal($input.val(), "xy");
@@ -137,7 +125,7 @@ QUnit.test("two chars with different maskRules surrounded by fixed chars", funct
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x").type("y");
     assert.equal($input.val(), "(xy)", "mask rendered correctly");
@@ -154,7 +142,7 @@ QUnit.test("using same maskRules in the mask", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x");
     assert.equal($input.val(), "x_", "first char is typed");
@@ -187,7 +175,7 @@ QUnit.test("cursor should be set after fixed mask letters during typing", functi
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x");
     assert.equal(keyboard.caret().start, 3, "cursor set after fixed mask letters");
@@ -404,7 +392,7 @@ QUnit.test("backspace should remove last char considering fixed letter", functio
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x").keyDown("backspace");
 
@@ -461,7 +449,7 @@ QUnit.test("backspace should remove chars correctly considering fixed letters", 
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard
         .type("x")
@@ -512,7 +500,7 @@ QUnit.test("delete should remove only selected valuable chars (T242341)", functi
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("xx")
         .caret({ start: 0, end: 3 })
@@ -542,7 +530,7 @@ QUnit.test("all selected chars should be deleted on key press", function(assert)
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard
         .type("x")
@@ -565,7 +553,7 @@ QUnit.test("all selected chars should be deleted on backspace", function(assert)
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard
         .type("x")
@@ -592,7 +580,7 @@ QUnit.test("all selected chars should be deleted on del key", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard
         .type("x")
@@ -658,7 +646,7 @@ QUnit.test("value considers mask", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x");
 
@@ -743,7 +731,7 @@ QUnit.test("option change should be fired during typing", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x");
     $input.trigger("change");
@@ -769,7 +757,7 @@ QUnit.test("valueChangeEvent=change should fire change on blur", function(assert
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x");
 
@@ -796,7 +784,7 @@ QUnit.test("valueChangeEvent=change should fire change on beforedeactivate (ie r
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("x");
 
@@ -1367,7 +1355,7 @@ QUnit.test("mask validation message", function(assert) {
 
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("1");
     $input.trigger("change");
@@ -1387,7 +1375,7 @@ QUnit.test("mask should be validated before valueChangeEvent is fired", function
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("1");
     $input.trigger("change");
@@ -1418,7 +1406,7 @@ QUnit.test("validation after value changed", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     keyboard.type("1");
     $input.trigger("change");
