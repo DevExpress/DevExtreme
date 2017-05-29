@@ -67,6 +67,12 @@ var $ = require("jquery"),
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
 
+if("chrome" in window && devices.real().deviceType !== "desktop") {
+    // Chrome DevTools device emulation
+    // Erase differences in user agent stylesheet
+    $("head").append($("<style>").text("input[type=date] { padding: 1px 0; }"));
+}
+
 fx.off = true;
 
 DataGrid.defaultOptions({
