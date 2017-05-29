@@ -693,13 +693,14 @@ var subscribes = {
             var floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration),
                 tailDuration = dateUtils.sameDate(startDate, endDate) ? appointmentDuration % dayDuration : appointmentDuration - floorQuantityOfDays * dayDuration;
 
-            if(!floorQuantityOfDays && !dateUtils.sameDate(startDate, endDate)) {
+            if(!floorQuantityOfDays && !dateUtils.sameDate(startDate, new Date(endDate.getTime() - 1))) {
                 tailDuration = tailDuration - (dayDuration - visibleDayDuration);
             }
 
             if(tailDuration > visibleDayDuration) {
                 tailDuration = visibleDayDuration;
             }
+
             result = floorQuantityOfDays * visibleDayDuration + tailDuration;
         }
         options.callback(result);
