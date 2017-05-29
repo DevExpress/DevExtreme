@@ -72,6 +72,30 @@ QUnit.test("Proxy Url exportForm generate", function(assert) {
     assert.equal(testForm.children("input[name=data]").eq(0).val(), "testData", "Set data in form Post data");
 });
 
+QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
+    //arrange
+    if(!browser.msie && commonUtils.isFunction(window.Blob)) {
+        var _winJSBlobSave = fileSaver._winJSBlobSave,
+            isCalled = false;
+        try {
+            window.WinJS = {};
+            fileSaver._winJSBlobSave = function() { isCalled = true; };
+
+            //act
+            fileSaver.saveAs("test", "EXCEL", [], "testUrl");
+
+            //assert
+            assert.ok(isCalled);
+        } finally {
+            delete window.WinJS;
+            fileSaver._winJSBlobSave = _winJSBlobSave;
+        }
+    } else {
+        assert.ok(true, "This test is for not IE browsers");
+    }
+});
+
+
 QUnit.test("Save base64 via proxyUrl for IE < 10", function(assert) {
     //act
     if(browser.msie && parseInt(browser.version) < 10) {
@@ -88,26 +112,6 @@ QUnit.test("Save base64 via proxyUrl for IE < 10", function(assert) {
         fileSaver._linkDownloader = _formDownloader;
     } else {
         assert.ok(true, "Test for ie<10");
-    }
-});
-
-QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
-    //arrange
-    if(!browser.msie && commonUtils.isFunction(window.Blob)) {
-        var _winJSBlobSave = fileSaver._winJSBlobSave,
-            isCalled = false;
-
-        window.WinJS = {};
-        fileSaver._winJSBlobSave = function() { isCalled = true; };
-
-        //act
-        fileSaver.saveAs("test", "EXCEL", [], "testUrl");
-
-        //assert
-        assert.ok(isCalled);
-        fileSaver._winJSBlobSave = _winJSBlobSave;
-    } else {
-        assert.ok(true, "This test is for not IE browsers");
     }
 });
 
@@ -134,7 +138,7 @@ QUnit.test("Save base 64 for Safari", function(assert) {
     }
 });
 
-QUnit.test("Ipad do not sand error E1034", function(assert) {
+QUnit.test("No E1034 on iPad", function(assert) {
     if(!commonUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
         assert.ok(true, "This test for iPad devices");
         return;
@@ -147,7 +151,8 @@ QUnit.test("Ipad do not sand error E1034", function(assert) {
     //act
     fileSaver._linkDownloader = function() { return; };
     errors.log = function(errorCode) { warningSend = errorCode; return; };
-    fileSaver.saveAs("test", "EXCEL");
+
+    fileSaver.saveAs("test", "EXCEL", new Blob([], { type: "test/plain" }));
 
     //assert
     assert.ok(warningSend !== "E1034", "Warning E1034 wasn't sent");
