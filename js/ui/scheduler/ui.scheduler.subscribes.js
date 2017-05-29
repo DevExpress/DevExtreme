@@ -660,13 +660,13 @@ var subscribes = {
 
             result = ceilQuantityOfDays * visibleDayDuration;
         } else {
-            var isSameDate = dateUtils.sameDate(startDate, new Date(endDate.getTime() - 1));
+            var isDifferentDate = !dateUtils.sameDate(startDate, new Date(endDate.getTime() - 1));
 
             var floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration),
                 tailDuration;
 
-            if(!isSameDate) {
-                tailDuration = floorQuantityOfDays ? appointmentDuration - floorQuantityOfDays * dayDuration : appointmentDuration - (dayDuration - visibleDayDuration);
+            if(isDifferentDate) {
+                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : dayDuration - visibleDayDuration);
             } else {
                 tailDuration = appointmentDuration % dayDuration;
             }
