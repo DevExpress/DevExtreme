@@ -1504,22 +1504,26 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _focusInHandler: function(e) {
-        var currentTarget = e.currentTarget,
-            focusTargets = this._focusTarget();
+        var that = this,
+            currentTarget = e.currentTarget,
+            focusTargets = that._focusTarget();
 
         if($.inArray(currentTarget, focusTargets) !== -1) {
-            this._toggleFocusClass(true, currentTarget);
+            that._toggleFocusClass(true, currentTarget);
         }
 
-        var focusedElement = this.option("focusedElement");
+        if(that.option("focusedElement")) {
+            clearTimeout(that._setFocusedItemTimeout);
 
-        if(focusedElement) {
-            this._setFocusedItem(focusedElement);
+            that._setFocusedItemTimeout = setTimeout(function() {
+                that._setFocusedItem(that.option("focusedElement"));
+            });
+
             return;
         }
 
-        var $activeItem = this._getActiveItem();
-        this.option("focusedElement", $activeItem.closest("." + NODE_CLASS));
+        var $activeItem = that._getActiveItem();
+        that.option("focusedElement", $activeItem.closest("." + NODE_CLASS));
     },
 
     _setFocusedItem: function($target) {
