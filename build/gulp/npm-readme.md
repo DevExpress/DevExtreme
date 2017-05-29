@@ -11,7 +11,7 @@ DevExtreme allows you to build HTML/JS applications that can be packed as native
 
 ## Installation
 
-If you plan to use DevExtreme Widgets in an Angular 2 application, please install [``devextreme-angular``](https://www.npmjs.com/package/devextreme-angular) package.
+If you plan to use DevExtreme Widgets in an Angular application, please install [``devextreme-angular``](https://www.npmjs.com/package/devextreme-angular) package.
 
 To add DevExtreme to your application, use the following command:
 ```
