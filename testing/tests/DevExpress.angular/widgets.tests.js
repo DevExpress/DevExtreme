@@ -21,8 +21,6 @@ require("ui/scheduler");
 require("ui/defer_rendering");
 require("ui/slide_out_view");
 
-var FIXTURE_ELEMENT = function() { return $("#qunit-fixture").attr("ng-app", "testApp"); };
-
 fx.off = true;
 var ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);
@@ -37,7 +35,13 @@ var initMarkup = function($markup, controller, context) {
         .appendTo(context.$container);
 
     $markup.appendTo(context.$controller);
-    context.testApp.controller("my-controller", controller);
+    context.testApp
+        .factory('$exceptionHandler', function() {
+            return function myExceptionHandler(exception, cause) {
+                throw exception;
+            };
+        })
+        .controller("my-controller", controller);
 
     angular.bootstrap(context.$container, ["testApp"]);
 };
@@ -367,12 +371,6 @@ QUnit.test("Change selection.mode option via binding and refresh", function(asse
 
 QUnit.module("Adaptive menu", {
     beforeEach: function() {
-        this.testApp = angular.module("testApp", ["dx"]);
-        this.$container = $("<div/>").appendTo(FIXTURE_ELEMENT());
-        this.$controller = $("<div></div>")
-            .attr("ng-controller", "my-controller")
-            .appendTo(this.$container);
-
         QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
     },
     afterEach: function() {
@@ -381,16 +379,12 @@ QUnit.module("Adaptive menu", {
 });
 
 QUnit.test("Adaptive menu should support angular integration", function(assert) {
-    var $markup = $("<div/>")
-            .attr("dx-menu", "menuOptions")
-            .appendTo(this.$controller),
-        $testDiv = $("<div>").attr("ng-bind", "test")
-            .appendTo(this.$controller),
-        scope;
+    var $markup = $("\
+        <div dx-menu=\"menuOptions\"></div>\
+        <div id=\"testDiv\" ng-bind=\"test\"></div>\
+    ");
 
-    this.testApp.controller("my-controller", function($scope) {
-        scope = $scope;
-
+    var controller = function($scope) {
         $scope.test = "Test text 1";
 
         $scope.menuOptions = {
@@ -400,29 +394,26 @@ QUnit.test("Adaptive menu should support angular integration", function(assert) 
                 $scope.test = "Test text 2";
             }
         };
-        assert.strictEqual(scope.selectedRowKeysInstance, scope.selectedRowKeys, "selectedRowKeys instance is not changed");
-    });
+        assert.strictEqual($scope.selectedRowKeysInstance, $scope.selectedRowKeys, "selectedRowKeys instance is not changed");
+    };
 
-    angular.bootstrap(this.$container, ["testApp"]);
+    initMarkup($markup, controller, this);
+
+    var scope = $markup.scope();
 
     var $treeViewItem = $markup.find(".dx-treeview-item").eq(0);
 
     $treeViewItem.trigger("dxclick");
 
     assert.equal(scope.test, "Test text 2", "scope value is updated");
-    assert.equal($testDiv.text(), "Test text 2", "test div is updated");
+    assert.equal($("#testDiv").text(), "Test text 2", "test div is updated");
 });
 
 QUnit.test("Component can change itself options on init (T446364)", function(assert) {
-    var $markup = $("<div/>")
-            .attr("dx-list", "listOptions")
-            .appendTo(this.$controller),
-        data = ["Peter", "Mary", "John", "Sam", "Betty", "Joyce"],
-        scope;
+    var data = ["Peter", "Mary", "John", "Sam", "Betty", "Joyce"];
 
-    this.testApp.controller("my-controller", function($scope) {
-        scope = $scope;
-
+    var $markup = $("<div dx-list=\"listOptions\"></div>");
+    var controller = function($scope) {
         $scope.listOptions = {
             bindingOptions: {
                 dataSource: 'vm.myData',
@@ -451,9 +442,11 @@ QUnit.test("Component can change itself options on init (T446364)", function(ass
 
         $scope.vm = new Test();
         $scope.vm.myData = data;
-    });
+    };
 
-    angular.bootstrap(this.$container, ["testApp"]);
+    initMarkup($markup, controller, this);
+
+    var scope = $markup.scope();
 
     $markup.dxList("option", "selectedItems", [ "Betty" ]);
 
@@ -463,12 +456,6 @@ QUnit.test("Component can change itself options on init (T446364)", function(ass
 
 QUnit.module("toolbar", {
     beforeEach: function() {
-        this.testApp = angular.module("testApp", ["dx"]);
-        this.$container = $("<div/>").appendTo(FIXTURE_ELEMENT());
-        this.$controller = $("<div></div>")
-            .attr("ng-controller", "my-controller")
-            .appendTo(this.$container);
-
         QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
     },
     afterEach: function() {
@@ -477,15 +464,12 @@ QUnit.module("toolbar", {
 });
 
 QUnit.test("polymorph widget correctly renders nested widgets", function(assert) {
-    var $markup = $("<div/>")
-            .attr("dx-toolbar", "{ items: items }")
-            .appendTo(this.$controller),
-        scope;
+    var $markup = $("\
+        <div dx-toolbar=\"{ items: items }\"></div>\
+        <div ng-bind=\"test\"></div>\
+    ");
 
-    $("<div>").attr("ng-bind", "test")
-        .appendTo(this.$controller);
-
-    this.testApp.controller("my-controller", function($scope) {
+    var controller = function($scope) {
         scope = $scope;
 
         $scope.disabled = false;
@@ -498,9 +482,11 @@ QUnit.test("polymorph widget correctly renders nested widgets", function(assert)
                 }
             }
         }];
-    });
+    };
 
-    angular.bootstrap(this.$container, ["testApp"]);
+    initMarkup($markup, controller, this);
+
+    var scope = $markup.scope();
 
     scope.$apply(function() {
         scope.disabled = true;
@@ -509,16 +495,12 @@ QUnit.test("polymorph widget correctly renders nested widgets", function(assert)
 });
 
 QUnit.test("dxPopup - bindingOptions for a title property should be worked", function(assert) {
-    $("<div/>")
-        .attr("dx-popup", "popupOptions")
-        .appendTo(this.$controller);
+    var $markup = $("\
+        <div dx-popup=\"popupOptions\"></div>\
+        <div ng-bind=\"test\"></div>\
+    ");
 
-    var scope;
-
-    $("<div>").attr("ng-bind", "test")
-        .appendTo(this.$controller);
-
-    this.testApp.controller("my-controller", function($scope) {
+    var controller = function($scope) {
         scope = $scope;
         $scope.titlePopup = "title";
 
@@ -529,9 +511,12 @@ QUnit.test("dxPopup - bindingOptions for a title property should be worked", fun
                 title: "titlePopup"
             }
         };
-    });
+    };
 
-    angular.bootstrap(this.$container, ["testApp"]);
+    initMarkup($markup, controller, this);
+
+    var scope = $markup.scope();
+
     var done = assert.async();
     setTimeout(function() {
         scope.$apply(function() {
@@ -546,12 +531,6 @@ QUnit.test("dxPopup - bindingOptions for a title property should be worked", fun
 
 QUnit.module("box", {
     beforeEach: function() {
-        this.testApp = angular.module("testApp", ["dx"]);
-        this.$container = $("<div/>").appendTo(FIXTURE_ELEMENT());
-        this.$controller = $("<div></div>")
-            .attr("ng-controller", "my-controller")
-            .appendTo(this.$container);
-
         QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
     },
     afterEach: function() {
@@ -560,21 +539,15 @@ QUnit.module("box", {
 });
 
 QUnit.test("innerBox with nested box item", function(assert) {
-    var $markup = $("<div/>")
-            .attr("dx-box", "{}")
-            .append(
-        '<div data-options="dxItem: {baseSize: 272, ratio: 0, box: {direction: \'col\'}}">\
-                    <div data-options="dxItem: {baseSize: \'auto\', ratio: 0}"><h2>Box1</h2></div>\
-                </div>'
-            )
-            .appendTo(this.$controller),
-        scope;
+    var $markup = $("\
+        <div dx-box=\"{}\">\
+            <div data-options=\"dxItem: {baseSize: 272, ratio: 0, box: {direction: \'col\'}}\">\
+                <div data-options=\"dxItem: {baseSize: \'auto\', ratio: 0}\"><h2>Box1</h2></div>\
+            </div>\
+        </div>\
+    ");
 
-    this.testApp.controller("my-controller", function($scope) {
-        scope = $scope;
-    });
-
-    angular.bootstrap(this.$container, ["testApp"]);
+    initMarkup($markup, function() {}, this);
 
     assert.equal($.trim($markup.text()), "Box1", "inner box rendered");
 });
@@ -582,12 +555,6 @@ QUnit.test("innerBox with nested box item", function(assert) {
 
 QUnit.module("tree view", {
     beforeEach: function() {
-        this.testApp = angular.module("testApp", ["dx"]);
-        this.$container = $("<div/>").appendTo(FIXTURE_ELEMENT());
-        this.$controller = $("<div></div>")
-            .attr("ng-controller", "my-controller")
-            .appendTo(this.$container);
-
         QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
     },
     afterEach: function() {
@@ -598,38 +565,30 @@ QUnit.module("tree view", {
 QUnit.test("tree view should not crash with complex ids", function(assert) {
     assert.expect(0);
 
-    $("<div dx-tree-view='options' dx-item-alias='item'>" +
-      "  <div data-options='dxTemplate: { name: \"item\" }'>{{item.title}}</div>" +
-      "</div>")
-        .appendTo(this.$controller);
+    var $markup = $("\
+        <div dx-tree-view='options' dx-item-alias='item'>\
+            <div data-options='dxTemplate: { name: \"item\" }'>{{item.title}}</div>\
+        </div>\
+    ");
 
-    var scope;
-    this.testApp
-        .factory('$exceptionHandler', function() {
-            return function myExceptionHandler(exception, cause) {
-                throw exception;
-            };
-        })
-        .controller("my-controller", function($scope) {
-            scope = $scope;
+    var controller = function($scope) {
+        $scope.data = [{
+            uid: "33ad",
+            title: "title",
+            uidParent: null
+        }];
 
-            $scope.data = [{
-                uid: "33ad",
-                title: "title",
-                uidParent: null
-            }];
+        $scope.options = {
+            keyExpr: "uid",
+            parentIdExpr: "uidParent",
+            dataStructure: "plain",
+            bindingOptions: {
+                items: "data"
+            }
+        };
+    };
 
-            $scope.options = {
-                keyExpr: "uid",
-                parentIdExpr: "uidParent",
-                dataStructure: "plain",
-                bindingOptions: {
-                    items: "data"
-                }
-            };
-        });
-
-    angular.bootstrap(this.$container, ["testApp"]);
+    initMarkup($markup, controller, this);
 });
 
 
@@ -681,29 +640,11 @@ QUnit.test("Custom store with ISO8601 dates", function(assert) {
 
 QUnit.module("Widgets without model for template", {
     beforeEach: function() {
-        var TestComponent = DOMComponent.inherit({
-            _render: function() {
-                return this.callBase.apply(this, arguments);
-            },
-            _optionChanged: function() {
-                this._invalidate();
-            },
-            _getDefaultOptions: function() {
-                return { text: "", array: [], obj: null };
-            }
-        });
-
-        this.testApp = angular.module("testApp", ["dx"]);
-        this.$container = $("<div/>").appendTo(FIXTURE_ELEMENT());
-        this.$controller = $("<div></div>")
-            .attr("ng-controller", "my-controller")
-            .appendTo(this.$container);
-
-        registerComponent("dxTest", TestComponent);
-
+        this.clock = sinon.useFakeTimers();
         QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
     },
     afterEach: function() {
+        this.clock.restore();
         QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
     }
 });
@@ -725,11 +666,22 @@ var noModelWidgets = [
 
 noModelWidgets.forEach(function(widget) {
     QUnit.test(widget.name, function(assert) {
+        var TestComponent = DOMComponent.inherit({
+            _render: function() {
+                return this.callBase.apply(this, arguments);
+            },
+            _optionChanged: function() {
+                this._invalidate();
+            },
+            _getDefaultOptions: function() {
+                return { text: "", array: [], obj: null };
+            }
+        });
+
+        registerComponent("dxTest", TestComponent);
+
         var $markup = $("<div/>")
-                .attr(inflector.dasherize(widget.name), "widgetOptions")
-                .appendTo(this.$controller),
-            clock = sinon.useFakeTimers(),
-            scope;
+            .attr(inflector.dasherize(widget.name), "widgetOptions");
 
         // TODO: ng-bind?
         $("<div>")
@@ -737,7 +689,7 @@ noModelWidgets.forEach(function(widget) {
             .addClass("inner-widget")
             .appendTo($markup);
 
-        this.testApp.controller("my-controller", function($scope) {
+        var controller = function($scope) {
             scope = $scope;
 
             $scope.modelIsReady = $.Deferred().resolve().promise();
@@ -750,19 +702,18 @@ noModelWidgets.forEach(function(widget) {
                     text: "test"
                 }
             };
-        });
+        };
 
-        angular.bootstrap(this.$container, ["testApp"]);
+        initMarkup($markup, controller, this);
 
-        clock.tick(300);
+        var scope = $markup.scope();
+        this.clock.tick(300);
 
         var instance = $(".inner-widget").dxTest("instance");
 
         instance.option("text", "Test text 2");
 
         assert.equal(scope.test, "Test text 2", "scope value is updated");
-
-        clock.restore();
     });
 });
 
@@ -782,16 +733,14 @@ QUnit.test("Scope for template with 'noModel' option is not destroyed after clea
 
     registerComponent("dxTestContainerNoModel", TestContainer);
 
-    var $markup = $(
-        "<div dx-test-container-no-model>"
-            + "    <div data-options='dxTemplate: { name: \"template\" }' class='outer-template'>"
-            + "    </div>"
-            + "</div>"
-        ).appendTo(this.$controller);
+    var $markup = $("\
+        <div dx-test-container-no-model>\
+            <div data-options='dxTemplate: { name: \"template\" }' class='outer-template'>\
+            </div>\
+        </div>\
+    ");
 
-    this.testApp.controller("my-controller", function($scope) { });
-
-    angular.bootstrap(this.$container, ["testApp"]);
+    initMarkup($markup, function() {}, this);
 
     var instance = $markup.data("dxTestContainerNoModel"),
         scope = $markup.scope();
@@ -832,27 +781,20 @@ QUnit.test("T183342 dxValidator should be created after any editors", function(a
 });
 
 QUnit.test("T228219 dxValidationSummary should be disposed properly", function(assert) {
-    var $container = $("<div/>").appendTo(FIXTURE_ELEMENT()),
-        $controller = $("<div></div>")
-            .attr("ng-controller", "my-controller")
-            .appendTo($container),
-        $markup = $(
-            "<div id='testGroup' dx-validation-group='{}'>" +
-            "<div class='dx-field'>" +
-            "<div class='dx-field-value'>" +
-            "<div dx-text-box='{ bindingOptions: { value: \"name\" } }'" +
-            "dx-validator='{ validationRules: [{ type: \"required\" }] }'>" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "<div id='valSumm' dx-validation-summary='{ }'></div>" +
-            "</div>")
-            .appendTo($controller);
+    var $markup = $("\
+        <div id='testGroup' dx-validation-group='{}'>\
+            <div class='dx-field'>\
+                <div class='dx-field-value'>\
+                    <div dx-text-box='{ bindingOptions: { value: \"name\" } }'\
+                        dx-validator='{ validationRules: [{ type: \"required\" }] }'>\
+                    </div>\
+                </div>\
+            </div>\
+            <div id='valSumm' dx-validation-summary='{ }'></div>\
+        </div>\
+    ");
 
-    this.testApp.controller("my-controller", function() {
-    });
-
-    angular.bootstrap($container, ["testApp"]);
+    initMarkup($markup, function() {}, this);
 
     assert.ok(new ValidationGroup($markup));
 
