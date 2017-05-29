@@ -809,6 +809,8 @@ QUnit.test("valueChangeEvent=change should fire change on pressing enter key", f
 
     var $input = $textEditor.find(".dx-texteditor-input");
 
+    caretWorkaround($input);
+
     var keyboard = keyboardMock($input);
     keyboard
         .press("x")
@@ -1144,6 +1146,8 @@ QUnit.test("paste event should be fired in the FireFox when ctrl+V pressed", fun
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
     var event = $.Event("keypress", { ctrlKey: true, keyCode: 0, key: "v", charCode: 118, char: undefined, which: 118 });
+
+    caretWorkaround($input);
 
     $input.trigger(event);
     keyboard.paste("00");
