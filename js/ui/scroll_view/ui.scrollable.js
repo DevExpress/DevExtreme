@@ -270,7 +270,8 @@ var Scrollable = DOMComponent.inherit({
 
     _attachNativeScrollbarsCustomizationCss: function() {
         // NOTE: Customize native scrollbars for dashboard team
-        if(devices.real().deviseType === "desctop" && !(navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
+
+        if(devices.real().deviceType === "desktop" && !(navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
             this.element().addClass("dx-scrollable-customizable-scrollbars");
         }
     },
