@@ -773,6 +773,23 @@ QUnit.test("'getAppointmentDurationInMs' should return visible appointment durat
     });
 });
 
+QUnit.test("'getAppointmentDurationInMs' should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field", function(assert) {
+    this.createInstance();
+
+    this.instance.option({
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    this.instance.fire("getAppointmentDurationInMs", {
+        startDate: new Date(2015, 2, 2, 8),
+        endDate: new Date(2015, 2, 3, 0),
+        callback: function(result) {
+            assert.equal(result / dateUtils.dateToMilliseconds("hour"), 12, "'getAppointmentDurationInMs' works fine");
+        }
+    });
+});
+
 QUnit.test("'getAppointmentDurationInMs' should return visible long appointment duration considering hours of startDate and endDate", function(assert) {
     this.createInstance();
 
