@@ -578,6 +578,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             result = [],
             $cells;
 
+        var forceApplyBindings = this.option("forceApplyBindings");
+        if(forceApplyBindings) {
+            forceApplyBindings();
+        }
+
         $tableElement = $tableElement || that._getTableElement();
 
         if($tableElement) {

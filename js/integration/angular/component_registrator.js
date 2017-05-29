@@ -378,6 +378,7 @@ var ComponentBuilder = Class.inherit({
         result.nestedComponentOptions = function(component) {
             return {
                 templatesRenderAsynchronously: component.option("templatesRenderAsynchronously"),
+                forceApplyBindings: component.option("forceApplyBindings"),
                 modelByElement: component.option("modelByElement"),
                 onActionCreated: component.option("onActionCreated"),
                 beforeActionExecute: component.option("beforeActionExecute"),
@@ -386,6 +387,12 @@ var ComponentBuilder = Class.inherit({
         };
 
         result.templatesRenderAsynchronously = true;
+
+        if(Config().wrapActionsBeforeExecute) {
+            result.forceApplyBindings = function() {
+                safeApply(function() {}, scope);
+            };
+        }
 
         result.integrationOptions = {
             createTemplate: function(element) {
