@@ -329,32 +329,99 @@ QUnit.test("selectAll/unselectAll for 'page' selectAllMode", function(assert) {
 
 QUnit.test("selectAll/unselectAll for 'allPages' selectAllMode", function(assert) {
     var items = [1, 2, 3, 4, 5];
+    var loading = sinon.spy();
     var ds = new DataSource({
-        store: items,
+        store: {
+            type: "array",
+            data: items,
+            onLoading: loading
+        },
         pageSize: 2,
         paginate: true
     });
 
     var $element = $("#list").dxList({
         dataSource: ds,
-        pageLoadMode: "nextButton",
         selectionMode: "multiple",
         selectAllMode: "allPages"
     });
 
     var instance = $element.dxList("instance");
+    assert.equal(loading.callCount, 1, "one load during creation");
 
     instance.selectAll();
 
     assert.deepEqual(instance.option("selectedItems"), items, "selected items is correct");
+    assert.equal(loading.callCount, 2, "one load during select all");
 
     instance.unselectAll();
 
     assert.deepEqual(instance.option("selectedItems"), [], "selected items is empty");
+    assert.equal(loading.callCount, 2, "no load during unselect all");
 });
 
-
 QUnit.module("selection");
+
+QUnit.test("unselectItem for last item if 'allPages' selectAllMode", function(assert) {
+    var items = [1, 2, 3, 4, 5];
+    var loading = sinon.spy();
+    var ds = new DataSource({
+        store: items,
+        pageSize: 2,
+        paginate: true
+    });
+    ds.store().on("loading", loading);
+
+    var $element = $("#list").dxList({
+        selectedItems: [1],
+        dataSource: ds,
+        pageLoadMode: "nextButton",
+        showSelectionControls: true,
+        selectionMode: "all",
+        selectAllMode: "allPages"
+    });
+
+    var instance = $element.dxList("instance");
+    assert.equal(loading.callCount, 1, "one load during creation");
+
+    //act
+    instance.unselectItem(0);
+
+    //assert
+    assert.equal(loading.callCount, 1, "no load during unselect last item");
+    assert.deepEqual(instance.option("selectedItems"), [], "selected items is empty");
+});
+
+QUnit.test("change selectedItemKeys to invisible items should perform load with filter", function(assert) {
+    var items = [1, 2, 3, 4, 5];
+    var ds = new DataSource({
+        store: {
+            type: "array",
+            key: "this",
+            data: items,
+            onLoading: loading
+        },
+        pageSize: 2,
+        paginate: true
+    });
+
+    var $element = $("#list").dxList({
+        dataSource: ds,
+        selectionMode: "multiple"
+    });
+
+    var instance = $element.dxList("instance");
+    var loading = sinon.spy();
+    ds.store().on("loading", loading);
+
+    //act
+    instance.option("selectedItemKeys", [4]);
+
+    //assert
+    assert.equal(loading.callCount, 1, "one load during change selectedRowKeys");
+    assert.deepEqual(loading.lastCall.args[0].filter, ["this", "=", 4], "load during change selectedRowKeys");
+    assert.deepEqual(instance.option("selectedItems"), [4], "selected items is empty");
+});
 
 QUnit.test("selectedItems should not be removed if items won't loaded", function(assert) {
     var items = [1, 2, 3, 4, 5];
