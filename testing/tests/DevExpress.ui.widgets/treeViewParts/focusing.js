@@ -6,6 +6,7 @@ var $ = require("jquery"),
     devices = require("core/devices");
 
 var NODE_CLASS = "dx-treeview-node",
+    ITEM_CLASS = "dx-treeview-item",
     TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility";
 
 QUnit.module("Focusing");
@@ -130,32 +131,33 @@ QUnit.test("Scroll should not jump down when focusing on item (T492496, T517945)
             focusStateEnabled: true,
             height: 40
         }),
-        $items = $treeView.find("." + internals.ITEM_CLASS),
-        scrollable = $treeView.find(".dx-scrollable").dxScrollable("instance");
+        $items = $treeView.find("." + ITEM_CLASS),
+        scrollable = $treeView.find(".dx-scrollable").dxScrollable("instance"),
+        clock = sinon.useFakeTimers();
 
-    $items.last().trigger("dxpointerdown");
+    try {
+        $items.last().trigger("dxpointerdown");
 
-    //assert
-    assert.equal(scrollable.scrollTop(), 56, "scroll top position");
+        //assert
+        assert.equal(scrollable.scrollTop(), 56, "scroll top position");
 
-    scrollable.scrollTo({ y: 0 });
+        scrollable.scrollTo({ y: 0 });
 
-    //assert
-    assert.equal(scrollable.scrollTop(), 0, "scroll top position");
+        //assert
+        assert.equal(scrollable.scrollTop(), 0, "scroll top position");
 
-    this.clock = sinon.useFakeTimers();
+        //act
+        $treeView.trigger("focusin");
 
-    //act
-    $treeView.trigger("focusin");
+        //assert
+        assert.equal(scrollable.scrollTop(), 0, "scroll top position");
 
-    //assert
-    assert.equal(scrollable.scrollTop(), 0, "scroll top position");
+        $items.first().trigger("dxpointerdown");
+        clock.tick();
 
-    $items.first().trigger("dxpointerdown");
-    this.clock.tick();
-
-    //assert
-    assert.equal(scrollable.scrollTop(), 0, "scroll top position");
-
-    this.clock.restore();
+        //assert
+        assert.equal(scrollable.scrollTop(), 0, "scroll top position");
+    } finally {
+        clock.restore();
+    }
 });
