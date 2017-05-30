@@ -526,24 +526,23 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     _renderRepeatEndSwitch: function() {
         var that = this;
         var $switchEndEditor = $("<div>")
-            .addClass(SWITCH_REPEAT_END_EDITOR)
-            .addClass(FIELD_VALUE_CLASS),
-
+                .addClass(SWITCH_REPEAT_END_EDITOR)
+                .addClass(FIELD_VALUE_CLASS),
             $switchEndLabel = $("<div>")
-                            .text(messageLocalization.format("dxScheduler-recurrenceEnd") + ":")
-                            .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
-                            .addClass(FIELD_LABEL_CLASS);
-
-        this._switchEndEditor = this._createComponent($switchEndEditor, Switch, {
-            value: that._recurrenceRule.repeatableRule() ? true : false,
-            onValueChanged: $.proxy(this._repeatEndSwitchValueChangeHandler, this)
-        });
+                .text(messageLocalization.format("dxScheduler-recurrenceEnd") + ":")
+                .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
+                .addClass(FIELD_LABEL_CLASS);
 
         $("<div>")
             .addClass(FIELD_CLASS)
             .addClass(REPEAT_END_EDITOR_FIELD)
             .append($switchEndLabel, $switchEndEditor)
             .appendTo(this._$container);
+
+        this._switchEndEditor = this._createComponent($switchEndEditor, Switch, {
+            value: that._recurrenceRule.repeatableRule() ? true : false,
+            onValueChanged: $.proxy(this._repeatEndSwitchValueChangeHandler, this)
+        });
 
         this._setAriaDescribedBy(this._switchEndEditor, $switchEndLabel);
     },
