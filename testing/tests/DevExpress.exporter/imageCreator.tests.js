@@ -855,7 +855,7 @@ QUnit.test("Text", function(assert) {
 QUnit.test("Text offset position calculation", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<text x="0" y="50" style="font-size: 10px; font-family: verdana;" transform="translate(0, 0)">' +
+        markup = testingMarkupStart + '<text x="0" y="50" style="font-size: 10px; font-family: sans-serif;" transform="translate(0, 0)">' +
             'test part1' +
             '<tspan>test part2</tspan>' +
             '<tspan dx="15" dy="15">test part3</tspan>' +
@@ -869,7 +869,7 @@ QUnit.test("Text offset position calculation", function(assert) {
         canvas = $("<canvas width='1000' height='1000'>").appendTo("#qunit-fixture")[0],
         ctx = canvas.getContext("2d");
 
-    ctx.font = "10px verdana";
+    ctx.font = "10px sans-serif";
 
     assert.expect(15);
 
