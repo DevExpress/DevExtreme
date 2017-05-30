@@ -135,7 +135,7 @@ QUnit.test("Must unwrap visible option when render", function(assert) {
                 }]
             }
         },
-        visibleEditorSelector = ".dx-box-item:not(.dx-state-invisible) .dx-textbox";
+        visibleEditorSelector = ".dx-box-item";
 
     var $form = $("#formWithCustomOptions");
     ko.applyBindings(viewModel, $form.get(0));

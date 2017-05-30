@@ -6,6 +6,7 @@ var $ = require("jquery"),
     utils = require("../../core/utils/common"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     isWritableWrapped = require("../../core/utils/variable_wrapper").isWritableWrapped,
+    unwrap = require("../../core/utils/variable_wrapper").unwrap,
     windowUtils = require("../../core/utils/window"),
     stringUtils = require("../../core/utils/string"),
     dataUtils = require("../../core/utils/data"),
@@ -91,6 +92,7 @@ var LayoutManager = Widget.inherit({
 
     _init: function() {
         this.callBase();
+        this._itemWatchers = [];
         this._initDataAndItems(this.option("layoutData"));
     },
 
@@ -143,11 +145,12 @@ var LayoutManager = Widget.inherit({
     _updateItems: function(layoutData) {
         var that = this,
             userItems = this.option("items"),
+            isUserItemsExist = utils.isDefined(userItems),
             customizeItem = that.option("customizeItem"),
             items,
             processedItems;
 
-        items = utils.isDefined(userItems) ? userItems : this._generateItemsByData(layoutData);
+        items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
         if(utils.isDefined(items)) {
             processedItems = [];
 
@@ -157,16 +160,48 @@ var LayoutManager = Widget.inherit({
 
                     customizeItem && customizeItem(item);
 
-                    if(utils.isObject(item) && item.visible !== false) {
+                    if(utils.isObject(item) && unwrap(item.visible) !== false) {
                         processedItems.push(item);
                     }
                 }
             });
 
+            if(!that._itemWatchers.length || !isUserItemsExist) {
+                that._updateItemWatchers(items);
+            }
+
             this._items = processedItems;
 
             this._sortItems();
         }
+    },
+
+    _cleanItemWatchers: function() {
+        this._itemWatchers.forEach(function(dispose) {
+            dispose();
+        });
+        this._itemWatchers = [];
+    },
+
+    _updateItemWatchers: function(items) {
+        var that = this,
+            watch = that._getWatch();
+
+        items.forEach(function(item) {
+            if(utils.isObject(item) && utils.isDefined(item.visible) && $.isFunction(watch)) {
+                that._itemWatchers.push(
+                    watch(
+                        function() {
+                            return unwrap(item.visible);
+                        },
+                        function() {
+                            that._updateItems(that.option("layoutData"));
+                            that.repaint();
+                        },
+                        { skipImmediate: true }
+                ));
+            }
+        });
     },
 
     _generateItemsByData: function(layoutData) {
@@ -185,10 +220,9 @@ var LayoutManager = Widget.inherit({
 
     _isAcceptableItem: function(item) {
         var itemField = item.dataField || item,
-            itemData = this._getDataByField(itemField),
-            isVisibleItem = item.visible !== false;
+            itemData = this._getDataByField(itemField);
 
-        return !(utils.isFunction(itemData) && !isWrapped(itemData)) && isVisibleItem;
+        return !(utils.isFunction(itemData) && !isWrapped(itemData));
     },
 
     _processItem: function(item) {
@@ -916,6 +950,7 @@ var LayoutManager = Widget.inherit({
                 }
                 break;
             case "items":
+                this._cleanItemWatchers();
                 this._initDataAndItems(args.value);
                 this._invalidate();
                 break;
