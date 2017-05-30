@@ -4731,6 +4731,43 @@ QUnit.testInActiveWindow('Cell should save focus state after data saving in cell
     assert.ok(rowsView.getCellElement(0, 1).find(".dx-widget").hasClass("dx-state-focused"), "editor is focused");
 });
 
+//T463800
+QUnit.testInActiveWindow('Focus should not returns to previous cell after data saving in cell editing mode', function(assert) {
+    //arrange
+    var that = this,
+        rowsView = that.rowsView,
+        editor,
+        testElement = $('#container');
+
+    that.options.loadingTimeout = 30;
+    that.options.columns[0] = { dataField: "name", showEditorAlways: true };
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'cell'
+    };
+
+    that.element = function() {
+        return testElement;
+    };
+
+    rowsView.render(testElement);
+    that.columnsController.init();
+
+    that.editCell(0, 0);
+
+    editor = rowsView.getCellElement(0, 0).find(".dx-textbox").data("dxTextBox");
+
+    //act
+    editor.option("value", "test2");
+    that.editCell(0, 1);
+    that.clock.tick(30);
+
+    //assert
+    assert.strictEqual(rowsView.getCellElement(0, 0).find("input").val(), "test2", "value input");
+    assert.ok(rowsView.getCellElement(0, 1).find(".dx-widget").hasClass("dx-state-focused"), "editor is focused");
+});
+
 //T383760
 QUnit.testInActiveWindow('Update be called once in cell mode on value change for boolean editor', function(assert) {
     //arrange
@@ -8111,6 +8148,42 @@ QUnit.test("It's impossible to save new data when editing form is invalid", func
     assert.equal($formRow.find(".dx-invalid").length, 1, "There is one invalid editor in first row");
 });
 
+//T506863
+QUnit.testInActiveWindow("Show the revert button when a row updating is canceled", function(assert) {
+    //arrange
+    var rowsView = this.rowsView,
+        testElement = $('#container');
+
+    this.applyOptions({
+        editing: {
+            allowUpdating: true,
+            mode: 'cell'
+        },
+        onRowUpdating: function(params) {
+            params.cancel = true;
+        }
+    });
+
+    this.editingController.optionChanged({
+        name: "onRowUpdating",
+        value: function(params) {
+            params.cancel = true;
+        }
+    });
+    rowsView.render(testElement);
+    var $cell = testElement.find('td').first();
+    $cell.trigger('dxclick'); //Edit
+    this.clock.tick();
+
+    var $input = getInputElements(testElement).first();
+    $input.val(101);
+    $input.trigger('change');
+
+    this.editingController.saveEditData();
+    this.clock.tick();
+
+    assert.ok(testElement.find(".dx-revert-button").length, "the revert button is shown");
+});
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {

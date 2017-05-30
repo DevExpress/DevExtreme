@@ -1381,9 +1381,9 @@ var Scheduler = Widget.inherit({
     _initAppointmentTemplate: function() {
         var that = this;
 
-        this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
+        this._defaultTemplates["item"] = new BindableTemplate(function($container, data, model) {
             var appointmentsInst = that.getAppointmentsInstance();
-            appointmentsInst._renderAppointmentTemplate.call(appointmentsInst, $container, data);
+            appointmentsInst._renderAppointmentTemplate.call(appointmentsInst, $container, data, model);
         }, [
             "html",
             "text", "startDate", "endDate", "allDay", "description", "recurrenceRule", "recurrenceException", "startDateTimeZone", "endDateTimeZone"
@@ -1414,31 +1414,32 @@ var Scheduler = Widget.inherit({
     },
 
     _dataSourceChangedHandler: function(result) {
-        var isAgenda = this._getAppointmentsRenderingStrategy() === "agenda",
-            appointmentsToRepaint = result;
+        this._workSpaceRecalculation.done((function() {
+            var isAgenda = this._getAppointmentsRenderingStrategy() === "agenda",
+                appointmentsToRepaint = result;
+            this._filteredItems = this.fire("prerenderFilter");
+            this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
 
-        this._filteredItems = this.fire("prerenderFilter");
-        this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
+            if(isAgenda) {
+                this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"));
+            }
 
-        if(isAgenda) {
-            this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"));
-        }
+            if(this._filteredItems.length && this._isVisible()) {
+                var appointments = this._layoutManager.createAppointmentsMap(this._filteredItems);
+                appointmentsToRepaint = this._layoutManager.markRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
+                this._appointments.option("items", appointmentsToRepaint);
 
-        if(this._filteredItems.length && this._isVisible()) {
-            var appointments = this._layoutManager.createAppointmentsMap(this._filteredItems);
-            appointmentsToRepaint = this._layoutManager.markRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
-            this._appointments.option("items", appointmentsToRepaint);
-
-            delete this.instance._updatedAppointment;
-        } else {
-            this._appointments.option("items", []);
-        }
-        if(isAgenda) {
-            this._workSpace._renderView();
-            this._removeExcessAppointmentWrapping(result);
-                // TODO: remove rows calculation from this callback
-            this._dataSourceLoadedCallback.fireWith(this, [result]);
-        }
+                delete this.instance._updatedAppointment;
+            } else {
+                this._appointments.option("items", []);
+            }
+            if(isAgenda) {
+                this._workSpace._renderView();
+                this._removeExcessAppointmentWrapping(result);
+                    // TODO: remove rows calculation from this callback
+                this._dataSourceLoadedCallback.fireWith(this, [result]);
+            }
+        }).bind(this));
     },
 
     _removeExcessAppointmentWrapping: function(appointments) {
@@ -1610,7 +1611,6 @@ var Scheduler = Widget.inherit({
 
             this._filterAppointmentsByDate();
             this._reloadDataSource();
-
         }).bind(this));
     },
 
@@ -1685,14 +1685,21 @@ var Scheduler = Widget.inherit({
         this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this.option("currentView")].workSpace, this._workSpaceConfig(groups));
         this._workSpace.getWorkArea().append(this._appointments.element());
 
+        this._recalculateWorkspace();
+    },
+
+    _recalculateWorkspace: function() {
+        this._workSpaceRecalculation = $.Deferred();
+
         var recalculateHandler = (function() {
-            domUtils.triggerResizeEvent(this.element());
+            domUtils.triggerResizeEvent(this._workSpace.element());
+            this._workSpaceRecalculation.resolve();
         }).bind(this);
 
         if(this.option("templatesRenderAsynchronously")) {
             this._recalculateTimeout = setTimeout(recalculateHandler);
         } else {
-            domUtils.triggerResizeEvent(this._workSpace.element());
+            recalculateHandler();
         }
     },
 

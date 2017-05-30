@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    browser = require("core/utils/browser"),
     noop = require("core/utils/common").noop,
     support = require("core/utils/support"),
     translator = require("animation/translator"),
@@ -109,6 +110,15 @@ QUnit.test("scrollable render", function(assert) {
     assert.ok($content.children().eq(1).hasClass("content2"));
 });
 
+QUnit.test("scrollable - root element should has 'dx-scrollable-customizable-scrollbars' class (only for non-Mac desktops)", function(assert) {
+    var scrollable = new Scrollable($("#scrollable"));
+
+    if(devices.real().deviceType !== "desktop" || navigator.platform.indexOf('Mac') > -1 && browser.webkit) {
+        assert.notOk(scrollable.element().hasClass("dx-scrollable-customizable-scrollbars"), "root element hasn't 'dx-scrollable-customizable-scrollbars' class");
+    } else {
+        assert.ok(scrollable.element().hasClass("dx-scrollable-customizable-scrollbars"), "root element has 'dx-scrollable-customizable-scrollbars' class");
+    }
+});
 
 QUnit.module("rtl", moduleConfig);
 

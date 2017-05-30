@@ -259,6 +259,8 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         refresh: function() {
+            if(getEditMode(this) === EDIT_MODE_CELL) return;
+
             if(getEditMode(this) !== EDIT_MODE_BATCH) {
                 this.init();
             } else {
@@ -837,7 +839,7 @@ var EditingController = modules.ViewController.inherit((function() {
         _saveEditDataCore: function(deferreds, processedKeys) {
             var that = this,
                 store = that._dataController.store(),
-                hasCanceledData = false;
+                isDataSaved = true;
 
             function executeEditingAction(actionName, params, func) {
                 var deferred = $.Deferred();
@@ -900,14 +902,17 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(deferred) {
                     doneDeferred = $.Deferred();
                     deferred
-                        .always(function() { processedKeys.push(editData.key); })
+                        .always(function(data) {
+                            isDataSaved = data !== "cancel";
+                            processedKeys.push(editData.key);
+                        })
                         .always(doneDeferred.resolve);
 
                     deferreds.push(doneDeferred.promise());
                 }
             });
 
-            return hasCanceledData;
+            return isDataSaved;
         },
         _processSaveEditDataResult: function(results, processedKeys) {
             var that = this,
@@ -980,8 +985,10 @@ var EditingController = modules.ViewController.inherit((function() {
                 result = $.Deferred();
 
             var resetEditIndices = function(that) {
-                that._editColumnIndex = -1;
-                that._editRowIndex = -1;
+                if(editMode !== EDIT_MODE_CELL) {
+                    that._editColumnIndex = -1;
+                    that._editRowIndex = -1;
+                }
             };
 
             if(that._beforeSaveEditData() || that._saving) {
@@ -989,7 +996,9 @@ var EditingController = modules.ViewController.inherit((function() {
                 return result.resolve().promise();
             }
 
-            that._saveEditDataCore(deferreds, processedKeys);
+            if(!that._saveEditDataCore(deferreds, processedKeys) && editMode === EDIT_MODE_CELL) {
+                that._focusEditingCell();
+            }
 
             if(deferreds.length) {
                 that._saving = true;
@@ -1140,6 +1149,8 @@ var EditingController = modules.ViewController.inherit((function() {
             if(!isRowEditMode(that)) {
                 setTimeout(function() {
                     if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
+                        that._editRowIndex = -1;
+                        that._editColumnIndex = -1;
                         that.saveEditData();
                     } else if(oldEditRowIndex >= 0) {
                         var rowIndices = [oldEditRowIndex];
@@ -1206,11 +1217,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._updateEditButtons();
 
                 if(options.column.showEditorAlways && getEditMode(that) === EDIT_MODE_CELL && options.row && !options.row.inserted) {
-                    that.saveEditData().always(function() {
-                        that._editColumnIndex = options.columnIndex;
-                        that._editRowIndex = options.row.rowIndex + that._dataController.getRowIndexOffset();
-                        that._focusEditingCell();
-                    });
+                    that.saveEditData();
                 } else if(options.row && (forceUpdateRow || options.column.setCellValue !== options.column.defaultSetCellValue)) {
                     that._dataController.updateItems({
                         changeType: "update",

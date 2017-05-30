@@ -276,26 +276,33 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value", function(assert) {
-        var data = [],
-            deltaTz = getDeltaTz(5);
+        var currentDevice = devices.current(),
+            isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "win";
 
-        this.instance.option("timeZone", 5);
+        if(!isWinPhone) {
+            var data = [],
+                deltaTz = getDeltaTz(5);
 
-        this.instance.option({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data
-        });
+            this.instance.option("timeZone", 5);
 
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "first" });
+            this.instance.option({
+                currentDate: new Date(2015, 1, 9),
+                dataSource: data
+            });
 
-        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz), "Start date is OK");
-        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz), "End date is OK");
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "first" });
 
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
+            assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz), "Start date is OK");
+            assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz), "End date is OK");
 
-        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
-        assert.equal($appointments.length, 3, "All appts are rendered");
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
+
+            var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+            assert.equal($appointments.length, 3, "All appts are rendered");
+        } else {
+            assert.ok(true);
+        }
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, startDay and endDay hours are set", function(assert) {
@@ -324,30 +331,37 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, negative value", function(assert) {
-        var data = [],
-            deltaTz = getDeltaTz(-7);
+        var currentDevice = devices.current(),
+            isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "win";
 
-        this.instance.option("timeZone", -7);
+        if(!isWinPhone) {
+            var data = [],
+                deltaTz = getDeltaTz(-7);
 
-        this.instance.option({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data
-        });
+            this.instance.option("timeZone", -7);
 
-        this.instance.addAppointment({
-            startDate: new Date(2015, 1, 9, 16),
-            endDate: new Date(2015, 1, 9, 17),
-            text: "first"
-        });
+            this.instance.option({
+                currentDate: new Date(2015, 1, 9),
+                dataSource: data
+            });
 
-        assert.deepEqual(data[0].startDate, new Date(new Date(2015, 1, 9).setHours(16 - deltaTz)), "Start date is OK");
-        assert.deepEqual(data[0].endDate, new Date(new Date(2015, 1, 9).setHours(17 - deltaTz)), "End date is OK");
+            this.instance.addAppointment({
+                startDate: new Date(2015, 1, 9, 16),
+                endDate: new Date(2015, 1, 9, 17),
+                text: "first"
+            });
 
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
+            assert.deepEqual(data[0].startDate, new Date(new Date(2015, 1, 9).setHours(16 - deltaTz)), "Start date is OK");
+            assert.deepEqual(data[0].endDate, new Date(new Date(2015, 1, 9).setHours(17 - deltaTz)), "End date is OK");
 
-        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
-        assert.equal($appointments.length, 3, "All appts are rendered");
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
+
+            var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+            assert.equal($appointments.length, 3, "All appts are rendered");
+        } else {
+            assert.ok(true);
+        }
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, negative value, startDay and endDay hours are set", function(assert) {

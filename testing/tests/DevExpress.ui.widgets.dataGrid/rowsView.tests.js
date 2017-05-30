@@ -6228,17 +6228,16 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
             { width: 200 },
             { width: 200 },
             { width: 200 }
-        ]),
-        device = devices.real();
+        ]);
 
     //act
     rowsView.render($('#container').css({ width: 100, height: 100 }));
 
     //arrange
-    if(device.ios || device.win) {
-        assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');
-    } else {
+    if(devices.real().deviceType === "desktop") {
         assert.ok(rowsView.getScrollbarWidth() > 0, 'scrollbar width more 0 for desktop');
+    } else {
+        assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');
     }
 });
 

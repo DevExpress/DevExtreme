@@ -176,7 +176,7 @@ var DataGrid = Widget.inherit({
                     return browser.webkit;
                 },
                 options: {
-                    loadingTimeout: 30,
+                    loadingTimeout: 30, //T344031
                     loadPanel: {
                         animation: {
                             show: {

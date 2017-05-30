@@ -19,10 +19,8 @@ require("ui/tree_list/ui.tree_list");
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     devices = require("core/devices"),
-    browser = require("core/utils/browser"),
     fx = require("animation/fx");
 
-browser.webkit = false;
 fx.off = true;
 
 QUnit.module("Initialization", {
@@ -289,6 +287,35 @@ QUnit.test("Filter Row", function(assert) {
     //assert
     assert.equal(treeList.element().find(".dx-data-row").length, 2, "two filtered rows are rendered");
     assert.equal(treeList.element().find(".dx-treelist-filter-row").length, 1, "filter row is rendered");
+});
+
+//T516918
+QUnit.test("Filter menu items should have icons", function(assert) {
+    //arrange
+    var $filterMenuElement,
+        $menuItemElements,
+        treeList = createTreeList({
+            filterRow: {
+                visible: true
+            },
+            columns: ["name", { dataField: "age", filterValue: 19 }],
+            dataSource: [
+                { id: 1, parentId: 0, name: "Name 3", age: 19 },
+                { id: 2, parentId: 0, name: "Name 1", age: 19 },
+                { id: 3, parentId: 0, name: "Name 2", age: 18 }
+            ]
+        });
+
+    this.clock.tick();
+
+    //act
+    $filterMenuElement = treeList.element().find(".dx-treelist-filter-row").find(".dx-menu").first().find(".dx-menu-item");
+    $filterMenuElement.trigger("dxclick"); // show menu
+
+    //assert
+    $menuItemElements = $(".dx-overlay-wrapper").find(".dx-menu-item");
+    assert.ok($menuItemElements.length > 0, "has filter menu items");
+    assert.equal($menuItemElements.first().find(".dx-icon").css("font-family"), "DXIcons", "first item has icon");
 });
 
 QUnit.test("Header Filter", function(assert) {

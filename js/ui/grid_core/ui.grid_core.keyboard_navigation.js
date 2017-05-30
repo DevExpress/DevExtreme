@@ -16,6 +16,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     GROUP_ROW_CLASS = "dx-group-row",
     MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
+    DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
     COMMAND_EXPAND_CLASS = "dx-command-expand",
 
     INTERACTIVE_ELEMENTS_SELECTOR = "input:not([type='hidden']), textarea, a, [tabindex]",
@@ -78,11 +79,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if($cell && $cell.length > 0) {
                 //that._focusView(view, index);
                 setTimeout(function() {
-                    if(that.getController("editorFactory").focus()) {
-                        that._focus($cell);
-                    }
                     if(that._editingController.isEditing()) {
                         that._focusInteractiveElement.bind(that)($cell);
+                    } else {
+                        that._focus($cell);
                     }
                 });
             }
@@ -415,7 +415,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _ctrlAKeyHandler: function(eventArgs, isEditing) {
-        if(!isEditing && eventArgs.ctrl && this.option("selection.mode") === "multiple" && this.option("selection.allowSelectAll")) {
+        if(!isEditing && eventArgs.ctrl && !eventArgs.alt && this.option("selection.mode") === "multiple" && this.option("selection.allowSelectAll")) {
             this._selectionController.selectAll();
             eventArgs.originalEvent.preventDefault();
         }
@@ -798,7 +798,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             that._initFocusedViews();
 
             that._documentClickHandler = that.createAction(function(e) {
-                if(!$(e.jQueryEvent.target).closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length) {
+                var $target = $(e.jQueryEvent.target);
+                if(!$target.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length && !$target.closest("." + DROPDOWN_EDITOR_OVERLAY_CLASS).length) {
                     that._resetFocusedCell();
                 }
             });

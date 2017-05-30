@@ -32,6 +32,7 @@ var FeedbackEvent = Class.inherit({
     },
 
     _schedule: function(fn) {
+        this.stop();
         this._timer = window.setTimeout(fn, this._timeout);
     },
 

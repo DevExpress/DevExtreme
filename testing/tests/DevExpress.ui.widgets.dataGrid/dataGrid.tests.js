@@ -57,7 +57,6 @@ var $ = require("jquery"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
     logger = require("core/utils/console").logger,
     errors = require("ui/widget/ui.errors"),
-    browser = require("core/utils/browser"),
     commonUtils = require("core/utils/common"),
     devices = require("core/devices"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
@@ -68,8 +67,13 @@ var $ = require("jquery"),
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
 
-browser.webkit = false;
 fx.off = true;
+
+DataGrid.defaultOptions({
+    options: {
+        loadingTimeout: 0
+    }
+});
 
 require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
 
@@ -3599,31 +3603,6 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
     assert.ok(!$loadPanel.length, "load panel is visible");
 });
 
-//T344031
-QUnit.test("Loading timeout in chrome", function(assert) {
-    var oldWebkit = browser.webkit;
-    browser.webkit = true;
-
-    var clock = sinon.useFakeTimers(),
-        dataGrid = createDataGrid({
-            dataSource: [{}]
-        });
-
-    clock.tick(29);
-
-    assert.equal(dataGrid.getController("data").items().length, 0, "no items");
-
-    //act
-    clock.tick(1);
-
-    //assert
-    assert.equal(dataGrid.getController("data").items().length, 1, "items is loaded");
-
-    clock.restore();
-
-    browser.webkit = oldWebkit;
-});
-
 //T389866
 QUnit.test("Collapse the group row of the grid, nested in the master detail", function(assert) {
     //arrange
@@ -5382,6 +5361,41 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     assert.ok(dataGrid.element().find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
 
+QUnit.testInActiveWindow("Tab key on editor should focus next cell if editing mode is cell", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    //arrange
+    var dataGrid = createDataGrid({
+            dataSource: [{ name: "name 1", value: 1 }, { name: "name 2", value: 2 }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
+        }),
+        navigationController = dataGrid.getController("keyboardNavigation");
+
+    this.clock.tick();
+    dataGrid.focus(dataGrid.getCellElement(0, 0));
+    this.clock.tick();
+
+    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    this.clock.tick();
+
+
+    //act
+    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(":focus").get(0) }) });
+    dataGrid.getCellElement(0, 1).find(".dx-numberbox").dxNumberBox("instance").option("value", 10);
+    this.clock.tick();
+
+    //assert
+    assert.equal(dataGrid.getCellElement(0, 1).find(".dx-texteditor-input").eq(0).val(), "10", "editor value is changed");
+    assert.ok(dataGrid.getCellElement(1, 0).hasClass("dx-focused"), "first cell in second row is focused");
+});
+
 //T460276
 QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual scrolling enabled and editing mode is cell at the end of table", function(assert) {
     if(devices.real().deviceType !== "desktop") {
@@ -6170,6 +6184,11 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
 });
 
 QUnit.test("Scroll positioned correct with fixed columns and editing", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is not actual for not desktop devices");
+        return;
+    }
+
     //arrange, act
     var dataGrid = createDataGrid({
             loadingTimeout: undefined,

@@ -1086,7 +1086,7 @@ module.exports = {
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
 
-                    if(!isDefined(prevValue) && !isDefined(value)) {
+                    if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf("buffer") !== 0) {
                         notFireEvent = true;
                     }
 

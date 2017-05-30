@@ -298,8 +298,44 @@ QUnit.test('Reset operation via operation chooser', function(assert) {
     assert.deepEqual(this.columnsController.updateOptions[0], {
         columnIndex: 0,
         optionName: {
-            selectedFilterOperation: undefined,
+            selectedFilterOperation: null,
             filterValue: null
+        },
+        optionValue: undefined
+    });
+});
+
+//T516687
+QUnit.test('Reset operation via operation chooser when applyMode is onClick', function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        filterMenu,
+        rootMenuItem,
+        filterMenuItems;
+
+    $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], selectedFilterOperation: '<>', index: 0 }, { caption: 'Column 2', allowFiltering: true, initialIndex: 1 }, { caption: 'Column 3', index: 2 }]);
+    this.options.filterRow.applyFilter = "onClick";
+
+    //act
+    this.columnHeadersView.render(testElement);
+
+    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    rootMenuItem = filterMenu.find(".dx-menu-item");
+    $(rootMenuItem).trigger("dxclick");
+    filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
+
+    var resetItem = filterMenuItems.find('.dx-menu-item').last();
+
+    //act
+    resetItem.trigger('dxclick');
+
+    //assert
+    assert.equal(resetItem.children('.dx-menu-item-content').find(":contains('Reset')").length, 1, 'reset description exists');
+    assert.deepEqual(this.columnsController.updateOptions[0], {
+        columnIndex: 0,
+        optionName: {
+            bufferedSelectedFilterOperation: null,
+            bufferedFilterValue: null
         },
         optionValue: undefined
     });

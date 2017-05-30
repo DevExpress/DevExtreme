@@ -1531,6 +1531,120 @@ QUnit.test("Initial load when filterMode is smart and remoteOperations is false"
     assert.equal(items[2].level, 0, "item 3 level");
 });
 
+//T515374
+QUnit.test("Initial load when dataSource has filter whose length is more than available (filterMode is extended)", function(assert) {
+    //arrange, act
+    var loadingArgs = [];
+
+    var arrayStore = new ArrayStore({
+        data: this.items
+    });
+
+    this.setupTreeList({
+        maxFilterLengthInRequest: 0,
+        expandNodesOnFiltering: true,
+        dataSource: {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+                loadingArgs.push(loadOptions);
+                setTimeout(function() {
+                    arrayStore.load(loadOptions).done(function(data) {
+                        d.resolve(data);
+                    }).fail(d.reject);
+                }, 10);
+
+                return d;
+            },
+            useDefaultSearch: true,
+            filter: ["age", "=", 19]
+        }
+    });
+
+    this.clock.tick(10);
+    this.clock.tick(10);
+
+    //assert
+    assert.equal(this.option("expandedRowKeys").length, 2, "expandedRowKeys count");
+    assert.deepEqual(loadingArgs, [{
+        filter: ["age", "=", 19],
+        group: null,
+        sort: null,
+        userData: {}
+    }, {
+        filter: null,
+        group: null,
+        sort: null,
+        userData: {}
+    }], "loading arguments");
+
+    var items = this.dataController.items();
+    assert.equal(items.length, 4, "count items");
+    assert.equal(items[0].data.name, "Name 3", "item 1 name value");
+    assert.equal(items[0].level, 0, "item 1 level");
+    assert.equal(items[1].data.name, "Name 5", "item 2 name value");
+    assert.equal(items[1].level, 1, "item 2 level");
+    assert.equal(items[2].data.name, "Name 7", "item 3 name value");
+    assert.equal(items[2].level, 2, "item 3 level");
+    assert.equal(items[3].data.name, "Name 1", "item 4 name value");
+    assert.strictEqual(items[3].node.hasChildren, false, "item 4 name hasChildren");
+    assert.equal(items[3].node.children.length, 0, "item 4 name children length");
+    assert.equal(items[3].level, 0, "item 4 level");
+});
+
+//T515374
+QUnit.test("Initial load when dataSource has filter whose length is more than available when remoteOperations false (filterMode is extended)", function(assert) {
+    //arrange, act
+    var loadingArgs = [];
+
+    var arrayStore = new ArrayStore({
+        data: this.items
+    });
+
+    this.setupTreeList({
+        maxFilterLengthInRequest: 0,
+        remoteOperations: false,
+        expandNodesOnFiltering: true,
+        dataSource: {
+            load: function(loadOptions) {
+                var d = $.Deferred();
+                loadingArgs.push(loadOptions);
+                setTimeout(function() {
+                    arrayStore.load(loadOptions).done(function(data) {
+                        d.resolve(data);
+                    }).fail(d.reject);
+                }, 10);
+
+                return d;
+            },
+            useDefaultSearch: true,
+            filter: ["age", "=", 19]
+        }
+    });
+
+    this.clock.tick(10);
+    this.clock.tick(10);
+
+    //assert
+    assert.equal(this.option("expandedRowKeys").length, 2, "expandedRowKeys count");
+    assert.deepEqual(loadingArgs, [{
+        userData: {}
+    }], "loading arguments");
+
+    var items = this.dataController.items();
+    assert.equal(items.length, 4, "count items");
+    assert.equal(items[0].data.name, "Name 3", "item 1 name value");
+    assert.equal(items[0].level, 0, "item 1 level");
+    assert.equal(items[1].data.name, "Name 5", "item 2 name value");
+    assert.equal(items[1].level, 1, "item 2 level");
+    assert.equal(items[2].data.name, "Name 7", "item 3 name value");
+    assert.equal(items[2].level, 2, "item 3 level");
+    assert.equal(items[3].data.name, "Name 1", "item 4 name value");
+    assert.strictEqual(items[3].node.hasChildren, false, "item 4 name hasChildren");
+    assert.equal(items[3].node.children.length, 1, "item 4 name children length");
+    assert.strictEqual(items[3].node.children[0].visible, false, "item 4 name children 0 visible");
+    assert.equal(items[3].level, 0, "item 4 level");
+});
+
 QUnit.test("expand -> collapse -> expand row", function(assert) {
     //arrange
     var items,

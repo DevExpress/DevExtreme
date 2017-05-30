@@ -48,34 +48,7 @@
         }
     }
 
-    .dx-@{widgetName} {
-        line-height: inherit;
-
-        .dx-menu {
-            background-color: transparent;
-            height: 100%;
-
-            .dx-menu-item {
-                .dx-menu-item-content {
-                    padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
-
-                    .dx-icon {
-                        margin: 0px 3px;
-                    }
-                }
-            }
-        }
-
-        .dx-menu-item-has-submenu {
-            &.dx-state-hover {
-                background-color: transparent;
-            }
-
-            &.dx-menu-item-expanded.dx-state-hover {
-                background-color: ~"@{@{widgetName}-editor-bg}";
-            }
-        }
-
+    .dx-@{widgetName}, .dx-@{widgetName}-container {
         .dx-menu-item-has-icon {
             .dx-icon {
                 color: ~"@{@{widgetName}-menu-icon-color}";
@@ -150,6 +123,35 @@
 
         .dx-menu-items-container .dx-menu-item-has-icon.dx-menu-item-selected .dx-icon-filter-operation-between {
             background-image: ~"@{@{widgetName}-filter-operation-selected-bg}";
+        }
+    }
+
+    .dx-@{widgetName} {
+        line-height: inherit;
+
+        .dx-menu {
+            background-color: transparent;
+            height: 100%;
+
+            .dx-menu-item {
+                .dx-menu-item-content {
+                    padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
+
+                    .dx-icon {
+                        margin: 0px 3px;
+                    }
+                }
+            }
+        }
+
+        .dx-menu-item-has-submenu {
+            &.dx-state-hover {
+                background-color: transparent;
+            }
+
+            &.dx-menu-item-expanded.dx-state-hover {
+                background-color: ~"@{@{widgetName}-editor-bg}";
+            }
         }
 
         .dx-row-alt {

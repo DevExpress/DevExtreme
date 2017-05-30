@@ -665,7 +665,7 @@ var TagBox = SelectBox.inherit({
         this._renderInputSize();
         this._clearFilter();
         this._renderTags();
-        this._popup && this._popup.repaint();
+        this._popup && this._popup.refreshPosition();
     },
 
     _listItemClickHandler: function(e) {
@@ -968,7 +968,6 @@ var TagBox = SelectBox.inherit({
 
     _refreshSelected: function() {
         this._list && this._suppressingSelectionChanged(function() {
-            this._setListOption("selectedItems", this._selectedItems.slice());
             this.callBase();
         });
     },

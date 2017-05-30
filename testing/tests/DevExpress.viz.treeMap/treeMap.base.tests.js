@@ -904,7 +904,7 @@ QUnit.test("Appearance is reapplied when current theme is updated", function(ass
         this.tile(i).attr.reset();
     }
 
-    themeModule.refreshAll();
+    themeModule.refreshTheme();
 
     for(i = 0; i < 3; ++i) {
         assert.strictEqual(this.tile(i).attr.callCount, 1, "tile " + (i + 1) + " settings call count");

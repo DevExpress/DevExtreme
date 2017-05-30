@@ -193,6 +193,10 @@ QUnit.test("Long and recurrent appointment parts should not have a reduced-icon 
 QUnit.test("Particular recurrence appt should have a correct data", function(assert) {
     this.createInstance({
         views: ["agenda"],
+        resources: [
+            { field: "ownerId", dataSource: [{ id: 1, color: "#ff0000" }, { id: 2, color: "#0000ff" }] }
+        ],
+        groups: ["ownerId"],
         currentView: "agenda",
         currentDate: new Date(2015, 2, 23),
         recurrenceEditMode: "occurrence",
@@ -201,7 +205,8 @@ QUnit.test("Particular recurrence appt should have a correct data", function(ass
                 startDate: new Date(2015, 2, 22, 1),
                 endDate: new Date(2015, 2, 22, 1, 30),
                 text: "a",
-                recurrenceRule: "FREQ=DAILY"
+                recurrenceRule: "FREQ=DAILY",
+                ownerId: 1
             }
         ]
     });
@@ -217,6 +222,10 @@ QUnit.test("Particular recurrence appt should have a correct data", function(ass
 
     this.instance.element().find(".dx-scheduler-appointment").each(function() {
         var $appt = $(this);
+
+        assert.equal($appt.find(".dx-scheduler-appointment-title").text(), "a", "Title is OK");
+        assert.equal(new Color($appt.css("background-color")).toHex(), "#ff0000", "Appointment color is OK");
+
         $appt.trigger("dxdblclick");
         apptIndex++;
     });
