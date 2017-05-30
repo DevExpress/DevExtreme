@@ -168,13 +168,13 @@ module.exports = SelectionStrategy.inherit({
             deferred.resolve([]);
             return deferred;
         }
-
-        if(isSelectAll && isDeselect && !this.options.filter) {
+        var filter = this.options.filter();
+        if(isSelectAll && isDeselect && !filter) {
             return this._clearSelection();
         }
 
         var selectionFilterCreator = new SelectionFilterCreator(key(), keys, isSelectAll, this.equalKeys.bind(this), this.options.keyOf),
-            combinedFilter = selectionFilterCreator.getCombinedFilter(this.options.filter());
+            combinedFilter = selectionFilterCreator.getCombinedFilter(filter);
 
         var deselectedItems = [];
         if(isDeselect) {
@@ -187,7 +187,7 @@ module.exports = SelectionStrategy.inherit({
 
         filteredItems = filteredItems.filter(localFilter);
 
-        if(!isSelectAll && (deselectedItems.length || filteredItems.length === keys.length)) {
+        if(deselectedItems.length || (!isSelectAll && filteredItems.length === keys.length)) {
             deferred.resolve(filteredItems);
         } else {
             deferred = this._loadFilteredData(combinedFilter, localFilter);

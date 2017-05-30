@@ -67,6 +67,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
              */
             selectedItemKeys: [],
 
+            maxFilterLengthInRequest: 1500,
+
             /**
              * @name CollectionWidgetOptions_keyExpr
              * @publicName keyExpr
@@ -210,6 +212,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         this._selection = new Selection({
             mode: this.option("selectionMode"),
+            maxFilterLengthInRequest: this.option("maxFilterLengthInRequest"),
             equalByReference: !this._isKeySpecified(),
             onSelectionChanged: function(args) {
                 if(args.addedItemKeys.length || args.removedItemKeys.length) {
@@ -381,6 +384,20 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return optionName;
     },
 
+    _compareKeys: function(oldKeys, newKeys) {
+        if(oldKeys.length !== newKeys.length) {
+            return false;
+        }
+
+        for(var i = 0; i < newKeys.length; i++) {
+            if(oldKeys[i] !== newKeys[i]) {
+                return false;
+            }
+        }
+
+        return true;
+    },
+
     _normalizeSelectedItems: function() {
         if(this.option("selectionMode") === "none") {
             this._setOptionSilent("selectedItems", []);
@@ -409,7 +426,11 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 this._selection.setSelection(this._getKeysByItems(newSelection));
             }
         } else {
-            this._selection.setSelection(this._getKeysByItems(this.option("selectedItems")));
+            var newKeys = this._getKeysByItems(this.option("selectedItems"));
+            var oldKeys = this._selection.getSelectedItemKeys();
+            if(!this._compareKeys(oldKeys, newKeys)) {
+                this._selection.setSelection(newKeys);
+            }
         }
     },
 
@@ -570,6 +591,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             case "onItemDeleting":
             case "onItemDeleted":
             case "onItemReordered":
+            case "maxFilterLengthInRequest":
                 break;
             default:
                 this.callBase(args);
