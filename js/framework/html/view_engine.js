@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     errors = require("../errors"),
     domUtils = require("../../core/utils/dom"),
     when = require("../../integration/jquery/deferred").when,
+    ajax = require("../../core/utils/ajax").sendRequest,
     _VIEW_ROLE = "dxView",
     _LAYOUT_ROLE = "dxLayout",
     MARKUP_TEMPLATE_MARKER = "MarkupTemplate:";
@@ -141,7 +142,7 @@ var ViewEngine = Class.inherit({
     },
 
     _ajaxImpl: function() {
-        return $.ajax.apply($, arguments);
+        return ajax.apply($, arguments);
     },
 
     _loadTemplatesFromURL: function(url) {
