@@ -10,7 +10,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../data/utils"),
     formatHelper = require("../../format_helper");
 
-var DATAGRID_NODATA_TEXT_CLASS = "dx-datagrid-nodata",
+var NODATA_CLASS = "nodata",
     DATE_INTERVAL_SELECTORS = {
         "year": function(value) {
             return value && value.getFullYear();
@@ -189,14 +189,15 @@ module.exports = (function() {
             var that = this;
             $element = $element || this.element();
 
-            var noDataElement = $element.find("." + DATAGRID_NODATA_TEXT_CLASS),
+            var noDataClass = that.addWidgetPrefix(NODATA_CLASS),
+                noDataElement = $element.find("." + noDataClass),
                 isVisible = this._dataController.isEmpty(),
                 isLoading = this._dataController.isLoading(),
                 rtlEnabled = this.option("rtlEnabled");
 
             if(!noDataElement.length) {
                 noDataElement = $("<span>")
-                    .addClass(DATAGRID_NODATA_TEXT_CLASS)
+                    .addClass(noDataClass)
                     .appendTo($element);
             }
 

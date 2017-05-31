@@ -166,7 +166,7 @@ QUnit.test("No data", function(assert) {
         }, assert);
     assert.ok(pivotGrid);
 
-    var $noDataElement = pivotGrid.element().find(".dx-datagrid-nodata"),
+    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata"),
         dataAreaCell = $(".dx-area-data-cell"),
         dataAreaCellOffset = dataAreaCell.offset(),
         noDataElementOffset = $noDataElement.offset();
@@ -194,7 +194,7 @@ QUnit.test("No data when pivot grid rendered to invisible container", function(a
     domUtils.triggerShownEvent($pivotGridElement);
     this.clock.tick();
 
-    var $noDataElement = pivotGrid.element().find(".dx-datagrid-nodata"),
+    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata"),
         dataAreaCell = $(".dx-area-data-cell"),
         dataAreaCellOffset = dataAreaCell.offset(),
         noDataElementOffset = $noDataElement.offset();
@@ -213,7 +213,7 @@ QUnit.test("Create PivotGrid with Data", function(assert) {
 
     pivotGrid = createPivotGrid(this.testOptions, assert);
 
-    $noDataElement = pivotGrid.element().find(".dx-datagrid-nodata");
+    $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata");
 
     assert.equal($noDataElement.length, 1);
     assert.ok(!$noDataElement.is(":visible"));
@@ -249,7 +249,7 @@ QUnit.test("Loading DataSource", function(assert) {
         onContentReady: onContentReadyCallback
     }, assert);
 
-    $noDataElement = pivotGrid.element().find(".dx-datagrid-nodata");
+    $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata");
 
     assert.equal($noDataElement.length, 1);
     assert.ok(!$noDataElement.is(":visible"));
