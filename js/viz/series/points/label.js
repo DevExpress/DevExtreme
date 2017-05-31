@@ -6,6 +6,7 @@ var $ = require("jquery"),
     _degreesToRadians = vizUtils.degreesToRadians,
     _patchFontOptions = vizUtils.patchFontOptions,
     _round = Math.round,
+    _floor = Math.floor,
     _getCosAndSin = vizUtils.getCosAndSin,
     _rotateBBox = vizUtils.rotateBBox,
 
@@ -299,7 +300,7 @@ Label.prototype = {
             ],
                 [xc, yc], -that._options.rotationAngle || 0);
             labelPoint = getClosestCoord(strategy.getFigureCenter(figure), points);
-            labelPoint = [_round(labelPoint[0]), _round(labelPoint[1])];
+            labelPoint = [_floor(labelPoint[0]), _floor(labelPoint[1])];
             figurePoint = strategy.findFigurePoint(figure, labelPoint);
             points = figurePoint.concat(labelPoint);
         }

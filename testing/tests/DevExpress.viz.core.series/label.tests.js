@@ -564,6 +564,14 @@ QUnit.test("connector with zero angle", function(assert) {
     assert.deepEqual(label._connector._stored_settings.points, [80, 10, 108, 20]);
 });
 
+//T520777
+QUnit.test("Drawn connector to label with odd side", function(assert) {
+    var label = this.createLabelWithBBox({ x: 181, y: 36, height: 24, width: 75 }, { x: 218, y: 70, width: 0, height: 0 });
+    label.shift(181, 15);
+
+    assert.deepEqual(label._connector._stored_settings.points, [218, 70, 218, 35]);
+});
+
 QUnit.module("Set options", $.extend({}, environment, {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
