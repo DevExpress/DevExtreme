@@ -226,22 +226,17 @@ var ComponentBuilder = Class.inherit({
         });
     },
 
+    _optionsAreNested: function(optionPath1, optionPath2) {
+        var parentSeparator = optionPath1[optionPath2.length];
+        return optionPath1.indexOf(optionPath2) === 0 && (parentSeparator === "." || parentSeparator === "[");
+    },
+
     _optionsAreLinked: function(optionPath1, optionPath2) {
-        var splitPath = function(path) {
-            return path.replace(/\[.*\]/, '').split(".");
-        };
+        if(optionPath1 === optionPath2) return true;
 
-        var parts1 = splitPath(optionPath1),
-            parts2 = splitPath(optionPath2),
-            len = Math.min(parts1.length, parts2.length);
-
-        for(var i = 0; i < len; i++) {
-            if(parts1[i] !== parts2[i]) {
-                return false;
-            }
-        }
-
-        return true;
+        return optionPath1.length > optionPath2.length
+            ? this._optionsAreNested(optionPath1, optionPath2)
+            : this._optionsAreNested(optionPath2, optionPath1);
     },
 
     _compilerByTemplate: function(template) {
