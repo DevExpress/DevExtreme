@@ -6,7 +6,8 @@ var extendUtils = require("./utils/extend"),
         defaultCurrency: "USD",
         designMode: false,
         serverDecimalSeparator: ".",
-        forceIsoDateParsing: true
+        forceIsoDateParsing: true,
+        wrapActionsBeforeExecute: true
     };
 
 /**
