@@ -454,6 +454,10 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         that._hidingColumnsQueue = [];
 
+        if(that.option("allowColumnResizing") && that.option("columnResizingMode") === "widget") {
+            return that._hidingColumnsQueue;
+        }
+
         for(i = 0; i < hideableColumns.length; i++) {
             if(commonUtils.isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
                 columnsHasHidingPriority = true;
