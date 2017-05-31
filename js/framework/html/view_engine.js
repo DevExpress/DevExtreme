@@ -146,14 +146,13 @@ var ViewEngine = Class.inherit({
 
     _loadTemplatesFromURL: function(url) {
         var that = this,
-            options = this._getLoadOptions(),
+            winPhonePrefix = this._getWinPhonePrefix(),
             deferred = $.Deferred();
 
-        url = options.winPhonePrefix + url;
+        url = winPhonePrefix + url;
 
         this._ajaxImpl({
             url: url,
-            isLocal: options.isLocal,
             dataType: "html"
         }).done(function(data) {
             that._loadTemplatesFromMarkupCore(domUtils.createMarkupFromString(data));
@@ -166,18 +165,12 @@ var ViewEngine = Class.inherit({
         return deferred.promise();
     },
 
-    _getLoadOptions: function() {
+    _getWinPhonePrefix: function() {
         if(location.protocol.indexOf("wmapp") >= 0) {
-            return {
-                winPhonePrefix: location.protocol + "www/",
-                isLocal: true
-            };
+            return location.protocol + "www/";
         }
 
-        return {
-            winPhonePrefix: "",
-            isLocal: undefined
-        };
+        return "";
     },
 
     _loadExternalTemplates: function() {
