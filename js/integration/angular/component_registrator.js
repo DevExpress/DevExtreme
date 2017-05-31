@@ -199,6 +199,10 @@ var ComponentBuilder = Class.inherit({
             that._ngLocker.obtain(fullName);
             safeApply(function() {
                 $.each(optionDependencies[optionName], function(optionPath, valuePath) {
+                    if(!that._optionsAreLinked(fullName, optionPath)) {
+                        return;
+                    }
+
                     var value = component.option(optionPath);
                     that._parse(valuePath).assign(that._scope, value);
 
@@ -220,6 +224,24 @@ var ComponentBuilder = Class.inherit({
             that._digestCallbacks.end.add(releaseOption);
 
         });
+    },
+
+    _optionsAreLinked: function(optionPath1, optionPath2) {
+        var splitPath = function(path) {
+            return path.replace(/\[.*\]/, '').split(".");
+        };
+
+        var parts1 = splitPath(optionPath1),
+            parts2 = splitPath(optionPath2),
+            len = Math.min(parts1.length, parts2.length);
+
+        for(var i = 0; i < len; i++) {
+            if(parts1[i] !== parts2[i]) {
+                return false;
+            }
+        }
+
+        return true;
     },
 
     _compilerByTemplate: function(template) {
