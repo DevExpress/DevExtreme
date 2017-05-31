@@ -3,10 +3,10 @@
 window.includeThemesLinks();
 
 require("common.css!");
+require("generic_light.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
-    setTemplateEngine = require("ui/set_template_engine"),
     commonUtils = require("core/utils/common"),
     devices = require("core/devices"),
     device = devices.real(),
@@ -17,10 +17,6 @@ var $ = require("jquery"),
 themes.current({
     theme: "generic"
 });
-
-require("../../../vendor/template-engines/hogan-2.0.0.js");
-setTemplateEngine("hogan");
-
 QUnit.testStart(function() {
     var markup =
         '<div id="container" class="dx-datagrid"></div>';
@@ -913,4 +909,42 @@ QUnit.test("CheckBox mode - Update a selection state when column visibility is c
     assert.ok(!this.columnChooserView._columnChooserList.getNodes()[0].selected, "first item is not selected");
 
     this.columnChooserView.hideColumnChooser();
+});
+
+QUnit.test("CheckBox mode - scroll position after selecting an last item", function(assert) {
+    //arrange
+    var $columnChooser,
+        $lastItemElement,
+        scrollableInstance,
+        $testElement = $("#container");
+
+    this.options.columnChooser.mode = "select";
+    this.options.columnChooser.height = 200;
+    this.columns.push(
+        { caption: "Column 1", index: 0, visible: true, showInColumnChooser: true },
+        { caption: "Column 2", index: 1, visible: true, showInColumnChooser: true },
+        { caption: "Column 3", index: 2, visible: true, showInColumnChooser: true },
+        { caption: "Column 4", index: 3, visible: true, showInColumnChooser: true },
+        { caption: "Column 5", index: 4, visible: true, showInColumnChooser: true },
+        { caption: "Column 6", index: 5, visible: true, showInColumnChooser: true },
+        { caption: "Column 7", index: 6, visible: true, showInColumnChooser: true },
+        { caption: "Column 8", index: 7, visible: true, showInColumnChooser: true }
+    );
+
+    this.setTestElement($testElement);
+    this.columnChooserView.showColumnChooser();
+    this.clock.tick(1000);
+
+    $columnChooser = $("body").children(".dx-datagrid-column-chooser");
+    $lastItemElement = $columnChooser.find(".dx-treeview-item").last();
+    scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
+    scrollableInstance.scrollToElement($lastItemElement);
+
+    //act
+    this.columnsController.columnOption(7, "visible", false);
+    this.columnChooserView.render($testElement, true);
+
+    //assert
+    scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
+    assert.ok(scrollableInstance.scrollTop() > 0, "scroll position");
 });
