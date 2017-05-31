@@ -369,6 +369,7 @@ var Popover = Popup.inherit({
         if(this._isOutsideClick(e)) {
             return this.callBase(e);
         }
+        return true;
     },
 
     _isOutsideClick: function(e) {
