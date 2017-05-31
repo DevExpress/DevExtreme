@@ -1844,6 +1844,7 @@ QUnit.test("Global scope properties are accessible from item template", function
             "</div>"
         ), controller);
 
+    //TODO: remove this after toggle wrapActionsBeforeExecute flag
     this.clock.tick();
 
     assert.equal($(".item-text", $markup).text(), "Item text");
@@ -1956,6 +1957,7 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
         ), controller),
         scope = $markup.scope();
 
+    //TODO: remove this after toggle wrapActionsBeforeExecute flag
     this.clock.tick();
 
     var $items = $markup.children();
@@ -1971,6 +1973,7 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
         scope.collection[3] = "new text 3";
     });
 
+    //TODO: remove this after toggle wrapActionsBeforeExecute flag
     this.clock.tick();
 
     $items = $markup.children();

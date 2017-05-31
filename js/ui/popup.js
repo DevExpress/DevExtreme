@@ -674,10 +674,7 @@ var Popup = Overlay.inherit({
     },
 
     _setContentHeight: function() {
-        var forceApplyBindings = this.option("forceApplyBindings");
-        if(forceApplyBindings) {
-            forceApplyBindings();
-        }
+        (this.option("forceApplyBindings") || $.noop)();
 
         if(this._disallowUpdateContentHeight()) {
             return;
