@@ -1842,6 +1842,9 @@ QUnit.testInActiveWindow("Scrolling to focused cell when it is fixed", function(
 
     that.clock.restore();
     that.items = generateData(20);
+    that.options.scrolling = {
+        pushBackValue: 0 // for ios devices
+    };
     that.setupDataGrid();
     that.rowsView.render($testElement);
     that.rowsView.height(100);
