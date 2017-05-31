@@ -612,7 +612,7 @@ exports.DataController = Class.inherit((function() {
                     if(this.pageIndex() < this.pageCount() - 1) {
                         return this.pageSize();
                     } else {
-                        this.totalItemsCount() % this.pageSize();
+                        return this.totalItemsCount() % this.pageSize();
                     }
                 },
                 items: function() {
@@ -774,8 +774,10 @@ exports.DataController = Class.inherit((function() {
                 columnsScrollController.viewportSize(contentParams.viewportWidth / columnsScrollController.viewportItemSize());
                 columnsScrollController.setContentSize(contentParams.contentWidth);
 
-                columnsScrollController.loadIfNeed();
-                rowsScrollController.loadIfNeed();
+                commonUtils.deferUpdate(function() {
+                    columnsScrollController.loadIfNeed();
+                    rowsScrollController.loadIfNeed();
+                });
 
                 newLeftPosition = columnsScrollController.getViewportPosition() * columnViewportItemSize / oldColumnViewportItemSize;
                 newTopPosition = rowsScrollController.getViewportPosition() * rowViewportItemSize / oldRowViewportItemSize;
