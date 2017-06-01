@@ -190,7 +190,6 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             $.merge(currentAppointments, appts.parts);
 
             var appointmentCount = currentAppointments.length;
-
             for(var i = 0; i < agendaDuration; i++) {
                 var day = new Date(currentDate);
                 day.setMilliseconds(day.getMilliseconds() + (24 * 3600000 * i));
@@ -200,7 +199,8 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 }
 
                 for(var j = 0; j < appointmentCount; j++) {
-                    var appointmentData = currentAppointments[j].itemData || currentAppointments[j];
+                    //var appointmentData = currentAppointments[j].itemData || currentAppointments[j];
+                    var appointmentData = currentAppointments[j].appointmentSettings || currentAppointments[j];
                     if(this.instance.fire("dayHasAppointment", day, appointmentData, true)) {
                         groupResult[i] += 1;
                     }
