@@ -1740,6 +1740,22 @@ QUnit.test("ValueChanged action should have jQuery event as a parameter when val
     assert.ok(valueChangedHandler.getCall(0).args[0].jQueryEvent, "jQueryEvent is defined");
 });
 
+QUnit.test("valueChangeEvent cache should be cleared after the value changing", function(assert) {
+    var valueChangedHandler = sinon.stub();
+
+    this.fixture.dateBox.option({
+        onValueChanged: valueChangedHandler,
+        opened: true
+    });
+
+    $(".dx-calendar-cell").eq(0).trigger("dxclick");
+    this.fixture.dateBox.option("value", new Date());
+
+    assert.equal(valueChangedHandler.callCount, 2, "valueChangeEventHandler was called 2 times");
+    assert.ok(valueChangedHandler.getCall(0).args[0].jQueryEvent, "jqueryEvent exists in first call via user interaction");
+    assert.notOk(valueChangedHandler.getCall(1).args[0].jQueryEvent, "jqueryEvent does not exist in second call via api");
+});
+
 QUnit.test("dateBox's 'min' and 'max' options equal to undefined (T171537)", function(assert) {
     assert.strictEqual(this.fixture.dateBox.option("min"), undefined);
     assert.strictEqual(this.fixture.dateBox.option("max"), undefined);
@@ -2972,6 +2988,31 @@ QUnit.test("apply contoured date on enter for date and datetime mode", function(
 
     var selectedDate = this.dateBox.option("value");
     assert.equal(selectedDate.getDate(), 1, "day is right");
+});
+
+QUnit.testInActiveWindow("valueChangeEvent should have jQueryEvent when enter key was pressed", function(assert) {
+    var $dateBox;
+
+    try {
+        var valueChangedHandler = sinon.stub();
+
+        $dateBox = $("<div>").appendTo("body").dxDateBox({
+            pickerType: "calendar",
+            focusStateEnabled: true,
+            onValueChanged: valueChangedHandler,
+            opened: true
+        });
+
+        var $input = $dateBox.find(".dx-texteditor-input"),
+            kb = keyboardMock($input);
+
+        $input.focusin();
+        kb.press("enter");
+
+        assert.ok(valueChangedHandler.getCall(0).args[0].jQueryEvent, "jqueryEvent exists");
+    } finally {
+        $dateBox.remove();
+    }
 });
 
 QUnit.testInActiveWindow("onValueChanged fires after clearing and enter key press", function(assert) {
