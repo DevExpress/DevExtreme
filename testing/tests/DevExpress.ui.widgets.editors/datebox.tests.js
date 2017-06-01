@@ -2991,21 +2991,28 @@ QUnit.test("apply contoured date on enter for date and datetime mode", function(
 });
 
 QUnit.testInActiveWindow("valueChangeEvent should have jQueryEvent when enter key was pressed", function(assert) {
-    var valueChangedHandler = sinon.stub();
+    var $dateBox;
 
-    var $dateBox = $("<div>").appendTo("body").dxDateBox({
+    try {
+        var valueChangedHandler = sinon.stub();
+
+        $dateBox = $("<div>").appendTo("body").dxDateBox({
             pickerType: "calendar",
             focusStateEnabled: true,
             onValueChanged: valueChangedHandler,
             opened: true
-        }),
-        $input = $dateBox.find(".dx-texteditor-input"),
-        kb = keyboardMock($input);
+        });
 
-    $input.focusin();
-    kb.press("enter");
+        var $input = $dateBox.find(".dx-texteditor-input"),
+            kb = keyboardMock($input);
 
-    assert.ok(valueChangedHandler.getCall(0).args[0].jQueryEvent, "jqueryEvent exists");
+        $input.focusin();
+        kb.press("enter");
+
+        assert.ok(valueChangedHandler.getCall(0).args[0].jQueryEvent, "jqueryEvent exists");
+    } finally {
+        $dateBox.remove();
+    }
 });
 
 QUnit.testInActiveWindow("onValueChanged fires after clearing and enter key press", function(assert) {

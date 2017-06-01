@@ -874,7 +874,7 @@ var DateBox = DropDownEditor.inherit({
         if(this._isValueChanged(value) && jQueryEvent) {
             this._saveValueChangeEvent(jQueryEvent);
         }
-        
+
         return this.dateOption("value", value);
     },
 
