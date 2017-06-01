@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    errors = require("ui/widget/ui.errors"),
     translator = require("animation/translator"),
     dateLocalization = require("localization/date"),
     messageLocalization = require("localization/message"),
@@ -4044,6 +4045,28 @@ QUnit.test("AllDay appointment should have right width on timeline week view", f
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
 });
 
+QUnit.test("AllDay appointment without allDay field should have right width on timeline day view", function(assert) {
+    var appointment = {
+        startDate: new Date(2015, 11, 14, 0, 0),
+        endDate: new Date(2015, 11, 14, 24, 0)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2015, 11, 14),
+        currentView: "timelineDay",
+        cellDuration: 60,
+        dataSource: [appointment],
+        startDayHour: 10,
+        endDayHour: 22
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+        cellsInAppointment = 12;
+
+    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
+});
+
 QUnit.test("Long multiday appointment should have right width on timeline work week view", function(assert) {
     var appointment = {
         startDate: new Date(2015, 2, 2, 9),
@@ -4231,3 +4254,27 @@ QUnit.test("Appointments should be rendered correctly at asynchronous rendering 
     assert.roughEqual(appointmentWidth, cellWidth * 3, 2.001, "appointment was render correctly");
 });
 
+QUnit.test("Scheduler shouldn't throw error at deferred appointment loading (T518327)", function(assert) {
+    var data = [{ text: "Task 1", startDate: new Date(2017, 4, 22, 16), endDate: new Date(2017, 4, 24, 1) }];
+
+    this.createInstance({
+        dataSource: new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    var d = $.Deferred();
+                    d.resolve(data);
+                    return d.promise();
+                }
+            })
+        }),
+        currentDate: new Date(2017, 4, 20),
+        views: ["week", "day"],
+        currentView: "week"
+    });
+
+    var errorLogStub = sinon.stub(errors, "log");
+    this.instance.option("currentView", "day");
+
+    assert.notOk(errorLogStub.called, "Error was not thrown");
+    errorLogStub.restore();
+});

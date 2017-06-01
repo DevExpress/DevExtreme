@@ -1128,9 +1128,20 @@ var dxChart = AdvancedChart.inherit({
 
     //T218011 for dashboards
     getVisibleArgumentBounds: function() {
-        var range = this._argumentAxes[0].getTranslator().getBusinessRange(),
-            isDiscrete = range.axisType === "discrete",
-            categories = range.categories;
+        var translator = this._argumentAxes[0].getTranslator(),
+            range,
+            isDiscrete,
+            categories;
+
+        if(!translator) {
+            return {
+                minVisible: this._zoomMinArg,
+                maxVisible: this._zoomMaxArg
+            };
+        }
+        range = translator.getBusinessRange();
+        isDiscrete = range.axisType === "discrete";
+        categories = range.categories;
 
         return {
             minVisible: isDiscrete ? (range.minVisible || categories[0]) : range.minVisible,

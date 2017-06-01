@@ -161,6 +161,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
 
             var itemMeta = getItemMeta(this._collectionWidget.option("items")) ||
                            getItemMeta(this._collectionWidget.option("selectedItems"));
+
             var groupKey = itemMeta.groupKey;
             var item = itemMeta.item;
 

@@ -17,12 +17,10 @@ require("generic_light.css!");
 require("ui/tree_list/ui.tree_list");
 
 var $ = require("jquery"),
-    browser = require("core/utils/browser"),
     fx = require("animation/fx"),
     treeListMocks = require("../../helpers/treeListMocks.js"),
     setupTreeListModules = treeListMocks.setupTreeListModules;
 
-browser.webkit = false;
 fx.off = true;
 
 var setupModule = function() {

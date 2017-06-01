@@ -76,6 +76,24 @@ QUnit.test("Show adaptive command column", function(assert) {
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
 });
 
+//T516888
+QUnit.test("Column hiding should not work if column resizing enabled and columnResizingMode is widget", function(assert) {
+    //arrange, act
+    this.options = {
+        allowColumnResizing: true,
+        columnResizingMode: "widget"
+    };
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.notOk(this.columnsController.columnOption("command:adaptive", "visible"), "adaptive command column is not shown");
+    assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 0, "no command adaptive element");
+});
+
 QUnit.test("Show adaptive command column when 'columnsHidingEnabled' is enabled", function(assert) {
     //arrange, act
     $(".dx-datagrid").width(200);

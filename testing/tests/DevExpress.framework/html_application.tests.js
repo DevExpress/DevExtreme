@@ -548,6 +548,7 @@ QUnit.test("Layout activation method call once after second overlay opening", fu
 
 QUnit.test("T184222: Under some circumstances views stop being shown after a view in popup layout is shown on Android phone", function(assert) {
     var sequenceLog = [];
+    var clock = sinon.useFakeTimers();
 
     var log = function(event) {
         sequenceLog.push(this.name + "_" + event);
@@ -612,12 +613,15 @@ QUnit.test("T184222: Under some circumstances views stop being shown after a vie
 
     sequenceLog.length = 0;
     app.navigate("detail", { target: 'current' });
+    clock.tick();
 
     assert.equal(sequenceLog.length, 4);
     assert.equal(sequenceLog[0], "simple_showView");
     assert.equal(sequenceLog[1], "simple_activate");
     assert.equal(sequenceLog[2], "popup_deactivate");
     assert.equal(sequenceLog[3], "navbar_deactivate");
+
+    clock.restore();
 });
 
 QUnit.test("View markup localization works", function(assert) {

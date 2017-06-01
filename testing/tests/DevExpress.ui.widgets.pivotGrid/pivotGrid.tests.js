@@ -3005,6 +3005,33 @@ QUnit.test("DataController - scrollChanged event", function(assert) {
     assert.strictEqual(dataAreaScrollable.scrollLeft(), 15);
 });
 
+//T518378
+QUnit.test("Column area should be visible after change scrolling.mode to virtual", function(assert) {
+    var widget = createPivotGrid({
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "standard"
+        },
+        dataSource: {
+            fields: [{ area: "row" }, { area: "data" }],
+            rows: [{ index: 0, value: "Row 1" }],
+            values: [
+                [[1]],
+                [[2]]
+            ]
+        }
+    }, assert);
+
+    widget.option({
+        scrolling: {
+            mode: "virtual"
+        }
+    });
+
+    assert.ok(widget.element().find(".dx-area-column-cell").height() > 0, "column area is visible");
+});
 
 QUnit.module("Field Panel", {
     beforeEach: function() {

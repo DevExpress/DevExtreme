@@ -1334,6 +1334,28 @@ QUnit.test("Event, zoomStart", function(assert) {
     assert.equal(zoomStart.callCount, 1);
 });
 
+//T520370
+QUnit.test("zoom end event, not rendered chart", function(assert) {
+    seriesMockData.series.push(new MockSeries({}));
+    var zoomEnd = sinon.spy();
+    var chart = this.createChart({
+        series: { type: "line" },
+        size: {
+            height: 10
+        },
+        margin: {
+            top: 100
+        },
+        onZoomEnd: zoomEnd
+    });
+
+    chart.zoomArgument(30, 80);
+
+    assert.equal(zoomEnd.callCount, 1);
+    assert.equal(zoomEnd.getCall(0).args[0].rangeStart, 30, 'rangeStart');
+    assert.equal(zoomEnd.getCall(0).args[0].rangeEnd, 80, 'rangeEnd');
+});
+
 QUnit.module("MultiAxis Synchronization", commons.environment);
 
 QUnit.test("dxChart with two Series on one pane and different value axis", function(assert) {

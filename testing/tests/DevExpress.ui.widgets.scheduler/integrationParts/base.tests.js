@@ -202,6 +202,7 @@ QUnit.test("Scheduler should not throw an error when the details form is opened 
     this.createInstance();
     this.instance.showAppointmentPopup({ startDate: new Date() });
     assert.notOk(errorLogStub.called, "Exception was not thrown");
+    errorLogStub.restore();
 });
 
 QUnit.test("The 'scrollingEnabled' option of an appointment form should be 'true'", function(assert) {

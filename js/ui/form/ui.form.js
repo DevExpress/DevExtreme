@@ -287,7 +287,7 @@ var Form = Widget.inherit({
              * @name dxFormSimpleItemOptions_editorType
              * @publicName editorType
              * @type string
-             * @acceptValues 'dxTextBox'|'dxNumberBox'|'dxDateBox'|'dxCheckBox'|'dxSwitch'|'dxSelectBox'|'dxLookup'|'dxTagBox'|'dxTextArea'|'dxColorBox'|'dxCalendar'|'dxAutocomplete'|'dxRadioGroup'|'dxSlider'
+             * @acceptValues 'dxTextBox'|'dxNumberBox'|'dxDateBox'|'dxCheckBox'|'dxSwitch'|'dxSelectBox'|'dxLookup'|'dxTagBox'|'dxTextArea'|'dxColorBox'|'dxCalendar'|'dxAutocomplete'|'dxRadioGroup'|'dxSlider'|'dxDropDownBox'
              */
             /**
              * @name dxFormSimpleItemOptions_editorOptions

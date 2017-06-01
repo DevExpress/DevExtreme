@@ -853,43 +853,45 @@ QUnit.test("Text", function(assert) {
 });
 
 QUnit.test("Text offset position calculation", function(assert) {
-    var realDevice = devices.real();
-
-    if(realDevice.deviceType !== "desktop" && realDevice.platform !== "ios") {
-        assert.ok(true, "This test only for desktop devices and iPhone devices");
-        return;
-    }
-
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<text x="0" y="50" transform="translate(0, 0)">' +
-                                        'test part1' +
-                                        '<tspan>test part2</tspan>' +
-                                        '<tspan dx="15" dy="15">test part3</tspan>' +
-                                        'test part4' +
-                                        '<tspan x="200" y="200">test part5</tspan>' +
-                                        '<tspan x="0">test part6</tspan>' +
-                                        '<tspan y="0">test part7</tspan>' +
-                                        '</text>' +
-                                        testingMarkupEnd,
-        imageBlob = getData(markup);
+        markup = testingMarkupStart + '<text x="0" y="50" style="font-size: 10px; font-family: sans-serif;" transform="translate(0, 0)">' +
+            'test part1' +
+            '<tspan>test part2</tspan>' +
+            '<tspan dx="15" dy="15">test part3</tspan>' +
+            'test part4' +
+            '<tspan x="200" y="200">test part5</tspan>' +
+            '<tspan x="0">test part6</tspan>' +
+            '<tspan y="0">test part7</tspan>' +
+            '</text>' +
+            testingMarkupEnd,
+        imageBlob = getData(markup),
+        canvas = $("<canvas width='1000' height='1000'>").appendTo("#qunit-fixture")[0],
+        ctx = canvas.getContext("2d");
+
+    ctx.font = "10px sans-serif";
 
     assert.expect(15);
 
     $.when(imageBlob).done(function(blob) {
         try {
+            var part1Width = ctx.measureText("test part1").width,
+                part2Width = ctx.measureText("test part2").width,
+                part3Width = ctx.measureText("test part3").width,
+                part6Width = ctx.measureText("test part6").width;
+
             assert.equal(that.drawnElements.length, 8, "Canvas elements count");
 
             assert.equal(that.drawnElements[1].args[1], 0, "Text out of tspanElement position X");
             assert.equal(that.drawnElements[1].args[2], 50, "Text out of tspanElement position Y");
 
-            assert.roughEqual(that.drawnElements[2].args[1], 43, 2, "tSpan text element without x,y,dx,dy attributes position X");
+            assert.strictEqual(that.drawnElements[2].args[1], part1Width, "tSpan text element without x,y,dx,dy attributes position X");
             assert.equal(that.drawnElements[2].args[2], 50, "tSpan text element without x,y,dx,dy attributes position Y");
 
-            assert.roughEqual(that.drawnElements[3].args[1], 86, 3.5, "tSpan text element with dx,dy attributes position X");
+            assert.strictEqual(that.drawnElements[3].args[1], part1Width + part2Width, "tSpan text element with dx,dy attributes position X");
             assert.equal(that.drawnElements[3].args[2], 65, "tSpan text element with dx,dy attributes position Y");
 
-            assert.roughEqual(that.drawnElements[4].args[1], 130, 5, "Text out of tspanElement in the middle text block position X");
+            assert.strictEqual(that.drawnElements[4].args[1], part1Width + part2Width + part3Width, "Text out of tspanElement in the middle text block position X");
             assert.equal(that.drawnElements[4].args[2], 65, "Text out of tspanElement in the middle text block position Y");
 
             assert.equal(that.drawnElements[5].args[1], 200, "tSpan text element with x,y attributes position X");
@@ -898,61 +900,7 @@ QUnit.test("Text offset position calculation", function(assert) {
             assert.equal(that.drawnElements[6].args[1], 0, "tSpan text element with x=0 attributte position X");
             assert.equal(that.drawnElements[6].args[2], 200, "tSpan text element with x=0 attributte position Y");
 
-            assert.roughEqual(that.drawnElements[7].args[1], 44, 4.5, "tSpan text element with y=0 attributte position X");
-            assert.equal(that.drawnElements[7].args[2], 0, "tSpan text element with y=0 attributte position Y");
-        } finally {
-            done();
-        }
-    });
-});
-
-QUnit.test("Text offset position calculation(other Devices)", function(assert) {
-    var realDevice = devices.real();
-
-    if(realDevice.deviceType === "desktop" || realDevice.platform === "ios") {
-        assert.ok(true, "This not for desktop devices or ios devices");
-        return;
-    }
-
-    var that = this,
-        done = assert.async(),
-        markup = testingMarkupStart + '<text x="0" y="50" transform="translate(0, 0)">' +
-                                        'test part1' +
-                                        '<tspan>test part2</tspan>' +
-                                        '<tspan dx="15" dy="15">test part3</tspan>' +
-                                        'test part4' +
-                                        '<tspan x="200" y="200">test part5</tspan>' +
-                                        '<tspan x="0">test part6</tspan>' +
-                                        '<tspan y="0">test part7</tspan>' +
-                                        '</text>' +
-                                        testingMarkupEnd,
-        imageBlob = getData(markup);
-
-    assert.expect(15);
-
-    $.when(imageBlob).done(function(blob) {
-        try {
-            assert.equal(that.drawnElements.length, 8, "Canvas elements count");
-
-            assert.equal(that.drawnElements[1].args[1], 0, "Text out of tspanElement position X");
-            assert.equal(that.drawnElements[1].args[2], 50, "Text out of tspanElement position Y");
-
-            assert.roughEqual(that.drawnElements[2].args[1], 42, 1, "tSpan text element without x,y,dx,dy attributes position X");
-            assert.equal(that.drawnElements[2].args[2], 50, "tSpan text element without x,y,dx,dy attributes position Y");
-
-            assert.roughEqual(that.drawnElements[3].args[1], 84, 2, "tSpan text element with dx,dy attributes position X");
-            assert.equal(that.drawnElements[3].args[2], 65, "tSpan text element with dx,dy attributes position Y");
-
-            assert.roughEqual(that.drawnElements[4].args[1], 127, 2, "Text out of tspanElement in the middle text block position X");
-            assert.equal(that.drawnElements[4].args[2], 65, "Text out of tspanElement in the middle text block position Y");
-
-            assert.equal(that.drawnElements[5].args[1], 200, "tSpan text element with x,y attributes position X");
-            assert.equal(that.drawnElements[5].args[2], 200, "tSpan text element with x,y attributes position Y");
-
-            assert.equal(that.drawnElements[6].args[1], 0, "tSpan text element with x=0 attributte position X");
-            assert.equal(that.drawnElements[6].args[2], 200, "tSpan text element with x=0 attributte position Y");
-
-            assert.roughEqual(that.drawnElements[7].args[1], 44, 4.5, "tSpan text element with y=0 attributte position X");
+            assert.strictEqual(that.drawnElements[7].args[1], part6Width, "tSpan text element with y=0 attributte position X");
             assert.equal(that.drawnElements[7].args[2], 0, "tSpan text element with y=0 attributte position Y");
         } finally {
             done(); // roughEqual

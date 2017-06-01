@@ -3,7 +3,6 @@
 var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
-    devices = require("core/devices"),
     fx = require("animation/fx"),
     setViewPort = require("core/utils/view_port").value,
     Toast = require("ui/toast");
@@ -75,21 +74,16 @@ QUnit.test("default template", function(assert) {
 });
 
 QUnit.test("position", function(assert) {
-    var device = devices.current();
-    if(device.win && device.phone) {
-        assert.expect(0);
-        return;
-    }
+    this.instance.option({
+        message: "test42",
+        position: { my: "bottom center", at: "bottom center", offset: "0 0" }
+    });
+
+    fx.off = true;
+    this.instance.show();
 
     var $content = this.instance.content();
-
-    this.instance.option({
-        message: "test42"
-    });
-    fx.off = true;
-
-    this.instance.show();
-    assert.equal($content.offset().top + $content.outerHeight() + 20, $(window).height());
+    assert.roughEqual($content.offset().top + $content.outerHeight(), $(window).height(), 1.01);
 });
 
 QUnit.test("displayTime", function(assert) {

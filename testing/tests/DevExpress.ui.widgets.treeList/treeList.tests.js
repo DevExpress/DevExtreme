@@ -19,10 +19,8 @@ require("ui/tree_list/ui.tree_list");
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     devices = require("core/devices"),
-    browser = require("core/utils/browser"),
     fx = require("animation/fx");
 
-browser.webkit = false;
 fx.off = true;
 
 QUnit.module("Initialization", {
