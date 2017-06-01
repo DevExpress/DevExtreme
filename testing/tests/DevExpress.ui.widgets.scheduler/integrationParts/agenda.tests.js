@@ -283,7 +283,7 @@ QUnit.test("AllDay appointment should have specific content on agenda view", fun
     assert.ok($appointmentAllDayTitle.is(":visible"), "AllDay title is visible");
 });
 
-QUnit.test("Appointment data of long-appointments should not be the same", function(assert) {
+QUnit.test("Appointment parts should have appointmentSettings field", function(assert) {
     this.createInstance({
         views: ["agenda"],
         currentView: "agenda",
@@ -295,9 +295,9 @@ QUnit.test("Appointment data of long-appointments should not be the same", funct
 
     var $appointments = this.instance.element().find(".dx-scheduler-appointment");
 
-    assert.ok($appointments.eq(1).data("dxItemData").appointmentData, "Appointment part has special field for item data");
-    assert.equal($appointments.eq(1).data("dxItemData").startDate.getTime(), new Date(2016, 1, 25, 0).getTime(), "Current date of appointment part is OK");
-    assert.deepEqual($appointments.eq(0).data("dxItemData").appointmentData, $appointments.eq(1).data("dxItemData").appointmentData, "Appointments data is OK");
+    assert.ok($appointments.eq(1).data("dxItemData").appointmentSettings, "Appointment part has special field for settings");
+    assert.equal($appointments.eq(1).data("dxItemData").appointmentSettings.startDate.getTime(), new Date(2016, 1, 25, 0).getTime(), "Current date of appointment part is OK");
+    assert.deepEqual($appointments.eq(0).data("dxItemData").startDate, $appointments.eq(1).data("dxItemData").startDate, "Appointments data is OK");
 });
 
 QUnit.test("Agenda should contain a right quantity of recurrence appointments", function(assert) {
@@ -682,16 +682,16 @@ QUnit.test("Agenda should contain a right appointment sorting", function(assert)
     assert.equal($appointments.eq(1).data("dxItemData").text, "a"); //24
     assert.equal($appointments.eq(2).data("dxItemData").text, "c"); //24
 
-    assert.equal($appointments.eq(3).data("dxItemData").appointmentData.text, "d"); //25
+    assert.equal($appointments.eq(3).data("dxItemData").text, "d"); //25
     assert.equal($appointments.eq(4).data("dxItemData").text, "b"); //25
 
-    assert.equal($appointments.eq(5).data("dxItemData").appointmentData.text, "d"); //26
+    assert.equal($appointments.eq(5).data("dxItemData").text, "d"); //26
     assert.equal($appointments.eq(6).data("dxItemData").text, "e"); //26
 
-    assert.equal($appointments.eq(7).data("dxItemData").appointmentData.text, "e"); //27
-    assert.equal($appointments.eq(8).data("dxItemData").appointmentData.text, "d"); //27
+    assert.equal($appointments.eq(7).data("dxItemData").text, "e"); //27
+    assert.equal($appointments.eq(8).data("dxItemData").text, "d"); //27
 
-    assert.equal($appointments.eq(9).data("dxItemData").appointmentData.text, "d"); //28
+    assert.equal($appointments.eq(9).data("dxItemData").text, "d"); //28
 });
 
 QUnit.test("Agenda should contain a right appointment sorting after adding of the new appointment", function(assert) {
@@ -729,8 +729,8 @@ QUnit.test("Agenda should contain a right recurrence appointment sorting", funct
     var $appointments = this.instance.element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.eq(0).data("dxItemData").text, "d"); //24
-    assert.equal($appointments.eq(1).data("dxItemData").appointmentData.text, "f"); //24
-    assert.equal($appointments.eq(2).data("dxItemData").appointmentData.text, "e"); //24
+    assert.equal($appointments.eq(1).data("dxItemData").text, "f"); //24
+    assert.equal($appointments.eq(2).data("dxItemData").text, "e"); //24
 });
 
 QUnit.test("Long & recurrence appts should be sorted correctly", function(assert) {
@@ -1103,8 +1103,8 @@ QUnit.test("Recurring appointment and timepanel should be rendered correctly if 
         height: 300,
         onAppointmentRendered: function(e) {
             var targetedAppointmentData = e.targetedAppointmentData;
-            assert.equal(targetedAppointmentData.startDate.getDate(), 10, "Appointment start date is OK");
-            assert.equal(targetedAppointmentData.endDate.getDate(), 10, "Appointment end date is OK");
+            assert.equal(targetedAppointmentData.appointmentSettings.startDate.getDate(), 10, "Appointment start date is OK");
+            assert.equal(targetedAppointmentData.appointmentSettings.endDate.getDate(), 10, "Appointment end date is OK");
         },
         dataSource: [{
             text: "test-rec",
@@ -1217,14 +1217,14 @@ QUnit.test("Long appointment parts data should be correct", function(assert) {
     assert.equal($appointments.eq(3).data("dxItemData").text, "a");
 
     assert.deepEqual($appointments.eq(0).data("dxItemData").Start, new Date(2016, 1, 24, 1)); //first part of long appointment has original startDate
-    assert.deepEqual($appointments.eq(1).data("dxItemData").Start, new Date(2016, 1, 25, 8));
-    assert.deepEqual($appointments.eq(2).data("dxItemData").Start, new Date(2016, 1, 26, 8));
-    assert.deepEqual($appointments.eq(3).data("dxItemData").Start, new Date(2016, 1, 27, 8));
+    assert.deepEqual($appointments.eq(1).data("dxItemData").appointmentSettings.Start, new Date(2016, 1, 25, 8));
+    assert.deepEqual($appointments.eq(2).data("dxItemData").appointmentSettings.Start, new Date(2016, 1, 26, 8));
+    assert.deepEqual($appointments.eq(3).data("dxItemData").appointmentSettings.Start, new Date(2016, 1, 27, 8));
 
     assert.deepEqual($appointments.eq(0).data("dxItemData").endDate, new Date(2016, 1, 27, 1, 30)); //first part of long appointment has original endDate
-    assert.deepEqual($appointments.eq(1).data("dxItemData").endDate, new Date(2016, 1, 25, 20));
-    assert.deepEqual($appointments.eq(2).data("dxItemData").endDate, new Date(2016, 1, 26, 20));
-    assert.deepEqual($appointments.eq(3).data("dxItemData").endDate, new Date(2016, 1, 27, 1, 30));
+    assert.deepEqual($appointments.eq(1).data("dxItemData").appointmentSettings.endDate, new Date(2016, 1, 25, 20));
+    assert.deepEqual($appointments.eq(2).data("dxItemData").appointmentSettings.endDate, new Date(2016, 1, 26, 20));
+    assert.deepEqual($appointments.eq(3).data("dxItemData").appointmentSettings.endDate, new Date(2016, 1, 27, 1, 30));
 });
 
 QUnit.test("Long appointment parts popup should have original data", function(assert) {

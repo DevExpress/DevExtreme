@@ -874,8 +874,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _sortAppointmentsByStartDate: function(appointments) {
         appointments.sort((function(a, b) {
             var result = 0,
-                firstDate = new Date(this.invoke("getField", "startDate", a)).getTime(),
-                secondDate = new Date(this.invoke("getField", "startDate", b)).getTime();
+                firstDate = new Date(this.invoke("getField", "startDate", a.appointmentSettings || a)).getTime(),
+                secondDate = new Date(this.invoke("getField", "startDate", b.appointmentSettings || b)).getTime();
 
             if(firstDate < secondDate) {
                 result = -1;
@@ -961,7 +961,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             extend(appointment, parts[0]);
 
             for(var i = 1; i < partCount; i++) {
-                var startDate = this.invoke("getField", "startDate", parts[i]).getTime();
+                var startDate = this.invoke("getField", "startDate", parts[i].appointmentSettings).getTime();
                 startDate = this.invoke("convertDateByTimezone", startDate, startDateTimeZone);
 
                 if(startDate < endViewDate && startDate > startViewDate) {
@@ -1055,9 +1055,11 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     splitAppointmentByDay: function(appointment) {
-        var originalStartDate = new Date(this.invoke("getField", "startDate", appointment)),
+        var dates = appointment.appointmentSettings || appointment;
+
+        var originalStartDate = new Date(this.invoke("getField", "startDate", dates)),
             startDate = dateUtils.makeDate(originalStartDate),
-            endDate = dateUtils.makeDate(this.invoke("getField", "endDate", appointment)),
+            endDate = dateUtils.makeDate(this.invoke("getField", "endDate", dates)),
             startDateTimeZone = this.invoke("getField", "startDateTimeZone", appointment),
             endDateTimeZone = this.invoke("getField", "endDateTimeZone", appointment),
             maxAllowedDate = this.invoke("getEndViewDate"),
@@ -1084,12 +1086,11 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this._checkStartDate(currentStartDate, originalStartDate, startDayHour);
             this._checkEndDate(currentEndDate, endDate, endDayHour);
 
-            var appointmentData = objectUtils.deepExtendArraySafe({}, appointment, true);
-
-            appointmentData.appointmentSettings = {
-                startDate: currentStartDate,
-                endDate: currentEndDate
-            };
+            var appointmentData = objectUtils.deepExtendArraySafe({}, appointment, true),
+                appointmentSettings = {};
+            this._applyStartDateToObj(currentStartDate, appointmentSettings);
+            this._applyEndDateToObj(currentEndDate, appointmentSettings);
+            appointmentData.appointmentSettings = appointmentSettings;
             // var appointmentData = objectUtils.deepExtendArraySafe({}, appointment, true),
             //     newAppointment = objectUtils.deepExtendArraySafe({}, appointment, true);
 

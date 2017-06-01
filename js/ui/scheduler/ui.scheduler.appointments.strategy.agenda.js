@@ -200,8 +200,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
                 for(var j = 0; j < appointmentCount; j++) {
                     //var appointmentData = currentAppointments[j].itemData || currentAppointments[j];
-                    var appointmentData = currentAppointments[j].appointmentSettings || currentAppointments[j];
-                    if(this.instance.fire("dayHasAppointment", day, appointmentData, true)) {
+                    //var appointmentData = appointmentCount > 1 && currentAppointments[j].appointmentSettings ? currentAppointments[j].appointmentSettings : currentAppointments[j];
+                    //var appointmentData = currentAppointments[j].appointmentSettings || currentAppointments[j];
+                    if(this.instance.fire("dayHasAppointment", day, currentAppointments[j].appointmentSettings, true) || this.instance.fire("dayHasAppointment", day, currentAppointments[j], true)) {
                         groupResult[i] += 1;
                     }
                 }
