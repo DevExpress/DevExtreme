@@ -241,6 +241,7 @@ QUnit.test("Confirm dialog should be shown when showAppointmentPopup for recurre
     });
 
     assert.ok($(".dx-dialog.dx-overlay-modal").length, "Dialog was shown");
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 });
 
 QUnit.test("Popup should contain recurrence editor", function(assert) {
@@ -274,9 +275,7 @@ QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is
     };
 
     this.instance.option("recurrenceRuleExpr", null);
-
     this.instance.showAppointmentPopup(appointment);
-    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
         $recurrenceEditor = $popupContent.find(".dx-recurrence-editor");
@@ -303,9 +302,7 @@ QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is
     };
 
     this.instance.option("recurrenceRuleExpr", '');
-
     this.instance.showAppointmentPopup(appointment);
-    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
         $recurrenceEditor = $popupContent.find(".dx-recurrence-editor");
