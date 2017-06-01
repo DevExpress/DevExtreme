@@ -87,8 +87,7 @@ var NumberBox = TextEditor.inherit({
             * @name dxNumberBoxOptions_useTouchSpinButtons
             * @publicName useTouchSpinButtons
             * @type boolean
-            * @default false
-            * @hidden
+            * @default true
             */
             useTouchSpinButtons: true,
 
@@ -160,6 +159,11 @@ var NumberBox = TextEditor.inherit({
                     return devices.real().generic && !devices.isSimulator();
                 },
                 options: {
+                    /**
+                     * @name dxNumberBoxOptions_useTouchSpinButtons
+                     * @publicName useTouchSpinButtons
+                     * @custom_default_for_desktop false
+                     */
                     useTouchSpinButtons: false
                 }
             },
