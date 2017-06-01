@@ -703,7 +703,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _isValueChanged: function(newValue) {
-        var oldValue = new Date(this.option("value")),
+        var oldValue = this.dateOption("value"),
             oldTime = oldValue && oldValue.getTime(),
             newTime = newValue && newValue.getTime();
 
