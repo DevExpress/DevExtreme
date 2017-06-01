@@ -1106,6 +1106,36 @@ QUnit.test("options with undefined value should be passed correctly", function(a
     assert.equal(instance.option("text"), undefined, "option is passed correctly");
 });
 
+QUnit.test("Binding with several nested options with same parent should work correctly", function(assert) {
+    var TestComponentWithDeprecated = DOMComponent.inherit({
+        _setDeprecatedOptions: function() {
+            this.callBase();
+
+            this._deprecatedOptions['root.deprecated'] = { alias: 'root.child1' };
+        }
+    });
+    registerComponent("dxTestWithDeprecated", TestComponentWithDeprecated);
+
+    var $markup = $("<div>")
+        .attr("dx-test-with-deprecated", "{ root: { }, bindingOptions: { 'root.child1': 'prop', 'root.child2': 'prop' } }")
+        .appendTo(this.$controller);
+
+    this.testApp.controller("my-controller", function($scope) {
+        $scope.prop = true;
+    });
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    var instance = $markup.data("dxTestWithDeprecated"),
+        scope = $markup.scope();
+
+    scope.$apply(function() {
+        scope.prop = false;
+    });
+
+    assert.equal(instance.option("root.child1"), false);
+    assert.equal(instance.option("root.child2"), false);
+});
 
 QUnit.module("nested Widget with templates enabled", {
     beforeEach: function() {
