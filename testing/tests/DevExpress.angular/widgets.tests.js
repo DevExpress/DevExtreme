@@ -8,6 +8,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     inflector = require("core/utils/inflector"),
     fx = require("animation/fx"),
+    positionUtils = require("animation/position"),
     ValidationGroup = require("ui/validation_group");
 
 require("integration/angular");
@@ -62,9 +63,19 @@ QUnit.module("Widgets wich calculate own sizes", {
 });
 
 QUnit.test("dxPopup", function(assert) {
+    var originalPositionSetup = positionUtils.setup;
+
+    var contentHeight;
+
+    positionUtils.setup = function($content, position) {
+        contentHeight = $content.height();
+
+        originalPositionSetup($content, position);
+    };
+
     var $markup = $("\
         <div dx-popup='popupOptions'>\
-            <div data-options='dxTemplate: { name: \"custom\" }'>\
+            <div data-options='dxTemplate: { name: \"custom\" }' style='line-height: 18px'>\
 		        {{VeryVeryVeryLongField.value1}}\
 		        {{VeryVeryVeryLongField.value2}}\
             </div>\
@@ -83,7 +94,9 @@ QUnit.test("dxPopup", function(assert) {
             visible: true,
             contentTemplate: "custom",
             maxWidth: 150,
-            height: undefined
+            height: undefined,
+            fullScreen: false,
+            position: { of: window, offset: '0 0' }
         };
     };
 
@@ -92,13 +105,18 @@ QUnit.test("dxPopup", function(assert) {
     this.clock.tick();
 
     assert.equal($(".dx-popup-content").height(), 18);
+    assert.equal(contentHeight, $(".dx-popup-content").height());
+
+    positionUtils.setup = originalPositionSetup;
 });
 
 QUnit.test("dxPopover", function(assert) {
     var $markup = $("\
         <a id=\"link1\">testLink</a>\
         <div id=\"popover\" dx-popover='popoverOptions'>\
-            {{popoverContent}} {{popoverContent}}\
+            <div data-options='dxTemplate: { name: \"content\" }' style='line-height: 18px'>\
+                {{popoverContent}} {{popoverContent}}\
+            </div>\
         </div>\
     ");
 
