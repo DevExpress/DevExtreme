@@ -1023,8 +1023,8 @@ declare module DevExpress.ui {
         /** @docid dxNumberBoxOptions_showSpinButtons */
         showSpinButtons?: boolean;
 
-        /** @docid dxNumberBoxOptions_useTouchSpinButtons */
-        useTouchSpinButtons?: boolean;
+        /** @docid dxNumberBoxOptions_useLargeSpinButtons */
+        useLargeSpinButtons?: boolean;
 
         /** @docid dxNumberBoxOptions_step */
         step?: number;

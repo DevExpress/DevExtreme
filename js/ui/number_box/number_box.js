@@ -84,12 +84,13 @@ var NumberBox = TextEditor.inherit({
             showSpinButtons: false,
 
             /**
-            * @name dxNumberBoxOptions_useTouchSpinButtons
-            * @publicName useTouchSpinButtons
+            * @name dxNumberBoxOptions_useLargeSpinButtons
+            * @publicName useLargeSpinButtons
             * @type boolean
             * @default true
+            * @custom_default_for_desktop false
             */
-            useTouchSpinButtons: true,
+            useLargeSpinButtons: true,
 
             /**
             * @name dxNumberBoxOptions_mode
@@ -159,12 +160,7 @@ var NumberBox = TextEditor.inherit({
                     return devices.real().generic && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                     * @name dxNumberBoxOptions_useTouchSpinButtons
-                     * @publicName useTouchSpinButtons
-                     * @custom_default_for_desktop false
-                     */
-                    useTouchSpinButtons: false
+                    useLargeSpinButtons: false
                 }
             },
             {
@@ -331,7 +327,7 @@ var NumberBox = TextEditor.inherit({
     },
 
     _toggleTouchFriendlyClass: function() {
-        this.element().toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, this.option("showSpinButtons") && this.option("useTouchSpinButtons"));
+        this.element().toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, this.option("showSpinButtons") && this.option("useLargeSpinButtons"));
     },
 
     _createSpinButtons: function() {
@@ -355,7 +351,7 @@ var NumberBox = TextEditor.inherit({
 
     _spinButtonsPointerDownHandler: function() {
         var $input = this._input();
-        if(!this.option("useTouchSpinButtons") && document.activeElement !== $input[0]) {
+        if(!this.option("useLargeSpinButtons") && document.activeElement !== $input[0]) {
             $input.trigger("focus");
         }
     },
@@ -571,7 +567,7 @@ var NumberBox = TextEditor.inherit({
             case "showSpinButtons":
                 this._renderInputAddons();
                 break;
-            case "useTouchSpinButtons":
+            case "useLargeSpinButtons":
                 this._toggleTouchFriendlyClass();
                 break;
             case "invalidValueMessage":

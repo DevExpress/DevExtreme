@@ -309,19 +309,19 @@ QUnit.test("placeholder is visible when value is invalid", function(assert) {
     assert.ok($element.find("." + PLACEHOLDER_CLASS).is(":visible"), "placeholder is visible with invalid value");
 });
 
-QUnit.test("init with option useTouchSpinButtons", function(assert) {
+QUnit.test("init with option useLargeSpinButtons", function(assert) {
     var $element = $("#numberbox").dxNumberBox({
         showSpinButtons: true,
-        useTouchSpinButtons: true
+        useLargeSpinButtons: true
     });
 
     assert.ok($element.hasClass(SPIN_TOUCH_FRIENDLY_CLASS), "element has touchFriendly class");
 });
 
-QUnit.testInActiveWindow("input is focused when spin buttons are clicked if useTouchSpinButtons = false", function(assert) {
+QUnit.testInActiveWindow("input is focused when spin buttons are clicked if useLargeSpinButtons = false", function(assert) {
     var $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true,
-            useTouchSpinButtons: false
+            useLargeSpinButtons: false
         }),
         $input = $element.find(".dx-texteditor-input"),
         $spinButton = $element.find(".dx-numberbox-spin-up");
@@ -443,10 +443,10 @@ QUnit.test("mousewheel action should not work in disabled state", function(asser
     assert.equal(numberBox.option("value"), 100.6, "value is not changed");
 });
 
-QUnit.testInActiveWindow("input is not focused when spin buttons are clicked if useTouchSpinButtons = true", function(assert) {
+QUnit.testInActiveWindow("input is not focused when spin buttons are clicked if useLargeSpinButtons = true", function(assert) {
     var $element = $("#numberbox").dxNumberBox({
             showSpinButtons: true,
-            useTouchSpinButtons: true
+            useLargeSpinButtons: true
         }),
         $input = $element.find(".dx-texteditor-input"),
         $spinButton = $element.find(".dx-numberbox-spin-up");
@@ -1262,15 +1262,15 @@ QUnit.test("Placeholder must not be visible after setting value by option", func
     assert.ok(this.element.find(".dx-placeholder").is(":hidden"), "placeholder is hidden");
 });
 
-QUnit.test("useTouchSpinButtons option changed", function(assert) {
+QUnit.test("useLargeSpinButtons option changed", function(assert) {
     this.instance.option({
         showSpinButtons: true,
-        useTouchSpinButtons: false
+        useLargeSpinButtons: false
     });
 
     assert.ok(!this.element.hasClass(SPIN_TOUCH_FRIENDLY_CLASS), "element has not touchFriendly class");
 
-    this.instance.option({ useTouchSpinButtons: true });
+    this.instance.option({ useLargeSpinButtons: true });
     assert.ok(this.element.hasClass(SPIN_TOUCH_FRIENDLY_CLASS), "element has touchFriendly class");
 });
 

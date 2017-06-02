@@ -268,7 +268,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
             min: 1,
             value: interval,
             showSpinButtons: true,
-            useTouchSpinButtons: false,
+            useLargeSpinButtons: false,
             onValueChanged: this._valueChangedHandler.bind(this)
         });
 
@@ -500,7 +500,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
             min: 1,
             max: 31,
             showSpinButtons: true,
-            useTouchSpinButtons: false,
+            useLargeSpinButtons: false,
             value: byMonthDay,
             onValueChanged: this._valueChangedHandler.bind(this)
         });
@@ -666,7 +666,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
             field: "count",
             min: 1,
             showSpinButtons: true,
-            useTouchSpinButtons: false,
+            useLargeSpinButtons: false,
             value: repeatCount,
             onValueChanged: this._repeatCountValueChangeHandler.bind(this)
         });

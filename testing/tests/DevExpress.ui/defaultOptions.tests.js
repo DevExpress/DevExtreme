@@ -109,7 +109,7 @@ testComponentDefaults(ActionSheet,
 
 testComponentDefaults(NumberBox,
     {},
-    { useTouchSpinButtons: false },
+    { useLargeSpinButtons: false },
     function() {
         this._origDevice = devices.real();
 
