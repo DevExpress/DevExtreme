@@ -701,6 +701,14 @@ var DateBox = DropDownEditor.inherit({
         return isValid;
     },
 
+    _isValueChanged: function(newValue) {
+        var oldValue = this.dateOption("value"),
+            oldTime = oldValue && oldValue.getTime(),
+            newTime = newValue && newValue.getTime();
+
+        return oldTime !== newTime;
+    },
+
     _renderProps: function() {
         this.callBase();
         this._input().attr("autocomplete", "off");
@@ -862,7 +870,10 @@ var DateBox = DropDownEditor.inherit({
         var jQueryEvent = arguments[1],
             value = arguments[0];
 
-        if(jQueryEvent) this._saveValueChangeEvent(jQueryEvent);
+        if(this._isValueChanged(value) && jQueryEvent) {
+            this._saveValueChangeEvent(jQueryEvent);
+        }
+
         return this.dateOption("value", value);
     },
 
