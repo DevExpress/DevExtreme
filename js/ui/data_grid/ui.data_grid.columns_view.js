@@ -571,6 +571,8 @@ exports.ColumnsView = gridCore.View.inherit(gridCoreUtils.columnStateMixin).inhe
             result = [],
             $cells;
 
+        (this.option("forceApplyBindings") || $.noop)();
+
         $tableElement = $tableElement || that._getTableElement();
 
         if($tableElement) {
