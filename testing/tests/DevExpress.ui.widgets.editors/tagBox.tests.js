@@ -3513,6 +3513,11 @@ QUnit.test("tags container should be scrolled to the start on value change in th
 });
 
 QUnit.test("the focused tag should be visible during keyboard navigation to the right in the RTL mode", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
     this.reinit({
         items: this.items,
         value: this.items,
@@ -3542,6 +3547,11 @@ QUnit.test("the focused tag should be visible during keyboard navigation to the 
 });
 
 QUnit.test("the focused tag should be visible during keyboard navigation to the left in the RTL mode", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
     this.reinit({
         items: this.items,
         value: this.items,

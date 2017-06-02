@@ -2727,7 +2727,10 @@ QUnit.test("dxpointermove is prevented when scrolling is disabled (Q574378)", fu
         initMobileViewport({ allowZoom: true, allowPan: false });
 
         $(document).on("dxpointermove.initViewportIntegration", function(e) {
-            assert.equal(e.isDefaultPrevented(), true, "dxpointermove was prevented");
+            var realDevice = devices.real(),
+                isWin10 = realDevice.platform === "win" && realDevice.version[0] === 10;
+
+            assert.equal(isWin10 || e.isDefaultPrevented(), true, "dxpointermove was prevented on non win10 devices");
         });
 
         pointerMock($scrollable.find("." + SCROLLABLE_CONTENT_CLASS))
