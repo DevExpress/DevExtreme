@@ -674,8 +674,6 @@ var Popup = Overlay.inherit({
     },
 
     _setContentHeight: function() {
-        (this.option("forceApplyBindings") || $.noop)();
-
         if(this._disallowUpdateContentHeight()) {
             return;
         }
@@ -740,8 +738,6 @@ var Popup = Overlay.inherit({
                 left: 0
             });
         } else {
-            (this.option("forceApplyBindings") || $.noop)();
-
             return this.callBase.apply(this, arguments);
         }
     },
