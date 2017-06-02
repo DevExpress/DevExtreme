@@ -1373,6 +1373,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             series.getPoints = function() {
                 return $.map(labels, function(label) {
                     return {
+                        series: series,
                         getLabels: sinon.stub().returns([label]),
                         argument: label.getBoundingRect().x,
                         originalValue: label.getBoundingRect().value
@@ -1674,6 +1675,58 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(!this.labels[2].hide.called, "label not should be hidden");
     });
 
+    //T514690
+    QUnit.test("stacked bar. save series order", function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 20, width: 10, height: 30, value: 12 },
+            { x: 5, y: 40, width: 10, height: 30, value: 6 },
+            { x: 5, y: 60, width: 10, height: 30, value: 15 }]);
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "stackedbar" }]
+        });
+
+        this.checkLabelPosition(assert, this.labels[0], [5, 120]);
+        this.checkLabelPosition(assert, this.labels[1], [5, 90]);
+        assert.ok(!this.labels[2].shift.called);
+    });
+
+    //T514690
+    QUnit.test("full stacked bar. save series order", function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 20, width: 10, height: 30, value: 12 },
+            { x: 5, y: 40, width: 10, height: 30, value: 6 },
+            { x: 5, y: 60, width: 10, height: 30, value: 15 }]);
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "fullstackedbar" }]
+        });
+
+        this.checkLabelPosition(assert, this.labels[0], [5, 120]);
+        this.checkLabelPosition(assert, this.labels[1], [5, 90]);
+        assert.ok(!this.labels[2].shift.called);
+    });
+
+    //T514690
+    QUnit.test("stacked bar. series order. last and second label were overlapped", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 96, width: 23, height: 24, value: 5 },
+            { x: 5, y: 56, width: 23, height: 24, value: 6 },
+            { x: 5, y: 71, width: 23, height: 24, value: 8 },
+            { x: 5, y: 46, width: 23, height: 24, value: 8 }
+        ]);
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "stackedbar" }]
+        });
+
+        assert.deepEqual(this.labels[0].shift.lastCall.args, [5, 119]);
+        assert.deepEqual(this.labels[1].shift.lastCall.args, [5, 95]);
+        assert.ok(!this.labels[2].shift.called);
+        assert.ok(!this.labels[3].shift.called);
+    });
+
     QUnit.module("resolveLabelOverlapping. stack. range series", $.extend({}, commons.environment, {
         beforeEach: function() {
             commons.environment.beforeEach.apply(this, arguments);
@@ -1689,6 +1742,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 that.labels = that.labels.concat(labels);
 
                 return {
+                    series: series,
                     getLabels: sinon.stub().returns([labels[0], labels[1]]),
                     argument: labels[0].getBoundingRect().x,
                     originalMinValue: labels[0].getBoundingRect().value,
