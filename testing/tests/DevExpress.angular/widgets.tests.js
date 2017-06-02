@@ -104,7 +104,7 @@ QUnit.test("dxPopup", function(assert) {
 
     this.clock.tick();
 
-    assert.equal($(".dx-popup-content").height(), 18);
+    assert.roughEqual($(".dx-popup-content").height(), 18, 0.5);
     assert.equal(contentHeight, $(".dx-popup-content").height());
 
     positionUtils.setup = originalPositionSetup;
@@ -136,7 +136,7 @@ QUnit.test("dxPopover", function(assert) {
 
     this.clock.tick();
 
-    assert.equal($(".dx-popup-content").height(), 18);
+    assert.roughEqual($(".dx-popup-content").height(), 18, 0.5);
 });
 
 QUnit.test("dxDataGrid", function(assert) {
