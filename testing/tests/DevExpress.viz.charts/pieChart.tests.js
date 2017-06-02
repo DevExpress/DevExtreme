@@ -172,13 +172,14 @@ var environment = {
         afterEach: function() {
             environment.afterEach.apply(this, arguments);
         },
-        _createStubPoints: function(labels) {
+        _createStubPoints: function(labels, series) {
             return $.map(labels, function(label) {
                 var point = new Point();
 
                 point.stub("getLabels");
                 point.getLabels.returns([label]);
                 point.middleAngle = label.getBoundingRect().pointPosition.angle;
+                point.series = series;
                 return point;
             });
         },
@@ -187,7 +188,7 @@ var environment = {
                 labels = this.createStubLabels(bBoxes);
 
             series.getOptions = function() { return { label: { position: position || "outside" } }; };
-            series.getVisiblePoints = sinon.stub().returns(this._createStubPoints(labels));
+            series.getVisiblePoints = sinon.stub().returns(this._createStubPoints(labels, series));
             seriesMockData.series.push(series);
 
         },
@@ -1879,7 +1880,7 @@ var environment = {
             this.createFakeSeriesWithLabels(BBox2);
             this.pieChart = this.createPieChart({
                 resolveLabelOverlapping: "shift",
-                series: [{}, {}]
+                series: [{ type: "pie" }, { type: "pie" }]
             });
             return this.pieChart;
         }

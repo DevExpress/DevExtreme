@@ -106,21 +106,21 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
         stubCanvas = {
             start: isRotated ? canvas.left : canvas.top,
             end: isRotated ? canvas.width - canvas.right : canvas.height - canvas.bottom
-        };
+        },
+        hasStackedSeries = false;
 
     checkHeightLabelsInCanvas(points, stubCanvas, isRotated);
 
     points.forEach(function(p) {
         if(!p) return;
 
+        hasStackedSeries = hasStackedSeries || p.series.isStackedSeries() || p.series.isFullStackedSeries();
         p.getLabels().forEach(function(l) {
             l.isVisible() && rollingStocks.push(new RollingStock(l, isRotated, shiftFunction));
         });
     });
 
-    rollingStocks.sort(function(a, b) {
-        return a.getInitialPosition() - b.getInitialPosition();
-    });
+    hasStackedSeries ? rollingStocks.reverse() : rollingStocks.sort(function(a, b) { return a.getInitialPosition() - b.getInitialPosition(); });
 
     if(!checkStackOverlap(rollingStocks)) return;
 
@@ -134,22 +134,20 @@ function overlapRollingStock(firstRolling, secondRolling) {
 }
 
 function checkStackOverlap(rollingStocks) {
-    var i, j,
+    var i,
         currentRollingStock,
-        nextRollingStock,
-        overlap;
+        overlap,
+        root;
 
-    for(i = 0; i < rollingStocks.length; i++) {
-        currentRollingStock = rollingStocks[i];
-
-        for(j = i + 1; j < rollingStocks.length; j++) {
-            nextRollingStock = rollingStocks[j];
-
-            if(overlapRollingStock(currentRollingStock, nextRollingStock)) {
-                currentRollingStock.toChain(nextRollingStock);
-                overlap = true;
-                rollingStocks[j] = null;
-            }
+    for(i = 0; i < rollingStocks.length - 1; i++) {
+        currentRollingStock = root || rollingStocks[i];
+        if(overlapRollingStock(currentRollingStock, rollingStocks[i + 1])) {
+            currentRollingStock.toChain(rollingStocks[i + 1]);
+            rollingStocks[i + 1] = null;
+            root = currentRollingStock;
+            overlap = true;
+        } else {
+            root = null;
         }
     }
     return overlap;
