@@ -245,7 +245,7 @@ QUnit.test("Recurrence interval numberbox should be rendered with right defaults
     assert.equal($interval.length, 1, "numberBox for setting recurrence interval was rendered");
     assert.equal($intervalLabel.length, 2, "labels was rendered");
     assert.equal(interval.option("showSpinButtons"), true, "numberBox have right showSpinButtons");
-    assert.equal(interval.option("useTouchSpinButtons"), false, "numberBox have right useTouchSpinButtons");
+    assert.equal(interval.option("useLargeSpinButtons"), false, "numberBox have right useLargeSpinButtons");
     assert.equal(interval.option("min"), 1, "numberBox have right min value");
     assert.equal(interval.option("value"), 1, "numberBox have right value");
 });
@@ -434,7 +434,7 @@ QUnit.test("Recurrence repeat-count editor should be rendered with right default
         repeatCount = $repeatCount.dxNumberBox("instance");
 
     assert.equal(repeatCount.option("showSpinButtons"), true, "numberBox has right min value");
-    assert.equal(repeatCount.option("useTouchSpinButtons"), false, "numberBox have right useTouchSpinButtons");
+    assert.equal(repeatCount.option("useLargeSpinButtons"), false, "numberBox have right useLargeSpinButtons");
     assert.equal(repeatCount.option("min"), 1, "numberBox has right min value");
     assert.equal(repeatCount.option("value"), 1, "numberBox has right value");
 });
@@ -608,7 +608,7 @@ QUnit.test("Recurrence repeat-on editor should contain repeat-on-month editor, w
     assert.equal(dayEditor.option("min"), 1, "correct default value of day-of-month editor");
     assert.equal(dayEditor.option("max"), 31, "correct default value of day-of-month editor");
     assert.equal(dayEditor.option("showSpinButtons"), true, "correct default value of day-of-month editor");
-    assert.equal(dayEditor.option("useTouchSpinButtons"), false, "numberBox have right useTouchSpinButtons");
+    assert.equal(dayEditor.option("useLargeSpinButtons"), false, "numberBox have right useLargeSpinButtons");
 });
 
 QUnit.test("Recurrence repeat-on editor should should process values correctly, when freq = monthly", function(assert) {
