@@ -323,28 +323,27 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointmentTemplate: function($container, data, model) {
-        var startDate = new Date(data.startDate),
-            endDate = new Date(data.endDate);
+        var startDate = model.appointmentSettings ? new Date(this.invoke("getField", "startDate", model.appointmentSettings)) : data.startDate,
+            endDate = model.appointmentSettings ? new Date(this.invoke("getField", "endDate", model.appointmentSettings)) : data.endDate;
 
-        var appointmentData = model.appointmentData || data;
 
         $("<div>")
-            .text(this._createAppointmentTitle(appointmentData))
+            .text(this._createAppointmentTitle(data))
             .addClass(APPOINTMENT_TITLE_CLASS)
             .appendTo($container);
 
-        if(typeUtils.isPlainObject(appointmentData)) {
-            if(appointmentData.html) {
-                $container.html(appointmentData.html);
+        if(typeUtils.isPlainObject(data)) {
+            if(data.html) {
+                $container.html(data.html);
             }
         }
 
-        var recurrenceRule = appointmentData.recurrenceRule,
-            allDay = appointmentData.allDay,
+        var recurrenceRule = data.recurrenceRule,
+            allDay = data.allDay,
             $contentDetails = $("<div>").addClass(APPOINTMENT_CONTENT_DETAILS_CLASS);
 
-        var apptStartTz = appointmentData.startDateTimeZone,
-            apptEndTz = appointmentData.endDateTimeZone;
+        var apptStartTz = data.startDateTimeZone,
+            apptEndTz = data.endDateTimeZone;
 
         startDate = this.invoke("convertDateByTimezone", startDate, apptStartTz);
         endDate = this.invoke("convertDateByTimezone", endDate, apptEndTz);

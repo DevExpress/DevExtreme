@@ -180,7 +180,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             }
 
             $.each(currentAppointments, function(index, appointment) {
-                var result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, true);
+                var result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
                 appts.parts = appts.parts.concat(result.parts);
                 appts.indexes = appts.indexes.concat(result.indexes);
             }.bind(this));
@@ -199,10 +199,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 }
 
                 for(var j = 0; j < appointmentCount; j++) {
-                    //var appointmentData = currentAppointments[j].itemData || currentAppointments[j];
-                    //var appointmentData = appointmentCount > 1 && currentAppointments[j].appointmentSettings ? currentAppointments[j].appointmentSettings : currentAppointments[j];
-                    //var appointmentData = currentAppointments[j].appointmentSettings || currentAppointments[j];
-                    if(this.instance.fire("dayHasAppointment", day, currentAppointments[j].appointmentSettings, true) || this.instance.fire("dayHasAppointment", day, currentAppointments[j], true)) {
+                    var appointmentData = currentAppointments[j].appointmentSettings || currentAppointments[j];
+
+                    if(this.instance.fire("dayHasAppointment", day, appointmentData, true)) {
                         groupResult[i] += 1;
                     }
                 }
