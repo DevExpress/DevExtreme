@@ -381,7 +381,9 @@ var VirtualScrollingRowsViewExtender = (function() {
                 };
 
             for(i = 0; i < columns.length; i++) {
-                freeSpaceCellsHtml += columns[i].command === "expand" ? "<td class='" + DATAGRID_GROUP_SPACE_CLASS + "'/>" : "<td />";
+                var cssClass = columns[i].cssClass;
+
+                freeSpaceCellsHtml += columns[i].command === "expand" ? "<td class='" + DATAGRID_GROUP_SPACE_CLASS + " " + cssClass + "'/>" : "<td class='" + cssClass + "'/>";
             }
 
             while(height > PIXELS_LIMIT) {
