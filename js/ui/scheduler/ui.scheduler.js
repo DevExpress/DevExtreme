@@ -1176,7 +1176,6 @@ var Scheduler = Widget.inherit({
             case "recurrenceExceptionExpr":
                 this._updateExpression(name, value);
                 this._initAppointmentTemplate();
-                this._cleanPopup();
                 this.repaint();
                 break;
             default:
@@ -1312,6 +1311,11 @@ var Scheduler = Widget.inherit({
         }
 
         this.hideAppointmentTooltip();
+    },
+
+    _clean: function() {
+        this._cleanPopup();
+        this.callBase();
     },
 
     _toggleSmallClass: function() {
