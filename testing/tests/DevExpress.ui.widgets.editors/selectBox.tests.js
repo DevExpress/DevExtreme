@@ -2844,6 +2844,32 @@ QUnit.test("the selected item should be visible if the data source is loaded aft
     });
 });
 
+QUnit.test("selectbox should not render own components if it was disposed (T517486)", function(assert) {
+    this.clock = sinon.useFakeTimers();
+
+    try {
+        var instance = $("#selectBox").dxSelectBox({
+            dataSource: {
+                byKey: function() {
+                    var d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolveWith(1);
+                    }, 200);
+                    return d.promise();
+                }
+            }
+        }).dxSelectBox("instance");
+
+        instance.option("value", "1");
+        instance.element().remove();
+        this.clock.tick(200);
+        assert.ok(true, "exception is not expected");
+    } catch(e) {
+        assert.ok(false, "Exception: " + e);
+    } finally {
+        this.clock.restore();
+    }
+});
 
 QUnit.module("regressions", moduleSetup);
 
