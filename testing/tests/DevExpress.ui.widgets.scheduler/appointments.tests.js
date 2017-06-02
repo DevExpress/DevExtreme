@@ -862,16 +862,16 @@ QUnit.test("Split appointment by day", function(assert) {
     }], "Parts are OK");
 
     assert.deepEqual(parts2, [
-        { appointmentSettings: { startDate: new Date(2016, 1, 28, 9), endDate: new Date(2016, 1, 28, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 2, 1, 8), endDate: new Date(2016, 2, 1, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 2, 3, 8), endDate: new Date(2016, 2, 3, 16) }, startDate: appt2.startDate, endDate: appt2.endDate }
+        { settings: { startDate: new Date(2016, 1, 28, 9), endDate: new Date(2016, 1, 28, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
+        { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
+        { settings: { startDate: new Date(2016, 2, 1, 8), endDate: new Date(2016, 2, 1, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
+        { settings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
+        { settings: { startDate: new Date(2016, 2, 3, 8), endDate: new Date(2016, 2, 3, 16) }, startDate: appt2.startDate, endDate: appt2.endDate }
     ], "Parts are OK");
 
     assert.deepEqual(parts3, [
-        { appointmentSettings: { startDate: new Date(2016, 1, 28, 9), endDate: new Date(2016, 1, 28, 20) }, startDate: appt3.startDate, endDate: appt3.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 10) }, startDate: appt3.startDate, endDate: appt3.endDate },
+        { settings: { startDate: new Date(2016, 1, 28, 9), endDate: new Date(2016, 1, 28, 20) }, startDate: appt3.startDate, endDate: appt3.endDate },
+        { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 10) }, startDate: appt3.startDate, endDate: appt3.endDate },
     ], "Parts are OK");
 });
 
@@ -887,16 +887,16 @@ QUnit.test("Split appointment by day should consider startDayHour & endDayHour",
     assert.deepEqual(parts1, [], "Parts are OK");
 
     assert.deepEqual(parts2, [
-        { appointmentSettings: { startDate: new Date(2016, 1, 28, 8), endDate: new Date(2016, 1, 28, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 2, 1, 8), endDate: new Date(2016, 2, 1, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 2, 3, 8), endDate: new Date(2016, 2, 3, 2) }, startDate: appt2.startDate, endDate: appt2.endDate }
+        { settings: { startDate: new Date(2016, 1, 28, 8), endDate: new Date(2016, 1, 28, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
+        { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
+        { settings: { startDate: new Date(2016, 2, 1, 8), endDate: new Date(2016, 2, 1, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
+        { settings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
+        { settings: { startDate: new Date(2016, 2, 3, 8), endDate: new Date(2016, 2, 3, 2) }, startDate: appt2.startDate, endDate: appt2.endDate }
     ], "Parts are OK");
 
     assert.deepEqual(parts3, [
-        { appointmentSettings: { startDate: new Date(2016, 1, 28, 16), endDate: new Date(2016, 1, 28, 20) }, startDate: appt3.startDate, endDate: appt3.endDate },
-        { appointmentSettings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt3.startDate, endDate: appt3.endDate }
+        { settings: { startDate: new Date(2016, 1, 28, 16), endDate: new Date(2016, 1, 28, 20) }, startDate: appt3.startDate, endDate: appt3.endDate },
+        { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt3.startDate, endDate: appt3.endDate }
     ], "Parts are OK");
 });
 
