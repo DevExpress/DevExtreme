@@ -184,21 +184,20 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
 
         for(var i = 0; i < itemsLength; i++) {
-            var item = appointments[i],
-                itemData = item && item.appointmentData || item;
+            var item = appointments[i];
 
-            if(itemData && item.needRemove === true) {
-                this._clearItem(itemData);
+            if(item && item.needRemove === true) {
+                this._clearItem(item);
                 appointments.splice(i, 1);
                 i--;
                 continue;
             }
-            if(itemData && item.needRepaint === false) {
+            if(item && item.needRepaint === false) {
                 this._processRenderedAppointment(item);
             }
-            if(itemData && (!commonUtils.isDefined(item.needRepaint) || item.needRepaint === true)) {
+            if(item && (!commonUtils.isDefined(item.needRepaint) || item.needRepaint === true)) {
                 item.needRepaint = false;
-                this._clearItem(itemData);
+                this._clearItem(item);
                 this._renderItem(i, item);
             }
         }
@@ -502,10 +501,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allowDrag = this.option("allowDrag"),
             allDay = settings.allDay;
         this.invoke("setCellDataCacheAlias", this._currentAppointmentSettings, geometry);
-        var appointmentData = data.appointmentData || data;
+
         this._createComponent($appointment, Appointment, {
             observer: this.option("observer"),
-            data: appointmentData,
+            data: data,
             geometry: geometry,
             direction: settings.direction || "vertical",
             allowResize: allowResize,
@@ -516,10 +515,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
             startDate: settings.startDate,
             cellWidth: this.invoke("getCellWidth"),
             cellHeight: this.invoke("getCellHeight"),
-            resizableConfig: this._resizableConfig(appointmentData, settings)
+            resizableConfig: this._resizableConfig(data, settings)
         });
 
-        this._applyAppointmentColor($appointment, appointmentData, settings);
+        this._applyAppointmentColor($appointment, data, settings);
         this._renderDraggable($appointment, allDay);
     },
 
@@ -979,37 +978,18 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _combineAppointments: function(appointments, additionalAppointments) {
-        var that = this;
         if(additionalAppointments.length) {
             $.merge(appointments, additionalAppointments);
         }
         this._sortAppointmentsByStartDate(appointments);
-
-        $.each(appointments, function(i, appointment) {
-            if(appointment.appointmentData) {
-                var startDate = dateUtils.makeDate(that.invoke("getField", "startDate", appointment));
-
-                if(startDate) {
-                    appointments[i] = appointment;
-                } else {
-                    appointments[i] = appointment.appointmentData;
-                }
-            }
-        });
     },
 
     _applyStartDateToObj: function(startDate, obj) {
-        // if(obj.appointmentData.appointmentData) {
-        //     obj = obj.appointmentData;
-        // }
         this.invoke("setField", "startDate", obj, startDate);
         return obj;
     },
 
     _applyEndDateToObj: function(endDate, obj) {
-        // if(obj.appointmentData.appointmentData) {
-        //     obj = obj.appointmentData;
-        // }
         this.invoke("setField", "endDate", obj, endDate);
         return obj;
     },
@@ -1090,17 +1070,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this._applyStartDateToObj(currentStartDate, appointmentSettings);
             this._applyEndDateToObj(currentEndDate, appointmentSettings);
             appointmentData.appointmentSettings = appointmentSettings;
-            // var appointmentData = objectUtils.deepExtendArraySafe({}, appointment, true),
-            //     newAppointment = objectUtils.deepExtendArraySafe({}, appointment, true);
-
-            // if(!appointmentData.appointmentData) {
-            //     extend(newAppointment, { appointmentData: appointmentData });
-            // } else {
-            //     extend(newAppointment, appointmentData);
-            // }
-
-            // appointmentData = this._applyStartDateToObj(currentStartDate, newAppointment);
-            // result.push(this._applyEndDateToObj(currentEndDate, newAppointment));
             result.push(appointmentData);
             startDate.setDate(startDate.getDate() + 1);
         }

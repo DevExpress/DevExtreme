@@ -1435,22 +1435,12 @@ var Scheduler = Widget.inherit({
             }
             if(isAgenda) {
                 this._workSpace._renderView();
-                this._removeExcessAppointmentWrapping(result);
                     // TODO: remove rows calculation from this callback
                 this._dataSourceLoadedCallback.fireWith(this, [result]);
             }
         }).bind(this));
     },
 
-    _removeExcessAppointmentWrapping: function(appointments) {
-        $.each(appointments, function(i, appointment) {
-            if(appointment.appointmentData) {
-                var data = appointment.appointmentData;
-
-                extend(appointment, data);
-            }
-        });
-    },
     _initExpressions: function(fields) {
         var dataCoreUtils = require("../../core/utils/data"),
             isDateField = function(field) {
@@ -2361,10 +2351,8 @@ var Scheduler = Widget.inherit({
     },
 
     _showAppointmentPopup: function(data, showButtons, processTimeZone) {
-        var appointmentData = data.appointmentData || data;
-
         if(!this._popup) {
-            this._createPopup(appointmentData, processTimeZone);
+            this._createPopup(data, processTimeZone);
             var toolbarItems = [],
                 showCloseButton = true;
             if(!commonUtils.isDefined(showButtons) || showButtons) {
@@ -2377,8 +2365,8 @@ var Scheduler = Widget.inherit({
             });
         }
 
-        this._initDynamicPopupTemplate(appointmentData, processTimeZone);
-        this._popup.option(this._popupConfig(appointmentData));
+        this._initDynamicPopupTemplate(data, processTimeZone);
+        this._popup.option(this._popupConfig(data));
         this._popup.show();
     },
 

@@ -73,12 +73,10 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _calculateIfApptReduced: function(appointment) {
-        var appointmentData = appointment.appointmentData || appointment;
-
-        var isRecurrence = !!this.instance.fire("getField", "recurrenceRule", appointmentData),
+        var isRecurrence = !!this.instance.fire("getField", "recurrenceRule", appointment),
             result = false;
 
-        if(this.instance.fire("appointmentTakesSeveralDays", appointmentData) && !isRecurrence) {
+        if(this.instance.fire("appointmentTakesSeveralDays", appointment) && !isRecurrence) {
             result = "head";
         }
 
