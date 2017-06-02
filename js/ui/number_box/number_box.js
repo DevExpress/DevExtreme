@@ -84,12 +84,14 @@ var NumberBox = TextEditor.inherit({
             showSpinButtons: false,
 
             /**
-            * @name dxNumberBoxOptions_useTouchSpinButtons
-            * @publicName useTouchSpinButtons
-            * @type boolean
-            * @default true
+            * @name dxNumberBoxOptions_spinButtonType
+            * @publicName spinButtonType
+            * @type string
+            * @default "large"
+            * @custom_default_for_desktop "compact"
+            * @acceptValues 'large'|'compact'
             */
-            useTouchSpinButtons: true,
+            spinButtonType: "large",
 
             /**
             * @name dxNumberBoxOptions_mode
@@ -159,12 +161,7 @@ var NumberBox = TextEditor.inherit({
                     return devices.real().generic && !devices.isSimulator();
                 },
                 options: {
-                    /**
-                     * @name dxNumberBoxOptions_useTouchSpinButtons
-                     * @publicName useTouchSpinButtons
-                     * @custom_default_for_desktop false
-                     */
-                    useTouchSpinButtons: false
+                    spinButtonType: "compact"
                 }
             },
             {
@@ -330,8 +327,12 @@ var NumberBox = TextEditor.inherit({
         this._$spinContainer.prependTo(this._buttonsContainer());
     },
 
+    _isLargeSpinButtons: function() {
+        return this.option("spinButtonType") === "large";
+    },
+
     _toggleTouchFriendlyClass: function() {
-        this.element().toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, this.option("showSpinButtons") && this.option("useTouchSpinButtons"));
+        this.element().toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, this.option("showSpinButtons") && this._isLargeSpinButtons());
     },
 
     _createSpinButtons: function() {
@@ -355,7 +356,7 @@ var NumberBox = TextEditor.inherit({
 
     _spinButtonsPointerDownHandler: function() {
         var $input = this._input();
-        if(!this.option("useTouchSpinButtons") && document.activeElement !== $input[0]) {
+        if(!this._isLargeSpinButtons() && document.activeElement !== $input[0]) {
             $input.trigger("focus");
         }
     },
@@ -571,7 +572,7 @@ var NumberBox = TextEditor.inherit({
             case "showSpinButtons":
                 this._renderInputAddons();
                 break;
-            case "useTouchSpinButtons":
+            case "spinButtonType":
                 this._toggleTouchFriendlyClass();
                 break;
             case "invalidValueMessage":
