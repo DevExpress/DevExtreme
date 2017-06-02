@@ -52,6 +52,16 @@ QUnit.test("showAppointmentPopup should render a popup only once", function(asse
     assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
 });
 
+QUnit.test("showAppointmentPopup should work correctly after scheduler repainting", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
+
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
+    this.instance.repaint();
+
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
+});
+
 QUnit.test("changing editing should work correctly after showing popup", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
     this.instance.hideAppointmentPopup(true);
