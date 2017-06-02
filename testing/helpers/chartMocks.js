@@ -565,6 +565,9 @@
             isFullStackedSeries: function() {
                 return this.type.indexOf("fullstacked") !== -1;
             },
+            isStackedSeries: function() {
+                return this.type.indexOf("stacked") === 0;
+            },
             isFinancialSeries: function() {
                 return this.type === "stock" || this.type === "candlestick";
             },
