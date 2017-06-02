@@ -7,7 +7,7 @@ var extendUtils = require("./utils/extend"),
         designMode: false,
         serverDecimalSeparator: ".",
         forceIsoDateParsing: true,
-        wrapActionsBeforeExecute: true
+        wrapActionsBeforeExecute: false
     };
 
 /**

@@ -1854,7 +1854,6 @@ QUnit.test("Bootstrap should not fail if container component changes element mar
 });
 
 QUnit.test("Global scope properties are accessible from item template", function(assert) {
-    this.clock = sinon.useFakeTimers();
 
     var controller = function($scope) {
             $scope.collection = [
@@ -1874,13 +1873,8 @@ QUnit.test("Global scope properties are accessible from item template", function
             "</div>"
         ), controller);
 
-    //TODO: remove this after toggle wrapActionsBeforeExecute flag
-    this.clock.tick();
-
     assert.equal($(".item-text", $markup).text(), "Item text");
     assert.equal($(".global-text", $markup).text(), "Global text");
-
-    this.clock.restore();
 });
 
 QUnit.test("binding to circular data (T144697)", function(assert) {
@@ -1970,8 +1964,6 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for all
 });
 
 QUnit.test("Defining item data alias by 'itemAlias' with custom template for some items", function(assert) {
-    this.clock = sinon.useFakeTimers();
-
     var controller = function($scope) {
             $scope.collection = [{ name: "0", template: "customWidget" }, { name: "1", template: "custom" }, { text: "2" }, "3"];
         },
@@ -1987,9 +1979,6 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
         ), controller),
         scope = $markup.scope();
 
-    //TODO: remove this after toggle wrapActionsBeforeExecute flag
-    this.clock.tick();
-
     var $items = $markup.children();
     assert.equal($items.eq(0).find(".test-widget").dxTestWidget("option", "text"), "0");
     assert.equal($.trim($items.eq(1).text()), "1");
@@ -2003,9 +1992,6 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
         scope.collection[3] = "new text 3";
     });
 
-    //TODO: remove this after toggle wrapActionsBeforeExecute flag
-    this.clock.tick();
-
     $items = $markup.children();
     assert.equal($items.eq(0).find(".test-widget").dxTestWidget("option", "text"), "new text 0");
     assert.equal($.trim($items.eq(1).text()), "new text 1");
@@ -2014,8 +2000,6 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
 
     $items.eq(0).find(".test-widget").dxTestWidget("option", "text", "widget text");
     assert.equal(scope.collection[0].name, "widget text");
-
-    this.clock.restore();
 });
 
 QUnit.test("$id in item model not caused exception", function(assert) {
