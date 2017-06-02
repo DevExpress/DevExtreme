@@ -1313,7 +1313,7 @@ var Scheduler = Widget.inherit({
         this.hideAppointmentTooltip();
     },
 
-    repaint: function() {
+    _clean: function() {
         this._cleanPopup();
         this.callBase();
     },
