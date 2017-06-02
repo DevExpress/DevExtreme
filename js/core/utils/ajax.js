@@ -7,6 +7,6 @@ var $ = require("../renderer");
 
 var sendRequest = function() {
     return $.ajax.apply($, arguments);
-}
+};
 
 exports.sendRequest = sendRequest;
