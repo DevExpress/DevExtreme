@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    Config = require("./config"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
     Action = require("./action"),
@@ -437,11 +438,19 @@ var Component = Class.inherit({
                 action = that._createAction(actionFunc, config);
                 that._resumeDeprecatedWarnings();
             }
+
+            if(Config().wrapActionsBeforeExecute) {
+                var beforeActionExecute = that.option("beforeActionExecute") || noop;
+                action = beforeActionExecute(that, action, config) || action;
+            }
+
             return action.apply(that, arguments);
         };
 
-        var onActionCreated = that.option("onActionCreated") || noop;
-        result = onActionCreated(that, result, config) || result;
+        if(!Config().wrapActionsBeforeExecute) {
+            var onActionCreated = that.option("onActionCreated") || noop;
+            result = onActionCreated(that, result, config) || result;
+        }
 
         return result;
     },
