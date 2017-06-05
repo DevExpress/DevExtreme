@@ -466,14 +466,10 @@ QUnit.test("selectedItems should not be cleaned after reordering if store key sp
     var items = [{ id: 1, text: "1" }, { id: 2, text: "2" }, { id: 3, text: "3" }];
 
     var listInstance = $("#list").dxList({
-        dataSource: new DataSource({
-            store: new ArrayStore({
-                key: "id",
-                data: items
-            })
+        dataSource: new ArrayStore({
+            key: "id",
+            data: items
         }),
-        allowItemReordering: true,
-        showSelectionControls: true,
         selectionMode: "all"
     }).dxList("instance");
 
