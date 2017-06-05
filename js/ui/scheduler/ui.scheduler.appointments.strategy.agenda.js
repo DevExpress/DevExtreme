@@ -31,7 +31,6 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                     recurrentIndexes = [];
 
                 $.each(appts, function(index, appointment) {
-
                     var recurrenceBatch = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index),
                         appointmentBatch = null;
 
@@ -157,14 +156,13 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     getCompactAppointmentDefaultOffset: noop,
 
-    calculateRows: function(appointments, agendaDuration, currentDate) {
+    calculateRows: function(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
 
         var appts = {
             indexes: [],
             parts: []
         };
-
         var groupedAppointments = this.instance.fire("groupAppointmentsByResources", appointments);
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
@@ -178,7 +176,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             }
 
             $.each(currentAppointments, function(index, appointment) {
-                delete appointment.settings;
+                needClearSettings && delete appointment.settings;
 
                 var result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
                 appts.parts = appts.parts.concat(result.parts);

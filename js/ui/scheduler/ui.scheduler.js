@@ -1421,7 +1421,7 @@ var Scheduler = Widget.inherit({
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
 
             if(isAgenda) {
-                this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"));
+                this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"), true);
             }
 
             if(this._filteredItems.length && this._isVisible()) {
