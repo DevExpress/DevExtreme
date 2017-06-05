@@ -426,10 +426,6 @@ var Accordion = CollectionWidget.inherit({
         this._updateItemHeights(true);
     },
 
-    _clean: function() {
-        this.callBase();
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "animationDuration":
