@@ -222,12 +222,6 @@ var Accordion = CollectionWidget.inherit({
 
     _renderContent: function() {
         this._renderContentImpl();
-
-        if(this.option("templatesRenderAsynchronously")) {
-            this._resizeEventTimer = setTimeout(function() {
-                this.updateDimensions();
-            }.bind(this), 0);
-        }
     },
 
     _itemDataKey: function() {
@@ -333,13 +327,21 @@ var Accordion = CollectionWidget.inherit({
             that.setAria("hidden", true, $item.find("." + ACCORDION_ITEM_BODY_CLASS));
         });
 
-        this._updateItemHeights(skipAnimation);
+        if(that.option("templatesRenderAsynchronously")) {
+            this._animationTimer = setTimeout(function() {
+                this._updateItemHeights(skipAnimation);
+            }.bind(this));
+        } else {
+            this._updateItemHeights(skipAnimation);
+        }
     },
 
     _updateItemHeights: function(skipAnimation) {
         var that = this,
             deferredAnimate = that._deferredAnimate,
             itemHeight = this._splitFreeSpace(this._calculateFreeSpace());
+
+        clearTimeout(this._animationTimer);
 
         return when.apply($, $.map(this._itemElements(), function(item) {
             return that._updateItemHeight($(item), itemHeight, skipAnimation);
@@ -425,7 +427,6 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _clean: function() {
-        clearTimeout(this._resizeEventTimer);
         this.callBase();
     },
 

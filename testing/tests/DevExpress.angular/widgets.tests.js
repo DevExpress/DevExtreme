@@ -13,6 +13,7 @@ var $ = require("jquery"),
 
 require("integration/angular");
 
+require("ui/accordion");
 require("ui/text_box");
 require("ui/popup");
 require("ui/popover");
@@ -570,6 +571,89 @@ QUnit.test("dxPopup - bindingOptions for a title property should be worked", fun
         assert.equal($.trim($(".dx-popup-title").text()), "new title");
         done();
     }, 0);
+});
+
+
+QUnit.module("accordion", {
+    beforeEach: function() {
+        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
+        this.clock.restore();
+    }
+});
+
+QUnit.test("item height is correct in animation config (T520346)", function(assert) {
+    assert.expect(1);
+    var done = assert.async();
+
+    var originalAnimate = fx.animate;
+
+    var $markup = $(
+        "<div dx-accordion=\"accordionOptions\" dx-item-alias=\"veryVeryVeryLongAlias\">\
+            <div data-options=\"dxTemplate : { name: 'item' } \" style='line-height: 18px'>\
+                {{veryVeryVeryLongAlias.Value}} {{veryVeryVeryLongAlias.Value}}\
+            </div>\
+        </div>"
+    );
+
+    var controller = function($scope) {
+        $scope.accordionOptions = {
+            dataSource: [{ "Value": "1" }],
+            width: 150,
+            collapsible: true,
+            selectedItems: []
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    this.clock.tick();
+
+    fx.animate = function($element, config) {
+        assert.roughEqual(config.to.height, 18, 0.5);
+
+        return originalAnimate($element, config);
+    };
+
+    var $titles = $markup.find(".dx-accordion-item-title");
+    $titles.eq(0).trigger("dxclick");
+
+    this.clock.tick();
+
+    fx.animate = originalAnimate;
+    done();
+});
+
+QUnit.test("title height is correct if the title is customized using ng-class (T444379)", function(assert) {
+    var $markup = $(
+        "<style>.test-class { height: 100px; }</style>\
+        <div dx-accordion=\"accordionOptions\" dx-item-alias=\"item\">\
+            <div data-options=\"dxTemplate : { name: 'title' } \">\
+                <div ng-class=\"getClass()\">{{item.Value}}</div>\
+            </div>\
+        </div>"
+    );
+
+    var controller = function($scope) {
+        $scope.accordionOptions = {
+            dataSource: [{ "Value": "1" }],
+            collapsible: true,
+            selectedItems: []
+        };
+        $scope.getClass = function() {
+            return "test-class";
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    this.clock.tick();
+
+    var $titles = $markup.find(".dx-accordion-item");
+    assert.equal($titles.height(), 100);
 });
 
 
