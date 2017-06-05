@@ -31,5 +31,5 @@ script:
     -e CONSTEL=$CONSTEL
     -e NUGET_PACKAGES=/devextreme/dotnet_packages
     -v $TRAVIS_BUILD_DIR:/devextreme
-    docker.io/devexpress/devextreme-build:17_1
+    docker.io/devexpress/devextreme-build:17_2
     ./docker-ci.sh
