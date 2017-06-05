@@ -14,6 +14,10 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     publicComponentUtils = require("core/utils/public_component");
 
+themes.current({
+    theme: "generic"
+});
+
 QUnit.testStart(function() {
     var markup =
         '<div id="container" class="dx-datagrid"></div>';
