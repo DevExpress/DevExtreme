@@ -1906,7 +1906,7 @@ module.exports = {
                             }
                         }
                     });
-                    return when.apply($, deferreds);
+                    return when.apply($, deferreds).done(resetColumnsCache.bind(null, this));
                 },
                 _updateColumnOptions: function(column) {
                     column.selector = column.selector || function(data) { return column.calculateCellValue(data); };
