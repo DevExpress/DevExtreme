@@ -120,7 +120,11 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
         });
     });
 
-    hasStackedSeries ? rollingStocks.reverse() : rollingStocks.sort(function(a, b) { return a.getInitialPosition() - b.getInitialPosition(); });
+    if(hasStackedSeries) {
+        !isRotated && rollingStocks.reverse();
+    } else {
+        rollingStocks.sort(function(a, b) { return a.getInitialPosition() - b.getInitialPosition(); });
+    }
 
     if(!checkStackOverlap(rollingStocks)) return;
 

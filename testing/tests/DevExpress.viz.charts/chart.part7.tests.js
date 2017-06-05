@@ -1375,7 +1375,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     return {
                         series: series,
                         getLabels: sinon.stub().returns([label]),
-                        argument: label.getBoundingRect().x,
+                        argument: seriesOptions && seriesOptions.argument || label.getBoundingRect().x,
                         originalValue: label.getBoundingRect().value
                     };
                 });
@@ -1725,6 +1725,22 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.deepEqual(this.labels[1].shift.lastCall.args, [5, 95]);
         assert.ok(!this.labels[2].shift.called);
         assert.ok(!this.labels[3].shift.called);
+    });
+
+    //T522291
+    QUnit.test("stacked bar. series order. rotated chart", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 96, width: 23, height: 24, value: 5 },
+            { x: 35, y: 96, width: 23, height: 24, value: 15 }
+        ], { argument: 10 });
+
+        this.createChart({
+            rotated: true,
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "stackedbar" }]
+        });
+
+        assert.ok(!this.labels[0].shift.called);
     });
 
     QUnit.module("resolveLabelOverlapping. stack. range series", $.extend({}, commons.environment, {
