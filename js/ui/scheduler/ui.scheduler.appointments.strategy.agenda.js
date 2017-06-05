@@ -178,6 +178,8 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             }
 
             $.each(currentAppointments, function(index, appointment) {
+                delete appointment.settings;
+
                 var result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
                 appts.parts = appts.parts.concat(result.parts);
                 appts.indexes = appts.indexes.concat(result.indexes);

@@ -367,6 +367,29 @@ QUnit.test("Agenda should contain a right quantity of recurrence long appointmen
     assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 5, "Appointment count is OK");
 });
 
+QUnit.test("Agenda should contain a right quantity of long appointments after changing currentView", function(assert) {
+    this.createInstance({
+        views: ["agenda", "week"],
+        currentView: "agenda",
+        currentDate: new Date(2016, 1, 24).toString(),
+        endDateExpr: "End",
+        startDateExpr: "Start",
+        dataSource: [
+            {
+                Start: new Date(2016, 1, 24, 1),
+                End: new Date(2016, 1, 26, 5),
+                text: "appointment 1"
+            }
+        ]
+    });
+    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 3, "Appointment count is OK");
+
+    this.instance.option("currentView", "week");
+    this.instance.option("currentView", "agenda");
+
+    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 3, "Appointment count is OK");
+});
+
 QUnit.test("Grouped agenda should contain a right appointment quantity", function(assert) {
     this.createInstance({
         views: ["agenda"],
