@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    Config = require("./config"),
     Class = require("./class"),
     Action = require("./action"),
     errors = require("./errors"),
@@ -433,11 +434,19 @@ var Component = Class.inherit({
                 action = that._createAction(actionFunc, config);
                 that._resumeDeprecatedWarnings();
             }
+
+            if(Config().wrapActionsBeforeExecute) {
+                var beforeActionExecute = that.option("beforeActionExecute") || $.noop;
+                action = beforeActionExecute(that, action, config) || action;
+            }
+
             return action.apply(that, arguments);
         };
 
-        var onActionCreated = that.option("onActionCreated") || $.noop;
-        result = onActionCreated(that, result, config) || result;
+        if(!Config().wrapActionsBeforeExecute) {
+            var onActionCreated = that.option("onActionCreated") || $.noop;
+            result = onActionCreated(that, result, config) || result;
+        }
 
         return result;
     },

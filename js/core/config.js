@@ -6,7 +6,8 @@ var $ = require("jquery"),
         defaultCurrency: "USD",
         designMode: false,
         serverDecimalSeparator: ".",
-        forceIsoDateParsing: false
+        forceIsoDateParsing: false,
+        wrapActionsBeforeExecute: false
     };
 
 /**
