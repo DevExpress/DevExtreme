@@ -2709,6 +2709,14 @@ QUnit.test("initViewport disables panning for non-native scrolling", function(as
 });
 
 QUnit.test("dxpointermove is prevented when scrolling is disabled (Q574378)", function(assert) {
+    var realDevice = devices.real(),
+        isWin10 = realDevice.platform === "win" && realDevice.version[0] === 10;
+
+    if(isWin10) {
+        assert.ok(true, "test is not relevant for win10 devices");
+        return;
+    }
+
     var $scrollable = $("#scrollable");
 
     $scrollable
@@ -2727,7 +2735,7 @@ QUnit.test("dxpointermove is prevented when scrolling is disabled (Q574378)", fu
         initMobileViewport({ allowZoom: true, allowPan: false });
 
         $(document).on("dxpointermove.initViewportIntegration", function(e) {
-            assert.equal(e.isDefaultPrevented(), true, "dxpointermove was prevented");
+            assert.equal(e.isDefaultPrevented(), true, "dxpointermove was prevented on non win10 devices");
         });
 
         pointerMock($scrollable.find("." + SCROLLABLE_CONTENT_CLASS))
