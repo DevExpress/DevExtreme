@@ -381,9 +381,10 @@ var VirtualScrollingRowsViewExtender = (function() {
                 };
 
             for(i = 0; i < columns.length; i++) {
-                var cssClass = columns[i].cssClass;
+                var classes = that._getCellClasses(columns[i]),
+                    classString = classes.length ? " class='" + classes.join(" ") + "'" : "";
 
-                freeSpaceCellsHtml += columns[i].command === "expand" ? "<td class='" + DATAGRID_GROUP_SPACE_CLASS + " " + cssClass + "'/>" : "<td class='" + cssClass + "'/>";
+                freeSpaceCellsHtml += "<td" + classString + "/>";
             }
 
             while(height > PIXELS_LIMIT) {
@@ -394,6 +395,17 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             container.addClass(DATAGRID_TABLE_CLASS);
             container.html(html);
+        },
+
+        _getCellClasses: function(column) {
+            var classes = [],
+                cssClass = column.cssClass,
+                isExpandColumn = column.command === "expand";
+
+            cssClass && classes.push(cssClass);
+            isExpandColumn && classes.push(DATAGRID_GROUP_SPACE_CLASS);
+
+            return classes;
         },
 
         _findBottomLoadPanel: function() {
