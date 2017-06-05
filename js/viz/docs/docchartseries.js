@@ -46,10 +46,10 @@ var commonSeries = {
 		* @name dxChartSeriesTypes_CommonSeries_reduction_color
 		* @publicName color
 		* @type string
-		* @default '#000000'
+		* @default '#ff0000'
 		* @propertyOf dxChartSeriesTypes_CandleStickSeries,dxChartSeriesTypes_StockSeries
 		*/
-        color: '#000000',
+        color: '#ff0000',
         /**
 		* @name dxChartSeriesTypes_CommonSeries_reduction_level
 		* @publicName level
