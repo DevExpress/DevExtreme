@@ -574,20 +574,12 @@ QUnit.test("dxPopup - bindingOptions for a title property should be worked", fun
 });
 
 
-QUnit.module("accordion", {
-    beforeEach: function() {
-        QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        QUnit.timerIgnoringCheckers.unregister(ignoreAngularBrowserDeferTimer);
-        this.clock.restore();
-    }
-});
+QUnit.module("accordion");
 
 QUnit.test("item height is correct in animation config (T520346)", function(assert) {
     assert.expect(1);
     var done = assert.async();
+    this.clock = sinon.useFakeTimers();
 
     var originalAnimate = fx.animate;
 
@@ -623,11 +615,14 @@ QUnit.test("item height is correct in animation config (T520346)", function(asse
 
     this.clock.tick();
 
+    this.clock.restore();
     fx.animate = originalAnimate;
     done();
 });
 
 QUnit.test("title height is correct if the title is customized using ng-class (T444379)", function(assert) {
+    this.clock = sinon.useFakeTimers();
+
     var $markup = $(
         "<style>.test-class { height: 100px; }</style>\
         <div dx-accordion=\"accordionOptions\" dx-item-alias=\"item\">\
@@ -654,6 +649,17 @@ QUnit.test("title height is correct if the title is customized using ng-class (T
 
     var $titles = $markup.find(".dx-accordion-item");
     assert.equal($titles.height(), 100);
+
+    this.clock.restore();
+});
+
+QUnit.test("not cleared timers not detected", function(assert) {
+    assert.expect(0);
+
+    var $markup = $("<div dx-accordion=\"{}\"></div>");
+    initMarkup($markup, function() {}, this);
+
+    $markup.remove();
 });
 
 
