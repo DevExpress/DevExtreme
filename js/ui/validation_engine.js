@@ -500,7 +500,7 @@ var ValidationEngine = {
         }
     },
 
-    validate: function validate(value, rules, name) {
+    _validateValue: function(value, rules, name) {
         var result = {
                 name: name,
                 value: value,
@@ -546,6 +546,21 @@ var ValidationEngine = {
         });
 
         return result;
+    },
+
+    validate: function validate(value, rules, name) {
+        if(Array.isArray(value) && value.length) {
+            var result;
+
+            value.every(function(item) {
+                result = this._validateValue(item, rules, name);
+                return result.isValid;
+            }.bind(this));
+
+            return result;
+        } else {
+            return this._validateValue(value, rules, name);
+        }
     },
 
     registerValidatorInGroup: function(group, validator) {

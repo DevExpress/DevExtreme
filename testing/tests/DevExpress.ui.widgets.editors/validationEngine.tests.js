@@ -693,6 +693,23 @@ QUnit.test("Email - empty value should be valid", function(assert) {
     assert.ok(result.isValid, "IsValid");
 });
 
+QUnit.test("Array of emails should be valid", function(assert) {
+    var result = ValidationEngine.validate(["test@domain.com", "test2@domain.com"], [{
+        type: "email"
+    }]);
+
+    assert.ok(result, "Result is defined");
+    assert.ok(result.isValid, "IsValid");
+});
+
+QUnit.test("Array of emails with incorrect one should be invalid", function(assert) {
+    var result = ValidationEngine.validate(["testdomain.com", "test2@domain.com"], [{
+        type: "email"
+    }]);
+
+    assert.ok(result, "Result is defined");
+    assert.ok(!result.isValid, "IsValid");
+});
 
 
 QUnit.module("Custom rule with user's callback");
