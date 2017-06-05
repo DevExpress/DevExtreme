@@ -10,7 +10,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../data/utils"),
     formatHelper = require("../../format_helper");
 
-var NODATA_CLASS = "nodata",
+var NO_DATA_CLASS = "nodata",
     DATE_INTERVAL_SELECTORS = {
         "year": function(value) {
             return value && value.getFullYear();
@@ -189,7 +189,7 @@ module.exports = (function() {
             var that = this;
             $element = $element || this.element();
 
-            var noDataClass = that.addWidgetPrefix(NODATA_CLASS),
+            var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
                 noDataElement = $element.find("." + noDataClass),
                 isVisible = this._dataController.isEmpty(),
                 isLoading = this._dataController.isLoading(),
