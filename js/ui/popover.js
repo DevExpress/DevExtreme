@@ -656,7 +656,7 @@ var Popover = Popup.inherit({
         }
 
         return this.callBase();
-    },
+    }
 
     /**
     * @name dxPopoverMethods_registerKeyHandler
