@@ -65,8 +65,8 @@ var POPOVER_CLASS = "dx-popover",
         eventName = eventUtils.addNamespace(event, that.NAME);
         action = that._createAction((function() {
             delay = getEventDelay(that, name + "Event");
+            clearTimeout(this._timeouts[name === "show" ? "hide" : "show"]);
             if(delay) {
-                clearTimeout(this._timeouts[name === "show" ? "hide" : "show"]);
                 this._timeouts[name] = setTimeout(function() {
                     that[name]();
                 }, delay);
