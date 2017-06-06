@@ -760,8 +760,7 @@ var Box = CollectionWidget.inherit({
 /**
 * @name dxBoxItemTemplate_ratio
 * @publicName ratio
-* @type number | string
-* @acceptValues 'auto'
+* @type number
 * @default 0
 */
 /**
