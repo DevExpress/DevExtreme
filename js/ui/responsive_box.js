@@ -36,7 +36,8 @@ var ResponsiveBox = CollectionWidget.inherit({
             /**
             * @name dxResponsiveBoxOptions_rows_baseSize
             * @publicName baseSize
-            * @type number
+            * @type number | string
+            * @acceptValues 'auto'
             * @default 0
             */
             /**
@@ -61,7 +62,8 @@ var ResponsiveBox = CollectionWidget.inherit({
             /**
             * @name dxResponsiveBoxOptions_cols_baseSize
             * @publicName baseSize
-            * @type number
+            * @type number | string
+            * @acceptValues 'auto'
             * @default 0
             */
             /**
