@@ -3721,7 +3721,7 @@ QUnit.test("DataController creation", function(assert) {
 
     var dataControllerOptions = pivotGridDataController.DataController.lastCall.args[0];
 
-    assert.strictEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
+    assert.deepEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
     assert.deepEqual(dataControllerOptions.texts, texts);
 
     assert.strictEqual(dataControllerOptions.showColumnGrandTotals, "customShowColumnGrandTotals");
@@ -3777,7 +3777,7 @@ QUnit.test("Change DataController options", function(assert) {
 
     assert.strictEqual(dataController.updateViewOptions.callCount, 8);
 
-    assert.strictEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
+    assert.deepEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
     assert.deepEqual(dataControllerOptions.texts, 0);
 
     assert.strictEqual(dataControllerOptions.showColumnGrandTotals, 1);
