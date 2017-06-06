@@ -3,7 +3,8 @@
 var $ = require("jquery"),
     executeAsyncMock = require("../../../helpers/executeAsyncMock.js"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
-    DataSource = require("data/data_source/data_source").DataSource;
+    DataSource = require("data/data_source/data_source").DataSource,
+    ArrayStore = require("data/array_store");
 
 require("ui/list");
 
@@ -461,6 +462,25 @@ QUnit.test("selectedItems should be cleaned after pulldown", function(assert) {
     assert.deepEqual($element.dxList("option", "selectedItems"), [], "selected items were cleaned");
 });
 
+QUnit.test("selectedItems should not be cleaned after reordering if store key specified", function(assert) {
+    var items = [{ id: 1, text: "1" }, { id: 2, text: "2" }, { id: 3, text: "3" }];
+
+    var listInstance = $("#list").dxList({
+        dataSource: new ArrayStore({
+            key: "id",
+            data: items
+        }),
+        selectionMode: "all"
+    }).dxList("instance");
+
+    listInstance.selectItem(0);
+
+    var item0 = $("#list").find(toSelector(LIST_ITEM_CLASS)).eq(0).get(0),
+        item1 = $("#list").find(toSelector(LIST_ITEM_CLASS)).eq(1).get(0);
+
+    listInstance.reorderItem(item0, item1);
+    assert.equal(listInstance.option("selectedItems")[0], items[0], "first item is selected");
+});
 
 var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 
