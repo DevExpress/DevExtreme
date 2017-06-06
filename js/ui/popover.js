@@ -66,7 +66,7 @@ var POPOVER_CLASS = "dx-popover",
         action = that._createAction((function() {
             delay = getEventDelay(that, name + "Event");
             if(delay) {
-                setTimeout(function() {
+                this._timeouts[name] = setTimeout(function() {
                     that[name]();
                 }, delay);
             } else {
@@ -339,6 +339,7 @@ var Popover = Popup.inherit({
         this.callBase();
 
         this._renderArrow();
+        this._timeouts = {};
 
         this.element().addClass(POPOVER_CLASS);
         this._wrapper().addClass(POPOVER_WRAPPER_CLASS);
@@ -649,11 +650,19 @@ var Popover = Popup.inherit({
     * @return Promise
     */
     show: function(target) {
+        clearTimeout(this._timeouts["hide"]);
+
         if(target) {
             this.option("target", target);
         }
 
         return this.callBase();
+    },
+
+    hide: function() {
+        clearTimeout(this._timeouts["show"]);
+
+        this.callBase();
     }
 
     /**

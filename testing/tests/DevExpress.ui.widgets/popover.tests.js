@@ -1757,3 +1757,47 @@ QUnit.test("second popover should be hidden by click on the first's target", fun
     assert.ok(popover2.option("visible"), "popover2 is still visible");
     assert.notOk(popover1.option("visible"), "popover1 is hidden");
 });
+
+QUnit.test("popover should clear show timeout when hide event fired", function(assert) {
+    var instance = new Popover($("#what"), {
+        visible: false,
+        target: "#where",
+        showEvent: {
+            name: "pointerenter",
+            delay: 500
+        },
+        hideEvent: {
+            name: "pointerleave",
+            delay: 100
+        }
+    });
+
+    $("#where").trigger("pointerenter");
+    this.clock.tick(300);
+    $("#where").trigger("pointerleave");
+    this.clock.tick(200);
+
+    assert.notOk(instance.option("visible"), "Showing has been cancelled");
+});
+
+QUnit.test("popover should clear hide timeout when show event fired", function(assert) {
+    var instance = new Popover($("#what"), {
+        visible: true,
+        target: "#where",
+        showEvent: {
+            name: "pointerenter",
+            delay: 100
+        },
+        hideEvent: {
+            name: "pointerleave",
+            delay: 500
+        }
+    });
+
+    $("#where").trigger("pointerleave");
+    this.clock.tick(300);
+    $("#where").trigger("pointerenter");
+    this.clock.tick(200);
+
+    assert.ok(instance.option("visible"), "Hiding has been cancelled");
+});
