@@ -853,8 +853,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             $destinationItem[strategy.itemPlacementFunc(movingIndex, destinationIndex)]($movingItem);
 
             strategy.moveItemAtIndexToIndex(movingIndex, destinationIndex);
-
-            that.option("selectedItems", that._getItemsByKeys(that._selection.getSelectedItemKeys()));
+            that.option("selectedItems", that._getItemsByKeys(that._selection.getSelectedItemKeys(), that._selection.getSelectedItems()));
 
             if(changingOption === "items") {
                 that._simulateOptionChange(changingOption);
