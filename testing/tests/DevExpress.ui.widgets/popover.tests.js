@@ -1767,8 +1767,7 @@ QUnit.test("popover should clear show timeout when hide event fired", function(a
             delay: 500
         },
         hideEvent: {
-            name: "pointerleave",
-            delay: 100
+            name: "pointerleave"
         }
     });
 
@@ -1785,8 +1784,7 @@ QUnit.test("popover should clear hide timeout when show event fired", function(a
         visible: true,
         target: "#where",
         showEvent: {
-            name: "pointerenter",
-            delay: 100
+            name: "pointerenter"
         },
         hideEvent: {
             name: "pointerleave",
