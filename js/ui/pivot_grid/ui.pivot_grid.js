@@ -1636,6 +1636,10 @@ var PivotGrid = Widget.inherit({
         return this.element().find('table').first();
     },
 
+    addWidgetPrefix: function(className) {
+        return "dx-pivotgrid-" + className;
+    },
+
     resize: function() {
         this.updateDimensions();
     },
