@@ -767,7 +767,7 @@ var Box = CollectionWidget.inherit({
 /**
 * @name dxBoxItemTemplate_baseSize
 * @publicName baseSize
-* @type number
+* @type number | string
 * @acceptValues 'auto'
 * @default 0
 */
