@@ -104,7 +104,6 @@ var EditingController = modules.ViewController.inherit((function() {
         init: function() {
             var that = this;
 
-            that._insertIndex = 1;
             that._editRowIndex = -1;
             that._editData = [];
             that._editColumnIndex = -1;
@@ -404,6 +403,12 @@ var EditingController = modules.ViewController.inherit((function() {
             this.executeAction("onInitNewRow", options);
         },
 
+        _getInsertIndex: function() {
+            return this._editData.filter(function(editItem) {
+                return editItem.type === DATA_EDIT_DATA_INSERT_TYPE;
+            }).length + 1;
+        },
+
         /**
          * @name GridBaseMethods_addRow
          * @publicName addRow()
@@ -431,7 +436,9 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that.refresh();
 
-            if(editMode !== EDIT_MODE_BATCH && that._insertIndex > 1) {
+            var insertIndex = that._getInsertIndex();
+
+            if(editMode !== EDIT_MODE_BATCH && insertIndex > 1) {
                 return;
             }
 
@@ -445,7 +452,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editRowIndex = insertKey.rowIndex + that._dataController.getRowIndexOffset();
             }
 
-            insertKey[INSERT_INDEX] = that._insertIndex++;
+            insertKey[INSERT_INDEX] = insertIndex++;
 
             that._addEditData({ key: insertKey, data: param.data, type: DATA_EDIT_DATA_INSERT_TYPE });
 
@@ -646,6 +653,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
                 oldEditColumnIndex = that._editColumnIndex,
                 columns = columnsController.getVisibleColumns(),
+                rowsView = that.getView("rowsView"),
                 showEditorAlways;
 
             if(commonUtils.isString(columnIndex)) {
@@ -698,7 +706,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
 
                 //TODO no focus border when call editCell via API
-                $cell = that.getView("rowsView").getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
+                $cell = rowsView && rowsView.getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
                 if($cell && !$cell.find(":focus").length) {
                     that._focusEditingCell(function() {
                         that._editCellInProgress = false;
@@ -730,9 +738,10 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _focusEditingCell: function(beforeFocusCallback, $editCell) {
-            var that = this;
+            var that = this,
+                rowsView = that.getView("rowsView");
 
-            $editCell = $editCell || that.getView("rowsView").getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex);
+            $editCell = $editCell || rowsView && rowsView.getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex);
             that._delayedInputFocus($editCell, beforeFocusCallback);
         },
 
