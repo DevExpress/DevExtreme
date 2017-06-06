@@ -66,6 +66,7 @@ var POPOVER_CLASS = "dx-popover",
         action = that._createAction((function() {
             delay = getEventDelay(that, name + "Event");
             if(delay) {
+                clearTimeout(this._timeouts[name === "show" ? "hide" : "show"]);
                 this._timeouts[name] = setTimeout(function() {
                     that[name]();
                 }, delay);
@@ -650,20 +651,12 @@ var Popover = Popup.inherit({
     * @return Promise
     */
     show: function(target) {
-        clearTimeout(this._timeouts["hide"]);
-
         if(target) {
             this.option("target", target);
         }
 
         return this.callBase();
     },
-
-    hide: function() {
-        clearTimeout(this._timeouts["show"]);
-
-        this.callBase();
-    }
 
     /**
     * @name dxPopoverMethods_registerKeyHandler
