@@ -2092,6 +2092,30 @@ QUnit.test("data is filtered when min search length is exceeded", function(asser
     assert.equal($items.length, 1, "items was filtered");
 });
 
+QUnit.test("data is filtered correctly for grouped items", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+        dataSource: {
+            store: [{ "value": "one", "groupName": "group1" }, { "value": "two", "groupName": "group1" }],
+            group: 'groupName'
+        },
+        valueExpr: 'value',
+        displayExpr: 'value',
+        grouped: true,
+        searchEnabled: true,
+        searchTimeout: 0,
+        searchMode: "startswith",
+        opened: true
+    });
+
+    var $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
+    var keyboard = keyboardMock($input);
+
+    keyboard.type("o");
+
+    var $items = $(".dx-list-item");
+    assert.equal($items.length, 1, "items was filtered");
+});
+
 QUnit.test("data is reset to first page after reset filter", function(assert) {
     var $selectBox = $("#selectBox").dxSelectBox({
         dataSource: ["one", "two", "three"],
