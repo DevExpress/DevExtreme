@@ -1013,7 +1013,11 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         $itemsContainer
             .off("." + EXPAND_EVENT_NAMESPACE, itemSelector)
             .on(expandedEventName, itemSelector, function(e) {
-                that._toggleExpandedState(e.currentTarget, undefined, e);
+                var $nodeElement = $(e.currentTarget.parentNode);
+
+                if(!$nodeElement.hasClass(IS_LEAF)) {
+                    that._toggleExpandedState(e.currentTarget, undefined, e);
+                }
             });
     },
 
