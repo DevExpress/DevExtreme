@@ -10,15 +10,6 @@ var $ = require("jquery"),
 require("../command");
 require("./command_container");
 
-/**
-* @name CommandManager
-* @section applicationFramework
-* @publicName CommandManager
-* @type object
-* @module framework/html/command_manager
-* @export default
-* @hidden
-*/
 var CommandManager = Class.inherit({
     ctor: function(options) {
         options = options || {};
@@ -46,22 +37,12 @@ var CommandManager = Class.inherit({
         }
         return this.defaultWidgetAdapter;
     },
-    /**
-    * @name CommandManagerMethods_findCommands
-    * @publicName findCommands(view)
-    * @param1 $view:jQuery object
-    */
     findCommands: function($view) {
         var result = $.map($view.addBack().find(".dx-command"), function(element) {
             return $(element).dxCommand("instance");
         });
         return result;
     },
-    /**
-    * @name CommandManagerMethods_findCommandContainers
-    * @publicName findCommandContainers($markup)
-    * @param1 $markup:jQuery object
-    */
     findCommandContainers: function($markup) {
         var result = $.map($markup.find(".dx-command-container"), function(element) {
             return $(element).dxCommandContainer("instance");
@@ -73,12 +54,6 @@ var CommandManager = Class.inherit({
             throw errors.Error("E3010", command.element().get(0).outerHTML);
         }
     },
-    /**
-    * @name CommandManagermethods_renderCommandsToContainers
-    * @publicName renderCommandsToContainers(commands,containers)
-    * @param1 commands:array
-    * @param2 containers:array
-    */
     renderCommandsToContainers: function(commands, containers) {
         var that = this,
             commandHash = {},
