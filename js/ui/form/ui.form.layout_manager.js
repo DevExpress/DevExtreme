@@ -60,6 +60,8 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
     LAYOUT_STRATEGY_FLEX = "flex",
     LAYOUT_STRATEGY_FALLBACK = "fallback",
 
+    SIMPLE_ITEM_TYPE = "simple",
+
     DATA_OPTIONS = ["dataSource", "items"];
 
 var LayoutManager = Widget.inherit({
@@ -234,7 +236,7 @@ var LayoutManager = Widget.inherit({
         }
 
         if(typeof item === "object" && !item.itemType) {
-            item.itemType = "simple";
+            item.itemType = SIMPLE_ITEM_TYPE;
         }
 
         if(!utils.isDefined(item.editorType) && utils.isDefined(item.dataField)) {
@@ -502,7 +504,7 @@ var LayoutManager = Widget.inherit({
             $label = that._renderLabel(labelOptions).appendTo($container);
         }
 
-        if(item.itemType === "simple") {
+        if(item.itemType === SIMPLE_ITEM_TYPE) {
             if(that._isLabelNeedBaselineAlign(item) && labelOptions.location !== "top") {
                 $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
             }
@@ -704,7 +706,7 @@ var LayoutManager = Widget.inherit({
     },
 
     _prepareValidationRules: function(userValidationRules, isItemRequired, itemType, itemName) {
-        var isSimpleItem = itemType === "simple",
+        var isSimpleItem = itemType === SIMPLE_ITEM_TYPE,
             validationRules;
 
         if(isSimpleItem) {
@@ -870,9 +872,10 @@ var LayoutManager = Widget.inherit({
     },
 
     _renderHelpText: function(fieldItem, $editor, helpID) {
-        var helpText = fieldItem.helpText;
+        var helpText = fieldItem.helpText,
+            isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
 
-        if(helpText) {
+        if(helpText && isSimpleItem) {
             var $editorWrapper = $("<div>").addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
 
             $editor.wrap($editorWrapper);
