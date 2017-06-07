@@ -4,35 +4,15 @@ var $ = require("jquery"),
     Class = require("../core/class"),
     errors = require("./errors");
 
-/**
-* @name CommandMapping
-* @publicName CommandMapping
-* @type object
-* @module framework/command_mapping
-* @export CommandMapping
-* @hidden
-*/
 var CommandMapping = Class.inherit({
     ctor: function() {
         this._commandMappings = {};
         this._containerDefaults = {};
     },
-    /**
-    * @name CommandMappingmethods_setDefaults
-    * @publicName setDefaults(containerId, defaults)
-    * @param1 containerId:string
-    * @param2 defaults:object
-    */
     setDefaults: function(containerId, defaults) {
         this._containerDefaults[containerId] = defaults;
         return this;
     },
-    /**
-    * @name CommandMappingmethods_mapCommands
-    * @publicName mapCommands(containerId, commandMappings)
-    * @param1 containerId:string
-    * @param2 commandMappings:array
-    */
     mapCommands: function(containerId, commandMappings) {
         var that = this;
         $.each(commandMappings, function(index, commandMapping) {
@@ -47,12 +27,6 @@ var CommandMapping = Class.inherit({
         this._initExistingCommands();
         return this;
     },
-    /**
-    * @name CommandMappingmethods_unmapCommands
-    * @publicName unmapCommands(containerId, commandIds)
-    * @param1 containerId:string
-    * @param2 commandIds:array
-    */
     unmapCommands: function(containerId, commandIds) {
         var that = this;
         $.each(commandIds, function(index, commandId) {
@@ -63,12 +37,6 @@ var CommandMapping = Class.inherit({
         });
         this._initExistingCommands();
     },
-    /**
-    * @name CommandMappingmethods_getCommandMappingForContainer
-    * @publicName getCommandMappingForContainer(commandId, containerId)
-    * @param1 commandId:string
-    * @param2 containerId:string
-    */
     getCommandMappingForContainer: function(commandId, containerId) {
         return (this._commandMappings[containerId] || {})[commandId];
     },
@@ -82,11 +50,6 @@ var CommandMapping = Class.inherit({
             throw errors.Error("E3005", result.join("', '"), (result.length === 1 ? " is" : "s are"));
         }
     },
-    /**
-    * @name CommandMappingmethods_load
-    * @publicName load(commandId, containerId)
-    * @param1 config:object
-    */
     load: function(config) {
         if(!config) return;
         var that = this;
