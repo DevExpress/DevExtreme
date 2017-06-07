@@ -1088,20 +1088,11 @@ exports.DataController = Class.inherit((function() {
                     }
                 });
 
-                newInfo.forEach(function(row, index) {
-                    row.forEach(function(item, itemIndex) {
-                        var height = item.rowspan || 1;
-                        for(var i = 0; i < height; i++) {
-                            if(!newInfo[index + i]) {
-                                row[itemIndex] = extend({}, item, {
-                                    rowspan: item.rowspan - 1
-                                });
-                            }
-                        }
-                    });
-                });
+                for(var i = 0; i < newInfo.length; i++) {
+                    newInfo[i] = newInfo[i] || [];
+                }
 
-                info = newInfo.filter(function(item) { return !!item; });
+                info = newInfo;
             }
 
             return info;

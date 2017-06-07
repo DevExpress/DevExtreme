@@ -5178,9 +5178,8 @@ QUnit.test("T522627. Columns info. Second row not in the visible pages", functio
 
     var columnsInfo = dataController.getColumnsInfo();
 
-    assert.strictEqual(columnsInfo.length, 2);
-    assert.strictEqual(columnsInfo[0][0].rowspan, 1);
-    assert.strictEqual(dataController.getColumnsInfo(true)[0][0].rowspan, 2);
+    assert.strictEqual(columnsInfo.length, 3);
+    assert.deepEqual(columnsInfo[1], []);
 });
 
 QUnit.test("Get page start with begin of header element. Columns", function(assert) {
