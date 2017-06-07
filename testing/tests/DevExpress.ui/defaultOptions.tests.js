@@ -310,7 +310,8 @@ testComponentDefaults(DropDownBox,
     {},
     {
         openOnFieldClick: true,
-        acceptCustomValue: false
+        acceptCustomValue: false,
+        valueChangeEvent: "change"
     }
 );
 
