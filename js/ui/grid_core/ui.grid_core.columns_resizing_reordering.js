@@ -660,6 +660,10 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             that._trackerView.hide();
             that._isReadyResizing = false;
             that._isResizing = false;
+
+            if(!isNextColumnResizingMode(that)) {
+                that.component.updateDimensions();
+            }
         }
     },
 
@@ -823,10 +827,6 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             }
 
             columnsController.endUpdate();
-
-            if(!isNextColumnMode) {
-                this.component.updateDimensions();
-            }
         }
 
         return needUpdate;
