@@ -452,7 +452,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editRowIndex = insertKey.rowIndex + that._dataController.getRowIndexOffset();
             }
 
-            insertKey[INSERT_INDEX] = insertIndex++;
+            insertKey[INSERT_INDEX] = insertIndex;
 
             that._addEditData({ key: insertKey, data: param.data, type: DATA_EDIT_DATA_INSERT_TYPE });
 
