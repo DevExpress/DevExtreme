@@ -5148,6 +5148,41 @@ QUnit.test("Get data by pageIndex, pageSize, pageCount. Columns", function(asser
     }]);
 });
 
+QUnit.test("T522627. Columns info. Second row not in the visible pages", function(assert) {
+    var dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: "column" },
+                { area: "column" },
+                { area: "data", caption: "d1" },
+                { area: "data", caption: "d2" }
+            ],
+            columns: [
+                { value: 'A' },
+                { value: 'B' },
+                { value: 'C' },
+                {
+                    value: 'D',
+                    children: [
+                        { value: 'P1' },
+                        { value: 'P2' }
+                    ]
+                }]
+        },
+        texts: texts
+    }));
+
+    dataController.columnPageSize(2);
+    dataController._columnsScrollController.beginPageIndex.returns(0);
+    dataController._columnsScrollController.endPageIndex.returns(0);
+
+    var columnsInfo = dataController.getColumnsInfo();
+
+    assert.strictEqual(columnsInfo.length, 2);
+    assert.strictEqual(columnsInfo[0][0].rowspan, 1);
+    assert.strictEqual(dataController.getColumnsInfo(true)[0][0].rowspan, 2);
+});
+
 QUnit.test("Get page start with begin of header element. Columns", function(assert) {
     var dataController = new DataController(this.getOptions({
             dataSource: {

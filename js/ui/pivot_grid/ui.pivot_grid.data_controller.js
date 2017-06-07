@@ -1058,23 +1058,24 @@ exports.DataController = Class.inherit((function() {
                 foreachColumnInfo(info, function(columnInfo, visibleIndex, rowIndex) {
                     var cell = columnInfo,
                         colspan,
-                        isVisible = visibleIndex + (cell.colspan - 1 || 0) >= startIndex && visibleIndex < endIndex;
+                        cellColspan = cell.colspan || 1,
+                        isVisible = visibleIndex + cellColspan - 1 >= startIndex && visibleIndex < endIndex;
 
                     newInfo[rowIndex] = newInfo[rowIndex] || [];
 
                     if(isVisible) {
                         if(visibleIndex < startIndex) {
-                            colspan = cell.colspan - (startIndex - visibleIndex);
+                            colspan = cellColspan - (startIndex - visibleIndex);
                             visibleIndex = startIndex;
                         } else {
-                            colspan = cell.colspan;
+                            colspan = cellColspan;
                         }
 
                         if(visibleIndex + colspan > endIndex) {
                             colspan = endIndex - visibleIndex;
                         }
 
-                        if(colspan !== cell.colspan) {
+                        if(colspan !== cellColspan) {
                             cell = extend({}, cell, {
                                 colspan: colspan
                             });
@@ -1087,7 +1088,20 @@ exports.DataController = Class.inherit((function() {
                     }
                 });
 
-                info = newInfo;
+                newInfo.forEach(function(row, index) {
+                    row.forEach(function(item, itemIndex) {
+                        var height = item.rowspan || 1;
+                        for(var i = 0; i < height; i++) {
+                            if(!newInfo[index + i]) {
+                                row[itemIndex] = extend({}, item, {
+                                    rowspan: item.rowspan - 1
+                                });
+                            }
+                        }
+                    });
+                });
+
+                info = newInfo.filter(function(item) { return !!item; });
             }
 
             return info;
