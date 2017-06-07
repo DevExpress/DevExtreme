@@ -10,7 +10,8 @@ var sendRequest = function(options) {
         delete options.data;
     }
 
-    return $.ajax(options);
+var sendRequest = function() {
+    return $.ajax.apply($, arguments);
 };
 
 exports.sendRequest = sendRequest;

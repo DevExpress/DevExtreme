@@ -154,7 +154,7 @@ var ViewEngine = Class.inherit({
 
         this._ajaxImpl({
             url: url,
-            responseType: "text/html"
+            ContentType: "text/html"
         }).done(function(data) {
             that._loadTemplatesFromMarkupCore(domUtils.createMarkupFromString(data));
             deferred.resolve();
