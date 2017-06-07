@@ -1804,6 +1804,9 @@ declare module DevExpress.ui {
 
         /** @docid dxDropDownBoxOptions_dropDownOptions */
         dropDownOptions?: DevExpress.ui.dxPopupOptions;
+
+        /** @docid dxDropDownBoxOptions_valueChangeEvent */
+        valueChangeEvent?: string;
     }
 
     /** @docid dxDropDownBox */
