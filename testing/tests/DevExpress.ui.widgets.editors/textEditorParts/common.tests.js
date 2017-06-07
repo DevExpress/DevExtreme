@@ -583,6 +583,19 @@ QUnit.test("click on clear button should not reset active focus (T241583)", func
     }).trigger(dxPointerDown);
 });
 
+QUnit.test("click on clear button should raise input event (T521817)", function(assert) {
+    var $element = $("#texteditor").dxTextEditor({
+            showClearButton: true,
+            value: "foo",
+            onInput: function() {
+                assert.ok(true, "onInput was called");
+            }
+        }),
+        $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+
+    pointerMock($clearButton).click();
+});
+
 QUnit.test("tap on clear button should reset value (T310102)", function(assert) {
     var $element = $("#texteditor").dxTextEditor({ showClearButton: true, value: "foo" }),
         $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
