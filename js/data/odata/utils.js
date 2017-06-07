@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    ajax = require("../../core/utils/ajax").sendRequest,
     Guid = require("../../core/guid"),
     isDefined = commonUtils.isDefined,
 
@@ -194,7 +195,7 @@ var sendRequest = function(protocolVersion, request, options) {
     var d = $.Deferred();
     var ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
 
-    $.ajax(ajaxOptions).always(function(obj, textStatus) {
+    ajax(ajaxOptions).always(function(obj, textStatus) {
         var transformOptions = {
                 deserializeDates: options.deserializeDates,
                 fieldTypes: options.fieldTypes
