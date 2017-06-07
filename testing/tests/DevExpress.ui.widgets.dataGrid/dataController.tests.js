@@ -5427,13 +5427,15 @@ QUnit.test("Inserting several rows for cell editing mode", function(assert) {
     this.addRow();
 
     //assert
-    assert.equal(this.dataController.items().length, 4, "two rows are added");
+    var items = this.dataController.items();
 
-    assert.deepEqual(this.dataController.items()[0].data, {}, "row 0 data");
-    assert.ok(this.dataController.items()[0].inserted, "row 0 is inserted");
-    assert.deepEqual(this.dataController.items()[1].data, array[0], "row 1 data");
-    assert.deepEqual(this.dataController.items()[2].data, array[1], "row 2 data");
-    assert.notOk(this.dataController.items()[3].inserted, "row 3 is saved");
+    assert.equal(items.length, 4, "two rows are added");
+
+    assert.deepEqual(items[0].data, {}, "row 0 data");
+    assert.ok(items[0].inserted, "row 0 is inserted");
+    assert.deepEqual(items[1].data, array[0], "row 1 data");
+    assert.deepEqual(items[2].data, array[1], "row 2 data");
+    assert.notOk(items[3].inserted, "row 3 is saved");
 });
 
 QUnit.test("Inserting several rows for row editing mode", function(assert) {
@@ -5457,11 +5459,12 @@ QUnit.test("Inserting several rows for row editing mode", function(assert) {
     this.addRow();
 
     //assert
-    assert.equal(this.dataController.items().length, 3, "only one row is added");
+    var items = this.dataController.items();
+    assert.equal(items.length, 3, "only one row is added");
 
-    assert.deepEqual(this.dataController.items()[0].data, {}, "row 1 data");
-    assert.deepEqual(this.dataController.items()[1].data, array[0], "row 1 data");
-    assert.deepEqual(this.dataController.items()[2].data, array[1], "row 2 data");
+    assert.deepEqual(items[0].data, {}, "row 1 data");
+    assert.deepEqual(items[1].data, array[0], "row 1 data");
+    assert.deepEqual(items[2].data, array[1], "row 2 data");
 });
 
 //T327787, T333894
