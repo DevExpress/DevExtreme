@@ -702,7 +702,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 if($cell && !$cell.find(":focus").length) {
                     that._focusEditingCell(function() {
                         that._editCellInProgress = false;
-                    }, $cell);
+                    }, $cell, true);
                 } else {
                     that._editCellInProgress = false;
                 }
@@ -712,28 +712,38 @@ var EditingController = modules.ViewController.inherit((function() {
             return false;
         },
 
-        _delayedInputFocus: function($cell, beforeFocusCallback) {
+        _delayedInputFocus: function($cell, beforeFocusCallback, callBeforeFocusCallbackAlways) {
+            var that = this;
+
             function inputFocus() {
                 if(beforeFocusCallback) {
                     beforeFocusCallback();
                 }
 
                 $cell && $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first().focus();
+                that._beforeFocusCallback = null;
             }
 
             if(devices.real().ios || devices.real().android) {
                 inputFocus();
             } else {
-                clearTimeout(this._inputFocusTimeoutID);
-                this._inputFocusTimeoutID = setTimeout(inputFocus);
+                if(that._beforeFocusCallback) that._beforeFocusCallback();
+
+                clearTimeout(that._inputFocusTimeoutID);
+
+                if(callBeforeFocusCallbackAlways) {
+                    that._beforeFocusCallback = beforeFocusCallback;
+                }
+
+                that._inputFocusTimeoutID = setTimeout(inputFocus);
             }
         },
 
-        _focusEditingCell: function(beforeFocusCallback, $editCell) {
+        _focusEditingCell: function(beforeFocusCallback, $editCell, callBeforeFocusCallbackAlways) {
             var that = this;
 
             $editCell = $editCell || that.getView("rowsView").getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex);
-            that._delayedInputFocus($editCell, beforeFocusCallback);
+            that._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
         },
 
 
