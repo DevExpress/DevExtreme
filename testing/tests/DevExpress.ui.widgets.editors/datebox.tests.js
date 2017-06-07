@@ -304,7 +304,7 @@ QUnit.test("invalid value should be cleared after clear button click", function(
     $input.val("asd").trigger("change");
     $clearButton.trigger("dxclick");
 
-    assert.equal(instance.option("text"), undefined, "dateBox 'text' option is clear");
+    assert.equal(instance.option("text"), "", "dateBox 'text' option is clear");
     assert.equal($input.val(), "", "dateBox input is empty");
 });
 
