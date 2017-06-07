@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
+    ajaxMock = require("../../helpers/ajaxMock.js"),
     DataSource = require("data/data_source/data_source").DataSource,
     Store = require("data/abstract_store"),
     ArrayStore = require("data/array_store"),
@@ -1314,10 +1315,10 @@ QUnit.module("Custom cases and regressions", moduleConfig);
 QUnit.test("expand option for OData store", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock({
         url: "odata.org",
         responseTime: 0,
-        response: function(bag) {
+        callback: function(bag) {
             this.responseText = { value: [bag] };
         }
     });
