@@ -71,7 +71,7 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions_pagingEnabled
             * @publicName pagingEnabled
-            * @deprecated #dataSource.paginate
+            * @deprecated DataSourceOptions_paginate
             * @extend_doc
             */
             "pagingEnabled": { since: "15.1", message: "Use the 'dataSource.paginate' option instead" }
