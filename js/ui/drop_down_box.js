@@ -125,6 +125,14 @@ var DropDownBox = DropDownEditor.inherit({
 
             openOnFieldClick: true,
 
+            /**
+             * @name dxDropDownBoxOptions_valueChangeEvent
+             * @publicName valueChangeEvent
+             * @type string
+             * @default "change"
+             */
+            valueChangeEvent: "change",
+
             valueFormat: function(value) {
                 return Array.isArray(value) ? value.join(", ") : value;
             }
