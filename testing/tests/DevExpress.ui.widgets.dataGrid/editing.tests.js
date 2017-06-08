@@ -8224,6 +8224,45 @@ QUnit.testInActiveWindow("Show the revert button when a row updating is canceled
     assert.ok(testElement.find(".dx-revert-button").length, "the revert button is shown");
 });
 
+//T516897
+QUnit.test("Show error message on save inserted rows when edit mode is 'popup'", function(assert) {
+    //arrange
+    var $inputElement,
+        $popupContent,
+        $errorMessageElement,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: "popup",
+            allowUpdating: true
+        },
+        columns: ['name', 'age'],
+        onRowValidating: function(e) {
+            e.isValid = false;
+            e.errorText = "Test";
+        }
+    });
+
+    this.editRow(0);
+
+    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").content();
+    $inputElement = $popupContent.find("input").first();
+    $inputElement.val("");
+    $inputElement.trigger("change");
+
+    //act
+    this.saveEditData();
+
+    //assert
+    $errorMessageElement = $popupContent.children().first();
+    assert.ok($errorMessageElement.hasClass("dx-error-message"), "has error message");
+    assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [

@@ -19,53 +19,67 @@ var ErrorHandlingController = modules.ViewController.inherit({
 
     _createErrorRow: function(message, $tableElements) {
         var that = this,
-            $errorRow = $("<tr />").addClass(ERROR_ROW_CLASS),
-            $errorMessage = $("<div/>").addClass(ERROR_MESSAGE_CLASS).text(message),
+            $errorRow,
+            $closeButton,
+            $errorMessage = $("<div/>").addClass(ERROR_MESSAGE_CLASS).text(message);
+
+        if($tableElements) {
+            $errorRow = $("<tr />").addClass(ERROR_ROW_CLASS);
             $closeButton = $("<div/>").addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
-        $closeButton.on(clickEvent.name, that.createAction(function(args) {
-            var e = args.jQueryEvent,
-                $errorRow,
-                errorRowIndex = $(e.currentTarget).closest("." + ERROR_ROW_CLASS).index();
+            $closeButton.on(clickEvent.name, that.createAction(function(args) {
+                var e = args.jQueryEvent,
+                    $errorRow,
+                    errorRowIndex = $(e.currentTarget).closest("." + ERROR_ROW_CLASS).index();
 
-            e.stopPropagation();
-            $.each($tableElements, function(_, tableElement) {
-                $errorRow = $(tableElement).children("tbody").children("tr").eq(errorRowIndex);
-                that.removeErrorRow($errorRow);
-            });
-        }));
+                e.stopPropagation();
+                $.each($tableElements, function(_, tableElement) {
+                    $errorRow = $(tableElement).children("tbody").children("tr").eq(errorRowIndex);
+                    that.removeErrorRow($errorRow);
+                });
+            }));
 
-        $("<td/>")
-            .attr({
-                "colspan": that.getController("columns").getVisibleColumns().length,
-                "role": "presentation"
-            })
-            .prepend($closeButton)
-            .append($errorMessage)
-            .appendTo($errorRow);
+            $("<td/>")
+                .attr({
+                    "colspan": that.getController("columns").getVisibleColumns().length,
+                    "role": "presentation"
+                })
+                .prepend($closeButton)
+                .append($errorMessage)
+                .appendTo($errorRow);
 
-        return $errorRow;
+            return $errorRow;
+        }
+
+        return $errorMessage;
     },
 
-    renderErrorRow: function(message, rowIndex) {
+    renderErrorRow: function(message, rowIndex, $popupContent) {
         var that = this,
             $row,
-            $errorRow,
+            $errorMessageElement,
             rowElements,
             viewElement = rowIndex >= 0 ? that._rowsView : that._columnHeadersView,
-            $tableElements = viewElement.getTableElements();
+            $tableElements = $popupContent || viewElement.getTableElements();
+
+        if($popupContent) {
+            $popupContent.find("." + ERROR_MESSAGE_CLASS).remove();
+            $errorMessageElement = that._createErrorRow(message);
+            $popupContent.prepend($errorMessageElement);
+            return;
+        }
 
         $.each($tableElements, function(_, tableElement) {
-            $errorRow = that._createErrorRow(message, $tableElements);
+            $errorMessageElement = that._createErrorRow(message, $tableElements);
             rowElements = $(tableElement).children("tbody").children("tr");
 
             if(rowIndex >= 0) {
                 $row = viewElement._getRowElements($(tableElement)).eq(rowIndex);
                 that.removeErrorRow(rowElements.eq(($row.index() + 1)));
-                $errorRow.insertAfter($row);
+                $errorMessageElement.insertAfter($row);
             } else {
                 that.removeErrorRow(rowElements.last());
-                $(tableElement).append($errorRow);
+                $(tableElement).append($errorMessageElement);
             }
         });
     },
