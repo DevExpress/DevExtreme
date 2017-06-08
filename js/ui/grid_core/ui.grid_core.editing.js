@@ -1122,6 +1122,7 @@ var EditingController = modules.ViewController.inherit((function() {
          */
         cancelEditData: function() {
             var that = this,
+                editMode = getEditMode(that),
                 rowIndex = this._editRowIndex,
                 dataController = that._dataController;
 
@@ -1129,16 +1130,18 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that.init();
 
-            if(isRowEditMode(that) && rowIndex >= 0) {
-                dataController.updateItems({
-                    changeType: "update",
-                    rowIndices: [rowIndex, rowIndex + 1]
-                });
-            } else {
-                dataController.updateItems();
+            if(editMode !== EDIT_MODE_POPUP) {
+                if((editMode === EDIT_MODE_ROW || editMode === EDIT_MODE_FORM) && rowIndex >= 0) {
+                    dataController.updateItems({
+                        changeType: "update",
+                        rowIndices: [rowIndex, rowIndex + 1]
+                    });
+                } else {
+                    dataController.updateItems();
+                }
             }
 
-            if(getEditMode(that) === EDIT_MODE_POPUP) {
+            if(editMode === EDIT_MODE_POPUP) {
                 that._hideEditPopup();
             }
         },
