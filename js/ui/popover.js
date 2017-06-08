@@ -65,8 +65,9 @@ var POPOVER_CLASS = "dx-popover",
         eventName = eventUtils.addNamespace(event, that.NAME);
         action = that._createAction((function() {
             delay = getEventDelay(that, name + "Event");
+            clearTimeout(this._timeouts[name === "show" ? "hide" : "show"]);
             if(delay) {
-                setTimeout(function() {
+                this._timeouts[name] = setTimeout(function() {
                     that[name]();
                 }, delay);
             } else {
@@ -339,6 +340,7 @@ var Popover = Popup.inherit({
         this.callBase();
 
         this._renderArrow();
+        this._timeouts = {};
 
         this.element().addClass(POPOVER_CLASS);
         this._wrapper().addClass(POPOVER_WRAPPER_CLASS);

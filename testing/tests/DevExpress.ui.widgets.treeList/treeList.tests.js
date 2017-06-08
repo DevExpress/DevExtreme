@@ -43,10 +43,13 @@ var createTreeList = function(options) {
 
 QUnit.test("Empty options", function(assert) {
     var treeList = createTreeList({}),
-        $treeListElement = treeList.element();
+        $treeListElement = treeList.element(),
+        $noDataElement = $treeListElement.find(".dx-treelist-nodata");
 
     assert.ok(treeList);
     assert.ok($treeListElement.hasClass("dx-treelist"), "widget class on the root element");
+    assert.ok($noDataElement.length, "widget have a 'no data' element");
+    assert.ok($noDataElement.is(":visible"), "'No data' element is visible");
     assert.ok($treeListElement.children().hasClass("dx-treelist-container"), "container class on the child");
 });
 

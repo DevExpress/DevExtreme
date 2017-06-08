@@ -378,7 +378,10 @@ var VirtualScrollingRowsViewExtender = (function() {
                 };
 
             for(i = 0; i < columns.length; i++) {
-                freeSpaceCellsHtml += columns[i].command === "expand" ? "<td class='" + that.addWidgetPrefix(GROUP_SPACE_CLASS) + "'/>" : "<td />";
+                var classes = that._getCellClasses(columns[i]),
+                    classString = classes.length ? " class='" + classes.join(" ") + "'" : "";
+
+                freeSpaceCellsHtml += "<td" + classString + "/>";
             }
 
             while(height > PIXELS_LIMIT) {
@@ -389,6 +392,17 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             container.addClass(that.addWidgetPrefix(TABLE_CLASS));
             container.html(html);
+        },
+
+        _getCellClasses: function(column) {
+            var classes = [],
+                cssClass = column.cssClass,
+                isExpandColumn = column.command === "expand";
+
+            cssClass && classes.push(cssClass);
+            isExpandColumn && classes.push(this.addWidgetPrefix(GROUP_SPACE_CLASS));
+
+            return classes;
         },
 
         _findBottomLoadPanel: function() {
