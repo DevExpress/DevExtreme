@@ -182,26 +182,22 @@
         }
 
         .dx-error-row {
-            td {
-                background-color: ~"@{@{widgetName}-error-row-background-color}";
-                color: ~"@{@{widgetName}-error-row-text-color}";
+            .dx-closebutton {
+                float: right;
+                margin: @GRID_BASE_CELL_PADDING + 1px;
+                .dx-icon-close;
+                .dx-icon-sizing(14px);
+            }
+
+            .dx-error-message {
                 padding: @GRID_BASE_CELL_PADDING;
-
-                .dx-error-message {
-                    white-space: normal;
-                    word-wrap: break-word;
-                    padding-right: 35px;
-                }
-
-                .dx-closebutton {
-                    float: right;
-                    margin-top: 1px;
-                    margin-right: 1px;
-                    .dx-icon-close;
-                    .dx-icon-sizing(14px);
-                }
+                padding-right: 35px;
             }
         }
+    }
+
+    .dx-@{widgetName}-edit-popup .dx-error-message {
+        padding: @GRID_BASE_CELL_PADDING;
     }
 
     .dx-@{widgetName}-filter-range-overlay .dx-overlay-content {

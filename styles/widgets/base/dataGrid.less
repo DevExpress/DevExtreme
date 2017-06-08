@@ -13,6 +13,12 @@
     }
 }
 
+.dx-datagrid-error-message() {
+    background-color: @datagrid-row-error-bg;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
 .dx-datagrid {
     color: @datagrid-base-color;
     background-color: @datagrid-base-background-color;
@@ -73,6 +79,17 @@
     .dx-datagrid-filter-row .dx-filter-range-content {
         color: @datagrid-base-color;
     }
+
+    .dx-error-row {
+        td {
+            color: @datagrid-row-error-color;
+            padding: 0;
+        }
+
+        .dx-error-message {
+            .dx-datagrid-error-message();
+        }
+    }
 }
 
 .dx-datagrid-form-buttons-container {
@@ -97,6 +114,12 @@
     cursor: pointer;
     .dx-icon-more;
     .dx-icon-sizing(21px);
+}
+
+.dx-datagrid-edit-popup .dx-error-message {
+    .dx-datagrid-error-message();
+    color: @datagrid-row-error-color;
+    margin-bottom: 20px;
 }
 
 .dx-rtl {
