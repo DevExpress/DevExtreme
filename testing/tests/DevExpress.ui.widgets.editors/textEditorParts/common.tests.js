@@ -564,6 +564,8 @@ QUnit.test("'Clear' button visibility depends on value", function(assert) {
         instance = $element.dxTextEditor("instance"),
         $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
 
+    caretWorkaround($element.find("input"));
+
     assert.ok($clearButton.is(":visible"), "TextEditor has clear button");
     instance.option("value", "");
     assert.ok($clearButton.is(":hidden"), "TextEditor has NO clear button");
