@@ -693,6 +693,23 @@ QUnit.test("Email - empty value should be valid", function(assert) {
     assert.ok(result.isValid, "IsValid");
 });
 
+QUnit.test("Array of emails should be valid", function(assert) {
+    var result = ValidationEngine.validate(["test@domain.com", "test2@domain.com"], [{
+        type: "email"
+    }]);
+
+    assert.ok(result, "Result is defined");
+    assert.ok(result.isValid, "IsValid");
+});
+
+QUnit.test("Array of emails with incorrect one should be invalid", function(assert) {
+    var result = ValidationEngine.validate(["testdomain.com", "test2@domain.com"], [{
+        type: "email"
+    }]);
+
+    assert.ok(result, "Result is defined");
+    assert.ok(!result.isValid, "IsValid");
+});
 
 
 QUnit.module("Custom rule with user's callback");
@@ -766,6 +783,19 @@ QUnit.test("Default message with name", function(assert) {
 
     assert.equal(result.brokenRule.message, "Customer Code is invalid");
 });
+
+QUnit.test("Custom validation rule when value is array", function(assert) {
+    var customCallback = sinon.stub().returns(false),
+        value = ["test1", "test2"],
+        result = testInvalidRule({
+            type: "custom",
+            validationCallback: customCallback
+        }, value, assert, "Customer Code");
+
+    assert.equal(result.brokenRule.message, "Customer Code is invalid");
+    assert.deepEqual(customCallback.getCall(0).args[0].value, value, "value is correct");
+});
+
 
 QUnit.module("Compare rule");
 
