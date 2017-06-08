@@ -2,7 +2,7 @@
 
 var ajax = require("core/utils/ajax"),
     mockOptions,
-    $;
+    $ = require("jquery");
 
 ajax.sendRequest = function(request) {
     var deferred = $.Deferred(),
