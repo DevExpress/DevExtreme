@@ -7,6 +7,7 @@ var $ = require("jquery"),
 
 var NODE_CLASS = "dx-treeview-node",
     ITEM_CLASS = "dx-treeview-item",
+    SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item",
     TOGGLE_ITEM_VISIBILITY_CLASS = "dx-treeview-toggle-item-visibility";
 
 QUnit.module("Focusing");
@@ -124,7 +125,7 @@ QUnit.test("PointerDown event at expansion arrow should not be ignored", functio
     assert.equal(pointerDownStub.callCount, 1, "itemPointerDownHandler was called");
 });
 
-QUnit.test("Scroll should not jump down when focusing on item (T492496, T517945)", function(assert) {
+QUnit.test("Scroll should not jump down when focusing on item (T492496)", function(assert) {
     //arrange
     var $treeView = initTree({
             items: [{ id: 1, text: "item 1" }, { id: 2, text: "item 2", expanded: true, items: [{ id: 3, text: "item 3" }] }],
@@ -153,6 +154,45 @@ QUnit.test("Scroll should not jump down when focusing on item (T492496, T517945)
         assert.equal(scrollable.scrollTop(), 0, "scroll top position");
 
         $items.first().trigger("dxpointerdown");
+        clock.tick();
+
+        //assert
+        assert.equal(scrollable.scrollTop(), 0, "scroll top position");
+    } finally {
+        clock.restore();
+    }
+});
+
+QUnit.test("Scroll should not jump down when focusing on Select All (T517945)", function(assert) {
+    //arrange
+    var $treeView = initTree({
+            items: [{ id: 1, text: "item 1" }, { id: 2, text: "item 2", expanded: true, items: [{ id: 3, text: "item 3" }] }],
+            showCheckBoxesMode: "selectAll",
+            focusStateEnabled: true,
+            height: 40
+        }),
+        $items = $treeView.find("." + ITEM_CLASS),
+        scrollable = $treeView.find(".dx-scrollable").dxScrollable("instance"),
+        clock = sinon.useFakeTimers();
+
+    try {
+        $items.last().trigger("dxpointerdown");
+
+        //assert
+        assert.equal(scrollable.scrollTop(), 106, "scroll top position");
+
+        scrollable.scrollTo({ y: 0 });
+
+        //assert
+        assert.equal(scrollable.scrollTop(), 0, "scroll top position");
+
+        //act
+        $treeView.trigger("focusin");
+
+        //assert
+        assert.equal(scrollable.scrollTop(), 0, "scroll top position");
+
+        $treeView.find("." + SELECT_ALL_ITEM_CLASS).first().trigger("dxpointerdown");
         clock.tick();
 
         //assert
