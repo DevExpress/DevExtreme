@@ -1264,6 +1264,30 @@ QUnit.test("Caption of group", function(assert) {
     assert.equal($captions.eq(0).text(), "Personal");
 });
 
+QUnit.test("helpText element didn't render for group item", function(assert) {
+    //arrange, act
+    var $formContainer = $("#form").dxForm({
+            formData: {
+                firstName: "John"
+            },
+            items: [
+                {
+                    itemType: "group",
+                    caption: "Personal",
+                    helpText: "Help Text",
+                    items: [
+                        {
+                            dataField: "firstName"
+                        }
+                    ]
+                }]
+        }),
+        $helpTextElement = $formContainer.find("." + internals.FIELD_ITEM_HELP_TEXT_CLASS);
+
+    //assert
+    assert.equal($helpTextElement.length, 0, "There is no helpText element");
+});
+
 QUnit.test("Group template", function(assert) {
     //arrange, act
     var $formContainer = $("#form").dxForm({
