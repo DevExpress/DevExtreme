@@ -521,10 +521,6 @@ var NumberBox = TextEditor.inherit({
     },
 
     _normalizeInputValue: function() {
-        return this._normalizeValue();
-    },
-
-    _normalizeValue: function() {
         return this._parseValue(this._normalizeText());
     },
 
