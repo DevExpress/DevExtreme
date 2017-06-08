@@ -1321,17 +1321,11 @@ declare module DevExpress.viz.charts {
         /** @docid dxchartoptions_commonaxissettings_label_alignment */
         alignment?: string;
 
+        /** @docid_ignore dxchartoptions_commonaxissettings_label_overlappingBehavior_mode */
+        /** @docid_ignore dxchartoptions_commonaxissettings_label_overlappingBehavior_rotationangle */
+        /** @docid_ignore dxchartoptions_commonaxissettings_label_overlappingBehavior_staggeringSpacing */
         /** @docid dxchartoptions_commonaxissettings_label_overlappingBehavior */
-        overlappingBehavior?: {
-            /** @docid dxchartoptions_commonaxissettings_label_overlappingBehavior_mode */
-            mode?: string;
-
-            /** @docid dxchartoptions_commonaxissettings_label_overlappingBehavior_rotationangle */
-            rotationAngle?: number;
-
-            /** @docid dxchartoptions_commonaxissettings_label_overlappingBehavior_staggeringSpacing */
-            staggeringSpacing?: number;
-        };
+        overlappingBehavior?: any;
     }
 
     export interface PolarCommonAxisLabel extends CommonAxisLabel {
