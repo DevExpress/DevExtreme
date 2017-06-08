@@ -1,14 +1,13 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    eventRegistrator = require("../../events/core/event_registrator"),
+var eventRegistrator = require("../../events/core/event_registrator"),
     ngModule = require("./module");
 
 eventRegistrator.callbacks.add(function(name) {
     var ngEventName = name.slice(0, 2) + name.charAt(2).toUpperCase() + name.slice(3);
     ngModule.directive(ngEventName, ['$parse', function($parse) {
         return function(scope, element, attr) {
-            var attrValue = $.trim(attr[ngEventName]),
+            var attrValue = attr[ngEventName].trim(),
                 handler,
                 eventOptions = { };
 

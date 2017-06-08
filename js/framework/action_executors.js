@@ -75,9 +75,11 @@ var createActionExecutors = function(app) {
                 var evaluate = args.evaluate || defaultEvaluate;
 
                 uri = uriTemplate.replace(/\{([^}]+)\}/g, function(entry, expr) {
-                    expr = $.trim(expr);
+                    expr = expr.trim();
                     if(expr.indexOf(",") > -1) {
-                        expr = $.map(expr.split(","), $.trim);
+                        expr = $.map(expr.split(","), function(item) {
+                            return item.trim();
+                        });
                     }
                     var value = evaluate(expr);
                     if(value === undefined) {

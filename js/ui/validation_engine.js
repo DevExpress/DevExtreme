@@ -43,7 +43,7 @@ var rulesValidators = {
             }
             value = String(value);
             if(rule.trim || !commonUtils.isDefined(rule.trim)) {
-                value = $.trim(value);
+                value = value.trim();
             }
 
             return value !== "";
@@ -190,7 +190,7 @@ var rulesValidators = {
         validate: function(value, rule) {
             value = commonUtils.isDefined(value) ? String(value) : "";
             if(rule.trim || !commonUtils.isDefined(rule.trim)) {
-                value = $.trim(value);
+                value = value.trim();
             }
 
             return rulesValidators.range.validate(value.length,
