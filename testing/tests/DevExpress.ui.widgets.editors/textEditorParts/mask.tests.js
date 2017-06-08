@@ -954,6 +954,8 @@ QUnit.test("mask should be displayed instead of empty string after clear button 
         $input = $textEditor.find(".dx-texteditor-input"),
         $clearButton = $textEditor.find(".dx-clear-button-area");
 
+    caretWorkaround($input);
+
     $input.trigger("focus");
     $clearButton.trigger("dxclick");
 
