@@ -152,7 +152,7 @@ var TransitionAnimationStrategy = {
 
     _completeAnimationCallback: function($element, config) {
         var that = this,
-            startTime = $.now() + config.delay,
+            startTime = Date.now() + config.delay,
             deferred = $.Deferred(),
             transitionEndFired = $.Deferred(),
             simulatedTransitionEndFired = $.Deferred(),
@@ -169,7 +169,7 @@ var TransitionAnimationStrategy = {
         $element
             .one(transitionEndEventName, function() {
                 //NOTE: prevent native transitionEnd event from previous animation in queue (Chrome)
-                if($.now() - startTime >= config.duration) {
+                if(Date.now() - startTime >= config.duration) {
                     transitionEndFired.reject();
                 }
             })
