@@ -524,12 +524,12 @@ var NumberBox = TextEditor.inherit({
         return this._normalizeValue();
     },
 
-    _normalizeValue: function(value) {
-        return this._parseValue(this._normalizeText(value));
+    _normalizeValue: function() {
+        return this._parseValue(this._normalizeText());
     },
 
-    _normalizeText: function(value) {
-        value = $.trim(commonUtils.isDefined(value) ? value : this._input().val());
+    _normalizeText: function() {
+        var value = $.trim(this._input().val());
 
         return this._replaceCommaWithPoint(value);
     },
