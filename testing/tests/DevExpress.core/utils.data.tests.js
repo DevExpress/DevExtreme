@@ -351,34 +351,6 @@ QUnit.test("complex values are merged only when it is plain object", function(as
     assert.equal(obj1.sub.person.lastName, undefined);
 });
 
-QUnit.test("plain objects are cloned if previous value is null (T521407)", function(assert) {
-    var obj = {
-        dataSource: null
-    };
-
-    var dataSource1 = {
-        store: "Store 1"
-    };
-
-    var dataSource2 = {
-        store: "Store 2"
-    };
-
-    SETTER("dataSource")(
-        obj,
-        dataSource1,
-        { merge: true }
-    );
-
-    SETTER("dataSource")(
-        obj,
-        dataSource2,
-        { merge: true }
-    );
-
-    assert.equal(dataSource1.store, "Store 1");
-});
-
 QUnit.module("setter with wrapped variables", {
     beforeEach: function() {
         variableWrapper.inject(mockVariableWrapper);
