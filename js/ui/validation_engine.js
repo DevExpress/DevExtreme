@@ -546,14 +546,7 @@ var ValidationEngine = {
                 isValid: true,
                 validationRules: rules
             },
-            that = this,
-            valueArray;
-
-        if(Array.isArray(value)) {
-            valueArray = value.length ? value : [null];
-        } else {
-            valueArray = [value];
-        }
+            that = this;
 
         $.each(rules || [], function(_, rule) {
             var ruleValidator = rulesValidators[rule.type],
@@ -569,19 +562,9 @@ var ValidationEngine = {
                     return true;
                 }
 
-                valueArray.every(function(itemValue) {
-                    if(rule.type === "custom") {
-                        rule.value = value;
-                        ruleValidationResult = ruleValidator.validate(value, rule);
-                        rule.isValid = ruleValidationResult;
-                        return false;
-                    } else {
-                        rule.value = itemValue;
-                        ruleValidationResult = ruleValidator.validate(itemValue, rule);
-                        rule.isValid = ruleValidationResult;
-                        return rule.isValid;
-                    }
-                });
+                rule.value = value;
+                ruleValidationResult = ruleValidator.validate(value, rule);
+                rule.isValid = ruleValidationResult;
 
                 if(!ruleValidationResult) {
                     result.isValid = false;
