@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
     query = require("data/query"),
     EdmLiteral = require("data/odata/utils").EdmLiteral,
     ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
@@ -16,15 +15,7 @@ function QUERY(url, options) {
 }
 
 var moduleConfig = {
-    beforeEach: function() {
-        this.originalThrowUnmocked = $.mockjaxSettings.throwUnmocked;
-
-        $.mockjaxSettings.throwUnmocked = true;
-    },
-
     afterEach: function() {
-        $.mockjaxSettings.throwUnmocked = this.originalThrowUnmocked;
-
         ajaxMock.clear();
     }
 };
@@ -37,8 +28,6 @@ var moduleWithMockConfig = {
                 this.responseText = { value: [bag] };
             }
         });
-
-        moduleConfig.beforeEach.apply(this, arguments);
     },
 
     afterEach: function() {
@@ -110,18 +99,13 @@ QUnit.test("Custom headers, query string params, async and request timeout (befo
 QUnit.test("JSONP for cross-domain requests", function(assert) {
     var done = assert.async();
 
-    var jsonpCallbackName = "jsonpCallback";
-    var originalJsonpCallback = $.ajaxSettings.jsonpCallback;
-    $.ajaxSettings.jsonpCallback = function() { return jsonpCallbackName; };
-
-    window[jsonpCallbackName] = noop;
-
     ajaxMock.setup({
         url: "odata.org",
         callback: function(bag) {
+            assert.equal(bag.dataType, "jsonp");
             assert.equal(bag.data.$format, "json", "JSONPSupportBehavior requirement");
 
-            this.responseText = jsonpCallbackName + "(" + JSON.stringify({ value: [1, 2, 3] }) + ")";
+            this.responseText = { value: [1, 2, 3] };
         }
     });
 
@@ -134,9 +118,6 @@ QUnit.test("JSONP for cross-domain requests", function(assert) {
             assert.deepEqual(r, [1, 2, 3]);
         })
         .always(function() {
-            $.ajaxSettings.jsonpCallback = originalJsonpCallback;
-            window[jsonpCallbackName] = undefined;
-
             ajaxMock.clear();
         })
         .always(done);
@@ -1181,9 +1162,6 @@ QUnit.test("slice after slice", function(assert) {
 
 QUnit.module("Client side fallbacks", {
     beforeEach: function() {
-
-        moduleConfig.beforeEach.apply(this, arguments);
-
         ajaxMock.setup({
             url: "odata.org",
             responseText: {
@@ -1379,6 +1357,7 @@ QUnit.test("unexpected server response with 200 status", function(assert) {
     ajaxMock.setup({
         url: "odata.org",
         status: 200,
+        textStatus: "parsererror",
         responseText: "Server gone crazy"
     });
 
@@ -1396,20 +1375,14 @@ QUnit.test("unexpected server response with 200 status", function(assert) {
 QUnit.test("server error via JSONP with 200 status", function(assert) {
     var done = assert.async();
 
-    var jsonpCallbackName = "jsonpCallback";
-    var originalJsonpCallback = $.ajaxSettings.jsonpCallback;
-    $.ajaxSettings.jsonpCallback = function() { return jsonpCallbackName; };
-
-    window[jsonpCallbackName] = noop;
-
     ajaxMock.setup({
         url: "odata.org",
-        responseText: jsonpCallbackName + "(" + JSON.stringify({
+        responseText: {
             error: {
                 message: "error via jsonp",
                 code: 123
             }
-        }) + ")"
+        }
     });
 
     QUERY("odata.org", { jsonp: true })
@@ -1422,8 +1395,7 @@ QUnit.test("server error via JSONP with 200 status", function(assert) {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .always(function() {
-            $.ajaxSettings.jsonpCallback = originalJsonpCallback;
-            window[jsonpCallbackName] = undefined;
+            ajaxMock.clear();
         })
         .always(done);
 });

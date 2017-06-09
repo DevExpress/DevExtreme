@@ -202,20 +202,17 @@ QUnit.test("load, ajax error", function(assert) {
     var done = assert.async(),
         helper = new ErrorHandlingHelper();
 
-    ajaxMock.setup({
-        url: "/mockjax-error",
-        status: 500,
-        statusText: "Internal Server Error"
-    });
-
     helper.extraChecker = function(error) {
         assert.equal(error.message, "Internal Server Error");
     };
 
     helper.run(function() {
         return new CustomStore({
-            load: function() {
-                return $.getJSON("/mockjax-error");
+            load: function(e) {
+                return $.Deferred().reject({
+                    statusText: "Internal Server Error",
+                    getResponseHeader: function() {}
+                }, "error").promise();
             },
             errorHandler: helper.optionalHandler
         }).load();
@@ -498,12 +495,6 @@ QUnit.test("update, error handling", function(assert) {
 
     var helper = new ErrorHandlingHelper();
 
-    ajaxMock.setup({
-        url: "/mockjax-error",
-        status: 500,
-        statusText: "Internal Server Error"
-    });
-
     helper.extraChecker = function(error) {
         assert.equal(error.message, "Internal Server Error");
     };
@@ -511,7 +502,10 @@ QUnit.test("update, error handling", function(assert) {
     helper.run(function() {
         return new CustomStore({
             update: function() {
-                return $.getJSON("/mockjax-error");
+                return $.Deferred().reject({
+                    statusText: "Internal Server Error",
+                    getResponseHeader: function() {}
+                }, "error").promise();
             },
             errorHandler: helper.optionalHandler
         }).update(123, {});
