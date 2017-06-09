@@ -187,30 +187,26 @@
         }
 
         .dx-error-row {
-            td {
-                background-color: ~"@{@{widgetName}-row-error-bg}";
-                color: ~"@{@{widgetName}-row-error-color}";
+            .dx-closebutton {
+                float: right;
+                margin: @GENERIC_GRID_BASE_CELL_PADDING + 2px;
+                .dx-icon-close;
+                .dx-icon-sizing(14px);
+            }
+
+            .dx-error-message {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING;
-
-                .dx-error-message {
-                    white-space: normal;
-                    word-wrap: break-word;
-                    padding-right: 35px;
-                }
-
-                .dx-closebutton {
-                    float: right;
-                    margin-top: 2px;
-                    margin-right: 2px;
-                    .dx-icon-close;
-                    .dx-icon-sizing(14px);
-                }
+                padding-right: 35px;
             }
         }
 
         .dx-row > td {
             padding: @GENERIC_GRID_BASE_CELL_PADDING;
         }
+    }
+
+    .dx-@{widgetName}-edit-popup .dx-error-message {
+        padding: @GENERIC_GRID_BASE_CELL_PADDING;
     }
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {

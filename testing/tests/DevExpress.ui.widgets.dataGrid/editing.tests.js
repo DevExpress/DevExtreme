@@ -8185,6 +8185,44 @@ QUnit.testInActiveWindow("Show the revert button when a row updating is canceled
     assert.ok(testElement.find(".dx-revert-button").length, "the revert button is shown");
 });
 
+QUnit.test("Show error message on save inserted rows when edit mode is 'popup'", function(assert) {
+    //arrange
+    var $inputElement,
+        $popupContent,
+        $errorMessageElement,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: "popup",
+            allowUpdating: true
+        },
+        columns: ['name', 'age'],
+        onRowValidating: function(e) {
+            e.isValid = false;
+            e.errorText = "Test";
+        }
+    });
+
+    this.editRow(0);
+
+    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").content();
+    $inputElement = $popupContent.find("input").first();
+    $inputElement.val("");
+    $inputElement.trigger("change");
+
+    //act
+    this.saveEditData();
+
+    //assert
+    $errorMessageElement = $popupContent.children().first();
+    assert.ok($errorMessageElement.hasClass("dx-error-message"), "has error message");
+    assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
@@ -9556,7 +9594,7 @@ QUnit.module('Editing - "popup" mode', {
         this.$testElement = $("#container");
 
         this.setupModules = function(that) {
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
+            setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editorFactory', 'errorHandling', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
                 initViews: true
             });
 
@@ -9825,4 +9863,44 @@ QUnit.test("Show full screen editing popup on mobile devices", function(assert) 
     //assert
     var isFullScreen = devices.current().deviceType !== "desktop";
     assert.equal(that.editPopupInstance.option("fullScreen"), isFullScreen, "'fullScreen' option value is 'false' on a desktop and 'true' on a mobile device");
+});
+
+//T516897
+QUnit.test("Error row should not be hidden when update error", function(assert) {
+    var that = this,
+        $popupContent,
+        $inputElement,
+        $errorMessageElement;
+
+    that.options.showColumnHeaders = true;
+    that.options.errorRowEnabled = true;
+    that.options.dataSource = {
+        load: function() {
+            return $.Deferred().resolve(that.array);
+        },
+        update: function() {
+            return $.Deferred().reject("Test");
+        }
+    };
+
+    that.setupModules(that);
+    that.columnHeadersView.render(this.$testElement);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.preparePopupHelpers();
+
+    $popupContent = that.editPopupInstance.content();
+    $inputElement = $popupContent.find("input").first();
+    $inputElement.val("Test");
+    $inputElement.trigger("change");
+
+    //act
+    that.saveEditData();
+    that.clock.tick(500);
+
+    //assert
+    $errorMessageElement = this.$testElement.find(".dx-datagrid-headers .dx-error-row");
+    assert.strictEqual($errorMessageElement.length, 1, "has error row");
+    assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
 });

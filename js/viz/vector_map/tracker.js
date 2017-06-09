@@ -11,7 +11,7 @@ var $ = require("../../core/renderer"),
     wheelEventName = require("../../events/core/wheel").name,
     _addNamespace = eventUtils.addNamespace,
     _parseScalar = require("../core/utils").parseScalar,
-    _now = $.now,
+    _now = Date.now,
 
     _NAME = "dxVectorMap",
     EVENTS = {};
