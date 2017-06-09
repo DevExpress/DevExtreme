@@ -4535,6 +4535,45 @@ QUnit.test('Close editing cell when using "cell" edit mode on click outside data
     assert.deepEqual(updateArgs, { "name": "Test update cell" });
 });
 
+QUnit.test('Cell should be closed on click outside dataGrid after changes in several cells if "cell" edit mode', function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'cell'
+    };
+
+    that.options.loadingTimeout = 0;
+
+    rowsView.render(testElement);
+    this.editCell(0, 0);
+    this.clock.tick();
+
+    //act
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
+    testElement.find('input').first().val('Test update cell');
+    testElement.find('input').first().trigger('change');
+
+    this.editCell(0, 2);
+    this.clock.tick();
+
+    //act
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
+    testElement.find('input').first().val('Test update cell 2');
+    testElement.find('input').first().trigger('change');
+
+    //act
+    $(document).trigger('dxclick');
+    this.clock.tick();
+
+    //assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
+    assert.notOk(this.editingController.isEditing(), "editing cell is closed");
+});
+
 QUnit.test("When select all items editing row must have not 'dx-selection' class", function(assert) {
     //arrange
     var testElement = $('#container'),
