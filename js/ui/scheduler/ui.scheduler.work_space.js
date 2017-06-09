@@ -1773,6 +1773,14 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     scrollToTime: function(hours, minutes, date) {
+        var min = this.getStartViewDate(),
+            max = this.getEndViewDate();
+
+        if(date < min || date > max) {
+            errors.log("W1008", date);
+            return;
+        }
+
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable();
 
