@@ -2,7 +2,6 @@
 
 require("../../../testing/content/orders.js");
 require("data/odata/store");
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
@@ -11,6 +10,7 @@ var $ = require("jquery"),
     pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
     config = require("core/config"),
     formatHelper = require("format_helper"),
+    ajaxMock = require("../../helpers/ajaxMock.js"),
 
     moduleConfig = {
         beforeEach: function() {
@@ -25,12 +25,11 @@ var $ = require("jquery"),
 
 $.extend($.mockjaxSettings, {
     contentType: "application/json",
-    responseTime: 0,
     logging: false
 });
 
 QUnit.testDone(function() {
-    $.mockjax.clear();
+    ajaxMock.clear();
 });
 
 QUnit.module("Local Store Initialization");
@@ -73,7 +72,7 @@ QUnit.test("OData Store", function(assert) {
     var done = assert.async(),
         d = $.Deferred();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "/mockjax-odata",
         responseText: { "d": [{ "group": "a" }, { "group": "a" }, { "group": "b" }, { "group": "c" }, { "group": "c" }] }
     });

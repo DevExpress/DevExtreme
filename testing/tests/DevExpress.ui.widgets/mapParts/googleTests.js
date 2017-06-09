@@ -5,7 +5,8 @@
 var $ = require("jquery"),
     testing = require("./utils.js"),
     errors = require("ui/widget/ui.errors"),
-    GoogleProvider = require("ui/map/provider.dynamic.google");
+    GoogleProvider = require("ui/map/provider.dynamic.google"),
+    ajaxMock = require("../../../helpers/ajaxMock.js");
 
 require("ui/map");
 
@@ -42,10 +43,10 @@ QUnit.module("google provider", {
         GoogleProvider.remapConstant(fakeURL);
         GoogleProvider.prototype._geocodedLocations = {};
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             proxy: '../../testing/helpers/forMap/googleMock.js',
-            response: function() {
+            callback: function() {
                 setTimeout(function() {
                     prepareTestingGoogleProvider();
                     if(window._googleScriptReady) {
@@ -60,7 +61,7 @@ QUnit.module("google provider", {
         }
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 

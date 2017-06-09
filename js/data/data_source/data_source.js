@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     commonUtils = require("../../core/utils/common"),
+    ajax = require("../../core/utils/ajax"),
     typeUtils = require("../../core/utils/type"),
     dataUtils = require("../utils"),
     Store = require("../abstract_store"),
@@ -76,7 +77,10 @@ function normalizeDataSourceOptions(options, normalizationOptions) {
     function createCustomStoreFromUrl(url) {
         return new CustomStore({
             load: function() {
-                return $.getJSON(url);
+                return ajax.sendRequest({
+                    url: url,
+                    dataType: "json"
+                });
             },
             loadMode: normalizationOptions && normalizationOptions.fromUrlLoadMode
         });

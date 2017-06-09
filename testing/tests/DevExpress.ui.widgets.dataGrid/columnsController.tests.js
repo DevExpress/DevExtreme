@@ -9,19 +9,18 @@ var $ = require("jquery"),
     dataSourceAdapter = require("ui/data_grid/ui.data_grid.data_source_adapter"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    config = require("core/config");
+    config = require("core/config"),
+    ajaxMock = require("../../helpers/ajaxMock.js");
 
 require("ui/data_grid/ui.data_grid");
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
 
 $.extend($.mockjaxSettings, {
     contentType: "application/json",
-    responseTime: 0,
     logging: false
 });
 
 QUnit.testDone(function() {
-    $.mockjax.clear();
+    ajaxMock.clear();
 });
 
 var processColumnsForCompare = function(columns, parameterNames, ignoreParameterNames) {
@@ -2354,7 +2353,7 @@ QUnit.test("Initialize from remote rest store", function(assert) {
         that = this,
         columnsController = this.columnsController;
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "/mockjax-rest-store",
         responseText: [{ "a": 1 }, { "a": 3 }, { "a": 2 }]
     });

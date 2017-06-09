@@ -2,11 +2,8 @@
 
 var $ = require("jquery");
 
-require("../../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
-
 exports.prepare = function() {
     $.mockjaxSettings = $.extend($.mockjaxSettings, {
-        responseTime: 0,
         isTimeout: false,
         lastModified: 'Wed, 15 Nov 1995 04:58:08 GMT',
         etag: '686897696a7c876b7e',

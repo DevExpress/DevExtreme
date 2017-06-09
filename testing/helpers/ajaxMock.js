@@ -1,22 +1,66 @@
 "use strict";
 
-var ajax = require("core/utils/ajax"),
-    mockOptions,
-    $ = require("jquery");
+var ajax = require("core/utils/ajax");
+var extend = require("core/utils/extend").extend;
+var $ = require("jquery");
+var originSendRequest = ajax.sendRequest;
+var urlMap = {};
+var timers = [];
 
-ajax.sendRequest = function(request) {
-    var deferred = $.Deferred(),
-        response = [];
+var findUrlOptions = function(requestUrl) {
+    var result = urlMap[requestUrl] || urlMap["*"];
 
-    response.push(request);
-
-    if(typeof mockOptions.callback === "function") {
-        mockOptions.callback.call(response, response);
+    if(result) {
+        return result;
     }
 
-    return deferred.resolveWith(response, [response, "success"]).promise();
+    for(var url in urlMap) {
+        if(url[url.length - 1] === "*" && requestUrl.indexOf(url.substr(0, url.length - 1)) === 0) {
+            return urlMap[url];
+        }
+    }
 };
 
-module.exports = function(options) {
-    mockOptions = options;
+exports.setup = function(options) {
+    urlMap[options.url] = options;
+
+    ajax.sendRequest = function(request) {
+        var deferred = $.Deferred();
+        var response = extend({ }, request);
+        var mockOptions = findUrlOptions(request.url);
+        var textStatus = mockOptions.textStatus;
+
+        response.status = mockOptions.status || 200;
+        response.statusText = mockOptions.statusText || "200 OK";
+        response.responseText = mockOptions.responseText;
+
+        if(typeof mockOptions.callback === "function") {
+            mockOptions.callback.call(response, request);
+        }
+
+        timers.push(setTimeout(function() {
+            if(response.status === 404) {
+                deferred.rejectWith(response, [
+                    {
+                        error: { message: response.statusText }
+                    },
+                    textStatus || "error"]);
+            } else if(textStatus && textStatus !== "success") {
+                response.error = { };
+                deferred.rejectWith(response, [response, textStatus || "error"]);
+            } else {
+                deferred.resolveWith(response, [response.responseText, textStatus || "success"]);
+            }
+        }));
+
+        return deferred.promise();
+    };
+};
+
+exports.clear = function() {
+    ajax.sendRequest = originSendRequest;
+    urlMap = {};
+    timers.forEach(function(timerId) {
+        clearTimeout(timerId);
+    });
 };

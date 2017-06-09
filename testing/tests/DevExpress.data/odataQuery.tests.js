@@ -4,11 +4,10 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     query = require("data/query"),
     EdmLiteral = require("data/odata/utils").EdmLiteral,
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js");
+    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
+    ajaxMock = require("../../helpers/ajaxMock.js");
 
 require("data/odata/query_adapter");
-
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
 
 var MUST_NOT_REACH_MESSAGE = "Shouldn't reach this point";
 
@@ -18,26 +17,23 @@ function QUERY(url, options) {
 
 var moduleConfig = {
     beforeEach: function() {
-        this.originalResponseTime = $.mockjaxSettings.responseTime;
         this.originalThrowUnmocked = $.mockjaxSettings.throwUnmocked;
 
-        $.mockjaxSettings.responseTime = 0;
         $.mockjaxSettings.throwUnmocked = true;
     },
 
     afterEach: function() {
-        $.mockjaxSettings.responseTime = this.originalResponseTime;
         $.mockjaxSettings.throwUnmocked = this.originalThrowUnmocked;
 
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 };
 
 var moduleWithMockConfig = {
     beforeEach: function() {
-        $.mockjax({
+        ajaxMock.setup({
             url: "odata.org",
-            response: function(bag) {
+            callback: function(bag) {
                 this.responseText = { value: [bag] };
             }
         });
@@ -54,9 +50,9 @@ QUnit.module("Common", moduleConfig);
 QUnit.test("existing query string is kept", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "url?customParam=1",
-        response: function(bag) {
+        callback: function(bag) {
             this.responseText = { value: [bag] };
         }
     });
@@ -76,9 +72,9 @@ QUnit.test("existing query string is kept", function(assert) {
 QUnit.test("Custom headers, query string params, async and request timeout (beforeSend event)", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
-        response: function(bag) {
+        callback: function(bag) {
             this.responseText = { value: [bag] };
         }
     });
@@ -106,7 +102,7 @@ QUnit.test("Custom headers, query string params, async and request timeout (befo
             assert.equal(r[0].headers["x-my-header"], 222);
         })
         .always(function() {
-            $.mockjax.clear();
+            ajaxMock.clear();
         })
         .always(done);
 });
@@ -120,10 +116,9 @@ QUnit.test("JSONP for cross-domain requests", function(assert) {
 
     window[jsonpCallbackName] = noop;
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
-        responseTime: 0,
-        response: function(bag) {
+        callback: function(bag) {
             assert.equal(bag.data.$format, "json", "JSONPSupportBehavior requirement");
 
             this.responseText = jsonpCallbackName + "(" + JSON.stringify({ value: [1, 2, 3] }) + ")";
@@ -142,7 +137,7 @@ QUnit.test("JSONP for cross-domain requests", function(assert) {
             $.ajaxSettings.jsonpCallback = originalJsonpCallback;
             window[jsonpCallbackName] = undefined;
 
-            $.mockjax.clear();
+            ajaxMock.clear();
         })
         .always(done);
 });
@@ -360,18 +355,18 @@ QUnit.module("Dates transformation", moduleConfig);
 QUnit.test("works", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
         responseText: { d: { results: [] } },
-        response: function(bag) {
+        callback: function(bag) {
             assert.equal(bag.data.$filter, "date eq datetime'1996-07-04T01:01:01.1'", "second version should transform date to datetime'YYYY-MM-DDThh:mm:ss[.mmm]' format");
         }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata4.org",
         responseText: { d: { results: [] } },
-        response: function(bag) {
+        callback: function(bag) {
             assert.equal(bag.data.$filter, "date eq 1996-07-04T00:00:00Z", "fourth version should transform date to ISO8601 like format");
         }
     });
@@ -814,9 +809,9 @@ QUnit.test("can be done on server: any number of sort and filter before slice, f
 
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
-        response: function(bag) {
+        callback: function(bag) {
             this.responseText = { value: [bag] };
         }
     });
@@ -862,12 +857,12 @@ QUnit.test("can be done on server: any number of sort and filter before slice, f
 QUnit.test("count on server", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata2.org",
         responseText: { d: { __count: 123 } }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata4.org",
         responseText: { "@odata.count": 321 }
     });
@@ -904,12 +899,12 @@ QUnit.test("count on server", function(assert) {
 QUnit.test("count rejects in case of non-number result", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata2.org",
         responseText: { d: { __count: undefined } }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata4.org",
         responseText: { "@odata.count": undefined }
     });
@@ -948,18 +943,18 @@ QUnit.test("count rejects in case of non-number result", function(assert) {
 QUnit.test("enumerate with/without requireTotalCount", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
         responseText: { d: { results: [] } },
-        response: function(bag) {
+        callback: function(bag) {
             assert.ok(!bag["$inlinecount"]);
         }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org/count",
         responseText: { d: { results: [], __count: 123 } },
-        response: function(bag) {
+        callback: function(bag) {
             assert.equal(bag.data["$inlinecount"], "allpages");
         }
     });
@@ -991,33 +986,33 @@ QUnit.test("$skiptoken support", function(assert) {
     var done = assert.async();
 
     // v2
-    $.mockjax({
+    ajaxMock.setup({
         url: "http://odata.org/DataSet",
         responseText: { d: { results: [1], __next: "DataSet?$skipToken=1" } }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "http://odata.org/DataSet?$skipToken=1",
         responseText: { d: { results: [2], __next: "http://odata.org/DataSet?$skipToken=2" } }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "http://odata.org/DataSet?$skipToken=2",
         responseText: { d: { results: [3] } }
     });
 
     // v4
-    $.mockjax({
+    ajaxMock.setup({
         url: "http://odata4.org/DataSet",
         responseText: { value: ["a"], "@odata.nextLink": "DataSet?$skipToken=1" }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "http://odata4.org/DataSet?$skipToken=1",
         responseText: { value: ["b"], "@odata.nextLink": "http://odata4.org/DataSet?$skipToken=2" }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "http://odata4.org/DataSet?$skipToken=2",
         responseText: { value: ["c"] }
     });
@@ -1189,7 +1184,7 @@ QUnit.module("Client side fallbacks", {
 
         moduleConfig.beforeEach.apply(this, arguments);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: "odata.org",
             responseText: {
                 value: [
@@ -1291,7 +1286,7 @@ QUnit.module("Error handling", moduleConfig);
 QUnit.test("generic HTTP error", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
         status: 404,
         statusText: "Not Found",
@@ -1312,18 +1307,18 @@ QUnit.test("generic HTTP error", function(assert) {
 QUnit.test("OData service error", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata2.org",
         responseText: { error: { message: "expected message" } }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata3.org",
         // In case of WCF implementation, the "error" key would be prefixed by "odata."
         responseText: { "odata.error": { message: "expected message" } }
     });
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata4.org",
         responseText: { "@odata.error": { message: "expected message" } }
     });
@@ -1360,7 +1355,7 @@ QUnit.test("OData service error", function(assert) {
 QUnit.test("OData service error with details (UseVerboseErrors = true)", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
         responseText: {
             error: { "innererror": { message: "expected inner message" } }
@@ -1381,7 +1376,7 @@ QUnit.test("OData service error with details (UseVerboseErrors = true)", functio
 QUnit.test("unexpected server response with 200 status", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
         status: 200,
         responseText: "Server gone crazy"
@@ -1407,9 +1402,8 @@ QUnit.test("server error via JSONP with 200 status", function(assert) {
 
     window[jsonpCallbackName] = noop;
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
-        responseTime: 0,
         responseText: jsonpCallbackName + "(" + JSON.stringify({
             error: {
                 message: "error via jsonp",
@@ -1439,9 +1433,9 @@ QUnit.test("client error: before ajax", function(assert) {
 
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
-        response: function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); }
+        callback: function() { assert.ok(false, MUST_NOT_REACH_MESSAGE); }
     });
 
     QUERY("odata.org", { adapter: "wrong adapter" })
@@ -1460,7 +1454,7 @@ QUnit.test("client error: after ajax", function(assert) {
 
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
         responseText: { value: [{}] }
     });
@@ -1480,7 +1474,7 @@ QUnit.test("client error: after ajax", function(assert) {
 QUnit.test("error handlers: server-side error", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
         status: 404,
         statusText: "Not Found",
@@ -1504,7 +1498,7 @@ QUnit.test("error handlers: server-side error", function(assert) {
 QUnit.test("error handlers: client-side error", function(assert) {
     var done = assert.async();
 
-    $.mockjax({ url: "odata.org" });
+    ajaxMock.setup({ url: "odata.org" });
 
     var helper = new ErrorHandlingHelper();
     helper.run(
@@ -1522,7 +1516,7 @@ QUnit.module("T174721", moduleConfig);
 QUnit.test("sortBy(str), thenBy(func)", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
         responseText: {
             value: [{ str: 2, func: "a" }, { str: 1, func: "z" }, { str: 1, func: "a" }]

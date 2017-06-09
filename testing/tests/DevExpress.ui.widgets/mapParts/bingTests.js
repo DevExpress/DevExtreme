@@ -4,7 +4,8 @@
 
 var $ = require("jquery"),
     testing = require("./utils.js"),
-    BingProvider = require("ui/map/provider.dynamic.bing");
+    BingProvider = require("ui/map/provider.dynamic.bing"),
+    ajaxMock = require("../../../helpers/ajaxMock.js");
 
 require("ui/map");
 
@@ -41,10 +42,10 @@ QUnit.module("bing provider", {
 
         $.ajaxSetup({ jsonp: false });
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             proxy: '../../testing/helpers/forMap/bingMock.js',
-            response: function() {
+            callback: function() {
                 setTimeout(function() {
                     prepareTestingBingProvider();
                     if(window._bingScriptReady) {
@@ -59,7 +60,7 @@ QUnit.module("bing provider", {
         }
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 

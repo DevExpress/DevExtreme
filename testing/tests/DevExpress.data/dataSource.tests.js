@@ -10,8 +10,6 @@ var $ = require("jquery"),
     ODataStore = require("data/odata/store"),
     AggregateCalculator = require("ui/data_grid/aggregate_calculator");
 
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
-
 var TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
 var moduleConfig = {
@@ -1227,9 +1225,8 @@ QUnit.module("requireTotalCount");
 QUnit.test("requireTotalCount: fail", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "odata.org",
-        responseTime: 0,
         responseText: {
             d: {
                 results: [],
@@ -1254,7 +1251,7 @@ QUnit.test("requireTotalCount: fail", function(assert) {
             assert.ok(error);
         })
         .always(function() {
-            $.mockjax.clear();
+            ajaxMock.clear();
         })
         .always(done);
 });
@@ -1315,9 +1312,8 @@ QUnit.module("Custom cases and regressions", moduleConfig);
 QUnit.test("expand option for OData store", function(assert) {
     var done = assert.async();
 
-    ajaxMock({
+    ajaxMock.setup({
         url: "odata.org",
-        responseTime: 0,
         callback: function(bag) {
             this.responseText = { value: [bag] };
         }
@@ -1334,7 +1330,7 @@ QUnit.test("expand option for OData store", function(assert) {
             assert.equal(data[0].data.$expand, "TestExpand");
         })
         .always(function() {
-            $.mockjax.clear();
+            ajaxMock.clear();
         })
         .always(done);
 });

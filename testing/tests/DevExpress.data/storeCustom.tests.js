@@ -10,18 +10,16 @@ var $ = require("jquery"),
         QUERY_NOT_SUPPORTED: "E4010",
         REQUEST_ERROR: "E4013"
     },
-    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js");
-
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
+    ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
+    ajaxMock = require("../../helpers/ajaxMock.js");
 
 $.extend($.mockjaxSettings, {
     contentType: "application/json",
-    responseTime: 0,
     logging: false
 });
 
 QUnit.testDone(function() {
-    $.mockjax.clear();
+    ajaxMock.clear();
 });
 
 function assertErrorCore(error, errorID, assert) {
@@ -204,7 +202,7 @@ QUnit.test("load, ajax error", function(assert) {
     var done = assert.async(),
         helper = new ErrorHandlingHelper();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "/mockjax-error",
         status: 500,
         statusText: "Internal Server Error"
@@ -500,7 +498,7 @@ QUnit.test("update, error handling", function(assert) {
 
     var helper = new ErrorHandlingHelper();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "/mockjax-error",
         status: 500,
         statusText: "Internal Server Error"
