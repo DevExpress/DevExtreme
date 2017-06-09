@@ -492,6 +492,10 @@ module.exports = {
 
                         this.option("showColumnLines") && $row.addClass(COLUMN_LINES_CLASS);
 
+                        if(row.visible === false) {
+                            $row.hide();
+                        }
+
                         if(isGroup) {
                             $row.addClass(GROUP_ROW_CLASS);
                             isRowExpanded = row.isExpanded;

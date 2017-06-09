@@ -59,8 +59,8 @@ var ErrorHandlingController = modules.ViewController.inherit({
             $row,
             $errorMessageElement,
             rowElements,
-            viewElement = rowIndex >= 0 ? that._rowsView : that._columnHeadersView,
-            $tableElements = $popupContent || viewElement.getTableElements();
+            viewElement,
+            $tableElements;
 
         if($popupContent) {
             $popupContent.find("." + ERROR_MESSAGE_CLASS).remove();
@@ -68,6 +68,9 @@ var ErrorHandlingController = modules.ViewController.inherit({
             $popupContent.prepend($errorMessageElement);
             return;
         }
+
+        viewElement = rowIndex >= 0 ? that._rowsView : that._columnHeadersView,
+        $tableElements = $popupContent || viewElement.getTableElements();
 
         $.each($tableElements, function(_, tableElement) {
             $errorMessageElement = that._createErrorRow(message, $tableElements);
@@ -128,11 +131,11 @@ module.exports = {
 
                     that.callBase();
 
-                    that.dataErrorOccurred.add(function(error) {
+                    that.dataErrorOccurred.add(function(error, $popupContent) {
                         var message = error && error.message || error;
 
                         if(that.option("errorRowEnabled")) {
-                            errorHandlingController.renderErrorRow(message);
+                            errorHandlingController.renderErrorRow(message, undefined, $popupContent);
                         }
                     });
                     that.changed.add(function() {

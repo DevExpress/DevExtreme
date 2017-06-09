@@ -292,6 +292,15 @@ var EditingController = modules.ViewController.inherit((function() {
             return this._getVisibleEditRowIndex() === rowIndex && this._editColumnIndex === columnIndex;
         },
 
+        getPopupContent: function() {
+            var editMode = getEditMode(this),
+                popupVisible = this._editPopup && this._editPopup.option("visible");
+
+            if(editMode === EDIT_MODE_POPUP && popupVisible) {
+                return this._editPopup.content();
+            }
+        },
+
         _needInsertItem: function(editData, changeType) {
             var that = this,
                 dataSource = that._dataController.dataSource(),
@@ -369,6 +378,9 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 switch(editData.type) {
                     case DATA_EDIT_DATA_INSERT_TYPE:
+                        if(editMode === EDIT_MODE_POPUP) {
+                            item.visible = false;
+                        }
                         item.inserted = true;
                         item.key = key;
                         item.data = data;
@@ -940,6 +952,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 arg,
                 editIndex,
                 isError,
+                $popupContent,
                 hasSavedData = false,
                 editMode = getEditMode(that);
 
@@ -951,7 +964,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     isError = arg && arg instanceof Error;
                     if(isError) {
                         that._editData[editIndex].error = arg;
-                        dataController.dataErrorOccurred.fire(arg);
+                        $popupContent = that.getPopupContent();
+                        dataController.dataErrorOccurred.fire(arg, $popupContent);
                         if(editMode !== EDIT_MODE_BATCH) {
                             break;
                         }
@@ -1022,15 +1036,15 @@ var EditingController = modules.ViewController.inherit((function() {
             if(deferreds.length) {
                 that._saving = true;
 
-                if(getEditMode(that) === EDIT_MODE_POPUP && that._editPopup) {
-                    that._editPopup.hide();
-                }
-
                 when.apply($, deferreds).done(function() {
                     editData = that._editData.slice(0);
 
                     if(that._processSaveEditDataResult(arguments, processedKeys)) {
                         resetEditIndices(that);
+
+                        if(editMode === EDIT_MODE_POPUP && that._editPopup) {
+                            that._editPopup.hide();
+                        }
 
                         when(dataController.refresh()).always(function() {
                             that._fireSaveEditDataEvents(editData);
@@ -1130,15 +1144,13 @@ var EditingController = modules.ViewController.inherit((function() {
 
             that.init();
 
-            if(editMode !== EDIT_MODE_POPUP) {
-                if(ROW_BASED_MODES.indexOf(editMode) !== -1 && rowIndex >= 0) {
-                    dataController.updateItems({
-                        changeType: "update",
-                        rowIndices: [rowIndex, rowIndex + 1]
-                    });
-                } else {
-                    dataController.updateItems();
-                }
+            if(ROW_BASED_MODES.indexOf(editMode) !== -1 && rowIndex >= 0) {
+                dataController.updateItems({
+                    changeType: "update",
+                    rowIndices: [rowIndex, rowIndex + 1]
+                });
+            } else {
+                dataController.updateItems();
             }
 
             if(editMode === EDIT_MODE_POPUP) {
