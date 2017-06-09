@@ -525,7 +525,7 @@ var NumberBox = TextEditor.inherit({
     },
 
     _normalizeText: function() {
-        var value = $.trim(this._input().val());
+        var value = this._input().val().trim();
 
         return this._replaceCommaWithPoint(value);
     },

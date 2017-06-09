@@ -57,7 +57,7 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
         }
         value = String(value);
         if(rule.trim || !commonUtils.isDefined(rule.trim)) {
-            value = $.trim(value);
+            value = value.trim();
         }
 
         return value !== "";
@@ -188,7 +188,7 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
     _validate: function(value, rule) {
         value = commonUtils.isDefined(value) ? String(value) : "";
         if(rule.trim || !commonUtils.isDefined(rule.trim)) {
-            value = $.trim(value);
+            value = value.trim();
         }
 
         return rulesValidators.range.validate(value.length,
