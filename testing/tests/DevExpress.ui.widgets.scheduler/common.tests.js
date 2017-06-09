@@ -8,6 +8,7 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     domUtils = require("core/utils/dom"),
     dateUtils = require("core/utils/date"),
+    errors = require("ui/widget/ui.errors"),
     Color = require("color"),
     fx = require("animation/fx"),
     config = require("core/config"),
@@ -671,6 +672,21 @@ QUnit.testStart(function() {
         this.instance.scrollToTime(12, 0);
 
         assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
+    });
+
+    QUnit.test("Scrolling to date which doesn't locate on current view should call console warning", function(assert) {
+        this.instance.option({
+            currentView: "week",
+            currentDate: new Date(2015, 1, 9),
+            height: 500
+        });
+
+        var warningHandler = sinon.spy(errors, "log");
+
+        this.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
+
+        assert.equal(warningHandler.callCount, 1, "warning has been called once");
+        assert.equal(warningHandler.getCall(0).args[0], "W1008", "warning has correct error id");
     });
 
     QUnit.test("Check scrolling to time for timeline view", function(assert) {
