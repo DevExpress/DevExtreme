@@ -2106,7 +2106,7 @@ QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
 });
 

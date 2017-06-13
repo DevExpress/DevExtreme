@@ -14,6 +14,7 @@ var DATAGRID_ROW_CLASS = "dx-row",
     DATAGRID_MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row",
     DATAGRID_MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     DATAGRID_EDIT_FORM_CLASS = "dx-datagrid-edit-form",
+    DATAGRID_EDIT_FORM_ITEM_CLASS = "dx-datagrid-edit-form-item",
     DATAGRID_GROUP_FOOTER_CLASS = "dx-datagrid-group-footer",
     DATAGRID_COMMAND_EXPAND_CLASS = "dx-command-expand",
     DATAGRID_CLASS_SELECTOR = ".dx-datagrid",
@@ -76,13 +77,16 @@ exports.KeyboardNavigationController = gridCore.ViewController.inherit({
                 $cell = that._getNextCell(this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0 ? "upArrow" : "downArrow");
             }
             if($cell && $cell.length > 0) {
-                //that._focusView(view, index);
                 setTimeout(function() {
-                    if(that.getController("editorFactory").focus()) {
-                        that._focus($cell);
-                    }
-                    if(that._editingController.isEditing()) {
-                        $.proxy(that._focusInteractiveElement, that)($cell);
+                    if($cell.is("td") || $cell.hasClass(DATAGRID_EDIT_FORM_ITEM_CLASS)) {
+                        if(that.getController("editorFactory").focus()) {
+                            that._focus($cell);
+                        }
+                        if(that._editingController.isEditing()) {
+                            $.proxy(that._focusInteractiveElement, that)($cell);
+                        }
+                    } else {
+                        $cell.focus();
                     }
                 });
             }
@@ -182,15 +186,38 @@ exports.KeyboardNavigationController = gridCore.ViewController.inherit({
         return rowIndex;
     },
 
-    _updateFocusedCellPosition: function($cell) {
-        var that = this;
+    _updateFocusedCellPosition: function($cell, direction) {
+        var that = this,
+            rowIndex,
+            columnIndex,
+            $rowElement = $cell.closest("tr");
 
-        if($cell.length > 0 && that._focusedView) {
+        if($rowElement.length > 0 && that._focusedView) {
+            rowIndex = $rowElement.length > 0 && that._getRowIndex($rowElement);
+            columnIndex = that._focusedView.getCellIndex($cell, rowIndex);
+
+            if(direction) {
+                columnIndex = direction === "previous" ? columnIndex - 1 : columnIndex + 1;
+                columnIndex = that._applyColumnIndexBoundaries(columnIndex);
+            }
+
             this._focusedCellPosition = {
-                columnIndex: that._focusedView.getCellIndex($cell),
-                rowIndex: $cell.parent().length > 0 && that._getRowIndex($cell.parent())
+                columnIndex: columnIndex,
+                rowIndex: rowIndex
             };
         }
+    },
+
+    _applyColumnIndexBoundaries: function(columnIndex) {
+        var visibleColumnsCount = this._getVisibleColumnCount();
+
+        if(columnIndex < 0) {
+            columnIndex = 0;
+        } else if(columnIndex >= visibleColumnsCount) {
+            columnIndex = visibleColumnsCount - 1;
+        }
+
+        return columnIndex;
     },
 
     _isCellValid: function($cell) {
@@ -233,7 +260,7 @@ exports.KeyboardNavigationController = gridCore.ViewController.inherit({
             focusedView = this._focusedView,
             $focusElement;
 
-        $focusedCell && $focusedCell.attr("tabIndex", null);
+        $focusedCell && $focusedCell.is("td") && $focusedCell.attr("tabIndex", null);
 
         if(isGroupRow($row)) {
             $focusElement = $row;
@@ -424,7 +451,7 @@ exports.KeyboardNavigationController = gridCore.ViewController.inherit({
 
     _handleTabKeyOnMasterDetailCell: function(target, direction) {
         if(this._isMasterDetailCell(target)) {
-            this._updateFocusedCellPosition($(target).closest("." + DATAGRID_MASTER_DETAIL_CELL_CLASS));
+            this._updateFocusedCellPosition($(target), direction);
 
             var $nextCell = this._getNextCell(direction, "row");
             if(!this._isInsideEditForm($nextCell)) {
