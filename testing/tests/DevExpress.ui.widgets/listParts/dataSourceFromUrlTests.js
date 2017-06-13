@@ -2,7 +2,7 @@
 
 var $ = require("jquery"),
     List = require("ui/list"),
-    ajaxMock = require("../../helpers/ajaxMock.js");
+    ajaxMock = require("../../../helpers/ajaxMock.js");
 
 QUnit.module(
     "data source from url",
