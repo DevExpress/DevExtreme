@@ -11,9 +11,6 @@ var LOCATIONS = testing.LOCATIONS,
     MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;
 
-testing.prepare();
-
-
 var MAP_CONTAINER_CLASS = "dx-map-container";
 
 

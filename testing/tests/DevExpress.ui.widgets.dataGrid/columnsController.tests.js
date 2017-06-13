@@ -14,11 +14,6 @@ var $ = require("jquery"),
 
 require("ui/data_grid/ui.data_grid");
 
-$.extend($.mockjaxSettings, {
-    contentType: "application/json",
-    logging: false
-});
-
 QUnit.testDone(function() {
     ajaxMock.clear();
 });

@@ -13,9 +13,6 @@ var LOCATIONS = testing.LOCATIONS,
     MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;
 
-testing.prepare();
-
-
 var prepareTestingBingProvider = function() {
     window.geocodedLocation = new Microsoft.Maps.Location(-1.12345, -1.12345);
     window.geocodedWithErrorLocation = new Microsoft.Maps.Location();

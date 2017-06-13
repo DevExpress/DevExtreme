@@ -23,11 +23,6 @@ var $ = require("jquery"),
         }
     };
 
-$.extend($.mockjaxSettings, {
-    contentType: "application/json",
-    logging: false
-});
-
 QUnit.testDone(function() {
     ajaxMock.clear();
 });
@@ -73,14 +68,14 @@ QUnit.test("OData Store", function(assert) {
         d = $.Deferred();
 
     ajaxMock.setup({
-        url: "/mockjax-odata",
+        url: "/mock-odata",
         responseText: { "d": [{ "group": "a" }, { "group": "a" }, { "group": "b" }, { "group": "c" }, { "group": "c" }] }
     });
 
     this.store = new LocalStore({
         store: {
             type: 'odata',
-            url: "/mockjax-odata"
+            url: "/mock-odata"
         }
     });
 

@@ -10,9 +10,6 @@ var $ = require("jquery"),
 var MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;
 
-testing.prepare();
-
-
 var MAP_CLASS = "dx-map",
     MAP_CONTAINER_CLASS = "dx-map-container",
     MAP_SHIELD_CLASS = "dx-map-shield",

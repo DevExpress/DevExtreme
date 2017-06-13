@@ -1055,10 +1055,9 @@ QUnit.module(
     function() {
         var TEST_URL = "/a3211c1d-c725-4185-acc0-0a59a4152aae";
 
-        function setupMockjax(responseFactory) {
+        function setupAjaxMock(responseFactory) {
             ajaxMock.setup({
                 url: TEST_URL,
-                contentType: "application/json",
                 callback: function() {
                     this.responseText = responseFactory();
                 }
@@ -1073,7 +1072,7 @@ QUnit.module(
             var done = assert.async();
 
             appendWidgetContainer();
-            setupMockjax(function() {
+            setupAjaxMock(function() {
                 return [ { value: 123, text: "Expected Text" } ];
             });
 
@@ -1098,7 +1097,7 @@ QUnit.module(
             var done = assert.async();
 
             appendWidgetContainer();
-            setupMockjax(function() {
+            setupAjaxMock(function() {
                 return [ "a", "z" ];
             });
 

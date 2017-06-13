@@ -77,11 +77,6 @@ DataGrid.defaultOptions({
     }
 });
 
-$.extend($.mockjaxSettings, {
-    contentType: "application/json",
-    logging: false
-});
-
 QUnit.testDone(function() {
     ajaxMock.clear();
 });
@@ -3179,12 +3174,12 @@ QUnit.test("load from remote rest store when remoteOperations false", function(a
     };
 
     ajaxMock.setup({
-        url: "/mockjax-rest-store",
+        url: "/mock-rest-store",
         responseText: [{ "a": 1 }, { "a": 3 }, { "a": 2 }]
     });
 
     createDataGrid({
-        dataSource: "/mockjax-rest-store",
+        dataSource: "/mock-rest-store",
         remoteOperations: false,
         onContentReady: function(e) {
             assert.ok(!errorMessage, "no error messages");

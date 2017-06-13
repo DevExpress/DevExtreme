@@ -14,9 +14,6 @@ var LOCATIONS = testing.LOCATIONS,
     MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;
 
-testing.prepare();
-
-
 var prepareTestingGoogleProvider = function() {
     window.geocodedLocation = new google.maps.LatLng(-1.12345, -1.12345);
     window.geocodedWithErrorLocation = new google.maps.LatLng();

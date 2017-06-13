@@ -13,11 +13,6 @@ var $ = require("jquery"),
     ErrorHandlingHelper = require("../../helpers/data.errorHandlingHelper.js"),
     ajaxMock = require("../../helpers/ajaxMock.js");
 
-$.extend($.mockjaxSettings, {
-    contentType: "application/json",
-    logging: false
-});
-
 QUnit.testDone(function() {
     ajaxMock.clear();
 });

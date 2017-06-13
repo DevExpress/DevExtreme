@@ -5,7 +5,7 @@ var $ = require("../renderer");
 // url, method, headers, body, withCredentials, responseType
 
 var sendRequest = function(options) {
-    var params = $.param(options.data);
+    var params = options.data && $.param(options.data);
 
     options.type = options.type || "get";
 

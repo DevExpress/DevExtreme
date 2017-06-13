@@ -36,7 +36,6 @@
     "gulp-template": "^4.0.0",
     "gulp-typescript": "^3.0.2",
     "gulp-uglify": "^1.5.3",
-    "jquery-mockjax": "^2.2.1",
     "jshint": "^2.9.3",
     "lazypipe": "^1.0.1",
     "less": "^2.7.1",

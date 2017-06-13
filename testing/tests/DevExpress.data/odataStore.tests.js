@@ -897,7 +897,6 @@ QUnit.test("works", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org",
-        type: "post",
         // NOTE:
         // A request returns 204 No Content if the requested resource has the null value, or if the service applies a return=minimal preference.
         // In this case, the response body MUST be empty.
@@ -943,7 +942,6 @@ QUnit.test("insert with compound key", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org",
-        type: "post",
         responseText: { id: { foo: "bar", bar: "foo" } }
     });
 
@@ -965,7 +963,6 @@ QUnit.test("with 201 status", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org",
-        type: "post",
         status: 201,
         // NOTE: From OData protocol:
         // ...returns 201 Created. In this case, the response body MUST contain the resource created.
@@ -1110,19 +1107,11 @@ QUnit.test("works", function(assert) {
 
     ajaxMock.setup({
         url: "odata2.org/DataSet(1)",
-        // NOTE: According to OData 2 protocol
-        // If the operation executed successfully servers should return 200 (OK) with no response body.
-        status: 200,
-        type: "delete",
         responseText: {}
     });
 
     ajaxMock.setup({
         url: "odata4.org/DataSet(1)",
-        // NOTE: According to OData 4 protocol
-        // On successful completion of the delete, the response MUST be 204 No Content and contain an empty body.
-        status: 204,
-        type: "delete",
         responseText: {}
     });
 
@@ -1188,7 +1177,6 @@ QUnit.test("Dates, on loading", function(assert) {
 
     ajaxMock.setup({
         url: "odata2.org",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data.$filter, "date eq datetime'1945-05-09T14:25:01.1'", "timezoneless iso8601 for second version");
         }
@@ -1212,7 +1200,6 @@ QUnit.test("Dates, on loading", function(assert) {
 
     ajaxMock.setup({
         url: "odata3.org",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data.$filter, "date eq datetime'1945-05-09T14:25:01.1'", "timezoneless iso8601 for third version");
         }
@@ -1220,7 +1207,6 @@ QUnit.test("Dates, on loading", function(assert) {
 
     ajaxMock.setup({
         url: "odata4.org",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data.$filter, "date eq 1945-05-09T14:25:01.1Z", "timezoneful iso8601 for fourth version");
         }
@@ -1280,7 +1266,6 @@ QUnit.test("Dates, on inserting", function(assert) {
 
     ajaxMock.setup({
         url: "odata2.org",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1"}', "timezoneless iso8601 for second version");
         }
@@ -1288,7 +1273,6 @@ QUnit.test("Dates, on inserting", function(assert) {
 
     ajaxMock.setup({
         url: "odata3.org",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for third version");
         }
@@ -1296,7 +1280,6 @@ QUnit.test("Dates, on inserting", function(assert) {
 
     ajaxMock.setup({
         url: "odata4.org",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for fourth version");
         }
@@ -1323,7 +1306,6 @@ QUnit.test("Dates, on updating", function(assert) {
 
     ajaxMock.setup({
         url: "odata2.org(1)",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1"}', "timezoneless iso8601 for second version");
         }
@@ -1331,7 +1313,6 @@ QUnit.test("Dates, on updating", function(assert) {
 
     ajaxMock.setup({
         url: "odata3.org(1)",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for third version");
         }
@@ -1339,7 +1320,6 @@ QUnit.test("Dates, on updating", function(assert) {
 
     ajaxMock.setup({
         url: "odata4.org(1)",
-        status: 204,
         callback: function(bag) {
             assert.equal(bag.data, '{"date":"1945-05-09T14:25:01.1Z"}', "timezoneful iso8601 for fourth version");
         }
@@ -1549,7 +1529,6 @@ QUnit.test("unexpected server response with 200 status", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org('bad-response')",
-        status: 200,
         textStatus: "parsererror",
         responseText: "Server gone crazy"
     });
