@@ -5,9 +5,16 @@ var $ = require("../renderer");
 // url, method, headers, body, withCredentials, responseType
 
 var sendRequest = function(options) {
-    if(options.data) {
-        options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + $.param(options.data);
-        delete options.data;
+    var params = $.param(options.data);
+
+    if(options.type.toLowerCase() === "get") {
+        if(params) {
+            options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + params;
+            delete options.data;
+        }
+        if(options.dataType === "jsonp") {
+            options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + "_=" + (Date.now);
+        }
     }
 
     return $.ajax.call($, options);
