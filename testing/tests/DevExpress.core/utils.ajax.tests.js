@@ -12,6 +12,7 @@ QUnit.test('сonversion of parameters to a url', function(assert) {
         $skip: 0
     };
 
+    var ajaxOrigin = $.ajax;
     $.ajax = function(options) {
         return options;
     };
@@ -19,4 +20,5 @@ QUnit.test('сonversion of parameters to a url', function(assert) {
     assert.strictEqual(ajaxUtils.sendRequest({ url: "odata.org", data: params }).url, "odata.org?%24expand=TestExpand&%24top=20&%24skip=0", "Url with parameters");
     assert.strictEqual(ajaxUtils.sendRequest({ url: "odata.org", data: {} }).url, "odata.org", "Empty data");
 
+    $.ajax = ajaxOrigin;
 });
