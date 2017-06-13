@@ -44,14 +44,14 @@ QUnit.module("bing provider", {
 
         ajaxMock.setup({
             url: fakeURL,
-            proxy: '../../testing/helpers/forMap/bingMock.js',
             callback: function() {
-                setTimeout(function() {
-                    prepareTestingBingProvider();
-                    if(window._bingScriptReady) {
-                        window._bingScriptReady();
-                    }
-                });
+                $.getScript("../../testing/helpers/forMap/bingMock.js")
+                    .done(function() {
+                        prepareTestingBingProvider();
+                        if(window._bingScriptReady) {
+                            window._bingScriptReady();
+                        }
+                    });
             }
         });
 
@@ -67,7 +67,7 @@ QUnit.module("bing provider", {
 QUnit.test("map initialize with loaded map", function(assert) {
     var done = assert.async();
 
-    $.getScript("fakeBingUrl").done(function() {
+    $.getScript("../../testing/helpers/forMap/bingMock.js").done(function() {
         window.Microsoft.Maps.customFlag = true;
 
         setTimeout(function() {

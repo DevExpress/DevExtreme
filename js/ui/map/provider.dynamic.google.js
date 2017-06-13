@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     DynamicProvider = require("./provider.dynamic"),
     errors = require("../widget/ui.errors"),
-    Color = require("../../color");
+    Color = require("../../color"),
+    ajax = require("../../core/utils/ajax");
 
 var GOOGLE_MAP_READY = "_googleScriptReady",
     GOOGLE_URL = "https://maps.google.com/maps/api/js?sensor=false&callback=" + GOOGLE_MAP_READY;
@@ -160,7 +161,10 @@ var GoogleProvider = DynamicProvider.inherit({
             var key = this._keyOption("google");
 
             window[GOOGLE_MAP_READY] = resolve;
-            $.getScript(GOOGLE_URL + (key ? ("&key=" + key) : ""));
+            ajax.sendRequest({
+                url: GOOGLE_URL + (key ? ("&key=" + key) : ""),
+                dataType: "script"
+            });
         }.bind(this)).then(function() {
             try {
                 delete window[GOOGLE_MAP_READY];
