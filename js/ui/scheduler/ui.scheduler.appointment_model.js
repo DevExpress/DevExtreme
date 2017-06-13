@@ -78,11 +78,20 @@ var AppointmentModel = Class.inherit({
 
     _createFilter: function(min, max, remoteFiltering, dateSerializationFormat) {
         this._filterMaker.make("date", [min, max]);
-        this._filterMaker.make("user", [this._dataSource.filter()]);
+
+        var userFilter = this._excessFiltering() ? this._dataSource.filter()[1] : this._dataSource.filter();
+        this._filterMaker.make("user", [userFilter]);
 
         if(remoteFiltering) {
             this._dataSource.filter(this._combineRemoteFilter(dateSerializationFormat));
         }
+    },
+
+    _excessFiltering: function() {
+        var dateFilter = this._filterMaker._filterRegistry.date,
+            dataSourceFilter = this._dataSource.filter();
+
+        return dataSourceFilter && (commonUtils.equalByValue(dataSourceFilter, dateFilter) || (dataSourceFilter.length && commonUtils.equalByValue(dataSourceFilter[0], dateFilter)));
     },
 
     _combineFilter: function() {
