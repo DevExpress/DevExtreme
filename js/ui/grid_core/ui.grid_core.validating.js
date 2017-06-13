@@ -463,16 +463,13 @@ module.exports = {
                 },
 
                 _showErrorRow: function(editData) {
-                    var isPopupMode,
-                        $popupContent,
+                    var $popupContent,
                         errorHandling = this.getController("errorHandling"),
                         items = this.getController("data").items(),
                         rowIndex = this.getIndexByKey(editData.key, items);
 
                     if(!editData.isValid && editData.errorText && rowIndex >= 0) {
-                        isPopupMode = this.getEditMode() === "popup",
-                        $popupContent = isPopupMode && this._editPopup && this._editPopup.content();
-
+                        $popupContent = this.getPopupContent();
                         errorHandling && errorHandling.renderErrorRow(editData.errorText, rowIndex, $popupContent);
                     }
                 },

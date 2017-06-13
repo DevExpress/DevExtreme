@@ -984,17 +984,6 @@ QUnit.test("value starts from decimal", function(assert) {
 
     var $input = this.element.find("." + INPUT_CLASS);
 
-    var expectedResult,
-        device = devices.real(),
-        version = device.version,
-        isAndroid = device.android;
-
-    if(isAndroid && version[0] === 4 && version[1] === 0) {
-        expectedResult = null;
-    } else {
-        expectedResult = 0.1;
-    }
-
     $input.get(0)
         .focus();
 
@@ -1003,7 +992,7 @@ QUnit.test("value starts from decimal", function(assert) {
         .val(".1")
         .trigger("change");
 
-    assert.equal(this.instance.option("value"), expectedResult, "value is right");
+    assert.equal(this.instance.option("value"), 0.1, "value is right");
 });
 
 QUnit.test("showSpinButtons", function(assert) {

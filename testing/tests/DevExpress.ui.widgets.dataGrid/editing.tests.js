@@ -9829,6 +9829,47 @@ QUnit.test("Save the row after editing", function(assert) {
     assert.equal($newRow.text().replace(/\s/g, ""), "Mary15John5555551", "Row contains new data");
 });
 
+//T523867
+QUnit.test("Save the row after adding", function(assert) {
+    fx.off = true;
+
+    try {
+        var that = this,
+            $popupContent,
+            $inputElement,
+            $insertRowElement;
+
+        that.options.columns = [{
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }, "age", "lastName", "phone", "room"];
+        that.setupModules(that);
+        that.renderRowsView();
+
+        that.addRow();
+        that.preparePopupHelpers();
+
+        //assert
+        $insertRowElement = that.$testElement.find(".dx-data-row").first();
+        assert.ok($insertRowElement.hasClass("dx-row-inserted"), "inserted row is rendered");
+        assert.notOk($insertRowElement.is(":visible"), "inserted row is hidden");
+
+        $popupContent = that.editPopupInstance.content();
+        $inputElement = $popupContent.find("input").first();
+        $inputElement.val("Test");
+        $inputElement.trigger("change");
+
+        //act
+        that.saveEditData();
+
+        //assert
+        $insertRowElement = that.$testElement.find(".dx-data-row").first();
+        assert.notOk($insertRowElement.hasClass("dx-row-inserted"), "inserted row isn't rendered");
+    } finally {
+        fx.off = false;
+    }
+});
+
 QUnit.test("editing.popup options should apply to editing popup", function(assert) {
     var that = this;
 
@@ -9905,41 +9946,90 @@ QUnit.test("Show full screen editing popup on mobile devices", function(assert) 
 });
 
 //T516897
-QUnit.test("Error row should not be hidden when update error", function(assert) {
-    var that = this,
-        $popupContent,
-        $inputElement,
-        $errorMessageElement;
+QUnit.test("Show error row inside popup when update error", function(assert) {
+    fx.off = true;
+    try {
+        var that = this,
+            $popupContent,
+            $inputElement,
+            $errorMessageElement;
 
-    that.options.showColumnHeaders = true;
-    that.options.errorRowEnabled = true;
-    that.options.dataSource = {
-        load: function() {
-            return $.Deferred().resolve(that.array);
-        },
-        update: function() {
-            return $.Deferred().reject("Test");
-        }
-    };
+        that.options.errorRowEnabled = true;
+        that.options.dataSource = {
+            load: function() {
+                return $.Deferred().resolve(that.array);
+            },
+            update: function() {
+                return $.Deferred().reject("Test");
+            }
+        };
 
-    that.setupModules(that);
-    that.columnHeadersView.render(this.$testElement);
-    that.renderRowsView();
+        that.setupModules(that);
+        that.renderRowsView();
 
-    that.editRow(0);
-    that.preparePopupHelpers();
+        that.editRow(0);
+        that.preparePopupHelpers();
 
-    $popupContent = that.editPopupInstance.content();
-    $inputElement = $popupContent.find("input").first();
-    $inputElement.val("Test");
-    $inputElement.trigger("change");
+        $popupContent = that.editPopupInstance.content();
+        $inputElement = $popupContent.find("input").first();
+        $inputElement.val("Test");
+        $inputElement.trigger("change");
 
-    //act
-    that.saveEditData();
-    that.clock.tick(500);
+        //act
+        that.saveEditData();
 
-    //assert
-    $errorMessageElement = this.$testElement.find(".dx-datagrid-headers .dx-error-row");
-    assert.strictEqual($errorMessageElement.length, 1, "has error row");
-    assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
+        //assert
+        $errorMessageElement = $popupContent.children().first();
+        assert.ok(that.editPopupInstance.option("visible"), "popup is visible");
+        assert.ok($errorMessageElement.hasClass("dx-error-message"), "popup has error message");
+        assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
+    } finally {
+        fx.off = false;
+    }
 });
+
+QUnit.test("Show error row in header when remove error", function(assert) {
+    fx.off = true;
+
+    try {
+        var that = this,
+            $errorMessageElement;
+
+        that.options.showColumnHeaders = true;
+        that.options.errorRowEnabled = true;
+        that.options.editing.text = {
+            confirmDeleteMessage: ""
+        };
+        that.options.dataSource = {
+            load: function() {
+                return $.Deferred().resolve(that.array);
+            },
+            remove: function() {
+                return $.Deferred().reject("Test");
+            }
+        };
+
+        that.setupModules(that);
+        that.columnHeadersView.render(that.$testElement);
+        that.renderRowsView();
+
+        that.editRow(0);            // render popup
+        that.cancelEditData();      //
+        that.preparePopupHelpers();
+
+        //assert
+        assert.ok(that.editPopupInstance, "has popup");
+        assert.notOk(that.editPopupInstance.option("visible"), "popup is hidden");
+
+        //act
+        that.deleteRow(0);
+
+        //assert
+        $errorMessageElement = that.$testElement.find(".dx-datagrid-headers .dx-error-row");
+        assert.strictEqual($errorMessageElement.length, 1, "header has error row");
+        assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
+    } finally {
+        fx.off = false;
+    }
+});
+

@@ -297,7 +297,7 @@ var CollectionWidget = Widget.inherit({
         var items = $.map($items, (function(item) {
             var $item = $(item);
             var result = domUtils.getElementOptions(item).dxItem;
-            var isTemplateRequired = $.trim($item.html()) && !result.template;
+            var isTemplateRequired = $item.html().trim() && !result.template;
 
             if(isTemplateRequired) {
                 result.template = this._prepareItemTemplate($item);
