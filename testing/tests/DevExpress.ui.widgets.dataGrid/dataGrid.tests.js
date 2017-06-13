@@ -6260,6 +6260,65 @@ QUnit.test("Scroll positioned correct with fixed columns and editing", function(
     assert.equal(dataGrid.getView("rowsView").getScrollable().scrollLeft(), 400, "Correct offset");
 });
 
+QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a field with defined 'setCellValue' handler", function(assert) {
+    //arrange
+    var clock = sinon.useFakeTimers(),
+        data = [{ firstName: "Alex", lastName: "Black" }, { firstName: "John", lastName: "Dow" }],
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            editing: {
+                mode: "form",
+                allowUpdating: true
+            },
+            dataSource: data,
+            columns: [
+                {
+                    dataField: "firstName",
+                    setCellValue: function(rowData, value) {
+                        rowData.lastName = 'test';
+                        this.defaultSetCellValue(rowData, value);
+                    },
+                }, "lastName"]
+        }),
+        triggerTabPress = function(target) {
+            dataGrid.getController("keyboardNavigation")._keyDownProcessor.process({
+                which: 9,
+                target: target && target[0] || target,
+                preventDefault: $.noop,
+                isDefaultPrevented: function() {
+                    return false;
+                },
+                stopPropagation: $.noop
+            });
+        };
+
+    //act
+    dataGrid.editRow(0);
+    clock.tick();
+
+    var editor = dataGrid.element().find(".dx-form .dx-texteditor").first().dxTextBox("instance"),
+        $input = editor.element().find(".dx-texteditor-input");
+
+    editor.focus();
+    $input.val("Josh");
+    triggerTabPress($input);
+    $input.change();
+    clock.tick();
+
+    //assert
+    var $secondEditor = dataGrid.element().find(".dx-form .dx-texteditor").eq(1);
+
+    assert.deepEqual(
+        dataGrid.getController("keyboardNavigation")._focusedCellPosition,
+        { columnIndex: 1, rowIndex: 0 },
+        "Focused cell position is correct"
+    );
+    assert.equal($secondEditor.find(".dx-texteditor-input").val(), "test", "'lastName' editor has correct value");
+    assert.ok($secondEditor.hasClass("dx-state-focused"), "'lastName' editor focused");
+
+    clock.restore();
+});
+
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {
     //arrange, act
     var dataGrid = createDataGrid({

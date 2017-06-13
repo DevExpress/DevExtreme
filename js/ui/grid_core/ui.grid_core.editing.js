@@ -35,6 +35,8 @@ var EDIT_FORM_CLASS = "edit-form",
     EDIT_ROW = "dx-edit-row",
     EDIT_BUTTON_CLASS = "dx-edit-button",
 
+    BUTTON_CLASS = "dx-button",
+
     INSERT_INDEX = "__DX_INSERT_INDEX__",
     ROW_CLASS = "dx-row",
     ROW_REMOVED = "dx-row-removed",
@@ -1864,10 +1866,27 @@ module.exports = {
                         editFormRowIndex = this._editingController.getEditFormRowIndex();
 
                     if(editFormRowIndex === rowIndex && $cellElements) {
-                        return $cellElements.find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS));
+                        return $cellElements.find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
                     }
 
                     return $cellElements;
+                },
+                getCellIndex: function($cell, rowIndex) {
+                    if(!$cell.is("td") && rowIndex >= 0) {
+                        var $cellElements = this.getCellElements(rowIndex),
+                            cellIndex = -1;
+
+                        $.each($cellElements, function(index, cellElement) {
+                            if($(cellElement).find($cell).length) {
+                                cellIndex = index;
+                                return false;
+                            }
+                        });
+
+                        return cellIndex;
+                    }
+
+                    return this.callBase.apply(this, arguments);
                 },
                 _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {
                     var item,
