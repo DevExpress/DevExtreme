@@ -74,6 +74,11 @@ QUnit.test("Find templates by links (nonexistent template)", function(assert) {
     var done = assert.async(),
         url = "../../helpers/nonexistent.html";
 
+    ajaxMock.setup({
+        url: url,
+        status: 404
+    });
+
     $("head").append('<li' + 'nk rel="dx-template" type="text/html" href="' + url + '"/>');
     var engine = new ViewEngineTester({
         $root: $("<div></div>"),

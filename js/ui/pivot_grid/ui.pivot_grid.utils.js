@@ -23,7 +23,7 @@ var setFieldProperty = exports.setFieldProperty = function(field, property, valu
 };
 
 exports.sendRequest = function(options) {
-    return ajax(options);
+    return ajax.sendRequest(options);
 };
 
 var foreachTreeAsyncDate = new Date();

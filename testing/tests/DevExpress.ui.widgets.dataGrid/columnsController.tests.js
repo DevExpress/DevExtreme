@@ -2353,14 +2353,15 @@ QUnit.test("Initialize from remote rest store", function(assert) {
         that = this,
         columnsController = this.columnsController;
 
-    ajaxMock.setup({
-        url: "/mockjax-rest-store",
-        responseText: [{ "a": 1 }, { "a": 3 }, { "a": 2 }]
-    });
-
     var dataSource = new DataSource({
         load: function() {
-            return $.getJSON("/mockjax-rest-store");
+            var d = $.Deferred();
+
+            setTimeout(function() {
+                d.resolve([{ "a": 1 }, { "a": 3 }, { "a": 2 }]);
+            });
+
+            return d.promise();
         },
         onChanged: function() {
             columnsController.applyDataSource(dataSource);
