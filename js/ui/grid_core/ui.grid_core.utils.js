@@ -190,7 +190,7 @@ module.exports = (function() {
             $element = $element || this.element();
 
             var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
-                noDataElement = $element.find("." + noDataClass),
+                noDataElement = $element.children("." + noDataClass),
                 isVisible = this._dataController.isEmpty(),
                 isLoading = this._dataController.isLoading(),
                 rtlEnabled = this.option("rtlEnabled");
