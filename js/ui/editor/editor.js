@@ -189,6 +189,7 @@ var Editor = Widget.inherit({
                 .appendTo($element);
 
             this._validationMessage = this._createComponent(this._$validationMessage, Overlay, {
+                integrationOptions: {},
                 templatesRenderAsynchronously: false,
                 target: this._getValidationMessageTarget(),
                 shading: false,
