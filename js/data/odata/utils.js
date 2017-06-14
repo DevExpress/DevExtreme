@@ -156,7 +156,7 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
         data: ajaxData,
         dataType: useJsonp ? "jsonp" : "json",
         jsonp: useJsonp && "$callback",
-        type: method,
+        method: method,
         async: request.async,
         timeout: request.timeout,
         headers: request.headers,

@@ -7,9 +7,9 @@ var $ = require("../renderer");
 var sendRequest = function(options) {
     var params = options.data && $.param(options.data);
 
-    options.type = options.type || "get";
+    options.method = options.method || "get";
 
-    if(options.type.toLowerCase() === "get") {
+    if(options.method.toLowerCase() === "get") {
         if(params) {
             options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + params;
             delete options.data;

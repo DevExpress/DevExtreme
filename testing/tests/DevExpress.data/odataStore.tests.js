@@ -140,7 +140,7 @@ QUnit.test("works", function(assert) {
                     "headers": {},
                     "jsonp": undefined,
                     "timeout": 30000,
-                    "type": "get",
+                    "method": "get",
                     "url": "odata2.org",
                     "xhrFields": {
                         "withCredentials": undefined
@@ -163,7 +163,7 @@ QUnit.test("works", function(assert) {
                     "headers": {},
                     "jsonp": undefined,
                     "timeout": 30000,
-                    "type": "get",
+                    "method": "get",
                     "url": "odata2.org",
                     "xhrFields": {
                         "withCredentials": undefined
@@ -186,7 +186,7 @@ QUnit.test("works", function(assert) {
                     "headers": {},
                     "jsonp": undefined,
                     "timeout": 30000,
-                    "type": "get",
+                    "method": "get",
                     "url": "odata4.org",
                     "xhrFields": {
                         "withCredentials": undefined
@@ -1759,7 +1759,7 @@ QUnit.test("get", function(assert) {
         callback: function(bag) {
             this.responseText = {
                 d: {
-                    method: bag.type.toLowerCase(),
+                    method: bag.method.toLowerCase(),
                     data: bag.data,
                     url: bag.url
                 }
@@ -1865,7 +1865,7 @@ QUnit.test("invoke for service operation", function(assert) {
         callback: function(bag) {
             this.responseText = {
                 d: {
-                    method: bag.type.toLowerCase(),
+                    method: bag.method.toLowerCase(),
                     url: bag.url,
                     data: bag.data
                 }
@@ -1877,7 +1877,7 @@ QUnit.test("invoke for service operation", function(assert) {
         url: "odata4.org/action",
         callback: function(bag) {
             this.responseText = {
-                method: bag.type.toLowerCase(),
+                method: bag.method.toLowerCase(),
                 url: bag.url,
                 data: bag.data
             };
