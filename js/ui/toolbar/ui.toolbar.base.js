@@ -10,6 +10,9 @@ var $ = require("../../core/renderer"),
     BindableTemplate = require("../widget/bindable_template");
 
 var TOOLBAR_CLASS = "dx-toolbar",
+    TOOLBAR_BEFORE_CLASS = "dx-toolbar-before",
+    TOOLBAR_CENTER_CLASS = "dx-toolbar-center",
+    TOOLBAR_AFTER_CLASS = "dx-toolbar-after",
     TOOLBAR_BOTTOM_CLASS = "dx-toolbar-bottom",
     TOOLBAR_MINI_CLASS = "dx-toolbar-mini",
     TOOLBAR_ITEM_CLASS = "dx-toolbar-item",
@@ -69,9 +72,9 @@ var ToolbarBase = CollectionWidget.inherit({
 
     _itemContainer: function() {
         return this._$toolbarItemsContainer.find([
-            ".dx-toolbar-before",
-            ".dx-toolbar-center",
-            ".dx-toolbar-after"
+            "." + TOOLBAR_BEFORE_CLASS,
+            "." + TOOLBAR_CENTER_CLASS,
+            "." + TOOLBAR_AFTER_CLASS
         ].join(","));
     },
 
@@ -133,16 +136,9 @@ var ToolbarBase = CollectionWidget.inherit({
         });
 
         var beforeRect = this._$beforeSection.get(0).getBoundingClientRect(),
-            centerRect = this._$centerSection.get(0).getBoundingClientRect(),
             afterRect = this._$afterSection.get(0).getBoundingClientRect();
 
-        if(beforeRect.right > centerRect.left || centerRect.right > afterRect.left) {
-            this._$centerSection.css({
-                marginLeft: beforeRect.width,
-                marginRight: afterRect.width,
-                float: beforeRect.width > afterRect.width ? "none" : "right"
-            });
-        }
+        this._alignCenterSection(beforeRect, afterRect);
 
         var $label = this._$toolbarItemsContainer.find(TOOLBAR_LABEL_SELECTOR).eq(0),
             $section = $label.parent();
@@ -152,8 +148,8 @@ var ToolbarBase = CollectionWidget.inherit({
         }
 
         var labelOffset = beforeRect.width ? beforeRect.width : $label.position().left,
-            widthBeforeSection = $section.hasClass("dx-toolbar-before") ? 0 : labelOffset,
-            widthAfterSection = $section.hasClass("dx-toolbar-after") ? 0 : afterRect.width,
+            widthBeforeSection = $section.hasClass(TOOLBAR_BEFORE_CLASS) ? 0 : labelOffset,
+            widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width,
             elemsAtSectionWidth = 0;
 
         $section.children().not(TOOLBAR_LABEL_SELECTOR).each(function() {
@@ -165,6 +161,21 @@ var ToolbarBase = CollectionWidget.inherit({
             labelMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection - labelPaddings, 0);
 
         $label.css("max-width", labelMaxWidth);
+    },
+
+    _alignCenterSection: function(beforeRect, afterRect) {
+        var isRTL = this.option("rtlEnabled"),
+            leftRect = isRTL ? afterRect : beforeRect,
+            rightRect = isRTL ? beforeRect : afterRect,
+            centerRect = this._$centerSection.get(0).getBoundingClientRect();
+
+        if(leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
+            this._$centerSection.css({
+                marginLeft: leftRect.width,
+                marginRight: rightRect.width,
+                float: leftRect.width > rightRect.width ? "none" : "right"
+            });
+        }
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
