@@ -105,6 +105,40 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
         assert.deepEqual(actualFilter, expectedFilter, "filter is right");
     });
 
+    QUnit.test("Appointment model filterByDate should filter dataSource correctly without сopying dateFilter", function(assert) {
+        var dateFilter = [
+            [
+                ["endDate", ">", new Date(2015, 1, 9, 0)],
+                ["startDate", "<", new Date(2015, 1, 11)]
+            ],
+            "or",
+            [
+                ["endDate", new Date(2015, 1, 9)],
+                ["startDate", new Date(2015, 1, 9)]
+            ]
+        ];
+
+        var dataSource = new DataSource({
+            store: [],
+            filter: [dateFilter, ["text", "=", "Appointment 2"]]
+        });
+
+        var appointmentModel = new dxSchedulerAppointmentModel(dataSource, {
+            startDateExpr: "startDate",
+            endDateExpr: "endDate"
+        });
+
+        appointmentModel.filterByDate(new Date(2015, 1, 9, 0), new Date(2015, 1, 10, 13), true);
+
+        var expectedFilter = [dateFilter, [
+            "text",
+            "=",
+            "Appointment 2"
+        ]];
+        var actualFilter = dataSource.filter();
+        assert.deepEqual(expectedFilter, actualFilter, "filter is right");
+    });
+
     QUnit.test("Appointment model filterByDate should return filter with dateSerializationFormat and without forceIsoDateParsing", function(assert) {
         var defaultForceIsoDateParsing = config().forceIsoDateParsing;
         config().forceIsoDateParsing = false;
