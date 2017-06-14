@@ -1357,7 +1357,7 @@ QUnit.test("unexpected server response with 200 status", function(assert) {
     ajaxMock.setup({
         url: "odata.org",
         status: 200,
-        textStatus: "parsererror",
+        jQueryTextStatus: "parsererror",
         responseText: "Server gone crazy"
     });
 

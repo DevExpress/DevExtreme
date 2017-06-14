@@ -28,7 +28,7 @@ exports.setup = function(options) {
         var deferred = $.Deferred();
         var response = extend({ }, request);
         var mockOptions = findUrlOptions(request.url);
-        var textStatus = mockOptions.textStatus;
+        var jQueryTextStatus = mockOptions.jQueryTextStatus;
 
         response.status = mockOptions.status || 200;
         response.statusText = mockOptions.statusText || "200 OK";
@@ -39,17 +39,11 @@ exports.setup = function(options) {
         }
 
         timers.push(setTimeout(function() {
-            if(response.status === 404) {
-                deferred.rejectWith(response, [
-                    {
-                        error: { message: response.statusText }
-                    },
-                    textStatus || "error"]);
-            } else if(textStatus && textStatus !== "success") {
-                response.error = { };
-                deferred.rejectWith(response, [response, textStatus || "error"]);
+            if(response.status === 404 || jQueryTextStatus === "parsererror") {
+                response.error = jQueryTextStatus ? {} : { message: response.statusText };
+                deferred.rejectWith(response, [ response, jQueryTextStatus || "error"]);
             } else {
-                deferred.resolveWith(response, [response.responseText, textStatus || "success"]);
+                deferred.resolveWith(response, [response.responseText, "success"]);
             }
         }));
 

@@ -1529,7 +1529,7 @@ QUnit.test("unexpected server response with 200 status", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org('bad-response')",
-        textStatus: "parsererror",
+        jQueryTextStatus: "parsererror",
         responseText: "Server gone crazy"
     });
 
@@ -1596,7 +1596,7 @@ QUnit.test("error handlers (update)", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org('error')",
-        textStatus: "parsererror"
+        jQueryTextStatus: "parsererror"
     });
 
     var helper = new ErrorHandlingHelper();
@@ -1616,7 +1616,7 @@ QUnit.test("error handlers (remove)", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org('error')",
-        textStatus: "parsererror"
+        jQueryTextStatus: "parsererror"
     });
 
     var helper = new ErrorHandlingHelper();
@@ -1636,7 +1636,7 @@ QUnit.test("error handlers (insert)", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org",
-        textStatus: "parsererror"
+        jQueryTextStatus: "parsererror"
     });
 
     var helper = new ErrorHandlingHelper();
@@ -1657,7 +1657,7 @@ QUnit.test("error handlers (custom operation)", function(assert) {
 
     ajaxMock.setup({
         url: "odata.org/TestOperationError",
-        textStatus: "parsererror"
+        jQueryTextStatus: "parsererror"
     });
 
     var helper = new ErrorHandlingHelper();
