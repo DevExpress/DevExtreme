@@ -1385,8 +1385,6 @@ declare module DevExpress.ui {
         /** @docid_ignore dxLoadPanelOptions_accessKey */
         /** @docid_ignore dxLoadPanelOptions_tabIndex */
         /** @docid_ignore dxLoadPanelOptions_shadingColor */
-        /** @docid_ignore dxLoadPanelOptions_animation_show */
-        /** @docid_ignore dxLoadPanelOptions_animation_hide */
 
         /** @docid dxLoadPanelOptions_animation */
         animation?: {
