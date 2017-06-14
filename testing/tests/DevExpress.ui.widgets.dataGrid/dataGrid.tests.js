@@ -3656,40 +3656,6 @@ QUnit.test("Collapse the group row of the grid, nested in the master detail", fu
     clock.restore();
 });
 
-QUnit.test("Do not hide noData block placed inside the masterDetail template", function(assert) {
-    //arrange
-    var dataSource = [{ field1: "1", field2: "2" }],
-        clock = sinon.useFakeTimers(),
-        dataGrid = createDataGrid({
-            dataSource: dataSource,
-            loadPanel: { enabled: false },
-            columns: ["field1", "field2"],
-            masterDetail: {
-                enabled: true,
-                template: function($container) {
-                    $('<div>').addClass('dx-datagrid-nodata').appendTo($container);
-                }
-            }
-        }),
-        $dataGrid = dataGrid.element();
-
-    //act
-    clock.tick();
-    $dataGrid.find(".dx-datagrid-rowsview .dx-command-expand").first().trigger("dxclick");
-    clock.tick();
-    //assert
-    assert.equal($dataGrid.find(".dx-datagrid-nodata").length, 2, "two blocks");
-
-    //act
-    $dataGrid.find(".dx-datagrid-rowsview .dx-command-expand").first().trigger("dxclick");
-    clock.tick();
-
-    //assert
-    assert.notOk($dataGrid.find(".dx-datagrid-nodata").eq(0).hasClass('dx-hidden'), "block inside masterDetail is not hidden");
-    assert.ok($dataGrid.find(".dx-datagrid-nodata").eq(1).hasClass('dx-hidden'), "datagrid's nodata block is hidden");
-    clock.restore();
-});
-
 //T439040
 QUnit.test("Toolbar templates should be called when toolbar is attached to dom", function(assert) {
     //arrange, act
