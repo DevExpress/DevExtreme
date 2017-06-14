@@ -96,6 +96,20 @@ var Fixture = Class.inherit({
         assert.strictEqual(editorValidationError.message, "Required", "Message should came from dxValidator");
     });
 
+    QUnit.test("T525700: numberBox and Validator - validation on focusout with validation rule range", function(assert) {
+        this.fixture.createInstance("dxNumberBox", {}, { validationRules: [{ type: "range", min: 100 }] });
+
+        this.fixture.keyboard.type("1");
+        this.fixture.$input.trigger("change");
+        //action
+        this.fixture.$input.trigger("focusout");
+
+        assert.strictEqual(this.fixture.editor.option("isValid"), false, "Editor should be invalid because value is less then min");
+        var editorValidationError = this.fixture.editor.option("validationError");
+        assert.ok(editorValidationError, "Editor should have specific validation error");
+        assert.strictEqual(editorValidationError.message, "Value is out of range", "Message should came from dxValidator");
+    });
+
     QUnit.test("T260652: disabled widgets should not be validated", function(assert) {
         this.fixture.createInstance("dxTextBox", { value: "", disabled: true }, { validationRules: [{ type: "required" }] });
 
