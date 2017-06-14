@@ -383,10 +383,14 @@ var SelectBox = DropDownList.inherit({
     },
 
     _renderInputValue: function() {
-        return this.callBase().always((function() {
+        this._renderInputValueAsync = function() {
             this._renderTooltip();
             this._renderInputValueImpl();
             this._refreshSelected();
+        };
+
+        return this.callBase().always((function() {
+            this._renderInputValueAsync();
         }).bind(this));
     },
 
@@ -776,6 +780,11 @@ var SelectBox = DropDownList.inherit({
             endPosition = inputElement.value.length;
         inputElement.selectionStart = endPosition;
         inputElement.selectionEnd = endPosition;
+    },
+
+    _dispose: function() {
+        this._renderInputValueAsync = commonUtils.noop;
+        this.callBase();
     },
 
     _optionChanged: function(args) {

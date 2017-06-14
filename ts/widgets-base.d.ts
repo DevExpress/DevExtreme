@@ -1023,8 +1023,8 @@ declare module DevExpress.ui {
         /** @docid dxNumberBoxOptions_showSpinButtons */
         showSpinButtons?: boolean;
 
-        /** @docid dxNumberBoxOptions_useTouchSpinButtons */
-        useTouchSpinButtons?: boolean;
+        /** @docid dxNumberBoxOptions_useLargeSpinButtons */
+        useLargeSpinButtons?: boolean;
 
         /** @docid dxNumberBoxOptions_step */
         step?: number;
@@ -1788,7 +1788,7 @@ declare module DevExpress.ui {
         content(): JQuery;
     }
 
-    export interface dxDropDownBoxOptions extends dxDropDownEditorOptions {
+    export interface dxDropDownBoxOptions extends dxDropDownEditorOptions, DataExpressionMixinOptions {
         /** @docid_ignore dxDropDownBoxOptions_maxLength */
         /** @docid_ignore dxDropDownBoxOptions_spellcheck */
         /** @docid_ignore dxDropDownBoxOptions_applyValueMode */
@@ -1812,7 +1812,7 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxDropDownBoxOptions);
     }
 
-    export interface dxDateBoxOptions extends dxTextEditorOptions {
+    export interface dxDateBoxOptions extends dxDropDownEditorOptions {
         /** @docid dxDateBoxOptions_formatString */
         formatString?: any;
 

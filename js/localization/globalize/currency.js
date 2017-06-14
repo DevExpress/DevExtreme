@@ -115,7 +115,7 @@ if(Globalize && Globalize.formatCurrency) {
 
                 if(format.type === "currency") {
                     return this._formatNumber(value, this._parseNumberFormatString("currency"), format);
-                } else if(format.currency) {
+                } else if(!format.type && format.currency) {
                     return getFormatter(format.currency, format)(value);
                 }
             }

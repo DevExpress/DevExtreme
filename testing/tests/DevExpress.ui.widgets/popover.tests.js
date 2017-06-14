@@ -1740,3 +1740,62 @@ QUnit.test("hideEvent set as object", function(assert) {
     this.clock.tick(500);
     assert.ok(!instance.option("visible"), "Popover was hidden");
 });
+
+QUnit.test("second popover should be hidden by click on the first's target", function(assert) {
+    var markup = "<div id='popover1'></div>" +
+            "<div id='popover2'></div>" +
+            "<div id='target1'></div>" +
+            "<div id='target2'><div id='clicktarget2'></div></div>";
+
+    $(markup).appendTo("body");
+
+    var popover1 = new Popover($("#popover1"), { visible: true, animation: false, target: "#target1" }),
+        popover2 = new Popover($("#popover2"), { visible: true, animation: false, target: "#target2" });
+
+    $("#clicktarget2").trigger("dxpointerdown");
+
+    assert.ok(popover2.option("visible"), "popover2 is still visible");
+    assert.notOk(popover1.option("visible"), "popover1 is hidden");
+});
+
+QUnit.test("popover should clear show timeout when hide event fired", function(assert) {
+    var instance = new Popover($("#what"), {
+        visible: false,
+        target: "#where",
+        showEvent: {
+            name: "pointerenter",
+            delay: 500
+        },
+        hideEvent: {
+            name: "pointerleave"
+        }
+    });
+
+    $("#where").trigger("pointerenter");
+    this.clock.tick(300);
+    $("#where").trigger("pointerleave");
+    this.clock.tick(200);
+
+    assert.notOk(instance.option("visible"), "Showing has been cancelled");
+});
+
+QUnit.test("popover should clear hide timeout when show event fired", function(assert) {
+    var instance = new Popover($("#what"), {
+        visible: true,
+        target: "#where",
+        showEvent: {
+            name: "pointerenter"
+        },
+        hideEvent: {
+            name: "pointerleave",
+            delay: 500
+        }
+    });
+
+    $("#where").trigger("pointerleave");
+    this.clock.tick(300);
+    $("#where").trigger("pointerenter");
+    this.clock.tick(200);
+
+    assert.ok(instance.option("visible"), "Hiding has been cancelled");
+});

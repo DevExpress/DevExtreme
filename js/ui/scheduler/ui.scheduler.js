@@ -1176,7 +1176,6 @@ var Scheduler = Widget.inherit({
             case "recurrenceExceptionExpr":
                 this._updateExpression(name, value);
                 this._initAppointmentTemplate();
-                this._cleanPopup();
                 this.repaint();
                 break;
             default:
@@ -1314,6 +1313,11 @@ var Scheduler = Widget.inherit({
         this.hideAppointmentTooltip();
     },
 
+    _clean: function() {
+        this._cleanPopup();
+        this.callBase();
+    },
+
     _toggleSmallClass: function() {
         var width = this.element().outerWidth();
         this.element().toggleClass(WIDGET_SMALL_CLASS, width < WIDGET_SMALL_WIDTH);
@@ -1421,7 +1425,7 @@ var Scheduler = Widget.inherit({
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
 
             if(isAgenda) {
-                this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"));
+                this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"), true);
             }
 
             if(this._filteredItems.length && this._isVisible()) {
@@ -1435,22 +1439,12 @@ var Scheduler = Widget.inherit({
             }
             if(isAgenda) {
                 this._workSpace._renderView();
-                this._removeExcessAppointmentWrapping(result);
                     // TODO: remove rows calculation from this callback
                 this._dataSourceLoadedCallback.fireWith(this, [result]);
             }
         }).bind(this));
     },
 
-    _removeExcessAppointmentWrapping: function(appointments) {
-        $.each(appointments, function(i, appointment) {
-            if(appointment.appointmentData) {
-                var data = appointment.appointmentData;
-
-                extend(appointment, data);
-            }
-        });
-    },
     _initExpressions: function(fields) {
         var dataCoreUtils = require("../../core/utils/data"),
             isDateField = function(field) {
@@ -2361,10 +2355,8 @@ var Scheduler = Widget.inherit({
     },
 
     _showAppointmentPopup: function(data, showButtons, processTimeZone) {
-        var appointmentData = data.appointmentData || data;
-
         if(!this._popup) {
-            this._createPopup(appointmentData, processTimeZone);
+            this._createPopup(data, processTimeZone);
             var toolbarItems = [],
                 showCloseButton = true;
             if(!commonUtils.isDefined(showButtons) || showButtons) {
@@ -2377,8 +2369,8 @@ var Scheduler = Widget.inherit({
             });
         }
 
-        this._initDynamicPopupTemplate(appointmentData, processTimeZone);
-        this._popup.option(this._popupConfig(appointmentData));
+        this._initDynamicPopupTemplate(data, processTimeZone);
+        this._popup.option(this._popupConfig(data));
         this._popup.show();
     },
 

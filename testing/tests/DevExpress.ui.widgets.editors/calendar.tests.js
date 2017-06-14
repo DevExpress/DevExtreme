@@ -14,6 +14,7 @@ var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     config = require("core/config"),
+    browser = require("core/utils/browser"),
     dateSerialization = require("core/utils/date_serialization");
 
 var camelize = inflector.camelize;
@@ -560,6 +561,12 @@ QUnit.test("calendar views position", function(assert) {
 });
 
 QUnit.test("calendar views position in RTL", function(assert) {
+    if("chrome" in window && browser.msie) {
+        // Chrome DevTools device emulation
+        assert.ok(true, "This test is not relevant for chrome dev tools device emulation");
+        return;
+    }
+
     this.reinit({ rtlEnabled: true });
 
     var $view = getCurrentViewInstance(this.instance).element(),

@@ -171,7 +171,9 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     _renderColumnChooserList: function($container, items) {
-        var isSelectMode = this.option("columnChooser.mode") === "select",
+        var scrollTop,
+            scrollableInstance,
+            isSelectMode = this.option("columnChooser.mode") === "select",
             listConfig = {
                 items: items,
                 dataStructure: "plain",
@@ -182,6 +184,19 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 showCheckBoxesMode: "none",
                 rootValue: null
             };
+
+        if(isSelectMode) {
+            scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
+            scrollTop = scrollableInstance && scrollableInstance.scrollTop();
+
+            listConfig.onContentReady = function(e) {
+                if(scrollTop) {
+                    var scrollable = e.element.find(".dx-scrollable").data("dxScrollable");
+
+                    scrollable && scrollable.scrollTo({ y: scrollTop });
+                }
+            };
+        }
 
         if(this._isWinDevice()) {
             listConfig.useNativeScrolling = false;

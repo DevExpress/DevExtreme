@@ -8,7 +8,7 @@ pipeline:
     image: plugins/git
 
   build:
-    image: devexpress/devextreme-build:17_1
+    image: devexpress/devextreme-build:17_2
     pull: true
     commands: ./docker-ci.sh
 

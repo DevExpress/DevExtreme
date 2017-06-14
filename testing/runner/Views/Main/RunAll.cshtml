@@ -278,7 +278,6 @@
 
         var runFirstBatch = function() {
             notifyDeviceTestManager("QUnit.runFirstBatch");
-            $.ajax(@Html.Raw(Json.Serialize(Url.Action("NotifyTestsStarted"))));
             for(var i = 0; i < WORKER_COUNT; i++)
                 nextUrl(i);
         };

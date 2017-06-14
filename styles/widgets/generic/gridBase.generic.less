@@ -406,30 +406,6 @@
         border: 2px solid ~"@{@{widgetName}-focused-border-color}";
     }
 
-    .dx-data-row.dx-state-hover {
-        &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
-            & > td:not(.dx-focused) {
-                background-color: ~"@{@{widgetName}-hover-bg}";
-                color: ~"@{@{widgetName}-row-hovered-color}";
-
-                &.dx-@{widgetName}-group-space {
-                    border-right-color: ~"@{@{widgetName}-hover-bg}";
-                }
-            }
-
-            & > .dx-@{widgetName}-readonly .dx-texteditor {
-                .dx-texteditor-input {
-                    background-color: ~"@{@{widgetName}-hover-bg}";
-                    color: ~"@{@{widgetName}-row-hovered-color}";
-                }
-            }
-
-            & > td.dx-pointer-events-none {
-                background-color: transparent;
-            }
-        }
-    }
-
     .dx-@{widgetName}-table {
         .dx-row {
             .dx-command-select {
@@ -445,6 +421,30 @@
             .dx-command-expand {
                 width: @GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
                 min-width: @GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
+            }
+        }
+
+        .dx-data-row.dx-state-hover {
+            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+                & > td:not(.dx-focused) {
+                    background-color: ~"@{@{widgetName}-hover-bg}";
+                    color: ~"@{@{widgetName}-row-hovered-color}";
+
+                    &.dx-@{widgetName}-group-space {
+                        border-right-color: ~"@{@{widgetName}-hover-bg}";
+                    }
+                }
+
+                & > .dx-@{widgetName}-readonly .dx-texteditor {
+                    .dx-texteditor-input {
+                        background-color: ~"@{@{widgetName}-hover-bg}";
+                        color: ~"@{@{widgetName}-row-hovered-color}";
+                    }
+                }
+
+                & > td.dx-pointer-events-none {
+                    background-color: transparent;
+                }
             }
         }
     }

@@ -52,6 +52,16 @@ QUnit.test("showAppointmentPopup should render a popup only once", function(asse
     assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
 });
 
+QUnit.test("showAppointmentPopup should work correctly after scheduler repainting", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
+
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
+    this.instance.repaint();
+
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
+});
+
 QUnit.test("changing editing should work correctly after showing popup", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
     this.instance.hideAppointmentPopup(true);
@@ -261,6 +271,7 @@ QUnit.test("Confirm dialog should be shown when showAppointmentPopup for recurre
     });
 
     assert.ok($(".dx-dialog.dx-overlay-modal").length, "Dialog was shown");
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 });
 
 QUnit.test("Popup should contain recurrence editor", function(assert) {
@@ -294,9 +305,7 @@ QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is
     };
 
     this.instance.option("recurrenceRuleExpr", null);
-
     this.instance.showAppointmentPopup(appointment);
-    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
         $recurrenceEditor = $popupContent.find(".dx-recurrence-editor");
@@ -323,9 +332,7 @@ QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is
     };
 
     this.instance.option("recurrenceRuleExpr", '');
-
     this.instance.showAppointmentPopup(appointment);
-    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
         $recurrenceEditor = $popupContent.find(".dx-recurrence-editor");

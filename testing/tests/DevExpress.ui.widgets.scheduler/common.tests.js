@@ -1945,8 +1945,8 @@ QUnit.testStart(function() {
                 var targetedAppointmentData = e.targetedAppointmentData,
                     appointmentIndex = e.appointmentElement.index();
 
-                assert.equal(targetedAppointmentData.startDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 16).getTime(), "Start date is OK");
-                assert.equal(targetedAppointmentData.endDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 17).getTime(), "End date is OK");
+                assert.equal(targetedAppointmentData.settings.startDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 16).getTime(), "Start date is OK");
+                assert.equal(targetedAppointmentData.settings.endDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 17).getTime(), "End date is OK");
             },
             currentDate: new Date(2015, 1, 9),
             views: ["agenda"],

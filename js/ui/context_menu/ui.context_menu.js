@@ -374,7 +374,6 @@ var ContextMenu = MenuBase.inherit((function() {
                 this._overlay = null;
             }
             this._detachShowContextMenuEvents(this._getTarget());
-            this.option("templatesRenderAsynchronously") && clearTimeout(this._drawSubmenuTimeout);
             this.callBase();
         },
 

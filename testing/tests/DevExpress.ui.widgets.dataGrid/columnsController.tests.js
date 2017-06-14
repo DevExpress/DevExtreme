@@ -1473,6 +1473,39 @@ QUnit.test("Initialize Lookup column dataSource by columnOption", function(asser
     assert.equal(gridCore.getDisplayValue(lookupColumn, lookupColumn.calculateCellValue(array[1]), array[1]), "Category 2", 'column displayValue by getDisplayValue');
 });
 
+//T521239
+QUnit.test("Update lookup column on refresh", function(assert) {
+    var lookupDataSource = [
+        { id: 1, category_name: 'Category 1' },
+        { id: 2, category_name: 'Category 2' },
+        { id: 3, category_name: 'Category 3' }
+    ];
+
+    this.applyOptions({
+        columns: ["name", { dataField: "category_id",
+            lookup: {
+                dataSource: function() {
+                    return {
+                        store: lookupDataSource
+                    };
+                },
+                valueExpr: 'id',
+                displayExpr: 'category_name'
+            }
+        }]
+    });
+
+    this.columnsController.getVisibleColumns();
+
+    //act
+    lookupDataSource.push({ id: 4, category_name: 'Category 4' });
+    this.columnsController.refresh();
+
+    //assert
+    var lookupColumn = this.columnsController.getVisibleColumns()[1];
+    assert.equal(lookupColumn.lookup.calculateCellValue(4), 'Category 4', 'lookup calculateCellValue return correct value for added item');
+});
+
 QUnit.test("Initialize Lookup column when calculateDisplayValue is defined as string", function(assert) {
     var array = [
         { name: 'Alex', age: 15, category_id: 1, category: { name: "Category 1" } },
