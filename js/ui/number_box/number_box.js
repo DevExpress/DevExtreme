@@ -457,6 +457,10 @@ var NumberBox = TextEditor.inherit({
             }
         }
 
+        this.validationRequest.fire({
+            value: value,
+            editor: this
+        });
     },
 
     _replaceCommaWithPoint: function(value) {
