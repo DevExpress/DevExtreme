@@ -300,15 +300,13 @@ registerTheme({
                     border: {
                         visible: true,
                         width: 4
-                    },
-                    size: 12
+                    }
                 },
                 selectionStyle: {
                     border: {
                         visible: true,
                         width: 4
-                    },
-                    size: 12
+                    }
                 }
             },
             "scatter": {
