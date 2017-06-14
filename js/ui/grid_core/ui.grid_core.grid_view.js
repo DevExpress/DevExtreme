@@ -179,7 +179,7 @@ var ResizingController = modules.ViewController.inherit({
                 if(this.width !== "auto") {
                     if(this.width) {
                         resultWidths[index] = this.width;
-                    } else if(!columnAutoWidth && !hasMinWidth) {
+                    } else if(!columnAutoWidth && !this.minWidth) {
                         resultWidths[index] = undefined;
                     }
                 }

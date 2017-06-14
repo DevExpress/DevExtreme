@@ -13,6 +13,12 @@
     }
 }
 
+.dx-treelist-error-message() {
+    background-color: @treelist-row-error-bg;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
 .dx-treelist-container {
     color: @treelist-base-color;
     background-color: @treelist-base-background-color;
@@ -73,6 +79,17 @@
     .dx-treelist-filter-row .dx-filter-range-content {
         color: @treelist-base-color;
     }
+
+    .dx-error-row {
+        td {
+            color: @datagrid-row-error-color;
+            padding: 0;
+        }
+
+        .dx-error-message {
+            .dx-treelist-error-message();
+        }
+    }
 }
 
 .dx-treelist-form-buttons-container {
@@ -97,6 +114,12 @@
     cursor: pointer;
     .dx-icon-more;
     .dx-icon-sizing(21px);
+}
+
+.dx-treelist-edit-popup .dx-error-message {
+    .dx-treelist-error-message();
+    color: @treelist-row-error-color;
+    margin-bottom: 20px;
 }
 
 .dx-rtl {

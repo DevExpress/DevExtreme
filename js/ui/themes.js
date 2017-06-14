@@ -59,10 +59,10 @@ function waitForThemeLoad(themeName, callback) {
     if(isPendingThemeLoaded()) {
         handleLoaded();
     } else {
-        waitStartTime = $.now();
+        waitStartTime = Date.now();
         timerId = setInterval(function() {
             var isLoaded = isPendingThemeLoaded(),
-                isTimeout = !isLoaded && $.now() - waitStartTime > 15 * 1000;
+                isTimeout = !isLoaded && Date.now() - waitStartTime > 15 * 1000;
 
             if(isTimeout) {
                 errors.log("W0004", pendingThemeName);

@@ -463,12 +463,14 @@ module.exports = {
                 },
 
                 _showErrorRow: function(editData) {
-                    var errorHandling = this.getController("errorHandling"),
+                    var $popupContent,
+                        errorHandling = this.getController("errorHandling"),
                         items = this.getController("data").items(),
                         rowIndex = this.getIndexByKey(editData.key, items);
 
                     if(!editData.isValid && editData.errorText && rowIndex >= 0) {
-                        errorHandling && errorHandling.renderErrorRow(editData.errorText, rowIndex);
+                        $popupContent = this.getPopupContent();
+                        errorHandling && errorHandling.renderErrorRow(editData.errorText, rowIndex, $popupContent);
                     }
                 },
 

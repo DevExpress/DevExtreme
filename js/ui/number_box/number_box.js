@@ -521,15 +521,11 @@ var NumberBox = TextEditor.inherit({
     },
 
     _normalizeInputValue: function() {
-        return this._normalizeValue();
+        return this._parseValue(this._normalizeText());
     },
 
-    _normalizeValue: function(value) {
-        return this._parseValue(this._normalizeText(value));
-    },
-
-    _normalizeText: function(value) {
-        value = $.trim(commonUtils.isDefined(value) ? value : this._input().val());
+    _normalizeText: function() {
+        var value = this._input().val().trim();
 
         return this._replaceCommaWithPoint(value);
     },

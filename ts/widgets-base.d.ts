@@ -1385,11 +1385,14 @@ declare module DevExpress.ui {
         /** @docid_ignore dxLoadPanelOptions_accessKey */
         /** @docid_ignore dxLoadPanelOptions_tabIndex */
         /** @docid_ignore dxLoadPanelOptions_shadingColor */
-        /** @docid_ignore dxLoadPanelOptions_animation_show */
-        /** @docid_ignore dxLoadPanelOptions_animation_hide */
 
         /** @docid dxLoadPanelOptions_animation */
-        animation?: fx.AnimationOptions;
+        animation?: {
+            /** @docid dxLoadPanelOptions_animation_show */
+            show?: fx.AnimationOptions;
+            /** @docid dxLoadPanelOptions_animation_hide */
+            hide?: fx.AnimationOptions;
+        };
 
         /** @docid dxLoadPanelOptions_delay */
         delay?: number;
@@ -1804,6 +1807,9 @@ declare module DevExpress.ui {
 
         /** @docid dxDropDownBoxOptions_dropDownOptions */
         dropDownOptions?: DevExpress.ui.dxPopupOptions;
+
+        /** @docid dxDropDownBoxOptions_valueChangeEvent */
+        valueChangeEvent?: string;
     }
 
     /** @docid dxDropDownBox */

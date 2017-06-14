@@ -149,7 +149,7 @@ var compileSetter = function(expr) {
             if(
                 options.merge &&
                 typeUtils.isPlainObject(value) &&
-                (prevTargetValue === undefined || typeUtils.isPlainObject(prevTargetValue)) &&
+                (!commonUtils.isDefined(prevTargetValue) || typeUtils.isPlainObject(prevTargetValue)) &&
                 !(value instanceof $.Event) // NOTE: http://bugs.jquery.com/ticket/15090
             ) {
                 if(!prevTargetValue) {

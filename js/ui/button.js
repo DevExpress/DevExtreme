@@ -361,9 +361,10 @@ var Button = Widget.inherit({
             }
         }
 
-        var ariaLabel = text || icon;
+        var ariaLabel = text || icon || "";
+        ariaLabel = ariaLabel.toString().trim();
 
-        this.setAria("label", $.trim(ariaLabel));
+        this.setAria("label", ariaLabel);
     },
 
     _renderType: function() {
