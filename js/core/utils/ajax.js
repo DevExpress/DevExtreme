@@ -2,22 +2,32 @@
 
 var $ = require("../renderer");
 
-// url, method, headers, body, withCredentials, responseType
-
 var sendRequest = function(options) {
-    var params = options.data && $.param(options.data);
+    // var params = options.data && $.param(options.data);
 
-    options.method = options.method || "get";
+    // var requestOptions = {
+    //     url: options.url,
+    //     method: options.method || "get",
+    //     dataType: options.dataType,
+    //     headers: options.headers,
+    //     timeout: options.timeout,
+    //     jsonp: options.jsonp,
+    //     async: options.async,
+    //     accepts: options.accepts, //"json": "application/json;odata=verbose,text/plain"
+    //     contentType: options.contentType,
+    //     xhrFields: options.xhrFields //withCredentials
+    // };
 
-    if(options.method.toLowerCase() === "get") {
-        if(params) {
-            options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + params;
-            delete options.data;
-        }
-        if(options.dataType === "jsonp") {
-            options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + "_=" + (Date.now);
-        }
-    }
+    // if(requestOptions.method.toLowerCase() === "get") {
+    //     if(params) {
+    //         requestOptions.url += (requestOptions.url.indexOf("?") > -1 ? "&" : "?") + params;
+    //     }
+    //     if(options.dataType === "jsonp") {
+    //         requestOptions.url += (requestOptions.url.indexOf("?") > -1 ? "&" : "?") + "_=" + (Date.now);
+    //     }
+    // } else {
+    //     requestOptions.data = options.data;
+    // }
 
     return $.ajax.call($, options);
 };
