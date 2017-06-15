@@ -5494,6 +5494,7 @@ if(!devices.win8) {
     QUnit.test('Change value with custom setCellValue', function(assert) {
         //arrange
         var that = this,
+            params,
             rowsView = this.rowsView,
             testElement = $('#container');
 
@@ -5508,6 +5509,8 @@ if(!devices.win8) {
         that.options.columns[0] = {
             dataField: "name",
             setCellValue: function(data, value) {
+                params = $.makeArray(arguments);
+
                 data[this.dataField] = value;
                 data.phone = "";
             }
@@ -5528,8 +5531,45 @@ if(!devices.win8) {
         //assert
         assert.equal(testElement.find('tbody > tr').first().find('input').eq(0).val(), "Test name");
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).eq(2).val(), "");
+        assert.equal(params.length, 4, "count of argument of the setCellValue");
+        assert.deepEqual(params, [{ name: "Test name", phone: "" }, "Test name", this.array[0], undefined], "arguments");
     });
 
+    QUnit.test("Changing the current row data in the setCellValue should not be applied", function(assert) {
+        //arrange
+        var that = this,
+            rowsView = this.rowsView,
+            $testElement = $('#container');
+
+        that.options.editing = {
+            mode: "row",
+            allowUpdating: true,
+            texts: {
+                saveRowChanges: "Save",
+                editRow: "Edit"
+            }
+        };
+        that.options.columns[0] = {
+            dataField: "name",
+            setCellValue: function(newData, value, currentRowData) {
+                newData[this.dataField] = value;
+                currentRowData.phone = "666";
+            }
+        };
+
+        rowsView.render($testElement);
+        that.columnsController.init();
+
+        that.editingController.editRow(0);
+
+        //act
+        $testElement.find('tbody > tr').first().find('input').eq(0).val('Test name');
+        $testElement.find('tbody > tr').first().find('input').eq(0).trigger('change');
+
+        //assert
+        assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(0).val(), "Test name");
+        assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(2).val(), "555555");
+    });
 
     QUnit.test('cellValue', function(assert) {
         //arrange
