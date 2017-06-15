@@ -191,9 +191,10 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_setCellValue
              * @publicName setCellValue
-             * @type function(rowData, value)
-             * @type_function_param1 rowData:object
+             * @type function(newData, value, currentRowData)
+             * @type_function_param1 newData:object
              * @type_function_param2 value:any
+             * @type_function_param3 currentRowData:object
              */
             /**
              * @name GridBaseOptions_columns_calculateDisplayValue

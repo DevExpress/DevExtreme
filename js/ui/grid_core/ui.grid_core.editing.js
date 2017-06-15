@@ -1221,7 +1221,8 @@ var EditingController = modules.ViewController.inherit((function() {
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
             var that = this,
-                data = {},
+                newData = {},
+                oldData = options.data,
                 rowKey = options.key,
                 $cellElement = options.cellElement,
                 editMode = getEditMode(that),
@@ -1236,14 +1237,14 @@ var EditingController = modules.ViewController.inherit((function() {
                     that._applyModified($cellElement, options);
                 }
                 options.value = value;
-                options.column.setCellValue(data, value, text);
+                options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
                 if(text && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;
                 }
                 params = {
-                    data: data,
+                    data: newData,
                     key: rowKey,
-                    oldData: options.data,
+                    oldData: oldData,
                     type: DATA_EDIT_DATA_UPDATE_TYPE
                 };
 
