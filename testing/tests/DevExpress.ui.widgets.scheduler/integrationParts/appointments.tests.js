@@ -4278,3 +4278,33 @@ QUnit.test("Scheduler shouldn't throw error at deferred appointment loading (T51
     assert.notOk(errorLogStub.called, "Error was not thrown");
     errorLogStub.restore();
 });
+
+QUnit.test("Exception should not be thrown on second details view opening if form items was not found", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Task",
+            start: new Date(2017, 2, 13),
+            end: new Date(2017, 2, 13, 0, 30)
+        }],
+        currentDate: new Date(2017, 2, 13),
+        currentView: "week",
+        views: ["week"],
+        startDateExpr: "start",
+        endDateExpr: "end"
+    });
+
+    this.instance.option("onAppointmentFormCreated", function(e) {
+        e.form.option("items", []);
+    });
+
+    try {
+        pointerMock(this.instance.element().find(".dx-scheduler-appointment").eq(0)).start().click().click();
+        var $popup = $(".dx-scheduler-appointment-popup");
+        $popup.hide();
+
+        pointerMock(this.instance.element().find(".dx-scheduler-appointment").eq(0)).start().click().click();
+        assert.ok(true, "exception is not expected");
+    } catch(e) {
+        assert.ok(false, "Exception: " + e);
+    }
+});
