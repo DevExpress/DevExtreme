@@ -990,6 +990,11 @@ gridCore.registerModule("keyboardNavigation", {
 
                     return isCellEditing;
                 },
+                addRow: function() {
+                    this.getController("keyboardNavigation").setupFocusedView();
+
+                    this.callBase.apply(this, arguments);
+                },
                 getFocusedCellInRow: function(rowIndex) {
                     var keyboardNavigationController = this.getController("keyboardNavigation"),
                         $cell = this.callBase(rowIndex);
