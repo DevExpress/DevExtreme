@@ -12,7 +12,7 @@ exports.renderNoDataText = function($element) {
     var that = this;
     $element = $element || this.element();
 
-    var noDataElement = $element.find("." + DATAGRID_NODATA_TEXT_CLASS),
+    var noDataElement = $element.children("." + DATAGRID_NODATA_TEXT_CLASS),
         isVisible = this._dataController.isEmpty(),
         isLoading = this._dataController.isLoading(),
         rtlEnabled = this.option("rtlEnabled");
