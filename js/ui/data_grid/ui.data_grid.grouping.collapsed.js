@@ -473,24 +473,35 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
             return $.Deferred().reject();
         },
         handleDataLoading: function(options) {
-            var groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group);
-            var that = this;
+            var that = this,
+                storeLoadOptions = options.storeLoadOptions,
+                groups = normalizeSortingInfo(storeLoadOptions.group || options.loadOptions.group);
 
             if(options.isCustomLoading || !groups.length) {
                 return;
             }
 
+            if(options.remoteOperations.grouping) {
+                var remotePaging = that._dataSource.remoteOperations().paging;
+
+                storeLoadOptions.group = normalizeSortingInfo(storeLoadOptions.group);
+                storeLoadOptions.group.forEach(function(group, index) {
+                    var isLastGroup = index === storeLoadOptions.group.length - 1;
+                    group.isExpanded = !remotePaging || !isLastGroup;
+                });
+            }
+
             options.group = options.group || groups;
 
             if(options.remoteOperations.paging) {
-                options.skip = options.storeLoadOptions.skip;
-                options.take = options.storeLoadOptions.take;
-                options.storeLoadOptions.requireGroupCount = true;
-                options.storeLoadOptions.group = groups.slice(0, 1);
+                options.skip = storeLoadOptions.skip;
+                options.take = storeLoadOptions.take;
+                storeLoadOptions.requireGroupCount = true;
+                storeLoadOptions.group = groups.slice(0, 1);
                 that._updatePagingOptions(options);
 
-                options.storeLoadOptions.skip = options.skip;
-                options.storeLoadOptions.take = options.take;
+                storeLoadOptions.skip = options.skip;
+                storeLoadOptions.take = options.take;
             } else {
                 that.foreachGroups(function(groupInfo) { groupInfo.count = 0; });
             }

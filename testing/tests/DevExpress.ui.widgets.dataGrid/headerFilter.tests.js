@@ -2134,7 +2134,7 @@ QUnit.test("Header Filter when grid with CustomStore when remote grouping and gr
     assert.strictEqual($popupContent.find(".dx-treeview-item").length, 1, "header items count");
     assert.strictEqual($popupContent.find(".dx-treeview-item").eq(0).text(), "0 - 100", "item 1 text");
     assert.strictEqual(loadArgs.length, 2, "load count");
-    assert.deepEqual(loadArgs[1].group, [{ selector: "Test1", groupInterval: 100, isExpanded: false }, { selector: "Test1", groupInterval: 10, isExpanded: false }], "header filter load group");
+    assert.deepEqual(loadArgs[1].group, [{ selector: "Test1", groupInterval: 100, isExpanded: true }, { selector: "Test1", groupInterval: 10, isExpanded: false }], "header filter load group");
     assert.deepEqual(loadArgs[1].skip, undefined, "header filter load skip");
     assert.deepEqual(loadArgs[1].take, undefined, "header filter load take");
 });

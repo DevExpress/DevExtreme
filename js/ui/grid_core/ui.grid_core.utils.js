@@ -444,7 +444,7 @@ module.exports = (function() {
 
             if(groupInterval) {
                 $.each(groupInterval, function(index, interval) {
-                    result.push(remoteGrouping ? { selector: dataField, groupInterval: interval, isExpanded: false } : getIntervalSelector.bind(column, interval));
+                    result.push(remoteGrouping ? { selector: dataField, groupInterval: interval, isExpanded: index < groupInterval.length - 1 } : getIntervalSelector.bind(column, interval));
                 });
 
                 return result;
