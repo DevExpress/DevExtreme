@@ -64,6 +64,8 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
+    ajaxMock = require("../../helpers/ajaxMock.js"),
+
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
 
@@ -81,16 +83,8 @@ DataGrid.defaultOptions({
     }
 });
 
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
-
-$.extend($.mockjaxSettings, {
-    contentType: "application/json",
-    responseTime: 0,
-    logging: false
-});
-
 QUnit.testDone(function() {
-    $.mockjax.clear();
+    ajaxMock.clear();
 });
 
 QUnit.module("Initialization");
@@ -3205,13 +3199,13 @@ QUnit.test("load from remote rest store when remoteOperations false", function(a
         errorMessage = message;
     };
 
-    $.mockjax({
-        url: "/mockjax-rest-store",
+    ajaxMock.setup({
+        url: "/mock-rest-store",
         responseText: [{ "a": 1 }, { "a": 3 }, { "a": 2 }]
     });
 
     createDataGrid({
-        dataSource: "/mockjax-rest-store",
+        dataSource: "/mock-rest-store",
         remoteOperations: false,
         onContentReady: function(e) {
             assert.ok(!errorMessage, "no error messages");

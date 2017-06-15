@@ -10,10 +10,10 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser"),
-    fx = require("animation/fx");
+    fx = require("animation/fx"),
+    ajaxMock = require("../../helpers/ajaxMock.js");
 
 require("ui/drop_down_editor/ui.drop_down_list");
-require("/node_modules/jquery-mockjax/dist/jquery.mockjax.js");
 
 QUnit.testStart(function() {
     var markup =
@@ -1049,18 +1049,16 @@ QUnit.module(
     "data source from url",
     {
         afterEach: function() {
-            $.mockjax.clear();
+            ajaxMock.clear();
         }
     },
     function() {
         var TEST_URL = "/a3211c1d-c725-4185-acc0-0a59a4152aae";
 
-        function setupMockjax(responseFactory) {
-            $.mockjax({
+        function setupAjaxMock(responseFactory) {
+            ajaxMock.setup({
                 url: TEST_URL,
-                contentType: "application/json",
-                responseTime: 0,
-                response: function() {
+                callback: function() {
                     this.responseText = responseFactory();
                 }
             });
@@ -1074,7 +1072,7 @@ QUnit.module(
             var done = assert.async();
 
             appendWidgetContainer();
-            setupMockjax(function() {
+            setupAjaxMock(function() {
                 return [ { value: 123, text: "Expected Text" } ];
             });
 
@@ -1099,7 +1097,7 @@ QUnit.module(
             var done = assert.async();
 
             appendWidgetContainer();
-            setupMockjax(function() {
+            setupAjaxMock(function() {
                 return [ "a", "z" ];
             });
 
