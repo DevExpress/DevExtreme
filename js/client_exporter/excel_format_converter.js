@@ -4,8 +4,7 @@ var commonUtils = require("../core/utils/common"),
     stringUtils = require("../core/utils/string"),
     numberFormatter = require("../localization/number"),
     dateLocalization = require("../localization/date"),
-    coreLocalization = require("../localization/core"),
-    excelLanguages = require("./excel_languages"),
+    getLanguageID = require("../localization/lcid"),
     UNSUPPORTED_FORMAT_MAPPING = {
         quarter: "shortDate",
         quarterAndYear: "shortDate",
@@ -217,8 +216,7 @@ var excelFormatConverter = module.exports = {
     },
 
     _getLanguageInfo: function(defaultPattern) {
-        var locale = coreLocalization.locale(),
-            languageID = excelLanguages.getLanguageID(locale),
+        var languageID = getLanguageID(),
             languageIDStr = languageID ? languageID.toString(16) : "",
             languageInfo = "";
 

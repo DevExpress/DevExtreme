@@ -13,6 +13,7 @@ var $ = require("jquery"),
     pivotGridDataSource = require("ui/pivot_grid/data_source"),
     Store = require("ui/pivot_grid/xmla_store"),
     errors = require("data/errors").errors,
+    languageId = require("localization/lcid")(),
     testEnvironment = {
         beforeEach: function() {
             this.store = new Store(this.dataSource);
@@ -106,9 +107,13 @@ var $ = require("jquery"),
         },
         dataSource: testEnvironment.dataSource,
 
-        getQuery: function(num) {
+        getRequest: function(num) {
             var call = num === undefined ? this.sendRequest.lastCall : this.sendRequest.getCall(num);
-            var query = $(call.args[0].data).find("Statement").text();
+            return call.args[0].data;
+        },
+
+        getQuery: function(num) {
+            var query = $(this.getRequest(num)).find("Statement").text();
             return query;
         }
     };
@@ -3612,6 +3617,46 @@ QUnit.test("Parse time type cell data", function(assert) {
             assert.strictEqual(getValue(data), "28:59:08");
         });
 });
+
+QUnit.test("Language Id passed to discover query", function(assert) {
+    this.store.getFields();
+
+    assert.equal($(this.getRequest(0)).find("LocaleIdentifier").text(), languageId);
+    assert.equal($(this.getRequest(1)).find("LocaleIdentifier").text(), languageId);
+    assert.equal($(this.getRequest(2)).find("LocaleIdentifier").text(), languageId);
+    assert.equal($(this.getRequest(3)).find("LocaleIdentifier").text(), languageId);
+});
+
+QUnit.test("Language Id passed to execute query", function(assert) {
+    this.store.load({
+        columns: [],
+        rows: [],
+        values: [{ dataField: "[Measures].[Duracao]" }]
+    });
+
+    assert.equal($(this.getRequest(0)).find("LocaleIdentifier").text(), languageId);
+});
+
+QUnit.test("No LocaleIdentifier in query if unknown locale is set", function(assert) {
+    var localization = require("localization"),
+        locale = localization.locale();
+
+    localization.locale("unknown");
+
+    try {
+        this.store.load({
+            columns: [],
+            rows: [],
+            values: [{ dataField: "[Measures].[Duracao]" }]
+        });
+
+        assert.equal($(this.getRequest(0)).find("LocaleIdentifier").length, 0);
+    } finally {
+        localization.locale(locale);
+    }
+
+});
+
 
 QUnit.module("getDrillDownItems", stubsEnvironment);
 
