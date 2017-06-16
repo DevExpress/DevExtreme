@@ -449,6 +449,7 @@
         color: ~"@{@{widgetName}-columnchooser-item-color}";
         font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
         .touch-action(pinch-zoom);
+        border-bottom: ~"@{@{widgetName}-border}";
 
         .dx-@{widgetName}-table {
             .dx-@{widgetName}-borders & {
@@ -457,6 +458,10 @@
 
             .dx-row > td {
                 border-bottom: ~"@{@{widgetName}-border}";
+            }
+
+            .dx-row:last-child > td {
+                border-bottom-width: 0;
             }
         }
     }
