@@ -2045,17 +2045,17 @@ QUnit.testInActiveWindow("Focus next cell after tab on last form button", functi
     testElement.find(".dx-button").last().focus();
     this.clock.tick();
 
-    this.triggerKeyDown("tab", false, false, testElement.find(".dx-button").last().get(0));
+    this.triggerKeyDown("tab", false, false, testElement.find(":focus").get(0));
     this.clock.tick();
 
     //assert
     var $nextCell = testElement.find(".dx-data-row").eq(1).children().eq(0);
 
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
     assert.equal($nextCell.attr("tabindex"), "0");
 
     if(device.deviceType === "desktop") {
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
         assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) + 1, testElement.find("[tabIndex]").index($nextCell), "next focusable element");
     }
 });
