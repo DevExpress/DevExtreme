@@ -29,6 +29,8 @@ var DATAGRID_LINK_CLASS = "dx-link",
     DATAGRID_EDIT_FORM_ITEM_CLASS = "dx-datagrid-edit-form-item",
     DATAGRID_EDIT_BUTTON_CLASS = "dx-edit-button",
 
+    BUTTON_CLASS = "dx-button",
+
     DATAGRID_INSERT_INDEX = "__DX_INSERT_INDEX__",
     DATAGRID_ROW_CLASS = "dx-row",
     DATAGRID_ROW_REMOVED = "dx-row-removed",
@@ -1644,10 +1646,27 @@ gridCore.registerModule("editing", {
                         editFormRowIndex = this._editingController.getEditFormRowIndex();
 
                     if(editFormRowIndex === rowIndex && $cellElements) {
-                        return $cellElements.find("." + DATAGRID_EDIT_FORM_ITEM_CLASS);
+                        return $cellElements.find("." + DATAGRID_EDIT_FORM_ITEM_CLASS + ", ." + BUTTON_CLASS);
                     }
 
                     return $cellElements;
+                },
+                getCellIndex: function($cell, rowIndex) {
+                    if(!$cell.is("td") && rowIndex >= 0) {
+                        var $cellElements = this.getCellElements(rowIndex),
+                            cellIndex = -1;
+
+                        $.each($cellElements, function(index, cellElement) {
+                            if($(cellElement).find($cell).length) {
+                                cellIndex = index;
+                                return false;
+                            }
+                        });
+
+                        return cellIndex;
+                    }
+
+                    return this.callBase.apply(this, arguments);
                 },
                 _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {
                     var item,

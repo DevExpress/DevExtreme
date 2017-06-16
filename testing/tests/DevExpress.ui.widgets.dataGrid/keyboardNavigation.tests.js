@@ -2106,8 +2106,43 @@ QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
+});
+
+QUnit.testInActiveWindow("Focused view must be initialized after insert a new row", function(assert) {
+    //arrange
+    this.options = {
+        errorRowEnabled: true,
+        editing: {
+            mode: 'form',
+            allowAdding: true,
+            allowUpdating: true
+        },
+        commonColumnSettings: {
+            allowEditing: true
+        },
+        columns: this.columns,
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: [
+                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
+                { name: 'Dan', age: 16, lastName: "Skip", phone: "8-800-555-35-35", room: 2 }
+            ]
+        }
+    };
+
+    setupModules(this, { initViews: true });
+    this.gridView.render($('#container'));
+
+    assert.notOk(this.keyboardNavigationController._focusedView, "focused view isn't initialized");
+
+    //act
+    this.addRow();
+    this.clock.tick();
+
+    //assert
+    assert.ok(this.keyboardNavigationController._focusedView, "focused view is initialized");
 });
 
 //T499640

@@ -657,7 +657,7 @@ var RowsViewFixedColumnsExtender = $.extend({}, baseFixedColumns, {
             return cellIndex;
         }
 
-        return this.callBase($cell);
+        return this.callBase.apply(this, arguments);
     },
 
     _updateFixedTablePosition: function(scrollTop) {
