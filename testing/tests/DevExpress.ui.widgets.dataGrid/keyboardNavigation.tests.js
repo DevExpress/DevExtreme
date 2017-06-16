@@ -2037,25 +2037,24 @@ QUnit.testInActiveWindow("Focus next cell after tab on last form button", functi
     //act
     this.focusCell(0, 1);
     this.triggerKeyDown("enter");
-
     this.clock.tick();
 
     assert.equal(testElement.find(".dx-datagrid-edit-form").length, 1, "editForm exists");
 
-
     testElement.find(".dx-button").last().focus();
-
     this.clock.tick();
 
     this.triggerKeyDown("tab", false, false, testElement.find(":focus").get(0));
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
     var $nextCell = testElement.find(".dx-data-row").eq(1).children().eq(0);
+
     assert.equal($nextCell.attr("tabindex"), "0");
+
     if(device.deviceType === "desktop") {
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
         assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) + 1, testElement.find("[tabIndex]").index($nextCell), "next focusable element");
     }
 });
