@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
+    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     equalByValue = commonUtils.equalByValue,
     messageLocalization = require("../../localization/message"),
     Button = require("../button"),
@@ -198,6 +199,9 @@ var ValidatingController = modules.Controller.inherit((function() {
                     adapter: useDefaultValidator ? null : {
                         getValue: getValue,
                         applyValidationResults: defaultValidationResult
+                    },
+                    dataGetter: function() {
+                        return deepExtendArraySafe(deepExtendArraySafe({}, editData.oldData), editData.data);
                     }
                 });
 

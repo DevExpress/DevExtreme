@@ -8302,6 +8302,66 @@ QUnit.test("Show error message on save inserted rows when edit mode is 'popup'",
     assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
 });
 
+QUnit.test("Edit cell with custom validation (edit mode is batch)", function(assert) {
+    //arrange
+    var that = this,
+        rowData,
+        $cellElements,
+        $inputElement,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    rowsView.render($testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: ["name", {
+            dataField: "age",
+            validationRules: [
+                {
+                    type: "custom",
+                    validationCallback: function(e) {
+                        rowData = e.data;
+                        return e.data.name === "Alex";
+                    }
+                }
+            ]
+        }, "lastName"]
+    });
+
+    //act
+    that.editCell(0, 1);
+    $inputElement = getInputElements($testElement).first();
+    $inputElement.val(666);
+    $inputElement.trigger("change");
+
+    that.closeEditCell();
+    that.clock.tick();
+
+    $cellElements = rowsView.element().find("tbody > tr").first().find("td");
+
+    //assert
+    assert.deepEqual(rowData, { age: 666, lastName: "John", name: "Alex" }, "row data");
+    assert.notOk($cellElements.eq(1).hasClass("dx-datagrid-invalid"), "success validation");
+
+    //act
+    that.editCell(1, 1);
+    $inputElement = getInputElements($testElement).first();
+    $inputElement.val(777);
+    $inputElement.trigger("change");
+
+    that.closeEditCell();
+    that.clock.tick();
+
+    $cellElements = rowsView.element().find("tbody > tr").eq(1).find("td");
+
+    //assert
+    assert.deepEqual(rowData, { age: 777, lastName: "Skip", name: "Dan" }, "row data");
+    assert.ok($cellElements.eq(1).hasClass("dx-datagrid-invalid"), "failed validation");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
