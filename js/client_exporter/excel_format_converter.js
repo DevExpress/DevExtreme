@@ -4,7 +4,7 @@ var commonUtils = require("../core/utils/common"),
     stringUtils = require("../core/utils/string"),
     numberFormatter = require("../localization/number"),
     dateLocalization = require("../localization/date"),
-    getLanguageID = require("../localization/lcid"),
+    getLanguageID = require("../localization/language_codes").getLanguageId,
     UNSUPPORTED_FORMAT_MAPPING = {
         quarter: "shortDate",
         quarterAndYear: "shortDate",

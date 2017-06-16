@@ -13,7 +13,7 @@ var $ = require("jquery"),
     pivotGridDataSource = require("ui/pivot_grid/data_source"),
     Store = require("ui/pivot_grid/xmla_store"),
     errors = require("data/errors").errors,
-    languageId = require("localization/lcid")(),
+    languageId = require("localization/language_codes").getLanguageId(),
     testEnvironment = {
         beforeEach: function() {
             this.store = new Store(this.dataSource);

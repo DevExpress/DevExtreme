@@ -8,7 +8,7 @@ var $ = require("../../../core/renderer"),
     inArray = require("../../../core/utils/array").inArray,
     pivotGridUtils = require("../ui.pivot_grid.utils"),
     when = require("../../../integration/jquery/deferred").when,
-    getLanguageId = require("../../../localization/lcid");
+    getLanguageId = require("../../../localization/language_codes").getLanguageId;
 
 exports.XmlaStore = Class.inherit((function() {
 
