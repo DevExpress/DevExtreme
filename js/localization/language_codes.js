@@ -355,6 +355,6 @@ var locale = require("./core").locale,
         "ha-Latn": 31848
     };
 
-module.exports = function() {
+exports.getLanguageId = function() {
     return LANGUAGE_CODES[locale()];
 };
