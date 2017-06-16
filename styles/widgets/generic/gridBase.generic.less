@@ -451,6 +451,10 @@
         .touch-action(pinch-zoom);
         border-bottom: ~"@{@{widgetName}-border}";
 
+        .dx-@{widgetName}-content {
+            margin-bottom: -1px;
+        }
+
         .dx-@{widgetName}-table {
             .dx-@{widgetName}-borders & {
                 border-bottom-width: 1px;
@@ -458,10 +462,6 @@
 
             .dx-row > td {
                 border-bottom: ~"@{@{widgetName}-border}";
-            }
-
-            .dx-row:last-child > td {
-                border-bottom-width: 0;
             }
         }
     }
