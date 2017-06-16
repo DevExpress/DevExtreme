@@ -6,12 +6,13 @@ var $ = require("jquery"),
     errors = require("../../../data/errors").errors,
     commonUtils = require("../../../core/utils/common"),
     pivotGridUtils = require("../ui.pivot_grid.utils"),
-    when = require("../../../integration/jquery/deferred").when;
+    when = require("../../../integration/jquery/deferred").when,
+    getLanguageId = require("../../../localization/language_codes").getLanguageId;
 
 exports.XmlaStore = Class.inherit((function() {
 
-    var discover = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Discover xmlns="urn:schemas-microsoft-com:xml-analysis"><RequestType>{2}</RequestType><Restrictions><RestrictionList><CATALOG_NAME>{0}</CATALOG_NAME><CUBE_NAME>{1}</CUBE_NAME></RestrictionList></Restrictions><Properties><PropertyList><Catalog>{0}</Catalog></PropertyList></Properties></Discover></Body></Envelope>',
-        execute = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout></PropertyList></Properties></Execute></Body></Envelope>',
+    var discover = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Discover xmlns="urn:schemas-microsoft-com:xml-analysis"><RequestType>{2}</RequestType><Restrictions><RestrictionList><CATALOG_NAME>{0}</CATALOG_NAME><CUBE_NAME>{1}</CUBE_NAME></RestrictionList></Restrictions><Properties><PropertyList><Catalog>{0}</Catalog>{3}</PropertyList></Properties></Discover></Body></Envelope>',
+        execute = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout>{2}</PropertyList></Properties></Execute></Body></Envelope>',
         mdx = "SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS",
         mdxFilterSelect = "(SELECT {0} FROM {1})",
         mdxWith = "{0} {1} as {2}",
@@ -61,6 +62,15 @@ exports.XmlaStore = Class.inherit((function() {
             deferred.resolve(xml);
         });
         return deferred;
+    }
+
+    function getLocaleIdProperty() {
+        var languageId = getLanguageId();
+
+        if(languageId !== undefined) {
+            return stringFormat("<LocaleIdentifier>{0}</LocaleIdentifier>", languageId);
+        }
+        return "";
     }
 
     function mdxDescendants(level, levelMember, nextLevel) {
@@ -765,7 +775,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function sendQuery(storeOptions, mdxString) {
         mdxString = $("<div>").text(mdxString).html();
-        return execXMLA(storeOptions, stringFormat(execute, mdxString, storeOptions.catalog));
+        return execXMLA(storeOptions, stringFormat(execute, mdxString, storeOptions.catalog, getLocaleIdProperty()));
     }
 
 /**
@@ -810,10 +820,11 @@ exports.XmlaStore = Class.inherit((function() {
             var options = this._options,
                 catalog = options.catalog,
                 cube = options.cube,
-                dimensionsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_DIMENSIONS")),
-                measuresRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASURES")),
-                hierarchiesRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_HIERARCHIES")),
-                levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_LEVELS")),
+                localeIdProperty = getLocaleIdProperty(),
+                dimensionsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_DIMENSIONS", localeIdProperty)),
+                measuresRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASURES", localeIdProperty)),
+                hierarchiesRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_HIERARCHIES", localeIdProperty)),
+                levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_LEVELS", localeIdProperty)),
                 result = $.Deferred();
 
             when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest).done(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) {
