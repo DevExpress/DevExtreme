@@ -2038,25 +2038,24 @@ QUnit.testInActiveWindow("Focus next cell after tab on last form button", functi
     //act
     this.focusCell(0, 1);
     this.triggerKeyDown("enter");
-
     this.clock.tick();
 
     assert.equal(testElement.find(".dx-datagrid-edit-form").length, 1, "editForm exists");
 
-
     testElement.find(".dx-button").last().focus();
-
     this.clock.tick();
 
     this.triggerKeyDown("tab", false, false, testElement.find(":focus").get(0));
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
     var $nextCell = testElement.find(".dx-data-row").eq(1).children().eq(0);
+
     assert.equal($nextCell.attr("tabindex"), "0");
+
     if(device.deviceType === "desktop") {
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
         assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) + 1, testElement.find("[tabIndex]").index($nextCell), "next focusable element");
     }
 });
@@ -2107,8 +2106,43 @@ QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
+});
+
+QUnit.testInActiveWindow("Focused view must be initialized after insert a new row", function(assert) {
+    //arrange
+    this.options = {
+        errorRowEnabled: true,
+        editing: {
+            mode: 'form',
+            allowAdding: true,
+            allowUpdating: true
+        },
+        commonColumnSettings: {
+            allowEditing: true
+        },
+        columns: this.columns,
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: [
+                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
+                { name: 'Dan', age: 16, lastName: "Skip", phone: "8-800-555-35-35", room: 2 }
+            ]
+        }
+    };
+
+    setupModules(this, { initViews: true });
+    this.gridView.render($('#container'));
+
+    assert.notOk(this.keyboardNavigationController._focusedView, "focused view isn't initialized");
+
+    //act
+    this.addRow();
+    this.clock.tick();
+
+    //assert
+    assert.ok(this.keyboardNavigationController._focusedView, "focused view is initialized");
 });
 
 //T499640
