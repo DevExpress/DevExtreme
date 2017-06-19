@@ -46,7 +46,7 @@ module.exports = (function() {
 
         if(!commonUtils.isDefined(value)) {
             return null;
-        } else if(module.exports.isDateType(this.dataType)) {
+        } else if(isDateType(this.dataType)) {
             nameIntervalSelector = arguments[0];
             return DATE_INTERVAL_SELECTORS[nameIntervalSelector](value);
         } else if(this.dataType === "number") {
@@ -169,7 +169,7 @@ module.exports = (function() {
             startFilterExpression = [dataField, ">=", filterValue[0]];
             endFilterExpression = [dataField, "<=", filterValue[1]];
 
-            if(module.exports.isDateType(column.dataType)) {
+            if(isDateType(column.dataType)) {
                 if(isZeroTime(filterValue[1])) {
                     endFilterValue = new Date(filterValue[1].getTime());
                     endFilterValue.setDate(filterValue[1].getDate() + 1);
@@ -189,6 +189,10 @@ module.exports = (function() {
         }
 
         return selector1 === selector2;
+    };
+
+    var isDateType = function(dataType) {
+        return dataType === "date" || dataType === "datetime";
     };
 
     return {
@@ -435,7 +439,7 @@ module.exports = (function() {
                 filter = [selector, selectedFilterOperation || "contains", filterValue];
             } else if(selectedFilterOperation === "between") {
                 return getFilterExpressionByRange.apply(column, arguments);
-            } else if(module.exports.isDateType(dataType) && commonUtils.isDefined(filterValue)) {
+            } else if(isDateType(dataType) && commonUtils.isDefined(filterValue)) {
                 return getFilterExpressionForDate.apply(column, arguments);
             } else if(dataType === "number") {
                 return getFilterExpressionForNumber.apply(column, arguments);
@@ -475,7 +479,7 @@ module.exports = (function() {
                 groupInterval = column.headerFilter && column.headerFilter.groupInterval,
                 interval = groupInterval === "quarter" ? "month" : groupInterval;
 
-            if(module.exports.isDateType(column.dataType)) {
+            if(isDateType(column.dataType)) {
                 result = column.dataType === "datetime" ? DEFAULT_DATETIME_INTERVAL : DEFAULT_DATE_INTERVAL;
                 index = inArray(interval, dateIntervals);
 
@@ -559,8 +563,6 @@ module.exports = (function() {
             return result;
         },
 
-        isDateType: function(dataType) {
-            return dataType === "date" || dataType === "datetime";
-        }
+        isDateType: isDateType
     };
 })();
