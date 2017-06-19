@@ -466,6 +466,24 @@ QUnit.test('Date editor', function(assert) {
     assert.deepEqual(value, new Date(2013), 'value after change');
 });
 
+QUnit.test("DateTime editor", function(assert) {
+    //arrange
+    var editor,
+        $container = $("#container");
+
+    //act
+    this.editorFactoryController.createEditor($container, {
+        dataType: "datetime",
+        format: "shortDateShortTime"
+    });
+
+    //assert
+    editor = $container.data("dxDateBox");
+    assert.ok(editor, "has editor");
+    assert.equal(editor.option("type"), "datetime", "editor type");
+    assert.equal(editor.option("displayFormat"), "shortDateShortTime", "display format of the editor");
+});
+
 //T219884
 QUnit.test('Date editor with datetime format changing value', function(assert) {
     var $container = $('#container'),

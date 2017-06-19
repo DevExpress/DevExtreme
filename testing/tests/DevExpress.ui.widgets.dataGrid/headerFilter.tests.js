@@ -3162,3 +3162,36 @@ QUnit.test("Draw header filter indicator for band columns", function(assert) {
     assert.ok($cells.eq(5).find(".dx-header-filter").length, "has header filter indicator");
     assert.ok($cells.eq(6).find(".dx-header-filter").length, "has header filter indicator");
 });
+
+QUnit.test("Load data for column with dataType is 'datetime'", function(assert) {
+    //arrange
+    var items,
+        column,
+        headerFilterDataSource,
+        getTreeText = function(items) {
+            var result = [],
+                item = items[0];
+
+            while(item) {
+                result.push(item.text);
+                item = item.items && item.items[0];
+            }
+
+            return result;
+        };
+
+    this.options.dataSource = [{ birthday: new Date(1992, 8, 6, 12, 13, 14) }];
+    this.options.columns = [{ dataField: "birthday", dataType: "datetime" }];
+    this.setupDataGrid();
+    column = this.columnsController.getVisibleColumns()[0];
+    headerFilterDataSource = this.headerFilterController.getDataSource(column);
+
+    //act
+    headerFilterDataSource.load({ group: headerFilterDataSource.group }).done(function(data) {
+        items = data;
+    });
+    this.clock.tick();
+
+    //assert
+    assert.deepEqual(getTreeText(items), ["1992", "September", "6", "12", "13"], "loaded data");
+});

@@ -34,7 +34,8 @@ var NO_DATA_CLASS = "nodata",
             return value && value.getSeconds();
         }
     },
-    DEFAULT_DATE_INTERVAL = ["year", "month", "day"];
+    DEFAULT_DATE_INTERVAL = ["year", "month", "day"],
+    DEFAULT_DATETIME_INTERVAL = ["year", "month", "day", "hour", "minute"];
 
 module.exports = (function() {
     var getIntervalSelector = function() {
@@ -45,7 +46,7 @@ module.exports = (function() {
 
         if(!commonUtils.isDefined(value)) {
             return null;
-        } else if(this.dataType === "date") {
+        } else if(module.exports.isDateType(this.dataType)) {
             nameIntervalSelector = arguments[0];
             return DATE_INTERVAL_SELECTORS[nameIntervalSelector](value);
         } else if(this.dataType === "number") {
@@ -65,11 +66,17 @@ module.exports = (function() {
 
     var getFilterExpressionForDate = function(filterValue, selectedFilterOperation, target) {
         var column = this,
-            selector = getFilterSelector(column, target),
             dateStart,
             dateEnd,
+            dateInterval,
             values = getDateValues(filterValue),
-            dateInterval = target === "headerFilter" && module.exports.getGroupInterval(column)[values.length - 1];
+            selector = getFilterSelector(column, target);
+
+        if(target === "headerFilter") {
+            dateInterval = module.exports.getGroupInterval(column)[values.length - 1];
+        } else if(column.dataType === "datetime") {
+            dateInterval = "minute";
+        }
 
         switch(dateInterval) {
             case "year":
@@ -162,7 +169,7 @@ module.exports = (function() {
             startFilterExpression = [dataField, ">=", filterValue[0]];
             endFilterExpression = [dataField, "<=", filterValue[1]];
 
-            if(column.dataType === "date") {
+            if(module.exports.isDateType(column.dataType)) {
                 if(isZeroTime(filterValue[1])) {
                     endFilterValue = new Date(filterValue[1].getTime());
                     endFilterValue.setDate(filterValue[1].getDate() + 1);
@@ -407,6 +414,8 @@ module.exports = (function() {
             switch(dataType) {
                 case "date":
                     return "shortDate";
+                case "datetime":
+                    return "shortDateShortTime";
             }
         },
 
@@ -426,7 +435,7 @@ module.exports = (function() {
                 filter = [selector, selectedFilterOperation || "contains", filterValue];
             } else if(selectedFilterOperation === "between") {
                 return getFilterExpressionByRange.apply(column, arguments);
-            } else if(dataType === "date" && commonUtils.isDefined(filterValue)) {
+            } else if(module.exports.isDateType(dataType) && commonUtils.isDefined(filterValue)) {
                 return getFilterExpressionForDate.apply(column, arguments);
             } else if(dataType === "number") {
                 return getFilterExpressionForNumber.apply(column, arguments);
@@ -466,8 +475,8 @@ module.exports = (function() {
                 groupInterval = column.headerFilter && column.headerFilter.groupInterval,
                 interval = groupInterval === "quarter" ? "month" : groupInterval;
 
-            if(column.dataType === "date") {
-                result = DEFAULT_DATE_INTERVAL;
+            if(module.exports.isDateType(column.dataType)) {
+                result = column.dataType === "datetime" ? DEFAULT_DATETIME_INTERVAL : DEFAULT_DATE_INTERVAL;
                 index = inArray(interval, dateIntervals);
 
                 if(index >= 0) {
@@ -548,6 +557,10 @@ module.exports = (function() {
                 columnIndex++;
             }
             return result;
+        },
+
+        isDateType: function(dataType) {
+            return dataType === "date" || dataType === "datetime";
         }
     };
 })();

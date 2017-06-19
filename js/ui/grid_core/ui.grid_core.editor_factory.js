@@ -115,6 +115,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                 }
             },
             displayFormat: options.format,
+            type: options.dataType,
             formatWidthCalculator: null,
             width: "auto"
         }, options);
@@ -455,6 +456,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             } else {
                 switch(options.dataType) {
                     case "date":
+                    case "datetime":
                         prepareDateBox(options);
                         break;
                     case "boolean":
