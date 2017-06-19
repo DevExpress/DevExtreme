@@ -2455,6 +2455,7 @@ QUnit.module('Editing with real dataController', {
         ];
         this.columns = ['name', 'age', { dataField: "lastName", allowEditing: false }, { dataField: 'phone' }, 'room'];
         this.options = {
+            tabIndex: 0,
             errorRowEnabled: true,
             editing: {
                 mode: 'row'

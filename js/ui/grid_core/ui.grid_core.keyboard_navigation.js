@@ -94,6 +94,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
         }
     },
 
+    _applyTabIndexToElement: function($element) {
+        var tabIndex = this.option("tabIndex");
+        $element.attr("tabIndex", commonUtils.isDefined(tabIndex) ? tabIndex : 0);
+    },
+
     _clickHandler: function(e) {
         var event = e.jQueryEvent,
             $cell = $(event.currentTarget),
@@ -104,7 +109,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($cell);
             if(!this._editingController.isEditing()) {
-                data.view.element().attr("tabIndex", 0);
+                this._applyTabIndexToElement(data.view.element());
                 data.view.element().find(".dx-row > td[tabIndex]").attr("tabIndex", null);
                 $cell.focus();
             }
@@ -278,7 +283,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         focusedView && focusedView.element().attr("tabIndex", null);
 
         if($focusElement) {
-            $focusElement.attr("tabindex", 0);
+            this._applyTabIndexToElement($focusElement);
             $focusElement.focus();
         }
 
@@ -391,6 +396,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var scrollingMode = this.option("scrolling.mode");
         return scrollingMode === "virtual" || scrollingMode === "infinite";
     },
+
     _scrollBy: function(top) {
         var that = this,
             scrollable = this.getView("rowsView").getScrollable();
@@ -402,7 +408,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     var columnIndex = that._focusedCellPosition.columnIndex;
                     var rowIndex = that.getView("rowsView").getTopVisibleItemIndex() + that._dataController.getRowIndexOffset();
                     that.getController("editorFactory").loseFocus();
-                    that.getView("rowsView").element().attr("tabIndex", 0).focus();
+
+                    var $rowsView = that.getView("rowsView").element();
+                    that._applyTabIndexToElement($rowsView);
+                    $rowsView.focus();
+
                     that._focusedCellPosition.rowIndex = rowIndex;
                     that._focusedCellPosition.columnIndex = columnIndex;
                 });
@@ -468,7 +478,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             var $nextCell = this._getNextCell(direction, "row");
             if(!this._isInsideEditForm($nextCell)) {
-                $nextCell && $nextCell.attr("tabindex", 0);
+                $nextCell && this._applyTabIndexToElement($nextCell);
             }
 
             return true;
@@ -958,6 +968,7 @@ module.exports = {
                     var that = this,
                         cellElements = that.getCellElements(0),
                         keyboardNavigation = that.getController("keyboardNavigation"),
+                        tabIndex = that.option("tabIndex"),
                         oldFocusedView = keyboardNavigation._focusedView,
                         $row,
                         $cell;
@@ -970,14 +981,14 @@ module.exports = {
                         $row = cellElements.eq(0).parent();
 
                         if(isGroupRow($row)) {
-                            $row.attr("tabIndex", 0);
+                            $row.attr("tabIndex", tabIndex);
                         } else {
                             keyboardNavigation._focusedView = that;
                             for(var i = 0; i < cellElements.length; i++) {
                                 $cell = cellElements.eq(i);
                                 if(keyboardNavigation._isCellValid($cell)) {
                                     if(isCellElement($cell)) {
-                                        $cell.attr("tabIndex", 0);
+                                        $cell.attr("tabIndex", tabIndex);
                                     }
                                     break;
                                 }
