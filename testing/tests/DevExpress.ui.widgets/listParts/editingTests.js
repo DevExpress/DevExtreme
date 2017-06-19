@@ -482,6 +482,29 @@ QUnit.test("selectedItems should not be cleaned after reordering if store key sp
     assert.equal(listInstance.option("selectedItems")[0], items[0], "first item is selected");
 });
 
+//T525081
+QUnit.test("selection works well after clean all selected items and selectAllMode is 'allPages'", function(assert) {
+    var items = [1, 2, 3],
+        selectionChangedSpy = sinon.spy();
+
+    var listInstance = $("#list").dxList({
+        dataSource: new ArrayStore({
+            key: "id",
+            data: items
+        }),
+        selectionMode: "all",
+        showSelectionControls: true,
+        selectAllMode: "allPages",
+        onSelectionChanged: selectionChangedSpy
+    }).dxList("instance");
+
+    listInstance.selectItem(0);
+    listInstance.unselectItem(0);
+    listInstance.selectItem(0);
+
+    assert.equal(selectionChangedSpy.callCount, 3, "'selectionChanged' event has been fired 3 times");
+});
+
 var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 
 QUnit.module("selecting in grouped list", {
