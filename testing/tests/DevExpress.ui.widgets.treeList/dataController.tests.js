@@ -558,6 +558,54 @@ QUnit.test("The expandRowKeys should be not changed when loading data when there
     assert.deepEqual(that.option("expandedRowKeys"), [3], "expandedRowKeys value when data is loaded");
 });
 
+QUnit.test("Get node by key", function(assert) {
+    //arrange
+    var rows,
+        node;
+
+    this.applyOptions({
+        dataSource: [
+            { name: "Category1", phone: "55-55-55", id: 1, parentId: 0 },
+            { name: "SubCategory1", phone: "35-35-35", id: 2, parentId: 1 },
+            { name: "SubCategory2", phone: "45-45-45", id: 3, parentId: 1 }
+        ]
+    });
+
+    //act
+    this.dataController.load();
+
+    //assert
+    rows = this.getVisibleRows();
+    node = this.getNodeByKey(1);
+    assert.equal(rows.length, 1, "count row");
+    assert.strictEqual(node, rows[0].node, "equal to the node of a first row");
+    assert.deepEqual(node.data, { name: "Category1", phone: "55-55-55", id: 1, parentId: 0 }, "node by key is '1'");
+});
+
+QUnit.test("Get node by key when node is hidden", function(assert) {
+    //arrange
+    var rows,
+        node;
+
+    this.applyOptions({
+        dataSource: [
+            { name: "Category1", phone: "55-55-55", id: 1, parentId: 0 },
+            { name: "SubCategory1", phone: "35-35-35", id: 2, parentId: 1 },
+            { name: "SubCategory2", phone: "45-45-45", id: 3, parentId: 1 }
+        ]
+    });
+
+    //act
+    this.dataController.load();
+
+    //assert
+    rows = this.getVisibleRows();
+    node = this.getNodeByKey(3);
+    assert.equal(rows.length, 1, "count row");
+    assert.notStrictEqual(node, rows[0].node, "not equal to the node of a first row");
+    assert.deepEqual(node.data, { name: "SubCategory2", phone: "45-45-45", id: 3, parentId: 1 }, "node by key is '3'");
+});
+
 
 QUnit.module("Expand/Collapse nodes", { beforeEach: setupModule, afterEach: teardownModule });
 
