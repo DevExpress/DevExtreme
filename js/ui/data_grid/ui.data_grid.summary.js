@@ -229,15 +229,16 @@ var SummaryDataSourceAdapterClientExtender = (function() {
         },
         _handleDataLoadedCore: function(options) {
             var that = this,
-                groups = dataUtils.normalizeSortingInfo(options.loadOptions.group || []),
+                groups = dataUtils.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []),
                 remoteOperations = options.remoteOperations || {},
                 summary = that.summaryGetter()(remoteOperations),
                 totalAggregates;
 
             if(remoteOperations.summary) {
-                if(!remoteOperations.paging && !remoteOperations.grouping && groups.length && summary) {
-                    calculateAggregates(that, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
-
+                if(!remoteOperations.paging && groups.length && summary) {
+                    if(!remoteOperations.grouping) {
+                        calculateAggregates(that, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
+                    }
                     options.data = sortGroupsBySummary(options.data, groups, summary);
                 }
             } else if(!remoteOperations.paging) {
