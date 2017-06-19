@@ -1997,6 +1997,33 @@ QUnit.test("There are no errors on repaint a filter row when filter range popup 
     assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 0, "hasn't overlay wrapper");
 });
 
+QUnit.test("Add custom tabIndex to filter range content", function(assert) {
+    //arrange
+    var that = this,
+        $filterMenu,
+        $menuItem,
+        $filterRangeContent,
+        $testElement = $('#container').addClass("dx-datagrid-borders");
+
+    that.options.tabIndex = 3;
+    that.options.columns.push({ caption: "Date", dataType: "date", allowFiltering: true });
+    setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+        initViews: true
+    });
+    that.columnHeadersView.render($testElement);
+
+    $filterMenu = $testElement.find(".dx-menu").last();
+
+    $menuItem = $filterMenu.find(".dx-menu-item");
+    $menuItem.trigger("dxclick");
+    $(".dx-menu-item:contains('Between')").trigger("dxclick");
+
+    $filterRangeContent = $(".dx-filter-range-content");
+
+    //assert
+    assert.equal($filterRangeContent.attr("tabIndex"), "3", "tabIndex of filter range content");
+});
+
 if(device.deviceType === "desktop") {
     //T306751
     QUnit.testInActiveWindow("Filter range - keyboard navigation", function(assert) {

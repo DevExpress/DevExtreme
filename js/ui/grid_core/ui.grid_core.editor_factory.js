@@ -46,7 +46,8 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             placeholder: options.placeholder,
             inputAttr: {
                 id: options.id
-            }
+            },
+            tabIndex: options.tabIndex
         }, options.editorOptions);
     };
 
@@ -235,7 +236,6 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             onValueChanged: function(e) {
                 options.setValue && options.setValue(e.value, e);
             },
-            tabIndex: options.tabIndex ? options.tabIndex : 0
         }, options);
     };
 
@@ -449,6 +449,10 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
         createEditor: function($container, options) {
             options.cancel = false;
             options.editorElement = $container;
+
+            if(!commonUtils.isDefined(options.tabIndex)) {
+                options.tabIndex = this.option("tabIndex");
+            }
 
             if(options.lookup) {
                 prepareSelectBox(options);
