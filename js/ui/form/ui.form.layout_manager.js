@@ -405,15 +405,23 @@ var LayoutManager = Widget.inherit({
                 return this._cashedColCount;
             }
 
-            var minColWidth = this.option("minColWidth"),
-                width = this.element().width(),
-                itemsCount = this._items.length,
-                maxColCount = Math.floor(width / minColWidth) || 1;
-
-            this._cashedColCount = colCount = itemsCount < maxColCount ? itemsCount : maxColCount;
+            this._cashedColCount = colCount = this._getMaxColCount();
         }
 
         return colCount < 1 ? 1 : colCount;
+    },
+
+    _getMaxColCount: function() {
+        var minColWidth = this.option("minColWidth"),
+            width = this.element().width(),
+            itemsCount = this._items.length,
+            maxColCount = Math.floor(width / minColWidth) || 1;
+
+        return itemsCount < maxColCount ? itemsCount : maxColCount;
+    },
+
+    isCachedColCountObsolete: function() {
+        return this._cashedColCount && this._getMaxColCount() !== this._cashedColCount;
     },
 
     _prepareItemsWithMerging: function(colCount) {
