@@ -419,6 +419,22 @@ QUnit.test('Boolean editor', function(assert) {
     assert.equal(value, false, 'value after change');
 });
 
+QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
+    var $container = $('#container');
+
+    this.editorFactoryController.option("tabIndex", 7);
+
+    this.editorFactoryController.createEditor($container, {
+        dataType: 'boolean'
+    });
+
+    //act
+    var checkBox = $container.dxCheckBox('instance');
+
+    //assert
+    assert.equal(checkBox.element().attr("tabIndex"), "7", "tabIndex attr of checkBox");
+});
+
 QUnit.test('Boolean editor with null value should be intermediate', function(assert) {
     var $container = $('#container'),
         value = null;
