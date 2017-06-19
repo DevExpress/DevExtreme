@@ -168,9 +168,11 @@ module.exports = SelectionStrategy.inherit({
             deferred.resolve([]);
             return deferred;
         }
+
         var filter = this.options.filter();
         if(isSelectAll && isDeselect && !filter) {
-            return this._clearSelection();
+            deferred.resolve(this.getSelectedItemKeys());
+            return deferred;
         }
 
         var selectionFilterCreator = new SelectionFilterCreator(key(), keys, isSelectAll, this.equalKeys.bind(this), this.options.keyOf),
