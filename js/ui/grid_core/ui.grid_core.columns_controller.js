@@ -11,8 +11,8 @@ var $ = require("../../core/renderer"),
     isDefined = commonUtils.isDefined,
     objectUtils = require("../../core/utils/object"),
     errors = require("../widget/ui.errors"),
-    modules = require("../grid_core/ui.grid_core.modules"),
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
+    modules = require("./ui.grid_core.modules"),
+    gridCoreUtils = require("./ui.grid_core.utils"),
     normalizeSortingInfo = gridCoreUtils.normalizeSortingInfo,
     equalSortParameters = gridCoreUtils.equalSortParameters,
     normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
@@ -174,7 +174,7 @@ module.exports = {
              * @publicName dataType
              * @type string
              * @default undefined
-             * @acceptValues "string" | "number" | "date" | "boolean" | "object"
+             * @acceptValues "string" | "number" | "date" | "datetime" | "boolean" | "object"
              */
             /**
              * @name GridBaseOptions_columns_validationRules
@@ -570,7 +570,8 @@ module.exports = {
                 DATATYPE_OPERATIONS = {
                     "number": ["=", "<>", "<", ">", "<=", ">=", "between"],
                     "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
-                    "date": ["=", "<>", "<", ">", "<=", ">=", "between"]
+                    "date": ["=", "<>", "<", ">", "<=", ">=", "between"],
+                    "datetime": ["=", "<>", "<", ">", "<=", ">=", "between"]
                 },
                 COLUMN_INDEX_OPTIONS = {
                     visibleIndex: true,
@@ -725,6 +726,7 @@ module.exports = {
             var getSerializationFormat = function(dataType, value) {
                 switch(dataType) {
                     case "date":
+                    case "datetime":
                         return dateSerialization.getDateSerializationFormat(value);
                     case "number":
                         if(commonUtils.isString(value)) {
@@ -739,7 +741,7 @@ module.exports = {
 
             var updateSerializers = function(options, dataType) {
                 if(!options.deserializeValue) {
-                    if(dataType === "date") {
+                    if(gridCoreUtils.isDateType(dataType)) {
                         options.deserializeValue = function(value) {
                             return dateSerialization.deserializeDate(value);
                         };
@@ -1961,10 +1963,10 @@ module.exports = {
                             valueDataType,
                             lookup = column.lookup;
 
-                        if(column.dataType === "date" && column.serializationFormat === undefined) {
+                        if(gridCoreUtils.isDateType(column.dataType) && column.serializationFormat === undefined) {
                             column.serializationFormat = dateSerializationFormat;
                         }
-                        if(lookup && lookup.dataType === "date" && column.serializationFormat === undefined) {
+                        if(lookup && gridCoreUtils.isDateType(lookup.dataType) && column.serializationFormat === undefined) {
                             lookup.serializationFormat = dateSerializationFormat;
                         }
 
@@ -2429,7 +2431,7 @@ module.exports = {
                                         } else if(text === column.falseText) {
                                             result = false;
                                         }
-                                    } else if(column.dataType === "date") {
+                                    } else if(gridCoreUtils.isDateType(column.dataType)) {
                                         parsedValue = dateLocalization.parse(text, column.format);
                                         if(parsedValue) {
                                             result = parsedValue;

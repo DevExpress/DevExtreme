@@ -1134,6 +1134,32 @@ QUnit.test("calculateFilterExpression for column with dataType is date when filt
     ], "calculate filter expression for end date with time");
 });
 
+QUnit.test("calculateFilterExpression for column with dataType is 'datetime'", function(assert) {
+    //arrange
+    this.applyOptions({
+        columns: [{ dataField: 'TestField', dataType: 'datetime' }]
+    });
+
+    var date = new Date(2012, 4, 11, 8, 30),
+        dateStart = new Date(2012, 4, 11, 8, 30),
+        dateEnd = new Date(2012, 4, 11, 8, 31),
+        column = this.columnsController.getColumns()[0];
+
+    //act, assert
+    assert.ok(column);
+    assert.ok(column.calculateFilterExpression);
+    //T241043
+    assert.deepEqual(column.calculateFilterExpression(null), ["TestField", "=", null]);
+
+    assert.deepEqual(column.calculateFilterExpression(date), [['TestField', '>=', dateStart], "and", ['TestField', '<', dateEnd]]);
+    assert.deepEqual(column.calculateFilterExpression(date, '='), [['TestField', '>=', dateStart], "and", ['TestField', '<', dateEnd]]);
+    assert.deepEqual(column.calculateFilterExpression(date, '<>'), [['TestField', '<', dateStart], 'or', ['TestField', '>=', dateEnd]]);
+    assert.deepEqual(column.calculateFilterExpression(date, '>'), ['TestField', '>=', dateEnd]);
+    assert.deepEqual(column.calculateFilterExpression(date, '<'), ['TestField', '<', dateStart]);
+    assert.deepEqual(column.calculateFilterExpression(date, '<='), ['TestField', '<', dateEnd]);
+    assert.deepEqual(column.calculateFilterExpression(date, '>='), ['TestField', '>=', dateStart]);
+});
+
 QUnit.test("calculateFilterExpression for column with string type dataField", function(assert) {
     this.applyOptions({
         columns: [{ dataField: 'TestField', dataType: 'string' }]
@@ -1222,6 +1248,20 @@ QUnit.test("minWidth should be assigned to all columns from columnMinWidth optio
     assert.strictEqual(visibleColumns[0].minWidth, 20);
     assert.strictEqual(visibleColumns[1].minWidth, 20);
     assert.strictEqual(visibleColumns[2].minWidth, 30);
+});
+
+QUnit.test("format of the column with dataType is 'datetime'", function(assert) {
+    //arrange
+    var column;
+
+    //act
+    this.applyOptions({
+        columns: [{ dataField: "TestField", dataType: "datetime" }]
+    });
+
+    //assert
+    column = this.columnsController.getColumns()[0];
+    assert.strictEqual(column.format, "shortDateShortTime");
 });
 
 QUnit.module("initialization from dataSource", { beforeEach: setupModule, afterEach: teardownModule });
