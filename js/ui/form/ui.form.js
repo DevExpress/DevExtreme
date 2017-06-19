@@ -1483,7 +1483,7 @@ var Form = Widget.inherit({
             return;
         }
 
-        if(this.option("colCount") === "auto") {
+        if(this.option("colCount") === "auto" && this._isAutoColCountChanged()) {
             this._refresh();
         }
     },
@@ -1499,6 +1499,16 @@ var Form = Widget.inherit({
         });
 
         return isChanged;
+    },
+
+    _isAutoColCountChanged: function() {
+        if(this._cachedLayoutManagers.length) {
+            var isColCountChanged = function(layoutManager) {
+                return layoutManager.isCachedColCountObsolete();
+            };
+
+            return this._cachedLayoutManagers.some(isColCountChanged);
+        }
     },
 
     _refresh: function() {
