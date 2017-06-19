@@ -511,6 +511,28 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         changeRowExpand: function(key) {
             this._changeRowExpandCore(key);
             return this._isNodesInitializing ? $.Deferred().resolve() : this.load();
+        },
+
+        getNodeByKey: function(key, nodes) {
+            if(this._rootNode) {
+                var node;
+
+                nodes = nodes || this._rootNode.children;
+
+                for(var i = 0; i < nodes.length; i++) {
+                    if(commonUtils.equalByValue(nodes[i].key, key)) {
+                        return nodes[i];
+                    }
+
+                    if(nodes[i].children.length) {
+                        node = this.getNodeByKey(key, nodes[i].children);
+                    }
+
+                    if(node) {
+                        return node;
+                    }
+                }
+            }
         }
     };
 })());
