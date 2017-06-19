@@ -98,6 +98,14 @@ var DOMComponent = Component.inherit({
         this._attachWindowResizeCallback();
     },
 
+    _setOptionsByDevice: function(userRules) {
+        this.callBase([].concat(userRules || [], this._getCustomRules()));
+    },
+
+    _getCustomRules: function() {
+        return [];
+    },
+
     _attachWindowResizeCallback: function() {
         if(this._isDimensionChangeSupported()) {
             var windowResizeCallBack = this._windowResizeCallBack = this._dimensionChanged.bind(this);
@@ -365,8 +373,15 @@ DOMComponent.getInstance = function($element) {
 * @param1_field2 options:Object
 */
 DOMComponent.defaultOptions = function(rule) {
-    this.prototype._customRules = this.prototype._customRules || [];
-    this.prototype._customRules.push(rule);
+    var customRules = this._customRules = this._customRules || [];
+
+    customRules.push(rule);
+
+    this.redefine({
+        _getCustomRules: function() {
+            return customRules;
+        }
+    });
 };
 
 

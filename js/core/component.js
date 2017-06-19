@@ -95,10 +95,6 @@ var Component = Class.inherit({
     _setOptionsByDevice: function(userRules) {
         var rules = this._defaultOptionsRules();
 
-        if(this._customRules) {
-            rules = rules.concat(this._customRules);
-        }
-
         if(Array.isArray(userRules)) {
             rules = rules.concat(userRules);
         }
