@@ -537,6 +537,21 @@ QUnit.test("valueExpr should be passed to the list's keyExpr option", function(a
     assert.equal(list.option("keyExpr"), null, "keyExpr should be cleared when valueExpr was changed to function");
 });
 
+QUnit.test("value option should be case-sensitive", function(assert) {
+    var $element = $("#dropDownList").dxDropDownList({
+        dataSource: [{ text: "first" }, { text: "First" }],
+        displayExpr: "text",
+        valueExpr: "text"
+    });
+
+    var instance = $element.dxDropDownList("instance");
+
+    assert.equal(instance._input().val(), "");
+
+    instance.option("value", "First");
+    assert.equal(instance._input().val(), "First");
+});
+
 
 QUnit.module("selectedItem", moduleConfig);
 

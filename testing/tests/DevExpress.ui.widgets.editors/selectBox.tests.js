@@ -1001,22 +1001,6 @@ QUnit.test("option value", function(assert) {
     assert.equal(instance._input().val(), "txt2");
 });
 
-QUnit.test("case sensitive value option", function(assert) {
-    var $element = $("#selectBox")
-            .dxSelectBox({
-                dataSource: [{ id: 1, text: "first" }, { id: 2, text: "First" }],
-                displayExpr: "text",
-                valueExpr: "text"
-            });
-
-    var instance = $element.dxSelectBox("instance");
-
-    assert.equal(instance._input().val(), "");
-
-    instance.option("value", "First");
-    assert.equal(instance._input().val(), "First");
-});
-
 QUnit.test("valueExpr change should clear displayValue", function(assert) {
     var $element = $("#selectBox")
         .dxSelectBox({
