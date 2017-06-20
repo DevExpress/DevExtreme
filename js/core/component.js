@@ -92,11 +92,11 @@ var Component = Class.inherit({
         return [];
     },
 
-    _setOptionsByDevice: function(userRules) {
+    _setOptionsByDevice: function(customRules) {
         var rules = this._defaultOptionsRules();
 
-        if(Array.isArray(userRules)) {
-            rules = rules.concat(userRules);
+        if(Array.isArray(customRules)) {
+            rules = rules.concat(customRules);
         }
 
         var rulesOptions = this._convertRulesToOptions(rules);
