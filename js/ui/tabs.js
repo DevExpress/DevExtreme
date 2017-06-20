@@ -6,7 +6,6 @@ var $ = require("../core/renderer"),
     Button = require("./button"),
     inkRipple = require("./widget/utils.ink_ripple"),
     eventUtils = require("../events/utils"),
-    domUtils = require("../core/utils/dom"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,
     pointerEvents = require("../events/pointer"),
@@ -246,17 +245,6 @@ var Tabs = CollectionWidget.inherit({
         return TABS_ITEM_DATA_KEY;
     },
 
-    _renderContent: function() {
-        var that = this;
-
-        this.callBase();
-        if(this.option("templatesRenderAsynchronously")) {
-            this._resizeEventTimer = setTimeout(function() {
-                domUtils.triggerResizeEvent(that.element());
-            }, 0);
-        }
-    },
-
     _render: function() {
         this.callBase();
         this._renderWrapper();
@@ -475,7 +463,6 @@ var Tabs = CollectionWidget.inherit({
 
     _clean: function() {
         this._scrollable = null;
-        clearTimeout(this._resizeEventTimer);
         this.callBase();
     },
 
