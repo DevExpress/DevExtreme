@@ -510,15 +510,29 @@ var ListBase = CollectionWidget.inherit({
         return this._$container;
     },
 
-    _itemElements: function() {
+    _refreshItemElements: function() {
         if(!this.option("grouped")) {
-            return this._itemContainer().children(this._itemSelector());
+            this._itemElementsCache = this._itemContainer().children(this._itemSelector());
+        } else {
+            this._itemElementsCache = this._itemContainer()
+                 .children("." + LIST_GROUP_CLASS)
+                 .children("." + LIST_GROUP_BODY_CLASS)
+                 .children(this._itemSelector());
         }
+    },
 
-        return this._itemContainer()
-            .children("." + LIST_GROUP_CLASS)
-            .children("." + LIST_GROUP_BODY_CLASS)
-            .children(this._itemSelector());
+    _reorderItem: function(itemElement, toItemElement) {
+        this.callBase(itemElement, toItemElement);
+        this._refreshItemElements();
+    },
+
+    _deleteItem: function(itemElement) {
+        this.callBase(itemElement);
+        this._refreshItemElements();
+    },
+
+    _itemElements: function() {
+        return this._itemElementsCache;
     },
 
     _itemSelectHandler: function(e) {
@@ -720,6 +734,7 @@ var ListBase = CollectionWidget.inherit({
             this.callBase.apply(this, arguments);
         }
 
+        this._refreshItemElements();
         this._updateLoadingState(true);
     },
 
@@ -785,6 +800,8 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _render: function() {
+        this._itemElementsCache = $();
+
         this.element().addClass(LIST_CLASS);
         this.callBase();
 
@@ -815,6 +832,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _postprocessRenderItem: function(args) {
+        this._refreshItemElements();
         this.callBase.apply(this, arguments);
 
         if(this.option("onItemSwipe")) {

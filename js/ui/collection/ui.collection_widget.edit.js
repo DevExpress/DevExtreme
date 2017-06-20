@@ -488,24 +488,21 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(that._rendered && (addedItems.length || removedItems.length)) {
             var selectionChangePromise = that._selectionChangePromise;
             if(!that._rendering) {
-                var addedSelection = [];
-                var removedSelection = [];
-                var i;
+                var addedSelection = [],
+                    normalizedIndex, i,
+                    removedSelection = [];
 
                 for(i = 0; i < addedItems.length; i++) {
-                    addedSelection.push(that._getIndexByItemData(addedItems[i]));
+                    normalizedIndex = that._getIndexByItemData(addedItems[i]);
+                    addedSelection.push(normalizedIndex);
+                    that._addSelection(normalizedIndex);
                 }
 
                 for(i = 0; i < removedItems.length; i++) {
-                    removedSelection.push(that._getIndexByItemData(removedItems[i]));
-                }
-
-                $.each(removedSelection, function(_, normalizedIndex) {
+                    normalizedIndex = that._getIndexByItemData(removedItems[i]);
+                    removedSelection.push(normalizedIndex);
                     that._removeSelection(normalizedIndex);
-                });
-                $.each(addedSelection, function(_, normalizedIndex) {
-                    that._addSelection(normalizedIndex);
-                });
+                }
 
                 that._updateSelection(addedSelection, removedSelection);
             }
@@ -536,7 +533,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(normalizedIndex !== -1) {
             $itemElement.removeClass(this._selectedItemClass());
             this._setAriaSelected($itemElement, "false");
-            $itemElement.triggerHandler("stateChanged");
+            $itemElement.triggerHandler("stateChanged", false);
         }
     },
 
@@ -551,7 +548,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(normalizedIndex !== -1) {
             $itemElement.addClass(this._selectedItemClass());
             this._setAriaSelected($itemElement, "true");
-            $itemElement.triggerHandler("stateChanged");
+            $itemElement.triggerHandler("stateChanged", true);
         }
     },
 
