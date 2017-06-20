@@ -606,6 +606,14 @@ QUnit.test("Get node by key when node is hidden", function(assert) {
     assert.deepEqual(node.data, { name: "SubCategory2", phone: "45-45-45", id: 3, parentId: 1 }, "node by key is '3'");
 });
 
+QUnit.test("There are no exceptions on getting node when hasn't datasource", function(assert) {
+    //arrange
+    this.dataController.setDataSource(undefined);
+
+    //act, assert
+    assert.equal(this.getNodeByKey(1), undefined, "no exceptions");
+});
+
 
 QUnit.module("Expand/Collapse nodes", { beforeEach: setupModule, afterEach: teardownModule });
 

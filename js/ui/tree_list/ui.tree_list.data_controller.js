@@ -185,7 +185,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
          * @return dxTreeListNode
          */
         getNodeByKey: function(key) {
-            if(!this.dataSource) {
+            if(!this._dataSource) {
                 return;
             }
 
