@@ -2365,6 +2365,9 @@ declare module DevExpress.ui {
 
         /** @docid dxTreeListMethods_getSelectedRowsData */
         getSelectedRowsData(): Array<any>;
+
+        /** @docid dxTreeListMethods_getNodeByKey */
+        getNodeByKey(key: any): dxTreeListNode;
     }
 
     /** @docid dxdataGrid */
