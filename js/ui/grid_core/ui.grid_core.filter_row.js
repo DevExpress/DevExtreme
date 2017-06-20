@@ -869,12 +869,14 @@ module.exports = {
 
                 _prepareFilterItem: function() {
                     var that = this,
-                        itemDisabledState = that.getToolbarItemOption("applyFilterButton", "disabled"),
-                        disabled = commonUtils.isDefined(itemDisabledState) ? itemDisabledState : true,
                         filterItem = [];
 
                     if(that._isShowApplyFilterButton()) {
                         var hintText = that.option("filterRow.applyFilterText"),
+                            columns = that._columnsController.getColumns(),
+                            disabled = !columns.filter(function(column) {
+                                return column.bufferedFilterValue !== undefined;
+                            }).length,
                             onInitialized = function(e) {
                                 e.element.addClass(that._getToolbarButtonClass(APPLY_BUTTON_CLASS));
                             },
@@ -885,6 +887,7 @@ module.exports = {
                                 widget: "dxButton",
                                 options: {
                                     icon: "apply-filter",
+                                    disabled: disabled,
                                     onClick: onClickHandler,
                                     hint: hintText,
                                     text: hintText,
@@ -892,7 +895,6 @@ module.exports = {
                                 },
                                 showText: "inMenu",
                                 name: "applyFilterButton",
-                                disabled: disabled,
                                 location: "after",
                                 locateInMenu: "auto",
                                 sortIndex: 10
@@ -916,7 +918,7 @@ module.exports = {
                 },
 
                 enableApplyButton: function(value) {
-                    this.updateToolbarItemOption("applyFilterButton", "disabled", !value);
+                    this.toolbarWidgetOption("applyFilterButton", "disabled", !value);
                 },
 
                 isVisible: function() {

@@ -813,7 +813,7 @@ QUnit.test("Show apply filter button", function(assert) {
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 1, "apply button class");
 
-    assert.ok($button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is disabled");
+    assert.ok($button.hasClass("dx-state-disabled"), "button is disabled");
 });
 
 QUnit.test("Apply filter button is hidden when filter row options is undefined", function(assert) {
@@ -887,7 +887,7 @@ QUnit.test("Apply filter button is changed enabled state", function(assert) {
     this.clock.tick(0);
 
     $button = testElement.find(".dx-apply-button");
-    assert.ok(!$button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is enabled");
+    assert.ok(!$button.hasClass("dx-state-disabled"), "button is enabled");
 });
 
 QUnit.test("Set highlight when filter operation is changed", function(assert) {
@@ -940,7 +940,7 @@ QUnit.test("Apply filter button is changed enabled state when filter operation i
     $(filterMenuItems.find('.dx-menu-item')[1]).trigger('dxclick');
 
     $button = testElement.find(".dx-apply-button");
-    assert.ok(!$button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is enabled");
+    assert.ok(!$button.hasClass("dx-state-disabled"), "button is enabled");
 });
 
 QUnit.test("Column option is changed when filter operation is changed", function(assert) {
@@ -1039,7 +1039,7 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
 
     $editorContainer = this.columnHeadersView.element().find(".dx-highlight-outline");
     assert.equal($editorContainer.length, 0, "highlights");
-    assert.ok($button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is enabled");
+    assert.ok($button.hasClass("dx-state-disabled"), "button is enabled");
     //assert.ok(this.dataController._isFilterApplied, "is filter applied");
 
     assert.deepEqual(this.columnsController.updateOptions, [{
@@ -1210,7 +1210,7 @@ QUnit.test("State of the 'Apply filter' button should be saved after repaint", f
 
     //assert
     $button = $testElement.find(".dx-apply-button");
-    assert.notOk($button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is enabled");
+    assert.notOk($button.hasClass("dx-state-disabled"), "button is enabled");
 });
 
 QUnit.module('Filter Row with real dataController and columnsController', {

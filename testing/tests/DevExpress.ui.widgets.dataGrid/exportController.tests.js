@@ -2431,21 +2431,20 @@ QUnit.test("Export button disable on editing", function(assert) {
 
     //act
     var $container = $("#container"),
-        toolbarItemSelector = ".dx-toolbar-item",
         $exportButton;
 
     this.headerPanel.render($container);
     $exportButton = $container.find(".dx-datagrid-export-button");
 
     //assert
-    assert.ok(!$exportButton.closest(toolbarItemSelector).hasClass("dx-state-disabled"), "Export button is enabled before editing start");
+    assert.ok(!$exportButton.hasClass("dx-state-disabled"), "Export button is enabled before editing start");
 
     //act
     this.editingController.hasChanges = function() { return true; };
     this.editingController._updateEditButtons();
 
     //assert
-    assert.ok($exportButton.closest(toolbarItemSelector).hasClass("dx-state-disabled"), "Export button is disabled after editing");
+    assert.ok($exportButton.hasClass("dx-state-disabled"), "Export button is disabled after editing");
 
     //act
     this.editingController.hasChanges = function() { return false; };
@@ -2453,7 +2452,7 @@ QUnit.test("Export button disable on editing", function(assert) {
     $exportButton = $container.find(".dx-datagrid-export-button");
 
     //assert
-    assert.ok(!$exportButton.closest(toolbarItemSelector).hasClass("dx-state-disabled"), "Export button is enabled after saving");
+    assert.ok(!$exportButton.hasClass("dx-state-disabled"), "Export button is enabled after saving");
 });
 
 QUnit.test("Show the export to excel button and a context menu via an option", function(assert) {

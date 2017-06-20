@@ -71,57 +71,23 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    updateToolbarItemOption: function(name, optionName, optionValue) {
+    toolbarWidgetOption: function(name, optionName, optionValue) {
         var toolbarInstance = this._toolbar;
 
         if(toolbarInstance) {
-            var items = toolbarInstance.option("items");
+            var items = toolbarInstance.option("items") || [],
+                item = items.filter(function(item) {
+                    return item.name === name;
+                })[0];
 
-            if(items && items.length) {
-                var itemIndex;
+            if(item) {
+                var $widget = toolbarInstance._findItemElementByItem(item).children().children(),
+                    dxComponents = $widget.data("dxComponents"),
+                    widget = dxComponents && dxComponents[0] && $widget.data(dxComponents[0]);
 
-                $.each(items, function(index, item) {
-                    if(item.name === name) {
-                        itemIndex = index;
-                        return false;
-                    }
-                });
-
-                if(itemIndex !== undefined) {
-                    if(commonUtils.isObject(optionName)) {
-                        toolbarInstance.option("items[" + itemIndex + "]", optionName);
-                    } else {
-                        toolbarInstance.option("items[" + itemIndex + "]." + optionName, optionValue);
-
-                        if(optionName === "disabled") {
-                            var widgetOptions = toolbarInstance.option("items[" + itemIndex + "].options") || {};
-
-                            widgetOptions.disabled = optionValue;
-                            toolbarInstance.option("items[" + itemIndex + "].options", widgetOptions);
-                        }
-                    }
+                if(widget) {
+                    widget.option(optionName, optionValue);
                 }
-            }
-        }
-    },
-
-    getToolbarItemOption: function(name, optionName) {
-        var toolbarInstance = this._toolbar;
-
-        if(toolbarInstance) {
-            var items = toolbarInstance.option("items");
-
-            if(items && items.length) {
-                var optionValue;
-
-                $.each(items, function(index, item) {
-                    if(item.name === name) {
-                        optionValue = item[optionName];
-                        return false;
-                    }
-                });
-
-                return optionValue;
             }
         }
     },
