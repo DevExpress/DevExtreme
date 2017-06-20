@@ -548,10 +548,10 @@ QUnit.test("value option should be case-sensitive", function(assert) {
 
     var instance = $element.dxDropDownList("instance");
 
-    assert.equal(instance._input().val(), "");
+    assert.equal($element.find("input").val(), "");
 
     instance.option("value", "First");
-    assert.equal(instance._input().val(), "First");
+    assert.equal($element.find("input").val(), "First");
 });
 
 
