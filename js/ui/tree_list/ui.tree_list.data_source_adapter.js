@@ -514,7 +514,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             return this._isNodesInitializing ? $.Deferred().resolve() : this.load();
         },
 
-        getNodeByKey: function(key, nodes) {
+        getNodeByKey: function(key) {
             if(this._nodeByKey) {
                 return this._nodeByKey[key];
             }
