@@ -23,6 +23,7 @@ require("ui/popup");
 require("ui/popover");
 require("ui/scheduler");
 require("ui/slide_out_view");
+require("ui/tabs");
 require("ui/text_box");
 require("ui/toolbar");
 
@@ -175,6 +176,45 @@ QUnit.test("dxDataGrid", function(assert) {
     var $cols = $(".dx-datagrid-rowsview col");
     assert.equal($cols[0].style.width, "100px");
     assert.equal($cols[1].style.width, "100px");
+});
+
+QUnit.test("dxTabs - navigation buttons should show/hide after showing/hiding items (T343231)", function(assert) {
+    var $markup = $("<div dx-tabs='tabSettings'></div>");
+
+    var controller = function($scope) {
+        $scope.tabs = [
+            { text: "item1", visible: true },
+            { text: "item2", visible: true }
+        ];
+
+        $scope.tabSettings = {
+            bindingOptions: {
+                dataSource: { dataPath: "tabs", deep: true }
+            },
+            width: 70
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    var scope = $markup.scope();
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 2);
+
+    scope.$apply(function() {
+        scope.tabs[1].visible = false;
+    });
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 0);
+
+    scope.$apply(function() {
+        scope.tabs[1].visible = true;
+    });
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 2);
 });
 
 
