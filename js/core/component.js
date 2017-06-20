@@ -139,12 +139,11 @@ var Component = Class.inherit({
     },
 
     _isInitialOptionValue: function(name) {
-        var isCustomOption = this._customRules && this._convertRulesToOptions(this._customRules).hasOwnProperty(name),
-            optionValue = this.option(name),
+        var optionValue = this.option(name),
             initialOptionValue = this.initialOption(name),
             isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
 
-        return !isCustomOption && isInitialOption;
+        return isInitialOption;
     },
 
     _setOptionsByReference: function() {

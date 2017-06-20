@@ -102,6 +102,12 @@ var DOMComponent = Component.inherit({
         this.callBase([].concat(this.constructor._classCustomRules || [], instanceCustomRules || []));
     },
 
+    _isInitialOptionValue: function(name) {
+        var isCustomOption = this.constructor._classCustomRules && this._convertRulesToOptions(this.constructor._classCustomRules).hasOwnProperty(name);
+
+        return !isCustomOption && this.callBase(name);
+    },
+
     _attachWindowResizeCallback: function() {
         if(this._isDimensionChangeSupported()) {
             var windowResizeCallBack = this._windowResizeCallBack = this._dimensionChanged.bind(this);

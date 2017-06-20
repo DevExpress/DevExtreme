@@ -18,7 +18,6 @@ var optionPrefix = "preset_";
 var AnimationPresetCollection = Component.inherit({
     ctor: function() {
         this.callBase.apply(this, arguments);
-        this._customRules = [];
         this._registeredPresets = [];
         this.resetToDefaults();
     },
