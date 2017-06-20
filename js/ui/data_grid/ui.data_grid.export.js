@@ -909,7 +909,7 @@ dataGridCore.registerModule("export", {
                     this._exportController = this.getController("export");
                     this._editingController = this.getController("editing");
                     this._editingController.editingChanged.add(function(hasChanges) {
-                        that.updateToolbarItemOption("exportButton", "disabled", hasChanges);
+                        that.toolbarWidgetOption("exportButton", "disabled", hasChanges);
                     });
 
                 },
