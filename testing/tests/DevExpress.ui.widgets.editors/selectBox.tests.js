@@ -1001,7 +1001,7 @@ QUnit.test("option value", function(assert) {
     assert.equal(instance._input().val(), "txt2");
 });
 
-QUnit.test("case sensative value option", function(assert) {
+QUnit.test("case sensitive value option", function(assert) {
     var $element = $("#selectBox")
             .dxSelectBox({
                 dataSource: [{ id: 1, text: "first" }, { id: 2, text: "First" }],
