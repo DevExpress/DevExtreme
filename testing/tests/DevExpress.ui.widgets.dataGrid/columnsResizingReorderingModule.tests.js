@@ -723,6 +723,8 @@ function getJQueryEvent(options) {
 
                 _resumeDeprecatedWarnings: $.noop,
 
+                updateDimensions: $.noop,
+
                 setAria: function(name, value, $target) {
                     var setAttribute = function(option) {
                         var attrName = ($.inArray(option.name, ["role", "id"]) + 1) ? option.name : "aria-" + option.name,
@@ -2184,12 +2186,8 @@ function getJQueryEvent(options) {
         var isGridViewResized = false,
             resizeController;
 
-        this.component._views.gridView = {
-            init: $.noop,
-            resize: function() {
-                isGridViewResized = true;
-            },
-            render: $.noop
+        this.component.updateDimensions = function() {
+            isGridViewResized = true;
         };
 
         resizeController = this.createColumnsResizerViewController();
@@ -2231,12 +2229,8 @@ function getJQueryEvent(options) {
         var isGridViewResized = false,
             resizeController;
 
-        this.component._views.gridView = {
-            init: $.noop,
-            resize: function() {
-                isGridViewResized = true;
-            },
-            render: $.noop
+        this.component.updateDimensions = function() {
+            isGridViewResized = true;
         };
 
         this.component._views.rowsView.getScrollbarWidth = function() {
