@@ -84,7 +84,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                             that._focus($cell);
                         }
                         if(that._editingController.isEditing()) {
-                            $.proxy(that._focusInteractiveElement, that)($cell);
+                            that._focusInteractiveElement.bind(that)($cell);
                         }
                     } else {
                         $cell.focus();

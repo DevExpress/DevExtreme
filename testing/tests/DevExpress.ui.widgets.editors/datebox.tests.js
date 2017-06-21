@@ -3473,15 +3473,16 @@ QUnit.test("Internal validation shouldn't be reset value if localization return 
 });
 
 QUnit.test("Validation should be correct when year of the value less than 100", function(assert) {
-    var dateBox = $("#dateBox").dxDateBox({
-        min: new Date(2015, 6, 10),
-        max: new Date(2015, 6, 14),
-        value: new Date(2015, 6, 12),
-        valueChangeEvent: "change",
-        pickerType: "calendar"
-    }).dxDateBox("instance");
+    var $dateBox = $("#dateBox").dxDateBox({
+            min: new Date(2015, 6, 10),
+            max: new Date(2015, 6, 14),
+            value: new Date(2015, 6, 12),
+            valueChangeEvent: "change",
+            pickerType: "calendar"
+        }),
+        dateBox = $dateBox.dxDateBox("instance");
 
-    var $input = dateBox.element().find("." + TEXTEDITOR_INPUT_CLASS);
+    var $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
     $input.val("1/1/99");
     $input.change();
 

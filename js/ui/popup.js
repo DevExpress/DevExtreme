@@ -13,7 +13,8 @@ var $ = require("../core/renderer"),
     themes = require("./themes"),
     Overlay = require("./overlay"),
     EmptyTemplate = require("./widget/empty_template"),
-    domUtils = require("../core/utils/dom");
+    domUtils = require("../core/utils/dom"),
+    noop = commonUtils.noop;
 
 require("./toolbar/ui.toolbar.base");
 
@@ -674,7 +675,7 @@ var Popup = Overlay.inherit({
     },
 
     _setContentHeight: function() {
-        (this.option("forceApplyBindings") || $.noop)();
+        (this.option("forceApplyBindings") || noop)();
 
         if(this._disallowUpdateContentHeight()) {
             return;
@@ -740,7 +741,7 @@ var Popup = Overlay.inherit({
                 left: 0
             });
         } else {
-            (this.option("forceApplyBindings") || $.noop)();
+            (this.option("forceApplyBindings") || noop)();
 
             return this.callBase.apply(this, arguments);
         }
