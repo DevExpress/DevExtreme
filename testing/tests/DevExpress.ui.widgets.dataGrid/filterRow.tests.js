@@ -1037,6 +1037,7 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
     $button = testElement.find(".dx-apply-button");
     $button.trigger("dxclick");
 
+    $button = testElement.find(".dx-apply-button");
     $editorContainer = this.columnHeadersView.element().find(".dx-highlight-outline");
     assert.equal($editorContainer.length, 0, "highlights");
     assert.ok($button.hasClass("dx-state-disabled"), "button is enabled");

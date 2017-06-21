@@ -1121,8 +1121,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 hasChanges = that.hasChanges();
 
             if(headerPanel) {
-                headerPanel.toolbarWidgetOption("saveButton", "disabled", !hasChanges);
-                headerPanel.toolbarWidgetOption("revertButton", "disabled", !hasChanges);
+                headerPanel.setToolbarItemDisabled("saveButton", !hasChanges);
+                headerPanel.setToolbarItemDisabled("revertButton", !hasChanges);
             }
         },
 

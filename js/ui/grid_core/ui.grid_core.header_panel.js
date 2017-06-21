@@ -71,22 +71,21 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    toolbarWidgetOption: function(name, optionName, optionValue) {
+    setToolbarItemDisabled: function(name, optionValue) {
         var toolbarInstance = this._toolbar;
 
         if(toolbarInstance) {
             var items = toolbarInstance.option("items") || [],
-                item = items.filter(function(item) {
+                itemIndex = items.indexOf(items.filter(function(item) {
                     return item.name === name;
-                })[0];
+                })[0]);
 
-            if(item) {
-                var $widget = toolbarInstance._findItemElementByItem(item).children().children(),
-                    dxComponents = $widget.data("dxComponents"),
-                    widget = dxComponents && dxComponents[0] && $widget.data(dxComponents[0]);
-
-                if(widget) {
-                    widget.option(optionName, optionValue);
+            if(itemIndex >= 0) {
+                var itemOptionPrefix = "items[" + itemIndex + "]";
+                if(toolbarInstance.option(itemOptionPrefix + ".options")) {
+                    toolbarInstance.option(itemOptionPrefix + ".options.disabled", optionValue);
+                } else {
+                    toolbarInstance.option(itemOptionPrefix + ".disabled", optionValue);
                 }
             }
         }
