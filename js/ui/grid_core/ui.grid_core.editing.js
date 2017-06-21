@@ -1121,8 +1121,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 hasChanges = that.hasChanges();
 
             if(headerPanel) {
-                headerPanel.updateToolbarItemOption("saveButton", "disabled", !hasChanges);
-                headerPanel.updateToolbarItemOption("revertButton", "disabled", !hasChanges);
+                headerPanel.setToolbarItemDisabled("saveButton", !hasChanges);
+                headerPanel.setToolbarItemDisabled("revertButton", !hasChanges);
             }
         },
 
@@ -1501,7 +1501,6 @@ var EditingController = modules.ViewController.inherit((function() {
                     },
                     showText: "inMenu",
                     name: name + "Button",
-                    disabled: isButtonDisabled,
                     location: "after",
                     locateInMenu: "auto",
                     sortIndex: sortIndex
