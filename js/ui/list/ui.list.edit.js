@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
     eventUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
     GroupedEditStrategy = require("./ui.list.edit.strategy.grouped"),
@@ -67,7 +66,7 @@ var ListEdit = ListBase.inherit({
         });
     },
 
-    _renderSelection: function() {
+    _updateSelection: function() {
         this._editProvider.afterItemsRendered();
         this.callBase();
     },
@@ -318,8 +317,6 @@ var ListEdit = ListBase.inherit({
         this.callBase.apply(this, arguments);
         this._editProvider.afterItemsRendered();
     },
-
-    _renderSelectedItems: commonUtils.noop,
 
     _selectedItemClass: function() {
         return LIST_ITEM_SELECTED_CLASS;

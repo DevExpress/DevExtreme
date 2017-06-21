@@ -285,14 +285,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         this.callBase();
 
-        this._renderSelectedItems();
-
-        this._rendering = false;
-    },
-
-    _renderSelectedItems: function() {
         var selectedItemIndices = this._getSelectedItemIndices();
         this._renderSelection(selectedItemIndices, []);
+
+        this._rendering = false;
     },
 
     _fireContentReadyAction: function() {
