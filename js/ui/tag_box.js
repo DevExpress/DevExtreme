@@ -480,6 +480,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _render: function() {
+        this._tagElementsCache = $();
+
         var isSingleLineMode = !this.option("multiline");
 
         this.element()
@@ -711,6 +713,8 @@ var TagBox = SelectBox.inherit({
         if(!this._preserveFocusedTag) {
             this._clearTagFocus();
         }
+
+        this._refreshTagElements();
     },
 
     _renderEmptyState: function() {
@@ -760,8 +764,12 @@ var TagBox = SelectBox.inherit({
         }
     },
 
+    _refreshTagElements: function() {
+        this._tagElementsCache = this.element().find("." + TAGBOX_TAG_CLASS);
+    },
+
     _tagElements: function() {
-        return this.element().find("." + TAGBOX_TAG_CLASS);
+        return this._tagElementsCache;
     },
 
     _getDefaultTagTemplate: function() {
