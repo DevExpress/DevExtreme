@@ -4244,7 +4244,6 @@ QUnit.test("Appointments should be rendered correctly at asynchronous rendering 
         width: 600
     });
 
-    this.instance.option("templatesRenderAsynchronously", true);
     this.instance.option("currentView", "month");
     this.clock.tick();
 
