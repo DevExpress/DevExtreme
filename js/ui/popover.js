@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     translator = require("../animation/translator"),
     positionUtils = require("../animation/position"),
     commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
     mathUtils = require("../core/utils/math"),
     eventUtils = require("../events/utils"),
     Popup = require("./popup");
@@ -43,12 +44,12 @@ var POPOVER_CLASS = "dx-popover",
     getEventName = function(that, optionName) {
         var optionValue = that.option(optionName);
 
-        return commonUtils.isObject(optionValue) ? optionValue.name : optionValue;
+        return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
     },
     getEventDelay = function(that, optionName) {
         var optionValue = that.option(optionName);
 
-        return commonUtils.isObject(optionValue) && optionValue.delay;
+        return typeUtils.isObject(optionValue) && optionValue.delay;
     },
     attachEvent = function(that, name) {
         var delay,

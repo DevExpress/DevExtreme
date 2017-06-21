@@ -2,6 +2,7 @@
 
 var Class = require("../core/class"),
     commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     errors = require("../ui/widget/ui.errors"),
@@ -93,7 +94,7 @@ exports.ExcelCreator = Class.inherit({
             dataType: dataType
         };
 
-        if(commonUtils.isObject(format)) {
+        if(typeUtils.isObject(format)) {
             return extend(result, format, { format: format.type, currency: format.currency });
         }
 

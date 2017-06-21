@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     getKeyHash = commonUtils.getKeyHash,
     dataQuery = require("../../data/query"),
     when = require("../../integration/jquery/deferred").when,
@@ -262,7 +263,7 @@ module.exports = SelectionStrategy.inherit({
         var keyHash = this._getKeyHash(key);
 
         if(this._indexOfSelectedItemKey(keyHash) === -1) {
-            if(!commonUtils.isObject(keyHash) && this.options.keyHashIndices) {
+            if(!typeUtils.isObject(keyHash) && this.options.keyHashIndices) {
                 this.options.keyHashIndices[keyHash] = [this.options.selectedItemKeys.length];
             }
 
@@ -301,7 +302,7 @@ module.exports = SelectionStrategy.inherit({
 
         if(this.options.equalByReference) {
             selectedIndex = this.options.selectedItemKeys.indexOf(key);
-        } else if(commonUtils.isObject(key)) {
+        } else if(typeUtils.isObject(key)) {
             selectedIndex = this._getSelectedIndexByKey(key, ignoreIndicesMap);
         } else {
             selectedIndex = this._getSelectedIndexByHash(key, ignoreIndicesMap);
@@ -345,7 +346,7 @@ module.exports = SelectionStrategy.inherit({
         this.options.selectedItemKeys.splice(keyIndex, 1);
         this.options.selectedItems.splice(keyIndex, 1);
 
-        if(commonUtils.isObject(keyHash) || !this.options.keyHashIndices) {
+        if(typeUtils.isObject(keyHash) || !this.options.keyHashIndices) {
             return keyIndex;
         }
 

@@ -6,6 +6,7 @@ require("generic_light.css!");
 var $ = require("jquery"),
     setTemplateEngine = require("ui/set_template_engine"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
     DataSource = require("data/data_source/data_source").DataSource,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
@@ -110,7 +111,7 @@ QUnit.test('Bounding rect with columns', function(assert) {
     boundingRect = this.columnHeadersView.getBoundingRect();
 
     //assert
-    assert.ok(commonUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
+    assert.ok(typeUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
 });
 
 QUnit.test("Bounding rect with columns in iOS (T211627)", function(assert) {
@@ -134,7 +135,7 @@ QUnit.test("Bounding rect with columns in iOS (T211627)", function(assert) {
     boundingRect = this.columnHeadersView.getBoundingRect();
 
     //assert
-    assert.ok(commonUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
+    assert.ok(typeUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
 
     devices.current(currentDevice);
     devices._realDevice = realDevice;

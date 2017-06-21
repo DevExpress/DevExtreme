@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     positionUtils = require("../../animation/position"),
     mathUtils = require("../../core/utils/math"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     numberLocalization = require("../../localization/number");
 
@@ -102,7 +103,7 @@ var SliderHandle = Widget.inherit({
         this._saveTooltipElements();
         this._resetTooltipPosition();
 
-        if(commonUtils.type(position) === "string") {
+        if(typeUtils.type(position) === "string") {
             position = extend({
                 boundary: this._$slider,
                 boundaryOffset: { h: 1, v: 1 }
@@ -161,7 +162,7 @@ var SliderHandle = Widget.inherit({
 
         var position = this.option("tooltipPosition");
 
-        if(commonUtils.type(position) === "string") {
+        if(typeUtils.type(position) === "string") {
             position = extend({
                 of: this.element(),
                 boundary: this._$slider,

@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     dataCoreUtils = require("../../core/utils/data"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -716,7 +717,7 @@ module.exports = {
             };
 
             var getValueDataType = function(value) {
-                var dataType = commonUtils.type(value);
+                var dataType = typeUtils.type(value);
                 if(dataType !== "string" && dataType !== "boolean" && dataType !== "number" && dataType !== "date" && dataType !== "object") {
                     dataType = undefined;
                 }
@@ -818,7 +819,7 @@ module.exports = {
                 });
 
                 $.each(that._columns, function(index, column) {
-                    if(commonUtils.isObject(column.ownerBand)) {
+                    if(typeUtils.isObject(column.ownerBand)) {
                         column.ownerBand = column.ownerBand.index;
                     }
                 });
@@ -878,11 +879,11 @@ module.exports = {
             };
 
             var getColumnIndexByVisibleIndex = function(that, visibleIndex, location) {
-                var rowIndex = commonUtils.isObject(visibleIndex) ? visibleIndex.rowIndex : null,
+                var rowIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.rowIndex : null,
                     columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex),
                     column;
 
-                visibleIndex = commonUtils.isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
+                visibleIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
                 column = columns[visibleIndex];
 
                 return column && isDefined(column.index) ? column.index : -1;
@@ -1734,8 +1735,8 @@ module.exports = {
                                 return false;
                             }
 
-                            fromVisibleIndex = commonUtils.isObject(fromVisibleIndex) ? fromVisibleIndex.columnIndex : fromVisibleIndex;
-                            toVisibleIndex = commonUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
+                            fromVisibleIndex = typeUtils.isObject(fromVisibleIndex) ? fromVisibleIndex.columnIndex : fromVisibleIndex;
+                            toVisibleIndex = typeUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
 
                             return fromVisibleIndex !== toVisibleIndex && fromVisibleIndex + 1 !== toVisibleIndex;
                         } else if((sourceLocation === GROUP_LOCATION && targetLocation !== COLUMN_CHOOSER_LOCATION) || targetLocation === GROUP_LOCATION) {
@@ -1757,7 +1758,7 @@ module.exports = {
 
                     if(fromIndex >= 0) {
                         column = that._columns[fromIndex];
-                        toVisibleIndex = commonUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
+                        toVisibleIndex = typeUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
                         targetGroupIndex = toIndex >= 0 ? that._columns[toIndex].groupIndex : -1;
 
                         if(isDefined(column.groupIndex) && sourceLocation === GROUP_LOCATION) {
@@ -2246,7 +2247,7 @@ module.exports = {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[option];
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
-                        } else if(commonUtils.isObject(option)) {
+                        } else if(typeUtils.isObject(option)) {
                             $.each(option, function(optionName, value) {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
@@ -2517,7 +2518,7 @@ module.exports = {
                                     if(commonUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                                         dataSource = dataSource({});
                                     }
-                                    if(commonUtils.isObject(dataSource) || Array.isArray(dataSource)) {
+                                    if(typeUtils.isObject(dataSource) || Array.isArray(dataSource)) {
                                         if(that.valueExpr) {
                                             dataSourceOptions = normalizeDataSourceOptions(dataSource);
                                             dataSourceOptions.paginate = false;

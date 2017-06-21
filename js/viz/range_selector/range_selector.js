@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     vizUtils = require("../core/utils"),
     adjustValue = vizUtils.adjustValue,
@@ -165,8 +166,8 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions) {
 }
 
 function calculateValueType(firstValue, secondValue) {
-    var typeFirstValue = commonUtils.type(firstValue),
-        typeSecondValue = commonUtils.type(secondValue),
+    var typeFirstValue = typeUtils.type(firstValue),
+        typeSecondValue = typeUtils.type(secondValue),
         validType = function(type) {
             return typeFirstValue === type || typeSecondValue === type;
         };

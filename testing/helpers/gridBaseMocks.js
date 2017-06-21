@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function($, gridCore, columnResizingReordering, domUtils, commonUtils, ArrayStore, nameWidget) {
+module.exports = function($, gridCore, columnResizingReordering, domUtils, commonUtils, typeUtils, ArrayStore, nameWidget) {
     var exports = {};
 
     exports.MockDataController = function(options) {
@@ -433,7 +433,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         }
                     } else if(commonUtils.isString(optionName)) {
                         columns[columnIndex][optionName] = optionValue;
-                    } else if(commonUtils.isObject(optionName)) {
+                    } else if(typeUtils.isObject(optionName)) {
                         $.each(optionName, function(name, value) {
                             columns[columnIndex][name] = value;
                         });
@@ -857,7 +857,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return result;
             }
 
-            if(commonUtils.isObject(options)) {
+            if(typeUtils.isObject(options)) {
                 $.extend(true, that.options, options);
             }
         };

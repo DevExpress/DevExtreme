@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     dateSerialization = require("../../core/utils/date_serialization"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     devices = require("../../core/devices"),
     config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
@@ -1514,7 +1515,7 @@ var Scheduler = Widget.inherit({
             allowDragging: !!editing
         };
 
-        if(commonUtils.isObject(editing)) {
+        if(typeUtils.isObject(editing)) {
             this._editing = extend(this._editing, editing);
         }
 
@@ -1616,7 +1617,7 @@ var Scheduler = Widget.inherit({
     _headerConfig: function() {
         var result,
             currentViewOptions = this._getCurrentViewOptions(),
-            viewNames = $.map(this.option("views"), function(view) { return commonUtils.isObject(view) ? view.type : view; });
+            viewNames = $.map(this.option("views"), function(view) { return typeUtils.isObject(view) ? view.type : view; });
 
         result = extend({
             firstDayOfWeek: this.option("firstDayOfWeek"),
@@ -1741,7 +1742,7 @@ var Scheduler = Widget.inherit({
             currentView = this.option("currentView");
 
         $.each(this.option("views"), function(_, view) {
-            if(commonUtils.isObject(view) && view.type === currentView) {
+            if(typeUtils.isObject(view) && view.type === currentView) {
                 result = view;
                 return false;
             }

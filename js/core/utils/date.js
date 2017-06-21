@@ -2,9 +2,10 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("./common"),
+    typeUtils = require("./type"),
     camelize = require("./inflector").camelize,
 
-    isObject = commonUtils.isObject,
+    isObject = typeUtils.isObject,
     isString = commonUtils.isString,
     isDate = commonUtils.isDate,
     isDefined = commonUtils.isDefined;

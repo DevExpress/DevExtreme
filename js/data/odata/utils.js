@@ -311,7 +311,7 @@ var interpretJsonFormat = function(obj, textStatus, transformOptions) {
         return { data: obj };
     }
 
-    if("d" in obj && (Array.isArray(obj.d) || commonUtils.isObject(obj.d))) {
+    if("d" in obj && (Array.isArray(obj.d) || typeUtils.isObject(obj.d))) {
         value = interpretVerboseJsonFormat(obj, textStatus);
     } else {
         value = interpretLightJsonFormat(obj, textStatus);

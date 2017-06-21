@@ -1,5 +1,22 @@
 "use strict";
 
+var types = {
+    "[object Array]": "array",
+    "[object Date]": "date",
+    "[object Object]": "object",
+    "[object Null]": "null" };
+
+var type = function(object) {
+    var typeOfObject = Object.prototype.toString.call(object);
+
+    return typeof object === "object" ?
+        types[typeOfObject] || "object" : typeof object;
+};
+
+var isObject = function(object) {
+    return type(object) === 'object';
+};
+
 var isEmptyObject = function(object) {
     var property;
 
@@ -21,5 +38,7 @@ var isPlainObject = function(object) {
         && Object.toString.call(ctor) === Object.toString.call(Object);
 };
 
+exports.isObject = isObject;
 exports.isEmptyObject = isEmptyObject;
 exports.isPlainObject = isPlainObject;
+exports.type = type;

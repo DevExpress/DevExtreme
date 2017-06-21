@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     ajax = require("../../core/utils/ajax"),
     dataCoreUtils = require("../../core/utils/data"),
     extend = require("../../core/utils/extend").extend,
@@ -209,7 +210,7 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
         }
 
         if(!dataType && commonUtils.isDefined(value)) {
-            dataType = commonUtils.type(value);
+            dataType = typeUtils.type(value);
         }
 
         items = [{

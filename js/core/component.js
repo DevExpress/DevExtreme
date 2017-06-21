@@ -9,6 +9,7 @@ var $ = require("../core/renderer"),
     coreDataUtils = require("./utils/data"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
+    typeUtils = require("./utils/type"),
     EventsMixin = require("./events_mixin"),
     publicComponentUtils = require("./utils/public_component"),
     devices = require("./devices"),
@@ -619,7 +620,7 @@ var Component = Class.inherit({
             var that = this,
                 name = options;
 
-            if(arguments.length < 2 && commonUtils.type(name) !== "object") {
+            if(arguments.length < 2 && typeUtils.type(name) !== "object") {
                 name = normalizeOptionName(that, name);
                 return getOptionValue(that._options, name);
             }

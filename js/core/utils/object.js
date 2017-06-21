@@ -64,7 +64,7 @@ var deepExtendArraySafe = function(target, changes, extendComplexObject, assignB
         }
 
         if(typeUtils.isPlainObject(newValue) && !(newValue instanceof $.Event)) { // NOTE: http://bugs.jquery.com/ticket/15090
-            var goDeeper = extendComplexObject ? commonUtils.isObject(prevValue) : typeUtils.isPlainObject(prevValue);
+            var goDeeper = extendComplexObject ? typeUtils.isObject(prevValue) : typeUtils.isPlainObject(prevValue);
             newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference);
         }
 

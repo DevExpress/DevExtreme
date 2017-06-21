@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -1123,7 +1124,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
 
     dock: function(parameters) {
         var that = this,
-            targetColumnIndex = commonUtils.isObject(parameters.targetColumnIndex) ? parameters.targetColumnIndex.columnIndex : parameters.targetColumnIndex,
+            targetColumnIndex = typeUtils.isObject(parameters.targetColumnIndex) ? parameters.targetColumnIndex.columnIndex : parameters.targetColumnIndex,
             sourceLocation = parameters.sourceLocation,
             sourceIndex = parameters.sourceIndex,
             sourceColumnElement = parameters.sourceColumnElement,

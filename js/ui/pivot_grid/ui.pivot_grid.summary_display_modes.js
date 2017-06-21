@@ -1,6 +1,7 @@
 "use strict";
 
 var commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     isDefined = commonUtils.isDefined,
@@ -124,7 +125,7 @@ function getFieldPos(descriptions, field, cache) {
             index: -1
         };
 
-    if(!commonUtils.isObject(field)) {
+    if(!typeUtils.isObject(field)) {
         if(cache.fields[field]) {
             field = cache[field];
         } else {
