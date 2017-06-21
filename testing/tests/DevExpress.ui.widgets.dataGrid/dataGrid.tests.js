@@ -744,6 +744,42 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
 });
 
+//T527538
+QUnit.test("Grid's height should be updated during column resizing if column headers height is changed", function(assert) {
+    //arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            height: 300,
+            wordWrapEnabled: true,
+            allowColumnResizing: true,
+            loadingTimeout: undefined,
+            dataSource: [{}],
+            columns: [{ dataField: "firstName", width: 100 }, { dataField: "lastName", width: 100 }]
+        }),
+        instance = $dataGrid.dxDataGrid("instance");
+
+    var columnHeadersViewHeight = instance.getView("columnHeadersView").getHeight();
+
+    //act
+    var resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+    resizeController._setupResizingInfo(-9900);
+    resizeController._moveSeparator({
+        jQueryEvent: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: -9970,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    //assert
+    assert.ok(instance.getView("columnHeadersView").getHeight() > columnHeadersViewHeight, "column headers height is changed");
+    assert.equal($dataGrid.children().height(), 300, "widget's height is not changed");
+    assert.equal(instance.columnOption(0, "width"), 30, "column 0 width");
+    assert.equal(instance.columnOption(1, "width"), 170, "column 1 width");
+});
+
 QUnit.test("Add row to empty dataGrid - freeSpaceRow element is hidden", function(assert) {
     //arrange
     var clock = sinon.useFakeTimers(),
