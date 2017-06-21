@@ -861,7 +861,6 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
 
     _init: function() {
         var that = this,
-            gridView,
             generatePointsByColumnsHandler = function() {
                 if(!that._isResizing) {
                     that.pointsByColumns(null);
@@ -872,8 +871,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                     that._scrollLeft = offset.left;
                     that.pointsByColumns(null);
                 }
-            },
-            previousScrollbarVisibility;
+            };
 
         that._columnsSeparatorView = that.getView("columnsSeparatorView");
         that._columnHeadersView = that.getView("columnHeadersView");
@@ -894,18 +892,22 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             that._rowsView.scrollChanged.add(generatePointsByColumnsScrollHandler);
         });
 
-        gridView = that.getView("gridView");
-        previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
-        that._subscribeToCallback(that.getController("tablePosition").positionChanged, function() {
+        var previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
+        var previousTableHeight = 0;
+
+        that._subscribeToCallback(that.getController("tablePosition").positionChanged, function(e) {
             if(that._isResizing && !that._rowsView.isResizing) {
                 var scrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
-                if(previousScrollbarVisibility !== scrollbarVisibility) {
+                if(previousScrollbarVisibility !== scrollbarVisibility || (previousTableHeight && previousTableHeight !== e.height)) {
                     previousScrollbarVisibility = scrollbarVisibility;
-                    gridView.resize();
+                    previousTableHeight = e.height;
+
+                    that.component.updateDimensions();
                 } else {
                     that._rowsView.updateFreeSpaceRowHeight();
                 }
             }
+            previousTableHeight = e.height;
         });
     },
 
