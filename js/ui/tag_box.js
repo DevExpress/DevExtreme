@@ -480,6 +480,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _render: function() {
+        this._tagElementsCache = $();
+
         var isSingleLineMode = !this.option("multiline");
 
         this.element()
@@ -711,6 +713,8 @@ var TagBox = SelectBox.inherit({
         if(!this._preserveFocusedTag) {
             this._clearTagFocus();
         }
+
+        this._refreshTagElements();
     },
 
     _renderEmptyState: function() {
@@ -760,8 +764,12 @@ var TagBox = SelectBox.inherit({
         }
     },
 
+    _refreshTagElements: function() {
+        this._tagElementsCache = this.element().find("." + TAGBOX_TAG_CLASS);
+    },
+
     _tagElements: function() {
-        return this.element().find("." + TAGBOX_TAG_CLASS);
+        return this._tagElementsCache;
     },
 
     _getDefaultTagTemplate: function() {
@@ -797,15 +805,17 @@ var TagBox = SelectBox.inherit({
     },
 
     _getTag: function(value) {
-        var $tags = this._tagElements();
+        var $tags = this._tagElements(),
+            tagsLength = $tags.length;
         var result = false;
-        $.each($tags, function(_, tag) {
-            var $tag = $(tag);
-            if(value === $tag.data(TAGBOX_TAG_DATA_KEY)) {
-                result = $tag;
-                return false;
+
+        for(var i = 0; i < tagsLength; i++) {
+            var $tag = $tags[i];
+            if(value === $.data($tag, TAGBOX_TAG_DATA_KEY)) {
+                result = $($tag);
+                break;
             }
-        });
+        }
         return result;
     },
 
@@ -837,6 +847,7 @@ var TagBox = SelectBox.inherit({
     _removeTagElement: function($tag) {
         var itemValue = $tag.data(TAGBOX_TAG_DATA_KEY);
         this._removeTagWithUpdate(itemValue);
+        this._refreshTagElements();
     },
 
     _updateField: commonUtils.noop,
