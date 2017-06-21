@@ -174,7 +174,7 @@ module.exports = errorUtils({
 
     /**
     * @name Errors and Warnings_E0121
-    * @publicName E0120
+    * @publicName E0121
     */
     E0121: "The onCustomItemCreating action should return an item or Promise of jQuery Deferred object resolved when an item is created",
 
