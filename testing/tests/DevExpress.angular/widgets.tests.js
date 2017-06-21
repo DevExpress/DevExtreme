@@ -191,7 +191,7 @@ QUnit.test("dxTabs - navigation buttons should show/hide after showing/hiding it
             bindingOptions: {
                 dataSource: { dataPath: "tabs", deep: true }
             },
-            width: 70,
+            width: 60,
             showNavButtons: true
         };
     };
