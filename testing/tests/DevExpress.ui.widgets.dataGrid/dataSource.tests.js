@@ -3353,7 +3353,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             //assert
             assert.equal(loadArgs.length, 2);
 
-            assert.deepEqual(loadArgs[0].group, [{ selector: "field2", isExpanded: true }]);
+            assert.deepEqual(loadArgs[0].group, [{ selector: "field2", isExpanded: false, desc: false }]);
             assert.deepEqual(loadArgs[0].select, ["field2", "field3"]);
             assert.deepEqual(loadArgs[0].filter, undefined);
             assert.strictEqual(loadArgs[0].skip, undefined);
@@ -3381,6 +3381,43 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
                     { field2: 2, field3: 4 }
                 ]
             }]);
+
+            clock.restore();
+        });
+
+        QUnit.test("grouping with paginate. Several groups are expanded. Async loading", function(assert) {
+            var clock = sinon.useFakeTimers(),
+                loadArgs = [],
+                source = this.createDataSource({
+                    group: [{ selector: "field1", isExpanded: true }, { selector: "field2", isExpanded: true }],
+                    pageSize: 3,
+                    executeAsync: function(func, loadOptions) {
+                        loadArgs.push(loadOptions);
+                        setTimeout(function() {
+                            func();
+                        }, 10);
+                    }
+                });
+
+            source.load();
+
+            assert.equal(loadArgs.length, 1);
+
+            //act
+            clock.tick(10);
+
+            //assert
+            assert.equal(loadArgs.length, 2);
+
+            assert.deepEqual(loadArgs[0].group, [{ selector: "field1", isExpanded: true, desc: false }, { selector: "field2", isExpanded: false, desc: false }], "isExpanded is false for last group");
+            assert.deepEqual(loadArgs[0].filter, undefined);
+            assert.strictEqual(loadArgs[0].skip, undefined);
+            assert.strictEqual(loadArgs[0].take, undefined);
+
+            assert.deepEqual(loadArgs[1].group, null);
+            assert.deepEqual(loadArgs[1].filter, [["field1", "=", 1], "and", ["field2", "=", 2]]);
+            assert.strictEqual(loadArgs[1].skip, undefined);
+            assert.strictEqual(loadArgs[1].take, 1);
 
             clock.restore();
         });

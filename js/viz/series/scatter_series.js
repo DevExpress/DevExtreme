@@ -217,13 +217,14 @@ var baseScatterMethods = {
         return this._options.point;
     },
 
-    _parsePointStyle: function(style, defaultColor, defaultBorderColor) {
-        var border = style.border || {};
+    _parsePointStyle: function(style, defaultColor, defaultBorderColor, defaultSize) {
+        var border = style.border || {},
+            sizeValue = style.size !== undefined ? style.size : defaultSize;
         return {
             fill: style.color || defaultColor,
             stroke: border.color || defaultBorderColor,
             "stroke-width": border.visible ? border.width : 0,
-            r: style.size / 2 + (border.visible && style.size !== 0 ? ~~(border.width / 2) || 0 : 0)
+            r: sizeValue / 2 + (border.visible && sizeValue !== 0 ? ~~(border.width / 2) || 0 : 0)
         };
     },
 
@@ -237,8 +238,8 @@ var baseScatterMethods = {
 
         return {
             normal: normalStyle,
-            hover: that._parsePointStyle(pointOptions.hoverStyle, containerColor, mainPointColor),
-            selection: that._parsePointStyle(pointOptions.selectionStyle, containerColor, mainPointColor)
+            hover: that._parsePointStyle(pointOptions.hoverStyle, containerColor, mainPointColor, pointOptions.size),
+            selection: that._parsePointStyle(pointOptions.selectionStyle, containerColor, mainPointColor, pointOptions.size)
         };
     },
 

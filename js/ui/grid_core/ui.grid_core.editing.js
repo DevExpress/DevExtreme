@@ -35,6 +35,8 @@ var EDIT_FORM_CLASS = "edit-form",
     EDIT_ROW = "dx-edit-row",
     EDIT_BUTTON_CLASS = "dx-edit-button",
 
+    BUTTON_CLASS = "dx-button",
+
     INSERT_INDEX = "__DX_INSERT_INDEX__",
     ROW_CLASS = "dx-row",
     ROW_REMOVED = "dx-row-removed",
@@ -1119,8 +1121,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 hasChanges = that.hasChanges();
 
             if(headerPanel) {
-                headerPanel.updateToolbarItemOption("saveButton", "disabled", !hasChanges);
-                headerPanel.updateToolbarItemOption("revertButton", "disabled", !hasChanges);
+                headerPanel.setToolbarItemDisabled("saveButton", !hasChanges);
+                headerPanel.setToolbarItemDisabled("revertButton", !hasChanges);
             }
         },
 
@@ -1221,7 +1223,8 @@ var EditingController = modules.ViewController.inherit((function() {
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
             var that = this,
-                data = {},
+                newData = {},
+                oldData = options.data,
                 rowKey = options.key,
                 $cellElement = options.cellElement,
                 editMode = getEditMode(that),
@@ -1236,14 +1239,14 @@ var EditingController = modules.ViewController.inherit((function() {
                     that._applyModified($cellElement, options);
                 }
                 options.value = value;
-                options.column.setCellValue(data, value, text);
+                options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
                 if(text && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;
                 }
                 params = {
-                    data: data,
+                    data: newData,
                     key: rowKey,
-                    oldData: options.data,
+                    oldData: oldData,
                     type: DATA_EDIT_DATA_UPDATE_TYPE
                 };
 
@@ -1499,7 +1502,6 @@ var EditingController = modules.ViewController.inherit((function() {
                     },
                     showText: "inMenu",
                     name: name + "Button",
-                    disabled: isButtonDisabled,
                     location: "after",
                     locateInMenu: "auto",
                     sortIndex: sortIndex
@@ -1864,10 +1866,27 @@ module.exports = {
                         editFormRowIndex = this._editingController.getEditFormRowIndex();
 
                     if(editFormRowIndex === rowIndex && $cellElements) {
-                        return $cellElements.find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS));
+                        return $cellElements.find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
                     }
 
                     return $cellElements;
+                },
+                getCellIndex: function($cell, rowIndex) {
+                    if(!$cell.is("td") && rowIndex >= 0) {
+                        var $cellElements = this.getCellElements(rowIndex),
+                            cellIndex = -1;
+
+                        $.each($cellElements, function(index, cellElement) {
+                            if($(cellElement).find($cell).length) {
+                                cellIndex = index;
+                                return false;
+                            }
+                        });
+
+                        return cellIndex;
+                    }
+
+                    return this.callBase.apply(this, arguments);
                 },
                 _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {
                     var item,

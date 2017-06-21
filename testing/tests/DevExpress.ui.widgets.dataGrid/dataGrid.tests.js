@@ -64,6 +64,8 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
+    ajaxMock = require("../../helpers/ajaxMock.js"),
+
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
 
@@ -81,16 +83,8 @@ DataGrid.defaultOptions({
     }
 });
 
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
-
-$.extend($.mockjaxSettings, {
-    contentType: "application/json",
-    responseTime: 0,
-    logging: false
-});
-
 QUnit.testDone(function() {
-    $.mockjax.clear();
+    ajaxMock.clear();
 });
 
 QUnit.module("Initialization");
@@ -748,6 +742,42 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(headersCols[2]).css("width"), "50px", "width of three column - headers view");
     assert.equal($(rowsCols[1]).css("width"), "150px", "width of two column - rows view");
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
+});
+
+//T527538
+QUnit.test("Grid's height should be updated during column resizing if column headers height is changed", function(assert) {
+    //arrange
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+            height: 300,
+            wordWrapEnabled: true,
+            allowColumnResizing: true,
+            loadingTimeout: undefined,
+            dataSource: [{}],
+            columns: [{ dataField: "firstName", width: 100 }, { dataField: "lastName", width: 100 }]
+        }),
+        instance = $dataGrid.dxDataGrid("instance");
+
+    var columnHeadersViewHeight = instance.getView("columnHeadersView").getHeight();
+
+    //act
+    var resizeController = instance.getController("columnsResizer");
+    resizeController._isResizing = true;
+    resizeController._targetPoint = { columnIndex: 0 };
+    resizeController._setupResizingInfo(-9900);
+    resizeController._moveSeparator({
+        jQueryEvent: {
+            data: resizeController,
+            type: "mousemove",
+            pageX: -9970,
+            preventDefault: commonUtils.noop
+        }
+    });
+
+    //assert
+    assert.ok(instance.getView("columnHeadersView").getHeight() > columnHeadersViewHeight, "column headers height is changed");
+    assert.equal($dataGrid.children().height(), 300, "widget's height is not changed");
+    assert.equal(instance.columnOption(0, "width"), 30, "column 0 width");
+    assert.equal(instance.columnOption(1, "width"), 170, "column 1 width");
 });
 
 QUnit.test("Add row to empty dataGrid - freeSpaceRow element is hidden", function(assert) {
@@ -3205,13 +3235,13 @@ QUnit.test("load from remote rest store when remoteOperations false", function(a
         errorMessage = message;
     };
 
-    $.mockjax({
-        url: "/mockjax-rest-store",
+    ajaxMock.setup({
+        url: "/mock-rest-store",
         responseText: [{ "a": 1 }, { "a": 3 }, { "a": 2 }]
     });
 
     createDataGrid({
-        dataSource: "/mockjax-rest-store",
+        dataSource: "/mock-rest-store",
         remoteOperations: false,
         onContentReady: function(e) {
             assert.ok(!errorMessage, "no error messages");
@@ -6258,6 +6288,65 @@ QUnit.test("Scroll positioned correct with fixed columns and editing", function(
 
     //assert
     assert.equal(dataGrid.getView("rowsView").getScrollable().scrollLeft(), 400, "Correct offset");
+});
+
+QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a field with defined 'setCellValue' handler", function(assert) {
+    //arrange
+    var clock = sinon.useFakeTimers(),
+        data = [{ firstName: "Alex", lastName: "Black" }, { firstName: "John", lastName: "Dow" }],
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            editing: {
+                mode: "form",
+                allowUpdating: true
+            },
+            dataSource: data,
+            columns: [
+                {
+                    dataField: "firstName",
+                    setCellValue: function(rowData, value) {
+                        rowData.lastName = 'test';
+                        this.defaultSetCellValue(rowData, value);
+                    },
+                }, "lastName"]
+        }),
+        triggerTabPress = function(target) {
+            dataGrid.getController("keyboardNavigation")._keyDownProcessor.process({
+                which: 9,
+                target: target && target[0] || target,
+                preventDefault: $.noop,
+                isDefaultPrevented: function() {
+                    return false;
+                },
+                stopPropagation: $.noop
+            });
+        };
+
+    //act
+    dataGrid.editRow(0);
+    clock.tick();
+
+    var editor = dataGrid.element().find(".dx-form .dx-texteditor").first().dxTextBox("instance"),
+        $input = editor.element().find(".dx-texteditor-input");
+
+    editor.focus();
+    $input.val("Josh");
+    triggerTabPress($input);
+    $input.change();
+    clock.tick();
+
+    //assert
+    var $secondEditor = dataGrid.element().find(".dx-form .dx-texteditor").eq(1);
+
+    assert.deepEqual(
+        dataGrid.getController("keyboardNavigation")._focusedCellPosition,
+        { columnIndex: 1, rowIndex: 0 },
+        "Focused cell position is correct"
+    );
+    assert.equal($secondEditor.find(".dx-texteditor-input").val(), "test", "'lastName' editor has correct value");
+    assert.ok($secondEditor.hasClass("dx-state-focused"), "'lastName' editor focused");
+
+    clock.restore();
 });
 
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {

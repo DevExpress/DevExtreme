@@ -4,9 +4,8 @@ var $ = require("jquery"),
     ViewEngine = require("framework/html/view_engine").ViewEngine,
     MemoryKeyValueStorage = require("framework/state_manager").MemoryKeyValueStorage,
     domUtils = require("core/utils/dom"),
-    Component = require("core/component");
-
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
+    Component = require("core/component"),
+    ajaxMock = require("../../helpers/ajaxMock.js");
 
 QUnit.testStart(function() {
     var markup = require("./frameworkParts/html_viewEngine.markup.html!text");
@@ -39,7 +38,7 @@ var ViewEngineTester = ViewEngine.inherit({
 
 QUnit.module("ViewEngine load external templates", {
     beforeEach: function() {
-        $.mockjax({
+        ajaxMock.setup({
             url: "../../helpers/TestViewTemplates.html",
             responseText: "<div data-options=\"dxView: { name: 'index-link' }\">index</div>" +
                             "<div data-options=\"dxView: { name: 'about-link' }\">about</div>" +
@@ -48,7 +47,7 @@ QUnit.module("ViewEngine load external templates", {
     },
     afterEach: function() {
         $("head").children("[rel='dx-template']").remove();
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
@@ -74,6 +73,11 @@ QUnit.test("Find templates by links", function(assert) {
 QUnit.test("Find templates by links (nonexistent template)", function(assert) {
     var done = assert.async(),
         url = "../../helpers/nonexistent.html";
+
+    ajaxMock.setup({
+        url: url,
+        status: 404
+    });
 
     $("head").append('<li' + 'nk rel="dx-template" type="text/html" href="' + url + '"/>');
     var engine = new ViewEngineTester({

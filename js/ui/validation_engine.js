@@ -214,6 +214,7 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 rule:object
      * @type_function_param1_field3 validator:object
+     * @type_function_param1_field4 data:object
      */
     /**
      * @name customRuleOptions_message
@@ -228,11 +229,20 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      * @default false
      */
     validate: function(value, rule) {
-        return rule.validationCallback({
-            value: value,
-            validator: rule.validator,
-            rule: rule
-        });
+        var validator = rule.validator,
+            dataGetter = validator && commonUtils.isFunction(validator.option) && validator.option("dataGetter"),
+            data = commonUtils.isFunction(dataGetter) && dataGetter(),
+            params = {
+                value: value,
+                validator: validator,
+                rule: rule
+            };
+
+        if(data) {
+            params.data = data;
+        }
+
+        return rule.validationCallback(params);
     }
 });
 

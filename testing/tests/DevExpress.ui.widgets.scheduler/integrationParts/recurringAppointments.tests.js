@@ -871,3 +871,22 @@ QUnit.test("AllDay recurrence appointments should be rendered correctly after ch
     this.instance.option("currentDate", new Date(2015, 2, 23));
     assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 7, "appointments are OK");
 });
+
+QUnit.test("AllDay recurrence appointments should be rendered correctly after changing currentDate, day view", function(assert) {
+    var tasks = [{
+        startDate: new Date(2015, 4, 25, 9, 30),
+        endDate: new Date(2015, 4, 26, 11, 30),
+        recurrenceRule: "FREQ=MONTHLY;BYMONTHDAY=26"
+    }];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentView: "day",
+        currentDate: new Date(2015, 4, 26),
+        dataSource: dataSource
+    });
+    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 1, "appointments are OK");
+    this.instance.option("currentDate", new Date(2015, 4, 27));
+    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 0, "appointments are OK");
+});

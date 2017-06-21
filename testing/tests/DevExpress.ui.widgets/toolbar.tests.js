@@ -195,6 +195,19 @@ QUnit.test("items - location", function(assert) {
     });
 });
 
+QUnit.test("Center element has correct margin with RTL", function(assert) {
+    var element = this.element.dxToolbar({
+            rtlEnabled: true,
+            items: [
+                { location: 'before', text: 'before' },
+                { location: 'center', text: 'center' }
+            ]
+        }),
+        margin = element.find("." + TOOLBAR_CLASS + "-center").get(0).style.margin;
+
+    assert.equal(margin, "0px auto", "aligned by center");
+});
+
 
 QUnit.module("option change handlers", {
     beforeEach: function() {

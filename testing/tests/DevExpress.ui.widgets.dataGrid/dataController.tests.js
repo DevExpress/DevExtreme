@@ -7354,6 +7354,46 @@ QUnit.test("group sorting by summary", function(assert) {
     assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
 });
 
+//T526028
+QUnit.test("group sorting by summary if remoteOperations option is enabled", function(assert) {
+    this.options = {
+        columns: ['name', 'age'],
+        remoteOperations: true,
+        dataSource: {
+            group: 'name',
+            load: function(options) {
+                return $.Deferred().resolve([
+                    { key: "Dan", summary: [1], items: null, count: 1 },
+                    { key: "Sam", summary: [3], items: null, count: 3 },
+                    { key: "Alex", summary: [2], items: null, count: 2 },
+                ]);
+            }
+        },
+        sortByGroupSummaryInfo: [{
+            summaryItem: 'count'
+        }],
+        summary: {
+            groupItems: [{
+                summaryType: 'count'
+            }]
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    //assert
+    assert.ok(!this.dataController.isLoading());
+    assert.strictEqual(this.dataController.items().length, 3);
+    assert.deepEqual(this.dataController.items()[0].data.key, 'Dan');
+    assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 1);
+    assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
+    assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+    assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
+    assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+});
+
 QUnit.test("group sorting by summary when change grouping", function(assert) {
     this.options = {
         columns: ['name', 'age'],

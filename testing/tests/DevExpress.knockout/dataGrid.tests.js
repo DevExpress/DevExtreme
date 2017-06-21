@@ -29,6 +29,11 @@ QUnit.testStart(function() {
                 <div data-options="dxTemplate: { name: \'testCellTemplate\'}">\
                     <span data-bind="text: $root.getCellText($data)"></span>\
                 </div>\
+                <table data-options="dxTemplate: { name: \'testRowTemplate\' }">\
+                    <tr class="test-row" data-bind="click: $root.rowClick">\
+                        <td>Cell Content</td>\
+                    </tr>\
+                </table>\
             </div>\
         </div>';
 
@@ -299,4 +304,25 @@ QUnit.test('Two-way binding disabled', function(assert) {
     assert.equal($rows.length, 2, "row count");
     assert.equal($rows.eq(0).children().eq(0).text(), "1");
     assert.equal($rows.eq(1).children().eq(0).text(), "3");
+});
+
+QUnit.test('$root model in rowTemplate', function(assert) {
+    //arrange, act
+
+    this.viewModel.rowClick = sinon.spy();
+    this.viewModel.gridOptions = {
+        rowTemplate: "testRowTemplate",
+        dataSource: [{ id: 1 }, { id: 2 }]
+    };
+
+    var dataGrid = this.createDataGrid();
+    var $rows = dataGrid.element().find(".test-row");
+
+    //act
+    $rows.eq(1).click();
+
+    //assert
+    assert.equal($rows.length, 2, "row count");
+    assert.ok(this.viewModel.rowClick.calledOnce, "rowClick called once");
+    assert.equal(this.viewModel.rowClick.getCall(0).args[0].data.id, 2, "rowClick args");
 });

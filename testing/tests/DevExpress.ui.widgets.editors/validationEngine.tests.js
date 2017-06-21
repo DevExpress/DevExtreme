@@ -796,6 +796,38 @@ QUnit.test("Custom validation rule when value is array", function(assert) {
     assert.deepEqual(customCallback.getCall(0).args[0].value, value, "value is correct");
 });
 
+QUnit.test("Validation callback must have the 'data' in arguments when validator has 'dataGetter' option", function(assert) {
+    var params,
+        customCallback = sinon.spy(function() { return true; }),
+        data = { test: "test" },
+        validator = {
+            option: function(optionName) {
+                if(optionName === "dataGetter") {
+                    return function() {
+                        return data;
+                    };
+                }
+            }
+        },
+        value = "Some custom value",
+        rule = {
+            type: "custom",
+            validationCallback: customCallback,
+            validator: validator
+        },
+        result = ValidationEngine.validate(value, [rule]);
+
+
+    assert.ok(result, "Result is defined");
+    assert.ok(customCallback.calledOnce, "Validation callback was called");
+
+    params = customCallback.getCall(0).args[0];
+    assert.equal(params.value, value, "Correct value should be passed");
+    assert.strictEqual(params.validator, validator, "Validator should be passed");
+    assert.strictEqual(params.rule, rule, "Rule should be passed");
+    assert.strictEqual(params.data, data, "Data should be passed");
+});
+
 
 QUnit.module("Compare rule");
 

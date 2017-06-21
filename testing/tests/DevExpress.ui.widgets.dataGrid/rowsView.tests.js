@@ -4875,6 +4875,37 @@ QUnit.test("Show master detail with rowTemplate", function(assert) {
     assert.equal($rowElements.eq(1).find(".test-detail").length, 1, "master detail template is rendered");
 });
 
+QUnit.test('Do not hide noData block placed inside the masterDetail template', function(assert) {
+    //arrange
+    var container = $('#container'),
+        noDataElements;
+
+    this.options.dataSource.store = [this.items[0]];
+    this.options.masterDetail = {
+        enabled: true,
+        template: function($container, options) {
+            $('<div>').addClass('dx-datagrid-nodata').appendTo($container);
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.rowsView.render(container);
+    this.rowsView.resize();
+    this.expandRow(this.items[0]);
+
+    noDataElements = container.find('.dx-datagrid-nodata');
+
+    //assert
+    assert.equal(noDataElements.length, 2, "two no data containers were rendered");
+
+    //act
+    this.rowsView.resize();
+    noDataElements = container.find('.dx-datagrid-nodata');
+    assert.notOk(noDataElements.eq(0).hasClass('dx-hidden'), "block inside masterDetail is not hidden");
+    assert.ok(noDataElements.eq(1).hasClass('dx-hidden'), "datagrid's nodata block is hidden");
+});
+
 //T436424
 QUnit.test("Show load panel after replace dataSource when scrolling mode is 'virtual'", function(assert) {
     //arrange

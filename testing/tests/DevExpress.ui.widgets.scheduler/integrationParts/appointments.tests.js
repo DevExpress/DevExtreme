@@ -4277,3 +4277,27 @@ QUnit.test("Appointments should be rendered correctly at asynchronous rendering 
 
     assert.roughEqual(appointmentWidth, cellWidth * 3, 2.001, "appointment was render correctly");
 });
+
+QUnit.test("Exception should not be thrown on second details view opening if form items was not found", function(assert) {
+    var task = { text: "Task", startDate: new Date(2017, 2, 13), endDate: new Date(2017, 2, 13, 0, 30) };
+
+    this.createInstance({
+        dataSource: [task],
+        currentDate: new Date(2017, 2, 13),
+        currentView: "week",
+        views: ["week"],
+        onAppointmentFormCreated: function(e) {
+            e.form.option("items", []);
+        }
+    });
+
+    try {
+        this.instance.showAppointmentPopup(task);
+        this.instance.hideAppointmentPopup();
+
+        this.instance.showAppointmentPopup(task);
+        assert.ok(true, "exception is not expected");
+    } catch(e) {
+        assert.ok(false, "Exception: " + e);
+    }
+});

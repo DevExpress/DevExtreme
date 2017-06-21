@@ -4,16 +4,14 @@
 
 var $ = require("jquery"),
     testing = require("./utils.js"),
-    BingProvider = require("ui/map/provider.dynamic.bing");
+    BingProvider = require("ui/map/provider.dynamic.bing"),
+    ajaxMock = require("../../../helpers/ajaxMock.js");
 
 require("ui/map");
 
 var LOCATIONS = testing.LOCATIONS,
     MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;
-
-testing.prepare();
-
 
 var prepareTestingBingProvider = function() {
     window.geocodedLocation = new Microsoft.Maps.Location(-1.12345, -1.12345);
@@ -41,16 +39,16 @@ QUnit.module("bing provider", {
 
         $.ajaxSetup({ jsonp: false });
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
-            proxy: '../../testing/helpers/forMap/bingMock.js',
-            response: function() {
-                setTimeout(function() {
-                    prepareTestingBingProvider();
-                    if(window._bingScriptReady) {
-                        window._bingScriptReady();
-                    }
-                });
+            callback: function() {
+                $.getScript("../../testing/helpers/forMap/bingMock.js")
+                    .done(function() {
+                        prepareTestingBingProvider();
+                        if(window._bingScriptReady) {
+                            window._bingScriptReady();
+                        }
+                    });
             }
         });
 
@@ -59,14 +57,14 @@ QUnit.module("bing provider", {
         }
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
 QUnit.test("map initialize with loaded map", function(assert) {
     var done = assert.async();
 
-    $.getScript("fakeBingUrl").done(function() {
+    $.getScript("../../testing/helpers/forMap/bingMock.js").done(function() {
         window.Microsoft.Maps.customFlag = true;
 
         setTimeout(function() {
