@@ -919,7 +919,7 @@ module.exports = {
                 },
 
                 enableApplyButton: function(value) {
-                    this.toolbarWidgetOption("applyFilterButton", "disabled", !value);
+                    this.setToolbarItemDisabled("applyFilterButton", !value);
                 },
 
                 isVisible: function() {

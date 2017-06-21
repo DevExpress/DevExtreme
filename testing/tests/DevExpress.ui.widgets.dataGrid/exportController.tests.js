@@ -2437,19 +2437,19 @@ QUnit.test("Export button disable on editing", function(assert) {
     $exportButton = $container.find(".dx-datagrid-export-button");
 
     //assert
-    assert.ok(!$exportButton.hasClass("dx-state-disabled"), "Export button is enabled before editing start");
+    assert.ok(!$exportButton.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "Export button is enabled before editing start");
 
     //act
     this.editingController.hasChanges = function() { return true; };
     this.editingController._updateEditButtons();
 
     //assert
-    assert.ok($exportButton.hasClass("dx-state-disabled"), "Export button is disabled after editing");
+    assert.ok($exportButton.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "Export button is disabled after editing");
 
     //act
     this.editingController.hasChanges = function() { return false; };
     this.editingController._updateEditButtons();
-    $exportButton = $container.find(".dx-datagrid-export-button");
+    $exportButton = $container.closest(".dx-toolbar-item").find(".dx-datagrid-export-button");
 
     //assert
     assert.ok(!$exportButton.hasClass("dx-state-disabled"), "Export button is enabled after saving");
