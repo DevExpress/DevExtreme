@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
+    devices = require("core/devices"),
     caretWorkaround = require("./caretWorkaround.js");
 
 require("ui/text_box/ui.text_editor");
@@ -632,6 +633,11 @@ QUnit.testInActiveWindow("selection should consider fixed mask letters", functio
 });
 
 QUnit.testInActiveWindow("Editor with mask isn't focused after render", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "desktop specific test");
+        return;
+    }
+
     var $textEditor = $("#texteditor").dxTextEditor({ mask: "(XX)" });
 
     assert.notOk($textEditor.hasClass("dx-state-focused"), "editor isn't focused");
