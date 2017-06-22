@@ -621,16 +621,15 @@ QUnit.test("value change should be fired when file selected", function(assert) {
     simulateFileChoose($fileUploader, fakeFile);
 });
 
-QUnit.test("value should support only null at initialization", function(assert) {
+QUnit.test("value should support files at initialization", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({
-            value: "fakefile"
+            value: [fakeFile]
         }),
         fileUploader = $fileUploader.dxFileUploader("instance"),
-
         $fileInput = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
 
-    assert.equal($fileInput.val(), "", "value was set to empty string");
-    assert.deepEqual(fileUploader.option("value"), [], "value was set to empty string");
+    assert.equal($fileInput.val(), "", "input value was set to empty string");
+    assert.deepEqual(fileUploader.option("value"), [fakeFile], "file value is correct");
 });
 
 QUnit.test("value should present in the file name", function(assert) {
@@ -1069,7 +1068,7 @@ QUnit.test("files count should be correct after value reset", function(assert) {
 QUnit.test("input should be cleared after value reset", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({
             extendSelection: true,
-            value: "fakefile",
+            value: ["fakefile"],
             multiple: true
         }),
         fileUploader = $fileUploader.dxFileUploader("instance"),
