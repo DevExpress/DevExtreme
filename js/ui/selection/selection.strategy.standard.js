@@ -8,7 +8,7 @@ var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
     SelectionStrategy = require("./selection.strategy");
 
-function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKeys, keyOf) {
+function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKeys, keyOf, equalByReference) {
 
     this.getLocalFilter = function() {
         return functionFilter;
@@ -61,9 +61,36 @@ function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKey
         return combinedFilter;
     };
 
+    var selectedItemKeyHashesMap;
+
+    var getSelectedItemKeyHashesMap = function(selectedItemKeys) {
+        if(!selectedItemKeyHashesMap) {
+            selectedItemKeyHashesMap = {};
+            for(var i = 0; i < selectedItemKeys.length; i++) {
+                selectedItemKeyHashesMap[getKeyHash(selectedItemKeys[i])] = true;
+            }
+        }
+        return selectedItemKeyHashesMap;
+    };
+
     var functionFilter = function(item) {
-        for(var i = 0; i < selectedItemKeys.length; i++) {
-            if(equalKeys(selectedItemKeys[i], keyOf(item))) {
+        var key = keyOf(item),
+            keyHash,
+            i;
+
+        if(!equalByReference) {
+            keyHash = getKeyHash(key);
+            if(!commonUtils.isObject(keyHash)) {
+                var selectedKeyHashesMap = getSelectedItemKeyHashesMap(selectedItemKeys);
+                if(selectedKeyHashesMap[keyHash]) {
+                    return !isSelectAll;
+                }
+                return !!isSelectAll;
+            }
+        }
+
+        for(i = 0; i < selectedItemKeys.length; i++) {
+            if(equalKeys(selectedItemKeys[i], key)) {
                 return !isSelectAll;
             }
         }
@@ -175,7 +202,7 @@ module.exports = SelectionStrategy.inherit({
             return deferred;
         }
 
-        var selectionFilterCreator = new SelectionFilterCreator(key(), keys, isSelectAll, this.equalKeys.bind(this), this.options.keyOf),
+        var selectionFilterCreator = new SelectionFilterCreator(key(), keys, isSelectAll, this.equalKeys.bind(this), this.options.keyOf, this.options.equalByReference),
             combinedFilter = selectionFilterCreator.getCombinedFilter(filter);
 
         var deselectedItems = [];
