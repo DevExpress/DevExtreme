@@ -6332,7 +6332,7 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     editor.focus();
     $input.val("Josh");
     triggerTabPress($input);
-    $input.change();
+    $input.trigger("change");
     clock.tick();
 
     //assert
