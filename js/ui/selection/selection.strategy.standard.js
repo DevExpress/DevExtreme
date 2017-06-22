@@ -81,7 +81,7 @@ function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKey
 
         if(!equalByReference) {
             keyHash = getKeyHash(key);
-            if(!commonUtils.isObject(keyHash)) {
+            if(!typeUtils.isObject(keyHash)) {
                 var selectedKeyHashesMap = getSelectedItemKeyHashesMap(selectedItemKeys);
                 if(selectedKeyHashesMap[keyHash]) {
                     return !isSelectAll;
