@@ -568,9 +568,7 @@ var TagBox = SelectBox.inherit({
 
     _renderTypingEvent: function() {
         this._input().on(eventUtils.addNamespace("keydown", this.NAME), (function(e) {
-            var keyCode = e.which || e.keyCode;
-
-            if(!this._isControlKey(keyCode) && this._isEditable()) {
+            if(!this._isControlKey(e.key) && this._isEditable()) {
                 this._clearTagFocus();
             }
         }).bind(this));

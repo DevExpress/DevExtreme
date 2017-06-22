@@ -1,11 +1,15 @@
 "use strict";
 
+var browser;
+
 (function(root, factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
+            browser = require("core/utils/browser");
             root.keyboardMock = module.exports = factory(require("jquery"));
         });
     } else {
+        browser = DevExpress.require("core/utils/browser");
         root.keyboardMock = factory(root.jQuery);
     }
 }(window, function($, undefined) {
@@ -115,6 +119,27 @@
             'del': 46
         },
 
+        KEY_VALUES_BY_CODE: {
+            8: "Backspace",
+            9: "Tab",
+            13: "Enter",
+            16: "Shift",
+            17: "Control",
+            18: "Alt",
+            27: "Escape",
+            32: " ",
+            33: "PageUp",
+            34: "PageDown",
+            35: "End",
+            36: "Home",
+            37: "ArrowLeft",
+            38: "ArrowUp",
+            39: "ArrowRight",
+            40: "ArrowDown",
+            45: "Insert",
+            46: "Delete"
+        },
+
         MODIFIERS: {
             'shift': 16,
             'ctrl': 17,
@@ -181,6 +206,19 @@
             111: 47
         }
     };
+
+    if(browser.msie && parseInt(browser.version) < 10) {
+        $.extend(KEYS_MAPS.KEY_VALUES_BY_CODE, {
+            27: "Esc",
+            32: "Spacebar",
+            37: "Left",
+            38: "Up",
+            39: "Right",
+            40: "Down",
+            45: "Ins",
+            46: "Del"
+        });
+    }
 
     var isLetter = function(key) {
         return key.length === 1 && (key >= 'a' && key <= 'z') || (key >= 'A' && key <= 'Z');
@@ -333,15 +371,23 @@
                 $element.trigger(this.event);
             },
 
-            keyDown: function(key, options) {
-                key = typeof key === "string" ? keyHelper(key, true) : key;
-                this.triggerEvent("keydown", $.extend({ keyCode: key, which: key }, options));
+            keyDown: function(rawKey, options) {
+                var isKeyCodeString = typeof rawKey === "string",
+                    keyCode = isKeyCodeString ? keyHelper(rawKey) : rawKey,
+                    isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
+                    key = isCommandKey && KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] ? KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] : rawKey;
+
+                this.triggerEvent("keydown", $.extend({ keyCode: keyCode, which: keyCode, key: key }, options));
                 return this;
             },
 
-            keyPress: function(key) {
-                key = typeof key === "string" ? keyHelper(key) : key;
-                this.triggerEvent("keypress", { keyCode: key, charCode: key, which: key });
+            keyPress: function(rawKey) {
+                var isKeyCodeString = typeof rawKey === "string",
+                    keyCode = isKeyCodeString ? keyHelper(rawKey) : rawKey,
+                    isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
+                    key = isCommandKey && KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] ? KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] : rawKey;
+
+                this.triggerEvent("keypress", { keyCode: keyCode, charCode: keyCode, which: keyCode, key: key });
                 return this;
             },
 
@@ -351,9 +397,13 @@
                 return this;
             },
 
-            keyUp: function(key) {
-                key = typeof key === "string" ? keyHelper(key) : key;
-                this.triggerEvent("keyup", { keyCode: key, which: key });
+            keyUp: function(rawKey) {
+                var isKeyCodeString = typeof rawKey === "string",
+                    keyCode = isKeyCodeString ? keyHelper(rawKey) : rawKey,
+                    isCommandKey = rawKey && rawKey.length > 1 || !isKeyCodeString,
+                    key = isCommandKey && KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] ? KEYS_MAPS.KEY_VALUES_BY_CODE[keyCode] : rawKey;
+
+                this.triggerEvent("keyup", { keyCode: keyCode, which: keyCode, key: key });
                 return this;
             },
 
