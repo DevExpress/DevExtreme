@@ -96,6 +96,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 parentType: "dataRow",
                 width: null,
                 readOnly: !options.setValue,
+                isOnForm: options.isOnForm,
                 id: options.id,
                 updateValueImmediately: isRowEditMode(that)
             }));
@@ -1293,6 +1294,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 rowData = detailCellOptions.row && detailCellOptions.row.data,
                 cellOptions = extend({}, detailCellOptions, {
                     cellElement: null,
+                    isOnForm: true,
                     item: item,
                     value: column.calculateCellValue(rowData),
                     column: extend({}, column, { editorOptions: item.editorOptions }),

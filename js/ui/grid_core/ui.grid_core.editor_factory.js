@@ -243,8 +243,10 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
     var createEditorCore = function(that, options) {
         if(options.editorName && options.editorOptions && options.editorElement[options.editorName]) {
             if(options.editorName === "dxCheckBox") {
-                options.editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
-                options.editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
+                if(!options.isOnForm) {
+                    options.editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
+                    options.editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
+                }
                 if(options.command || options.editorOptions.readOnly) {
                     options.editorElement.parent().addClass(CELL_FOCUS_DISABLED_CLASS);
                 }
