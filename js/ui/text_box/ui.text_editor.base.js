@@ -28,22 +28,28 @@ var EVENTS_LIST = [
     "Change", "Cut", "Copy", "Paste", "Input"
 ];
 
-var CONTROL_KEYS = {
-    "9": "tab",
-    "13": "enter",
-    "16": "shift",
-    "17": "ctrl",
-    "18": "alt",
-    "27": "escape",
-    "33": "pageUp",
-    "34": "pageDown",
-    "35": "end",
-    "36": "home",
-    "37": "leftArrow",
-    "38": "upArrow",
-    "39": "rightArrow",
-    "40": "downArrow"
-};
+var CONTROL_KEYS = [
+    "Tab",
+    "Enter",
+    "Shift",
+    "Control",
+    "Alt",
+    "Escape",
+    "PageUp",
+    "PageDown",
+    "End",
+    "Home",
+    "ArrowLeft",
+    "ArrowUp",
+    "ArrowRight",
+    "ArrowDown",
+    //IE9 fallback:
+    "Esc",
+    "Left",
+    "Up",
+    "Right",
+    "Down"
+];
 
 /**
 * @name dxTextEditor
@@ -297,8 +303,8 @@ var TextEditorBase = Editor.inherit({
         return this._inputWrapper().find("." + TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
     },
 
-    _isControlKey: function(keyCode) {
-        return !!CONTROL_KEYS[keyCode];
+    _isControlKey: function(key) {
+        return CONTROL_KEYS.indexOf(key) !== -1;
     },
 
     _render: function() {
