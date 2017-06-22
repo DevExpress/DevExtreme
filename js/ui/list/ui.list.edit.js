@@ -66,6 +66,11 @@ var ListEdit = ListBase.inherit({
         });
     },
 
+    _updateSelection: function() {
+        this._editProvider.afterItemsRendered();
+        this.callBase();
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**

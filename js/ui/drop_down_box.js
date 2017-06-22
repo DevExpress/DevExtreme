@@ -145,8 +145,31 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _render: function() {
+        this._renderSubmitElement();
         this.callBase();
         this.element().addClass(DROP_DOWN_BOX_CLASS);
+    },
+
+    _renderSubmitElement: function() {
+        this._$submitElement = $("<input>")
+            .attr("type", "hidden")
+            .appendTo(this.element());
+    },
+
+    _renderValue: function() {
+        this._setSubmitValue();
+        this.callBase();
+    },
+
+    _setSubmitValue: function() {
+        var value = this.option("value"),
+            submitValue = this.option("valueExpr") === "this" ? this._displayGetter(value) : value;
+
+        this._$submitElement.val(submitValue);
+    },
+
+    _getSubmitElement: function() {
+        return this._$submitElement;
     },
 
     _renderInputValue: function() {

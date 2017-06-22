@@ -390,6 +390,8 @@ QUnit.test('Change editorOptions on editorPreparing', function(assert) {
     assert.ok($container.hasClass('dx-numberbox-spin'), 'numberbox render with spin buttons');
 });
 
+var DATAGRID_CHECKBOX_SIZE_CLASS = "dx-datagrid-checkbox-size";
+
 QUnit.test('Boolean editor', function(assert) {
     var $container = $('#container'),
         value = true;
@@ -407,6 +409,7 @@ QUnit.test('Boolean editor', function(assert) {
 
     //assert
     assert.ok(checkBox, 'dxCheckBox created');
+    assert.ok(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox has dx-datagrid-checkbox-size class');
     assert.equal(checkBox.option('value'), true, 'checkbox editor value');
     assert.ok(checkBox.option('hoverStateEnabled'), 'hover enabled');
     assert.ok(checkBox.option('focusStateEnabled'), 'focus enabled');
@@ -417,6 +420,24 @@ QUnit.test('Boolean editor', function(assert) {
 
     //assert
     assert.equal(value, false, 'value after change');
+});
+
+QUnit.test('Boolean editor when inOnForm is true', function(assert) {
+    var $container = $('#container'),
+        value = true;
+
+    this.editorFactoryController.createEditor($container, {
+        dataType: 'boolean',
+        isOnForm: true,
+        value: value
+    });
+    //act
+    var checkBox = $container.dxCheckBox('instance');
+
+
+    //assert
+    assert.ok(checkBox, 'dxCheckBox created');
+    assert.notOk(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox not have dx-datagrid-checkbox-size class');
 });
 
 QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {

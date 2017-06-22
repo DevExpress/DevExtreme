@@ -10,7 +10,8 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
-    columnStateMixin = require("./ui.grid_core.column_state_mixin");
+    columnStateMixin = require("./ui.grid_core.column_state_mixin"),
+    noop = commonUtils.noop;
 
 var SCROLL_CONTAINER_CLASS = "scroll-container",
     GROUP_SPACE_CLASS = "group-space",
@@ -579,7 +580,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             result = [],
             $cells;
 
-        (this.option("forceApplyBindings") || $.noop)();
+        (this.option("forceApplyBindings") || noop)();
 
         $tableElement = $tableElement || that._getTableElement();
 

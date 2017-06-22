@@ -193,7 +193,7 @@ var LayoutManager = Widget.inherit({
             watch = that._getWatch();
 
         items.forEach(function(item) {
-            if(typeUtils.isObject(item) && utils.isDefined(item.visible) && $.isFunction(watch)) {
+            if(typeUtils.isObject(item) && utils.isDefined(item.visible) && utils.isFunction(watch)) {
                 that._itemWatchers.push(
                     watch(
                         function() {

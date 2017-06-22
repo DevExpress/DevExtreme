@@ -1062,7 +1062,6 @@ declare module DevExpress.ui {
     }
 
     export interface dxMultiViewOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxMultiViewOptions_noDataText */
         /** @docid_ignore dxMultiViewOptions_selectedItems */
         /** @docid_ignore dxMultiViewOptions_selectedItemKeys */
         /** @docid_ignore dxMultiViewOptions_keyExpr */

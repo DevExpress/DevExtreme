@@ -2064,7 +2064,8 @@ QUnit.test("template.render() - data parameter is Scope", function(assert) {
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            this.scope = this.element().scope().$new();
+            var element = this.element().get(0);
+            this.scope = angular.element(element).scope().$new();
             this.scope.text = this.option("text");
         },
 

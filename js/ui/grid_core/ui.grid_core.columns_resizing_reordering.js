@@ -1051,8 +1051,10 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
 
                 for(i = 0; i < rowCount; i++) {
                     columnElements = draggingPanel.getColumnElements(i) || [];
-                    columns = draggingPanel.getColumns(i) || [];
-                    $.each(columnElements, subscribeToEvents);
+                    if(columnElements.length) {
+                        columns = draggingPanel.getColumns(i) || [];
+                        $.each(columnElements, subscribeToEvents);
+                    }
                 }
             }
         });
