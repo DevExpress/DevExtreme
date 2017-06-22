@@ -419,6 +419,22 @@ QUnit.test('Boolean editor', function(assert) {
     assert.equal(value, false, 'value after change');
 });
 
+QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
+    var $container = $('#container');
+
+    this.editorFactoryController.option("tabIndex", 7);
+
+    this.editorFactoryController.createEditor($container, {
+        dataType: 'boolean'
+    });
+
+    //act
+    var checkBox = $container.dxCheckBox('instance');
+
+    //assert
+    assert.equal(checkBox.element().attr("tabIndex"), "7", "tabIndex attr of checkBox");
+});
+
 QUnit.test('Boolean editor with null value should be intermediate', function(assert) {
     var $container = $('#container'),
         value = null;
@@ -464,6 +480,24 @@ QUnit.test('Date editor', function(assert) {
     //assert
     assert.equal(editor.option('displayFormat'), 'shortDate', 'Widget format is correct');
     assert.deepEqual(value, new Date(2013), 'value after change');
+});
+
+QUnit.test("DateTime editor", function(assert) {
+    //arrange
+    var editor,
+        $container = $("#container");
+
+    //act
+    this.editorFactoryController.createEditor($container, {
+        dataType: "datetime",
+        format: "shortDateShortTime"
+    });
+
+    //assert
+    editor = $container.data("dxDateBox");
+    assert.ok(editor, "has editor");
+    assert.equal(editor.option("type"), "datetime", "editor type");
+    assert.equal(editor.option("displayFormat"), "shortDateShortTime", "display format of the editor");
 });
 
 //T219884

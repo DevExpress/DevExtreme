@@ -1,14 +1,11 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    DataSource = require("data/data_source/data_source").DataSource,
+var DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     CustomStore = require("data/custom_store"),
     LocalStore = require("data/local_store"),
-    ODataStore = require("data/odata/store");
-
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
+    ODataStore = require("data/odata/store"),
+    ajaxMock = require("../../helpers/ajaxMock.js");
 
 QUnit.test("no options", function(assert) {
     var ds = new DataSource();
@@ -132,9 +129,8 @@ QUnit.test("unknown value of options.store.type throws", function(assert) {
 QUnit.test("create from bare url", function(assert) {
     var goFurther = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "some.url",
-        responseTime: 0,
         responseText: [1, 2, 3]
     });
 
@@ -143,24 +139,17 @@ QUnit.test("create from bare url", function(assert) {
             assert.ok(r.length, 3);
         })
         .always(function() {
-            $.mockjax.clear();
+            ajaxMock.clear();
         })
         .always(goFurther);
 });
 
 QUnit.test("create from bare url, JSONP", function(assert) {
-    var goFurther = assert.async();
+    var done = assert.async();
 
-    var jsonpCallbackName = "jsonpCallback";
-    var originalJsonpCallback = $.ajaxSettings.jsonpCallback;
-    $.ajaxSettings.jsonpCallback = function() { return jsonpCallbackName; };
-
-    window[jsonpCallbackName] = noop;
-
-    $.mockjax({
-        url: "*",
-        responseTime: 0,
-        responseText: jsonpCallbackName + "(" + JSON.stringify({ jsonp: "works" }) + ")"
+    ajaxMock.setup({
+        url: "some.url?callback=?",
+        responseText: { jsonp: "works" }
     });
 
     new DataSource("some.url?callback=?")
@@ -169,10 +158,7 @@ QUnit.test("create from bare url, JSONP", function(assert) {
             assert.ok(r[0].jsonp, "works");
         })
         .done(function() {
-            $.ajaxSettings.jsonpCallback = originalJsonpCallback;
-            window[jsonpCallbackName] = undefined;
-
-            $.mockjax.clear();
+            ajaxMock.clear();
         })
-        .always(goFurther);
+        .always(done);
 });
