@@ -634,37 +634,30 @@ module.exports = {
             };
 
             var getParentBandColumns = function(columnIndex, columnParentByIndex) {
-                var result = [];
+                var result = [],
+                    parent = columnParentByIndex[columnIndex];
 
-                if(columnParentByIndex) {
-                    var parent = columnParentByIndex[columnIndex];
-                    while(parent) {
-                        result.push(parent);
-                        columnIndex = parent.index;
-                        parent = columnParentByIndex[columnIndex];
-                    }
+                while(parent) {
+                    result.push(parent);
+                    columnIndex = parent.index;
+                    parent = columnParentByIndex[columnIndex];
                 }
 
                 return result;
             };
 
-            var getChildrenByBandColumn = function(columnIndex, columnChildrenByIndex, onlyDirectChildren) {
+            var getChildrenByBandColumn = function(columnIndex, columnChildrenByIndex, recursive) {
                 var column,
-                    result = [];
+                    result = [],
+                    children = columnChildrenByIndex[columnIndex];
 
-                if(columnChildrenByIndex) {
-                    var children = columnChildrenByIndex[columnIndex];
-
-                    if(children && children.length) {
-                        for(var i = 0; i < children.length; i++) {
-                            column = children[i];
-
-                            if(!isDefined(column.groupIndex) || column.showWhenGrouped) {
-                                result.push(column);
-
-                                if(!onlyDirectChildren && column.isBand) {
-                                    result = result.concat(getChildrenByBandColumn(column.index, columnChildrenByIndex));
-                                }
+                if(children) {
+                    for(var i = 0; i < children.length; i++) {
+                        column = children[i];
+                        if(!isDefined(column.groupIndex) || column.showWhenGrouped) {
+                            result.push(column);
+                            if(recursive && column.isBand) {
+                                result = result.concat(getChildrenByBandColumn(column.index, columnChildrenByIndex, recursive));
                             }
                         }
                     }
@@ -1024,8 +1017,7 @@ module.exports = {
                 that._visibleColumns = undefined;
                 that._fixedColumns = undefined;
                 that._rowCount = undefined;
-                that._columnChildrenByIndex = undefined;
-                that._columnParentByIndex = undefined;
+                that._bandColumnsCache = undefined;
             };
 
             var assignColumns = function(that, columns) {
@@ -1189,16 +1181,14 @@ module.exports = {
                     bandColumnsCache = that.getBandColumnsCache(),
                     columnParentByIndex = bandColumnsCache.columnParentByIndex;
 
-                if(columnParentByIndex) {
-                    that._columns.forEach(function(column) {
-                        var parents = getParentBandColumns(column.index, columnParentByIndex),
-                            invisibleParents = parents.filter(function(column) { return !column.visible; });
+                that._columns.forEach(function(column) {
+                    var parents = getParentBandColumns(column.index, columnParentByIndex),
+                        invisibleParents = parents.filter(function(column) { return !column.visible; });
 
-                        if(column.visible && !invisibleParents.length) {
-                            rowCount = Math.max(rowCount, parents.length + 1);
-                        }
-                    });
-                }
+                    if(column.visible && !invisibleParents.length) {
+                        rowCount = Math.max(rowCount, parents.length + 1);
+                    }
+                });
 
                 return rowCount;
             };
@@ -1292,7 +1282,6 @@ module.exports = {
                         that.applyDataSource(that._dataSource, true);
                     } else {
                         updateIndexes(that);
-                        that.setBandColumnsCache();
                     }
                 },
                 callbackNames: function() {
@@ -1590,12 +1579,12 @@ module.exports = {
 
                     return expandColumns;
                 },
-                setBandColumnsCache: function() {
-                    var columns = this._columns,
-                        columnChildrenByIndex = {},
-                        columnParentByIndex = {};
+                getBandColumnsCache: function() {
+                    if(!this._bandColumnsCache) {
+                        var columns = this._columns,
+                            columnChildrenByIndex = {},
+                            columnParentByIndex = {};
 
-                    if(columns) {
                         columns.forEach(function(column) {
                             var parentIndex = column.ownerBand,
                                 parent = columns[parentIndex];
@@ -1617,29 +1606,23 @@ module.exports = {
                             columnChildrenByIndex[parentIndex] = columnChildrenByIndex[parentIndex] || [];
                             columnChildrenByIndex[parentIndex].push(column);
                         });
+
+                        this._bandColumnsCache = {
+                            columnChildrenByIndex: columnChildrenByIndex,
+                            columnParentByIndex: columnParentByIndex
+                        };
                     }
 
-                    this._columnChildrenByIndex = columnChildrenByIndex;
-                    this._columnParentByIndex = columnParentByIndex;
-                },
-                getBandColumnsCache: function() {
-                    if(!this._columnChildrenByIndex || !this._columnParentByIndex) {
-                        this.setBandColumnsCache();
-                    }
-
-                    return {
-                        columnChildrenByIndex: this._columnChildrenByIndex,
-                        columnParentByIndex: this._columnParentByIndex
-                    };
+                    return this._bandColumnsCache;
                 },
                 _getVisibleColumnsCore: function() {
                     var that = this,
                         i,
-                        rowCount,
                         result = [],
                         rowspanExpandColumns = 0,
                         firstPositiveIndexColumn,
                         expandColumns = that.getExpandColumns(),
+                        rowCount = that.getRowCount(),
                         positiveIndexedColumns = [],
                         negativeIndexedColumns = [],
                         notGroupedColumnsCount = 0,
@@ -1650,7 +1633,6 @@ module.exports = {
                         columnDigitsCount = digitsCount(columns.length);
 
                     processBandColumns(that, columns, bandColumnsCache);
-                    rowCount = that.getRowCount();
 
                     for(i = 0; i < rowCount; i++) {
                         result[i] = [];
@@ -2083,7 +2065,6 @@ module.exports = {
 
                         that._customizeColumns(that._columns);
                         updateIndexes(that);
-                        that.setBandColumnsCache();
 
                         return when(that.refresh(true)).always(function() {
                             that._updateChanges(dataSource, { sorting: sortParameters, grouping: groupParameters });
@@ -2610,7 +2591,7 @@ module.exports = {
                 getChildrenByBandColumn: function(bandColumnIndex, onlyVisibleDirectChildren) {
                     var that = this,
                         bandColumnsCache = that.getBandColumnsCache(),
-                        result = getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex, onlyVisibleDirectChildren);
+                        result = getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex, !onlyVisibleDirectChildren);
 
                     if(onlyVisibleDirectChildren) {
                         return result
