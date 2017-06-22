@@ -9174,7 +9174,30 @@ QUnit.test("Render detail form row with custom editCellTemplate", function(asser
     assert.equal(editCellTemplateOptions.columnIndex, 3, "editCellTemplate columnIndex");
     assert.equal(editCellTemplateOptions.rowIndex, 0, "editCellTemplate rowIndex");
     assert.equal(editCellTemplateOptions.value, "555555", "editCellTemplate value");
+    assert.equal(editCellTemplateOptions.isOnForm, true, "editCellTemplate isOnForm");
     assert.equal(typeof editCellTemplateOptions.setValue, "function", "editCellTemplate setValue exists");
+});
+
+QUnit.test("onEditorPreparing event should have isOnForm parameter for form editing modes", function(assert) {
+    this.setupModules(this);
+
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    this.options.onEditorPreparing = sinon.spy();
+    this.editorFactoryController.init();
+
+    rowsView.render(testElement);
+
+    //act
+    that.editRow(0);
+
+    //assert
+    assert.equal(this.options.onEditorPreparing.callCount, 5, "onEditorPreparing called 5 times");
+    for(var i = 0; i < 5; i++) {
+        assert.strictEqual(this.options.onEditorPreparing.getCall(i).args[0].isOnForm, true, "onEditorPreparing args have isOnForm parameter");
+    }
 });
 
 //T434382

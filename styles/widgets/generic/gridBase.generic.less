@@ -168,15 +168,6 @@
             color: ~"@{@{widgetName}-link-color}";
         }
 
-        .dx-checkbox-indeterminate {
-            .dx-checkbox-icon:before {
-                width: 6px;
-                height: 6px;
-                left: 4px;
-                top: 4px;
-            }
-        }
-
         .dx-row-lines > td {
             border-bottom: ~"@{@{widgetName}-border}";
         }
@@ -321,6 +312,15 @@
         .dx-checkbox-icon {
             height: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
             width: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
+        }
+
+        &.dx-checkbox-indeterminate {
+            .dx-checkbox-icon:before {
+                width: 6px;
+                height: 6px;
+                left: 4px;
+                top: 4px;
+            }
         }
     }
 
