@@ -3346,20 +3346,55 @@ QUnit.test("Cached colCount options doesn't leak", function(assert) {
     assert.equal(instance._cachedColCountOptions.length, 1, "only root colCount options cached");
 });
 
-QUnit.test("Form redraw layout when colCount is 'auto' and an calculated colCount changed", function(assert) {
+QUnit.test("Form refreshes only one time on dimension changed with group layout", function(assert) {
     //arrange
-    var $form = $("#form"),
+    var $form = $("#form").width(300),
         screen = "md",
         form = $form.dxForm({
             screenByWidth: function() {
                 return screen;
             },
             colCount: "auto",
-            colCountByScreen: {
-                sm: 1
-            },
+            minColWidth: 100,
             items: [{
-                name: "test",
+                name: "test1",
+                editorType: "dxTextBox"
+            }, {
+                itemType: "group",
+                caption: "Test group",
+                colCount: "auto",
+                minColWidth: 200,
+                items: [
+                    { name: "test2", editorType: "dxTextBox" },
+                    { name: "test3", editorType: "dxTextBox" }
+                ]
+            }]
+        }).data("dxForm");
+
+    var refreshSpy = sinon.spy(form, "_refresh");
+
+    //act
+    $form.width(100);
+    resizeCallbacks.fire();
+    //assert
+    assert.equal(refreshSpy.callCount, 1, "form has been redraw layout one time");
+});
+
+QUnit.test("Form redraw layout when colCount is 'auto' and an calculated colCount changed", function(assert) {
+    //arrange
+    var $form = $("#form").width(300),
+        screen = "md",
+        form = $form.dxForm({
+            screenByWidth: function() {
+                return screen;
+            },
+            colCount: "auto",
+            minColWidth: 100,
+            items: [{
+                name: "test1",
+                editorType: "dxTextBox"
+            }, {
+                name: "test2",
                 editorType: "dxTextBox"
             }]
         }).data("dxForm");
@@ -3367,7 +3402,7 @@ QUnit.test("Form redraw layout when colCount is 'auto' and an calculated colCoun
     var refreshSpy = sinon.spy(form, "_refresh");
 
     //act
-    screen = "sm";
+    $form.width(100);
     resizeCallbacks.fire();
 
     //assert

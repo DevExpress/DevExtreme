@@ -1051,6 +1051,12 @@ var LayoutManager = Widget.inherit({
         this._isValueChangedCalled = false;
     },
 
+    _dimensionChanged: function() {
+        if(this.isCachedColCountObsolete()) {
+            this.fireEvent("autoColCountChanged");
+        }
+    },
+
     getItemID: function(name) {
         var formInstance = this.option("form");
         return formInstance && formInstance.getItemID(name);
