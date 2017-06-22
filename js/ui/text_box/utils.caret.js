@@ -4,7 +4,7 @@ var $ = require("jquery"),
     commonUtils = require("../../core/utils/common"),
     browser = require("../../core/utils/browser");
 
-var isFocusingOnCaretChange = (browser.msie && browser.version < 15) || browser.safari;
+var isFocusingOnCaretChange = browser.msie || browser.safari;
 
 var getCaret = function(input) {
     if(isObsoleteBrowser(input)) {
