@@ -1075,7 +1075,7 @@ declare module DevExpress.ui {
         calculateCellValue?: (rowData: Object) => string;
 
         /** @docid GridBaseOptions_columns_setCellValue */
-        setCellValue?: (rowData: Object, value: any) => void;
+        setCellValue?: (newData: Object, value: any, currentRowData: Object) => void;
 
         /** @docid GridBaseOptions_columns_caption */
         caption?: string;
@@ -2365,6 +2365,9 @@ declare module DevExpress.ui {
 
         /** @docid dxTreeListMethods_getSelectedRowsData */
         getSelectedRowsData(): Array<any>;
+
+        /** @docid dxTreeListMethods_getNodeByKey */
+        getNodeByKey(key: any): dxTreeListNode;
     }
 
     /** @docid dxdataGrid */

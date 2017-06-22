@@ -4,13 +4,11 @@ var $ = require("jquery"),
     testing = require("./utils.js"),
     Map = require("ui/map"),
     config = require("core/config"),
-    GoogleStaticProvider = require("ui/map/provider.google_static");
+    GoogleStaticProvider = require("ui/map/provider.google_static"),
+    ajaxMock = require("../../../helpers/ajaxMock.js");
 
 var MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;
-
-testing.prepare();
-
 
 var MAP_CLASS = "dx-map",
     MAP_CONTAINER_CLASS = "dx-map-container",
@@ -24,13 +22,13 @@ QUnit.module("rendering", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
@@ -77,7 +75,7 @@ QUnit.module("design mode", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
@@ -85,7 +83,7 @@ QUnit.module("design mode", {
         config({ designMode: true });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
 
         config({ designMode: false });
     }
@@ -124,13 +122,13 @@ QUnit.module("option change", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
@@ -154,13 +152,13 @@ QUnit.module("markers", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
@@ -262,13 +260,13 @@ QUnit.module("saving previous markers", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
@@ -433,13 +431,13 @@ QUnit.module("async markers rendering", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
@@ -504,13 +502,13 @@ QUnit.module("routes", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
@@ -612,13 +610,13 @@ QUnit.module("saving previous routes", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 
@@ -783,13 +781,13 @@ QUnit.module("async routes rendering", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 

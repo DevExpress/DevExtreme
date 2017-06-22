@@ -18,7 +18,6 @@ var optionPrefix = "preset_";
 var AnimationPresetCollection = Component.inherit({
     ctor: function() {
         this.callBase.apply(this, arguments);
-        this._customRules = [];
         this._registeredPresets = [];
         this.resetToDefaults();
     },
@@ -231,8 +230,8 @@ var AnimationPresetCollection = Component.inherit({
 
     applyChanges: function() {
         var that = this;
+        var customRules = [];
 
-        this._customRules.length = 0;
         $.each(this._registeredPresets, function(index, preset) {
             var rule = {
                 device: preset.config.device,
@@ -240,9 +239,10 @@ var AnimationPresetCollection = Component.inherit({
             };
 
             rule.options[that._getPresetOptionName(preset.name)] = preset.config.animation;
-            that._customRules.push(rule);
+            customRules.push(rule);
         });
-        this._setOptionsByDevice();
+
+        this._setOptionsByDevice(customRules);
     },
 
     getPreset: function(name) {

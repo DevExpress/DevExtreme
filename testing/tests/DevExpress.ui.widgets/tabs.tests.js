@@ -203,29 +203,6 @@ QUnit.test("select action should not be triggered when disabled item is disabled
     assert.equal(selectedIndex, undefined);
 });
 
-//TODO: remove this hack after fix it in angular integration
-QUnit.test("tabs with 'templatesRenderAsynchronously' option should trigger resize event when content ready (T351071)", function(assert) {
-    var resizeCount = 0,
-        clock = sinon.useFakeTimers(),
-        resizeSpy = sinon.spy(domUtils, "triggerResizeEvent"),
-        tabsEl = $("#tabs").dxTabs({
-            items: [
-                { text: "1" },
-                { text: "2" }
-            ],
-            templatesRenderAsynchronously: true
-        });
-
-    tabsEl.on("dxresize", function() {
-        resizeCount++;
-    });
-
-    clock.tick(0);
-    assert.equal(resizeCount, 1, "resize event triggered");
-    assert.deepEqual(resizeSpy.args[0][0][0], tabsEl[0], "resize event was called on the tabs element");
-    clock.restore();
-});
-
 
 QUnit.module("tab select action");
 

@@ -449,6 +449,11 @@
         color: ~"@{@{widgetName}-columnchooser-item-color}";
         font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
         .touch-action(pinch-zoom);
+        border-bottom: ~"@{@{widgetName}-border}";
+
+        .dx-@{widgetName}-content {
+            margin-bottom: -1px;
+        }
 
         .dx-@{widgetName}-table {
             .dx-@{widgetName}-borders & {

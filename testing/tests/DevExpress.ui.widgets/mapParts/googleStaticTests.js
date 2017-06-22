@@ -4,14 +4,12 @@ var $ = require("jquery"),
     testing = require("./utils.js"),
     Map = require("ui/map"),
     GoogleStaticProvider = require("ui/map/provider.google_static"),
-    Color = require("color");
+    Color = require("color"),
+    ajaxMock = require("../../../helpers/ajaxMock.js");
 
 var LOCATIONS = testing.LOCATIONS,
     MARKERS = testing.MARKERS,
     ROUTES = testing.ROUTES;
-
-testing.prepare();
-
 
 var MAP_CONTAINER_CLASS = "dx-map-container";
 
@@ -22,13 +20,13 @@ QUnit.module("googleStatic provider", {
 
         GoogleStaticProvider.remapConstant(fakeURL);
 
-        $.mockjax({
+        ajaxMock.setup({
             url: fakeURL,
             responseText: ""
         });
     },
     afterEach: function() {
-        $.mockjax.clear();
+        ajaxMock.clear();
     }
 });
 

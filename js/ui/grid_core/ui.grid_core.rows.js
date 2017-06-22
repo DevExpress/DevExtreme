@@ -852,6 +852,16 @@ module.exports = {
                     return $table;
                 },
 
+                _createTable: function() {
+                    var $table = this.callBase.apply(this, arguments);
+
+                    if(this.option("rowTemplate")) {
+                        $table.appendTo(this.component.element());
+                    }
+
+                    return $table;
+                },
+
                 _renderCore: function(change) {
                     var that = this,
                         $table,

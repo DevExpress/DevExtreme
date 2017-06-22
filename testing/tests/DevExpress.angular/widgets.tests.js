@@ -11,18 +11,21 @@ var $ = require("jquery"),
     positionUtils = require("animation/position"),
     ValidationGroup = require("ui/validation_group");
 
+require("common.css!");
 require("integration/angular");
 
 require("ui/accordion");
-require("ui/text_box");
+require("ui/box");
+require("ui/data_grid");
+require("ui/defer_rendering");
+require("ui/menu");
 require("ui/popup");
 require("ui/popover");
-require("ui/data_grid");
-require("ui/toolbar");
-require("ui/box");
 require("ui/scheduler");
-require("ui/defer_rendering");
 require("ui/slide_out_view");
+require("ui/tabs");
+require("ui/text_box");
+require("ui/toolbar");
 
 fx.off = true;
 var ignoreAngularBrowserDeferTimer = function(args) {
@@ -69,7 +72,7 @@ QUnit.test("dxPopup", function(assert) {
     var contentHeight;
 
     positionUtils.setup = function($content, position) {
-        contentHeight = $content.height();
+        contentHeight = $content.find(".dx-popup-content").height();
 
         originalPositionSetup($content, position);
     };
@@ -173,6 +176,46 @@ QUnit.test("dxDataGrid", function(assert) {
     var $cols = $(".dx-datagrid-rowsview col");
     assert.equal($cols[0].style.width, "100px");
     assert.equal($cols[1].style.width, "100px");
+});
+
+QUnit.test("dxTabs - navigation buttons should show/hide after showing/hiding items (T343231)", function(assert) {
+    var $markup = $("<div dx-tabs='tabSettings'></div>");
+
+    var controller = function($scope) {
+        $scope.tabs = [
+            { text: "item1", visible: true },
+            { text: "item2", visible: true }
+        ];
+
+        $scope.tabSettings = {
+            bindingOptions: {
+                dataSource: { dataPath: "tabs", deep: true }
+            },
+            width: 60,
+            showNavButtons: true
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    var scope = $markup.scope();
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 2);
+
+    scope.$apply(function() {
+        scope.tabs[1].visible = false;
+    });
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 0);
+
+    scope.$apply(function() {
+        scope.tabs[1].visible = true;
+    });
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 2);
 });
 
 
@@ -496,6 +539,26 @@ QUnit.test("Component can change itself options on init (T446364)", function(ass
     $markup.dxList("option", "selectedItems", [ "Betty" ]);
 
     assert.equal(scope.vm.MyRows[0], "Betty");
+});
+
+QUnit.test("The hamburger button should be visible on small screen (T377800)", function(assert) {
+    var $markup = $("\
+        <div style='width: 100px'>\
+            <div dx-menu='menu'></div>\
+        </div>"
+    );
+
+    var controller = function($scope) {
+        $scope.menu = {
+            adaptivityEnabled: true,
+            items: [{ text: "menuItem1" }, { text: "menuItem2" }, { text: "menuItem3" }]
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    assert.ok(!$markup.find(".dx-menu-items-container").is(":visible"));
+    assert.ok($markup.find(".dx-menu-hamburger-button").is(":visible"));
 });
 
 

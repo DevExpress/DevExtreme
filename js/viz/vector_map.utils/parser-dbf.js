@@ -60,6 +60,11 @@ function parseFieldDescriptor(stream) {
 var DBF_FIELD_PARSERS = {
     "C": function(stream, length) {
         var str = getAsciiString(stream, length);
+
+        try {
+            str = decodeURIComponent(escape(str)); //T522922
+        } catch(e) { }
+
         return str.trim();
     },
     "N": function(stream, length) {

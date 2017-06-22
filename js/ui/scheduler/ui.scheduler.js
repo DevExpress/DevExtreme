@@ -1863,17 +1863,22 @@ var Scheduler = Widget.inherit({
 
             this._appointmentForm.option("formData", formData);
 
-            var startDateEditorOptions = this._appointmentForm.itemOption(startDateExpr).editorOptions,
-                endDateEditorOptions = this._appointmentForm.itemOption(endDateExpr).editorOptions;
+            var startDateFormItem = this._appointmentForm.itemOption(startDateExpr),
+                endDateFormItem = this._appointmentForm.itemOption(endDateExpr);
 
-            if(allDay) {
-                startDateEditorOptions.type = endDateEditorOptions.type = "date";
-            } else {
-                startDateEditorOptions.type = endDateEditorOptions.type = "datetime";
+            if(startDateFormItem && endDateFormItem) {
+                var startDateEditorOptions = startDateFormItem.editorOptions,
+                    endDateEditorOptions = endDateFormItem.editorOptions;
+
+                if(allDay) {
+                    startDateEditorOptions.type = endDateEditorOptions.type = "date";
+                } else {
+                    startDateEditorOptions.type = endDateEditorOptions.type = "datetime";
+                }
+
+                this._appointmentForm.itemOption(startDateExpr, "editorOptions", startDateEditorOptions);
+                this._appointmentForm.itemOption(endDateExpr, "editorOptions", endDateEditorOptions);
             }
-
-            this._appointmentForm.itemOption(startDateExpr, "editorOptions", startDateEditorOptions);
-            this._appointmentForm.itemOption(endDateExpr, "editorOptions", endDateEditorOptions);
         } else {
             AppointmentForm.prepareAppointmentFormEditors(allDay, {
                 textExpr: this.option("textExpr"),

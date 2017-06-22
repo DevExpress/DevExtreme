@@ -493,13 +493,7 @@ var Menu = MenuBase.inherit({
 
         this.element().append(this._$adaptiveContainer);
 
-        if(this.option("templatesRenderAsynchronously")) {
-            this._resizeEventTimer = setTimeout((function() {
-                this._dimensionChanged();
-            }).bind(this), 0);
-        } else {
-            this._dimensionChanged();
-        }
+        this._dimensionChanged();
     },
 
     _getDelay: function(delayType) {

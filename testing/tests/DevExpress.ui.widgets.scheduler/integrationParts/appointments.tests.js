@@ -4230,6 +4230,30 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
     assert.equal(endDateEditor.option("type"), "datetime", "end date is correct");
 });
 
+QUnit.test("Appointments should be rendered correctly at asynchronous rendering (T515894)", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Task 1",
+            startDate: new Date(2017, 4, 22, 16),
+            endDate: new Date(2017, 4, 24, 1)
+        }],
+        currentDate: new Date(2017, 4, 23),
+        currentView: "week",
+        views: ["week", "month"],
+        crossScrollingEnabled: true,
+        width: 600
+    });
+
+    this.instance.option("templatesRenderAsynchronously", true);
+    this.instance.option("currentView", "month");
+    this.clock.tick();
+
+    var appointmentWidth = this.instance.element().find(".dx-scheduler-appointment").eq(0).outerWidth(),
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+
+    assert.roughEqual(appointmentWidth, cellWidth * 3, 2.001, "appointment was render correctly");
+});
+
 QUnit.test("Scheduler shouldn't throw error at deferred appointment loading (T518327)", function(assert) {
     var data = [{ text: "Task 1", startDate: new Date(2017, 4, 22, 16), endDate: new Date(2017, 4, 24, 1) }];
 
@@ -4253,27 +4277,4 @@ QUnit.test("Scheduler shouldn't throw error at deferred appointment loading (T51
 
     assert.notOk(errorLogStub.called, "Error was not thrown");
     errorLogStub.restore();
-});
-
-QUnit.test("Appointments should be rendered correctly at asynchronous rendering (T515894)", function(assert) {
-    this.createInstance({
-        dataSource: [{
-            text: "Task 1",
-            startDate: new Date(2017, 4, 22, 16),
-            endDate: new Date(2017, 4, 24, 1)
-        }],
-        currentDate: new Date(2017, 4, 23),
-        currentView: "week",
-        views: ["week", "month"],
-        crossScrollingEnabled: true,
-        width: 600
-    });
-
-    this.instance.option("currentView", "month");
-    this.clock.tick();
-
-    var appointmentWidth = this.instance.element().find(".dx-scheduler-appointment").eq(0).outerWidth(),
-        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
-
-    assert.roughEqual(appointmentWidth, cellWidth * 3, 2.001, "appointment was render correctly");
 });
