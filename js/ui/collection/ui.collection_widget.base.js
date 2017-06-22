@@ -35,7 +35,7 @@ var COLLECTION_CLASS = "dx-collection",
     EMPTY_COLLECTION = "dx-empty-collection",
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
-    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+(\w+)$/;
+    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w\.]+)$/;
 
 var FOCUS_UP = "up",
     FOCUS_DOWN = "down",

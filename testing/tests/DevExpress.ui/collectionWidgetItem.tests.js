@@ -60,6 +60,23 @@ QUnit.test("changing field that is basis for complex with different field expres
     assert.equal($item.data("value"), 3);
 });
 
+QUnit.test("changing complex item field should correctly rerender one item", function(assert) {
+    var widget = new this.TestCollection($("<div>"), {
+            items: [{ options: { value: 1 } }, {}]
+        }),
+        $itemElements = widget.itemElements();
+
+    assert.equal($itemElements.eq(0).data("dxItemData").options.value, 1);
+
+    //act
+    widget.option("items[0].options.value", 2);
+
+    //assert
+    var $newItemElements = widget.itemElements();
+    assert.equal($newItemElements.eq(0).data("dxItemData").options.value, 2, "item 0 data is changed");
+    assert.notEqual($newItemElements.get(0), $itemElements.get(0), "item 0 element is changed");
+    assert.equal($newItemElements.get(1), $itemElements.get(1), "item 1 element is not changed");
+});
 
 QUnit.module("visible builtin");
 
