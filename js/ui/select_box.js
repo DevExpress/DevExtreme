@@ -712,7 +712,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _searchHandler: function(e) {
-        if((e && this._isControlKey(e.which || e.keyCode)) || this._preventFiltering) {
+        if((e && this._isControlKey(e.key)) || this._preventFiltering) {
             delete this._preventFiltering;
             return;
         }
