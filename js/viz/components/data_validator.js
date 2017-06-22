@@ -19,9 +19,9 @@ var commonUtils = require("../../core/utils/common"),
     _isDefined = commonUtils.isDefined,
     _isFunction = commonUtils.isFunction,
     _isArray = Array.isArray,
-    _isString = commonUtils.isString,
+    _isString = typeUtils.isString,
     _isDate = commonUtils.isDate,
-    _isNumber = commonUtils.isNumeric,
+    _isNumber = typeUtils.isNumeric,
     _isObject = typeUtils.isObject;
 
 function groupingValues(data, others, valueField, index) {

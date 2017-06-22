@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     stringUtils = require("../../core/utils/string"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
@@ -1207,9 +1208,9 @@ module.exports = {
                     $.each($rows, function(rowIndex, row) {
                         if(!$(row).hasClass(GROUP_ROW_CLASS)) {
                             for(i = 0; i < visibleColumns.length; i++) {
-                                if(commonUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
+                                if(typeUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
                                     that.getCellElements(rowIndex).eq(i).css({ opacity: value });
-                                    if(!commonUtils.isNumeric(columnID)) {
+                                    if(!typeUtils.isNumeric(columnID)) {
                                         break;
                                     }
                                 }

@@ -1197,7 +1197,7 @@ var Scheduler = Widget.inherit({
             return "number";
         }
 
-        if(!commonUtils.isString(value)) {
+        if(!typeUtils.isString(value)) {
             return;
         }
 

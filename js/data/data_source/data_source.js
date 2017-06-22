@@ -16,8 +16,8 @@ var $ = require("../../core/renderer"),
     queue = require("../../core/utils/queue"),
     when = require("../../integration/jquery/deferred").when,
 
-    __isString = commonUtils.isString,
-    __isNumber = commonUtils.isNumeric,
+    __isString = typeUtils.isString,
+    __isNumber = typeUtils.isNumeric,
     __isBoolean = commonUtils.isBoolean,
     __isDefined = commonUtils.isDefined;
 

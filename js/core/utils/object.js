@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("./common"),
     typeUtils = require("./type"),
     variableWrapper = require("./variable_wrapper");
 
@@ -26,8 +25,8 @@ var orderEach = function(map, func) {
     }
 
     keys.sort(function(x, y) {
-        var isNumberX = commonUtils.isNumeric(x),
-            isNumberY = commonUtils.isNumeric(y);
+        var isNumberX = typeUtils.isNumeric(x),
+            isNumberY = typeUtils.isNumeric(y);
 
         if(isNumberX && isNumberY) return x - y;
         if(isNumberX && !isNumberY) return -1;

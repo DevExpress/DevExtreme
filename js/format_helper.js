@@ -12,8 +12,8 @@ require("./localization/currency");
 
 module.exports = dependencyInjector({
     format: function(value, format, precision) {
-        var formatIsValid = commonUtils.isString(format) && format !== '' || typeUtils.isPlainObject(format) || commonUtils.isFunction(format),
-            valueIsValid = commonUtils.isNumeric(value) || commonUtils.isDate(value);
+        var formatIsValid = typeUtils.isString(format) && format !== '' || typeUtils.isPlainObject(format) || commonUtils.isFunction(format),
+            valueIsValid = typeUtils.isNumeric(value) || commonUtils.isDate(value);
 
 
         if(!formatIsValid || !valueIsValid) {
@@ -28,14 +28,14 @@ module.exports = dependencyInjector({
             logger.warn("Option 'precision' is deprecated. Use field 'precision' of a format object instead.");
         }
 
-        if(commonUtils.isString(format)) {
+        if(typeUtils.isString(format)) {
             format = {
                 type: format,
                 precision: precision
             };
         }
 
-        if(commonUtils.isNumeric(value)) {
+        if(typeUtils.isNumeric(value)) {
             return numberLocalization.format(value, format);
         }
 
@@ -200,7 +200,7 @@ module.exports = dependencyInjector({
                     }
                 }
             };
-        tickInterval = commonUtils.isString(tickInterval) ? tickInterval.toLowerCase() : tickInterval;
+        tickInterval = typeUtils.isString(tickInterval) ? tickInterval.toLowerCase() : tickInterval;
         dateDifferences = dateUtils.getDatesDifferences(startValue, endValue);
 
         if(startValue !== endValue) {

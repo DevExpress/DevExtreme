@@ -15,7 +15,6 @@ var $ = require("../../core/renderer"),
     compileSetter = require("../../core/utils/data").compileSetter,
     compileGetter = require("../../core/utils/data").compileGetter,
     extendFromObject = require("../../core/utils/extend").extendFromObject,
-    isNumeric = require("../../core/utils/common").isNumeric,
     inflector = require("../../core/utils/inflector"),
     errors = require("../../core/errors");
 
@@ -331,7 +330,7 @@ var ComponentBuilder = Class.inherit({
             optionOuterPath;
 
         if(collectionField) {
-            if(!isNumeric(itemIndex)) return;
+            if(!typeUtils.isNumeric(itemIndex)) return;
 
             optionOuterBag.push("[", itemIndex, "]");
         }

@@ -6,19 +6,6 @@ var $ = require("jquery"),
 
 QUnit.module('Type checking');
 
-QUnit.test('type method', function(assert) {
-    var element = $("#qunit-fixture").html('"<div id="widget"></div>"');
-
-    assert.strictEqual(commonUtils.type(0), 'number', 'number');
-    assert.strictEqual(commonUtils.type(null), 'null', 'null');
-    assert.strictEqual(commonUtils.type(undefined), 'undefined', 'undefined');
-    assert.strictEqual(commonUtils.type(new Date()), 'date', 'date');
-    assert.strictEqual(commonUtils.type({}), 'object', 'object');
-    assert.strictEqual(commonUtils.type([]), 'array', 'array');
-    assert.strictEqual(commonUtils.type(function() { }), 'function', 'function');
-    assert.strictEqual(commonUtils.type(element[0].firstElementChild), 'object', 'HTMLDivElement');
-});
-
 QUnit.test('isDefined', function(assert) {
     assert.strictEqual(commonUtils.isDefined(0), true, 'zero number');
     assert.strictEqual(commonUtils.isDefined(1), true, 'number');
@@ -33,40 +20,6 @@ QUnit.test('isDefined', function(assert) {
 
     assert.strictEqual(commonUtils.isDefined(null), false, 'null');
     assert.strictEqual(commonUtils.isDefined(undefined), false, 'undefined');
-});
-
-QUnit.test('isString', function(assert) {
-    assert.strictEqual(commonUtils.isString(''), true, 'empty string');
-    assert.strictEqual(commonUtils.isString('string'), true, 'string');
-
-    assert.strictEqual(commonUtils.isString(12), false, 'number');
-    assert.strictEqual(commonUtils.isString(new Date()), false, 'date');
-    assert.strictEqual(commonUtils.isString([]), false, 'array');
-    assert.strictEqual(commonUtils.isString({}), false, 'object');
-    assert.strictEqual(commonUtils.isString(function() { }), false, 'function');
-});
-
-QUnit.test('isNumeric', function(assert) {
-    assert.strictEqual(commonUtils.isNumeric(0), true, 'zero');
-    assert.strictEqual(commonUtils.isNumeric(-10), true, 'non zero');
-    assert.strictEqual(commonUtils.isNumeric('1'), true, 'number string');
-
-    assert.strictEqual(commonUtils.isNumeric(new Date()), false, 'date');
-    assert.strictEqual(commonUtils.isNumeric('test'), false, 'string');
-    assert.strictEqual(commonUtils.isNumeric({}), false, 'object');
-    assert.strictEqual(commonUtils.isNumeric([]), false, 'array');
-    assert.strictEqual(commonUtils.isNumeric(function() { }), false, 'function');
-});
-
-QUnit.test('isObject', function(assert) {
-    assert.strictEqual(commonUtils.isObject({}), true, 'empty object');
-    assert.strictEqual(commonUtils.isObject({ a: 1 }), true, 'object');
-
-    assert.strictEqual(commonUtils.isObject(1), false, 'number');
-    assert.strictEqual(commonUtils.isObject('test'), false, 'string');
-    assert.strictEqual(commonUtils.isObject([]), false, 'array');
-    assert.strictEqual(commonUtils.isObject(new Date()), false, 'date');
-    assert.strictEqual(commonUtils.isObject(function() { }), false, 'function');
 });
 
 QUnit.test('isDate', function(assert) {

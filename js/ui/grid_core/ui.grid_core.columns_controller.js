@@ -589,7 +589,7 @@ module.exports = {
                     calculatedColumnOptions;
 
                 if(columnOptions) {
-                    if(commonUtils.isString(columnOptions)) {
+                    if(typeUtils.isString(columnOptions)) {
                         columnOptions = {
                             dataField: columnOptions
                         };
@@ -730,11 +730,11 @@ module.exports = {
                     case "datetime":
                         return dateSerialization.getDateSerializationFormat(value);
                     case "number":
-                        if(commonUtils.isString(value)) {
+                        if(typeUtils.isString(value)) {
                             return "string";
                         }
 
-                        if(commonUtils.isNumeric(value)) {
+                        if(typeUtils.isNumeric(value)) {
                             return null;
                         }
                 }
@@ -1099,7 +1099,7 @@ module.exports = {
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
                             column = columns && columns[columnIndex];
-                            if(commonUtils.isString(column)) {
+                            if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
                             if(column) {
@@ -1923,7 +1923,7 @@ module.exports = {
                         }
                     });
 
-                    if(commonUtils.isString(column.calculateDisplayValue)) {
+                    if(typeUtils.isString(column.calculateDisplayValue)) {
                         column.displayField = column.calculateDisplayValue;
                         column.calculateDisplayValue = dataCoreUtils.compileGetter(column.displayField);
                     }
@@ -2151,7 +2151,7 @@ module.exports = {
 
                     columnIndex = filter.columnIndex || columnIndex;
 
-                    if(commonUtils.isString(filter[0])) {
+                    if(typeUtils.isString(filter[0])) {
                         column = that.columnOption(filter[0]);
 
                         if(remoteFiltering) {
@@ -2211,7 +2211,7 @@ module.exports = {
                 columnOption: function(identifier, option, value, notFireEvent) {
                     var that = this,
                         i,
-                        identifierOptionName = commonUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
+                        identifierOptionName = typeUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
                         columns = (identifier < 0 || identifierOptionName === "command") ? that._commandColumns : that._columns,
                         needUpdateIndexes,
                         column;
@@ -2240,7 +2240,7 @@ module.exports = {
                         if(arguments.length === 1) {
                             return extend({}, column);
                         }
-                        if(commonUtils.isString(option)) {
+                        if(typeUtils.isString(option)) {
                             if(arguments.length === 2) {
                                 return columnOptionCore(that, column, option);
                             } else {
@@ -2402,7 +2402,7 @@ module.exports = {
                     }
 
                     if(dataField) {
-                        if(commonUtils.isString(dataField)) {
+                        if(typeUtils.isString(dataField)) {
                             getter = dataCoreUtils.compileGetter(dataField);
                             calculatedColumnOptions = {
                                 caption: inflector.captionize(dataField),
@@ -2417,10 +2417,10 @@ module.exports = {
                                         parsedValue;
 
                                     if(column.dataType === "number") {
-                                        if(commonUtils.isString(text)) {
+                                        if(typeUtils.isString(text)) {
                                             parsedValue = numberLocalization.parse(text);
 
-                                            if(commonUtils.isNumeric(parsedValue)) {
+                                            if(typeUtils.isNumeric(parsedValue)) {
                                                 result = parsedValue;
                                             }
                                         } else if(isDefined(text)) {
@@ -2466,7 +2466,7 @@ module.exports = {
                         return result;
                     };
 
-                    if(!dataField || !commonUtils.isString(dataField)) {
+                    if(!dataField || !typeUtils.isString(dataField)) {
                         extend(true, calculatedColumnOptions, {
                             allowSorting: false,
                             allowGrouping: false,

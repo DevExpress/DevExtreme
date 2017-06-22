@@ -420,7 +420,7 @@ var Application = Class.inherit({
         if(!selectedCommand) {
             $.each(this.navigation, function(index, command) {
                 var commandUri = command.option("onExecute");
-                if(commonUtils.isString(commandUri)) {
+                if(typeUtils.isString(commandUri)) {
                     commandUri = commandUri.replace(/^#+/, "");
                     if(commandUri === that.navigationManager.rootUri()) {
                         selectedCommand = command;

@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     devices = require("../../core/devices"),
@@ -273,7 +274,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 }
             };
         } else {
-            templateID = commonUtils.isString(template) ? template : $(template).attr("id");
+            templateID = typeUtils.isString(template) ? template : $(template).attr("id");
 
             if(!templateID) {
                 renderingTemplate = that.getTemplate(template);
@@ -688,7 +689,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {
         var columnIndex;
 
-        if(commonUtils.isString(columnIdentifier)) {
+        if(typeUtils.isString(columnIdentifier)) {
             columnIndex = this._columnsController.columnOption(columnIdentifier, "index");
             return this._columnsController.getVisibleIndex(columnIndex);
         }

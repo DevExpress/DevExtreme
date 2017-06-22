@@ -264,7 +264,7 @@ exports.setDefaultFieldValueFormatting = function(field) {
             setFieldProperty(field, "format", DATE_INTERVAL_FORMATS[field.groupInterval]);
         }
     } else if(field.dataType === 'number') {
-        var groupInterval = commonUtils.isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
+        var groupInterval = typeUtils.isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
         if(groupInterval && !field.customizeText) {
             setFieldProperty(field, "customizeText", function(formatObject) {

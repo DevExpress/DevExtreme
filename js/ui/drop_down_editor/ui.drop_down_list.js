@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     DropDownEditor = require("./ui.drop_down_editor"),
@@ -570,7 +571,7 @@ var DropDownList = DropDownEditor.inherit({
 
     _getListKeyExpr: function() {
         var valueExpr = this.option("valueExpr"),
-            isValueExprField = commonUtils.isString(valueExpr) && valueExpr !== "this";
+            isValueExprField = typeUtils.isString(valueExpr) && valueExpr !== "this";
 
         return isValueExprField ? valueExpr : null;
     },

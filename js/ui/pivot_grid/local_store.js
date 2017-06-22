@@ -10,6 +10,7 @@ var $ = require("../../core/renderer"),
     dataCoreUtils = require("../../core/utils/data"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     getFiltersByPath = pivotGridUtils.getFiltersByPath,
     setFieldProperty = pivotGridUtils.setFieldProperty,
@@ -78,11 +79,11 @@ exports.LocalStore = Class.inherit((function() {
                         return intervalSelector ? intervalSelector(value) : value;
                     };
                 } else if(field.dataType === 'number') {
-                    groupInterval = commonUtils.isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
+                    groupInterval = typeUtils.isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
                     fieldSelector = function(data) {
                         var value = dataSelector(data);
-                        if(commonUtils.isString(value)) {
+                        if(typeUtils.isString(value)) {
                             value = Number(value);
                         }
                         return groupInterval ? Math.floor(value / groupInterval) * groupInterval : value;
@@ -292,7 +293,7 @@ exports.LocalStore = Class.inherit((function() {
                 groupName = field.groupName,
                 filter;
 
-            if(groupName && commonUtils.isNumeric(field.groupIndex)) {
+            if(groupName && typeUtils.isNumeric(field.groupIndex)) {
                 return;
             }
             filter = function(dataItem) {
@@ -457,7 +458,7 @@ exports.LocalStore = Class.inherit((function() {
         }
 
         filter = filter.slice(0);
-        if(commonUtils.isString(filter[0]) && (filter[1] instanceof Date || filter[2] instanceof Date)) {
+        if(typeUtils.isString(filter[0]) && (filter[1] instanceof Date || filter[2] instanceof Date)) {
             filter[0] = fieldSelectors[filter[0]];
         }
 

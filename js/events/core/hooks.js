@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     compareVersion = require("../../core/utils/version").compare,
-    isNumeric = require("../../core/utils/common").isNumeric,
+    isNumeric = require("../../core/utils/type").isNumeric,
     registerEvent = require("./event_registrator");
 
 var touchPropsToHook = ["pageX", "pageY", "screenX", "screenY", "clientX", "clientY"];

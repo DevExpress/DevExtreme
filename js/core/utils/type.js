@@ -13,6 +13,14 @@ var type = function(object) {
         types[typeOfObject] || "object" : typeof object;
 };
 
+var isString = function(object) {
+    return typeof object === 'string';
+};
+
+var isNumeric = function(object) {
+    return ((typeof object === "number") && isFinite(object) || !isNaN(object - parseFloat(object)));
+};
+
 var isObject = function(object) {
     return type(object) === 'object';
 };
@@ -38,6 +46,8 @@ var isPlainObject = function(object) {
         && Object.toString.call(ctor) === Object.toString.call(Object);
 };
 
+exports.isString = isString;
+exports.isNumeric = isNumeric;
 exports.isObject = isObject;
 exports.isEmptyObject = isEmptyObject;
 exports.isPlainObject = isPlainObject;

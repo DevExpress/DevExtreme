@@ -9,14 +9,6 @@ var isDefined = function(object) {
     return (object !== null) && (object !== undefined);
 };
 
-var isString = function(object) {
-    return typeof object === 'string';
-};
-
-var isNumeric = function(object) {
-    return ((typeof object === "number") && isFinite(object) || !isNaN(object - parseFloat(object)));
-};
-
 var isDate = function(object) {
     return typeUtils.type(object) === 'date';
 };
@@ -34,7 +26,7 @@ var isPrimitive = function(value) {
 };
 
 var isExponential = function(value) {
-    return isNumeric(value) && value.toString().indexOf('e') !== -1;
+    return typeUtils.isNumeric(value) && value.toString().indexOf('e') !== -1;
 };
 
 var isWindow = function(object) {
@@ -233,7 +225,7 @@ var splitQuad = function(raw) {
 };
 
 var normalizeKey = function(id) {
-    var key = isString(id) ? id : id.toString(),
+    var key = typeUtils.isString(id) ? id : id.toString(),
         arr = key.match(/[^a-zA-Z0-9_]/g);
 
     arr && $.each(arr, function(_, sign) {
@@ -350,8 +342,6 @@ var grep = function(elements, checkFunction, invert) {
 };
 
 exports.isDefined = isDefined;
-exports.isString = isString;
-exports.isNumeric = isNumeric;
 exports.isDate = isDate;
 exports.isBoolean = isBoolean;
 exports.isFunction = isFunction;

@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     virtualScrolling = require("../grid_core/ui.grid_core.virtual_scrolling_core"),
     stateStoring = require("../grid_core/ui.grid_core.state_storing"),
     PivotGridDataSource = require("./data_source"),
@@ -155,7 +156,7 @@ exports.DataController = Class.inherit((function() {
         var isItemSorted = function(items, sortBySummaryPath) {
             var path,
                 item = items[0],
-                stringValuesUsed = commonUtils.isString(sortBySummaryPath[0]),
+                stringValuesUsed = typeUtils.isString(sortBySummaryPath[0]),
                 headerItem = item.dataIndex >= 0 ? items[1] : item;
 
             if((stringValuesUsed && sortBySummaryPath[0].indexOf("&[") !== -1 && headerItem.key) || !headerItem.key) {

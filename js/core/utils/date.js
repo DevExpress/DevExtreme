@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     camelize = require("./inflector").camelize,
 
     isObject = typeUtils.isObject,
-    isString = commonUtils.isString,
+    isString = typeUtils.isString,
     isDate = commonUtils.isDate,
     isDefined = commonUtils.isDefined;
 

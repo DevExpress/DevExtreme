@@ -778,7 +778,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             if(column) {
                 var oldColumnWidth = column.width;
                 if(oldColumnWidth) {
-                    adaptColumnWidthByRatio = commonUtils.isString(oldColumnWidth) && oldColumnWidth.slice(-1) === "%";
+                    adaptColumnWidthByRatio = typeUtils.isString(oldColumnWidth) && oldColumnWidth.slice(-1) === "%";
                 }
 
                 if(adaptColumnWidthByRatio) {

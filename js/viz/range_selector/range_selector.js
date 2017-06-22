@@ -28,7 +28,7 @@ var $ = require("../../core/renderer"),
     log = require("../../core/errors").log,
 
     _isDefined = commonUtils.isDefined,
-    _isNumber = commonUtils.isNumeric,
+    _isNumber = typeUtils.isNumeric,
     _isDate = commonUtils.isDate,
     _max = Math.max,
     _ceil = Math.ceil,

@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     numberLocalization = require("./number"),
     dependencyInjector = require("../core/utils/dependency_injector"),
-    isString = require("../core/utils/common").isString,
+    isString = require("../core/utils/type").isString,
     inArray = require("../core/utils/array").inArray,
     errors = require("../core/errors");
 

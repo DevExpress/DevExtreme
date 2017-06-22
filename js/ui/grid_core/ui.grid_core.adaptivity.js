@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     equalByValue = commonUtils.equalByValue,
     Guid = require("../../core/guid"),
@@ -154,7 +155,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isPercentWidth: function(width) {
-        return commonUtils.isString(width) && width.slice(-1) === "%";
+        return typeUtils.isString(width) && width.slice(-1) === "%";
     },
 
     _getNotTruncatedColumnWidth: function(column, containerWidth, columnsCount, columnsCanFit) {

@@ -1,10 +1,9 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
     layoutElementModule = require("../core/layout_element"),
-    _isNumber = commonUtils.isNumeric,
+    _isNumber = require("../../core/utils/type").isNumeric,
     _min = Math.min,
     _max = Math.max,
     _floor = Math.floor,

@@ -2,9 +2,10 @@
 
 var config = require("../config"),
     commonUtils = require("./common"),
-    isString = commonUtils.isString,
+    typeUtils = require("./type"),
+    isString = typeUtils.isString,
     isDate = commonUtils.isDate,
-    isNumber = commonUtils.isNumeric;
+    isNumber = typeUtils.isNumeric;
 
 var NUMBER_SERIALIZATION_FORMAT = "number",
     DATE_SERIALIZATION_FORMAT = "yyyy/MM/dd",

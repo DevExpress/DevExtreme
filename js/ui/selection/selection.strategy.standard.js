@@ -29,7 +29,7 @@ function SelectionFilterCreator(keyExpr, selectedItemKeys, isSelectAll, equalKey
                 filterExpr.push(isSelectAll ? "and" : "or");
             }
 
-            if(commonUtils.isString(keyExpr)) {
+            if(typeUtils.isString(keyExpr)) {
                 filterExprPart = getFilterForPlainKey(itemKeyValue);
             } else {
                 filterExprPart = getFilterForCompositeKey(itemKeyValue);

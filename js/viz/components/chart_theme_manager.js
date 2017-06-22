@@ -4,7 +4,7 @@ var commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager,
-    _isString = commonUtils.isString,
+    _isString = typeUtils.isString,
     _isDefined = commonUtils.isDefined,
     _normalizeEnum = require("../core/utils").normalizeEnum,
 
@@ -67,7 +67,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         axisOptions = extend(true, {}, axisOptions);
         axisOptions.title = processTitleOptions(axisOptions.title);
 
-        if(axisOptions.type === "logarithmic" && (axisOptions.logarithmBase <= 0) || (axisOptions.logarithmBase && !commonUtils.isNumeric(axisOptions.logarithmBase))) {
+        if(axisOptions.type === "logarithmic" && (axisOptions.logarithmBase <= 0) || (axisOptions.logarithmBase && !typeUtils.isNumeric(axisOptions.logarithmBase))) {
             axisOptions.logarithmBase = undefined;
             axisOptions.logarithmBaseError = true;
         }

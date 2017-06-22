@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
-    isEmptyObject = require("../../core/utils/type").isEmptyObject,
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     compileGetter = require("../../core/utils/data").compileGetter,
     errors = require("../widget/ui.errors"),
@@ -655,14 +655,14 @@ gridCore.registerModule("summary", {
                                 aggregate = aggregates[summaryIndex];
                                 if(aggregate === aggregate) {
                                     summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
-                                        value: commonUtils.isString(aggregate) && column && column.deserializeValue ? column.deserializeValue(aggregate) : aggregate,
+                                        value: typeUtils.isString(aggregate) && column && column.deserializeValue ? column.deserializeValue(aggregate) : aggregate,
                                         valueFormat: !commonUtils.isDefined(summaryItem.valueFormat) ? gridCore.getFormatByDataType(column && column.dataType) : summaryItem.valueFormat,
                                         columnCaption: (column && column.index !== columnIndex) ? column.caption : undefined
                                     }));
                                 }
                             }
                         });
-                        if(!isEmptyObject(summaryCellsByColumns)) {
+                        if(!typeUtils.isEmptyObject(summaryCellsByColumns)) {
                             $.each(visibleColumns, function() {
                                 summaryCells.push(summaryCellsByColumns[this.index] || []);
                             });

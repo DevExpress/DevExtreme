@@ -2,7 +2,8 @@
 
 var adjustValue = require("../core/utils").adjustValue,
     commonUtils = require("../../core/utils/common"),
-    isNumber = commonUtils.isNumeric,
+    typeUtils = require("../../core/utils/type"),
+    isNumber = typeUtils.isNumeric,
     isDefined = commonUtils.isDefined,
     dateUtils = require("../../core/utils/date"),
     addInterval = dateUtils.addInterval,

@@ -541,7 +541,7 @@ var Popover = Popup.inherit({
     _getPosition: function() {
         var position = this.option("position");
 
-        if(commonUtils.isString(position)) {
+        if(typeUtils.isString(position)) {
             position = extend({}, POSITION_ALIASES[position]);
         }
         return position;

@@ -154,7 +154,7 @@ exports.ExcelCreator = Class.inherit({
             value = dataProvider.getCellValue(rowIndex, cellIndex),
             type = this._getDataType(dataProvider.getCellType(rowIndex, cellIndex)),
             formatID = this._styleArray[this._dataProvider.getStyleId(rowIndex, cellIndex)].formatID,
-            format = commonUtils.isNumeric(formatID) ? this._styleFormat[formatID - 1] : null;
+            format = typeUtils.isNumeric(formatID) ? this._styleFormat[formatID - 1] : null;
 
         if(type === "d" && !commonUtils.isDate(value)) {
             type = "s";

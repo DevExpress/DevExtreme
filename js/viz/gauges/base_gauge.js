@@ -7,9 +7,8 @@ var _Number = Number,
     _extend = extend,
     BaseWidget = require("../core/base_widget"),
     _normalizeEnum = require("../core/utils").normalizeEnum,
-    commonUtils = require("../../core/utils/common"),
     Tracker = require("./tracker"),
-    _isString = commonUtils.isString;
+    _isString = require("../../core/utils/type").isString;
 
 var dxBaseGauge = BaseWidget.inherit({
     _rootClassPrefix: "dxg",

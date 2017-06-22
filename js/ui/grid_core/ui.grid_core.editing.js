@@ -670,7 +670,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 rowsView = that.getView("rowsView"),
                 showEditorAlways;
 
-            if(commonUtils.isString(columnIndex)) {
+            if(typeUtils.isString(columnIndex)) {
                 columnIndex = columnsController.columnOption(columnIndex, "index");
                 columnIndex = columnsController.getVisibleIndex(columnIndex);
             }
@@ -1364,7 +1364,7 @@ var EditingController = modules.ViewController.inherit((function() {
                             }
                         }
                         userCustomizeItem && userCustomizeItem.call(this, item);
-                        item.cssClass = commonUtils.isString(item.cssClass) ? item.cssClass + " " + editFormItemClass : editFormItemClass;
+                        item.cssClass = typeUtils.isString(item.cssClass) ? item.cssClass + " " + editFormItemClass : editFormItemClass;
                     }
                 }));
 

@@ -416,7 +416,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     if(arguments.length === 1) {
                         return columns[columnIndex];
                     }
-                    if(commonUtils.isString(columnIndex)) {
+                    if(typeUtils.isString(columnIndex)) {
                         if(columnIndex.indexOf("command:") === 0) {
                             var commandName = columnIndex.substr("command:".length);
                             for(i = 0; i < columns.length; i++) {
@@ -431,7 +431,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                                 }
                             }
                         }
-                    } else if(commonUtils.isString(optionName)) {
+                    } else if(typeUtils.isString(optionName)) {
                         columns[columnIndex][optionName] = optionValue;
                     } else if(typeUtils.isObject(optionName)) {
                         $.each(optionName, function(name, value) {
@@ -845,7 +845,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             var result = that.options,
                 path;
 
-            if(commonUtils.isString(options)) {
+            if(typeUtils.isString(options)) {
                 path = options.split('.');
                 while(result && path.length) {
                     if(arguments.length > 1 && path.length === 1) {
@@ -886,7 +886,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             });
 
             var instance;
-            if(commonUtils.isString(component)) {
+            if(typeUtils.isString(component)) {
                 var $element = $(element)[component](config);
                 instance = $element[component]("instance");
             } else if(element.length) {

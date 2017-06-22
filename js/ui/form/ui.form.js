@@ -1529,7 +1529,7 @@ var Form = Widget.inherit({
             $.each(_data, function(dataField, fieldValue) {
                 that._updateData(isComplexData ? data + "." + dataField : dataField, fieldValue, typeUtils.isObject(fieldValue));
             });
-        } else if(utils.isString(data)) {
+        } else if(typeUtils.isString(data)) {
             that._updateFieldValue(data, value);
         }
     },
