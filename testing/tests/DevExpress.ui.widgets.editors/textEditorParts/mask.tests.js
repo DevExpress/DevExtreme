@@ -631,6 +631,12 @@ QUnit.testInActiveWindow("selection should consider fixed mask letters", functio
     assert.equal(keyboard.caret().end, 1, "caret position set before last fixed mask letter");
 });
 
+QUnit.testInActiveWindow("Editor with mask isn't focused after render", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({ mask: "(XX)" });
+
+    assert.notOk($textEditor.hasClass("dx-state-focused"), "editor isn't focused");
+});
+
 
 QUnit.module("value");
 
