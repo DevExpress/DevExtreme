@@ -644,7 +644,10 @@ QUnit.testInActiveWindow("selection should consider fixed mask letters", functio
 });
 
 QUnit.testInActiveWindow("Editor with mask isn't focused after render", function(assert) {
-    var $textEditor = $("#texteditor").dxTextEditor({ mask: "(XX)" });
+    var $textEditor = $("#texteditor").dxTextEditor({
+        mask: "(XX)",
+        focusStateEnabled: true
+    });
 
     assert.notOk($textEditor.hasClass("dx-state-focused"), "editor isn't focused");
 });
