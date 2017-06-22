@@ -6065,4 +6065,16 @@ function getJQueryEvent(options) {
         //assert
         assert.ok(!that.draggingPanels[0].element().find('.dx-header-row').first().hasClass("dx-datagrid-drop-highlight"), 'not has class dx-headers-drop-highlight');
     });
+
+    QUnit.test('getColumns method should not be called when items of the column chooser not rendered', function(assert) {
+        //arrange
+        var $testElement = $('#container'),
+            handlerSpy = sinon.spy(this.columnChooserView, 'getColumns');
+
+        //act
+        this.headerPanel.render($testElement);
+
+        //assert
+        assert.ok(!handlerSpy.called, "getColumns was not called");
+    });
 })();
