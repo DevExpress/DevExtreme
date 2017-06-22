@@ -312,7 +312,7 @@ module.exports = {
                     if(that.option("showColumnHeaders")) {
                         if(rowCount > 1 && (!commonUtils.isDefined(index) || commonUtils.isDefined(bandColumnIndex))) {
                             result = [];
-                            visibleColumns = commonUtils.isDefined(bandColumnIndex) ? columnsController.getChildrenByBandColumn(bandColumnIndex, index) : columnsController.getVisibleColumns();
+                            visibleColumns = commonUtils.isDefined(bandColumnIndex) ? columnsController.getChildrenByBandColumn(bandColumnIndex, true) : columnsController.getVisibleColumns();
 
                             $.each(visibleColumns, function(_, column) {
                                 rowIndex = commonUtils.isDefined(index) ? index : columnsController.getRowIndex(column.index);

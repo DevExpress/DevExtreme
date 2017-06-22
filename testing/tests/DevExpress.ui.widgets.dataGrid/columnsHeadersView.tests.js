@@ -2342,7 +2342,7 @@ QUnit.test("getColumnElements by band column with hidden children where filter r
     this.columnHeadersView.render($testElement);
 
     //act
-    $columnElements = this.columnHeadersView.getColumnElements(1, 4);
+    $columnElements = this.columnHeadersView.getColumnElements(1, 3);
 
     //assert
     assert.ok(!$columnElements, "no cells");
