@@ -895,10 +895,13 @@ function createGridView(options, userOptions) {
     });
 
     //T527837
-    QUnit.test("RowsView height calculation when grid container has border and zoom is 90%", function(assert) {
+    QUnit.test("RowsView height calculation when grid container has border and padding (zoom is 90%)", function(assert) {
         //arrange, act
         var $rowsViewContainer,
-            $testElement = $("#container").css("border", "1px solid black"),
+            $testElement = $("#container").css({
+                border: "1px solid black",
+                padding: 15
+            }),
             gridView = this.createGridView({
                 columnsController: new MockColumnsController([{ caption: "Column 1", visible: true }]),
                 dataController: new MockDataController({
