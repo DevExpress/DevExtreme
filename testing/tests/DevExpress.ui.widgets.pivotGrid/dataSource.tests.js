@@ -3990,6 +3990,66 @@ QUnit.test("Data order with sortingMethod", function(assert) {
     assert.strictEqual(sortingMethod.lastCall.thisValue, dataSource.field("ShipCountry"), "field is context");//T490852
 });
 
+QUnit.test("Data order with sortBy: none", function(assert) {
+    var def = $.Deferred();
+
+    this.testStore.load.returns(def);
+
+    var dataSource = createDataSource({
+        fields: [
+            { dataField: "ShipCountry", area: "column", sortBy: "none" },
+            { dataField: "ShipVia", area: "row", sortBy: "none" },
+            { summaryType: 'count', area: "data" }
+        ],
+        store: this.testStore
+    });
+
+    this.storeData.columns = this.storeData.columns[0].children;
+    def.resolve(this.storeData);
+
+    assert.deepEqual(prepareLoadedData(dataSource.getData().columns), [
+        { index: 2, value: "Boise" },
+        { index: 3, value: "Elgin" },
+        { index: 4, value: "Butte" }
+    ], "column");
+
+    assert.deepEqual(prepareLoadedData(dataSource.getData().rows), [
+        { index: 1, value: 1991 },
+        { index: 2, value: 1991 },
+        { index: 3, value: 1985 }
+    ], "rows");
+});
+
+QUnit.test("Data order with sortBy: none and desc sort order", function(assert) {
+    var def = $.Deferred();
+
+    this.testStore.load.returns(def);
+
+    var dataSource = createDataSource({
+        fields: [
+            { dataField: "ShipCountry", area: "column", sortBy: "none", sortOrder: "desc" },
+            { dataField: "ShipVia", area: "row", sortBy: "none", sortOrder: "desc" },
+            { summaryType: 'count', area: "data" }
+        ],
+        store: this.testStore
+    });
+
+    this.storeData.columns = this.storeData.columns[0].children;
+    def.resolve(this.storeData);
+
+    assert.deepEqual(prepareLoadedData(dataSource.getData().columns), [
+        { index: 4, value: "Butte" },
+        { index: 3, value: "Elgin" },
+        { index: 2, value: "Boise" }
+    ], "column");
+
+    assert.deepEqual(prepareLoadedData(dataSource.getData().rows), [
+        { index: 3, value: 1985 },
+        { index: 2, value: 1991 },
+        { index: 1, value: 1991 }
+    ], "rows");
+});
+
 QUnit.test("Data order with sortingMethod. Desc", function(assert) {
     var def = $.Deferred();
 
