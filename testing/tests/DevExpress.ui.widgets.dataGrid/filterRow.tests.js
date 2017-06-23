@@ -1951,6 +1951,8 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
     ];
 
     this.options.columns = [{ dataField: "date", dataType: "date" }];
+    //T528529
+    this.options.filterRow.resetOperationText = "My Reset";
 
     setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
         initViews: true
@@ -1963,9 +1965,12 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
     $input.val("test");
     $input.change();
 
-    getFilterMenuItem(this.columnHeadersView.element(), 7).trigger('dxclick'); //reset
+    var $resetMenuItem = getFilterMenuItem(this.columnHeadersView.element(), 7);
+
+    $resetMenuItem.trigger('dxclick'); //reset
 
     //assert
+    assert.equal($resetMenuItem.text(), "My Reset");
     var dateBox = $(".dx-datebox").data("dxDateBox");
     assert.ok(!dateBox.option("text"), "text option");
     assert.ok(dateBox.option("isValid"), "isValid option");
