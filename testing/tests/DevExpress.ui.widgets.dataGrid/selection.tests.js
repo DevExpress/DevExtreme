@@ -1357,6 +1357,12 @@ QUnit.test("selectRows with big array", function(assert) {
     //arrange
     var that = this;
 
+    that.applyOptions({
+        selection: {
+            maxFilterLengthInRequest: 1000
+        }
+    });
+
     that.array = [];
     for(var i = 1; i <= 10000; i++) {
         that.array.push({ id: i, text: "text " + i });
