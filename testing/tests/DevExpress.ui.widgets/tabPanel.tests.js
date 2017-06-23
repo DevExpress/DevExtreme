@@ -212,6 +212,22 @@ QUnit.test("items option test", function(assert) {
     assert.deepEqual(this.tabWidgetInstance.option("items"), [], "option <items> of nested tabs widget successfully changed");
 });
 
+QUnit.test("items option test - changing a single item at runtime", function(assert) {
+    var items = [
+        { text: "Greg", title: "Name" }
+    ];
+
+    var $tabPanel = $("<div>").appendTo("#qunit-fixture");
+    var tabPanel = $tabPanel.dxTabPanel({
+        items: items
+    }).dxTabPanel("instance");
+
+    tabPanel.option("items[0].title", "test");
+
+    assert.equal($tabPanel.find(toSelector(TABS_ITEM_CLASS)).eq(0).text(),
+        "test", "option <items> of nested tabs widget successfully changed - tabs were rerendered");
+});
+
 QUnit.test("itemTitleTemplate options test", function(assert) {
     assert.expect(2);
 
