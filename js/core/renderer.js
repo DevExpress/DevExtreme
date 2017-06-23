@@ -179,7 +179,7 @@ if(!useJQueryRenderer) {
                     if(!elementId) {
                         rendererStrategy.setAttribute(element, "id", queryId);
                     }
-                    queryId = "#" + queryId + " ";
+                    queryId = "[id='" + queryId + "'] ";
 
                     var querySelector = queryId + selector.replace(",", ", " + queryId);
                     nodes.push.apply(nodes, element.querySelectorAll(querySelector));
