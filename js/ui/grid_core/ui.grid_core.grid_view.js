@@ -330,7 +330,7 @@ var ResizingController = modules.ViewController.inherit({
                 $groupElement.detach();
             }
 
-            that._hasHeight = !!$rootElement.height();
+            that._hasHeight = !!$rootElement.get(0).clientHeight;
 
             width = $rootElement.width();
             $rootElement.addClass(importantMarginClass);
