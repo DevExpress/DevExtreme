@@ -155,7 +155,7 @@ if(!useJQueryRenderer) {
     };
 
     initRender.prototype.contents = function() {
-        return renderer(this.$element.contents());
+        return renderer(this[0] ? this[0].childNodes : []);
     };
 
     initRender.prototype.find = function(selector) {
@@ -203,8 +203,21 @@ if(!useJQueryRenderer) {
     initRender.prototype.filter = function() {
         return renderer(this.$element.filter.apply(this.$element, arguments));
     };
-    initRender.prototype.children = function() {
-        return renderer(this.$element.children.apply(this.$element, arguments));
+
+    initRender.prototype.children = function(selector) {
+        var result = [];
+        for(var i = 0; i < this.length; i++) {
+            var nodes = this[i] ? this[i].childNodes : [];
+            for(var j = 0; j < nodes.length; j++) {
+                if(nodes[j].nodeType === Node.ELEMENT_NODE) {
+                    result.push(nodes[j]);
+                }
+            }
+        }
+
+        result = renderer(result);
+
+        return selector ? result.filter(selector) : result;
     };
 
     initRender.prototype.siblings = function() {
