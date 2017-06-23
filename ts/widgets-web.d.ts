@@ -1404,6 +1404,9 @@ declare module DevExpress.ui {
     export interface dxDataGridOptions extends GridBaseOptions {
         /** @docid_ignore dxDataGridOptions_regenerateColumnsByVisibleItems */
 
+        /** @docid dxDataGridOptions_keyExpr */
+        keyExpr?: any;
+
         /** @docid dxDataGridOptions_onContextMenuPreparing */
         onContextMenuPreparing?: (e: Object) => void;
 
