@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../../ui/widget/ui.errors"),
-    commonUtils = require("../../core/utils/common");
+    typeUtils = require("../../core/utils/type");
 
 var DataConverter = Class.inherit({
 
@@ -20,7 +20,7 @@ var DataConverter = Class.inherit({
         var that = this;
 
         $.each(items, function(_, item) {
-            var parentId = commonUtils.isDefined(parentKey) ? parentKey : that._getParentId(item),
+            var parentId = typeUtils.isDefined(parentKey) ? parentKey : that._getParentId(item),
                 node = that._convertItemToNode(item, parentId);
 
             that._dataStructure.push(node);
@@ -35,7 +35,7 @@ var DataConverter = Class.inherit({
     },
 
     _checkForDuplicateId: function(key) {
-        if(commonUtils.isDefined(this._indexByKey[key])) {
+        if(typeUtils.isDefined(this._indexByKey[key])) {
             throw errors.Error("E1040", key);
         }
     },
@@ -52,7 +52,7 @@ var DataConverter = Class.inherit({
     _getUniqueKey: function(item) {
         var keyGetter = this._dataAccessors.getters.key,
             itemKey = keyGetter(item),
-            isCorrectKey = keyGetter && (itemKey || itemKey === 0) && commonUtils.isPrimitive(itemKey);
+            isCorrectKey = keyGetter && (itemKey || itemKey === 0) && typeUtils.isPrimitive(itemKey);
 
         return isCorrectKey ? itemKey : this.getItemsCount();
     },
@@ -68,7 +68,7 @@ var DataConverter = Class.inherit({
                     expanded: that._dataAccessors.getters.expanded(item) || false,
                     selected: that._dataAccessors.getters.selected(item) || false,
                     key: that._getUniqueKey(item),
-                    parentKey: commonUtils.isDefined(parentKey) ? parentKey : that._rootValue,
+                    parentKey: typeUtils.isDefined(parentKey) ? parentKey : that._rootValue,
                     item: that._makeObjectFromPrimitive(item),
                     childrenKeys: []
                 }
@@ -93,7 +93,7 @@ var DataConverter = Class.inherit({
     },
 
     _makeObjectFromPrimitive: function(item) {
-        if(commonUtils.isPrimitive(item)) {
+        if(typeUtils.isPrimitive(item)) {
             var key = item;
             item = {};
             this._dataAccessors.setters.key(item, key);
@@ -134,7 +134,7 @@ var DataConverter = Class.inherit({
             publicNodes = [];
 
         $.each(data, function(_, node) {
-            node = commonUtils.isPrimitive(node) ? that._getByKey(node) : node;
+            node = typeUtils.isPrimitive(node) ? that._getByKey(node) : node;
 
             var publicNode = that._convertToPublicNode(node, parent);
 

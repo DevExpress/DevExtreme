@@ -41,7 +41,7 @@ module.exports = gridCore.Controller.inherit((function() {
     }
 
     function executeTask(action, timeout) {
-        if(commonUtils.isDefined(timeout)) {
+        if(typeUtils.isDefined(timeout)) {
             commonUtils.executeAsync(action, timeout);
         } else {
             action();
@@ -78,7 +78,7 @@ module.exports = gridCore.Controller.inherit((function() {
             dataSource.on("loadError", that._loadErrorHandler);
 
             $.each(dataSource, function(memberName, member) {
-                if(!that[memberName] && commonUtils.isFunction(member)) {
+                if(!that[memberName] && typeUtils.isFunction(member)) {
                     that[memberName] = function() {
                         return this._dataSource[memberName].apply(this._dataSource, arguments);
                     };

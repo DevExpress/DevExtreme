@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
@@ -87,7 +87,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             if(rangeEnd !== "") {
                 result += " - " + rangeEnd;
             }
-        } else if(commonUtils.isDefined(filterValue)) {
+        } else if(isDefined(filterValue)) {
             result = gridCoreUtils.formatValue(filterValue, formatOptions);
         }
 
@@ -143,7 +143,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             column = that._columnsController.columnOption(options.column.index),
             filterValue = getFilterValue(that, column.index, $editorContainer);
 
-        if(!commonUtils.isDefined(filterValue) && !commonUtils.isDefined(value)) return;
+        if(!isDefined(filterValue) && !isDefined(value)) return;
 
         that._applyFilterViewController.setHighLight($editorContainer, filterValue !== value);
         that._columnsController.columnOption(column.index, isOnClickApplyFilterMode(that) ? "bufferedFilterValue" : "filterValue", normalizeFilterValue(that, value, column, $editorContainer), options.notFireEvent);
@@ -605,7 +605,7 @@ var DataControllerFilterRowExtender = {
         $.each(columns, function() {
             var filter;
 
-            if(this.allowFiltering && this.calculateFilterExpression && commonUtils.isDefined(this.filterValue)) {
+            if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue)) {
                 filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, "filterRow");
                 filters.push(filter);
             }

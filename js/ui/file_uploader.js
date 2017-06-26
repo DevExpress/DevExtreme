@@ -2,7 +2,7 @@
 
 var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
-    commonUtils = require("../core/utils/common"),
+    isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     Editor = require("./editor/editor"),
@@ -634,7 +634,7 @@ var FileUploader = Editor.inherit({
             .text(value.name)
             .appendTo($fileInfo);
 
-        if(commonUtils.isDefined(value.size)) {
+        if(isDefined(value.size)) {
             $("<div>")
                 .addClass(FILEUPLOADER_FILE_SIZE_CLASS)
                 .text(this._getFileSize(value.size))

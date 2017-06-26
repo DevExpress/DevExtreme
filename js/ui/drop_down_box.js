@@ -3,6 +3,7 @@
 var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     DataExpressionMixin = require("./editor/ui.data_expression"),
     commonUtils = require("../core/utils/common"),
+    isDefined = require("../core/utils/type").isDefined,
     selectors = require("./widget/jquery.selectors"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
     when = require("../integration/jquery/deferred").when,
@@ -183,7 +184,7 @@ var DropDownBox = DropDownEditor.inherit({
         var itemLoadDeferreds = $.map(keys, (function(key) {
             return this._loadItem(key).always((function(item) {
                 var displayValue = this._displayGetter(item);
-                if(commonUtils.isDefined(displayValue)) {
+                if(isDefined(displayValue)) {
                     values.push(displayValue);
                 }
             }).bind(this));

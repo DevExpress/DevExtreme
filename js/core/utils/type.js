@@ -13,6 +13,26 @@ var type = function(object) {
         types[typeOfObject] || "object" : typeof object;
 };
 
+var isBoolean = function(object) {
+    return typeof object === "boolean";
+};
+
+var isExponential = function(value) {
+    return isNumeric(value) && value.toString().indexOf('e') !== -1;
+};
+
+var isDate = function(object) {
+    return type(object) === 'date';
+};
+
+var isDefined = function(object) {
+    return (object !== null) && (object !== undefined);
+};
+
+var isFunction = function(object) {
+    return typeof object === 'function';
+};
+
 var isString = function(object) {
     return typeof object === 'string';
 };
@@ -46,9 +66,24 @@ var isPlainObject = function(object) {
         && Object.toString.call(ctor) === Object.toString.call(Object);
 };
 
+var isPrimitive = function(value) {
+    return ["object", "array", "function"].indexOf(type(value)) === -1;
+};
+
+var isWindow = function(object) {
+    return object != null && object === object.window;
+};
+
+exports.isBoolean = isBoolean;
+exports.isExponential = isExponential;
+exports.isDate = isDate;
+exports.isDefined = isDefined;
+exports.isFunction = isFunction;
 exports.isString = isString;
 exports.isNumeric = isNumeric;
 exports.isObject = isObject;
 exports.isEmptyObject = isEmptyObject;
 exports.isPlainObject = isPlainObject;
+exports.isPrimitive = isPrimitive;
+exports.isWindow = isWindow;
 exports.type = type;

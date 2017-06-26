@@ -77,7 +77,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $cell = $(cell);
         this.setAria("role", "gridcell", $cell);
 
-        if(!commonUtils.isDefined(column.groupIndex) && column.cssClass) {
+        if(!typeUtils.isDefined(column.groupIndex) && column.cssClass) {
             $cell.addClass(column.cssClass);
         }
         if(column.command === "expand") {
@@ -148,7 +148,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    if($element[0].scrollWidth > $element[0].clientWidth && !commonUtils.isDefined($element.attr("title"))) {
+                    if($element[0].scrollWidth > $element[0].clientWidth && !typeUtils.isDefined($element.attr("title"))) {
                         $element.attr("title", $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
                     }
@@ -265,7 +265,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     template.render(options.container, options.model);
                 }
             };
-        } else if(commonUtils.isFunction(template)) {
+        } else if(typeUtils.isFunction(template)) {
             renderingTemplate = {
                 render: function(options) {
                     var renderedTemplate = template(options.container, options.model);
@@ -520,7 +520,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         that._skipScrollChanged = false;
 
-        if(commonUtils.isDefined(pos) && commonUtils.isDefined(pos.left) && that._scrollLeft !== pos.left) {
+        if(typeUtils.isDefined(pos) && typeUtils.isDefined(pos.left) && that._scrollLeft !== pos.left) {
             that._scrollLeft = pos.left;
             $scrollContainer && $scrollContainer.scrollLeft(Math.round(pos.left));
             that._skipScrollChanged = true;

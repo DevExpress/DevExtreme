@@ -7,7 +7,7 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    isDefined = commonUtils.isDefined,
+    isDefined = typeUtils.isDefined,
     each = $.each,
     when = require("../../integration/jquery/deferred").when,
     Class = require("../../core/class"),
@@ -1194,7 +1194,7 @@ module.exports = Class.inherit((function() {
             var indices = {};
             each(descriptions.values, function(_, field) {
                 var expression = field.calculateSummaryValue;
-                if(commonUtils.isFunction(expression)) {
+                if(typeUtils.isFunction(expression)) {
                     var summaryCell = summaryDisplayModes.createMockSummaryCell(descriptions, fields, indices);
                     expression(summaryCell);
                 }

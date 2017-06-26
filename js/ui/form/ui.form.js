@@ -734,7 +734,7 @@ var Form = Widget.inherit({
     },
 
     _getGroupElementsInColumn: function($container, columnIndex, colCount) {
-        var cssColCountSelector = utils.isDefined(colCount) ? "." + GROUP_COL_COUNT_CLASS + colCount : "",
+        var cssColCountSelector = typeUtils.isDefined(colCount) ? "." + GROUP_COL_COUNT_CLASS + colCount : "",
             groupSelector = "." + FORM_FIELD_ITEM_COL_CLASS + columnIndex + " > ." + FIELD_ITEM_CONTENT_CLASS + " > ." + FORM_GROUP_CLASS + cssColCountSelector;
 
         return $container.find(groupSelector);
@@ -999,7 +999,7 @@ var Form = Widget.inherit({
 
     _itemGroupTemplate: function(item, e, $container) {
         var $group = $("<div/>")
-                .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, utils.isDefined(item.caption) && item.caption.length)
+                .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, typeUtils.isDefined(item.caption) && item.caption.length)
                 .addClass(FORM_GROUP_CLASS)
                 .appendTo($container),
             $groupContent,
@@ -1127,7 +1127,7 @@ var Form = Widget.inherit({
                 var optionFullName = args.fullName;
 
                 if(optionFullName === "formData") {
-                    if(!utils.isDefined(args.value)) {
+                    if(!typeUtils.isDefined(args.value)) {
                         that._options.formData = args.value = {};
                     }
 
@@ -1300,7 +1300,7 @@ var Form = Widget.inherit({
     },
 
     _updateFieldValue: function(dataField, value) {
-        if(utils.isDefined(this.option("formData"))) {
+        if(typeUtils.isDefined(this.option("formData"))) {
             var editor = this.getEditor(dataField);
 
             this.option("formData." + dataField, value);
@@ -1319,7 +1319,7 @@ var Form = Widget.inherit({
         var formData = this.option("formData"),
             result = [];
 
-        if(!items && utils.isDefined(formData)) {
+        if(!items && typeUtils.isDefined(formData)) {
             $.each(formData, function(dataField) {
                 result.push({
                     dataField: dataField
@@ -1403,7 +1403,7 @@ var Form = Widget.inherit({
 
         do {
             if(isItemWithSubItems) {
-                var isGroupWithCaption = utils.isDefined(item.caption || item.title),
+                var isGroupWithCaption = typeUtils.isDefined(item.caption || item.title),
                     captionWithoutSpaces = that._getTextWithoutSpaces(item.caption || item.title),
                     pathNode;
 

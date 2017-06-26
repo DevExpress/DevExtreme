@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
@@ -124,7 +123,7 @@ var SeparatorView = modules.View.inherit({
     height: function(value) {
         var $element = this.element();
         if($element) {
-            if(commonUtils.isDefined(value)) {
+            if(typeUtils.isDefined(value)) {
                 $element.height(value);
             } else {
                 return $element.height();
@@ -135,7 +134,7 @@ var SeparatorView = modules.View.inherit({
     width: function(value) {
         var $element = this.element();
         if($element) {
-            if(commonUtils.isDefined(value)) {
+            if(typeUtils.isDefined(value)) {
                 $element.width(value);
             } else {
                 return $element.width();
@@ -248,7 +247,7 @@ var ColumnsSeparatorView = SeparatorView.inherit({
     },
 
     changeCursor: function(cursorName) {
-        cursorName = commonUtils.isDefined(cursorName) ? cursorName : "";
+        cursorName = typeUtils.isDefined(cursorName) ? cursorName : "";
         var $element = this.element();
         if($element) {
             $element.css("cursor", cursorName);
@@ -379,7 +378,7 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     _getVisibleIndexObject: function(rowIndex, visibleIndex) {
-        if(commonUtils.isDefined(rowIndex)) {
+        if(typeUtils.isDefined(rowIndex)) {
             return {
                 columnIndex: visibleIndex,
                 rowIndex: rowIndex
@@ -959,7 +958,7 @@ var TablePositionViewController = modules.ViewController.inherit({
             $element = that._columnHeadersView.element(),
             offset = $element && $element.offset(),
             offsetTop = offset && offset.top || 0,
-            diffOffsetTop = commonUtils.isDefined(top) ? Math.abs(top - offsetTop) : 0,
+            diffOffsetTop = typeUtils.isDefined(top) ? Math.abs(top - offsetTop) : 0,
             columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0,
             rowsHeight = that._rowsView ? that._rowsView.height() - that._rowsView.getScrollbarWidth(true) : 0;
 

@@ -531,7 +531,7 @@ var Gallery = CollectionWidget.inherit({
             targetPosition = this._offsetDirection() * targetIndex * (itemWidth + this._itemFreeSpace()),
             positionReady;
 
-        if(commonUtils.isDefined(this._animationOverride)) {
+        if(typeUtils.isDefined(this._animationOverride)) {
             animate = this._animationOverride;
             delete this._animationOverride;
         }

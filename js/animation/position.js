@@ -117,6 +117,7 @@
 
 var $ = require("../core/renderer"),
     commonUtils = require("../core/utils/common"),
+    isWindow = require("../core/utils/type").isWindow,
     stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,
 
@@ -355,7 +356,7 @@ var calculatePosition = function(what, options) {
         v.atSize = 0;
     } else {
         of = $(of);
-        if(commonUtils.isWindow(of[0])) {
+        if(isWindow(of[0])) {
             h.atLocation = of.scrollLeft();
             v.atLocation = of.scrollTop();
             h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : of.width();
@@ -471,7 +472,7 @@ var position = function(what, options) {
 
 var offset = function(element) {
     element = $(element).get(0);
-    if(commonUtils.isWindow(element)) {
+    if(isWindow(element)) {
         return null;
     } else if(element instanceof $.Event) {
         return { top: element.pageY, left: element.pageX };

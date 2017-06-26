@@ -2,7 +2,7 @@
 
 var $ = require("../core/renderer"),
     Component = require("../core/component"),
-    isFunction = require("../core/utils/common").isFunction,
+    isFunction = require("../core/utils/type").isFunction,
     Action = require("../core/action"),
     domUtils = require("../core/utils/dom"),
     viewPortUtils = require("../core/utils/view_port"),

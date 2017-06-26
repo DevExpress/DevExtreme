@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     CustomStore = require("../../data/custom_store"),
     errors = require("../widget/ui.errors"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     DataHelperMixin = require("../../data_helper"),
     equalKeys = commonUtils.equalByValue,
@@ -376,7 +377,7 @@ module.exports = {
                             filterValue = that._columnsController.columnOption(e.columnIndex, "filterValue");
                             filterValues = that._columnsController.columnOption(e.columnIndex, "filterValues");
 
-                            if(Array.isArray(filterValues) || e.columnIndex === undefined || commonUtils.isDefined(filterValue) || !optionNames.selectedFilterOperation || optionNames.filterValue) {
+                            if(Array.isArray(filterValues) || e.columnIndex === undefined || typeUtils.isDefined(filterValue) || !optionNames.selectedFilterOperation || optionNames.filterValue) {
                                 that._applyFilter();
                             }
                         }
@@ -386,9 +387,9 @@ module.exports = {
                             that._columnsController.columnsChanged.add(updateItemsHandler);
                         }
 
-                        if(commonUtils.isDefined(optionNames.visible)) {
+                        if(typeUtils.isDefined(optionNames.visible)) {
                             var column = that._columnsController.columnOption(e.columnIndex);
-                            if(column && (commonUtils.isDefined(column.filterValue) || commonUtils.isDefined(column.filterValues))) {
+                            if(column && (typeUtils.isDefined(column.filterValue) || typeUtils.isDefined(column.filterValues))) {
                                 that._applyFilter();
                             }
                         }
@@ -490,7 +491,7 @@ module.exports = {
                         result = [];
 
                     $.each(items, function(index, item) {
-                        if(commonUtils.isDefined(item)) {
+                        if(typeUtils.isDefined(item)) {
                             options.rowIndex = index;
                             item = that._processItem(item, options);
                             result.push(item);
@@ -1065,7 +1066,7 @@ module.exports = {
                 repaintRows: function(rowIndexes) {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
 
-                    if(rowIndexes.length > 1 || commonUtils.isDefined(rowIndexes[0])) {
+                    if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
                         this.updateItems({ changeType: "update", rowIndices: rowIndexes });
                     }
                 }

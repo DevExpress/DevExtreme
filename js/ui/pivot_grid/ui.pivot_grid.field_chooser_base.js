@@ -3,7 +3,8 @@
 var $ = require("../../core/renderer"),
     ArrayStore = require("../../data/array_store"),
     clickEvent = require("../../events/click"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
@@ -52,7 +53,7 @@ var processItems = function(groupItems, field) {
 
 function getMainGroupField(dataSource, sourceField) {
     var field = sourceField;
-    if(commonUtils.isDefined(sourceField.groupIndex)) {
+    if(isDefined(sourceField.groupIndex)) {
         field = dataSource.getAreaFields(sourceField.area, true)[sourceField.areaIndex];
     }
 
@@ -305,7 +306,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
         that.element().on(clickEvent.name, ".dx-area-field.dx-area-box", func);
     },
 
-    _initTemplates: commonUtils.noop,
+    _initTemplates: noop,
 
     addWidgetPrefix: function(className) {
         return "dx-pivotgrid-" + className;

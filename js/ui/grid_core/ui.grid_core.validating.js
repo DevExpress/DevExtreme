@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     equalByValue = commonUtils.equalByValue,
@@ -143,7 +144,7 @@ var ValidatingController = modules.Controller.inherit((function() {
             $.each(editingController._editData, function(index, editData) {
                 var validateGroup = ValidationEngine.getGroupConfig(editData);
 
-                if(!commonUtils.isDefined(editIndex) || editIndex === index) {
+                if(!typeUtils.isDefined(editIndex) || editIndex === index) {
                     if(validateGroup) {
                         for(var i = 0; i < validateGroup.validators.length; i++) {
                             validateGroup.validators[i]._dispose();
@@ -180,7 +181,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                     return value !== undefined ? value : parameters.value;
                 };
 
-            if(!column.validationRules || !Array.isArray(column.validationRules) || commonUtils.isDefined(column.command)) return;
+            if(!column.validationRules || !Array.isArray(column.validationRules) || typeUtils.isDefined(column.command)) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
