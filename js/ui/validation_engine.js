@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     EventsMixin = require("../core/events_mixin"),
     errors = require("../core/errors"),
     commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
     numberLocalization = require("../localization/number"),
     messageLocalization = require("../localization/message");
 
@@ -84,10 +85,10 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
             return true;
         }
 
-        if(rule.useCultureSettings && commonUtils.isString(value)) {
+        if(rule.useCultureSettings && typeUtils.isString(value)) {
             return !isNaN(numberLocalization.parse(value));
         } else {
-            return commonUtils.isNumeric(value);
+            return typeUtils.isNumeric(value);
         }
     }
 });
@@ -337,7 +338,7 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
             return true;
         }
         var pattern = rule.pattern;
-        if(commonUtils.isString(pattern)) {
+        if(typeUtils.isString(pattern)) {
             pattern = new RegExp(pattern);
         }
         return pattern.test(value);

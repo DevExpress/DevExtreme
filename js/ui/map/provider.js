@@ -3,11 +3,10 @@
 var $ = require("../../core/renderer"),
     Promise = require("../../core/polyfills/promise"),
     Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     eventUtils = require("../../events/utils"),
     isPlainObject = typeUtils.isPlainObject,
-    isNumeric = commonUtils.isNumeric;
+    isNumeric = typeUtils.isNumeric;
 
 var abstract = Class.abstract;
 

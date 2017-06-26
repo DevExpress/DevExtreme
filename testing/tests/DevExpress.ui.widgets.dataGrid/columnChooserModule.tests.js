@@ -8,6 +8,7 @@ require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
     device = devices.real(),
     themes = require("ui/themes"),
@@ -90,7 +91,7 @@ QUnit.test('Bounding rect of groupPanel', function(assert) {
 
     //assert
     boundingRect = this.columnChooserView.getBoundingRect();
-    isBoundingCorrect = commonUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top) && commonUtils.isDefined(boundingRect.bottom)
+    isBoundingCorrect = typeUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top) && commonUtils.isDefined(boundingRect.bottom)
         && commonUtils.isDefined(boundingRect.right) && commonUtils.isDefined(boundingRect.left);
 
     assert.ok(isBoundingCorrect, 'Bounding rect return object with "top", "bottom", "left" and "right" properties when column chooser is visible');

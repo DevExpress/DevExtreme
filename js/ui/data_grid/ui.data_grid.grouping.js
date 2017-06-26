@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     dataSourceAdapter = require("./ui.data_grid.data_source_adapter"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     devices = require("../../core/devices"),
     when = require("../../integration/jquery/deferred").when;
 
@@ -171,7 +172,7 @@ var GroupingDataControllerExtender = (function() {
             return this.callBase(items, changeType);
         },
         _processItem: function(item, options) {
-            if(commonUtils.isDefined(item.groupIndex) && commonUtils.isString(item.rowType) && item.rowType.indexOf("group") === 0) {
+            if(commonUtils.isDefined(item.groupIndex) && typeUtils.isString(item.rowType) && item.rowType.indexOf("group") === 0) {
                 item = this._processGroupItem(item, options);
                 options.dataIndex = 0;
             } else {

@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     _isDefined = commonUtils.isDefined,
@@ -29,7 +30,7 @@ var cosFunc = Math.cos,
     Number = window.Number,
     NaN = window.NaN;
 
-var isNumber = commonUtils.isNumeric,
+var isNumber = typeUtils.isNumeric,
     isExponential = commonUtils.isExponential;
 
 var getPrecision = function(value) {

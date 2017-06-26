@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     dataCoreUtils = require("../../core/utils/data"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -588,7 +589,7 @@ module.exports = {
                     calculatedColumnOptions;
 
                 if(columnOptions) {
-                    if(commonUtils.isString(columnOptions)) {
+                    if(typeUtils.isString(columnOptions)) {
                         columnOptions = {
                             dataField: columnOptions
                         };
@@ -724,7 +725,7 @@ module.exports = {
             };
 
             var getValueDataType = function(value) {
-                var dataType = commonUtils.type(value);
+                var dataType = typeUtils.type(value);
                 if(dataType !== "string" && dataType !== "boolean" && dataType !== "number" && dataType !== "date" && dataType !== "object") {
                     dataType = undefined;
                 }
@@ -737,11 +738,11 @@ module.exports = {
                     case "datetime":
                         return dateSerialization.getDateSerializationFormat(value);
                     case "number":
-                        if(commonUtils.isString(value)) {
+                        if(typeUtils.isString(value)) {
                             return "string";
                         }
 
-                        if(commonUtils.isNumeric(value)) {
+                        if(typeUtils.isNumeric(value)) {
                             return null;
                         }
                 }
@@ -826,7 +827,7 @@ module.exports = {
                 });
 
                 $.each(that._columns, function(index, column) {
-                    if(commonUtils.isObject(column.ownerBand)) {
+                    if(typeUtils.isObject(column.ownerBand)) {
                         column.ownerBand = column.ownerBand.index;
                     }
                 });
@@ -887,11 +888,11 @@ module.exports = {
             };
 
             var getColumnIndexByVisibleIndex = function(that, visibleIndex, location) {
-                var rowIndex = commonUtils.isObject(visibleIndex) ? visibleIndex.rowIndex : null,
+                var rowIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.rowIndex : null,
                     columns = location === GROUP_LOCATION ? that.getGroupColumns() : location === COLUMN_CHOOSER_LOCATION ? that.getChooserColumns() : that.getVisibleColumns(rowIndex),
                     column;
 
-                visibleIndex = commonUtils.isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
+                visibleIndex = typeUtils.isObject(visibleIndex) ? visibleIndex.columnIndex : visibleIndex;
                 column = columns[visibleIndex];
 
                 return column && isDefined(column.index) ? column.index : -1;
@@ -1108,7 +1109,7 @@ module.exports = {
                         if(inArray(optionName, USER_STATE_FIELD_NAMES) < 0 && optionName !== "visibleWidth") {
                             columns = that.option("columns");
                             column = columns && columns[columnIndex];
-                            if(commonUtils.isString(column)) {
+                            if(typeUtils.isString(column)) {
                                 column = columns[columnIndex] = { dataField: column };
                             }
                             if(column) {
@@ -1760,8 +1761,8 @@ module.exports = {
                                 return false;
                             }
 
-                            fromVisibleIndex = commonUtils.isObject(fromVisibleIndex) ? fromVisibleIndex.columnIndex : fromVisibleIndex;
-                            toVisibleIndex = commonUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
+                            fromVisibleIndex = typeUtils.isObject(fromVisibleIndex) ? fromVisibleIndex.columnIndex : fromVisibleIndex;
+                            toVisibleIndex = typeUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
 
                             return fromVisibleIndex !== toVisibleIndex && fromVisibleIndex + 1 !== toVisibleIndex;
                         } else if((sourceLocation === GROUP_LOCATION && targetLocation !== COLUMN_CHOOSER_LOCATION) || targetLocation === GROUP_LOCATION) {
@@ -1783,7 +1784,7 @@ module.exports = {
 
                     if(fromIndex >= 0) {
                         column = that._columns[fromIndex];
-                        toVisibleIndex = commonUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
+                        toVisibleIndex = typeUtils.isObject(toVisibleIndex) ? toVisibleIndex.columnIndex : toVisibleIndex;
                         targetGroupIndex = toIndex >= 0 ? that._columns[toIndex].groupIndex : -1;
 
                         if(isDefined(column.groupIndex) && sourceLocation === GROUP_LOCATION) {
@@ -1948,7 +1949,7 @@ module.exports = {
                         }
                     });
 
-                    if(commonUtils.isString(column.calculateDisplayValue)) {
+                    if(typeUtils.isString(column.calculateDisplayValue)) {
                         column.displayField = column.calculateDisplayValue;
                         column.calculateDisplayValue = dataCoreUtils.compileGetter(column.displayField);
                     }
@@ -2175,7 +2176,7 @@ module.exports = {
 
                     columnIndex = filter.columnIndex || columnIndex;
 
-                    if(commonUtils.isString(filter[0])) {
+                    if(typeUtils.isString(filter[0])) {
                         column = that.columnOption(filter[0]);
 
                         if(remoteFiltering) {
@@ -2235,7 +2236,7 @@ module.exports = {
                 columnOption: function(identifier, option, value, notFireEvent) {
                     var that = this,
                         i,
-                        identifierOptionName = commonUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
+                        identifierOptionName = typeUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
                         columns = (identifier < 0 || identifierOptionName === "command") ? that._commandColumns : that._columns,
                         needUpdateIndexes,
                         column;
@@ -2264,14 +2265,14 @@ module.exports = {
                         if(arguments.length === 1) {
                             return extend({}, column);
                         }
-                        if(commonUtils.isString(option)) {
+                        if(typeUtils.isString(option)) {
                             if(arguments.length === 2) {
                                 return columnOptionCore(that, column, option);
                             } else {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[option];
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
-                        } else if(commonUtils.isObject(option)) {
+                        } else if(typeUtils.isObject(option)) {
                             $.each(option, function(optionName, value) {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
@@ -2426,7 +2427,7 @@ module.exports = {
                     }
 
                     if(dataField) {
-                        if(commonUtils.isString(dataField)) {
+                        if(typeUtils.isString(dataField)) {
                             getter = dataCoreUtils.compileGetter(dataField);
                             calculatedColumnOptions = {
                                 caption: inflector.captionize(dataField),
@@ -2441,10 +2442,10 @@ module.exports = {
                                         parsedValue;
 
                                     if(column.dataType === "number") {
-                                        if(commonUtils.isString(text)) {
+                                        if(typeUtils.isString(text)) {
                                             parsedValue = numberLocalization.parse(text);
 
-                                            if(commonUtils.isNumeric(parsedValue)) {
+                                            if(typeUtils.isNumeric(parsedValue)) {
                                                 result = parsedValue;
                                             }
                                         } else if(isDefined(text)) {
@@ -2490,7 +2491,7 @@ module.exports = {
                         return result;
                     };
 
-                    if(!dataField || !commonUtils.isString(dataField)) {
+                    if(!dataField || !typeUtils.isString(dataField)) {
                         extend(true, calculatedColumnOptions, {
                             allowSorting: false,
                             allowGrouping: false,
@@ -2542,7 +2543,7 @@ module.exports = {
                                     if(commonUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                                         dataSource = dataSource({});
                                     }
-                                    if(commonUtils.isObject(dataSource) || Array.isArray(dataSource)) {
+                                    if(typeUtils.isObject(dataSource) || Array.isArray(dataSource)) {
                                         if(that.valueExpr) {
                                             dataSourceOptions = normalizeDataSourceOptions(dataSource);
                                             dataSourceOptions.paginate = false;

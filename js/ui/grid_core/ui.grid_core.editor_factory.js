@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     compileGetter = require("../../core/utils/data").compileGetter,
     modules = require("./ui.grid_core.modules"),
@@ -183,7 +184,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                 dataSource = dataSource(options.row || {});
             }
 
-            if(commonUtils.isObject(dataSource) || Array.isArray(dataSource)) {
+            if(typeUtils.isObject(dataSource) || Array.isArray(dataSource)) {
                 dataSource = normalizeDataSourceOptions(dataSource);
                 if(isFilterRow) {
                     postProcess = dataSource.postProcess;

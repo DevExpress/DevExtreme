@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     ajax = require("../../core/utils/ajax"),
     dataCoreUtils = require("../../core/utils/data"),
     extend = require("../../core/utils/extend").extend,
@@ -209,7 +210,7 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
         }
 
         if(!dataType && commonUtils.isDefined(value)) {
-            dataType = commonUtils.type(value);
+            dataType = typeUtils.type(value);
         }
 
         items = [{
@@ -263,7 +264,7 @@ exports.setDefaultFieldValueFormatting = function(field) {
             setFieldProperty(field, "format", DATE_INTERVAL_FORMATS[field.groupInterval]);
         }
     } else if(field.dataType === 'number') {
-        var groupInterval = commonUtils.isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
+        var groupInterval = typeUtils.isNumeric(field.groupInterval) && field.groupInterval > 0 && field.groupInterval;
 
         if(groupInterval && !field.customizeText) {
             setFieldProperty(field, "customizeText", function(formatObject) {

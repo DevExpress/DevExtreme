@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     SelectionStrategy = require("./selection.strategy"),
     errors = require("../widget/ui.errors"),
     dataQuery = require("../../data/query");
@@ -16,7 +16,7 @@ module.exports = SelectionStrategy.inherit({
         var d = $.Deferred(),
             that = this,
             key = this.options.key(),
-            select = commonUtils.isString(key) ? [key] : key;
+            select = typeUtils.isString(key) ? [key] : key;
 
         this._loadFilteredData(this.options.selectionFilter, null, select).done(function(items) {
             var keys = items.map(function(item) {
@@ -143,7 +143,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _addFilterOperator: function(selectionFilter, filterOperator) {
-        if(selectionFilter.length > 1 && commonUtils.isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
+        if(selectionFilter.length > 1 && typeUtils.isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
             selectionFilter = [selectionFilter];
         }
         if(selectionFilter.length) {
@@ -153,7 +153,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _denormalizeFilter: function(filter) {
-        if(filter && commonUtils.isString(filter[0])) {
+        if(filter && typeUtils.isString(filter[0])) {
             filter = [filter];
         }
         return filter;

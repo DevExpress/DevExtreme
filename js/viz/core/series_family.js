@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isNumeric = require("../../core/utils/type").isNumeric,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     _math = Math,
@@ -9,7 +9,7 @@ var $ = require("../../core/renderer"),
     _abs = _math.abs,
     _pow = _math.pow,
     _each = $.each,
-    _noop = commonUtils.noop,
+    _noop = require("../../core/utils/common").noop,
     vizUtils = require("./utils"),
     _normalizeEnum = vizUtils.normalizeEnum;
 
@@ -317,7 +317,7 @@ function updateFullStackedSeriesValues(series, stackKeepers) {
         _each(singleSeries.getPoints(), function(index, point) {
             var stackSum = getAbsStackSumByArg(stackKeepers, stackName, point.argument.valueOf());
             point.value = point.value / stackSum;
-            if(commonUtils.isNumeric(point.minValue)) {
+            if(isNumeric(point.minValue)) {
                 point.minValue = point.minValue / stackSum;
             }
         });

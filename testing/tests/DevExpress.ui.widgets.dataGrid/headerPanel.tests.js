@@ -18,6 +18,7 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     devices = require("core/devices"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
     MockColumnsController = dataGridMocks.MockColumnsController;
@@ -195,7 +196,7 @@ QUnit.test('Bounding rect of groupPanel', function(assert) {
 
     //assert
     boundingRect = headerPanel.getBoundingRect();
-    isBoundingCorrect = commonUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top) && commonUtils.isDefined(boundingRect.bottom);
+    isBoundingCorrect = typeUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top) && commonUtils.isDefined(boundingRect.bottom);
     assert.ok(isBoundingCorrect, 'Bounding rect return object with "top" and "bottom" properties when grouping zone is visible');
 });
 

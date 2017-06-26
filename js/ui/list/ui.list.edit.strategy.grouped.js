@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    isNumeric = require("../../core/utils/common").isNumeric,
+    isNumeric = require("../../core/utils/type").isNumeric,
     EditStrategy = require("../collection/ui.collection_widget.edit.strategy.plain");
 
 

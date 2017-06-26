@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
     Class = require("../../core/class"),
-    type = require("../../core/utils/common").type,
+    typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
     Locker = require("../../core/utils/locker"),
     Widget = require("../../ui/widget/ui.widget"),
@@ -15,7 +15,6 @@ var $ = require("../../core/renderer"),
     compileSetter = require("../../core/utils/data").compileSetter,
     compileGetter = require("../../core/utils/data").compileGetter,
     extendFromObject = require("../../core/utils/extend").extendFromObject,
-    isNumeric = require("../../core/utils/common").isNumeric,
     inflector = require("../../core/utils/inflector"),
     errors = require("../../core/errors");
 
@@ -93,7 +92,7 @@ var ComponentBuilder = Class.inherit({
 
         if(options.bindingOptions) {
             $.each(options.bindingOptions, function(key, value) {
-                if(type(value) === 'string') {
+                if(typeUtils.type(value) === 'string') {
                     that._ngOptions.bindingOptions[key] = { dataPath: value };
                 }
             });
@@ -331,7 +330,7 @@ var ComponentBuilder = Class.inherit({
             optionOuterPath;
 
         if(collectionField) {
-            if(!isNumeric(itemIndex)) return;
+            if(!typeUtils.isNumeric(itemIndex)) return;
 
             optionOuterBag.push("[", itemIndex, "]");
         }

@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     utils = require("../../core/utils/common"),
-    isEmptyObject = require("../../core/utils/type").isEmptyObject,
+    typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     isWritableWrapped = require("../../core/utils/variable_wrapper").isWritableWrapped,
     unwrap = require("../../core/utils/variable_wrapper").unwrap,
@@ -165,7 +165,7 @@ var LayoutManager = Widget.inherit({
 
                     customizeItem && customizeItem(item);
 
-                    if(utils.isObject(item) && unwrap(item.visible) !== false) {
+                    if(typeUtils.isObject(item) && unwrap(item.visible) !== false) {
                         processedItems.push(item);
                     }
                 }
@@ -193,7 +193,7 @@ var LayoutManager = Widget.inherit({
             watch = that._getWatch();
 
         items.forEach(function(item) {
-            if(utils.isObject(item) && utils.isDefined(item.visible) && utils.isFunction(watch)) {
+            if(typeUtils.isObject(item) && utils.isDefined(item.visible) && utils.isFunction(watch)) {
                 that._itemWatchers.push(
                     watch(
                         function() {
@@ -242,7 +242,7 @@ var LayoutManager = Widget.inherit({
         if(!utils.isDefined(item.editorType) && utils.isDefined(item.dataField)) {
             var value = this._getDataByField(item.dataField);
 
-            item.editorType = utils.isDefined(value) ? this._getEditorTypeByDataType(utils.type(value)) : FORM_EDITOR_BY_DEFAULT;
+            item.editorType = utils.isDefined(value) ? this._getEditorTypeByDataType(typeUtils.type(value)) : FORM_EDITOR_BY_DEFAULT;
         }
 
         return item;
@@ -941,7 +941,7 @@ var LayoutManager = Widget.inherit({
                 break;
             case "layoutData":
                 if(this.option("items")) {
-                    if(!isEmptyObject(args.value)) {
+                    if(!typeUtils.isEmptyObject(args.value)) {
                         $.each(this._editorInstancesByField, function(name, editor) {
                             var valueGetter = dataUtils.compileGetter(name),
                                 dataValue = valueGetter(args.value);
@@ -1065,7 +1065,7 @@ var LayoutManager = Widget.inherit({
     updateData: function(data, value) {
         var that = this;
 
-        if(utils.isObject(data)) {
+        if(typeUtils.isObject(data)) {
             $.each(data, function(dataField, fieldValue) {
                 that._updateFieldValue(dataField, fieldValue);
             });

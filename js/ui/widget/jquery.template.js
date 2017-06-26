@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     errors = require("../../core/errors"),
-    commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     TemplateBase = require("./ui.template_base"),
     domUtils = require("../../core/utils/dom");
 
@@ -103,7 +103,7 @@ registerTemplateEngine("doT", {
 
 var currentTemplateEngine;
 var setTemplateEngine = function(templateEngine) {
-    if(commonUtils.isString(templateEngine)) {
+    if(typeUtils.isString(templateEngine)) {
         currentTemplateEngine = templateEngines[templateEngine];
         if(!currentTemplateEngine) {
             throw errors.Error("E0020", templateEngine);

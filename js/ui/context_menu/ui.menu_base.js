@@ -471,7 +471,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         var defaultValue = "onClick",
             optionValue = this.option("showSubmenuMode");
 
-        optionValue = commonUtils.isObject(optionValue) ? optionValue.name : optionValue;
+        optionValue = typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
 
         return this._isDesktopDevice() ? optionValue : defaultValue;
     },
@@ -533,7 +533,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             return DEFAULT_DELAY[action];
         }
 
-        return commonUtils.isObject(delay) ? delay[action] : delay;
+        return typeUtils.isObject(delay) ? delay[action] : delay;
     },
 
     //TODO: try to simplify

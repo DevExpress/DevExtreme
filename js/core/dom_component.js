@@ -6,6 +6,7 @@ var $ = require("../core/renderer"),
     errors = require("./errors"),
     windowResizeCallbacks = require("./utils/window").resizeCallbacks,
     commonUtils = require("./utils/common"),
+    typeUtils = require("./utils/type"),
     inArray = require("./utils/array").inArray,
     publicComponentUtils = require("./utils/public_component"),
     Component = require("./component"),
@@ -258,7 +259,7 @@ var DOMComponent = Component.inherit({
         }, nestedComponentOptions(this)));
 
         var instance;
-        if(commonUtils.isString(component)) {
+        if(typeUtils.isString(component)) {
             var $element = $(element)[component](config);
             instance = $element[component]("instance");
         } else if(element) {

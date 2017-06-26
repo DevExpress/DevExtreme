@@ -1,6 +1,7 @@
 "use strict";
 
 var commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
 
     STRING = "string",
     NUMERIC = "numeric",
@@ -18,10 +19,10 @@ var commonUtils = require("../../core/utils/common"),
     _isDefined = commonUtils.isDefined,
     _isFunction = commonUtils.isFunction,
     _isArray = Array.isArray,
-    _isString = commonUtils.isString,
+    _isString = typeUtils.isString,
     _isDate = commonUtils.isDate,
-    _isNumber = commonUtils.isNumeric,
-    _isObject = commonUtils.isObject;
+    _isNumber = typeUtils.isNumeric,
+    _isObject = typeUtils.isObject;
 
 function groupingValues(data, others, valueField, index) {
     if(index >= 0) {

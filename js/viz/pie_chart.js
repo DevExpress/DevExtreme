@@ -5,7 +5,7 @@ var $ = require("../core/renderer"),
     seriesConsts = require("./components/consts"),
     vizUtils = require("./core/utils"),
     extend = require("../core/utils/extend").extend,
-    commonUtils = require("../core/utils/common"),
+    isNumeric = require("../core/utils/type").isNumeric,
     rangeModule = require("./translators/range"),
     registerComponent = require("../core/component_registrator"),
     baseChartModule = require("./chart_components/base_chart"),
@@ -16,7 +16,7 @@ var $ = require("../core/renderer"),
     OPTIONS_FOR_REFRESH_SERIES = ["startAngle", "innerRadius", "segmentsDirection", "type"],
     _extend = extend,
     _each = $.each,
-    _noop = commonUtils.noop,
+    _noop = require("../core/utils/common").noop,
     _getVerticallyShiftedAngularCoords = require("./core/utils").getVerticallyShiftedAngularCoords,
 
     states = seriesConsts.states, NORMAL_STATE = states.normalMark,
@@ -32,7 +32,7 @@ function getLegendItemAction(points) {
 }
 
 function correctPercentValue(value) {
-    if(commonUtils.isNumeric(value)) {
+    if(isNumeric(value)) {
         if(value > 1) {
             value = 1;
         } else if(value < 0) {

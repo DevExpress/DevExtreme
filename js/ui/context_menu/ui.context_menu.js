@@ -45,7 +45,7 @@ var ContextMenu = MenuBase.inherit((function() {
             var result = null,
                 optionValue = that.option("showEvent");
 
-            if(commonUtils.isObject(optionValue)) {
+            if(typeUtils.isObject(optionValue)) {
                 if(optionValue.name !== null) {
                     result = optionValue.name || DEFAULT_SHOW_EVENT;
                 }
@@ -57,7 +57,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
         getShowDelay = function(that) {
             var optionValue = that.option("showEvent");
-            return commonUtils.isObject(optionValue) && optionValue.delay;
+            return typeUtils.isObject(optionValue) && optionValue.delay;
         };
 
     return {

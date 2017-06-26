@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     stringUtils = require("../../core/utils/string"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     clickEvent = require("../../events/click"),
     messageLocalization = require("../../localization/message"),
@@ -48,7 +49,7 @@ var Page = Class.inherit({
             that._$page.text(value);
         } else {
             var text = that._$page.text();
-            if(commonUtils.isNumeric(text)) {
+            if(typeUtils.isNumeric(text)) {
                 return parseInt(text);
             } else {
                 return text;

@@ -60,7 +60,7 @@ function createCaption(field) {
     var caption = field.dataField || field.groupName || "",
         summaryType = (field.summaryType || "").toLowerCase();
 
-    if(commonUtils.isString(field.groupInterval)) {
+    if(typeUtils.isString(field.groupInterval)) {
         caption += "_" + field.groupInterval;
     }
 
@@ -363,7 +363,7 @@ module.exports = Class.inherit((function() {
 
     function getFieldsByGroup(fields, groupingField) {
         return $.map(fields, function(field) {
-            if(field.groupName === groupingField.groupName && commonUtils.isNumeric(field.groupIndex) && field.visible !== false) {
+            if(field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false) {
                 return extend(field, {
                     areaIndex: groupingField.areaIndex,
                     area: groupingField.area,
@@ -1021,7 +1021,7 @@ module.exports = Class.inherit((function() {
         field: function(id, options) {
             var that = this,
                 fields = that._fields,
-                field = fields && fields[commonUtils.isNumeric(id) ? id : findField(fields, id)],
+                field = fields && fields[typeUtils.isNumeric(id) ? id : findField(fields, id)],
                 levels;
 
             if(field && options) {
@@ -1169,11 +1169,11 @@ module.exports = Class.inherit((function() {
                     dimension = descriptions[descriptionName],
                     groupName = field.groupName;
 
-                if(groupName && !commonUtils.isNumeric(field.groupIndex)) {
+                if(groupName && !typeUtils.isNumeric(field.groupIndex)) {
                     field.levels = getFieldsByGroup(fields, field);
                 }
 
-                if(!dimension || groupName && commonUtils.isNumeric(field.groupIndex) || (field.visible === false && (field.area !== "data" && field.area !== "filter"))) {
+                if(!dimension || groupName && typeUtils.isNumeric(field.groupIndex) || (field.visible === false && (field.area !== "data" && field.area !== "filter"))) {
                     return;
                 }
 

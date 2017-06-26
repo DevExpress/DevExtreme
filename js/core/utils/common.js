@@ -2,38 +2,15 @@
 
 var $ = require("../../core/renderer"),
     config = require("../config"),
-    deferredUtils = require("../../integration/jquery/deferred");
-
-var type = function(object) {
-    var types = {
-            "[object Array]": "array",
-            "[object Date]": "date",
-            "[object Object]": "object",
-            "[object Null]": "null" },
-        typeOfObject = Object.prototype.toString.call(object);
-
-    return typeof object === "object" ?
-            types[typeOfObject] || "object" : typeof object;
-};
+    deferredUtils = require("../../integration/jquery/deferred"),
+    typeUtils = require("./type");
 
 var isDefined = function(object) {
     return (object !== null) && (object !== undefined);
 };
 
-var isString = function(object) {
-    return typeof object === 'string';
-};
-
-var isNumeric = function(object) {
-    return ((typeof object === "number") && isFinite(object) || !isNaN(object - parseFloat(object)));
-};
-
-var isObject = function(object) {
-    return type(object) === 'object';
-};
-
 var isDate = function(object) {
-    return type(object) === 'date';
+    return typeUtils.type(object) === 'date';
 };
 
 var isBoolean = function(object) {
@@ -45,11 +22,11 @@ var isFunction = function(object) {
 };
 
 var isPrimitive = function(value) {
-    return ["object", "array", "function"].indexOf(type(value)) === -1;
+    return ["object", "array", "function"].indexOf(typeUtils.type(value)) === -1;
 };
 
 var isExponential = function(value) {
-    return isNumeric(value) && value.toString().indexOf('e') !== -1;
+    return typeUtils.isNumeric(value) && value.toString().indexOf('e') !== -1;
 };
 
 var isWindow = function(object) {
@@ -248,7 +225,7 @@ var splitQuad = function(raw) {
 };
 
 var normalizeKey = function(id) {
-    var key = isString(id) ? id : id.toString(),
+    var key = typeUtils.isString(id) ? id : id.toString(),
         arr = key.match(/[^a-zA-Z0-9_]/g);
 
     arr && $.each(arr, function(_, sign) {
@@ -310,7 +287,7 @@ var equalByValue = function(object1, object2, deep) {
         return true;
     }
 
-    if(isObject(object1) && isObject(object2)) {
+    if(typeUtils.isObject(object1) && typeUtils.isObject(object2)) {
         return isObjectsEqualByValue(object1, object2, deep);
     } else if(Array.isArray(object1) && Array.isArray(object2)) {
         return isArraysEqualByValue(object1, object2, deep);
@@ -322,7 +299,7 @@ var equalByValue = function(object1, object2, deep) {
 };
 
 var getKeyHash = function(key) {
-    if(isObject(key) || Array.isArray(key)) {
+    if(typeUtils.isObject(key) || Array.isArray(key)) {
         try {
             var keyHash = JSON.stringify(key);
             return keyHash === "{}" ? key : keyHash;
@@ -364,11 +341,7 @@ var grep = function(elements, checkFunction, invert) {
     return result;
 };
 
-exports.type = type;
 exports.isDefined = isDefined;
-exports.isString = isString;
-exports.isNumeric = isNumeric;
-exports.isObject = isObject;
 exports.isDate = isDate;
 exports.isBoolean = isBoolean;
 exports.isFunction = isFunction;

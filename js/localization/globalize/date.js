@@ -566,7 +566,7 @@ var ACCEPTABLE_JSON_FORMAT_PROPERTIES = ["skeleton", "date", "time", "datetime",
 var $ = require("../../core/renderer"),
     Globalize = require("globalize"),
     dateLocalization = require("../date"),
-    isObject = require("../../core/utils/common").isObject,
+    isObject = require("../../core/utils/type").isObject,
     inArray = require("../../core/utils/array").inArray,
     errors = require("../../core/errors");
 

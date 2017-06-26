@@ -5,7 +5,7 @@ var $ = require("../../core/renderer"),
     version = require("../../core/version"),
     _windowResizeCallbacks = require("../../core/utils/window").resizeCallbacks,
     _stringFormat = require("../../core/utils/string").format,
-    _isObject = require("../../core/utils/common").isObject,
+    _isObject = require("../../core/utils/type").isObject,
     extend = require("../../core/utils/extend").extend,
 
     _floor = Math.floor,

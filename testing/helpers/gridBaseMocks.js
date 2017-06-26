@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports = function($, gridCore, columnResizingReordering, domUtils, commonUtils, ArrayStore, nameWidget) {
+module.exports = function($, gridCore, columnResizingReordering, domUtils, commonUtils, typeUtils, ArrayStore, nameWidget) {
     var exports = {};
 
     exports.MockDataController = function(options) {
@@ -416,7 +416,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     if(arguments.length === 1) {
                         return columns[columnIndex];
                     }
-                    if(commonUtils.isString(columnIndex)) {
+                    if(typeUtils.isString(columnIndex)) {
                         if(columnIndex.indexOf("command:") === 0) {
                             var commandName = columnIndex.substr("command:".length);
                             for(i = 0; i < columns.length; i++) {
@@ -431,9 +431,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                                 }
                             }
                         }
-                    } else if(commonUtils.isString(optionName)) {
+                    } else if(typeUtils.isString(optionName)) {
                         columns[columnIndex][optionName] = optionValue;
-                    } else if(commonUtils.isObject(optionName)) {
+                    } else if(typeUtils.isObject(optionName)) {
                         $.each(optionName, function(name, value) {
                             columns[columnIndex][name] = value;
                         });
@@ -845,7 +845,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             var result = that.options,
                 path;
 
-            if(commonUtils.isString(options)) {
+            if(typeUtils.isString(options)) {
                 path = options.split('.');
                 while(result && path.length) {
                     if(arguments.length > 1 && path.length === 1) {
@@ -857,7 +857,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return result;
             }
 
-            if(commonUtils.isObject(options)) {
+            if(typeUtils.isObject(options)) {
                 $.extend(true, that.options, options);
             }
         };
@@ -886,7 +886,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             });
 
             var instance;
-            if(commonUtils.isString(component)) {
+            if(typeUtils.isString(component)) {
                 var $element = $(element)[component](config);
                 instance = $element[component]("instance");
             } else if(element.length) {

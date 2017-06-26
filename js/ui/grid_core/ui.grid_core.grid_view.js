@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     messageLocalization = require("../../localization/message"),
     when = require("../../integration/jquery/deferred").when;
 
@@ -21,7 +22,7 @@ var TABLE_CLASS = "table",
     VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView"];
 
 var isPercentWidth = function(width) {
-    return commonUtils.isString(width) && width.slice(-1) === "%";
+    return typeUtils.isString(width) && width.slice(-1) === "%";
 };
 
 var mergeArraysByMaxValue = function(values1, values2) {

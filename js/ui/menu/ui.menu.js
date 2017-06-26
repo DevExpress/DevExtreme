@@ -502,7 +502,7 @@ var Menu = MenuBase.inherit({
         if(!commonUtils.isDefined(delay)) {
             return DEFAULT_DELAY[delayType];
         } else {
-            return commonUtils.isObject(delay) ? delay[delayType] : delay;
+            return typeUtils.isObject(delay) ? delay[delayType] : delay;
         }
     },
 
@@ -580,7 +580,7 @@ var Menu = MenuBase.inherit({
 
         var optionValue = this.option("showFirstSubmenuMode");
 
-        return commonUtils.isObject(optionValue) ? optionValue.name : optionValue;
+        return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
     },
 
     _moveMainMenuFocus: function(direction) {
