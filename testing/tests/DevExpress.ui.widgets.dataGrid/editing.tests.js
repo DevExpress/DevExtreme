@@ -4892,6 +4892,7 @@ QUnit.testInActiveWindow('Update be called once in cell mode on value change for
     assert.strictEqual($checkBox.length, 1, "has checkBox");
 
     //act
+    that.editCell(0, 0);
     $checkBox.focus().trigger("dxclick");
 
     updateDeferred.resolve();
@@ -5220,6 +5221,45 @@ QUnit.test("Get correct first editable column index when visible option for item
 
     //assert
     assert.equal(editableIndex, 1, "editable index");
+});
+
+//T528580
+QUnit.test("Save edit data when update fails in batch edit mode", function(assert) {
+    //arrange
+    var that = this,
+        deferreds = [],
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing.mode = "batch";
+    that.options.dataSource = {
+        load: function() {
+            return that.array;
+        },
+        update: function(key, value) {
+            var d = $.Deferred();
+            deferreds.push(d);
+            return d.promise();
+        }
+    };
+    that.dataController.init();
+    rowsView.render($testElement);
+
+    that.cellValue(0, 0, "Test1");
+    that.cellValue(1, 0, "Test2");
+    that.saveEditData();
+
+    //assert
+    assert.strictEqual(deferreds.length, 2, "count of deferred updates");
+
+    //act
+    deferreds[1].reject();
+    deferreds[0].resolve();
+
+    //assert
+    assert.deepEqual(that.editingController._editData.length, 1, "count of edit data");
+    assert.deepEqual(that.editingController._editData[0].data, { name: "Test2" }, "new data");
+    assert.deepEqual(that.editingController._editData[0].oldData, that.array[1], "old data");
 });
 
 if(device.ios || device.android) {
