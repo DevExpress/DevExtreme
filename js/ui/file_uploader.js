@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
+    objectUtils = require("../core/utils/object"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     Editor = require("./editor/editor"),
@@ -443,6 +444,10 @@ var FileUploader = Editor.inherit({
         var fileName = this._$fileInput.val().replace(/^.*\\/, ''),
             files = this._$fileInput.prop("files");
 
+        if(this.option("uploadMode") === "useForm") {
+            files = objectUtils.deepExtendArraySafe([], files);
+            this.reset();
+        }
         if(files && !files.length) {
             return;
         }
