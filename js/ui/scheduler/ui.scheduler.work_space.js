@@ -824,8 +824,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         var headerPanelHeight = this.getHeaderPanelHeight(),
             headerHeight = this.invoke("getHeaderHeight"),
-            allDayPanelIsHidden = this._$allDayTitle && !this._$allDayTitle.is(":visible"),
-            allDayPanelHeight = this.getAllDayHeight() + (allDayPanelIsHidden ? 0 : CELL_BORDER);
+            allDayPanelHeight = this.getAllDayHeight() + (this.supportAllDayRow() ? CELL_BORDER : 0);
 
         headerPanelHeight && this._dateTableScrollable.element().css({
             "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
