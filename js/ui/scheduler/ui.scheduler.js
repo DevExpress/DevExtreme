@@ -1423,6 +1423,7 @@ var Scheduler = Widget.inherit({
                 appointmentsToRepaint = result;
             this._filteredItems = this.fire("prerenderFilter");
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
+            this._workSpace.headerPanelOffsetRecalculate();
 
             if(isAgenda) {
                 this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"), true);
