@@ -207,6 +207,17 @@ QUnit.test("selected files should be rendered in container", function(assert) {
     assert.equal($filesContainer.find("." + FILEUPLOADER_FILE_CLASS).length, 2, "number of files is correct");
 });
 
+QUnit.test("selected files should be rendered in container, uploadMethod = useForm", function(assert) {
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: true,
+            uploadMode: "useForm"
+        }),
+        $filesContainer = $fileUploader.find("." + FILEUPLOADER_FILES_CONTAINER_CLASS);
+
+    simulateFileChoose($fileUploader, [fakeFile, fakeFile1]);
+    assert.equal($filesContainer.find("." + FILEUPLOADER_FILE_CLASS).length, 2, "number of files is correct");
+});
+
 QUnit.test("files should contain file name and file size", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader();
 
@@ -804,7 +815,9 @@ QUnit.test("widget input should get the 'name' attribute with a correct value", 
 QUnit.module("option change", moduleConfig);
 
 QUnit.test("file input should not be rerendered if widget repainted", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader();
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+        uploadMode: "instantly"
+    });
 
     simulateFileChoose($fileUploader, fakeFile);
     $fileUploader.dxFileUploader("repaint");
