@@ -1621,6 +1621,59 @@ QUnit.test("Edit form. Editors of hidden columns are visible", function(assert) 
     assert.notOk($formItemElements.last().hasClass("dx-datagrid-hidden-column"), "editor is visible");
 });
 
+//T529028
+QUnit.test("Edit popup form. Check that adaptive form is hidden when adding row", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(200);
+    this.options = {
+        editing: {
+            mode: "popup",
+            allowUpdating: true,
+            texts: {
+                editRow: "Edit"
+            }
+        }
+    };
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.editingController.addRow();
+
+    //assert
+    assert.strictEqual($("#container").find(".dx-adaptive-detail-row").length, 0, "hasn't adaptive detail row");
+});
+
+//T529028
+QUnit.test("Edit popup form. Check that adaptive form is hidden when editing row", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(200);
+    this.options = {
+        editing: {
+            mode: "popup",
+            allowUpdating: true,
+            texts: {
+                editRow: "Edit"
+            }
+        }
+    };
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.editingController.editRow(0);
+    this.editingController.cancelEditData();
+
+    //assert
+    assert.strictEqual($("#container").find(".dx-adaptive-detail-row").length, 0, "hasn't adaptive detail row");
+});
+
 QUnit.test("Edit row", function(assert) {
     //arrange
     $(".dx-datagrid").width(400);
