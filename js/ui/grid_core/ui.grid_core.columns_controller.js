@@ -11,8 +11,8 @@ var $ = require("../../core/renderer"),
     isDefined = commonUtils.isDefined,
     objectUtils = require("../../core/utils/object"),
     errors = require("../widget/ui.errors"),
-    modules = require("../grid_core/ui.grid_core.modules"),
-    gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
+    modules = require("./ui.grid_core.modules"),
+    gridCoreUtils = require("./ui.grid_core.utils"),
     normalizeSortingInfo = gridCoreUtils.normalizeSortingInfo,
     equalSortParameters = gridCoreUtils.equalSortParameters,
     normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
@@ -174,7 +174,7 @@ module.exports = {
              * @publicName dataType
              * @type string
              * @default undefined
-             * @acceptValues "string" | "number" | "date" | "boolean" | "object"
+             * @acceptValues "string" | "number" | "date" | "datetime" | "boolean" | "object"
              */
             /**
              * @name GridBaseOptions_columns_validationRules
@@ -191,9 +191,10 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_setCellValue
              * @publicName setCellValue
-             * @type function(rowData, value)
-             * @type_function_param1 rowData:object
+             * @type function(newData, value, currentRowData)
+             * @type_function_param1 newData:object
              * @type_function_param2 value:any
+             * @type_function_param3 currentRowData:object
              */
             /**
              * @name GridBaseOptions_columns_calculateDisplayValue
@@ -569,7 +570,8 @@ module.exports = {
                 DATATYPE_OPERATIONS = {
                     "number": ["=", "<>", "<", ">", "<=", ">=", "between"],
                     "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
-                    "date": ["=", "<>", "<", ">", "<=", ">=", "between"]
+                    "date": ["=", "<>", "<", ">", "<=", ">=", "between"],
+                    "datetime": ["=", "<>", "<", ">", "<=", ">=", "between"]
                 },
                 COLUMN_INDEX_OPTIONS = {
                     visibleIndex: true,
@@ -631,22 +633,34 @@ module.exports = {
                 return result;
             };
 
-            var getParentBandColumns = function(columnIndex, columns) {
+            var getParentBandColumns = function(columnIndex, columnParentByIndex) {
                 var result = [],
-                    columnID = columns[columnIndex].ownerBand;
+                    parent = columnParentByIndex[columnIndex];
 
-                if(isDefined(columnID)) {
-                    $.each(columns, function(index, column) {
-                        if(column.index === columnID) {
-                            result.unshift(column);
+                while(parent) {
+                    result.push(parent);
+                    columnIndex = parent.index;
+                    parent = columnParentByIndex[columnIndex];
+                }
 
-                            if(isDefined(column.ownerBand)) {
-                                result = getParentBandColumns(index, columns).concat(result);
-                            } else {
-                                return false;
+                return result;
+            };
+
+            var getChildrenByBandColumn = function(columnIndex, columnChildrenByIndex, recursive) {
+                var column,
+                    result = [],
+                    children = columnChildrenByIndex[columnIndex];
+
+                if(children) {
+                    for(var i = 0; i < children.length; i++) {
+                        column = children[i];
+                        if(!isDefined(column.groupIndex) || column.showWhenGrouped) {
+                            result.push(column);
+                            if(recursive && column.isBand) {
+                                result = result.concat(getChildrenByBandColumn(column.index, columnChildrenByIndex, recursive));
                             }
                         }
-                    });
+                    }
                 }
 
                 return result;
@@ -670,29 +684,26 @@ module.exports = {
                 return result;
             };
 
-            var calculateColspan = function(that, columnID, columns) {
-                var colspan = 0;
-
-                columns = columns || that.getChildrenByBandColumn(columnID);
+            var calculateColspan = function(that, columnID) {
+                var colspan = 0,
+                    columns = that.getChildrenByBandColumn(columnID, true);
 
                 $.each(columns, function(_, column) {
-                    if(column.visible && column.ownerBand === columnID) {
-                        if(column.isBand) {
-                            colspan += calculateColspan(that, column.index, columns);
-                        } else {
-                            colspan += 1;
-                        }
+                    if(column.isBand) {
+                        column.colspan = column.colspan || calculateColspan(that, column.index);
+                        colspan += column.colspan;
+                    } else {
+                        colspan += 1;
                     }
                 });
 
                 return colspan;
             };
 
-            var processBandColumns = function(that, columns) {
+            var processBandColumns = function(that, columns, bandColumnsCache) {
                 var i,
                     column,
                     rowspan,
-                    colspan,
                     rowCount = that.getRowCount();
 
                 for(i = 0; i < columns.length; i++) {
@@ -700,11 +711,10 @@ module.exports = {
 
                     if(column.visible || column.command) {
                         if(column.isBand) {
-                            colspan = calculateColspan(that, column.index);
-                            column.colspan = colspan;
+                            column.colspan = column.colspan || calculateColspan(that, column.index);
                         }
                         if(!column.isBand || !column.colspan) {
-                            rowspan = rowCount - (!column.command && !isDefined(column.groupIndex) ? getParentBandColumns(i, columns).length : 0);
+                            rowspan = rowCount - (!column.command && !isDefined(column.groupIndex) ? getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex).length : 0);
                             if(rowspan > 1) {
                                 column.rowspan = rowspan;
                             }
@@ -724,6 +734,7 @@ module.exports = {
             var getSerializationFormat = function(dataType, value) {
                 switch(dataType) {
                     case "date":
+                    case "datetime":
                         return dateSerialization.getDateSerializationFormat(value);
                     case "number":
                         if(commonUtils.isString(value)) {
@@ -738,7 +749,7 @@ module.exports = {
 
             var updateSerializers = function(options, dataType) {
                 if(!options.deserializeValue) {
-                    if(dataType === "date") {
+                    if(gridCoreUtils.isDateType(dataType)) {
                         options.deserializeValue = function(value) {
                             return dateSerialization.deserializeDate(value);
                         };
@@ -852,11 +863,12 @@ module.exports = {
                     bandColumnIndex,
                     parentBandColumns,
                     bandColumns = {},
-                    columns = [];
+                    columns = [],
+                    bandColumnsCache = that.getBandColumnsCache();
 
                 for(i = 0; i < that._columns.length; i++) {
                     column = that._columns[i];
-                    parentBandColumns = getParentBandColumns(i, that._columns);
+                    parentBandColumns = getParentBandColumns(i, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns.length) {
                         bandColumnIndex = parentBandColumns[parentBandColumns.length - 1].index;
@@ -1005,6 +1017,7 @@ module.exports = {
                 that._visibleColumns = undefined;
                 that._fixedColumns = undefined;
                 that._rowCount = undefined;
+                that._bandColumnsCache = undefined;
             };
 
             var assignColumns = function(that, columns) {
@@ -1163,37 +1176,17 @@ module.exports = {
                 return result;
             };
 
-            var isChildrenColumnVisibleInHeaders = function(that, columnID) {
-                var result;
-
-                $.each(that.getChildrenByBandColumn(columnID), function(_, column) {
-                    if(column.visible) {
-                        if(column.isBand) {
-                            result = isChildrenColumnVisibleInHeaders(that, column.index);
-                        } else if(column.ownerBand === columnID) {
-                            result = true;
-                        }
-                    }
-                    return !result;
-                });
-
-                return result;
-            };
-
             var getRowCount = function(that, level, bandColumnIndex) {
-                var rowCount,
-                    visibleInHeaders;
+                var rowCount = 1,
+                    bandColumnsCache = that.getBandColumnsCache(),
+                    columnParentByIndex = bandColumnsCache.columnParentByIndex;
 
-                level = level || 1;
-                rowCount = level;
+                that._columns.forEach(function(column) {
+                    var parents = getParentBandColumns(column.index, columnParentByIndex),
+                        invisibleParents = parents.filter(function(column) { return !column.visible; });
 
-                $.each(that._columns, function(_, column) {
-                    if(column.isBand && column.visible && column.ownerBand === bandColumnIndex) {
-                        visibleInHeaders = isChildrenColumnVisibleInHeaders(that, column.index);
-
-                        if(visibleInHeaders) {
-                            rowCount = Math.max(rowCount, getRowCount(that, level + 1, column.index));
-                        }
+                    if(column.visible && !invisibleParents.length) {
+                        rowCount = Math.max(rowCount, parents.length + 1);
                     }
                 });
 
@@ -1586,7 +1579,42 @@ module.exports = {
 
                     return expandColumns;
                 },
+                getBandColumnsCache: function() {
+                    if(!this._bandColumnsCache) {
+                        var columns = this._columns,
+                            columnChildrenByIndex = {},
+                            columnParentByIndex = {};
 
+                        columns.forEach(function(column) {
+                            var parentIndex = column.ownerBand,
+                                parent = columns[parentIndex];
+
+                            if(column.colspan) {
+                                column.colspan = undefined;
+                            }
+
+                            if(column.rowspan) {
+                                column.rowspan = undefined;
+                            }
+
+                            if(parent) {
+                                columnParentByIndex[column.index] = parent;
+                            } else {
+                                parentIndex = -1;
+                            }
+
+                            columnChildrenByIndex[parentIndex] = columnChildrenByIndex[parentIndex] || [];
+                            columnChildrenByIndex[parentIndex].push(column);
+                        });
+
+                        this._bandColumnsCache = {
+                            columnChildrenByIndex: columnChildrenByIndex,
+                            columnParentByIndex: columnParentByIndex
+                        };
+                    }
+
+                    return this._bandColumnsCache;
+                },
                 _getVisibleColumnsCore: function() {
                     var that = this,
                         i,
@@ -1601,9 +1629,10 @@ module.exports = {
                         isFixedToEnd,
                         rtlEnabled = that.option("rtlEnabled"),
                         columns = extend(true, [], that._columns.length ? that._commandColumns.concat(that._columns) : []),
+                        bandColumnsCache = that.getBandColumnsCache(),
                         columnDigitsCount = digitsCount(columns.length);
 
-                    processBandColumns(that, columns);
+                    processBandColumns(that, columns, bandColumnsCache);
 
                     for(i = 0; i < rowCount; i++) {
                         result[i] = [];
@@ -1616,7 +1645,7 @@ module.exports = {
                             rowIndex,
                             visibleIndex = column.visibleIndex,
                             indexedColumns,
-                            parentBandColumns = getParentBandColumns(index, columns),
+                            parentBandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex),
                             visible = column.visible && that.isParentColumnVisible(column.index);
 
                         if(visible && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
@@ -1960,10 +1989,10 @@ module.exports = {
                             valueDataType,
                             lookup = column.lookup;
 
-                        if(column.dataType === "date" && column.serializationFormat === undefined) {
+                        if(gridCoreUtils.isDateType(column.dataType) && column.serializationFormat === undefined) {
                             column.serializationFormat = dateSerializationFormat;
                         }
-                        if(lookup && lookup.dataType === "date" && column.serializationFormat === undefined) {
+                        if(lookup && gridCoreUtils.isDateType(lookup.dataType) && column.serializationFormat === undefined) {
                             lookup.serializationFormat = dateSerializationFormat;
                         }
 
@@ -2035,7 +2064,6 @@ module.exports = {
                         groupParameters = dataSource ? dataSource.group() || [] : that.getGroupDataSourceParameters();
 
                         that._customizeColumns(that._columns);
-
                         updateIndexes(that);
 
                         return when(that.refresh(true)).always(function() {
@@ -2428,7 +2456,7 @@ module.exports = {
                                         } else if(text === column.falseText) {
                                             result = false;
                                         }
-                                    } else if(column.dataType === "date") {
+                                    } else if(gridCoreUtils.isDateType(column.dataType)) {
                                         parsedValue = dateLocalization.parse(text, column.format);
                                         if(parsedValue) {
                                             result = parsedValue;
@@ -2555,25 +2583,31 @@ module.exports = {
                     return this._rowCount;
                 },
                 getRowIndex: function(columnIndex, alwaysGetRowIndex) {
-                    var column = this._columns[columnIndex];
+                    var column = this._columns[columnIndex],
+                        bandColumnsCache = this.getBandColumnsCache();
 
-                    return column && (alwaysGetRowIndex || column.visible && !(column.command || isDefined(column.groupIndex))) ? getParentBandColumns(columnIndex, this._columns).length : 0;
+                    return column && (alwaysGetRowIndex || column.visible && !(column.command || isDefined(column.groupIndex))) ? getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex).length : 0;
                 },
-                getChildrenByBandColumn: function(bandColumnIndex, rowIndex) {
-                    var that = this;
+                getChildrenByBandColumn: function(bandColumnIndex, onlyVisibleDirectChildren) {
+                    var that = this,
+                        bandColumnsCache = that.getBandColumnsCache(),
+                        result = getChildrenByBandColumn(bandColumnIndex, bandColumnsCache.columnChildrenByIndex, !onlyVisibleDirectChildren);
 
-                    if(isDefined(rowIndex)) {
-                        return commonUtils.grep(that.getVisibleColumns(rowIndex), function(column) { return column.ownerBand === bandColumnIndex && !column.command; });
-                    } else {
-                        return that._columns.filter(function(column) {
-                            return ((!isDefined(column.groupIndex) || column.showWhenGrouped) && that.isParentBandColumn(column.index, bandColumnIndex));
-                        });
+                    if(onlyVisibleDirectChildren) {
+                        return result
+                            .filter(function(column) { return column.visible && !column.command; })
+                            .sort(function(column1, column2) {
+                                return column1.visibleIndex - column2.visibleIndex;
+                            });
                     }
+
+                    return result;
                 },
                 isParentBandColumn: function(columnIndex, bandColumnIndex) {
                     var result = false,
                         column = this._columns[columnIndex],
-                        parentBandColumns = column && getParentBandColumns(columnIndex, this._columns);
+                        bandColumnsCache = this.getBandColumnsCache(),
+                        parentBandColumns = column && getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns) { // T416483 - fix for jquery 2.1.4
                         $.each(parentBandColumns, function(_, bandColumn) {
@@ -2588,7 +2622,8 @@ module.exports = {
                 },
                 isParentColumnVisible: function(columnIndex) {
                     var result = true,
-                        bandColumns = columnIndex >= 0 && getParentBandColumns(columnIndex, this._columns);
+                        bandColumnsCache = this.getBandColumnsCache(),
+                        bandColumns = columnIndex >= 0 && getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
 
                     bandColumns && $.each(bandColumns, function(_, bandColumn) {
                         result = result && bandColumn.visible;

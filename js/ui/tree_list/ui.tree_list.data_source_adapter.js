@@ -111,7 +111,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             var that = this,
                 rootValue = that.option("rootValue"),
                 visibleByKey = {},
-                nodeByKey = {},
+                nodeByKey = that._nodeByKey = {},
                 i;
 
             if(visibleItems) {
@@ -458,6 +458,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 this._parentIdSetter = this.createParentIdSetter();
             }
 
+            this._nodeByKey = {};
             this._hasItemsMap = {};
             this._totalItemsCount = 0;
             this.createAction("onNodesInitialized");
@@ -511,6 +512,12 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         changeRowExpand: function(key) {
             this._changeRowExpandCore(key);
             return this._isNodesInitializing ? $.Deferred().resolve() : this.load();
+        },
+
+        getNodeByKey: function(key) {
+            if(this._nodeByKey) {
+                return this._nodeByKey[key];
+            }
         }
     };
 })());

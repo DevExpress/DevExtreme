@@ -879,7 +879,7 @@ function setupModules(that, modulesOptions) {
         { caption: 'Column 4', visible: true, allowEditing: true, dataField: "Column4", setCellValue: defaultSetCellValue }
     ];
 
-    that.options = $.extend(true, {}, that.options, {
+    that.options = $.extend(true, { tabIndex: 0 }, that.options, {
         useKeyboard: true,
         showColumnHeaders: true,
         editing: {}
@@ -2038,25 +2038,24 @@ QUnit.testInActiveWindow("Focus next cell after tab on last form button", functi
     //act
     this.focusCell(0, 1);
     this.triggerKeyDown("enter");
-
     this.clock.tick();
 
     assert.equal(testElement.find(".dx-datagrid-edit-form").length, 1, "editForm exists");
 
-
     testElement.find(".dx-button").last().focus();
-
     this.clock.tick();
 
     this.triggerKeyDown("tab", false, false, testElement.find(":focus").get(0));
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
     var $nextCell = testElement.find(".dx-data-row").eq(1).children().eq(0);
+
     assert.equal($nextCell.attr("tabindex"), "0");
+
     if(device.deviceType === "desktop") {
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
         assert.equal(testElement.find("[tabIndex]").index(testElement.find(":focus")) + 1, testElement.find("[tabIndex]").index($nextCell), "next focusable element");
     }
 });
@@ -2107,8 +2106,43 @@ QUnit.testInActiveWindow("Navigation using tab inside edit form in the first row
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, "column index");
+    assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 1, "column index");
     assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, "row index");
+});
+
+QUnit.testInActiveWindow("Focused view must be initialized after insert a new row", function(assert) {
+    //arrange
+    this.options = {
+        errorRowEnabled: true,
+        editing: {
+            mode: 'form',
+            allowAdding: true,
+            allowUpdating: true
+        },
+        commonColumnSettings: {
+            allowEditing: true
+        },
+        columns: this.columns,
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: [
+                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
+                { name: 'Dan', age: 16, lastName: "Skip", phone: "8-800-555-35-35", room: 2 }
+            ]
+        }
+    };
+
+    setupModules(this, { initViews: true });
+    this.gridView.render($('#container'));
+
+    assert.notOk(this.keyboardNavigationController._focusedView, "focused view isn't initialized");
+
+    //act
+    this.addRow();
+    this.clock.tick();
+
+    //assert
+    assert.ok(this.keyboardNavigationController._focusedView, "focused view is initialized");
 });
 
 //T499640
@@ -4200,6 +4234,158 @@ QUnit.testInActiveWindow('Tab index is not applied when focus is located inside 
     assert.ok(!$(".dx-datagrid-edit-form-item[tabindex=\"0\"]").length, "tabIndex is not applied");
 });
 
+QUnit.testInActiveWindow("Add custom tabIndex to focused element after key press", function(assert) {
+    //arrange
+    this.options = {
+        tabIndex: 3
+    };
+
+    setupModules(this);
+
+    //act
+    this.gridView.render($("#container"));
+
+    this.focusFirstCell();
+
+    this.triggerKeyDown("rightArrow");
+
+    //assert
+    assert.equal(this.rowsView.element().find("td").eq(1).attr("tabIndex"), 3, "tabIndex of focused cell");
+});
+
+QUnit.testInActiveWindow("Add custom tabIndex to rowsView on pageDown", function(assert) {
+    //arrange
+    var that = this;
+    var done = assert.async();
+
+    this.options = {
+        height: 200,
+        tabIndex: 4
+    };
+    setupModules(this);
+
+    //act
+    this.gridView.render($("#container"));
+    this.rowsView.height(200);
+    this.rowsView.resize();
+
+    this.focusFirstCell();
+
+    this.clock.restore();
+
+    this.triggerKeyDown("pageDown");
+
+    //assert
+    this.rowsView.getScrollable().on("scroll", function() {
+        setTimeout(function() {
+            assert.equal(that.rowsView.element().attr("tabIndex"), "4", "tabIndex of rowsView");
+            done();
+        });
+    });
+});
+
+QUnit.testInActiveWindow("Add custom tabIndex to cell inside edit form when tab key is pressed", function(assert) {
+    //arrange
+    this.options = {
+        errorRowEnabled: true,
+        editing: {
+            mode: 'form',
+            allowUpdating: true,
+            form: {
+                colCount: 4,
+                customizeItem: function(item) {
+                    if(item.dataField === "name") {
+                        item.cssClass = "test";
+                    }
+                }
+            }
+        },
+        commonColumnSettings: {
+            allowEditing: true
+        },
+        columns: this.columns,
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: [
+                { name: 'Alex', age: 15, lastName: "John", phone: "555555", room: 1 },
+                { name: 'Dan', age: 16, lastName: "Skip", phone: "553355", room: 2 },
+                { name: 'Vadim', age: 17, lastName: "Dog", phone: "225555", room: 3 },
+                { name: 'Dmitry', age: 18, lastName: "Cat", phone: "115555", room: 4 },
+                { name: 'Sergey', age: 18, lastName: "Larry", phone: "550055", room: 5 },
+                { name: 'Kate', age: 20, lastName: "Glock", phone: "501555", room: 6 },
+                { name: 'Dan', age: 21, lastName: "Zikerman", phone: "1228844", room: 7 }
+            ],
+            paginate: true
+        },
+        tabIndex: 3
+    };
+
+    setupModules(this, { initViews: true });
+
+    var testElement = $('#container');
+
+    this.gridView.render(testElement);
+
+    //act
+    this.focusCell(0, 1);
+    this.triggerKeyDown("enter");
+
+    this.clock.tick();
+
+    assert.ok(testElement.find(".test .dx-texteditor.dx-state-focused").length === 1);
+    this.triggerKeyDown("tab", false, false, testElement.find(".test .dx-texteditor.dx-state-focused").get(0));
+    this.clock.tick();
+
+    //assert
+    var $nextCell = testElement.find(".dx-data-row").eq(0).children().eq(0);
+    assert.equal($nextCell.attr("tabIndex"), "3");
+});
+
+QUnit.testInActiveWindow("Add custom tabIndex to first valid cell", function(assert) {
+    //arrange
+    this.options = {
+        tabIndex: 3
+    };
+
+    setupModules(this);
+
+    //act
+    this.gridView.render($("#container"));
+
+    //assert
+    assert.equal(this.rowsView.element().find("td").first().attr("tabIndex"), "3", "tabIndex of first cell");
+});
+
+QUnit.testInActiveWindow("Add custom tabIndex to group row", function(assert) {
+    //arrange
+    this.columns = [
+        { visible: true, command: "expand" },
+        { caption: 'Column 1', visible: true, dataField: "Column1" },
+        { caption: 'Column 2', visible: true, dataField: "Column2" },
+        { caption: 'Column 3', visible: true, dataField: "Column3" }
+    ];
+    this.dataControllerOptions = {
+        items: [
+            { values: ['group test'], rowType: 'group', key: 0 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 2 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 3 },
+            { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 4 }
+        ]
+    };
+
+    this.options = {
+        tabIndex: 3
+    };
+
+    setupModules(this);
+
+    //act
+    this.gridView.render($("#container"));
+
+    //assert
+    assert.equal(this.rowsView.element().find(".dx-group-row").first().attr("tabIndex"), "3", "tabIndex of group row");
+});
+
 QUnit.module("Rows view", {
     beforeEach: function() {
         this.items = [
@@ -4223,7 +4409,8 @@ QUnit.module("Rows view", {
 
             this.options = {
                 disabled: false,
-                useKeyboard: true
+                useKeyboard: true,
+                tabIndex: 0
             };
             this.selectionOptions = {};
 
@@ -4432,4 +4619,18 @@ QUnit.test("Focused state is not applied when element is not cell", function(ass
 
     //assert
     assert.ok(!$element.attr("tabIndex"));
+});
+
+QUnit.test("Apply custom tabIndex to rows view on click", function(assert) {
+    //arrange
+    var rowsView = this.createRowsView(this.items),
+        testElement = $('#container');
+
+    this.options.tabIndex = 5;
+
+    //act
+    rowsView.render(testElement);
+    rowsView.element().find("td").first().trigger(CLICK_EVENT);
+
+    assert.equal(rowsView.element().attr("tabIndex"), 5, "tabIndex of rowsView");
 });

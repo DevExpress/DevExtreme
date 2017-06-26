@@ -1015,7 +1015,11 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         $itemsContainer
             .off("." + EXPAND_EVENT_NAMESPACE, itemSelector)
             .on(expandedEventName, itemSelector, function(e) {
-                that._toggleExpandedState(e.currentTarget, undefined, e);
+                var $nodeElement = $(e.currentTarget.parentNode);
+
+                if(!$nodeElement.hasClass(IS_LEAF)) {
+                    that._toggleExpandedState(e.currentTarget, undefined, e);
+                }
             });
     },
 
@@ -1457,7 +1461,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     _attachClickEvent: function() {
         var that = this,
             clickSelector = "." + this._itemClass(),
-            pointerDownSelector = "." + NODE_CLASS,
+            pointerDownSelector = "." + NODE_CLASS + ", ." + SELECT_ALL_ITEM_CLASS,
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             pointerDownEvent = eventUtils.addNamespace(pointerEvents.down, this.NAME);
 
@@ -1544,9 +1548,9 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        var $target = $(e.target).closest("." + NODE_CLASS);
+        var $target = $(e.target).closest("." + NODE_CLASS + ", ." + SELECT_ALL_ITEM_CLASS);
 
-        if(!$target.hasClass(NODE_CLASS)) {
+        if(!$target.length) {
             return;
         }
 

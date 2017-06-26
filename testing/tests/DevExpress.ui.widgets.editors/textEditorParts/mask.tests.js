@@ -308,15 +308,20 @@ QUnit.test("caret position should be correct after typing", function(assert) {
 });
 
 QUnit.test("arrow keys should not be prevented", function(assert) {
-    var controlKeys = {
-        tab: 9,
-        end: 35,
-        home: 36,
-        leftArrow: 37,
-        upArrow: 38,
-        rightArrow: 39,
-        downArrow: 40
-    };
+    var controlKeys = [
+        "Tab",
+        "End",
+        "Home",
+        "ArrowLeft",
+        "ArrowUp",
+        "ArrowRight",
+        "ArrowDown",
+        //IE9
+        "Left",
+        "Up",
+        "Right",
+        "Down"
+    ];
 
     var isKeyPressPrevented = false;
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -330,9 +335,9 @@ QUnit.test("arrow keys should not be prevented", function(assert) {
         isKeyPressPrevented = e.isDefaultPrevented();
     });
 
-    $.each(controlKeys, function(key, code) {
+    controlKeys.forEach(function(key) {
         isKeyPressPrevented = false;
-        keyboard.triggerEvent("keypress", { keyCode: code });
+        keyboard.triggerEvent("keypress", { key: key });
         assert.equal(isKeyPressPrevented, false, key + " is not prevented");
     });
 });
@@ -351,6 +356,22 @@ QUnit.test("keypress with meta key should not be prevented", function(assert) {
     });
     keyboard.triggerEvent("keypress", { keyCode: 86, metaKey: true });
     assert.equal(isKeyPressPrevented, false, "keypress with meta is not prevented");
+});
+
+QUnit.test("press enter when caret position in the middle of the text", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+        mask: "XX",
+        maskRules: {
+            "X": "x"
+        }
+    });
+
+    var $input = $textEditor.find(".dx-texteditor-input");
+
+    var keyboard = keyboardMock($input, true);
+
+    keyboard.caret(1).type("x").caret(1).keyDown("enter");
+    assert.equal($input.val(), "_x", "second char is still there");
 });
 
 
@@ -629,6 +650,15 @@ QUnit.testInActiveWindow("selection should consider fixed mask letters", functio
     $input.focus();
     assert.equal(keyboard.caret().start, 1, "caret position set before last fixed mask letter");
     assert.equal(keyboard.caret().end, 1, "caret position set before last fixed mask letter");
+});
+
+QUnit.testInActiveWindow("Editor with mask isn't focused after render", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+        mask: "(XX)",
+        focusStateEnabled: true
+    });
+
+    assert.notOk($textEditor.hasClass("dx-state-focused"), "editor isn't focused");
 });
 
 
@@ -953,6 +983,8 @@ QUnit.test("mask should be displayed instead of empty string after clear button 
         instance = $textEditor.dxTextEditor("instance"),
         $input = $textEditor.find(".dx-texteditor-input"),
         $clearButton = $textEditor.find(".dx-clear-button-area");
+
+    caretWorkaround($input);
 
     $input.trigger("focus");
     $clearButton.trigger("dxclick");

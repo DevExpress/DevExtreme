@@ -1794,24 +1794,6 @@ QUnit.test("Adaptive menu is invisible at first", function(assert) {
     assert.ok($itemsContainer.is(":hidden"), "non adaptive items should be hidden");
 });
 
-//TODO: remove this hack after fix it in angular integration
-QUnit.test("Adaptive menu with 'templatesRenderAsynchronously' option should trigger resize event after timeout", function(assert) {
-    var clock = sinon.useFakeTimers();
-
-    new Menu(this.$element, {
-        items: this.items,
-        adaptivityEnabled: true,
-        templatesRenderAsynchronously: true
-    });
-
-    var $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
-
-    assert.ok($itemsContainer.is(":visible"), "non adaptive container is visible yet");
-
-    clock.tick(0);
-    assert.notOk($itemsContainer.is(":visible"), "non adaptive container was hidden after the timeout");
-});
-
 QUnit.test("Adaptive elements should not render if adaptivity is disabled on init", function(assert) {
     new Menu(this.$element, {
         items: this.items,

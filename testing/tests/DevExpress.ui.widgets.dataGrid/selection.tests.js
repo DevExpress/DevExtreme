@@ -334,8 +334,8 @@ QUnit.test("set selectedRows for single selection. Object with the level of embe
     this.selectionController.selectRows({ name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } });
 
     //assert
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', address: { country: { name: "USA", city: { name: "New York" } } } }, { name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } }]);
-    assert.ok(this.dataController.items()[0].isSelected);
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } }]);
+    assert.notOk(this.dataController.items()[0].isSelected);
     assert.ok(this.dataController.items()[1].isSelected);
 });
 
@@ -1351,6 +1351,31 @@ QUnit.test("no selection column when not has columns", function(assert) {
 
     //assert
     assert.ok(!visibleColumns.length, 'not has columns');
+});
+
+QUnit.test("selectRows with big array", function(assert) {
+    //arrange
+    var that = this;
+
+    that.applyOptions({
+        selection: {
+            maxFilterLengthInRequest: 1000
+        }
+    });
+
+    that.array = [];
+    for(var i = 1; i <= 10000; i++) {
+        that.array.push({ id: i, text: "text " + i });
+    }
+
+    that.dataSource = createDataSource(that.array, { key: "id" });
+    that.dataController.setDataSource(that.dataSource);
+    that.dataSource.load();
+
+    //act
+    var keys = that.array.filter(function(data) { return data.id <= 9000; }).map(function(data) { return data.id; });
+    that.selectRows(keys);
+    assert.equal(that.selectionController.getSelectedRowKeys().length, 9000, "selected row keys");
 });
 
 //T441847

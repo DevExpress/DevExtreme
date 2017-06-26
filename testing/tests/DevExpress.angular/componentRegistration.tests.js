@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     config = require("core/config"),
     noop = require("core/utils/common").noop,
+    domUtils = require("core/utils/dom"),
     angular = require("angular"),
     registerComponent = require("core/component_registrator"),
     DOMComponent = require("core/dom_component"),
@@ -1122,6 +1123,31 @@ QUnit.test("Angular component should have 'templatesRenderAsynchronously' option
     assert.ok(instance.option("templatesRenderAsynchronously"), "option should exist");
 });
 
+QUnit.test("Angular component should not fire 'triggerResizeEvent' on 'contentReady' event (T351071)", function(assert) {
+    this.clock = sinon.useFakeTimers();
+
+    var resizeEventSpy = sinon.spy(domUtils, "triggerResizeEvent");
+
+    var $markup = $("<div></div>")
+            .attr("dx-test", "options")
+            .appendTo(this.$controller);
+
+    this.testApp.controller("my-controller", function($scope) {
+        $scope.options = {};
+    });
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    var instance = $markup.data("dxTest");
+    instance.fireEvent("contentReady", {});
+
+    this.clock.tick();
+
+    assert.ok(!resizeEventSpy.called);
+
+    this.clock.restore();
+});
+
 QUnit.test("options with undefined value should be passed correctly", function(assert) {
     var $markup = $("<div></div>")
         .attr("dx-test", "options")
@@ -2038,7 +2064,8 @@ QUnit.test("template.render() - data parameter is Scope", function(assert) {
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            this.scope = this.element().scope().$new();
+            var element = this.element().get(0);
+            this.scope = angular.element(element).scope().$new();
             this.scope.text = this.option("text");
         },
 

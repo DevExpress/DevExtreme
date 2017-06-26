@@ -390,6 +390,8 @@ QUnit.test('Change editorOptions on editorPreparing', function(assert) {
     assert.ok($container.hasClass('dx-numberbox-spin'), 'numberbox render with spin buttons');
 });
 
+var DATAGRID_CHECKBOX_SIZE_CLASS = "dx-datagrid-checkbox-size";
+
 QUnit.test('Boolean editor', function(assert) {
     var $container = $('#container'),
         value = true;
@@ -407,6 +409,7 @@ QUnit.test('Boolean editor', function(assert) {
 
     //assert
     assert.ok(checkBox, 'dxCheckBox created');
+    assert.ok(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox has dx-datagrid-checkbox-size class');
     assert.equal(checkBox.option('value'), true, 'checkbox editor value');
     assert.ok(checkBox.option('hoverStateEnabled'), 'hover enabled');
     assert.ok(checkBox.option('focusStateEnabled'), 'focus enabled');
@@ -417,6 +420,40 @@ QUnit.test('Boolean editor', function(assert) {
 
     //assert
     assert.equal(value, false, 'value after change');
+});
+
+QUnit.test('Boolean editor when inOnForm is true', function(assert) {
+    var $container = $('#container'),
+        value = true;
+
+    this.editorFactoryController.createEditor($container, {
+        dataType: 'boolean',
+        isOnForm: true,
+        value: value
+    });
+    //act
+    var checkBox = $container.dxCheckBox('instance');
+
+
+    //assert
+    assert.ok(checkBox, 'dxCheckBox created');
+    assert.notOk(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox not have dx-datagrid-checkbox-size class');
+});
+
+QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
+    var $container = $('#container');
+
+    this.editorFactoryController.option("tabIndex", 7);
+
+    this.editorFactoryController.createEditor($container, {
+        dataType: 'boolean'
+    });
+
+    //act
+    var checkBox = $container.dxCheckBox('instance');
+
+    //assert
+    assert.equal(checkBox.element().attr("tabIndex"), "7", "tabIndex attr of checkBox");
 });
 
 QUnit.test('Boolean editor with null value should be intermediate', function(assert) {
@@ -464,6 +501,24 @@ QUnit.test('Date editor', function(assert) {
     //assert
     assert.equal(editor.option('displayFormat'), 'shortDate', 'Widget format is correct');
     assert.deepEqual(value, new Date(2013), 'value after change');
+});
+
+QUnit.test("DateTime editor", function(assert) {
+    //arrange
+    var editor,
+        $container = $("#container");
+
+    //act
+    this.editorFactoryController.createEditor($container, {
+        dataType: "datetime",
+        format: "shortDateShortTime"
+    });
+
+    //assert
+    editor = $container.data("dxDateBox");
+    assert.ok(editor, "has editor");
+    assert.equal(editor.option("type"), "datetime", "editor type");
+    assert.equal(editor.option("displayFormat"), "shortDateShortTime", "display format of the editor");
 });
 
 //T219884

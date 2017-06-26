@@ -1009,6 +1009,33 @@ var checkTwoGroups = function(assert, series) {
         });
     });
 
+    QUnit.test("hover and selection point size inherit normal size", function(assert) {
+        var series = createSeries({
+            type: seriesType,
+            point: {
+                size: 5,
+                hoverStyle: {
+                    border: {
+                        visible: false,
+                    }
+                },
+                selectionStyle: {
+                    border: {
+                        visible: true,
+                        width: 2
+                    }
+                }
+            }
+        });
+
+        series.updateData(this.data);
+
+        var pointStyles = this.createPoint.firstCall.args[2].styles;
+
+        assert.strictEqual(pointStyles.hover.r, 2.5, "hover style without border");
+        assert.strictEqual(pointStyles.selection.r, 3.5, "selection style with border");
+    });
+
     QUnit.test("Label style", function(assert) {
         var series = createSeries({
             type: seriesType,

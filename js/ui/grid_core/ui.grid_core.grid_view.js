@@ -41,6 +41,14 @@ var mergeArraysByMaxValue = function(values1, values2) {
     return result;
 };
 
+var getContainerHeight = function($container) {
+    var clientHeight = $container.get(0).clientHeight,
+        paddingTop = parseFloat($container.css("paddingTop")),
+        paddingBottom = parseFloat($container.css("paddingBottom"));
+
+    return clientHeight - paddingTop - paddingBottom;
+};
+
 var ResizingController = modules.ViewController.inherit({
     _initPostRenderHandlers: function() {
         var that = this;
@@ -179,7 +187,7 @@ var ResizingController = modules.ViewController.inherit({
                 if(this.width !== "auto") {
                     if(this.width) {
                         resultWidths[index] = this.width;
-                    } else if(!columnAutoWidth && !hasMinWidth) {
+                    } else if(!columnAutoWidth && !this.minWidth) {
                         resultWidths[index] = undefined;
                     }
                 }
@@ -330,7 +338,7 @@ var ResizingController = modules.ViewController.inherit({
                 $groupElement.detach();
             }
 
-            that._hasHeight = !!$rootElement.height();
+            that._hasHeight = !!getContainerHeight($rootElement);
 
             width = $rootElement.width();
             $rootElement.addClass(importantMarginClass);

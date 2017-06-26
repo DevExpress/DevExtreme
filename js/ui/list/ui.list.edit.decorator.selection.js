@@ -68,9 +68,8 @@ registerDecorator(
             var $itemElement = config.$itemElement,
                 control = this._controlWidget.getInstance($itemElement.find("." + this._controlClass));
 
-            $itemElement.on("stateChanged", (function() {
-                control.option("value", this._isSelected($itemElement));
-                this._updateSelectAllState();
+            $itemElement.on("stateChanged", (function(e, state) {
+                control.option("value", state);
             }).bind(this));
         },
 

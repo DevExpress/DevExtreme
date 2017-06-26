@@ -35,7 +35,7 @@ var COLLECTION_CLASS = "dx-collection",
     EMPTY_COLLECTION = "dx-empty-collection",
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
-    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+(\w+)$/;
+    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w\.]+)$/;
 
 var FOCUS_UP = "up",
     FOCUS_DOWN = "down",
@@ -297,7 +297,7 @@ var CollectionWidget = Widget.inherit({
         var items = $.map($items, (function(item) {
             var $item = $(item);
             var result = domUtils.getElementOptions(item).dxItem;
-            var isTemplateRequired = $.trim($item.html()) && !result.template;
+            var isTemplateRequired = $item.html().trim() && !result.template;
 
             if(isTemplateRequired) {
                 result.template = this._prepareItemTemplate($item);

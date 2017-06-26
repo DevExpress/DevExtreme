@@ -97,6 +97,15 @@ QUnit.test("Initialize from options with invisible columns", function(assert) {
     assert.deepEqual(this.dataController.items()[1].values, ['Dan', '98-75-21']);
 });
 
+QUnit.test("Initialize array with keyExpr option", function(assert) {
+    //act
+    this.applyOptions({ keyExpr: "id", dataSource: [] });
+    this.dataController.optionChanged({ name: "keyExpr" });
+
+    //assert
+    assert.equal(this.getDataSource().store().key(), "id", "keyExpr is assigned to store");
+});
+
 QUnit.test("changed on initialize", function(assert) {
     var changedCount = 0;
     var lastArgs;
@@ -5405,6 +5414,68 @@ QUnit.test("Inserting Row", function(assert) {
     assert.equal(this.dataController.items()[1].dataIndex, 0);
 });
 
+//T521968
+QUnit.test("Inserting several rows for cell editing mode", function(assert) {
+    var array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+
+    this.options.editing = {
+        mode: "cell",
+        allowAdding: true
+    };
+
+    var dataSource = createDataSource(array, { key: 'name' });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    //act
+    this.addRow();
+    this.addRow();
+
+    //assert
+    var items = this.dataController.items();
+
+    assert.equal(items.length, 4, "two rows are added");
+
+    assert.deepEqual(items[0].data, {}, "row 0 data");
+    assert.ok(items[0].inserted, "row 0 is inserted");
+    assert.deepEqual(items[1].data, array[0], "row 1 data");
+    assert.deepEqual(items[2].data, array[1], "row 2 data");
+    assert.notOk(items[3].inserted, "row 3 is saved");
+});
+
+QUnit.test("Inserting several rows for row editing mode", function(assert) {
+    var array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+
+    this.options.editing = {
+        mode: "row",
+        allowAdding: true
+    };
+
+    var dataSource = createDataSource(array, { key: 'name' });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    //act
+    this.addRow();
+    this.addRow();
+
+    //assert
+    var items = this.dataController.items();
+    assert.equal(items.length, 3, "only one row is added");
+
+    assert.deepEqual(items[0].data, {}, "row 1 data");
+    assert.deepEqual(items[1].data, array[0], "row 1 data");
+    assert.deepEqual(items[2].data, array[1], "row 2 data");
+});
+
 //T327787, T333894
 QUnit.test("Inserting Row for grouped data", function(assert) {
     var array = [
@@ -7266,6 +7337,46 @@ QUnit.test("group sorting by summary", function(assert) {
                 { name: 'Alex', age: 15 },
                 { name: 'Alex', age: 25 }
             ]
+        },
+        sortByGroupSummaryInfo: [{
+            summaryItem: 'count'
+        }],
+        summary: {
+            groupItems: [{
+                summaryType: 'count'
+            }]
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    //assert
+    assert.ok(!this.dataController.isLoading());
+    assert.strictEqual(this.dataController.items().length, 3);
+    assert.deepEqual(this.dataController.items()[0].data.key, 'Dan');
+    assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 1);
+    assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
+    assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+    assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
+    assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+});
+
+//T526028
+QUnit.test("group sorting by summary if remoteOperations option is enabled", function(assert) {
+    this.options = {
+        columns: ['name', 'age'],
+        remoteOperations: true,
+        dataSource: {
+            group: 'name',
+            load: function(options) {
+                return $.Deferred().resolve([
+                    { key: "Dan", summary: [1], items: null, count: 1 },
+                    { key: "Sam", summary: [3], items: null, count: 3 },
+                    { key: "Alex", summary: [2], items: null, count: 2 },
+                ]);
+            }
         },
         sortByGroupSummaryInfo: [{
             summaryItem: 'count'

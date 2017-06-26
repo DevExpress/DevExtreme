@@ -540,6 +540,20 @@ QUnit.testStart(function() {
         assert.equal(coords.left, position.left, "Cell coordinates are right");
     });
 
+    QUnit.test("Workspace should find cell coordinates by date with second precision", function(assert) {
+        var $element = this.instance.element();
+
+        this.instance.option("currentDate", new Date(2017, 5, 16));
+        this.instance.option("hoursInterval", 1);
+
+        var coords = this.instance.getCoordinatesByDate(new Date(2017, 5, 16, 1, 1, 30)),
+            $cell = $element.find(".dx-scheduler-date-table tbody td").eq(1),
+            top = $cell.position().top + (1.5 / 60) * $cell.outerHeight();
+
+        assert.equal(coords.top, top, "Cell coordinates are right");
+        assert.equal(coords.left, $cell.position().left, "Cell coordinates are right");
+    });
+
     QUnit.test("Work space should find cell coordinates by date depend on start day hour", function(assert) {
         var $element = this.instance.element();
 

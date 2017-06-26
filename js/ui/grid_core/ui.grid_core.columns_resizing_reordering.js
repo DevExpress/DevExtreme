@@ -572,10 +572,12 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     _pointCreated: function(point, cellsLength, columns) {
         var currentColumn,
             isNextColumnMode = isNextColumnResizingMode(this),
+            rtlEnabled = this.option("rtlEnabled"),
+            firstPointColumnIndex = !isNextColumnMode && rtlEnabled ? 0 : 1,
             nextColumn;
 
-        if(point.index > 0 && point.index < cellsLength + (isNextColumnMode ? 0 : 1)) {
-            point.columnIndex -= 1;
+        if(point.index >= firstPointColumnIndex && point.index < cellsLength + (!isNextColumnMode && !rtlEnabled ? 1 : 0)) {
+            point.columnIndex -= firstPointColumnIndex;
             currentColumn = columns[point.columnIndex] || {};
             nextColumn = columns[point.columnIndex + 1] || {};
             return !(isNextColumnMode ? currentColumn.allowResizing && nextColumn.allowResizing : currentColumn.allowResizing);
@@ -612,7 +614,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             if(parentOffsetLeft <= eventData.x && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
                 if(that._updateColumnsWidthIfNeeded(eventData.x)) {
                     var $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
-                    that._columnsSeparatorView.moveByX($cell.offset().left + (that.option("rtlEnabled") ? 0 : $cell.outerWidth()));
+                    that._columnsSeparatorView.moveByX($cell.offset().left + (isNextColumnMode && that.option("rtlEnabled") ? 0 : $cell.outerWidth()));
                     that._tablePositionController.update(that._targetPoint.y);
                     e.preventDefault();
                 }
@@ -789,7 +791,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         }
 
         deltaX = posX - this._resizingInfo.startPosX;
-        if(this.option("rtlEnabled")) {
+        if(isNextColumnMode && this.option("rtlEnabled")) {
             deltaX = -deltaX;
         }
         cellWidth = this._resizingInfo.currentColumnWidth + deltaX;
@@ -859,7 +861,6 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
 
     _init: function() {
         var that = this,
-            gridView,
             generatePointsByColumnsHandler = function() {
                 if(!that._isResizing) {
                     that.pointsByColumns(null);
@@ -870,8 +871,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
                     that._scrollLeft = offset.left;
                     that.pointsByColumns(null);
                 }
-            },
-            previousScrollbarVisibility;
+            };
 
         that._columnsSeparatorView = that.getView("columnsSeparatorView");
         that._columnHeadersView = that.getView("columnHeadersView");
@@ -892,18 +892,22 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             that._rowsView.scrollChanged.add(generatePointsByColumnsScrollHandler);
         });
 
-        gridView = that.getView("gridView");
-        previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
-        that._subscribeToCallback(that.getController("tablePosition").positionChanged, function() {
+        var previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
+        var previousTableHeight = 0;
+
+        that._subscribeToCallback(that.getController("tablePosition").positionChanged, function(e) {
             if(that._isResizing && !that._rowsView.isResizing) {
                 var scrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
-                if(previousScrollbarVisibility !== scrollbarVisibility) {
+                if(previousScrollbarVisibility !== scrollbarVisibility || (previousTableHeight && previousTableHeight !== e.height)) {
                     previousScrollbarVisibility = scrollbarVisibility;
-                    gridView.resize();
+                    previousTableHeight = e.height;
+
+                    that.component.updateDimensions();
                 } else {
                     that._rowsView.updateFreeSpaceRowHeight();
                 }
             }
+            previousTableHeight = e.height;
         });
     },
 
@@ -1046,8 +1050,10 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
 
                 for(i = 0; i < rowCount; i++) {
                     columnElements = draggingPanel.getColumnElements(i) || [];
-                    columns = draggingPanel.getColumns(i) || [];
-                    $.each(columnElements, subscribeToEvents);
+                    if(columnElements.length) {
+                        columns = draggingPanel.getColumns(i) || [];
+                        $.each(columnElements, subscribeToEvents);
+                    }
                 }
             }
         });

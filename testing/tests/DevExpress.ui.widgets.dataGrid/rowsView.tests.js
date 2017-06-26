@@ -1840,6 +1840,29 @@ QUnit.test('Free space row with a command column', function(assert) {
     assert.ok(rowsView._getFreeSpaceRowElements().find("td").hasClass("dx-datagrid-group-space"), 'has class dx-datagrid-group-space');
 });
 
+QUnit.test('Free space row with a command column and cssClass', function(assert) {
+    //arrange
+    var dataController = new MockDataController({ items: this.items, virtualItemsCount: { begin: 20, end: 0 } }),
+        rowsView = this.createRowsView(this.items, dataController, [{ command: "expand", cssClass: "command-cell" }, { cssClass: "simple-cell" }, {}, {}]),
+        $testElement = $('#container');
+
+    //act
+    rowsView.render($testElement);
+    rowsView.height(400);
+    rowsView.resize();
+
+    //assert
+    var $cells = $testElement.find("table").last().find(".dx-freespace-row td"),
+        $commandCell = $cells.eq(0),
+        $simpleCellWithCssClass = $cells.eq(1),
+        $simpleCell = $cells.eq(2);
+
+    assert.ok($commandCell.hasClass("dx-datagrid-group-space"), "has class dx-datagrid-group-space");
+    assert.ok($commandCell.hasClass("command-cell"), "has custom css class");
+    assert.ok($simpleCellWithCssClass.hasClass("simple-cell"), "has custom css class");
+    assert.notOk($simpleCell.hasClass("simple-cell"), "doesn't have a custom css class");
+});
+
 //B233350
 QUnit.test('Freespace row must be empty for virtual scroller and non-first page', function(assert) {
     //arrange
@@ -4850,6 +4873,37 @@ QUnit.test("Show master detail with rowTemplate", function(assert) {
     assert.equal($rowElements.eq(0).children().eq(2).text(), "15");
     assert.ok($rowElements.eq(1).hasClass("dx-master-detail-row"));
     assert.equal($rowElements.eq(1).find(".test-detail").length, 1, "master detail template is rendered");
+});
+
+QUnit.test('Do not hide noData block placed inside the masterDetail template', function(assert) {
+    //arrange
+    var container = $('#container'),
+        noDataElements;
+
+    this.options.dataSource.store = [this.items[0]];
+    this.options.masterDetail = {
+        enabled: true,
+        template: function($container, options) {
+            $('<div>').addClass('dx-datagrid-nodata').appendTo($container);
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.rowsView.render(container);
+    this.rowsView.resize();
+    this.expandRow(this.items[0]);
+
+    noDataElements = container.find('.dx-datagrid-nodata');
+
+    //assert
+    assert.equal(noDataElements.length, 2, "two no data containers were rendered");
+
+    //act
+    this.rowsView.resize();
+    noDataElements = container.find('.dx-datagrid-nodata');
+    assert.notOk(noDataElements.eq(0).hasClass('dx-hidden'), "block inside masterDetail is not hidden");
+    assert.ok(noDataElements.eq(1).hasClass('dx-hidden'), "datagrid's nodata block is hidden");
 });
 
 //T436424

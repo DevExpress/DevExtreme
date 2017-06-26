@@ -108,7 +108,6 @@
                     mdx,        // OLAP Multi-dimensional expressions
                     mercator,   // Map term
                     microsoft,
-                    mockjax,    // JS library
                     moz,        // Vendor prefix
                     mozilla,
                     msie,

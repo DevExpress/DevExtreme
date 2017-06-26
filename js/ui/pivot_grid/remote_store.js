@@ -16,7 +16,7 @@ function createGroupingOptions(dimensionOptions) {
         groupingOptions.push({
             selector: dimensionOption.dataField,
             groupInterval: dimensionOption.groupInterval,
-            isExpanded: false
+            isExpanded: index < dimensionOptions.length - 1
         });
     });
 

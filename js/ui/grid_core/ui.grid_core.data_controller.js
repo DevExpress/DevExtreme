@@ -257,6 +257,7 @@ module.exports = {
                         case "remoteOperations":
                             handled();
                             break;
+                        case "keyExpr":
                         case "dataSource":
                         case "scrolling":
                         case "paging":
@@ -460,6 +461,21 @@ module.exports = {
                     if(pageIndex !== undefined) {
                         dataSource.pageIndex(pageIndex);
                     }
+                },
+                _getSpecificDataSourceOption: function() {
+                    var dataSource = this.option("dataSource");
+
+                    if(Array.isArray(dataSource)) {
+                        return {
+                            store: {
+                                type: "array",
+                                data: dataSource,
+                                key: this.option("keyExpr")
+                            }
+                        };
+                    }
+
+                    return dataSource;
                 },
                 _initDataSource: function() {
                     var that = this,

@@ -267,6 +267,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_W1007
      * @publicName W1007
      */
-    W1007: "No item with key {0} was found in the data source, but this key was used as the parent key for item {1}"
+    W1007: "No item with key {0} was found in the data source, but this key was used as the parent key for item {1}",
 
+    /**
+     * @name Errors and Warnings_W1008
+     * @publicName W1008
+     */
+    W1008: "Cannot scroll to the '{0}' date because it does not exist on the current view"
 });

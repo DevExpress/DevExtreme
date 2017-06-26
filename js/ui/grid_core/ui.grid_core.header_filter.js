@@ -34,7 +34,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
         if(groupInterval) {
             result.groupInterval = groupInterval[currentLevel];
 
-            if(column.dataType === "date") {
+            if(gridCoreUtils.isDateType(column.dataType)) {
                 result.format = DATE_INTERVAL_FORMATS[groupInterval[currentLevel]];
             } else if(column.dataType === "number") {
                 result.getDisplayFormat = function() {
@@ -431,7 +431,7 @@ var DataControllerFilterRowExtender = {
                     if(Array.isArray(filterValue)) {
                         filter = isExclude ? invertFilterExpression(filterValue) : filterValue;
                     } else {
-                        if(column.deserializeValue && column.dataType !== "date" && column.dataType !== "number") {
+                        if(column.deserializeValue && !gridCoreUtils.isDateType(column.dataType) && column.dataType !== "number") {
                             filterValue = column.deserializeValue(filterValue);
                         }
 

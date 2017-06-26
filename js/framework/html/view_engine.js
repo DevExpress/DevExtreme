@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     errors = require("../errors"),
     domUtils = require("../../core/utils/dom"),
     when = require("../../integration/jquery/deferred").when,
+    ajax = require("../../core/utils/ajax"),
     _VIEW_ROLE = "dxView",
     _LAYOUT_ROLE = "dxLayout",
     MARKUP_TEMPLATE_MARKER = "MarkupTemplate:";
@@ -141,20 +142,19 @@ var ViewEngine = Class.inherit({
     },
 
     _ajaxImpl: function() {
-        return $.ajax.apply($, arguments);
+        return ajax.sendRequest.apply($, arguments);
     },
 
     _loadTemplatesFromURL: function(url) {
         var that = this,
-            options = this._getLoadOptions(),
+            winPhonePrefix = this._getWinPhonePrefix(),
             deferred = $.Deferred();
 
-        url = options.winPhonePrefix + url;
+        url = winPhonePrefix + url;
 
         this._ajaxImpl({
             url: url,
-            isLocal: options.isLocal,
-            dataType: "html"
+            contentType: "text/html"
         }).done(function(data) {
             that._loadTemplatesFromMarkupCore(domUtils.createMarkupFromString(data));
             deferred.resolve();
@@ -166,18 +166,12 @@ var ViewEngine = Class.inherit({
         return deferred.promise();
     },
 
-    _getLoadOptions: function() {
+    _getWinPhonePrefix: function() {
         if(location.protocol.indexOf("wmapp") >= 0) {
-            return {
-                winPhonePrefix: location.protocol + "www/",
-                isLocal: true
-            };
+            return location.protocol + "www/";
         }
 
-        return {
-            winPhonePrefix: "",
-            isLocal: undefined
-        };
+        return "";
     },
 
     _loadExternalTemplates: function() {

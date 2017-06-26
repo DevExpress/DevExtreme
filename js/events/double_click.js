@@ -34,7 +34,7 @@ var DblClick = Class.inherit({
     },
 
     _clickHandler: function(e) {
-        var timeStamp = e.timeStamp || $.now();
+        var timeStamp = e.timeStamp || Date.now();
 
         if(timeStamp - this._lastClickTimeStamp < DBLCLICK_TIMEOUT) {
             eventUtils.fireEvent({

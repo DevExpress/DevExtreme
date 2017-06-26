@@ -173,9 +173,10 @@ exports.LocalStore = Class.inherit((function() {
 
     function fillHashExpandedPath(expandedPaths) {
         if(expandedPaths) {
-            expandedPaths.hash = {};
-            $.each(expandedPaths, function() {
-                expandedPaths.hash[this.join(".")] = true;
+            var hash = expandedPaths.hash = {};
+            expandedPaths.forEach(function(path) {
+                var pathValue = path.map(function(value) { return value + ""; }).join(".");
+                hash[pathValue] = true;
             });
         }
     }

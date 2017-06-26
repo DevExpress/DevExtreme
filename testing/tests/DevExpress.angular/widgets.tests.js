@@ -11,17 +11,21 @@ var $ = require("jquery"),
     positionUtils = require("animation/position"),
     ValidationGroup = require("ui/validation_group");
 
+require("common.css!");
 require("integration/angular");
 
-require("ui/text_box");
+require("ui/accordion");
+require("ui/box");
+require("ui/data_grid");
+require("ui/defer_rendering");
+require("ui/menu");
 require("ui/popup");
 require("ui/popover");
-require("ui/data_grid");
-require("ui/toolbar");
-require("ui/box");
 require("ui/scheduler");
-require("ui/defer_rendering");
 require("ui/slide_out_view");
+require("ui/tabs");
+require("ui/text_box");
+require("ui/toolbar");
 
 fx.off = true;
 var ignoreAngularBrowserDeferTimer = function(args) {
@@ -68,7 +72,7 @@ QUnit.test("dxPopup", function(assert) {
     var contentHeight;
 
     positionUtils.setup = function($content, position) {
-        contentHeight = $content.height();
+        contentHeight = $content.find(".dx-popup-content").height();
 
         originalPositionSetup($content, position);
     };
@@ -172,6 +176,46 @@ QUnit.test("dxDataGrid", function(assert) {
     var $cols = $(".dx-datagrid-rowsview col");
     assert.equal($cols[0].style.width, "100px");
     assert.equal($cols[1].style.width, "100px");
+});
+
+QUnit.test("dxTabs - navigation buttons should show/hide after showing/hiding items (T343231)", function(assert) {
+    var $markup = $("<div dx-tabs='tabSettings'></div>");
+
+    var controller = function($scope) {
+        $scope.tabs = [
+            { text: "item1", visible: true },
+            { text: "item2", visible: true }
+        ];
+
+        $scope.tabSettings = {
+            bindingOptions: {
+                dataSource: { dataPath: "tabs", deep: true }
+            },
+            width: 60,
+            showNavButtons: true
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    var scope = $markup.scope();
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 2);
+
+    scope.$apply(function() {
+        scope.tabs[1].visible = false;
+    });
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 0);
+
+    scope.$apply(function() {
+        scope.tabs[1].visible = true;
+    });
+
+    this.clock.tick();
+    assert.equal($markup.find(".dx-tabs-nav-button").length, 2);
 });
 
 
@@ -497,6 +541,26 @@ QUnit.test("Component can change itself options on init (T446364)", function(ass
     assert.equal(scope.vm.MyRows[0], "Betty");
 });
 
+QUnit.test("The hamburger button should be visible on small screen (T377800)", function(assert) {
+    var $markup = $("\
+        <div style='width: 100px'>\
+            <div dx-menu='menu'></div>\
+        </div>"
+    );
+
+    var controller = function($scope) {
+        $scope.menu = {
+            adaptivityEnabled: true,
+            items: [{ text: "menuItem1" }, { text: "menuItem2" }, { text: "menuItem3" }]
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    assert.ok(!$markup.find(".dx-menu-items-container").is(":visible"));
+    assert.ok($markup.find(".dx-menu-hamburger-button").is(":visible"));
+});
+
 
 QUnit.module("toolbar", {
     beforeEach: function() {
@@ -570,6 +634,95 @@ QUnit.test("dxPopup - bindingOptions for a title property should be worked", fun
         assert.equal($.trim($(".dx-popup-title").text()), "new title");
         done();
     }, 0);
+});
+
+
+QUnit.module("accordion");
+
+QUnit.test("item height is correct in animation config (T520346)", function(assert) {
+    assert.expect(1);
+    var done = assert.async();
+    this.clock = sinon.useFakeTimers();
+
+    var originalAnimate = fx.animate;
+
+    var $markup = $(
+        "<div dx-accordion=\"accordionOptions\" dx-item-alias=\"veryVeryVeryLongAlias\">\
+            <div data-options=\"dxTemplate : { name: 'item' } \" style='line-height: 18px'>\
+                {{veryVeryVeryLongAlias.Value}} {{veryVeryVeryLongAlias.Value}}\
+            </div>\
+        </div>"
+    );
+
+    var controller = function($scope) {
+        $scope.accordionOptions = {
+            dataSource: [{ "Value": "1" }],
+            width: 150,
+            collapsible: true,
+            selectedItems: []
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    this.clock.tick();
+
+    fx.animate = function($element, config) {
+        assert.roughEqual(config.to.height, 18, 0.5);
+
+        return originalAnimate($element, config);
+    };
+
+    var $titles = $markup.find(".dx-accordion-item-title");
+    $titles.eq(0).trigger("dxclick");
+
+    this.clock.tick();
+
+    this.clock.restore();
+    fx.animate = originalAnimate;
+    done();
+});
+
+QUnit.test("title height is correct if the title is customized using ng-class (T444379)", function(assert) {
+    this.clock = sinon.useFakeTimers();
+
+    var $markup = $(
+        "<style>.test-class { height: 100px; }</style>\
+        <div dx-accordion=\"accordionOptions\" dx-item-alias=\"item\">\
+            <div data-options=\"dxTemplate : { name: 'title' } \">\
+                <div ng-class=\"getClass()\">{{item.Value}}</div>\
+            </div>\
+        </div>"
+    );
+
+    var controller = function($scope) {
+        $scope.accordionOptions = {
+            dataSource: [{ "Value": "1" }],
+            collapsible: true,
+            selectedItems: []
+        };
+        $scope.getClass = function() {
+            return "test-class";
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    this.clock.tick();
+
+    var $titles = $markup.find(".dx-accordion-item");
+    assert.equal($titles.height(), 100);
+
+    this.clock.restore();
+});
+
+QUnit.test("not cleared timers not detected", function(assert) {
+    assert.expect(0);
+
+    var $markup = $("<div dx-accordion=\"{}\"></div>");
+    initMarkup($markup, function() {}, this);
+
+    $markup.remove();
 });
 
 

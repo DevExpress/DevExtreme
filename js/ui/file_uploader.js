@@ -401,7 +401,6 @@ var FileUploader = Editor.inherit({
     },
 
     _init: function() {
-        this.option("value", []);
         this.callBase.apply(this, arguments);
 
         this._initFileInput();

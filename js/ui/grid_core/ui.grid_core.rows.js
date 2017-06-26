@@ -492,6 +492,10 @@ module.exports = {
 
                         this.option("showColumnLines") && $row.addClass(COLUMN_LINES_CLASS);
 
+                        if(row.visible === false) {
+                            $row.hide();
+                        }
+
                         if(isGroup) {
                             $row.addClass(GROUP_ROW_CLASS);
                             isRowExpanded = row.isExpanded;
@@ -843,6 +847,16 @@ module.exports = {
                         that.resizeCompleted.add(resizeCompletedHandler);
                     } else {
                         that._renderScrollable();
+                    }
+
+                    return $table;
+                },
+
+                _createTable: function() {
+                    var $table = this.callBase.apply(this, arguments);
+
+                    if(this.option("rowTemplate")) {
+                        $table.appendTo(this.component.element());
                     }
 
                     return $table;

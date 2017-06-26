@@ -28,7 +28,7 @@ var TimeView = Editor.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            value: new Date($.now()),
+            value: new Date(Date.now()),
             _showClock: true,
             _arrowOffset: 0
         });

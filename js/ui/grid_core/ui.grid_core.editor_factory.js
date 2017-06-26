@@ -46,7 +46,8 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             placeholder: options.placeholder,
             inputAttr: {
                 id: options.id
-            }
+            },
+            tabIndex: options.tabIndex
         }, options.editorOptions);
     };
 
@@ -115,6 +116,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                 }
             },
             displayFormat: options.format,
+            type: options.dataType,
             formatWidthCalculator: null,
             width: "auto"
         }, options);
@@ -235,15 +237,16 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             onValueChanged: function(e) {
                 options.setValue && options.setValue(e.value, e);
             },
-            tabIndex: options.tabIndex ? options.tabIndex : 0
         }, options);
     };
 
     var createEditorCore = function(that, options) {
         if(options.editorName && options.editorOptions && options.editorElement[options.editorName]) {
             if(options.editorName === "dxCheckBox") {
-                options.editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
-                options.editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
+                if(!options.isOnForm) {
+                    options.editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
+                    options.editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
+                }
                 if(options.command || options.editorOptions.readOnly) {
                     options.editorElement.parent().addClass(CELL_FOCUS_DISABLED_CLASS);
                 }
@@ -450,11 +453,16 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             options.cancel = false;
             options.editorElement = $container;
 
+            if(!commonUtils.isDefined(options.tabIndex)) {
+                options.tabIndex = this.option("tabIndex");
+            }
+
             if(options.lookup) {
                 prepareSelectBox(options);
             } else {
                 switch(options.dataType) {
                     case "date":
+                    case "datetime":
                         prepareDateBox(options);
                         break;
                     case "boolean":

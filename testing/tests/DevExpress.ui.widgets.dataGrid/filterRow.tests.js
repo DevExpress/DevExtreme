@@ -813,7 +813,7 @@ QUnit.test("Show apply filter button", function(assert) {
     $button = testElement.find(".dx-apply-button");
     assert.equal($button.length, 1, "apply button class");
 
-    assert.ok($button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is disabled");
+    assert.ok($button.hasClass("dx-state-disabled"), "button is disabled");
 });
 
 QUnit.test("Apply filter button is hidden when filter row options is undefined", function(assert) {
@@ -887,7 +887,7 @@ QUnit.test("Apply filter button is changed enabled state", function(assert) {
     this.clock.tick(0);
 
     $button = testElement.find(".dx-apply-button");
-    assert.ok(!$button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is enabled");
+    assert.ok(!$button.hasClass("dx-state-disabled"), "button is enabled");
 });
 
 QUnit.test("Set highlight when filter operation is changed", function(assert) {
@@ -940,7 +940,7 @@ QUnit.test("Apply filter button is changed enabled state when filter operation i
     $(filterMenuItems.find('.dx-menu-item')[1]).trigger('dxclick');
 
     $button = testElement.find(".dx-apply-button");
-    assert.ok(!$button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is enabled");
+    assert.ok(!$button.hasClass("dx-state-disabled"), "button is enabled");
 });
 
 QUnit.test("Column option is changed when filter operation is changed", function(assert) {
@@ -1037,9 +1037,10 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
     $button = testElement.find(".dx-apply-button");
     $button.trigger("dxclick");
 
+    $button = testElement.find(".dx-apply-button");
     $editorContainer = this.columnHeadersView.element().find(".dx-highlight-outline");
     assert.equal($editorContainer.length, 0, "highlights");
-    assert.ok($button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is enabled");
+    assert.ok($button.hasClass("dx-state-disabled"), "button is enabled");
     //assert.ok(this.dataController._isFilterApplied, "is filter applied");
 
     assert.deepEqual(this.columnsController.updateOptions, [{
@@ -1210,7 +1211,7 @@ QUnit.test("State of the 'Apply filter' button should be saved after repaint", f
 
     //assert
     $button = $testElement.find(".dx-apply-button");
-    assert.notOk($button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), "button is enabled");
+    assert.notOk($button.hasClass("dx-state-disabled"), "button is enabled");
 });
 
 QUnit.module('Filter Row with real dataController and columnsController', {
@@ -1950,6 +1951,8 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
     ];
 
     this.options.columns = [{ dataField: "date", dataType: "date" }];
+    //T528529
+    this.options.filterRow.resetOperationText = "My Reset";
 
     setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
         initViews: true
@@ -1962,9 +1965,12 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
     $input.val("test");
     $input.change();
 
-    getFilterMenuItem(this.columnHeadersView.element(), 7).trigger('dxclick'); //reset
+    var $resetMenuItem = getFilterMenuItem(this.columnHeadersView.element(), 7);
+
+    $resetMenuItem.trigger('dxclick'); //reset
 
     //assert
+    assert.equal($resetMenuItem.text(), "My Reset");
     var dateBox = $(".dx-datebox").data("dxDateBox");
     assert.ok(!dateBox.option("text"), "text option");
     assert.ok(dateBox.option("isValid"), "isValid option");
@@ -1995,6 +2001,33 @@ QUnit.test("There are no errors on repaint a filter row when filter range popup 
 
     //assert
     assert.equal($(".dx-viewport").children(".dx-datagrid-filter-range-overlay").length, 0, "hasn't overlay wrapper");
+});
+
+QUnit.test("Add custom tabIndex to filter range content", function(assert) {
+    //arrange
+    var that = this,
+        $filterMenu,
+        $menuItem,
+        $filterRangeContent,
+        $testElement = $('#container').addClass("dx-datagrid-borders");
+
+    that.options.tabIndex = 3;
+    that.options.columns.push({ caption: "Date", dataType: "date", allowFiltering: true });
+    setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'filterRow', 'editorFactory'], {
+        initViews: true
+    });
+    that.columnHeadersView.render($testElement);
+
+    $filterMenu = $testElement.find(".dx-menu").last();
+
+    $menuItem = $filterMenu.find(".dx-menu-item");
+    $menuItem.trigger("dxclick");
+    $(".dx-menu-item:contains('Between')").trigger("dxclick");
+
+    $filterRangeContent = $(".dx-filter-range-content");
+
+    //assert
+    assert.equal($filterRangeContent.attr("tabIndex"), "3", "tabIndex of filter range content");
 });
 
 if(device.deviceType === "desktop") {

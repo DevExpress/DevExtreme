@@ -196,6 +196,7 @@ namespace Runner.Controllers
             m.NoGlobals = q.ContainsKey("noglobals");
             m.NoTimers = q.ContainsKey("notimers");
             m.NoTryCatch = q.ContainsKey("notrycatch");
+            m.NoJQuery = q.ContainsKey("nojquery");
             m.WorkerInWindow = q.ContainsKey("workerinwindow");
         }
 

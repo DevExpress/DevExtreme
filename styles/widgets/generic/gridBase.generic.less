@@ -168,15 +168,6 @@
             color: ~"@{@{widgetName}-link-color}";
         }
 
-        .dx-checkbox-indeterminate {
-            .dx-checkbox-icon:before {
-                width: 6px;
-                height: 6px;
-                left: 4px;
-                top: 4px;
-            }
-        }
-
         .dx-row-lines > td {
             border-bottom: ~"@{@{widgetName}-border}";
         }
@@ -187,30 +178,26 @@
         }
 
         .dx-error-row {
-            td {
-                background-color: ~"@{@{widgetName}-row-error-bg}";
-                color: ~"@{@{widgetName}-row-error-color}";
+            .dx-closebutton {
+                float: right;
+                margin: @GENERIC_GRID_BASE_CELL_PADDING + 2px;
+                .dx-icon-close;
+                .dx-icon-sizing(14px);
+            }
+
+            .dx-error-message {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING;
-
-                .dx-error-message {
-                    white-space: normal;
-                    word-wrap: break-word;
-                    padding-right: 35px;
-                }
-
-                .dx-closebutton {
-                    float: right;
-                    margin-top: 2px;
-                    margin-right: 2px;
-                    .dx-icon-close;
-                    .dx-icon-sizing(14px);
-                }
+                padding-right: 35px;
             }
         }
 
         .dx-row > td {
             padding: @GENERIC_GRID_BASE_CELL_PADDING;
         }
+    }
+
+    .dx-@{widgetName}-edit-popup .dx-error-message {
+        padding: @GENERIC_GRID_BASE_CELL_PADDING;
     }
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
@@ -325,6 +312,15 @@
         .dx-checkbox-icon {
             height: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
             width: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
+        }
+
+        &.dx-checkbox-indeterminate {
+            .dx-checkbox-icon:before {
+                width: 6px;
+                height: 6px;
+                left: 4px;
+                top: 4px;
+            }
         }
     }
 
@@ -453,6 +449,11 @@
         color: ~"@{@{widgetName}-columnchooser-item-color}";
         font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
         .touch-action(pinch-zoom);
+        border-bottom: ~"@{@{widgetName}-border}";
+
+        .dx-@{widgetName}-content {
+            margin-bottom: -1px;
+        }
 
         .dx-@{widgetName}-table {
             .dx-@{widgetName}-borders & {

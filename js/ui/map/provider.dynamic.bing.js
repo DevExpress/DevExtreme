@@ -5,7 +5,8 @@ var $ = require("../../core/renderer"),
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
     DynamicProvider = require("./provider.dynamic"),
-    Color = require("../../color");
+    Color = require("../../color"),
+    ajax = require("../../core/utils/ajax");
 
 /* global Microsoft */
 
@@ -134,7 +135,10 @@ var BingProvider = DynamicProvider.inherit({
     _loadMapScript: function() {
         return new Promise(function(resolve) {
             window[BING_MAP_READY] = resolve;
-            $.getScript(BING_URL);
+            ajax.sendRequest({
+                url: BING_URL,
+                dataType: "script"
+            });
         }).then(function() {
             try {
                 delete window[BING_MAP_READY];

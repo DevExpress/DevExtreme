@@ -67,15 +67,13 @@ function createThemeManager(options, themeGroupName) {
                 border: {
                     visible: true,
                     width: 4
-                },
-                size: 12
+                }
             },
             selectionStyle: {
                 border: {
                     visible: true,
                     width: 4
-                },
-                size: 12
+                }
             },
             hoverMode: "onlyPoint",
             selectionMode: "onlyPoint"
@@ -163,15 +161,13 @@ function createThemeManager(options, themeGroupName) {
                 border: {
                     visible: true,
                     width: 4
-                },
-                size: 12
+                }
             },
             selectionStyle: {
                 border: {
                     visible: true,
                     width: 4
-                },
-                size: 12
+                }
             },
             hoverMode: "onlyPoint",
             selectionMode: "onlyPoint"
@@ -255,15 +251,13 @@ function createThemeManager(options, themeGroupName) {
                 border: {
                     visible: true,
                     width: 4
-                },
-                size: 12
+                }
             },
             selectionStyle: {
                 border: {
                     visible: true,
                     width: 4
-                },
-                size: 12
+                }
             },
             hoverMode: "onlyPoint",
             selectionMode: "onlyPoint"

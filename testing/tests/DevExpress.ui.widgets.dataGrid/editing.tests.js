@@ -450,10 +450,10 @@ QUnit.test('Header Panel when editing with mode batch', function(assert) {
 
     //assert
     var $button = this.find(headerPanelElement, '.dx-datagrid-save-button');
-    assert.ok($button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'Save changes button disabled by default');
+    assert.ok($button.hasClass("dx-state-disabled"), 'Save changes button disabled by default');
 
     $button = this.find(headerPanelElement, '.dx-datagrid-cancel-button');
-    assert.ok($button.closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'Cancel changes button disabled by default');
+    assert.ok($button.hasClass("dx-state-disabled"), 'Cancel changes button disabled by default');
 });
 
 QUnit.test("Toolbar menu hidden when click on edit button", function(assert) {
@@ -1982,6 +1982,51 @@ QUnit.test('Save changes when batch mode', function(assert) {
     assert.deepEqual(removeKeys, ['test3']);
 });
 
+//T501010
+QUnit.test('Save changes on save button click when batch mode', function(assert) {
+    //arrange
+    var that = this,
+        headerPanel = this.headerPanel,
+        rowsView = this.rowsView,
+        updateArgs = [],
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+
+    that.dataControllerOptions.store = {
+        update: function(key, values) {
+            updateArgs.push([key, values]);
+            return $.Deferred().resolve(key, values);
+        }
+    };
+
+    headerPanel.render(testElement);
+    rowsView.render(testElement);
+
+    testElement.find('td').eq(0).trigger('dxclick'); //Edit
+    assert.equal(getInputElements(testElement.find('tbody > tr').eq(0)).length, 1);
+    getInputElements(testElement).eq(0).val('Test1');
+    getInputElements(testElement).eq(0).trigger('change');
+
+    testElement.find('tbody > tr').eq(1).find('td').eq(0).trigger('dxclick'); //Edit
+    assert.equal(getInputElements(testElement.find('tbody > tr').eq(1)).length, 1);
+    getInputElements(testElement).eq(0).val('Test2');
+
+    var $saveButton = testElement.find(".dx-datagrid-save-button");
+    var mouse = pointerMock($saveButton).start();
+
+    //act
+    mouse.down();
+    getInputElements(testElement).eq(0).trigger('change');
+    mouse.up();
+
+    //assert
+    assert.deepEqual(updateArgs, [['test1', { "name": "Test1" }], ['test2', { "name": "Test2" }]], "changed rows are saved");
+});
+
 QUnit.test('Cancel changes when batch mode', function(assert) {
     //arrange
     var that = this,
@@ -2455,6 +2500,7 @@ QUnit.module('Editing with real dataController', {
         ];
         this.columns = ['name', 'age', { dataField: "lastName", allowEditing: false }, { dataField: 'phone' }, 'room'];
         this.options = {
+            tabIndex: 0,
             errorRowEnabled: true,
             editing: {
                 mode: 'row'
@@ -2564,13 +2610,13 @@ QUnit.test('Close Editing Cell and edit new cell on click', function(assert) {
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
     testElement.find('input').first().val('Test update cell');
 
-    assert.ok(this.find(headerPanelElement, '.dx-datagrid-save-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'save changes button disabled');
-    assert.ok(this.find(headerPanelElement, '.dx-datagrid-cancel-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'cancel changes button disabled');
+    assert.ok(this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass("dx-state-disabled"), 'save changes button disabled');
+    assert.ok(this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass("dx-state-disabled"), 'cancel changes button disabled');
 
     testElement.find('input').first().trigger('change');
     assert.ok(testElement.find('td').first().hasClass("dx-cell-modified"));
-    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-save-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'save changes button enabled');
-    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-cancel-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'cancel changes button enabled');
+    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass("dx-state-disabled"), 'save changes button enabled');
+    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass("dx-state-disabled"), 'cancel changes button enabled');
     //act
     testElement.find('tbody > tr').first().find('td').eq(1).trigger('dxclick');
 
@@ -2586,8 +2632,8 @@ QUnit.test('Close Editing Cell and edit new cell on click', function(assert) {
 
     //assert
     assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0, 'inputs count');
-    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-save-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'save changes button enabled');
-    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-cancel-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'cancel changes button enabled');
+    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass("dx-state-disabled"), 'save changes button enabled');
+    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass("dx-state-disabled"), 'cancel changes button enabled');
 });
 
 //T181661
@@ -3381,8 +3427,8 @@ QUnit.test('Insert Row when batch editing', function(assert) {
     assert.equal(cells.eq(3).html(), "&nbsp;", "text of the fourth cell of the inserted row");
     assert.equal(cells.eq(4).html(), "&nbsp;", "text of the fifth cell of the inserted row");
 
-    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-save-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'save changes button enabled');
-    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-cancel-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'cancel changes button enabled');
+    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass("dx-state-disabled"), 'save changes button enabled');
+    assert.ok(!this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass("dx-state-disabled"), 'cancel changes button enabled');
 
     //act
     testElement.find('td').first().trigger('dxclick');
@@ -3405,8 +3451,8 @@ QUnit.test('Insert Row when batch editing', function(assert) {
     assert.ok(this.array[7].__KEY__);
     delete this.array[7].__KEY__;
     assert.deepEqual(this.array[7], { "name": "Test update row" });
-    assert.ok(this.find(headerPanelElement, '.dx-datagrid-save-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'save changes button disabled');
-    assert.ok(this.find(headerPanelElement, '.dx-datagrid-cancel-button').closest(".dx-toolbar-item").hasClass("dx-state-disabled"), 'cancel changes button disabled');
+    assert.ok(this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass("dx-state-disabled"), 'save changes button disabled');
+    assert.ok(this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass("dx-state-disabled"), 'cancel changes button disabled');
 });
 
 QUnit.test('Insert Row when "cell" edit mode', function(assert) {
@@ -4535,6 +4581,45 @@ QUnit.test('Close editing cell when using "cell" edit mode on click outside data
     assert.deepEqual(updateArgs, { "name": "Test update cell" });
 });
 
+QUnit.test('Cell should be closed on click outside dataGrid after changes in several cells if "cell" edit mode', function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'cell'
+    };
+
+    that.options.loadingTimeout = 0;
+
+    rowsView.render(testElement);
+    this.editCell(0, 0);
+    this.clock.tick();
+
+    //act
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
+    testElement.find('input').first().val('Test update cell');
+    testElement.find('input').first().trigger('change');
+
+    this.editCell(0, 2);
+    this.clock.tick();
+
+    //act
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
+    testElement.find('input').first().val('Test update cell 2');
+    testElement.find('input').first().trigger('change');
+
+    //act
+    $(document).trigger('dxclick');
+    this.clock.tick();
+
+    //assert
+    assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 0);
+    assert.notOk(this.editingController.isEditing(), "editing cell is closed");
+});
+
 QUnit.test("When select all items editing row must have not 'dx-selection' class", function(assert) {
     //arrange
     var testElement = $('#container'),
@@ -5455,6 +5540,7 @@ if(!devices.win8) {
     QUnit.test('Change value with custom setCellValue', function(assert) {
         //arrange
         var that = this,
+            params,
             rowsView = this.rowsView,
             testElement = $('#container');
 
@@ -5469,6 +5555,8 @@ if(!devices.win8) {
         that.options.columns[0] = {
             dataField: "name",
             setCellValue: function(data, value) {
+                params = $.makeArray(arguments);
+
                 data[this.dataField] = value;
                 data.phone = "";
             }
@@ -5489,8 +5577,45 @@ if(!devices.win8) {
         //assert
         assert.equal(testElement.find('tbody > tr').first().find('input').eq(0).val(), "Test name");
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).eq(2).val(), "");
+        assert.equal(params.length, 4, "count of argument of the setCellValue");
+        assert.deepEqual(params, [{ name: "Test name", phone: "" }, "Test name", this.array[0], undefined], "arguments");
     });
 
+    QUnit.test("Changing the current row data in the setCellValue should not be applied", function(assert) {
+        //arrange
+        var that = this,
+            rowsView = this.rowsView,
+            $testElement = $('#container');
+
+        that.options.editing = {
+            mode: "row",
+            allowUpdating: true,
+            texts: {
+                saveRowChanges: "Save",
+                editRow: "Edit"
+            }
+        };
+        that.options.columns[0] = {
+            dataField: "name",
+            setCellValue: function(newData, value, currentRowData) {
+                newData[this.dataField] = value;
+                currentRowData.phone = "666";
+            }
+        };
+
+        rowsView.render($testElement);
+        that.columnsController.init();
+
+        that.editingController.editRow(0);
+
+        //act
+        $testElement.find('tbody > tr').first().find('input').eq(0).val('Test name');
+        $testElement.find('tbody > tr').first().find('input').eq(0).trigger('change');
+
+        //assert
+        assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(0).val(), "Test name");
+        assert.equal(getInputElements($testElement.find('tbody > tr').first()).eq(2).val(), "555555");
+    });
 
     QUnit.test('cellValue', function(assert) {
         //arrange
@@ -8185,6 +8310,104 @@ QUnit.testInActiveWindow("Show the revert button when a row updating is canceled
     assert.ok(testElement.find(".dx-revert-button").length, "the revert button is shown");
 });
 
+QUnit.test("Show error message on save inserted rows when edit mode is 'popup'", function(assert) {
+    //arrange
+    var $inputElement,
+        $popupContent,
+        $errorMessageElement,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    rowsView.render($testElement);
+
+    this.applyOptions({
+        editing: {
+            mode: "popup",
+            allowUpdating: true
+        },
+        columns: ['name', 'age'],
+        onRowValidating: function(e) {
+            e.isValid = false;
+            e.errorText = "Test";
+        }
+    });
+
+    this.editRow(0);
+
+    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").content();
+    $inputElement = $popupContent.find("input").first();
+    $inputElement.val("");
+    $inputElement.trigger("change");
+
+    //act
+    this.saveEditData();
+
+    //assert
+    $errorMessageElement = $popupContent.children().first();
+    assert.ok($errorMessageElement.hasClass("dx-error-message"), "has error message");
+    assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
+});
+
+QUnit.test("Edit cell with custom validation (edit mode is batch)", function(assert) {
+    //arrange
+    var that = this,
+        rowData,
+        $cellElements,
+        $inputElement,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    rowsView.render($testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: ["name", {
+            dataField: "age",
+            validationRules: [
+                {
+                    type: "custom",
+                    validationCallback: function(e) {
+                        rowData = e.data;
+                        return e.data.name === "Alex";
+                    }
+                }
+            ]
+        }, "lastName"]
+    });
+
+    //act
+    that.editCell(0, 1);
+    $inputElement = getInputElements($testElement).first();
+    $inputElement.val(666);
+    $inputElement.trigger("change");
+
+    that.closeEditCell();
+    that.clock.tick();
+
+    $cellElements = rowsView.element().find("tbody > tr").first().find("td");
+
+    //assert
+    assert.deepEqual(rowData, { age: 666, lastName: "John", name: "Alex" }, "row data");
+    assert.notOk($cellElements.eq(1).hasClass("dx-datagrid-invalid"), "success validation");
+
+    //act
+    that.editCell(1, 1);
+    $inputElement = getInputElements($testElement).first();
+    $inputElement.val(777);
+    $inputElement.trigger("change");
+
+    that.closeEditCell();
+    that.clock.tick();
+
+    $cellElements = rowsView.element().find("tbody > tr").eq(1).find("td");
+
+    //assert
+    assert.deepEqual(rowData, { age: 777, lastName: "Skip", name: "Dan" }, "row data");
+    assert.ok($cellElements.eq(1).hasClass("dx-datagrid-invalid"), "failed validation");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
@@ -8996,7 +9219,30 @@ QUnit.test("Render detail form row with custom editCellTemplate", function(asser
     assert.equal(editCellTemplateOptions.columnIndex, 3, "editCellTemplate columnIndex");
     assert.equal(editCellTemplateOptions.rowIndex, 0, "editCellTemplate rowIndex");
     assert.equal(editCellTemplateOptions.value, "555555", "editCellTemplate value");
+    assert.equal(editCellTemplateOptions.isOnForm, true, "editCellTemplate isOnForm");
     assert.equal(typeof editCellTemplateOptions.setValue, "function", "editCellTemplate setValue exists");
+});
+
+QUnit.test("onEditorPreparing event should have isOnForm parameter for form editing modes", function(assert) {
+    this.setupModules(this);
+
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    this.options.onEditorPreparing = sinon.spy();
+    this.editorFactoryController.init();
+
+    rowsView.render(testElement);
+
+    //act
+    that.editRow(0);
+
+    //assert
+    assert.equal(this.options.onEditorPreparing.callCount, 5, "onEditorPreparing called 5 times");
+    for(var i = 0; i < 5; i++) {
+        assert.strictEqual(this.options.onEditorPreparing.getCall(i).args[0].isOnForm, true, "onEditorPreparing args have isOnForm parameter");
+    }
 });
 
 //T434382
@@ -9556,7 +9802,7 @@ QUnit.module('Editing - "popup" mode', {
         this.$testElement = $("#container");
 
         this.setupModules = function(that) {
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
+            setupDataGridModules(that, ['data', 'columns', 'columnHeaders', 'rows', 'masterDetail', 'editing', 'editorFactory', 'errorHandling', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
                 initViews: true
             });
 
@@ -9752,6 +9998,47 @@ QUnit.test("Save the row after editing", function(assert) {
     assert.equal($newRow.text().replace(/\s/g, ""), "Mary15John5555551", "Row contains new data");
 });
 
+//T523867
+QUnit.test("Save the row after adding", function(assert) {
+    fx.off = true;
+
+    try {
+        var that = this,
+            $popupContent,
+            $inputElement,
+            $insertRowElement;
+
+        that.options.columns = [{
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }, "age", "lastName", "phone", "room"];
+        that.setupModules(that);
+        that.renderRowsView();
+
+        that.addRow();
+        that.preparePopupHelpers();
+
+        //assert
+        $insertRowElement = that.$testElement.find(".dx-data-row").first();
+        assert.ok($insertRowElement.hasClass("dx-row-inserted"), "inserted row is rendered");
+        assert.notOk($insertRowElement.is(":visible"), "inserted row is hidden");
+
+        $popupContent = that.editPopupInstance.content();
+        $inputElement = $popupContent.find("input").first();
+        $inputElement.val("Test");
+        $inputElement.trigger("change");
+
+        //act
+        that.saveEditData();
+
+        //assert
+        $insertRowElement = that.$testElement.find(".dx-data-row").first();
+        assert.notOk($insertRowElement.hasClass("dx-row-inserted"), "inserted row isn't rendered");
+    } finally {
+        fx.off = false;
+    }
+});
+
 QUnit.test("editing.popup options should apply to editing popup", function(assert) {
     var that = this;
 
@@ -9826,3 +10113,92 @@ QUnit.test("Show full screen editing popup on mobile devices", function(assert) 
     var isFullScreen = devices.current().deviceType !== "desktop";
     assert.equal(that.editPopupInstance.option("fullScreen"), isFullScreen, "'fullScreen' option value is 'false' on a desktop and 'true' on a mobile device");
 });
+
+//T516897
+QUnit.test("Show error row inside popup when update error", function(assert) {
+    fx.off = true;
+    try {
+        var that = this,
+            $popupContent,
+            $inputElement,
+            $errorMessageElement;
+
+        that.options.errorRowEnabled = true;
+        that.options.dataSource = {
+            load: function() {
+                return $.Deferred().resolve(that.array);
+            },
+            update: function() {
+                return $.Deferred().reject("Test");
+            }
+        };
+
+        that.setupModules(that);
+        that.renderRowsView();
+
+        that.editRow(0);
+        that.preparePopupHelpers();
+
+        $popupContent = that.editPopupInstance.content();
+        $inputElement = $popupContent.find("input").first();
+        $inputElement.val("Test");
+        $inputElement.trigger("change");
+
+        //act
+        that.saveEditData();
+
+        //assert
+        $errorMessageElement = $popupContent.children().first();
+        assert.ok(that.editPopupInstance.option("visible"), "popup is visible");
+        assert.ok($errorMessageElement.hasClass("dx-error-message"), "popup has error message");
+        assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("Show error row in header when remove error", function(assert) {
+    fx.off = true;
+
+    try {
+        var that = this,
+            $errorMessageElement;
+
+        that.options.showColumnHeaders = true;
+        that.options.errorRowEnabled = true;
+        that.options.editing.text = {
+            confirmDeleteMessage: ""
+        };
+        that.options.dataSource = {
+            load: function() {
+                return $.Deferred().resolve(that.array);
+            },
+            remove: function() {
+                return $.Deferred().reject("Test");
+            }
+        };
+
+        that.setupModules(that);
+        that.columnHeadersView.render(that.$testElement);
+        that.renderRowsView();
+
+        that.editRow(0);            // render popup
+        that.cancelEditData();      //
+        that.preparePopupHelpers();
+
+        //assert
+        assert.ok(that.editPopupInstance, "has popup");
+        assert.notOk(that.editPopupInstance.option("visible"), "popup is hidden");
+
+        //act
+        that.deleteRow(0);
+
+        //assert
+        $errorMessageElement = that.$testElement.find(".dx-datagrid-headers .dx-error-row");
+        assert.strictEqual($errorMessageElement.length, 1, "header has error row");
+        assert.strictEqual($errorMessageElement.text(), "Test", "text of an error message");
+    } finally {
+        fx.off = false;
+    }
+});
+

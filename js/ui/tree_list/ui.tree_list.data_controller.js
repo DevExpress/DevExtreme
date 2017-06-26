@@ -8,22 +8,6 @@ var $ = require("../../core/renderer"),
 
 exports.DataController = dataControllerModule.controllers.data.inherit((function() {
     return {
-        _getSpecificDataSourceOption: function() {
-            var dataSource = this.option("dataSource");
-
-            if(Array.isArray(dataSource)) {
-                return {
-                    store: {
-                        type: "array",
-                        data: dataSource,
-                        key: this.option("keyExpr")
-                    }
-                };
-            }
-
-            return dataSource;
-        },
-
         _getDataSourceAdapter: function() {
             return dataSourceAdapterProvider;
         },
@@ -83,7 +67,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         publicMethods: function() {
-            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode"]);
+            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey"]);
         },
 
         changeRowExpand: function(key) {
@@ -152,7 +136,6 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         optionChanged: function(args) {
             switch(args.name) {
                 case "rootValue":
-                case "keyExpr":
                 case "parentIdExpr":
                 case "itemsExpr":
                 case "filterMode":
@@ -176,6 +159,20 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                 default:
                     this.callBase(args);
             }
+        },
+
+        /**
+         * @name dxTreeListMethods_getNodeByKey
+         * @publicName getNodeByKey(key)
+         * @param1 key:object|string|number
+         * @return dxTreeListNode
+         */
+        getNodeByKey: function(key) {
+            if(!this._dataSource) {
+                return;
+            }
+
+            return this._dataSource.getNodeByKey(key);
         }
     };
 })());

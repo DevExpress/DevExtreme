@@ -67,12 +67,14 @@ var LoadPanel = Overlay.inherit({
             /**
             * @name dxLoadPanelOptions_animation_show
             * @publicName show
+            * @type animationConfig
             * @default null
             * @extend_doc
             */
             /**
             * @name dxLoadPanelOptions_animation_hide
             * @publicName hide
+            * @type animationConfig
             * @default null
             * @extend_doc
             */

@@ -14,6 +14,7 @@ var ROWS_VIEW_CLASS = "rowsview",
     ROW_CLASS = "dx-row",
     DATA_ROW_CLASS = "dx-data-row",
     GROUP_ROW_CLASS = "dx-group-row",
+    EDIT_FORM_ITEM_CLASS = "edit-form-item",
     MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     DROPDOWN_EDITOR_OVERLAY_CLASS = "dx-dropdowneditor-overlay",
@@ -77,16 +78,25 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 $cell = that._getNextCell(this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0 ? "upArrow" : "downArrow");
             }
             if($cell && $cell.length > 0) {
-                //that._focusView(view, index);
                 setTimeout(function() {
-                    if(that._editingController.isEditing()) {
-                        that._focusInteractiveElement.bind(that)($cell);
+                    if($cell.is("td") || $cell.hasClass(that.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
+                        if(that.getController("editorFactory").focus()) {
+                            that._focus($cell);
+                        }
+                        if(that._editingController.isEditing()) {
+                            that._focusInteractiveElement.bind(that)($cell);
+                        }
                     } else {
-                        that._focus($cell);
+                        $cell.focus();
                     }
                 });
             }
         }
+    },
+
+    _applyTabIndexToElement: function($element) {
+        var tabIndex = this.option("tabIndex");
+        $element.attr("tabIndex", commonUtils.isDefined(tabIndex) ? tabIndex : 0);
     },
 
     _clickHandler: function(e) {
@@ -99,7 +109,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($cell);
             if(!this._editingController.isEditing()) {
-                data.view.element().attr("tabIndex", 0);
+                this._applyTabIndexToElement(data.view.element());
                 data.view.element().find(".dx-row > td[tabIndex]").attr("tabIndex", null);
                 $cell.focus();
             }
@@ -182,16 +192,40 @@ var KeyboardNavigationController = core.ViewController.inherit({
         return rowIndex;
     },
 
-    _updateFocusedCellPosition: function($cell) {
-        var that = this;
+    _updateFocusedCellPosition: function($cell, direction) {
+        var that = this,
+            rowIndex,
+            columnIndex,
+            $rowElement = $cell.closest("tr");
 
-        if($cell.length > 0 && that._focusedView) {
+        if($rowElement.length > 0 && that._focusedView) {
+            rowIndex = $rowElement.length > 0 && that._getRowIndex($rowElement);
+            columnIndex = that._focusedView.getCellIndex($cell, rowIndex);
+
+            if(direction) {
+                columnIndex = direction === "previous" ? columnIndex - 1 : columnIndex + 1;
+                columnIndex = that._applyColumnIndexBoundaries(columnIndex);
+            }
+
             this._focusedCellPosition = {
-                columnIndex: that._focusedView.getCellIndex($cell),
-                rowIndex: $cell.parent().length > 0 && that._getRowIndex($cell.parent())
+                columnIndex: columnIndex,
+                rowIndex: rowIndex
             };
         }
     },
+
+    _applyColumnIndexBoundaries: function(columnIndex) {
+        var visibleColumnsCount = this._getVisibleColumnCount();
+
+        if(columnIndex < 0) {
+            columnIndex = 0;
+        } else if(columnIndex >= visibleColumnsCount) {
+            columnIndex = visibleColumnsCount - 1;
+        }
+
+        return columnIndex;
+    },
+
 
     _isCellValid: function($cell) {
         if(commonUtils.isDefined($cell)) {
@@ -233,7 +267,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             focusedView = this._focusedView,
             $focusElement;
 
-        $focusedCell && $focusedCell.attr("tabIndex", null);
+        $focusedCell && $focusedCell.is("td") && $focusedCell.attr("tabIndex", null);
+
 
         if(isGroupRow($row)) {
             $focusElement = $row;
@@ -248,7 +283,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         focusedView && focusedView.element().attr("tabIndex", null);
 
         if($focusElement) {
-            $focusElement.attr("tabindex", 0);
+            this._applyTabIndexToElement($focusElement);
             $focusElement.focus();
         }
 
@@ -361,6 +396,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var scrollingMode = this.option("scrolling.mode");
         return scrollingMode === "virtual" || scrollingMode === "infinite";
     },
+
     _scrollBy: function(top) {
         var that = this,
             scrollable = this.getView("rowsView").getScrollable();
@@ -372,7 +408,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     var columnIndex = that._focusedCellPosition.columnIndex;
                     var rowIndex = that.getView("rowsView").getTopVisibleItemIndex() + that._dataController.getRowIndexOffset();
                     that.getController("editorFactory").loseFocus();
-                    that.getView("rowsView").element().attr("tabIndex", 0).focus();
+
+                    var $rowsView = that.getView("rowsView").element();
+                    that._applyTabIndexToElement($rowsView);
+                    $rowsView.focus();
+
                     that._focusedCellPosition.rowIndex = rowIndex;
                     that._focusedCellPosition.columnIndex = columnIndex;
                 });
@@ -434,11 +474,11 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _handleTabKeyOnMasterDetailCell: function(target, direction) {
         if(this._isMasterDetailCell(target)) {
-            this._updateFocusedCellPosition($(target).closest("." + MASTER_DETAIL_CELL_CLASS));
+            this._updateFocusedCellPosition($(target), direction);
 
             var $nextCell = this._getNextCell(direction, "row");
             if(!this._isInsideEditForm($nextCell)) {
-                $nextCell && $nextCell.attr("tabindex", 0);
+                $nextCell && this._applyTabIndexToElement($nextCell);
             }
 
             return true;
@@ -928,6 +968,7 @@ module.exports = {
                     var that = this,
                         cellElements = that.getCellElements(0),
                         keyboardNavigation = that.getController("keyboardNavigation"),
+                        tabIndex = that.option("tabIndex"),
                         oldFocusedView = keyboardNavigation._focusedView,
                         $row,
                         $cell;
@@ -940,14 +981,14 @@ module.exports = {
                         $row = cellElements.eq(0).parent();
 
                         if(isGroupRow($row)) {
-                            $row.attr("tabIndex", 0);
+                            $row.attr("tabIndex", tabIndex);
                         } else {
                             keyboardNavigation._focusedView = that;
                             for(var i = 0; i < cellElements.length; i++) {
                                 $cell = cellElements.eq(i);
                                 if(keyboardNavigation._isCellValid($cell)) {
                                     if(isCellElement($cell)) {
-                                        $cell.attr("tabIndex", 0);
+                                        $cell.attr("tabIndex", tabIndex);
                                     }
                                     break;
                                 }
@@ -978,6 +1019,11 @@ module.exports = {
                     }
 
                     return isCellEditing;
+                },
+                addRow: function(parentKey) {
+                    this.getController("keyboardNavigation").setupFocusedView();
+
+                    this.callBase.apply(this, arguments);
                 },
                 getFocusedCellInRow: function(rowIndex) {
                     var keyboardNavigationController = this.getController("keyboardNavigation"),

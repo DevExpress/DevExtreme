@@ -2,7 +2,6 @@
 
 require("../../../testing/content/orders.js");
 require("data/odata/store");
-require("../../../node_modules/jquery-mockjax/dist/jquery.mockjax.js");
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
@@ -11,6 +10,7 @@ var $ = require("jquery"),
     pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
     config = require("core/config"),
     formatHelper = require("format_helper"),
+    ajaxMock = require("../../helpers/ajaxMock.js"),
 
     moduleConfig = {
         beforeEach: function() {
@@ -23,14 +23,8 @@ var $ = require("jquery"),
         }
     };
 
-$.extend($.mockjaxSettings, {
-    contentType: "application/json",
-    responseTime: 0,
-    logging: false
-});
-
 QUnit.testDone(function() {
-    $.mockjax.clear();
+    ajaxMock.clear();
 });
 
 QUnit.module("Local Store Initialization");
@@ -73,15 +67,15 @@ QUnit.test("OData Store", function(assert) {
     var done = assert.async(),
         d = $.Deferred();
 
-    $.mockjax({
-        url: "/mockjax-odata",
+    ajaxMock.setup({
+        url: "/mock-odata",
         responseText: { "d": [{ "group": "a" }, { "group": "a" }, { "group": "b" }, { "group": "c" }, { "group": "c" }] }
     });
 
     this.store = new LocalStore({
         store: {
             type: 'odata',
-            url: "/mockjax-odata"
+            url: "/mock-odata"
         }
     });
 
@@ -1148,6 +1142,25 @@ QUnit.test("Expand row on several levels & column", function(assert) {
         assert.strictEqual(data.values[19][0][0], 1, 'Spain Madrid Bolido - 1996');
         assert.strictEqual(data.values[19][1], undefined, 'Spain Madrid Bolido - 1996 Q3');
         assert.strictEqual(data.values[19][2][0], 1, 'Spain Madrid Bolido - 1996 Q4');
+    });
+});
+
+QUnit.test("Load with undefined value in the expanded path", function(assert) {
+    new LocalStore([
+        { a: undefined, b: 1 },
+        { a: undefined, b: 2 },
+        { a: "1", b: 2 }
+    ]).load({
+        rows: [
+            { dataField: "a" },
+            { dataField: "b" }
+        ],
+        columns: [],
+        values: [],
+        rowExpandedPaths: [[undefined]]
+    }).done(function(data) {
+        assert.strictEqual(data.rows.length, 2);
+        assert.strictEqual(data.rows[0].children.length, 2);
     });
 });
 

@@ -20,7 +20,10 @@ var clearSelection = function() {
     if(selection.empty) {
         selection.empty();
     } else if(selection.removeAllRanges) {
-        selection.removeAllRanges();
+        //T522811
+        try {
+            selection.removeAllRanges();
+        } catch(e) {}
     }
 };
 
@@ -73,10 +76,10 @@ var dataOptionsAttributeName = "data-options";
 
 var getElementOptions = function(element) {
     /* jshint evil:true */
-    var optionsString = $(element).attr(dataOptionsAttributeName),
+    var optionsString = $(element).attr(dataOptionsAttributeName) || "",
         result;
 
-    if($.trim(optionsString).charAt(0) !== "{") {
+    if(optionsString.trim().charAt(0) !== "{") {
         optionsString = "{" + optionsString + "}";
     }
     try {

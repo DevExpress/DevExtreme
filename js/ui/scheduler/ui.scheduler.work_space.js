@@ -1525,7 +1525,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellDuration = this.getCellDuration(),
             currentDayStart = new Date(date);
 
-        currentDayStart.setMinutes(0);
+        currentDayStart.setMinutes(0, 0, 0);
         currentDayStart.setHours(this.option("startDayHour"));
 
         return ((date.getTime() - currentDayStart.getTime()) % cellDuration) / cellDuration;
@@ -1773,6 +1773,14 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     scrollToTime: function(hours, minutes, date) {
+        var min = this.getStartViewDate(),
+            max = this.getEndViewDate();
+
+        if(date < min || date > max) {
+            errors.log("W1008", date);
+            return;
+        }
+
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable();
 
