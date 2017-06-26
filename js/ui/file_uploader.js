@@ -445,9 +445,10 @@ var FileUploader = Editor.inherit({
             files = this._$fileInput.prop("files");
 
         if(this.option("uploadMode") === "useForm") {
-            files = objectUtils.deepExtendArraySafe([], files);
+            files = files ? objectUtils.deepExtendArraySafe([], files) : undefined;
             this.reset();
         }
+
         if(files && !files.length) {
             return;
         }
