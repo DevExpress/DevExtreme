@@ -4,6 +4,7 @@
 
 var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
+    isFunction = require("core/utils/type").isFunction,
     fx = require("animation/fx"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
@@ -61,7 +62,7 @@ QUnit.test("updateDimensions method should update scrollable container", functio
         return $.Deferred().resolve();
     });
 
-    assert.ok(commonUtils.isFunction(treeView.updateDimensions));
+    assert.ok(isFunction(treeView.updateDimensions));
     var result = treeView.updateDimensions();
     assert.ok(treeView._scrollableContainer.update.calledOnce);
     assert.ok(result.promise);

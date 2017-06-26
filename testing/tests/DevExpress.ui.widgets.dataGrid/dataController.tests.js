@@ -4,7 +4,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     formatHelper = require("format_helper"),
     errors = require("ui/widget/ui.errors"),
-    commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
@@ -3091,7 +3091,7 @@ QUnit.module("Filtering", {
         this.option = function(options, value) {
             var result = originalOption.apply(this, arguments);
 
-            if(options === "searchPanel.text" && commonUtils.isDefined(value)) {
+            if(options === "searchPanel.text" && typeUtils.isDefined(value)) {
                 this.dataController.optionChanged({ fullName: options });
             }
 
@@ -5398,7 +5398,7 @@ QUnit.test("Inserting Row", function(assert) {
 
     assert.deepEqual(this.dataController.items()[0].values, [undefined, undefined]);
     assert.deepEqual(this.dataController.items()[0].data, {});
-    assert.ok(!commonUtils.isDefined(this.dataController.items()[0].dataIndex));
+    assert.ok(!typeUtils.isDefined(this.dataController.items()[0].dataIndex));
 
     assert.deepEqual(this.dataController.items()[1].values, ['Alex', '55-55-55']);
     assert.deepEqual(this.dataController.items()[1].data, { name: 'Alex', phone: '55-55-55' });

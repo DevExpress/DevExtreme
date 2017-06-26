@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("jquery"),
-    commonUtils = require("core/utils/common");
+    commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type");
 
 require("common.css!");
 require("generic_light.css!");
@@ -566,7 +567,7 @@ QUnit.test('Click separator page_B239176', function(assert) {
 
     $(".dx-separator").first().trigger("dxclick");
 
-    assert.ok(!commonUtils.isDefined(instance._testPageIndex));
+    assert.ok(!typeUtils.isDefined(instance._testPageIndex));
 });
 
 //B239176
@@ -576,7 +577,7 @@ QUnit.test('Click  page parent container_B239176', function(assert) {
 
     $(".dx-pages").first().trigger("dxclick");
 
-    assert.ok(!commonUtils.isDefined(instance._testPageIndex));
+    assert.ok(!typeUtils.isDefined(instance._testPageIndex));
 });
 
 //B239176
@@ -586,7 +587,7 @@ QUnit.test('Click page size parent container_B239176', function(assert) {
 
     $(".dx-page-sizes").first().trigger("dxclick");
 
-    assert.ok(!commonUtils.isDefined(instance._testPageSizeIndex));
+    assert.ok(!typeUtils.isDefined(instance._testPageSizeIndex));
 });
 
 QUnit.test("Show navigate buttons", function(assert) {

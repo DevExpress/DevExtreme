@@ -2,7 +2,8 @@
 
 var vizUtils = require("../core/utils"),
     extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined,
     translator2DModule = require("./translator2d"),
     SHIFT_ANGLE = 90,
     _round = Math.round;
@@ -57,7 +58,7 @@ PolarTranslator.prototype = {
         var that = this,
             argTranslate = that._arg.translate(arg, offsets && offsets[0]),
             radius = that._val.translate(val, offsets && offsets[1]),
-            angle = commonUtils.isDefined(argTranslate) ? argTranslate + that._startAngle - SHIFT_ANGLE : null,
+            angle = isDefined(argTranslate) ? argTranslate + that._startAngle - SHIFT_ANGLE : null,
             cosSin = vizUtils.getCosAndSin(angle),
             x,
             y;
@@ -135,7 +136,7 @@ PolarTranslator.prototype = {
         pos.r = _round(pos.r);
         return pos;
     },
-    getVisibleCategories: commonUtils.noop,
+    getVisibleCategories: noop,
     //TODO
     getCanvasVisibleArea: function() {
         return {};

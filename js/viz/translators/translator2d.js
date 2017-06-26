@@ -8,15 +8,15 @@ var $ = require("../../core/renderer"),
     datetimeTranslator = require("./datetime_translator"),
     logarithmicTranslator = require("./logarithmic_translator"),
     vizUtils = require("../core/utils"),
-    commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     getLog = vizUtils.getLog,
     getPower = vizUtils.getPower,
-    isDefined = commonUtils.isDefined,
+    isDefined = typeUtils.isDefined,
     _abs = Math.abs,
     CANVAS_PROP = ["width", "height", "left", "top", "bottom", "right"],
     NUMBER_EQUALITY_CORRECTION = 1,
     DATETIME_EQUALITY_CORRECTION = 60000,
-    _noop = commonUtils.noop,
+    _noop = require("../../core/utils/common").noop,
     _Translator2d,
 
     addInterval = require("../../core/utils/date").addInterval;
@@ -58,7 +58,7 @@ function getCanvasBounds(range) {
         newMin,
         newMax,
         base = range.base,
-        isDateTime = commonUtils.isDate(max) || commonUtils.isDate(min),
+        isDateTime = typeUtils.isDate(max) || typeUtils.isDate(min),
         correction = isDateTime ? DATETIME_EQUALITY_CORRECTION : NUMBER_EQUALITY_CORRECTION,
         isLogarithmic = range.axisType === 'logarithmic';
 

@@ -12,6 +12,7 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     dataCoreUtils = require("core/utils/data"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     dateUtils = require("core/utils/date"),
     compileGetter = dataCoreUtils.compileGetter,
     compileSetter = dataCoreUtils.compileSetter,
@@ -91,7 +92,7 @@ var moduleOptions = {
                 options.callback({ field: "roomId" });
             },
             getField: function(field, obj) {
-                if(!commonUtils.isDefined(dataAccessors.getter[field])) {
+                if(!typeUtils.isDefined(dataAccessors.getter[field])) {
                     return;
                 }
 

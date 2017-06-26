@@ -1,11 +1,11 @@
 "use strict";
 
-var commonUtils = require("../../core/utils/common"),
+var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     BaseThemeManager = require("../core/base_theme_manager").BaseThemeManager,
     _isString = typeUtils.isString,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _normalizeEnum = require("../core/utils").normalizeEnum,
 
     FONT = "font",
@@ -37,7 +37,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
 
         // This is required because chart calls "_getOption" during "_init" stage
         // TODO: Remove it when chart stops doing that
-        that._callback = commonUtils.noop;
+        that._callback = noop;
     };
 
     var dispose = function() {

@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     dataCoreUtils = require("../../core/utils/data"),
     extend = require("../../core/utils/extend").extend,
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
@@ -97,7 +98,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 parentNode,
                 node;
 
-            parentId = commonUtils.isDefined(parentId) ? parentId : rootValue;
+            parentId = typeUtils.isDefined(parentId) ? parentId : rootValue;
             parentNode = nodeByKey[parentId] = nodeByKey[parentId] || { key: parentId, children: [] };
 
             node = nodeByKey[key] = nodeByKey[key] || { key: key, children: [] };
@@ -169,7 +170,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                         this._convertDataToPlainStructure(childItems, key, result);
 
                         itemsExpr = this.option("itemsExpr");
-                        if(!commonUtils.isFunction(itemsExpr)) {
+                        if(!typeUtils.isFunction(itemsExpr)) {
                             delete item[itemsExpr];
                         }
                     }
@@ -469,7 +470,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 key = store && store.key(),
                 keyExpr = this.option("keyExpr");
 
-            if(commonUtils.isDefined(key) && commonUtils.isDefined(keyExpr)) {
+            if(typeUtils.isDefined(key) && typeUtils.isDefined(keyExpr)) {
                 if(!commonUtils.equalByValue(key, keyExpr)) {
                     throw errors.Error("E1044");
                 }

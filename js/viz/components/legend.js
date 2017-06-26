@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     vizUtils = require("../core/utils"),
     extend = require("../../core/utils/extend").extend,
     layoutElementModule = require("../core/layout_element"),
+    typeUtils = require("../../core/utils/type"),
 
     _Number = Number,
 
@@ -14,9 +15,9 @@ var $ = require("../../core/renderer"),
     _ceil = _math.ceil,
 
     objectUtils = require("../../core/utils/object"),
-    commonUtils = require("../../core/utils/common"),
-    _isDefined = commonUtils.isDefined,
-    _isFunction = commonUtils.isFunction,
+    noop = require("../../core/utils/common").noop,
+    _isDefined = typeUtils.isDefined,
+    _isFunction = typeUtils.isFunction,
     _enumParser = vizUtils.enumParser,
     _normalizeEnum = vizUtils.normalizeEnum,
 
@@ -142,8 +143,8 @@ function parseOptions(options, textField) {
     options.itemsAlignment = parseItemsAlignment(options.itemsAlignment, null);
     options.hoverMode = _normalizeEnum(options.hoverMode);
     options.customizeText = _isFunction(options.customizeText) ? options.customizeText : function() { return this[textField]; };
-    options.customizeHint = _isFunction(options.customizeHint) ? options.customizeHint : commonUtils.noop;
-    options._incidentOccurred = options._incidentOccurred || commonUtils.noop;
+    options.customizeHint = _isFunction(options.customizeHint) ? options.customizeHint : noop;
+    options._incidentOccurred = options._incidentOccurred || noop;
     return options;
 }
 
@@ -751,7 +752,7 @@ extend(legendPrototype, {
                 that[act](point.index);
             };
         } else {
-            return commonUtils.noop;
+            return noop;
         }
     },
 

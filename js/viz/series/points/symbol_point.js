@@ -1,11 +1,11 @@
 "use strict";
 
 var $ = require("../../../core/renderer"),
-    commonUtils = require("../../../core/utils/common"),
     extend = require("../../../core/utils/extend").extend,
+    noop = require("../../../core/utils/common").noop,
     labelModule = require("./label"),
     _extend = extend,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../../core/utils/type").isDefined,
     _normalizeEnum = require("../../core/utils").normalizeEnum,
 
     _math = Math,
@@ -274,7 +274,7 @@ module.exports = {
         return bBox;
     },
 
-    _isLabelInsidePoint: commonUtils.noop,
+    _isLabelInsidePoint: noop,
 
     _getShiftLabelCoords: function(label) {
         var coord = this._addLabelAlignmentAndOffset(label, this._getLabelCoords(label));

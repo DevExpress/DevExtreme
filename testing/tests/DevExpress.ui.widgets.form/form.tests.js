@@ -5,7 +5,7 @@ var $ = require("jquery"),
     consoleUtils = require("core/utils/console"),
     responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
-    utils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
     internals = require("ui/form/ui.form").__internals;
@@ -2450,9 +2450,9 @@ QUnit.test("Get editor instance", function(assert) {
     var form = $testContainer.dxForm("instance");
 
     //assert
-    assert.ok(!utils.isDefined(form.getEditor("test2")), "We hasn't instance for 'test2' field");
-    assert.ok(utils.isDefined(form.getEditor("test1")), "We have instance for 'test1' field");
-    assert.ok(utils.isDefined(form.getEditor("test3")), "We have instance for 'test3' field");
+    assert.ok(!typeUtils.isDefined(form.getEditor("test2")), "We hasn't instance for 'test2' field");
+    assert.ok(typeUtils.isDefined(form.getEditor("test1")), "We have instance for 'test1' field");
+    assert.ok(typeUtils.isDefined(form.getEditor("test3")), "We have instance for 'test3' field");
 
     assert.equal(form.getEditor("test1").NAME, "dxTextBox", "It's textbox");
     assert.equal(form.getEditor("test3").NAME, "dxNumberBox", "It's numberBox");
@@ -2477,9 +2477,9 @@ QUnit.test("Get editor instance with group config", function(assert) {
     var form = $testContainer.dxForm("instance");
 
     //assert
-    assert.ok(utils.isDefined(form.getEditor("test1")), "We have instance for 'test1' field");
-    assert.ok(utils.isDefined(form.getEditor("test2")), "We have instance for 'test2' field");
-    assert.ok(utils.isDefined(form.getEditor("test3")), "We have instance for 'test3' field");
+    assert.ok(typeUtils.isDefined(form.getEditor("test1")), "We have instance for 'test1' field");
+    assert.ok(typeUtils.isDefined(form.getEditor("test2")), "We have instance for 'test2' field");
+    assert.ok(typeUtils.isDefined(form.getEditor("test3")), "We have instance for 'test3' field");
 
     assert.equal(form.getEditor("test2").NAME, "dxTextArea", "It's textArea");
     assert.equal(form.getEditor("test3").NAME, "dxTextBox", "It's textBox");

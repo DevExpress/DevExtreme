@@ -21,6 +21,7 @@ var $ = require("jquery"),
     device = devices.real(),
     domUtils = require("core/utils/dom"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     eventUtils = require("events/utils"),
     KeyboardNavigationController = require("ui/grid_core/ui.grid_core.keyboard_navigation").controllers.keyboardNavigation,
     RowsView = require("ui/data_grid/ui.data_grid.rows").RowsView,
@@ -1676,7 +1677,7 @@ QUnit.testInActiveWindow("Page up and page down by infinite scrolling", function
     var isPageIndexChanged = false;
 
     this.dataController.pageIndex = function(index) {
-        if(commonUtils.isDefined(index)) {
+        if(typeUtils.isDefined(index)) {
             isPageIndexChanged = true;
         } else {
             return 1;
@@ -1711,7 +1712,7 @@ QUnit.testInActiveWindow("Page up and page down by virtual scrolling", function(
     var isPageIndexChanged;
 
     this.dataController.pageIndex = function(index) {
-        if(commonUtils.isDefined(index)) {
+        if(typeUtils.isDefined(index)) {
             isPageIndexChanged = true;
         } else {
             return 1;
@@ -4399,7 +4400,7 @@ QUnit.module("Rows view", {
 
             dataController = dataController || new MockDataController({ items: rows });
 
-            if(!commonUtils.isDefined(columns)) {
+            if(!typeUtils.isDefined(columns)) {
                 columns = [];
                 for(i = 0; i < rows[0].values.length; i++) {
                     columns.push({});

@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     eventUtils = require("../../events/utils"),
@@ -27,7 +28,7 @@ var $ = require("../../core/renderer"),
     _each = $.each,
     _extend = extend,
     _isArray = Array.isArray,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _setCanvasValues = vizUtils.setCanvasValues,
     DEFAULT_OPACITY = 0.3,
 
@@ -727,7 +728,7 @@ var BaseChart = BaseWidget.inherit({
                 func = this._resolveLabelOverlappingShift;
                 break;
         }
-        commonUtils.isFunction(func) && func.call(this);
+        typeUtils.isFunction(func) && func.call(this);
     },
 
     _getVisibleSeries: function() {

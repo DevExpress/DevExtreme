@@ -4,44 +4,6 @@ var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
     config = require("core/config");
 
-QUnit.module('Type checking');
-
-QUnit.test('isDefined', function(assert) {
-    assert.strictEqual(commonUtils.isDefined(0), true, 'zero number');
-    assert.strictEqual(commonUtils.isDefined(1), true, 'number');
-    assert.strictEqual(commonUtils.isDefined(''), true, 'empty string');
-    assert.strictEqual(commonUtils.isDefined('string'), true, 'string');
-    assert.strictEqual(commonUtils.isDefined(new Date()), true, 'date');
-    assert.strictEqual(commonUtils.isDefined({}), true, 'empty object');
-    assert.strictEqual(commonUtils.isDefined({ a: 1 }), true, 'object');
-    assert.strictEqual(commonUtils.isDefined([]), true, 'empty array');
-    assert.strictEqual(commonUtils.isDefined(['a', 1]), true, 'array');
-    assert.strictEqual(commonUtils.isDefined(function() { }), true, 'function');
-
-    assert.strictEqual(commonUtils.isDefined(null), false, 'null');
-    assert.strictEqual(commonUtils.isDefined(undefined), false, 'undefined');
-});
-
-QUnit.test('isDate', function(assert) {
-    assert.strictEqual(commonUtils.isDate(new Date()), true, 'date');
-
-    assert.strictEqual(commonUtils.isDate({}), false, 'object');
-    assert.strictEqual(commonUtils.isDate([]), false, 'array');
-    assert.strictEqual(commonUtils.isDate(1), false, 'number');
-    assert.strictEqual(commonUtils.isDate('s'), false, 'string');
-    assert.strictEqual(commonUtils.isDate(function() { }), false, 'function');
-});
-
-QUnit.test('isFunction', function(assert) {
-    assert.strictEqual(commonUtils.isFunction(function() { }), true, 'function');
-
-    assert.strictEqual(commonUtils.isFunction({}), false, 'object');
-    assert.strictEqual(commonUtils.isFunction([]), false, 'array');
-    assert.strictEqual(commonUtils.isFunction(1), false, 'number');
-    assert.strictEqual(commonUtils.isFunction('s'), false, 'string');
-    assert.strictEqual(commonUtils.isFunction(new Date()), false, 'date');
-});
-
 QUnit.module("runtime utils", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

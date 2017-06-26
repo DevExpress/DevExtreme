@@ -7,13 +7,12 @@ var $ = require("../../core/renderer"),
     barSeries = require("./bar_series"),
     chartBarSeries = barSeries.chart.bar,
     polarBarSeries = barSeries.polar.bar,
-    commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
 
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../core/utils/type").isDefined,
     _extend = extend,
     _each = $.each,
-    _noop = commonUtils.noop;
+    _noop = require("../../core/utils/common").noop;
 
 exports.chart = {};
 exports.chart.bubble = _extend({}, scatterSeries, {
