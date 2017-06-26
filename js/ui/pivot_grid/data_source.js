@@ -504,19 +504,26 @@ module.exports = Class.inherit((function() {
         }
     }
 
+    function getMemberForSortBy(sortBy, getAscOrder) {
+        var member = "text";
+        if(sortBy === "none") {
+            member = "index";
+        } else if(getAscOrder || sortBy !== "displayText") {
+            member = "value";
+        }
+        return member;
+    }
+
     function getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder) {
         var sortOrder = getAscOrder ? "asc" : field.sortOrder,
-            sortBy = field.sortBy === "none" ? "none" : getAscOrder ? "value" : field.sortBy === "displayText" ? "text" : "value",
+            sortBy = getMemberForSortBy(field.sortBy, getAscOrder),
             defaultCompare = field.sortingMethod ? function(a, b) {
                 return field.sortingMethod(a, b);
             } : getCompareFunction(function(item) { return item[sortBy]; }),
             summaryValueSelector = !getAscOrder && getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName),
             summaryCompare = summaryValueSelector && getCompareFunction(summaryValueSelector),
             sortingMethod = function(a, b) {
-                var result = summaryCompare && summaryCompare(a, b) || 0;
-                if(result === 0) {
-                    result = sortBy === "none" ? a.index - b.index : defaultCompare(a, b);
-                }
+                var result = summaryCompare && summaryCompare(a, b) || defaultCompare(a, b);
                 return sortOrder === "desc" ? -result : result;
             };
 
