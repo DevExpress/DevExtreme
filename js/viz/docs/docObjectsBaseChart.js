@@ -63,7 +63,17 @@ var BaseBaseSeries = {
     * @publicName selectPoint(point)
     * @param1 point:Point
     */
-    selectPoint: function() { },
+    selectPoint: function () { },
+    /**
+    * @name baseSeriesObjectmethods_hover
+    * @publicName hover()
+    */
+    hover: function () { },
+    /**
+    * @name baseSeriesObjectmethods_clearHover
+    * @publicName clearHover()
+    */
+    clearHover: function () { },
     /**
     * @name baseSeriesObjectmethods_isSelected
     * @publicName isSelected()
@@ -145,7 +155,17 @@ var BasePoint = {
     * @name basePointObjectmethods_select
     * @publicName select()
     */
-    select: function() { },
+    select: function () { },
+    /**
+    * @name basePointObjectmethods_hover
+    * @publicName hover()
+    */
+    hover: function () { },
+    /**
+    * @name basePointObjectmethods_clearHover
+    * @publicName clearHover()
+    */
+    clearHover: function() { },
     /**
    * @name basePointObjectmethods_isSelected
    * @publicName isSelected()
