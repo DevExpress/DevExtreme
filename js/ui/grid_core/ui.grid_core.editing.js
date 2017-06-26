@@ -870,7 +870,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
             }
         },
-        _saveEditDataCore: function(deferreds, processedSaveResults) {
+        _saveEditDataCore: function(deferreds, results) {
             var that = this,
                 store = that._dataController.store(),
                 isDataSaved = true;
@@ -938,7 +938,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     deferred
                         .always(function(data) {
                             isDataSaved = data !== "cancel";
-                            processedSaveResults.push({ key: editData.key, data: data });
+                            results.push({ key: editData.key, result: data });
                         })
                         .always(doneDeferred.resolve);
 
@@ -960,7 +960,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 editMode = getEditMode(that);
 
             for(i = 0; i < results.length; i++) {
-                arg = results[i].data;
+                arg = results[i].result;
                 editIndex = getIndexByKey(results[i].key, that._editData);
 
                 if(that._editData[editIndex]) {
@@ -1014,7 +1014,7 @@ var EditingController = modules.ViewController.inherit((function() {
         saveEditData: function() {
             var that = this,
                 editData,
-                processedSaveResults = [],
+                results = [],
                 deferreds = [],
                 dataController = that._dataController,
                 editMode = getEditMode(that),
@@ -1032,7 +1032,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 return result.resolve().promise();
             }
 
-            if(!that._saveEditDataCore(deferreds, processedSaveResults) && editMode === EDIT_MODE_CELL) {
+            if(!that._saveEditDataCore(deferreds, results) && editMode === EDIT_MODE_CELL) {
                 that._focusEditingCell();
             }
 
@@ -1042,7 +1042,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 when.apply($, deferreds).done(function() {
                     editData = that._editData.slice(0);
 
-                    if(that._processSaveEditDataResult(processedSaveResults)) {
+                    if(that._processSaveEditDataResult(results)) {
                         resetEditIndices(that);
 
                         if(editMode === EDIT_MODE_POPUP && that._editPopup) {
