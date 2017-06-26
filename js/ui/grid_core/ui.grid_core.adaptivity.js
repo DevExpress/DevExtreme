@@ -32,7 +32,8 @@ var $ = require("../../core/renderer"),
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     ADAPTIVE_COLUMN_NAME = "adaptive",
     EDIT_MODE_ROW = "row",
-    EDIT_MODE_FORM = "form";
+    EDIT_MODE_FORM = "form",
+    EDIT_MODE_POPUP = "popup";
 
 function getColumnId(column) {
     return column.command ? "command:" + column.command : column.index;
@@ -42,11 +43,6 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     _isRowEditMode: function() {
         var editMode = this._editingController.getEditMode();
         return editMode === EDIT_MODE_ROW;
-    },
-
-    _isFormEditMode: function() {
-        var editMode = this._editingController.getEditMode();
-        return editMode === EDIT_MODE_FORM;
     },
 
     _isItemModified: function(item, cellOptions) {
@@ -209,7 +205,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isItemEdited: function(item) {
-        if(this._isFormEditMode()) {
+        if(this.isFormEditMode()) {
             return false;
         }
 
@@ -312,6 +308,12 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
+    isFormEditMode: function() {
+        var editMode = this._editingController.getEditMode();
+
+        return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
+    },
+
     hideRedundantColumns: function(resultWidths, visibleColumns, hiddenQueue) {
         var that = this,
             visibleColumn;
@@ -394,7 +396,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     toggleExpandAdaptiveDetailRow: function(key) {
-        if(!(this._isFormEditMode() && this._editingController.isEditing())) {
+        if(!(this.isFormEditMode() && this._editingController.isEditing())) {
             this.getController("data").toggleExpandAdaptiveDetailRow(key);
         }
     },
@@ -709,7 +711,7 @@ module.exports = {
                 },
 
                 _beforeUpdateItems: function(rowIndices, rowIndex) {
-                    if(this.getEditMode() !== EDIT_MODE_FORM && this._adaptiveController.hasHiddenColumns()) {
+                    if(!this._adaptiveController.isFormEditMode() && this._adaptiveController.hasHiddenColumns()) {
                         var items = this._dataController.items(),
                             item = items[rowIndex],
                             oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.adaptiveExpandedKey(), items);
@@ -785,7 +787,7 @@ module.exports = {
                 },
 
                 editRow: function(rowIndex) {
-                    if(this.getEditMode() === EDIT_MODE_FORM) {
+                    if(this._adaptiveController.isFormEditMode()) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                     }
 
