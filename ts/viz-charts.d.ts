@@ -35,6 +35,12 @@ declare module DevExpress.viz.charts {
         /** @docid baseSeriesObjectmethods_deselectpoint */
         deselectPoint(point: BasePoint): void;
 
+        /** @docid baseSeriesObjectmethods_hover */
+        hover(): void;
+
+        /** @docid baseSeriesObjectmethods_clearHover */
+        clearHover(): void;
+
         /** @docid baseSeriesObjectmethods_getallpoints */
         getAllPoints(): Array<BasePoint>;
 
@@ -94,6 +100,12 @@ declare module DevExpress.viz.charts {
 
         /** @docid basePointObjectmethods_select */
         select(): void;
+
+        /** @docid basePointObjectmethods_hover */
+        hover(): void;
+
+        /** @docid basePointObjectmethods_clearHover */
+        clearHover(): void;
 
         /** @docid basePointObjectmethods_showTooltip */
         showTooltip(): void;
