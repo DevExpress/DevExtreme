@@ -371,7 +371,8 @@ QUnit.test("files count in list is correct if the 'extendSelection' option is fa
 QUnit.test("files count in list is correct if the 'extendSelection' option is true", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({
         extendSelection: true,
-        multiple: true
+        multiple: true,
+        uploadMode: "instantly"
     });
 
     simulateFileChoose($fileUploader, [getNewFile(), getNewFile()]);
@@ -592,7 +593,9 @@ QUnit.test("input value should not be changed inside widget after selecting", fu
     var originalVal = $.fn.val;
 
     try {
-        var $fileUploader = $("#fileuploader").dxFileUploader();
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            uploadMode: "instantly"
+        });
 
         var valUsed = 0;
 
@@ -614,12 +617,30 @@ QUnit.test("input value should not be changed inside widget after selecting", fu
 
 QUnit.test("value change should be fired when file selected", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({
+        uploadMode: "instantly",
         onValueChanged: function(e) {
             assert.deepEqual(e.value, [fakeFile], "value specified correctly");
         }
     });
 
     simulateFileChoose($fileUploader, fakeFile);
+});
+
+QUnit.test("value change should be fired when file selected, uploadMode = useForm", function(assert) {
+    var counter = 0;
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+            uploadMode: "useForm",
+            onValueChanged: function(e) {
+                !counter && assert.deepEqual(e.value, [], "value specified correctly");
+                counter++;
+            }
+        }),
+        fileUploader = $fileUploader.dxFileUploader("instance");
+
+
+    simulateFileChoose($fileUploader, fakeFile);
+    assert.equal(counter, 2, "onValueChanged was called twice");
+    assert.deepEqual(fileUploader.option("value"), [fakeFile], "value specified correctly");
 });
 
 QUnit.test("value should support files at initialization", function(assert) {
