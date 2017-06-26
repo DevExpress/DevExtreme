@@ -447,7 +447,7 @@ var FileUploader = Editor.inherit({
 
         if(this.option("uploadMode") === "useForm") {
             files = objectUtils.deepExtendArraySafe([], files);
-            this._clearFiles();
+            this.reset();
         }
 
         if(files && !files.length) {
@@ -719,12 +719,6 @@ var FileUploader = Editor.inherit({
         return $("<div>")
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
             .append(file.uploadButton.element());
-    },
-
-    _clearFiles: function() {
-        this._$filesContainer.empty();
-        this._files = [];
-        this.option("value", []);
     },
 
     _removeFile: function(file) {
