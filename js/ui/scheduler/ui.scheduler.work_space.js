@@ -74,6 +74,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     CELL_DATA = "dxCellData",
 
     DATE_TABLE_CELL_WIDTH = 75,
+    CELL_BORDER = 1,
 
     DAY_MS = toMs("day"),
     HOUR_MS = toMs("hour");
@@ -823,11 +824,13 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var headerPanelHeight = this.getHeaderPanelHeight(),
-            headerHeight = this.invoke("getHeaderHeight");
+            headerHeight = this.invoke("getHeaderHeight"),
+            allDayPanelIsHidden = this._$allDayTitle && !this._$allDayTitle.is(":visible"),
+            allDayPanelHeight = this.getAllDayHeight() + (allDayPanelIsHidden ? 0 : CELL_BORDER);
 
         headerPanelHeight && this._dateTableScrollable.element().css({
-            "padding-bottom": headerPanelHeight + "px",
-            "margin-bottom": -1 * (parseInt(headerPanelHeight, 10)) + "px"
+            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "margin-bottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
 
         this._$allDayTitle && this._$allDayTitle.css("top", headerHeight + headerPanelHeight + "px");
