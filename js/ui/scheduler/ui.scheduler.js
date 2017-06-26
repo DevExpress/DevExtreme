@@ -1407,6 +1407,7 @@ var Scheduler = Widget.inherit({
         var filteredItems = this.fire("prerenderFilter");
 
         this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
+        this._workSpace.headerPanelOffsetRecalculate();
 
         this._appointments.option("renderingStrategy", this._getAppointmentsRenderingStrategy());
 
