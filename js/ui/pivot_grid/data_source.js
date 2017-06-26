@@ -506,12 +506,10 @@ module.exports = Class.inherit((function() {
 
     function getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder) {
         var sortOrder = getAscOrder ? "asc" : field.sortOrder,
+            sortBy = field.sortBy === "none" ? "index" : getAscOrder ? "value" : field.sortBy === "displayText" ? "text" : "value",
             defaultCompare = field.sortingMethod ? function(a, b) {
                 return field.sortingMethod(a, b);
-            } : getCompareFunction(function(item) {
-                var sortBy = field.sortBy === "none" ? "index" : getAscOrder ? "value" : field.sortBy === "displayText" ? "text" : "value";
-                return item[sortBy];
-            }),
+            } : getCompareFunction(function(item) { return item[sortBy]; }),
             summaryValueSelector = !getAscOrder && getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName),
             summaryCompare = summaryValueSelector && getCompareFunction(summaryValueSelector),
             sortingMethod = function(a, b) {
