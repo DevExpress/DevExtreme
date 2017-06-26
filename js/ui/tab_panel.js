@@ -340,6 +340,7 @@ var TabPanel = MultiView.inherit({
             case "items":
                 this._setTabsOption(fullName, value);
                 this._updateLayout();
+                this._tabs.repaint();
                 this.callBase(args);
                 break;
             case "selectedIndex":
