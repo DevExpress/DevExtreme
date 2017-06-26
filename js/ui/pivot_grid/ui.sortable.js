@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
     addNamespace = eventUtils.addNamespace,
@@ -27,7 +27,7 @@ function elementHasPoint(element, x, y) {
 }
 
 function checkHorizontalPosition(position, itemOffset, rtl) {
-    if(commonUtils.isDefined(itemOffset.posHorizontal)) {
+    if(isDefined(itemOffset.posHorizontal)) {
         return rtl ? position > itemOffset.posHorizontal : position < itemOffset.posHorizontal;
     } else {
         return true;

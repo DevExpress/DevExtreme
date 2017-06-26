@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     CollapsedGroupingHelper = require("./ui.data_grid.grouping.collapsed").GroupingHelper,
     messageLocalization = require("../../localization/message"),
     dataSourceAdapter = require("./ui.data_grid.data_source_adapter"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     devices = require("../../core/devices"),
     when = require("../../integration/jquery/deferred").when;
@@ -172,7 +171,7 @@ var GroupingDataControllerExtender = (function() {
             return this.callBase(items, changeType);
         },
         _processItem: function(item, options) {
-            if(commonUtils.isDefined(item.groupIndex) && typeUtils.isString(item.rowType) && item.rowType.indexOf("group") === 0) {
+            if(typeUtils.isDefined(item.groupIndex) && typeUtils.isString(item.rowType) && item.rowType.indexOf("group") === 0) {
                 item = this._processGroupItem(item, options);
                 options.dataIndex = 0;
             } else {
@@ -496,10 +495,10 @@ var GroupingHeaderPanelExtender = (function() {
 
             if(contextMenuEnabled && options.column) {
                 var column = options.column,
-                    isGroupingAllowed = commonUtils.isDefined(column.allowGrouping) ? column.allowGrouping : true;
+                    isGroupingAllowed = typeUtils.isDefined(column.allowGrouping) ? column.allowGrouping : true;
 
                 if(isGroupingAllowed) {
-                    var isColumnGrouped = commonUtils.isDefined(column.groupIndex) && column.groupIndex > -1,
+                    var isColumnGrouped = typeUtils.isDefined(column.groupIndex) && column.groupIndex > -1,
                         groupingTexts = that.option("grouping.texts"),
                         onItemClick = onGroupingMenuItemClick.bind(that, column);
 
@@ -587,7 +586,7 @@ var GroupingRowsViewExtender = (function() {
                 return {
                     allowRenderToDetachedContainer: true,
                     render: function(container, options) {
-                        if(commonUtils.isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.inserted) {
+                        if(typeUtils.isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.inserted) {
                             container
                                 .addClass(DATAGRID_EXPAND_CLASS)
                                 .addClass(DATAGRID_SELECTION_DISABLED_CLASS);
@@ -618,9 +617,9 @@ var columnHeadersViewExtender = (function() {
             if(contextMenuEnabled && options.row && options.row.rowType === "header") {
                 var column = options.column;
 
-                if(!column.command && (!commonUtils.isDefined(column.allowGrouping) || column.allowGrouping)) {
+                if(!column.command && (!typeUtils.isDefined(column.allowGrouping) || column.allowGrouping)) {
                     var groupingTexts = that.option("grouping.texts"),
-                        isColumnGrouped = commonUtils.isDefined(column.groupIndex) && column.groupIndex > -1,
+                        isColumnGrouped = typeUtils.isDefined(column.groupIndex) && column.groupIndex > -1,
                         onItemClick = onGroupingMenuItemClick.bind(that, column);
 
                     items = items || [];

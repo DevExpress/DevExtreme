@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     translator = require("../../animation/translator"),
     positionUtils = require("../../animation/position"),
     mathUtils = require("../../core/utils/math"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     numberLocalization = require("../../localization/number");
@@ -211,7 +210,7 @@ var SliderHandle = Widget.inherit({
     },
 
     _ensureTooltipIsCentered: function(value, previousValue) {
-        if(commonUtils.isDefined(value) && commonUtils.isDefined(previousValue) && value.toString().length !== previousValue.toString().length) {
+        if(typeUtils.isDefined(value) && typeUtils.isDefined(previousValue) && value.toString().length !== previousValue.toString().length) {
             this._centeredTooltipPosition();
         }
     },

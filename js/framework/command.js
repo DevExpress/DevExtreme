@@ -3,13 +3,12 @@
 var $ = require("../core/renderer"),
     errors = require("./errors"),
     extend = require("../core/utils/extend").extend,
-    commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     registerComponent = require("../core/component_registrator"),
     DOMComponent = require("../core/dom_component"),
-    isFunction = commonUtils.isFunction,
+    isFunction = typeUtils.isFunction,
     isPlainObject = typeUtils.isPlainObject,
-    noop = commonUtils.noop;
+    noop = require("../core/utils/common").noop;
 
 require("../integration/knockout");
 

@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    commonUtils = require("../core/utils/common"),
+    noop = require("../core/utils/common").noop,
+    isDefined = require("../core/utils/type").isDefined,
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     PlainEditStrategy = require("./collection/ui.collection_widget.edit.strategy.plain"),
@@ -294,7 +295,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderContentTemplate: function() {
-        if(commonUtils.isDefined(this._singleContent)) {
+        if(isDefined(this._singleContent)) {
             return;
         }
 
@@ -305,7 +306,7 @@ var SlideOut = CollectionWidget.inherit({
         this._singleContent = this._itemContainer().html().length !== itemsLength;
     },
 
-    _itemClickHandler: commonUtils.noop,
+    _itemClickHandler: noop,
 
     _renderContentImpl: function() {
         if(this._singleContent) {

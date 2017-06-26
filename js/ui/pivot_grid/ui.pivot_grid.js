@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     clickEvent = require("../../events/click"),
     messageLocalization = require("../../localization/message"),
@@ -22,7 +23,6 @@ var $ = require("../../core/renderer"),
     PivotGridFieldChooserBase = require("./ui.pivot_grid.field_chooser_base"),
     ExportMixin = require("./ui.pivot_grid.export").ExportMixin,
     chartIntegrationMixin = require("./ui.pivot_grid.chart_integration"),
-    isDefined = commonUtils.isDefined,
     Popup = require("../popup"),
     ContextMenu = require("../context_menu"),
     when = require("../../integration/jquery/deferred").when,
@@ -1261,7 +1261,7 @@ var PivotGrid = Widget.inherit({
             args = {
                 field: field
             };
-        return commonUtils.isDefined(field) ? args : {};
+        return isDefined(field) ? args : {};
     },
 
     _createCellArgs: function(cellElement) {
@@ -1398,7 +1398,7 @@ var PivotGrid = Widget.inherit({
             element = that.element(),
             testElement;
 
-        if(commonUtils.isDefined(that._hasHeight) || element.is(":hidden")) {
+        if(isDefined(that._hasHeight) || element.is(":hidden")) {
             return;
         }
 

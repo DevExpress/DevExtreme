@@ -10,7 +10,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     dateSerialization = require("../../core/utils/date_serialization"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     devices = require("../../core/devices"),
     config = require("../../core/config"),
@@ -1579,7 +1579,7 @@ var Scheduler = Widget.inherit({
         });
     },
 
-    _renderFocusTarget: commonUtils.noop,
+    _renderFocusTarget: noop,
 
     _render: function() {
         this.callBase();
@@ -1765,7 +1765,7 @@ var Scheduler = Widget.inherit({
     _updateOption: function(viewName, optionName, value) {
         var currentViewOptions = this._getCurrentViewOptions();
 
-        if(!currentViewOptions || !commonUtils.isDefined(currentViewOptions[optionName])) {
+        if(!currentViewOptions || !typeUtils.isDefined(currentViewOptions[optionName])) {
             this["_" + viewName].option(optionName, value);
         }
     },
@@ -2229,10 +2229,10 @@ var Scheduler = Widget.inherit({
             appointmentDuration = endDate.getTime() - startDate.getTime(),
             updatedStartDate;
 
-        if(commonUtils.isDefined($appointment)) {
+        if(typeUtils.isDefined($appointment)) {
             var apptDataCalculator = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
 
-            if(commonUtils.isFunction(apptDataCalculator)) {
+            if(typeUtils.isFunction(apptDataCalculator)) {
                 updatedStartDate = apptDataCalculator($appointment, startDate).startDate;
             } else if(this._needUpdateAppointmentData($appointment)) {
                 var coordinates = translator.locate($appointment);
@@ -2272,7 +2272,7 @@ var Scheduler = Widget.inherit({
         var callback = this._subscribes[subject],
             args = Array.prototype.slice.call(arguments);
 
-        if(!commonUtils.isFunction(callback)) {
+        if(!typeUtils.isFunction(callback)) {
             throw errors.Error("E1031", subject);
         }
 
@@ -2291,7 +2291,7 @@ var Scheduler = Widget.inherit({
         };
 
         var performFailAction = function(err) {
-            if(commonUtils.isFunction(onUpdatePrevented)) {
+            if(typeUtils.isFunction(onUpdatePrevented)) {
                 onUpdatePrevented.call(this);
             }
 
@@ -2356,7 +2356,7 @@ var Scheduler = Widget.inherit({
             this._createPopup(data, processTimeZone);
             var toolbarItems = [],
                 showCloseButton = true;
-            if(!commonUtils.isDefined(showButtons) || showButtons) {
+            if(!typeUtils.isDefined(showButtons) || showButtons) {
                 toolbarItems = this._getPopupToolbarItems();
                 showCloseButton = this._popup.initialOption("showCloseButton");
             }

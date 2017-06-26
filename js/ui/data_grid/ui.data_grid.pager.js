@@ -3,7 +3,7 @@
 var gridCore = require("./ui.data_grid.core"),
     Pager = require("./pager"),
     inArray = require("../../core/utils/array").inArray,
-    commonUtils = require("../../core/utils/common");
+    isDefined = require("../../core/utils/type").isDefined;
 
 var DATAGRID_PAGER_CLASS = "dx-datagrid-pager",
     MAX_PAGES_COUNT = 10;
@@ -58,7 +58,7 @@ exports.PagerView = gridCore.View.inherit({
                 }
             };
 
-        if(commonUtils.isDefined(pagerOptions.infoText)) {
+        if(isDefined(pagerOptions.infoText)) {
             options.infoText = pagerOptions.infoText;
         }
 
@@ -72,7 +72,7 @@ exports.PagerView = gridCore.View.inherit({
             allowedPageSizes = pagerOptions && pagerOptions.allowedPageSizes,
             pageSize = dataController.pageSize();
 
-        if(!commonUtils.isDefined(that._pageSizes) || inArray(pageSize, that._pageSizes) === -1) {
+        if(!isDefined(that._pageSizes) || inArray(pageSize, that._pageSizes) === -1) {
             that._pageSizes = [];
             if(pagerOptions) {
                 if(Array.isArray(allowedPageSizes)) {

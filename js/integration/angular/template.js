@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
-    isFunction = require("../../core/utils/common").isFunction,
+    isFunction = require("../../core/utils/type").isFunction,
     domUtils = require("../../core/utils/dom");
 
 var NgTemplate = TemplateBase.inherit({

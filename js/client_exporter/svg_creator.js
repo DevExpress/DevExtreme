@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    commonUtils = require("../core/utils/common"),
+    isFunction = require("../core/utils/type").isFunction,
     getSvgMarkup = require("../core/utils/svg").getSvgMarkup,
     when = require("../integration/jquery/deferred").when;
 
@@ -98,7 +98,7 @@ exports.svgCreator = {
                 markup = markup.split(href).join(dataURI);
             });
 
-            blob.resolve(commonUtils.isFunction(window.Blob) ? that._getBlob(markup) : that._getBase64(markup));
+            blob.resolve(isFunction(window.Blob) ? that._getBlob(markup) : that._getBase64(markup));
         });
 
         return blob;

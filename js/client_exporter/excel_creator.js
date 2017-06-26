@@ -1,7 +1,6 @@
 "use strict";
 
 var Class = require("../core/class"),
-    commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
@@ -53,7 +52,7 @@ exports.ExcelCreator = Class.inherit({
             result = result + " " + attr.name + "=\"" + attr.value + "\"";
         }
 
-        return commonUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
+        return typeUtils.isDefined(content) ? result + ">" + content + "</" + tagName + ">" : result + " />";
     },
 
     _getCellIndex: function(rowIndex, cellIndex) {
@@ -121,7 +120,7 @@ exports.ExcelCreator = Class.inherit({
     },
 
     _appendString: function(value) {
-        if(commonUtils.isDefined(value)) {
+        if(typeUtils.isDefined(value)) {
             value = String(value);
             if(value.length) {
                 value = stringUtils.encodeHtml(value);
@@ -138,7 +137,7 @@ exports.ExcelCreator = Class.inherit({
         var days,
             totalTime;
 
-        if(commonUtils.isDate(date)) {
+        if(typeUtils.isDate(date)) {
             days = Math.floor((Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) - EXCEL_START_TIME) / (1000 * 60 * 60 * 24));
             if(days < DAYS_COUNT_BEFORE_29_FEB_1900) {
                 days--;
@@ -156,7 +155,7 @@ exports.ExcelCreator = Class.inherit({
             formatID = this._styleArray[this._dataProvider.getStyleId(rowIndex, cellIndex)].formatID,
             format = typeUtils.isNumeric(formatID) ? this._styleFormat[formatID - 1] : null;
 
-        if(type === "d" && !commonUtils.isDate(value)) {
+        if(type === "d" && !typeUtils.isDate(value)) {
             type = "s";
         }
 
@@ -309,10 +308,10 @@ exports.ExcelCreator = Class.inherit({
                 { name: "xfId", value: 0 },
                 { name: "applyAlignment", value: 1 },
                 { name: "fontId", value: Number(!!style.bold) },
-                { name: "applyNumberFormat", value: (commonUtils.isDefined(style.formatID)) ? 1 : 0 },
+                { name: "applyNumberFormat", value: (typeUtils.isDefined(style.formatID)) ? 1 : 0 },
                 {
                     name: "numFmtId",
-                    value: commonUtils.isDefined(style.formatID) ? Number(style.formatID) + CUSTOM_FORMAT_START_INDEX - 1 : 0
+                    value: typeUtils.isDefined(style.formatID) ? Number(style.formatID) + CUSTOM_FORMAT_START_INDEX - 1 : 0
                 }
             ], that._getXMLTag("alignment", [
                 { name: "vertical", value: "top" },
@@ -414,7 +413,7 @@ exports.ExcelCreator = Class.inherit({
                     { name: "r", value: this._getCellIndex(rowIndex + 1, colIndex) },
                     { name: "s", value: cellData.style },
                     { name: "t", value: cellData.type }
-                ], (commonUtils.isDefined(cellData.value)) ? this._getXMLTag("v", [], cellData.value) : null));
+                ], (typeUtils.isDefined(cellData.value)) ? this._getXMLTag("v", [], cellData.value) : null));
             }
             xmlRows.push(this._getXMLTag("row", [
                 { name: "r", value: Number(rowIndex) + 1 },
@@ -454,7 +453,7 @@ exports.ExcelCreator = Class.inherit({
             l,
             cellIndex,
             rowIndex,
-            rowsLength = commonUtils.isDefined(this._dataProvider.getHeaderRowCount) ? this._dataProvider.getHeaderRowCount() : this._dataProvider.getRowsCount(),
+            rowsLength = typeUtils.isDefined(this._dataProvider.getHeaderRowCount) ? this._dataProvider.getHeaderRowCount() : this._dataProvider.getRowsCount(),
             columnsLength = this._dataProvider.getColumns().length,
             usedArea = [],
             mergeArray = [],
@@ -464,7 +463,7 @@ exports.ExcelCreator = Class.inherit({
 
         for(rowIndex = 0; rowIndex < rowsLength; rowIndex++) {
             for(cellIndex = 0; cellIndex !== columnsLength; cellIndex++) {
-                if(!commonUtils.isDefined(usedArea[rowIndex]) || !commonUtils.isDefined(usedArea[rowIndex][cellIndex])) {
+                if(!typeUtils.isDefined(usedArea[rowIndex]) || !typeUtils.isDefined(usedArea[rowIndex][cellIndex])) {
                     var cellMerge = this._dataProvider.getCellMerging(rowIndex, cellIndex);
                     if(cellMerge.colspan || cellMerge.rowspan) {
                         mergeArray.push({
@@ -473,7 +472,7 @@ exports.ExcelCreator = Class.inherit({
                         });
                         for(k = rowIndex; k <= rowIndex + cellMerge.rowspan || 0; k++) {
                             for(l = cellIndex; l <= cellIndex + cellMerge.colspan || 0; l++) {
-                                if(!commonUtils.isDefined(usedArea[k])) {
+                                if(!typeUtils.isDefined(usedArea[k])) {
                                     usedArea[k] = [];
                                 }
                                 usedArea[k][l] = true;
@@ -534,7 +533,7 @@ exports.ExcelCreator = Class.inherit({
         this._needSheetPr = false;
         this._dataProvider = dataProvider;
 
-        if(commonUtils.isDefined(JSZip)) {
+        if(typeUtils.isDefined(JSZip)) {
             this._zip = new JSZip();
         } else {
             this._zip = null;
@@ -574,9 +573,9 @@ exports.getData = function(data, options, callback) {
 
     excelCreator.ready().done(function() {
         if(excelCreator._zip.generateAsync) {
-            excelCreator.getData(commonUtils.isFunction(window.Blob)).then(callback);
+            excelCreator.getData(typeUtils.isFunction(window.Blob)).then(callback);
         } else {
-            callback(excelCreator.getData(commonUtils.isFunction(window.Blob)));
+            callback(excelCreator.getData(typeUtils.isFunction(window.Blob)));
         }
     });
 };

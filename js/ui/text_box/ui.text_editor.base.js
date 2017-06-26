@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     domUtils = require("../../core/utils/dom"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     themes = require("../themes"),
@@ -357,7 +357,7 @@ var TextEditorBase = Editor.inherit({
 
         if(displayValue !== undefined && value !== null) {
             text = valueFormat(displayValue);
-        } else if(!commonUtils.isDefined(text)) {
+        } else if(!isDefined(text)) {
             text = valueFormat(value);
         }
 
@@ -365,7 +365,7 @@ var TextEditorBase = Editor.inherit({
 
         //fallback to empty string is required to support WebKit native date picker in some basic scenarios
         //can not be covered by QUnit
-        if(this._input().val() !== (commonUtils.isDefined(text) ? text : "")) {
+        if(this._input().val() !== (isDefined(text) ? text : "")) {
             this._renderDisplayText(text);
         } else {
             this._toggleEmptinessEventHandler();

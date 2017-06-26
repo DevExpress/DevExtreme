@@ -3,7 +3,8 @@
 var $ = require("../core/renderer"),
     translator = require("../animation/translator"),
     camelize = require("../core/utils/inflector").camelize,
-    commonUtils = require("../core/utils/common"),
+    noop = require("../core/utils/common").noop,
+    isDefined = require("../core/utils/type").isDefined,
     inArray = require("../core/utils/array").inArray,
     extend = require("../core/utils/extend").extend,
     messageLocalization = require("../localization/message"),
@@ -13,8 +14,7 @@ var $ = require("../core/renderer"),
     themes = require("./themes"),
     Overlay = require("./overlay"),
     EmptyTemplate = require("./widget/empty_template"),
-    domUtils = require("../core/utils/dom"),
-    noop = commonUtils.noop;
+    domUtils = require("../core/utils/dom");
 
 require("./toolbar/ui.toolbar.base");
 
@@ -547,7 +547,7 @@ var Popup = Overlay.inherit({
             index = 0;
 
         $.each(toolbarItems, (function(_, data) {
-            var isShortcut = commonUtils.isDefined(data.shortcut),
+            var isShortcut = isDefined(data.shortcut),
                 item = isShortcut ? getButtonPlace(data.shortcut) : data;
 
             if(isShortcut && currentPlatform === "ios" && index < 2) {

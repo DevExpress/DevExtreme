@@ -3,11 +3,10 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     ajax = require("../../core/utils/ajax"),
     Guid = require("../../core/guid"),
-    isDefined = commonUtils.isDefined,
+    isDefined = typeUtils.isDefined,
 
     errors = require("../errors").errors,
     dataUtils = require("../utils");

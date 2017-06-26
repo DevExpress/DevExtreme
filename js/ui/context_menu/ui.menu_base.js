@@ -529,7 +529,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
     _getSubmenuDelay: function(action) {
         var delay = this.option("showSubmenuMode").delay;
-        if(!commonUtils.isDefined(delay)) {
+        if(!typeUtils.isDefined(delay)) {
             return DEFAULT_DELAY[action];
         }
 

@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     VERSION = require("../core/version"),
     imageCreator = require("./image_creator").imageCreator,
-    isFunction = require("../core/utils/common").isFunction,
+    isFunction = require("../core/utils/type").isFunction,
     extend = require("../core/utils/extend").extend,
     when = require("../integration/jquery/deferred").when,
 
