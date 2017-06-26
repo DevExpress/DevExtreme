@@ -467,17 +467,18 @@ QUnit.test("the 'allowCanceling' option should be ignored if the 'uploadMode' op
     assert.equal($element.find("." + FILEUPLOADER_CANCEL_BUTTON_CLASS).length, 0, "no cancel buttons are rendered");
 });
 
-QUnit.test("duplicate files should be removed when option 'useForm' is used", function(assert) {
+QUnit.test("file list should be cleared when 'useForm' option is used", function(assert) {
     var $element = $("#fileuploader").dxFileUploader({
             multiple: true,
             uploadMode: "useForm"
         }),
-        fileUploader = $element.dxFileUploader("instance");
+        fileUploader = $element.dxFileUploader("instance"),
+        newFile = getNewFile();
 
     simulateFileChoose($element, [fakeFile, fakeFile1]);
-    simulateFileChoose($element, [fakeFile1]);
+    simulateFileChoose($element, [newFile]);
 
-    assert.equal(fileUploader.option("value").length, 2, "duplicate was not selected");
+    assert.deepEqual(fileUploader.option("value"), [newFile], "file list was cleared");
 });
 
 

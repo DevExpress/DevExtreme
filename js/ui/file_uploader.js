@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
+    objectUtils = require("../core/utils/object"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     Editor = require("./editor/editor"),
@@ -435,6 +436,7 @@ var FileUploader = Editor.inherit({
         });
     },
 
+
     _inputChangeHandler: function() {
         if(this._doPreventInputChange) {
             return;
@@ -442,6 +444,11 @@ var FileUploader = Editor.inherit({
 
         var fileName = this._$fileInput.val().replace(/^.*\\/, ''),
             files = this._$fileInput.prop("files");
+
+        if(this.option("uploadMode") === "useForm") {
+            files = objectUtils.deepExtendArraySafe([], files);
+            this._clearFiles();
+        }
 
         if(files && !files.length) {
             return;
@@ -453,6 +460,7 @@ var FileUploader = Editor.inherit({
         if(this.option("uploadMode") === "instantly") {
             this._uploadFiles();
         }
+
     },
 
     _shouldFileListBeExtended: function() {
@@ -711,6 +719,12 @@ var FileUploader = Editor.inherit({
         return $("<div>")
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
             .append(file.uploadButton.element());
+    },
+
+    _clearFiles: function() {
+        this._$filesContainer.empty();
+        this._files = [];
+        this.option("value", []);
     },
 
     _removeFile: function(file) {
