@@ -1174,7 +1174,7 @@ QUnit.test("WorkSpace recalculation works fine after render resourceCellTemplate
         }],
         crossScrollingEnabled: true,
         resourceCellTemplate: function(itemData, index, $container) {
-            return $("<div />").css({ height: "150px" });
+            return $("<div>").css({ height: "150px" });
         }
     });
 
@@ -1202,7 +1202,7 @@ QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if 
         }],
         crossScrollingEnabled: true,
         dateCellTemplate: function(itemData, index, $container) {
-            return $("<div />").css({ height: "150px" });
+            return $("<div>").css({ height: "150px" });
         }
     });
 
