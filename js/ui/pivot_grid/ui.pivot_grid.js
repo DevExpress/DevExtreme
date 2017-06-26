@@ -154,7 +154,7 @@ function clickedOnFieldsArea($targetElement) {
 
 /**
  * @name dxPivotGridOptions_focusStateEnabled
- * @publicName hoverStateEnabled
+ * @publicName focusStateEnabled
  * @hidden
 * @extend_doc
 */
