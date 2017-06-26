@@ -97,6 +97,15 @@ QUnit.test("Initialize from options with invisible columns", function(assert) {
     assert.deepEqual(this.dataController.items()[1].values, ['Dan', '98-75-21']);
 });
 
+QUnit.test("Initialize array with keyExpr option", function(assert) {
+    //act
+    this.applyOptions({ keyExpr: "id", dataSource: [] });
+    this.dataController.optionChanged({ name: "keyExpr" });
+
+    //assert
+    assert.equal(this.getDataSource().store().key(), "id", "keyExpr is assigned to store");
+});
+
 QUnit.test("changed on initialize", function(assert) {
     var changedCount = 0;
     var lastArgs;

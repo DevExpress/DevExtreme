@@ -502,7 +502,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     that._columnsController.columnOption(column.index, options);
                     that._applyFilterViewController.setHighLight($editorContainer, true);
 
-                    if(properties.itemData.text === "Reset") {
+                    if(!selectedFilterOperation) {
                         var editor = getEditorInstance($editorContainer);
                         if(editor && editor.NAME === "dxDateBox" && !editor.option("isValid")) {
                             editor.reset();

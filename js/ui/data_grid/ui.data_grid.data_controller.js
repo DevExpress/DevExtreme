@@ -13,6 +13,12 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
 })());
 
 gridCore.registerModule("data", {
+    /**
+    * @name dxDataGridOptions_keyExpr
+    * @publicName keyExpr
+    * @type string|array
+    * @default undefined
+    */
     defaultOptions: dataControllerModule.defaultOptions,
     controllers: {
         data: exports.DataController

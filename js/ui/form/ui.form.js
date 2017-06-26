@@ -1057,6 +1057,7 @@ var Form = Widget.inherit({
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
         $element.appendTo($rootElement);
         instance = that._createComponent($element, "dxLayoutManager", config);
+        instance.on("autoColCountChanged", function() { that._refresh(); });
         that._cachedLayoutManagers.push(instance);
         return instance;
     },
@@ -1481,10 +1482,6 @@ var Form = Widget.inherit({
 
             this._cachedScreenFactor = currentScreenFactor;
             return;
-        }
-
-        if(this.option("colCount") === "auto") {
-            this._refresh();
         }
     },
 

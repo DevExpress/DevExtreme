@@ -893,6 +893,39 @@ function createGridView(options, userOptions) {
         //assert
         assert.ok($testElement.find(".dx-datagrid-rowsview").hasClass("dx-scrollable"), "has scrollable");
     });
+
+    //T527837
+    QUnit.test("RowsView height calculation when grid container has border and padding (zoom is 90%)", function(assert) {
+        //arrange, act
+        var $rowsViewContainer,
+            $testElement = $("#container").css({
+                border: "1px solid black",
+                padding: 15
+            }),
+            gridView = this.createGridView({
+                columnsController: new MockColumnsController([{ caption: "Column 1", visible: true }]),
+                dataController: new MockDataController({
+                    items: [
+                        { values: [1] },
+                        { values: [2] }
+                    ]
+                })
+            });
+
+        $("#root").css("zoom", 0.9);
+
+        gridView.render($testElement, $.extend(this.options, {
+            scrolling: true,
+            showColumnHeaders: true,
+            pager: {
+                visible: true
+            }
+        }));
+
+        //assert
+        $rowsViewContainer = gridView.getView("rowsView").element();
+        assert.strictEqual($rowsViewContainer.get(0).style.height, "auto", "height of the rowsView");
+    });
 }());
 
 

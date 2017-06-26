@@ -506,7 +506,7 @@ module.exports = Class.inherit((function() {
 
     function getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder) {
         var sortOrder = getAscOrder ? "asc" : field.sortOrder,
-            sortBy = getAscOrder ? "value" : field.sortBy === "displayText" ? "text" : "value",
+            sortBy = field.sortBy === "none" ? "none" : getAscOrder ? "value" : field.sortBy === "displayText" ? "text" : "value",
             defaultCompare = field.sortingMethod ? function(a, b) {
                 return field.sortingMethod(a, b);
             } : getCompareFunction(function(item) { return item[sortBy]; }),
@@ -515,7 +515,7 @@ module.exports = Class.inherit((function() {
             sortingMethod = function(a, b) {
                 var result = summaryCompare && summaryCompare(a, b) || 0;
                 if(result === 0) {
-                    result = defaultCompare(a, b);
+                    result = sortBy === "none" ? a.index - b.index : defaultCompare(a, b);
                 }
                 return sortOrder === "desc" ? -result : result;
             };
@@ -788,7 +788,7 @@ module.exports = Class.inherit((function() {
             * @publicName sortBy
             * @type string
             * @default undefined
-            * @acceptValues 'displayText' | 'value'
+            * @acceptValues 'displayText' | 'value' | 'none'
             */
             /**
              * @name PivotGridDataSourceOptions_fields_sortingMethod

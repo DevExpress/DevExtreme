@@ -207,6 +207,17 @@ QUnit.test("selected files should be rendered in container", function(assert) {
     assert.equal($filesContainer.find("." + FILEUPLOADER_FILE_CLASS).length, 2, "number of files is correct");
 });
 
+QUnit.test("selected files should be rendered in container, uploadMethod = useForm", function(assert) {
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+            multiple: true,
+            uploadMode: "useForm"
+        }),
+        $filesContainer = $fileUploader.find("." + FILEUPLOADER_FILES_CONTAINER_CLASS);
+
+    simulateFileChoose($fileUploader, [fakeFile, fakeFile1]);
+    assert.equal($filesContainer.find("." + FILEUPLOADER_FILE_CLASS).length, 2, "number of files is correct");
+});
+
 QUnit.test("files should contain file name and file size", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader();
 
@@ -371,7 +382,8 @@ QUnit.test("files count in list is correct if the 'extendSelection' option is fa
 QUnit.test("files count in list is correct if the 'extendSelection' option is true", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({
         extendSelection: true,
-        multiple: true
+        multiple: true,
+        uploadMode: "instantly"
     });
 
     simulateFileChoose($fileUploader, [getNewFile(), getNewFile()]);
@@ -467,17 +479,18 @@ QUnit.test("the 'allowCanceling' option should be ignored if the 'uploadMode' op
     assert.equal($element.find("." + FILEUPLOADER_CANCEL_BUTTON_CLASS).length, 0, "no cancel buttons are rendered");
 });
 
-QUnit.test("duplicate files should be removed when option 'useForm' is used", function(assert) {
+QUnit.test("file list should be cleared when 'useForm' option is used", function(assert) {
     var $element = $("#fileuploader").dxFileUploader({
             multiple: true,
             uploadMode: "useForm"
         }),
-        fileUploader = $element.dxFileUploader("instance");
+        fileUploader = $element.dxFileUploader("instance"),
+        newFile = getNewFile();
 
     simulateFileChoose($element, [fakeFile, fakeFile1]);
-    simulateFileChoose($element, [fakeFile1]);
+    simulateFileChoose($element, [newFile]);
 
-    assert.equal(fileUploader.option("value").length, 2, "duplicate was not selected");
+    assert.deepEqual(fileUploader.option("value"), [newFile], "file list was cleared");
 });
 
 
@@ -591,7 +604,9 @@ QUnit.test("input value should not be changed inside widget after selecting", fu
     var originalVal = $.fn.val;
 
     try {
-        var $fileUploader = $("#fileuploader").dxFileUploader();
+        var $fileUploader = $("#fileuploader").dxFileUploader({
+            uploadMode: "instantly"
+        });
 
         var valUsed = 0;
 
@@ -613,12 +628,30 @@ QUnit.test("input value should not be changed inside widget after selecting", fu
 
 QUnit.test("value change should be fired when file selected", function(assert) {
     var $fileUploader = $("#fileuploader").dxFileUploader({
+        uploadMode: "instantly",
         onValueChanged: function(e) {
             assert.deepEqual(e.value, [fakeFile], "value specified correctly");
         }
     });
 
     simulateFileChoose($fileUploader, fakeFile);
+});
+
+QUnit.test("value change should be fired when file selected, uploadMode = useForm", function(assert) {
+    var counter = 0;
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+            uploadMode: "useForm",
+            onValueChanged: function(e) {
+                !counter && assert.deepEqual(e.value, [], "value specified correctly");
+                counter++;
+            }
+        }),
+        fileUploader = $fileUploader.dxFileUploader("instance");
+
+
+    simulateFileChoose($fileUploader, fakeFile);
+    assert.equal(counter, 2, "onValueChanged was called twice");
+    assert.deepEqual(fileUploader.option("value"), [fakeFile], "value specified correctly");
 });
 
 QUnit.test("value should support files at initialization", function(assert) {
@@ -782,7 +815,9 @@ QUnit.test("widget input should get the 'name' attribute with a correct value", 
 QUnit.module("option change", moduleConfig);
 
 QUnit.test("file input should not be rerendered if widget repainted", function(assert) {
-    var $fileUploader = $("#fileuploader").dxFileUploader();
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+        uploadMode: "instantly"
+    });
 
     simulateFileChoose($fileUploader, fakeFile);
     $fileUploader.dxFileUploader("repaint");
