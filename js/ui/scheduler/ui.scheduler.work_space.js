@@ -379,6 +379,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._changeAllDayVisibility();
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
+                this.headerPanelOffsetRecalculate();
                 break;
             case "onCellClick":
                 this._createCellClickAction();
@@ -823,11 +824,12 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var headerPanelHeight = this.getHeaderPanelHeight(),
-            headerHeight = this.invoke("getHeaderHeight");
+            headerHeight = this.invoke("getHeaderHeight"),
+            allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this.getAllDayHeight() : 0;
 
         headerPanelHeight && this._dateTableScrollable.element().css({
-            "padding-bottom": headerPanelHeight + "px",
-            "margin-bottom": -1 * (parseInt(headerPanelHeight, 10)) + "px"
+            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "margin-bottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
 
         this._$allDayTitle && this._$allDayTitle.css("top", headerHeight + headerPanelHeight + "px");
