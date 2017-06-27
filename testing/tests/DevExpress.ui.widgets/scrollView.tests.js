@@ -1508,24 +1508,6 @@ QUnit.test("scrollTop should be greater than 0 on init for prevent WebView bounc
     assert.equal($container.scrollTop(), 1, "real scrollTop is greater than 0");
 });
 
-QUnit.test("scrollTop should be greater than 0 after scroll event for prevent WebView bounce", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({
-        useNative: true,
-        refreshStrategy: "pullDown"
-    });
-
-    var scrollView = $("#scrollView").dxScrollView("instance"),
-        $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollView);
-
-    scrollView.scrollTo({ y: 10 });
-    $container.trigger("scroll");
-    assert.equal($container.scrollTop(), 11, "container was scrolled");
-
-    scrollView.scrollTo({ y: 0 });
-    $container.trigger("scroll");
-    assert.equal($container.scrollTop(), 1, "scrollTop is greater than 0");
-});
-
 QUnit.test("scrollTop method should have correct position on init", function(assert) {
     var scrollView = $("#scrollView").dxScrollView({
         useNative: true,
