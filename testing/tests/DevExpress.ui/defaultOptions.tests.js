@@ -755,6 +755,22 @@ testComponentDefaults(Scrollable,
 );
 
 testComponentDefaults(Scrollable,
+    [
+        { platform: "ios" }
+    ],
+    {
+        pushBackValue: 0
+    },
+    function() {
+        this._originalRealDevice = devices.real();
+        devices.real({ platform: "ios" });
+    },
+    function() {
+        devices.real(this._originalRealDevice);
+    }
+);
+
+testComponentDefaults(Scrollable,
     {},
     { useSimulatedScrollbar: true },
     function() {
