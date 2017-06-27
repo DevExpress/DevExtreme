@@ -1,6 +1,6 @@
 "use strict";
 
-var isNumeric = require("../../../core/utils/common").isNumeric,
+var isNumeric = require("../../../core/utils/type").isNumeric,
     extend = require("../../../core/utils/extend").extend,
     symbolPoint = require("./symbol_point"),
     barPoint = require("./bar_point"),

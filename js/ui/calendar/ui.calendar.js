@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     Button = require("../button"),
     Editor = require("../editor/editor"),
@@ -312,11 +313,11 @@ var Calendar = Editor.inherit({
             return this.option("dateSerializationFormat");
         }
 
-        if(commonUtils.isNumeric(value)) {
+        if(typeUtils.isNumeric(value)) {
             return "number";
         }
 
-        if(!commonUtils.isString(value)) {
+        if(!typeUtils.isString(value)) {
             return;
         }
 

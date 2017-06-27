@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../data/utils"),
     dataCoreUtils = require("../../core/utils/data"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
     normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
@@ -89,7 +90,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 displayValue = value;
             }
 
-            item = commonUtils.isObject(item) ? item : {};
+            item = typeUtils.isObject(item) ? item : {};
 
             path.push(value);
 

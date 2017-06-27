@@ -2,6 +2,7 @@
 
 var vizUtils = require("../core/utils"),
     commonUtils = require("../../core/utils/common"),
+    isNumeric = require("../../core/utils/type").isNumeric,
     extend = require("../../core/utils/extend").extend,
     constants = require("./axes_constants"),
     circularAxes,
@@ -59,7 +60,7 @@ circularAxes = polarAxes.circular = {
 
     _getMinMax: function() {
         var options = this._options,
-            min = commonUtils.isNumeric(options.originValue) ? options.originValue : undefined,
+            min = isNumeric(options.originValue) ? options.originValue : undefined,
             max;
 
         if(options.period > 0 && options.argumentType === constants.numeric) {

@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     utils = require("../../core/utils/common"),
-    isEmptyObject = require("../../core/utils/type").isEmptyObject,
+    typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     isWritableWrapped = require("../../core/utils/variable_wrapper").isWritableWrapped,
     unwrap = require("../../core/utils/variable_wrapper").unwrap,
@@ -165,7 +165,7 @@ var LayoutManager = Widget.inherit({
 
                     customizeItem && customizeItem(item);
 
-                    if(utils.isObject(item) && unwrap(item.visible) !== false) {
+                    if(typeUtils.isObject(item) && unwrap(item.visible) !== false) {
                         processedItems.push(item);
                     }
                 }
@@ -193,7 +193,7 @@ var LayoutManager = Widget.inherit({
             watch = that._getWatch();
 
         items.forEach(function(item) {
-            if(utils.isObject(item) && utils.isDefined(item.visible) && utils.isFunction(watch)) {
+            if(typeUtils.isObject(item) && utils.isDefined(item.visible) && utils.isFunction(watch)) {
                 that._itemWatchers.push(
                     watch(
                         function() {
@@ -242,7 +242,7 @@ var LayoutManager = Widget.inherit({
         if(!utils.isDefined(item.editorType) && utils.isDefined(item.dataField)) {
             var value = this._getDataByField(item.dataField);
 
-            item.editorType = utils.isDefined(value) ? this._getEditorTypeByDataType(utils.type(value)) : FORM_EDITOR_BY_DEFAULT;
+            item.editorType = utils.isDefined(value) ? this._getEditorTypeByDataType(typeUtils.type(value)) : FORM_EDITOR_BY_DEFAULT;
         }
 
         return item;
@@ -405,15 +405,23 @@ var LayoutManager = Widget.inherit({
                 return this._cashedColCount;
             }
 
-            var minColWidth = this.option("minColWidth"),
-                width = this.element().width(),
-                itemsCount = this._items.length,
-                maxColCount = Math.floor(width / minColWidth) || 1;
-
-            this._cashedColCount = colCount = itemsCount < maxColCount ? itemsCount : maxColCount;
+            this._cashedColCount = colCount = this._getMaxColCount();
         }
 
         return colCount < 1 ? 1 : colCount;
+    },
+
+    _getMaxColCount: function() {
+        var minColWidth = this.option("minColWidth"),
+            width = this.element().width(),
+            itemsCount = this._items.length,
+            maxColCount = Math.floor(width / minColWidth) || 1;
+
+        return itemsCount < maxColCount ? itemsCount : maxColCount;
+    },
+
+    isCachedColCountObsolete: function() {
+        return this._cashedColCount && this._getMaxColCount() !== this._cashedColCount;
     },
 
     _prepareItemsWithMerging: function(colCount) {
@@ -933,7 +941,7 @@ var LayoutManager = Widget.inherit({
                 break;
             case "layoutData":
                 if(this.option("items")) {
-                    if(!isEmptyObject(args.value)) {
+                    if(!typeUtils.isEmptyObject(args.value)) {
                         $.each(this._editorInstancesByField, function(name, editor) {
                             var valueGetter = dataUtils.compileGetter(name),
                                 dataValue = valueGetter(args.value);
@@ -1043,6 +1051,12 @@ var LayoutManager = Widget.inherit({
         this._isValueChangedCalled = false;
     },
 
+    _dimensionChanged: function() {
+        if(this.option("colCount") === "auto" && this.isCachedColCountObsolete()) {
+            this.fireEvent("autoColCountChanged");
+        }
+    },
+
     getItemID: function(name) {
         var formInstance = this.option("form");
         return formInstance && formInstance.getItemID(name);
@@ -1051,7 +1065,7 @@ var LayoutManager = Widget.inherit({
     updateData: function(data, value) {
         var that = this;
 
-        if(utils.isObject(data)) {
+        if(typeUtils.isObject(data)) {
             $.each(data, function(dataField, fieldValue) {
                 that._updateFieldValue(dataField, fieldValue);
             });

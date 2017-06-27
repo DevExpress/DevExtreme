@@ -1,7 +1,7 @@
 "use strict";
 
 var _Number = Number,
-    _isString = require("../../core/utils/common").isString,
+    _isString = require("../../core/utils/type").isString,
     extend = require("../../core/utils/extend").extend,
     _patchFontOptions = require("./utils").patchFontOptions,
     parseHorizontalAlignment = require("./utils").enumParser(["left", "center", "right"]),

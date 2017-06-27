@@ -13,6 +13,7 @@ if(typeof define === 'function' && define.amd) {
             null,
             require("core/utils/dom"),
             require("core/utils/common"),
+            require("core/utils/type"),
             require("data/array_store"),
             "TreeList"
         );
@@ -26,6 +27,7 @@ if(typeof define === 'function' && define.amd) {
         null,
         DevExpress.require("core/utils/dom"),
         DevExpress.require("core/utils/common"),
+        DevExpress.require("core/utils/type"),
         DevExpress.require("data/array_store"),
         "TreeList"
     ));

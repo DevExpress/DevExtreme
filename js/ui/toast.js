@@ -5,6 +5,7 @@
 
 var $ = require("../core/renderer"),
     commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     pointerEvents = require("../events/pointer"),
@@ -383,7 +384,7 @@ var Toast = Overlay.inherit({
     },
 
     _posStringToObject: function() {
-        if(!commonUtils.isString(this.option("position"))) return;
+        if(!typeUtils.isString(this.option("position"))) return;
 
         var verticalPosition = this.option("position").split(" ")[0],
             horizontalPosition = this.option("position").split(" ")[1];

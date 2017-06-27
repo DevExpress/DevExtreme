@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     vizUtils = require("../core/utils"),
     adjustValue = vizUtils.adjustValue,
@@ -27,7 +28,7 @@ var $ = require("../../core/renderer"),
     log = require("../../core/errors").log,
 
     _isDefined = commonUtils.isDefined,
-    _isNumber = commonUtils.isNumeric,
+    _isNumber = typeUtils.isNumeric,
     _isDate = commonUtils.isDate,
     _max = Math.max,
     _ceil = Math.ceil,
@@ -165,8 +166,8 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions) {
 }
 
 function calculateValueType(firstValue, secondValue) {
-    var typeFirstValue = commonUtils.type(firstValue),
-        typeSecondValue = commonUtils.type(secondValue),
+    var typeFirstValue = typeUtils.type(firstValue),
+        typeSecondValue = typeUtils.type(secondValue),
         validType = function(type) {
             return typeFirstValue === type || typeSecondValue === type;
         };

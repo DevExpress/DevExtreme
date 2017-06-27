@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     debug = require("../../core/utils/console").debug,
     Range = require("../translators/range").Range,
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     vizUtils = require("../core/utils"),
     _adjustValue = vizUtils.adjustValue,
     _applyPrecisionByMinDelta = vizUtils.applyPrecisionByMinDelta,
@@ -123,7 +124,7 @@ var populateAxesInfo = function(axes) {
             tickInterval,
             synchronizedValue;
 
-        if(majorTicks && majorTicks.length > 0 && commonUtils.isNumeric(majorTicks[0]) && options.type !== "discrete") {
+        if(majorTicks && majorTicks.length > 0 && typeUtils.isNumeric(majorTicks[0]) && options.type !== "discrete") {
             businessRange = axis.getTranslator().getBusinessRange();
             tickInterval = axis._tickManager.getTickInterval();
             minValue = businessRange.minVisible;

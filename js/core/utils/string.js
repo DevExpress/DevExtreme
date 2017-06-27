@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    typeUtils = require("./type"),
     commonUtils = require("./common");
 
 var encodeHtml = (function() {
@@ -68,7 +69,7 @@ var stringFormat = function() {
     for(var i = 0; i < values.length; i++) {
         reg = new RegExp("\\{" + i + "\\}", "gm");
         value = values[i];
-        if(commonUtils.type(value) === "string" && value.indexOf("$") >= 0) {
+        if(typeUtils.type(value) === "string" && value.indexOf("$") >= 0) {
             replaceDollarCount = "$".replace("$", "$$").length;
             value = value.replace("$", replaceDollarCount === 1 ? "$$$$" : "$$");
         }

@@ -1072,7 +1072,7 @@ declare module DevExpress.ui {
         allowSearch?: boolean;
 
         /** @docid GridBaseOptions_columns_calculateCellValue */
-        calculateCellValue?: (rowData: Object) => string;
+        calculateCellValue?: (rowData: Object) => any;
 
         /** @docid GridBaseOptions_columns_setCellValue */
         setCellValue?: (newData: Object, value: any, currentRowData: Object) => void;

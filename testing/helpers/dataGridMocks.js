@@ -13,6 +13,7 @@ if(typeof define === 'function' && define.amd) {
             require("ui/data_grid/ui.data_grid.columns_resizing_reordering"),
             require("core/utils/dom"),
             require("core/utils/common"),
+            require("core/utils/type"),
             require("data/array_store"),
             "DataGrid"
         );
@@ -26,6 +27,7 @@ if(typeof define === 'function' && define.amd) {
         DevExpress.require("ui/data_grid/ui.data_grid.columns_resizing_reordering"),
         DevExpress.require("core/utils/dom"),
         DevExpress.require("core/utils/common"),
+        DevExpress.require("core/utils/type"),
         DevExpress.require("data/array_store"),
         "DataGrid"
     ));

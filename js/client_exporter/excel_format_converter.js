@@ -1,6 +1,7 @@
 "use strict";
 
 var commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
     stringUtils = require("../core/utils/string"),
     numberFormatter = require("../localization/number"),
     dateLocalization = require("../localization/date"),
@@ -248,7 +249,7 @@ var excelFormatConverter = module.exports = {
             if(type === "date") {
                 return excelFormatConverter._convertDateFormat(format);
             } else {
-                if(commonUtils.isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
+                if(typeUtils.isString(format) && DEFINED_NUMBER_FORMTATS[format.toLowerCase()]) {
                     return excelFormatConverter._convertNumberFormat(format, precision, currency);
                 }
             }

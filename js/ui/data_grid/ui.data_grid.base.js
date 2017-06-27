@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     logger = require("../../core/utils/console").logger,
     browser = require("../../core/utils/browser"),
@@ -248,7 +249,7 @@ var DataGrid = Widget.inherit({
     _getTemplate: function(templateName) {
         var template = templateName;
 
-        if(commonUtils.isString(template) && template[0] === "#") {
+        if(typeUtils.isString(template) && template[0] === "#") {
             template = $(templateName);
             logger.warn(DATAGRID_DEPRECATED_TEMPLATE_WARNING);
         }

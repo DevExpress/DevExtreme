@@ -619,7 +619,7 @@ var Component = Class.inherit({
             var that = this,
                 name = options;
 
-            if(arguments.length < 2 && commonUtils.type(name) !== "object") {
+            if(arguments.length < 2 && typeUtils.type(name) !== "object") {
                 name = normalizeOptionName(that, name);
                 return getOptionValue(that._options, name);
             }

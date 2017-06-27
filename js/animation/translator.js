@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    type = require("../core/utils/common").type;
+    type = require("../core/utils/type").type;
 
 var TRANSLATOR_DATA_KEY = "dxTranslator",
     TRANSFORM_MATRIX_REGEX = /matrix(3d)?\((.+?)\)/,

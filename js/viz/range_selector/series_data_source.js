@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     seriesModule = require("../series/base_series"),
     seriesFamilyModule = require("../core/series_family"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     vizUtils = require("../core/utils"),
@@ -231,7 +232,7 @@ SeriesDataSource.prototype = {
             minIndent = that._valueAxis.inverted ? that._indent.top : that._indent.bottom;
             maxIndent = that._valueAxis.inverted ? that._indent.bottom : that._indent.top;
             rangeYSize = valRange.max - valRange.min;
-            rangeVisibleSizeY = (commonUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (commonUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
+            rangeVisibleSizeY = (typeUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (typeUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
             //B253717
             if(commonUtils.isDate(valRange.min)) {
                 valRange.min = new Date(valRange.min.valueOf() - rangeYSize * minIndent);
@@ -244,7 +245,7 @@ SeriesDataSource.prototype = {
                 valRange.max += rangeYSize * maxIndent;
             }
 
-            if(commonUtils.isNumeric(rangeVisibleSizeY)) {
+            if(typeUtils.isNumeric(rangeVisibleSizeY)) {
                 valRange.maxVisible = valRange.maxVisible ? valRange.maxVisible + rangeVisibleSizeY * maxIndent : undefined;
                 valRange.minVisible = valRange.minVisible ? valRange.minVisible - rangeVisibleSizeY * minIndent : undefined;
             }

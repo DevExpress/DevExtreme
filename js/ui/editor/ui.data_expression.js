@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     variableWrapper = require("../../core/utils/variable_wrapper"),
     dataCoreUtils = require("../../core/utils/data"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     FunctionTemplate = require("../widget/function_template"),
     DataHelperMixin = require("../../data_helper"),
@@ -180,7 +181,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     },
 
     _compareByCompositeKey: function(value1, value2, key) {
-        var isObject = commonUtils.isObject;
+        var isObject = typeUtils.isObject;
 
         if(!isObject(value1) || !isObject(value2)) {
             return false;

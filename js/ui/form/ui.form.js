@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     Guid = require("../../core/guid"),
     utils = require("../../core/utils/common"),
-    isEmptyObject = require("../../core/utils/type").isEmptyObject,
+    typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     stringUtils = require("../../core/utils/string"),
@@ -873,13 +873,13 @@ var Form = Widget.inherit({
 
             for(i = 0; i < items.length; i++) {
                 item = items[i];
-                clonedItem = utils.isObject(item) ? extend({}, item) : item;
+                clonedItem = typeUtils.isObject(item) ? extend({}, item) : item;
 
                 that._prepareGroupItem(clonedItem);
                 that._prepareTabbedItem(clonedItem);
                 that._prepareItemTemplate(clonedItem);
 
-                if(utils.isObject(clonedItem)) {
+                if(typeUtils.isObject(clonedItem)) {
                     if(isTabbed) {
                         clonedItem.cssItemClass = FIELD_ITEM_TAB_CLASS;
                     }
@@ -1057,6 +1057,7 @@ var Form = Widget.inherit({
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
         $element.appendTo($rootElement);
         instance = that._createComponent($element, "dxLayoutManager", config);
+        instance.on("autoColCountChanged", function() { that._refresh(); });
         that._cachedLayoutManagers.push(instance);
         return instance;
     },
@@ -1162,7 +1163,7 @@ var Form = Widget.inherit({
             case "formData":
                 if(!this.option("items")) {
                     this._invalidate();
-                } else if(isEmptyObject(args.value)) {
+                } else if(typeUtils.isEmptyObject(args.value)) {
                     this._resetValues();
                 }
                 break;
@@ -1292,7 +1293,7 @@ var Form = Widget.inherit({
 
     _triggerOnFieldDataChangedByDataSet: function(data) {
         var that = this;
-        if(data && utils.isObject(data)) {
+        if(data && typeUtils.isObject(data)) {
             $.each(data, function(dataField, value) {
                 that._triggerOnFieldDataChanged({ dataField: dataField, value: value });
             });
@@ -1329,7 +1330,7 @@ var Form = Widget.inherit({
 
         if(items) {
             $.each(items, function(index, item) {
-                if(utils.isObject(item)) {
+                if(typeUtils.isObject(item)) {
                     result.push(item);
                 } else {
                     result.push({
@@ -1344,7 +1345,7 @@ var Form = Widget.inherit({
 
     _getItemByField: function(field, items) {
         var that = this,
-            fieldParts = utils.isObject(field) ? field : that._getFieldParts(field),
+            fieldParts = typeUtils.isObject(field) ? field : that._getFieldParts(field),
             fieldName = fieldParts.fieldName,
             fieldPath = fieldParts.fieldPath,
             resultItem;
@@ -1466,7 +1467,7 @@ var Form = Widget.inherit({
     },
 
     _changeItemOption: function(item, option, value) {
-        if(utils.isObject(item)) {
+        if(typeUtils.isObject(item)) {
             item[option] = value;
         }
     },
@@ -1481,10 +1482,6 @@ var Form = Widget.inherit({
 
             this._cachedScreenFactor = currentScreenFactor;
             return;
-        }
-
-        if(this.option("colCount") === "auto") {
-            this._refresh();
         }
     },
 
@@ -1525,11 +1522,11 @@ var Form = Widget.inherit({
         var that = this,
             _data = isComplexData ? value : data;
 
-        if(utils.isObject(_data)) {
+        if(typeUtils.isObject(_data)) {
             $.each(_data, function(dataField, fieldValue) {
-                that._updateData(isComplexData ? data + "." + dataField : dataField, fieldValue, utils.isObject(fieldValue));
+                that._updateData(isComplexData ? data + "." + dataField : dataField, fieldValue, typeUtils.isObject(fieldValue));
             });
-        } else if(utils.isString(data)) {
+        } else if(typeUtils.isString(data)) {
             that._updateFieldValue(data, value);
         }
     },
@@ -1637,7 +1634,7 @@ var Form = Widget.inherit({
                 that._changeItemOption(item, option, value);
                 break;
             default:
-                if(utils.isObject(option)) {
+                if(typeUtils.isObject(option)) {
                     $.each(option, function(optionName, optionValue) {
                         that._changeItemOption(item, optionName, optionValue);
                     });

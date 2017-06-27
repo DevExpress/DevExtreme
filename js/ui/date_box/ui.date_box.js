@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     compareVersions = require("../../core/utils/version").compare,
     extend = require("../../core/utils/extend").extend,
     support = require("../../core/utils/support"),
@@ -856,11 +857,11 @@ var DateBox = DropDownEditor.inherit({
             return this.option("dateSerializationFormat");
         }
 
-        if(commonUtils.isNumeric(value)) {
+        if(typeUtils.isNumeric(value)) {
             return "number";
         }
 
-        if(!commonUtils.isString(value)) {
+        if(!typeUtils.isString(value)) {
             return;
         }
 

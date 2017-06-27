@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     recurrenceUtils = require("./utils.recurrence"),
     dateUtils = require("../../core/utils/date"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     arrayUtils = require("../../core/utils/array"),
@@ -314,7 +315,7 @@ var AppointmentModel = Class.inherit({
         var startDate = that._dataExpressions.startDateExpr,
             endDate = that._dataExpressions.endDateExpr;
 
-        if(commonUtils.isString(filter[0])) {
+        if(typeUtils.isString(filter[0])) {
             if(config().forceIsoDateParsing && filter.length > 1) {
                 if(filter[0] === startDate || filter[0] === endDate) {
                     filter[filter.length - 1] = dateSerialization.serializeDate(filter[filter.length - 1], dateSerializationFormat);

@@ -5,6 +5,7 @@ var $ = require("../../../core/renderer"),
     stringFormat = require("../../../core/utils/string").format,
     errors = require("../../../data/errors").errors,
     commonUtils = require("../../../core/utils/common"),
+    typeUtils = require("../../../core/utils/type"),
     inArray = require("../../../core/utils/array").inArray,
     pivotGridUtils = require("../ui.pivot_grid.utils"),
     when = require("../../../integration/jquery/deferred").when,
@@ -248,7 +249,7 @@ exports.XmlaStore = Class.inherit((function() {
                 filterValues = field.filterValues || [],
                 filterStringExpression;
 
-            if(field.hierarchyName && commonUtils.isNumeric(field.groupIndex)) {
+            if(field.hierarchyName && typeUtils.isNumeric(field.groupIndex)) {
                 return;
             }
 
@@ -304,7 +305,7 @@ exports.XmlaStore = Class.inherit((function() {
     function prepareDataFields(withArray, valueFields) {
 
         return $.map(valueFields, function(cell) {
-            if(commonUtils.isString(cell.expression)) {
+            if(typeUtils.isString(cell.expression)) {
                 declare(cell.expression, withArray, cell.dataField, "member");
             }
             return cell.dataField;
@@ -385,7 +386,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function parseValue(valueText) {
 
-        return commonUtils.isNumeric(valueText) ? parseFloat(valueText) : valueText;
+        return typeUtils.isNumeric(valueText) ? parseFloat(valueText) : valueText;
     }
 
     function getFirstChild(node, tagName) {
@@ -404,7 +405,7 @@ exports.XmlaStore = Class.inherit((function() {
                 axis = [],
                 index = 0;
 
-            if(name.indexOf("Axis") === 0 && commonUtils.isNumeric(getNumber(name.substr(4)))) {
+            if(name.indexOf("Axis") === 0 && typeUtils.isNumeric(getNumber(name.substr(4)))) {
 
                 axes.push(axis);
 
@@ -513,7 +514,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function preparePathValue(pathValue) {
         if(pathValue) {
-            return (commonUtils.isString(pathValue) && pathValue.indexOf("&[") !== -1) ? pathValue : "[" + pathValue + "]";
+            return (typeUtils.isString(pathValue) && pathValue.indexOf("&[") !== -1) ? pathValue : "[" + pathValue + "]";
         }
     }
 

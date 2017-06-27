@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isNumeric = require("../../core/utils/type").isNumeric,
     errors = require("../widget/ui.errors"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
@@ -13,9 +14,7 @@ var $ = require("../../core/renderer"),
     Popover = require("../popover"),
     Popup = require("../popup"),
     publisherMixin = require("./ui.scheduler.publisher_mixin"),
-    dateLocalization = require("../../localization/date"),
-    isNumeric = commonUtils.isNumeric,
-    noop = commonUtils.noop;
+    dateLocalization = require("../../localization/date");
 
 var ELEMENT_CLASS = "dx-scheduler-navigator",
     CALENDAR_CLASS = "dx-scheduler-navigator-calendar",
