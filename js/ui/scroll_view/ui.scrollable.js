@@ -202,14 +202,6 @@ var Scrollable = DOMComponent.inherit({
                 options: {
                     useSimulatedScrollbar: true
                 }
-            },
-            {
-                device: function() {
-                    return devices.real().platform === "ios";
-                },
-                options: {
-                    pushBackValue: 1
-                }
             }
         ]);
     },
