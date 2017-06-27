@@ -1186,8 +1186,8 @@ QUnit.test("WorkSpace recalculation works fine after render resourceCellTemplate
         allDayPanelHeight = this.instance._workSpace.getAllDayHeight();
 
     assert.equal(parseInt($allDayTitle.css("top"), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, "All day title element top value");
-    assert.equal(parseInt($dateTableScrollable.css("padding-bottom"), 10), schedulerHeaderPanelHeight + allDayPanelHeight, "dateTableScrollable element padding bottom");
-    assert.equal(parseInt($dateTableScrollable.css("margin-bottom"), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), "dateTableScrollable element margin bottom");
+    assert.roughEqual(parseInt($dateTableScrollable.css("padding-bottom"), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, "dateTableScrollable element padding bottom");
+    assert.roughEqual(parseInt($dateTableScrollable.css("margin-bottom"), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, "dateTableScrollable element margin bottom");
 });
 
 QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment", function(assert) {
@@ -1214,8 +1214,8 @@ QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if 
         allDayPanelHeight = this.instance._workSpace.getAllDayHeight();
 
     assert.equal(parseInt($allDayTitle.css("top"), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, "All day title element top value");
-    assert.equal(parseInt($dateTableScrollable.css("padding-bottom"), 10), schedulerHeaderPanelHeight + allDayPanelHeight, "dateTableScrollable element padding bottom");
-    assert.equal(parseInt($dateTableScrollable.css("margin-bottom"), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), "dateTableScrollable element margin bottom");
+    assert.roughEqual(parseInt($dateTableScrollable.css("padding-bottom"), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, "dateTableScrollable element padding bottom");
+    assert.roughEqual(parseInt($dateTableScrollable.css("margin-bottom"), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, "dateTableScrollable element margin bottom");
 });
 
 QUnit.test("Timepanel text should be calculated correctly if DST makes sense (T442904)", function(assert) {
