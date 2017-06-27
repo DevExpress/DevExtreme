@@ -6565,6 +6565,47 @@ QUnit.test("Clear state when initial options defined", function(assert) {
     assert.equal(dataGrid.pageSize(), 10, "page size");
 });
 
+//T528181
+QUnit.test("Change state when lookup column exists and remote data is used", function(assert) {
+    var createRemoteDataSource = function(data) {
+        return {
+            key: "id",
+            load: function() {
+                var d = $.Deferred();
+
+                setTimeout(function() {
+                    d.resolve(data);
+                }, 0);
+
+                return d.promise();
+            }
+        };
+    };
+
+    var dataGrid = createDataGrid({
+        columns: [{
+            dataField: "id",
+            lookup: {
+                dataSource: createRemoteDataSource([ { id: 1, text: "Test 1" } ]),
+                valueExpr: "id",
+                displayExpr: "text"
+            }
+        }],
+        dataSource: createRemoteDataSource([ { id: 1 } ])
+    });
+
+    //act
+    this.clock.tick(0);
+
+    //act
+    dataGrid.state({});
+    this.clock.tick(0);
+
+    //assert
+    var $firstCell = dataGrid.element().find(".dx-data-row").eq(0).children().eq(0);
+    assert.equal($firstCell.text(), "Test 1", "Lookup text is correct");
+});
+
 QUnit.test("Clear state when initial options is defined in dataSource", function(assert) {
     var dataGrid = createDataGrid({
         columnChooser: { enabled: true },
