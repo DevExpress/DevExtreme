@@ -243,7 +243,12 @@
 
         SystemJS.import("@Url.Content(Model.ScriptVirtualPath)")
             .then(function() {
-                return new Promise(function(resolve) { jQuery(resolve); })
+                return new Promise(function(resolve) {
+                    if (document.readyState !== 'complete')
+                        jQuery(resolve);
+                    else
+                        resolve();
+                })
             }).then(function() {
                 QUnit.start();
             }).catch(function (err) {
@@ -252,5 +257,6 @@
                     throw err;
                 });
             });
+
     })();
 </script>
