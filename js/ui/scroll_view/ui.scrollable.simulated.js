@@ -537,7 +537,7 @@ var SimulatedStrategy = Class.inherit({
         this._$element.addClass(SCROLLABLE_SIMULATED_CLASS);
         this._createScrollers();
         if(this.option("useKeyboard")) {
-            this._$container.prop("tabindex", 0);
+            this._$container.prop("tabIndex", 0);
         }
         this._attachKeyboardHandler();
         this._attachCursorHandlers();

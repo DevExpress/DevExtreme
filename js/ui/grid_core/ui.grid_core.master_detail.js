@@ -321,7 +321,7 @@ module.exports = {
                             $detailCell
                                 .addClass(CELL_FOCUS_DISABLED_CLASS)
                                 .addClass(MASTER_DETAIL_CELL_CLASS)
-                                .attr("colspan", groupCellOptions.colspan);
+                                .attr("colSpan", groupCellOptions.colspan);
                         } else {
                             this.callBase.apply(this, arguments);
                         }

@@ -183,7 +183,7 @@ var SchedulerTableCreator = {
 
                 cells.forEach(function(cell, index) {
                     if(rowspans[index]) {
-                        cell.element.setAttribute("rowspan", rowspans[index]);
+                        cell.element.setAttribute("rowSpan", rowspans[index]);
                     }
                     row.appendChild(cell.element);
                 });
@@ -239,7 +239,7 @@ var SchedulerTableCreator = {
                 var currentRowIndex = j * rowspan,
                     row = rows[currentRowIndex];
 
-                row.prepend(arr[i][j].element.attr("rowspan", rowspan));
+                row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
             }
         }
 
@@ -284,7 +284,7 @@ var SchedulerTableCreator = {
                 colspan = maxCellCount / $cell.length * cellCount;
 
             if(colspan > 1) {
-                $cell.attr("colspan", colspan);
+                $cell.attr("colSpan", colspan);
             }
         }
 

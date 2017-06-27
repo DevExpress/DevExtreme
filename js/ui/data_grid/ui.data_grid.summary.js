@@ -950,7 +950,7 @@ gridCore.registerModule("summary", {
 
                     _renderGroupSummaryCells: function($row, options) {
                         var $groupCell = $row.children().last(),
-                            groupCellColSpan = Number($groupCell.attr("colspan")) || 1,
+                            groupCellColSpan = Number($groupCell.attr("colSpan")) || 1,
                             alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
 
                         this._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
@@ -958,7 +958,7 @@ gridCore.registerModule("summary", {
 
                     _renderGroupSummaryCellsCore: function($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
                         if(alignByColumnCellCount > 0) {
-                            $groupCell.attr("colspan", groupCellColSpan - alignByColumnCellCount);
+                            $groupCell.attr("colSpan", groupCellColSpan - alignByColumnCellCount);
 
                             for(var i = 0; i < alignByColumnCellCount; i++) {
                                 var columnIndex = options.columns.length - alignByColumnCellCount + i;

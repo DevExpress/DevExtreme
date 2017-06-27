@@ -554,7 +554,7 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderFocusTarget: function() {
-        this._focusTarget().attr("tabindex", this.option("tabIndex"));
+        this._focusTarget().attr("tabIndex", this.option("tabIndex"));
     },
 
     _keyboardEventBindingTarget: function() {
@@ -675,7 +675,7 @@ var Widget = DOMComponent.inherit({
         this._detachFocusEvents();
 
         this._toggleFocusClass(false);
-        $element.removeAttr("tabindex");
+        $element.removeAttr("tabIndex");
 
         if(this._keyboardProcessor) {
             this._keyboardProcessor.dispose();

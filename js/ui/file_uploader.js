@@ -432,7 +432,7 @@ var FileUploader = Editor.inherit({
         this._$fileInput.prop({
             multiple: this.option("multiple"),
             accept: this.option("accept"),
-            tabindex: -1
+            tabIndex: -1
         });
     },
 

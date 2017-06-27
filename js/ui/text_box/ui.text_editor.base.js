@@ -413,9 +413,9 @@ var TextEditorBase = Editor.inherit({
 
         var $input = this._input();
         if(value) {
-            $input.attr("disabled", true).attr("tabindex", -1);
+            $input.attr("disabled", true).attr("tabIndex", -1);
         } else {
-            $input.removeAttr("disabled").removeAttr("tabindex");
+            $input.removeAttr("disabled").removeAttr("tabIndex");
         }
     },
 

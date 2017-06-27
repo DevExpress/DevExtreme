@@ -56,22 +56,6 @@ if(!useJQueryRenderer) {
         };
     });
 
-    var propFix = {};
-    [
-        "tabIndex",
-        "readOnly",
-        "maxLength",
-        "cellSpacing",
-        "cellPadding",
-        "rowSpan",
-        "colSpan",
-        "useMap",
-        "frameBorder",
-        "contentEditable"
-    ].forEach(function(name) {
-        propFix[name.toLowerCase()] = name;
-    });
-
     initRender.prototype.attr = function(attrName, value) {
         if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, "attr", arguments);
         if(!this[0]) {
@@ -111,7 +95,7 @@ if(!useJQueryRenderer) {
                 this.prop(key, propName[key]);
             }
         } else {
-            rendererStrategy.setProperty(this[0], propFix[propName] || propName, value);
+            rendererStrategy.setProperty(this[0], propName, value);
         }
 
         return this;

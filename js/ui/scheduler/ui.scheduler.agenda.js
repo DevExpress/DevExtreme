@@ -155,7 +155,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
     _setGroupHeaderCellsHeight: function() {
         var $cells = this._getGroupHeaderCells().filter(function(_, element) {
-                return !element.getAttribute("rowspan");
+                return !element.getAttribute("rowSpan");
             }),
             rows = this._removeEmptyRows(this._rows);
 
