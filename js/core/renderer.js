@@ -346,9 +346,6 @@ if(!useJQueryRenderer) {
     };
 }
 
-renderer.ajax = function() {
-    return $.ajax.apply(this, arguments);
-};
 renderer.getJSON = $.getJSON;
 renderer.getScript = $.getScript;
 renderer.parseXML = $.parseXML;
