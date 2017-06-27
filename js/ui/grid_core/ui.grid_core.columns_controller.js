@@ -2067,7 +2067,10 @@ module.exports = {
                         that._customizeColumns(that._columns);
                         updateIndexes(that);
 
+                        var columns = that._columns;
                         return when(that.refresh(true)).always(function() {
+                            if(that._columns !== columns) return;
+
                             that._updateChanges(dataSource, { sorting: sortParameters, grouping: groupParameters });
 
                             fireColumnsChanged(that);
