@@ -241,16 +241,16 @@
             });
         });
 
-        Promise.all([
-            SystemJS.import("@Url.Content(Model.ScriptVirtualPath)"),
-            new Promise(function(resolve) { jQuery(resolve); })
-        ]).then(function() {
-            QUnit.start();
-        }).catch(function (err) {
-            QUnit.start();
-            QUnit.test("load failed", function(assert) {
-                throw err;
+        SystemJS.import("@Url.Content(Model.ScriptVirtualPath)")
+            .then(function() {
+                return new Promise(function(resolve) { jQuery(resolve); })
+            }).then(function() {
+                QUnit.start();
+            }).catch(function (err) {
+                QUnit.start();
+                QUnit.test("load failed", function(assert) {
+                    throw err;
+                });
             });
-        });
     })();
 </script>
