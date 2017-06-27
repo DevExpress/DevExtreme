@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("jquery"),
-    rendererStrategy = require("./native_renderer_strategy");
+    rendererStrategy = require("./native_renderer_strategy"),
+    typeUtils = require("./utils/type");
 
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
@@ -54,6 +55,71 @@ if(!useJQueryRenderer) {
             return result;
         };
     });
+
+    var propFix = {};
+    [
+        "tabIndex",
+        "readOnly",
+        "maxLength",
+        "cellSpacing",
+        "cellPadding",
+        "rowSpan",
+        "colSpan",
+        "useMap",
+        "frameBorder",
+        "contentEditable"
+    ].forEach(function(name) {
+        propFix[name.toLowerCase()] = name;
+    });
+
+    initRender.prototype.attr = function(attrName, value) {
+        if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, "attr", arguments);
+        if(!this[0]) {
+            if(typeUtils.isPlainObject(attrName)) {
+                return this;
+            } else {
+                return value === undefined ? undefined : this;
+            }
+        }
+        if(!this[0].getAttribute) {
+            return this.prop(attrName, value);
+        }
+        if(typeof attrName === "string" && arguments.length === 1) {
+            var result = this[0].getAttribute(attrName);
+            return result == null ? undefined : result;
+        } else if(typeUtils.isPlainObject(attrName)) {
+            for(var key in attrName) {
+                this.attr(key, attrName[key]);
+            }
+        } else {
+            rendererStrategy.setAttribute(this[0], attrName, value);
+        }
+        return this;
+    };
+
+    initRender.prototype.removeAttr = function(attrName) {
+        this[0] && rendererStrategy.setAttribute(this[0], attrName, null);
+        return this;
+    };
+
+    initRender.prototype.prop = function(propName, value) {
+        if(!this[0]) return this;
+        if(typeof propName === "string" && arguments.length === 1) {
+            return this[0][propName];
+        } else if(typeUtils.isPlainObject(propName)) {
+            for(var key in propName) {
+                this.prop(key, propName[key]);
+            }
+        } else {
+            rendererStrategy.setProperty(this[0], propFix[propName] || propName, value);
+        }
+
+        return this;
+    };
+    initRender.prototype.removeProp = function(propName) {
+        this[0] && rendererStrategy.setProperty(this[0], propName, null);
+        return this;
+    };
 
     initRender.prototype.addClass = function(className) {
         return this.toggleClass(className, true);
