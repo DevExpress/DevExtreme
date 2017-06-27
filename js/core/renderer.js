@@ -302,6 +302,18 @@ if(!useJQueryRenderer) {
         return renderer();
     };
 
+    initRender.prototype.has = function(target) {
+        var targets = this.find(target);
+
+        return this.filter(function() {
+            for(var i = 0; i < targets.length; i++) {
+                if(this.contains(targets[i])) {
+                    return true;
+                }
+            }
+        });
+    };
+
     initRender.prototype.next = function(selector) {
         if(!this[0]) return renderer();
         var next = renderer(this[0].nextSibling);
