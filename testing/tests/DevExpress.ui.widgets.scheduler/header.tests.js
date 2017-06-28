@@ -139,7 +139,9 @@ QUnit.test("Views option with objects should be passed to viewSwitcher", functio
 
 QUnit.test("View switcher should be rendered correctly when views contains objects", function(assert) {
     var instance = $("#scheduler-header").dxSchedulerHeader({
-        views: ["month", {
+        views: [{
+            type: "month"
+        }, {
             type: "day",
             name: "TestDay"
         }]

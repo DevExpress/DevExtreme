@@ -157,7 +157,7 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _getItemText: function(item) {
-        return item.name || messageLocalization.format("dxScheduler-switcher" + camelize(item, true));
+        return item.name || messageLocalization.format("dxScheduler-switcher" + camelize(item.type || item, true));
     },
 
     _refreshViewSwitcher: function() {
