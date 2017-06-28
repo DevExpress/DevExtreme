@@ -16,6 +16,7 @@ var BING_MAP_READY = "_bingScriptReady",
 
     INFOBOX_V_OFFSET_V7 = 33,
     INFOBOX_V_OFFSET_V8 = 13,
+    IS_V8_SUPPORTED = !(browser.msie && parseInt(browser.version) < 11),
 
     BING_CREDENTIALS = "AhuxC0dQ1DBTNo8L-H9ToVMQStmizZzBJdraTSgCzDSWPsA1Qd8uIvFSflzxdaLH",
 
@@ -30,9 +31,6 @@ var msMapsLoader;
 
 
 var BingProvider = DynamicProvider.inherit({
-    _isV8Supported: function() {
-        return !(browser.msie && parseInt(browser.version) < 11);
-    },
     _mapType: function(type) {
         var mapTypes = {
             roadmap: Microsoft.Maps.MapTypeId.road,
@@ -139,7 +137,7 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _loadMapScript: function() {
-        var bingUrl = this._isV8Supported() ? BING_URL_V8 : BING_URL_V7;
+        var bingUrl = IS_V8_SUPPORTED ? BING_URL_V8 : BING_URL_V7;
 
         return new Promise(function(resolve) {
             window[BING_MAP_READY] = resolve;
@@ -157,7 +155,7 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _init: function() {
-        if(this._isV8Supported()) {
+        if(IS_V8_SUPPORTED) {
             this._createMap();
 
             return Promise.resolve();
@@ -207,7 +205,7 @@ var BingProvider = DynamicProvider.inherit({
         if(e.targetType === "map") {
             var location;
 
-            if(this._isV8Supported()) {
+            if(IS_V8_SUPPORTED) {
                 location = e.location;
             } else {
                 var point = new Microsoft.Maps.Point(e.getX(), e.getY());
@@ -333,15 +331,14 @@ var BingProvider = DynamicProvider.inherit({
 
         options = this._parseTooltipOptions(options);
 
-        var isV8Supported = this._isV8Supported(),
-            vOffset = isV8Supported ? INFOBOX_V_OFFSET_V8 : INFOBOX_V_OFFSET_V7,
+        var vOffset = IS_V8_SUPPORTED ? INFOBOX_V_OFFSET_V8 : INFOBOX_V_OFFSET_V7,
             infobox = new Microsoft.Maps.Infobox(location, {
                 description: options.text,
                 offset: new Microsoft.Maps.Point(0, vOffset),
                 visible: options.visible
             });
 
-        if(isV8Supported) {
+        if(IS_V8_SUPPORTED) {
             infobox.setMap(this._map);
         } else {
             this._map.entities.push(infobox, null);
