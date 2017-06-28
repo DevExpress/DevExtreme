@@ -82,7 +82,7 @@ if(!useJQueryRenderer) {
     };
 
     initRender.prototype.removeAttr = function(attrName) {
-        this[0] && rendererStrategy.setAttribute(this[0], attrName, null);
+        this[0] && rendererStrategy.removeAttribute(this[0], attrName);
         return this;
     };
 

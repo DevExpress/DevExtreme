@@ -30,6 +30,10 @@ module.exports = {
         }
     },
 
+    removeAttribute: function(element, name) {
+        element.removeAttribute(name);
+    },
+
     setProperty: function(element, name, value) {
         element[name] = value;
     },

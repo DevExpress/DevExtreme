@@ -599,7 +599,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _updateHiddenElement: function() {
         if(this.option("mask")) {
-            this._input().attr("name", null);
+            this._input().removeAttr("name");
             this._renderHiddenElement();
         } else {
             this._removeHiddenElement();
