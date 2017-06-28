@@ -4236,6 +4236,40 @@ QUnit.test("Apply search for string column without reloading when all dataTypes 
     assert.equal(that.dataController.items()[0].data.name, 'Test');
 });
 
+//T528684
+QUnit.test("Apply search for lookup column", function(assert) {
+    //arrange
+    var that = this,
+        loadingArgs = [];
+
+    this.applyOptions({
+        searchPanel: { text: 'Second' },
+        remoteOperations: true,
+        dataSource: new ArrayStore({
+            onLoading: function(e) {
+                loadingArgs.push(e);
+            },
+            data: [{ name: "Alex", categoryId: 1 }, { name: "Dan", categoryId: 2 }]
+        }),
+        columns: [{ dataField: 'categoryId', dataType: "number", lookup: {
+            dataSource: [
+                { id: 1, name: "first" },
+                { id: 2, name: "second" }
+            ],
+            valueExpr: "id",
+            displayExpr: "name"
+        } }]
+    });
+
+    this.dataController.optionChanged({ name: "dataSource" });
+
+    //assert
+    assert.equal(loadingArgs.length, 1);
+    assert.deepEqual(loadingArgs[0].filter, ["categoryId", "=", 2]);
+    assert.equal(that.dataController.items().length, 1);
+    assert.equal(that.dataController.items()[0].data.categoryId, 2);
+});
+
 QUnit.test("column filter for one column", function(assert) {
     this.setupFilterableData();
 

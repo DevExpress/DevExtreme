@@ -2533,7 +2533,9 @@ module.exports = {
                                     calculateDisplayValue = dataCoreUtils.compileGetter(this.displayExpr);
                                     for(i = 0; i < this.items.length; i++) {
                                         item = this.items[i];
-                                        this.valueMap[calculateValue(item)] = calculateDisplayValue(item);
+                                        var displayValue = calculateDisplayValue(item);
+                                        this.valueMap[calculateValue(item)] = displayValue;
+                                        this.dataType = this.dataType || getValueDataType(displayValue);
                                     }
                                 }
                             },
