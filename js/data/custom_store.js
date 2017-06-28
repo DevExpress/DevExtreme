@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     deferredUtils = require("../integration/jquery/deferred"),
     dataUtils = require("./utils"),
-    isFunction = require("../core/utils/common").isFunction,
+    isFunction = require("../core/utils/type").isFunction,
     errors = require("./errors").errors,
     Store = require("./abstract_store"),
     arrayQuery = require("./array_query"),

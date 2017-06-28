@@ -340,11 +340,11 @@ var Widget = DOMComponent.inherit({
     },
 
     _getTemplate: function(templateSource) {
-        if(commonUtils.isFunction(templateSource)) {
+        if(typeUtils.isFunction(templateSource)) {
             return new FunctionTemplate(function(options) {
                 var templateSourceResult = templateSource.apply(this, this._getNormalizedTemplateArgs(options));
 
-                if(!commonUtils.isDefined(templateSourceResult)) {
+                if(!typeUtils.isDefined(templateSourceResult)) {
                     return new EmptyTemplate();
                 }
 
@@ -378,7 +378,7 @@ var Widget = DOMComponent.inherit({
         }
 
         //TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
-        if(commonUtils.isFunction(templateSource.render) && !templateSource.jquery) {
+        if(typeUtils.isFunction(templateSource.render) && !templateSource.jquery) {
             return templateSource;
         }
 

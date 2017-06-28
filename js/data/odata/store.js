@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     odataUtils = require("./utils"),
     proxyUrlFormatter = require("../proxy_url_formatter"),
     errors = require("../errors").errors,
@@ -204,7 +204,7 @@ var ODataStore = Store.inherit({
         };
 
         // NOTE: For AppBuilder, do not remove
-        if(commonUtils.isDefined(loadOptions.urlOverride)) {
+        if(isDefined(loadOptions.urlOverride)) {
             url = loadOptions.urlOverride;
         } else {
             url = this._url;

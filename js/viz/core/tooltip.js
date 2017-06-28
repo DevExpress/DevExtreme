@@ -4,7 +4,6 @@ var doc = document,
     win = window,
     $ = require("../../core/renderer"),
     rendererModule = require("./renderers/renderer"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     HALF_ARROW_WIDTH = 10,
@@ -94,7 +93,7 @@ Tooltip.prototype = {
         that._textFontStyles.color = options.font.color;
         that._wrapper.css({ "z-index": options.zIndex });
 
-        that._customizeTooltip = commonUtils.isFunction(options.customizeTooltip) ? options.customizeTooltip : null;
+        that._customizeTooltip = typeUtils.isFunction(options.customizeTooltip) ? options.customizeTooltip : null;
         return that;
     },
 
@@ -134,10 +133,10 @@ Tooltip.prototype = {
             customize = this._customizeTooltip.call(formatObject, formatObject);
             customize = typeUtils.isPlainObject(customize) ? customize : {};
             if("text" in customize) {
-                state.text = commonUtils.isDefined(customize.text) ? String(customize.text) : "";
+                state.text = typeUtils.isDefined(customize.text) ? String(customize.text) : "";
             }
             if("html" in customize) {
-                state.html = commonUtils.isDefined(customize.html) ? String(customize.html) : "";
+                state.html = typeUtils.isDefined(customize.html) ? String(customize.html) : "";
             }
         }
         if(!("text" in state) && !("html" in state)) {

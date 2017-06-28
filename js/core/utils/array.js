@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("./common"),
+    isDefined = require("./type").isDefined,
     objectUtils = require("./object");
 
 var isEmpty = function(entity) {
@@ -59,7 +59,7 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
 
     $.each(items, function(index, item) {
         index = item[indexParameterName];
-        if(commonUtils.isDefined(index)) {
+        if(isDefined(index)) {
             indexedItems[index] = indexedItems[index] || [];
 
             if(item === currentItem) {
@@ -80,7 +80,7 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
     });
 
     $.each(items, function() {
-        if(!commonUtils.isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
+        if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
             this[indexParameterName] = parameterIndex++;
         }
     });

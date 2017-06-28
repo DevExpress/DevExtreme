@@ -12,7 +12,7 @@ var $ = require("../../core/renderer"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     removeEvent = require("../../core/remove_event"),
     messageLocalization = require("../../localization/message"),
-    isDefined = commonUtils.isDefined;
+    isDefined = typeUtils.isDefined;
 
 var ROWS_VIEW_CLASS = "rowsview",
     CONTENT_CLASS = "content",

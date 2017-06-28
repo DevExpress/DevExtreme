@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     extend = require("../../core/utils/extend").extend,
@@ -830,7 +829,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(isBatchMode || !confirmDeleteMessage) {
                     removeByKey(key);
                 } else {
-                    showDialogTitle = commonUtils.isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
+                    showDialogTitle = typeUtils.isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
                     dialog.confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done(function(confirmResult) {
                         if(confirmResult) {
                             removeByKey(key);
@@ -1360,7 +1359,7 @@ var EditingController = modules.ViewController.inherit((function() {
                                 extend(item, column.formItem);
                             }
 
-                            var itemVisible = commonUtils.isDefined(item.visible) ? item.visible : true;
+                            var itemVisible = typeUtils.isDefined(item.visible) ? item.visible : true;
                             if(!that._firstFormItem && itemVisible) {
                                 that._firstFormItem = item;
                             }

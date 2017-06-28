@@ -62,7 +62,7 @@ var stringFormat = function() {
         reg,
         value;
 
-    if(commonUtils.isFunction(s)) {
+    if(typeUtils.isFunction(s)) {
         return s.apply(this, values);
     }
 

@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     caret = require("./utils.caret"),
     domUtils = require("../../core/utils/dom"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     stringUtils = require("../../core/utils/string"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
@@ -254,7 +254,7 @@ var TextEditorMask = TextEditorBase.inherit({
             }
         });
 
-        return commonUtils.isDefined(ruleConfig)
+        return isDefined(ruleConfig)
                 ? new MaskRules.MaskRule(extend({ maskChar: this.option("maskChar") }, ruleConfig))
                 : new MaskRules.StubMaskRule({ maskChar: pattern });
     },

@@ -3,7 +3,8 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     arrayUtils = require("../../core/utils/array"),
-    commonUtils = require("../../core/utils/common"),
+    grep = require("../../core/utils/common").grep,
+    isDefined = require("../../core/utils/type").isDefined,
     objectUtils = require("../../core/utils/object"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -172,7 +173,7 @@ var ResourceManager = Class.inherit({
         var that = this,
             result = null;
 
-        if(!commonUtils.isDefined(wrapOnlyMultipleResources)) {
+        if(!isDefined(wrapOnlyMultipleResources)) {
             wrapOnlyMultipleResources = false;
         }
 
@@ -248,7 +249,7 @@ var ResourceManager = Class.inherit({
     },
 
     getResourcesByFields: function(fields) {
-        return commonUtils.grep(this.getResources(), (function(resource) {
+        return grep(this.getResources(), (function(resource) {
             var field = this.getField(resource);
             return inArray(field, fields) > -1;
         }).bind(this));
@@ -386,7 +387,7 @@ var ResourceManager = Class.inherit({
                 continue;
             }
 
-            if(commonUtils.isDefined(tree[i].leafIndex)) {
+            if(isDefined(tree[i].leafIndex)) {
                 result.push(tree[i].leafIndex);
             }
 

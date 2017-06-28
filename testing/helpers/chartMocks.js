@@ -25,6 +25,7 @@
                 require("jquery"),
                 require("core/class"),
                 require("core/utils/common"),
+                require("core/utils/type"),
                 require("viz/core/loading_indicator"),
                 require("viz/axes/base_axis"),
                 require("viz/series/points/base_point"),
@@ -40,6 +41,7 @@
             jQuery,
             DevExpress.require("core/class"),
             DevExpress.require("core/utils/common"),
+            DevExpress.require("core/utils/type"),
             DevExpress.require("viz/core/loading_indicator"),
             DevExpress.require("viz/axes/base_axis"),
             DevExpress.require("viz/series/points/base_point"),
@@ -50,7 +52,7 @@
             require("./vizMocks.js")
         ));
     }
-}(window, function($, Class, commonUtils, loadingIndicatorModule, axisModule, pointModule, translator1DModule, translator2DModule, seriesFamilyModule, seriesModule, vizMocks) {
+}(window, function($, Class, commonUtils, typeUtils, loadingIndicatorModule, axisModule, pointModule, translator1DModule, translator2DModule, seriesFamilyModule, seriesModule, vizMocks) {
 
     var exports = {};
 
@@ -621,7 +623,7 @@
                     { originalField: this._options.tagField, templateField: this._options.tagField + this.name },
                 { originalField: this._options.sizeField, templateField: this._options.sizeField + this.name }];
             },
-            isUpdated: commonUtils.isDefined(options.isUpdated) ? options.isUpdated : true,
+            isUpdated: typeUtils.isDefined(options.isUpdated) ? options.isUpdated : true,
 
             getOptions: function() {
                 return this._options;

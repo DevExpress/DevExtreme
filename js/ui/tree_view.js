@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     messageLocalization = require("../localization/message"),
     clickEvent = require("../events/click"),
     commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     registerComponent = require("../core/component_registrator"),
@@ -603,7 +604,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _useCustomChildrenLoader: function() {
-        return commonUtils.isFunction(this.option("createChildren")) && this._isDataStructurePlain();
+        return typeUtils.isFunction(this.option("createChildren")) && this._isDataStructurePlain();
     },
 
     _loadChildrenByCustomLoader: function(parentNode) {
@@ -613,7 +614,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             return $.Deferred().resolve(invocationResult).promise();
         }
 
-        if(invocationResult && commonUtils.isFunction(invocationResult.then)) {
+        if(invocationResult && typeUtils.isFunction(invocationResult.then)) {
             return deferredUtils.fromPromise(invocationResult);
         }
 
@@ -1033,7 +1034,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             return identifier;
         }
 
-        if(commonUtils.isPrimitive(identifier)) {
+        if(typeUtils.isPrimitive(identifier)) {
             return this._dataAdapter.getNodeByKey(identifier);
         }
 
@@ -1064,7 +1065,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        if(!commonUtils.isDefined(state)) {
+        if(!typeUtils.isDefined(state)) {
             state = !currentState;
         }
 
@@ -1233,7 +1234,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        if(commonUtils.isDefined(e)) {
+        if(typeUtils.isDefined(e)) {
             this._itemJQueryEventHandler(e, optionName, { node: this._dataAdapter.getPublicNode(node) });
         } else {
             target = this._getNodeElement(node);

@@ -1,11 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     compareVersion = require("../../core/utils/version").compare;
 
 exports.fromPromise = function(promise, context) {
-    var isDeferred = promise && commonUtils.isFunction(promise.done) && commonUtils.isFunction(promise.fail);
+    var isDeferred = promise && typeUtils.isFunction(promise.done) && typeUtils.isFunction(promise.fail);
     if(isDeferred) {
         return promise;
     }

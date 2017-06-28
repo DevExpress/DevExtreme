@@ -4,7 +4,7 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     inflector = require("../core/utils/inflector"),
-    commonUtils = require("../core/utils/common"),
+    isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
     ScrollView = require("./scroll_view"),
     CollectionWidget = require("./collection/ui.collection_widget.edit");
@@ -505,7 +505,7 @@ var TileView = CollectionWidget.inherit({
         }
 
         var newTargetIndex = getCell(targetCol, targetRow);
-        if(!commonUtils.isDefined(newTargetIndex)) {
+        if(!isDefined(newTargetIndex)) {
             return;
         }
 

@@ -3,7 +3,7 @@
 var $ = require("jquery"),
     DropDownAppointments = require("ui/scheduler/ui.scheduler.appointments.drop_down"),
     dataCoreUtils = require("core/utils/data"),
-    commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     compileGetter = dataCoreUtils.compileGetter,
     compileSetter = dataCoreUtils.compileSetter,
     Widget = require("ui/widget/ui.widget"),
@@ -104,7 +104,7 @@ var moduleOptions = {
                 }
             };
             if(command === "getField") {
-                if(!commonUtils.isDefined(dataAccessors.getter[field])) {
+                if(!typeUtils.isDefined(dataAccessors.getter[field])) {
                     return;
                 }
 

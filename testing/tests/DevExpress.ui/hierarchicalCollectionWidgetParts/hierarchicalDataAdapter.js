@@ -173,6 +173,23 @@ QUnit.test("public node should exist in internalFields", function(assert) {
     assert.ok(Object.keys(data[0].internalFields.publicNode).length, "publicNode is not empty");
 });
 
+QUnit.test("dataAdapter should work correct with circular data", function(assert) {
+    var parent = {
+            id: 1,
+            items: []
+        },
+        child1 = {
+            id: 11,
+            parent: parent
+        };
+
+    parent.items.push(child1);
+
+    var dataAdapter = initDataAdapter({ items: [parent] }),
+        data = dataAdapter.getData();
+
+    assert.equal(data.length, 2, "circular items were converted");
+});
 
 QUnit.module("tree structure without keys", moduleConfig);
 

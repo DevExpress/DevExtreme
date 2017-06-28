@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
-    commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     rendererModule = require("viz/core/renderers/renderer"),
     Color = require("color");
 
@@ -4675,24 +4675,24 @@ function checkDashStyle(assert, elem, result, style, value) {
                         postfix = " / " + (checkStroke ? "stroke" : "") + " tspan " + (i + 1);
                     assert.strictEqual(tspan.tagName, "tspan", "tag name" + postfix);
 
-                    if(commonUtils.isDefined(expected.x)) {
+                    if(typeUtils.isDefined(expected.x)) {
                         assert.equal(tspan.getAttribute("x"), expected.x + "", "x attribute" + postfix);
                     } else {
                         assert.equal(tspan.getAttribute("x"), null, "x attribute" + postfix);
                     }
-                    if(commonUtils.isDefined(expected.y)) {
+                    if(typeUtils.isDefined(expected.y)) {
                         assert.equal(tspan.getAttribute("y"), expected.y + "", "y attribute" + postfix);
                     } else {
                         assert.equal(tspan.getAttribute("y"), null, "y attribute" + postfix);
                     }
 
-                    if(commonUtils.isDefined(expected.dx)) {
+                    if(typeUtils.isDefined(expected.dx)) {
                         assert.deepEqual(tspan.getAttribute("dx"), expected.dx + "", "dx attribute" + postfix);
                     } else {
                         assert.equal(tspan.getAttribute("dx"), null, "dx attribute" + postfix);
                     }
 
-                    if(commonUtils.isDefined(expected.dy)) {
+                    if(typeUtils.isDefined(expected.dy)) {
                         assert.deepEqual(tspan.getAttribute("dy"), expected.dy + "", "dy attribute" + postfix);
                     } else {
                         assert.equal(tspan.getAttribute("dy"), null, "d attribute" + postfix);

@@ -3,7 +3,6 @@
 var $ = require("../../core/renderer"),
     seriesModule = require("../series/base_series"),
     seriesFamilyModule = require("../core/series_family"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -109,7 +108,7 @@ SeriesDataSource = function(options) {
         themeManager.getOptions('minBubbleSize'),
         themeManager.getOptions('maxBubbleSize'),
         themeManager.getOptions('barWidth'),
-        commonUtils.isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros);
+        typeUtils.isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros);
 };
 
 SeriesDataSource.prototype = {
@@ -234,12 +233,12 @@ SeriesDataSource.prototype = {
             rangeYSize = valRange.max - valRange.min;
             rangeVisibleSizeY = (typeUtils.isNumeric(valRange.maxVisible) ? valRange.maxVisible : valRange.max) - (typeUtils.isNumeric(valRange.minVisible) ? valRange.minVisible : valRange.min);
             //B253717
-            if(commonUtils.isDate(valRange.min)) {
+            if(typeUtils.isDate(valRange.min)) {
                 valRange.min = new Date(valRange.min.valueOf() - rangeYSize * minIndent);
             } else {
                 valRange.min -= rangeYSize * minIndent;
             }
-            if(commonUtils.isDate(valRange.max)) {
+            if(typeUtils.isDate(valRange.max)) {
                 valRange.max = new Date(valRange.max.valueOf() + rangeYSize * maxIndent);
             } else {
                 valRange.max += rangeYSize * maxIndent;

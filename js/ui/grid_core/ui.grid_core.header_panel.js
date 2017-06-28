@@ -3,7 +3,8 @@
 var $ = require("../../core/renderer"),
     Toolbar = require("../toolbar"),
     columnsView = require("./ui.grid_core.columns_view"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined,
     domUtils = require("../../core/utils/dom");
 
 require("../drop_down_menu");
@@ -42,7 +43,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
 
         this.executeAction("onToolbarPreparing", options);
 
-        if(options.toolbarOptions && !commonUtils.isDefined(options.toolbarOptions.visible)) {
+        if(options.toolbarOptions && !isDefined(options.toolbarOptions.visible)) {
             toolbarItems = options.toolbarOptions.items;
             options.toolbarOptions.visible = !!(toolbarItems && toolbarItems.length);
         }
@@ -59,7 +60,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         }
     },
 
-    _columnOptionChanged: commonUtils.noop,
+    _columnOptionChanged: noop,
 
     init: function() {
         this.callBase();
@@ -111,7 +112,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         return this._toolbarOptions && this._toolbarOptions.visible;
     },
 
-    allowDragging: commonUtils.noop
+    allowDragging: noop
 });
 
 module.exports = {

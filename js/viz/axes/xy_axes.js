@@ -5,9 +5,9 @@ var formatHelper = require("../../format_helper"),
     extend = require("../../core/utils/extend").extend,
     getNextDateUnit = dateUtils.getNextDateUnit,
     correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning,
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
     vizUtils = require("../core/utils"),
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../core/utils/type").isDefined,
     constants = require("./axes_constants"),
     _extend = extend,
     _math = Math,
@@ -694,6 +694,6 @@ module.exports = {
             return skippedCategory;
         },
 
-        _getSpiderCategoryOption: commonUtils.noop
+        _getSpiderCategoryOption: noop
     }
 };

@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    commonUtils = require("../core/utils/common"),
     stringUtils = require("../core/utils/string"),
     registerComponent = require("../core/component_registrator"),
     translator = require("../animation/translator"),
@@ -12,8 +11,8 @@ var $ = require("../core/renderer"),
     pointerEvents = require("../events/pointer"),
     dragEvents = require("../events/drag"),
     positionUtils = require("../animation/position"),
-    isFunction = commonUtils.isFunction,
-    noop = commonUtils.noop;
+    isFunction = require("../core/utils/type").isFunction,
+    noop = require("../core/utils/common").noop;
 
 var DRAGGABLE = "dxDraggable",
     DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE),

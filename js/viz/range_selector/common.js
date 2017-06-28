@@ -1,7 +1,7 @@
 "use strict";
 
 var _format = require("../core/format"),
-    isFunction = require("../../core/utils/common").isFunction,
+    isFunction = require("../../core/utils/type").isFunction,
     HEIGHT_COMPACT_MODE = 24,
     POINTER_SIZE = 4,
     EMPTY_SLIDER_MARKER_TEXT = ". . .";

@@ -3,7 +3,6 @@
 var $ = require("../core/renderer"),
     errors = require("../core/errors"),
     extend = require("../core/utils/extend").extend,
-    commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     translator = require("./translator"),
     animationFrame = require("./frame"),
@@ -14,9 +13,9 @@ var $ = require("../core/renderer"),
     when = require("../integration/jquery/deferred").when,
     transitionEndEventName = support.transitionEndEventName + ".dxFX",
     removeEventName = eventUtils.addNamespace(removeEvent, "dxFX"),
-    isFunction = commonUtils.isFunction,
+    isFunction = typeUtils.isFunction,
     isPlainObject = typeUtils.isPlainObject,
-    noop = commonUtils.noop;
+    noop = require("../core/utils/common").noop;
 
 
 var CSS_TRANSITION_EASING_REGEX = /cubic-bezier\((\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\)/,

@@ -4,7 +4,7 @@ require("./ui.tree_list.editor_factory");
 
 var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     treeListCore = require("./ui.tree_list.core"),
@@ -71,7 +71,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
                 store = dataController && dataController.store();
                 key = store && store.key();
 
-                if(!commonUtils.isDefined(key)) {
+                if(!isDefined(key)) {
                     throw errors.Error("E1045");
                 }
             }

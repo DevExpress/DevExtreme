@@ -4,7 +4,7 @@ var $ = require("../../../core/renderer"),
     Class = require("../../../core/class"),
     stringFormat = require("../../../core/utils/string").format,
     errors = require("../../../data/errors").errors,
-    commonUtils = require("../../../core/utils/common"),
+    noop = require("../../../core/utils/common").noop,
     typeUtils = require("../../../core/utils/type"),
     inArray = require("../../../core/utils/array").inArray,
     pivotGridUtils = require("../ui.pivot_grid.utils"),
@@ -43,7 +43,7 @@ exports.XmlaStore = Class.inherit((function() {
                 method: "POST"
             };
 
-        if(commonUtils.isFunction(beforeSend)) {
+        if(typeUtils.isFunction(beforeSend)) {
             beforeSend(ajaxSettings);
         }
 
@@ -618,7 +618,7 @@ exports.XmlaStore = Class.inherit((function() {
             var parentItem = {
                     children: result
                 },
-                dataIndex = commonUtils.isDefined(measureCount) ? Math.floor(tupleIndex / measureCount) : tupleIndex;
+                dataIndex = typeUtils.isDefined(measureCount) ? Math.floor(tupleIndex / measureCount) : tupleIndex;
 
             each(members, function(_, member) {
                 parentItem = processMember(dataIndex, member, parentItem);
@@ -906,7 +906,7 @@ exports.XmlaStore = Class.inherit((function() {
             return result;
         },
 
-        key: commonUtils.noop,
-        filter: commonUtils.noop
+        key: noop,
+        filter: noop
     };
 })()).include(pivotGridUtils.storeDrillDownMixin);

@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     queryAdapters = require("../query_adapters"),
@@ -9,9 +8,9 @@ var $ = require("../../core/renderer"),
     serializePropName = odataUtils.serializePropName,
     errors = require("../errors").errors,
     dataUtils = require("../utils"),
-    isFunction = commonUtils.isFunction,
+    isFunction = typeUtils.isFunction,
     isPlainObject = typeUtils.isPlainObject,
-    grep = commonUtils.grep;
+    grep = require("../../core/utils/common").grep;
 
 var DEFAULT_PROTOCOL_VERSION = 2;
 

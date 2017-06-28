@@ -6,12 +6,11 @@ var $ = require("../../core/renderer"),
     dateTimeManager = require("./datetime_tick_manager"),
     logarithmicMethods = require("./logarithmic_tick_manager"),
     dateUtils = require("../../core/utils/date"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _isNumber = typeUtils.isNumeric,
     _addInterval = dateUtils.addInterval,
     utils = require("../core/utils"),
@@ -20,7 +19,7 @@ var $ = require("../../core/renderer"),
 
     _each = $.each,
     _inArray = inArray,
-    _noop = commonUtils.noop,
+    _noop = require("../../core/utils/common").noop,
 
     DEFAULT_GRID_SPACING_FACTOR = 30,
     DEFAULT_MINOR_GRID_SPACING_FACTOR = 15,
@@ -383,7 +382,7 @@ TickManager.prototype = {
     },
 
     _getDataType: function(value) {
-        return commonUtils.isDate(value) ? "datetime" : "numeric";
+        return typeUtils.isDate(value) ? "datetime" : "numeric";
     },
 
     _getMethods: function() {
@@ -440,7 +439,7 @@ TickManager.prototype = {
     },
 
     _adjustNumericTickValue: function(value, interval, min) {
-        return commonUtils.isExponential(value) ? _adjustValue(value) : utils.applyPrecisionByMinDelta(min, interval, value);
+        return typeUtils.isExponential(value) ? _adjustValue(value) : utils.applyPrecisionByMinDelta(min, interval, value);
     },
 
     _isTickIntervalCorrect: function(tickInterval, tickCountLimit, businessDelta) {

@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     recurrenceUtils = require("./utils.recurrence"),
     domUtils = require("../../core/utils/dom"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     Editor = require("../editor/editor"),
@@ -83,7 +83,7 @@ var RecurrenceRule = Class.inherit({
             return;
         }
 
-        if(commonUtils.isDefined(field)) {
+        if(isDefined(field)) {
             if(field === "until") {
                 delete this._recurrenceRule.count;
             }
@@ -285,7 +285,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     _renderRepeatOnEditor: function() {
         var freq = this._recurrenceRule.rules().freq;
 
-        if(!commonUtils.isDefined(this._$repeatOnEditor)) {
+        if(!isDefined(this._$repeatOnEditor)) {
             this._$repeatOnEditor = $("<div>")
                 .addClass(REPEAT_ON_EDITOR)
                 .addClass(FIELD_CLASS)
@@ -298,7 +298,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
             return;
         }
 
-        if(!commonUtils.isDefined(this._$repeatOnLabel)) {
+        if(!isDefined(this._$repeatOnLabel)) {
             this._renderRepeatOnLabel(this._$repeatOnEditor);
         }
 
@@ -328,21 +328,21 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     },
 
     _clearRepeatOnEditor: function() {
-        if(commonUtils.isDefined(this._$repeatOnWeek)) {
+        if(isDefined(this._$repeatOnWeek)) {
             this._$repeatOnWeek.detach();
             this._$repeatOnWeek.remove();
 
             delete this._$repeatOnWeek;
         }
 
-        if(commonUtils.isDefined(this._$repeatOnMonth)) {
+        if(isDefined(this._$repeatOnMonth)) {
             this._$repeatOnMonth.detach();
             this._$repeatOnMonth.remove();
 
             delete this._$repeatOnMonth;
         }
 
-        if(commonUtils.isDefined(this._$repeatOnYear)) {
+        if(isDefined(this._$repeatOnYear)) {
             this._$repeatOnYear.detach();
             this._$repeatOnYear.remove();
 
@@ -357,7 +357,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     },
 
     _clearRepeatOnLabel: function() {
-        if(commonUtils.isDefined(this._$repeatOnLabel)) {
+        if(isDefined(this._$repeatOnLabel)) {
             this._$repeatOnLabel.detach();
             this._$repeatOnLabel.remove();
 
@@ -578,11 +578,11 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     },
 
     _renderRepeatEndEditor: function(rule) {
-        rule = commonUtils.isDefined(rule) ? rule : this._recurrenceRule.repeatableRule();
+        rule = isDefined(rule) ? rule : this._recurrenceRule.repeatableRule();
 
         if(!rule) rule = "count";
 
-        if(!commonUtils.isDefined(this._$repeatEndEditor)) {
+        if(!isDefined(this._$repeatEndEditor)) {
             this._$repeatEndEditor = $("<div>")
                 .addClass(REPEAT_END_EDITOR_CONTAINER)
                 .addClass(FIELD_CLASS)
@@ -786,7 +786,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
                 this._renderRepeatOnEditor();
                 this._makeRepeatOnRule("freq", this._recurrenceRule.rules().freq);
 
-                if(commonUtils.isDefined(this._recurrenceRule.recurrenceString())) {
+                if(isDefined(this._recurrenceRule.recurrenceString())) {
                     this._changeEditorValue();
                 }
 

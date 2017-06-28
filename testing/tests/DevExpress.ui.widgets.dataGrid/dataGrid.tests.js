@@ -58,6 +58,7 @@ var $ = require("jquery"),
     logger = require("core/utils/console").logger,
     errors = require("ui/widget/ui.errors"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     DataSource = require("data/data_source/data_source").DataSource,
@@ -7736,7 +7737,7 @@ QUnit.test("try to focus unknown element", function(assert) {
 
     //assert
     assert.ok(!$focusedCell.length, "We do not have focused cell in markup");
-    assert.ok(!commonUtils.isDefined(this.keyboardNavigationController._focusedView), "There is no focused view");
+    assert.ok(!typeUtils.isDefined(this.keyboardNavigationController._focusedView), "There is no focused view");
 });
 
 QUnit.test("Focus row element", function(assert) {

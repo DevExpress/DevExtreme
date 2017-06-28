@@ -52,12 +52,12 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
      * @default 'Required'
      */
     _validate: function(value, rule) {
-        if(!commonUtils.isDefined(value)) return false;
+        if(!typeUtils.isDefined(value)) return false;
         if(value === false) {
             return false;
         }
         value = String(value);
-        if(rule.trim || !commonUtils.isDefined(rule.trim)) {
+        if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
 
@@ -131,22 +131,22 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
         }
 
         var validNumber = rulesValidators["numeric"].validate(value, rule),
-            validValue = commonUtils.isDefined(value),
+            validValue = typeUtils.isDefined(value),
             number = validNumber ? parseFloat(value) : validValue && value.valueOf(),
             min = rule.min,
             max = rule.max;
 
-        if(!(validNumber || commonUtils.isDate(value)) && !validValue) {
+        if(!(validNumber || typeUtils.isDate(value)) && !validValue) {
             return false;
         }
 
-        if(commonUtils.isDefined(min)) {
-            if(commonUtils.isDefined(max)) {
+        if(typeUtils.isDefined(min)) {
+            if(typeUtils.isDefined(max)) {
                 return number >= min && number <= max;
             }
             return number >= min;
         } else {
-            if(commonUtils.isDefined(max)) {
+            if(typeUtils.isDefined(max)) {
                 return number <= max;
             } else {
                 throw errors.Error("E0101");
@@ -187,8 +187,8 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
      * @default 'The length of the value is not correct'
      */
     _validate: function(value, rule) {
-        value = commonUtils.isDefined(value) ? String(value) : "";
-        if(rule.trim || !commonUtils.isDefined(rule.trim)) {
+        value = typeUtils.isDefined(value) ? String(value) : "";
+        if(rule.trim || !typeUtils.isDefined(rule.trim)) {
             value = value.trim();
         }
 
@@ -231,8 +231,8 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      */
     validate: function(value, rule) {
         var validator = rule.validator,
-            dataGetter = validator && commonUtils.isFunction(validator.option) && validator.option("dataGetter"),
-            data = commonUtils.isFunction(dataGetter) && dataGetter(),
+            dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option("dataGetter"),
+            data = typeUtils.isFunction(dataGetter) && dataGetter(),
             params = {
                 value: value,
                 validator: validator,
@@ -540,8 +540,8 @@ var ValidationEngine = {
     },
 
     _setDefaultMessage: function(rule, validator, name) {
-        if(!commonUtils.isDefined(rule.message)) {
-            if(validator.defaultFormattedMessage && commonUtils.isDefined(name)) {
+        if(!typeUtils.isDefined(rule.message)) {
+            if(validator.defaultFormattedMessage && typeUtils.isDefined(name)) {
                 rule.message = validator.defaultFormattedMessage(name);
             } else {
                 rule.message = validator.defaultMessage();
@@ -564,7 +564,7 @@ var ValidationEngine = {
                 ruleValidationResult;
 
             if(ruleValidator) {
-                if(commonUtils.isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
+                if(typeUtils.isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
                     if(!rule.isValid) {
                         result.isValid = false;
                         result.brokenRule = rule;

@@ -26,7 +26,7 @@ var $ = require("../core/renderer"),
     _each = $.each,
     _extend = extend,
     _isArray = Array.isArray,
-    _isDefined = commonUtils.isDefined;
+    _isDefined = require("../core/utils/type").isDefined;
 
 function getFirstAxisNameForPane(axes, paneName) {
     var result;

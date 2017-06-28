@@ -195,7 +195,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             if(item && item.needRepaint === false) {
                 this._processRenderedAppointment(item);
             }
-            if(item && (!commonUtils.isDefined(item.needRepaint) || item.needRepaint === true)) {
+            if(item && (!typeUtils.isDefined(item.needRepaint) || item.needRepaint === true)) {
                 item.needRepaint = false;
                 this._clearItem(item);
                 this._renderItem(i, item);
@@ -497,7 +497,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this._applyResourceDataAttr($appointment);
         var data = this._getItemData($appointment),
             geometry = this.invoke("getAppointmentGeometry", settings),
-            allowResize = !settings.isCompact && this.option("allowResize") && (!commonUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing)),
+            allowResize = !settings.isCompact && this.option("allowResize") && (!typeUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing)),
             allowDrag = this.option("allowDrag"),
             allDay = settings.allDay;
         this.invoke("setCellDataCacheAlias", this._currentAppointmentSettings, geometry);
@@ -812,7 +812,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var virtualAppointment = appointmentSetting.virtual,
             virtualGroupIndex = virtualAppointment.index;
 
-        if(!commonUtils.isDefined(this._virtualAppointments[virtualGroupIndex])) {
+        if(!typeUtils.isDefined(this._virtualAppointments[virtualGroupIndex])) {
             this._virtualAppointments[virtualGroupIndex] = {
                 coordinates: {
                     top: virtualAppointment.top,

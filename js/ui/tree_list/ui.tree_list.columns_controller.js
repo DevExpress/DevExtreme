@@ -1,6 +1,6 @@
 "use strict";
 
-var commonUtils = require("../../core/utils/common"),
+var isDefined = require("../../core/utils/type").isDefined,
     treeListCore = require("./ui.tree_list.core"),
     columnsControllerModule = require("../grid_core/ui.grid_core.columns_controller");
 
@@ -17,7 +17,7 @@ exports.ColumnsController = columnsControllerModule.controllers.columns.inherit(
                 firstDataColumnIndex = 0;
 
             for(var i = 0; i <= visibleColumnsLength - 1; i++) {
-                if(!commonUtils.isDefined(visibleColumns[i].command)) {
+                if(!isDefined(visibleColumns[i].command)) {
                     firstDataColumnIndex = visibleColumns[i].index;
                     break;
                 }

@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
@@ -202,7 +202,7 @@ var ContextMenu = MenuBase.inherit((function() {
             this._actions = {};
 
             $.each(ACTIONS, (function(index, action) {
-                this._actions[action] = this._createActionByOption(action) || commonUtils.noop;
+                this._actions[action] = this._createActionByOption(action) || noop;
             }).bind(this));
         },
 
@@ -215,7 +215,7 @@ var ContextMenu = MenuBase.inherit((function() {
             });
         },
 
-        _focusInHandler: commonUtils.noop,
+        _focusInHandler: noop,
 
         _itemContainer: function() {
             return this._overlay ? this._overlay.content() : $();
@@ -470,7 +470,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             contextMenuAction = that._createAction(contextMenuAction);
 
-            if(target.jquery || target.nodeType || commonUtils.isWindow(target)) {
+            if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
                 that._showContextMenuEventHandler = undefined;
                 $(target).on(eventName, handler);
             } else {
@@ -484,7 +484,7 @@ var ContextMenu = MenuBase.inherit((function() {
             e.stopPropagation();
         },
 
-        _renderDimensions: commonUtils.noop,
+        _renderDimensions: noop,
 
         _renderContainer: function($wrapper, submenuContainer) {
             var $itemsContainer,
@@ -574,7 +574,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 isInnerOverlayClicked,
                 closeOnOutsideClick = this.option("closeOnOutsideClick");
 
-            if(commonUtils.isFunction(closeOnOutsideClick)) {
+            if(typeUtils.isFunction(closeOnOutsideClick)) {
                 return closeOnOutsideClick(e);
             }
 
@@ -691,7 +691,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 submenuPosition = this._getSubmenuPosition($itemElement);
 
             if(this._overlay && this._overlay.option("visible")) {
-                if(!commonUtils.isDefined(this._shownSubmenus)) {
+                if(!typeUtils.isDefined(this._shownSubmenus)) {
                     this._shownSubmenus = [];
                 }
 

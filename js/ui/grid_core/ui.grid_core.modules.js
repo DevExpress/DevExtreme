@@ -2,7 +2,8 @@
 
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
+    grep = require("../../core/utils/common").grep,
+    isFunction = require("../../core/utils/type").isFunction,
     inArray = require("../../core/utils/array").inArray,
     errors = require("../widget/ui.errors"),
     messageLocalization = require("../../localization/message"),
@@ -170,7 +171,7 @@ var ModuleItem = Class.inherit({
     createAction: function(actionName, config) {
         var action;
 
-        if(commonUtils.isFunction(actionName)) {
+        if(isFunction(actionName)) {
             action = this.component._createAction(actionName.bind(this), config);
             return function(e) {
                 action({ jQueryEvent: e });
@@ -469,7 +470,7 @@ module.exports = {
     },
 
     unregisterModule: function(name) {
-        this.modules = commonUtils.grep(this.modules, function(module) {
+        this.modules = grep(this.modules, function(module) {
             return module.name !== name;
         });
         delete this.controllerTypes;

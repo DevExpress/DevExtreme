@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     TemplateBase = require("./ui.template_base"),
     removeEvent = require("../../core/remove_event"),
-    commonUtils = require("../../core/utils/common");
+    isPrimitive = require("../../core/utils/type").isPrimitive;
 
 var watchChanges = (function() {
 
@@ -14,7 +14,7 @@ var watchChanges = (function() {
         globalDispose = globalWatch(rawData, watchMethod, function(dataWithRawFields) {
             fieldsDispose && fieldsDispose();
 
-            if(commonUtils.isPrimitive(dataWithRawFields)) {
+            if(isPrimitive(dataWithRawFields)) {
                 callback(dataWithRawFields);
                 return;
             }

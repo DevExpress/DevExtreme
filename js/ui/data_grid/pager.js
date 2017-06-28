@@ -45,7 +45,7 @@ var Page = Class.inherit({
     value: function(value) {
         var that = this;
 
-        if((commonUtils.isDefined(value))) {
+        if((typeUtils.isDefined(value))) {
             that._$page.text(value);
         } else {
             var text = that._$page.text();
@@ -165,7 +165,7 @@ var Pager = Widget.inherit({
             }
         }
 
-        if(commonUtils.isDefined(that.selectedPage)) {
+        if(typeUtils.isDefined(that.selectedPage)) {
             if(pageIndex === pageCount && pageCount > maxPagesCount && that.selectedPage.index !== PAGES_LIMITER + 1) {
                 that.selectedPage.index = PAGES_LIMITER + 1;
             }
@@ -187,7 +187,7 @@ var Pager = Widget.inherit({
             nextPage,
             morePage;
 
-        if(!commonUtils.isDefined(page)) {
+        if(!typeUtils.isDefined(page)) {
             return;
         }
 
@@ -254,7 +254,7 @@ var Pager = Widget.inherit({
         var pageIndex = this.option("pageIndex"),
             pageCount = this.option("pageCount");
 
-        if(commonUtils.isDefined(pageIndex)) {
+        if(typeUtils.isDefined(pageIndex)) {
             pageIndex = direction === "next" ? ++pageIndex : --pageIndex;
             if(pageIndex > 0 && pageIndex <= pageCount) {
                 this.option("pageIndex", pageIndex);
@@ -489,7 +489,7 @@ var Pager = Widget.inherit({
     _renderInfo: function() {
         var infoText = this.option("infoText");
 
-        if(this.option("showInfo") && commonUtils.isDefined(infoText)) {
+        if(this.option("showInfo") && typeUtils.isDefined(infoText)) {
             this._$info = $("<div>")
                 .css("display", this._isInfoHide ? "none" : "")
                 .addClass(PAGER_INFO_CLASS)
@@ -651,8 +651,8 @@ var Pager = Widget.inherit({
     },
 
     _getMinPagerWidth: function() {
-        var pagesChooserWidth = commonUtils.isDefined(this._pagesChooserWidth) ? this._pagesChooserWidth : 0,
-            pagesSizeChooserWidth = commonUtils.isDefined(this._pagesSizeChooserWidth) ? this._pagesSizeChooserWidth : 0;
+        var pagesChooserWidth = typeUtils.isDefined(this._pagesChooserWidth) ? this._pagesChooserWidth : 0,
+            pagesSizeChooserWidth = typeUtils.isDefined(this._pagesSizeChooserWidth) ? this._pagesSizeChooserWidth : 0;
 
         return pagesChooserWidth + pagesSizeChooserWidth;
     },
@@ -665,7 +665,7 @@ var Pager = Widget.inherit({
     _updateLightMode: commonUtils.deferUpdater(function() {
         var that = this,
             width = this.element().width(),
-            infoWidth = commonUtils.isDefined(this._infoWidth) ? this._infoWidth : 0;
+            infoWidth = typeUtils.isDefined(this._infoWidth) ? this._infoWidth : 0;
 
         commonUtils.deferRender(function() {
             if(that._isInfoHide && width > that._getMinPagerWidth() + infoWidth) {

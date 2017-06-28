@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     compileGetter = require("../../core/utils/data").compileGetter,
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
@@ -13,7 +13,7 @@ var SEARCH_PANEL_CLASS = "search-panel",
 
 
 function allowSearch(column) {
-    return commonUtils.isDefined(column.allowSearch) ? column.allowSearch : column.allowFiltering;
+    return isDefined(column.allowSearch) ? column.allowSearch : column.allowFiltering;
 }
 
 function parseValue(column, text) {

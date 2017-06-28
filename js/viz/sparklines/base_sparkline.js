@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isFunction = require("../../core/utils/type").isFunction,
     BaseWidget = require("../core/base_widget"),
     extend = require("../../core/utils/extend").extend,
 
@@ -16,7 +16,7 @@ var $ = require("../../core/renderer"),
 
     _abs = Math.abs,
     _extend = extend,
-    _noop = commonUtils.noop;
+    _noop = require("../../core/utils/common").noop;
 
 function generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled) {
     var lineSpacing = fontOptions.lineSpacing,
@@ -36,7 +36,7 @@ function generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled) {
 function generateCustomizeTooltipCallback(customizeTooltip, fontOptions, rtlEnabled) {
     var defaultCustomizeTooltip = generateDefaultCustomizeTooltipCallback(fontOptions, rtlEnabled);
 
-    if(commonUtils.isFunction(customizeTooltip)) {
+    if(isFunction(customizeTooltip)) {
         return function(customizeObject) {
             var res = customizeTooltip.call(customizeObject, customizeObject);
             if(!("html" in res) && !("text" in res)) {

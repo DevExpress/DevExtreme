@@ -138,7 +138,7 @@ var Application = Class.inherit({
         var tasks = [];
 
         $.each(this.components, function(index, component) {
-            if(component[methodName] && commonUtils.isFunction(component[methodName])) {
+            if(component[methodName] && typeUtils.isFunction(component[methodName])) {
                 var result = component[methodName](args);
                 if(result && result.done) {
                     tasks.push(result);

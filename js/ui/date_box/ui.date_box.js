@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     compareVersions = require("../../core/utils/version").compare,
     extend = require("../../core/utils/extend").extend,
@@ -399,7 +398,7 @@ var DateBox = DropDownEditor.inherit({
     _getPickerTypeByDeprecatedOptions: function(userOptions) {
         return userOptions.pickerType
             ? userOptions.pickerType
-            : commonUtils.isDefined(userOptions.useCalendar) || commonUtils.isDefined(userOptions.useNative)
+            : typeUtils.isDefined(userOptions.useCalendar) || typeUtils.isDefined(userOptions.useNative)
                 ? this._getPickerType()
                 : this._pickerType || this.option("pickerType");
     },
@@ -521,7 +520,7 @@ var DateBox = DropDownEditor.inherit({
     _updateSize: function() {
         var $element = this.element(),
             widthOption = this.option("width"),
-            isWidthSet = commonUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
+            isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
             isElementVisible = $element.is(":visible"),
             pickerType = this._pickerType,
             // NOTE: no calculateWidth if type is rollers, why?
@@ -675,13 +674,13 @@ var DateBox = DropDownEditor.inherit({
         var displayFormat = this._strategy.getDisplayFormat(this.option("displayFormat"));
         var parsedText = this._strategy.getParsedText(text, displayFormat);
 
-        return commonUtils.isDefined(parsedText) ? parsedText : undefined;
+        return typeUtils.isDefined(parsedText) ? parsedText : undefined;
     },
 
     _validateValue: function(value) {
         var text = this.option("text"),
             hasText = !!text && value !== null,
-            isDate = !!value && commonUtils.isDate(value) && !isNaN(value.getTime()),
+            isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime()),
             isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption("min"), this.dateOption("max"), this.option("type")),
             isValid = !hasText || !hasText && !value || isDateInRange,
             validationMessage = "";

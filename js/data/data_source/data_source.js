@@ -18,8 +18,8 @@ var $ = require("../../core/renderer"),
 
     __isString = typeUtils.isString,
     __isNumber = typeUtils.isNumeric,
-    __isBoolean = commonUtils.isBoolean,
-    __isDefined = commonUtils.isDefined;
+    __isBoolean = typeUtils.isBoolean,
+    __isDefined = typeUtils.isDefined;
 
 var CANCELED_TOKEN = "canceled";
 
