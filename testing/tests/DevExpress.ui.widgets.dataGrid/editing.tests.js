@@ -6749,6 +6749,7 @@ QUnit.test("Show tooltip on focus for last row with set validate in column and e
     //arrange
     var that = this,
         $overlayContent,
+        $highlightContainer,
         rowsView = that.rowsView,
         testElement = $('#container'),
         cells,
@@ -6815,7 +6816,8 @@ QUnit.test("Show tooltip on focus for last row with set validate in column and e
     assert.ok(rowsView.element().find(".dx-freespace-row").height() > 0, "freespace row has height ");
 
     //T526383
-    assert.ok($overlayContent.offset().top >= (cells.eq(1).offset().top + cells.eq(1).height()), "tooltip is under the cell");
+    $highlightContainer = cells.eq(1).find(".dx-highlight-outline").first();
+    assert.ok($overlayContent.offset().top >= ($highlightContainer.offset().top + $highlightContainer.height()), "tooltip is under the cell");
 });
 
 //T200857
