@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     camelize = require("../../core/utils/inflector").camelize,
@@ -127,7 +128,9 @@ var SchedulerHeader = Widget.inherit({
     _validateViews: function() {
         var views = this.option("views");
 
-        $.each(views, function(_, viewName) {
+        $.each(views, function(_, view) {
+            var viewName = typeUtils.isObject(view) && view.type ? view.type : view;
+
             if(inArray(viewName, VIEWS) === -1) {
                 errors.log("W0008", viewName);
             }
@@ -135,6 +138,8 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _renderViewSwitcherTabs: function($element) {
+        var that = this;
+
         this._viewSwitcher = this._createComponent($element, Tabs, {
             selectionRequired: true,
             scrollingEnabled: true,
@@ -143,12 +148,16 @@ var SchedulerHeader = Widget.inherit({
             itemTemplate: function(item) {
                 return $("<span>")
                     .addClass("dx-tab-text")
-                    .text(messageLocalization.format("dxScheduler-switcher" + camelize(item, true)));
+                    .text(that._getItemText(item));
             },
             selectedItem: this.option("currentView"),
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled")
         });
+    },
+
+    _getItemText: function(item) {
+        return item.name || messageLocalization.format("dxScheduler-switcher" + camelize(item, true));
     },
 
     _refreshViewSwitcher: function() {
@@ -172,6 +181,8 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _renderViewSwitcherDropDownMenu: function($element) {
+        var that = this;
+
         this._$viewSwitcherLabel = $("<div>").addClass(VIEW_SWITCHER_LABEL_CLASS).appendTo(this.element());
 
         this._changeViewSwitcherLabelText();
@@ -182,7 +193,7 @@ var SchedulerHeader = Widget.inherit({
             itemTemplate: function(item) {
                 return $("<span>")
                     .addClass("dx-dropdownmenu-item-text")
-                    .text(messageLocalization.format("dxScheduler-switcher" + camelize(item, true)));
+                    .text(that._getItemText(item));
             }
         });
     },
@@ -199,7 +210,9 @@ var SchedulerHeader = Widget.inherit({
     _updateCurrentView: function(e) {
         var selectedItem = e.itemData || e.component.option("selectedItem");
 
-        this.notifyObserver("currentViewUpdated", selectedItem);
+        var viewName = typeUtils.isObject(selectedItem) ? selectedItem.type : selectedItem;
+
+        this.notifyObserver("currentViewUpdated", viewName);
     },
 
     _renderFocusTarget: commonUtils.noop

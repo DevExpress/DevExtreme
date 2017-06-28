@@ -1616,8 +1616,7 @@ var Scheduler = Widget.inherit({
     _headerConfig: function() {
         var result,
             currentViewOptions = this._getCurrentViewOptions(),
-            viewNames = $.map(this.option("views"), function(view) { return typeUtils.isObject(view) ? view.type : view; });
-
+            viewNames = $.map(this.option("views"), function(view) { return typeUtils.isObject(view) && !view.name ? view.type : view; });
         result = extend({
             firstDayOfWeek: this.option("firstDayOfWeek"),
             currentView: this.option("currentView"),
