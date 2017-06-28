@@ -739,7 +739,7 @@ QUnit.test("onReachBottom should not be called when scroll delta is 0", function
             onReachBottom: function() {
                 scrollView.release(false);
 
-                assert.ok(true, "reachBottom was called once");
+                assert.ok(true, "reachBottom was not called on the second scroll");
                 done();
             }
         }),
