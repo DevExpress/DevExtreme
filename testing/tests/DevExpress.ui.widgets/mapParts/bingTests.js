@@ -4,6 +4,7 @@
 
 var $ = require("jquery"),
     testing = require("./utils.js"),
+    browser = require("core/utils/browser"),
     BingProvider = require("ui/map/provider.dynamic.bing");
 
 require("ui/map");
@@ -64,6 +65,11 @@ QUnit.module("bing provider", {
 });
 
 QUnit.test("map initialize with loaded map", function(assert) {
+    if(!(browser.msie && parseInt(browser.version) < 11)) {
+        assert.ok(true, "Bing maps v7 specific test");
+        return;
+    }
+
     var done = assert.async();
 
     $.getScript("fakeBingUrl").done(function() {
@@ -124,10 +130,12 @@ QUnit.test("map ready action", function(assert) {
             assert.ok(true, "map ready");
             assert.equal(window.Microsoft.optionsSpecified, true, "map options specified");
             assert.ok(window.Microsoft.options.credentials, "map credentials specified");
-            assert.equal(window.Microsoft.mapInitialized, true, "map initialized");
-            assert.equal(window.Microsoft["tiledownloadcompleteHandlerRemoved"], true, "tiledownloadcomplete handler removed");
             assert.ok(e.originalMap instanceof Microsoft.Maps.Map, "map instance specified");
 
+            if(browser.msie && parseInt(browser.version) < 11) {
+                assert.equal(window.Microsoft.mapInitialized, true, "map initialized [V7 specific]");
+                assert.equal(window.Microsoft["tiledownloadcompleteHandlerRemoved"], true, "tiledownloadcomplete handler removed [V7 specific]");
+            }
             done();
         }
     });

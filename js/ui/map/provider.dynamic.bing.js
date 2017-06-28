@@ -5,12 +5,16 @@ var $ = require("../../core/renderer"),
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
     DynamicProvider = require("./provider.dynamic"),
-    Color = require("../../color");
+    Color = require("../../color"),
+    browser = require("../../core/utils/browser");
 
 /* global Microsoft */
-
 var BING_MAP_READY = "_bingScriptReady",
-    BING_URL = "https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&s=1&onScriptLoad=" + BING_MAP_READY,
+    BING_URL_V7 = "https://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0&s=1&onScriptLoad=" + BING_MAP_READY,
+    BING_URL_V8 = "https://www.bing.com/api/maps/mapcontrol?callback=" + BING_MAP_READY,
+
+    INFOBOX_V_OFFSET_V7 = 33,
+    INFOBOX_V_OFFSET_V8 = 13,
 
     BING_CREDENTIALS = "AhuxC0dQ1DBTNo8L-H9ToVMQStmizZzBJdraTSgCzDSWPsA1Qd8uIvFSflzxdaLH",
 
@@ -25,7 +29,9 @@ var msMapsLoader;
 
 
 var BingProvider = DynamicProvider.inherit({
-
+    _isV8Supported: function() {
+        return !(browser.msie && parseInt(browser.version) < 11);
+    },
     _mapType: function(type) {
         var mapTypes = {
             roadmap: Microsoft.Maps.MapTypeId.road,
@@ -132,9 +138,11 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _loadMapScript: function() {
+        var bingUrl = this._isV8Supported() ? BING_URL_V8 : BING_URL_V7;
+
         return new Promise(function(resolve) {
             window[BING_MAP_READY] = resolve;
-            $.getScript(BING_URL);
+            $.getScript(bingUrl);
         }).then(function() {
             try {
                 delete window[BING_MAP_READY];
@@ -145,22 +153,32 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _init: function() {
-        return new Promise(function(resolve) {
-            var controls = this._option("controls");
+        if(this._isV8Supported()) {
+            this._createMap();
 
-            this._map = new Microsoft.Maps.Map(this._$container[0], {
-                credentials: this._keyOption("bing") || BING_CREDENTIALS,
-                zoom: this._option("zoom"),
-                showDashboard: controls,
-                showMapTypeSelector: controls,
-                showScalebar: controls
-            });
+            return Promise.resolve();
+        } else {
+            return new Promise(function(resolve) {
+                this._createMap();
 
-            var handler = Microsoft.Maps.Events.addHandler(this._map, 'tiledownloadcomplete', function() {
-                resolve(handler);
+                var handler = Microsoft.Maps.Events.addHandler(this._map, 'tiledownloadcomplete', function() {
+                    resolve(handler);
+                });
+            }.bind(this)).then(function(handler) {
+                Microsoft.Maps.Events.removeHandler(handler);
             });
-        }.bind(this)).then(function(handler) {
-            Microsoft.Maps.Events.removeHandler(handler);
+        }
+    },
+
+    _createMap: function() {
+        var controls = this._option("controls");
+
+        this._map = new Microsoft.Maps.Map(this._$container[0], {
+            credentials: this._keyOption("bing") || BING_CREDENTIALS,
+            zoom: this._option("zoom"),
+            showDashboard: controls,
+            showMapTypeSelector: controls,
+            showScalebar: controls
         });
     },
 
@@ -183,8 +201,15 @@ var BingProvider = DynamicProvider.inherit({
 
     _clickActionHandler: function(e) {
         if(e.targetType === "map") {
-            var point = new Microsoft.Maps.Point(e.getX(), e.getY()),
+            var location;
+
+            if(this._isV8Supported()) {
+                location = e.location;
+            } else {
+                var point = new Microsoft.Maps.Point(e.getX(), e.getY());
                 location = e.target.tryPixelToLocation(point);
+            }
+
             this._fireClickAction({ location: this._normalizeLocation(location) });
         }
     },
@@ -304,12 +329,19 @@ var BingProvider = DynamicProvider.inherit({
 
         options = this._parseTooltipOptions(options);
 
-        var infobox = new Microsoft.Maps.Infobox(location, {
-            description: options.text,
-            offset: new Microsoft.Maps.Point(0, 33),
-            visible: options.visible
-        });
-        this._map.entities.push(infobox, null);
+        var isV8Supported = this._isV8Supported(),
+            vOffset = isV8Supported ? INFOBOX_V_OFFSET_V8 : INFOBOX_V_OFFSET_V7,
+            infobox = new Microsoft.Maps.Infobox(location, {
+                description: options.text,
+                offset: new Microsoft.Maps.Point(0, vOffset),
+                visible: options.visible
+            });
+
+        if(isV8Supported) {
+            infobox.setMap(this._map);
+        } else {
+            this._map.entities.push(infobox, null);
+        }
 
         return infobox;
     },
@@ -434,7 +466,8 @@ var BingProvider = DynamicProvider.inherit({
 
 ///#DEBUG
 BingProvider.remapConstant = function(newValue) {
-    BING_URL = newValue;
+    BING_URL_V7 = newValue;
+    BING_URL_V8 = newValue;
 };
 ///#ENDDEBUG
 
