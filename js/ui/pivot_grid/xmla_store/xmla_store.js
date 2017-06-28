@@ -50,9 +50,19 @@ exports.XmlaStore = Class.inherit((function() {
         pivotGridUtils.sendRequest(ajaxSettings).fail(function() {
             deferred.reject(arguments);
         }).done(function(text) {
+            var parser = new window.DOMParser();
             var xml;
+
             try {
-                xml = $.parseXML(text);
+                try { //For IE
+                    xml = parser.parseFromString(text, "text/xml");
+                } catch(e) {
+                    xml = undefined;
+                }
+
+                if(!xml || xml.getElementsByTagName("parsererror").length) {
+                    throw new errors.Error("E4023", text);
+                }
             } catch(e) {
                 deferred.reject({
                     statusText: e.message,
