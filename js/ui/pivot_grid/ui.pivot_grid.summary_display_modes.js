@@ -1,10 +1,9 @@
 "use strict";
 
-var commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
+var typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    isDefined = commonUtils.isDefined,
+    isDefined = typeUtils.isDefined,
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     findField = pivotGridUtils.findField,
     foreachTree = pivotGridUtils.foreachTree,
@@ -488,7 +487,7 @@ function getExpression(field) {
         crossGroupCalculation = field.allowCrossGroupCalculation,
         expression = NULL;
 
-    if(commonUtils.isFunction(field.calculateSummaryValue)) {
+    if(typeUtils.isFunction(field.calculateSummaryValue)) {
         expression = field.calculateSummaryValue;
     } else if(summaryDisplayMode) {
         if(summaryDisplayMode === "absoluteVariation") {
@@ -573,10 +572,10 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
 exports.createMockSummaryCell = function(descriptions, fields, indices) {
     var summaryCell = new SummaryCell([], [], {}, descriptions, 0);
     summaryCell.value = function(fieldId) {
-        if(commonUtils.isDefined(fieldId)) {
+        if(isDefined(fieldId)) {
             var index = findField(fields, fieldId),
                 field = fields[index];
-            if(!indices[index] && field && !commonUtils.isDefined(field.area)) {
+            if(!indices[index] && field && !isDefined(field.area)) {
                 descriptions.values.push(field);
                 indices[index] = true;
             }

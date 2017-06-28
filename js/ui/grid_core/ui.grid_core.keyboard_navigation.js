@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     core = require("./ui.grid_core.modules"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
     KeyboardProcessor = require("../widget/ui.keyboard_processor"),
     eventUtils = require("../../events/utils"),
@@ -96,7 +96,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _applyTabIndexToElement: function($element) {
         var tabIndex = this.option("tabIndex");
-        $element.attr("tabIndex", commonUtils.isDefined(tabIndex) ? tabIndex : 0);
+        $element.attr("tabIndex", isDefined(tabIndex) ? tabIndex : 0);
     },
 
     _clickHandler: function(e) {
@@ -228,7 +228,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
 
     _isCellValid: function($cell) {
-        if(commonUtils.isDefined($cell)) {
+        if(isDefined($cell)) {
             var rowsView = this.getView("rowsView"),
                 visibleColumns = this._columnsController.getVisibleColumns(),
                 visibleRowIndex = rowsView.getRowIndex($cell.parent()),
@@ -240,7 +240,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 isEditingCurrentRow = editingController && (editMode === EDIT_MODE_ROW ? editingController.isEditRow(visibleRowIndex) : editingController.isEditing()),
                 isMasterDetailRow = isDetailRow($cell.parent()),
                 isValidGroupSpaceColumn = function() {
-                    return !isMasterDetailRow && column && !commonUtils.isDefined(column.groupIndex) || parseInt($cell.attr("colspan")) > 1;
+                    return !isMasterDetailRow && column && !isDefined(column.groupIndex) || parseInt($cell.attr("colspan")) > 1;
                 };
 
             if(this._isMasterDetailCell($cell)) {
@@ -907,7 +907,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     setupFocusedView: function() {
-        if(!commonUtils.isDefined(this._focusedView)) {
+        if(!isDefined(this._focusedView)) {
             this.focusViewByName("rowsView");
         }
     },

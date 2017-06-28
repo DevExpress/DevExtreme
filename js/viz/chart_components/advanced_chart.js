@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     rangeModule = require("../translators/range"),
@@ -11,9 +10,9 @@ var $ = require("../../core/renderer"),
     BaseChart = require("./base_chart").BaseChart,
 
     _isArray = Array.isArray,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../core/utils/type").isDefined,
     _each = $.each,
-    _noop = commonUtils.noop,
+    _noop = require("../../core/utils/common").noop,
     _extend = extend,
     vizUtils = require("../core/utils"),
     _map = vizUtils.map;

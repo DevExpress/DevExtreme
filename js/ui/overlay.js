@@ -12,7 +12,7 @@ var $ = require("../core/renderer"),
     positionUtils = require("../animation/position"),
     fitIntoRange = require("../core/utils/math").fitIntoRange,
     domUtils = require("../core/utils/dom"),
-    commonUtils = require("../core/utils/common"),
+    noop = require("../core/utils/common").noop,
     typeUtils = require("../core/utils/type"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
@@ -446,7 +446,7 @@ var Overlay = Widget.inherit({
         this._$wrapper.attr("data-bind", "dxControlsDescendantBindings: true");
 
         // NOTE: hack to fix B251087
-        this._$wrapper.on("MSPointerDown", commonUtils.noop);
+        this._$wrapper.on("MSPointerDown", noop);
         // NOTE: bootstrap integration T342292
         this._$wrapper.on("focusin", function(e) { e.stopPropagation(); });
 
@@ -462,7 +462,7 @@ var Overlay = Widget.inherit({
     },
 
     _initTarget: function(target) {
-        if(!commonUtils.isDefined(target)) {
+        if(!typeUtils.isDefined(target)) {
             return;
         }
 
@@ -517,7 +517,7 @@ var Overlay = Widget.inherit({
         $.each(ACTIONS, (function(_, action) {
             this._actions[action] = this._createActionByOption(action, {
                 excludeValidators: ["disabled", "readOnly"]
-            }) || commonUtils.noop;
+            }) || noop;
         }).bind(this));
     },
 
@@ -536,7 +536,7 @@ var Overlay = Widget.inherit({
 
         var closeOnOutsideClick = this.option("closeOnOutsideClick");
 
-        if(commonUtils.isFunction(closeOnOutsideClick)) {
+        if(typeUtils.isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
         if(closeOnOutsideClick) {
@@ -600,7 +600,7 @@ var Overlay = Widget.inherit({
 
     _getAnimationConfig: function() {
         var animation = this.option("animation");
-        if(commonUtils.isFunction(animation)) animation = animation.call(this);
+        if(typeUtils.isFunction(animation)) animation = animation.call(this);
         return animation;
     },
 
@@ -626,8 +626,8 @@ var Overlay = Widget.inherit({
 
         var animation = that._getAnimationConfig() || {},
             showAnimation = this._normalizeAnimation(animation.show, "to"),
-            startShowAnimation = (showAnimation && showAnimation.start) || commonUtils.noop,
-            completeShowAnimation = (showAnimation && showAnimation.complete) || commonUtils.noop;
+            startShowAnimation = (showAnimation && showAnimation.start) || noop,
+            completeShowAnimation = (showAnimation && showAnimation.complete) || noop;
 
         if(this._isHidingActionCanceled) {
             delete this._isHidingActionCanceled;
@@ -687,7 +687,7 @@ var Overlay = Widget.inherit({
             deferred = $.Deferred(),
             animation = that._getAnimationConfig() || {},
             hideAnimation = this._normalizeAnimation(animation.hide, "from"),
-            completeHideAnimation = (hideAnimation && hideAnimation.complete) || commonUtils.noop,
+            completeHideAnimation = (hideAnimation && hideAnimation.complete) || noop,
             hidingArgs = { cancel: false };
 
         this._actions.onHiding(hidingArgs);
@@ -719,7 +719,7 @@ var Overlay = Widget.inherit({
 
     _animate: function(animation, completeCallback, startCallback) {
         if(animation) {
-            startCallback = startCallback || animation.start || commonUtils.noop;
+            startCallback = startCallback || animation.start || noop;
 
             var $content = this._$content;
 
@@ -894,7 +894,7 @@ var Overlay = Widget.inherit({
     _targetParentsScrollHandler: function(e) {
         var closeHandled = false,
             closeOnScroll = this.option("closeOnTargetScroll");
-        if(commonUtils.isFunction(closeOnScroll)) {
+        if(typeUtils.isFunction(closeOnScroll)) {
             closeHandled = closeOnScroll(e);
         }
 
@@ -1029,8 +1029,8 @@ var Overlay = Widget.inherit({
                 getDirection: function() {
                     return "both";
                 },
-                _toggleGestureCover: commonUtils.noop,
-                _clearSelection: commonUtils.noop,
+                _toggleGestureCover: noop,
+                _clearSelection: noop,
                 isNative: true
             }, function(e) {
                 var originalEvent = e.originalEvent.originalEvent;
@@ -1207,7 +1207,7 @@ var Overlay = Widget.inherit({
     },
 
     _isWindow: function($element) {
-        return !!$element && commonUtils.isWindow($element.get(0));
+        return !!$element && typeUtils.isWindow($element.get(0));
     },
 
     _getContainer: function() {

@@ -5,7 +5,8 @@ var $ = require("../../core/renderer"),
     deferredStrategy = require("./selection.strategy.deferred"),
     standardStrategy = require("./selection.strategy.standard"),
     extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common");
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined;
 
 module.exports = Class.inherit({
     ctor: function(options) {
@@ -29,16 +30,16 @@ module.exports = Class.inherit({
             selectedItems: [],
             selectionFilter: [],
             maxFilterLengthInRequest: 0,
-            onSelectionChanged: commonUtils.noop,
-            key: commonUtils.noop,
+            onSelectionChanged: noop,
+            key: noop,
             keyOf: function(item) { return item; },
             load: function() { return $.Deferred().resolve([]); },
             totalCount: function() { return -1; },
             isSelectableItem: function() { return true; },
             isItemSelected: function() { return false; },
             getItemData: function(item) { return item; },
-            dataFields: commonUtils.noop,
-            filter: commonUtils.noop
+            dataFields: noop,
+            filter: noop
         };
     },
 
@@ -176,7 +177,7 @@ module.exports = Class.inherit({
             key = keyOf(items[this._focusedItemIndex].data),
             isFocusedItemSelected = items[this._focusedItemIndex] && this.isItemSelected(key);
 
-        if(!commonUtils.isDefined(this._shiftFocusedItemIndex)) {
+        if(!isDefined(this._shiftFocusedItemIndex)) {
             this._shiftFocusedItemIndex = this._focusedItemIndex;
         }
 

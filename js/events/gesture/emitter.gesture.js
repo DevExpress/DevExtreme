@@ -6,7 +6,8 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
     mathUtils = require("../../core/utils/math"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined,
     eventUtils = require("../utils"),
     Emitter = require("../core/emitter"),
     sign = mathUtils.sign,
@@ -37,7 +38,7 @@ var gestureCover = (function() {
     var isDesktop = devices.real().platform === "generic";
 
     if(!supportPointerEvents() || !isDesktop) {
-        return commonUtils.noop;
+        return noop;
     }
 
     var $cover = $("<div>")
@@ -209,16 +210,16 @@ var GestureEmitter = Emitter.inherit({
         this._toggleGestureCover(false);
     },
 
-    _init: commonUtils.noop,
-    _start: commonUtils.noop,
-    _move: commonUtils.noop,
-    _stop: commonUtils.noop,
-    _end: commonUtils.noop
+    _init: noop,
+    _start: noop,
+    _move: noop,
+    _stop: noop,
+    _end: noop
 
 });
 GestureEmitter.initialTouchBoundary = TOUCH_BOUNDARY;
 GestureEmitter.touchBoundary = function(newBoundary) {
-    if(commonUtils.isDefined(newBoundary)) {
+    if(isDefined(newBoundary)) {
         TOUCH_BOUNDARY = newBoundary;
         return;
     }

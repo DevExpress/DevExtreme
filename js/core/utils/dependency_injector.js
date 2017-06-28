@@ -3,7 +3,7 @@
 module.exports = function(object) {
     var $ = require("../../core/renderer"),
         extend = require("./extend").extend,
-        isFunction = require("./common").isFunction,
+        isFunction = require("./type").isFunction,
         Class = require("../class");
 
     var BaseClass = Class.inherit(object),

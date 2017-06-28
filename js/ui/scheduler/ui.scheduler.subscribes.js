@@ -5,7 +5,7 @@ var $ = require("../../core/renderer"),
     recurrenceUtils = require("./utils.recurrence"),
     dateUtils = require("../../core/utils/date"),
     translator = require("../../animation/translator"),
-    commonUtils = require("../../core/utils/common"),
+    grep = require("../../core/utils/common").grep,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -407,7 +407,7 @@ var subscribes = {
     updateResizableArea: function() {
         var $allResizableElements = this.element().find(".dx-scheduler-appointment.dx-resizable");
 
-        var horizontalResizables = commonUtils.grep($allResizableElements, function(el) {
+        var horizontalResizables = grep($allResizableElements, function(el) {
             var $el = $(el),
                 resizableInst = $el.dxResizable("instance"),
                 area = resizableInst.option("area");
@@ -434,7 +434,7 @@ var subscribes = {
     },
 
     getField: function(field, obj) {
-        if(!commonUtils.isDefined(this._dataAccessors.getter[field])) {
+        if(!typeUtils.isDefined(this._dataAccessors.getter[field])) {
             return;
         }
 
@@ -442,7 +442,7 @@ var subscribes = {
     },
 
     setField: function(field, obj, value) {
-        if(!commonUtils.isDefined(this._dataAccessors.setter[field])) {
+        if(!typeUtils.isDefined(this._dataAccessors.setter[field])) {
             return;
         }
 

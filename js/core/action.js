@@ -2,7 +2,6 @@
 
 var $ = require("../core/renderer"),
     config = require("./config"),
-    commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
     Class = require("./class");
 
@@ -131,7 +130,7 @@ Action.registerExecutor({
     },
     "func": {
         execute: function(e) {
-            if(commonUtils.isFunction(e.action)) {
+            if(typeUtils.isFunction(e.action)) {
                 e.result = e.action.call(e.context, e.args[0]);
                 e.handled = true;
             }

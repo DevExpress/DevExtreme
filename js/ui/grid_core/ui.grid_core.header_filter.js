@@ -10,7 +10,6 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     dataUtils = require("../../data/utils"),
     dataCoreUtils = require("../../core/utils/data"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
@@ -136,7 +135,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 });
 
                 if("items" in groupItems[i]) {
-                    if(currentLevel === level || !commonUtils.isDefined(groupItems[i].value)) {
+                    if(currentLevel === level || !typeUtils.isDefined(groupItems[i].value)) {
                         delete groupItems[i].items;
                     } else {
                         that._processGroupItems(groupItems[i].items, currentLevel + 1, path, options);
@@ -162,7 +161,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
             if(!dataSource) return;
 
-            if(commonUtils.isDefined(headerFilterDataSource) && !commonUtils.isFunction(headerFilterDataSource)) {
+            if(typeUtils.isDefined(headerFilterDataSource) && !typeUtils.isFunction(headerFilterDataSource)) {
                 dataSource = normalizeDataSourceOptions(headerFilterDataSource);
                 dataSource.postProcess = function(items) {
                     that._updateSelectedState(items, column);
@@ -172,7 +171,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             }
             if(column.lookup) {
                 dataSource = column.lookup.dataSource;
-                if(commonUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
+                if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                     dataSource = dataSource({});
                 }
                 dataSource = normalizeDataSourceOptions(dataSource);
@@ -221,7 +220,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 };
             }
 
-            if(commonUtils.isFunction(headerFilterDataSource)) {
+            if(typeUtils.isFunction(headerFilterDataSource)) {
                 headerFilterDataSource.call(column, options);
                 origPostProcess = options.dataSource.postProcess;
                 options.dataSource.postProcess = function(data) {

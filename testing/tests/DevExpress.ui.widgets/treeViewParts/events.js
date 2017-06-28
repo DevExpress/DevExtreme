@@ -4,6 +4,7 @@
 
 var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     holdEvent = require("events/hold"),
     fx = require("animation/fx"),
     devices = require("core/devices"),
@@ -14,7 +15,7 @@ var $ = require("jquery"),
         assert.ok(e.element);
         assert.ok(e.itemData);
         assert.ok(e.itemElement);
-        assert.ok(commonUtils.isDefined(e.itemIndex));
+        assert.ok(typeUtils.isDefined(e.itemIndex));
         assert.ok(e.jQueryEvent);
         assert.ok(e.node);
     };
@@ -781,7 +782,7 @@ QUnit.test("Rendered event handler has correct arguments", function(assert) {
             assert.ok(e.element);
             assert.ok(e.itemData);
             assert.ok(e.itemElement);
-            assert.ok(commonUtils.isDefined(e.itemIndex));
+            assert.ok(typeUtils.isDefined(e.itemIndex));
             assert.ok(e.node);
         }
     });

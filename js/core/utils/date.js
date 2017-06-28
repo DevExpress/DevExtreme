@@ -1,14 +1,13 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("./common"),
     typeUtils = require("./type"),
     camelize = require("./inflector").camelize,
 
     isObject = typeUtils.isObject,
     isString = typeUtils.isString,
-    isDate = commonUtils.isDate,
-    isDefined = commonUtils.isDefined;
+    isDate = typeUtils.isDate,
+    isDefined = typeUtils.isDefined;
 
 var dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
 

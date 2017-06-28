@@ -59,7 +59,7 @@ var TransitionExecutor = Class.inherit({
 
         if(!config) {
             result = undefined;
-        } else if(commonUtils.isFunction(config[type])) {
+        } else if(typeUtils.isFunction(config[type])) {
             result = config[type];
         } else {
             result = extend({
@@ -93,7 +93,7 @@ var TransitionExecutor = Class.inherit({
 
         if(typeUtils.isPlainObject(animationConfig)) {
             result = fx.createAnimation($element, animationConfig);
-        } else if(commonUtils.isFunction(animationConfig)) {
+        } else if(typeUtils.isFunction(animationConfig)) {
             result = animationConfig($element, configModifier);
         }
 

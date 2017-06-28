@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     camelize = require("../../core/utils/inflector").camelize,
@@ -163,7 +164,7 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _removeViewSwitcherLabel: function() {
-        if(commonUtils.isDefined(this._$viewSwitcherLabel)) {
+        if(isDefined(this._$viewSwitcherLabel)) {
             this._$viewSwitcherLabel.detach();
             this._$viewSwitcherLabel.remove();
 
@@ -188,7 +189,7 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _changeViewSwitcherLabelText: function() {
-        if(!commonUtils.isDefined(this._$viewSwitcherLabel)) {
+        if(!isDefined(this._$viewSwitcherLabel)) {
             return;
         }
 
@@ -202,7 +203,7 @@ var SchedulerHeader = Widget.inherit({
         this.notifyObserver("currentViewUpdated", selectedItem);
     },
 
-    _renderFocusTarget: commonUtils.noop
+    _renderFocusTarget: noop
 
 }).include(publisherMixin);
 

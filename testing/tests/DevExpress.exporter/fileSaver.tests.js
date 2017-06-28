@@ -4,7 +4,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     fileSaver = require("client_exporter").fileSaver,
     errors = require("ui/widget/ui.errors"),
-    commonUtils = require("core/utils/common");
+    typeUtils = require("core/utils/type");
 
 QUnit.module("saveAs");
 
@@ -40,12 +40,12 @@ QUnit.test("IE9 do not save without proxy", function(assert) {
 });
 
 QUnit.test("exportLinkElement generate", function(assert) {
-    if(!commonUtils.isFunction(window.Blob)) {
+    if(!typeUtils.isFunction(window.Blob)) {
         assert.ok(true, "This browser doesn't support Blob function");
         return;
     }
 
-    if(commonUtils.isDefined(navigator.msSaveOrOpenBlob)) {
+    if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
         assert.ok(true, "This browser use msSaveOrOpenBlob for save blob");
         return;
     }
@@ -74,7 +74,7 @@ QUnit.test("Proxy Url exportForm generate", function(assert) {
 
 QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
     //arrange
-    if(!browser.msie && commonUtils.isFunction(window.Blob)) {
+    if(!browser.msie && typeUtils.isFunction(window.Blob)) {
         var _winJSBlobSave = fileSaver._winJSBlobSave,
             isCalled = false;
         try {
@@ -116,7 +116,7 @@ QUnit.test("Save base64 via proxyUrl for IE < 10", function(assert) {
 });
 
 QUnit.test("Save base 64 for Safari", function(assert) {
-    if(!commonUtils.isFunction(window.Blob)) {
+    if(!typeUtils.isFunction(window.Blob)) {
         if(browser.msie) {
             assert.ok(true, "This test not for IE browsers");
             return;
@@ -139,7 +139,7 @@ QUnit.test("Save base 64 for Safari", function(assert) {
 });
 
 QUnit.test("No E1034 on iPad", function(assert) {
-    if(!commonUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
+    if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
         assert.ok(true, "This test for iPad devices");
         return;
     }
@@ -187,7 +187,7 @@ QUnit.test("Blob is saved via msSaveOrOpenBlob method", function(assert) {
 });
 
 QUnit.test("SaveBlobAs is called after saveAs", function(assert) {
-    if(!commonUtils.isFunction(window.Blob)) {
+    if(!typeUtils.isFunction(window.Blob)) {
         assert.ok(true, "This browser doesn't support Blob function");
         return;
     }

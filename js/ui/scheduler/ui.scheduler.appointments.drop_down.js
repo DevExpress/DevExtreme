@@ -3,7 +3,6 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     translator = require("../../animation/translator"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     Button = require("../button"),
     DropDownMenu = require("../drop_down_menu");
@@ -111,7 +110,7 @@ var dropDownAppointments = Class.inherit({
                 onItemClick: function(args) {
                     args.component.open();
 
-                    if(commonUtils.isFunction(onAppointmentClick)) {
+                    if(typeUtils.isFunction(onAppointmentClick)) {
                         onAppointmentClick.call(instance._appointments, args);
                     }
                 },

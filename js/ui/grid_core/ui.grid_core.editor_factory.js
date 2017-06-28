@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     compileGetter = require("../../core/utils/data").compileGetter,
@@ -78,7 +78,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                     if(options.parentType === "filterRow" || options.parentType === "searchPanel") {
                         sharedData.valueChangeTimeout = data.valueChangeTimeout = window.setTimeout(function() {
                             updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
-                        }, commonUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
+                        }, typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
                     } else {
                         isValueChanged = true;
                     }
@@ -127,7 +127,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
         var config = getTextEditorConfig(options),
             isSearching = options.parentType === "searchPanel",
             toString = function(value) {
-                return commonUtils.isDefined(value) ? value.toString() : "";
+                return typeUtils.isDefined(value) ? value.toString() : "";
             };
 
         config.value = toString(options.value);
@@ -143,7 +143,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
     var prepareNumberBox = function(options) {
         var config = getTextEditorConfig(options);
 
-        config.value = commonUtils.isDefined(options.value) ? options.value : null;
+        config.value = typeUtils.isDefined(options.value) ? options.value : null;
 
         options.editorName = "dxNumberBox";
 
@@ -180,7 +180,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             displayGetter = compileGetter(lookup.displayExpr);
             dataSource = lookup.dataSource;
 
-            if(commonUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
+            if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                 dataSource = dataSource(options.row || {});
             }
 
@@ -231,7 +231,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
     var prepareCheckBox = function(options) {
         options.editorName = "dxCheckBox";
         options.editorOptions = getResultConfig({
-            value: commonUtils.isDefined(options.value) ? options.value : undefined,
+            value: typeUtils.isDefined(options.value) ? options.value : undefined,
             hoverStateEnabled: !options.readOnly,
             focusStateEnabled: !options.readOnly,
             activeStateEnabled: false,
@@ -256,7 +256,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             that._createComponent(options.editorElement, options.editorName, options.editorOptions);
 
             if(options.editorName === "dxTextBox") {
-                options.editorElement.dxTextBox("instance").registerKeyHandler("enter", commonUtils.noop);
+                options.editorElement.dxTextBox("instance").registerKeyHandler("enter", noop);
             }
         }
     };
@@ -454,7 +454,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             options.cancel = false;
             options.editorElement = $container;
 
-            if(!commonUtils.isDefined(options.tabIndex)) {
+            if(!typeUtils.isDefined(options.tabIndex)) {
                 options.tabIndex = this.option("tabIndex");
             }
 

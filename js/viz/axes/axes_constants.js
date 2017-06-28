@@ -1,6 +1,6 @@
 "use strict";
 
-var isFunction = require("../../core/utils/common").isFunction,
+var isFunction = require("../../core/utils/type").isFunction,
     _map = require("../core/utils").map,
     _format = require("../core/format");
 

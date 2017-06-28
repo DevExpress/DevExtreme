@@ -560,7 +560,7 @@ var GridView = modules.View.inherit({
     optionChanged: function(args) {
         var that = this;
 
-        if(commonUtils.isDefined(that._groupElement) && args.name === "showBorders") {
+        if(typeUtils.isDefined(that._groupElement) && args.name === "showBorders") {
             that._groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!args.value);
             args.handled = true;
         } else {

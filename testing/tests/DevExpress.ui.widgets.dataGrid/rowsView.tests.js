@@ -31,6 +31,7 @@ require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
     support = require("core/utils/support"),
     browser = require("core/utils/browser"),
@@ -53,7 +54,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
 
     dataController = dataController || new MockDataController({ items: rows });
 
-    if(!commonUtils.isDefined(columns)) {
+    if(!typeUtils.isDefined(columns)) {
         columns = [];
         for(i = 0; i < rows[0].values.length; i++) {
             columns.push({});

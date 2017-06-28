@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Color = require("../../color"),
     ColorView = require("./color_view"),
     extend = require("../../core/utils/extend").extend,
-    isFunction = require("../../core/utils/common").isFunction,
+    isFunction = require("../../core/utils/type").isFunction,
     registerComponent = require("../../core/component_registrator"),
     DropDownEditor = require("../drop_down_editor/ui.drop_down_editor");
 

@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     Button = require("../button"),
@@ -294,7 +294,7 @@ var Calendar = Editor.inherit({
                 e.preventDefault();
                 this._waitRenderView(1);
             },
-            tab: commonUtils.noop,
+            tab: noop,
             enter: function(e) {
                 if(!this._isMaxZoomLevel()) {
                     this._navigateDown();
@@ -406,7 +406,7 @@ var Calendar = Editor.inherit({
 
     _getNormalizedDate: function(date) {
         date = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
-        return commonUtils.isDefined(date) ? new Date(date) : date;
+        return typeUtils.isDefined(date) ? new Date(date) : date;
     },
 
     _initActions: function() {
@@ -772,8 +772,8 @@ var Calendar = Editor.inherit({
     },
 
     _updateButtonsVisibility: function() {
-        this._navigator.toggleButton("next", !commonUtils.isDefined(this._getRequiredView("next")));
-        this._navigator.toggleButton("prev", !commonUtils.isDefined(this._getRequiredView("prev")));
+        this._navigator.toggleButton("next", !typeUtils.isDefined(this._getRequiredView("next")));
+        this._navigator.toggleButton("prev", !typeUtils.isDefined(this._getRequiredView("prev")));
     },
 
     _renderSwipeable: function() {
@@ -1166,7 +1166,7 @@ var Calendar = Editor.inherit({
                 value = this._convertToDate(value);
                 previousValue = this._convertToDate(previousValue);
                 this._updateAriaSelected(value, previousValue);
-                this.option("currentDate", commonUtils.isDefined(value) ? new Date(value) : new Date());
+                this.option("currentDate", typeUtils.isDefined(value) ? new Date(value) : new Date());
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
                 this.callBase(args);

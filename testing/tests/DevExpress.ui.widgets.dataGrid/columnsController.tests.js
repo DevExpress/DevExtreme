@@ -4,7 +4,7 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     dateLocalization = require("localization/date"),
-    commonUtils = require("core/utils/common"),
+    isFunction = require("core/utils/type").isFunction,
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     dataSourceAdapter = require("ui/data_grid/ui.data_grid.data_source_adapter"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
@@ -578,7 +578,7 @@ QUnit.test("Save default calculateCellValue when column with custom calculateCel
     assert.ok(columns[0].setCellValue, 'setCellValue exists');
     assert.strictEqual(columns[0].setCellValue, columns[0].defaultSetCellValue, 'defaultSetCellValue generated when no user option');
     assert.strictEqual(columns[1].calculateCellValue({ Address: { City: 'London' } }), 'test-London', 'custom calculation cell value of the second column');
-    assert.ok(commonUtils.isFunction(columns[1]["defaultCalculateCellValue"]), 'has defaultCalculationCellValue in second column');
+    assert.ok(isFunction(columns[1]["defaultCalculateCellValue"]), 'has defaultCalculationCellValue in second column');
     assert.strictEqual(columns[1].defaultCalculateCellValue({ Address: { City: 'London' } }), 'London', 'default calculation cell value of the second column');
 });
 

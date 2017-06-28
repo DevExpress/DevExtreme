@@ -4,7 +4,8 @@ var $ = require("../../core/renderer"),
     BaseCollectionWidget = require("./ui.collection_widget.base"),
     errors = require("../widget/ui.errors"),
     extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined,
     PlainEditStrategy = require("./ui.collection_widget.edit.strategy.plain"),
     compileGetter = require("../../core/utils/data").compileGetter,
     DataSource = require("../../data/data_source/data_source").DataSource,
@@ -308,7 +309,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             case "selectedIndex":
                 selectedItem = this._editStrategy.getItemDataByIndex(this.option("selectedIndex"));
 
-                if(commonUtils.isDefined(selectedItem)) {
+                if(isDefined(selectedItem)) {
                     this._setOptionSilent("selectedItems", [selectedItem]);
                     this._setOptionSilent("selectedItem", selectedItem);
                     this._setOptionSilent("selectedItemKeys", this._editStrategy.getKeysByItems([selectedItem]));
@@ -340,7 +341,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     return;
                 }
 
-                if(commonUtils.isDefined(selectedItem)) {
+                if(isDefined(selectedItem)) {
                     this._setOptionSilent("selectedItems", [selectedItem]);
                     this._setOptionSilent("selectedIndex", selectedIndex);
                     this._setOptionSilent("selectedItemKeys", this._editStrategy.getKeysByItems([selectedItem]));
@@ -376,7 +377,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         if(arrayOptionsDefined("selectedItems")) {
             optionName = "selectedItems";
-        } else if(commonUtils.isDefined(this.option("selectedItem"))) {
+        } else if(isDefined(this.option("selectedItem"))) {
             optionName = "selectedItem";
         } else if(arrayOptionsDefined("selectedItemKeys")) {
             optionName = "selectedItemKeys";
@@ -435,7 +436,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
     },
 
-    _renderSelection: commonUtils.noop,
+    _renderSelection: noop,
 
     _itemClickHandler: function(e) {
         this._createAction((function(e) {

@@ -2,7 +2,8 @@
 
 var $ = require("../core/renderer"),
     devices = require("../core/devices"),
-    commonUtils = require("../core/utils/common"),
+    noop = require("../core/utils/common").noop,
+    isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
@@ -239,7 +240,7 @@ var TagBox = SelectBox.inherit({
         return scrollLeft;
     },
 
-    _setNextValue: commonUtils.noop,
+    _setNextValue: noop,
 
     _setDeprecatedOptions: function() {
         this.callBase();
@@ -509,7 +510,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderField: function() {
-        var isDefaultFieldTemplate = !commonUtils.isDefined(this.option("fieldTemplate"));
+        var isDefaultFieldTemplate = !isDefined(this.option("fieldTemplate"));
 
         this.element()
             .toggleClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS, isDefaultFieldTemplate)
@@ -613,7 +614,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _suppressingSelectionChanged: function(callback) {
-        this._setListOption("onSelectionChanged", commonUtils.noop);
+        this._setListOption("onSelectionChanged", noop);
         callback.call(this);
         this._setListOption("onSelectionChanged", this._getSelectionChangeHandler());
     },
@@ -784,7 +785,7 @@ var TagBox = SelectBox.inherit({
         $tag = $tag || this._createTag(value, $input);
 
         return this._loadItem(value).always((function(item) {
-            if(!commonUtils.isDefined(item)) {
+            if(!isDefined(item)) {
                 $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
                 item = value;
             } else {
@@ -848,7 +849,7 @@ var TagBox = SelectBox.inherit({
         this._refreshTagElements();
     },
 
-    _updateField: commonUtils.noop,
+    _updateField: noop,
 
     _removeTagWithUpdate: function(itemValue) {
         var value = this._getValue().slice();
@@ -947,7 +948,7 @@ var TagBox = SelectBox.inherit({
         return this._getValue().slice(-1).pop() || null;
     },
 
-    _valueChangeEventHandler: commonUtils.noop,
+    _valueChangeEventHandler: noop,
 
     _shouldRenderSearchEvent: function() {
         return this.option("searchEnabled") || this.option("acceptCustomValue");

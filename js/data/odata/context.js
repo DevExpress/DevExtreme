@@ -3,7 +3,6 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     errorsModule = require("../errors"),
     ODataStore = require("./store"),
@@ -146,7 +145,7 @@ var ODataContext = Class.inherit({
             throw errorsModule.errors.Error("E4015", entityAlias);
         }
 
-        if(!commonUtils.isDefined(key)) {
+        if(!typeUtils.isDefined(key)) {
             return null;
         }
 
