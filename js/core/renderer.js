@@ -351,7 +351,6 @@ renderer.ajax = function() {
 };
 renderer.getJSON = $.getJSON;
 renderer.getScript = $.getScript;
-renderer.parseXML = $.parseXML;
 renderer.tmpl = function() {
     return $.tmpl.apply(this, arguments);
 };

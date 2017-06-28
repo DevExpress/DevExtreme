@@ -179,7 +179,7 @@ QUnit.test("incorrect dataSource", function(assert) {
         rows: [{ dataField: "[Ship Date].[Calendar Year]" }],
         values: [{ dataField: "[Measures].[Customer Count]", caption: 'Count' }]
     }).fail(function(error) {
-        assert.ok(error);
+        assert.ok(error.statusText.indexOf("E4023") > -1);
         done();
     });
 });

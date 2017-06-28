@@ -144,6 +144,12 @@ var errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     E4022: "The server response does not provide the groupCount value",
 
     /**
+    * @name Errors and Warnings_E4023
+    * @publicName E4023
+    */
+    E4023: "Could not parse the following XML: {0}",
+
+    /**
     * @name Errors and Warnings_W4000
     * @publicName W4000
     */
