@@ -134,11 +134,14 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
             return;
         }
 
-        this._location = this.location().top;
+        var currentLocation = this.location().top,
+            scrollDelta = (this._location || 0) - currentLocation;
+
+        this._location = currentLocation;
 
         if(this._isPullDown()) {
             this._pullDownReady();
-        } else if(this._isReachBottom()) {
+        } else if(scrollDelta > 0 && this._isReachBottom()) {
             this._reachBottom();
         } else {
             this._stateReleased();
