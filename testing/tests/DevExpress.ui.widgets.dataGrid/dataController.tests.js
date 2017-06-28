@@ -4,7 +4,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     formatHelper = require("format_helper"),
     errors = require("ui/widget/ui.errors"),
-    commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
@@ -3100,7 +3100,7 @@ QUnit.module("Filtering", {
         this.option = function(options, value) {
             var result = originalOption.apply(this, arguments);
 
-            if(options === "searchPanel.text" && commonUtils.isDefined(value)) {
+            if(options === "searchPanel.text" && typeUtils.isDefined(value)) {
                 this.dataController.optionChanged({ fullName: options });
             }
 
@@ -4234,6 +4234,40 @@ QUnit.test("Apply search for string column without reloading when all dataTypes 
     assert.equal(logId, undefined);
     assert.equal(that.dataController.items().length, 1);
     assert.equal(that.dataController.items()[0].data.name, 'Test');
+});
+
+//T528684
+QUnit.test("Apply search for lookup column", function(assert) {
+    //arrange
+    var that = this,
+        loadingArgs = [];
+
+    this.applyOptions({
+        searchPanel: { text: 'Second' },
+        remoteOperations: true,
+        dataSource: new ArrayStore({
+            onLoading: function(e) {
+                loadingArgs.push(e);
+            },
+            data: [{ name: "Alex", categoryId: 1 }, { name: "Dan", categoryId: 2 }]
+        }),
+        columns: [{ dataField: 'categoryId', dataType: "number", lookup: {
+            dataSource: [
+                { id: 1, name: "first" },
+                { id: 2, name: "second" }
+            ],
+            valueExpr: "id",
+            displayExpr: "name"
+        } }]
+    });
+
+    this.dataController.optionChanged({ name: "dataSource" });
+
+    //assert
+    assert.equal(loadingArgs.length, 1);
+    assert.deepEqual(loadingArgs[0].filter, ["categoryId", "=", 2]);
+    assert.equal(that.dataController.items().length, 1);
+    assert.equal(that.dataController.items()[0].data.categoryId, 2);
 });
 
 QUnit.test("column filter for one column", function(assert) {
@@ -5407,7 +5441,7 @@ QUnit.test("Inserting Row", function(assert) {
 
     assert.deepEqual(this.dataController.items()[0].values, [undefined, undefined]);
     assert.deepEqual(this.dataController.items()[0].data, {});
-    assert.ok(!commonUtils.isDefined(this.dataController.items()[0].dataIndex));
+    assert.ok(!typeUtils.isDefined(this.dataController.items()[0].dataIndex));
 
     assert.deepEqual(this.dataController.items()[1].values, ['Alex', '55-55-55']);
     assert.deepEqual(this.dataController.items()[1].data, { name: 'Alex', phone: '55-55-55' });

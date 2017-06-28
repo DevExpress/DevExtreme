@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
-    commonUtils = require("core/utils/common"),
+    isFunction = require("core/utils/type").isFunction,
     svgCreator = require("client_exporter").svg.creator,
     browser = require("core/utils/browser");
 
@@ -10,7 +10,7 @@ if(browser.msie && parseInt(browser.version) < 10) {
 }
 function setupCanvasStub() {
     // Blob
-    commonUtils.isFunction(Blob) && sinon.stub(window, "Blob", function(arrayBuffer, options) {
+    isFunction(Blob) && sinon.stub(window, "Blob", function(arrayBuffer, options) {
         return {
             arrayBuffer: arrayBuffer,
             options: options
@@ -30,7 +30,7 @@ function checkForBlob(assert) {
 
 function teardownCanvasStub() {
     // Blob
-    commonUtils.isFunction(Blob) && window.Blob.restore();
+    isFunction(Blob) && window.Blob.restore();
 }
 
 QUnit.module("Svg creator. Get Data", {
@@ -38,7 +38,7 @@ QUnit.module("Svg creator. Get Data", {
         this.blobArguments = {};
 
         setupCanvasStub(this.blobArguments);
-        this.blobSupported = commonUtils.isFunction(Blob);
+        this.blobSupported = isFunction(Blob);
     },
     afterEach: function() {
         delete this.blobSupported;

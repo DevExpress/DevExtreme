@@ -5,7 +5,8 @@ var $ = require("../core/renderer"),
     translator = require("../animation/translator"),
     mathUtils = require("../core/utils/math"),
     extend = require("../core/utils/extend").extend,
-    commonUtils = require("../core/utils/common"),
+    noop = require("../core/utils/common").noop,
+    isDefined = require("../core/utils/type").isDefined,
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
@@ -64,8 +65,8 @@ var MultiView = CollectionWidget.inherit({
 
     _supportedKeys: function() {
         return extend(this.callBase(), {
-            pageUp: commonUtils.noop,
-            pageDown: commonUtils.noop
+            pageUp: noop,
+            pageDown: noop
         });
     },
 
@@ -289,12 +290,12 @@ var MultiView = CollectionWidget.inherit({
     _renderSpecificItem: function(index) {
         var hasItemContent = this._itemElements().eq(index).find(this._itemContentClass()).length > 0;
 
-        if(commonUtils.isDefined(index) && !hasItemContent) {
+        if(isDefined(index) && !hasItemContent) {
             this._deferredItems[index].resolve();
         }
     },
 
-    _setAriaSelected: commonUtils.noop,
+    _setAriaSelected: noop,
 
     _updateSelection: function(addedSelection, removedSelection) {
         var newIndex = addedSelection[0],
@@ -386,7 +387,7 @@ var MultiView = CollectionWidget.inherit({
             var $selectedElement = this.itemElements().filter(".dx-item-selected");
             this.option("focusStateEnabled") && this.option("focusedElement", $selectedElement);
         } else {
-            this._animateItemContainer(0, commonUtils.noop);
+            this._animateItemContainer(0, noop);
         }
     },
 

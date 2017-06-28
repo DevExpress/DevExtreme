@@ -5,6 +5,7 @@
 var $ = require("jquery"),
     animationFrame = require("animation/frame"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     animationModule = require("viz/core/renderers/animation"),
     rendererModule = require("viz/core/renderers/renderer"),
     vizMocks = require("../../helpers/vizMocks.js");
@@ -825,9 +826,9 @@ QUnit.module('SvgAnimationStep', {
     },
     easing: function(assert) {
         return function(p, from, to) {
-            assert.ok(commonUtils.isDefined(p), 'progress pass to easing function');
-            assert.ok(commonUtils.isDefined(from), 'from value pass to easing function');
-            assert.ok(commonUtils.isDefined(to), 'to value pass to easing function');
+            assert.ok(typeUtils.isDefined(p), 'progress pass to easing function');
+            assert.ok(typeUtils.isDefined(from), 'from value pass to easing function');
+            assert.ok(typeUtils.isDefined(to), 'to value pass to easing function');
             return from + (to - from) * p;
         };
     }

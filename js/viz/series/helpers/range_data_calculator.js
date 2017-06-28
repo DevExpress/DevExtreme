@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../../core/renderer"),
-    commonUtils = require("../../../core/utils/common"),
     typeUtils = require("../../../core/utils/type"),
     _math = Math,
     _abs = _math.abs,
@@ -11,7 +10,7 @@ var $ = require("../../../core/renderer"),
     _each = $.each,
     _isEmptyObject = typeUtils.isEmptyObject,
 
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _isFinite = isFinite,
 
     unique = require("../../core/utils").unique,

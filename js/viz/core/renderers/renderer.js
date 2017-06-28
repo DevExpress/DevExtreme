@@ -2,7 +2,6 @@
 
 var $ = require("../../../core/renderer"),
     jQuery = require("jquery"),
-    commonUtils = require("../../../core/utils/common"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
     doc = document,
     animation = require("./animation"),
@@ -16,7 +15,7 @@ var $ = require("../../../core/renderer"),
     mathAbs = math.abs,
     mathPI = math.PI,
 
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../../core/utils/type").isDefined,
     vizUtils = require("../utils"),
     _normalizeEnum = vizUtils.normalizeEnum,
     _normalizeBBox = vizUtils.normalizeBBox,

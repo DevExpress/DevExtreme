@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     dataGridCore = require("./ui.data_grid.core"),
@@ -62,7 +62,7 @@ exports.DataProvider = Class.inherit({
             summaryTexts: exportController.option("summary.texts"),
             customizeExportData: exportController.option("customizeExportData"),
             rtlEnabled: exportController.option("rtlEnabled"),
-            wrapTextEnabled: commonUtils.isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
+            wrapTextEnabled: isDefined(excelWrapTextEnabled) ? excelWrapTextEnabled : !!exportController.option("wordWrapEnabled"),
         };
     },
 
@@ -148,7 +148,7 @@ exports.DataProvider = Class.inherit({
         if(item && item.rowType === "totalFooter") {
             return 0;
         }
-        return commonUtils.isDefined(groupIndex) ? groupIndex : this._options.groupColumns.length;
+        return isDefined(groupIndex) ? groupIndex : this._options.groupColumns.length;
     },
 
     getCellType: function(rowIndex, cellIndex) {
@@ -165,8 +165,8 @@ exports.DataProvider = Class.inherit({
                 column = columns[cellIndex];
 
             if(item && item.rowType === "data") {
-                if(isFinite(item.values[this._correctCellIndex(cellIndex)]) && !commonUtils.isDefined(column.customizeText)) {
-                    return commonUtils.isDefined(column.lookup) ? column.lookup.dataType : column.dataType;
+                if(isFinite(item.values[this._correctCellIndex(cellIndex)]) && !isDefined(column.customizeText)) {
+                    return isDefined(column.lookup) ? column.lookup.dataType : column.dataType;
                 }
             }
             return "string";
@@ -218,7 +218,7 @@ exports.DataProvider = Class.inherit({
                 case "totalFooter":
                     if(correctedCellIndex < itemValues.length) {
                         value = itemValues[correctedCellIndex];
-                        if(commonUtils.isDefined(value)) {
+                        if(isDefined(value)) {
                             return dataGridCore.getSummaryText(value, this._options.summaryTexts);
                         }
                     }
@@ -351,7 +351,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
         var i,
             groupItems = this.option("summary.groupItems");
 
-        if(commonUtils.isDefined(groupItems)) {
+        if(isDefined(groupItems)) {
             for(i = 0; i < groupItems.length; i++) {
                 if(groupItems[i].showInGroupFooter) {
                     return true;
@@ -436,7 +436,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
             for(j = 0; j < columns.length; j++) {
                 column = columns[j];
-                if((commonUtils.isDefined(column.command) || column.allowExporting) && item.values) {
+                if((isDefined(column.command) || column.allowExporting) && item.values) {
                     values.push(item.values[j]);
                 }
             }
@@ -467,7 +467,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
                 summaryCells = totalItem && totalItem.summaryCells;
 
-                if(commonUtils.isDefined(totalAggregates) && summaryTotalItems) {
+                if(isDefined(totalAggregates) && summaryTotalItems) {
                     summaryCells = dataController._getSummaryCells(summaryTotalItems, totalAggregates);
                 }
 
@@ -498,14 +498,14 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             visibleColumnsLength = visibleColumns.length;
 
         for(i = 0; i < visibleColumnsLength; i++) {
-            if(!commonUtils.isDefined(visibleColumns[i].command)) {
+            if(!isDefined(visibleColumns[i].command)) {
                 startIndex = i;
                 break;
             }
         }
 
         for(i = visibleColumnsLength - 1; i >= 0; i--) {
-            if(!commonUtils.isDefined(visibleColumns[i].command)) {
+            if(!isDefined(visibleColumns[i].command)) {
                 endIndex = i;
                 break;
             }
@@ -563,7 +563,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
     },
 
     selectionOnly: function(value) {
-        if(commonUtils.isDefined(value)) {
+        if(isDefined(value)) {
             this._isSelectedRows = value;
             this.selectionOnlyChanged.fire();
         } else {
@@ -702,7 +702,7 @@ dataGridCore.registerModule("export", {
             editing: {
                 callbackNames: function() {
                     var callbackList = this.callBase();
-                    return commonUtils.isDefined(callbackList) ? callbackList.push("editingChanged") : ["editingChanged"];
+                    return isDefined(callbackList) ? callbackList.push("editingChanged") : ["editingChanged"];
                 },
 
                 _updateEditButtons: function() {

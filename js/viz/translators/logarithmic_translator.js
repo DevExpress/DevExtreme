@@ -2,7 +2,7 @@
 
 var numericTranslator = require("./numeric_translator"),
     vizUtils = require("../core/utils"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     raiseTo = vizUtils.raiseTo,
     getLog = vizUtils.getLog;
 
@@ -11,7 +11,7 @@ module.exports = {
         var that = this,
             specialValue = that.translateSpecialCase(bp);
 
-        if(commonUtils.isDefined(specialValue)) {
+        if(isDefined(specialValue)) {
             return specialValue;
         }
         return numericTranslator.translate.call(that, getLog(bp, that._businessRange.base));
@@ -34,8 +34,8 @@ module.exports = {
 
     getScale: function(val1, val2) {
         var base = this._businessRange.base;
-        val1 = commonUtils.isDefined(val1) ? getLog(val1, base) : undefined;
-        val2 = commonUtils.isDefined(val2) ? getLog(val2, base) : undefined;
+        val1 = isDefined(val1) ? getLog(val1, base) : undefined;
+        val2 = isDefined(val2) ? getLog(val2, base) : undefined;
 
         return numericTranslator.getScale.call(this, val1, val2);
     },

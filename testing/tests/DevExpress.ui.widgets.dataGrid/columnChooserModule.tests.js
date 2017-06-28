@@ -7,7 +7,6 @@ require("generic_light.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
-    commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
     device = devices.real(),
@@ -91,8 +90,8 @@ QUnit.test('Bounding rect of groupPanel', function(assert) {
 
     //assert
     boundingRect = this.columnChooserView.getBoundingRect();
-    isBoundingCorrect = typeUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top) && commonUtils.isDefined(boundingRect.bottom)
-        && commonUtils.isDefined(boundingRect.right) && commonUtils.isDefined(boundingRect.left);
+    isBoundingCorrect = typeUtils.isObject(boundingRect) && typeUtils.isDefined(boundingRect.top) && typeUtils.isDefined(boundingRect.bottom)
+        && typeUtils.isDefined(boundingRect.right) && typeUtils.isDefined(boundingRect.left);
 
     assert.ok(isBoundingCorrect, 'Bounding rect return object with "top", "bottom", "left" and "right" properties when column chooser is visible');
 });
@@ -784,7 +783,7 @@ QUnit.test("CheckBox mode - not update treeview when selected items", function(a
 
     this.renderColumnChooser();
     columnChooserView._columnsController.columnOption = function(columnIndex, optionName, value) {
-        if(!commonUtils.isDefined(value)) {
+        if(!typeUtils.isDefined(value)) {
             return;
         }
 

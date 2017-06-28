@@ -6788,6 +6788,8 @@ QUnit.test("Show tooltip on focus with set validate in column and edit mode batc
 QUnit.test("Show tooltip on focus for last row with set validate in column and edit mode batch", function(assert) {
     //arrange
     var that = this,
+        $overlayContent,
+        $highlightContainer,
         rowsView = that.rowsView,
         testElement = $('#container'),
         cells,
@@ -6847,10 +6849,15 @@ QUnit.test("Show tooltip on focus for last row with set validate in column and e
     cells = rowsView.element().find(".dx-data-row").last().find("td");
 
     //assert
+    $overlayContent = cells.eq(1).find(".dx-overlay-content");
     assert.equal(getInputElements(testElement).length, 1, "has input");
-    assert.equal(cells.eq(1).find(".dx-overlay").length, 1, "has tooltip");
+    assert.equal($overlayContent.length, 1, "has tooltip");
     assert.ok(rowsView.element().find(".dx-freespace-row").is(":visible"), "visible freespace row");
     assert.ok(rowsView.element().find(".dx-freespace-row").height() > 0, "freespace row has height ");
+
+    //T526383
+    $highlightContainer = cells.eq(1).find(".dx-highlight-outline").first();
+    assert.ok($overlayContent.offset().top >= ($highlightContainer.offset().top + $highlightContainer.height()), "tooltip is under the cell");
 });
 
 //T200857

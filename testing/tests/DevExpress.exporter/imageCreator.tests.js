@@ -3,7 +3,7 @@
 var $ = require("jquery"),
     devices = require("core/devices"),
     imageCreator = require("client_exporter").image.creator,
-    commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     testingMarkupStart = "<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' version='1.1' fill='none' stroke='none' stroke-width='0' class='dxc dxc-chart' style='line-height:normal;-ms-user-select:none;-moz-user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);display:block;overflow:hidden;touch-action:pan-x pan-y pinch-zoom;-ms-touch-action:pan-x pan-y pinch-zoom;' width='500' height='250'>",
     testingMarkupEnd = "</svg>",
     browser = require("core/utils/browser");
@@ -1497,7 +1497,7 @@ QUnit.test("Export.color option", function(assert) {
 });
 
 QUnit.test("getData returns Blob when it supported by Browser", function(assert) {
-    if(!commonUtils.isFunction(window.Blob)) {
+    if(!typeUtils.isFunction(window.Blob)) {
         assert.ok(true, "Skip if there isn't blob");
         return;
     }
@@ -1533,7 +1533,7 @@ QUnit.test("getData returns Blob when it supported by Browser", function(assert)
 });
 
 QUnit.test("getData returns Base64 when Blob not supported by Browser", function(assert) {
-    if(commonUtils.isFunction(window.Blob)) {
+    if(typeUtils.isFunction(window.Blob)) {
         assert.ok(true, "Skip if there isn't Blob");
         return;
     }
@@ -1569,7 +1569,7 @@ QUnit.test("getData returns Base64 when Blob not supported by Browser", function
 });
 
 QUnit.test("getData returns Base64 when Blob not supported by Browser", function(assert) {
-    if(commonUtils.isFunction(window.Blob)) {
+    if(typeUtils.isFunction(window.Blob)) {
         assert.ok(true, "Skip if there isn't Blob");
         return;
     }
@@ -1609,7 +1609,7 @@ QUnit.test("getElementOptions should work correctly with empty attributs element
     var markup = "<svg>Brazil</svg>";
     imageCreator.getData(markup, {
         __parseAttributesFn: function(attributes) {
-            assert.ok(commonUtils.isDefined(attributes), "Attributes are always defined");
+            assert.ok(typeUtils.isDefined(attributes), "Attributes are always defined");
             return {};
         }
     });

@@ -12,7 +12,7 @@ var $ = require("../core/renderer"),
     EventsMixin = require("./events_mixin"),
     publicComponentUtils = require("./utils/public_component"),
     devices = require("./devices"),
-    isFunction = commonUtils.isFunction,
+    isFunction = typeUtils.isFunction,
     noop = commonUtils.noop;
 
 var cachedGetters = {};

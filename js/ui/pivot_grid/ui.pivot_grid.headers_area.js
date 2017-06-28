@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
     areaItem = require("./ui.pivot_grid.area_item");
 
@@ -67,7 +67,7 @@ exports.HorizontalHeadersArea = areaItem.AreaItem.inherit({
             classArray.push(PIVOTGRID_GRAND_TOTAL_CLASS);
         }
 
-        if(commonUtils.isDefined(cell.expanded)) {
+        if(isDefined(cell.expanded)) {
             classArray.push(cell.expanded ? PIVOTGRID_EXPANDED_CLASS : PIVOTGRID_COLLAPSED_CLASS);
         }
 

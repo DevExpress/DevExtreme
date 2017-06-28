@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     compileGetter = require("../../core/utils/data").compileGetter,
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
@@ -13,7 +13,7 @@ var SEARCH_PANEL_CLASS = "search-panel",
 
 
 function allowSearch(column) {
-    return commonUtils.isDefined(column.allowSearch) ? column.allowSearch : column.allowFiltering;
+    return isDefined(column.allowSearch) ? column.allowSearch : column.allowFiltering;
 }
 
 function parseValue(column, text) {
@@ -144,6 +144,28 @@ module.exports = {
 
                         return gridCoreUtils.combineFilters([filter, searchFilter]);
                     },
+
+                    _loadDataSource: function() {
+                        var that = this,
+                            callBase = that.callBase,
+                            searchText = that.option("searchPanel.text"),
+                            columnsController = that._columnsController,
+                            columns = columnsController.getColumns(),
+                            hasLookup = columns.filter(function(column) { return !!column.lookup; }).length,
+                            result;
+
+                        if(searchText && hasLookup) {
+                            result = $.Deferred();
+                            columnsController.refresh(true).always(function() {
+                                callBase.apply(that, arguments).then(result.resolve, result.reject);
+                            });
+                        } else {
+                            result = callBase.apply(that, arguments);
+                        }
+
+                        return result;
+                    },
+
                     /**
                      * @name GridBaseMethods_searchByText
                      * @publicName searchByText(text)

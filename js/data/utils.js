@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    isFunction = require("../core/utils/common").isFunction,
+    isFunction = require("../core/utils/type").isFunction,
     toComparable = require("../core/utils/data").toComparable;
 
 var normalizeBinaryCriterion = function(crit) {

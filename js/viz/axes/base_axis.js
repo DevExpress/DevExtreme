@@ -13,7 +13,7 @@ var $ = require("../../core/renderer"),
     convertTicksToValues = constants.convertTicksToValues,
     convertValuesToTicks = constants.convertValuesToTicks,
 
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _isNumber = typeUtils.isNumeric,
     _getSignificantDigitPosition = vizUtils.getSignificantDigitPosition,
     _roundValue = vizUtils.roundValue,

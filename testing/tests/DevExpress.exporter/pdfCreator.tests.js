@@ -4,7 +4,7 @@ var $ = require("jquery"),
     version = require("core/version"),
     getData = require("client_exporter").pdf.getData,
     pdfCreator = require("client_exporter/pdf_creator").__tests,
-    commonUtils = require("core/utils/common"),
+    isFunction = require("core/utils/type").isFunction,
     imageCreator = require("client_exporter/image_creator").imageCreator,
     browser = require("core/utils/browser");
 
@@ -131,7 +131,7 @@ QUnit.module("Export", {
 
         sinon.stub(imageCreator, "getImageData", function(markup) { var def = $.Deferred(); def.resolve(""); return def; });
 
-        if(commonUtils.isFunction(window.Blob)) {
+        if(isFunction(window.Blob)) {
             this.Blob = window.Blob;
             window.Blob = sinon.spy();
         } else {
@@ -142,7 +142,7 @@ QUnit.module("Export", {
     afterEach: function() {
         pdfCreator.restore_composePdfString();
         imageCreator.getImageData.restore();
-        if(commonUtils.isFunction(window.Blob)) {
+        if(isFunction(window.Blob)) {
             window.Blob = this.Blob;
         } else {
             window.btoa = this.btoa;
@@ -162,7 +162,7 @@ QUnit.test("pass correct options to imageCreator", function(assert) {
 });
 
 QUnit.test("getData returns Blob when it is supported by Browser", function(assert) {
-    if(!commonUtils.isFunction(window.Blob)) {
+    if(!isFunction(window.Blob)) {
         assert.ok(true, "Skip if there isn't blob");
         return;
     }
@@ -183,7 +183,7 @@ QUnit.test("getData returns Blob when it is supported by Browser", function(asse
 });
 
 QUnit.test("getData returns Base64 when Blob is not supported by Browser", function(assert) {
-    if(commonUtils.isFunction(window.Blob)) {
+    if(isFunction(window.Blob)) {
         assert.ok(true, "Skip if there is Blob");
         return;
     }

@@ -114,7 +114,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         var deferred = $.Deferred();
         value = this._unwrappedValue(value);
 
-        if(!commonUtils.isDefined(value)) {
+        if(!typeUtils.isDefined(value)) {
             return deferred.reject().promise();
         }
 
@@ -136,7 +136,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     },
 
     _unwrappedValue: function(value) {
-        value = commonUtils.isDefined(value) ? value : this._getCurrentValue();
+        value = typeUtils.isDefined(value) ? value : this._getCurrentValue();
 
         if(value && this._dataSource && this._valueGetterExpr() === "this") {
             value = this._getItemKey(value);
@@ -166,7 +166,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     _isValueEquals: function(value1, value2) {
         var dataSourceKey = this._dataSource && this._dataSource.key();
 
-        var isDefined = commonUtils.isDefined;
+        var isDefined = typeUtils.isDefined;
         var result = this._compareValues(value1, value2);
 
         if(!result && dataSourceKey && isDefined(value1) && isDefined(value2)) {

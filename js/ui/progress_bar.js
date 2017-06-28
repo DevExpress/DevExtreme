@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     TrackBar = require("./track_bar"),
     extend = require("../core/utils/extend").extend,
-    isFunction = require("../core/utils/common").isFunction,
+    isFunction = require("../core/utils/type").isFunction,
     registerComponent = require("../core/component_registrator");
 
 var PROGRESSBAR_CLASS = "dx-progressbar",

@@ -6,7 +6,7 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     translator = require("../animation/translator"),
     positionUtils = require("../animation/position"),
-    commonUtils = require("../core/utils/common"),
+    noop = require("../core/utils/common").noop,
     typeUtils = require("../core/utils/type"),
     mathUtils = require("../core/utils/math"),
     eventUtils = require("../events/utils"),
@@ -80,7 +80,7 @@ var POPOVER_CLASS = "dx-popover",
             action({ jQueryEvent: e, target: $(e.currentTarget) });
         };
 
-        if(target.jquery || target.nodeType || commonUtils.isWindow(target)) {
+        if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
             that["_" + name + "EventHandler"] = undefined;
             $(target).on(eventName, handler);
         } else {
@@ -404,7 +404,7 @@ var Popover = Popup.inherit({
         this._renderOverlayPosition();
     },
 
-    _renderOverlayBoundaryOffset: commonUtils.noop,
+    _renderOverlayBoundaryOffset: noop,
 
     _renderOverlayPosition: function() {
         this._resetOverlayPosition();

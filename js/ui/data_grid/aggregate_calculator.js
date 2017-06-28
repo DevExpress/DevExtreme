@@ -2,7 +2,7 @@
 
 var Class = require("../../core/class"),
     compileGetter = require("../../core/utils/data").compileGetter,
-    isFunction = require("../../core/utils/common").isFunction,
+    isFunction = require("../../core/utils/type").isFunction,
     errors = require("../../data/errors").errors,
     dataUtils = require("../../data/utils");
 

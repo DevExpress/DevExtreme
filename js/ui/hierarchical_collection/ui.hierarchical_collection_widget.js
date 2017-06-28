@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
     dataCoreUtils = require("../../core/utils/data"),
     extend = require("../../core/utils/extend").extend,
     devices = require("../../core/devices"),
@@ -9,8 +8,8 @@ var $ = require("../../core/renderer"),
     HierarchicalDataAdapter = require("./ui.data_adapter"),
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
     BindableTemplate = require("../widget/bindable_template"),
-    isFunction = commonUtils.isFunction,
-    noop = commonUtils.noop;
+    isFunction = require("../../core/utils/type").isFunction,
+    noop = require("../../core/utils/common").noop;
 
 var DISABLED_STATE_CLASS = "dx-state-disabled";
 

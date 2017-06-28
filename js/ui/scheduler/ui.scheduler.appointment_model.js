@@ -119,7 +119,7 @@ var AppointmentModel = Class.inherit({
             var resourceGetter = this._dataAccessors.getter.resources[resourceName],
                 resource;
 
-            if(commonUtils.isFunction(resourceGetter)) {
+            if(typeUtils.isFunction(resourceGetter)) {
                 resource = resourceGetter(appointment);
             }
 
@@ -208,7 +208,7 @@ var AppointmentModel = Class.inherit({
                 hiddenInterval = (24 - endDayHour + startDayHour) * 3600000,
                 apptDuration = endDate.getTime() - startDate.getTime(),
                 delta = (hiddenInterval - apptDuration) / (1000 * 60 * 60),
-                useRecurrence = commonUtils.isDefined(dataAccessors.getter.recurrenceRule),
+                useRecurrence = typeUtils.isDefined(dataAccessors.getter.recurrenceRule),
                 recurrenceRule;
 
             if(useRecurrence) {
@@ -331,7 +331,7 @@ var AppointmentModel = Class.inherit({
     },
 
     filterLoadedAppointments: function(filterOptions, timeZoneProcessor) {
-        if(!commonUtils.isFunction(timeZoneProcessor)) {
+        if(!typeUtils.isFunction(timeZoneProcessor)) {
             timeZoneProcessor = function(date) {
                 return date;
             };

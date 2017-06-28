@@ -3,11 +3,10 @@
 var extend = require("../../../core/utils/extend").extend,
     _extend = extend,
 
-    commonUtils = require("../../../core/utils/common"),
     symbolPoint = require("./symbol_point"),
     barPoint = require("./bar_point"),
     piePoint = require("./pie_point"),
-    isDefined = commonUtils.isDefined,
+    isDefined = require("../../../core/utils/type").isDefined,
     vizUtils = require("../../core/utils"),
     normalizeAngle = vizUtils.normalizeAngle,
 

@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     sessionStorage = require("../../core/utils/storage").sessionStorage,
     extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type");
 
 var DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
@@ -42,7 +41,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
     };
 
     var getUniqueStorageKey = function(options) {
-        return commonUtils.isDefined(options.storageKey) ? options.storageKey : "storage";
+        return typeUtils.isDefined(options.storageKey) ? options.storageKey : "storage";
     };
 
     return {
@@ -113,7 +112,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
             that._isLoading = true;
             loadResult = that._loadState();
 
-            if(!loadResult || !commonUtils.isFunction(loadResult.done)) {
+            if(!loadResult || !typeUtils.isFunction(loadResult.done)) {
                 loadResult = $.Deferred().resolve(loadResult);
             }
 

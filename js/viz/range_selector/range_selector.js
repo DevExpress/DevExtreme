@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     vizUtils = require("../core/utils"),
@@ -27,9 +26,9 @@ var $ = require("../../core/renderer"),
     tickManagerModule = require("../axes/base_tick_manager"),
     log = require("../../core/errors").log,
 
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _isNumber = typeUtils.isNumeric,
-    _isDate = commonUtils.isDate,
+    _isDate = typeUtils.isDate,
     _max = Math.max,
     _ceil = Math.ceil,
     _floor = Math.floor,
@@ -214,7 +213,7 @@ function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers) {
         markerScaleOptions = scaleOptions.marker,
         customizeText = labelScaleOptions.customizeText,
         placeholderHeight = scaleOptions.placeholderHeight,
-        text = commonUtils.isFunction(customizeText) ? customizeText.call(formatObject, formatObject) : value,
+        text = typeUtils.isFunction(customizeText) ? customizeText.call(formatObject, formatObject) : value,
         visibleLabels = labelScaleOptions.visible;
 
     if(placeholderHeight) {

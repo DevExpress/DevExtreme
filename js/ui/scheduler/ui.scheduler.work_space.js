@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     toMs = dateUtils.dateToMilliseconds,
     Widget = require("../widget/ui.widget"),
     abstract = Widget.abstract,
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined,
     registerComponent = require("../../core/component_registrator"),
     publisherMixin = require("./ui.scheduler.publisher_mixin"),
     eventUtils = require("../../events/utils"),
@@ -306,7 +307,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _releaseFocusedCell: function($cell) {
         $cell = $cell || $(this._focusedCells);
-        if(commonUtils.isDefined($cell)) {
+        if(isDefined($cell)) {
             this._toggleFocusClass(false, $cell);
             this._toggleFocusedCellClass(false, $cell);
             this.setAria("label", undefined, $cell);
@@ -379,6 +380,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._changeAllDayVisibility();
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
+                this.headerPanelOffsetRecalculate();
                 break;
             case "onCellClick":
                 this._createCellClickAction();
@@ -652,11 +654,11 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
     },
 
-    _getElementClass: commonUtils.noop,
+    _getElementClass: noop,
 
-    _getRowCount: commonUtils.noop,
+    _getRowCount: noop,
 
-    _getCellCount: commonUtils.noop,
+    _getCellCount: noop,
 
     _render: function() {
         this.callBase();
@@ -696,7 +698,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _setStartDayHour: function(date) {
         var startDayHour = this.option("startDayHour");
-        if(commonUtils.isDefined(startDayHour)) {
+        if(isDefined(startDayHour)) {
             date.setHours(startDayHour, startDayHour % 1 * 60, 0, 0);
         }
     },
@@ -774,7 +776,7 @@ var SchedulerWorkSpace = Widget.inherit({
             endDate: lastCellData.endDate
         };
 
-        if(commonUtils.isDefined(lastCellData.allDay)) {
+        if(isDefined(lastCellData.allDay)) {
             args.allDay = lastCellData.allDay;
         }
 
@@ -823,11 +825,12 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var headerPanelHeight = this.getHeaderPanelHeight(),
-            headerHeight = this.invoke("getHeaderHeight");
+            headerHeight = this.invoke("getHeaderHeight"),
+            allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this.getAllDayHeight() : 0;
 
         headerPanelHeight && this._dateTableScrollable.element().css({
-            "padding-bottom": headerPanelHeight + "px",
-            "margin-bottom": -1 * (parseInt(headerPanelHeight, 10)) + "px"
+            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "margin-bottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
 
         this._$allDayTitle && this._$allDayTitle.css("top", headerHeight + headerPanelHeight + "px");

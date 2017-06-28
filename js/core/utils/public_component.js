@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     WeakMap = require("../polyfills/weak_map"),
-    commonUtils = require("./common"),
+    isDefined = require("./type").isDefined,
     removeEvent = require("../remove_event");
 
 var COMPONENT_NAMES_DATA_KEY = "dxComponents",
@@ -12,7 +12,7 @@ var componentNames = new WeakMap(),
     nextAnonymousComponent = 0;
 
 var getName = exports.name = function(componentClass, newName) {
-    if(commonUtils.isDefined(newName)) {
+    if(isDefined(newName)) {
         componentNames.set(componentClass, newName);
         return;
     }

@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     sortingMixin = require("../grid_core/ui.grid_core.sorting_mixin"),
     messageLocalization = require("../../localization/message"),
@@ -35,7 +35,7 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
                         return;
                     }
 
-                    if(column && !commonUtils.isDefined(column.groupIndex) && !column.command) {
+                    if(column && !isDefined(column.groupIndex) && !column.command) {
                         if(event.shiftKey) {
                             keyName = "shift";
                         } else if(event.ctrlKey) {

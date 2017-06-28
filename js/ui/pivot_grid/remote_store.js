@@ -2,7 +2,8 @@
 
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
+    grep = require("../../core/utils/common").grep,
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     DataSourceModule = require("../../data/data_source/data_source"),
     when = require("../../integration/jquery/deferred").when,
@@ -49,7 +50,7 @@ function getFilterExpressionForFilterValue(field, filterValue) {
         isExcludedFilterType = field.filterType === "exclude",
         expression = [selector, isExcludedFilterType ? "<>" : "=", filterValue];
 
-    if(commonUtils.isDefined(field.groupInterval)) {
+    if(isDefined(field.groupInterval)) {
         if(typeof field.groupInterval === "string" && field.groupInterval.toLowerCase() === "quarter") {
             expression = getIntervalFilterExpression(selector, 3, (filterValue - 1) * 3 + 1, isExcludedFilterType);
         } else if(typeof field.groupInterval === "number" && field.dataType !== "date") {
@@ -273,7 +274,7 @@ function parseResult(data, total, descriptions, result) {
 }
 
 function getFiltersForDimension(dimensionOptions) {
-    return commonUtils.grep(dimensionOptions || [], function(field) {
+    return grep(dimensionOptions || [], function(field) {
         return field.filterValues && field.filterValues.length;
     });
 }

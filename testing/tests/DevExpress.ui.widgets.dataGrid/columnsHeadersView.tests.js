@@ -5,7 +5,6 @@ require("generic_light.css!");
 
 var $ = require("jquery"),
     setTemplateEngine = require("ui/set_template_engine"),
-    commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
     DataSource = require("data/data_source/data_source").DataSource,
@@ -111,7 +110,7 @@ QUnit.test('Bounding rect with columns', function(assert) {
     boundingRect = this.columnHeadersView.getBoundingRect();
 
     //assert
-    assert.ok(typeUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
+    assert.ok(typeUtils.isObject(boundingRect) && typeUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
 });
 
 QUnit.test("Bounding rect with columns in iOS (T211627)", function(assert) {
@@ -135,7 +134,7 @@ QUnit.test("Bounding rect with columns in iOS (T211627)", function(assert) {
     boundingRect = this.columnHeadersView.getBoundingRect();
 
     //assert
-    assert.ok(typeUtils.isObject(boundingRect) && commonUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
+    assert.ok(typeUtils.isObject(boundingRect) && typeUtils.isDefined(boundingRect.top), 'Bounding rect return object with "top" property when it has columns');
 
     devices.current(currentDevice);
     devices._realDevice = realDevice;
@@ -986,17 +985,17 @@ QUnit.test("Get context menu items with sorting column", function(assert) {
     assert.strictEqual(items[0].text, "Sort Ascending", "text menu item 1");
     assert.strictEqual(items[0].value, "asc", "value menu item 1");
     assert.strictEqual(items[0].icon, "context-menu-sort-asc", "imageCss menu item 1");
-    assert.ok(commonUtils.isFunction(items[0].onItemClick), "onItemClick menu item 1");
+    assert.ok(typeUtils.isFunction(items[0].onItemClick), "onItemClick menu item 1");
 
     assert.strictEqual(items[1].text, "Sort Descending", "text menu item 2");
     assert.strictEqual(items[1].value, "desc", "value menu item 2");
     assert.strictEqual(items[1].icon, "context-menu-sort-desc", "imageCss menu item 2");
-    assert.ok(commonUtils.isFunction(items[1].onItemClick), "onItemClick menu item 2");
+    assert.ok(typeUtils.isFunction(items[1].onItemClick), "onItemClick menu item 2");
 
     assert.strictEqual(items[2].text, "Clear Sorting", "text menu item 3");
     assert.strictEqual(items[2].value, "none", "value menu item 3");
     assert.strictEqual(items[2].icon, "context-menu-sort-none", "imageCss menu item 3");
-    assert.ok(commonUtils.isFunction(items[2].onItemClick), "onItemClick menu item 3");
+    assert.ok(typeUtils.isFunction(items[2].onItemClick), "onItemClick menu item 3");
 });
 
 //T431994

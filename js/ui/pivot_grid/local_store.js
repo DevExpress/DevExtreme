@@ -242,7 +242,7 @@ exports.LocalStore = Class.inherit((function() {
                 }
                 if(cell[aggregatorIndex] === undefined) {
                     cell[aggregatorIndex] = cellValue;
-                } else if(commonUtils.isDefined(cellValue)) {
+                } else if(typeUtils.isDefined(cellValue)) {
                     cell[aggregatorIndex] = aggregator.step(cell[aggregatorIndex], cellValue);
                 }
             }

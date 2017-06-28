@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     gridCore = require("../data_grid/ui.data_grid.core"),
-    commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     support = require("../../core/utils/support"),
     clickEvent = require("../../events/click"),
@@ -438,7 +438,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         focusedItemIndex: function(itemIndex) {
             var that = this;
 
-            if(commonUtils.isDefined(itemIndex)) {
+            if(typeUtils.isDefined(itemIndex)) {
                 that._selection._focusedItemIndex = itemIndex;
             } else {
                 return that._selection._focusedItemIndex;

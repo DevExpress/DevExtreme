@@ -2,12 +2,11 @@
 
 var $ = require("../../core/renderer"),
     seriesNS = {},
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     pointModule = require("./points/base_point"),
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     vizUtils = require("../core/utils"),
     _map = vizUtils.map,
     _each = $.each,
@@ -15,7 +14,7 @@ var $ = require("../../core/renderer"),
     _isEmptyObject = typeUtils.isEmptyObject,
     _normalizeEnum = vizUtils.normalizeEnum,
     _Event = $.Event,
-    _noop = commonUtils.noop,
+    _noop = require("../../core/utils/common").noop,
     _inArray = inArray,
     states = require("../components/consts").states,
 
@@ -105,7 +104,7 @@ function getLabelOptions(labelOptions, defaultColor) {
         precision: opt.precision,   // DEPRECATED_16_1
         argumentPrecision: opt.argumentPrecision,   // DEPRECTATED_16_1
         percentPrecision: opt.percentPrecision, // DEPRECATED_16_1
-        customizeText: commonUtils.isFunction(opt.customizeText) ? opt.customizeText : undefined,
+        customizeText: typeUtils.isFunction(opt.customizeText) ? opt.customizeText : undefined,
         attributes: { font: labelFont },
         visible: labelFont.size !== 0 ? opt.visible : false,
         showForZeroValues: opt.showForZeroValues,

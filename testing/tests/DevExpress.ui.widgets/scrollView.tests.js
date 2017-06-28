@@ -686,7 +686,7 @@ QUnit.test("scrollview onReachBottom action fired when bottom position is reache
         inertiaEnabled: false,
         onReachBottom: function() {
             var location = getScrollOffset($scrollView);
-            assert.equal(Math.round(location.top), -Math.round($content.height() - $container.height()));
+            assert.roughEqual(location.top, $container.height() - $content.height(), 1);
         }
     });
 
@@ -725,6 +725,28 @@ QUnit.test("scrollview should go to released state if release method was called 
 
     scrollView.toggleLoading(true);
     scrollView.scrollTo({ x: 0, y: 220 });
+});
+
+QUnit.test("onReachBottom should not be called when scroll delta is 0", function(assert) {
+    assert.expect(1);
+
+    var done = assert.async(),
+        $scrollView = $("#scrollView").dxScrollView({
+            height: 50,
+            useNative: true,
+            inertiaEnabled: false,
+            refreshStrategy: "pullDown",
+            onReachBottom: function() {
+                scrollView.release(false);
+
+                assert.ok(true, "reachBottom was not called on the second scroll");
+                done();
+            }
+        }),
+        scrollView = $scrollView.dxScrollView("instance");
+
+    scrollView.scrollTo({ x: 0, y: 150 });
+    scrollView.content().trigger("scroll");
 });
 
 QUnit.test("scrollview locked while loading", function(assert) {
@@ -775,7 +797,7 @@ QUnit.test("release after loading cause bounce to the bottom bound", function(as
         },
         onEnd: function() {
             var location = getScrollOffset($scrollView);
-            assert.equal(Math.round(location.top), -Math.round($content.height() - $container.height()), "scrollview bounced");
+            assert.roughEqual(location.top, $container.height() - $content.height(), 1, "scrollview bounced");
         }
     });
 
@@ -1098,7 +1120,7 @@ QUnit.test("release calls update", function(assert) {
         },
         onReachBottom: function() {
             var location = getScrollOffset($scrollView);
-            assert.equal(Math.round(location.top), -Math.round($content.height() - $container.height()));
+            assert.roughEqual(location.top, $container.height() - $content.height(), 1);
         }
     });
 

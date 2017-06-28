@@ -562,11 +562,11 @@ var ListBase = CollectionWidget.inherit({
     _dataSourceOptions: function() {
         this._suppressDeprecatedWarnings();
         var pagingEnabled = this.option("autoPagingEnabled");
-        pagingEnabled = commonUtils.isDefined(this.option("showNextButton")) ? pagingEnabled || this.option("showNextButton") : pagingEnabled;
+        pagingEnabled = typeUtils.isDefined(this.option("showNextButton")) ? pagingEnabled || this.option("showNextButton") : pagingEnabled;
         this._resumeDeprecatedWarnings();
 
         return extend(this.callBase(), {
-            paginate: commonUtils.isDefined(pagingEnabled) ? pagingEnabled : true
+            paginate: typeUtils.isDefined(pagingEnabled) ? pagingEnabled : true
         });
     },
 
