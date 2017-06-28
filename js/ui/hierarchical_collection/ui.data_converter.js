@@ -74,7 +74,7 @@ var DataConverter = Class.inherit({
                 }
             };
 
-        extend(true, node, item);
+        extend(node, item);
 
         delete node.items;
 
