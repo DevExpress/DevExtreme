@@ -306,7 +306,9 @@ Microsoft.Maps = {
 
         this.open = function() {};
         this.close = function() {};
-        this.setMap = function() {}; //?
+        this.setMap = function() {
+            Microsoft.infoboxAddedToMap = true;
+        };
         this.getContent = function() {};
         this.getPosition = function() {};
         this.setContent = function() {};
@@ -348,6 +350,7 @@ Microsoft.Maps = {
         this.getY = function() {
             return y;
         };
+        this.location = { latitude: x, longitude: y };
     }
 };
 
