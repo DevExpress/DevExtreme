@@ -288,7 +288,7 @@ declare module DevExpress.ui {
         type?: string;
 
         /** @docid dxSchedulerOptions_views_name */
-        type?: string;
+        name?: string;
 
         /** @docid dxSchedulerOptions_views_firstDayOfWeek */
         firstDayOfWeek?: number;
