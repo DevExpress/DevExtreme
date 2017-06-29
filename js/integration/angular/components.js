@@ -1,11 +1,11 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var Callbacks = require("../../core/utils/callbacks"),
     ngModule = require("./module");
 
 ngModule.service("dxDigestCallbacks", ["$rootScope", function($rootScope) {
-    var begin = $.Callbacks(),
-        end = $.Callbacks();
+    var begin = Callbacks(),
+        end = Callbacks();
 
     var digestPhase = false;
 

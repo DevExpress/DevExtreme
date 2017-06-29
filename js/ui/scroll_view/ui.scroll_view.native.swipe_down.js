@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     translator = require("../../animation/translator"),
     eventUtils = require("../../events/utils"),
     NativeStrategy = require("./ui.scrollable.native"),
@@ -31,9 +32,9 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _initCallbacks: function() {
-        this.pullDownCallbacks = $.Callbacks();
-        this.releaseCallbacks = $.Callbacks();
-        this.reachBottomCallbacks = $.Callbacks();
+        this.pullDownCallbacks = Callbacks();
+        this.releaseCallbacks = Callbacks();
+        this.reachBottomCallbacks = Callbacks();
     },
 
     render: function() {

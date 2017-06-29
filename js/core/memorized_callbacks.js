@@ -1,11 +1,12 @@
 "use strict";
 
-var $ = require("../core/renderer");
+var $ = require("../core/renderer"),
+    Callbacks = require("./utils/callbacks");
 
 var MemorizedCallbacks = function() {
 
     var memory = [];
-    var callbacks = $.Callbacks();
+    var callbacks = Callbacks();
 
     this.add = function(fn) {
         $.each(memory, function(_, item) {

@@ -4,7 +4,7 @@ var $ = require("../../core/renderer");
 
 var resizeCallbacks = (function() {
     var prevSize,
-        callbacks = $.Callbacks(),
+        callbacks = require("../../core/utils/callbacks")(),
         jqWindow = $(window),
         resizeEventHandlerAttached = false,
         originalCallbacksAdd = callbacks.add,

@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     Class = require("../../core/class"),
+    Callbacks = require("../../core/utils/callbacks"),
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../utils");
 
@@ -11,8 +12,8 @@ var Emitter = Class.inherit({
     ctor: function(element) {
         this._$element = $(element);
 
-        this._cancelCallback = $.Callbacks();
-        this._acceptCallback = $.Callbacks();
+        this._cancelCallback = Callbacks();
+        this._acceptCallback = Callbacks();
     },
 
     getElement: function() {

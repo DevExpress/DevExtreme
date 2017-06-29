@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     translator = require("../../animation/translator"),
     errors = require("../widget/ui.errors"),
     dialog = require("../dialog"),
@@ -1282,7 +1283,7 @@ var Scheduler = Widget.inherit({
         return result.promise();
     },
 
-    _dataSourceLoadedCallback: $.Callbacks(),
+    _dataSourceLoadedCallback: Callbacks(),
 
     _reloadDataSource: function() {
         if(this._dataSource) {
