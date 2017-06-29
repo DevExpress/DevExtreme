@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
+    noop = require("../../core/utils/common").noop,
     messageLocalization = require("../../localization/message"),
     dateLocalization = require("../../localization/date"),
     toMs = dateUtils.dateToMilliseconds,
@@ -337,6 +338,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             currentDate: new Date(),
+            count: 1,
             firstDayOfWeek: undefined,
             startDayHour: 0,
             endDayHour: 24,
@@ -369,6 +371,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "firstDayOfWeek":
             case "currentDate":
             case "groups":
+            case "count":
                 this._cleanView();
                 this._toggleGroupedClass();
                 this._renderView();
@@ -686,8 +689,9 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateHeader();
 
-        this._renderAllDayPanel();
         this._renderTimePanel();
+        this._renderAllDayPanel();
+
         this._renderDateTable();
     },
 
@@ -993,7 +997,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderTableBody({
             container: this._$dateTable,
             rowCount: this._getTotalRowCount(groupCount),
-            cellCount: this._getTotalCellCount(groupCount),
+            cellCount: this._getTotalCellCount(groupCount) * this.option("count"),
             cellClass: this._getDateTableCellClass(),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
@@ -1289,10 +1293,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getDateByCellIndexes: function(rowIndex, cellIndex) {
         var firstViewDate = this.getStartViewDate(),
-            currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex));
+            currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex) + this._getOffsetByCount() * cellIndex);
 
         currentDate.setTime(currentDate.getTime() + dateUtils.getTimezonesDifference(firstViewDate, currentDate));
         return currentDate;
+    },
+
+    _getOffsetByCount: function() {
+        return 0;
     },
 
     _getMillisecondsOffset: function(rowIndex, cellIndex) {

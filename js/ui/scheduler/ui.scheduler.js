@@ -1682,10 +1682,26 @@ var Scheduler = Widget.inherit({
     _renderWorkSpace: function(groups) {
         var $workSpace = $("<div>").appendTo(this.element());
 
-        this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this.option("currentView")].workSpace, this._workSpaceConfig(groups));
+        var currentView = this.option("currentView"),
+            count;
+
+        var view = this._getViewByType(currentView);
+
+        count = view.count || 1;
+
+
+        this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[currentView].workSpace, this._workSpaceConfig(groups, count));
         this._workSpace.getWorkArea().append(this._appointments.element());
 
         this._recalculateWorkspace();
+    },
+
+    _getViewByType: function(type) {
+        var views = this.option("views");
+
+        for(var i = 0; i < views.length; i++) {
+            if(views[i].type === type || views[i] === type) return views[i];
+        }
     },
 
     _recalculateWorkspace: function() {
@@ -1695,7 +1711,7 @@ var Scheduler = Widget.inherit({
         this._workSpaceRecalculation.resolve();
     },
 
-    _workSpaceConfig: function(groups) {
+    _workSpaceConfig: function(groups, count) {
         var result,
             currentViewOptions = this._getCurrentViewOptions();
 
@@ -1719,6 +1735,7 @@ var Scheduler = Widget.inherit({
         }, currentViewOptions);
 
         result.observer = this;
+        result.count = count;
         result.groups = groups;
         result.onCellClick = this._createActionByOption("onCellClick");
         result.min = new Date(this._dateOption("min"));

@@ -2855,8 +2855,6 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Cell data cache should be cleared when dimensions were changed", function(assert) {
-
-
         var workSpace = this.instance,
             $element = this.instance.element(),
             appointment = {
@@ -2882,3 +2880,35 @@ QUnit.testStart(function() {
     });
 
 })("Work Space cellData Cache");
+
+(function() {
+    QUnit.module("Work Space Day with count", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay().dxSchedulerWorkSpaceDay("instance");
+            stubInvokeMethod(this.instance);
+        }
+    });
+
+    QUnit.test("WorkSpace Day view has right count of cells with view option count=2", function(assert) {
+        this.instance.option("count", 2);
+
+        var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 2, "view has right cell count");
+    });
+
+    QUnit.test("WorkSpace Day view cells have right cellData with view option count=2", function(assert) {
+        this.instance.option("count", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 29));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(1).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(95).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 30, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 30, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 5, 30, 23, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 31, 0), "cell has right endtDate");
+    });
+
+})("Work Space with count");
