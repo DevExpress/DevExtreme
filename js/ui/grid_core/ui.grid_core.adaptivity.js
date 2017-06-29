@@ -621,7 +621,7 @@ module.exports = {
                     return $row;
                 },
 
-                _getColumnIndexByElement: function($element) {
+                _getColumnIndexByElementCore: function($element) {
                     var $itemContent = $element.closest("." + FORM_ITEM_CONTENT_CLASS);
                     if($itemContent.length && $itemContent.closest(this.component.element()).length) {
                         var formItem = $itemContent.length ? $itemContent.first().data("dx-form-item") : null;
