@@ -1971,7 +1971,19 @@ module.exports = {
                     return $row;
                 },
                 _getColumnIndexByElement: function($element) {
+                    var $tableElement = $element.closest("table"),
+                        $tableElements = this.getTableElements();
+
+                    while($tableElement.length && !$tableElements.filter($tableElement).length) {
+                        $element = $tableElement.closest("td");
+                        $tableElement = $element.closest("table");
+                    }
+
+                    return this._getColumnIndexByElementCore($element);
+                },
+                _getColumnIndexByElementCore: function($element) {
                     var $targetElement = $element.closest("." + ROW_CLASS + "> td:not(.dx-master-detail-cell)");
+
                     return this.getCellIndex($targetElement);
                 },
                 _rowClick: function(e) {
