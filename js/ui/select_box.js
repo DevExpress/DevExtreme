@@ -568,7 +568,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _clearTextValue: function() {
-        this.reset();
+        this.option("value", null);
     },
 
     _renderValueChangeEvent: function() {
