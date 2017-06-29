@@ -2778,7 +2778,8 @@ QUnit.testStart(function() {
                 name: "Test Day"
             }, "week"],
             cellDuration: 40,
-            currentView: "day"
+            currentView: "day",
+            useDropDownViewSwitcher: false
         });
 
         var $header = this.instance.getHeader().element();
