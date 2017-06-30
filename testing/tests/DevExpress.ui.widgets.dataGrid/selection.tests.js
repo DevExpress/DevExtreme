@@ -721,6 +721,26 @@ QUnit.test("Deselect selectedRows. Store with key", function(assert) {
     assert.ok(!this.dataController.items()[6].isSelected);
 });
 
+QUnit.test("Deselect all if key is defined", function(assert) {
+    //arrange
+    this.applyOptions({
+        selection: { mode: 'single' },
+        dataSource: { store: { type: 'array', data: this.array, key: 'age' } }
+    });
+
+    this.dataController.optionChanged({ name: 'dataSource' });
+
+
+    this.selectionController.selectRows([16, 18]);
+
+    //act
+    this.selectionController.deselectAll();
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
+    assert.deepEqual(this.selectionController.getSelectedRowsData(), []);
+});
+
 QUnit.test("Deselect selectedRows. Object parameter", function(assert) {
     //arrange
     this.applyOptions({
