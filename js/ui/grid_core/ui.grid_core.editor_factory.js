@@ -34,7 +34,7 @@ var CHECKBOX_SIZE_CLASS = "checkbox-size",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
-    FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, .dx-lookup-field:focus",
+    FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus",
     DX_HIDDEN = "dx-hidden",
     TAB_KEY = 9;
 
