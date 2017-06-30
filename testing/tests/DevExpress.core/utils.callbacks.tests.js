@@ -98,24 +98,55 @@ QUnit.test("Remove a callback from a callback list", function(assert) {
     assert.ok(this.Callbacks.has(callBack2), "has callBack2");
 });
 
-QUnit.test("Remove all of the Callbacks from a list", function(assert) {
+QUnit.test("Remove a callback from a callback list when firing", function(assert) {
     //arrange
-    var callBack1 = function() { },
-        callBack2 = function() { };
+    var that = this;
+    var callOrder = [];
+
+    var callBack1 = function() {
+        callOrder.push(1);
+    };
+    var callBack2 = function() {
+        callOrder.push(2);
+        that.Callbacks.remove(callBack3);
+    };
+    var callBack3 = function() {
+        callOrder.push(3);
+    };
+    var callBack4 = function() {
+        callOrder.push(4);
+        that.Callbacks.remove(callBack1);
+    };
+    var callBack5 = function() {
+        callOrder.push(5);
+        that.Callbacks.remove(callBack5);
+        that.Callbacks.fire();
+    };
+    var callBack6 = function() {
+        callOrder.push(6);
+    };
 
     this.Callbacks.add(callBack1);
     this.Callbacks.add(callBack2);
-
-    //assert
-    assert.ok(this.Callbacks.has(callBack1), "has callBack1");
-    assert.ok(this.Callbacks.has(callBack2), "has callBack2");
+    this.Callbacks.add(callBack3);
+    this.Callbacks.add(callBack4);
+    this.Callbacks.add(callBack5);
+    this.Callbacks.add(callBack6);
 
     //act
-    this.Callbacks.empty();
+    this.Callbacks.fire();
 
     //assert
-    assert.ok(!this.Callbacks.has(callBack1), "not has callBack1");
-    assert.ok(!this.Callbacks.has(callBack2), "not has callBack2");
+    assert.deepEqual(callOrder, [ 1, 2, 4, 5, 6, 2, 4, 6 ]);
+
+    //arrange
+    callOrder = [];
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.deepEqual(callOrder, [ 2, 4, 6 ]);
 });
 
 QUnit.test("Remove all of the Callbacks from a list", function(assert) {
@@ -260,6 +291,59 @@ QUnit.test("Sync strategy with two inner fires", function(assert) {
         { callback: 3, params: 2 },
         { callback: 3, params: 1 }
     ]);
+});
+
+QUnit.test("Remove a callback from a callback list when firing for sync strategy", function(assert) {
+    //arrange
+    var that = this;
+    var callOrder = [];
+
+    this.Callbacks = Callbacks({ syncStrategy: true });
+
+    var callBack1 = function() {
+        callOrder.push(1);
+    };
+    var callBack2 = function() {
+        callOrder.push(2);
+        that.Callbacks.remove(callBack3);
+    };
+    var callBack3 = function() {
+        callOrder.push(3);
+    };
+    var callBack4 = function() {
+        callOrder.push(4);
+        that.Callbacks.remove(callBack1);
+    };
+    var callBack5 = function() {
+        callOrder.push(5);
+        that.Callbacks.remove(callBack5);
+        that.Callbacks.fire();
+    };
+    var callBack6 = function() {
+        callOrder.push(6);
+    };
+
+    this.Callbacks.add(callBack1);
+    this.Callbacks.add(callBack2);
+    this.Callbacks.add(callBack3);
+    this.Callbacks.add(callBack4);
+    this.Callbacks.add(callBack5);
+    this.Callbacks.add(callBack6);
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.deepEqual(callOrder, [ 1, 2, 4, 5, 2, 4, 6, 6 ]);
+
+    //arrange
+    callOrder = [];
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.deepEqual(callOrder, [ 2, 4, 6 ]);
 });
 
 QUnit.test("StopOnFalse", function(assert) {
