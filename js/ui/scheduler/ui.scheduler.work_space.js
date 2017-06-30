@@ -997,7 +997,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderTableBody({
             container: this._$dateTable,
             rowCount: this._getTotalRowCount(groupCount),
-            cellCount: this._getTotalCellCount(groupCount) * this.option("count"),
+            cellCount: this._getTotalCellCount(groupCount),
             cellClass: this._getDateTableCellClass(),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
@@ -1293,7 +1293,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getDateByCellIndexes: function(rowIndex, cellIndex) {
         var firstViewDate = this.getStartViewDate(),
-            currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex) + this._getOffsetByCount() * cellIndex);
+            currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex));
 
         currentDate.setTime(currentDate.getTime() + dateUtils.getTimezonesDifference(firstViewDate, currentDate));
         return currentDate;

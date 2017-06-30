@@ -18,7 +18,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _getCellCount: function() {
-        return 1;
+        return this.option("count");
     },
 
     _setFirstViewDate: function() {
@@ -53,8 +53,8 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _getOffsetByCount: function() {
-        return toMs("day");
-    },
+        return this.option("count") > 1 ? toMs("day") : 0;
+    }
 
 });
 

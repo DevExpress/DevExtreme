@@ -2911,4 +2911,11 @@ QUnit.testStart(function() {
         assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 31, 0), "cell has right endtDate");
     });
 
+    QUnit.test("Get date range", function(assert) {
+        this.instance.option("currentDate", new Date(2015, 2, 16));
+        this.instance.option("count", 2);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 17, 23, 59)], "Range is OK");
+    });
+
 })("Work Space with count");
