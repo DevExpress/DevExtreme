@@ -4278,3 +4278,56 @@ QUnit.test("Exception should not be thrown on second details view opening if for
         assert.ok(false, "Exception: " + e);
     }
 });
+
+QUnit.test("Appointments should be rendered correctly, Day view with count", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2015, 2, 16, 7), endDate: new Date(2015, 2, 16, 7, 30) },
+        { text: "Two", startDate: new Date(2015, 2, 16, 11), endDate: new Date(2015, 2, 16, 11, 30) },
+        { text: "Three", startDate: new Date(2015, 2, 18, 12), endDate: new Date(2015, 2, 18, 12, 30) },
+        { text: "Four", startDate: new Date(2015, 2, 18, 15), endDate: new Date(2015, 2, 18, 15, 30) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2015, 2, 16),
+        dataSource: dataSource,
+        views: [{
+            type: "day",
+            name: "Day",
+            count: 3
+        }],
+        currentView: "day"
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 4, "Appointments were rendered correctly");
+});
+
+QUnit.test("Appointments should be rendered correctly, Week view with count", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2015, 4, 25, 7), endDate: new Date(2015, 4, 25, 7, 30) },
+        { text: "Two", startDate: new Date(2015, 5, 1, 11), endDate: new Date(2015, 5, 1, 11, 30) },
+        { text: "Three", startDate: new Date(2015, 5, 6, 12), endDate: new Date(2015, 5, 6, 12, 30) },
+        { text: "Four", startDate: new Date(2015, 5, 12, 15), endDate: new Date(2015, 5, 12, 15, 30) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        dataSource: dataSource,
+        views: [{
+            type: "week",
+            name: "week",
+            count: 3
+        }],
+        currentView: "week"
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 4, "Appointments were rendered correctly");
+});
+
