@@ -13,8 +13,7 @@ var extend = require("../../../core/utils/extend").extend,
     vizUtils = require("../../core/utils"),
     _normalizeAngle = vizUtils.normalizeAngle,
     _getCosAndSin = vizUtils.getCosAndSin,
-    commonUtils = require("../../../core/utils/common"),
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../../core/utils/type").isDefined,
     getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords,
 
     INDENT_FROM_PIE = require("../../components/consts").pieLabelIndent;

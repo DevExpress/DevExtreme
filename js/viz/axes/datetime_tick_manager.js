@@ -1,10 +1,10 @@
 "use strict";
 
 var dateUtils = require("../../core/utils/date"),
-    commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     tickManagerContinuous = require("./numeric_tick_manager").continuous,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _convertDateUnitToMilliseconds = dateUtils.convertDateUnitToMilliseconds,
     _correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning,
     _dateToMilliseconds = dateUtils.dateToMilliseconds,

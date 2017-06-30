@@ -3,12 +3,11 @@
 var $ = require("../../core/renderer"),
     debug = require("../../core/utils/console").debug,
     Range = require("../translators/range").Range,
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     vizUtils = require("../core/utils"),
     _adjustValue = vizUtils.adjustValue,
     _applyPrecisionByMinDelta = vizUtils.applyPrecisionByMinDelta,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
 
     _math = Math,
     _floor = _math.floor,
@@ -306,7 +305,7 @@ var updateTickValuesIfSynchronizedValueUsed = function(axesInfo) {
             }
             lastTickValue = tickValues[tickValues.length - 1];
             while((lastTickValue = lastTickValue + tickInterval) <= maxValue) {
-                tickValues.push(commonUtils.isExponential(lastTickValue) ? _adjustValue(lastTickValue) : _applyPrecisionByMinDelta(minValue, tickInterval, lastTickValue));
+                tickValues.push(typeUtils.isExponential(lastTickValue) ? _adjustValue(lastTickValue) : _applyPrecisionByMinDelta(minValue, tickInterval, lastTickValue));
             }
         }
         while(tickValues[0] < minValue) {

@@ -1799,3 +1799,49 @@ QUnit.test("popover should clear hide timeout when show event fired", function(a
 
     assert.ok(instance.option("visible"), "Hiding has been cancelled");
 });
+
+QUnit.test("popover should clear show timeout when show method is called", function(assert) {
+    var instance = new Popover($("#what"), {
+        visible: false,
+        target: "#where",
+        showEvent: {
+            name: "pointerenter",
+            delay: 500
+        },
+        hideEvent: {
+            name: "pointerleave"
+        }
+    });
+
+    $("#where").trigger("pointerenter");
+    this.clock.tick(200);
+
+    instance.show();
+    instance.hide();
+
+    this.clock.tick(300);
+    assert.notOk(instance.option("visible"), "Showing has been cancelled");
+});
+
+QUnit.test("popover should clear hide timeout when hide method is called", function(assert) {
+    var instance = new Popover($("#what"), {
+        visible: true,
+        target: "#where",
+        showEvent: {
+            name: "pointerenter"
+        },
+        hideEvent: {
+            name: "pointerleave",
+            delay: 500
+        }
+    });
+
+    $("#where").trigger("pointerleave");
+    this.clock.tick(200);
+
+    instance.hide();
+    instance.show();
+
+    this.clock.tick(300);
+    assert.ok(instance.option("visible"), "Hiding has been cancelled");
+});

@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     commonUtils = require("core/utils/common"),
+    typeUtils = require("core/utils/type"),
     pointModule = require("viz/series/points/base_point"),
     originalPoint = pointModule.Point,
     seriesModule = require("viz/series/base_series"),
@@ -151,7 +152,7 @@ var environment = {
             _getPointData: function(dataItem) {
                 return {
                     argument: dataItem.arg,
-                    value: commonUtils.isDefined(dataItem.val1) ? dataItem.val1 : dataItem.val,
+                    value: typeUtils.isDefined(dataItem.val1) ? dataItem.val1 : dataItem.val,
                     minValue: dataItem.val2,
                     highValue: dataItem.h,
                     lowValue: dataItem.l

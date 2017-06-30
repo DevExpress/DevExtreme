@@ -5,7 +5,8 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     dateUtils = require("core/utils/date"),
     dateSerialization = require("core/utils/date_serialization"),
-    commonUtils = require("core/utils/common"),
+    noop = require("core/utils/common").noop,
+    isDefined = require("core/utils/type").isDefined,
     KeyboardProcessor = require("ui/widget/ui.keyboard_processor"),
     swipeEvents = require("events/swipe"),
     fx = require("animation/fx"),
@@ -1173,7 +1174,7 @@ QUnit.test("keydown event default behavior should be prevented by calendar keydo
 
     var kb = new KeyboardProcessor({
         element: this.$element,
-        handler: commonUtils.noop
+        handler: noop
     });
 
     this.$element.dxCalendar({
@@ -1501,7 +1502,7 @@ QUnit.test("changing the 'value' option must invoke the 'onValueChanged' action"
 });
 
 QUnit.test("onCellClick return not 'undefined' after click on cell", function(assert) {
-    var clickHandler = sinon.spy(commonUtils.noop);
+    var clickHandler = sinon.spy(noop);
 
     this.reinit({
         currentDate: new Date(2010, 10, 10),
@@ -1639,9 +1640,9 @@ QUnit.test("correct data should be passed to cellTemplate", function(assert) {
         }
     });
 
-    assert.equal(commonUtils.isDefined(data.text), true, "text field is present in itemData");
-    assert.equal(commonUtils.isDefined(data.date), true, "date field is present in itemData");
-    assert.equal(commonUtils.isDefined(data.view), true, "view field is present in itemData");
+    assert.equal(isDefined(data.text), true, "text field is present in itemData");
+    assert.equal(isDefined(data.date), true, "date field is present in itemData");
+    assert.equal(isDefined(data.view), true, "view field is present in itemData");
 });
 
 

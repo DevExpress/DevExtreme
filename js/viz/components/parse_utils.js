@@ -1,8 +1,8 @@
 "use strict";
 
-var commonUtils = require("../../core/utils/common"),
+var noop = require("../../core/utils/common").noop,
     dateSerialization = require("../../core/utils/date_serialization"),
-    isDefined = commonUtils.isDefined,
+    isDefined = require("../../core/utils/type").isDefined,
     parsers = {
         string: function(val) {
             return isDefined(val) ? ('' + val) : val;
@@ -47,7 +47,7 @@ module.exports = {
     correctValueType: correctValueType,
 
     getParser: function(valueType) {
-        return parsers[correctValueType(valueType)] || commonUtils.noop;
+        return parsers[correctValueType(valueType)] || noop;
     }
 };
 
