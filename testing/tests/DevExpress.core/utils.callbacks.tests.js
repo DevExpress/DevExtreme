@@ -1,6 +1,6 @@
 "use strict";
 
-var Callbacks = require("core/utils/Callbacks");
+var Callbacks = require("core/utils/callbacks");
 
 QUnit.module("Callbacks with flags", {
     beforeEach: function() {
