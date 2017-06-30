@@ -144,9 +144,8 @@ var normalizeTemplateElement = function(element) {
 
 var toggleAttr = function($target, attr, value) {
     if(value) {
-        if($target[0].getAttribute) {
-            $target.prop(attr, value);
-        } else {
+        if($target[0]) {
+            !$target[0].getAttribute ? $target.prop(attr, value) :
             $target.attr(attr, value);
         }
     } else {
