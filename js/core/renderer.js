@@ -10,7 +10,7 @@ var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
-    "css", "attr", "removeAttr", "prop", "removeProp",
+    "css",
     "remove", "detach", "empty", "text",
     "html", "is", "not", "wrapInner", "wrap",
     "each", "val", "index",
@@ -59,14 +59,11 @@ if(!useJQueryRenderer) {
     initRender.prototype.attr = function(attrName, value) {
         if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, "attr", arguments);
         if(!this[0]) {
-            if(typeUtils.isPlainObject(attrName)) {
+            if(typeUtils.isPlainObject(attrName) || value !== undefined) {
                 return this;
             } else {
-                return value === undefined ? undefined : this;
+                return undefined;
             }
-        }
-        if(!this[0].getAttribute) {
-            return this.prop(attrName, value);
         }
         if(typeof attrName === "string" && arguments.length === 1) {
             var result = this[0].getAttribute(attrName);
@@ -98,10 +95,6 @@ if(!useJQueryRenderer) {
             rendererStrategy.setProperty(this[0], propName, value);
         }
 
-        return this;
-    };
-    initRender.prototype.removeProp = function(propName) {
-        this[0] && rendererStrategy.setProperty(this[0], propName, null);
         return this;
     };
 

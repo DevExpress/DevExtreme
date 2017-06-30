@@ -29,7 +29,7 @@ var ClickEmitter = Emitter.inherit({
     },
 
     _makeElementClickable: function($element) {
-        if(!$element.attr("onclick")) {
+        if($element[0].getAttribute) {
             $element.attr("onclick", "void(0)");
         }
     },

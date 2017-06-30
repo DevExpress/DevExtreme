@@ -143,7 +143,15 @@ var normalizeTemplateElement = function(element) {
 };
 
 var toggleAttr = function($target, attr, value) {
-    value ? $target.attr(attr, value) : $target.removeAttr(attr);
+    if(value) {
+        if($target[0].getAttribute) {
+            $target.prop(attr, value);
+        } else {
+            $target.attr(attr, value);
+        }
+    } else {
+        $target.removeAttr(attr);
+    }
 };
 
 
