@@ -2,7 +2,6 @@
 
 var BaseSparkline = require("./base_sparkline"),
 
-    commonUtils = require("../../core/utils/common"),
     dataValidatorModule = require("../components/data_validator"),
     seriesModule = require("../series/base_series"),
     MIN_BAR_WIDTH = 1,
@@ -34,7 +33,7 @@ var BaseSparkline = require("./base_sparkline"),
     vizUtils = require("../core/utils"),
     _map = vizUtils.map,
     _normalizeEnum = vizUtils.normalizeEnum,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../core/utils/type").isDefined,
     _Number = Number,
     _String = String;
 

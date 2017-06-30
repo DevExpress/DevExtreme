@@ -2,12 +2,12 @@
 
 var $ = require("../../../core/renderer"),
     extend = require("../../../core/utils/extend").extend,
-    commonUtils = require("../../../core/utils/common"),
+    noop = require("../../../core/utils/common").noop,
     labelModule = require("./label"),
     symbolPoint = require("./symbol_point"),
 
     _extend = extend,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../../core/utils/type").isDefined,
 
     _math = Math,
     _abs = _math.abs,
@@ -513,7 +513,7 @@ module.exports = _extend({}, symbolPoint, {
         return [this._topLabel, this._bottomLabel];
     },
 
-    getBoundingRect: commonUtils.noop,
+    getBoundingRect: noop,
 
     coordsIn: function(x, y) {
         var trackerRadius = this._storeTrackerR(),

@@ -447,8 +447,8 @@ var Scrollable = DOMComponent.inherit({
             var left = commonUtils.ensureDefined(location.left, location.x);
             var top = commonUtils.ensureDefined(location.top, location.y);
             return {
-                left: commonUtils.isDefined(left) ? -left : undefined,
-                top: commonUtils.isDefined(top) ? -top : undefined
+                left: typeUtils.isDefined(left) ? -left : undefined,
+                top: typeUtils.isDefined(top) ? -top : undefined
             };
         } else {
             var direction = this.option("direction");

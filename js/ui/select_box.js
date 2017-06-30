@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     commonUtils = require("../core/utils/common"),
+    isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     errors = require("../core/errors"),
@@ -458,7 +459,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _displayValue: function(item) {
-        item = (!commonUtils.isDefined(item) && this._isCustomValueAllowed()) ? this.option("value") : item;
+        item = (!isDefined(item) && this._isCustomValueAllowed()) ? this.option("value") : item;
         return this.callBase(item);
     },
 
@@ -568,7 +569,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _clearTextValue: function() {
-        this.reset();
+        this.option("value", null);
     },
 
     _renderValueChangeEvent: function() {

@@ -1,10 +1,9 @@
 "use strict";
 
 var adjustValue = require("../core/utils").adjustValue,
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     isNumber = typeUtils.isNumeric,
-    isDefined = commonUtils.isDefined,
+    isDefined = typeUtils.isDefined,
     dateUtils = require("../../core/utils/date"),
     addInterval = dateUtils.addInterval,
     dateToMilliseconds = dateUtils.dateToMilliseconds,

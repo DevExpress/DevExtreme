@@ -3,9 +3,9 @@
 var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    commonUtils = require("../../core/utils/common"),
-    noop = commonUtils.noop,
-    isFunction = commonUtils.isFunction;
+    typeUtils = require("../../core/utils/type"),
+    noop = require("../../core/utils/common").noop,
+    isFunction = typeUtils.isFunction;
 
 var EMPTY_CHAR = " ";
 
@@ -33,9 +33,9 @@ var BaseMaskRule = Class.inherit({
     _prepareHandlingArgs: function(args, config) {
         config = config || {};
         var handlingProperty = args.hasOwnProperty("value") ? "value" : "text";
-        args[handlingProperty] = commonUtils.isDefined(config.str) ? config.str : args[handlingProperty];
-        args.start = commonUtils.isDefined(config.start) ? config.start : args.start;
-        args.length = commonUtils.isDefined(config.length) ? config.length : args.length;
+        args[handlingProperty] = typeUtils.isDefined(config.str) ? config.str : args[handlingProperty];
+        args.start = typeUtils.isDefined(config.start) ? config.start : args.start;
+        args.length = typeUtils.isDefined(config.length) ? config.length : args.length;
         args.index = args.index + 1;
         return args;
     },

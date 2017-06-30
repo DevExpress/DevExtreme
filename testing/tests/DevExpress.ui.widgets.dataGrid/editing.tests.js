@@ -2408,6 +2408,45 @@ QUnit.test('Apply column editorOptions to cell editor', function(assert) {
     assert.ok(textEditor.option("disabled"), "disabled true");
 });
 
+//T529043
+QUnit.test("The first cell should not be switched to the editing state when clicking on grid inside cellTemplate", function(assert) {
+   //arrange
+    var that = this,
+        $mainTable,
+        $internalTable,
+        rowsView = that.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: 'batch'
+    };
+    that.dataControllerOptions.items.length = 1;
+    that.columns.length = 1;
+    that.columns.push({
+        caption: "Test",
+        allowEditing: false,
+        cellTemplate: function() {
+            return $("<table/>").append("<tbody><tr class='dx-row'><td>Test666</td><td>Test777</td></tr></tbody>");
+        }
+    });
+    rowsView.render($testElement);
+
+    $mainTable = rowsView.element().children(".dx-datagrid-content").children("table");
+    $internalTable = $mainTable.find("tbody > tr").first().children().last().find("table");
+
+    //assert
+    assert.strictEqual($internalTable.length, 1, "table inside the second cell");
+
+    //act
+    $internalTable.find("td").first().trigger("dxclick");
+
+    //assert
+    $mainTable = rowsView.element().children(".dx-datagrid-content").children("table");
+    assert.strictEqual($mainTable.find("input").length, 0, "hasn't input");
+    assert.notOk($mainTable.find("tbody > tr").first().children().first().hasClass("dx-editor-cell"), 0, "first cell isn't editable");
+});
+
 if(browser.msie && parseInt(browser.version) <= 11) {
     QUnit.test("Update value immediately on the keyup event for row edit mode", function(assert) {
         //arrange
@@ -6788,6 +6827,8 @@ QUnit.test("Show tooltip on focus with set validate in column and edit mode batc
 QUnit.test("Show tooltip on focus for last row with set validate in column and edit mode batch", function(assert) {
     //arrange
     var that = this,
+        $overlayContent,
+        $highlightContainer,
         rowsView = that.rowsView,
         testElement = $('#container'),
         cells,
@@ -6847,10 +6888,15 @@ QUnit.test("Show tooltip on focus for last row with set validate in column and e
     cells = rowsView.element().find(".dx-data-row").last().find("td");
 
     //assert
+    $overlayContent = cells.eq(1).find(".dx-overlay-content");
     assert.equal(getInputElements(testElement).length, 1, "has input");
-    assert.equal(cells.eq(1).find(".dx-overlay").length, 1, "has tooltip");
+    assert.equal($overlayContent.length, 1, "has tooltip");
     assert.ok(rowsView.element().find(".dx-freespace-row").is(":visible"), "visible freespace row");
     assert.ok(rowsView.element().find(".dx-freespace-row").height() > 0, "freespace row has height ");
+
+    //T526383
+    $highlightContainer = cells.eq(1).find(".dx-highlight-outline").first();
+    assert.ok($overlayContent.offset().top >= ($highlightContainer.offset().top + $highlightContainer.height()), "tooltip is under the cell");
 });
 
 //T200857

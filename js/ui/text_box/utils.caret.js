@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     browser = require("../../core/utils/browser");
 
 var isFocusingOnCaretChange = browser.msie || browser.safari;
@@ -62,7 +62,7 @@ var setCaretForObsoleteBrowser = function(input, position) {
 var caret = function(input, position) {
     input = $(input).get(0);
 
-    if(!commonUtils.isDefined(position)) {
+    if(!isDefined(position)) {
         return getCaret(input);
     }
 
