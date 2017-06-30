@@ -3,96 +3,106 @@
 var isFunction = require("../../core/utils/type").isFunction,
     inArray = require("./array").inArray;
 
-var Callbacks = function(options) {
-    options = options || {};
+var Callback = function(options) {
+    this._options = options || {};
+    this._list = [];
+    this._queue = [];
+    this._firing = false;
+    this._firingIndexes = [];
+};
 
-    var list = [],
-        queue = [],
-        firing,
-        firingIndexes = [];
+Callback.prototype._fireCore = function(context, args) {
+    var firingIndexes = this._firingIndexes,
+        list = this._list,
+        stopOnFalse = this._options.stopOnFalse,
+        step = firingIndexes.length;
 
-    var fireCore = function(context, args) {
-        var step = firingIndexes.length;
+    for(firingIndexes[step] = 0; firingIndexes[step] < list.length; firingIndexes[step]++) {
+        var result = list[firingIndexes[step]].apply(context, args);
 
-        for(firingIndexes[step] = 0; firingIndexes[step] < list.length; firingIndexes[step]++) {
-            var result = list[firingIndexes[step]].apply(context, args);
+        if(result === false && stopOnFalse) {
+            break;
+        }
+    }
 
-            if(result === false && options.stopOnFalse) {
-                break;
+    firingIndexes.unshift(step);
+};
+
+
+Callback.prototype.add = function(fn) {
+    if(isFunction(fn) && (!this._options.unique || !this.has(fn))) {
+        this._list.push(fn);
+    }
+    return this;
+};
+
+Callback.prototype.remove = function(fn) {
+    var list = this._list,
+        firingIndexes = this._firingIndexes,
+        index = inArray(fn, list);
+
+    if(index > -1) {
+        list.splice(index, 1);
+
+        if(this._firing && firingIndexes.length) {
+            for(var step = 0; step < firingIndexes.length; step++) {
+                if(index <= firingIndexes[step]) {
+                    firingIndexes[step]--;
+                }
             }
         }
+    }
 
-        firingIndexes.unshift(step);
-    };
+    return this;
+};
 
-    var that = {
-        add: function(fn) {
-            if(isFunction(fn) && (!options.unique || !that.has(fn))) {
-                list.push(fn);
-            }
-            return this;
-        },
+Callback.prototype.has = function(fn) {
+    var list = this._list;
 
-        remove: function(fn) {
-            var index = inArray(fn, list);
+    return fn ? inArray(fn, list) > -1 : !!list.length;
+};
 
-            if(index > -1) {
-                list.splice(index, 1);
+Callback.prototype.empty = function(fn) {
+    this._list = [];
 
-                if(firing && firingIndexes.length) {
-                    for(var step = 0; step < firingIndexes.length; step++) {
-                        if(index <= firingIndexes[step]) {
-                            firingIndexes[step]--;
-                        }
-                    }
-                }
-            }
+    return this;
+};
 
-            return this;
-        },
+Callback.prototype.fireWith = function(context, args) {
+    var queue = this._queue;
 
-        has: function(fn) {
-            return fn ? inArray(fn, list) > -1 : !!list.length;
-        },
+    args = args || [];
+    args = args.slice ? args.slice() : args;
 
-        empty: function() {
-            list = [];
-            return this;
-        },
+    if(this._options.syncStrategy) {
+        this._firing = true;
+        this._fireCore(context, args);
+    } else {
+        queue.push([context, args]);
+        if(this._firing) {
+            return;
+        }
 
-        fireWith: function(context, args) {
-            args = args || [];
-            args = args.slice ? args.slice() : args;
+        this._firing = true;
 
-            if(options.syncStrategy) {
-                firing = true;
-                fireCore(context, args);
-            } else {
-                queue.push([context, args]);
-                if(firing) {
-                    return;
-                }
+        while(queue.length) {
+            var memory = queue.shift();
 
-                firing = true;
+            this._fireCore(memory[0], memory[1]);
+        }
+    }
 
-                while(queue.length) {
-                    var memory = queue.shift();
+    this._firing = false;
 
-                    fireCore(memory[0], memory[1]);
-                }
-            }
-            firing = false;
+    return this;
+};
 
-            return this;
-        },
+Callback.prototype.fire = function() {
+    this.fireWith(this, arguments);
+};
 
-        fire: function() {
-            that.fireWith(this, arguments);
-            return this;
-        },
-    };
-
-    return that;
+var Callbacks = function(options) {
+    return new Callback(options);
 };
 
 module.exports = Callbacks;
