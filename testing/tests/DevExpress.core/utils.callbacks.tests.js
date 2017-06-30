@@ -261,3 +261,46 @@ QUnit.test("Sync strategy with two inner fires", function(assert) {
         { callback: 3, params: 1 }
     ]);
 });
+
+QUnit.test("StopOnFalse", function(assert) {
+    //arrange
+    var fireCount = 0;
+
+    this.Callbacks = Callbacks({ stopOnFalse: true });
+
+    this.Callbacks.add(function() {
+        fireCount++;
+
+        return false;
+    });
+
+    this.Callbacks.add(function() {
+        fireCount++;
+    });
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.equal(fireCount, 1);
+});
+
+QUnit.test("Unique", function(assert) {
+    //arrange
+    var fireCount = 0;
+
+    this.Callbacks = Callbacks({ unique: true });
+
+    var func = function() {
+        fireCount++;
+    };
+
+    this.Callbacks.add(func);
+    this.Callbacks.add(func);
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.equal(fireCount, 1);
+});
