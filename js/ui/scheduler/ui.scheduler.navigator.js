@@ -35,9 +35,21 @@ var getDateMonthFormat = function(short) {
     };
 };
 
-var getCaptionFormat = function(short) {
+var getCaptionFormat = function(short, skipCount) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
+        if(this && this.option("count") > 1) {
+            var lastIntervalDate = new Date(date);
+            lastIntervalDate.setDate(date.getDate() + this.option("count") - 1);
+
+            var isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth(),
+                useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),
+                firstWeekDateText = dateLocalization.format(date, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : "d"),
+                lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat, true));
+
+            return firstWeekDateText + "-" + lastWeekDateText;
+        }
+
         return [dateMonthFormat(date), dateLocalization.format(date, "year")].join(" ");
     };
 };
@@ -156,6 +168,7 @@ var SchedulerNavigator = Widget.inherit({
         return extend(this.callBase(), {
             date: new Date(),
             step: "day",
+            count: 1,
             min: undefined,
             max: undefined,
             firstDayOfWeek: undefined,
@@ -180,6 +193,7 @@ var SchedulerNavigator = Widget.inherit({
         switch(args.name) {
             case "step":
             case "date":
+            case "count":
                 this._updateButtonsState();
                 this._renderCaption();
                 this._setCalendarOption("value", this.option("date"));

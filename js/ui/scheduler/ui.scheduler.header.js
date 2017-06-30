@@ -103,6 +103,7 @@ var SchedulerHeader = Widget.inherit({
         this._navigator = this._createComponent("<div>", SchedulerNavigator, {
             min: this.option("min"),
             max: this.option("max"),
+            count: this.option("count"),
             date: this.option("currentDate"),
             step: STEP_MAP[this.option("currentView")],
             firstDayOfWeek: this.option("firstDayOfWeek"),

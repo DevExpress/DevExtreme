@@ -200,6 +200,18 @@ QUnit.test("Caption should be OK with default options", function(assert) {
     assert.equal(button.option("text"), caption, "Caption is OK");
 });
 
+QUnit.test("Caption should be OK for Day with count", function(assert) {
+    var $element = this.instance.element(),
+        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
+        date = new Date(2015, 4, 25),
+        caption = "25-27 May 2015";
+
+    this.instance.option("date", date);
+    this.instance.option("count", 3);
+
+    assert.equal(button.option("text"), caption, "Caption is OK");
+});
+
 QUnit.test("Caption should be OK when step and date are changed", function(assert) {
     var $element = this.instance.element(),
         button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),

@@ -1293,7 +1293,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getDateByCellIndexes: function(rowIndex, cellIndex) {
         var firstViewDate = this.getStartViewDate(),
-            currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex));
+            currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex) + this._getOffsetByCount(cellIndex));
 
         currentDate.setTime(currentDate.getTime() + dateUtils.getTimezonesDifference(firstViewDate, currentDate));
         return currentDate;

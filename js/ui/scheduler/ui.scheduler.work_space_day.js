@@ -1,8 +1,6 @@
 "use strict";
 
 var noop = require("../../core/utils/common").noop,
-    dateUtils = require("../../core/utils/date"),
-    toMs = dateUtils.dateToMilliseconds,
     registerComponent = require("../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space");
 
@@ -50,10 +48,6 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
         }
 
         return this._$focusedCell;
-    },
-
-    _getOffsetByCount: function() {
-        return this.option("count") > 1 ? toMs("day") : 0;
     }
 
 });

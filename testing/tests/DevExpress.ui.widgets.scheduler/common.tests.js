@@ -1073,6 +1073,25 @@ QUnit.testStart(function() {
         assert.notEqual(this.instance.element().find(".dx-scheduler-appointment").eq(0).outerHeight(), initialAppointmentHeight, "Appointment was repainted");
     });
 
+    QUnit.test("view.count is passed to workspace & header & navigator", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            views: [{
+                type: "week",
+                name: "Week",
+                count: 3
+            }]
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("count"), 3, "workspace has correct count");
+        assert.equal(header.option("count"), 3, "header has correct count");
+        assert.equal(navigator.option("count"), 3, "navigator has correct count");
+    });
+
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
         this.createInstance({
             currentView: "week",

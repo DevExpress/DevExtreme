@@ -1,6 +1,8 @@
 "use strict";
 
 var registerComponent = require("../../core/component_registrator"),
+    dateUtils = require("../../core/utils/date"),
+    toMs = dateUtils.dateToMilliseconds,
     SchedulerWorkSpaceWeek = require("./ui.scheduler.work_space_week"),
     dateUtils = require("../../core/utils/date"),
     dateLocalization = require("../../localization/date");
@@ -16,7 +18,7 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
     },
 
     _getCellCount: function() {
-        return 5;
+        return 5 * this.option("count");
     },
 
     _firstDayOfWeek: function() {
@@ -48,7 +50,16 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
         this._firstViewDate = dateUtils.normalizeDateByWeek(this._firstViewDate, this.option("currentDate"));
 
         this._setStartDayHour(this._firstViewDate);
-    }
+    },
+
+    _getOffsetByCount: function(cellIndex) {
+        var weekendCount = Math.floor((cellIndex) / 5);
+        if(weekendCount > 0) {
+            return toMs("day") * weekendCount * 2;
+        } else {
+            return 0;
+        }
+    },
 });
 
 registerComponent("dxSchedulerWorkSpaceWorkWeek", SchedulerWorkSpaceWorkWeek);
