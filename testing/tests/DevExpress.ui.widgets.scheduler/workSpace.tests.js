@@ -2893,8 +2893,12 @@ QUnit.testStart(function() {
         this.instance.option("count", 2);
 
         var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
-
         assert.equal(cells.length, this.instance._getCellCountInDay() * 2, "view has right cell count");
+
+        this.instance.option("count", 4);
+
+        cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 4, "view has right cell count");
     });
 
     QUnit.test("WorkSpace Day view cells have right cellData with view option count=2", function(assert) {
@@ -2916,6 +2920,9 @@ QUnit.testStart(function() {
         this.instance.option("count", 2);
 
         assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 17, 23, 59)], "Range is OK");
+
+        this.instance.option("count", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 19, 23, 59)], "Range is OK");
     });
 
-})("Work Space with count");
+})("Work Space Day with count");
