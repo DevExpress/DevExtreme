@@ -244,10 +244,7 @@
         SystemJS.import("@Url.Content(Model.ScriptVirtualPath)")
             .then(function() {
                 return new Promise(function(resolve) {
-                    if (document.readyState !== 'complete')
-                        jQuery(resolve);
-                    else
-                        resolve();
+                    jQuery.isReady ? resolve() : jQuery(resolve);
                 })
             }).then(function() {
                 QUnit.start();
