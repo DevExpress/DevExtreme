@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     equalByValue = commonUtils.equalByValue,
@@ -143,7 +144,7 @@ var ValidatingController = modules.Controller.inherit((function() {
             $.each(editingController._editData, function(index, editData) {
                 var validateGroup = ValidationEngine.getGroupConfig(editData);
 
-                if(!commonUtils.isDefined(editIndex) || editIndex === index) {
+                if(!typeUtils.isDefined(editIndex) || editIndex === index) {
                     if(validateGroup) {
                         for(var i = 0; i < validateGroup.validators.length; i++) {
                             validateGroup.validators[i]._dispose();
@@ -180,7 +181,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                     return value !== undefined ? value : parameters.value;
                 };
 
-            if(!column.validationRules || !Array.isArray(column.validationRules) || commonUtils.isDefined(column.command)) return;
+            if(!column.validationRules || !Array.isArray(column.validationRules) || typeUtils.isDefined(column.command)) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
@@ -548,6 +549,7 @@ module.exports = {
 
                 _showValidationMessage: function($cell, message, alignment) {
                     var that = this,
+                        needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
                         isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay:visible").length,
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
@@ -575,8 +577,14 @@ module.exports = {
                                 my: myPosition,
                                 at: atPosition
                             },
-                            onPositioned: function() {
-                                that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();
+                            onPositioned: function(e) {
+                                if(!needRepaint) {
+                                    needRepaint = that._rowsView.updateFreeSpaceRowHeight();
+
+                                    if(needRepaint) {
+                                        e.component.repaint();
+                                    }
+                                }
                             }
                         });
                 },
@@ -644,17 +652,24 @@ module.exports = {
             rowsView: {
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
-                        $rowElements = that._getRowElements(),
-                        $freeSpaceRowElements = that._getFreeSpaceRowElements($table),
-                        $freeSpaceRowElement = $freeSpaceRowElements.first(),
-                        $tooltipContent = that.element().find(".dx-invalid-message .dx-overlay-content");
+                        $rowElements,
+                        $freeSpaceRowElement,
+                        $freeSpaceRowElements,
+                        $element = that.element(),
+                        $tooltipContent = $element && $element.find(".dx-invalid-message .dx-overlay-content");
 
                     that.callBase($table);
 
+                    if($tooltipContent && $tooltipContent.length) {
+                        $rowElements = that._getRowElements();
+                        $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
+                        $freeSpaceRowElement = $freeSpaceRowElements.first();
 
-                    if($tooltipContent.length && $freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(":visible") || $tooltipContent.outerHeight() > $freeSpaceRowElement.outerHeight())) {
-                        $freeSpaceRowElements.show();
-                        $freeSpaceRowElements.height($tooltipContent.outerHeight());
+                        if($freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(":visible") || $tooltipContent.outerHeight() > $freeSpaceRowElement.outerHeight())) {
+                            $freeSpaceRowElements.show();
+                            $freeSpaceRowElements.height($tooltipContent.outerHeight());
+                            return true;
+                        }
                     }
                 },
                 _formItemPrepared: function(cellOptions, $container) {

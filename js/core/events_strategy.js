@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    isFunction = require("./utils/common").isFunction,
+    isFunction = require("./utils/type").isFunction,
     Class = require("./class");
 
 module.exports = Class.inherit({

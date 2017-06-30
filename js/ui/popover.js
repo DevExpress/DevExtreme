@@ -6,7 +6,7 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     translator = require("../animation/translator"),
     positionUtils = require("../animation/position"),
-    commonUtils = require("../core/utils/common"),
+    noop = require("../core/utils/common").noop,
     typeUtils = require("../core/utils/type"),
     mathUtils = require("../core/utils/math"),
     eventUtils = require("../events/utils"),
@@ -66,7 +66,7 @@ var POPOVER_CLASS = "dx-popover",
         eventName = eventUtils.addNamespace(event, that.NAME);
         action = that._createAction((function() {
             delay = getEventDelay(that, name + "Event");
-            clearTimeout(this._timeouts[name === "show" ? "hide" : "show"]);
+            this._clearEventTimeout(name === "hide");
             if(delay) {
                 this._timeouts[name] = setTimeout(function() {
                     that[name]();
@@ -80,7 +80,7 @@ var POPOVER_CLASS = "dx-popover",
             action({ jQueryEvent: e, target: $(e.currentTarget) });
         };
 
-        if(target.jquery || target.nodeType || commonUtils.isWindow(target)) {
+        if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
             that["_" + name + "EventHandler"] = undefined;
             $(target).on(eventName, handler);
         } else {
@@ -404,7 +404,7 @@ var Popover = Popup.inherit({
         this._renderOverlayPosition();
     },
 
-    _renderOverlayBoundaryOffset: commonUtils.noop,
+    _renderOverlayBoundaryOffset: noop,
 
     _renderOverlayPosition: function() {
         this._resetOverlayPosition();
@@ -609,6 +609,10 @@ var Popover = Popup.inherit({
         return side === "left" || side === "right";
     },
 
+    _clearEventTimeout: function(visibility) {
+        clearTimeout(this._timeouts[visibility ? "show" : "hide"]);
+    },
+
     _clean: function() {
         this._detachEvents(this.option("target"));
         this.callBase.apply(this, arguments);
@@ -639,6 +643,10 @@ var Popover = Popup.inherit({
             case "showEvent":
             case "hideEvent":
                 this._invalidate();
+                break;
+            case "visible":
+                this._clearEventTimeout(args.value);
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);

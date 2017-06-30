@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../../ui/widget/ui.errors"),
     inArray = require("../../core/utils/array").inArray,
@@ -162,7 +163,7 @@ var DataAdapter = Class.inherit({
 
         $.each(node.internalFields.childrenKeys, function(_, key) {
             var child = that.getNodeByKey(key);
-            commonUtils.isFunction(callback) && callback(child);
+            typeUtils.isFunction(callback) && callback(child);
             if(child.internalFields.childrenKeys.length && recursive) {
                 that._iterateChildren(child, recursive, callback);
             }
@@ -176,7 +177,7 @@ var DataAdapter = Class.inherit({
 
         var parent = this.options.dataConverter.getParentNode(node);
         if(parent) {
-            commonUtils.isFunction(callback) && callback(parent);
+            typeUtils.isFunction(callback) && callback(parent);
             if(parent.internalFields.parentKey !== this.options.rootValue) {
                 this._iterateParents(parent, callback);
             }
@@ -381,7 +382,7 @@ var DataAdapter = Class.inherit({
     },
 
     toggleSelectAll: function(state) {
-        if(!commonUtils.isDefined(state)) {
+        if(!typeUtils.isDefined(state)) {
             return;
         }
 

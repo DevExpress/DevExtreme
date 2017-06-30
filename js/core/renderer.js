@@ -146,13 +146,22 @@ if(!useJQueryRenderer) {
         }
         return this;
     };
+
     initRender.prototype.prependTo = function(element) {
-        this.$element.prependTo(element.$element || element);
+        element = renderer(element);
+        if(element[0]) {
+            rendererStrategy.insertElement(element[0], this[0], element[0].firstChild);
+        }
+
         return this;
     };
+
     initRender.prototype.appendTo = function(element) {
-        if(!element) return this;
-        this.$element.appendTo(element.$element || element);
+        if(this.length > 1) {
+            return repeatMethod.call(this, "appendTo", arguments);
+        }
+
+        rendererStrategy.insertElement(renderer(element)[0], this[0]);
         return this;
     };
 
@@ -385,7 +394,6 @@ renderer.ajax = function() {
 };
 renderer.getJSON = $.getJSON;
 renderer.getScript = $.getScript;
-renderer.parseXML = $.parseXML;
 renderer.tmpl = function() {
     return $.tmpl.apply(this, arguments);
 };

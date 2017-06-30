@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
-    commonUtils = require("../../core/utils/common");
+    isDefined = require("../../core/utils/type").isDefined;
 
 var PIVOTGRID_EXPAND_CLASS = "dx-expand";
 
@@ -178,7 +178,7 @@ exports.AreaItem = Class.inherit({
 
                     columnMarkupArray.push(">");
 
-                    if(commonUtils.isDefined(cell.expanded)) {
+                    if(isDefined(cell.expanded)) {
                         columnMarkupArray.push("<div class='dx-expand-icon-container'><span class='" + PIVOTGRID_EXPAND_CLASS + "'></span></div>");
                     }
 
@@ -190,7 +190,7 @@ exports.AreaItem = Class.inherit({
 
                 columnMarkupArray.push("<span ");
 
-                if(commonUtils.isDefined(cell.wordWrapEnabled)) {
+                if(isDefined(cell.wordWrapEnabled)) {
                     columnMarkupArray.push("style='white-space:", cell.wordWrapEnabled ? "normal" : "nowrap", ";'");
                 }
 

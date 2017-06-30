@@ -4,7 +4,6 @@ var $ = require("../../core/renderer"),
     errors = require("../errors"),
     Class = require("../class"),
     objectUtils = require("./object"),
-    commonUtils = require("./common"),
     typeUtils = require("./type"),
     variableWrapper = require("./variable_wrapper"),
     unwrapVariable = variableWrapper.unwrap,
@@ -72,7 +71,7 @@ var compileGetter = function(expr) {
 
                 var next = unwrap(current[path[i]], options);
 
-                if(!functionAsIs && commonUtils.isFunction(next)) {
+                if(!functionAsIs && typeUtils.isFunction(next)) {
                     next = next.call(current);
                 }
 
@@ -87,7 +86,7 @@ var compileGetter = function(expr) {
         return combineGetters(expr);
     }
 
-    if(commonUtils.isFunction(expr)) {
+    if(typeUtils.isFunction(expr)) {
         return expr;
     }
 };
@@ -141,7 +140,7 @@ var compileSetter = function(expr) {
         var target = targetGetter(obj, { functionsAsIs: options.functionsAsIs, unwrapObservables: options.unwrapObservables }),
             prevTargetValue = readPropValue(target, targetPropName);
 
-        if(!options.functionsAsIs && commonUtils.isFunction(prevTargetValue) && !isWrapped(prevTargetValue)) {
+        if(!options.functionsAsIs && typeUtils.isFunction(prevTargetValue) && !isWrapped(prevTargetValue)) {
             target[targetPropName](value);
         } else {
             prevTargetValue = unwrap(prevTargetValue, options);
@@ -149,7 +148,7 @@ var compileSetter = function(expr) {
             if(
                 options.merge &&
                 typeUtils.isPlainObject(value) &&
-                (!commonUtils.isDefined(prevTargetValue) || typeUtils.isPlainObject(prevTargetValue)) &&
+                (!typeUtils.isDefined(prevTargetValue) || typeUtils.isPlainObject(prevTargetValue)) &&
                 !(value instanceof $.Event) // NOTE: http://bugs.jquery.com/ticket/15090
             ) {
                 if(!prevTargetValue) {

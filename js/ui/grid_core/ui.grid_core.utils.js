@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     stringUtils = require("../../core/utils/string"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -44,7 +45,7 @@ module.exports = (function() {
             nameIntervalSelector,
             value = this.calculateCellValue(data);
 
-        if(!commonUtils.isDefined(value)) {
+        if(!typeUtils.isDefined(value)) {
             return null;
         } else if(isDateType(this.dataType)) {
             nameIntervalSelector = arguments[0];
@@ -56,7 +57,7 @@ module.exports = (function() {
     };
 
     var getDateValues = function(dateValue) {
-        if(commonUtils.isDate(dateValue)) {
+        if(typeUtils.isDate(dateValue)) {
             return [dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate(), dateValue.getHours(), dateValue.getMinutes(), dateValue.getSeconds()];
         }
         return $.map(("" + dateValue).split("/"), function(value, index) {
@@ -135,7 +136,7 @@ module.exports = (function() {
             isExclude = column.filterType === "exclude",
             groupInterval = module.exports.getGroupInterval(column);
 
-        if(target === "headerFilter" && groupInterval && commonUtils.isDefined(filterValue)) {
+        if(target === "headerFilter" && groupInterval && typeUtils.isDefined(filterValue)) {
             interval = groupInterval[values.length - 1];
             startFilterValue = [selector, isExclude ? "<" : ">=", value];
             endFilterValue = [selector, isExclude ? ">=" : "<", value + interval];
@@ -165,7 +166,7 @@ module.exports = (function() {
             endFilterExpression,
             dataField = column.dataField;
 
-        if(Array.isArray(filterValue) && commonUtils.isDefined(filterValue[0]) && commonUtils.isDefined(filterValue[1])) {
+        if(Array.isArray(filterValue) && typeUtils.isDefined(filterValue[0]) && typeUtils.isDefined(filterValue[1])) {
             startFilterExpression = [dataField, ">=", filterValue[0]];
             endFilterExpression = [dataField, "<=", filterValue[1]];
 
@@ -182,7 +183,7 @@ module.exports = (function() {
     };
 
     var equalSelectors = function(selector1, selector2) {
-        if(commonUtils.isFunction(selector1) && commonUtils.isFunction(selector2)) {
+        if(typeUtils.isFunction(selector1) && typeUtils.isFunction(selector2)) {
             if(selector1.originalCallback && selector2.originalCallback) {
                 return selector1.originalCallback === selector2.originalCallback;
             }
@@ -262,7 +263,7 @@ module.exports = (function() {
             if(Array.isArray(items)) {
                 keyName = arguments.length <= 2 ? "key" : keyName;
                 for(var i = 0; i < items.length; i++) {
-                    item = commonUtils.isDefined(keyName) ? items[i][keyName] : items[i];
+                    item = typeUtils.isDefined(keyName) ? items[i][keyName] : items[i];
 
                     if(commonUtils.equalByValue(key, item)) {
                         index = i;
@@ -322,7 +323,7 @@ module.exports = (function() {
                     }
                 }
                 return true;
-            } else if(commonUtils.isFunction(filter1) && filter1.columnIndex >= 0 && commonUtils.isFunction(filter2) && filter2.columnIndex >= 0) {
+            } else if(typeUtils.isFunction(filter1) && filter1.columnIndex >= 0 && typeUtils.isFunction(filter2) && filter2.columnIndex >= 0) {
                 return filter1.columnIndex === filter2.columnIndex;
             } else {
                 return toComparable(filter1) == toComparable(filter2); // jshint ignore:line
@@ -439,7 +440,7 @@ module.exports = (function() {
                 filter = [selector, selectedFilterOperation || "contains", filterValue];
             } else if(selectedFilterOperation === "between") {
                 return getFilterExpressionByRange.apply(column, arguments);
-            } else if(isDateType(dataType) && commonUtils.isDefined(filterValue)) {
+            } else if(isDateType(dataType) && typeUtils.isDefined(filterValue)) {
                 return getFilterExpressionForDate.apply(column, arguments);
             } else if(dataType === "number") {
                 return getFilterExpressionForNumber.apply(column, arguments);
@@ -490,7 +491,7 @@ module.exports = (function() {
                 }
 
                 return result;
-            } else if(commonUtils.isDefined(groupInterval)) {
+            } else if(typeUtils.isDefined(groupInterval)) {
                 return Array.isArray(groupInterval) ? groupInterval : [groupInterval];
             }
         },

@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     errors = require("../errors"),
     inArray = require("./array").inArray,
-    commonUtils = require("./common");
+    isDefined = require("./type").isDefined;
 
 var resetActiveElement = function() {
     var activeElement = document.activeElement;
@@ -127,7 +127,7 @@ var createMarkupFromString = function(str) {
 
 
 var normalizeTemplateElement = function(element) {
-    var $element = commonUtils.isDefined(element) && (element.nodeType || element.jquery)
+    var $element = isDefined(element) && (element.nodeType || element.jquery)
         ? $(element)
         : $("<div>").html(element).contents();
 
