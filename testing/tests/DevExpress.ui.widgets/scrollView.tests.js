@@ -686,7 +686,7 @@ QUnit.test("scrollview onReachBottom action fired when bottom position is reache
         inertiaEnabled: false,
         onReachBottom: function() {
             var location = getScrollOffset($scrollView);
-            assert.equal(Math.round(location.top), -Math.round($content.height() - $container.height()));
+            assert.roughEqual(location.top, $container.height() - $content.height(), 1);
         }
     });
 
@@ -775,7 +775,7 @@ QUnit.test("release after loading cause bounce to the bottom bound", function(as
         },
         onEnd: function() {
             var location = getScrollOffset($scrollView);
-            assert.equal(Math.round(location.top), -Math.round($content.height() - $container.height()), "scrollview bounced");
+            assert.roughEqual(location.top, $container.height() - $content.height(), 1, "scrollview bounced");
         }
     });
 
@@ -1098,7 +1098,7 @@ QUnit.test("release calls update", function(assert) {
         },
         onReachBottom: function() {
             var location = getScrollOffset($scrollView);
-            assert.equal(Math.round(location.top), -Math.round($content.height() - $container.height()));
+            assert.roughEqual(location.top, $container.height() - $content.height(), 1);
         }
     });
 
