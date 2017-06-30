@@ -3,13 +3,13 @@
 var $ = require("../../core/renderer"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     dataCoreUtils = require("../../core/utils/data"),
-    commonUtils = require("../../core/utils/common"),
+    grep = require("../../core/utils/common").grep,
     typeUtils = require("../../core/utils/type"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     config = require("../../core/config"),
-    isDefined = commonUtils.isDefined,
+    isDefined = typeUtils.isDefined,
     objectUtils = require("../../core/utils/object"),
     errors = require("../widget/ui.errors"),
     modules = require("./ui.grid_core.modules"),
@@ -805,7 +805,7 @@ module.exports = {
                 for(i = 0; i < firstItems.length; i++) {
                     if(firstItems[i]) {
                         for(fieldName in firstItems[i]) {
-                            if(!commonUtils.isFunction(firstItems[i][fieldName]) || isWrapped(firstItems[i][fieldName])) {
+                            if(!typeUtils.isFunction(firstItems[i][fieldName]) || isWrapped(firstItems[i][fieldName])) {
                                 processedFields[fieldName] = true;
                             }
                         }
@@ -1748,7 +1748,7 @@ module.exports = {
                 getChooserColumns: function(getAllColumns) {
                     var columns = getAllColumns ? this.getColumns() : this.getInvisibleColumns();
 
-                    return commonUtils.grep(columns, function(column) { return column.showInColumnChooser; });
+                    return grep(columns, function(column) { return column.showInColumnChooser; });
                 },
                 allowMoveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
                     var that = this,
@@ -1943,7 +1943,7 @@ module.exports = {
 
                     $.each(["calculateSortValue", "calculateGroupValue", "calculateDisplayValue"], function(_, calculateCallbackName) {
                         var calculateCallback = column[calculateCallbackName];
-                        if(commonUtils.isFunction(calculateCallback) && !calculateCallback.originalCallback) {
+                        if(typeUtils.isFunction(calculateCallback) && !calculateCallback.originalCallback) {
                             column[calculateCallbackName] = function(data) { return calculateCallback.call(column, data); };
                             column[calculateCallbackName].originalCallback = calculateCallback;
                         }
@@ -2067,7 +2067,10 @@ module.exports = {
                         that._customizeColumns(that._columns);
                         updateIndexes(that);
 
+                        var columns = that._columns;
                         return when(that.refresh(true)).always(function() {
+                            if(that._columns !== columns) return;
+
                             that._updateChanges(dataSource, { sorting: sortParameters, grouping: groupParameters });
 
                             fireColumnsChanged(that);
@@ -2189,7 +2192,7 @@ module.exports = {
                                 filter[0].columnIndex = column.index;
                             }
                         }
-                    } else if(commonUtils.isFunction(filter[0])) {
+                    } else if(typeUtils.isFunction(filter[0])) {
                         filter[0].columnIndex = columnIndex;
                     }
 
@@ -2483,7 +2486,7 @@ module.exports = {
                         if(this.calculateFilterExpression) {
                             result = this.calculateFilterExpression.apply(this, arguments);
                         }
-                        if(commonUtils.isFunction(result)) {
+                        if(typeUtils.isFunction(result)) {
                             result = [result, "=", true];
                         } else if(result) {
                             result.columnIndex = this.index;
@@ -2530,7 +2533,9 @@ module.exports = {
                                     calculateDisplayValue = dataCoreUtils.compileGetter(this.displayExpr);
                                     for(i = 0; i < this.items.length; i++) {
                                         item = this.items[i];
-                                        this.valueMap[calculateValue(item)] = calculateDisplayValue(item);
+                                        var displayValue = calculateDisplayValue(item);
+                                        this.valueMap[calculateValue(item)] = displayValue;
+                                        this.dataType = this.dataType || getValueDataType(displayValue);
                                     }
                                 }
                             },
@@ -2540,7 +2545,7 @@ module.exports = {
                                     dataSourceOptions;
 
                                 if(dataSource) {
-                                    if(commonUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
+                                    if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                                         dataSource = dataSource({});
                                     }
                                     if(typeUtils.isObject(dataSource) || Array.isArray(dataSource)) {
@@ -2570,7 +2575,7 @@ module.exports = {
 
                     $.each(calculatedColumnOptions, function(optionName) {
                         var defaultOptionName;
-                        if(commonUtils.isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf("default") !== 0) {
+                        if(typeUtils.isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf("default") !== 0) {
                             defaultOptionName = "default" + optionName.charAt(0).toUpperCase() + optionName.substr(1);
                             calculatedColumnOptions[defaultOptionName] = calculatedColumnOptions[optionName];
                         }

@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     queryAdapters = require("./query_adapters"),
     errorsModule = require("./errors"),
-    isFunction = require("../core/utils/common").isFunction,
+    isFunction = require("../core/utils/type").isFunction,
     arrayQueryImpl = require("./array_query");
 
 var remoteQueryImpl = function(url, queryOptions, tasks) {

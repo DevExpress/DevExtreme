@@ -4,7 +4,8 @@ var $ = require("../core/renderer"),
     Class = require("../core/class"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
-    commonUtils = require("../core/utils/common"),
+    noop = require("../core/utils/common").noop,
+    isDefined = require("../core/utils/type").isDefined,
     support = require("../core/utils/support"),
     browser = require("../core/utils/browser"),
     CollectionWidgetItem = require("./collection/item"),
@@ -58,7 +59,7 @@ var FLEX_DIRECTION_MAP = {
 var BoxItem = CollectionWidgetItem.inherit({
     _renderVisible: function(value, oldValue) {
         this.callBase(value);
-        if(commonUtils.isDefined(oldValue)) {
+        if(isDefined(oldValue)) {
             this._options.fireItemStateChangedAction({
                 name: "visible",
                 state: value,
@@ -117,7 +118,7 @@ var FlexLayoutStrategy = Class.inherit({
             // NOTE: workaround for jQuery version < 1.11.1 (T181692)
             var itemStyle = $item.get(0).style;
             itemStyle[flexGrowProp] = item.ratio;
-            itemStyle[flexShrinkProp] = commonUtils.isDefined(item.shrink) ? item.shrink : SHRINK;
+            itemStyle[flexShrinkProp] = isDefined(item.shrink) ? item.shrink : SHRINK;
 
             $item.children().each(function(_, itemContent) {
                 $(itemContent).css({
@@ -134,9 +135,9 @@ var FlexLayoutStrategy = Class.inherit({
         });
     },
 
-    initSize: commonUtils.noop,
+    initSize: noop,
 
-    update: commonUtils.noop
+    update: noop
 });
 
 
@@ -326,7 +327,7 @@ var FallbackLayoutStrategy = Class.inherit({
             var itemData = $item.data(BOX_ITEM_DATA_KEY),
                 ratio = itemData.ratio || 0,
                 size = this._baseSize($item),
-                shrink = commonUtils.isDefined(itemData.shrink) ? itemData.shrink : SHRINK;
+                shrink = isDefined(itemData.shrink) ? itemData.shrink : SHRINK;
 
             totalRatio += ratio;
             totalWeightedShrink += shrink * size;
@@ -339,7 +340,7 @@ var FallbackLayoutStrategy = Class.inherit({
         var itemSize = (function($item) {
             var itemData = $item.data(BOX_ITEM_DATA_KEY),
                 size = this._baseSize($item),
-                factor = (freeSpaceSize >= 0) ? itemData.ratio || 0 : (commonUtils.isDefined(itemData.shrink) ? itemData.shrink : SHRINK) * size,
+                factor = (freeSpaceSize >= 0) ? itemData.ratio || 0 : (isDefined(itemData.shrink) ? itemData.shrink : SHRINK) * size,
                 totalFactor = (freeSpaceSize >= 0) ? totalRatio : totalWeightedShrink,
                 shift = totalFactor ? Math.round(freeSpaceSize * factor / totalFactor) : 0;
 

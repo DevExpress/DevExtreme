@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     columnsView = require("./ui.grid_core.columns_view"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message");
 
@@ -138,7 +138,7 @@ module.exports = {
                     if(options.row.rowType === "header") {
                         $cell.addClass(CELL_FOCUS_DISABLED_CLASS);
 
-                        if(!commonUtils.isDefined(options.column.command)) {
+                        if(!isDefined(options.column.command)) {
                             this.setAria("role", "columnheader", $cell);
                             this.setAria("label", options.column.caption + " " + messageLocalization.format("dxDataGrid-ariaColumn"), $cell);
                         }
@@ -310,12 +310,12 @@ module.exports = {
                         rowCount = that.getRowCount();
 
                     if(that.option("showColumnHeaders")) {
-                        if(rowCount > 1 && (!commonUtils.isDefined(index) || commonUtils.isDefined(bandColumnIndex))) {
+                        if(rowCount > 1 && (!isDefined(index) || isDefined(bandColumnIndex))) {
                             result = [];
-                            visibleColumns = commonUtils.isDefined(bandColumnIndex) ? columnsController.getChildrenByBandColumn(bandColumnIndex, true) : columnsController.getVisibleColumns();
+                            visibleColumns = isDefined(bandColumnIndex) ? columnsController.getChildrenByBandColumn(bandColumnIndex, true) : columnsController.getVisibleColumns();
 
                             $.each(visibleColumns, function(_, column) {
-                                rowIndex = commonUtils.isDefined(index) ? index : columnsController.getRowIndex(column.index);
+                                rowIndex = isDefined(index) ? index : columnsController.getRowIndex(column.index);
                                 $cellElement = that.getCellElement(rowIndex, columnsController.getVisibleIndex(column.index, rowIndex));
                                 $cellElement && result.push($cellElement.get(0));
                             });
@@ -462,7 +462,7 @@ module.exports = {
                             }
                         };
 
-                    if(commonUtils.isDefined(columnID)) {
+                    if(isDefined(columnID)) {
                         rowIndex = rowIndex || 0;
                         for(i = rowIndex; i < rowCount; i++) {
                             columnElements = that.getCellElements(i);

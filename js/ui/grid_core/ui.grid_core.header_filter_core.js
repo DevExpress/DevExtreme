@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     Popup = require("../popup"),
     TreeView = require("../tree_view"),
@@ -176,7 +176,7 @@ exports.HeaderFilterView = modules.View.inherit({
                 }
             };
 
-        if(!commonUtils.isDefined(that._popupContainer)) {
+        if(!isDefined(that._popupContainer)) {
             that._popupContainer = that._createComponent($element, Popup, dxPopupOptions);
         } else {
             that._popupContainer.option(dxPopupOptions);
@@ -274,7 +274,7 @@ exports.HeaderFilterView = modules.View.inherit({
 });
 
 var allowHeaderFiltering = exports.allowHeaderFiltering = function(column) {
-    return commonUtils.isDefined(column.allowHeaderFiltering) ? column.allowHeaderFiltering : column.allowFiltering;
+    return isDefined(column.allowHeaderFiltering) ? column.allowHeaderFiltering : column.allowFiltering;
 };
 
 

@@ -815,6 +815,7 @@ var DropDownEditor = TextBox.inherit({
     */
     reset: function() {
         this.option("value", null);
+        this._input().val("");
     },
 
     /**

@@ -1,7 +1,6 @@
 "use strict";
 
-var commonUtils = require("./core/utils/common"),
-    typeUtils = require("./core/utils/type"),
+var typeUtils = require("./core/utils/type"),
     dateUtils = require("./core/utils/date"),
     numberLocalization = require("./localization/number"),
     dateLocalization = require("./localization/date"),
@@ -12,15 +11,15 @@ require("./localization/currency");
 
 module.exports = dependencyInjector({
     format: function(value, format, precision) {
-        var formatIsValid = typeUtils.isString(format) && format !== '' || typeUtils.isPlainObject(format) || commonUtils.isFunction(format),
-            valueIsValid = typeUtils.isNumeric(value) || commonUtils.isDate(value);
+        var formatIsValid = typeUtils.isString(format) && format !== '' || typeUtils.isPlainObject(format) || typeUtils.isFunction(format),
+            valueIsValid = typeUtils.isNumeric(value) || typeUtils.isDate(value);
 
 
         if(!formatIsValid || !valueIsValid) {
-            return commonUtils.isDefined(value) ? value.toString() : '';
+            return typeUtils.isDefined(value) ? value.toString() : '';
         }
 
-        if(commonUtils.isFunction(format)) {
+        if(typeUtils.isFunction(format)) {
             return format(value);
         }
 
@@ -39,7 +38,7 @@ module.exports = dependencyInjector({
             return numberLocalization.format(value, format);
         }
 
-        if(commonUtils.isDate(value)) {
+        if(typeUtils.isDate(value)) {
             return dateLocalization.format(value, format);
         }
     },
