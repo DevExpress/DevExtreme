@@ -280,7 +280,9 @@ QUnit.test("Loading DataSource", function(assert) {
 
 QUnit.test("Loading DataSource longer 1000 ms", function(assert) {
     var onContentReadyCallback = sinon.stub(),
-        pivotGrid;
+        pivotGrid,
+        progresses = [],
+        loadingChangedArgs = [];
 
     //act
 
@@ -289,6 +291,12 @@ QUnit.test("Loading DataSource longer 1000 ms", function(assert) {
     pivotGrid = createPivotGrid({
         height: 200,
         dataSource: {
+            onLoadingChanged: function(isLoading) {
+                loadingChangedArgs.push(isLoading);
+            },
+            onProgressChanged: function(progress) {
+                progresses.push(progress);
+            },
             load: function() {
                 return d;
             }
@@ -323,7 +331,9 @@ QUnit.test("Loading DataSource longer 1000 ms", function(assert) {
     //act
     this.clock.tick();
 
-    assert.deepEqual(loadMessages, ["80%", "85%", "87%", "90%", "95%", "97%", "100%"]);
+    assert.deepEqual(loadMessages, ["80%", "Loading...", "85%", "87%", "90%", "95%", "97%", "100%"]);
+    assert.deepEqual(progresses, [1]);
+    assert.deepEqual(loadingChangedArgs, [true, false, true, false]); //T514201
 
     assert.ok(onContentReadyCallback.calledOnce, "contentReady should be called once");
     assert.ok(!pivotGrid._loadPanel.option("visible"), 'loadPanel should not be visible');
@@ -3389,6 +3399,7 @@ QUnit.module("Tests with stubs", {
 
             dataController.changed = $.Callbacks();
             dataController.loadingChanged = $.Callbacks();
+            dataController.progressChanged = $.Callbacks();
             dataController.expandValueChanging = $.Callbacks();
             dataController.dataSourceChanged = $.Callbacks();
 
