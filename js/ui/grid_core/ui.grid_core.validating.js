@@ -25,6 +25,7 @@ var INVALIDATE_CLASS = "invalid",
     CELL_HIGHLIGHT_OUTLINE = "dx-highlight-outline",
 
     INSERT_INDEX = "__DX_INSERT_INDEX__",
+    PADDING_BETWEEN_TOOLTIPS = 2,
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
     EDIT_MODE_BATCH = "batch",
@@ -597,7 +598,7 @@ module.exports = {
                         revertContentOffset = $revertContent.offset();
 
                     if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
-                        var left = $revertContent.width() + 2;
+                        var left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
                         $content.css("left", revertContentOffset.left < $cell.offset().left ? -left : left);
                     }
                 },
