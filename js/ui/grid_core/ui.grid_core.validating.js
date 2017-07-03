@@ -585,19 +585,20 @@ module.exports = {
                                     }
                                 }
 
-                                that._shiftValidationMessageIfNeed(e.component.content(), revertTooltip && revertTooltip.content());
+                                that._shiftValidationMessageIfNeed(e.component.content(), revertTooltip && revertTooltip.content(), $cell);
                             }
                         });
                 },
 
-                _shiftValidationMessageIfNeed: function($content, $revertContent) {
+                _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
                     if(!$revertContent) return;
 
                     var contentOffset = $content.offset(),
                         revertContentOffset = $revertContent.offset();
 
-                    if(contentOffset.top === revertContentOffset.top && revertContentOffset.left + $content.width() > revertContentOffset.left) {
-                        $content.css("left", $revertContent.width() + 2);
+                    if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
+                        var left = $revertContent.width() + 2;
+                        $content.css("left", revertContentOffset.left < $cell.offset().left ? -left : left);
                     }
                 },
 
