@@ -6984,7 +6984,7 @@ QUnit.test("Tooltip should be positioned by left side when the drop-down editor 
 });
 
 //T523770
-QUnit.test("Invalid message and revert button should not be overlapped when the drop-down editor is shown", function(assert) {
+QUnit.test("Invalid message and revert button should not be overlapped when the drop-down editor is shown for first column", function(assert) {
     //arrange
     var that = this,
         invalidTooltipInstance,
@@ -7034,7 +7034,65 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
     assert.ok(selectBoxInstance.element().offset().left + selectBoxInstance.element().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after selectbox");
-    assert.ok(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width() < invalidTooltipInstance.content().offset().left, "invalid tooltip is shown after revert booltip");
+    assert.ok(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width() < invalidTooltipInstance.content().offset().left, "invalid tooltip is shown after revert tooltip");
+});
+
+//T523770
+QUnit.test("Invalid message and revert button should not be overlapped when the drop-down editor is shown for last column", function(assert) {
+    //arrange
+    var that = this,
+        invalidTooltipInstance,
+        revertTooltipInstance,
+        selectBoxInstance,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    $("#qunit-fixture").addClass("qunit-fixture-static").css("width", 2000);
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: [
+            "age",
+            "lastName",
+            {
+                dataField: "name",
+                validationRules: [{ type: "required" }],
+                lookup: {
+                    dataSource: that.array,
+                    displayExpr: "name",
+                    valueExpr: "name"
+                }
+            }
+        ]
+    });
+    that.editorFactoryController._getFocusedElement = function() {
+        return $testElement.find("input");
+    };
+
+    that.cellValue(0, 2, "");
+    that.editCell(0, 2);
+    that.clock.tick();
+
+    //act
+    getInputElements($testElement.find("tbody td").eq(2)).trigger("dxclick");
+    that.clock.tick();
+
+    //assert
+    selectBoxInstance = $testElement.find("tbody td").eq(2).find(".dx-selectbox").dxSelectBox("instance");
+    invalidTooltipInstance = $testElement.find("tbody td").eq(2).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    revertTooltipInstance = $testElement.find("tbody td").eq(2).find(".dx-overlay.dx-datagrid-revert-tooltip").dxTooltip("instance");
+
+    assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
+    assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
+    assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
+    assert.ok(invalidTooltipInstance.content().offset().left + invalidTooltipInstance.content().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after invalid tooltip");
+    assert.equal(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.element().offset().left, "selectbox is shown after revert tooltip");
+
+    $("#qunit-fixture").removeClass("qunit-fixture-static").css("width", "");
 });
 
 QUnit.test("Show error rows on save inserted rows when set validate in column and edit mode batch", function(assert) {
