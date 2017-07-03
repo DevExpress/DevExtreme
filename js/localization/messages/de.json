@@ -202,6 +202,8 @@
         "dxColorView-ariaBlue": "Blau",
         "dxColorView-ariaAlpha": "Transparenz",
         "dxColorView-ariaHex": "Farbwert",
+        "dxTagBox-selected": "ausgewählt",
+        "dxTagBox-all-selected": "Alle ausgewählt",
         "vizExport-printingButtonText": "Drucken",
         "vizExport-titleMenuText": "Export/Druck",
         "vizExport-exportButtonText": "{0}-Datei"

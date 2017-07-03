@@ -23,6 +23,7 @@ var TAGBOX_TAG_DATA_KEY = "dxTagData";
 var TAGBOX_CLASS = "dx-tagbox",
     TAGBOX_TAG_CONTAINER_CLASS = "dx-tag-container",
     TAGBOX_TAG_CLASS = "dx-tag",
+    TAGBOX_MULTI_TAG_CLASS = "dx-tagbox-multi-tag",
     TAGBOX_CUSTOM_TAG_CLASS = "dx-tag-custom",
     TAGBOX_TAG_REMOVE_BUTTON_CLASS = "dx-tag-remove-button",
     TAGBOX_ONLY_SELECT_CLASS = "dx-tagbox-only-select",
@@ -693,13 +694,35 @@ var TagBox = SelectBox.inherit({
         return this.option("value") || [];
     },
 
+    _multiTagRequired: function() {
+        var values = this._getValue(),
+            maxTagCount = this.option("maxTagCount");
+
+        return isDefined(maxTagCount) && values.length > maxTagCount;
+    },
+
     _renderTags: function() {
         this._cleanTags();
 
-        var $input = this._input();
-        var itemLoadDeferreds = $.map(this._getValue(), (function(value) {
-            return this._renderTag(value, $input);
-        }).bind(this));
+        var $input = this._input(),
+            value = this._getValue(),
+            itemLoadDeferreds;
+
+        if(this._multiTagRequired()) {
+            var text = value.length + " " + messageLocalization.format("dxTagBox-selected"),
+                $tag = this._createTag(text, $input).addClass(TAGBOX_MULTI_TAG_CLASS);
+
+            this._tagTemplate.render({
+                model: text,
+                container: $tag
+            });
+
+            itemLoadDeferreds = $.Deferred().resolve().promise();
+        } else {
+            itemLoadDeferreds = $.map(this._getValue(), (function(value) {
+                return this._renderTag(value, $input);
+            }).bind(this));
+        }
 
         when.apply($, itemLoadDeferreds).done((function() {
             this._renderInputAddons();
@@ -729,6 +752,11 @@ var TagBox = SelectBox.inherit({
     _cleanTags: function() {
         var $tags = this._tagElements(),
             values = this._getValue();
+
+        if(this._multiTagRequired()) {
+            $tags.remove();
+            return;
+        }
 
         $.each($tags, function(_, tag) {
             var $tag = $(tag),
@@ -844,6 +872,11 @@ var TagBox = SelectBox.inherit({
     },
 
     _removeTagElement: function($tag) {
+        if($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
+            this.reset();
+            return;
+        }
+
         var itemValue = $tag.data(TAGBOX_TAG_DATA_KEY);
         this._removeTagWithUpdate(itemValue);
         this._refreshTagElements();
@@ -1084,6 +1117,9 @@ var TagBox = SelectBox.inherit({
             case "value":
                 this.callBase(args);
                 this._setListDataSourceFilter();
+                break;
+            case "maxTagCount":
+                this._renderTags();
                 break;
             case "selectAllMode":
                 this._setListOption(args.name, args.value);
