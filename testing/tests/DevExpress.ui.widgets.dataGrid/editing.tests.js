@@ -7023,6 +7023,60 @@ QUnit.test("Tooltip should be positioned by left side when the drop-down editor 
     assert.strictEqual(tooltipInstance.option("position").at, "top left", "position.at of the tooltip");
 });
 
+//T523770
+QUnit.test("Invalid message and revert button should not be overlapped when the drop-down editor is shown", function(assert) {
+    //arrange
+    var that = this,
+        invalidTooltipInstance,
+        revertTooltipInstance,
+        selectBoxInstance,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: [
+            {
+                dataField: "name",
+                validationRules: [{ type: "required" }],
+                lookup: {
+                    dataSource: that.array,
+                    displayExpr: "name",
+                    valueExpr: "name"
+                }
+            },
+            "age",
+            "lastName",
+        ]
+    });
+    that.editorFactoryController._getFocusedElement = function() {
+        return $testElement.find("input");
+    };
+
+    that.cellValue(0, 0, "");
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    //act
+    getInputElements($testElement.find("tbody td").eq(0)).trigger("dxclick");
+    that.clock.tick();
+
+    //assert
+    selectBoxInstance = $testElement.find("tbody td").eq(0).find(".dx-selectbox").dxSelectBox("instance");
+    invalidTooltipInstance = $testElement.find("tbody td").eq(0).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    revertTooltipInstance = $testElement.find("tbody td").eq(0).find(".dx-overlay.dx-datagrid-revert-tooltip").dxTooltip("instance");
+
+    assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
+    assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
+    assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
+    assert.ok(selectBoxInstance.element().offset().left + selectBoxInstance.element().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after selectbox");
+    assert.ok(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width() < invalidTooltipInstance.content().offset().left, "invalid tooltip is shown after revert booltip");
+});
+
 QUnit.test("Show error rows on save inserted rows when set validate in column and edit mode batch", function(assert) {
     //arrange
     var that = this,
