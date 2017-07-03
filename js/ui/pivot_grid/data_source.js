@@ -606,13 +606,10 @@ module.exports = Class.inherit((function() {
         ctor: function(options) {
             options = options || {};
 
-            var that = this;
-
-            that._progressChanged = function(progress) {
-                that.fireEvent("progressChanged", [progress]);
-            };
-
-            var store = createStore(options, that._progressChanged);
+            var that = this,
+                store = createStore(options, function(progress) {
+                    that.fireEvent("progressChanged", [progress]);
+                });
 
             /**
             * @name PivotGridDataSourceOptions_store
