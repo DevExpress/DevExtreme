@@ -80,8 +80,6 @@ window.XMLHttpRequestMock = function() {
 
                 this.uploaded = true;
                 this.upload.onload(progressEvent);
-                this.readyState = 4;
-                this.status = STATUS;
                 this["onreadystatechange"](readyStateEvent);
             } else {
                 this._timeout = setTimeout($.proxy(this._progressHandler, this), PROGRESS_INTERVAL);
@@ -103,8 +101,6 @@ window.XMLHttpRequestMock = function() {
 
             this.uploadFailed = true;
             this.upload.onerror(errorEvent);
-            this.status = STATUS;
-            this.readyState = 4;
             this["onreadystatechange"](readyStateEvent);
         };
 

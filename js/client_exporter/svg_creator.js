@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    ajax = require("../core/utils/ajax"),
     isFunction = require("../core/utils/type").isFunction,
     getSvgMarkup = require("../core/utils/svg").getSvgMarkup,
     when = require("../integration/jquery/deferred").when;
@@ -13,13 +12,21 @@ exports.svgCreator = {
     _imageDeferreds: [],
 
     _getBinaryFile: function(src, callback) {
-        ajax.sendRequest({
-            url: src,
-            method: "GET",
-            responseType: "arraybuffer"
-        }).done(callback).fail(function() {
-            callback(false);
-        });
+        var xhr = new XMLHttpRequest();
+
+        xhr["onreadystatechange"] = function() {
+            if(xhr.readyState === xhr.DONE) {
+                if(xhr.status === 200 && xhr.response) {
+                    callback(xhr.response);
+                } else {
+                    callback(false);
+                }
+            }
+        };
+
+        xhr.open("GET", src, true);
+        xhr.responseType = "arraybuffer";
+        xhr.send();
     },
 
     _loadImages: function() {
