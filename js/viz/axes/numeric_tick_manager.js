@@ -1,16 +1,14 @@
 "use strict";
 
 var vizUtils = require("../core/utils"),
-    commonUtils = require("../../core/utils/common"),
-    _isDefined = commonUtils.isDefined,
+    _noop = require("../../core/utils/common").noop,
+    _isDefined = require("../../core/utils/type").isDefined,
     _adjustValue = vizUtils.adjustValue,
 
     _math = Math,
     _abs = _math.abs,
     _ceil = _math.ceil,
     _floor = _math.floor,
-
-    _noop = commonUtils.noop,
 
     MINOR_TICKS_COUNT_LIMIT = 200,
     DEFAULT_MINOR_NUMBER_MULTIPLIERS = [2, 4, 5, 8, 10];

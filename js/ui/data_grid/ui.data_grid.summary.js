@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     compileGetter = require("../../core/utils/data").compileGetter,
@@ -123,14 +123,14 @@ var SummaryDataSourceAdapterExtender = (function() {
         init: function() {
             this.callBase.apply(this, arguments);
             this._totalAggregates = [];
-            this._summaryGetter = commonUtils.noop;
+            this._summaryGetter = noop;
         },
         summaryGetter: function(summaryGetter) {
             if(!arguments.length) {
                 return this._summaryGetter;
             }
 
-            if(commonUtils.isFunction(summaryGetter)) {
+            if(typeUtils.isFunction(summaryGetter)) {
                 this._summaryGetter = summaryGetter;
             }
         },
@@ -553,7 +553,7 @@ gridCore.registerModule("summary", {
             data: (function() {
                 return {
                     _isDataColumn: function(column) {
-                        return column && (!commonUtils.isDefined(column.groupIndex) || column.showWhenGrouped);
+                        return column && (!typeUtils.isDefined(column.groupIndex) || column.showWhenGrouped);
                     },
 
                     _isGroupFooterVisible: function() {
@@ -620,7 +620,7 @@ gridCore.registerModule("summary", {
                                     return -1;
                                 }
 
-                                if(summaryItem.alignByColumn && column && !commonUtils.isDefined(column.groupIndex) && (column.index !== afterGroupColumnIndex)) {
+                                if(summaryItem.alignByColumn && column && !typeUtils.isDefined(column.groupIndex) && (column.index !== afterGroupColumnIndex)) {
                                     return column.index;
                                 } else {
                                     return groupColumnIndex;
@@ -656,7 +656,7 @@ gridCore.registerModule("summary", {
                                 if(aggregate === aggregate) {
                                     summaryCellsByColumns[columnIndex].push(extend({}, summaryItem, {
                                         value: typeUtils.isString(aggregate) && column && column.deserializeValue ? column.deserializeValue(aggregate) : aggregate,
-                                        valueFormat: !commonUtils.isDefined(summaryItem.valueFormat) ? gridCore.getFormatByDataType(column && column.dataType) : summaryItem.valueFormat,
+                                        valueFormat: !typeUtils.isDefined(summaryItem.valueFormat) ? gridCore.getFormatByDataType(column && column.dataType) : summaryItem.valueFormat,
                                         columnCaption: (column && column.index !== columnIndex) ? column.caption : undefined
                                     }));
                                 }
@@ -715,7 +715,7 @@ gridCore.registerModule("summary", {
                                 calculateCellValue = (column && column.calculateCellValue) ? column.calculateCellValue.bind(column) : compileGetter(column ? column.dataField : summaryItem.column),
                                 aggregator = summaryItem.summaryType || "count",
                                 selector = summaryItem.column,
-                                skipEmptyValues = commonUtils.isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues,
+                                skipEmptyValues = typeUtils.isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues,
                                 options;
 
                             if(remoteOperations) {
@@ -727,7 +727,7 @@ gridCore.registerModule("summary", {
                                 if(aggregator === "avg" || aggregator === "sum") {
                                     selector = function(data) {
                                         var value = calculateCellValue(data);
-                                        return commonUtils.isDefined(value) ? Number(value) : value;
+                                        return typeUtils.isDefined(value) ? Number(value) : value;
                                     };
                                 } else {
                                     selector = calculateCellValue;
@@ -782,7 +782,7 @@ gridCore.registerModule("summary", {
                         if(groupColumn) {
                             groupIndex = groupColumn.groupIndex;
                             sortOrder = sortOrder || groupColumn.sortOrder;
-                            if(commonUtils.isDefined(groupIndex)) {
+                            if(typeUtils.isDefined(groupIndex)) {
                                 sortByGroups[groupIndex] = sortByGroups[groupIndex] || [];
                                 sortByGroups[groupIndex].push({
                                     selector: selector,
@@ -802,7 +802,7 @@ gridCore.registerModule("summary", {
                             return summaryType && column && summaryType + "_" + column;
                         };
 
-                        if(commonUtils.isDefined(name)) {
+                        if(typeUtils.isDefined(name)) {
                             $.each(summaryItems || [], function(index) {
                                 if(this.name === name || index === name || this.summaryType === name || this.column === name || getFullName(this) === name) {
                                     summaryItemIndex = index;
@@ -832,7 +832,7 @@ gridCore.registerModule("summary", {
                                 return getGroupAggregates(data)[summaryItemIndex];
                             };
 
-                            if(commonUtils.isDefined(groupColumn)) {
+                            if(typeUtils.isDefined(groupColumn)) {
                                 groupColumn = columnsController.columnOption(groupColumn);
                                 that._addSortInfo(sortByGroups, groupColumn, selector, sortOrder);
                             } else {
@@ -933,7 +933,7 @@ gridCore.registerModule("summary", {
                     },
 
                     _hasAlignByColumnSummaryItems: function(columnIndex, options) {
-                        return !commonUtils.isDefined(options.columns[columnIndex].groupIndex) && options.row.summaryCells[columnIndex].length;
+                        return !typeUtils.isDefined(options.columns[columnIndex].groupIndex) && options.row.summaryCells[columnIndex].length;
                     },
 
                     _getAlignByColumnCellCount: function(groupCellColSpan, options) {
@@ -973,7 +973,7 @@ gridCore.registerModule("summary", {
                     },
 
                     _getCellTemplate: function(options) {
-                        if(!options.column.command && !commonUtils.isDefined(options.column.groupIndex) && options.summaryItems && options.summaryItems.length) {
+                        if(!options.column.command && !typeUtils.isDefined(options.column.groupIndex) && options.summaryItems && options.summaryItems.length) {
                             return renderSummaryCell;
                         } else {
                             return this.callBase(options);

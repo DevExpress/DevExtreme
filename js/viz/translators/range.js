@@ -1,9 +1,9 @@
 "use strict";
 
-var commonUtils = require("../../core/utils/common"),
+var typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
-    _isDefined = commonUtils.isDefined,
-    _isDate = commonUtils.isDate,
+    _isDefined = typeUtils.isDefined,
+    _isDate = typeUtils.isDate,
     unique = require("../core/utils").unique,
 
     minSelector = "min",
@@ -58,7 +58,7 @@ _Range.prototype = {
             that[field] = that[field] || otherRange[field];
         };
 
-        if(commonUtils.isDefined(otherRange.stick)) {
+        if(typeUtils.isDefined(otherRange.stick)) {
             that.stick = otherRange.stick;
         }
 

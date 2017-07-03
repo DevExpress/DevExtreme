@@ -3,7 +3,6 @@
 var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
-    utils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     isWritableWrapped = require("../../core/utils/variable_wrapper").isWritableWrapped,
@@ -110,7 +109,7 @@ var LayoutManager = Widget.inherit({
         var that = this,
             userItems = that.option("items");
 
-        if(utils.isDefined(userItems)) {
+        if(typeUtils.isDefined(userItems)) {
             $.each(userItems, function(index, item) {
                 var value;
                 if(item.dataField && that._getDataByField(item.dataField) === undefined) {
@@ -132,10 +131,10 @@ var LayoutManager = Widget.inherit({
         var layoutData = this.option("layoutData"),
             newValue = value;
 
-        if(!isWrapped(layoutData[dataField]) && utils.isDefined(dataField)) {
+        if(!isWrapped(layoutData[dataField]) && typeUtils.isDefined(dataField)) {
             this.option("layoutData." + dataField, newValue);
         } else if(isWritableWrapped(layoutData[dataField])) {
-            newValue = utils.isFunction(newValue) ? newValue() : newValue;
+            newValue = typeUtils.isFunction(newValue) ? newValue() : newValue;
 
             layoutData[dataField](newValue);
         }
@@ -150,13 +149,13 @@ var LayoutManager = Widget.inherit({
     _updateItems: function(layoutData) {
         var that = this,
             userItems = this.option("items"),
-            isUserItemsExist = utils.isDefined(userItems),
+            isUserItemsExist = typeUtils.isDefined(userItems),
             customizeItem = that.option("customizeItem"),
             items,
             processedItems;
 
         items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
-        if(utils.isDefined(items)) {
+        if(typeUtils.isDefined(items)) {
             processedItems = [];
 
             $.each(items, function(index, item) {
@@ -193,7 +192,8 @@ var LayoutManager = Widget.inherit({
             watch = that._getWatch();
 
         items.forEach(function(item) {
-            if(typeUtils.isObject(item) && utils.isDefined(item.visible) && utils.isFunction(watch)) {
+            if(typeUtils.isObject(item) && typeUtils.isDefined(item.visible) && typeUtils.isFunction(watch)) {
+
                 that._itemWatchers.push(
                     watch(
                         function() {
@@ -212,7 +212,7 @@ var LayoutManager = Widget.inherit({
     _generateItemsByData: function(layoutData) {
         var result = [];
 
-        if(utils.isDefined(layoutData)) {
+        if(typeUtils.isDefined(layoutData)) {
             $.each(layoutData, function(dataField) {
                 result.push({
                     dataField: dataField
@@ -227,7 +227,7 @@ var LayoutManager = Widget.inherit({
         var itemField = item.dataField || item,
             itemData = this._getDataByField(itemField);
 
-        return !(utils.isFunction(itemData) && !isWrapped(itemData));
+        return !(typeUtils.isFunction(itemData) && !isWrapped(itemData));
     },
 
     _processItem: function(item) {
@@ -239,10 +239,10 @@ var LayoutManager = Widget.inherit({
             item.itemType = SIMPLE_ITEM_TYPE;
         }
 
-        if(!utils.isDefined(item.editorType) && utils.isDefined(item.dataField)) {
+        if(!typeUtils.isDefined(item.editorType) && typeUtils.isDefined(item.dataField)) {
             var value = this._getDataByField(item.dataField);
 
-            item.editorType = utils.isDefined(value) ? this._getEditorTypeByDataType(typeUtils.type(value)) : FORM_EDITOR_BY_DEFAULT;
+            item.editorType = typeUtils.isDefined(value) ? this._getEditorTypeByDataType(typeUtils.type(value)) : FORM_EDITOR_BY_DEFAULT;
         }
 
         return item;
@@ -324,10 +324,10 @@ var LayoutManager = Widget.inherit({
     _extendItemsWithDefaultTemplateOptions: function(targetItems, sourceItems) {
         sourceItems.forEach(function(item) {
             if(!item.merged) {
-                if(utils.isDefined(item.disabled)) {
+                if(typeUtils.isDefined(item.disabled)) {
                     targetItems[item.visibleIndex].disabled = item.disabled;
                 }
-                if(utils.isDefined(item.visible)) {
+                if(typeUtils.isDefined(item.visible)) {
                     targetItems[item.visibleIndex].visible = item.visible;
                 }
             }
@@ -473,10 +473,10 @@ var LayoutManager = Widget.inherit({
                         col: this._getColByIndex(i, colCount)
                     }
                 };
-                if(utils.isDefined(item.colSpan)) {
+                if(typeUtils.isDefined(item.colSpan)) {
                     generatedItem.location.colspan = item.colSpan;
                 }
-                if(utils.isDefined(item.rowSpan)) {
+                if(typeUtils.isDefined(item.rowSpan)) {
                     generatedItem.location.rowspan = item.rowSpan;
                 }
                 result.push(generatedItem);
@@ -496,7 +496,7 @@ var LayoutManager = Widget.inherit({
         var that = this,
             name = that._getName(item),
             id = that.getItemID(name),
-            isRequired = utils.isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules),
+            isRequired = typeUtils.isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules),
             labelOptions = that._getLabelOptions(item, id, isRequired),
             $editor = $("<div/>"),
             helpID = item.helpText ? ("dx-" + new Guid()) : null,
@@ -506,7 +506,7 @@ var LayoutManager = Widget.inherit({
             .addClass(FIELD_ITEM_CLASS)
             .addClass(isRequired ? FIELD_ITEM_REQUIRED_CLASS : FIELD_ITEM_OPTIONAL_CLASS)
             .addClass(that.option("cssItemClass"))
-            .addClass(utils.isDefined(item.col) ? "dx-col-" + item.col : "");
+            .addClass(typeUtils.isDefined(item.col) ? "dx-col-" + item.col : "");
 
         if(labelOptions.visible && labelOptions.text) {
             $label = that._renderLabel(labelOptions).appendTo($container);
@@ -599,7 +599,7 @@ var LayoutManager = Widget.inherit({
     },
 
     _renderLabel: function(options) {
-        if(utils.isDefined(options.text) && options.text.length > 0) {
+        if(typeUtils.isDefined(options.text) && options.text.length > 0) {
             var labelClasses = FIELD_ITEM_LABEL_CLASS + " " + FIELD_ITEM_LABEL_LOCATION_CLASS + options.location,
                 $label = $("<label />")
                     .addClass(labelClasses)
@@ -781,7 +781,7 @@ var LayoutManager = Widget.inherit({
         var that = this,
             watch = that._getWatch();
 
-        if(!utils.isFunction(watch)) {
+        if(!typeUtils.isFunction(watch)) {
             return;
         }
 
@@ -802,7 +802,7 @@ var LayoutManager = Widget.inherit({
     },
 
     _getWatch: function() {
-        if(!utils.isDefined(this._watch)) {
+        if(!typeUtils.isDefined(this._watch)) {
             var formInstance = this.option("form");
 
             this._watch = formInstance && formInstance.option("integrationOptions.watchMethod");
@@ -946,7 +946,7 @@ var LayoutManager = Widget.inherit({
                             var valueGetter = dataUtils.compileGetter(name),
                                 dataValue = valueGetter(args.value);
 
-                            if(utils.isDefined(dataValue)) {
+                            if(typeUtils.isDefined(dataValue)) {
                                 editor.option("value", dataValue);
                             } else {
                                 editor.reset();

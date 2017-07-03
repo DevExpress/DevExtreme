@@ -6,7 +6,7 @@ var $ = require("../core/renderer"),
     translator = require("../animation/translator"),
     domUtils = require("../core/utils/dom"),
     extend = require("../core/utils/extend").extend,
-    commonUtils = require("../core/utils/common"),
+    isDefined = require("../core/utils/type").isDefined,
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
     config = require("../core/config"),
@@ -304,7 +304,7 @@ var Pivot = CollectionWidget.inherit({
     },
 
     _renderContentTemplate: function() {
-        if(commonUtils.isDefined(this._singleContent)) {
+        if(isDefined(this._singleContent)) {
             return;
         }
 

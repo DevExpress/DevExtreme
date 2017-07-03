@@ -5,7 +5,6 @@ var $ = require("../core/renderer"),
     stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
-    commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     translator = require("../animation/translator"),
     fitIntoRange = require("../core/utils/math").fitIntoRange,
@@ -13,7 +12,7 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     dragEvents = require("../events/drag"),
     isPlainObject = typeUtils.isPlainObject,
-    isFunction = commonUtils.isFunction;
+    isFunction = typeUtils.isFunction;
 
 var RESIZABLE = "dxResizable",
     RESIZABLE_CLASS = "dx-resizable",
@@ -250,7 +249,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _getBorderWidth: function($element, direction) {
-        if(commonUtils.isWindow($element.get(0))) return 0;
+        if(typeUtils.isWindow($element.get(0))) return 0;
         var borderWidth = $element.css("border-" + direction + "-width");
         return parseInt(borderWidth) || 0;
     },
@@ -399,7 +398,7 @@ var Resizable = DOMComponent.inherit({
                 offset: extend({
                     top: 0,
                     left: 0
-                }, commonUtils.isWindow($area[0]) ? {} : $area.offset())
+                }, typeUtils.isWindow($area[0]) ? {} : $area.offset())
             };
 
             this._correctAreaGeometry(result, $area);

@@ -2,7 +2,7 @@
 
 var $ = require("../core/renderer"),
     Class = require("../core/class"),
-    commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
     compileGetter = require("../core/utils/data").compileGetter,
     toComparable = require("../core/utils/data").toComparable,
     errorsModule = require("./errors"),
@@ -223,7 +223,7 @@ var compileCriteria = (function() {
             nextGroupOperator;
 
         $.each(crit, function() {
-            if(Array.isArray(this) || commonUtils.isFunction(this)) {
+            if(Array.isArray(this) || typeUtils.isFunction(this)) {
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
                     throw new errorsModule.errors.Error("E4019");
                 }
@@ -243,7 +243,7 @@ var compileCriteria = (function() {
     };
 
     var toString = function(value) {
-        return commonUtils.isDefined(value) ? value.toString() : '';
+        return typeUtils.isDefined(value) ? value.toString() : '';
     };
 
     var compileBinary = function(crit) {
@@ -317,7 +317,7 @@ var compileCriteria = (function() {
     }
 
     return function(crit) {
-        if(commonUtils.isFunction(crit)) {
+        if(typeUtils.isFunction(crit)) {
             return crit;
         }
         if(Array.isArray(crit[0])) {
@@ -526,7 +526,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
     };
 
     var select = function(getter) {
-        if(!commonUtils.isFunction(getter) && !Array.isArray(getter)) {
+        if(!typeUtils.isFunction(getter) && !Array.isArray(getter)) {
             getter = $.makeArray(arguments);
         }
 

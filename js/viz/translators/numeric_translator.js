@@ -1,7 +1,6 @@
 "use strict";
 
-var commonUtils = require("../../core/utils/common"),
-    isDefined = commonUtils.isDefined,
+var isDefined = require("../../core/utils/type").isDefined,
     round = Math.round;
 
 module.exports = {

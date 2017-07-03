@@ -4,7 +4,8 @@ var $ = require("../../core/renderer"),
     List = require("../list"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
     devices = require("../../core/devices"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDate = require("../../core/utils/type").isDate,
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("./ui.date_utils"),
     dateLocalization = require("../../localization/date");
@@ -25,9 +26,9 @@ var ListStrategy = DateBoxStrategy.inherit({
                     this.close();
                 }
             },
-            space: commonUtils.noop,
-            home: commonUtils.noop,
-            end: commonUtils.noop
+            space: noop,
+            home: noop,
+            end: noop
         };
     },
 
@@ -159,7 +160,7 @@ var ListStrategy = DateBoxStrategy.inherit({
     },
 
     _areDatesEqual: function(first, second) {
-        return commonUtils.isDate(first) && commonUtils.isDate(second)
+        return isDate(first) && isDate(second)
             && first.getHours() === second.getHours()
             && first.getMinutes() === second.getMinutes();
     },

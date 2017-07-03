@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     dateSerialization = require("../../core/utils/date_serialization"),
-    commonUtils = require("../../core/utils/common"),
+    isDate = require("../../core/utils/type").isDate,
     dateLocalization = require("../../localization/date");
 
 // TODO: move to dx.utils
@@ -124,7 +124,7 @@ var dateUtils = {
 
     fromStandardDateFormat: function(text) {
         var date = dateSerialization.dateParser(text);
-        return commonUtils.isDate(date) ? date : undefined;
+        return isDate(date) ? date : undefined;
     },
 
     getMaxMonthDay: function(year, month) {

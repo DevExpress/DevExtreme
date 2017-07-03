@@ -5,14 +5,13 @@ var $ = require("../../core/renderer"),
     scatterSeries = require("./scatter_series").chart,
     barSeries = require("./bar_series").chart.bar,
     rangeCalculator = require("./helpers/range_data_calculator"),
-    commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
 
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../core/utils/type").isDefined,
     _normalizeEnum = require("../core/utils").normalizeEnum,
     _extend = extend,
     _each = $.each,
-    _noop = commonUtils.noop,
+    _noop = require("../../core/utils/common").noop,
 
     DEFAULT_FINANCIAL_POINT_SIZE = 10;
 

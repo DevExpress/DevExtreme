@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     iconUtils = require("../../core/utils/icon"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     messageLocalization = require("../../localization/message"),
@@ -29,7 +29,7 @@ function getDimensionFields(item, fields) {
             result.push.apply(result, getDimensionFields(item.items[i], fields));
         }
     } else {
-        if(commonUtils.isDefined(item.index)) {
+        if(isDefined(item.index)) {
             result.push(fields[item.index]);
         }
     }
@@ -391,7 +391,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                     index: field.index,
                     field: field,
                     key: field.dataField,
-                    selected: commonUtils.isDefined(field.area),
+                    selected: isDefined(field.area),
                     text: field.caption || field.dataField,
                     icon: icon,
                     isMeasure: field.isMeasure,
@@ -439,7 +439,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             treeItems;
 
         fields = $.map(fields, function(field) {
-            return field.visible === false || commonUtils.isDefined(field.groupIndex) ? null : field;
+            return field.visible === false || isDefined(field.groupIndex) ? null : field;
         });
 
         treeItems = this._createTreeItems(fields, ["dimension", "displayFolder"]);
@@ -503,7 +503,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                         }
 
                         if(needSelectDefaultItem) {
-                            var item = getFirstItem(data, function(item) { return item.isDefault; }) || getFirstItem(data, function(item) { return commonUtils.isDefined(item.index); });
+                            var item = getFirstItem(data, function(item) { return item.isDefault; }) || getFirstItem(data, function(item) { return isDefined(item.index); });
                             item && treeView.selectItem(item);
                             return;
                         }

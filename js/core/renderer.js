@@ -348,7 +348,6 @@ if(!useJQueryRenderer) {
 
 renderer.getJSON = $.getJSON;
 renderer.getScript = $.getScript;
-renderer.parseXML = $.parseXML;
 renderer.tmpl = function() {
     return $.tmpl.apply(this, arguments);
 };
@@ -368,7 +367,6 @@ renderer.easing = $.easing;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.makeArray = $.makeArray;
 renderer.contains = $.contains;
-renderer.Callbacks = $.Callbacks;
 renderer.Deferred = $.Deferred;
 renderer.map = $.map;
 renderer.each = $.each;

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -41,7 +42,7 @@ module.exports = gridCore.Controller.inherit((function() {
     }
 
     function executeTask(action, timeout) {
-        if(commonUtils.isDefined(timeout)) {
+        if(typeUtils.isDefined(timeout)) {
             commonUtils.executeAsync(action, timeout);
         } else {
             action();
@@ -60,10 +61,10 @@ module.exports = gridCore.Controller.inherit((function() {
             that._currentTotalCount = 0;
 
 
-            that.changed = $.Callbacks();
-            that.loadingChanged = $.Callbacks();
-            that.loadError = $.Callbacks();
-            that.customizeStoreLoadOptions = $.Callbacks();
+            that.changed = Callbacks();
+            that.loadingChanged = Callbacks();
+            that.loadError = Callbacks();
+            that.customizeStoreLoadOptions = Callbacks();
 
             that._dataChangedHandler = that._handleDataChanged.bind(that);
             that._dataLoadingHandler = that._handleDataLoading.bind(that);
@@ -78,7 +79,7 @@ module.exports = gridCore.Controller.inherit((function() {
             dataSource.on("loadError", that._loadErrorHandler);
 
             $.each(dataSource, function(memberName, member) {
-                if(!that[memberName] && commonUtils.isFunction(member)) {
+                if(!that[memberName] && typeUtils.isFunction(member)) {
                     that[memberName] = function() {
                         return this._dataSource[memberName].apply(this._dataSource, arguments);
                     };

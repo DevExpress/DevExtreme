@@ -2,66 +2,15 @@
 
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
-    commonUtils = require("../../core/utils/common"),
+    Callbacks = require("../../core/utils/callbacks"),
+    grep = require("../../core/utils/common").grep,
+    isFunction = require("../../core/utils/type").isFunction,
     inArray = require("../../core/utils/array").inArray,
     errors = require("../widget/ui.errors"),
     messageLocalization = require("../../localization/message"),
 
     WIDGET_WITH_LEGACY_CONTAINER_NAME = "dxDataGrid";
 
-var CallBacks = function(options) {
-    options = options || {};
-
-    var list = [],
-        firing,
-        firingIndex,
-        fireCore = function(context, args) {
-            firing = true;
-            for(firingIndex = 0; firingIndex < list.length; firingIndex++) {
-                if(list[firingIndex] && list[firingIndex].apply(context, args) === false && options.stopOnFalse) {
-                    break;
-                }
-            }
-            firing = false;
-        },
-        that = {
-            add: function(fn) {
-                if(typeof fn === "function" && !that.has(fn)) {
-                    list.push(fn);
-                }
-                return this;
-            },
-            has: function(fn) {
-                return fn ? inArray(fn, list) > -1 : !!list.length;
-            },
-            remove: function(fn) {
-                var index = inArray(fn, list);
-
-                if(index > -1) {
-                    list.splice(index, 1);
-
-                    if(firing && index <= firingIndex) {
-                        firingIndex--;
-                    }
-                }
-                return this;
-            },
-            fireWith: function(context, args) {
-                args = args || [];
-                fireCore(context, args.slice ? args.slice() : args);
-            },
-            fire: function() {
-                that.fireWith(this, arguments);
-                return this;
-            },
-            empty: function() {
-                list = [];
-                return this;
-            }
-        };
-
-    return that;
-};
 
 var ModuleItem = Class.inherit({
     _endUpdateCore: function() { },
@@ -74,8 +23,12 @@ var ModuleItem = Class.inherit({
         that._actionConfigs = {};
 
         $.each(this.callbackNames() || [], function(index, name) {
-            var flags = that.callbackFlags(name);
-            that[this] = CallBacks(flags);
+            var flags = that.callbackFlags(name) || {};
+
+            flags.unique = true,
+            flags.syncStrategy = true;
+
+            that[this] = Callbacks(flags);
         });
     },
 
@@ -170,7 +123,7 @@ var ModuleItem = Class.inherit({
     createAction: function(actionName, config) {
         var action;
 
-        if(commonUtils.isFunction(actionName)) {
+        if(isFunction(actionName)) {
             action = this.component._createAction(actionName.bind(this), config);
             return function(e) {
                 action({ jQueryEvent: e });
@@ -255,8 +208,8 @@ var View = ModuleItem.inherit({
 
     ctor: function(component) {
         this.callBase(component);
-        this.renderCompleted = $.Callbacks();
-        this.resizeCompleted = $.Callbacks();
+        this.renderCompleted = Callbacks();
+        this.resizeCompleted = Callbacks();
     },
 
     element: function() {
@@ -469,7 +422,7 @@ module.exports = {
     },
 
     unregisterModule: function(name) {
-        this.modules = commonUtils.grep(this.modules, function(module) {
+        this.modules = grep(this.modules, function(module) {
             return module.name !== name;
         });
         delete this.controllerTypes;
@@ -480,7 +433,3 @@ module.exports = {
 
     callModuleItemsMethod: callModuleItemsMethod
 };
-
-///#DEBUG
-module.exports.CallBacks = CallBacks;
-///#ENDDEBUG

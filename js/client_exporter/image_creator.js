@@ -2,7 +2,7 @@
 
 var $ = require("../core/renderer"),
     Color = require("../color"),
-    commonUtils = require("../core/utils/common"),
+    isFunction = require("../core/utils/type").isFunction,
     extend = require("../core/utils/extend").extend,
     camelize = require("../core/utils/inflector").camelize,
     when = require("../integration/jquery/deferred").when,
@@ -586,7 +586,7 @@ exports.imageCreator = {
             height = options.height,
             backgroundColor = options.backgroundColor;
         // Injection for testing T403049
-        if(commonUtils.isFunction(options.__parseAttributesFn)) {
+        if(isFunction(options.__parseAttributesFn)) {
             parseAttributes = options.__parseAttributesFn;
         }
 
@@ -602,7 +602,7 @@ exports.imageCreator = {
             data = $.Deferred();
 
         when(imageData).done(function(binaryData) {
-            imageData = commonUtils.isFunction(window.Blob) ?
+            imageData = isFunction(window.Blob) ?
                that._getBlob(binaryData, mimeType) :
                that._getBase64(binaryData);
 

@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
     treeListCore = require("./ui.tree_list.core"),
@@ -67,7 +68,7 @@ var TreeList = Widget.inherit({
             result = that.callBase();
 
         $.each(treeListCore.modules, function() {
-            if(commonUtils.isFunction(this.defaultOptions)) {
+            if(typeUtils.isFunction(this.defaultOptions)) {
                 extend(true, result, this.defaultOptions());
             }
         });
@@ -155,7 +156,7 @@ var TreeList = Widget.inherit({
     focus: function(element) {
         this.callBase();
 
-        if(commonUtils.isDefined(element)) {
+        if(typeUtils.isDefined(element)) {
             this.getController("keyboardNavigation").focus(element);
         }
     }

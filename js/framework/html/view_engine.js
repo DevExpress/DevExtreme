@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     version = require("../../core/version"),
     Class = require("../../core/class"),
+    Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
     inArray = require("../../core/utils/array").inArray,
     errors = require("../errors"),
@@ -23,7 +24,7 @@ var ViewEngine = Class.inherit({
         this.dataOptionsAttributeName = options.dataOptionsAttributeName || "data-options";
         this._templateMap = {};
         this._pendingViewContainer = null;
-        this.markupLoaded = $.Callbacks();
+        this.markupLoaded = Callbacks();
         this._templateContext = options.templateContext;
         this._$skippedMarkup = $();
 

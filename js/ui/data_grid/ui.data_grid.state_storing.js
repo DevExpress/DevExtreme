@@ -2,6 +2,7 @@
 
 var gridCore = require("./ui.data_grid.core"),
     commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     stateStoringCore = require("../grid_core/ui.grid_core.state_storing"),
     equalByValue = commonUtils.equalByValue;
@@ -226,7 +227,7 @@ gridCore.registerModule("stateStoring", {
                 },
 
                 isStateLoading: function() {
-                    return commonUtils.isDefined(this._restoreStateTimeoutID);
+                    return isDefined(this._restoreStateTimeoutID);
                 },
 
                 isLoaded: function() {

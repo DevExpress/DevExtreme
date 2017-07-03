@@ -2,7 +2,8 @@
 
 var $ = require("../../core/renderer"),
     gridCoreUtils = require("./ui.grid_core.utils"),
-    commonUtils = require("../../core/utils/common");
+    grep = require("../../core/utils/common").grep,
+    isDefined = require("../../core/utils/type").isDefined;
 
 var MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     MASTER_DETAIL_ROW_CLASS = "dx-master-detail-row",
@@ -139,7 +140,7 @@ module.exports = {
                         if(options.detailColumnIndex === undefined) {
                             options.detailColumnIndex = -1;
                             $.each(options.visibleColumns, function(index, column) {
-                                if(column.command === "expand" && !commonUtils.isDefined(column.groupIndex)) {
+                                if(column.command === "expand" && !isDefined(column.groupIndex)) {
                                     options.detailColumnIndex = index;
                                     return false;
                                 }
@@ -162,7 +163,7 @@ module.exports = {
                         }
 
                         if(changeType === "refresh") {
-                            that._expandedItems = commonUtils.grep(that._expandedItems, function(item) { return item.visible; });
+                            that._expandedItems = grep(that._expandedItems, function(item) { return item.visible; });
                         }
 
                         $.each(items, function(index, item) {
@@ -269,7 +270,7 @@ module.exports = {
                             this.option("showRowLines") && $row.addClass(ROW_LINES_CLASS);
                             $row.addClass(MASTER_DETAIL_ROW_CLASS);
 
-                            if(commonUtils.isDefined(row.visible)) {
+                            if(isDefined(row.visible)) {
                                 $row.toggle(row.visible);
                             }
                         }

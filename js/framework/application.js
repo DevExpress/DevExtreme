@@ -138,7 +138,7 @@ var Application = Class.inherit({
         var tasks = [];
 
         $.each(this.components, function(index, component) {
-            if(component[methodName] && commonUtils.isFunction(component[methodName])) {
+            if(component[methodName] && typeUtils.isFunction(component[methodName])) {
                 var result = component[methodName](args);
                 if(result && result.done) {
                     tasks.push(result);
@@ -522,7 +522,7 @@ var Application = Class.inherit({
     /*        handleError: function() {
                 // TODO: This is workaround for bug in jQuery.Callbacks (#?????? - need to be registered)
                 this.navigationManager.navigated.empty();
-                this.navigationManager.navigated = $.Callbacks();
+                this.navigationManager.navigated = Callbacks();
                 this.navigationManager.on("navigated", this._onNavigated.bind(this));
             }*/
 }).include(EventsMixin);

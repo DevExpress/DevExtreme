@@ -1,12 +1,11 @@
 "use strict";
 
 //there are rangebar, rangearea
-var commonUtils = require("../../core/utils/common"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
     _extend = extend,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = require("../../core/utils/type").isDefined,
     _map = require("../core/utils").map,
-    _noop = commonUtils.noop,
+    _noop = require("../../core/utils/common").noop,
 
     rangeCalculator = require("./helpers/range_data_calculator"),
     scatterSeries = require("./scatter_series").chart,

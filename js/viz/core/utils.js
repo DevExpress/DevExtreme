@@ -1,11 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _inArray = inArray,
     _each = $.each,
     _math = Math,
@@ -31,7 +31,7 @@ var cosFunc = Math.cos,
     NaN = window.NaN;
 
 var isNumber = typeUtils.isNumeric,
-    isExponential = commonUtils.isExponential;
+    isExponential = typeUtils.isExponential;
 
 var getPrecision = function(value) {
     var stringFraction,
@@ -360,7 +360,7 @@ extend(exports, {
     },
 
     processSeriesTemplate: function(seriesTemplate, items) {
-        var customizeSeries = commonUtils.isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : commonUtils.noop,
+        var customizeSeries = typeUtils.isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop,
             nameField = seriesTemplate.nameField || 'series',
             generatedSeries = {},
             seriesOrder = [],

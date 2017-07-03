@@ -1,12 +1,13 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     triggerShownEvent = require("../../core/utils/dom").triggerShownEvent,
     Class = require("../../core/class"),
     abstract = Class.abstract;
 
 
-var renderedCallbacks = $.Callbacks();
+var renderedCallbacks = Callbacks();
 
 /**
  * @name dxTemplate

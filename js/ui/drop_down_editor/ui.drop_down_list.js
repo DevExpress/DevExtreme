@@ -780,7 +780,7 @@ var DropDownList = DropDownEditor.inherit({
 
     _needPopupRepaint: function() {
         var currentPageIndex = this._dataSource.pageIndex(),
-            needRepaint = commonUtils.isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
+            needRepaint = typeUtils.isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
 
         this._pageIndex = currentPageIndex;
 

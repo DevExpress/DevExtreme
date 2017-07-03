@@ -4,9 +4,8 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     MIN_SCROLL_BAR_SIZE = 2,
     translator2DModule = require("../translators/translator2d"),
-    commonUtils = require("../../core/utils/common"),
     pointerEvents = require("../../events/pointer"),
-    isDefined = commonUtils.isDefined,
+    isDefined = require("../../core/utils/type").isDefined,
     _min = Math.min,
     _max = Math.max;
 

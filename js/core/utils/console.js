@@ -1,6 +1,6 @@
 "use strict";
 
-var isFunction = require("./common").isFunction;
+var isFunction = require("./type").isFunction;
 
 var logger = (function() {
     var console = window.console;

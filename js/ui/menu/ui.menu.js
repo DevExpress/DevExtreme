@@ -499,7 +499,7 @@ var Menu = MenuBase.inherit({
     _getDelay: function(delayType) {
         var delay = this.option("showFirstSubmenuMode").delay;
 
-        if(!commonUtils.isDefined(delay)) {
+        if(!typeUtils.isDefined(delay)) {
             return DEFAULT_DELAY[delayType];
         } else {
             return typeUtils.isObject(delay) ? delay[delayType] : delay;
@@ -811,7 +811,7 @@ var Menu = MenuBase.inherit({
         var mouseMoveEventName = eventUtils.addNamespace(pointerEvents.move, this.NAME),
             $item = this._getItemElementByEventArgs(e),
             node = this._dataAdapter.getNodeByItem(this._getItemData($item)),
-            isSelectionActive = commonUtils.isDefined(e.buttons) && e.buttons === 1 || !commonUtils.isDefined(e.buttons) && e.which === 1;
+            isSelectionActive = typeUtils.isDefined(e.buttons) && e.buttons === 1 || !typeUtils.isDefined(e.buttons) && e.which === 1;
 
         if(this._isItemDisabled($item)) {
             return;
@@ -897,7 +897,7 @@ var Menu = MenuBase.inherit({
         var that = this,
             $item = $(e.currentTarget);
 
-        if(!commonUtils.isDefined(that._showSubmenuTimer)) {
+        if(!typeUtils.isDefined(that._showSubmenuTimer)) {
             return;
         }
 

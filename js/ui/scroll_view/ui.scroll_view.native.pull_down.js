@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     translator = require("../../animation/translator"),
     NativeStrategy = require("./ui.scrollable.native"),
     LoadIndicator = require("../load_indicator");
@@ -32,9 +33,9 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _initCallbacks: function() {
-        this.pullDownCallbacks = $.Callbacks();
-        this.releaseCallbacks = $.Callbacks();
-        this.reachBottomCallbacks = $.Callbacks();
+        this.pullDownCallbacks = Callbacks();
+        this.releaseCallbacks = Callbacks();
+        this.reachBottomCallbacks = Callbacks();
     },
 
     render: function() {
@@ -134,11 +135,14 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
             return;
         }
 
-        this._location = this.location().top;
+        var currentLocation = this.location().top,
+            scrollDelta = (this._location || 0) - currentLocation;
+
+        this._location = currentLocation;
 
         if(this._isPullDown()) {
             this._pullDownReady();
-        } else if(this._isReachBottom()) {
+        } else if(scrollDelta > 0 && this._isReachBottom()) {
             this._reachBottom();
         } else {
             this._stateReleased();

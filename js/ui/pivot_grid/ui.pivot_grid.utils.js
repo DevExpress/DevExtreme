@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     ajax = require("../../core/utils/ajax"),
     dataCoreUtils = require("../../core/utils/data"),
@@ -99,7 +98,7 @@ exports.findField = function(fields, id) {
     var i,
         field;
 
-    if(fields && commonUtils.isDefined(id)) {
+    if(fields && typeUtils.isDefined(id)) {
         for(i = 0; i < fields.length; i++) {
             field = fields[i];
             if(field.name === id || field.caption === id || field.dataField === id || field.index === id) {
@@ -204,12 +203,12 @@ function parseFields(dataSource, fieldsList, path, fieldsDataType) {
             getter = dataCoreUtils.compileGetter(currentPath),
             items;
 
-        while(!commonUtils.isDefined(value) && dataSource[dataIndex]) {
+        while(!typeUtils.isDefined(value) && dataSource[dataIndex]) {
             value = getter(dataSource[dataIndex]);
             dataIndex++;
         }
 
-        if(!dataType && commonUtils.isDefined(value)) {
+        if(!dataType && typeUtils.isDefined(value)) {
             dataType = typeUtils.type(value);
         }
 

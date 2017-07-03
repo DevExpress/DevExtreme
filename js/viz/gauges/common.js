@@ -2,10 +2,9 @@
 
 var $ = require("../../core/renderer"),
     dxBaseGauge = require("./base_gauge").dxBaseGauge,
-    commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
-    _isDefined = commonUtils.isDefined,
+    _isDefined = typeUtils.isDefined,
     _isString = typeUtils.isString,
     _isArray = Array.isArray,
     _isNumber = typeUtils.isNumeric,
@@ -22,7 +21,7 @@ var $ = require("../../core/renderer"),
 
     _extend = extend,
     _each = $.each,
-    _noop = commonUtils.noop,
+    _noop = require("../../core/utils/common").noop,
 
     OPTION_VALUE = "value",
     OPTION_SUBVALUES = "subvalues",

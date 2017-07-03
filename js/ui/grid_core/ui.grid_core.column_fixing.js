@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
-    commonUtils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     wheelEvent = require("../../events/core/wheel"),
     messageLocalization = require("../../localization/message"),
@@ -139,7 +139,7 @@ var baseFixedColumns = {
         if(!that._isFixedTableRendering && that._isFixedColumns) {
             isEmptyCell = column.fixed || column.command;
 
-            if(options.rowType === "group" && commonUtils.isDefined(column.groupIndex)) {
+            if(options.rowType === "group" && isDefined(column.groupIndex)) {
                 isEmptyCell = false;
                 if(options.row.summaryCells && options.row.summaryCells.length) {
                     columns = that._columnsController.getVisibleColumns();
@@ -415,7 +415,7 @@ var ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             transparentColumnIndex,
             $transparentColumnElement;
 
-        if(commonUtils.isDefined(rowIndex)) {
+        if(isDefined(rowIndex)) {
             return this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).children();
         }
 

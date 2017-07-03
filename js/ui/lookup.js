@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
@@ -667,7 +668,7 @@ var Lookup = DropDownList.inherit({
     _dataSourceOptions: function() {
         this._suppressDeprecatedWarnings();
         var pagingEnabled = commonUtils.ensureDefined(this.option("pagingEnabled"), true);
-        pagingEnabled = commonUtils.isDefined(this.option("showNextButton")) ? pagingEnabled || this.option("showNextButton") : pagingEnabled;
+        pagingEnabled = typeUtils.isDefined(this.option("showNextButton")) ? pagingEnabled || this.option("showNextButton") : pagingEnabled;
         this._resumeDeprecatedWarnings();
 
         return extend(this.callBase(), {
@@ -1099,7 +1100,7 @@ var Lookup = DropDownList.inherit({
 
     _getPageLoadMode: function() {
         this._suppressDeprecatedWarnings();
-        var result = commonUtils.isDefined(this.option("showNextButton")) ? "nextButton" : this.option("pageLoadMode");
+        var result = typeUtils.isDefined(this.option("showNextButton")) ? "nextButton" : this.option("pageLoadMode");
         this._resumeDeprecatedWarnings();
         return result;
     },

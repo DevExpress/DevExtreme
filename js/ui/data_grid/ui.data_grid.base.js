@@ -71,7 +71,7 @@ var DataGrid = Widget.inherit({
             result = that.callBase();
 
         $.each(gridCore.modules, function() {
-            if(commonUtils.isFunction(this.defaultOptions)) {
+            if(typeUtils.isFunction(this.defaultOptions)) {
                 extend(true, result, this.defaultOptions());
             }
         });
@@ -293,7 +293,7 @@ var DataGrid = Widget.inherit({
     focus: function(element) {
         this.callBase();
 
-        if(commonUtils.isDefined(element)) {
+        if(typeUtils.isDefined(element)) {
             this.getController("keyboardNavigation").focus(element);
         }
     }

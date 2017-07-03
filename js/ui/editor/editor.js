@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
@@ -31,7 +32,7 @@ var Editor = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this.validationRequest = $.Callbacks();
+        this.validationRequest = Callbacks();
 
         var $element = this.element();
 

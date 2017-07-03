@@ -1,10 +1,9 @@
 "use strict";
 
 var config = require("../config"),
-    commonUtils = require("./common"),
     typeUtils = require("./type"),
     isString = typeUtils.isString,
-    isDate = commonUtils.isDate,
+    isDate = typeUtils.isDate,
     isNumber = typeUtils.isNumeric;
 
 var NUMBER_SERIALIZATION_FORMAT = "number",

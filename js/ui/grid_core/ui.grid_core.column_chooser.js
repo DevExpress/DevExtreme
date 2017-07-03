@@ -3,7 +3,8 @@
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     columnsView = require("./ui.grid_core.columns_view"),
-    commonUtils = require("../../core/utils/common"),
+    noop = require("../../core/utils/common").noop,
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     themes = require("../themes"),
@@ -36,7 +37,7 @@ var COLUMN_CHOOSER_CLASS = "column-chooser",
                     allowHiding: column.allowHiding,
                     expanded: true,
                     id: column.index,
-                    parentId: commonUtils.isDefined(column.ownerBand) ? column.ownerBand : null
+                    parentId: isDefined(column.ownerBand) ? column.ownerBand : null
                 };
 
                 if(isSelectMode) {
@@ -95,7 +96,7 @@ var ColumnChooserController = modules.ViewController.inherit({
 });
 
 var ColumnChooserView = columnsView.ColumnsView.inherit({
-    _resizeCore: commonUtils.noop,
+    _resizeCore: noop,
 
     _isWinDevice: function() {
         return !!devices.real().win;
@@ -151,7 +152,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             dxPopupOptions.toolbarItems[dxPopupOptions.toolbarItems.length] = { shortcut: "cancel" };
         }
 
-        if(!commonUtils.isDefined(this._popupContainer)) {
+        if(!isDefined(this._popupContainer)) {
             that._popupContainer = that._createComponent($element, Popup, dxPopupOptions);
 
             that._popupContainer.on("optionChanged", function(args) {

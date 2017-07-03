@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
-    utils = require("../../core/utils/common"),
+    isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
     clientExporter = require("../../client_exporter"),
@@ -56,7 +56,7 @@ exports.ExportMixin = extend({}, exportMixin, {
 
         for(rowIndex = 0; rowIndex < rowsInfoItems.length; rowIndex++) {
             for(cellIndex = rowsInfoItems[rowIndex].length - 1; cellIndex >= 0; cellIndex--) {
-                if(!utils.isDefined(sourceItems[rowIndex + headerRowsCount])) {
+                if(!isDefined(sourceItems[rowIndex + headerRowsCount])) {
                     sourceItems[rowIndex + headerRowsCount] = [];
                 }
 

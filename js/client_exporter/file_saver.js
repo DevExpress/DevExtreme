@@ -4,7 +4,7 @@
 var $ = require("../core/renderer"),
     errors = require("../ui/widget/ui.errors"),
     browser = require("../core/utils/browser"),
-    commonUtils = require("../core/utils/common"),
+    typeUtils = require("../core/utils/type"),
 
     FILE_EXTESIONS = {
         EXCEL: "xlsx",
@@ -45,7 +45,7 @@ exports.fileSaver = {
             attributes = { 'download': fileName, "href": href };
 
         ///#DEBUG
-        if(commonUtils.isDefined(callback)) attributes["onclick"] = callback;
+        if(typeUtils.isDefined(callback)) attributes["onclick"] = callback;
         ///#ENDDEBUG
 
         document.body.appendChild(exportLinkElement);
@@ -58,7 +58,7 @@ exports.fileSaver = {
             exportForm = $("<form>").css({ "display": "none" }).attr(formAttributes);
 
         ///#DEBUG
-        if(commonUtils.isDefined(callback)) {
+        if(typeUtils.isDefined(callback)) {
             exportForm.submit(callback);
         }
         ///#ENDDEBUG
@@ -103,22 +103,22 @@ exports.fileSaver = {
     _saveBlobAs: function(fileName, format, data, linkClick) {
         this._blobSaved = false;
 
-        if(commonUtils.isDefined(navigator.msSaveOrOpenBlob)) {
+        if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
             navigator.msSaveOrOpenBlob(data, fileName);
             this._blobSaved = true;
-        } else if(commonUtils.isDefined(window.WinJS)) {
+        } else if(typeUtils.isDefined(window.WinJS)) {
             this._winJSBlobSave(data, fileName, format);
             this._blobSaved = true;
         } else {
             var URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
-            linkClick = commonUtils.isDefined(linkClick) ? linkClick : function() {
+            linkClick = typeUtils.isDefined(linkClick) ? linkClick : function() {
                 var link = $('#dxExportLink');
                 URL.revokeObjectURL(link.attr('href'));
                 link.remove();
                 //exporter.blobSaved = true;
             };
 
-            if(commonUtils.isDefined(URL)) {
+            if(typeUtils.isDefined(URL)) {
                 return this._linkDownloader(fileName, URL.createObjectURL(data), linkClick);
             }
         }
@@ -131,13 +131,13 @@ exports.fileSaver = {
             return this._cordovaDownloader(fileName, this._getDataUri(format, data), linkClick);
         }*/
 
-        if(commonUtils.isFunction(window.Blob)) {
+        if(typeUtils.isFunction(window.Blob)) {
             this._saveBlobAs(fileName, format, data);
         } else {
-            if(commonUtils.isDefined(proxyURL) && !commonUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
+            if(typeUtils.isDefined(proxyURL) && !typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) {
                 this._saveByProxy(proxyURL, fileName, format, data);
             } else {
-                if(!commonUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log("E1034");
+                if(!typeUtils.isDefined(navigator.userAgent.match(/iPad/i))) errors.log("E1034");
 
                 if(browser.msie && parseInt(browser.version) < 10) return;
 

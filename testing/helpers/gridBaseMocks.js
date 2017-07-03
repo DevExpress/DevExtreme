@@ -5,11 +5,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
     exports.MockDataController = function(options) {
 
-        if(!commonUtils.isDefined(options.itemsCount)) {
+        if(!typeUtils.isDefined(options.itemsCount)) {
             options.itemsCount = 100;
         }
 
-        if(!commonUtils.isDefined(options.selectionMode)) {
+        if(!typeUtils.isDefined(options.selectionMode)) {
             options.selectionMode = 'single';
         }
 
@@ -55,11 +55,11 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getPageSizes: function() {
-                return commonUtils.isDefined(options.pageSizes) ? options.pageSizes : [];
+                return typeUtils.isDefined(options.pageSizes) ? options.pageSizes : [];
             },
 
             hasKnownLastPage: function() {
-                return commonUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
+                return typeUtils.isDefined(options.hasKnownLastPage) ? options.hasKnownLastPage : true;
             },
 
             updatePagesCount: function(count) {
@@ -76,7 +76,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             pageIndex: function(index) {
-                if(commonUtils.isDefined(index)) {
+                if(typeUtils.isDefined(index)) {
                     options.pageIndex = index;
                     this.changed.fire({});
                 } else {
@@ -283,7 +283,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             getVisibleIndex: function(index, rowIndex) {
-                var visibleColumn = this.getRowCount() > 1 && commonUtils.isDefined(rowIndex) ? columns[rowIndex] : columns;
+                var visibleColumn = this.getRowCount() > 1 && typeUtils.isDefined(rowIndex) ? columns[rowIndex] : columns;
 
                 for(var i = 0; i < visibleColumn.length; i++) {
                     if(visibleColumn[i].index === index) {
@@ -295,7 +295,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getVisibleColumns: function(rowIndex) {
                 if(this.getRowCount() > 1) {
-                    return commonUtils.isDefined(rowIndex) ? columns[rowIndex] : columns[columns.length - 1];
+                    return typeUtils.isDefined(rowIndex) ? columns[rowIndex] : columns[columns.length - 1];
                 }
 
                 return columns;
@@ -314,7 +314,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                         if(column.fixed || column.command) {
                             result.push(column);
                         } else {
-                            if(!commonUtils.isDefined(indexTransparentColumn)) {
+                            if(!typeUtils.isDefined(indexTransparentColumn)) {
                                 indexTransparentColumn = index;
                             }
                             colspan += column.colspan || 1;
@@ -500,7 +500,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 var visibleGroupColumns = [];
 
                 $.each(columns, function(index, column) {
-                    if(commonUtils.isDefined(column.groupIndex)) {
+                    if(typeUtils.isDefined(column.groupIndex)) {
                         visibleGroupColumns.push(column);
                     }
                 });
@@ -522,7 +522,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     firstDataColumnIndex = 0;
 
                 for(var i = 0; i <= visibleColumnsLength - 1; i++) {
-                    if(!commonUtils.isDefined(visibleColumns[i].command)) {
+                    if(!typeUtils.isDefined(visibleColumns[i].command)) {
                         firstDataColumnIndex = visibleColumns[i].index;
                         break;
                     }
@@ -658,7 +658,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
     };
 
     exports.getCells = function(rootElement, additionalCssSelector) {
-        if(commonUtils.isDefined(additionalCssSelector)) {
+        if(typeUtils.isDefined(additionalCssSelector)) {
             return rootElement.find(additionalCssSelector + ' td');
         } else {
             return rootElement.find('td');
@@ -673,7 +673,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     left: 0
                 },
                 offset: function(parameters) {
-                    if(commonUtils.isDefined(parameters)) {
+                    if(typeUtils.isDefined(parameters)) {
                         this._offset = parameters;
                     } else {
                         return this._offset;
@@ -707,7 +707,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             height: function(value) {
-                if(commonUtils.isDefined(value)) {
+                if(typeUtils.isDefined(value)) {
                     this._height = value;
                 } else {
                     return this._height;
@@ -715,7 +715,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             width: function(value) {
-                if(commonUtils.isDefined(value)) {
+                if(typeUtils.isDefined(value)) {
                     this._width = value;
                 } else {
                     return this._width;
@@ -727,7 +727,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             },
 
             changeCursor: function(cursorName) {
-                this.cursorName = commonUtils.isDefined(cursorName) ? cursorName : '';
+                this.cursorName = typeUtils.isDefined(cursorName) ? cursorName : '';
             },
 
             render: function($container) {

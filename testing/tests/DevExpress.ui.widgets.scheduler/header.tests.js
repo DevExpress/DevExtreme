@@ -120,6 +120,39 @@ QUnit.test("Views option should be passed to viewSwitcher", function(assert) {
     assert.deepEqual(switcher.option("items"), ['week'], "views were passed after option changed");
 });
 
+QUnit.test("Views option with objects should be passed to viewSwitcher", function(assert) {
+    var instance = $("#scheduler-header").dxSchedulerHeader({
+        views: ["month", {
+            type: "day",
+            name: "Test Day"
+        }]
+    }).dxSchedulerHeader("instance");
+
+    var $element = instance.element(),
+        switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher").dxTabs("instance");
+
+    assert.deepEqual(switcher.option("items"), ['month', {
+        type: "day",
+        name: "Test Day"
+    }], "views were passed");
+});
+
+QUnit.test("View switcher should be rendered correctly when views contains objects", function(assert) {
+    var instance = $("#scheduler-header").dxSchedulerHeader({
+        views: [{
+            type: "month"
+        }, {
+            type: "day",
+            name: "TestDay"
+        }]
+    }).dxSchedulerHeader("instance");
+
+    var $element = instance.element(),
+        $switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher");
+
+    assert.equal($switcher.text(), "MonthTestDay", "ViewSwitcher was rendered correctly");
+});
+
 QUnit.test("Views option should be passed to viewSwitcher, useDropDownViewSwitcher = true", function(assert) {
     var instance = $("#scheduler-header").dxSchedulerHeader({
         views: ['month', 'day'],
@@ -135,6 +168,41 @@ QUnit.test("Views option should be passed to viewSwitcher, useDropDownViewSwitch
     instance.option("views", ['month', 'week']);
 
     assert.deepEqual(switcher.option("items"), ['month', 'week'], "views were passed after option changed");
+});
+
+QUnit.test("Views option with objects should be passed to viewSwitcher, useDropDownViewSwitcher = true", function(assert) {
+    var instance = $("#scheduler-header").dxSchedulerHeader({
+        views: ["month", {
+            type: "day",
+            name: "TestDay"
+        }],
+        useDropDownViewSwitcher: true,
+        currentView: "month"
+    }).dxSchedulerHeader("instance");
+
+    var $element = instance.element(),
+        switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher").dxDropDownMenu("instance");
+
+    assert.deepEqual(switcher.option("items"), ["month", {
+        type: "day",
+        name: "TestDay"
+    }], "views were passed");
+});
+
+QUnit.test("View switcher should be rendered correctly when views contains objects, useDropDownViewSwitcher = true", function(assert) {
+    var instance = $("#scheduler-header").dxSchedulerHeader({
+        useDropDownViewSwitcher: true,
+        views: ["month", {
+            type: "day",
+            name: "TestDay"
+        }]
+    }).dxSchedulerHeader("instance");
+
+    var $element = instance.element(),
+        switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher").dxDropDownMenu("instance");
+
+    switcher.open();
+    assert.equal(switcher._popup.content().find(".dx-item").eq(1).text(), "TestDay", "ViewSwitcher was rendered correctly");
 });
 
 QUnit.test("currentView option should be saved then views changed", function(assert) {
@@ -166,6 +234,28 @@ QUnit.test("'currentViewUpdated' observer should be notified after selection of 
 
     switcher.option("selectedItem", "day");
 
+    var args = stub.getCall(0).args;
+    assert.ok(stub.calledOnce, "Observer is notified");
+    assert.equal(args[1], "day", "Arguments are OK");
+});
+
+QUnit.test("'currentViewUpdated' observer should be notified after selection of dxTabs item, views with objects", function(assert) {
+    var instance = $("#scheduler-header").dxSchedulerHeader({
+        views: ["month", {
+            type: "day",
+            name: "TestDay"
+        }],
+        useDropDownViewSwitcher: false,
+        currentView: 'month'
+    }).dxSchedulerHeader("instance");
+
+    var $element = instance.element(),
+        $switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher");
+
+    var stub = sinon.stub(this.instance, "notifyObserver").withArgs("currentViewUpdated");
+    var $item = $switcher.find(".dx-item").eq(1);
+
+    $item.trigger("dxclick");
     var args = stub.getCall(0).args;
     assert.ok(stub.calledOnce, "Observer is notified");
     assert.equal(args[1], "day", "Arguments are OK");

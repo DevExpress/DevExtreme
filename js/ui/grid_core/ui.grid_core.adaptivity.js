@@ -51,7 +51,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             rowIndex = this._dataController.getRowIndexByKey(cellOptions.key),
             row = this._dataController.items()[rowIndex + 1];
 
-        return row && row.modifiedValues && commonUtils.isDefined(row.modifiedValues[columnIndex]);
+        return row && row.modifiedValues && typeUtils.isDefined(row.modifiedValues[columnIndex]);
     },
 
     _renderFormViewTemplate: function(item, cellOptions, $container) {
@@ -75,7 +75,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             }
 
             $container.addClass(ADAPTIVE_ITEM_TEXT_CLASS);
-            if(!commonUtils.isDefined(cellText) || cellText === "") {
+            if(!typeUtils.isDefined(cellText) || cellText === "") {
                 $container.html("&nbsp;");
             }
 
@@ -251,7 +251,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
     _hideAdaptiveColumn: function(resultWidths, visibleColumns) {
         var visibleIndex = this._getAdaptiveColumnVisibleIndex(visibleColumns);
-        if(commonUtils.isDefined(visibleIndex)) {
+        if(typeUtils.isDefined(visibleIndex)) {
             resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
             this._addCssClassToColumn(COMMAND_ADAPTIVE_HIDDEN_CLASS, visibleIndex);
         }
@@ -432,12 +432,12 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     hasAdaptiveDetailRowExpanded: function() {
-        return commonUtils.isDefined(this._dataController.adaptiveExpandedKey());
+        return typeUtils.isDefined(this._dataController.adaptiveExpandedKey());
     },
 
     updateForm: function(hiddenColumns) {
         if(this.hasAdaptiveDetailRowExpanded()) {
-            if(this._form && commonUtils.isDefined(this._form._contentReadyAction)) {
+            if(this._form && typeUtils.isDefined(this._form._contentReadyAction)) {
                 if(hiddenColumns && hiddenColumns.length) {
                     this._form.option("items", this._getFormItemsByHiddenColumns(hiddenColumns));
                 } else {
@@ -450,7 +450,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     updateHidingQueue: function(columns) {
         var that = this,
             hideableColumns = columns.filter(function(column) {
-                return column.visible && !column.fixed && !(commonUtils.isDefined(column.groupIndex) && column.groupIndex >= 0);
+                return column.visible && !column.fixed && !(typeUtils.isDefined(column.groupIndex) && column.groupIndex >= 0);
             }),
             columnsHasHidingPriority,
             i;
@@ -462,7 +462,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
 
         for(i = 0; i < hideableColumns.length; i++) {
-            if(commonUtils.isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
+            if(typeUtils.isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
                 columnsHasHidingPriority = true;
                 that._hidingColumnsQueue[hideableColumns[i].hidingPriority] = hideableColumns[i];
             }
@@ -621,7 +621,7 @@ module.exports = {
                     return $row;
                 },
 
-                _getColumnIndexByElement: function($element) {
+                _getColumnIndexByElementCore: function($element) {
                     var $itemContent = $element.closest("." + FORM_ITEM_CONTENT_CLASS);
                     if($itemContent.length && $itemContent.closest(this.component.element()).length) {
                         var formItem = $itemContent.length ? $itemContent.first().data("dx-form-item") : null;
@@ -841,7 +841,7 @@ module.exports = {
 
                     items = that.callBase.apply(that, arguments);
 
-                    if((changeType === "loadingAll") || (!commonUtils.isDefined(that._adaptiveExpandedKey))) {
+                    if((changeType === "loadingAll") || (!typeUtils.isDefined(that._adaptiveExpandedKey))) {
                         return items;
                     }
 
@@ -878,7 +878,7 @@ module.exports = {
                 },
 
                 adaptiveExpandedKey: function(value) {
-                    if(commonUtils.isDefined(value)) {
+                    if(typeUtils.isDefined(value)) {
                         this._adaptiveExpandedKey = value;
                     } else {
                         return this._adaptiveExpandedKey;

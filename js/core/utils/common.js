@@ -5,36 +5,8 @@ var $ = require("../../core/renderer"),
     deferredUtils = require("../../integration/jquery/deferred"),
     typeUtils = require("./type");
 
-var isDefined = function(object) {
-    return (object !== null) && (object !== undefined);
-};
-
-var isDate = function(object) {
-    return typeUtils.type(object) === 'date';
-};
-
-var isBoolean = function(object) {
-    return typeof object === "boolean";
-};
-
-var isFunction = function(object) {
-    return typeof object === 'function';
-};
-
-var isPrimitive = function(value) {
-    return ["object", "array", "function"].indexOf(typeUtils.type(value)) === -1;
-};
-
-var isExponential = function(value) {
-    return typeUtils.isNumeric(value) && value.toString().indexOf('e') !== -1;
-};
-
-var isWindow = function(object) {
-    return object != null && object === object.window;
-};
-
 var ensureDefined = function(value, defaultValue) {
-    return isDefined(value) ? value : defaultValue;
+    return typeUtils.isDefined(value) ? value : defaultValue;
 };
 
 var executeAsync = function(action, context/*, internal */) {
@@ -53,7 +25,7 @@ var executeAsync = function(action, context/*, internal */) {
         callback = function() {
             var result = action.call(normalizedContext);
 
-            if(result && result.done && isFunction(result.done)) {
+            if(result && result.done && typeUtils.isFunction(result.done)) {
                 result.done(function() {
                     deferred.resolveWith(normalizedContext);
                 });
@@ -291,7 +263,7 @@ var equalByValue = function(object1, object2, deep) {
         return isObjectsEqualByValue(object1, object2, deep);
     } else if(Array.isArray(object1) && Array.isArray(object2)) {
         return isArraysEqualByValue(object1, object2, deep);
-    } else if(isDate(object1) && isDate(object2)) {
+    } else if(typeUtils.isDate(object1) && typeUtils.isDate(object2)) {
         return object1.getTime() === object2.getTime();
     }
 
@@ -317,7 +289,7 @@ var escapeRegExp = function(string) {
 
 var applyServerDecimalSeparator = function(value) {
     var separator = config().serverDecimalSeparator;
-    if(isDefined(value)) {
+    if(typeUtils.isDefined(value)) {
         value = value.toString().replace(".", separator);
     }
     return value;
@@ -340,14 +312,6 @@ var grep = function(elements, checkFunction, invert) {
 
     return result;
 };
-
-exports.isDefined = isDefined;
-exports.isDate = isDate;
-exports.isBoolean = isBoolean;
-exports.isFunction = isFunction;
-exports.isPrimitive = isPrimitive;
-exports.isExponential = isExponential;
-exports.isWindow = isWindow;
 
 exports.ensureDefined = ensureDefined;
 

@@ -1,7 +1,6 @@
 "use strict";
 
-var commonUtils = require("../../core/utils/common"),
-    typeUtils = require("../../core/utils/type"),
+var typeUtils = require("../../core/utils/type"),
 
     STRING = "string",
     NUMERIC = "numeric",
@@ -16,11 +15,11 @@ var commonUtils = require("../../core/utils/common"),
     axisTypeParser = require("../core/utils").enumParser([STRING, NUMERIC, DATETIME]),
     _getParser = require("./parse_utils").getParser,
 
-    _isDefined = commonUtils.isDefined,
-    _isFunction = commonUtils.isFunction,
+    _isDefined = typeUtils.isDefined,
+    _isFunction = typeUtils.isFunction,
     _isArray = Array.isArray,
     _isString = typeUtils.isString,
-    _isDate = commonUtils.isDate,
+    _isDate = typeUtils.isDate,
     _isNumber = typeUtils.isNumeric,
     _isObject = typeUtils.isObject;
 
