@@ -13,7 +13,7 @@ var methods = [
     "remove", "detach", "empty", "text",
     "html", "is", "not", "wrapInner", "wrap",
     "each", "val", "index",
-    "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit", "has"];
+    "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
