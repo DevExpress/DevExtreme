@@ -45,6 +45,10 @@ if(!useJQueryRenderer) {
         return this;
     };
 
+    var checkAttributeValue = function(value) {
+        return value !== undefined && value !== null;
+    };
+
     methods.forEach(function(method) {
         var methodName = method;
         initRender.prototype[method] = function() {
@@ -65,6 +69,9 @@ if(!useJQueryRenderer) {
                 return undefined;
             }
         }
+        if(!this[0].getAttribute) {
+            return this.prop(attrName, value);
+        }
         if(typeof attrName === "string" && arguments.length === 1) {
             var result = this[0].getAttribute(attrName);
             return result == null ? undefined : result;
@@ -72,8 +79,10 @@ if(!useJQueryRenderer) {
             for(var key in attrName) {
                 this.attr(key, attrName[key]);
             }
-        } else {
+        } else if(checkAttributeValue(value)) {
             rendererStrategy.setAttribute(this[0], attrName, value);
+        } else {
+            rendererStrategy.removeAttribute(this[0], attrName);
         }
         return this;
     };
@@ -229,13 +238,15 @@ if(!useJQueryRenderer) {
                         queryId = elementId || "dx-query-children";
 
                     if(!elementId) {
-                        rendererStrategy.setAttribute(element, "id", queryId);
+                        checkAttributeValue(queryId) ? rendererStrategy.setAttribute(element, "id", queryId) :
+                        rendererStrategy.removeAttribute(element, "id");
                     }
                     queryId = "[id='" + queryId + "'] ";
 
                     var querySelector = queryId + selector.replace(",", ", " + queryId);
                     nodes.push.apply(nodes, element.querySelectorAll(querySelector));
-                    rendererStrategy.setAttribute(element, "id", elementId);
+                    checkAttributeValue(elementId) ? rendererStrategy.setAttribute(element, "id", elementId) :
+                        rendererStrategy.removeAttribute(element, "id");
                 } else if(element.nodeType === Node.DOCUMENT_NODE) {
                     nodes.push.apply(nodes, element.querySelectorAll(selector));
                 }
