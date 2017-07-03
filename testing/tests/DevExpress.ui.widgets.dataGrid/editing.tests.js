@@ -2135,6 +2135,7 @@ QUnit.test('Save changes when batch mode when one the changes is canceled from e
     assert.deepEqual(updateArgs, [['test1', { "name": "Test1" }]]);
     assert.deepEqual(removeKeys, []);
     assert.ok(that.dataController.refreshed, 'data is refreshed');
+    assert.deepEqual(that.editingController._editData, [{ key: "test3", oldData: that.dataControllerOptions.items[2].data, type: "remove" }], "edit data");
 });
 
 QUnit.test('Close Editing Cell when batch mode on click inside freespace row', function(assert) {
@@ -2445,6 +2446,43 @@ QUnit.test("The first cell should not be switched to the editing state when clic
     $mainTable = rowsView.element().children(".dx-datagrid-content").children("table");
     assert.strictEqual($mainTable.find("input").length, 0, "hasn't input");
     assert.notOk($mainTable.find("tbody > tr").first().children().first().hasClass("dx-editor-cell"), 0, "first cell isn't editable");
+});
+
+//T531154
+QUnit.test("The cell should be editable after cancel removing the row", function(assert) {
+   //arrange
+    var that = this,
+        $cellElement,
+        countCallOnRowRemoving = 0,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        allowDeleting: true,
+        mode: "cell",
+        texts: {
+            confirmDeleteMessage: ""
+        }
+    };
+    that.options.onRowRemoving = function(e) {
+        countCallOnRowRemoving++;
+        e.cancel = $.Deferred().resolve(true);
+    };
+
+    rowsView.render($testElement);
+    that.editingController.optionChanged({ name: "onRowRemoving" });
+
+    that.deleteRow(0);
+
+    //act
+    that.editCell(0, 0);
+
+    //assert
+    $cellElement = rowsView.element().find("tbody > tr").first().children().first();
+    assert.strictEqual(countCallOnRowRemoving, 1, "count call onRowRemoving event");
+    assert.ok($cellElement.hasClass("dx-editor-cell"), "cell is editable");
+    assert.ok($cellElement.find("input").length > 0, "has input");
 });
 
 if(browser.msie && parseInt(browser.version) <= 11) {
