@@ -1,10 +1,11 @@
 "use strict";
 
-var $ = require("../../core/renderer");
+var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks");
 
 var resizeCallbacks = (function() {
     var prevSize,
-        callbacks = require("../../core/utils/callbacks")(),
+        callbacks = Callbacks(),
         jqWindow = $(window),
         resizeEventHandlerAttached = false,
         originalCallbacksAdd = callbacks.add,
