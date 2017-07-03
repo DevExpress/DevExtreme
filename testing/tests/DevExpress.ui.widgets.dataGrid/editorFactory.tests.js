@@ -32,6 +32,7 @@ require("common.css!");
 
 require("ui/data_grid/ui.data_grid");
 require("ui/lookup");
+var TextArea = require("ui/text_area");
 
 var pointerMock = require("../../helpers/pointerMock.js"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
@@ -1514,6 +1515,51 @@ QUnit.testInActiveWindow("Focus on dxLookup editor", function(assert) {
     //assert
     $cell = $testElement.find(".dx-datagrid-rowsview tbody > tr").eq(0).children().eq(0);
     assert.ok($cell.find(".dx-lookup-field").length, "has lookup field");
+    assert.ok($cell.hasClass("dx-focused"), "cell is focused");
+});
+
+//T531176
+QUnit.testInActiveWindow("Focus on dxTextArea editor", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "if device is not desktop we do not test the case");
+        return;
+    }
+
+    var that = this,
+        $cell,
+        $testElement = $('#container');
+
+    that.options = {
+        useKeyboard: true,
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [{ allowEditing: true, dataField: "name", editCellTemplate: function(container, options) {
+            new TextArea($("<div>").appendTo(container), {});
+        } }],
+        dataSource: [{ name: "Bob" }]
+    };
+
+    that.element = function() {
+        return $("#qunit-fixture");
+    };
+
+    setupDataGridModules(that, ["data", "columns", "rows", "editorFactory", "editing", "keyboardNavigation"], {
+        initViews: true
+    });
+
+    that.rowsView.render($testElement);
+
+    //act
+    $cell = $testElement.find(".dx-datagrid-rowsview tbody > tr").eq(0).children().eq(0);
+    $cell.trigger("dxpointerdown");
+    $cell.trigger("dxclick");
+    that.clock.tick();
+
+    //assert
+    $cell = $testElement.find(".dx-datagrid-rowsview tbody > tr").eq(0).children().eq(0);
+    assert.ok($cell.find("textarea").length, "has lookup field");
     assert.ok($cell.hasClass("dx-focused"), "cell is focused");
 });
 
