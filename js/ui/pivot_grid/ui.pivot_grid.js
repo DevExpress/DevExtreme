@@ -829,7 +829,6 @@ var PivotGrid = Widget.inherit({
                             pivotGridUtils.setFieldProperty(field, optionName, that.option(optionName));
                         }
                     });
-
                 });
             }
         };
@@ -849,9 +848,11 @@ var PivotGrid = Widget.inherit({
             that._scrollTop = options.top;
         });
 
-        that._dataController.loadingChanged.add(function(isLoading, progress) {
-            that._updateLoading(progress);
+        that._dataController.loadingChanged.add(function(isLoading) {
+            that._updateLoading();
         });
+
+        that._dataController.progressChanged.add(that._updateLoading.bind(that));
 
         that._dataController.dataSourceChanged.add(function() {
             that._trigger("onChanged");

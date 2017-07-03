@@ -216,20 +216,22 @@ module.exports = Class.inherit((function() {
         }
     };
 
-    function createLocalOrRemoteStore(dataSourceOptions) {
+    function createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
         var StoreConstructor = dataSourceOptions.remoteOperations ? RemoteStore : localStore.LocalStore;
 
         return new StoreConstructor(extend(DataSourceModule.normalizeDataSourceOptions(dataSourceOptions), {
-            onChanged: null
+            onChanged: null,
+            onLoadingChanged: null,
+            onProgressChanged: notifyProgress
         }));
     }
 
-    function createStore(dataSourceOptions) {
+    function createStore(dataSourceOptions, notifyProgress) {
         var store,
             storeOptions;
 
         if(typeUtils.isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
-            store = createLocalOrRemoteStore(dataSourceOptions);
+            store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
         } else {
             //TODO remove
             if(dataSourceOptions && !dataSourceOptions.store) {
@@ -241,7 +243,7 @@ module.exports = Class.inherit((function() {
             if(storeOptions.type === "xmla") {
                 store = new xmlaStore.XmlaStore(storeOptions);
             } else if((typeUtils.isPlainObject(storeOptions) && storeOptions.type) || (storeOptions instanceof Store) || Array.isArray(storeOptions)) {
-                store = createLocalOrRemoteStore(dataSourceOptions);
+                store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
             } else if(storeOptions instanceof Class) {
                 store = storeOptions;
             }
@@ -604,8 +606,13 @@ module.exports = Class.inherit((function() {
         ctor: function(options) {
             options = options || {};
 
-            var that = this,
-                store = createStore(options);
+            var that = this;
+
+            that._progressChanged = function(progress) {
+                that.fireEvent("progressChanged", [progress]);
+            };
+
+            var store = createStore(options, that._progressChanged);
 
             /**
             * @name PivotGridDataSourceOptions_store
@@ -654,6 +661,7 @@ module.exports = Class.inherit((function() {
                     "changed",
                     "loadError",
                     "loadingChanged",
+                    "progressChanged",
                     "fieldsPrepared",
                     "expandValueChanging"
                 ],
@@ -1112,10 +1120,6 @@ module.exports = Class.inherit((function() {
 
             that._changeLoadingCount(1);
 
-            d.progress(function(progress) {
-                that._changeLoadingCount(0, progress * 0.8);
-            });
-
             d.fail(function(e) {
                 that.fireEvent("loadError", [e]);
             }).always(function() {
@@ -1284,15 +1288,15 @@ module.exports = Class.inherit((function() {
             }
         },
 
-        _changeLoadingCount: function(increment, progress) {
+        _changeLoadingCount: function(increment) {
             var oldLoading = this.isLoading(),
                 newLoading;
 
             this._loadingCount += increment;
             newLoading = this.isLoading();
 
-            if((oldLoading ^ newLoading) || progress) {
-                this.fireEvent("loadingChanged", [newLoading, progress]);
+            if(oldLoading ^ newLoading) {
+                this.fireEvent("loadingChanged", [newLoading]);
             }
         },
 
@@ -1317,7 +1321,7 @@ module.exports = Class.inherit((function() {
                 deferred.always(function() {
                     that._changeLoadingCount(-1);
                 });
-                when(store.load(options)).progress(deferred.notify).done(function(data) {
+                when(store.load(options)).done(function(data) {
                     if(options.path) {
                         that.applyPartialDataSource(options.area, options.path, data, deferred);
                     } else {
@@ -1366,6 +1370,7 @@ module.exports = Class.inherit((function() {
                 });
                 deferred && deferred.resolve(that._data);
             });
+            return deferred;
         },
 
         store: function() {
