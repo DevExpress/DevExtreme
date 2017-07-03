@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer");
+var Callbacks = require("../../core/utils/callbacks");
 
 var eventEmitterMethods = {
     _initEvents: function() {
@@ -9,7 +9,7 @@ var eventEmitterMethods = {
             ii = names.length,
             events = this._events = {};
         for(i = 0; i < ii; ++i) {
-            events[names[i]] = $.Callbacks();
+            events[names[i]] = Callbacks();
         }
     },
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -60,10 +61,10 @@ module.exports = gridCore.Controller.inherit((function() {
             that._currentTotalCount = 0;
 
 
-            that.changed = $.Callbacks();
-            that.loadingChanged = $.Callbacks();
-            that.loadError = $.Callbacks();
-            that.customizeStoreLoadOptions = $.Callbacks();
+            that.changed = Callbacks();
+            that.loadingChanged = Callbacks();
+            that.loadError = Callbacks();
+            that.customizeStoreLoadOptions = Callbacks();
 
             that._dataChangedHandler = that._handleDataChanged.bind(that);
             that._dataLoadingHandler = that._handleDataLoading.bind(that);

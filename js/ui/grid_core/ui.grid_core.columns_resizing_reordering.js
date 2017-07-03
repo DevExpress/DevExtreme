@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
@@ -984,7 +985,7 @@ var TablePositionViewController = modules.ViewController.inherit({
 
     ctor: function(component) {
         this.callBase(component);
-        this.positionChanged = $.Callbacks();
+        this.positionChanged = Callbacks();
     }
 });
 

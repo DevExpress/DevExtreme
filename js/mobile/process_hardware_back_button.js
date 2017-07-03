@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    hardwareBack = $.Callbacks();
+var hardwareBack = require("../core/utils/callbacks")();
 
 /**
  * @name processHardwareBackButton

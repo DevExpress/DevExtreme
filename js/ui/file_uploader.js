@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
+    Callbacks = require("../core/utils/callbacks"),
     isDefined = require("../core/utils/type").isDefined,
     objectUtils = require("../core/utils/object"),
     extend = require("../core/utils/extend").extend,
@@ -577,11 +578,11 @@ var FileUploader = Editor.inherit({
         return {
             value: value,
             loadedSize: 0,
-            onProgress: $.Callbacks(),
-            onAbort: $.Callbacks(),
-            onLoad: $.Callbacks(),
-            onError: $.Callbacks(),
-            onLoadStart: $.Callbacks()
+            onProgress: Callbacks(),
+            onAbort: Callbacks(),
+            onLoad: Callbacks(),
+            onError: Callbacks(),
+            onLoadStart: Callbacks()
         };
     },
 

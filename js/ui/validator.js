@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),
     DOMComponent = require("../core/dom_component"),
     extend = require("../core/utils/extend").extend,
@@ -121,7 +122,7 @@ var Validator = DOMComponent.inherit({
         this.callBase();
         this._initGroupRegistration();
 
-        this.focused = $.Callbacks();
+        this.focused = Callbacks();
         this._initAdapter();
 
     },

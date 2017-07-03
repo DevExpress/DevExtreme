@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     dataCoreUtils = require("../../core/utils/data"),
     grep = require("../../core/utils/common").grep,
@@ -2568,7 +2569,7 @@ module.exports = {
                         };
                     }
 
-                    calculatedColumnOptions.resizedCallbacks = $.Callbacks();
+                    calculatedColumnOptions.resizedCallbacks = Callbacks();
                     if(columnOptions.resized) {
                         calculatedColumnOptions.resizedCallbacks.add(columnOptions.resized.bind(columnOptions));
                     }

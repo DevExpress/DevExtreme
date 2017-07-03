@@ -370,7 +370,6 @@ renderer.easing = $.easing;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.makeArray = $.makeArray;
 renderer.contains = $.contains;
-renderer.Callbacks = $.Callbacks;
 renderer.Deferred = $.Deferred;
 renderer.map = $.map;
 renderer.each = $.each;

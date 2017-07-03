@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     when = require("../../integration/jquery/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -700,7 +701,7 @@ exports.DataController = Class.inherit((function() {
 
             options = that._options = options || {};
 
-            that.dataSourceChanged = $.Callbacks();
+            that.dataSourceChanged = Callbacks();
             that._dataSource = that._createDataSource(options);
 
             that._rowsScrollController = createScrollController(that, options.component, {
@@ -749,13 +750,13 @@ exports.DataController = Class.inherit((function() {
             that._rowsInfo = [];
             that._cellsInfo = [];
 
-            that.expandValueChanging = $.Callbacks();
-            that.loadingChanged = $.Callbacks();
-            that.scrollChanged = $.Callbacks();
+            that.expandValueChanging = Callbacks();
+            that.loadingChanged = Callbacks();
+            that.scrollChanged = Callbacks();
 
             that.load();
             that._update();
-            that.changed = $.Callbacks();
+            that.changed = Callbacks();
         },
 
         _fireChanged: function() {
