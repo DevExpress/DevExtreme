@@ -216,14 +216,6 @@ var doNextIteration = function(date, startIntervalDate, endIntervalDate, recurre
         }
     }
 
-    if(date < startIntervalDate) {
-        var intervalField = intervalMap[recurrenceRule.freq.toLowerCase()],
-            interval = {};
-
-        interval[intervalField] = 1;
-        date.setDate(dateUtils.addInterval(date, interval).getDate());
-    }
-
     dateInInterval = date.getTime() <= endIntervalDate;
 
     return dateInInterval && matchCountIsCorrect;
