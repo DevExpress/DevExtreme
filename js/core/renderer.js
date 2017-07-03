@@ -59,7 +59,7 @@ if(!useJQueryRenderer) {
     initRender.prototype.attr = function(attrName, value) {
         if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, "attr", arguments);
         if(!this[0]) {
-            if(typeUtils.isPlainObject(attrName) || value !== undefined) {
+            if(typeUtils.isObject(attrName) || value !== undefined) {
                 return this;
             } else {
                 return undefined;
