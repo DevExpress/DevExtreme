@@ -800,8 +800,8 @@ module.exports = {
                 }
             },
             resizing: {
-                _isNeedToCalcBestFitWidths: function(needBestFit) {
-                    return this.callBase(needBestFit) || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
+                _needBestFit: function() {
+                    return this.callBase() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
                 },
 
                 _correctColumnWidths: function(resultWidths, visibleColumns) {
