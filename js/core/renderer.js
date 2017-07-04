@@ -10,7 +10,7 @@ var methods = [
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "css", "attr", "removeAttr", "prop", "removeProp",
-    "remove", "detach", "empty", "text",
+    "remove", "detach", "empty",
     "html", "is", "not", "wrapInner", "wrap",
     "each", "val", "index",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit", "has"];
