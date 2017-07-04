@@ -7085,7 +7085,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
         rowsView = that.rowsView,
         $testElement = $("#container");
 
-    $("#qunit-fixture").addClass("qunit-fixture-static").css("width", 2000);
+    $("#qunit-fixture").addClass("qunit-fixture-static").css("width", "auto");
 
     rowsView.render($testElement);
     that.applyOptions({
@@ -7128,7 +7128,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
     assert.ok(invalidTooltipInstance.content().offset().left + invalidTooltipInstance.content().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after invalid tooltip");
-    assert.equal(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.element().offset().left, "selectbox is shown after revert tooltip");
+    assert.roughEqual(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.element().offset().left, 1, "selectbox is shown after revert tooltip");
 
     $("#qunit-fixture").removeClass("qunit-fixture-static").css("width", "");
 });
