@@ -1,6 +1,7 @@
 "use strict";
 
 var ajax = require("core/utils/ajax");
+var browser = require("core/utils/browser");
 
 QUnit.module("sendRequest", {
     beforeEach: function() {
@@ -41,6 +42,11 @@ QUnit.test("Get JSON", function(assert) {
 });
 
 QUnit.test("responseType arraybuffer", function(assert) {
+    if(browser.msie && parseInt(browser.version) < 10) {
+        assert.expect(0);
+        return;
+    }
+
     var buffer = new ArrayBuffer(8);
     var result;
 
