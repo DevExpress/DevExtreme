@@ -1821,7 +1821,7 @@ QUnit.test("scroll event should be triggered if scroll position changed", functi
 
     return new Promise(function(resolve) {
         $scrollable.dxScrollable("option", "onScroll", function() {
-            assert.equal(++called, 1, "scroll was fired on height change");
+            assert.ok(++called <= 2, "scroll was fired on height change");
             resolve();
         });
         $content.height(50);
