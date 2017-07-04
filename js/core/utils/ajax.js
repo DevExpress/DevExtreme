@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("../renderer");
+var $ = require("../renderer"),
+    jQuery = require("jquery");
 
 var isStatusSuccess = function(status) {
     return 200 <= status && status < 300;
@@ -51,7 +52,7 @@ var sendRequest = function(options) {
         return result;
     }
 
-    return $.ajax(options);
+    return jQuery.ajax(options);
 };
 
 exports.sendRequest = sendRequest;
