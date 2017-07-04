@@ -110,7 +110,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
             if(!this._editingController.isEditing()) {
                 this._applyTabIndexToElement(data.view.element());
-                data.view.element().find(".dx-row > td[tabIndex]").attr("tabIndex", null);
+                data.view.element().find(".dx-row > td[tabIndex]").removeAttr("tabIndex");
                 $cell.focus();
             }
         } else {
@@ -267,7 +267,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             focusedView = this._focusedView,
             $focusElement;
 
-        $focusedCell && $focusedCell.is("td") && $focusedCell.attr("tabIndex", null);
+        $focusedCell && $focusedCell.is("td") && $focusedCell.removeAttr("tabIndex");
 
 
         if(isGroupRow($row)) {
@@ -280,7 +280,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
         }
 
-        focusedView && focusedView.element().attr("tabIndex", null);
+        focusedView && focusedView.element().removeAttr("tabIndex");
 
         if($focusElement) {
             this._applyTabIndexToElement($focusElement);
@@ -801,7 +801,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var that = this,
             $cell = that._getFocusedCell();
 
-        $cell && $cell.attr("tabIndex", null);
+        $cell && $cell.removeAttr("tabIndex");
 
         that._focusedView && that._focusedView.renderFocusState && that._focusedView.renderFocusState();
 

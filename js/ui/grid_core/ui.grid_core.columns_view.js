@@ -84,7 +84,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $cell.addClass(this.addWidgetPrefix(GROUP_SPACE_CLASS));
         }
 
-        column.colspan > 1 && $cell.attr("colspan", column.colspan);
+        column.colspan > 1 && $cell.attr("colSpan", column.colspan);
 
         return $cell;
     },

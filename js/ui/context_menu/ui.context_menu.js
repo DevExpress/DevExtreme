@@ -791,7 +791,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 }
             } else {
                 if(this._shownSubmenus && this._shownSubmenus.length > 0) {
-                    if(this._shownSubmenus[0].is($submenu) || this._shownSubmenus[0].has($submenu).length === 1) {
+                    if(this._shownSubmenus[0].is($submenu)) {
                         this._hideSubmenu($submenu); // close to parent?
                     } else {
                         this._hideAllShownSubmenus();
@@ -807,7 +807,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 shownSubmenus = extend([], that._shownSubmenus);
 
             $.each(shownSubmenus, function(index, $submenu) {
-                if($curSubmenu.is($submenu) || $curSubmenu.has($submenu).length) {
+                if($curSubmenu.is($submenu) || $curSubmenu[0].contains($submenu[0])) {
                     $submenu.parent().removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
                     that._hideSubmenuCore($submenu);
                 }
