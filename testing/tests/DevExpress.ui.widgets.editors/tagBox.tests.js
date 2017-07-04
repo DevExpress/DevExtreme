@@ -604,19 +604,20 @@ QUnit.test("onMultitagPreparing option", function(assert) {
     assert.expect(4);
 
     var $tagBox = $("#tagBox").dxTagBox({
-        items: [1, 2, 3, 4],
-        value: [1, 2, 4],
-        maxTagCount: 2,
-        onMultiTagPreparing: function(e) {
-            assert.equal(e.component.NAME, "dxTagBox", "component is correct");
-            assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
-            assert.strictEqual(e.allSelected, false, "allSelected is correct");
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            onMultiTagPreparing: function(e) {
+                assert.equal(e.component.NAME, "dxTagBox", "component is correct");
+                assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
+                assert.strictEqual(e.allSelected, false, "allSelected is correct");
             //assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
-            return "custom text";
-        }
-    });
+                return "custom text";
+            }
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
 
-    assert.deepEqual($tagBox.text(), "custom text", "custom text is displayed");
+    assert.deepEqual($tag.text(), "custom text", "custom text is displayed");
 });
 
 QUnit.test("onMultitagPreparing option change", function(assert) {
@@ -639,7 +640,8 @@ QUnit.test("onMultitagPreparing option change", function(assert) {
 
     tagBox.option("onMultiTagPreparing", onMultiTagPreparing);
 
-    assert.deepEqual($tagBox.text(), "custom text", "custom text is displayed");
+    var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+    assert.deepEqual($tag.text(), "custom text", "custom text is displayed");
 });
 
 QUnit.test("tagBox should show special text for all selected state", function(assert) {
