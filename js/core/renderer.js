@@ -400,8 +400,6 @@ if(!useJQueryRenderer) {
     };
 }
 
-renderer.getJSON = $.getJSON;
-renderer.getScript = $.getScript;
 renderer.tmpl = function() {
     return $.tmpl.apply(this, arguments);
 };
