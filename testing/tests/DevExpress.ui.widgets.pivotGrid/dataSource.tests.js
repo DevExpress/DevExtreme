@@ -2767,6 +2767,155 @@ QUnit.test("Load with group field", function(assert) {
     }], "load args");
 });
 
+//T531359
+QUnit.test("Sort group fields", function(assert) {
+    this.testStore.load.returns($.Deferred());
+
+    var fields = [
+        {
+            caption: "Date Problem",
+            displayFolder: "Project",
+            dataField: "projectCust_datumproblem",
+            groupName: "projectCust_datumproblem",
+            dataType: "date",
+            area: "column"
+        },
+        {
+            groupName: "projectCust_datumproblem",
+            groupInterval: "year",
+            groupIndex: 0,
+            caption: "datumProblem Jahr",
+            area: "column"
+        },
+        {
+            groupName: "projectCust_datumproblem",
+            groupInterval: "quarter",
+            groupIndex: 1,
+            caption: "datumProblem Quartal",
+            area: "column"
+        },
+        {
+            groupName: "projectCust_datumproblem",
+            groupInterval: "month",
+            groupIndex: 2,
+            caption: "datumProblem Monat",
+            area: "column"
+        },
+        {
+            caption: "Allocation Date",
+            displayFolder: "Project",
+            dataField: "allocationDate",
+            groupName: "allocationDate",
+            dataType: "date",
+            area: "column"
+        },
+        {
+            groupName: "allocationDate",
+            groupInterval: "year",
+            groupIndex: 0,
+            caption: "Allocation Jahr",
+            area: "column"
+        },
+        {
+            groupName: "allocationDate",
+            groupInterval: "quarter",
+            groupIndex: 1,
+            caption: "Allocation Quartal",
+            area: "column"
+        },
+        {
+            groupName: "allocationDate",
+            groupInterval: "month",
+            groupIndex: 2,
+            caption: "Allocation Monat",
+            area: "column"
+        },
+        {
+            caption: "Project Finish",
+            displayFolder: "Project",
+            dataField: "projectFinishDate",
+            groupName: "projectFinishDate",
+            dataType: "date",
+            area: "column"
+        },
+        {
+            groupName: "projectFinishDate",
+            groupInterval: "year",
+            groupIndex: 0,
+            caption: "Project Finish Jahr",
+            area: "column"
+        },
+        {
+            groupName: "projectFinishDate",
+            groupInterval: "quarter",
+            groupIndex: 1,
+            caption: "Project Finish Quartal",
+            area: "column"
+        },
+        {
+            groupName: "projectFinishDate",
+            groupInterval: "month",
+            groupIndex: 2,
+            caption: "Project Finish Monat",
+            area: "column"
+        },
+        {
+            caption: "Project Start",
+            displayFolder: "Project",
+            dataField: "projectStartDate",
+            groupName: "projectStartDate",
+            dataType: "date",
+            area: "column"
+        },
+        {
+            groupName: "projectStartDate",
+            groupInterval: "year",
+            groupIndex: 0,
+            caption: "Project Start Jahr",
+            area: "column"
+        },
+        {
+            groupName: "projectStartDate",
+            groupInterval: "quarter",
+            groupIndex: 1,
+            caption: "Project Start Quartal",
+            area: "column"
+        },
+        {
+            groupName: "projectStartDate",
+            groupInterval: "month",
+            groupIndex: 2,
+            caption: "Project Start Monat",
+            area: "column"
+        }
+    ];
+
+    createDataSource({
+        fields: fields,
+        store: this.testStore
+    });
+
+    //assert
+    assert.ok(this.testStore.load.calledOnce, "load once");
+    assert.deepEqual(this.testStore.load.lastCall.args[0].columns, [
+        fields[1],
+        fields[2],
+        fields[3],
+
+        fields[5],
+        fields[6],
+        fields[7],
+
+        fields[9],
+        fields[10],
+        fields[11],
+
+        fields[13],
+        fields[14],
+        fields[15]
+    ], "columns order");
+});
+
 QUnit.test("Load with group field. Pass sorting params", function(assert) {
     //act
     createDataSource({
