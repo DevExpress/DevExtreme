@@ -131,7 +131,7 @@ var ColorBox = DropDownEditor.inherit({
             onApplyButtonClick: null,
             onCancelButtonClick: null,
 
-            buttonsLocation: "bottom after"
+            buttonsLocation: "bottom after",
 
             /**
             * @name dxColorBoxOptions_value
@@ -167,6 +167,7 @@ var ColorBox = DropDownEditor.inherit({
             * @hidden
             * @extend_doc
             */
+            valueChangeEvent: "change"
 
             /**
             * @name dxColorBoxOptions_spellcheck
