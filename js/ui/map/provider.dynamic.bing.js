@@ -5,7 +5,7 @@ var $ = require("jquery"),
     DynamicProvider = require("./provider.dynamic"),
     Color = require("../../color"),
     browser = require("../../core/utils/browser"),
-    isDefined = require("../../core/utils/type").isDefined;
+    isDefined = require("../../core/utils/common").isDefined;
 
 /* global Microsoft */
 var BING_MAP_READY = "_bingScriptReady",
