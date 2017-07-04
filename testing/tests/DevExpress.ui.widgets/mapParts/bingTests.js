@@ -307,6 +307,31 @@ QUnit.test("center with geocode error", function(assert) {
     });
 });
 
+QUnit.test("'center' option is null", function(assert) {
+    var done = assert.async();
+    var d1 = $.Deferred();
+
+    var $map = $("#map").dxMap({
+            provider: "bing",
+            center: null,
+            onReady: function() {
+                assert.deepEqual(window.Microsoft.assignedOptions.center, window.geocodedWithErrorLocation, "center changed");
+
+                d1.resolve();
+            }
+        }),
+        map = $map.dxMap("instance");
+
+    d1.done(function() {
+        map.option("onUpdated", function() {
+            assert.deepEqual(window.Microsoft.assignedOptions.center, window.geocodedLocation, "center changed");
+            done();
+        });
+
+        map.option("center", LOCATIONS[0]);
+    });
+});
+
 QUnit.test("geocode should be called once for equal locations", function(assert) {
     var done = assert.async();
     var d1 = $.Deferred(),
