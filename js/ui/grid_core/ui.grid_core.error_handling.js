@@ -41,7 +41,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
 
             $("<td/>")
                 .attr({
-                    "colspan": that.getController("columns").getVisibleColumns().length,
+                    "colSpan": that.getController("columns").getVisibleColumns().length,
                     "role": "presentation"
                 })
                 .prepend($closeButton)

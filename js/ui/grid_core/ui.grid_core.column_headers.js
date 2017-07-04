@@ -198,7 +198,7 @@ module.exports = {
                     var column = options.column,
                         $cellElement = this.callBase.apply(this, arguments);
 
-                    column.rowspan > 1 && $cellElement.attr("rowspan", column.rowspan);
+                    column.rowspan > 1 && $cellElement.attr("rowSpan", column.rowspan);
 
                     return $cellElement;
                 },
