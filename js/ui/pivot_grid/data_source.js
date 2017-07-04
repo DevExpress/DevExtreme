@@ -387,7 +387,7 @@ module.exports = Class.inherit((function() {
 
     function sortFieldsByAreaIndex(fields) {
         fields.sort(function(field1, field2) {
-            return field1.areaIndex - field2.areaIndex;
+            return field1.areaIndex - field2.areaIndex || field1.groupIndex - field2.groupIndex;
         });
     }
 
