@@ -155,12 +155,36 @@ if(!useJQueryRenderer) {
         return this;
     };
 
+    var cleanData = function(node, cleanSelf) {
+        if(!node) return;
+
+        var childNodes = node.getElementsByTagName("*");
+
+        renderer.cleanData(childNodes, true);
+        if(cleanSelf) {
+            renderer.cleanData(node);
+        }
+    };
+
     initRender.prototype.clone = function() {
         var result = [];
         for(var i = 0; i < this.length; i++) {
             result.push(this[i].cloneNode(true));
         }
         return renderer(result);
+    };
+
+    initRender.prototype.text = function(text) {
+        if(!arguments.length) {
+            var result = "";
+            for(var i = 0; i < this.length; i++) {
+                result += this[i] && this[i].textContent || "";
+            }
+            return result;
+        }
+        cleanData(this[0], false);
+        rendererStrategy.setText(this[0], text);
+        return this;
     };
 
     initRender.prototype.contents = function() {
