@@ -1,13 +1,14 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+    commonUtils = require("../../core/utils/common"),
+    noop = commonUtils.noop,
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
     DynamicProvider = require("./provider.dynamic"),
     Color = require("../../color"),
     browser = require("../../core/utils/browser"),
-    isDefined = require("../../core/utils/type").isDefined;
+    isDefined = commonUtils.isDefined;
 
 /* global Microsoft */
 var BING_MAP_READY = "_bingScriptReady",
