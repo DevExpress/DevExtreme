@@ -62,27 +62,28 @@ var BingProvider = DynamicProvider.inherit({
     _geocodedLocations: {},
     _geocodeLocationImpl: function(location) {
         return new Promise(function(resolve) {
-            if(isDefined(location)) {
-                var searchManager = new Microsoft.Maps.Search.SearchManager(this._map);
-                var searchRequest = {
-                    where: location,
-                    count: 1,
-                    callback: function(searchResponse) {
-                        var result = searchResponse.results[0];
-                        if(result) {
-                            var boundsBox = searchResponse.results[0].location;
-
-                            resolve(new Microsoft.Maps.Location(boundsBox.latitude, boundsBox.longitude));
-                        } else {
-                            resolve(new Microsoft.Maps.Location(0, 0));
-                        }
-                    }
-                };
-
-                searchManager.geocode(searchRequest);
-            } else {
+            if(!isDefined(location)) {
                 resolve(new Microsoft.Maps.Location(0, 0));
+                return;
             }
+
+            var searchManager = new Microsoft.Maps.Search.SearchManager(this._map);
+            var searchRequest = {
+                where: location,
+                count: 1,
+                callback: function(searchResponse) {
+                    var result = searchResponse.results[0];
+                    if(result) {
+                        var boundsBox = searchResponse.results[0].location;
+
+                        resolve(new Microsoft.Maps.Location(boundsBox.latitude, boundsBox.longitude));
+                    } else {
+                        resolve(new Microsoft.Maps.Location(0, 0));
+                    }
+                }
+            };
+
+            searchManager.geocode(searchRequest);
         }.bind(this));
     },
 
