@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("jquery"),
-    rendererStrategy = require("./native_renderer_strategy"),
-    typeUtils = require("./utils/type");
+var $ = require("jquery");
+var rendererStrategy = require("./native_renderer_strategy");
+var typeUtils = require("./utils/type");
 
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
