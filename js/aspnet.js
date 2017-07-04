@@ -140,7 +140,8 @@
             id = id || ("dx-" + new Guid());
 
             var render = function(_, container) {
-                var $component = $("#" + id, container)[name](options);
+                var selector = "#" + id.replace(/\W/g, "\\$&"),
+                    $component = $(selector, container)[name](options);
                 if($.isPlainObject(validatorOptions)) {
                     $component.dxValidator(validatorOptions);
                 }
