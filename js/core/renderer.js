@@ -45,8 +45,12 @@ if(!useJQueryRenderer) {
         return this;
     };
 
-    var checkAttributeValue = function(value) {
-        return value !== undefined && value !== null;
+    var setAttributeValue = function(element, attrName, value) {
+        if(value !== undefined && value !== null) {
+            rendererStrategy.setAttribute(element, attrName, value);
+        } else {
+            rendererStrategy.removeAttribute(element, attrName);
+        }
     };
 
     methods.forEach(function(method) {
@@ -79,10 +83,8 @@ if(!useJQueryRenderer) {
             for(var key in attrName) {
                 this.attr(key, attrName[key]);
             }
-        } else if(checkAttributeValue(value)) {
-            rendererStrategy.setAttribute(this[0], attrName, value);
         } else {
-            rendererStrategy.removeAttribute(this[0], attrName);
+            setAttributeValue(this[0], attrName, value);
         }
         return this;
     };
@@ -238,15 +240,13 @@ if(!useJQueryRenderer) {
                         queryId = elementId || "dx-query-children";
 
                     if(!elementId) {
-                        checkAttributeValue(queryId) ? rendererStrategy.setAttribute(element, "id", queryId) :
-                        rendererStrategy.removeAttribute(element, "id");
+                        setAttributeValue(element, "id", queryId);
                     }
                     queryId = "[id='" + queryId + "'] ";
 
                     var querySelector = queryId + selector.replace(",", ", " + queryId);
                     nodes.push.apply(nodes, element.querySelectorAll(querySelector));
-                    checkAttributeValue(elementId) ? rendererStrategy.setAttribute(element, "id", elementId) :
-                        rendererStrategy.removeAttribute(element, "id");
+                    setAttributeValue(element, "id", elementId);
                 } else if(element.nodeType === Node.DOCUMENT_NODE) {
                     nodes.push.apply(nodes, element.querySelectorAll(selector));
                 }
