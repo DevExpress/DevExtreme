@@ -315,6 +315,9 @@ var TagBox = SelectBox.inherit({
             */
             onSelectAllValueChanged: null,
 
+            maxTagCount: undefined,
+            onMultiTagPreparing: null,
+
             /**
             * @name dxTagBoxOptions_multiline
             * @publicName multiline
@@ -438,6 +441,32 @@ var TagBox = SelectBox.inherit({
         this._selectedItems = [];
 
         this._initSelectAllValueChangedAction();
+    },
+
+    _initActions: function() {
+        this.callBase();
+        this._initMultiTagPreparingAction();
+    },
+
+    _initMultiTagPreparingAction: function() {
+        var onMultiTagPreparing = this.option("onMultiTagPreparing");
+
+        if(onMultiTagPreparing) {
+            this._multiTagPreparingAction = this._createActionByOption("onMultiTagPreparing");
+        } else {
+            this._multiTagPreparingAction = this._createAction(this._multiTagPreparingHandler.bind(this));
+        }
+    },
+
+    _multiTagPreparingHandler: function(e) {
+        if(e.allSelected) {
+            return messageLocalization.format("dxTagBox-all-selected");
+        } else {
+            var value = this._getValue(),
+                text = value.length + " " + messageLocalization.format("dxTagBox-selected");
+
+            return text;
+        }
     },
 
     _initTemplates: function() {
@@ -701,22 +730,31 @@ var TagBox = SelectBox.inherit({
         return isDefined(maxTagCount) && values.length > maxTagCount;
     },
 
+    _renderMultiTag: function($input) {
+        var value = this._getValue(),
+            $tag = this._createTag(null, $input).addClass(TAGBOX_MULTI_TAG_CLASS),
+            text = this._multiTagPreparingAction({
+                multiTagElement: $tag,
+                selectedItems: this.option("selectedItems"),
+                allSelected: value.length === this.option("items").length
+            });
+
+        $tag.data(TAGBOX_TAG_DATA_KEY, text);
+
+        this._tagTemplate.render({
+            model: text,
+            container: $tag
+        });
+    },
+
     _renderTags: function() {
         this._cleanTags();
 
         var $input = this._input(),
-            value = this._getValue(),
             itemLoadDeferreds;
 
         if(this._multiTagRequired()) {
-            var text = value.length + " " + messageLocalization.format("dxTagBox-selected"),
-                $tag = this._createTag(text, $input).addClass(TAGBOX_MULTI_TAG_CLASS);
-
-            this._tagTemplate.render({
-                model: text,
-                container: $tag
-            });
-
+            this._renderMultiTag($input);
             itemLoadDeferreds = $.Deferred().resolve().promise();
         } else {
             itemLoadDeferreds = $.map(this._getValue(), (function(value) {
@@ -1095,6 +1133,10 @@ var TagBox = SelectBox.inherit({
         switch(args.name) {
             case "onSelectAllValueChanged":
                 this._initSelectAllValueChangedAction();
+                break;
+            case "onMultiTagPreparing":
+                this._initMultiTagPreparingAction();
+                this._renderTags();
                 break;
             case "hideSelectedItems":
                 if(args.value) {
