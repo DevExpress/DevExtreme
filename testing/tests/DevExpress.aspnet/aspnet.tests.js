@@ -217,7 +217,7 @@
                 assert.equal($result.dxValidator("option", "validationGroup"), "my-group");
             });
 
-            QUnit.test("Component ID that contains non-word characters should be escaped (T531137)", function(assert) {
+            QUnit.test("Exotic characters in component ID should be escaped (T531137)", function(assert) {
                 var $result = renderTemplate("#templateWithExoticId");
                 assert.ok($result.dxButton("instance"));
             });
