@@ -161,7 +161,7 @@ if(!useJQueryRenderer) {
 
         var childNodes = node.getElementsByTagName("*");
 
-        renderer.cleanData(childNodes, true);
+        renderer.cleanData(childNodes);
         if(cleanSelf) {
             renderer.cleanData(node);
         }
@@ -407,19 +407,8 @@ renderer._data = $._data;
 renderer.data = $.data;
 renderer.removeData = $.removeData;
 
-var originalCleanData = $.cleanData;
-
-$.cleanData = function(element) {
-    var result = originalCleanData.apply(this, arguments);
-
-    for(var i = 0; i < renderer(element).length; i++) {
-        renderer.removeData(renderer(element)[i]);
-    }
-
-    return result;
-};
 renderer.cleanData = function(element) {
-    return $.cleanData($(element));
+    $.cleanData($(element));
 };
 
 renderer.when = $.when;
