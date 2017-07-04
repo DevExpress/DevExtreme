@@ -9,8 +9,7 @@ var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
-    "css", "attr", "removeAttr", "prop", "removeProp",
-    "remove", "detach", "empty", "text",
+    "css", "attr", "removeAttr", "prop", "removeProp", "text",
     "html", "is", "not", "wrapInner", "wrap",
     "each", "val", "index",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit", "has"];
@@ -152,6 +151,51 @@ if(!useJQueryRenderer) {
 
     initRender.prototype.replaceWith = function(element) {
         this.$element.replaceWith(element.$element || element);
+        return this;
+    };
+
+    var cleanData = function(node, cleanSelf) {
+        if(!node) {
+            return;
+        }
+
+        var childNodes = node.getElementsByTagName("*");
+
+        renderer.cleanData(childNodes, true);
+        if(cleanSelf) {
+            renderer.cleanData(node);
+        }
+    };
+
+    initRender.prototype.remove = function() {
+        if(this.length > 1) {
+            return repeatMethod.call(this, "remove", arguments);
+        }
+
+        cleanData(this[0], true);
+        rendererStrategy.removeElement(this[0]);
+
+        return this;
+    };
+
+    initRender.prototype.detach = function() {
+        if(this.length > 1) {
+            return repeatMethod.call(this, "detach", arguments);
+        }
+
+        rendererStrategy.removeElement(this[0]);
+
+        return this;
+    };
+
+    initRender.prototype.empty = function() {
+        if(this.length > 1) {
+            return repeatMethod.call(this, "empty", arguments);
+        }
+
+        cleanData(this[0]);
+        rendererStrategy.setText(this[0], "");
+
         return this;
     };
 
@@ -362,7 +406,22 @@ renderer.param = $.param;
 renderer._data = $._data;
 renderer.data = $.data;
 renderer.removeData = $.removeData;
-renderer.cleanData = $.cleanData;
+
+var originalCleanData = $.cleanData;
+
+$.cleanData = function(element) {
+    var result = originalCleanData.apply(this, arguments);
+
+    for(var i = 0; i < renderer(element).length; i++) {
+        renderer.removeData(renderer(element)[i]);
+    }
+
+    return result;
+};
+renderer.cleanData = function(element) {
+    return $.cleanData($(element));
+};
+
 renderer.when = $.when;
 renderer.event = $.event;
 renderer.Event = $.Event;
