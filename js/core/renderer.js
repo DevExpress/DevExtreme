@@ -64,6 +64,26 @@ if(!useJQueryRenderer) {
         };
     });
 
+    initRender.prototype.show = function() {
+        if(this[0]) {
+            if(!this.hasClass("dx-state-invisible") && this[0].style.display === "none") {
+                this[0].style.display = "";
+            } else {
+                this.toggleClass("dx-state-invisible", false);
+            }
+        }
+
+        return this;
+    };
+
+    initRender.prototype.hide = function() {
+        return this.toggleClass("dx-state-invisible", true);
+    };
+
+    initRender.prototype.toggle = function(value) {
+        return value ? this.show() : this.hide();
+    };
+
     initRender.prototype.attr = function(attrName, value) {
         if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, "attr", arguments);
         if(!this[0]) {

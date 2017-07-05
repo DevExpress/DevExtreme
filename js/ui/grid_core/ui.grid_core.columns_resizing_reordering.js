@@ -290,7 +290,7 @@ var BlockSeparatorView = SeparatorView.inherit({
             $element = this.element();
 
         if($element && this._isShown) {
-            $element.hide();
+            $element.css("display", "none");
         }
 
         if($parent && !$parent.children("." + BLOCK_SEPARATOR_CLASS).length) {
@@ -333,7 +333,7 @@ var BlockSeparatorView = SeparatorView.inherit({
                     startAnimate({ width: "100%", display: "block" });
                     break;
                 default:
-                    $element.show();
+                    $element.css("display", "");
             }
         }
 

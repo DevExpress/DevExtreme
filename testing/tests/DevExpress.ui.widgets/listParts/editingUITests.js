@@ -16,6 +16,7 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store");
 
 require("ui/list");
+require("common.css!");
 
 var LIST_ITEM_CLASS = "dx-list-item",
     LIST_ITEM_CONTENT_CLASS = "dx-list-item-content",
