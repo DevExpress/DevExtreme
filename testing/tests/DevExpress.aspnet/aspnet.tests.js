@@ -157,6 +157,12 @@
                     </div>\
                     </script>\
                     \
+                    <script id="templateWithExoticId" type="text/html">\
+                    <div id="templateContent">\
+                        <%= DevExpress.aspnet.renderComponent("dxButton", { }, "id-_1α♠!#$%&()*+,./:;<=>?@[\]^`{|}~") %>\
+                    </div>\
+                    </script>\
+                    \
                     <script id="templateWithValidator" type="text/html">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxTextBox", { }, "test-id", { validationGroup: "my-group" }) %>\
@@ -209,6 +215,11 @@
             QUnit.test("Component element rendering with validator", function(assert) {
                 var $result = renderTemplate("#templateWithValidator");
                 assert.equal($result.dxValidator("option", "validationGroup"), "my-group");
+            });
+
+            QUnit.test("Exotic characters in component ID should be escaped (T531137)", function(assert) {
+                var $result = renderTemplate("#templateWithExoticId");
+                assert.ok($result.dxButton("instance"));
             });
         }
     );

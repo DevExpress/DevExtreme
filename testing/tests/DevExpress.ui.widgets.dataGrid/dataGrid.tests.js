@@ -3877,6 +3877,30 @@ QUnit.test("dataSource changing not reset columns order when dataSource structur
     assert.deepEqual(dataGrid.getController("data").items()[0].data, { field1: 3, field2: 4 });
 });
 
+//T531189
+QUnit.test("noData should be hidden after assign dataSource and height", function(assert) {
+    //arrange, act
+    var clock = sinon.useFakeTimers();
+    var dataGrid = createDataGrid({
+        columns: ["id"]
+    });
+
+    clock.tick(0);
+
+    //act
+    dataGrid.option("dataSource", [{ id: 1 }]);
+    dataGrid.option("height", 300);
+
+    clock.tick(0);
+
+    //assert
+    var $noData = dataGrid.element().find(".dx-datagrid-nodata");
+    assert.equal($noData.length, 1, "nodata is rendered once");
+    assert.notOk($noData.is(":visible"), "nodata is hidden");
+
+    clock.restore();
+});
+
 //T231356
 QUnit.test("rtlEnabled change", function(assert) {
     //arrange, act

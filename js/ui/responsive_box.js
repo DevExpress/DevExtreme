@@ -635,8 +635,8 @@ var ResponsiveBox = CollectionWidget.inherit({
             return;
         }
 
-        $.each(this._assistantRoots, function() {
-            $(this).remove();
+        $.each(this._assistantRoots, function(_, item) {
+            $(item).remove();
         });
     },
 

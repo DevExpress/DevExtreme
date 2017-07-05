@@ -4,7 +4,7 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("../../core/utils/date");
 
-var WEEK_APPOINTMENT_DEFAULT_OFFSET = 15;
+var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25;
 
 var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     getDeltaTime: function(args, initialSize, appointment) {

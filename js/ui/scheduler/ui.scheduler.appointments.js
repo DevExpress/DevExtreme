@@ -81,8 +81,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _resetTabIndex: function($appointment) {
-        this._focusTarget().attr("tabindex", -1);
-        $appointment.attr("tabindex", this.option("tabIndex"));
+        this._focusTarget().attr("tabIndex", -1);
+        $appointment.attr("tabIndex", this.option("tabIndex"));
     },
 
     _moveFocus: commonUtils.noop,

@@ -72,7 +72,8 @@ QUnit.test("Show adaptive command column", function(assert) {
     this.clock.tick();
 
     //assert
-    assert.ok(this.columnsController.columnOption("command:adaptive", "visible"), "adaptive command column is shown");
+    assert.ok(this.columnsController.columnOption("command:adaptive", "visible"), "adaptive command column is visible");
+    assert.notOk(this.columnsController.columnOption("command:adaptive", "adaptiveHidden"), "adaptive command is not hidden");
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
 });
 
@@ -90,7 +91,7 @@ QUnit.test("Column hiding should not work if column resizing enabled and columnR
     this.clock.tick();
 
     //assert
-    assert.notOk(this.columnsController.columnOption("command:adaptive", "visible"), "adaptive command column is not shown");
+    assert.ok(this.columnsController.columnOption("command:adaptive", "adaptiveHidden"), "adaptive command column is not shown");
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 0, "no command adaptive element");
 });
 
@@ -169,7 +170,7 @@ QUnit.test("Hide adaptive command column when 'columnsHidingEnabled' is disabled
     this.clock.tick();
 
     //assert
-    assert.ok(!this.columnsController.columnOption("command:adaptive", "visible"), "adaptive command column is hidden");
+    assert.ok(this.columnsController.columnOption("command:adaptive", "adaptiveHidden"), "adaptive command column is hidden");
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 0, "command adaptive element");
     assert.equal(this.adaptiveColumnsController.getHiddenColumns().length, 0, "hidden columns count");
 });
@@ -1338,6 +1339,22 @@ QUnit.test("Adaptive command column should be shown when columns contains banded
 
     //assert
     assert.equal($(".dx-data-row .dx-command-adaptive:not(.dx-datagrid-hidden-column)").length, 2, "the adaptive column is shown");
+});
+
+QUnit.test("Not display adaptive command column when it is invisible via option", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.columnsController.columnOption("command:adaptive", "visible", false);
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 0, "command adaptive element");
 });
 
 QUnit.module("API", {

@@ -23,11 +23,11 @@ module.exports = {
     },
 
     setAttribute: function(element, name, value) {
-        if(value !== undefined && value !== null) {
-            element.setAttribute(name, value);
-        } else {
-            element.removeAttribute(name);
-        }
+        element.setAttribute(name, value);
+    },
+
+    removeAttribute: function(element, name) {
+        element.removeAttribute(name);
     },
 
     setProperty: function(element, name, value) {

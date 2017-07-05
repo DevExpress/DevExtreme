@@ -31,7 +31,8 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
                 height: height,
                 width: fullWeekAppointmentWidth,
                 appointmentReduced: "body",
-                rowIndex: ++appointmentSettings.rowIndex
+                rowIndex: ++appointmentSettings.rowIndex,
+                cellIndex: 0
             }));
 
             currentPartTop += this._defaultHeight;
@@ -49,7 +50,8 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
                 height: height,
                 width: tailWidth,
                 appointmentReduced: "tail",
-                rowIndex: ++appointmentSettings.rowIndex
+                rowIndex: ++appointmentSettings.rowIndex,
+                cellIndex: 0
             }));
         }
 
