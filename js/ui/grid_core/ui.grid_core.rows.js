@@ -618,7 +618,7 @@ module.exports = {
                                             break;
                                         case "insert":
                                             if(!$rowsElement.length) {
-                                                $newRowElement.prependTo(tableElement);
+                                                $newRowElement.prependTo(tableElement.children("tbody"));
                                             } else if($rowElement.length) {
                                                 $newRowElement.insertBefore($rowElement);
                                             } else {
@@ -1226,7 +1226,7 @@ module.exports = {
                     if($cells) {
                         groupCellIndex = $cells.filter("." + GROUP_CELL_CLASS).index();
                         if(groupCellIndex >= 0 && $cells.length > groupCellIndex + 1) {
-                            $cells.length = groupCellIndex + 1;
+                            return $cells.slice(0, groupCellIndex + 1);
                         }
                     }
                     return $cells;
