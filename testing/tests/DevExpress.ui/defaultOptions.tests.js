@@ -14,6 +14,7 @@ var $ = require("jquery"),
     Box = require("ui/box"),
     Button = require("ui/button"),
     CheckBox = require("ui/check_box"),
+    ColorBox = require("ui/color_box"),
     DateBox = require("ui/date_box"),
     DateView = require("ui/date_box/ui.date_view"),
     DateViewRoller = require("ui/date_box/ui.date_view_roller"),
@@ -1003,6 +1004,13 @@ testComponentDefaults(CheckBox,
     },
     function() {
         themes.current(this.originalCurrentTheme);
+    }
+);
+
+testComponentDefaults(ColorBox,
+    { },
+    {
+        valueChangeEvent: "change"
     }
 );
 
