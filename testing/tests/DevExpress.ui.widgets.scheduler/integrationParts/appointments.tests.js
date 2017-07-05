@@ -18,7 +18,7 @@ var $ = require("jquery"),
 require("ui/scheduler/ui.scheduler");
 require("ui/switch");
 
-var APPOINTMENT_DEFAULT_OFFSET = 25;
+var APPOINTMENT_DEFAULT_OFFSET = 15;
 
 function getDeltaTz(schedulerTz, date) {
     var defaultTz = date.getTimezoneOffset() * 60000;
@@ -830,16 +830,16 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
     });
 
     var $commonAppointments = this.instance.element().find(".dx-scheduler-scrollable-appointments .dx-scheduler-appointment"),
-        $allDayAppts = this.instance.element().find(".dx-scheduler-all-day-appointment"),
+        $allDayAppts = this.instance.element().find(".dx-scheduler-scrollable-appointments .dx-scheduler-appointment"),
         cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, "Left position is OK");
 
-    assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_OFFSET, 1.001, "Width is OK");
-    assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_OFFSET, 1.001, "Width is OK");
-    assert.roughEqual($allDayAppts.eq(0).outerWidth(), cellWidth, 1.001, "Width is OK");
+    assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - 15, 1.001, "Width is OK");
+    assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - 15, 1.001, "Width is OK");
+    assert.roughEqual($allDayAppts.eq(0).outerWidth(), cellWidth - 15, 1.001, "Width is OK");
 });
 
 QUnit.test("DblClick on appointment should call scheduler.showAppointmentPopup", function(assert) {
