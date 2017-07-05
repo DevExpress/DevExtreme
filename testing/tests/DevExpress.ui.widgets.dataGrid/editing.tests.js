@@ -2135,6 +2135,7 @@ QUnit.test('Save changes when batch mode when one the changes is canceled from e
     assert.deepEqual(updateArgs, [['test1', { "name": "Test1" }]]);
     assert.deepEqual(removeKeys, []);
     assert.ok(that.dataController.refreshed, 'data is refreshed');
+    assert.deepEqual(that.editingController._editData, [{ key: "test3", oldData: that.dataControllerOptions.items[2].data, type: "remove" }], "edit data");
 });
 
 QUnit.test('Close Editing Cell when batch mode on click inside freespace row', function(assert) {
@@ -2445,6 +2446,43 @@ QUnit.test("The first cell should not be switched to the editing state when clic
     $mainTable = rowsView.element().children(".dx-datagrid-content").children("table");
     assert.strictEqual($mainTable.find("input").length, 0, "hasn't input");
     assert.notOk($mainTable.find("tbody > tr").first().children().first().hasClass("dx-editor-cell"), 0, "first cell isn't editable");
+});
+
+//T531154
+QUnit.test("The cell should be editable after cancel removing the row", function(assert) {
+   //arrange
+    var that = this,
+        $cellElement,
+        countCallOnRowRemoving = 0,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    that.options.editing = {
+        allowUpdating: true,
+        allowDeleting: true,
+        mode: "cell",
+        texts: {
+            confirmDeleteMessage: ""
+        }
+    };
+    that.options.onRowRemoving = function(e) {
+        countCallOnRowRemoving++;
+        e.cancel = $.Deferred().resolve(true);
+    };
+
+    rowsView.render($testElement);
+    that.editingController.optionChanged({ name: "onRowRemoving" });
+
+    that.deleteRow(0);
+
+    //act
+    that.editCell(0, 0);
+
+    //assert
+    $cellElement = rowsView.element().find("tbody > tr").first().children().first();
+    assert.strictEqual(countCallOnRowRemoving, 1, "count call onRowRemoving event");
+    assert.ok($cellElement.hasClass("dx-editor-cell"), "cell is editable");
+    assert.ok($cellElement.find("input").length > 0, "has input");
 });
 
 if(browser.msie && parseInt(browser.version) <= 11) {
@@ -7021,6 +7059,118 @@ QUnit.test("Tooltip should be positioned by left side when the drop-down editor 
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.strictEqual(tooltipInstance.option("position").my, "top right", "position.my of the tooltip");
     assert.strictEqual(tooltipInstance.option("position").at, "top left", "position.at of the tooltip");
+});
+
+//T523770
+QUnit.test("Invalid message and revert button should not be overlapped when the drop-down editor is shown for first column", function(assert) {
+    //arrange
+    var that = this,
+        invalidTooltipInstance,
+        revertTooltipInstance,
+        selectBoxInstance,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: [
+            {
+                dataField: "name",
+                validationRules: [{ type: "required" }],
+                lookup: {
+                    dataSource: that.array,
+                    displayExpr: "name",
+                    valueExpr: "name"
+                }
+            },
+            "age",
+            "lastName",
+        ]
+    });
+    that.editorFactoryController._getFocusedElement = function() {
+        return $testElement.find("input");
+    };
+
+    that.cellValue(0, 0, "");
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    //act
+    getInputElements($testElement.find("tbody td").eq(0)).trigger("dxclick");
+    that.clock.tick();
+
+    //assert
+    selectBoxInstance = $testElement.find("tbody td").eq(0).find(".dx-selectbox").dxSelectBox("instance");
+    invalidTooltipInstance = $testElement.find("tbody td").eq(0).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    revertTooltipInstance = $testElement.find("tbody td").eq(0).find(".dx-overlay.dx-datagrid-revert-tooltip").dxTooltip("instance");
+
+    assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
+    assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
+    assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
+    assert.ok(selectBoxInstance.element().offset().left + selectBoxInstance.element().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after selectbox");
+    assert.ok(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width() < invalidTooltipInstance.content().offset().left, "invalid tooltip is shown after revert tooltip");
+});
+
+//T523770
+QUnit.test("Invalid message and revert button should not be overlapped when the drop-down editor is shown for last column", function(assert) {
+    //arrange
+    var that = this,
+        invalidTooltipInstance,
+        revertTooltipInstance,
+        selectBoxInstance,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    $("#qunit-fixture").addClass("qunit-fixture-static").css("width", "auto");
+
+    rowsView.render($testElement);
+    that.applyOptions({
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: [
+            "age",
+            "lastName",
+            {
+                dataField: "name",
+                validationRules: [{ type: "required" }],
+                lookup: {
+                    dataSource: that.array,
+                    displayExpr: "name",
+                    valueExpr: "name"
+                }
+            }
+        ]
+    });
+    that.editorFactoryController._getFocusedElement = function() {
+        return $testElement.find("input");
+    };
+
+    that.cellValue(0, 2, "");
+    that.editCell(0, 2);
+    that.clock.tick();
+
+    //act
+    getInputElements($testElement.find("tbody td").eq(2)).trigger("dxclick");
+    that.clock.tick();
+
+    //assert
+    selectBoxInstance = $testElement.find("tbody td").eq(2).find(".dx-selectbox").dxSelectBox("instance");
+    invalidTooltipInstance = $testElement.find("tbody td").eq(2).find(".dx-overlay.dx-invalid-message").dxOverlay("instance");
+    revertTooltipInstance = $testElement.find("tbody td").eq(2).find(".dx-overlay.dx-datagrid-revert-tooltip").dxTooltip("instance");
+
+    assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
+    assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
+    assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
+    assert.ok(invalidTooltipInstance.content().offset().left + invalidTooltipInstance.content().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after invalid tooltip");
+    assert.roughEqual(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.element().offset().left, 1, "selectbox is shown after revert tooltip");
+
+    $("#qunit-fixture").removeClass("qunit-fixture-static").css("width", "");
 });
 
 QUnit.test("Show error rows on save inserted rows when set validate in column and edit mode batch", function(assert) {

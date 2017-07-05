@@ -369,6 +369,12 @@ QUnit.test('getDatesByRecurrence should handle strings correctly if interval sta
     assert.deepEqual(dates, [new Date(2015, 2, 12), new Date(2015, 2, 14), new Date(2015, 2, 16)], 'dates are right');
 });
 
+QUnit.test('getDatesByRecurrence should handle strings correctly for WEEKLY rule with BYDAY for next week', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH', start: new Date(2017, 5, 29, 9), min: new Date(2017, 6, 3), max: new Date(2017, 6, 7, 23, 59) });
+
+    assert.deepEqual(dates, [new Date(2017, 6, 3, 9), new Date(2017, 6, 4, 9), new Date(2017, 6, 5, 9), new Date(2017, 6, 6, 9)], 'dates are right');
+});
+
 QUnit.test('getRecurrenceString should handle objects with freq', function(assert) {
     var string = recurrenceUtils.getRecurrenceString({ freq: "yearly", interval: 2 });
 

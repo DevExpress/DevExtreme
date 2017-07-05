@@ -622,7 +622,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
         this._addContentClasses(node, $itemFrame);
 
-        $itemFrame.attr("tabindex", -1);
+        $itemFrame.attr("tabIndex", -1);
 
         if(this._hasSubmenu(node)) this.setAria("haspopup", "true", $itemFrame);
     },

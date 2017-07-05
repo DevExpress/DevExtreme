@@ -146,7 +146,7 @@ QUnit.test("click subscription should make element clickable (Q559654)", functio
     assert.equal(this.element.attr("onclick"), "void(0)");
 });
 
-QUnit.test("click subscription should make element clickable (Q559654)", function(assert) {
+QUnit.test("click subscription should not add onclick attr for native strategy (T527293)", function(assert) {
     if(!clickEvent.useNativeClick) {
         assert.expect(0);
         return;

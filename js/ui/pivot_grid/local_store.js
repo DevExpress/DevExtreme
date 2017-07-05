@@ -341,7 +341,7 @@ exports.LocalStore = Class.inherit((function() {
         };
     }
 
-    function loadCore(items, options) {
+    function loadCore(items, options, notifyProgress) {
         var headers = {
                 columns: [],
                 rows: [],
@@ -364,7 +364,7 @@ exports.LocalStore = Class.inherit((function() {
             for(; i < items.length; i++) {
                 if(i > startIndex && i % 10000 === 0) {
                     if(new Date() - t >= 300) {
-                        d.notify(i / items.length);
+                        notifyProgress(i / items.length);
                         setTimeout(processData, 0);
 
                         return;
@@ -378,7 +378,7 @@ exports.LocalStore = Class.inherit((function() {
             }
 
             aggregationFinalize(options.values, values);
-            d.notify(1);
+            notifyProgress(1);
             d.resolve({
                 rows: headers.rows,
                 columns: headers.columns,
@@ -470,6 +470,7 @@ exports.LocalStore = Class.inherit((function() {
 
     return {
         ctor: function(options) {
+            this._progressChanged = options.onProgressChanged || commonUtils.noop;
             this._dataSource = new DataSourceModule.DataSource(options);
             this._dataSource.paginate(false);
         },
@@ -498,7 +499,7 @@ exports.LocalStore = Class.inherit((function() {
             prepareLoadOption(options);
 
             loadDataSource(dataSource, getFieldSelectors(options), options.reload).done(function(data) {
-                when(loadCore(data, options)).progress(d.notify).done(d.resolve);
+                when(loadCore(data, options, that._progressChanged)).progress(d.notify).done(d.resolve);
             }).fail(d.reject);
 
             return d;

@@ -13,7 +13,7 @@ jQuery.cleanData = function(elements) {
     for(var i = 0; i < elements.length; i++) {
         var $element = $(elements[i]);
         if($element.prop(eventPropName)) {
-            $element.removeProp(eventPropName);
+            $element[0][eventPropName] = null;
             $element.triggerHandler(eventName);
         }
     }

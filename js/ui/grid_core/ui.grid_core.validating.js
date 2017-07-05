@@ -25,6 +25,7 @@ var INVALIDATE_CLASS = "invalid",
     CELL_HIGHLIGHT_OUTLINE = "dx-highlight-outline",
 
     INSERT_INDEX = "__DX_INSERT_INDEX__",
+    PADDING_BETWEEN_TOOLTIPS = 2,
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
     EDIT_MODE_BATCH = "batch",
@@ -514,7 +515,7 @@ module.exports = {
                     var that = this;
 
                     if($targetElement && $targetElement.length) {
-                        new Tooltip(
+                        return new Tooltip(
                         $("<div>")
                             .addClass(that.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
                             .appendTo($container),
@@ -547,7 +548,7 @@ module.exports = {
                     }
                 },
 
-                _showValidationMessage: function($cell, message, alignment) {
+                _showValidationMessage: function($cell, message, alignment, revertTooltip) {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
@@ -580,13 +581,26 @@ module.exports = {
                             onPositioned: function(e) {
                                 if(!needRepaint) {
                                     needRepaint = that._rowsView.updateFreeSpaceRowHeight();
-
                                     if(needRepaint) {
                                         e.component.repaint();
                                     }
                                 }
+
+                                that._shiftValidationMessageIfNeed(e.component.content(), revertTooltip && revertTooltip.content(), $cell);
                             }
                         });
+                },
+
+                _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
+                    if(!$revertContent) return;
+
+                    var contentOffset = $content.offset(),
+                        revertContentOffset = $revertContent.offset();
+
+                    if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
+                        var left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
+                        $content.css("left", revertContentOffset.left < $cell.offset().left ? -left : left);
+                    }
                 },
 
                 _getTooltipsSelector: function() {
@@ -615,6 +629,8 @@ module.exports = {
                         validationResult,
                         $tooltips = $focus && $focus.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector()),
                         $cell = $focus && $focus.is("td") ? $focus : null,
+                        showValidationMessage = false,
+                        revertTooltip,
                         column = $cell && that.getController("columns").getVisibleColumns()[$cell.index()];
 
                     if(!arguments.length) return that.callBase();
@@ -629,18 +645,18 @@ module.exports = {
 
                             if(!validationResult.isValid) {
                                 hideBorder = true;
-
-                                if($cell && column) {
-                                    that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment);
-                                }
+                                showValidationMessage = true;
                             }
                         }
                     }
 
                     if((validationResult && !validationResult.isValid) || (editData && editData.type === "update")) {
                         if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
-                            that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
+                            revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
                         }
+                    }
+                    if(showValidationMessage && $cell && column) {
+                        that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment, revertTooltip);
                     }
 
                     !hideBorder && that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();
