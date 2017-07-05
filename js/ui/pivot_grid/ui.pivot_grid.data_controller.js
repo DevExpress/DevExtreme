@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     when = require("../../integration/jquery/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -700,7 +701,7 @@ exports.DataController = Class.inherit((function() {
 
             options = that._options = options || {};
 
-            that.dataSourceChanged = $.Callbacks();
+            that.dataSourceChanged = Callbacks();
             that._dataSource = that._createDataSource(options);
 
             that._rowsScrollController = createScrollController(that, options.component, {
@@ -749,13 +750,14 @@ exports.DataController = Class.inherit((function() {
             that._rowsInfo = [];
             that._cellsInfo = [];
 
-            that.expandValueChanging = $.Callbacks();
-            that.loadingChanged = $.Callbacks();
-            that.scrollChanged = $.Callbacks();
+            that.expandValueChanging = Callbacks();
+            that.loadingChanged = Callbacks();
+            that.progressChanged = Callbacks();
+            that.scrollChanged = Callbacks();
 
             that.load();
             that._update();
-            that.changed = $.Callbacks();
+            that.changed = Callbacks();
         },
 
         _fireChanged: function() {
@@ -852,8 +854,11 @@ exports.DataController = Class.inherit((function() {
         _handleExpandValueChanging: function(e) {
             this.expandValueChanging.fire(e);
         },
-        _handleLoadingChanged: function(isLoading, progress) {
-            this.loadingChanged.fire(isLoading, progress);
+        _handleLoadingChanged: function(isLoading) {
+            this.loadingChanged.fire(isLoading);
+        },
+        _handleProgressChanged: function(progress) {
+            this.progressChanged.fire(progress);
         },
         _handleFieldsPrepared: function(e) {
             this._options.onFieldsPrepared && this._options.onFieldsPrepared(e);
@@ -873,6 +878,9 @@ exports.DataController = Class.inherit((function() {
 
             that._expandValueChangingHandler = that._handleExpandValueChanging.bind(that);
             that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
+            that._progressChangedHandler = function(progress) {
+                that._handleProgressChanged(progress * 0.8);
+            };
             that._fieldsPreparedHandler = that._handleFieldsPrepared.bind(that);
             that._changedHandler = function() {
                 that._update();
@@ -882,6 +890,7 @@ exports.DataController = Class.inherit((function() {
             dataSource.on("changed", that._changedHandler);
             dataSource.on("expandValueChanging", that._expandValueChangingHandler);
             dataSource.on("loadingChanged", that._loadingChangedHandler);
+            dataSource.on("progressChanged", that._progressChangedHandler);
             dataSource.on("fieldsPrepared", that._fieldsPreparedHandler);
 
             return dataSource;
@@ -920,7 +929,7 @@ exports.DataController = Class.inherit((function() {
                 grandTotalsAreHiddenForNotAllDataFields = dataFields.length > 0 ? hiddenGrandTotals.length !== dataFields.length : true,
                 notifyProgress = function(progress) {
                     this.progress = progress;
-                    dataSource._changeLoadingCount(0, 0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
+                    that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
                 },
                 rowOptions = {
                     isEmptyGrandTotal: data.isEmptyGrandTotalRow, //TODO bool or array
@@ -963,7 +972,7 @@ exports.DataController = Class.inherit((function() {
                 data.grandTotalColumnIndex = getHeaderIndexedItems(data.columns, columnOptions).length;
             }
 
-            dataSource._changeLoadingCount(1, 0.8);
+            dataSource._changeLoadingCount(1);
 
             when(
                 createHeaderInfo(data.columns, columnFields, dataFieldsForColumns, true, columnOptions),
@@ -1159,6 +1168,7 @@ exports.DataController = Class.inherit((function() {
                 that._dataSource.off("changed", that._changedHandler);
                 that._dataSource.off("expandValueChanging", that._expandValueChangingHandler);
                 that._dataSource.off("loadingChanged", that._loadingChangedHandler);
+                that._dataSource.off("progressChanged", that._progressChangedHandler);
             } else {
                 that._dataSource.dispose();
             }
@@ -1171,6 +1181,7 @@ exports.DataController = Class.inherit((function() {
             that.expandValueChanging.empty();
             that.changed.empty();
             that.loadingChanged.empty();
+            that.progressChanged.empty();
             that.scrollChanged.empty();
             that.dataSourceChanged.empty();
         }

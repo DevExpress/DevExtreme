@@ -501,14 +501,15 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         that._columnsController.addCommandColumn({
             command: ADAPTIVE_COLUMN_NAME,
-            visible: false,
+            visible: true,
+            adaptiveHidden: true,
             cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
             width: "auto"
         });
 
         that._columnsController.columnsChanged.add(function() {
             var isAdaptiveVisible = !!that.updateHidingQueue(that._columnsController.getColumns()).length;
-            that._columnsController.columnOption("command:adaptive", "visible", isAdaptiveVisible, true);
+            that._columnsController.columnOption("command:adaptive", "adaptiveHidden", !isAdaptiveVisible, true);
         });
         that._editingController = that.getController("editing");
         that._hidingColumnsQueue = [];
@@ -520,7 +521,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
     optionChanged: function(args) {
         if(args.name === "columnHidingEnabled") {
-            this._columnsController.columnOption("command:adaptive", "visible", args.value);
+            this._columnsController.columnOption("command:adaptive", "adaptiveHidden", !args.value);
         }
 
         this.callBase(args);
@@ -621,7 +622,7 @@ module.exports = {
                     return $row;
                 },
 
-                _getColumnIndexByElement: function($element) {
+                _getColumnIndexByElementCore: function($element) {
                     var $itemContent = $element.closest("." + FORM_ITEM_CONTENT_CLASS);
                     if($itemContent.length && $itemContent.closest(this.component.element()).length) {
                         var formItem = $itemContent.length ? $itemContent.first().data("dx-form-item") : null;
@@ -801,8 +802,8 @@ module.exports = {
                 }
             },
             resizing: {
-                _isNeedToCalcBestFitWidths: function(needBestFit) {
-                    return this.callBase(needBestFit) || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
+                _needBestFit: function() {
+                    return this.callBase() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
                 },
 
                 _correctColumnWidths: function(resultWidths, visibleColumns) {
@@ -924,8 +925,12 @@ module.exports = {
                 _getTooltipsSelector: function() {
                     return this.callBase() + ", .dx-field-item-content .dx-tooltip";
                 }
+            },
+            columns: {
+                _isColumnVisible: function(column) {
+                    return this.callBase(column) && !column.adaptiveHidden;
+                }
             }
-
         }
     }
 };

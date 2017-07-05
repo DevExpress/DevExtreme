@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
     Class = require("../../core/class"),
+    Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
     Locker = require("../../core/utils/locker"),
@@ -34,8 +35,8 @@ var safeApply = function(func, scope) {
 var ComponentBuilder = Class.inherit({
 
     ctor: function(options) {
-        this._componentDisposing = $.Callbacks();
-        this._optionChangedCallbacks = $.Callbacks();
+        this._componentDisposing = Callbacks();
+        this._optionChangedCallbacks = Callbacks();
         this._ngLocker = new Locker();
 
         this._scope = options.scope;

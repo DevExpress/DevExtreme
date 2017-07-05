@@ -952,6 +952,8 @@ var EditingController = modules.ViewController.inherit((function() {
                 dataController = that._dataController,
                 i,
                 arg,
+                cancel,
+                editData,
                 editIndex,
                 isError,
                 $popupContent,
@@ -960,20 +962,22 @@ var EditingController = modules.ViewController.inherit((function() {
 
             for(i = 0; i < results.length; i++) {
                 arg = results[i].result;
+                cancel = arg === "cancel";
                 editIndex = getIndexByKey(results[i].key, that._editData);
+                editData = that._editData[editIndex];
 
-                if(that._editData[editIndex]) {
+                if(editData) {
                     isError = arg && arg instanceof Error;
                     if(isError) {
-                        that._editData[editIndex].error = arg;
+                        editData.error = arg;
                         $popupContent = that.getPopupContent();
                         dataController.dataErrorOccurred.fire(arg, $popupContent);
                         if(editMode !== EDIT_MODE_BATCH) {
                             break;
                         }
-                    } else if(arg !== "cancel") {
+                    } else if(!cancel || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
                         that._editData.splice(editIndex, 1);
-                        hasSavedData = true;
+                        hasSavedData = !cancel;
                     }
                 }
             }
@@ -1971,7 +1975,19 @@ module.exports = {
                     return $row;
                 },
                 _getColumnIndexByElement: function($element) {
+                    var $tableElement = $element.closest("table"),
+                        $tableElements = this.getTableElements();
+
+                    while($tableElement.length && !$tableElements.filter($tableElement).length) {
+                        $element = $tableElement.closest("td");
+                        $tableElement = $element.closest("table");
+                    }
+
+                    return this._getColumnIndexByElementCore($element);
+                },
+                _getColumnIndexByElementCore: function($element) {
                     var $targetElement = $element.closest("." + ROW_CLASS + "> td:not(.dx-master-detail-cell)");
+
                     return this.getCellIndex($targetElement);
                 },
                 _rowClick: function(e) {

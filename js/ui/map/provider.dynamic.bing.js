@@ -7,7 +7,8 @@ var $ = require("../../core/renderer"),
     DynamicProvider = require("./provider.dynamic"),
     Color = require("../../color"),
     ajax = require("../../core/utils/ajax"),
-    browser = require("../../core/utils/browser");
+    browser = require("../../core/utils/browser"),
+    isDefined = require("../../core/utils/type").isDefined;
 
 /* global Microsoft */
 var BING_MAP_READY = "_bingScriptReady",
@@ -64,6 +65,11 @@ var BingProvider = DynamicProvider.inherit({
     _geocodedLocations: {},
     _geocodeLocationImpl: function(location) {
         return new Promise(function(resolve) {
+            if(!isDefined(location)) {
+                resolve(new Microsoft.Maps.Location(0, 0));
+                return;
+            }
+
             var searchManager = new Microsoft.Maps.Search.SearchManager(this._map);
             var searchRequest = {
                 where: location,
@@ -79,6 +85,7 @@ var BingProvider = DynamicProvider.inherit({
                     }
                 }
             };
+
             searchManager.geocode(searchRequest);
         }.bind(this));
     },

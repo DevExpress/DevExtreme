@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     Class = require("../core/class"),
+    Callbacks = require("../core/utils/callbacks"),
     commonUtils = require("../core/utils/common"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     extend = require("../core/utils/extend").extend,
@@ -486,7 +487,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
 var NavigationStack = Class.inherit({
     ctor: function(options) {
         options = options || {};
-        this.itemsRemoved = $.Callbacks();
+        this.itemsRemoved = Callbacks();
         this.clear();
     },
     currentItem: function(item) {

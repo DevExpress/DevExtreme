@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     ready = require("./dom").ready,
-    changeCallback = $.Callbacks(),
+    changeCallback = require("../../core/utils/callbacks")(),
     $originalViewPort = $();
 
 var value = (function() {

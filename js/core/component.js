@@ -9,6 +9,7 @@ var $ = require("../core/renderer"),
     coreDataUtils = require("./utils/data"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
+    Callbacks = require("./utils/callbacks"),
     EventsMixin = require("./events_mixin"),
     publicComponentUtils = require("./utils/public_component"),
     devices = require("./devices"),
@@ -165,8 +166,8 @@ var Component = Class.inherit({
 
         this._updateLockCount = 0;
 
-        this._optionChangedCallbacks = options._optionChangedCallbacks || $.Callbacks();
-        this._disposingCallbacks = options._disposingCallbacks || $.Callbacks();
+        this._optionChangedCallbacks = options._optionChangedCallbacks || Callbacks();
+        this._disposingCallbacks = options._disposingCallbacks || Callbacks();
 
         this.beginUpdate();
 

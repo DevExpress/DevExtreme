@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     ko = require("knockout"),
+    Callbacks = require("../../core/utils/callbacks"),
     errors = require("../../core/errors"),
     inflector = require("../../core/utils/inflector"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
@@ -26,7 +27,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
     ko.bindingHandlers[componentName] = {
         init: function(domNode, valueAccessor) {
             var $element = $(domNode),
-                optionChangedCallbacks = $.Callbacks(),
+                optionChangedCallbacks = Callbacks(),
                 optionsByReference = {},
                 component,
                 knockoutConfig = config().knockout,

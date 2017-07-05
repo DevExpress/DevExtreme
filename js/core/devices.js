@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     isPlainObject = require("./utils/type").isPlainObject,
     Class = require("./class"),
     errors = require("./errors"),
+    Callbacks = require("./utils/callbacks"),
     resizeCallbacks = require("./utils/window").resizeCallbacks,
     EventsMixin = require("./events_mixin"),
     SessionStorage = require("./utils/storage").sessionStorage,
@@ -193,7 +194,7 @@ var Devices = Class.inherit({
         this._currentDevice = undefined;
         this._currentOrientation = undefined;
 
-        this.changed = $.Callbacks();
+        this.changed = Callbacks();
         this._recalculateOrientation();
         resizeCallbacks.add(this._recalculateOrientation.bind(this));
     },

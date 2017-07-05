@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     dataCoreUtils = require("../../core/utils/data"),
     grep = require("../../core/utils/common").grep,
@@ -1616,6 +1617,9 @@ module.exports = {
 
                     return this._bandColumnsCache;
                 },
+                _isColumnVisible: function(column) {
+                    return column.visible && this.isParentColumnVisible(column.index);
+                },
                 _getVisibleColumnsCore: function() {
                     var that = this,
                         i,
@@ -1641,13 +1645,13 @@ module.exports = {
                         positiveIndexedColumns[i] = [{}, {}, {}];
                     }
 
-                    $.each(columns, function(index) {
+                    $.each(columns, function() {
                         var column = this,
                             rowIndex,
                             visibleIndex = column.visibleIndex,
                             indexedColumns,
                             parentBandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex),
-                            visible = column.visible && that.isParentColumnVisible(column.index);
+                            visible = that._isColumnVisible(column);
 
                         if(visible && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
                             rowIndex = parentBandColumns.length;
@@ -2568,7 +2572,7 @@ module.exports = {
                         };
                     }
 
-                    calculatedColumnOptions.resizedCallbacks = $.Callbacks();
+                    calculatedColumnOptions.resizedCallbacks = Callbacks();
                     if(columnOptions.resized) {
                         calculatedColumnOptions.resizedCallbacks.add(columnOptions.resized.bind(columnOptions));
                     }

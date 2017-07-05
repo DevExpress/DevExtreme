@@ -1,7 +1,8 @@
 "use strict";
 
-var $ = require("jquery"),
-    rendererStrategy = require("./native_renderer_strategy");
+var $ = require("jquery");
+var rendererStrategy = require("./native_renderer_strategy");
+var typeUtils = require("./utils/type");
 
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
@@ -9,11 +10,10 @@ var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
-    "css", "attr", "removeAttr", "prop", "removeProp",
-    "remove", "detach", "empty",
+    "css",
     "html", "is", "not", "wrapInner", "wrap",
     "each", "val", "index",
-    "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit", "has"];
+    "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
@@ -44,6 +44,14 @@ if(!useJQueryRenderer) {
         return this;
     };
 
+    var setAttributeValue = function(element, attrName, value) {
+        if(value !== undefined && value !== null) {
+            rendererStrategy.setAttribute(element, attrName, value);
+        } else {
+            rendererStrategy.removeAttribute(element, attrName);
+        }
+    };
+
     methods.forEach(function(method) {
         var methodName = method;
         initRender.prototype[method] = function() {
@@ -54,6 +62,51 @@ if(!useJQueryRenderer) {
             return result;
         };
     });
+
+    initRender.prototype.attr = function(attrName, value) {
+        if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, "attr", arguments);
+        if(!this[0]) {
+            if(typeUtils.isObject(attrName) || value !== undefined) {
+                return this;
+            } else {
+                return undefined;
+            }
+        }
+        if(!this[0].getAttribute) {
+            return this.prop(attrName, value);
+        }
+        if(typeof attrName === "string" && arguments.length === 1) {
+            var result = this[0].getAttribute(attrName);
+            return result == null ? undefined : result;
+        } else if(typeUtils.isPlainObject(attrName)) {
+            for(var key in attrName) {
+                this.attr(key, attrName[key]);
+            }
+        } else {
+            setAttributeValue(this[0], attrName, value);
+        }
+        return this;
+    };
+
+    initRender.prototype.removeAttr = function(attrName) {
+        this[0] && rendererStrategy.removeAttribute(this[0], attrName);
+        return this;
+    };
+
+    initRender.prototype.prop = function(propName, value) {
+        if(!this[0]) return this;
+        if(typeof propName === "string" && arguments.length === 1) {
+            return this[0][propName];
+        } else if(typeUtils.isPlainObject(propName)) {
+            for(var key in propName) {
+                this.prop(key, propName[key]);
+            }
+        } else {
+            rendererStrategy.setProperty(this[0], propName, value);
+        }
+
+        return this;
+    };
 
     initRender.prototype.addClass = function(className) {
         return this.toggleClass(className, true);
@@ -156,14 +209,48 @@ if(!useJQueryRenderer) {
     };
 
     var cleanData = function(node, cleanSelf) {
-        if(!node) return;
+        if(!node) {
+            return;
+        }
 
         var childNodes = node.getElementsByTagName("*");
 
-        renderer.cleanData(childNodes, true);
+        renderer.cleanData(childNodes);
         if(cleanSelf) {
             renderer.cleanData(node);
         }
+    };
+
+    initRender.prototype.remove = function() {
+        if(this.length > 1) {
+            return repeatMethod.call(this, "remove", arguments);
+        }
+
+        cleanData(this[0], true);
+        rendererStrategy.removeElement(this[0]);
+
+        return this;
+    };
+
+    initRender.prototype.detach = function() {
+        if(this.length > 1) {
+            return repeatMethod.call(this, "detach", arguments);
+        }
+
+        rendererStrategy.removeElement(this[0]);
+
+        return this;
+    };
+
+    initRender.prototype.empty = function() {
+        if(this.length > 1) {
+            return repeatMethod.call(this, "empty", arguments);
+        }
+
+        cleanData(this[0]);
+        rendererStrategy.setText(this[0], "");
+
+        return this;
     };
 
     initRender.prototype.clone = function() {
@@ -177,13 +264,16 @@ if(!useJQueryRenderer) {
     initRender.prototype.text = function(text) {
         if(!arguments.length) {
             var result = "";
+
             for(var i = 0; i < this.length; i++) {
                 result += this[i] && this[i].textContent || "";
             }
             return result;
         }
+
         cleanData(this[0], false);
         rendererStrategy.setText(this[0], text);
+
         return this;
     };
 
@@ -210,13 +300,13 @@ if(!useJQueryRenderer) {
                         queryId = elementId || "dx-query-children";
 
                     if(!elementId) {
-                        rendererStrategy.setAttribute(element, "id", queryId);
+                        setAttributeValue(element, "id", queryId);
                     }
                     queryId = "[id='" + queryId + "'] ";
 
-                    var querySelector = queryId + selector.replace(",", ", " + queryId);
+                    var querySelector = queryId + selector.replace(/([^\\])(\,)/g, "$1, " + queryId);
                     nodes.push.apply(nodes, element.querySelectorAll(querySelector));
-                    rendererStrategy.setAttribute(element, "id", elementId);
+                    setAttributeValue(element, "id", elementId);
                 } else if(element.nodeType === Node.DOCUMENT_NODE) {
                     nodes.push.apply(nodes, element.querySelectorAll(selector));
                 }
@@ -370,11 +460,6 @@ if(!useJQueryRenderer) {
     };
 }
 
-renderer.ajax = function() {
-    return $.ajax.apply(this, arguments);
-};
-renderer.getJSON = $.getJSON;
-renderer.getScript = $.getScript;
 renderer.tmpl = function() {
     return $.tmpl.apply(this, arguments);
 };
@@ -386,7 +471,11 @@ renderer.param = $.param;
 renderer._data = $._data;
 renderer.data = $.data;
 renderer.removeData = $.removeData;
-renderer.cleanData = $.cleanData;
+
+renderer.cleanData = function(element) {
+    $.cleanData($(element));
+};
+
 renderer.when = $.when;
 renderer.event = $.event;
 renderer.Event = $.Event;
@@ -394,7 +483,6 @@ renderer.easing = $.easing;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.makeArray = $.makeArray;
 renderer.contains = $.contains;
-renderer.Callbacks = $.Callbacks;
 renderer.Deferred = $.Deferred;
 renderer.map = $.map;
 renderer.each = $.each;
