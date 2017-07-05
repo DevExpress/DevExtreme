@@ -4995,8 +4995,12 @@ QUnit.module("Apply summary mode", {
         var that = this;
         defaultEnvironment.beforeEach.apply(this, arguments);
 
-        sinon.stub(summaryDisplayModes, "applyDisplaySummaryMode", function(descriptions, data) {
-            that.applyDisplaySummaryModePassedData = $.extend(true, {}, data);
+        sinon.stub(summaryDisplayModes, "applyDisplaySummaryMode", function(descriptions, data, isRunningTotal) {
+            if(!isRunningTotal) {
+                that.applyDisplaySummaryModePassedData = $.extend(true, {}, data);
+            } else {
+                that.applyDisplaySummaryModeWithRunningTotalsData = $.extend(true, {}, data);
+            }
         });
     },
     afterEach: function() {
@@ -5158,7 +5162,7 @@ QUnit.test("apply Display Summary Mode when expressions were used", function(ass
             value: 1991
         }]);
 
-    assert.ok(summaryDisplayModes.applyDisplaySummaryMode.calledOnce);
+    assert.ok(summaryDisplayModes.applyDisplaySummaryMode.callCount, 2);
 
     var descriptions = this.testStore.load.lastCall.args[0];
     delete descriptions.columnExpandedPaths;
@@ -5276,6 +5280,29 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
         value: "Elgin"
     }]);
 
+    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModeWithRunningTotalsData.rows), [
+        {
+            index: 3,
+            value: 1985
+        }, {
+            index: 1,
+            value: 1991
+        }, {
+            index: 2,
+            value: 1991
+        }]);
+
+    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModeWithRunningTotalsData.columns), [{
+        index: 2,
+        value: "Boise"
+    }, {
+        index: 4,
+        value: "Butte"
+    }, {
+        index: 3,
+        value: "Elgin"
+    }]);
+
     assert.deepEqual(prepareLoadedData(dataSource.getData().columns), [{
         index: 2,
         value: "Boise"
@@ -5300,7 +5327,7 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
         }]);
 });
 
-QUnit.test("apply Display Summary Mode when expressions were used when data is sorted", function(assert) {
+QUnit.test("apply Display Summary Mode when expressions were used and data is sorted", function(assert) {
     var def = $.Deferred();
 
     this.testStore.load.returns(def);

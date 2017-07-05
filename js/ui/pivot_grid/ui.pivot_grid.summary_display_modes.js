@@ -511,7 +511,7 @@ function getExpression(field) {
     return expression;
 }
 
-exports.applyDisplaySummaryMode = function(descriptions, data) {
+exports.applyDisplaySummaryMode = function(descriptions, data, isRunningTotal) {
     var expressions = [],
         columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }],
         rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }],
@@ -541,26 +541,28 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
 
             for(var i = 0; i < valueFields.length; i++) {
                 field = valueFields[i];
-                expression = expressions[i] = (expressions[i] === undefined ? getExpression(field) : expressions[i]);
-                isEmptyCell = false;
+                if((!isRunningTotal && !field.runningTotal) || (isRunningTotal && field.runningTotal)) {
+                    expression = expressions[i] = (expressions[i] === undefined ? getExpression(field) : expressions[i]);
+                    isEmptyCell = false;
 
-                if(expression) {
-                    expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
-                    cell = expressionArg.cell();
+                    if(expression) {
+                        expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
+                        cell = expressionArg.cell();
 
-                    value = cell[i] = expression(expressionArg);
-                    isEmptyCell = value === null || value === undefined;
+                        value = cell[i] = expression(expressionArg);
+                        isEmptyCell = value === null || value === undefined;
+                    }
+
+                    if(columnItem.isEmpty[i] === undefined) {
+                        columnItem.isEmpty[i] = true;
+                    }
+
+                    if(!isEmptyCell) {
+                        columnItem.isEmpty[i] = false;
+                        rowItem.isEmpty = false;
+                    }
+
                 }
-
-                if(columnItem.isEmpty[i] === undefined) {
-                    columnItem.isEmpty[i] = true;
-                }
-
-                if(!isEmptyCell) {
-                    columnItem.isEmpty[i] = false;
-                    rowItem.isEmpty = false;
-                }
-
             }
         }, false);
     }, false);
