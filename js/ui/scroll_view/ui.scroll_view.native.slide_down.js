@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     NativeStrategy = require("./ui.scrollable.native");
 
 var STATE_RELEASED = 0,
@@ -21,9 +22,9 @@ var SlideDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _initCallbacks: function() {
-        this.pullDownCallbacks = $.Callbacks();
-        this.releaseCallbacks = $.Callbacks();
-        this.reachBottomCallbacks = $.Callbacks();
+        this.pullDownCallbacks = Callbacks();
+        this.releaseCallbacks = Callbacks();
+        this.reachBottomCallbacks = Callbacks();
     },
 
     render: function() {

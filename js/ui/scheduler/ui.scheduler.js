@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     translator = require("../../animation/translator"),
     errors = require("../widget/ui.errors"),
     dialog = require("../dialog"),
@@ -201,6 +202,13 @@ var Scheduler = Widget.inherit({
                 * @type string
                 * @default undefined
                 * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
+                */
+
+                /**
+                * @name dxSchedulerOptions_views_name
+                * @publicName name
+                * @type string
+                * @default undefined
                 */
 
                 /**
@@ -1275,7 +1283,7 @@ var Scheduler = Widget.inherit({
         return result.promise();
     },
 
-    _dataSourceLoadedCallback: $.Callbacks(),
+    _dataSourceLoadedCallback: Callbacks(),
 
     _reloadDataSource: function() {
         if(this._dataSource) {
@@ -1615,8 +1623,7 @@ var Scheduler = Widget.inherit({
 
     _headerConfig: function() {
         var result,
-            currentViewOptions = this._getCurrentViewOptions(),
-            viewNames = $.map(this.option("views"), function(view) { return typeUtils.isObject(view) ? view.type : view; });
+            currentViewOptions = this._getCurrentViewOptions();
 
         result = extend({
             firstDayOfWeek: this.option("firstDayOfWeek"),
@@ -1629,7 +1636,7 @@ var Scheduler = Widget.inherit({
         }, currentViewOptions);
 
         result.observer = this;
-        result.views = viewNames;
+        result.views = this.option("views");
         result.min = new Date(this._dateOption("min"));
         result.max = new Date(this._dateOption("max"));
         result.currentDate = dateUtils.trimTime(new Date(this._dateOption("currentDate")));

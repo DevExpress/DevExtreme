@@ -306,6 +306,22 @@ QUnit.test("reset()", function(assert) {
     assert.strictEqual(dropDownEditor.option("value"), null, "Value should be reset");
 });
 
+QUnit.test("reset method should clear the input value", function(assert) {
+    var dropDownEditor = this.dropDownEditor,
+        $input = dropDownEditor.element().find("input");
+
+    dropDownEditor.option("value", null);
+    $input.val("456");
+
+    //act
+    dropDownEditor.reset();
+
+    //assert
+    assert.strictEqual(dropDownEditor.option("value"), null, "Value should be null");
+    assert.equal($input.val(), "", "Input value is correct");
+
+});
+
 QUnit.test("dx-state-hover class added after hover on element", function(assert) {
     this.dropDownEditor.option({
         value: "123",

@@ -3877,6 +3877,30 @@ QUnit.test("dataSource changing not reset columns order when dataSource structur
     assert.deepEqual(dataGrid.getController("data").items()[0].data, { field1: 3, field2: 4 });
 });
 
+//T531189
+QUnit.test("noData should be hidden after assign dataSource and height", function(assert) {
+    //arrange, act
+    var clock = sinon.useFakeTimers();
+    var dataGrid = createDataGrid({
+        columns: ["id"]
+    });
+
+    clock.tick(0);
+
+    //act
+    dataGrid.option("dataSource", [{ id: 1 }]);
+    dataGrid.option("height", 300);
+
+    clock.tick(0);
+
+    //assert
+    var $noData = dataGrid.element().find(".dx-datagrid-nodata");
+    assert.equal($noData.length, 1, "nodata is rendered once");
+    assert.notOk($noData.is(":visible"), "nodata is hidden");
+
+    clock.restore();
+});
+
 //T231356
 QUnit.test("rtlEnabled change", function(assert) {
     //arrange, act
@@ -7787,196 +7811,4 @@ QUnit.test("CustomizeText formatting", function(assert) {
             return Math.round(options.value) + ' rub';
         }
     }), '216 rub');
-});
-
-QUnit.module("Callbacks of the DataGrid", {
-    beforeEach: function() {
-        this.callBacks = gridCore.CallBacks();
-    },
-    afterEach: function() {
-        this.callBacks.empty();
-    }
-});
-
-QUnit.test("Call all of the callbacks with the argument", function(assert) {
-    //arrange
-    var callBack1,
-        callBack2;
-
-    this.callBacks.add(function(param) {
-        callBack1 = true;
-
-        //assert
-        assert.deepEqual(param, { param: "test" }, "parameter of the first callback");
-    });
-    this.callBacks.add(function(param) {
-        callBack2 = true;
-
-        //assert
-        assert.ok(callBack1, "callBack1");
-        assert.deepEqual(param, { param: "test" }, "parameter of the second callback");
-    });
-
-    //act
-    this.callBacks.fire({ param: "test" });
-
-    //assert
-    assert.ok(callBack2, "callBack1");
-});
-
-QUnit.test("Call all callbacks in a list with the given context", function(assert) {
-    //arrange
-    var context = {},
-        callBack1,
-        callBack2;
-
-    this.callBacks.add(function(param) {
-        callBack1 = true;
-
-        //assert
-        assert.deepEqual(param, { param: "test" }, "parameter of the first callback");
-        assert.deepEqual(this, context, "context");
-    });
-    this.callBacks.add(function(param) {
-        callBack2 = true;
-
-        //assert
-        assert.ok(callBack1, "callBack1");
-        assert.deepEqual(param, { param: "test" }, "parameter of the second callback");
-        assert.deepEqual(this, context, "context");
-    });
-
-    //act
-    this.callBacks.fireWith(context, [{ param: "test" }]);
-
-    //assert
-    assert.ok(callBack2, "callBack1");
-});
-
-QUnit.test("Determine whether callback is in a list", function(assert) {
-    //arrange
-    var callBack1 = function() {},
-        callBack2 = function() {};
-
-    this.callBacks.add(callBack1);
-
-    //act, assert
-    assert.ok(this.callBacks.has(callBack1), "has callBack1");
-    assert.ok(!this.callBacks.has(callBack2), "not has callBack2");
-});
-
-QUnit.test("Remove a callback from a callback list", function(assert) {
-    //arrange
-    var callBack1 = function() { },
-        callBack2 = function() { };
-
-    this.callBacks.add(callBack1);
-    this.callBacks.add(callBack2);
-
-    //assert
-    assert.ok(this.callBacks.has(callBack1), "has callBack1");
-    assert.ok(this.callBacks.has(callBack2), "has callBack2");
-
-    //act
-    this.callBacks.remove(callBack1);
-
-    //assert
-    assert.ok(!this.callBacks.has(callBack1), "not has callBack1");
-    assert.ok(this.callBacks.has(callBack2), "has callBack2");
-});
-
-QUnit.test("Remove all of the callbacks from a list", function(assert) {
-    //arrange
-    var callBack1 = function() { },
-        callBack2 = function() { };
-
-    this.callBacks.add(callBack1);
-    this.callBacks.add(callBack2);
-
-    //assert
-    assert.ok(this.callBacks.has(callBack1), "has callBack1");
-    assert.ok(this.callBacks.has(callBack2), "has callBack2");
-
-    //act
-    this.callBacks.empty();
-
-    //assert
-    assert.ok(!this.callBacks.has(callBack1), "not has callBack1");
-    assert.ok(!this.callBacks.has(callBack2), "not has callBack2");
-});
-
-QUnit.test("Remove all of the callbacks from a list", function(assert) {
-    //arrange
-    var callBack1 = function() { },
-        callBack2 = function() { };
-
-    this.callBacks.add(callBack1);
-    this.callBacks.add(callBack2);
-
-    //assert
-    assert.ok(this.callBacks.has(callBack1), "has callBack1");
-    assert.ok(this.callBacks.has(callBack2), "has callBack2");
-
-    //act
-    this.callBacks.empty();
-
-    //assert
-    assert.ok(!this.callBacks.has(callBack1), "not has callBack1");
-    assert.ok(!this.callBacks.has(callBack2), "not has callBack2");
-});
-
-// Differences with jquery callbacks
-QUnit.test("Second call all of the callbacks during the first", function(assert) {
-    //arrange
-    var that = this,
-        callBack1,
-        callBack2,
-        callBack3;
-
-    that.callBacks.add(function(param) {
-        callBack1 = true;
-
-        //assert
-        if(!param) { // first call
-            assert.ok(!callBack2, "not called the callback2");
-            assert.ok(!callBack3, "not called the callback3");
-        } else { // second call
-            assert.ok(callBack2, "called the callback2");
-            assert.ok(!callBack3, "not called the callback3");
-        }
-    });
-
-    that.callBacks.add(function(param) {
-        callBack2 = true;
-
-        if(!param) {
-            //act
-            that.callBacks.fire({});
-        }
-
-        //assert
-        assert.ok(callBack1, "called the callback1");
-
-        if(!param) { // first call
-            assert.ok(callBack3, "called the callback3");
-        } else { // second call
-            assert.ok(!callBack3, "not called the callback3");
-        }
-    });
-
-    that.callBacks.add(function(param) {
-        callBack3 = true;
-
-        //assert
-        assert.ok(callBack1, "called the callback1");
-        assert.ok(callBack2, "called the callback2");
-    });
-
-    //act
-    that.callBacks.fire();
-
-    //assert
-    assert.ok(callBack1, "called the callback1");
-    assert.ok(callBack2, "called the callback2");
-    assert.ok(callBack3, "called the callback3");
 });

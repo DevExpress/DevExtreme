@@ -189,7 +189,12 @@ QUnit.test("Async loading when more 10000 items", function(assert) {
         items.push({ name: "test" + i });
     }
 
-    this.store = new LocalStore(items);
+    this.store = new LocalStore({
+        store: items,
+        onProgressChanged: function(progress) {
+            progresses.push(Math.floor(progress * 100));
+        }
+    });
 
     var clock = sinon.useFakeTimers();
 
@@ -211,8 +216,6 @@ QUnit.test("Async loading when more 10000 items", function(assert) {
         assert.equal(result.columns.length, 0);
         assert.equal(result.rows.length, 20000);
         assert.equal(result.values.length, 20001);
-    }).progress(function(progress) {
-        progresses.push(Math.floor(progress * 100));
     });
 
     //assert

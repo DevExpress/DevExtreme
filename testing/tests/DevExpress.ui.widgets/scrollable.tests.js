@@ -1831,7 +1831,7 @@ QUnit.test("scroll event should be triggered if scroll position changed", functi
 
     return new Promise(function(resolve) {
         $scrollable.dxScrollable("option", "onScroll", function() {
-            assert.equal(++called, 1, "scroll was fired on height change");
+            assert.ok(++called <= 2, "scroll was fired on height change");
             resolve();
         });
         $content.height(50);
@@ -3482,6 +3482,21 @@ QUnit.test("simulated scroll does not work when using native", function(assert) 
 
     var location = getScrollOffset($scrollable);
     assert.equal(location.top, startLocation.top, "scroll does not move");
+});
+
+QUnit.test("scroll action fired for simulated scroller during native scroll", function(assert) {
+    var done = assert.async();
+
+    var $scrollable = $("#scrollable").dxScrollable({
+        inertiaEnabled: false,
+        useNative: false,
+        onScroll: function(args) {
+            assert.equal(args.scrollOffset.top, 10, "scroll action fired with right offset");
+            done();
+        },
+    });
+
+    $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS).scrollTop(10);
 });
 
 QUnit.test("scroll action fired when scrollable scrolling", function(assert) {

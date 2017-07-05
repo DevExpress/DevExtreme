@@ -2771,6 +2771,23 @@ QUnit.testStart(function() {
         }
     });
 
+    QUnit.test("Scheduler should have specific viewName setting of the view", function(assert) {
+        this.createInstance({
+            views: [{
+                type: "day",
+                name: "Test Day"
+            }, "week"],
+            cellDuration: 40,
+            currentView: "day",
+            useDropDownViewSwitcher: false
+        });
+
+        var $header = this.instance.getHeader().element();
+
+        assert.equal($header.find(".dx-tab").eq(0).text(), "Test Day");
+        assert.equal($header.find(".dx-tab").eq(1).text(), "Week");
+    });
+
     QUnit.test("Scheduler should have specific cellDuration setting of the view", function(assert) {
         var viewCellDuration = 60;
         this.createInstance({

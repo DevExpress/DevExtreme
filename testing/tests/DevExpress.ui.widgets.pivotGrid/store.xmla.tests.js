@@ -13,6 +13,7 @@ var $ = require("jquery"),
     pivotGridDataSource = require("ui/pivot_grid/data_source"),
     Store = require("ui/pivot_grid/xmla_store"),
     errors = require("data/errors").errors,
+    ajax = require("core/utils/ajax"),
     languageId = require("localization/language_codes").getLanguageId(),
     testEnvironment = {
         beforeEach: function() {
@@ -3385,13 +3386,13 @@ QUnit.test("T248791. Dimension with zero level members. Expand All level", funct
 
 QUnit.module("Send Request", {
     beforeEach: function() {
-        sinon.stub($, "ajax");
-        $.ajax.returns($.Deferred().reject());
+        sinon.stub(ajax, "sendRequest");
+        ajax.sendRequest.returns($.Deferred().reject());
         this.dataSource = $.extend(true, {}, testEnvironment.dataSource);
     },
 
     afterEach: function() {
-        $.ajax.restore();
+        ajax.sendRequest.restore();
     },
 
     loadOptions: {
@@ -3409,8 +3410,8 @@ QUnit.test("send ajax request on load", function(assert) {
 
     store.load(this.loadOptions);
 
-    assert.ok($.ajax.calledOnce);
-    ajaxArg = $.ajax.lastCall.args[0];
+    assert.ok(ajax.sendRequest.calledOnce);
+    ajaxArg = ajax.sendRequest.lastCall.args[0];
 
     assert.strictEqual(ajaxArg.url, this.dataSource.url, "url");
     assert.strictEqual(ajaxArg.method, "POST", "method");
@@ -3443,8 +3444,8 @@ QUnit.test("send ajax request with before send callback", function(assert) {
 
     store.load(this.loadOptions);
     //assert
-    assert.ok($.ajax.calledOnce);
-    ajaxArg = $.ajax.lastCall.args[0];
+    assert.ok(ajax.sendRequest.calledOnce);
+    ajaxArg = ajax.sendRequest.lastCall.args[0];
 
     assert.strictEqual(ajaxArg.url, dataSource.url, "url");
     assert.strictEqual(ajaxArg.method, "POST", "method");

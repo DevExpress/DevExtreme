@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
     math = Math,
@@ -40,9 +41,9 @@ var ScrollViewScroller = simulatedStrategy.Scroller.inherit({
     },
 
     _initCallbacks: function() {
-        this.pullDownCallbacks = $.Callbacks();
-        this.releaseCallbacks = $.Callbacks();
-        this.reachBottomCallbacks = $.Callbacks();
+        this.pullDownCallbacks = Callbacks();
+        this.releaseCallbacks = Callbacks();
+        this.reachBottomCallbacks = Callbacks();
     },
 
     _updateBounds: function() {
@@ -228,9 +229,9 @@ var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
     },
 
     _initCallbacks: function() {
-        this.pullDownCallbacks = $.Callbacks();
-        this.releaseCallbacks = $.Callbacks();
-        this.reachBottomCallbacks = $.Callbacks();
+        this.pullDownCallbacks = Callbacks();
+        this.releaseCallbacks = Callbacks();
+        this.reachBottomCallbacks = Callbacks();
     },
 
     render: function() {

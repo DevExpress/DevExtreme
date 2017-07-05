@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var Callbacks = require("../../core/utils/callbacks"),
     Class = require("../../core/class");
 
 var DefaultAdapter = Class.inherit({
@@ -9,7 +9,7 @@ var DefaultAdapter = Class.inherit({
         that.editor = editor;
         that.validator = validator;
 
-        that.validationRequestsCallbacks = $.Callbacks();
+        that.validationRequestsCallbacks = Callbacks();
 
         var handler = function() {
             that.validationRequestsCallbacks.fire();
