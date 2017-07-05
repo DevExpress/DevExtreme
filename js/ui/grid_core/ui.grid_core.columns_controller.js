@@ -1617,6 +1617,9 @@ module.exports = {
 
                     return this._bandColumnsCache;
                 },
+                _isColumnVisible: function(column) {
+                    return column.visible && this.isParentColumnVisible(column.index);
+                },
                 _getVisibleColumnsCore: function() {
                     var that = this,
                         i,
@@ -1642,13 +1645,13 @@ module.exports = {
                         positiveIndexedColumns[i] = [{}, {}, {}];
                     }
 
-                    $.each(columns, function(index) {
+                    $.each(columns, function() {
                         var column = this,
                             rowIndex,
                             visibleIndex = column.visibleIndex,
                             indexedColumns,
                             parentBandColumns = getParentBandColumns(column.index, bandColumnsCache.columnParentByIndex),
-                            visible = column.visible && that.isParentColumnVisible(column.index);
+                            visible = that._isColumnVisible(column);
 
                         if(visible && (!isDefined(column.groupIndex) || column.showWhenGrouped)) {
                             rowIndex = parentBandColumns.length;
