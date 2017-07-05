@@ -1,12 +1,13 @@
 "use strict";
 
 var $ = require("jquery"),
+    isWindow = require("./utils/type").isWindow,
     rendererStrategy = require("./native_renderer_strategy");
 
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
 var methods = [
-    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
+    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "css", "attr", "removeAttr", "prop", "removeProp",
@@ -344,6 +345,50 @@ if(!useJQueryRenderer) {
     initRender.prototype.toArray = function() {
         return emptyArray.slice.call(this);
     };
+
+    var getWindow = function(element) {
+        return isWindow(element) ? element : element.nodeType === 9 && element.defaultView;
+    };
+
+    [{
+        name: "scrollLeft",
+        offsetProp: "pageXOffset",
+        scrollWindow: function(win, value) {
+            win.scrollTo(value, win.pageYOffset);
+        }
+    }, {
+        name: "scrollTop",
+        offsetProp: "pageYOffset",
+        scrollWindow: function(win, value) {
+            win.scrollTo(win.pageXOffset, value);
+        }
+    }].forEach(function(scrollStrategy) {
+        var propName = scrollStrategy.name;
+        var originalFunc = $.fn[propName];
+
+        initRender.prototype[propName] = function(value) {
+            if(originalFunc !== $.fn[propName]) {
+                return $.fn[propName].apply(this, arguments);
+            }
+
+            if(!this[0]) {
+                return;
+            }
+
+            var window = getWindow(this[0]);
+
+            if(value === undefined) {
+                return window ? window[scrollStrategy.offsetProp] : this[0][propName];
+            }
+
+            if(window) {
+                scrollStrategy.scrollWindow(window, value);
+            } else {
+                this[0][propName] = value;
+            }
+            return this;
+        };
+    });
 }
 
 renderer.ajax = function() {
