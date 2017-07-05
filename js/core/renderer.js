@@ -288,7 +288,7 @@ if(!useJQueryRenderer) {
                     }
                     queryId = "[id='" + queryId + "'] ";
 
-                    var querySelector = queryId + selector.replace(",", ", " + queryId);
+                    var querySelector = queryId + selector.replace(/([^\\])(\,)/g, "$1, " + queryId);
                     nodes.push.apply(nodes, element.querySelectorAll(querySelector));
                     setAttributeValue(element, "id", elementId);
                 } else if(element.nodeType === Node.DOCUMENT_NODE) {
