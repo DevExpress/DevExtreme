@@ -1347,6 +1347,8 @@ module.exports = Class.inherit((function() {
 
                 that._sort(descriptions, loadedData);
 
+                expressionsUsed && summaryDisplayModes.applyDisplaySummaryMode(descriptions, loadedData, true);
+
                 that._data = loadedData;
                 when(deferred).done(function() {
                     that.fireEvent("changed");
