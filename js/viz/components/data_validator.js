@@ -271,10 +271,10 @@ function sort(a, b) {
     var result = a - b;
 
     if(isNaN(result)) {
-        if(!a) {
+        if(!_isDefined(a)) {
             return 1;
         }
-        if(!b) {
+        if(!_isDefined(b)) {
             return -1;
         }
         return 0;
