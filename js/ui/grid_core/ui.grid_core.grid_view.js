@@ -130,7 +130,7 @@ var ResizingController = modules.ViewController.inherit({
             columnsController = that._columnsController,
             visibleColumns = columnsController.getVisibleColumns(),
             columnAutoWidth = that.option("columnAutoWidth"),
-            needBestFit = columnAutoWidth || that._maxHeightHappened,
+            needBestFit = that._needBestFit(),
             hasMinWidth = false,
             resetBestFitMode,
             isColumnWidthsCorrected = false,
@@ -167,13 +167,13 @@ var ResizingController = modules.ViewController.inherit({
 
         that._setVisibleWidths(visibleColumns, []);
 
-        if(that._isNeedToCalcBestFitWidths(needBestFit)) {
+        if(needBestFit) {
             that._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
 
         commonUtils.deferUpdate(function() {
-            if(that._isNeedToCalcBestFitWidths(needBestFit)) {
+            if(needBestFit) {
                 resultWidths = that._getBestFitWidths();
 
                 $.each(visibleColumns, function(index, column) {
@@ -214,8 +214,8 @@ var ResizingController = modules.ViewController.inherit({
         });
     },
 
-    _isNeedToCalcBestFitWidths: function(needBestFit) {
-        return needBestFit;
+    _needBestFit: function() {
+        return this.option("columnAutoWidth") || this._maxHeightHappened;
     },
 
     _correctColumnWidths: function(resultWidths, visibleColumns) {

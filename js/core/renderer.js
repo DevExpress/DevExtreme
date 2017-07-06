@@ -11,7 +11,7 @@ var methods = [
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "css", "text",
-    "html", "wrapInner", "wrap",
+    "wrapInner", "wrap",
     "each", "val", "index",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
@@ -292,6 +292,22 @@ if(!useJQueryRenderer) {
         return renderer(result);
     };
 
+    initRender.prototype.html = function(value) {
+        if(value === undefined) {
+            return arguments.length ? this : this[0].innerHTML;
+        }
+
+        this.empty();
+
+        if(typeof value === "string" || typeof value === "number") {
+            this[0].innerHTML = value;
+        } else {
+            this.append(value);
+        }
+
+        return this;
+    };
+
     initRender.prototype.contents = function() {
         return renderer(this[0] ? this[0].childNodes : []);
     };
@@ -319,7 +335,7 @@ if(!useJQueryRenderer) {
                     }
                     queryId = "[id='" + queryId + "'] ";
 
-                    var querySelector = queryId + selector.replace(",", ", " + queryId);
+                    var querySelector = queryId + selector.replace(/([^\\])(\,)/g, "$1, " + queryId);
                     nodes.push.apply(nodes, element.querySelectorAll(querySelector));
                     setAttributeValue(element, "id", elementId);
                 } else if(element.nodeType === Node.DOCUMENT_NODE) {
