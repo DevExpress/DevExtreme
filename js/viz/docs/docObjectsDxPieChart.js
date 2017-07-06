@@ -28,3 +28,30 @@ var piePointObject = {
   */
     hide: function() { }
 };
+
+/**
+* @name pieChartSeriesObject
+* @publicName Series
+* @type object
+* @inherits baseSeriesObject
+*/
+var pieChartSeriesObject = {
+    /**
+    * @name pieChartSeriesObjectmethods_hover
+    * @publicName hover()
+    * @hidden
+    */
+    hover: function () { },
+    /**
+    * @name pieChartSeriesObjectmethods_clearHover
+    * @publicName clearHover()
+    * @hidden
+    */
+    clearHover: function () { },
+    /**
+    * @name pieChartSeriesObjectmethods_isHovered
+    * @publicName isHovered()
+    * @hidden
+    */
+    isHovered: function() { }
+};
