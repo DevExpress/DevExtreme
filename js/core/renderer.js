@@ -11,7 +11,7 @@ var methods = [
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "css",
-    "html", "is", "not", "wrapInner", "wrap",
+    "is", "not", "wrapInner", "wrap",
     "each", "val", "index",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
@@ -261,6 +261,7 @@ if(!useJQueryRenderer) {
         return renderer(result);
     };
 
+
     initRender.prototype.text = function(text) {
         if(!arguments.length) {
             var result = "";
@@ -273,6 +274,22 @@ if(!useJQueryRenderer) {
 
         cleanData(this[0], false);
         rendererStrategy.setText(this[0], text);
+
+        return this;
+    };
+
+    initRender.prototype.html = function(value) {
+        if(value === undefined) {
+            return arguments.length ? this : this[0].innerHTML;
+        }
+
+        this.empty();
+
+        if(typeof value === "string" || typeof value === "number") {
+            this[0].innerHTML = value;
+        } else {
+            this.append(value);
+        }
 
         return this;
     };

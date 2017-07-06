@@ -1091,6 +1091,22 @@ QUnit.test("dropdown menu should be rendered if there is hidden overflow items",
     assert.equal($dropDownMenu.length, 1);
 });
 
+QUnit.test("dropdown menu button should be invisible if there is hidden invisible overflow items", function(assert) {
+    var $element = $("#widget").dxToolbar({
+        items: [
+            { location: "before", template: function() { return $("<div>").width(100); } },
+            { location: "center", template: function() { return $("<div>").width(150); } },
+            { location: "after", locateInMenu: "auto", template: function() { return $("<div>").width(100); } },
+            { locateInMenu: "always", visible: false, template: function() { return $("<div>").width(100); } }
+        ]
+    });
+
+    var $dropDownMenu = $element.find("." + DROP_DOWN_MENU_CLASS);
+
+    assert.equal($dropDownMenu.length, 1, "button is rendered");
+    assert.notOk($dropDownMenu.is(":visible"), "button is invisible");
+});
+
 QUnit.test("all overflow items should be hidden on render", function(assert) {
     var $element = $("#toolbarWithMenu").dxToolbar({
         items: [
