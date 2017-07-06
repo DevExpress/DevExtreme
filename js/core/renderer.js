@@ -308,6 +308,8 @@ if(!useJQueryRenderer) {
         }
 
         cleanData(this[0], false);
+
+        text = text === undefined ? "" : text;
         rendererStrategy.setText(this[0], text);
 
         return this;
