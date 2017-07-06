@@ -4,6 +4,8 @@ var $ = require("jquery"),
     rendererStrategy = require("./native_renderer_strategy"),
     typeUtils = require("./utils/type");
 
+var STATE_INVISIBLE = "dx-state-invisible";
+
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
 var methods = [
@@ -66,10 +68,10 @@ if(!useJQueryRenderer) {
 
     initRender.prototype.show = function() {
         if(this[0]) {
-            if(!this.hasClass("dx-state-invisible") && this[0].style.display === "none") {
+            if(!this.hasClass(STATE_INVISIBLE) && this[0].style.display === "none") {
                 this[0].style.display = "";
             } else {
-                this.toggleClass("dx-state-invisible", false);
+                this.toggleClass(STATE_INVISIBLE, false);
             }
         }
 
@@ -77,7 +79,7 @@ if(!useJQueryRenderer) {
     };
 
     initRender.prototype.hide = function() {
-        return this.toggleClass("dx-state-invisible", true);
+        return this.toggleClass(STATE_INVISIBLE, true);
     };
 
     initRender.prototype.toggle = function(value) {
