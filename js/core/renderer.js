@@ -149,7 +149,12 @@ if(!useJQueryRenderer) {
         if(!this[0]) return;
 
         if(typeof element === "string") {
-            element = renderer("<div>").html(element).contents();
+            var html = element.trim();
+            if(html[0] === "<" && html[html.length - 1] === ">") {
+                element = renderer(element);
+            } else {
+                element = renderer("<div>").html(element).contents();
+            }
         } else {
             element = renderer(element);
         }
@@ -293,8 +298,10 @@ if(!useJQueryRenderer) {
     };
 
     initRender.prototype.html = function(value) {
-        if(value === undefined) {
-            return arguments.length ? this : this[0].innerHTML;
+        if(arguments.length === 0) {
+            return this[0].innerHTML;
+        } else if(arguments[0] === undefined) {
+            return this;
         }
 
         this.empty();
