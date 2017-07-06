@@ -169,6 +169,7 @@ declare module DevExpress.viz.charts {
         show(): void;
     }
 
+    /** @docid pieChartSeriesObject */
     export interface PieSeries extends BaseSeries {
         /** @docid_ignore pieChartSeriesObjectmethods_hover */
         /** @docid_ignore pieChartSeriesObjectmethods_clearHover */
