@@ -272,6 +272,28 @@ QUnit.test("Scroller state", function(assert) {
     assert.ok(!dataGrid.getTopVisibleRowData());
 });
 
+//T532629
+QUnit.test("Vertical scrollbar spacing should not be added when widget does not have height", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    var dataGrid = createDataGrid({
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        columnAutoWidth: true,
+        scrolling: {
+            useNative: true
+        },
+        columns: ["column"]
+    });
+
+    //act
+    clock.tick();
+
+    //assert
+    assert.equal(dataGrid.element().find(".dx-datagrid-headers").css("padding-right"), "0px");
+
+    clock.restore();
+});
+
 QUnit.test("noDataText option", function(assert) {
     //act
     var noDataText = "Custom no data",

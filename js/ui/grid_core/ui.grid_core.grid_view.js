@@ -413,6 +413,7 @@ var ResizingController = modules.ViewController.inherit({
             $rootElement = that.component.element(),
             rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height()),
             maxHeightHappened = maxHeight && rootElementHeight >= maxHeight,
+            hasHeight = that._hasHeight || maxHeightHappened,
             loadPanelOptions = that.option("loadPanel"),
             height = that.option("height") || $rootElement.get(0).style.height,
             rowsViewHeight,
@@ -444,7 +445,7 @@ var ResizingController = modules.ViewController.inherit({
         }
 
         commonUtils.deferRender(function() {
-            rowsView.height(rowsViewHeight, that._hasHeight || maxHeightHappened);
+            rowsView.height(rowsViewHeight, hasHeight);
 
             if(scrollTop && scrollable) {
                 //TODO Use public API
@@ -458,7 +459,7 @@ var ResizingController = modules.ViewController.inherit({
             commonUtils.deferUpdate(function() {
                 that._updateLastSizes($rootElement);
 
-                var vScrollbarWidth = rowsView.getScrollbarWidth();
+                var vScrollbarWidth = hasHeight ? rowsView.getScrollbarWidth() : 0;
                 var hScrollbarWidth = rowsView.getScrollbarWidth(true);
 
                 commonUtils.deferRender(function() {
