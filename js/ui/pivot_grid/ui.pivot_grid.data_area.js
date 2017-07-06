@@ -70,7 +70,7 @@ exports.DataArea = areaItem.AreaItem.inherit({
 
         this._virtualContent.parent().height(params.height);
 
-        this.tableElement().css({
+        this._setTableCss({
             top: params.top,
             left: params.left
         });
