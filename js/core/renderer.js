@@ -11,7 +11,7 @@ var methods = [
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "css", "text",
-    "is", "not", "wrapInner", "wrap",
+    "wrapInner", "wrap",
     "each", "val", "index",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
@@ -145,15 +145,46 @@ if(!useJQueryRenderer) {
         return this;
     };
 
+    var appendElements = function(element, nextSibling) {
+        if(!this[0]) return;
+
+        if(typeof element === "string") {
+            element = renderer("<div>").html(element).contents();
+        } else {
+            element = renderer(element);
+        }
+
+        for(var i = 0; i < element.length; i++) {
+            var item = element[i],
+                container = this[0],
+                wrapTR = container.tagName === "TABLE" && item.tagName === "TR";
+
+            if(wrapTR && container.tBodies.length) {
+                container = container.tBodies[0];
+            }
+            rendererStrategy.insertElement(container, item.nodeType ? item : item[0], nextSibling);
+        }
+    };
+
     initRender.prototype.prepend = function(element) {
-        this.$element.prepend(element.$element || element);
+        if(arguments.length > 1) {
+            for(var i = 0; i < arguments.length; i++) {
+                this.prepend(arguments[i]);
+            }
+            return this;
+        }
+        appendElements.apply(this, [element, this[0].firstChild]);
         return this;
     };
-    initRender.prototype.append = function() {
-        for(var i = 0; i < arguments.length; i++) {
-            var element = arguments[i];
-            element && this.$element.append(element.$element || element);
+
+    initRender.prototype.append = function(element) {
+        if(arguments.length > 1) {
+            for(var i = 0; i < arguments.length; i++) {
+                this.append(arguments[i]);
+            }
+            return this;
         }
+        appendElements.apply(this, [element]);
         return this;
     };
 
@@ -325,6 +356,23 @@ if(!useJQueryRenderer) {
 
     initRender.prototype.filter = function() {
         return renderer(this.$element.filter.apply(this.$element, arguments));
+    };
+
+    initRender.prototype.not = function(selector) {
+        var result = [],
+            nodes = this.filter(selector).toArray();
+
+        for(var i = 0; i < this.length; i++) {
+            if(nodes.indexOf(this[i]) === -1) {
+                result.push(this[i]);
+            }
+        }
+
+        return renderer(result);
+    };
+
+    initRender.prototype.is = function(selector) {
+        return !!this.filter(selector).length;
     };
 
     initRender.prototype.children = function(selector) {
