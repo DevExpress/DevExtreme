@@ -85,10 +85,11 @@ exports.HorizontalHeadersArea = areaItem.AreaItem.inherit({
     setVirtualContentParams: function(params) {
         this.callBase(params);
 
-        this.tableElement().css({
+        this._setTableCss({
             left: params.left,
             top: 0
         });
+
         this._virtualContentWidth = params.width;
     },
 
@@ -153,7 +154,7 @@ exports.HorizontalHeadersArea = areaItem.AreaItem.inherit({
     },
 
     _moveFakeTable: function(scrollPos) {
-        this._moveFakeTableLeft(scrollPos);
+        this._moveFakeTableHorizontally(scrollPos);
         this.callBase();
     }
 });
@@ -186,7 +187,7 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
     setVirtualContentParams: function(params) {
         this.callBase(params);
 
-        this.tableElement().css({
+        this._setTableCss({
             top: params.top,
             left: 0
         });

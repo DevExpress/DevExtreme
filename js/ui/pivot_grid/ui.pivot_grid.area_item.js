@@ -439,6 +439,15 @@ exports.AreaItem = Class.inherit({
         return this._tableElement.find('thead');
     },
 
+    _setTableCss: function(styles) {
+        if(this.option("rtlEnabled")) {
+            styles.right = styles.left;
+            delete styles.left;
+        }
+
+        this.tableElement().css(styles);
+    },
+
     setVirtualContentParams: function(params) {
         this._virtualContent.css({
             width: params.width,
@@ -484,22 +493,24 @@ exports.AreaItem = Class.inherit({
     _updateFakeTableVisibility: function() {
         var that = this,
             tableElement = that.tableElement()[0],
+            horizontalOffsetName = that.option("rtlEnabled") ? "right" : "left",
             fakeTableElement = that._fakeTable[0];
 
-        if(tableElement.style.top === fakeTableElement.style.top && fakeTableElement.style.left === tableElement.style.left) {
+        if(tableElement.style.top === fakeTableElement.style.top && fakeTableElement.style[horizontalOffsetName] === tableElement.style[horizontalOffsetName]) {
             that._fakeTable.addClass("dx-hidden");
         } else {
             that._fakeTable.removeClass("dx-hidden");
         }
     },
 
-    _moveFakeTableLeft: function(scrollPos) {
+    _moveFakeTableHorizontally: function(scrollPos) {
         var that = this,
-            tableElementOffsetLeft = parseFloat(that.tableElement()[0].style.left),
-            offsetLeft = getFakeTableOffset(scrollPos, tableElementOffsetLeft, that._tableWidth, that._groupWidth);
-
-        if(parseFloat(that._fakeTable[0].style.left) !== offsetLeft) {
-            that._fakeTable[0].style.left = offsetLeft + "px";
+            rtlEnabled = that.option("rtlEnabled"),
+            offsetStyleName = rtlEnabled ? "right" : "left",
+            tableElementOffset = parseFloat(that.tableElement()[0].style[offsetStyleName]),
+            offset = getFakeTableOffset(scrollPos, tableElementOffset, that._tableWidth, that._groupWidth);
+        if(parseFloat(that._fakeTable[0].style[offsetStyleName]) !== offset) {
+            that._fakeTable[0].style[offsetStyleName] = offset + "px";
         }
     },
 
@@ -558,26 +569,40 @@ exports.AreaItem = Class.inherit({
     },
 
     on: function(eventName, handler) {
-        var scrollable = this._getScrollable();
+        var that = this,
+            scrollable = that._getScrollable();
+
         if(scrollable) {
-            scrollable.on(eventName, handler);
+            scrollable.on(eventName, function(e) {
+                if(that.option("rtlEnabled")) {
+                    e.scrollOffset.left = scrollable.content().width() - scrollable._container().width() - e.scrollOffset.left;
+                }
+                handler(e);
+            });
         }
         return this;
     },
 
-    off: function() {
+    off: function(eventName) {
         var scrollable = this._getScrollable();
         if(scrollable) {
-            scrollable.off.apply(scrollable, arguments);
+            scrollable.off(eventName);
         }
         return this;
     },
-
     scrollTo: function(pos) {
-        var scrollable = this._getScrollable();
+        var scrollable = this._getScrollable(),
+            scrollablePos = pos;
 
         if(scrollable) {
-            scrollable.scrollTo(pos);
+            if(this.option("rtlEnabled")) {
+                if(this._getAreaName() === "column") {
+                    scrollablePos = scrollable.content().width() - scrollable._container().width() - pos;
+                } else if(this._getAreaName() === "data") {
+                    scrollablePos = { x: scrollable.content().width() - scrollable._container().width() - pos.x, y: pos.y };
+                }
+            }
+            scrollable.scrollTo(scrollablePos);
             if(this._virtualContent) {
                 this._createFakeTable();
                 this._moveFakeTable(pos);
