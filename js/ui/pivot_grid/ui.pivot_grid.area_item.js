@@ -503,7 +503,7 @@ exports.AreaItem = Class.inherit({
         }
     },
 
-    _moveFakeTableLeft: function(scrollPos) {
+    _moveFakeTableHorizontalOffset: function(scrollPos) {
         var that = this,
             rtlEnabled = that.option("rtlEnabled"),
             offsetStyleName = rtlEnabled ? "right" : "left",
