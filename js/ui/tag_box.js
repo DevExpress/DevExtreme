@@ -760,15 +760,18 @@ var TagBox = SelectBox.inherit({
         this._cleanTags();
 
         var $input = this._input(),
+            multiTagRequired = this._multiTagRequired() && this._renderMultiTag($input),
             itemLoadDeferreds;
 
-        if(this._multiTagRequired() && this._renderMultiTag($input)) {
-            itemLoadDeferreds = $.Deferred().resolve().promise();
-        } else {
-            itemLoadDeferreds = $.map(this._getValue(), (function(value) {
+        itemLoadDeferreds = $.map(this._getValue(), (function(value) {
+            if(multiTagRequired) {
+                return this._loadItem(value).always((function(item) {
+                    isDefined(item) && this._selectedItems.push(item);
+                }).bind(this));
+            } else {
                 return this._renderTag(value, $input);
-            }).bind(this));
-        }
+            }
+        }).bind(this));
 
         when.apply($, itemLoadDeferreds).done((function() {
             this._renderInputAddons();
@@ -801,6 +804,7 @@ var TagBox = SelectBox.inherit({
 
         if(this._multiTagRequired()) {
             $tags.remove();
+            this._selectedItems = [];
             return;
         }
 
@@ -849,31 +853,38 @@ var TagBox = SelectBox.inherit({
         return this._defaultTemplates["tag"];
     },
 
-    _renderTag: function(value, $input) {
-        var $tag = this._getTag(value);
-        if($tag && !$tag.hasClass(TAGBOX_CUSTOM_TAG_CLASS)) {
-            return $.Deferred().resolve();
+    _applyTagTemplate: function(item, $tag) {
+        if(this._displayGetterExpr() && this._tagTemplate === this._getDefaultTagTemplate()) {
+            item = this._displayGetter(item);
         }
 
-        $tag && $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
-        $tag = $tag || this._createTag(value, $input);
+        this._tagTemplate.render({
+            model: item,
+            container: $tag
+        });
+    },
+
+    _renderTag: function(value, $input) {
+        var $tag = this._getTag(value);
+
+        if($tag) {
+            if(!$tag.hasClass(TAGBOX_CUSTOM_TAG_CLASS)) {
+                return $.Deferred().resolve();
+            }
+
+            $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
+        } else {
+            $tag = this._createTag(value, $input);
+        }
 
         return this._loadItem(value).always((function(item) {
-            if(!isDefined(item)) {
-                $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
-                item = value;
-            } else {
+            if(isDefined(item)) {
                 this._selectedItems.push(item);
+                this._applyTagTemplate(item, $tag);
+            } else {
+                $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
+                this._applyTagTemplate(value, $tag);
             }
-
-            if(this._displayGetterExpr() && this._tagTemplate === this._getDefaultTagTemplate()) {
-                item = this._displayGetter(item);
-            }
-
-            this._tagTemplate.render({
-                model: item,
-                container: $tag
-            });
         }).bind(this));
     },
 

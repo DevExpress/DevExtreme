@@ -601,7 +601,7 @@ QUnit.test("multitag should be rendered always when maxTagCount is 0", function(
 });
 
 QUnit.test("onMultitagPreparing option", function(assert) {
-    assert.expect(4);
+    assert.expect(5);
 
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
@@ -611,7 +611,7 @@ QUnit.test("onMultitagPreparing option", function(assert) {
                 assert.equal(e.component.NAME, "dxTagBox", "component is correct");
                 assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
                 assert.strictEqual(e.allSelected, false, "allSelected is correct");
-                // assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
+                assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
                 e.text = "custom text";
             }
         }),
@@ -621,13 +621,13 @@ QUnit.test("onMultitagPreparing option", function(assert) {
 });
 
 QUnit.test("onMultitagPreparing option change", function(assert) {
-    assert.expect(4);
+    assert.expect(5);
 
     var onMultiTagPreparing = function(e) {
         assert.equal(e.component.NAME, "dxTagBox", "component is correct");
         assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
         assert.strictEqual(e.allSelected, false, "allSelected is correct");
-        // assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
+        assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
         e.text = "custom text";
     };
 
