@@ -1357,6 +1357,38 @@ QUnit.test("Not display adaptive command column when it is invisible via option"
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 0, "command adaptive element");
 });
 
+QUnit.test("Render a view template for item of adaptive form  when other columns are hiding", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(200);
+
+    this.columns = [
+        { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
+        { dataField: 'lastName', index: 2, allowEditing: true, allowExporting: true },
+        { dataField: 'template', index: 1, allowEditing: true, allowExporting: true,
+            cellTemplate: function(container) {
+                $("<div>")
+                    .addClass("test-template")
+                    .appendTo(container);
+            }
+        }
+    ];
+
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
+
+    $(".dx-datagrid").width(500);
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-adaptive-detail-row .test-template").length, 1, "cell template is shown");
+});
+
 QUnit.module("API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
