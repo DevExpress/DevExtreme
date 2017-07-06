@@ -6355,6 +6355,41 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     clock.restore();
 });
 
+//T532658
+QUnit.test("Cancel editing should works correctly if editing mode is form and masterDetail row is shown", function(assert) {
+    //arrange
+    var items = [{ firstName: "Alex", lastName: "Black" }, { firstName: "John", lastName: "Dow" }];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "form",
+            allowUpdating: true
+        },
+        dataSource: items,
+        columns: ["firstName", "lastName"]
+    });
+
+    dataGrid.expandRow(items[0]);
+    dataGrid.editRow(0);
+
+    assert.ok(dataGrid.getRowElement(0).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
+    assert.ok(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
+
+    //act
+    dataGrid.cancelEditData();
+
+    //assert
+    assert.ok(dataGrid.getRowElement(0).hasClass("dx-data-row"), "row 0 is data row");
+    assert.notOk(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
+
+    assert.ok(dataGrid.getRowElement(1).hasClass("dx-master-detail-row"), "row 1 is master detail row");
+    assert.notOk(dataGrid.getRowElement(1).hasClass("dx-datagrid-edit-form"), "row 1 is not edit form row");
+    assert.notOk(dataGrid.getVisibleRows()[1].isEditing, "row 1 isEditing");
+
+    assert.ok(dataGrid.getRowElement(2).hasClass("dx-data-row"), "row 2 is data row");
+});
+
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {
     //arrange, act
     var dataGrid = createDataGrid({
