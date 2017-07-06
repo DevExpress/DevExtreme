@@ -297,24 +297,6 @@ if(!useJQueryRenderer) {
         return renderer(result);
     };
 
-    // initRender.prototype.html = function(value) {
-    //     if(arguments.length === 0) {
-    //         return this[0].innerHTML;
-    //     } else if(arguments[0] === undefined) {
-    //         return this;
-    //     }
-
-    //     this.empty();
-
-    //     if(typeof value === "string" || typeof value === "number") {
-    //         this[0].innerHTML = value;
-    //     } else {
-    //         this.append(value);
-    //     }
-
-    //     return this;
-    // };
-
     initRender.prototype.contents = function() {
         return renderer(this[0] ? this[0].childNodes : []);
     };
