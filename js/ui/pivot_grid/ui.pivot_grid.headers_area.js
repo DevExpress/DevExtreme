@@ -154,7 +154,7 @@ exports.HorizontalHeadersArea = areaItem.AreaItem.inherit({
     },
 
     _moveFakeTable: function(scrollPos) {
-        this._moveFakeTableHorizontalOffset(scrollPos);
+        this._moveFakeTableHorizontally(scrollPos);
         this.callBase();
     }
 });

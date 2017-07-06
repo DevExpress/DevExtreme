@@ -42,7 +42,7 @@ exports.DataArea = areaItem.AreaItem.inherit({
     },
 
     _moveFakeTable: function(scrollPos) {
-        this._moveFakeTableHorizontalOffset(scrollPos.x);
+        this._moveFakeTableHorizontally(scrollPos.x);
         this._moveFakeTableTop(scrollPos.y);
         this.callBase();
     },
