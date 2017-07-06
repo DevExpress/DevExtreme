@@ -170,6 +170,10 @@ declare module DevExpress.viz.charts {
     }
 
     export interface PieSeries extends BaseSeries {
+        /** @docid_ignore pieChartSeriesObjectmethods_hover */
+        /** @docid_ignore pieChartSeriesObjectmethods_clearHover */
+        /** @docid_ignore pieChartSeriesObjectmethods_isHovered */
+
         selectPoint(point: PiePoint): void;
         deselectPoint(point: PiePoint): void;
         getAllPoints(): Array<PiePoint>;
