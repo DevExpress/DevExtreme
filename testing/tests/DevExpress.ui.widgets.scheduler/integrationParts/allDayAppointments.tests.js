@@ -1196,7 +1196,7 @@ QUnit.test("All-day & common appointments should have a right sorting", function
     assert.equal($appointments.eq(3).data("dxItemData").text, "Short 4", "Data is right");
 
     assert.roughEqual(translator.locate($simpleAppointment).left, 100, 1.001, "Appointment position is OK");
-    assert.roughEqual($simpleAppointment.outerWidth(), cellWidth - 25, 1.001, "Appointment size is OK");
+    assert.roughEqual($simpleAppointment.outerWidth(), cellWidth - 15, 1.001, "Appointment size is OK");
 });
 
 QUnit.test("All-day appointments should have a right sorting", function(assert) {

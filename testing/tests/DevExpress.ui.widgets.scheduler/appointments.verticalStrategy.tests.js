@@ -20,7 +20,7 @@ QUnit.testStart(function() {
                                 <div id="fixedContainer"></div>');
 });
 
-var CELL_OFFSET = 25,
+var CELL_OFFSET = 15,
     CELL_BORDER_OFFSET = 1;
 
 var moduleOptions = {
@@ -32,7 +32,7 @@ var moduleOptions = {
             return this.coordinates;
         };
         this.clock = sinon.useFakeTimers();
-        this.cellWidth = 30;
+        this.cellWidth = 25;
         this.cellHeight = 20;
         this.allDayHeight = 20;
         this.compactAppointmentOffset = 3;
@@ -205,16 +205,16 @@ QUnit.test("Four rival appointments with three columns should have correct posit
     assert.deepEqual(translator.locate($appointment.eq(0)), this.appCoordinates(0, 3), "appointment is rendered in right place");
 
 
-    assert.roughEqual($appointment.eq(0).outerWidth(), this.appWidth(3), 1, "appointment has a right size");
+    assert.equal($appointment.eq(0).outerWidth(), this.appWidth(3), "appointment has a right size");
 
     assert.deepEqual(translator.locate($appointment.eq(1)), this.appCoordinates(2, 3, 60, 0), "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(1).outerWidth(), this.appWidth(3), 1, "appointment has a right size");
+    assert.equal($appointment.eq(1).outerWidth(), this.appWidth(3), "appointment has a right size");
 
     assert.deepEqual(translator.locate($appointment.eq(2)), this.appCoordinates(1, 3), "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(2).outerWidth(), this.appWidth(3), 1, "appointment has a right size");
+    assert.equal($appointment.eq(2).outerWidth(), this.appWidth(3), "appointment has a right size");
 
     assert.deepEqual(translator.locate($appointment.eq(3)), this.appCoordinates(1, 3, 120, 0), "appointment is rendered in right place");
-    assert.roughEqual($appointment.eq(3).outerWidth(), this.appWidth(3), 1, "appointment has a right size");
+    assert.equal($appointment.eq(3).outerWidth(), this.appWidth(3), "appointment has a right size");
 
 });
 
