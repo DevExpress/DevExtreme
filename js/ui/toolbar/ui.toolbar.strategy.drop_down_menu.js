@@ -45,8 +45,9 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
     },
 
     _getMenuItems: function() {
-        var menuItems = this.callBase();
-        this._toggleMenuVisibility(menuItems.length);
+        var menuItems = this.callBase(),
+            isMenuVisible = menuItems.length && this._hasVisibleMenuItems(menuItems);
+        this._toggleMenuVisibility(isMenuVisible);
         return menuItems;
     },
 
