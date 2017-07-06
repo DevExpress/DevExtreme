@@ -11,7 +11,7 @@ var methods = [
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "css", "text",
-    "html", "is", "not", "wrapInner", "wrap",
+    "is", "not", "wrapInner", "wrap",
     "each", "val", "index",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
@@ -259,6 +259,22 @@ if(!useJQueryRenderer) {
             result.push(this[i].cloneNode(true));
         }
         return renderer(result);
+    };
+
+    initRender.prototype.html = function(value) {
+        if(value === undefined) {
+            return arguments.length ? this : this[0].innerHTML;
+        }
+
+        this.empty();
+
+        if(typeof value === "string" || typeof value === "number") {
+            this[0].innerHTML = value;
+        } else {
+            this.append(value);
+        }
+
+        return this;
     };
 
     initRender.prototype.contents = function() {
