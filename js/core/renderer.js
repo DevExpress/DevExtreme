@@ -263,10 +263,7 @@ if(!useJQueryRenderer) {
 
     initRender.prototype.html = function(value) {
         if(value === undefined) {
-            if(arguments.length) {
-                return this;
-            }
-            return this[0].innerHTML;
+            return arguments.length ? this : this[0].innerHTML;
         }
 
         this.empty();
