@@ -611,8 +611,8 @@ QUnit.test("onMultitagPreparing option", function(assert) {
                 assert.equal(e.component.NAME, "dxTagBox", "component is correct");
                 assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
                 assert.strictEqual(e.allSelected, false, "allSelected is correct");
-            //assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
-                return "custom text";
+                // assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
+                e.text = "custom text";
             }
         }),
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
@@ -627,8 +627,8 @@ QUnit.test("onMultitagPreparing option change", function(assert) {
         assert.equal(e.component.NAME, "dxTagBox", "component is correct");
         assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
         assert.strictEqual(e.allSelected, false, "allSelected is correct");
-        //assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
-        return "custom text";
+        // assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
+        e.text = "custom text";
     };
 
     var $tagBox = $("#tagBox").dxTagBox({
@@ -642,6 +642,21 @@ QUnit.test("onMultitagPreparing option change", function(assert) {
 
     var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
     assert.deepEqual($tag.text(), "custom text", "custom text is displayed");
+});
+
+QUnit.test("multi tag should not be rendered if e.cancel is true", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            onMultiTagPreparing: function(e) {
+                e.cancel = true;
+            }
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 3, "3 tags was rendered");
+    assert.deepEqual($tag.text(), "124", "text is correct");
 });
 
 QUnit.test("tagBox should show special text for all selected state", function(assert) {

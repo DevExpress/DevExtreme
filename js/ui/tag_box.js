@@ -458,14 +458,11 @@ var TagBox = SelectBox.inherit({
         }
     },
 
-    _multiTagPreparingHandler: function(e) {
-        if(e.allSelected) {
-            return messageLocalization.format("dxTagBox-all-selected");
+    _multiTagPreparingHandler: function(args) {
+        if(args.allSelected) {
+            args.text = messageLocalization.format("dxTagBox-all-selected");
         } else {
-            var value = this._getValue(),
-                text = value.length + " " + messageLocalization.format("dxTagBox-selected");
-
-            return text;
+            args.text = this._getValue().length + " " + messageLocalization.format("dxTagBox-selected");
         }
     },
 
@@ -732,19 +729,31 @@ var TagBox = SelectBox.inherit({
 
     _renderMultiTag: function($input) {
         var value = this._getValue(),
-            $tag = this._createTag(null, $input).addClass(TAGBOX_MULTI_TAG_CLASS),
-            text = this._multiTagPreparingAction({
-                multiTagElement: $tag,
-                selectedItems: this.option("selectedItems"),
-                allSelected: value.length === this.option("items").length
-            });
+            $tag = $("<div>")
+                .addClass(TAGBOX_TAG_CLASS)
+                .addClass(TAGBOX_MULTI_TAG_CLASS);
 
-        $tag.data(TAGBOX_TAG_DATA_KEY, text);
+        var args = {
+            multiTagElement: $tag,
+            selectedItems: this.option("selectedItems"),
+            allSelected: value.length === this.option("items").length
+        };
+
+        this._multiTagPreparingAction(args);
+
+        if(args.cancel) {
+            return false;
+        }
+
+        $tag.data(TAGBOX_TAG_DATA_KEY, args.text);
+        $tag.insertBefore($input);
 
         this._tagTemplate.render({
-            model: text,
+            model: args.text,
             container: $tag
         });
+
+        return true;
     },
 
     _renderTags: function() {
@@ -753,8 +762,7 @@ var TagBox = SelectBox.inherit({
         var $input = this._input(),
             itemLoadDeferreds;
 
-        if(this._multiTagRequired()) {
-            this._renderMultiTag($input);
+        if(this._multiTagRequired() && this._renderMultiTag($input)) {
             itemLoadDeferreds = $.Deferred().resolve().promise();
         } else {
             itemLoadDeferreds = $.map(this._getValue(), (function(value) {
