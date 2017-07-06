@@ -11,8 +11,7 @@ var methods = [
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "css", "text",
-    "wrapInner", "wrap",
-    "each", "val", "index",
+    "wrapInner", "wrap", "val",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
@@ -415,6 +414,23 @@ if(!useJQueryRenderer) {
         }
 
         return renderer(result);
+    };
+
+    initRender.prototype.each = function(callback) {
+        for(var i = 0; i < this.length; i++) {
+            if(callback.call(this[i], i, this[i]) === false) {
+                break;
+            }
+        }
+    };
+
+    initRender.prototype.index = function(element) {
+        if(!element) {
+            return this.parent().children().index(this);
+        }
+
+        element = renderer(element);
+        return this.toArray().indexOf(element[0]);
     };
 
     initRender.prototype.get = function(index) {
