@@ -64,7 +64,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(column.cellTemplate) {
             var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
-            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions);
+            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(document).length);
         } else {
             var container = $container.get(0);
             if(column.encodeHtml) {
