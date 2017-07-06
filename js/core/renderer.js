@@ -444,7 +444,7 @@ if(!useJQueryRenderer) {
     };
 
     var getWindow = function(element) {
-        return typeUtils.isWindow(element) ? element : element.nodeType === 9 && element.defaultView;
+        return typeUtils.isWindow(element) ? element : element.defaultView;
     };
 
     [{
@@ -461,13 +461,8 @@ if(!useJQueryRenderer) {
         }
     }].forEach(function(scrollStrategy) {
         var propName = scrollStrategy.name;
-        var originalFunc = $.fn[propName];
 
         initRender.prototype[propName] = function(value) {
-            if(originalFunc !== $.fn[propName]) {
-                return $.fn[propName].apply(this, arguments);
-            }
-
             if(!this[0]) {
                 return;
             }

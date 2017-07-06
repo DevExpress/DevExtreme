@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("jquery"),
+var $ = require("core/renderer"),
     noop = require("core/utils/common").noop,
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
@@ -1109,7 +1109,7 @@ QUnit.test("release calls update", function(assert) {
         inertiaEnabled: false,
         onPullDown: function() {
             $(".content2").height(400);
-            setTimeout($.proxy(this.release, this));
+            setTimeout(this.release.bind(this));
         },
         onEnd: function() {
             mouse
@@ -1151,7 +1151,7 @@ QUnit.test("release calls update for scrollbar", function(assert) {
         onReachBottom: function() {
             $container.height(100);
             $(".content2").height(400);
-            setTimeout($.proxy(this.release, this));
+            setTimeout(this.release.bind(this));
         }
     });
 
@@ -1443,11 +1443,23 @@ QUnit.module("native pullDown strategy", {
 
         this.originalJQueryScrollTop = $.fn.scrollTop;
         var currentValue = 0;
+
         $.fn.scrollTop = function(value) {
             if(arguments.length) {
                 currentValue = value;
             } else {
                 return currentValue;
+            }
+        };
+
+        this.originalJQueryScrollLeft = $.fn.scrollLeft;
+
+        var currentLeftValue = 0;
+        $.fn.scrollLeft = function(value) {
+            if(arguments.length) {
+                currentLeftValue = value;
+            } else {
+                return currentLeftValue;
             }
         };
     },
@@ -1457,6 +1469,7 @@ QUnit.module("native pullDown strategy", {
         $("#qunit-fixture").removeClass("dx-theme-ios");
 
         $.fn.scrollTop = this.originalJQueryScrollTop;
+        $.fn.scrollLeft = this.originalJQueryScrollLeft;
     }
 });
 
@@ -2115,6 +2128,9 @@ QUnit.module("native slideDown strategy", {
                 return currentTopValue;
             }
         };
+
+        this.originalJQueryScrollLeft = $.fn.scrollLeft;
+
         var currentLeftValue = 0;
         $.fn.scrollLeft = function(value) {
             if(arguments.length) {
@@ -2131,6 +2147,7 @@ QUnit.module("native slideDown strategy", {
     },
     afterEach: function() {
         $.fn.scrollTop = this.originalJQueryScrollTop;
+        $.fn.scrollLeft = this.originalJQueryScrollLeft;
         moduleConfig.afterEach.call(this);
         devices.real({ platform: this._originalPlatform });
         $("#qunit-fixture").removeClass("dx-theme-win8");
