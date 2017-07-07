@@ -3,6 +3,7 @@
 require("ui/action_sheet");
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     fx = require("animation/fx"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
@@ -834,7 +835,7 @@ QUnit.test("multiple swipes should not break deletion", function(assert) {
 });
 
 QUnit.test("optimizations", function(assert) {
-    var origOuterWidth = $.fn.outerWidth,
+    var origOuterWidth = renderer.fn.outerWidth,
         outerWidthCallCount = 0;
 
     try {
@@ -848,7 +849,7 @@ QUnit.test("optimizations", function(assert) {
             $item = $items.eq(0),
             pointer = pointerMock($item);
 
-        $.fn.outerWidth = function() {
+        renderer.fn.outerWidth = function() {
             outerWidthCallCount++;
             return origOuterWidth.apply(this, arguments);
         };
@@ -857,7 +858,7 @@ QUnit.test("optimizations", function(assert) {
         pointer.start().swipeStart().swipe(0.5).swipeEnd(1);
     } finally {
         assert.equal(outerWidthCallCount, 2, "outerWidth should be calculated only once for item and button");
-        $.fn.outerWidth = origOuterWidth;
+        renderer.fn.outerWidth = origOuterWidth;
     }
 });
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     fx = require("animation/fx"),
     pointerMock = require("../../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
@@ -1240,9 +1241,9 @@ QUnit.test("Tables should take css class after width calculation(T491453)", func
     assert.expect(1);
 
     var counter = 0;
-    var originalWidthFn = $.fn.width;
+    var originalWidthFn = renderer.fn.width;
 
-    sinon.stub($.fn, "width", function(value) {
+    sinon.stub(renderer.fn, "width", function(value) {
         if(value === 999 && !counter) {
             var $headerTable = $("#scheduler").find("table").first();
             assert.notOk($headerTable.attr("class"), "Header table doesn't have any css classes yet");
@@ -1261,7 +1262,7 @@ QUnit.test("Tables should take css class after width calculation(T491453)", func
             width: 999
         });
     } finally {
-        $.fn.width.restore();
+        renderer.fn.width.restore();
     }
 });
 

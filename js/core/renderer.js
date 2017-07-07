@@ -3,11 +3,13 @@
 var $ = require("jquery");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
+var isNumeric = typeUtils.isNumeric;
+var isWindow = typeUtils.isWindow;
 
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
 var methods = [
-    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
+    "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "html", "css",
@@ -170,6 +172,112 @@ if(!useJQueryRenderer) {
             rendererStrategy.insertElement(container, item.nodeType ? item : item[0], nextSibling);
         }
     };
+
+    var getWidthOrHeight = function(element, funcName, includePaddings, includeBorders, includeMargins) {
+        var beforeName, afterName;
+
+        if(funcName === "width") {
+            beforeName = "Left";
+            afterName = "Right";
+        } else {
+            beforeName = "Top";
+            afterName = "Bottom";
+        }
+
+        var styles = window.getComputedStyle(element);
+        var padding = (parseFloat(styles["padding" + beforeName]) || 0) + (parseFloat(styles["padding" + afterName]) || 0);
+        var border = (parseFloat(styles["border" + beforeName + "Width"]) || 0) + (parseFloat(styles["border" + afterName + "Width"]) || 0);
+        var isBorderBox = styles.boxSizing === "border-box";
+        var needSwap = styles.display === "none" && (!element.getClientRects().length || !element.getBoundingClientRect().width);
+
+        var oldDisplay = element.style.display;
+        var oldPosition = element.style.position;
+
+        if(needSwap) {
+            element.style.display = "block";
+            element.style.position = "absolute";
+        }
+
+        var result = element.getClientRects().length ? element.getBoundingClientRect()[funcName] : 0;
+
+        if(result <= 0) {
+            result = parseFloat(styles[funcName] || element.style[funcName]) || 0;
+
+            if(isBorderBox && styles[funcName].length && styles[funcName][styles[funcName].length - 1] !== "%") {
+                result -= padding + border;
+            }
+        } else {
+            result -= padding + border;
+        }
+
+        if(needSwap) {
+            element.style.display = oldDisplay;
+            element.style.position = oldPosition;
+        }
+
+        if(includePaddings) {
+            result += padding;
+        }
+
+        if(includeBorders) {
+            result += border;
+
+            if(includeMargins) {
+                result += (parseFloat(styles["margin" + beforeName]) || 0) + (parseFloat(styles["margin" + afterName]) || 0);
+            }
+        }
+
+        return result;
+    };
+
+    ["width", "height", "outerWidth", "outerHeight", "innerWidth", "innerHeight"].forEach(function(funcName) {
+        var name = funcName.toLowerCase().indexOf("width") >= 0 ? "Width" : "Height";
+        var type = name.toLowerCase();
+        var isOuter = funcName.indexOf("outer") === 0;
+        var isInner = funcName.indexOf("inner") === 0;
+
+        initRender.prototype[funcName] = function(value) {
+            var element = this[0];
+
+            if(!element) {
+                return;
+            }
+
+            if(isWindow(element)) {
+                return isOuter ? element["inner" + name] : element.document.documentElement["client" + name];
+            }
+
+            if(element.nodeType === Node.DOCUMENT_NODE) {
+                var documentElement = element.documentElement;
+
+                return Math.max(
+                    element.body["scroll" + name],
+                    element.body["offset" + name],
+                    documentElement["scroll" + name],
+                    documentElement["offset" + name],
+                    documentElement["client" + name]
+                );
+            }
+
+            if(arguments.length === 0 || typeof value === "boolean") {
+                return getWidthOrHeight(element, type, isInner || isOuter, isOuter, value);
+            }
+
+            if(value === undefined || value === null) {
+                return this;
+            }
+
+            if(isOuter) {
+                return this.$element[funcName](value);
+            }
+
+            for(var i = 0; i < this.length; i++) {
+                rendererStrategy.setStyle(this[i], funcName, value + (isNumeric(value) ? "px" : ""));
+            }
+
+            return this;
+        };
+    });
 
     initRender.prototype.prepend = function(element) {
         if(arguments.length > 1) {

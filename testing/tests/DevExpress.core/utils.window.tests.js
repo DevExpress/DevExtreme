@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks;
 
 QUnit.module('resizeCallbacks', {
@@ -8,13 +9,13 @@ QUnit.module('resizeCallbacks', {
         var clock = sinon.useFakeTimers();
         this.clock = clock;
 
-        this.__width = $.fn.width;
-        this.__height = $.fn.height;
+        this.__width = renderer.fn.width;
+        this.__height = renderer.fn.height;
         var test = this;
         test.width = 400;
         test.height = 300;
-        $.fn.width = function() { return test.width; };
-        $.fn.height = function() { return test.height; };
+        renderer.fn.width = function() { return test.width; };
+        renderer.fn.height = function() { return test.height; };
         this.callbacks = resizeCallbacks;
         var $window = $(window);
         this.triggerResize = function() {
@@ -29,8 +30,8 @@ QUnit.module('resizeCallbacks', {
         this.triggerResize();   //  to reset size cache
     },
     afterEach: function() {
-        $.fn.width = this.__width;
-        $.fn.height = this.__height;
+        renderer.fn.width = this.__width;
+        renderer.fn.height = this.__height;
         delete this.__width;
         delete this.__height;
         delete this.callbacks;
