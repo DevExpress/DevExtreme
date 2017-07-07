@@ -10,7 +10,7 @@ var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
-    "css", "text",
+    "html", "css", "text",
     "wrapInner", "wrap", "val",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
@@ -294,24 +294,6 @@ if(!useJQueryRenderer) {
             result.push(this[i].cloneNode(true));
         }
         return renderer(result);
-    };
-
-    initRender.prototype.html = function(value) {
-        if(arguments.length === 0) {
-            return this[0].innerHTML;
-        } else if(arguments[0] === undefined) {
-            return this;
-        }
-
-        this.empty();
-
-        if(typeof value === "string" || typeof value === "number") {
-            this[0].innerHTML = value;
-        } else {
-            this.append(value);
-        }
-
-        return this;
     };
 
     initRender.prototype.contents = function() {
