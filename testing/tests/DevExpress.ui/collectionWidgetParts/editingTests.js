@@ -1195,6 +1195,20 @@ var runTests = function() {
         assert.equal(instance.option("selectedItems").length, 1, "one item is selected");
     });
 
+    QUnit.test("several items should be selected if 'selectionItemKeys' is set and 'selectionRequired' option is 'true'", function(assert) {
+        var items = [{ key: 0 }, { key: 1 }, { key: 2 }];
+
+        var $element = $("#cmp"),
+            instance = new TestComponent($element, {
+                items: items,
+                keyExpr: "key",
+                selectionMode: 'multiple',
+                selectionRequired: true
+            });
+        instance.option("selectedItemKeys", [1, 2]);
+
+        assert.deepEqual(instance.option("selectedItems"), items.slice(1), "items is selected");
+    });
 
     QUnit.module("deleting of items");
 
