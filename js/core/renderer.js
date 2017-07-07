@@ -459,15 +459,10 @@ if(!useJQueryRenderer) {
         scrollWindow: function(win, value) {
             win.scrollTo(win.pageXOffset, value);
         }
-    }].forEach(function(scrollStrategy) {
-        var propName = scrollStrategy.name;
-        var originalFunc = $.fn[propName];
+    }].forEach(function(directionStrategy) {
+        var propName = directionStrategy.name;
 
         initRender.prototype[propName] = function(value) {
-            if(originalFunc !== $.fn[propName]) {
-                return $.fn[propName].apply(this, arguments);
-            }
-
             if(!this[0]) {
                 return;
             }
@@ -475,11 +470,11 @@ if(!useJQueryRenderer) {
             var window = getWindow(this[0]);
 
             if(value === undefined) {
-                return window ? window[scrollStrategy.offsetProp] : this[0][propName];
+                return window ? window[directionStrategy.offsetProp] : this[0][propName];
             }
 
             if(window) {
-                scrollStrategy.scrollWindow(window, value);
+                directionStrategy.scrollWindow(window, value);
             } else {
                 this[0][propName] = value;
             }
