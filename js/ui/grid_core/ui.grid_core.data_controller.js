@@ -496,12 +496,14 @@ module.exports = {
                     var dataSource = this._dataSource;
                     return dataSource ? dataSource.load() : $.Deferred().resolve().promise();
                 },
-                _processItems: function(items) {
+                _processItems: function(items, changeType) {
                     var that = this,
                         visibleColumns = that._columnsController.getVisibleColumns(),
+                        visibleItems = that._items,
+                        dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
                         options = {
                             visibleColumns: visibleColumns,
-                            dataIndex: 0
+                            dataIndex: dataIndex
                         },
                         result = [];
 
