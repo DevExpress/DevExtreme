@@ -3497,6 +3497,41 @@ QUnit.test("contentReady event must be raised once when scrolling mode is virtua
     assert.equal(contentReadyCallCount, 1, "one contentReady on start");
 });
 
+QUnit.test("row alternation should be correct if virtual scrolling is enabled and grouping is used", function(assert) {
+    var dataSource = [
+        { id: 1, group: 1 },
+        { id: 2, group: 1 },
+        { id: 3, group: 1 },
+        { id: 4, group: 1 },
+        { id: 5, group: 1 },
+    ];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: dataSource,
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 4
+        },
+        rowAlternationEnabled: true,
+        columns: ["id", { dataField: "group", groupIndex: 0 }]
+    });
+
+    var dataIndexes = dataGrid.getVisibleRows().map(function(row) {
+        return row.dataIndex;
+    });
+
+    var alternatedRowIndexes = [0, 1, 2, 3, 4, 5].filter(function(index) {
+        return dataGrid.getRowElement(index).hasClass("dx-row-alt");
+    });
+
+    //assert
+    assert.deepEqual(dataIndexes, [undefined, 0, 1, 2, 3, 4], "dataIndex values in rows");
+    assert.deepEqual(alternatedRowIndexes, [2, 4], "row indexes with dx-row-alt class");
+});
+
 QUnit.test("isReady when loading", function(assert) {
     //act
     var d = $.Deferred(),
