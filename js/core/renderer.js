@@ -148,7 +148,7 @@ if(!useJQueryRenderer) {
     var appendElements = function(element, nextSibling) {
         if(!this[0]) return;
 
-        if(typeof element === "string") {
+        if(typeUtils.type(element) === "string") {
             var html = element.trim();
             if(html[0] === "<" && html[html.length - 1] === ">") {
                 element = renderer(element);
