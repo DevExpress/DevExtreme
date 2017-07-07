@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -457,7 +458,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _attachHoverEvents: function() {
         var that = this,
             attachHoverEvent = function($table) {
-                $table.on("mouseover mouseout", ".dx-data-row", that.createAction(function(args) {
+                eventsEngine.on($table, "mouseover mouseout", ".dx-data-row", that.createAction(function(args) {
                     var event = args.jQueryEvent,
                         rowIndex = that.getRowIndex($(event.target).closest(".dx-row")),
                         isHover = event.type === "mouseover";

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
@@ -440,7 +441,7 @@ var DropDownEditor = TextBox.inherit({
         $button
             .removeClass("dx-button");
 
-        $button.on("mousedown", function(e) {
+        eventsEngine.on($button, "mousedown", function(e) {
             e.preventDefault();
         });
 
@@ -458,7 +459,7 @@ var DropDownEditor = TextBox.inherit({
 
         if(openOnFieldClick) {
             that._openOnFieldClickAction = that._createAction(that._openHandler.bind(that));
-            $inputWrapper.on(eventName, function(e) { that._executeOpenAction(e); });
+            eventsEngine.on($inputWrapper, eventName, function(e) { that._executeOpenAction(e); });
             return;
         }
     },

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
@@ -559,7 +560,7 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        $element.on(mouseWheelEvent, this._tagContainerMouseWheelHandler.bind(this));
+        eventsEngine.on($element, mouseWheelEvent, this._tagContainerMouseWheelHandler.bind(this));
     },
 
     _tagContainerMouseWheelHandler: function(e) {
@@ -570,7 +571,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderTypingEvent: function() {
-        this._input().on(eventUtils.addNamespace("keydown", this.NAME), (function(e) {
+        eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), (function(e) {
             if(!this._isControlKey(e.key) && this._isEditable()) {
                 this._clearTagFocus();
             }

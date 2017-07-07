@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -445,7 +446,7 @@ var TextEditorBase = Editor.inherit({
                 .attr("data-dx_placeholder", placeholderText),
             startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
 
-        $placeholder.on(startEvent, function() {
+        eventsEngine.on($placeholder, startEvent, function() {
             $input.focus();
         });
 
@@ -516,7 +517,7 @@ var TextEditorBase = Editor.inherit({
 
                 var action = that._createActionByOption("on" + event, { excludeValidators: ["readOnly"] });
 
-                $input.on(eventUtils.addNamespace(event.toLowerCase(), that.NAME), function(e) {
+                eventsEngine.on($input, eventUtils.addNamespace(event.toLowerCase(), that.NAME), function(e) {
                     if(that._disposed) {
                         return;
                     }
@@ -588,7 +589,7 @@ var TextEditorBase = Editor.inherit({
     _renderEmptinessEvent: function() {
         var $input = this._input();
 
-        $input.on("input blur", this._toggleEmptinessEventHandler.bind(this));
+        eventsEngine.on($input, "input blur", this._toggleEmptinessEventHandler.bind(this));
     },
 
     _toggleEmptinessEventHandler: function() {

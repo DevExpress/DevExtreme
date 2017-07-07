@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
@@ -334,7 +335,7 @@ var ValidationSummary = CollectionWidget.inherit({
     },
 
     _postprocessRenderItem: function(params) {
-        params.itemElement.on("click", function() {
+        eventsEngine.on(params.itemElement, "click", function() {
             params.itemData.validator && params.itemData.validator.focus && params.itemData.validator.focus();
         });
     },

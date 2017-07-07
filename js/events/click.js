@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     domUtils = require("../core/utils/dom"),
     animationFrame = require("../animation/frame"),
@@ -116,7 +117,7 @@ var ClickEmitter = Emitter.inherit({
                 this.callBase($element);
             }
 
-            $element.on("click", clickHandler);
+            eventsEngine.on($element, "click", clickHandler);
         },
 
         configure: function(data) {

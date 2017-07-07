@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
     Class = require("../../core/class"),
@@ -256,7 +257,7 @@ var ComponentBuilder = Class.inherit({
             $resultMarkup.appendTo(options.container);
 
             if(!options.noModel) {
-                $resultMarkup.on("$destroy", function() {
+                eventsEngine.on($resultMarkup, "$destroy", function() {
                     var destroyAlreadyCalled = !templateScope.$parent;
 
                     if(destroyAlreadyCalled) {

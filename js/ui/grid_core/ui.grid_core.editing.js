@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
     deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
@@ -151,7 +152,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                $(document).on(clickEvent.name, that._saveEditorHandler);
+                eventsEngine.on($(document), clickEvent.name, that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();

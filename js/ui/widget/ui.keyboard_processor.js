@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     inArray = require("../../core/utils/array").inArray,
     eventUtils = require("../../events/utils");
@@ -45,7 +46,7 @@ var KeyboardProcessor = Class.inherit({
             this._processFunction = function(e) {
                 _this.process(e);
             };
-            this._element.on(this._keydown, this._processFunction);
+            eventsEngine.on(this._element, this._keydown, this._processFunction);
         }
     },
 

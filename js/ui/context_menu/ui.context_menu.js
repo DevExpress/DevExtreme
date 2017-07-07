@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     noop = require("../../core/utils/common").noop,
@@ -472,10 +473,10 @@ var ContextMenu = MenuBase.inherit((function() {
 
             if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
                 that._showContextMenuEventHandler = undefined;
-                $(target).on(eventName, handler);
+                eventsEngine.on($(target), eventName, handler);
             } else {
                 that._showContextMenuEventHandler = handler;
-                $(document).on(eventName, target, that._showContextMenuEventHandler);
+                eventsEngine.on($(document), eventName, target, that._showContextMenuEventHandler);
             }
         },
 

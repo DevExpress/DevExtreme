@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../integration/jquery/deferred").when,
@@ -780,7 +781,7 @@ var CollectionWidget = Widget.inherit({
             eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
 
         $itemContainer.off(eventName, itemSelector);
-        $itemContainer.on(eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
+        eventsEngine.on($itemContainer, eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
     },
 
     _getHoldTimeout: function() {
@@ -805,7 +806,7 @@ var CollectionWidget = Widget.inherit({
             eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
 
         $itemContainer.off(eventName, itemSelector);
-        $itemContainer.on(eventName, itemSelector, this._itemContextMenuHandler.bind(this));
+        eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));
     },
 
     _shouldFireContextMenuEvent: function() {
@@ -875,7 +876,7 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        $itemElement.on(clickEvent.name, (function(e) {
+        eventsEngine.on($itemElement, clickEvent.name, (function(e) {
             this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
                 jQueryEvent: e
             });

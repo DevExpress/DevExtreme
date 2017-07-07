@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     translator = require("../../animation/translator"),
     fx = require("../../animation/fx"),
     dragEvents = require("../../events/drag"),
@@ -73,15 +74,15 @@ registerDecorator(
             var $handle = $("<div>").addClass(REORDER_HANDLE_CLASS);
 
             var lockedDrag = false;
-            $handle.on("dxpointerdown", function(e) {
+            eventsEngine.on($handle, "dxpointerdown", function(e) {
                 lockedDrag = !eventUtils.isMouseEvent(e);
             });
-            $handle.on("dxhold", { timeout: 30 }, function(e) {
+            eventsEngine.on($handle, "dxhold", { timeout: 30 }, function(e) {
                 e.cancel = true;
                 lockedDrag = false;
             });
 
-            $handle.on(DRAG_START_EVENT_NAME, { direction: "vertical", immediate: true }, (function(e) {
+            eventsEngine.on($handle, DRAG_START_EVENT_NAME, { direction: "vertical", immediate: true }, (function(e) {
                 if(lockedDrag) {
                     e.cancel = true;
                     return;
@@ -89,8 +90,8 @@ registerDecorator(
                 this._dragStartHandler($itemElement, e);
             }).bind(this));
 
-            $handle.on(DRAG_UPDATE_EVENT_NAME, this._dragHandler.bind(this, $itemElement));
-            $handle.on(DRAG_END_EVENT_NAME, this._dragEndHandler.bind(this, $itemElement));
+            eventsEngine.on($handle, DRAG_UPDATE_EVENT_NAME, this._dragHandler.bind(this, $itemElement));
+            eventsEngine.on($handle, DRAG_END_EVENT_NAME, this._dragEndHandler.bind(this, $itemElement));
 
             $container.addClass(REORDER_HANDLE_CONTAINER_CLASS);
             $container.append($handle);

@@ -4,6 +4,7 @@
 // 1. animation
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
@@ -35,7 +36,7 @@ var TOAST_CLASS = "dx-toast",
         "left": { my: "center left", at: "center left", of: null, offset: "0 0" }
     };
 
-$(document).on(pointerEvents.down, function(e) {
+eventsEngine.on($(document), pointerEvents.down, function(e) {
     for(var i = TOAST_STACK.length - 1; i >= 0; i--) {
         if(!TOAST_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -380,7 +381,7 @@ var Toast = Overlay.inherit({
         var dxEvent = "dx" + event.toLowerCase();
 
         this._$content.off(dxEvent);
-        this.option("closeOn" + event) && this._$content.on(dxEvent, this.hide.bind(this));
+        this.option("closeOn" + event) && eventsEngine.on(this._$content, dxEvent, this.hide.bind(this));
     },
 
     _posStringToObject: function() {

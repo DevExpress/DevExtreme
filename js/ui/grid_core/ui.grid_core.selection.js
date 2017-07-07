@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
@@ -743,7 +744,7 @@ module.exports = {
                 },
 
                 _attachSelectAllCheckBoxClickEvent: function($element) {
-                    $element.on(clickEvent.name, this.createAction(function(e) {
+                    eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
                         var event = e.jQueryEvent;
 
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
@@ -799,7 +800,7 @@ module.exports = {
                 },
 
                 _attachCheckBoxClickEvent: function($element) {
-                    $element.on(clickEvent.name, this.createAction(function(e) {
+                    eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
                         var selectionController = this.getController("selection"),
                             event = e.jQueryEvent,
                             rowIndex = this.getRowIndex($(event.currentTarget).closest("." + ROW_CLASS));
@@ -850,13 +851,13 @@ module.exports = {
                     if(selectionMode !== "none") {
                         if(that.option(SHOW_CHECKBOXES_MODE) === "onLongTap" || !support.touch) {
                             //TODO Not working timeout by hold when it is larger than other timeouts by hold
-                            $table.on(eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
+                            eventsEngine.on($table, eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
                                 processLongTap(that.component, e.jQueryEvent);
 
                                 e.jQueryEvent.stopPropagation();
                             }));
                         }
-                        $table.on("mousedown selectstart", that.createAction(function(e) {
+                        eventsEngine.on($table, "mousedown selectstart", that.createAction(function(e) {
                             var event = e.jQueryEvent;
 
                             if(event.shiftKey) {

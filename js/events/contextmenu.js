@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     support = require("../core/utils/support"),
     devices = require("../core/devices"),
     Class = require("../core/class"),
@@ -21,10 +22,10 @@ var ContextMenu = Class.inherit({
     setup: function(element) {
         var $element = $(element);
 
-        $element.on(CONTEXTMENU_NAMESPACED_EVENT_NAME, this._contextMenuHandler.bind(this));
+        eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, this._contextMenuHandler.bind(this));
 
         if(support.touch || devices.isSimulator()) {
-            $element.on(HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
+            eventsEngine.on($element, HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
         }
     },
 

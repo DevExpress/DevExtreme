@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
     errors = require("../widget/ui.errors"),
     browser = require("../../core/utils/browser"),
@@ -92,7 +93,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
                 }
             };
 
-            $(window).on("unload", that._windowUnloadHandler);
+            eventsEngine.on($(window), "unload", that._windowUnloadHandler);
 
             return that;
         },

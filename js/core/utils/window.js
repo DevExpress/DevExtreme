@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Callbacks = require("../../core/utils/callbacks");
 
 var resizeCallbacks = (function() {
@@ -42,7 +43,7 @@ var resizeCallbacks = (function() {
     callbacks.add = function() {
         var result = originalCallbacksAdd.apply(callbacks, arguments);
         if(!resizeEventHandlerAttached && callbacks.has()) {
-            jqWindow.on("resize", handleResize);
+            eventsEngine.on(jqWindow, "resize", handleResize);
             resizeEventHandlerAttached = true;
         }
         return result;

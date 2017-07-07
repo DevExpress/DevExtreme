@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     caret = require("./utils.caret"),
     domUtils = require("../../core/utils/dom"),
     isDefined = require("../../core/utils/type").isDefined,
@@ -190,7 +191,7 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        this._input().on(eventUtils.addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
+        eventsEngine.on(this._input(), eventUtils.addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
             // NOTE: input is focused on caret changing in IE(T304159)
             this._suppressCaretChanging(this._changeHandler, [e]);
             this._changeHandler(e);

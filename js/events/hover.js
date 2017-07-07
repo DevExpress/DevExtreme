@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     Class = require("../core/class"),
     devices = require("../core/devices"),
     registerEvent = require("./core/event_registrator"),
@@ -35,7 +36,7 @@ var Hover = Class.inherit({
                 that._handler(e);
             };
 
-        $element.on(this._originalEventName, handleObj.selector, handler);
+        eventsEngine.on($element, this._originalEventName, handleObj.selector, handler);
         $.data(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
     },
 

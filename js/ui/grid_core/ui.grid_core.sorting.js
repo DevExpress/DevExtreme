@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -97,7 +98,7 @@ var HeaderPanelSortingExtender = extend({}, sortingMixin, {
         var that = this,
             $item = that.callBase.apply(that, arguments);
 
-        $item.on(eventUtils.addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(function() {
+        eventsEngine.on($item, eventUtils.addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(function() {
             setTimeout(function() {
                 that.getController("columns").changeSortOrder(groupColumn.index);
             });

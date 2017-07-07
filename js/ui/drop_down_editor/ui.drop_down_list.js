@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
@@ -361,7 +362,7 @@ var DropDownList = DropDownEditor.inherit({
 
     _renderField: function() {
         this.callBase();
-        this._input().on("input", this._setFocusPolicy.bind(this));
+        eventsEngine.on(this._input(), "input", this._setFocusPolicy.bind(this));
     },
 
     _preventFocusOnPopup: function(e) {
@@ -666,7 +667,7 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
 
         if(this._shouldRenderSearchEvent()) {
-            this._input().on(this._getSearchEvent(), this._searchHandler.bind(this));
+            eventsEngine.on(this._input(), this._getSearchEvent(), this._searchHandler.bind(this));
         }
     },
 

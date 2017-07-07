@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -830,7 +831,7 @@ var Menu = MenuBase.inherit({
             this._clearTimeouts();
 
             if(!submenu.isOverlayVisible()) {
-                $item.on(mouseMoveEventName, this._itemMouseMoveHandler.bind(this));
+                eventsEngine.on($item, mouseMoveEventName, this._itemMouseMoveHandler.bind(this));
                 this._showSubmenuTimer = this._getDelay("hide");
             }
         }

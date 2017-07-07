@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     stringUtils = require("../../core/utils/string"),
     registerComponent = require("../../core/component_registrator"),
@@ -283,7 +284,7 @@ var Pager = Widget.inherit({
             that._pageClickHandler = function(e) {
                 clickPagesIndexAction({ jQueryEvent: e });
             };
-            that._$pagesChooser.on(eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), '.' + PAGER_PAGE_CLASS, that._pageClickHandler);
+            eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), '.' + PAGER_PAGE_CLASS, that._pageClickHandler);
         }
 
         for(var i = 0; i < pagesLength; i++) {
@@ -418,7 +419,7 @@ var Pager = Widget.inherit({
         that._testCurrentPageSize = currentPageSize;
         ///#ENDDEBUG
 
-        that._$pagesSizeChooser.on(eventUtils.addNamespace(clickEvent.name, that.Name + "PageSize"), '.' + PAGER_PAGE_SIZE_CLASS, function(e) {
+        eventsEngine.on(that._$pagesSizeChooser, eventUtils.addNamespace(clickEvent.name, that.Name + "PageSize"), '.' + PAGER_PAGE_SIZE_CLASS, function(e) {
             clickPagesSizeAction({ jQueryEvent: e });
         });
 

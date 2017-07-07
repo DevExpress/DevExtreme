@@ -3,7 +3,8 @@
 var Form = require("../form"),
     dateSerialization = require("../../core/utils/date_serialization"),
     messageLocalization = require("../../localization/message"),
-    clickEvent = require("../../events/click");
+    clickEvent = require("../../events/click"),
+    eventsEngine = require("../../events/core/events_engine");
 
 require("./ui.scheduler.recurrence_editor");
 require("./ui.scheduler.timezone_editor");
@@ -201,7 +202,7 @@ var SchedulerAppointmentForm = {
                         var $editorField = args.element.closest(".dx-field-item"),
                             $editorLabel = $editorField.find(".dx-field-item-label");
 
-                        $editorLabel.off(clickEvent.name).on(clickEvent.name, function() {
+                        eventsEngine.on($editorLabel.off(clickEvent.name), clickEvent.name, function() {
                             args.component.toggle();
                         });
                     }

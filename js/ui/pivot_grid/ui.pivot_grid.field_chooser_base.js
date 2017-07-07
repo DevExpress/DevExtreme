@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     ArrayStore = require("../../data/array_store"),
     clickEvent = require("../../events/click"),
     noop = require("../../core/utils/common").noop,
@@ -300,10 +301,10 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             };
 
         if(element) {
-            element.on(clickEvent.name, ".dx-area-field.dx-area-box", func);
+            eventsEngine.on(element, clickEvent.name, ".dx-area-field.dx-area-box", func);
             return;
         }
-        that.element().on(clickEvent.name, ".dx-area-field.dx-area-box", func);
+        eventsEngine.on(that.element(), clickEvent.name, ".dx-area-field.dx-area-box", func);
     },
 
     _initTemplates: noop,

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
@@ -118,7 +119,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         //T138469
         if(browser.mozilla) {
-            $table.on("mousedown", "td", function(e) {
+            eventsEngine.on($table, "mousedown", "td", function(e) {
                 if(e.ctrlKey) {
                     e.preventDefault();
                 }
@@ -126,7 +127,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
 
         if(that.option("cellHintEnabled")) {
-            $table.on("mousemove", ".dx-row > td", this.createAction(function(args) {
+            eventsEngine.on($table, "mousemove", ".dx-row > td", this.createAction(function(args) {
                 var e = args.jQueryEvent,
                     $element = $(e.target),
                     $cell = $(e.currentTarget),
@@ -181,18 +182,18 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             return resultOptions;
         };
 
-        $table.on("mouseover", ".dx-row > td", function(e) {
+        eventsEngine.on($table, "mouseover", ".dx-row > td", function(e) {
             that.executeAction("onCellHoverChanged", getOptions(e));
         });
-        $table.on("mouseout", ".dx-row > td", function(e) {
+        eventsEngine.on($table, "mouseout", ".dx-row > td", function(e) {
             that.executeAction("onCellHoverChanged", getOptions(e));
         });
 
-        $table.on(clickEvent.name, ".dx-row > td", function(e) {
+        eventsEngine.on($table, clickEvent.name, ".dx-row > td", function(e) {
             that.executeAction("onCellClick", getOptions(e));
         });
 
-        $table.on(clickEvent.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
+        eventsEngine.on($table, clickEvent.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
             var jQueryEvent = e.jQueryEvent;
 
             if(!$(jQueryEvent.target).closest("a").length) {

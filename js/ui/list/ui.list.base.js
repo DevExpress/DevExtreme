@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     compileGetter = require("../../core/utils/data").compileGetter,
@@ -748,7 +749,7 @@ var ListBase = CollectionWidget.inherit({
 
         $element.off(eventName, selector);
         if(collapsibleGroups) {
-            $element.on(eventName, selector, (function(e) {
+            eventsEngine.on($element, eventName, selector, (function(e) {
                 this._createAction((function(e) {
                     var $group = $(e.jQueryEvent.currentTarget).parent();
                     this._collapseGroupHandler($group);

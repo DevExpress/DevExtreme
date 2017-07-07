@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     abstract = Class.abstract,
     eventUtils = require("../../events/utils"),
@@ -37,7 +38,7 @@ var Locker = Class.inherit((function() {
 
             var that = this;
             this._proxiedScroll = function(e) { that._scroll(e); };
-            $(this._element).on(NAMESPACED_SCROLL_EVENT, this._proxiedScroll);
+            eventsEngine.on($(this._element), NAMESPACED_SCROLL_EVENT, this._proxiedScroll);
         },
 
         _scroll: abstract,

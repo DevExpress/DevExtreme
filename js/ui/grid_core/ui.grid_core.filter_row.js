@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     modules = require("./ui.grid_core.modules"),
@@ -261,7 +262,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions = that._getEditorOptions($editor, column);
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-                    $editor.find(EDITORS_INPUT_SELECTOR).on("keydown", function(e) {
+                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
                         if(e.which === 9 && e.shiftKey) {
@@ -280,7 +281,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-                    $editor.find(EDITORS_INPUT_SELECTOR).on("keydown", function(e) {
+                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         if(e.which === 9 && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();

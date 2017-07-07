@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
@@ -51,7 +52,7 @@ var SpinButton = Widget.inherit({
 
         this._clearTimer();
 
-        this.element().on(holdEvent.name, (function() {
+        eventsEngine.on(this.element(), holdEvent.name, (function() {
             this._feedBackDeferred = $.Deferred();
             feedbackEvents.lock(this._feedBackDeferred);
             this._spinChangeHandler({ jQueryEvent: e });

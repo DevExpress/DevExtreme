@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     errors = require("./ui.errors"),
     Action = require("../../core/action"),
     extend = require("../../core/utils/extend").extend,
@@ -525,7 +526,7 @@ var Widget = DOMComponent.inherit({
 
         focusTarget.off(clickNamespace);
 
-        this.option("accessKey") && focusTarget.on(clickNamespace, (function(e) {
+        this.option("accessKey") && eventsEngine.on(focusTarget, clickNamespace, (function(e) {
             if(eventUtils.isFakeClickEvent(e)) {
                 e.stopImmediatePropagation();
                 this.focus();

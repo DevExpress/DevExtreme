@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
     compareVersions = require("../core/utils/version").compare,
@@ -79,7 +80,7 @@ var getElement = function(value) {
     return value && $(value instanceof $.Event ? value.target : value);
 };
 
-$(document).on(pointerEvents.down, function(e) {
+eventsEngine.on($(document), pointerEvents.down, function(e) {
     for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
         if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -446,9 +447,9 @@ var Overlay = Widget.inherit({
         this._$wrapper.attr("data-bind", "dxControlsDescendantBindings: true");
 
         // NOTE: hack to fix B251087
-        this._$wrapper.on("MSPointerDown", noop);
+        eventsEngine.on(this._$wrapper, "MSPointerDown", noop);
         // NOTE: bootstrap integration T342292
-        this._$wrapper.on("focusin", function(e) { e.stopPropagation(); });
+        eventsEngine.on(this._$wrapper, "focusin", function(e) { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
     },
@@ -818,7 +819,7 @@ var Overlay = Widget.inherit({
     _toggleTabTerminator: function(enabled) {
         var eventName = eventUtils.addNamespace("keydown", this.NAME);
         if(enabled) {
-            $(document).on(eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.on($(document), eventName, this._proxiedTabTerminatorHandler);
         } else {
             $(document).off(eventName, this._proxiedTabTerminatorHandler);
         }
@@ -886,7 +887,7 @@ var Overlay = Widget.inherit({
         $().add(this._$prevTargetParents)
             .off(scrollEvent, this._proxiedTargetParentsScrollHandler);
         if(subscribe && closeOnScroll) {
-            $parents.on(scrollEvent, this._proxiedTargetParentsScrollHandler);
+            eventsEngine.on($parents, scrollEvent, this._proxiedTargetParentsScrollHandler);
             this._$prevTargetParents = $parents;
         }
     },

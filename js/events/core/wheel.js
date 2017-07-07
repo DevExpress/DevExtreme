@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     registerEvent = require("./event_registrator"),
     eventUtils = require("../utils");
 
@@ -13,7 +14,7 @@ var wheel = {
 
     setup: function(element) {
         var $element = $(element);
-        $element.on(eventUtils.addNamespace(wheelEvent, EVENT_NAMESPACE), wheel._wheelHandler.bind(wheel));
+        eventsEngine.on($element, eventUtils.addNamespace(wheelEvent, EVENT_NAMESPACE), wheel._wheelHandler.bind(wheel));
     },
 
     teardown: function(element) {

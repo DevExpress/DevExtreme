@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     math = Math,
     titleize = require("../../core/utils/inflector").titleize,
     extend = require("../../core/utils/extend").extend,
@@ -679,7 +680,7 @@ var SimulatedStrategy = Class.inherit({
         this._$element.off("." + SCROLLABLE_SIMULATED_KEYBOARD);
 
         if(!this.option("disabled") && this.option("useKeyboard")) {
-            this._$element.on(eventUtils.addNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
         }
     },
 

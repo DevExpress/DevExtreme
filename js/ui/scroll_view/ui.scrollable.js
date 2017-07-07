@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     support = require("../../core/utils/support"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
@@ -252,7 +253,7 @@ var Scrollable = DOMComponent.inherit({
             $content = this._$content = $("<div>").addClass(SCROLLABLE_CONTENT_CLASS);
 
         if(beforeActivateExists) {
-            $element.on(eventUtils.addNamespace("beforeactivate", SCROLLABLE), function(e) {
+            eventsEngine.on($element, eventUtils.addNamespace("beforeactivate", SCROLLABLE), function(e) {
                 if(!$(e.target).is(selectors.focusable)) {
                     e.preventDefault();
                 }

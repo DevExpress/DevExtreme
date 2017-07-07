@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
@@ -753,10 +754,10 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         this._startResizingHandler = this.createAction(this._startResizing);
         this._endResizingHandler = this.createAction(this._endResizing);
 
-        $(document).on(addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, this._moveSeparatorHandler);
-        this._$parentContainer.on(addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, this._startResizingHandler);
-        this._columnsSeparatorView.element().on(addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
-        $(document).on(addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
+        eventsEngine.on($(document), addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, this._moveSeparatorHandler);
+        eventsEngine.on(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, this._startResizingHandler);
+        eventsEngine.on(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
+        eventsEngine.on($(document), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
     },
 
     _updateColumnsWidthIfNeeded: function(posX) {
@@ -1028,7 +1029,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
 
                         if(draggingPanel.allowDragging(columns[index], nameDraggingPanel, draggingPanels)) {
                             $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
-                            $columnElement.on(addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
+                            eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
                                 var e = args.jQueryEvent,
                                     eventData = eventUtils.eventData(e);
 
@@ -1044,8 +1045,8 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                                     rowIndex: that._columnsController.getRowIndex(column.index, true)
                                 });
                             }));
-                            $columnElement.on(addNamespace(dragEvents.move, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.moveHeader));
-                            $columnElement.on(addNamespace(dragEvents.end, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.dropHeader));
+                            eventsEngine.on($columnElement, addNamespace(dragEvents.move, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.moveHeader));
+                            eventsEngine.on($columnElement, addNamespace(dragEvents.end, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.dropHeader));
                         }
                     };
 

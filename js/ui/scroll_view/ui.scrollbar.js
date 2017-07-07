@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     translator = require("../../animation/translator"),
     Widget = require("../widget/ui.widget"),
     eventUtils = require("../../events/utils"),
@@ -79,7 +80,7 @@ var Scrollbar = Widget.inherit({
     },
 
     _attachPointerDownHandler: function() {
-        this._$thumb.on(eventUtils.addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
+        eventsEngine.on(this._$thumb, eventUtils.addNamespace(pointerEvents.down, SCROLLBAR), this.feedbackOn.bind(this));
     },
 
     feedbackOn: function() {
@@ -225,7 +226,7 @@ var Scrollbar = Widget.inherit({
 
 var activeScrollbar = null;
 
-$(document).on(eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
+eventsEngine.on($(document), eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
     if(activeScrollbar) {
         activeScrollbar.feedbackOff();
     }

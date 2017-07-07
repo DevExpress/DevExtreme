@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     extend = require("../../core/utils/extend").extend,
     CheckBox = require("../check_box"),
@@ -68,7 +69,7 @@ registerDecorator(
             var $itemElement = config.$itemElement,
                 control = this._controlWidget.getInstance($itemElement.find("." + this._controlClass));
 
-            $itemElement.on("stateChanged", (function(e, state) {
+            eventsEngine.on($itemElement, "stateChanged", (function(e, state) {
                 control.option("value", state);
             }).bind(this));
         },

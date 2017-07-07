@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
     Class = require("../../core/class"),
     eventUtils = require("../utils");
@@ -61,7 +62,7 @@ var BaseStrategy = Class.inherit({
             element = this.noBubble ? element : document;
 
             var that = this;
-            $(element).on(this._originalEvents, this._selector, function(e) {
+            eventsEngine.on($(element), this._originalEvents, this._selector, function(e) {
                 that._handler(e);
             });
         }
