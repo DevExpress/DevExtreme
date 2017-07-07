@@ -10,7 +10,7 @@ var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
-    "html", "css", "text",
+    "html", "css",
     "wrapInner", "wrap",
     "each", "val", "index",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
@@ -295,6 +295,24 @@ if(!useJQueryRenderer) {
             result.push(this[i].cloneNode(true));
         }
         return renderer(result);
+    };
+
+    initRender.prototype.text = function(text) {
+        if(!arguments.length) {
+            var result = "";
+
+            for(var i = 0; i < this.length; i++) {
+                result += this[i] && this[i].textContent || "";
+            }
+            return result;
+        }
+
+        cleanData(this[0], false);
+
+        text = text === undefined ? "" : text;
+        rendererStrategy.setText(this[0], text);
+
+        return this;
     };
 
     initRender.prototype.contents = function() {
