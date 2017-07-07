@@ -592,7 +592,11 @@ module.exports = {
                                 change.changeTypes = [];
 
                                 var equalItems = function(item1, item2, strict) {
-                                    return item1 && item2 && equalKeys(item1.key, item2.key) && (!strict || item1.rowType === item2.rowType);
+                                    var result = item1 && item2 && equalKeys(item1.key, item2.key);
+                                    if(result && strict) {
+                                        result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
+                                    }
+                                    return result;
                                 };
 
                                 $.each(rowIndices, function(index, rowIndex) {
@@ -635,6 +639,9 @@ module.exports = {
                                         that._items.splice(rowIndex, 1);
                                         rowIndexCorrection--;
                                         prevIndex = -1;
+                                    } else {
+                                        changeType = "update";
+                                        that._items[rowIndex] = newItem;
                                     }
                                     change.changeTypes.push(changeType);
                                 });
