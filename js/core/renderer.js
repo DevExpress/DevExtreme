@@ -243,7 +243,7 @@ if(!useJQueryRenderer) {
             var wrap = renderer(wrapper, this[0].ownerDocument).eq(0).clone();
 
             if(this[0].parentNode) {
-                wrap.insertBefore(renderer(this[0]));
+                wrap.insertBefore(this);
             }
 
             wrap.append(this);
