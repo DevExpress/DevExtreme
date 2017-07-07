@@ -759,14 +759,17 @@ var TagBox = SelectBox.inherit({
         this._cleanTags();
 
         var $input = this._input(),
+            values = this._getValue(),
             items = [],
-            itemLoadDeferreds = $.map(this._getValue(), (function(value) {
+            itemLoadDeferreds = $.map(values, (function(value) {
                 return this._loadItem(value).always((function(item) {
+                    var valueIndex = values.indexOf(value);
+
                     if(isDefined(item)) {
                         this._selectedItems.push(item);
-                        items.push(item);
+                        items.splice(valueIndex, 0, item);
                     } else {
-                        items.push(value);
+                        items.splice(valueIndex, 0, value);
                     }
                 }).bind(this));
             }).bind(this));
