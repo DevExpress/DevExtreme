@@ -2229,6 +2229,27 @@ QUnit.test("Select All for multiple selection when selectAllMode is page", funct
     assert.strictEqual(this.selectionController.isSelectAll(), true, "select all is true");
 });
 
+QUnit.test("Select All for multiple selection when selectAllMode is page and data is grouped", function(assert) {
+    this.applyOptions({
+        columns: ["id", { dataField: "value", groupIndex: 0 }],
+        grouping: {
+            autoExpandAll: true
+        },
+        selection: {
+            mode: 'multiple',
+            allowSelectAll: true,
+            selectAllMode: "page"
+        }
+    });
+
+    //act
+    this.selectionController.selectAll();
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 2]);
+    assert.strictEqual(this.selectionController.isSelectAll(), true, "select all is true");
+});
+
 QUnit.test("Select All and deselect for multiple selection when selectAllMode is page", function(assert) {
     this.applyOptions({
         selection: {
