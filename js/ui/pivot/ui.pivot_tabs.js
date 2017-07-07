@@ -177,17 +177,6 @@ var PivotTabs = CollectionWidget.inherit({
         this._renderGhostTab();
     },
 
-    _renderContent: function() {
-        var that = this;
-
-        this.callBase();
-        if(this.option("templatesRenderAsynchronously")) {
-            this._resizeEventTimer = setTimeout(function() {
-                that._dimensionChanged();
-            }, 0);
-        }
-    },
-
     _renderGhostTab: function() {
         this._itemContainer().append(this._$ghostTab);
         this._toggleGhostTab(false);

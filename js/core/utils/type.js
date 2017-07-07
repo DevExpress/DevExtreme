@@ -4,6 +4,7 @@ var types = {
     "[object Array]": "array",
     "[object Date]": "date",
     "[object Object]": "object",
+    "[object String]": "string",
     "[object Null]": "null" };
 
 var type = function(object) {
