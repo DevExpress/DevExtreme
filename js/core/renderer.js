@@ -3,6 +3,7 @@
 var $ = require("jquery");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
+var matches = require("./polyfills/matches");
 
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
@@ -380,8 +381,8 @@ if(!useJQueryRenderer) {
         var result = [];
         for(var i = 0; i < this.length; i++) {
             var item = this[i];
-            if(item.nodeType === Node.ELEMENT_NODE && typeUtils.isString(selector)) {
-                item.matches(selector) && result.push(item);
+            if(item.nodeType === Node.ELEMENT_NODE && typeUtils.type(selector) === "string") {
+                matches(item, selector) && result.push(item);
             } else if(selector.nodeType || typeUtils.isWindow(selector)) {
                 selector === item && result.push(item);
             } else if(typeUtils.isFunction(selector)) {
