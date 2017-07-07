@@ -13,11 +13,11 @@ var $ = require("../../core/renderer"),
     when = require("../../integration/jquery/deferred").when;
 
 var ITEM_DELETING_DATA_KEY = "dxItemDeleting",
-    NOT_FOUND_INDEX = -1;
+    NOT_EXISTING_INDEX = -1;
 
 var indexExists = function(index) {
-    return index !== NOT_FOUND_INDEX;
-}
+    return index !== NOT_EXISTING_INDEX;
+};
 
 var CollectionWidget = BaseCollectionWidget.inherit({
 
@@ -89,7 +89,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @type number
             * @default -1
             */
-            selectedIndex: NOT_FOUND_INDEX,
+            selectedIndex: NOT_EXISTING_INDEX,
 
             /**
             * @name CollectionWidgetOptions_selectedItem
@@ -353,7 +353,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 } else {
                     this._setOptionSilent("selectedItems", []);
                     this._setOptionSilent("selectedItemKeys", []);
-                    this._setOptionSilent("selectedIndex", NOT_FOUND_INDEX);
+                    this._setOptionSilent("selectedIndex", NOT_EXISTING_INDEX);
                 }
                 break;
             case "selectedItemKeys":
