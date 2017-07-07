@@ -7,7 +7,7 @@ var typeUtils = require("./utils/type");
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
 var methods = [
-    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
+    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "html", "css",
@@ -513,6 +513,45 @@ if(!useJQueryRenderer) {
     initRender.prototype.toArray = function() {
         return emptyArray.slice.call(this);
     };
+
+    var getWindow = function(element) {
+        return typeUtils.isWindow(element) ? element : element.nodeType === 9 && element.defaultView;
+    };
+
+    [{
+        name: "scrollLeft",
+        offsetProp: "pageXOffset",
+        scrollWindow: function(win, value) {
+            win.scrollTo(value, win.pageYOffset);
+        }
+    }, {
+        name: "scrollTop",
+        offsetProp: "pageYOffset",
+        scrollWindow: function(win, value) {
+            win.scrollTo(win.pageXOffset, value);
+        }
+    }].forEach(function(directionStrategy) {
+        var propName = directionStrategy.name;
+
+        initRender.prototype[propName] = function(value) {
+            if(!this[0]) {
+                return;
+            }
+
+            var window = getWindow(this[0]);
+
+            if(value === undefined) {
+                return window ? window[directionStrategy.offsetProp] : this[0][propName];
+            }
+
+            if(window) {
+                directionStrategy.scrollWindow(window, value);
+            } else {
+                this[0][propName] = value;
+            }
+            return this;
+        };
+    });
 }
 
 renderer.tmpl = function() {
