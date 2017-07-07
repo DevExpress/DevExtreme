@@ -611,7 +611,7 @@ QUnit.test("onMultitagPreparing option", function(assert) {
                 assert.equal(e.component.NAME, "dxTagBox", "component is correct");
                 assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
                 assert.strictEqual(e.allSelected, false, "allSelected is correct");
-                assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
+                assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
                 e.text = "custom text";
             }
         }),
@@ -627,7 +627,7 @@ QUnit.test("onMultitagPreparing option change", function(assert) {
         assert.equal(e.component.NAME, "dxTagBox", "component is correct");
         assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
         assert.strictEqual(e.allSelected, false, "allSelected is correct");
-        assert.deepEqual(e.selectedItems, [1, 2, 3], "selectedItems are correct");
+        assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
         e.text = "custom text";
     };
 

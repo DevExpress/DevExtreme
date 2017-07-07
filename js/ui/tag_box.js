@@ -6,7 +6,6 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
     extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
@@ -760,23 +759,33 @@ var TagBox = SelectBox.inherit({
         this._cleanTags();
 
         var $input = this._input(),
-            multiTagRequired = this._multiTagRequired() && this._renderMultiTag($input),
-            itemLoadDeferreds;
-
-        itemLoadDeferreds = $.map(this._getValue(), (function(value) {
-            if(multiTagRequired) {
+            items = [],
+            itemLoadDeferreds = $.map(this._getValue(), (function(value) {
                 return this._loadItem(value).always((function(item) {
-                    isDefined(item) && this._selectedItems.push(item);
+                    if(isDefined(item)) {
+                        this._selectedItems.push(item);
+                        items.push(item);
+                    } else {
+                        items.push(value);
+                    }
                 }).bind(this));
-            } else {
-                return this._renderTag(value, $input);
-            }
-        }).bind(this));
+            }).bind(this));
 
-        when.apply($, itemLoadDeferreds).done((function() {
+        when.apply($, itemLoadDeferreds).always((function() {
             this._renderInputAddons();
-            this._scrollContainer("end");
+
             this.option("selectedItems", this._selectedItems.slice());
+
+            var multiTagRequired = this._multiTagRequired() && this._renderMultiTag($input);
+
+            if(!multiTagRequired) {
+                items.forEach(function(item) {
+                    this._renderTag(item, $input);
+                }.bind(this));
+            }
+
+            this._scrollContainer("end");
+            this._refreshTagElements();
         }).bind(this));
 
         this._renderEmptyState();
@@ -784,8 +793,6 @@ var TagBox = SelectBox.inherit({
         if(!this._preserveFocusedTag) {
             this._clearTagFocus();
         }
-
-        this._refreshTagElements();
     },
 
     _renderEmptyState: function() {
@@ -799,46 +806,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _cleanTags: function() {
-        var $tags = this._tagElements(),
-            values = this._getValue();
-
-        if(this._multiTagRequired()) {
-            $tags.remove();
-            this._selectedItems = [];
-            return;
-        }
-
-        $.each($tags, function(_, tag) {
-            var $tag = $(tag),
-                index = inArray($tag.data(TAGBOX_TAG_DATA_KEY), values);
-
-            if(index < 0) {
-                $tag.remove();
-            }
-        });
-
-        this._cleanSelectedItems();
-    },
-
-    _cleanSelectedItems: function() {
-        if(this.option("fieldTemplate")) {
-            this._selectedItems = [];
-            return;
-        }
-
-        var values = this._getValue(),
-            selectedItemsCount = this._selectedItems.length;
-
-        for(var index = 0; index < selectedItemsCount; index++) {
-            var selectedItem = this._selectedItems[index],
-                value = this._valueGetter(selectedItem);
-
-            if(inArray(value, values) < 0) {
-                this._selectedItems.splice(index, 1);
-                index--;
-                selectedItemsCount--;
-            }
-        }
+        this._tagElements().remove();
+        this._selectedItems = [];
     },
 
     _refreshTagElements: function() {
@@ -864,8 +833,9 @@ var TagBox = SelectBox.inherit({
         });
     },
 
-    _renderTag: function(value, $input) {
-        var $tag = this._getTag(value);
+    _renderTag: function(item, $input) {
+        var value = this._valueGetter(item) || item,
+            $tag = this._getTag(value);
 
         if($tag) {
             if(!$tag.hasClass(TAGBOX_CUSTOM_TAG_CLASS)) {
@@ -877,15 +847,12 @@ var TagBox = SelectBox.inherit({
             $tag = this._createTag(value, $input);
         }
 
-        return this._loadItem(value).always((function(item) {
-            if(isDefined(item)) {
-                this._selectedItems.push(item);
-                this._applyTagTemplate(item, $tag);
-            } else {
-                $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
-                this._applyTagTemplate(value, $tag);
-            }
-        }).bind(this));
+        if(isDefined(item)) {
+            this._applyTagTemplate(item, $tag);
+        } else {
+            $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
+            this._applyTagTemplate(value, $tag);
+        }
     },
 
     _getTag: function(value) {
