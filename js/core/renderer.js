@@ -361,8 +361,39 @@ if(!useJQueryRenderer) {
         return result.add(nodes);
     };
 
-    initRender.prototype.filter = function() {
-        return renderer(this.$element.filter.apply(this.$element, arguments));
+    var isVisible = function(_, element) {
+        if(!element.nodeType) return true;
+        return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+    };
+
+    initRender.prototype.filter = function(selector) {
+        if(!selector) return renderer();
+
+        if(selector === ":visible") {
+            return this.filter(isVisible);
+        } else if(selector === ":hidden") {
+            return this.filter(function(_, element) {
+                return !isVisible(_, element);
+            });
+        }
+
+        var result = [];
+        for(var i = 0; i < this.length; i++) {
+            var item = this[i];
+            if(item.nodeType === Node.ELEMENT_NODE && typeUtils.isString(selector)) {
+                item.matches(selector) && result.push(item);
+            } else if(selector.nodeType || typeUtils.isWindow(selector)) {
+                selector === item && result.push(item);
+            } else if(typeUtils.isFunction(selector)) {
+                selector.call(item, i, item) && result.push(item);
+            } else {
+                for(var j = 0; j < selector.length; j++) {
+                    selector[j] === item && result.push(item);
+                }
+            }
+        }
+
+        return renderer(result);
     };
 
     initRender.prototype.not = function(selector) {
