@@ -240,12 +240,9 @@ if(!useJQueryRenderer) {
 
     initRender.prototype.wrap = function(wrapper) {
         if(this[0]) {
-            var wrap = renderer(wrapper, this[0].ownerDocument).eq(0).clone();
+            var wrap = renderer(wrapper);
 
-            if(this[0].parentNode) {
-                wrap.insertBefore(this);
-            }
-
+            wrap.insertBefore(this);
             wrap.append(this);
         }
 
