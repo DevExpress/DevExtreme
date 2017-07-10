@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    isDefined = commonUtils.isDefined,
     extend = require("../../core/utils/extend").extend,
     errors = require("../widget/ui.errors"),
     positionUtils = require("../../animation/position"),
@@ -781,7 +782,11 @@ var DropDownEditor = TextBox.inherit({
                 this._initPopupInitializedAction();
                 break;
             case "fieldTemplate":
-                this._renderInputAddons();
+                if(isDefined(args.value)) {
+                    this._renderInputAddons();
+                } else {
+                    this._invalidate();
+                }
                 break;
             case "showDropDownButton":
             case "contentTemplate":
