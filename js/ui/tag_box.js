@@ -314,7 +314,23 @@ var TagBox = SelectBox.inherit({
             */
             onSelectAllValueChanged: null,
 
+            /**
+             * @name dxTagBoxOptions_maxTagCount
+             * @publicName maxTagCount
+             * @type number
+             * @default undefined
+             */
             maxTagCount: undefined,
+
+            /**
+             * @name dxTagBoxOptions_onMultiTagPreparing
+             * @publicName onMultiTagPreparing
+             * @extends Action
+             * @type_function_param1_field4 multiTagElement:jQuery
+             * @type_function_param1_field5 selectedItems:array
+             * @type_function_param1_field6 allSelected:boolean
+             * @action
+             */
             onMultiTagPreparing: null,
 
             /**
