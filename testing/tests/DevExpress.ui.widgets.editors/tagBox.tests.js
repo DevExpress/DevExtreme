@@ -498,8 +498,8 @@ QUnit.module("multi tag support", {
         this.clock = sinon.useFakeTimers();
         messageLocalization.load({
             "en": {
-                "dxTagBox-seleced": "selected",
-                "dxTagBox-all-seleced": "All selectedo"
+                "dxTagBox-seleced": "{0} selected",
+                "dxTagBox-all-seleced": "All selected ({0})"
             }
         });
     },
@@ -674,7 +674,7 @@ QUnit.test("tagBox should show special text for all selected state", function(as
 
     assert.equal($tag.length, 1, "only one tag should be displayed");
     assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), "the tag has correct css class");
-    assert.equal($tag.text(), "All selected", "tag has correct text");
+    assert.equal($tag.text(), "All selected (4)", "tag has correct text");
 
     tagBox.option("value", [1, 2, 3]);
 
@@ -699,7 +699,7 @@ QUnit.test("tagbox should show all selected tag correctly in allPage selection m
     this.clock.tick(TIME_TO_WAIT);
 
     assert.deepEqual($tagBox.dxTagBox("option", "value"), items, "items is selected");
-    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected", "text is correct");
+    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected (15)", "text is correct");
 });
 
 QUnit.test("tagbox should show count of selected items when only first page is loaded", function(assert) {
@@ -737,7 +737,7 @@ QUnit.test("tagbox should show all selected text correctly without datasource", 
     this.clock.tick(TIME_TO_WAIT);
 
     assert.equal($tagBox.dxTagBox("option", "value").length, 15, "all items are selected");
-    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected", "text is correct");
+    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected (15)", "text is correct");
 });
 
 

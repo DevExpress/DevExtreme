@@ -329,6 +329,8 @@ var TagBox = SelectBox.inherit({
              * @type_function_param1_field4 multiTagElement:jQuery
              * @type_function_param1_field5 selectedItems:array
              * @type_function_param1_field6 allSelected:boolean
+             * @type_function_param1_field7 text:string
+             * @type_function_param1_field8 cancel:boolean
              * @action
              */
             onMultiTagPreparing: null,
@@ -474,10 +476,12 @@ var TagBox = SelectBox.inherit({
     },
 
     _multiTagPreparingHandler: function(args) {
+        var selectedCount = this._getValue().length;
+
         if(args.allSelected) {
-            args.text = messageLocalization.format("dxTagBox-all-selected");
+            args.text = messageLocalization.getFormatter("dxTagBox-all-selected")(selectedCount);
         } else {
-            args.text = this._getValue().length + " " + messageLocalization.format("dxTagBox-selected");
+            args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
         }
     },
 
