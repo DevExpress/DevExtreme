@@ -902,7 +902,7 @@ var LayoutManager = Widget.inherit({
 
         if($label && isBooleanEditors) {
             eventsEngine.on($label, clickEvent.name, function() {
-                $editor.children().trigger(clickEvent.name);
+                eventsEngine.trigger($editor.children(), clickEvent.name);
             });
         }
     },

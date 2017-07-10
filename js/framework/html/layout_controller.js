@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
     frameworkUtils = require("../utils"),
@@ -466,7 +467,7 @@ var DefaultLayoutController = Class.inherit({
     },
 
     _onViewShown: function(viewInfo) {
-        $(document).trigger("dx.viewchanged");
+        eventsEngine.trigger(document, "dx.viewchanged");
     },
 
     _enter: function(animationItems, animationModifier) {

@@ -748,7 +748,7 @@ module.exports = {
                         var event = e.jQueryEvent;
 
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
-                            $(event.currentTarget).children().trigger(clickEvent.name);
+                            eventsEngine.trigger($(event.currentTarget).children(), clickEvent.name);
                         }
                         event.stopPropagation();
                         event.preventDefault();
@@ -791,7 +791,7 @@ module.exports = {
                         tabIndex: -1,
                         setValue: function(value, e) {
                             if(e && e.jQueryEvent && e.jQueryEvent.type === "keydown") {
-                                container.trigger(clickEvent.name, e);
+                                eventsEngine.trigger(container, clickEvent.name, e);
                             }
                         }
                     }));

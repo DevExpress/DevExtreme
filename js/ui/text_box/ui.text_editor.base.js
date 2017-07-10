@@ -508,7 +508,7 @@ var TextEditorBase = Editor.inherit({
         this.reset();
 
         !$input.is(":focus") && $input.focus();
-        $input.trigger("input");
+        eventsEngine.trigger($input, "input");
     },
 
     _renderEvents: function() {

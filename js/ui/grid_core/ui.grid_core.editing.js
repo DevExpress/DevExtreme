@@ -484,7 +484,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._delayedInputFocus($firstCell, function() {
                     that._editCellInProgress = false;
                     var $cell = that.getFirstEditableCellInRow(insertKey.rowIndex);
-                    $cell && $cell.trigger(clickEvent.name);
+                    $cell && eventsEngine.trigger($cell, clickEvent.name);
                 });
             }
 

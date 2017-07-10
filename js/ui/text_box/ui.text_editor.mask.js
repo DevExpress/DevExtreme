@@ -218,7 +218,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this._changedValue = inputValue;
         var changeEvent = eventUtils.createEvent(e, { type: "change" });
-        $input.trigger(changeEvent);
+        eventsEngine.trigger($input, changeEvent);
     },
 
     _parseMask: function() {

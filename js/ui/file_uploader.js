@@ -66,7 +66,7 @@ var FileUploader = Editor.inherit({
         var click = function(e) {
             e.preventDefault();
             var $selectButton = this._selectButton.element();
-            $selectButton.trigger(clickEvent.name);
+            eventsEngine.trigger($selectButton, clickEvent.name);
         };
 
         return extend(this.callBase(), {
@@ -792,7 +792,7 @@ var FileUploader = Editor.inherit({
         }
 
         that._isCustomClickEvent = true;
-        that._$fileInput.trigger("click");
+        eventsEngine.trigger(that._$fileInput, "click");
         that._isCustomClickEvent = false;
     },
 

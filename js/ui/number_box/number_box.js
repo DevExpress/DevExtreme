@@ -353,7 +353,7 @@ var NumberBox = TextEditor.inherit({
     _spinButtonsPointerDownHandler: function() {
         var $input = this._input();
         if(!this.option("useLargeSpinButtons") && document.activeElement !== $input[0]) {
-            $input.trigger("focus");
+            eventsEngine.trigger($input, "focus");
         }
     },
 

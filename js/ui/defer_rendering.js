@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
     extend = require("../core/utils/extend").extend,
@@ -209,7 +210,7 @@ var DeferRendering = Widget.inherit({
         }
 
         this._setRenderedState($element);
-        $element.trigger("dxcontentrendered");
+        eventsEngine.trigger($element, "dxcontentrendered");
         this._actions.onRendered([renderedArgs]);
         this._isRendered = true;
 
