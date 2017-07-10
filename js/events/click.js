@@ -182,9 +182,8 @@ var ClickEmitter = Emitter.inherit({
         };
 
         var NATIVE_CLICK_FIXER_NAMESPACE = "NATIVE_CLICK_FIXER";
-        $(document)
-            .on(eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler)
-            .on(eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.on($(document), eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.on($(document), eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 

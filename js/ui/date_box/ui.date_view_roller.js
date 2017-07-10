@@ -87,11 +87,11 @@ var DateViewRoller = Scrollable.inherit({
 
         var clickAction = this._createActionByOption("onClick");
 
-        this._$container
-            .off(eventName)
-            .on(eventName, function(e) {
-                clickAction({ jQueryEvent: e });
-            });
+
+        eventsEngine.off(this._$container, this._$container, eventName);
+        eventsEngine.on(this._$container, this._$container, eventName, function(e) {
+            clickAction({ jQueryEvent: e });
+        });
     },
 
     _wrapAction: function(actionName, callback) {

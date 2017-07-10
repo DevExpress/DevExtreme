@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Promise = require("../../core/polyfills/promise"),
     Provider = require("./provider"),
     Color = require("../../color"),
@@ -175,11 +176,10 @@ var GoogleStaticProvider = Provider.inherit({
         var that = this,
             eventName = this._addEventNamespace(clickEvent.name);
 
-        this._$container
-            .off(eventName)
-            .on(eventName, function(e) {
-                that._fireClickAction({ jQueryEvent: e });
-            });
+        eventsEngine.off(this._$container, eventName);
+        eventsEngine.on(this._$container, eventName, function(e) {
+            that._fireClickAction({ jQueryEvent: e });
+        });
     }
 
 });

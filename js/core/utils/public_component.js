@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     WeakMap = require("../polyfills/weak_map"),
     isDefined = require("./type").isDefined,
     removeEvent = require("../remove_event");
@@ -33,7 +34,7 @@ exports.attachInstanceToElement = function($element, componentInstance, disposeF
     data[name] = componentInstance;
 
     if(disposeFn) {
-        $element.one(removeEvent, function() {
+        eventsEngine.one($element, removeEvent, function() {
             disposeFn.call(componentInstance);
         });
     }

@@ -832,9 +832,8 @@ var SimulatedStrategy = Class.inherit({
         this._$element.off("." + SCROLLABLE_SIMULATED_CURSOR);
 
         if(!this.option("disabled") && this._isHoverMode()) {
-            this._$element
-                .on(eventUtils.addNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this))
-                .on(eventUtils.addNamespace("mouseleave", SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("mouseleave", SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
         }
     },
 

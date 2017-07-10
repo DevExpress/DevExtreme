@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
     when = require("../integration/jquery/deferred").when,
     fx = require("../animation/fx"),
@@ -902,12 +903,11 @@ var Panorama = CollectionWidget.inherit({
     },
 
     _initSwipeHandlers: function() {
-        this.element()
-            .on(eventUtils.addNamespace(swipeEvents.start, this.NAME), {
-                itemSizeFunc: this._elementWidth.bind(this)
-            }, this._swipeStartHandler.bind(this))
-            .on(eventUtils.addNamespace(swipeEvents.swipe, this.NAME), this._swipeUpdateHandler.bind(this))
-            .on(eventUtils.addNamespace(swipeEvents.end, this.NAME), this._swipeEndHandler.bind(this));
+        eventsEngine.on(this.element(), eventUtils.addNamespace(swipeEvents.start, this.NAME), {
+            itemSizeFunc: this._elementWidth.bind(this)
+        }, this._swipeStartHandler.bind(this));
+        eventsEngine.on(this.element(), eventUtils.addNamespace(swipeEvents.swipe, this.NAME), this._swipeUpdateHandler.bind(this));
+        eventsEngine.on(this.element(), eventUtils.addNamespace(swipeEvents.end, this.NAME), this._swipeEndHandler.bind(this));
     },
 
     _swipeStartHandler: function(e) {

@@ -343,11 +343,13 @@ var Pager = Widget.inherit({
 
         $pageCount = $("<span/>")
             .addClass(PAGER_PAGES_COUNT_CLASS)
-            .text(pageCount)
-            .on(eventUtils.addNamespace(clickEvent.name, that.Name + "PagesCount"), function(e) {
-                clickAction({ jQueryEvent: e });
-            })
-            .appendTo($container);
+            .text(pageCount);
+
+        eventsEngine.on($pageCount, eventUtils.addNamespace(clickEvent.name, that.Name + "PagesCount"), function(e) {
+            clickAction({ jQueryEvent: e });
+        });
+
+        $pageCount.appendTo($container);
 
         that.setAria({
             "role": "button",
@@ -511,11 +513,11 @@ var Pager = Widget.inherit({
             $button;
 
         if(that.option("showNavigationButtons") || that.option("lightModeEnabled")) {
-            $button = $("<div>")
-                .addClass(PAGER_NAVIGATE_BUTTON)
-                .on(eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), function(e) {
-                    clickAction({ jQueryEvent: e });
-                });
+            $button = $("<div>").addClass(PAGER_NAVIGATE_BUTTON);
+
+            eventsEngine.on($button, eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), function(e) {
+                clickAction({ jQueryEvent: e });
+            });
 
             that.setAria({
                 "role": "button",

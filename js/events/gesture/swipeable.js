@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     swipeEvents = require("../swipe"),
     DOMComponent = require("../../core/dom_component"),
     eventUtils = require("../utils"),
@@ -56,10 +57,9 @@ var Swipeable = DOMComponent.inherit({
 
             eventName = eventUtils.addNamespace(eventName, NAME);
 
-            this.element()
-                .on(eventName, this._eventData, function(e) {
-                    return action({ jQueryEvent: e });
-                });
+            eventsEngine.on(this.element(), eventName, this._eventData, function(e) {
+                return action({ jQueryEvent: e });
+            });
         }).bind(this));
     },
 

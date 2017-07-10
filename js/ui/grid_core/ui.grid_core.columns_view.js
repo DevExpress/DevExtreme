@@ -532,14 +532,16 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var that = this,
             $scrollContainer;
 
-        $scrollContainer = $("<div/>")
-            .on("scroll", function() {
-                !that._skipScrollChanged && that.scrollChanged.fire({
-                    left: $scrollContainer.scrollLeft()
-                }, that.name);
-                that._skipScrollChanged = false;
-            })
-            .addClass(that.addWidgetPrefix(CONTENT_CLASS))
+        $scrollContainer = $("<div/>");
+
+        eventsEngine.on($scrollContainer, "scroll", function() {
+            !that._skipScrollChanged && that.scrollChanged.fire({
+                left: $scrollContainer.scrollLeft()
+            }, that.name);
+            that._skipScrollChanged = false;
+        });
+
+        $scrollContainer.addClass(that.addWidgetPrefix(CONTENT_CLASS))
             .addClass(that.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
             .append($table)
             .appendTo(that.element());

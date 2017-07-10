@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     swipeEvents = require("../events/swipe"),
     translator = require("../animation/translator"),
@@ -382,12 +383,13 @@ var Pivot = CollectionWidget.inherit({
     },
 
     _initSwipeHandlers: function() {
-        this.element()
-            .on(eventUtils.addNamespace(swipeEvents.start, this.NAME), {
-                itemSizeFunc: this._elementWidth.bind(this)
-            }, this._swipeStartHandler.bind(this))
-            .on(eventUtils.addNamespace(swipeEvents.swipe, this.NAME), this._swipeUpdateHandler.bind(this))
-            .on(eventUtils.addNamespace(swipeEvents.end, this.NAME), this._swipeEndHandler.bind(this));
+        var $element = this.element();
+
+        eventsEngine.on($element, eventUtils.addNamespace(swipeEvents.start, this.NAME), {
+            itemSizeFunc: this._elementWidth.bind(this)
+        }, this._swipeStartHandler.bind(this));
+        eventsEngine.on($element, eventUtils.addNamespace(swipeEvents.swipe, this.NAME), this._swipeUpdateHandler.bind(this));
+        eventsEngine.on($element, eventUtils.addNamespace(swipeEvents.end, this.NAME), this._swipeEndHandler.bind(this));
     },
 
     _swipeStartHandler: function(e) {

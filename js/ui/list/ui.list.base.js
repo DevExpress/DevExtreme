@@ -844,8 +844,7 @@ var ListBase = CollectionWidget.inherit({
     _attachSwipeEvent: function($itemElement) {
         var endEventName = eventUtils.addNamespace(swipeEvents.end, this.NAME);
 
-        $itemElement
-            .on(endEventName, this._itemSwipeEndHandler.bind(this));
+        eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
     },
 
     _itemSwipeEndHandler: function(e) {

@@ -1442,15 +1442,16 @@ var EditingController = modules.ViewController.inherit((function() {
                 $link = $("<a>")
                 .addClass(LINK_CLASS)
                 .addClass(linkClass)
-                .text(text)
-                .on(addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(params) {
-                    var e = params.jQueryEvent;
+                .text(text);
 
-                    e.stopPropagation();
-                    setTimeout(function() {
-                        options.row && that[methodName](options.row.rowIndex);
-                    });
-                }));
+            eventsEngine.on($link, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(params) {
+                var e = params.jQueryEvent;
+
+                e.stopPropagation();
+                setTimeout(function() {
+                    options.row && that[methodName](options.row.rowIndex);
+                });
+            }));
 
             options.rtlEnabled ? container.prepend($link, "&nbsp;") : container.append($link, "&nbsp;");
         },
@@ -1929,14 +1930,14 @@ module.exports = {
                         $table = that.callBase.apply(that, arguments);
 
                     if(!isRowEditMode(that) && that.option("editing.allowUpdating")) {
-                        $table
-                            .on(addNamespace(holdEvent.name, "dxDataGridRowsView"), "td:not(." + EDITOR_CELL_CLASS + ")", that.createAction(function() {
-                                var editingController = that._editingController;
 
-                                if(editingController.isEditing()) {
-                                    editingController.closeEditCell();
-                                }
-                            }));
+                        eventsEngine.on($table, addNamespace(holdEvent.name, "dxDataGridRowsView"), "td:not(." + EDITOR_CELL_CLASS + ")", that.createAction(function() {
+                            var editingController = that._editingController;
+
+                            if(editingController.isEditing()) {
+                                editingController.closeEditCell();
+                            }
+                        }));
                     }
 
                     return $table;

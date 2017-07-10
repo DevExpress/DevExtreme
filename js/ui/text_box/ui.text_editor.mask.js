@@ -169,14 +169,15 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _attachMaskEventHandlers: function() {
-        this._input()
-            .on(eventUtils.addNamespace("focus", MASK_EVENT_NAMESPACE), this._maskFocusHandler.bind(this))
-            .on(eventUtils.addNamespace("keydown", MASK_EVENT_NAMESPACE), this._maskKeyDownHandler.bind(this))
-            .on(eventUtils.addNamespace("keypress", MASK_EVENT_NAMESPACE), this._maskKeyPressHandler.bind(this))
-            .on(eventUtils.addNamespace("input", MASK_EVENT_NAMESPACE), this._maskInputHandler.bind(this))
-            .on(eventUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this))
-            .on(eventUtils.addNamespace("cut", MASK_EVENT_NAMESPACE), this._maskCutHandler.bind(this))
-            .on(eventUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), this._maskDragHandler.bind(this));
+        var $input = this._input();
+
+        eventsEngine.on($input, eventUtils.addNamespace("focus", MASK_EVENT_NAMESPACE), this._maskFocusHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("keydown", MASK_EVENT_NAMESPACE), this._maskKeyDownHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("keypress", MASK_EVENT_NAMESPACE), this._maskKeyPressHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("input", MASK_EVENT_NAMESPACE), this._maskInputHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("cut", MASK_EVENT_NAMESPACE), this._maskCutHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), this._maskDragHandler.bind(this));
 
         this._attachChangeEventHandlers();
     },

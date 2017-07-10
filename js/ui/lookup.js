@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
@@ -717,11 +718,10 @@ var Lookup = DropDownList.inherit({
             this._validatedOpening();
         }).bind(this));
 
-        this._$field = $("<div>")
-            .addClass(LOOKUP_FIELD_CLASS)
-            .on(eventUtils.addNamespace(clickEvent.name, this.NAME), function(e) {
-                fieldClickAction({ jQueryEvent: e });
-            });
+        this._$field = $("<div>").addClass(LOOKUP_FIELD_CLASS);
+        eventsEngine.on(this._$field, eventUtils.addNamespace(clickEvent.name, this.NAME), function(e) {
+            fieldClickAction({ jQueryEvent: e });
+        });
 
         var $arrow = $("<div>").addClass(LOOKUP_ARROW_CLASS);
 

@@ -980,17 +980,15 @@ var Overlay = Widget.inherit({
         var startEventName = eventUtils.addNamespace(dragEvents.start, this.NAME),
             updateEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
-        $dragTarget
-            .off(startEventName)
-            .off(updateEventName);
+        eventsEngine.off($dragTarget, startEventName);
+        eventsEngine.off($dragTarget, updateEventName);
 
         if(!this.option("dragEnabled")) {
             return;
         }
 
-        $dragTarget
-            .on(startEventName, this._dragStartHandler.bind(this))
-            .on(updateEventName, this._dragUpdateHandler.bind(this));
+        eventsEngine.on($dragTarget, startEventName, this._dragStartHandler.bind(this));
+        eventsEngine.on($dragTarget, updateEventName, this._dragUpdateHandler.bind(this));
     },
 
     _renderResize: function() {
@@ -1021,26 +1019,25 @@ var Overlay = Widget.inherit({
         var $scrollTerminator = this._wrapper();
         var terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
-        $scrollTerminator
-            .off(terminatorEventName)
-            .on(terminatorEventName, {
-                validate: function() {
-                    return true;
-                },
-                getDirection: function() {
-                    return "both";
-                },
-                _toggleGestureCover: noop,
-                _clearSelection: noop,
-                isNative: true
-            }, function(e) {
-                var originalEvent = e.originalEvent.originalEvent;
-                e._cancelPreventDefault = true;
+        eventsEngine.off($scrollTerminator, terminatorEventName);
+        eventsEngine.on($scrollTerminator, terminatorEventName, {
+            validate: function() {
+                return true;
+            },
+            getDirection: function() {
+                return "both";
+            },
+            _toggleGestureCover: noop,
+            _clearSelection: noop,
+            isNative: true
+        }, function(e) {
+            var originalEvent = e.originalEvent.originalEvent;
+            e._cancelPreventDefault = true;
 
-                if(originalEvent && originalEvent.type !== "mousemove") {
-                    e.preventDefault();
-                }
-            });
+            if(originalEvent && originalEvent.type !== "mousemove") {
+                e.preventDefault();
+            }
+        });
     },
 
     _getDragTarget: function() {

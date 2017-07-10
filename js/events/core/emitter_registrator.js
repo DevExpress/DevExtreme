@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -23,12 +24,10 @@ var EventManager = Class.inherit({
     },
 
     _attachHandlers: function() {
-        $(document)
-            .on(eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this))
-            .on(eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this))
-            .on(eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(" "), MANAGER_EVENT), this._pointerUpHandler.bind(this))
-
-            .on(eventUtils.addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
+        eventsEngine.on(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(" "), MANAGER_EVENT), this._pointerUpHandler.bind(this));
+        eventsEngine.on(document, eventUtils.addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
     },
 
     _eachEmitter: function(callback) {

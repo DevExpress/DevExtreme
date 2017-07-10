@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     messageLocalization = require("../localization/message"),
     clickEvent = require("../events/click"),
     commonUtils = require("../core/utils/common"),
@@ -1013,15 +1014,14 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             $itemsContainer = this._itemContainer(),
             itemSelector = this._itemSelector();
 
-        $itemsContainer
-            .off("." + EXPAND_EVENT_NAMESPACE, itemSelector)
-            .on(expandedEventName, itemSelector, function(e) {
-                var $nodeElement = $(e.currentTarget.parentNode);
+        eventsEngine.off($itemsContainer, "." + EXPAND_EVENT_NAMESPACE, itemSelector);
+        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, function(e) {
+            var $nodeElement = $(e.currentTarget.parentNode);
 
-                if(!$nodeElement.hasClass(IS_LEAF)) {
-                    that._toggleExpandedState(e.currentTarget, undefined, e);
-                }
-            });
+            if(!$nodeElement.hasClass(IS_LEAF)) {
+                that._toggleExpandedState(e.currentTarget, undefined, e);
+            }
+        });
     },
 
     _getEventNameByOption: function(name) {
@@ -1110,14 +1110,13 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _renderToggleItemVisibilityIconClick: function($icon, node) {
-        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            that = this;
+        var that = this;
+        var eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
 
-        $icon
-            .off(eventName)
-            .on(eventName, function(e) {
-                that._toggleExpandedState(node, undefined, e);
-            });
+        eventsEngine.off($icon, eventName);
+        eventsEngine.on($icon, eventName, function(e) {
+            that._toggleExpandedState(node, undefined, e);
+        });
     },
 
     _updateExpandedItemsUI: function(node, state, e) {
@@ -1460,21 +1459,21 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _attachClickEvent: function() {
-        var that = this,
-            clickSelector = "." + this._itemClass(),
-            pointerDownSelector = "." + NODE_CLASS + ", ." + SELECT_ALL_ITEM_CLASS,
-            eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
-            pointerDownEvent = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        var that = this;
+        var clickSelector = "." + that._itemClass();
+        var pointerDownSelector = "." + NODE_CLASS + ", ." + SELECT_ALL_ITEM_CLASS;
+        var eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
+        var pointerDownEvent = eventUtils.addNamespace(pointerEvents.down, that.NAME);
+        var $itemContainer = that._itemContainer();
 
-        that._itemContainer()
-            .off(eventName, clickSelector)
-            .off(pointerDownEvent, pointerDownSelector)
-            .on(eventName, clickSelector, function(e) {
-                that._itemClickHandler(e, $(this));
-            })
-            .on(pointerDownEvent, pointerDownSelector, function(e) {
-                that._itemPointerDownHandler(e);
-            });
+        eventsEngine.off($itemContainer, eventName, clickSelector);
+        eventsEngine.off($itemContainer, pointerDownEvent, pointerDownSelector);
+        eventsEngine.on($itemContainer, eventName, clickSelector, function(e) {
+            that._itemClickHandler(e, $(this));
+        });
+        eventsEngine.on($itemContainer, pointerDownEvent, pointerDownSelector, function(e) {
+            that._itemPointerDownHandler(e);
+        });
     },
 
     _itemClickHandler: function(e, $item) {

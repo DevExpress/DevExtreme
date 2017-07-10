@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
     inkRipple = require("./widget/utils.ink_ripple"),
@@ -304,14 +305,13 @@ var Switch = Editor.inherit({
 
     _renderClick: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-
+        var $element = this.element();
         this._clickAction = this._createAction(this._clickHandler.bind(this));
 
-        this.element()
-            .off(eventName)
-            .on(eventName, (function(e) {
-                this._clickAction({ jQueryEvent: e });
-            }).bind(this));
+        eventsEngine.off($element, eventName);
+        eventsEngine.on($element, eventName, (function(e) {
+            this._clickAction({ jQueryEvent: e });
+        }).bind(this));
     },
 
     _clickHandler: function(args) {

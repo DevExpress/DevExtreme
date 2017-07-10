@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     extend = require("../../core/utils/extend").extend,
     inkRipple = require("../widget/utils.ink_ripple"),
@@ -135,11 +136,11 @@ var RadioButton = Editor.inherit({
             this._clickHandler(args.jQueryEvent);
         }).bind(this));
 
-        this.element()
-            .off(eventName)
-            .on(eventName, (function(e) {
-                this._clickAction({ jQueryEvent: e });
-            }).bind(this));
+
+        eventsEngine.off(this.element(), eventName);
+        eventsEngine.on(this.element(), eventName, (function(e) {
+            this._clickAction({ jQueryEvent: e });
+        }).bind(this));
     },
 
     _clickHandler: function(e) {

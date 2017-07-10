@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     Class = require("../../core/class"),
     dateLocalization = require("../../localization/date");
@@ -62,9 +63,10 @@ var DateBoxStrategy = Class.inherit({
     renderPopupContent: function() {
         var popup = this._getPopup();
         this._renderWidget();
-        popup.content().parent()
-            .off("mousedown")
-            .on("mousedown", this._preventFocusOnPopup.bind(this));
+
+        var $popupContent = popup.content().parent();
+        eventsEngine.off($popupContent, "mousedown");
+        eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
     },
 
     getFirstPopupElement: noop,

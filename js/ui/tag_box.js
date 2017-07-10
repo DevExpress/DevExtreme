@@ -523,23 +523,23 @@ var TagBox = SelectBox.inherit({
     _renderPreventBlur: function() {
         var eventName = eventUtils.addNamespace(pointerEvents.down, "dxTagBoxContainer");
 
-        this._$tagsContainer && this._$tagsContainer
-            .off(eventName)
-            .on(eventName, function(e) {
+        if(this._$tagsContainer) {
+            eventsEngine.off(this._$tagsContainer, eventName);
+            eventsEngine.on(this._$tagsContainer, eventName, function(e) {
                 e.preventDefault();
             });
+        }
     },
 
     _renderTagRemoveAction: function() {
         var tagRemoveAction = this._createAction(this._removeTagHandler.bind(this));
         var eventName = eventUtils.addNamespace(clickEvent.name, "dxTagBoxTagRemove");
+        var $container = this.element().find(".dx-texteditor-container");
 
-        this.element()
-            .find(".dx-texteditor-container")
-            .off(eventName)
-            .on(eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
-                tagRemoveAction({ jQueryEvent: e });
-            });
+        eventsEngine.off($container, eventName);
+        eventsEngine.on($container, eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
+            tagRemoveAction({ jQueryEvent: e });
+        });
 
         this._renderTypingEvent();
     },

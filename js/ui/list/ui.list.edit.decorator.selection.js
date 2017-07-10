@@ -114,9 +114,8 @@ registerDecorator(
         _attachSelectAllHandler: function() {
             this._selectAllCheckBox.option("onValueChanged", this._selectAllHandler.bind(this));
 
-            this._$selectAll
-                .off(CLICK_EVENT_NAME)
-                .on(CLICK_EVENT_NAME, this._selectAllClickHandler.bind(this));
+            eventsEngine.off(this._$selectAll, CLICK_EVENT_NAME);
+            eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, this._selectAllClickHandler.bind(this));
         },
 
         _selectAllHandler: function(e) {

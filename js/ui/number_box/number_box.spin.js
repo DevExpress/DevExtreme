@@ -38,9 +38,10 @@ var SpinButton = Widget.inherit({
 
         $element
             .addClass(SPIN_BUTTON_CLASS)
-            .addClass(direction)
-            .off(eventName)
-            .on(eventName, this._spinDownHandler.bind(this));
+            .addClass(direction);
+
+        eventsEngine.off($element, eventName);
+        eventsEngine.on($element, eventName, this._spinDownHandler.bind(this));
 
         this._spinIcon = $("<div>").addClass(direction + "-icon").appendTo(this.element());
 
@@ -59,9 +60,8 @@ var SpinButton = Widget.inherit({
             this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { jQueryEvent: e });
         }).bind(this));
 
-        $(document)
-            .on(POINTERUP_EVENT_NAME, this._clearTimer.bind(this))
-            .on(POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
+        eventsEngine.on(document, POINTERUP_EVENT_NAME, this._clearTimer.bind(this));
+        eventsEngine.on(document, POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
 
         this._spinChangeHandler({ jQueryEvent: e });
     },

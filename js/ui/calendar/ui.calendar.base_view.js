@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
@@ -155,16 +156,16 @@ var BaseView = Widget.inherit({
 
     _renderEvents: function() {
         this._createCellClickAction();
-        this._$table
-            .off(CALENDAR_DXCLICK_EVENT_NAME)
-            .on(CALENDAR_DXCLICK_EVENT_NAME, "td", (function(e) {
-                if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
-                    this._cellClickAction({
-                        jQueryEvent: e,
-                        value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY)
-                    });
-                }
-            }).bind(this));
+
+        eventsEngine.off(this._$table, CALENDAR_DXCLICK_EVENT_NAME);
+        eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, "td", (function(e) {
+            if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
+                this._cellClickAction({
+                    jQueryEvent: e,
+                    value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY)
+                });
+            }
+        }).bind(this));
     },
 
     _createCellClickAction: function() {

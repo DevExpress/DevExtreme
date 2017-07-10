@@ -437,13 +437,15 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $editorContainer = $cell.find("." + EDITOR_CONTAINER_CLASS).first();
 
             $editorContainer.empty();
-            $("<div>")
+            var $filterRangeContent = $("<div>")
                 .addClass(FILTER_RANGE_CONTENT_CLASS)
-                .attr("tabindex", this.option("tabIndex"))
-                .on("focusin", function() {
-                    that._showFilterRange($cell, column);
-                })
-                .appendTo($editorContainer);
+                .attr("tabindex", this.option("tabIndex"));
+
+            eventsEngine.on($filterRangeContent, "focusin", function() {
+                that._showFilterRange($cell, column);
+            });
+
+            $filterRangeContent.appendTo($editorContainer);
 
             that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
         },

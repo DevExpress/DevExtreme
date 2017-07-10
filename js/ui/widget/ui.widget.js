@@ -581,18 +581,18 @@ var Widget = DOMComponent.inherit({
             focusInEvent = eventUtils.addNamespace("focusin", namespace),
             focusOutEvent = eventUtils.addNamespace("focusout", namespace);
 
-        this._focusTarget()
-            .on(focusInEvent, this._focusInHandler.bind(this))
-            .on(focusOutEvent, this._focusOutHandler.bind(this));
+        var $focusTarget = this._focusTarget();
+        eventsEngine.on($focusTarget, focusInEvent, this._focusInHandler.bind(this));
+        eventsEngine.on($focusTarget, focusOutEvent, this._focusOutHandler.bind(this));
 
         if(beforeActivateExists) {
             var beforeActivateEvent = eventUtils.addNamespace("beforeactivate", namespace);
-            this._focusTarget()
-                .on(beforeActivateEvent, function(e) {
-                    if(!$(e.target).is(selectors.focusable)) {
-                        e.preventDefault();
-                    }
-                });
+
+            eventsEngine.on(this._focusTarget(), beforeActivateEvent, function(e) {
+                if(!$(e.target).is(selectors.focusable)) {
+                    e.preventDefault();
+                }
+            });
         }
     },
 
@@ -689,9 +689,8 @@ var Widget = DOMComponent.inherit({
             nameStart = eventUtils.addNamespace(hoverEvents.start, UI_FEEDBACK),
             nameEnd = eventUtils.addNamespace(hoverEvents.end, UI_FEEDBACK);
 
-        that._eventBindingTarget()
-            .off(nameStart, hoverableSelector)
-            .off(nameEnd, hoverableSelector);
+        eventsEngine.off(that._eventBindingTarget(), nameStart, hoverableSelector);
+        eventsEngine.off(that._eventBindingTarget(), nameEnd, hoverableSelector);
 
         if(that.option("hoverStateEnabled")) {
             var startAction = new Action(function(args) {
@@ -702,17 +701,18 @@ var Widget = DOMComponent.inherit({
                 excludeValidators: ["readOnly"]
             });
 
-            that._eventBindingTarget()
-                .on(nameStart, hoverableSelector, function(e) {
-                    startAction.execute({
-                        element: $(e.target),
-                        event: e
-                    });
-                })
-                .on(nameEnd, hoverableSelector, function(e) {
-                    that._hoverEndHandler(e);
-                    that._forgetHoveredElement();
+            var $eventBindingTarget = that._eventBindingTarget();
+
+            eventsEngine.on($eventBindingTarget, nameStart, hoverableSelector, function(e) {
+                startAction.execute({
+                    element: $(e.target),
+                    event: e
                 });
+            });
+            eventsEngine.on($eventBindingTarget, nameEnd, hoverableSelector, function(e) {
+                that._hoverEndHandler(e);
+                that._forgetHoveredElement();
+            });
         } else {
             that._toggleHoverClass(false);
         }
@@ -730,9 +730,8 @@ var Widget = DOMComponent.inherit({
             feedbackAction,
             feedbackActionDisabled;
 
-        that._eventBindingTarget()
-            .off(activeEventName, feedbackSelector)
-            .off(inactiveEventName, feedbackSelector);
+        eventsEngine.off(that._eventBindingTarget(), activeEventName, feedbackSelector);
+        eventsEngine.off(that._eventBindingTarget(), inactiveEventName, feedbackSelector);
 
         if(that.option("activeStateEnabled")) {
             var feedbackActionHandler = function(args) {
@@ -743,23 +742,22 @@ var Widget = DOMComponent.inherit({
                 that._toggleActiveState($element, value, jQueryEvent);
             };
 
-            that._eventBindingTarget()
-                .on(activeEventName, feedbackSelector, { timeout: that._feedbackShowTimeout }, function(e) {
-                    feedbackAction = feedbackAction || new Action(feedbackActionHandler);
-                    feedbackAction.execute({
-                        element: $(e.currentTarget),
-                        value: true,
-                        jQueryEvent: e
-                    });
-                })
-                .on(inactiveEventName, feedbackSelector, { timeout: that._feedbackHideTimeout }, function(e) {
-                    feedbackActionDisabled = feedbackActionDisabled || new Action(feedbackActionHandler, { excludeValidators: ["disabled", "readOnly"] });
-                    feedbackActionDisabled.execute({
-                        element: $(e.currentTarget),
-                        value: false,
-                        jQueryEvent: e
-                    });
+            eventsEngine.on(that._eventBindingTarget(), activeEventName, feedbackSelector, { timeout: that._feedbackShowTimeout }, function(e) {
+                feedbackAction = feedbackAction || new Action(feedbackActionHandler);
+                feedbackAction.execute({
+                    element: $(e.currentTarget),
+                    value: true,
+                    jQueryEvent: e
                 });
+            });
+            eventsEngine.on(that._eventBindingTarget(), inactiveEventName, feedbackSelector, { timeout: that._feedbackHideTimeout }, function(e) {
+                feedbackActionDisabled = feedbackActionDisabled || new Action(feedbackActionHandler, { excludeValidators: ["disabled", "readOnly"] });
+                feedbackActionDisabled.execute({
+                    element: $(e.currentTarget),
+                    value: false,
+                    jQueryEvent: e
+                });
+            });
         }
     },
 

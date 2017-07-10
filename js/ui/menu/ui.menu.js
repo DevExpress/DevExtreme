@@ -672,9 +672,8 @@ var Menu = MenuBase.inherit({
         });
 
         $.each(submenus, function(index, submenu) {
-            $(submenu)
-                .off(submenuMouseLeaveName)
-                .on(submenuMouseLeaveName, null, that._submenuMouseLeaveHandler.bind(that, $rootItem));
+            eventsEngine.off(submenu, submenuMouseLeaveName);
+            eventsEngine.on(submenu, submenuMouseLeaveName, null, that._submenuMouseLeaveHandler.bind(that, $rootItem));
         });
     },
 

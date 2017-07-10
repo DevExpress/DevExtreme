@@ -374,9 +374,10 @@ var DropDownList = DropDownEditor.inherit({
     _createPopup: function() {
         this.callBase();
         this._popup._wrapper().addClass(this._popupWrapperClass());
-        this._popup.content()
-            .off("mousedown")
-            .on("mousedown", this._preventFocusOnPopup.bind(this));
+
+        var $popupContent = this._popup.content();
+        eventsEngine.off($popupContent, "mousedown");
+        eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
     },
 
     _popupWrapperClass: function() {

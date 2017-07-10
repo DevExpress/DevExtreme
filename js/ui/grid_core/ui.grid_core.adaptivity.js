@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
     commonUtils = require("../../core/utils/common"),
@@ -595,14 +596,11 @@ module.exports = {
 
                     if(column.command === ADAPTIVE_COLUMN_NAME && options.rowType !== "groupFooter") {
                         return function(container) {
-                            $("<span/>")
-                                .addClass(that.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS))
-                                .on(eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), that.createAction(
-                                    function() {
-                                        that._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
-                                    }
-                                ))
-                                .appendTo(container);
+                            var $adaptiveColumnButton = $("<span/>").addClass(that.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
+                            eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), that.createAction(function() {
+                                that._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
+                            }));
+                            $adaptiveColumnButton.appendTo(container);
                         };
                     }
                     if(options.rowType === ADAPTIVE_ROW_TYPE && column.command === "detail") {

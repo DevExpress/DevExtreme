@@ -489,26 +489,27 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
             scrollable = that.getScrollable();
             if(!$content.length && scrollable) {
-                $content = $("<div/>")
-                    .addClass(contentClass)
-                    .on("scroll", function(e) {
-                        scrollTop = $(e.target).scrollTop();
-                        if(scrollTop) {
-                            $(e.target).scrollTop(0);
-                            scrollable.scrollTo({ y: that._scrollTop + scrollTop });
-                        }
-                    })
-                    .on(wheelEvent.name, function(e) {
-                        if(scrollable) {
-                            scrollTop = scrollable.scrollTop();
-                            scrollable.scrollTo({ y: scrollTop - e.delta });
+                $content = $("<div/>").addClass(contentClass);
 
-                            if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
-                                return false;
-                            }
+                eventsEngine.on($content, "scroll", function(e) {
+                    scrollTop = $(e.target).scrollTop();
+                    if(scrollTop) {
+                        $(e.target).scrollTop(0);
+                        scrollable.scrollTo({ y: that._scrollTop + scrollTop });
+                    }
+                });
+                eventsEngine.on($content, wheelEvent.name, function(e) {
+                    if(scrollable) {
+                        scrollTop = scrollable.scrollTop();
+                        scrollable.scrollTo({ y: scrollTop - e.delta });
+
+                        if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
+                            return false;
                         }
-                    })
-                    .appendTo(element);
+                    }
+                });
+
+                $content.appendTo(element);
             }
 
             return $content;

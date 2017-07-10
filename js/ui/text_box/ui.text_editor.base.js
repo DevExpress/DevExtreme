@@ -486,15 +486,18 @@ var TextEditorBase = Editor.inherit({
     },
 
     _createClearButton: function() {
-        return $("<span>")
+        var $clearButton = $("<span>")
             .addClass(TEXTEDITOR_CLEAR_BUTTON_CLASS)
-            .append($("<span>").addClass(TEXTEDITOR_ICON_CLASS).addClass(TEXTEDITOR_CLEAR_ICON_CLASS))
-            .on(eventUtils.addNamespace(pointerEvents.down, this.NAME), function(e) {
-                if(e.pointerType === "mouse") {
-                    e.preventDefault();
-                }
-            })
-            .on(eventUtils.addNamespace(clickEvent.name, this.NAME), this._clearValueHandler.bind(this));
+            .append($("<span>").addClass(TEXTEDITOR_ICON_CLASS).addClass(TEXTEDITOR_CLEAR_ICON_CLASS));
+
+        eventsEngine.on($clearButton, eventUtils.addNamespace(pointerEvents.down, this.NAME), function(e) {
+            if(e.pointerType === "mouse") {
+                e.preventDefault();
+            }
+        });
+        eventsEngine.on($clearButton, eventUtils.addNamespace(clickEvent.name, this.NAME), this._clearValueHandler.bind(this));
+
+        return $clearButton;
     },
 
     _clearValueHandler: function(e) {
@@ -547,9 +550,8 @@ var TextEditorBase = Editor.inherit({
         var keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), this.NAME + "TextChange"),
             valueChangeEvent = eventUtils.addNamespace(this.option("valueChangeEvent"), this.NAME + "ValueChange");
 
-        this._input()
-            .on(keyPressEvent, this._keyPressHandler.bind(this))
-            .on(valueChangeEvent, this._valueChangeEventHandler.bind(this));
+        eventsEngine.on(this._input(), keyPressEvent, this._keyPressHandler.bind(this));
+        eventsEngine.on(this._input(), valueChangeEvent, this._valueChangeEventHandler.bind(this));
     },
 
     _cleanValueChangeEvent: function() {
@@ -609,9 +611,8 @@ var TextEditorBase = Editor.inherit({
             excludeValidators: ["readOnly"]
         });
 
-        this._input()
-            .off("keyup.onEnterKey.dxTextEditor")
-            .on("keyup.onEnterKey.dxTextEditor", this._enterKeyHandlerUp.bind(this));
+        eventsEngine.off(this._input(), "keyup.onEnterKey.dxTextEditor");
+        eventsEngine.on(this._input(), "keyup.onEnterKey.dxTextEditor", this._enterKeyHandlerUp.bind(this));
     },
 
     _enterKeyHandlerUp: function(e) {

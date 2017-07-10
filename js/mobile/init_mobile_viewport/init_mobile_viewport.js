@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     resizeCallbacks = require("../../core/utils/window").resizeCallbacks,
     support = require("../../core/utils/support"),
@@ -51,18 +52,17 @@ var initMobileViewport = function(options) {
     realDevice = devices.real();
 
     if(support.touch && !(realDevice.platform === "win" && realDevice.version[0] === 10)) {
-        $(document)
-            .off(".dxInitMobileViewport")
-            .on("dxpointermove.dxInitMobileViewport", function(e) {
-                var count = e.pointers.length,
-                    isTouchEvent = e.pointerType === "touch",
-                    zoomDisabled = !allowZoom && count > 1,
-                    panDisabled = !allowPan && count === 1 && !e.isScrollingEvent;
+        eventsEngine.off(document, ".dxInitMobileViewport");
+        eventsEngine.on(document, "dxpointermove.dxInitMobileViewport", function(e) {
+            var count = e.pointers.length,
+                isTouchEvent = e.pointerType === "touch",
+                zoomDisabled = !allowZoom && count > 1,
+                panDisabled = !allowPan && count === 1 && !e.isScrollingEvent;
 
-                if(isTouchEvent && (zoomDisabled || panDisabled)) {
-                    e.preventDefault();
-                }
-            });
+            if(isTouchEvent && (zoomDisabled || panDisabled)) {
+                e.preventDefault();
+            }
+        });
     }
 
     if(realDevice.ios) {

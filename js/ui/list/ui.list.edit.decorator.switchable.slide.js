@@ -44,9 +44,9 @@ registerDecorator(
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            this._$buttonsContainer = $("<div/>")
-                .addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS)
-                .on(ACTIVE_EVENT_NAME, noop);
+            this._$buttonsContainer = $("<div/>").addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS);
+            eventsEngine.on(this._$buttonsContainer, ACTIVE_EVENT_NAME, noop);
+
             this._$buttons = $("<div/>")
                 .addClass(SLIDE_MENU_BUTTONS_CLASS)
                 .appendTo(this._$buttonsContainer);
