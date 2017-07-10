@@ -12,7 +12,6 @@ var methods = [
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "html", "css",
-    "val",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
@@ -336,6 +335,14 @@ if(!useJQueryRenderer) {
         rendererStrategy.setText(this[0], text);
 
         return this;
+    };
+
+    initRender.prototype.val = function(value) {
+        if(arguments.length === 1) {
+            return this.prop("value", value);
+        }
+
+        return this.prop("value");
     };
 
     initRender.prototype.contents = function() {
