@@ -600,6 +600,9 @@ declare module DevExpress.ui {
         /** @docid dxTagBoxOptions_maxTagCount */
         maxTagCount?: number;
 
+        /** @docid dxTagBoxOptions_replaceTags */
+        replaceTags?: boolean;
+
         /** @docid dxTagBoxOptions_multiline */
         multiline?: boolean;
 

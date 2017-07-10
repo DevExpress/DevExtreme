@@ -323,6 +323,14 @@ var TagBox = SelectBox.inherit({
             maxTagCount: undefined,
 
             /**
+             * @name dxTagBoxOptions_replaceTags
+             * @publicName replaceTags
+             * @type boolean
+             * @default true
+             */
+            replaceTags: true,
+
+            /**
              * @name dxTagBoxOptions_onMultiTagPreparing
              * @publicName onMultiTagPreparing
              * @extends Action
@@ -481,7 +489,11 @@ var TagBox = SelectBox.inherit({
         if(args.allSelected) {
             args.text = messageLocalization.getFormatter("dxTagBox-all-selected")(selectedCount);
         } else {
-            args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
+            if(!this.option("replaceTags")) {
+                args.text = messageLocalization.getFormatter("dxTagBox-more-selected")(selectedCount - this.option("maxTagCount"));
+            } else {
+                args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
+            }
         }
     },
 
@@ -782,7 +794,7 @@ var TagBox = SelectBox.inherit({
             container: $tag
         });
 
-        return true;
+        return $tag;
     },
 
     _renderTags: function() {
@@ -809,13 +821,16 @@ var TagBox = SelectBox.inherit({
 
             this.option("selectedItems", this._selectedItems.slice());
 
-            var multiTagRequired = this._multiTagRequired() && this._renderMultiTag($input);
+            var $multiTag = this._multiTagRequired() && this._renderMultiTag($input),
+                replaceTags = this.option("replaceTags"),
+                maxTagCount = this.option("maxTagCount");
 
-            if(!multiTagRequired) {
-                items.forEach(function(item) {
-                    this._renderTag(item, $input);
-                }.bind(this));
-            }
+            items.forEach(function(item, index) {
+                if(($multiTag && replaceTags) || ($multiTag && !replaceTags && index >= maxTagCount)) {
+                    return false;
+                }
+                this._renderTag(item, $multiTag || $input);
+            }.bind(this));
 
             this._scrollContainer("end");
             this._refreshTagElements();
@@ -930,7 +945,11 @@ var TagBox = SelectBox.inherit({
 
     _removeTagElement: function($tag) {
         if($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
-            this.reset();
+            if(!this.option("replaceTags")) {
+                this.option("value", this._getValue().slice(0, this.option("maxTagCount")));
+            } else {
+                this.reset();
+            }
             return;
         }
 

@@ -499,7 +499,8 @@ QUnit.module("multi tag support", {
         messageLocalization.load({
             "en": {
                 "dxTagBox-seleced": "{0} selected",
-                "dxTagBox-all-seleced": "All selected ({0})"
+                "dxTagBox-all-seleced": "All selected ({0})",
+                "dxTagBox-more-seleced": "{0} more"
             }
         });
     },
@@ -661,6 +662,36 @@ QUnit.test("multi tag should not be rendered if e.cancel is true", function(asse
 
     assert.equal($tag.length, 3, "3 tags was rendered");
     assert.deepEqual($tag.text(), "124", "text is correct");
+});
+
+QUnit.test("multi tag should be rendered after max number of tags if replaceTags is false", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            replaceTags: false
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 3, "3 tags rendered");
+    assert.deepEqual($tagBox.text(), "121 more", "text is correct");
+});
+
+QUnit.test("multi tag should deselect overflow tags only when replaceTags is false", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            replaceTags: false
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $multiTag = $tagBox.find("." + TAGBOX_MULTI_TAG_CLASS);
+
+    $multiTag.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).trigger("dxclick");
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 2, "only 2 tags remain");
+    assert.deepEqual(tagBox.option("value"), [1, 2], "value is correct");
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "12", "text is correct");
 });
 
 QUnit.test("tagBox should show special text for all selected state", function(assert) {
