@@ -1264,6 +1264,9 @@ var EditingController = modules.ViewController.inherit((function() {
                         changeType: "update",
                         rowIndices: that._getRowIndicesForCascadeUpdating(options.row)
                     });
+                    if(!forceUpdateRow) {
+                        that._focusEditingCell();
+                    }
                 }
             }
         },
