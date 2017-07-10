@@ -214,8 +214,8 @@ var Sortable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        var dragEvents = [dragEvents.move, dragEvents.start, dragEvents.end, dragEvents.enter, dragEvents.leave, dragEvents.drop].join(" ");
-        eventsEngine.off(this._getEventListener(), addNamespace(dragEvents, SORTABLE_NAMESPACE));
+        var dragEventsString = [dragEvents.move, dragEvents.start, dragEvents.end, dragEvents.enter, dragEvents.leave, dragEvents.drop].join(" ");
+        eventsEngine.off(this._getEventListener(), addNamespace(dragEventsString, SORTABLE_NAMESPACE));
     },
 
     _getItemOffset: function(isVertical, itemsOffset, e) {

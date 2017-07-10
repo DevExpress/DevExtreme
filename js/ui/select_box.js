@@ -703,7 +703,11 @@ var SelectBox = DropDownList.inherit({
 
     _createClearButton: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        return eventsEngine.on(this.callBase(), eventName, function() { return false; });
+        var $clearButton = this.callBase();
+
+        eventsEngine.on($clearButton, eventName, function() { return false; });
+
+        return $clearButton;
     },
 
     _wasSearch: function(value) {

@@ -561,7 +561,8 @@ var ColorView = Editor.inherit({
             "append": $editor
         });
 
-        eventsEngine.off($label, clickEvent.name).on(clickEvent.name, function(e) {
+        eventsEngine.off($label, clickEvent.name);
+        eventsEngine.on($label, clickEvent.name, function(e) {
             e.preventDefault();
         });
 
