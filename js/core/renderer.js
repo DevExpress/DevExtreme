@@ -68,18 +68,18 @@ if(!useJQueryRenderer) {
 
     initRender.prototype.show = function() {
         if(this[0]) {
-            if(!this.hasClass(STATE_INVISIBLE) && this[0].style.display === "none") {
-                this[0].style.display = "";
-            } else {
-                this.toggleClass(STATE_INVISIBLE, false);
-            }
+            this.toggleClass(STATE_INVISIBLE, false);
         }
 
         return this;
     };
 
     initRender.prototype.hide = function() {
-        return this.toggleClass(STATE_INVISIBLE, true);
+        if(this[0]) {
+            this.toggleClass(STATE_INVISIBLE, true);
+        }
+
+        return this;
     };
 
     initRender.prototype.toggle = function(value) {

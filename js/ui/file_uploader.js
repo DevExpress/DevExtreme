@@ -827,7 +827,7 @@ var FileUploader = Editor.inherit({
             .appendTo(this._$inputWrapper);
 
         if(!this._shouldDragOverBeRendered()) {
-            this._$inputContainer.css("display", "none");
+            this._$inputContainer.hide();
         }
 
         this._$fileInput
@@ -1068,7 +1068,7 @@ var FileUploader = Editor.inherit({
         setTimeout(function() {
             if(that.option("showFileList")) {
                 file.$statusMessage.text(that.option("uploadFailedMessage"));
-                file.$statusMessage.css("display", "");
+                file.$statusMessage.show();
                 file.progressBar.element().remove();
             }
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -1094,7 +1094,7 @@ var FileUploader = Editor.inherit({
         setTimeout(function() {
             if(that.option("showFileList")) {
                 file.$statusMessage.text(that.option("uploadedMessage"));
-                file.$statusMessage.css("display", "");
+                file.$statusMessage.show();
                 file.progressBar.element().remove();
             }
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -1143,7 +1143,7 @@ var FileUploader = Editor.inherit({
     },
 
     _initStatusMessage: function(file) {
-        file.$statusMessage.css("display", "none");
+        file.$statusMessage.hide();
     },
 
     _initCancelButton: function(file) {

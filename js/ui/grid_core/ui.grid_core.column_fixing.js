@@ -588,7 +588,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 groupCellColSpan -= (options.columns[transparentColumnIndex].colspan - 1) || 0;
             } else if(alignByColumnCellCount > 0) {
                 if(browser.mozilla) {
-                    $groupCell.css("display", "none");
+                    $groupCell.hide();
                 } else {
                     $groupCell.css("visibility", "hidden");
                 }

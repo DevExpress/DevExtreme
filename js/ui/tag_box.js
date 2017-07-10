@@ -460,7 +460,7 @@ var TagBox = SelectBox.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<select>")
             .attr("multiple", "multiple")
-            .css("display", "none")
+            .hide()
             .appendTo(this.element());
     },
 
