@@ -868,8 +868,7 @@ var FileUploader = Editor.inherit({
     },
 
     _renderDragEvents: function() {
-        this._$inputWrapper
-            .off("." + this.NAME);
+        eventsEngine.off(this._$inputWrapper, "." + this.NAME);
 
         if(!this._shouldDragOverBeRendered()) {
             return;

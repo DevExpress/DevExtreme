@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
+    eventsEngine = require("../../events/core/events_engine"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
@@ -214,12 +214,8 @@ var Sortable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        this._getEventListener()
-            .off(addNamespace(
-                [dragEvents.move, dragEvents.start, dragEvents.end, dragEvents.enter, dragEvents.leave, dragEvents.drop].join(" "),
-                SORTABLE_NAMESPACE
-                )
-            );
+        var dragEvents = [dragEvents.move, dragEvents.start, dragEvents.end, dragEvents.enter, dragEvents.leave, dragEvents.drop].join(" ");
+        eventsEngine.off(this._getEventListener(), addNamespace(dragEvents, SORTABLE_NAMESPACE));
     },
 
     _getItemOffset: function(isVertical, itemsOffset, e) {

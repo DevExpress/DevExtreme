@@ -884,8 +884,8 @@ var Overlay = Widget.inherit({
         this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
             || (function(e) { this._targetParentsScrollHandler(e); }).bind(this);
 
-        $().add(this._$prevTargetParents)
-            .off(scrollEvent, this._proxiedTargetParentsScrollHandler);
+        eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._proxiedTargetParentsScrollHandler);
+
         if(subscribe && closeOnScroll) {
             eventsEngine.on($parents, scrollEvent, this._proxiedTargetParentsScrollHandler);
             this._$prevTargetParents = $parents;

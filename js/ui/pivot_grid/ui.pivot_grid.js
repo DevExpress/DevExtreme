@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
+    eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),

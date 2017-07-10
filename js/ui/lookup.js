@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
+    eventsEngine = require("../events/core/events_engine"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),

@@ -558,9 +558,8 @@ var TextEditorBase = Editor.inherit({
         var eventNamespace = this.NAME + "ValueChange",
             keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), this.NAME + "TextChange");
 
-        this._input()
-            .off("." + eventNamespace)
-            .off(keyPressEvent);
+        eventsEngine.off(this._input(), "." + eventNamespace);
+        eventsEngine.off(this._input(), keyPressEvent);
     },
 
     _refreshValueChangeEvent: function() {

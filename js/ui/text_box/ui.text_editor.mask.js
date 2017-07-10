@@ -183,8 +183,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _detachMaskEventHandlers: function() {
-        this._input()
-            .off("." + MASK_EVENT_NAMESPACE);
+        eventsEngine.off(this._input(), "." + MASK_EVENT_NAMESPACE);
     },
 
     _attachChangeEventHandlers: function() {

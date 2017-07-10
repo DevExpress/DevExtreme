@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    eventsEngine = require("../events/core/events_engine"),
+    eventsEngine = require("../../events/core/events_engine"),
     swipeEvents = require("../swipe"),
     DOMComponent = require("../../core/dom_component"),
     eventUtils = require("../utils"),
