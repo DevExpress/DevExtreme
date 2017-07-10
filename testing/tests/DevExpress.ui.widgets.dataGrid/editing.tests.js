@@ -5339,6 +5339,53 @@ QUnit.test("Save edit data when update fails in batch edit mode", function(asser
     assert.deepEqual(that.editingController._editData[0].oldData, that.array[1], "old data");
 });
 
+//T533546
+QUnit.testInActiveWindow("The lookup column should keep focus after changing value when it has 'setCellValue' option", function(assert) {
+   //arrange
+    var that = this,
+        $cellElement,
+        lookupInstance,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    that.options.columns[0] = {
+        dataField: "name",
+        lookup: {
+            dataSource: ["test1", "test2"]
+        },
+        setCellValue: function(rowData, value) {
+            this.defaultSetCellValue(rowData, value);
+        }
+    };
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+    that.element = function() {
+        return $testElement;
+    };
+    rowsView.render($testElement);
+    that.columnsController.init();
+
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    //assert
+    $cellElement = rowsView.element().find("tbody > tr").first().children().first();
+    assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
+
+    lookupInstance = rowsView.element().find(".dx-selectbox").data("dxSelectBox");
+    assert.ok(lookupInstance, "has lookup");
+
+    //act
+    lookupInstance.option("value", "test1");
+    that.clock.tick();
+
+    //assert
+    $cellElement = rowsView.element().find("tbody > tr").first().children().first();
+    assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
+});
+
 if(device.ios || device.android) {
     //T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {
