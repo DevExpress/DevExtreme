@@ -495,12 +495,16 @@ QUnit.test("removing tags after clicking the 'clear' button", function(assert) {
 
 QUnit.module("multi tag support", {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         messageLocalization.load({
             "en": {
                 "dxTagBox-seleced": "selected",
                 "dxTagBox-all-seleced": "All selectedo"
             }
         });
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 });
 
@@ -675,6 +679,65 @@ QUnit.test("tagBox should show special text for all selected state", function(as
     tagBox.option("value", [1, 2, 3]);
 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "3 selected", "tag has correct text");
+});
+
+QUnit.test("tagbox should show all selected tag correctly in allPage selection mode", function(assert) {
+    var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    var $tagBox = $("#tagBox").dxTagBox({
+        dataSource: {
+            store: new ArrayStore(items),
+            paginate: true,
+            pageSize: 5
+        },
+        maxTagCount: 2,
+        opened: true,
+        selectAllMode: "allPages",
+        showSelectionControls: true
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.deepEqual($tagBox.dxTagBox("option", "value"), items, "items is selected");
+    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected", "text is correct");
+});
+
+QUnit.test("tagbox should show count of selected items when only first page is loaded", function(assert) {
+    var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    var $tagBox = $("#tagBox").dxTagBox({
+        dataSource: {
+            store: new ArrayStore(items),
+            paginate: true,
+            pageSize: 5
+        },
+        maxTagCount: 2,
+        opened: true,
+        selectAllMode: "page",
+        showSelectionControls: true
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($tagBox.dxTagBox("option", "value").length, 5, "first page is selected");
+    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "5 selected", "text is correct");
+});
+
+
+QUnit.test("tagbox should show all selected text correctly without datasource", function(assert) {
+    var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    var $tagBox = $("#tagBox").dxTagBox({
+        items: items,
+        maxTagCount: 2,
+        opened: true,
+        showSelectionControls: true
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($tagBox.dxTagBox("option", "value").length, 15, "all items are selected");
+    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected", "text is correct");
 });
 
 
