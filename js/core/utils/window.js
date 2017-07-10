@@ -52,7 +52,7 @@ var resizeCallbacks = (function() {
     callbacks.remove = function() {
         var result = originalCallbacksRemove.apply(callbacks, arguments);
         if(!callbacks.has() && resizeEventHandlerAttached) {
-            jqWindow.off("resize", handleResize);
+            eventsEngine.off(jqWindow, "resize", handleResize);
             resizeEventHandlerAttached = false;
         }
         return result;

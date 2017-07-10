@@ -163,7 +163,7 @@ var DateViewRoller = Scrollable.inherit({
         var itemSelector = this._getItemSelector(),
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        this.element().off(eventName, itemSelector);
+        eventsEngine.off(this.element(), eventName, itemSelector);
         eventsEngine.on(this.element(), eventName, itemSelector, this._itemClickHandler.bind(this));
     },
 

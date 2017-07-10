@@ -68,8 +68,8 @@ var Draggable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        this.element().off("." + DRAGGABLE);
-        this._getArea().off("." + DRAGGABLE);
+        eventsEngine.off(this.element(), "." + DRAGGABLE);
+        eventsEngine.off(this._getArea(), "." + DRAGGABLE);
     },
 
     _move: function(position) {

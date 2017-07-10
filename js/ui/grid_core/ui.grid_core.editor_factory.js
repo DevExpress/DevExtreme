@@ -397,7 +397,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             this.createAction("onEditorPrepared", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
 
             this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-            eventsEngine.on($(document), UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+            eventsEngine.on(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
             this._attachContainerEventHandlers();
         },
@@ -448,7 +448,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
         dispose: function() {
             clearTimeout(this._focusTimeoutID);
             clearTimeout(this._updateFocusTimeoutID);
-            $(document).off(UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+            eventsEngine.off(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
         },
 
         createEditor: function($container, options) {

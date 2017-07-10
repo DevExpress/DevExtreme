@@ -536,7 +536,7 @@ var TextEditorBase = Editor.inherit({
             $input = this._input();
 
         $.each(EVENTS_LIST, function(_, event) {
-            $input.off(eventUtils.addNamespace(event.toLowerCase(), that.NAME));
+            eventsEngine.off($input, eventUtils.addNamespace(event.toLowerCase(), that.NAME));
         });
 
         this._renderEvents();

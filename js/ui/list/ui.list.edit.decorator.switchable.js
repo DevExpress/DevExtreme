@@ -146,7 +146,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
 
     _disablePositioning: function($itemElement) {
         $itemElement.removeClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS);
-        $itemElement.off(ACTIVE_EVENT_NAME);
+        eventsEngine.off($itemElement, ACTIVE_EVENT_NAME);
     },
 
     _prepareDeleteReady: function($itemElement) {

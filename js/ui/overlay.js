@@ -80,7 +80,7 @@ var getElement = function(value) {
     return value && $(value instanceof $.Event ? value.target : value);
 };
 
-eventsEngine.on($(document), pointerEvents.down, function(e) {
+eventsEngine.on(document, pointerEvents.down, function(e) {
     for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
         if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -819,9 +819,9 @@ var Overlay = Widget.inherit({
     _toggleTabTerminator: function(enabled) {
         var eventName = eventUtils.addNamespace("keydown", this.NAME);
         if(enabled) {
-            eventsEngine.on($(document), eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.on(document, eventName, this._proxiedTabTerminatorHandler);
         } else {
-            $(document).off(eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.off(document, eventName, this._proxiedTabTerminatorHandler);
         }
     },
 

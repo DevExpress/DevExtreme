@@ -334,7 +334,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
 
         if(this.option("fieldTemplate")) {
-            this._input().off("focusin focusout beforeactivate");
+            eventsEngine.off(this._input(), "focusin focusout beforeactivate");
         }
     },
 
@@ -454,7 +454,7 @@ var DropDownEditor = TextBox.inherit({
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             openOnFieldClick = that.option("openOnFieldClick");
 
-        $inputWrapper.off(eventName);
+        eventsEngine.off($inputWrapper, eventName);
         that.element().toggleClass(DROP_DOWN_EDITOR_FIELD_CLICKABLE, openOnFieldClick);
 
         if(openOnFieldClick) {

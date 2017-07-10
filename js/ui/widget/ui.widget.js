@@ -524,7 +524,7 @@ var Widget = DOMComponent.inherit({
 
         var clickNamespace = eventUtils.addNamespace(clickEvent.name, UI_FEEDBACK);
 
-        focusTarget.off(clickNamespace);
+        eventsEngine.off(focusTarget, clickNamespace);
 
         this.option("accessKey") && eventsEngine.on(focusTarget, clickNamespace, (function(e) {
             if(eventUtils.isFakeClickEvent(e)) {
@@ -573,7 +573,7 @@ var Widget = DOMComponent.inherit({
             focusEvents = focusEvents + " " + eventUtils.addNamespace("beforeactivate", namespace);
         }
 
-        $element.off(focusEvents);
+        eventsEngine.off($element, focusEvents);
     },
 
     _attachFocusEvents: function() {

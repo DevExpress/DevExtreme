@@ -18,8 +18,7 @@ var wheel = {
     },
 
     teardown: function(element) {
-        var $element = $(element);
-        $element.off("." + EVENT_NAMESPACE);
+        eventsEngine.off(element, "." + EVENT_NAMESPACE);
     },
 
     _wheelHandler: function(e) {

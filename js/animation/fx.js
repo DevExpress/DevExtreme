@@ -162,8 +162,8 @@ var TransitionAnimationStrategy = {
         config.transitionAnimation.cleanup = function() {
             clearTimeout(simulatedEndEventTimer);
             clearTimeout(waitForJSCompleteTimer);
-            $element.off(transitionEndEventName);
-            $element.off(removeEventName);
+            eventsEngine.off($element, transitionEndEventName);
+            eventsEngine.off($element, removeEventName);
         };
 
         eventsEngine.one($element, transitionEndEventName, function() {
@@ -172,7 +172,7 @@ var TransitionAnimationStrategy = {
                 transitionEndFired.reject();
             }
         });
-        eventsEngine.off($element, removeEventName);
+        eventsEngine.off(eventsEngine, $element, removeEventName);
         eventsEngine.on($element, removeEventName, function() {
             that.stop($element, config);
             deferred.reject();
@@ -802,7 +802,7 @@ var subscribeToRemoveEvent = function(animation) {
     });
 
     animation.deferred.always(function() {
-        animation.element.off(scopedRemoveEvent);
+        eventsEngine.off(animation.element, scopedRemoveEvent);
     });
 };
 

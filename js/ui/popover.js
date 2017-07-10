@@ -83,10 +83,10 @@ var POPOVER_CLASS = "dx-popover",
 
         if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
             that["_" + name + "EventHandler"] = undefined;
-            eventsEngine.on($(target), eventName, handler);
+            eventsEngine.on(target, eventName, handler);
         } else {
             that["_" + name + "EventHandler"] = handler;
-            eventsEngine.on($(document), eventName, target, handler);
+            eventsEngine.on(document, eventName, target, handler);
         }
     },
     detachEvent = function(that, target, name) {
@@ -100,9 +100,9 @@ var POPOVER_CLASS = "dx-popover",
         eventName = eventUtils.addNamespace(event, that.NAME);
 
         if(that["_" + name + "EventHandler"]) {
-            $(document).off(eventName, target, that["_" + name + "EventHandler"]);
+            eventsEngine.off(document, eventName, target, that["_" + name + "EventHandler"]);
         } else {
-            $(target).off(eventName);
+            eventsEngine.off(target, eventName);
         }
     };
 

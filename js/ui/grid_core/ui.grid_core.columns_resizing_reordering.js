@@ -741,11 +741,11 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _unsubscribeFromEvents: function() {
-        this._moveSeparatorHandler && $(document).off(addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
-        this._startResizingHandler && this._$parentContainer.off(addNamespace(pointerEvents.down, MODULE_NAMESPACE), this._startResizingHandler);
+        this._moveSeparatorHandler && eventsEngine.off(document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
+        this._startResizingHandler && eventsEngine.off(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this._startResizingHandler);
         if(this._endResizingHandler) {
-            this._columnsSeparatorView.element().off(addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
-            $(document).off(addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
+            eventsEngine.off(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
+            eventsEngine.off(document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
         }
     },
 
@@ -754,10 +754,10 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         this._startResizingHandler = this.createAction(this._startResizing);
         this._endResizingHandler = this.createAction(this._endResizing);
 
-        eventsEngine.on($(document), addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, this._moveSeparatorHandler);
+        eventsEngine.on(document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, this._moveSeparatorHandler);
         eventsEngine.on(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, this._startResizingHandler);
         eventsEngine.on(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
-        eventsEngine.on($(document), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
+        eventsEngine.on(document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
     },
 
     _updateColumnsWidthIfNeeded: function(posX) {
@@ -1070,9 +1070,9 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
 
                 $.each(columnElements, function(index, columnElement) {
                     var $columnElement = $(columnElement);
-                    $columnElement.off(addNamespace(dragEvents.start, MODULE_NAMESPACE));
-                    $columnElement.off(addNamespace(dragEvents.move, MODULE_NAMESPACE));
-                    $columnElement.off(addNamespace(dragEvents.end, MODULE_NAMESPACE));
+                    eventsEngine.off($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE));
+                    eventsEngine.off($columnElement, addNamespace(dragEvents.move, MODULE_NAMESPACE));
+                    eventsEngine.off($columnElement, addNamespace(dragEvents.end, MODULE_NAMESPACE));
                     $columnElement.removeClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
                 });
             }

@@ -72,11 +72,10 @@ var SpinButton = Widget.inherit({
     },
 
     _clearTimer: function() {
-        this.element().off(holdEvent.name);
+        eventsEngine.off(this.element(), holdEvent.name);
 
-        $(document)
-            .off(POINTERUP_EVENT_NAME)
-            .off(POINTERCANCEL_EVENT_NAME);
+        eventsEngine.off(document, POINTERUP_EVENT_NAME);
+        eventsEngine.off(document, POINTERCANCEL_EVENT_NAME);
 
         if(this._feedBackDeferred) {
             this._feedBackDeferred.resolve();

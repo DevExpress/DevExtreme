@@ -194,7 +194,7 @@ var TextArea = TextBox.inherit({
     },
 
     _refreshEvents: function() {
-        this._input().off(eventUtils.addNamespace("input paste", this.NAME));
+        eventsEngine.off(this._input(), eventUtils.addNamespace("input paste", this.NAME));
         this.callBase();
     },
 

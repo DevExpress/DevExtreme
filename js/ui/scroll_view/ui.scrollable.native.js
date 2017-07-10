@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     devices = require("../../core/devices"),
     Class = require("../../core/class"),
@@ -259,8 +260,8 @@ var NativeStrategy = Class.inherit({
             this._$element.removeClass(className.match(scrollableNativeRegexp).join(" "));
         }
 
-        this._$element.off("." + SCROLLABLE_NATIVE);
-        this._$container.off("." + SCROLLABLE_NATIVE);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_NATIVE);
+        eventsEngine.off(this._$container, "." + SCROLLABLE_NATIVE);
         this._removeScrollbars();
         clearTimeout(this._gestureEndTimer);
         clearTimeout(this._hideScrollbarTimeout);

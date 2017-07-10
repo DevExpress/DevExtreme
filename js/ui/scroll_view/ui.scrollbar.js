@@ -196,7 +196,7 @@ var Scrollbar = Widget.inherit({
             activeScrollbar = null;
         }
 
-        this._$thumb.off("." + SCROLLBAR);
+        eventsEngine.off(this._$thumb, "." + SCROLLBAR);
     },
 
     _optionChanged: function(args) {
@@ -226,7 +226,7 @@ var Scrollbar = Widget.inherit({
 
 var activeScrollbar = null;
 
-eventsEngine.on($(document), eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
+eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
     if(activeScrollbar) {
         activeScrollbar.feedbackOff();
     }

@@ -779,7 +779,7 @@ var CollectionWidget = Widget.inherit({
             itemSelector = this._itemSelector(),
             eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
 
-        $itemContainer.off(eventName, itemSelector);
+        eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
     },
 

@@ -433,9 +433,9 @@ var ContextMenu = MenuBase.inherit((function() {
             eventName = eventUtils.addNamespace(showEvent, this.NAME);
 
             if(this._showContextMenuEventHandler) {
-                $(document).off(eventName, target, this._showContextMenuEventHandler);
+                eventsEngine.off(document, eventName, target, this._showContextMenuEventHandler);
             } else {
-                $(target).off(eventName);
+                eventsEngine.off(target, eventName);
             }
         },
 
@@ -473,10 +473,10 @@ var ContextMenu = MenuBase.inherit((function() {
 
             if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
                 that._showContextMenuEventHandler = undefined;
-                eventsEngine.on($(target), eventName, handler);
+                eventsEngine.on(target, eventName, handler);
             } else {
                 that._showContextMenuEventHandler = handler;
-                eventsEngine.on($(document), eventName, target, that._showContextMenuEventHandler);
+                eventsEngine.on(document, eventName, target, that._showContextMenuEventHandler);
             }
         },
 

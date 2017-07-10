@@ -52,7 +52,7 @@ var KeyboardProcessor = Class.inherit({
 
     dispose: function() {
         if(this._element) {
-            this._element.off(this._keydown, this._processFunction);
+            eventsEngine.off(this._element, this._keydown, this._processFunction);
         }
         this._element = undefined;
         this._handler = undefined;

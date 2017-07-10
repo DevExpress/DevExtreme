@@ -49,7 +49,7 @@ var ContextMenu = Class.inherit({
     },
 
     teardown: function(element) {
-        $(element).off("." + CONTEXTMENU_NAMESPACE);
+        eventsEngine.off(element, "." + CONTEXTMENU_NAMESPACE);
     }
 
 });

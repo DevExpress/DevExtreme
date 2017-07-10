@@ -36,7 +36,7 @@ var TOAST_CLASS = "dx-toast",
         "left": { my: "center left", at: "center left", of: null, offset: "0 0" }
     };
 
-eventsEngine.on($(document), pointerEvents.down, function(e) {
+eventsEngine.on(document, pointerEvents.down, function(e) {
     for(var i = TOAST_STACK.length - 1; i >= 0; i--) {
         if(!TOAST_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -380,7 +380,7 @@ var Toast = Overlay.inherit({
     _toggleCloseEvents: function(event) {
         var dxEvent = "dx" + event.toLowerCase();
 
-        this._$content.off(dxEvent);
+        eventsEngine.off(this._$content, dxEvent);
         this.option("closeOn" + event) && eventsEngine.on(this._$content, dxEvent, this.hide.bind(this));
     },
 

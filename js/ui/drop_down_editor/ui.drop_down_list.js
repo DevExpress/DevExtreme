@@ -677,7 +677,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _refreshEvents: function() {
-        this._input().off(this._getSearchEvent());
+        eventsEngine.off(this._input(), this._getSearchEvent());
         this.callBase();
     },
 

@@ -677,7 +677,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _attachKeyboardHandler: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_KEYBOARD);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_KEYBOARD);
 
         if(!this.option("disabled") && this.option("useKeyboard")) {
             eventsEngine.on(this._$element, eventUtils.addNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
@@ -829,7 +829,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _attachCursorHandlers: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_CURSOR);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_CURSOR);
 
         if(!this.option("disabled") && this._isHoverMode()) {
             eventsEngine.on(this._$element, eventUtils.addNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
@@ -999,8 +999,8 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _detachEventHandlers: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_CURSOR);
-        this._$container.off("." + SCROLLABLE_SIMULATED_KEYBOARD);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_CURSOR);
+        eventsEngine.off(this._$container, "." + SCROLLABLE_SIMULATED_KEYBOARD);
     }
 
 });

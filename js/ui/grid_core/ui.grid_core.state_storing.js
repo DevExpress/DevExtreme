@@ -93,7 +93,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
                 }
             };
 
-            eventsEngine.on($(window), "unload", that._windowUnloadHandler);
+            eventsEngine.on(window, "unload", that._windowUnloadHandler);
 
             return that;
         },
@@ -164,7 +164,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
 
         dispose: function() {
             clearTimeout(this._savingTimeoutID);
-            $(window).off("unload", this._windowUnloadHandler);
+            eventsEngine.off(window, "unload", this._windowUnloadHandler);
         }
     };
 })());

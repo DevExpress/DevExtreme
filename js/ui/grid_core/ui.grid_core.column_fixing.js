@@ -451,8 +451,8 @@ var ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
 var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _detachHoverEvents: function() {
-        this._fixedTableElement && this._fixedTableElement.off("mouseover mouseout", ".dx-data-row");
-        this._tableElement && this._tableElement.off("mouseover mouseout", ".dx-data-row");
+        this._fixedTableElement && eventsEngine.off(this._fixedTableElement, "mouseover mouseout", ".dx-data-row");
+        this._tableElement && eventsEngine.off(this._tableElement, "mouseover mouseout", ".dx-data-row");
     },
 
     _attachHoverEvents: function() {

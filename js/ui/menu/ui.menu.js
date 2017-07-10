@@ -817,7 +817,7 @@ var Menu = MenuBase.inherit({
             return;
         }
 
-        $item.off(mouseMoveEventName);
+        eventsEngine.off($item, mouseMoveEventName);
 
         if(!this._hasChildren(node)) {
             this._showSubmenuTimer = setTimeout(this._hideSubmenuAfterTimeout.bind(this), this._getDelay("hide"));

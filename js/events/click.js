@@ -148,7 +148,7 @@ var ClickEmitter = Emitter.inherit({
         dispose: function() {
             this.callBase();
 
-            this.getElement().off("click", clickHandler);
+            eventsEngine.off(this.getElement(), "click", clickHandler);
         }
     });
 
@@ -182,8 +182,8 @@ var ClickEmitter = Emitter.inherit({
         };
 
         var NATIVE_CLICK_FIXER_NAMESPACE = "NATIVE_CLICK_FIXER";
-        eventsEngine.on($(document), eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
-        eventsEngine.on($(document), eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.on(document, eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 

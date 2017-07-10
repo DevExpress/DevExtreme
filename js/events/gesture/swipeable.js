@@ -73,7 +73,7 @@ var Swipeable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        this.element().off("." + DX_SWIPEABLE);
+        eventsEngine.off(this.element(), "." + DX_SWIPEABLE);
     },
 
     _optionChanged: function(args) {

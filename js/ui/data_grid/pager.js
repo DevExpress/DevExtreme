@@ -648,7 +648,7 @@ var Pager = Widget.inherit({
     },
 
     _clean: function() {
-        this._$pagesChooser && this._$pagesChooser.off(eventUtils.addNamespace(clickEvent.name, this.Name + "Pages"), '.' + PAGER_PAGE_CLASS, this._pageClickHandler);
+        this._$pagesChooser && eventsEngine.off(this._$pagesChooser, eventUtils.addNamespace(clickEvent.name, this.Name + "Pages"), '.' + PAGER_PAGE_CLASS, this._pageClickHandler);
 
         this.callBase();
     },

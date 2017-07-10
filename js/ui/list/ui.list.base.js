@@ -747,7 +747,7 @@ var ListBase = CollectionWidget.inherit({
 
         $element.toggleClass(LIST_COLLAPSIBLE_GROUPS_CLASS, collapsibleGroups);
 
-        $element.off(eventName, selector);
+        eventsEngine.off($element, eventName, selector);
         if(collapsibleGroups) {
             eventsEngine.on($element, eventName, selector, (function(e) {
                 this._createAction((function(e) {

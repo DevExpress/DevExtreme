@@ -31,12 +31,11 @@ var Hover = Class.inherit({
 
     add: function(element, handleObj) {
         var that = this,
-            $element = $(element),
             handler = function(e) {
                 that._handler(e);
             };
 
-        eventsEngine.on($element, this._originalEventName, handleObj.selector, handler);
+        eventsEngine.on(element, this._originalEventName, handleObj.selector, handler);
         $.data(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
     },
 
@@ -55,7 +54,7 @@ var Hover = Class.inherit({
     remove: function(element, handleObj) {
         var handler = $.data(element, this._handlerArrayKeyPath)[handleObj.guid];
 
-        $(element).off(this._originalEventName, handleObj.selector, handler);
+        eventsEngine.off(element, this._originalEventName, handleObj.selector, handler);
     },
 
     teardown: function(element) {
