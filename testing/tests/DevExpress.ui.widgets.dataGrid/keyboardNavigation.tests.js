@@ -23,6 +23,7 @@ var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type"),
     eventUtils = require("events/utils"),
+    eventsEngine = require("events/core/events_engine"),
     KeyboardNavigationController = require("ui/grid_core/ui.grid_core.keyboard_navigation").controllers.keyboardNavigation,
     RowsView = require("ui/data_grid/ui.data_grid.rows").RowsView,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
@@ -43,9 +44,18 @@ function callViewsRenderCompleted(views) {
 
 QUnit.module("Keyboard navigation", {
     beforeEach: function() {
+        var on = this.originalEventsEngineOn = eventsEngine.on;
+        var off = this.originalEventsEngineOff = eventsEngine.off;
+        eventsEngine.on = function(element, name) {
+            element.fake && element.on(name) || on.apply(this, Array.prototype.slice.call(arguments, 0));
+        };
+        eventsEngine.off = function(element, name) {
+            element.fake && element.off(name) || off.apply(this, Array.prototype.slice.call(arguments, 0));
+        };
         var that = this,
             View = function(name, isVisible) {
                 var element = {
+                    fake: true,
                     eventsInfo: {},
                     is: function() {
                         return false;
@@ -181,6 +191,8 @@ QUnit.module("Keyboard navigation", {
         that.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
+        eventsEngine.on = this.originalEventsEngineOn;
+        eventsEngine.off = this.originalEventsEngineOff;
         this.clock.restore();
     }
 });
