@@ -63,6 +63,22 @@ if(!useJQueryRenderer) {
         };
     });
 
+    initRender.prototype.show = function() {
+        return this.toggle(true);
+    };
+
+    initRender.prototype.hide = function() {
+        return this.toggle(false);
+    };
+
+    initRender.prototype.toggle = function(value) {
+        if(this[0]) {
+            this.toggleClass("dx-state-invisible", !value);
+        }
+
+        return this;
+    };
+
     initRender.prototype.attr = function(attrName, value) {
         if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, "attr", arguments);
         if(!this[0]) {
