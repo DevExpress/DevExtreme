@@ -345,7 +345,9 @@ module.exports = (function() {
                 precision: column.precision,
                 getDisplayFormat: column.getDisplayFormat,
                 customizeText: column.customizeText,
-                target: target
+                target: target,
+                trueText: column.trueText,
+                falseText: column.falseText
             };
         },
 
