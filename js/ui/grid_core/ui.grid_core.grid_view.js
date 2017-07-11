@@ -257,6 +257,7 @@ var ResizingController = modules.ViewController.inherit({
 
         if(!hasAutoWidth && resultWidths.length) {
             var contentWidth = that._rowsView.contentWidth(),
+                scrollbarWidth = that._rowsView.getScrollbarWidth(),
                 totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth <= contentWidth) {
@@ -268,7 +269,7 @@ var ResizingController = modules.ViewController.inherit({
                     resultWidths[lastColumnIndex] = "auto";
                     isColumnWidthsCorrected = true;
                     if(!hasWidth && !hasPercentWidth) {
-                        that._maxWidth = that.option("showBorders") ? totalWidth + 2 : totalWidth;
+                        that._maxWidth = totalWidth + scrollbarWidth + (that.option("showBorders") ? 2 : 0);
                         $element.css("max-width", that._maxWidth);
                     }
                 }
