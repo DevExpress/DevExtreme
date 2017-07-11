@@ -1245,7 +1245,7 @@ module.exports = {
                         tableElement = that._getTableElement();
 
                     if(items.length && tableElement) {
-                        rowElements = tableElement.children("tbody").children(".dx-row:visible, .dx-error-row").not("." + FREE_SPACE_CLASS);
+                        rowElements = tableElement.children("tbody").children(".dx-row, .dx-error-row").filter(":visible").not("." + FREE_SPACE_CLASS);
 
                         for(itemIndex = 0; itemIndex < items.length; itemIndex++) {
                             prevOffsetTop = offsetTop;

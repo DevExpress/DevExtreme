@@ -4109,12 +4109,6 @@ var BaseChart = {
     */
     render: function(renderOptions) { },
     /**
-    * @name basechartmethods_getsize
-    * @publicName getSize()
-    * @return object
-    */
-    getSize: function() { },
-    /**
     * @name basechartmethods_getallseries
     * @publicName getAllSeries()
     * @return array

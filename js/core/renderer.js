@@ -4,16 +4,16 @@ var $ = require("jquery");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
 var sizeUtils = require("./utils/size");
+var matches = require("./polyfills/matches");
 
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
 var methods = [
-    "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
+    "offset", "offsetParent", "position",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "html", "css",
-    "wrapInner", "wrap",
-    "each", "val", "index",
+    "val",
     "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
@@ -288,6 +288,29 @@ if(!useJQueryRenderer) {
         return this;
     };
 
+    initRender.prototype.wrap = function(wrapper) {
+        if(this[0]) {
+            var wrap = renderer(wrapper);
+
+            wrap.insertBefore(this);
+            wrap.append(this);
+        }
+
+        return this;
+    };
+
+    initRender.prototype.wrapInner = function(wrapper) {
+        var contents = this.contents();
+
+        if(contents.length) {
+            contents.wrap(wrapper);
+        } else {
+            this.append(wrapper);
+        }
+
+        return this;
+    };
+
     initRender.prototype.replaceWith = function(element) {
         this.$element.replaceWith(element.$element || element);
         return this;
@@ -410,8 +433,39 @@ if(!useJQueryRenderer) {
         return result.add(nodes);
     };
 
-    initRender.prototype.filter = function() {
-        return renderer(this.$element.filter.apply(this.$element, arguments));
+    var isVisible = function(_, element) {
+        if(!element.nodeType) return true;
+        return !!(element.offsetWidth || element.offsetHeight || element.getClientRects().length);
+    };
+
+    initRender.prototype.filter = function(selector) {
+        if(!selector) return renderer();
+
+        if(selector === ":visible") {
+            return this.filter(isVisible);
+        } else if(selector === ":hidden") {
+            return this.filter(function(_, element) {
+                return !isVisible(_, element);
+            });
+        }
+
+        var result = [];
+        for(var i = 0; i < this.length; i++) {
+            var item = this[i];
+            if(item.nodeType === Node.ELEMENT_NODE && typeUtils.type(selector) === "string") {
+                matches(item, selector) && result.push(item);
+            } else if(selector.nodeType || typeUtils.isWindow(selector)) {
+                selector === item && result.push(item);
+            } else if(typeUtils.isFunction(selector)) {
+                selector.call(item, i, item) && result.push(item);
+            } else {
+                for(var j = 0; j < selector.length; j++) {
+                    selector[j] === item && result.push(item);
+                }
+            }
+        }
+
+        return renderer(result);
     };
 
     initRender.prototype.not = function(selector) {
@@ -464,6 +518,23 @@ if(!useJQueryRenderer) {
         }
 
         return renderer(result);
+    };
+
+    initRender.prototype.each = function(callback) {
+        for(var i = 0; i < this.length; i++) {
+            if(callback.call(this[i], i, this[i]) === false) {
+                break;
+            }
+        }
+    };
+
+    initRender.prototype.index = function(element) {
+        if(!element) {
+            return this.parent().children().index(this);
+        }
+
+        element = renderer(element);
+        return this.toArray().indexOf(element[0]);
     };
 
     initRender.prototype.get = function(index) {
@@ -562,6 +633,45 @@ if(!useJQueryRenderer) {
     initRender.prototype.toArray = function() {
         return emptyArray.slice.call(this);
     };
+
+    var getWindow = function(element) {
+        return typeUtils.isWindow(element) ? element : element.nodeType === 9 && element.defaultView;
+    };
+
+    [{
+        name: "scrollLeft",
+        offsetProp: "pageXOffset",
+        scrollWindow: function(win, value) {
+            win.scrollTo(value, win.pageYOffset);
+        }
+    }, {
+        name: "scrollTop",
+        offsetProp: "pageYOffset",
+        scrollWindow: function(win, value) {
+            win.scrollTo(win.pageXOffset, value);
+        }
+    }].forEach(function(directionStrategy) {
+        var propName = directionStrategy.name;
+
+        initRender.prototype[propName] = function(value) {
+            if(!this[0]) {
+                return;
+            }
+
+            var window = getWindow(this[0]);
+
+            if(value === undefined) {
+                return window ? window[directionStrategy.offsetProp] : this[0][propName];
+            }
+
+            if(window) {
+                directionStrategy.scrollWindow(window, value);
+            } else {
+                this[0][propName] = value;
+            }
+            return this;
+        };
+    });
 }
 
 renderer.tmpl = function() {
