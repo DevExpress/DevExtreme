@@ -1239,11 +1239,6 @@ var BaseChart = BaseWidget.inherit({
         that.callBase.apply(that, arguments);
         that.__renderOptions = that.__forceRender = null;
         return that;
-    },
-
-    getSize: function() {
-        var canvas = this._canvas || {};
-        return { width: canvas.width, height: canvas.height };
     }
 });
 
