@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     MIN_SCROLL_BAR_SIZE = 2,
     translator2DModule = require("../translators/translator2d"),
@@ -66,11 +67,11 @@ ScrollBar.prototype = {
                     pageY: startPosY
                 }]
             }));
-            $(document).on(pointerEvents.move, scrollChangeHandler);
+            eventsEngine.on(document, pointerEvents.move, scrollChangeHandler);
         });
 
-        $(document).on(pointerEvents.up, function() {
-            $(document).off(pointerEvents.move, scrollChangeHandler);
+        eventsEngine.on(document, pointerEvents.up, function() {
+            eventsEngine.off(document, pointerEvents.move, scrollChangeHandler);
         });
 
     },

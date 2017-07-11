@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var eventsEngine = require("../../events/core/events_engine"),
     isFunction = require("../../core/utils/type").isFunction,
     BaseWidget = require("../core/base_widget"),
     extend = require("../../core/utils/extend").extend,
@@ -298,7 +298,7 @@ var touchEvents = {
     "touchstart.sparkline-tooltip": touchStartTooltipProcessing
 };
 
-$(document).on({
+eventsEngine.on(document, {
     "pointerdown.sparkline-tooltip": function() {
         isPointerDownCalled = true;
         touchStartDocumentProcessing();

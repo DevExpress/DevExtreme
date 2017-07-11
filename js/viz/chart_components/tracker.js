@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     extend = require("../../core/utils/extend").extend,
     consts = require("../components/consts"),
@@ -260,12 +261,12 @@ var baseTrackerPrototype = {
                 }
             };
 
-        $(document).on(POINTER_ACTION, handler);
+        eventsEngine.on(document, POINTER_ACTION, handler);
         this._outHandler = handler;
     },
 
     _disableOutHandler: function() {
-        this._outHandler && $(document).off(POINTER_ACTION, this._outHandler);
+        this._outHandler && eventsEngine.off(document, POINTER_ACTION, this._outHandler);
         this._outHandler = null;
     },
 
@@ -538,7 +539,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
                 that._gestureEnd && that._gestureEnd();     // T235643
             };
 
-            $(document).on(addNamespace(pointerEvents.up, EVENT_NS), that._gestureEndHandler);
+            eventsEngine.on(document, addNamespace(pointerEvents.up, EVENT_NS), that._gestureEndHandler);
         }
         wheelZoomingEnabled && root.on(addNamespace(wheelEvent.name, EVENT_NS), function(e) {
             var rootOffset = that._renderer.getRootOffset(),
@@ -793,7 +794,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     dispose: function() {
-        $(document).off(DOT_EVENT_NS);
+        eventsEngine.off(document, DOT_EVENT_NS);
         this._resetTimer();
         baseTrackerPrototype.dispose.call(this);
     }
