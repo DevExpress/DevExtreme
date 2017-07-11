@@ -526,6 +526,65 @@ if(!useJQueryRenderer) {
         return renderer(result);
     };
 
+    initRender.prototype.closest = function(selector) {
+        if(this.is(selector)) {
+            return this;
+        }
+
+        var parent = this.parent();
+        while(parent && parent.length) {
+            if(parent.is(selector)) {
+                return parent;
+            }
+            parent = parent.parent();
+        }
+
+        return renderer();
+    };
+
+    initRender.prototype.next = function(selector) {
+        if(!this[0]) return renderer();
+        var next = renderer(this[0].nextSibling);
+        if(!arguments.length) {
+            return next;
+        }
+        while(next && next.length) {
+            if(next.is(selector)) return next;
+            next = next.next();
+        }
+        return renderer();
+    };
+
+    initRender.prototype.prev = function() {
+        if(!this[0]) return renderer();
+        return renderer(this[0].previousSibling);
+    };
+
+    initRender.prototype.add = function(selector) {
+        var targets = renderer(selector),
+            result = this.toArray();
+
+        for(var i = 0; i < targets.length; i++) {
+            var target = targets[i];
+            if(result.indexOf(target) === -1) {
+                result.push(target);
+            }
+        }
+
+        return renderer(result);
+    };
+
+    var emptyArray = [];
+    initRender.prototype.splice = function() {
+        return renderer(emptyArray.splice.apply(this, arguments));
+    };
+    initRender.prototype.slice = function() {
+        return renderer(emptyArray.slice.apply(this, arguments));
+    };
+    initRender.prototype.toArray = function() {
+        return emptyArray.slice.call(this);
+    };
+
     var getWindow = function(element) {
         return typeUtils.isWindow(element) ? element : element.defaultView;
     };
@@ -619,65 +678,6 @@ if(!useJQueryRenderer) {
             top: offset.top - parentOffset.top - marginTop,
             left: offset.left - parentOffset.left - marginLeft
         };
-    };
-
-    initRender.prototype.closest = function(selector) {
-        if(this.is(selector)) {
-            return this;
-        }
-
-        var parent = this.parent();
-        while(parent && parent.length) {
-            if(parent.is(selector)) {
-                return parent;
-            }
-            parent = parent.parent();
-        }
-
-        return renderer();
-    };
-
-    initRender.prototype.next = function(selector) {
-        if(!this[0]) return renderer();
-        var next = renderer(this[0].nextSibling);
-        if(!arguments.length) {
-            return next;
-        }
-        while(next && next.length) {
-            if(next.is(selector)) return next;
-            next = next.next();
-        }
-        return renderer();
-    };
-
-    initRender.prototype.prev = function() {
-        if(!this[0]) return renderer();
-        return renderer(this[0].previousSibling);
-    };
-
-    initRender.prototype.add = function(selector) {
-        var targets = renderer(selector),
-            result = this.toArray();
-
-        for(var i = 0; i < targets.length; i++) {
-            var target = targets[i];
-            if(result.indexOf(target) === -1) {
-                result.push(target);
-            }
-        }
-
-        return renderer(result);
-    };
-
-    var emptyArray = [];
-    initRender.prototype.splice = function() {
-        return renderer(emptyArray.splice.apply(this, arguments));
-    };
-    initRender.prototype.slice = function() {
-        return renderer(emptyArray.slice.apply(this, arguments));
-    };
-    initRender.prototype.toArray = function() {
-        return emptyArray.slice.call(this);
     };
 
     [{
