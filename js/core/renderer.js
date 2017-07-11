@@ -7,7 +7,7 @@ var typeUtils = require("./utils/type");
 var useJQueryRenderer = window.useJQueryRenderer !== false;
 
 var methods = [
-    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position", "scrollLeft", "scrollTop",
+    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "scrollLeft", "scrollTop",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "html", "css", "text",
@@ -435,6 +435,101 @@ if(!useJQueryRenderer) {
             parent = parent.parent();
         }
         return renderer(result);
+    };
+
+    var getWindow = function(element) {
+        return typeUtils.isWindow(element) ? element : element.defaultView;
+    };
+
+    initRender.prototype.offset = function(options) {
+        if(!this[0]) return;
+
+        if(!options) {
+            var rect = this[0].getBoundingClientRect();
+            var win = getWindow(this[0].ownerDocument);
+            var docElem = this[0].ownerDocument.documentElement;
+
+            return {
+                top: rect.top + win.pageYOffset - docElem.clientTop,
+                left: rect.left + win.pageXOffset - docElem.clientLeft
+            };
+        }
+
+        var position = this.css("position");
+        if(position === "static") {
+            this[0].style.position = "relative";
+        }
+
+        var offset = this.offset();
+        var cssTop = this.css("top");
+        var cssLeft = this.css("left");
+        var left;
+        var top;
+
+        if((position === "absolute" || position === "fixed")
+        && (cssTop === "auto" || cssLeft === "auto")) {
+            var pos = this.position();
+            top = pos.top;
+            left = pos.left;
+        } else {
+            top = parseFloat(cssTop) || 0;
+            left = parseFloat(cssLeft) || 0;
+        }
+
+        var props = {};
+
+        if(options.top) {
+            props.top = options.top - offset.top + top;
+        }
+        if(options.left) {
+            props.left = options.left - offset.left + left;
+        }
+
+        return this.css(props);
+    };
+
+    initRender.prototype.offsetParent = function() {
+        if(!this[0]) return renderer();
+        return renderer(this[0].offsetParent || document.documentElement);
+    };
+
+    initRender.prototype.position = function() {
+        if(!this[0]) return;
+
+        var offset;
+        var marginTop = parseFloat(this.css("marginTop"));
+        var marginLeft = parseFloat(this.css("marginLeft"));
+
+        if(this.css("position") === "fixed") {
+            offset = this[0].getBoundingClientRect();
+
+            return {
+                top: offset.top - marginTop,
+                left: offset.left - marginLeft
+            };
+        }
+
+        offset = this.offset();
+
+        var offsetParent = this.offsetParent();
+        var parentOffset = {
+            top: 0,
+            left: 0
+        };
+
+        if(offsetParent[0].nodeName !== "HTML") {
+            parentOffset = offsetParent.offset();
+        }
+
+        parentOffset = {
+            top: parentOffset.top + parseFloat(offsetParent.css("borderTopWidth")),
+            left: parentOffset.left + parseFloat(offsetParent.css("borderLeftWidth"))
+        };
+
+        return {
+            top: offset.top - parentOffset.top - marginTop,
+            left: offset.left - parentOffset.left - marginLeft
+        };
     };
 
     initRender.prototype.closest = function(selector) {
