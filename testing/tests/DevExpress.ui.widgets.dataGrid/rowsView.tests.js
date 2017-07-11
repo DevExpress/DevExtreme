@@ -869,6 +869,90 @@ QUnit.test("Highlight searchText for lookup column (T449327)", function(assert) 
     assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "Lookup<span class=" + searchTextClass + ">1</span>", "highlight text in cell");
 });
 
+//T534059
+QUnit.test("Highlighting search text for boolean column with set to 'trueText' option", function(assert) {
+    //arrange
+    var columns = [{
+            allowFiltering: true,
+            dataType: "boolean",
+            trueText: "Yes",
+            parseValue: function(text) {
+                if(text === this.trueText) {
+                    return true;
+                } else if(text === this.falseText) {
+                    return false;
+                }
+            },
+            customizeText: function(e) {
+                if(e.value === true) {
+                    return this.trueText || "true";
+                } else {
+                    return e.valueText || "";
+                }
+            }
+        }],
+        rowsView = this.createRowsView([
+            { data: { field: true }, values: [true], rowType: 'data', dataIndex: 0 }
+        ], null, columns),
+        $testElement = $("#container"),
+        searchTextClass = "dx-datagrid-search-text",
+        $cells;
+
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "Yes"
+    };
+
+    //act
+    rowsView.render($testElement);
+
+    //assert
+    $cells = $testElement.find(".dx-data-row").find("td");
+    assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "<span class=" + searchTextClass + ">Yes</span>", "highlight text in cell");
+});
+
+//T534059
+QUnit.test("Highlighting search text for boolean column with set to 'falseText' option", function(assert) {
+    //arrange
+    var columns = [{
+            allowFiltering: true,
+            dataType: "boolean",
+            falseText: "No",
+            parseValue: function(text) {
+                if(text === this.trueText) {
+                    return true;
+                } else if(text === this.falseText) {
+                    return false;
+                }
+            },
+            customizeText: function(e) {
+                if(e.value === false) {
+                    return this.falseText || "false";
+                } else {
+                    return e.valueText || "";
+                }
+            }
+        }],
+        rowsView = this.createRowsView([
+            { data: { field: false }, values: [false], rowType: 'data', dataIndex: 0 }
+        ], null, columns),
+        $testElement = $("#container"),
+        searchTextClass = "dx-datagrid-search-text",
+        $cells;
+
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "No"
+    };
+
+    //act
+    rowsView.render($testElement);
+
+    //assert
+    $cells = $testElement.find(".dx-data-row").find("td");
+    assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "<span class=" + searchTextClass + ">No</span>", "highlight text in cell");
+});
+
 QUnit.test('All rows are not isSelected by default', function(assert) {
     //arrange
     var rowsView = this.createRowsView(this.items),
