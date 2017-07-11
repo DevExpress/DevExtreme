@@ -42,6 +42,7 @@ QUnit.test('getFraction', function(assert) {
     assert.strictEqual(vizUtils.getFraction(1.01234e+15), '');
     assert.strictEqual(vizUtils.getFraction(1.012340000000000000013e+21), '01234');
     assert.strictEqual(vizUtils.getFraction(1.01234e+34), '01234');
+    assert.strictEqual(vizUtils.getFraction(2.123e-8), '00000002123');
 });
 
 QUnit.module('Angular utils');
