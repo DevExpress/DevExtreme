@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
@@ -346,14 +347,15 @@ var BaseChart = BaseWidget.inherit({
         that.layoutManager = new LayoutManagerModule.LayoutManager();
         that._createScrollBar();
 
-        that._$element.on("contextmenu", function(event) {
+        eventsEngine.on(that._$element, "contextmenu", function(event) {
             ///#DEBUG
             that.eventType = "contextmenu";
             ///#ENDDEBUG
             if(eventUtils.isTouchEvent(event) || eventUtils.isPointerEvent(event)) {
                 event.preventDefault();
             }
-        }).on("MSHoldVisual", function(event) {
+        });
+        eventsEngine.on(that._$element, "MSHoldVisual", function(event) {
             ///#DEBUG
             that.eventType = "MSHoldVisual";
             ///#ENDDEBUG

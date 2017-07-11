@@ -219,7 +219,8 @@ var SlideOutView = Widget.inherit({
     _renderShield: function() {
         this._$shield = this._$shield || $("<div>").addClass(SLIDEOUTVIEW_SHIELD_CLASS);
         this._$shield.appendTo(this.content());
-        eventsEngine.on(this._$shield.off(clickEvent.name), clickEvent.name, this.hideMenu.bind(this));
+        eventsEngine.off(this._$shield, clickEvent.name);
+        eventsEngine.on(this._$shield, clickEvent.name, this.hideMenu.bind(this));
         this._toggleShieldVisibility(this.option("menuVisible"));
     },
 

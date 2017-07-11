@@ -50,7 +50,7 @@ ScrollBar.prototype = {
             scrollChangeHandler = function(e) {
                 var dX = (startPosX - e.pageX) * that._scale,
                     dY = (startPosY - e.pageY) * that._scale;
-                $scroll.trigger(new $.Event("dxc-scroll-move", extend(e, {
+                eventsEngine.trigger($scroll, new $.Event("dxc-scroll-move", extend(e, {
                     type: "dxc-scroll-move",
                     pointers: [{
                         pageX: startPosX + dX,
@@ -58,10 +58,10 @@ ScrollBar.prototype = {
                     }]
                 })));
             };
-        $scroll.on(pointerEvents.down, function(e) {
+        eventsEngine.on($scroll, pointerEvents.down, function(e) {
             startPosX = e.pageX;
             startPosY = e.pageY;
-            $scroll.trigger(new $.Event("dxc-scroll-start", {
+            eventsEngine.trigger($scroll, new $.Event("dxc-scroll-start", {
                 pointers: [{
                     pageX: startPosX,
                     pageY: startPosY

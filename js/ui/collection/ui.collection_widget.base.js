@@ -804,7 +804,7 @@ var CollectionWidget = Widget.inherit({
             itemSelector = this._itemSelector(),
             eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
 
-        $itemContainer.off(eventName, itemSelector);
+        eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));
     },
 

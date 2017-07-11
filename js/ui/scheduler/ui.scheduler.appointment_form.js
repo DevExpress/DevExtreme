@@ -202,7 +202,8 @@ var SchedulerAppointmentForm = {
                         var $editorField = args.element.closest(".dx-field-item"),
                             $editorLabel = $editorField.find(".dx-field-item-label");
 
-                        eventsEngine.on($editorLabel.off(clickEvent.name), clickEvent.name, function() {
+                        eventsEngine.off($editorLabel, clickEvent.name);
+                        eventsEngine.on($editorLabel, clickEvent.name, function() {
                             args.component.toggle();
                         });
                     }

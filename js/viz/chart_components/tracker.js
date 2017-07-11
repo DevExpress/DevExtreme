@@ -132,11 +132,10 @@ var baseTrackerPrototype = {
             $parents = $parents.add(window);
         }
 
-        $().add(that._$prevRootParents)
-            .off(scrollEvents);
+        eventsEngine.off($().add(that._$prevRootParents), scrollEvents);
 
         if(subscribe) {
-            $parents.on(scrollEvents, function() {
+            eventsEngine.on($parents, scrollEvents, function() {
                 that._pointerOut();
             });
             that._$prevRootParents = $parents;
