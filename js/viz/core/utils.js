@@ -137,7 +137,8 @@ var getAppropriateFormat = function(start, end, count) {
 
 var getFraction = function(value) {
     var valueString,
-        dotIndex;
+        dotIndex,
+        pow;
 
     if(isNumber(value)) {
         valueString = value.toString();
@@ -145,6 +146,11 @@ var getFraction = function(value) {
 
         if(dotIndex >= 0) {
             if(isExponential(value)) {
+                pow = Number(getPower(value));
+                if(pow < 0) {
+                    valueString = valueString.replace('.', '').split("e")[0];
+                    return new Array(-pow - 1).fill(0).join("") + valueString;
+                }
                 return valueString.substr(dotIndex + 1, valueString.indexOf('e') - dotIndex - 1);
             } else {
                 valueString = value.toFixed(20);
