@@ -138,6 +138,12 @@ var BaseWidget = {
     */
     svg: function() { },
     /**
+    * @name BaseWidgetMethods_getSize
+    * @publicName getSize()
+    * @return object
+    */
+    getSize: function() { },
+    /**
     * @name BaseWidgetMethods_render
     * @publicName render()
     */

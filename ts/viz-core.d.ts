@@ -760,6 +760,9 @@ declare module DevExpress.viz.core {
         /** @docid BaseWidgetMethods_svg */
         svg(): string;
 
+        /** @docid BaseWidgetMethods_getSize */
+        getSize(): { width: number; height: number };
+
         /** @docid BaseWidgetMethods_exportTo */
         exportTo(fileName: string, format: string): void;
 
