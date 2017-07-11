@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("jquery"),
     ko = require("knockout"),
     KoTemplate = require("../integration/knockout/template");
 

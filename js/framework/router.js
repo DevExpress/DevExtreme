@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("jquery"),
     extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
     inArray = require("../core/utils/array").inArray,

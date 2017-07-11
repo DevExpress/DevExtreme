@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("jquery"),
     Class = require("../core/class"),
     abstract = Class.abstract,
     Action = require("../core/action"),

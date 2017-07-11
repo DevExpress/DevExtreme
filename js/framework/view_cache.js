@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("jquery"),
     inArray = require("../core/utils/array").inArray,
     Class = require("../core/class"),
     EventsMixin = require("../core/events_mixin");

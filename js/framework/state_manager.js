@@ -2,7 +2,7 @@
 
 var Class = require("../core/class"),
     inArray = require("../core/utils/array").inArray,
-    $ = require("../core/renderer");
+    $ = require("jquery");
 
 var MemoryKeyValueStorage = Class.inherit({
     ctor: function() {
