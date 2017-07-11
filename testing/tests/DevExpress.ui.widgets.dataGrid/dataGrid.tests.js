@@ -2611,6 +2611,37 @@ QUnit.test("columns width when all columns have width and dataGrid width auto", 
     assert.equal($dataGrid.width(), 100);
 });
 
+//T533852
+QUnit.test("last column should have correct width if all columns have width and native vertcal scrollbar is shown", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "This test is not actual for mobile devices");
+        return;
+    }
+    //arrange
+    var clock = sinon.useFakeTimers();
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        scrolling: {
+            useNative: true
+        },
+        dataSource: [{}, {}, {}, {}, {}, {}, {}],
+        columns: [
+            { dataField: "field1", width: 50 },
+            { dataField: "field2", width: 50 },
+            { dataField: "field3", width: 50 },
+            { dataField: "field4", width: 50 }
+        ]
+    });
+
+    //act
+    clock.tick(0);
+
+    //assert
+    assert.ok($dataGrid.width() > 200, "grid's width is more then column widths sum");
+    assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50, "last column have correct width");
+    clock.restore();
+});
+
 //T387828
 QUnit.test("columns width when all columns have width and dataGrid with fixed width", function(assert) {
     //arrange
