@@ -696,7 +696,14 @@ var subscribes = {
                 tailDuration;
 
             if(isDifferentDate) {
+                var startDayTime = this.option("startDayHour") * toMs("hour"),
+                    appointmentPartDuration = endDate - dateUtils.trimTime(endDate);
+
                 tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : dayDuration - visibleDayDuration);
+
+                if(appointmentPartDuration < startDayTime) {
+                    tailDuration += startDayTime - appointmentPartDuration;
+                }
             } else {
                 tailDuration = appointmentDuration % dayDuration;
             }
