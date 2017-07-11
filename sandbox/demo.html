@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Test page</title>
+		<script src="DX/js/jquery-2.2.3.js"></script>
+		<script src="DX/js/knockout-3.4.0.debug.js"></script>
+
+        <link rel="stylesheet" href="DX/css/dx.common.css"/>
+        <script>
+            $(function(){
+				$("#version span").html(DevExpress.VERSION);
+                $("#theme-selector").on("change", function(){
+                    var theme = $(this).val(),
+                        bodyColor = "#fff",
+                        $newlink = $("<link>", {
+                            id: "theme",
+                            rel: "stylesheet",
+                            type: "text/css",
+                            href: "DX/css/" + theme + ".css"
+                        });
+
+                    $("#theme").replaceWith($newlink);
+
+                    switch(theme){
+                        case "dx.dark":
+                        case "dx.dark.compact":
+                            bodyColor = "#2a2a2a";
+                            break;
+                        case "dx.contrast":
+                        case "dx.contrast.compact":
+                        case "dx.win10.black":
+                            bodyColor = "#000";
+                            break;
+                        default:
+                            bodyColor = "#fff";
+                    }
+
+                    $("body").css("background-color", bodyColor);
+                });
+            });
+        </script>
+
+		<link id="theme" rel="stylesheet" href="DX/css/dx.light.css"/>
+		<link rel="stylesheet" href="style.css"/>
+
+		<script src="DX/js/angular.js"></script>
+		<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-sanitize/1.6.1/angular-sanitize.min.js"></script>-->
+
+		<script src="DX/js/dx.all.debug.js"></script>
+
+		<script src="script.js"></script>
+		<script src="angular.js"></script>
+	</head>
+
+	<body ng-controller="appCtrl">
+
+    <div class="sb-header">
+        <select id="theme-selector">
+            <option value="dx.light" selected="selected">Generic Light</option>
+            <option value="dx.light.compact">Generic Light Compact</option>
+            <option value="dx.dark">Generic Dark</option>
+            <option value="dx.dark.compact">Generic Dark Compact</option>
+            <option value="dx.contrast">Generic Contrast</option>
+            <option value="dx.contrast.compact">Generic Contrast Compact</option>
+            <option value="dx.ios7.default">ios7</option>
+            <option value="dx.win10.black">win10 Black</option>
+            <option value="dx.win10.white">win10 White</option>
+            <option value="dx.android5.light">android5</option>
+        </select>
+    </div>
+
+    <div class="dx-fieldset">
+        <div class="dx-field">
+            <div class="dx-field-label">Show multi tag when more than 3 items are selected</div>
+            <div class="dx-field-value">
+                <div id="commonOptions"></div>
+            </div>
+        </div>
+
+        <div class="dx-field">
+            <div class="dx-field-label">Show multi tag only when all items are selected</div>
+            <div class="dx-field-value">
+                <div id="allOptions"></div>
+            </div>
+        </div>
+
+
+        <div class="dx-field">
+            <div class="dx-field-label">Show multi tag with ordinary tags</div>
+            <div class="dx-field-value">
+                <div id="moreOptions"></div>
+            </div>
+        </div>
+    </div>
+
+
+    </body>
+</html>

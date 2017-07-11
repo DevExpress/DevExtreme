@@ -323,12 +323,12 @@ var TagBox = SelectBox.inherit({
             maxTagCount: undefined,
 
             /**
-             * @name dxTagBoxOptions_replaceTags
-             * @publicName replaceTags
+             * @name dxTagBoxOptions_showMultiTagOnly
+             * @publicName showMultiTagOnly
              * @type boolean
              * @default true
              */
-            replaceTags: true,
+            showMultiTagOnly: true,
 
             /**
              * @name dxTagBoxOptions_onMultiTagPreparing
@@ -489,7 +489,7 @@ var TagBox = SelectBox.inherit({
         if(args.allSelected) {
             args.text = messageLocalization.getFormatter("dxTagBox-all-selected")(selectedCount);
         } else {
-            if(!this.option("replaceTags")) {
+            if(!this.option("showMultiTagOnly")) {
                 args.text = messageLocalization.getFormatter("dxTagBox-more-selected")(selectedCount - this.option("maxTagCount"));
             } else {
                 args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
@@ -822,11 +822,11 @@ var TagBox = SelectBox.inherit({
             this.option("selectedItems", this._selectedItems.slice());
 
             var $multiTag = this._multiTagRequired() && this._renderMultiTag($input),
-                replaceTags = this.option("replaceTags"),
+                showMultiTagOnly = this.option("showMultiTagOnly"),
                 maxTagCount = this.option("maxTagCount");
 
             items.forEach(function(item, index) {
-                if(($multiTag && replaceTags) || ($multiTag && !replaceTags && index >= maxTagCount)) {
+                if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index >= maxTagCount)) {
                     return false;
                 }
                 this._renderTag(item, $multiTag || $input);
@@ -945,7 +945,7 @@ var TagBox = SelectBox.inherit({
 
     _removeTagElement: function($tag) {
         if($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
-            if(!this.option("replaceTags")) {
+            if(!this.option("showMultiTagOnly")) {
                 this.option("value", this._getValue().slice(0, this.option("maxTagCount")));
             } else {
                 this.reset();

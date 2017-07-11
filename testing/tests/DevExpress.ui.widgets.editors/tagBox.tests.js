@@ -664,25 +664,25 @@ QUnit.test("multi tag should not be rendered if e.cancel is true", function(asse
     assert.deepEqual($tag.text(), "124", "text is correct");
 });
 
-QUnit.test("multi tag should be rendered after max number of tags if replaceTags is false", function(assert) {
+QUnit.test("multi tag should be rendered after max number of tags if showMultiTagOnly is false", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
             maxTagCount: 2,
-            replaceTags: false
+            showMultiTagOnly: false
         }),
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
 
     assert.equal($tag.length, 3, "3 tags rendered");
-    assert.deepEqual($tagBox.text(), "121 more", "text is correct");
+    assert.deepEqual($tag.text(), "121 more", "text is correct");
 });
 
-QUnit.test("multi tag should deselect overflow tags only when replaceTags is false", function(assert) {
+QUnit.test("multi tag should deselect overflow tags only when showMultiTagOnly is false", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
             maxTagCount: 2,
-            replaceTags: false
+            showMultiTagOnly: false
         }),
         tagBox = $tagBox.dxTagBox("instance"),
         $multiTag = $tagBox.find("." + TAGBOX_MULTI_TAG_CLASS);
