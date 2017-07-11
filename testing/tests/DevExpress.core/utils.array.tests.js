@@ -16,3 +16,19 @@ QUnit.testInActiveWindow("intersection", function(assert) {
     assert.deepEqual(arrayUtils.intersection([1], [1, 2]), [1]);
     assert.deepEqual(arrayUtils.intersection([1, 2], [1, 2]), [1, 2]);
 });
+
+QUnit.test("merge", function(assert) {
+    var array1, array2;
+
+    array1 = [ 1, 2 ];
+    array2 = [ 3, 4 ];
+
+    assert.deepEqual(arrayUtils.merge(array1, array2), [ 1, 2, 3, 4 ]);
+    assert.deepEqual(array1, [ 1, 2, 3, 4 ]);
+    assert.deepEqual(array1.length, 4);
+
+    array1 = [ 1, 2 ];
+    array2[3] = 5;
+    assert.deepEqual(arrayUtils.merge(array1, array2), [ 1, 2, 3, 4, undefined, 5 ]);
+    assert.deepEqual(array1.length, 6);
+});

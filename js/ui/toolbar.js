@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
+    arrayUtils = require("../core/utils/array"),
     ActionSheetStrategy = require("./toolbar/ui.toolbar.strategy.action_sheet"),
     DropDownMenuStrategy = require("./toolbar/ui.toolbar.strategy.drop_down_menu"),
     ListBottomStrategy = require("./toolbar/ui.toolbar.strategy.list_bottom"),
@@ -303,7 +304,7 @@ var Toolbar = ToolbarBase.inherit({
             }, itemData);
         });
 
-        return $.merge(overflowItems, menuItems);
+        return arrayUtils.merge(overflowItems, menuItems);
     },
 
     _getToolbarItems: function() {

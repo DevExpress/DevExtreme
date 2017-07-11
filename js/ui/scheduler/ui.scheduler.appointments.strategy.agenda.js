@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     dateUtils = require("../../core/utils/date"),
+    arrayUtils = require("../../core/utils/array"),
     BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base");
 
 var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
@@ -185,7 +186,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
             this.instance.getAppointmentsInstance()._reduceRecurrenceAppointments(appts.indexes, currentAppointments);
 
-            $.merge(currentAppointments, appts.parts);
+            arrayUtils.merge(currentAppointments, appts.parts);
 
             var appointmentCount = currentAppointments.length;
             for(var i = 0; i < agendaDuration; i++) {
