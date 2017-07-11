@@ -474,13 +474,11 @@ var TagBox = SelectBox.inherit({
     },
 
     _initMultiTagPreparingAction: function() {
-        var onMultiTagPreparing = this.option("onMultiTagPreparing");
-
-        if(onMultiTagPreparing) {
-            this._multiTagPreparingAction = this._createActionByOption("onMultiTagPreparing");
-        } else {
-            this._multiTagPreparingAction = this._createAction(this._multiTagPreparingHandler.bind(this));
-        }
+        this._multiTagPreparingAction = this._createActionByOption("onMultiTagPreparing", {
+            beforeExecute: (function(e) {
+                this._multiTagPreparingHandler(e.args[0]);
+            }).bind(this)
+        });
     },
 
     _multiTagPreparingHandler: function(args) {
@@ -1199,6 +1197,7 @@ var TagBox = SelectBox.inherit({
                 this._setListDataSourceFilter();
                 break;
             case "maxTagCount":
+            case "showMultiTagOnly":
                 this._renderTags();
                 break;
             case "selectAllMode":

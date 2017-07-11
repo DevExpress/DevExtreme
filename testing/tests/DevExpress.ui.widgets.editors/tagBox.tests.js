@@ -677,6 +677,23 @@ QUnit.test("multi tag should be rendered after max number of tags if showMultiTa
     assert.deepEqual($tag.text(), "121 more", "text is correct");
 });
 
+QUnit.test("tags should be rerendered after showMultiTagOnly option changed", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            showMultiTagOnly: false
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    tagBox.option("showMultiTagOnly", true);
+
+    var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 1, "1 tag rendered");
+    assert.deepEqual($tag.text(), "3 selected", "text is correct");
+});
+
 QUnit.test("multi tag should deselect overflow tags only when showMultiTagOnly is false", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
