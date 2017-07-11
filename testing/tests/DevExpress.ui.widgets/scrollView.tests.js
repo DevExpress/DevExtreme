@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     noop = require("core/utils/common").noop,
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
@@ -1442,7 +1443,15 @@ QUnit.module("native pullDown strategy", {
         $("#qunit-fixture").addClass("dx-theme-ios");
 
         this.originalJQueryScrollTop = $.fn.scrollTop;
+        this.originalRendererScrollTop = renderer.fn.scrollTop;
         var currentValue = 0;
+        renderer.fn.scrollTop = function(value) {
+            if(arguments.length) {
+                currentValue = value;
+            } else {
+                return currentValue;
+            }
+        };
         $.fn.scrollTop = function(value) {
             if(arguments.length) {
                 currentValue = value;
@@ -1457,6 +1466,7 @@ QUnit.module("native pullDown strategy", {
         $("#qunit-fixture").removeClass("dx-theme-ios");
 
         $.fn.scrollTop = this.originalJQueryScrollTop;
+        renderer.fn.scrollTop = this.originalRendererScrollTop;
     }
 });
 
@@ -1520,24 +1530,23 @@ QUnit.test("pull down element position after dynamic action specification", func
 });
 
 QUnit.test("scrollTop should be greater than 0 on init for prevent WebView bounce", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({
+    var scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "pullDown"
-    });
+    }).dxScrollView("instance");
 
-    var $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollView);
+    var $container = scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS);
 
     assert.equal($container.scrollTop(), 1, "real scrollTop is greater than 0");
 });
 
 QUnit.test("scrollTop should be greater than 0 after scroll event for prevent WebView bounce", function(assert) {
-    var $scrollView = $("#scrollView").dxScrollView({
+    var scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "pullDown"
-    });
+    }).dxScrollView("instance");
 
-    var scrollView = $("#scrollView").dxScrollView("instance"),
-        $container = $("." + SCROLLABLE_CONTAINER_CLASS, $scrollView);
+    var $container = scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS);
 
     scrollView.scrollTo({ y: 10 });
     $container.trigger("scroll");
@@ -2105,18 +2114,21 @@ QUnit.test("scroll fires with correctly arguments", function(assert) {
 
 QUnit.module("native slideDown strategy", {
     beforeEach: function() {
-        this.originalJQueryScrollTop = $.fn.scrollTop;
+        this.originalJQueryScrollTop = renderer.fn.scrollTop;
 
         var currentTopValue = 0;
-        $.fn.scrollTop = function(value) {
+        renderer.fn.scrollTop = function(value) {
             if(arguments.length) {
                 currentTopValue = value;
             } else {
                 return currentTopValue;
             }
         };
+
+        this.originalJQueryScrollLeft = renderer.fn.scrollLeft;
+
         var currentLeftValue = 0;
-        $.fn.scrollLeft = function(value) {
+        renderer.fn.scrollLeft = function(value) {
             if(arguments.length) {
                 currentLeftValue = value;
             } else {
@@ -2130,7 +2142,8 @@ QUnit.module("native slideDown strategy", {
         $("#qunit-fixture").addClass("dx-theme-win8");
     },
     afterEach: function() {
-        $.fn.scrollTop = this.originalJQueryScrollTop;
+        renderer.fn.scrollTop = this.originalJQueryScrollTop;
+        renderer.fn.scrollLeft = this.originalJQueryScrollLeft;
         moduleConfig.afterEach.call(this);
         devices.real({ platform: this._originalPlatform });
         $("#qunit-fixture").removeClass("dx-theme-win8");
@@ -2167,15 +2180,15 @@ QUnit.test("onReachBottom", function(assert) {
 
     assert.expect(1);
 
-    var $scrollView = $("#scrollView").dxScrollView({
+    var scrollView = $("#scrollView").dxScrollView({
         useNative: true,
         refreshStrategy: "slideDown",
         onReachBottom: function() {
             assert.ok(true, "onReachBottom action was fired");
         }
-    });
+    }).dxScrollView("instance");
 
-    var $container = $scrollView.find("." + SCROLLABLE_CONTAINER_CLASS);
+    var $container = scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS);
 
     $container.scrollTop($container.prop("scrollHeight") - $container.prop("clientHeight"));
     $container.trigger("scroll");
