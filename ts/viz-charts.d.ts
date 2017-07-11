@@ -2063,9 +2063,6 @@ declare module DevExpress.viz.charts {
         /** @docid basechartmethods_clearselection */
         clearSelection(): void;
 
-        /** @docid basechartmethods_getsize */
-        getSize(): { width: number; height: number };
-
         /** @docid basechartmethods_getallseries */
         getAllSeries(): Array<BaseSeries>;
 
