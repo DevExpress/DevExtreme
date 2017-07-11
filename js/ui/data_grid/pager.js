@@ -97,7 +97,7 @@ var Pager = Widget.inherit({
     _toggleVisibility: function(value) {
         var $element = this.element();
         if($element) {
-            value ? $element.show() : $element.hide();
+            $element.css("display", value ? "" : "none");
         }
     },
 
@@ -491,7 +491,7 @@ var Pager = Widget.inherit({
 
         if(this.option("showInfo") && typeUtils.isDefined(infoText)) {
             this._$info = $("<div>")
-                .toggle(!this._isInfoHide)
+                .css("display", this._isInfoHide ? "none" : "")
                 .addClass(PAGER_INFO_CLASS)
                 .text(stringUtils.format(infoText, this.selectedPage && this.selectedPage.value(), this.option("pageCount"), this.option("totalCount")))
                 .appendTo(this._$pagesChooser);
