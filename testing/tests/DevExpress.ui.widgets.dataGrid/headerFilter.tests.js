@@ -3162,3 +3162,35 @@ QUnit.test("Draw header filter indicator for band columns", function(assert) {
     assert.ok($cells.eq(5).find(".dx-header-filter").length, "has header filter indicator");
     assert.ok($cells.eq(6).find(".dx-header-filter").length, "has header filter indicator");
 });
+
+//T534059
+QUnit.test("Header filter should consider the 'trueText' and 'falseText' column options", function(assert) {
+    //arrange
+    var that = this,
+        $itemElements,
+        $testElement = $("#container");
+
+    that.options.columns = [{
+        dataField: "field",
+        dataType: "boolean",
+        trueText: "Yes",
+        falseText: "No"
+    }];
+    that.setupDataGrid({
+        controllers: {
+            data: new MockDataController({ items: [{ field: undefined }, { field: true }, { field: false }] })
+        }
+    });
+    that.columnHeadersView.render($testElement);
+    that.headerFilterView.render($testElement);
+
+    //act
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    //assert
+    $itemElements = that.headerFilterView.getPopupContainer().content().find(".dx-list-item");
+    assert.equal($itemElements.length, 3, "count item");
+    assert.strictEqual($itemElements.eq(0).text(), "(Blanks)", "text of the first item");
+    assert.strictEqual($itemElements.eq(1).text(), "No", "text of the second item");
+    assert.strictEqual($itemElements.eq(2).text(), "Yes", "text of the third item");
+});
