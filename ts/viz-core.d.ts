@@ -730,6 +730,7 @@ declare module DevExpress.viz.core {
         onExporting?: (e: {
             fileName: string;
             cancel: boolean;
+            format: string;
         }) => void;
 
         /** @docid BaseWidgetOptions_onfilesaving */
