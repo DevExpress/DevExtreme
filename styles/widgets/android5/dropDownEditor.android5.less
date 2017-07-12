@@ -32,16 +32,32 @@
         }
     }
 
-.dx-invalid.dx-dropdowneditor-button-visible {
-    .dx-texteditor-input {
-        padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
+.invalid-dropdowneditor-input-padding() {
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
+            padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
+        }
+
+        &.dx-show-clear-button .dx-texteditor-input {
+            padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+        }
+
+        &.dx-rtl {
+            .dx-texteditor-input {
+                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
+                padding-right: 0;
+            }
+
+            &.dx-show-clear-button .dx-texteditor-input {
+                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+                padding-right: 0;
+            }
+        }
     }
 }
 
-.dx-invalid.dx-show-clear-button.dx-dropdowneditor-button-visible {
-    .dx-texteditor-input {
-        padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
-    }
+.dx-invalid {
+    .invalid-dropdowneditor-input-padding();
 }
 
 .dx-dropdowneditor-button {
@@ -86,16 +102,6 @@
     .dx-dropdowneditor,
     &.dx-dropdowneditor {
         &.dx-dropdowneditor-button-visible {
-            &.dx-invaild .dx-texteditor-input {
-                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH;
-                padding-right: 0;
-            }
-
-            &.dx-invalid.dx-show-clear-button .dx-texteditor-input {
-                padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
-                padding-right: 0;
-            }
-
             &.dx-show-clear-button {
                 .dx-texteditor-input {
                     padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
