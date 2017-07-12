@@ -4148,6 +4148,31 @@ QUnit.test("Long multiday appointment should have right width on timeline work w
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
 });
 
+QUnit.test("Long multiday appointment should have right width on timeline week view when set startDayHour > appointment endDate (T533348)", function(assert) {
+    var appointment = {
+        startDate: new Date(2016, 1, 1, 11, 0),
+        endDate: new Date(2016, 1, 4, 1, 0)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2016, 1, 1),
+        views: ["timelineWeek"],
+        currentView: "timelineWeek",
+        cellDuration: 60,
+        firstDayOfWeek: 1,
+        dataSource: [appointment],
+        startDayHour: 8,
+        endDayHour: 20,
+        height: 200
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+        cellsInAppointment = 33;
+
+    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
+});
+
 QUnit.test("Long multiday appointment should have right position on timeline week view", function(assert) {
     var appointment = {
         startDate: new Date(2015, 2, 2, 9),
