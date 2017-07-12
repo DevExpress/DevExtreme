@@ -163,7 +163,7 @@ Axis.prototype = {
 
     _correctMinForTicks: function(min, max, screenDelta) {
         var diff = _abs(max - min) / screenDelta,
-            digitPosition = commonUtils.isExponential(diff) && diff < 1
+            digitPosition = typeUtils.isExponential(diff) && diff < 1
                 ? vizUtils.getPrecision(diff)
                 : _getSignificantDigitPosition(diff),
             newMin = _roundValue(Number(min), digitPosition),
