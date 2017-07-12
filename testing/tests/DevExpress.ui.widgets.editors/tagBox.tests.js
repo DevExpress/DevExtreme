@@ -499,8 +499,8 @@ QUnit.module("multi tag support", {
         messageLocalization.load({
             "en": {
                 "dxTagBox-seleced": "{0} selected",
-                "dxTagBox-all-seleced": "All selected ({0})",
-                "dxTagBox-more-seleced": "{0} more"
+                "dxTagBox-allSeleced": "All selected ({0})",
+                "dxTagBox-moreSeleced": "{0} more"
             }
         });
     },

@@ -485,10 +485,10 @@ var TagBox = SelectBox.inherit({
         var selectedCount = this._getValue().length;
 
         if(args.allSelected) {
-            args.text = messageLocalization.getFormatter("dxTagBox-all-selected")(selectedCount);
+            args.text = messageLocalization.getFormatter("dxTagBox-allSelected")(selectedCount);
         } else {
             if(!this.option("showMultiTagOnly")) {
-                args.text = messageLocalization.getFormatter("dxTagBox-more-selected")(selectedCount - this.option("maxTagCount"));
+                args.text = messageLocalization.getFormatter("dxTagBox-moreSelected")(selectedCount - this.option("maxTagCount"));
             } else {
                 args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
             }

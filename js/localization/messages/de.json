@@ -203,8 +203,8 @@
         "dxColorView-ariaAlpha": "Transparenz",
         "dxColorView-ariaHex": "Farbwert",
         "dxTagBox-selected": "!TODO!",
-        "dxTagBox-all-selected": "!TODO!",
-        "dxTagBox-more-selected": "!TODO!",
+        "dxTagBox-allSelected": "!TODO!",
+        "dxTagBox-moreSelected": "!TODO!",
         "vizExport-printingButtonText": "Drucken",
         "vizExport-titleMenuText": "Export/Druck",
         "vizExport-exportButtonText": "{0}-Datei"

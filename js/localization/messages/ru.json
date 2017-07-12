@@ -203,8 +203,8 @@
         "dxColorView-ariaAlpha": "Прозрачность",
         "dxColorView-ariaHex": "Код цвета",
         "dxTagBox-selected": "{0} выбрано",
-        "dxTagBox-all-selected": "Выбрано все ({0})",
-        "dxTagBox-more-selected": "и еще {0}",
+        "dxTagBox-allSelected": "Выбрано все ({0})",
+        "dxTagBox-moreSelected": "и еще {0}",
         "vizExport-printingButtonText": "Печать",
         "vizExport-titleMenuText": "Экспорт/Печать",
         "vizExport-exportButtonText": "{0} файл"

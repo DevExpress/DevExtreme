@@ -203,8 +203,8 @@
         "dxColorView-ariaAlpha": "透明度",
         "dxColorView-ariaHex": "色コード",
         "dxTagBox-selected": "!TODO!",
-        "dxTagBox-all-selected": "!TODO!",
-        "dxTagBox-more-selected": "!TODO!",
+        "dxTagBox-allSelected": "!TODO!",
+        "dxTagBox-moreSelected": "!TODO!",
         "vizExport-printingButtonText": "印刷",
         "vizExport-titleMenuText": "エクスポート / 印刷",
         "vizExport-exportButtonText": "{0} ファイル"

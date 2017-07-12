@@ -233,8 +233,8 @@
         "dxColorView-ariaHex": "Color code",
 
         "dxTagBox-selected": "{0} selected",
-        "dxTagBox-all-selected": "All selected ({0})",
-        "dxTagBox-more-selected": "{0} more",
+        "dxTagBox-allSelected": "All selected ({0})",
+        "dxTagBox-moreSelected": "{0} more",
 
         "vizExport-printingButtonText": "Print",
         "vizExport-titleMenuText": "Exporting/Printing",
