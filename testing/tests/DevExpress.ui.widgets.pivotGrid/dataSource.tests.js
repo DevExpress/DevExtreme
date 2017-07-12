@@ -4995,17 +4995,18 @@ QUnit.module("Apply summary mode", {
         var that = this;
         defaultEnvironment.beforeEach.apply(this, arguments);
 
-        sinon.stub(summaryDisplayModes, "applyDisplaySummaryMode", function(descriptions, data, isRunningTotal) {
-            if(!isRunningTotal) {
-                that.applyDisplaySummaryModePassedData = $.extend(true, {}, data);
-            } else {
-                that.applyDisplaySummaryModeWithRunningTotalsData = $.extend(true, {}, data);
-            }
+        sinon.stub(summaryDisplayModes, "applyDisplaySummaryMode", function(descriptions, data) {
+            that.applyDisplaySummaryModePassedData = $.extend(true, {}, data);
+        });
+
+        sinon.stub(summaryDisplayModes, "applyRunningTotal", function(descriptions, data) {
+            that.applyRunningTotalPassedData = $.extend(true, {}, data);
         });
     },
     afterEach: function() {
         defaultEnvironment.afterEach.apply(this, arguments);
         summaryDisplayModes.applyDisplaySummaryMode.restore();
+        summaryDisplayModes.applyRunningTotal.restore();
     }
 });
 
@@ -5162,7 +5163,7 @@ QUnit.test("apply Display Summary Mode when expressions were used", function(ass
             value: 1991
         }]);
 
-    assert.ok(summaryDisplayModes.applyDisplaySummaryMode.callCount, 2);
+    assert.ok(summaryDisplayModes.applyDisplaySummaryMode.calledOnce);
 
     var descriptions = this.testStore.load.lastCall.args[0];
     delete descriptions.columnExpandedPaths;
@@ -5257,7 +5258,9 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
 
     def.resolve(this.storeData);
 
-    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModePassedData.rows), [
+    assert.ok(summaryDisplayModes.applyRunningTotal.calledOnce);
+
+    assert.deepEqual(prepareLoadedData(this.applyRunningTotalPassedData.rows), [
         {
             index: 3,
             value: 1985
@@ -5269,30 +5272,7 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
             value: 1991
         }]);
 
-    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModePassedData.columns), [{
-        index: 2,
-        value: "Boise"
-    }, {
-        index: 4,
-        value: "Butte"
-    }, {
-        index: 3,
-        value: "Elgin"
-    }]);
-
-    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModeWithRunningTotalsData.rows), [
-        {
-            index: 3,
-            value: 1985
-        }, {
-            index: 1,
-            value: 1991
-        }, {
-            index: 2,
-            value: 1991
-        }]);
-
-    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModeWithRunningTotalsData.columns), [{
+    assert.deepEqual(prepareLoadedData(this.applyRunningTotalPassedData.columns), [{
         index: 2,
         value: "Boise"
     }, {

@@ -93,17 +93,16 @@ function updateCalculatedFieldProperties(field, calculatedProperties) {
     }
 }
 
-function areExpressionsUsed(descriptions) {
-    var expressionsUsed = false;
-
-    each(descriptions.values, function(_, field) {
-        if(field.summaryDisplayMode || field.calculateSummaryValue || field.runningTotal) {
-            expressionsUsed = true;
-            return false;
-        }
+function areExpressionsUsed(dataFields) {
+    return dataFields.some(function(field) {
+        return field.summaryDisplayMode || field.calculateSummaryValue;
     });
+}
 
-    return expressionsUsed;
+function isRunningTotalUsed(dataFields) {
+    return dataFields.some(function(field) {
+        return !!field.runningTotal;
+    });
 }
 
 module.exports = Class.inherit((function() {
@@ -1345,7 +1344,8 @@ module.exports = Class.inherit((function() {
             var that = this,
                 descriptions = that._descriptions,
                 loadedData = that._data,
-                expressionsUsed = areExpressionsUsed(descriptions);
+                dataFields = descriptions.values,
+                expressionsUsed = areExpressionsUsed(dataFields);
 
             when(formatHeaders(descriptions, loadedData), updateCache(loadedData.rows), updateCache(loadedData.columns)).done(function() {
                 if(expressionsUsed) {
@@ -1355,7 +1355,7 @@ module.exports = Class.inherit((function() {
 
                 that._sort(descriptions, loadedData);
 
-                expressionsUsed && summaryDisplayModes.applyDisplaySummaryMode(descriptions, loadedData, true);
+                isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
 
                 that._data = loadedData;
                 when(deferred).done(function() {

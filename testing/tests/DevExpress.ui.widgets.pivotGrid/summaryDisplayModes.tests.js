@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     summaryDisplayModes = require("ui/pivot_grid/ui.pivot_grid.summary_display_modes"),
     applyDisplaySummaryMode = summaryDisplayModes.applyDisplaySummaryMode, //arguments: description, data
+    applyRunningTotal = summaryDisplayModes.applyRunningTotal, //arguments: description, data
     pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
     summaryDictionary = summaryDisplayModes.summaryDictionary,
     data = {
@@ -586,7 +587,7 @@ QUnit.test("RunningTotal", function(assert) {
 
     this.data.values[1][8] = [null];
     //act
-    applyDisplaySummaryMode(this.descriptions, this.data, true);
+    applyRunningTotal(this.descriptions, this.data);
     //assert
     var values = this.data.values;
 
@@ -601,7 +602,7 @@ QUnit.test("RunningTotal by column", function(assert) {
 
     this.data.values[1][8] = [null];
     //act
-    applyDisplaySummaryMode(this.descriptions, this.data, true);
+    applyRunningTotal(this.descriptions, this.data);
     //assert
     var values = this.data.values;
 
@@ -610,13 +611,12 @@ QUnit.test("RunningTotal by column", function(assert) {
 });
 
 QUnit.test("RunningTotal by row", function(assert) {
-
     this.descriptions.values[0].runningTotal = "column";
     this.data.values[1][0] = null;
 
     this.data.values[1][8] = [null];
     //act
-    applyDisplaySummaryMode(this.descriptions, this.data, true);
+    applyRunningTotal(this.descriptions, this.data);
     //assert
     var values = this.data.values,
         firstColumn = $.map(values, function(row) { return row[0]; });
@@ -633,7 +633,7 @@ QUnit.test("RunningTotal with grossGrouping", function(assert) {
 
     this.data.values[1][8] = [null];
     //act
-    applyDisplaySummaryMode(this.descriptions, this.data, true);
+    applyRunningTotal(this.descriptions, this.data);
     //assert
     var values = this.data.values;
 
@@ -652,10 +652,10 @@ QUnit.test("RunningTotal with expression", function(assert) {
 
     this.data.values[1][8] = [null];
     //act
-    applyDisplaySummaryMode(this.descriptions, this.data, true);
+    applyDisplaySummaryMode(this.descriptions, this.data);
+    applyRunningTotal(this.descriptions, this.data);
     //assert
     var values = this.data.values;
-
     assert.deepEqual(values[0], [[1], [1], [1], [2], [3], [2], [3], [1], [2]]);
 });
 
@@ -670,7 +670,8 @@ QUnit.test("RunningTotal with expression and crossGrouping", function(assert) {
 
     this.data.values[1][8] = [null];
     //act
-    applyDisplaySummaryMode(this.descriptions, this.data, true);
+    applyDisplaySummaryMode(this.descriptions, this.data);
+    applyRunningTotal(this.descriptions, this.data);
     //assert
     var values = this.data.values;
 
@@ -687,7 +688,8 @@ QUnit.test("RunningTotal with summaryDisplayType", function(assert) {
 
     this.data.values[1][8] = [null];
     //act
-    applyDisplaySummaryMode(this.descriptions, this.data, true);
+    applyDisplaySummaryMode(this.descriptions, this.data);
+    applyRunningTotal(this.descriptions, this.data);
     //assert
     var values = this.data.values;
 
