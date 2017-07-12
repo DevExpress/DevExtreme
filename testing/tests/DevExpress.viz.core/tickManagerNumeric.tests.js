@@ -1570,6 +1570,17 @@ QUnit.test("User tickInterval not ignored if screenDelta is too small and axis i
     assert.equal(this.tickManager.getTickInterval(), 5, "tickInterval");
 });
 
+QUnit.test("Small exponential values", function(assert) {
+    this.tickManager.update(this.types, {
+        min: 1.2001e-7,
+        max: 1.22e-7,
+        screenDelta: 400
+    }, $.extend({}, this.options, { gridSpacingFactor: 100 }));
+
+    var ticks = this.tickManager.getTicks();
+
+    assert.deepEqual(ticks, [1.2e-7, 1.205e-7, 1.21e-7, 1.215e-7, 1.22e-7], "Tick values");
+});
 
 QUnit.module("Get continuous minor ticks", {
     beforeEach: function() {
