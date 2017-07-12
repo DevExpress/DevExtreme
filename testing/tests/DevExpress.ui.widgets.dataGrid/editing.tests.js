@@ -10485,3 +10485,38 @@ QUnit.test("Show error row in header when remove error", function(assert) {
     }
 });
 
+//T534503
+QUnit.testInActiveWindow("Form should repaint after change data of the column with 'setCellValue' option", function(assert) {
+    //arrange
+    var that = this,
+        $popupContent,
+        $inputElement,
+        callSetCellValue;
+
+    that.columns[0].setCellValue = function(rowData, value) {
+        callSetCellValue = true;
+        rowData.lastName = "Test2";
+        this.defaultSetCellValue(rowData, value);
+    };
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.clock.tick(500);
+    that.preparePopupHelpers();
+    $popupContent = that.editPopupInstance.content();
+
+    //assert
+    assert.ok($popupContent.find(".dx-texteditor").first().hasClass("dx-state-focused"), "first cell is focused");
+
+    //act
+    $inputElement = $popupContent.find("input").first();
+    $inputElement.val("Test1");
+    $inputElement.trigger("change");
+    that.clock.tick(500);
+
+    //assert
+    assert.ok(callSetCellValue, "setCellValue is called");
+    assert.strictEqual($popupContent.find("input[type!='hidden']").eq(2).val(), "Test2", "value of the third cell");
+    assert.ok($popupContent.find(".dx-texteditor").first().hasClass("dx-state-focused"), "first cell is focused");
+});
