@@ -766,16 +766,19 @@ var TagBox = SelectBox.inherit({
         return dataSourceTotalCount;
     },
 
+    _allItemsSelected: function() {
+        return this._getValue().length === this._getTotalCount();
+    },
+
     _renderMultiTag: function($input) {
-        var value = this._getValue(),
-            $tag = $("<div>")
+        var $tag = $("<div>")
                 .addClass(TAGBOX_TAG_CLASS)
                 .addClass(TAGBOX_MULTI_TAG_CLASS);
 
         var args = {
             multiTagElement: $tag,
             selectedItems: this.option("selectedItems"),
-            allSelected: value.length === this._getTotalCount()
+            allSelected: this._allItemsSelected()
         };
 
         this._multiTagPreparingAction(args);
@@ -824,7 +827,7 @@ var TagBox = SelectBox.inherit({
                 maxTagCount = this.option("maxTagCount");
 
             items.forEach(function(item, index) {
-                if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index >= maxTagCount)) {
+                if(($multiTag && (showMultiTagOnly || this._allItemsSelected())) || ($multiTag && !showMultiTagOnly && index >= maxTagCount)) {
                     return false;
                 }
                 this._renderTag(item, $multiTag || $input);

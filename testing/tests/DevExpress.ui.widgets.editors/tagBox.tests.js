@@ -788,6 +788,23 @@ QUnit.test("tagbox should show all selected text correctly without datasource", 
     assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected (15)", "text is correct");
 });
 
+QUnit.test("tagbox should never show ordinary tag when all items are selected", function(assert) {
+    var items = [1, 2, 3, 4, 5];
+    var $tagBox = $("#tagBox").dxTagBox({
+        items: items,
+        maxTagCount: 2,
+        showMultiTagOnly: false,
+        opened: true,
+        showSelectionControls: true
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($tagBox.dxTagBox("option", "value").length, 5, "all items are selected");
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "All selected (5)", "text is correct");
+});
+
 
 QUnit.module("the 'value' option", moduleSetup);
 
