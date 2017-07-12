@@ -1273,30 +1273,10 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _updateEditRow: function(row, forceUpdateRow) {
             var that = this,
-                rowIndex,
-                columnIndex,
-                $focusedItemElement,
-                rowsView = that._rowsView,
                 editMode = getEditMode(that);
 
             if(editMode === EDIT_MODE_POPUP) {
-                setTimeout(function() {
-                    rowIndex = that.getEditFormRowIndex();
-
-                    if(rowIndex >= 0 && that._editForm) {
-                        if(!forceUpdateRow) {
-                            $focusedItemElement = that._editForm.element().find(".dx-state-focused");
-                            columnIndex = rowsView.getCellIndex($focusedItemElement, rowIndex);
-                        }
-
-                        that._editForm.repaint();
-
-                        if(columnIndex >= 0) {
-                            $focusedItemElement = rowsView.getCellElement(rowIndex, columnIndex);
-                            that._delayedInputFocus($focusedItemElement);
-                        }
-                    }
-                });
+                setTimeout(this._updatePopupForm.bind(this, forceUpdateRow));
             } else {
                 this._dataController.updateItems({
                     changeType: "update",
@@ -1304,6 +1284,27 @@ var EditingController = modules.ViewController.inherit((function() {
                 });
                 if(!forceUpdateRow) {
                     this._focusEditingCell();
+                }
+            }
+        },
+
+        _updatePopupForm: function(forceUpdateRow) {
+            var columnIndex,
+                $focusedItemElement,
+                rowsView = this._rowsView,
+                rowIndex = this.getEditFormRowIndex();
+
+            if(rowIndex >= 0 && this._editForm) {
+                if(!forceUpdateRow) {
+                    $focusedItemElement = this._editForm.element().find(".dx-state-focused");
+                    columnIndex = rowsView.getCellIndex($focusedItemElement, rowIndex);
+                }
+
+                this._editForm.repaint();
+
+                if(columnIndex >= 0) {
+                    $focusedItemElement = rowsView.getCellElement(rowIndex, columnIndex);
+                    this._delayedInputFocus($focusedItemElement);
                 }
             }
         },
