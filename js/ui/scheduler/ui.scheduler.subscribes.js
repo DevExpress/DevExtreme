@@ -660,13 +660,25 @@ var subscribes = {
 
             result = ceilQuantityOfDays * visibleDayDuration;
         } else {
-            var isDifferentDate = !dateUtils.sameDate(startDate, new Date(endDate.getTime() - 1));
-
-            var floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration),
+            var isDifferentDate = !dateUtils.sameDate(startDate, new Date(endDate.getTime() - 1)),
+                floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration),
                 tailDuration;
 
             if(isDifferentDate) {
-                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : dayDuration - visibleDayDuration);
+                var hiddenDayDuration = dayDuration - visibleDayDuration;
+
+                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
+
+                var startDayTime = this.option("startDayHour") * toMs("hour"),
+                    endPartDuration = endDate - dateUtils.trimTime(endDate);
+
+                if(endPartDuration < startDayTime) {
+                    if(floorQuantityOfDays) {
+                        tailDuration -= hiddenDayDuration;
+                    }
+
+                    tailDuration += startDayTime - endPartDuration;
+                }
             } else {
                 tailDuration = appointmentDuration % dayDuration;
             }
