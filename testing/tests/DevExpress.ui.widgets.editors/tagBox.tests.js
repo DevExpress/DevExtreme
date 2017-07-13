@@ -7,6 +7,7 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     ArrayStore = require("data/array_store"),
     CustomStore = require("data/custom_store"),
+    messageLocalization = require("localization/message"),
     DataSource = require("data/data_source/data_source").DataSource,
     fx = require("animation/fx"),
     browser = require("core/utils/browser"),
@@ -29,6 +30,7 @@ var LIST_CLASS = "dx-list",
     TAGBOX_TAG_CONTAINER_CLASS = "dx-tag-container",
     TAGBOX_TAG_CONTENT_CLASS = "dx-tag-content",
     TAGBOX_TAG_CLASS = "dx-tag",
+    TAGBOX_MULTI_TAG_CLASS = "dx-tagbox-multi-tag",
     TAGBOX_TAG_REMOVE_BUTTON_CLASS = "dx-tag-remove-button",
     TAGBOX_SINGLE_LINE_CLASS = "dx-tagbox-single-line",
     TAGBOX_POPUP_WRAPPER_CLASS = "dx-tagbox-popup-wrapper",
@@ -488,6 +490,322 @@ QUnit.test("removing tags after clicking the 'clear' button", function(assert) {
     $listItems.eq(2).trigger("dxclick");
 
     assert.equal($element.find("." + TAGBOX_TAG_CLASS).length, 1, "one item is chosen");
+});
+
+
+QUnit.module("multi tag support", {
+    beforeEach: function() {
+        this.getTexts = function($tags) {
+            return $tags.map(function(_, tag) { return $(tag).text(); }).toArray();
+        },
+        this.clock = sinon.useFakeTimers();
+        messageLocalization.load({
+            "en": {
+                "dxTagBox-seleced": "{0} selected",
+                "dxTagBox-allSeleced": "All selected ({0})",
+                "dxTagBox-moreSeleced": "{0} more"
+            }
+        });
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("tagBox should display one tag after limit overflow", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 1, "only one tag should be displayed");
+    assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), "the tag has correct css class");
+    assert.equal($tag.text(), "3 selected", "tag has correct text");
+});
+
+QUnit.test("tagBox should display one tag after new tags was added", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    tagBox.option("value", [1, 2]);
+    tagBox.option("value", [1, 2, 3]);
+
+    var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 1, "only one tag should be displayed");
+    assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), "the tag has correct css class");
+    assert.equal($tag.text(), "3 selected", "tag has correct text");
+});
+
+QUnit.test("tagBox should display multiple tags after value was changed", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    tagBox.option("value", [1, 2]);
+
+    var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+    assert.equal($tag.length, 2, "two tags should be displayed");
+    assert.deepEqual(this.getTexts($tag), ["1", "2"], "tags have correct text");
+});
+
+QUnit.test("tagBox should deselect all items after multi tag removed", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $tagRemoveButton = $tagBox.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).eq(0);
+
+    $tagRemoveButton.trigger("dxclick");
+
+    assert.deepEqual(tagBox.option("value"), [], "value was cleared");
+    assert.deepEqual(tagBox.option("selectedItems"), [], "selectedItems was cleared");
+    assert.strictEqual(tagBox.option("selectedItem"), null, "selectedItem was cleared");
+    assert.strictEqual(tagBox.option("selectedIndex"), undefined, "selectedIndex was cleared");
+    assert.strictEqual($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "there are no tags in the field");
+});
+
+QUnit.test("tags should be recalculated after maxTagCount option changed", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4]
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 3, "3 tags by default");
+
+    tagBox.option("maxTagCount", 2);
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 1, "1 tag when limit is over");
+
+    tagBox.option("maxTagCount", 3);
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 3, "3 tags when limit is not over");
+
+    tagBox.option("value", [1, 2, 3, 4]);
+    tagBox.option("maxTagCount", undefined);
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 4, "4 tags when option was disabled");
+});
+
+QUnit.test("multitag should be rendered always when maxTagCount is 0", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            maxTagCount: 0,
+            value: [1]
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 1, "one tag is selected");
+    assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), "one selected tag is multitag");
+});
+
+QUnit.test("onMultitagPreparing option", function(assert) {
+    assert.expect(5);
+
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            onMultiTagPreparing: function(e) {
+                assert.equal(e.component.NAME, "dxTagBox", "component is correct");
+                assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
+                assert.strictEqual(e.allSelected, false, "allSelected is correct");
+                assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
+                e.text = "custom text";
+            }
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.deepEqual($tag.text(), "custom text", "custom text is displayed");
+});
+
+QUnit.test("onMultitagPreparing option change", function(assert) {
+    assert.expect(5);
+
+    var onMultiTagPreparing = function(e) {
+        assert.equal(e.component.NAME, "dxTagBox", "component is correct");
+        assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
+        assert.strictEqual(e.allSelected, false, "allSelected is correct");
+        assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
+        e.text = "custom text";
+    };
+
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    tagBox.option("onMultiTagPreparing", onMultiTagPreparing);
+
+    var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+    assert.deepEqual($tag.text(), "custom text", "custom text is displayed");
+});
+
+QUnit.test("multi tag should not be rendered if e.cancel is true", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            onMultiTagPreparing: function(e) {
+                e.cancel = true;
+            }
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 3, "3 tags was rendered");
+    assert.deepEqual(this.getTexts($tag), ["1", "2", "4"], "tags have correct text");
+});
+
+QUnit.test("multi tag should be rendered after max number of tags if showMultiTagOnly is false", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            showMultiTagOnly: false
+        }),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 2, "2 tags rendered");
+    assert.deepEqual(this.getTexts($tag), ["1", "2 more"], "tags have correct text");
+});
+
+QUnit.test("tags should be rerendered after showMultiTagOnly option changed", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            showMultiTagOnly: false
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    tagBox.option("showMultiTagOnly", true);
+
+    var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 1, "1 tag rendered");
+    assert.deepEqual($tag.text(), "3 selected", "text is correct");
+});
+
+QUnit.test("multi tag should deselect overflow tags only when showMultiTagOnly is false", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 4],
+            maxTagCount: 2,
+            showMultiTagOnly: false
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $multiTag = $tagBox.find("." + TAGBOX_MULTI_TAG_CLASS);
+
+    $multiTag.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).trigger("dxclick");
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 2, "only 2 tags remain");
+    assert.deepEqual(tagBox.option("value"), [1, 2], "value is correct");
+    assert.deepEqual(this.getTexts($tagBox.find("." + TAGBOX_TAG_CLASS)), ["1", "2"], "tags have correct text");
+});
+
+QUnit.test("tagBox should show special text for all selected state", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3, 4],
+            value: [1, 2, 3, 4],
+            maxTagCount: 2
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tag.length, 1, "only one tag should be displayed");
+    assert.ok($tag.hasClass(TAGBOX_MULTI_TAG_CLASS), "the tag has correct css class");
+    assert.equal($tag.text(), "All selected (4)", "tag has correct text");
+
+    tagBox.option("value", [1, 2, 3]);
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "3 selected", "tag has correct text");
+});
+
+QUnit.test("tagbox should show all selected tag correctly in allPage selection mode", function(assert) {
+    var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    var $tagBox = $("#tagBox").dxTagBox({
+        dataSource: {
+            store: new ArrayStore(items),
+            paginate: true,
+            pageSize: 5
+        },
+        maxTagCount: 2,
+        opened: true,
+        selectAllMode: "allPages",
+        showSelectionControls: true
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.deepEqual($tagBox.dxTagBox("option", "value"), items, "items is selected");
+    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected (15)", "text is correct");
+});
+
+QUnit.test("tagbox should show count of selected items when only first page is loaded", function(assert) {
+    var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    var $tagBox = $("#tagBox").dxTagBox({
+        dataSource: {
+            store: new ArrayStore(items),
+            paginate: true,
+            pageSize: 5
+        },
+        maxTagCount: 2,
+        opened: true,
+        selectAllMode: "page",
+        showSelectionControls: true
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($tagBox.dxTagBox("option", "value").length, 5, "first page is selected");
+    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "5 selected", "text is correct");
+});
+
+
+QUnit.test("tagbox should show all selected text correctly without datasource", function(assert) {
+    var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+    var $tagBox = $("#tagBox").dxTagBox({
+        items: items,
+        maxTagCount: 2,
+        opened: true,
+        showSelectionControls: true
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($tagBox.dxTagBox("option", "value").length, 15, "all items are selected");
+    assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "All selected (15)", "text is correct");
+});
+
+QUnit.test("tagbox should never show ordinary tag when all items are selected", function(assert) {
+    var items = [1, 2, 3, 4, 5],
+        $tagBox = $("#tagBox").dxTagBox({
+            items: items,
+            maxTagCount: 2,
+            showMultiTagOnly: false,
+            opened: true,
+            showSelectionControls: true
+        });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($tagBox.dxTagBox("option", "value").length, 5, "all items are selected");
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "All selected (5)", "text is correct");
 });
 
 
