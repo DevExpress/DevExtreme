@@ -16,7 +16,7 @@ require("angular-route");
 require("ui/list");
 require("ui/button");
 
-var FIXTURE_ELEMENT = function() { return $("#qunit-fixture").attr("ng-app", "testApp"); };
+var FIXTURE_ELEMENT = function() { return $("#qunit-fixture"); };
 
 var ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);

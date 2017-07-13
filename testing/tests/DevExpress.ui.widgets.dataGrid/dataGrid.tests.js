@@ -272,6 +272,28 @@ QUnit.test("Scroller state", function(assert) {
     assert.ok(!dataGrid.getTopVisibleRowData());
 });
 
+//T532629
+QUnit.test("Vertical scrollbar spacing should not be added when widget does not have height", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    var dataGrid = createDataGrid({
+        dataSource: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
+        columnAutoWidth: true,
+        scrolling: {
+            useNative: true
+        },
+        columns: ["column"]
+    });
+
+    //act
+    clock.tick();
+
+    //assert
+    assert.equal(dataGrid.element().find(".dx-datagrid-headers").css("padding-right"), "0px");
+
+    clock.restore();
+});
+
 QUnit.test("noDataText option", function(assert) {
     //act
     var noDataText = "Custom no data",
@@ -2594,6 +2616,37 @@ QUnit.test("columns width when all columns have width and dataGrid width auto", 
     assert.equal($dataGrid.width(), 100);
 });
 
+//T533852
+QUnit.test("last column should have correct width if all columns have width and native vertcal scrollbar is shown", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "This test is not actual for mobile devices");
+        return;
+    }
+    //arrange
+    var clock = sinon.useFakeTimers();
+    var $dataGrid = $("#dataGrid").dxDataGrid({
+        height: 100,
+        scrolling: {
+            useNative: true
+        },
+        dataSource: [{}, {}, {}, {}, {}, {}, {}],
+        columns: [
+            { dataField: "field1", width: 50 },
+            { dataField: "field2", width: 50 },
+            { dataField: "field3", width: 50 },
+            { dataField: "field4", width: 50 }
+        ]
+    });
+
+    //act
+    clock.tick(0);
+
+    //assert
+    assert.ok($dataGrid.width() > 200, "grid's width is more then column widths sum");
+    assert.equal($dataGrid.find(".dx-row").first().find("td").last().outerWidth(), 50, "last column have correct width");
+    clock.restore();
+});
+
 //T387828
 QUnit.test("columns width when all columns have width and dataGrid with fixed width", function(assert) {
     //arrange
@@ -3502,6 +3555,41 @@ QUnit.test("contentReady event must be raised once when scrolling mode is virtua
     assert.equal(contentReadyCallCount, 1, "one contentReady on start");
 });
 
+QUnit.test("row alternation should be correct if virtual scrolling is enabled and grouping is used", function(assert) {
+    var dataSource = [
+        { id: 1, group: 1 },
+        { id: 2, group: 1 },
+        { id: 3, group: 1 },
+        { id: 4, group: 1 },
+        { id: 5, group: 1 },
+    ];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: dataSource,
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 4
+        },
+        rowAlternationEnabled: true,
+        columns: ["id", { dataField: "group", groupIndex: 0 }]
+    });
+
+    var dataIndexes = dataGrid.getVisibleRows().map(function(row) {
+        return row.dataIndex;
+    });
+
+    var alternatedRowIndexes = [0, 1, 2, 3, 4, 5].filter(function(index) {
+        return dataGrid.getRowElement(index).hasClass("dx-row-alt");
+    });
+
+    //assert
+    assert.deepEqual(dataIndexes, [undefined, 0, 1, 2, 3, 4], "dataIndex values in rows");
+    assert.deepEqual(alternatedRowIndexes, [2, 4], "row indexes with dx-row-alt class");
+});
+
 QUnit.test("isReady when loading", function(assert) {
     //act
     var d = $.Deferred(),
@@ -3880,6 +3968,30 @@ QUnit.test("dataSource changing not reset columns order when dataSource structur
     assert.equal(columns[0].dataField, "field2");
     assert.equal(columns[1].dataField, "field1");
     assert.deepEqual(dataGrid.getController("data").items()[0].data, { field1: 3, field2: 4 });
+});
+
+//T531189
+QUnit.test("noData should be hidden after assign dataSource and height", function(assert) {
+    //arrange, act
+    var clock = sinon.useFakeTimers();
+    var dataGrid = createDataGrid({
+        columns: ["id"]
+    });
+
+    clock.tick(0);
+
+    //act
+    dataGrid.option("dataSource", [{ id: 1 }]);
+    dataGrid.option("height", 300);
+
+    clock.tick(0);
+
+    //assert
+    var $noData = dataGrid.element().find(".dx-datagrid-nodata");
+    assert.equal($noData.length, 1, "nodata is rendered once");
+    assert.notOk($noData.is(":visible"), "nodata is hidden");
+
+    clock.restore();
 });
 
 //T231356
@@ -6353,6 +6465,41 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     assert.ok($secondEditor.hasClass("dx-state-focused"), "'lastName' editor focused");
 
     clock.restore();
+});
+
+//T532658
+QUnit.test("Cancel editing should works correctly if editing mode is form and masterDetail row is shown", function(assert) {
+    //arrange
+    var items = [{ firstName: "Alex", lastName: "Black" }, { firstName: "John", lastName: "Dow" }];
+
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        editing: {
+            mode: "form",
+            allowUpdating: true
+        },
+        dataSource: items,
+        columns: ["firstName", "lastName"]
+    });
+
+    dataGrid.expandRow(items[0]);
+    dataGrid.editRow(0);
+
+    assert.ok(dataGrid.getRowElement(0).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
+    assert.ok(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
+
+    //act
+    dataGrid.cancelEditData();
+
+    //assert
+    assert.ok(dataGrid.getRowElement(0).hasClass("dx-data-row"), "row 0 is data row");
+    assert.notOk(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
+
+    assert.ok(dataGrid.getRowElement(1).hasClass("dx-master-detail-row"), "row 1 is master detail row");
+    assert.notOk(dataGrid.getRowElement(1).hasClass("dx-datagrid-edit-form"), "row 1 is not edit form row");
+    assert.notOk(dataGrid.getVisibleRows()[1].isEditing, "row 1 isEditing");
+
+    assert.ok(dataGrid.getRowElement(2).hasClass("dx-data-row"), "row 2 is data row");
 });
 
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {

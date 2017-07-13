@@ -13,24 +13,9 @@ Voted the best cross-platform component suite containing everything you need to 
 
 This is a working repo for DevExtreme. To include DevExtreme to your project, use one of the distribution packages. If you use Visual Studio, then use the Windows installer for added features like project templates. Alternatively, download a plain zip archive of just the client-side library and its widgets:
 
-- Install from [NPM](https://js.devexpress.com/Documentation/Guide/Getting_Started/Installation/npm_Package/)
-
-  ```
-  npm install devextreme 
-  ```
-
-- Install via [Bower](https://js.devexpress.com/Documentation/Guide/Getting_Started/Installation/Bower_Package/)
-
-  ``` 
-  bower install devextreme
-  ```
-
-- Install from [NuGet](https://js.devexpress.com/Documentation/Guide/Getting_Started/Installation/NuGet_Package/)
-
-  ```
-  Install-Package DevExtreme.Web
-  ```
-
+- [Install from NPM](https://js.devexpress.com/Documentation/Guide/Getting_Started/Installation/npm_Package/)
+- [Install via Bower](https://js.devexpress.com/Documentation/Guide/Getting_Started/Installation/Bower_Package/)
+- [Install from NuGet](https://js.devexpress.com/Documentation/Guide/Getting_Started/Installation/NuGet_Package/)
 - [Windows Installer](https://js.devexpress.com/Downloading/DevExtremeComplete/) - Provides benefits for developers who use Visual Studio
 - [ZIP Archive](https://js.devexpress.com/Downloading/DevExtremeCompleteZip/)
 

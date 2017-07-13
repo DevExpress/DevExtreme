@@ -240,17 +240,20 @@ module.exports = Class.inherit({
     _onePageSelectAll: function(isDeselect) {
         var items = this.options.plainItems();
         for(var i = 0; i < items.length; i++) {
-            var item = items[i],
-                itemData = this.options.getItemData(item),
-                itemKey = this.options.keyOf(itemData),
-                isSelected = this.isItemSelected(itemKey);
+            var item = items[i];
 
-            if(!isSelected && !isDeselect) {
-                this._addSelectedItem(itemData, itemKey);
-            }
+            if(this.isDataItem(item)) {
+                var itemData = this.options.getItemData(item),
+                    itemKey = this.options.keyOf(itemData),
+                    isSelected = this.isItemSelected(itemKey);
 
-            if(isSelected && isDeselect) {
-                this._removeSelectedItem(itemKey);
+                if(!isSelected && !isDeselect) {
+                    this._addSelectedItem(itemData, itemKey);
+                }
+
+                if(isSelected && isDeselect) {
+                    this._removeSelectedItem(itemKey);
+                }
             }
         }
 

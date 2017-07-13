@@ -496,12 +496,14 @@ module.exports = {
                     var dataSource = this._dataSource;
                     return dataSource ? dataSource.load() : $.Deferred().resolve().promise();
                 },
-                _processItems: function(items) {
+                _processItems: function(items, changeType) {
                     var that = this,
                         visibleColumns = that._columnsController.getVisibleColumns(),
+                        visibleItems = that._items,
+                        dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
                         options = {
                             visibleColumns: visibleColumns,
-                            dataIndex: 0
+                            dataIndex: dataIndex
                         },
                         result = [];
 
@@ -591,7 +593,11 @@ module.exports = {
                                 change.changeTypes = [];
 
                                 var equalItems = function(item1, item2, strict) {
-                                    return item1 && item2 && equalKeys(item1.key, item2.key) && (!strict || item1.rowType === item2.rowType);
+                                    var result = item1 && item2 && equalKeys(item1.key, item2.key);
+                                    if(result && strict) {
+                                        result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
+                                    }
+                                    return result;
                                 };
 
                                 $.each(rowIndices, function(index, rowIndex) {
@@ -634,6 +640,9 @@ module.exports = {
                                         that._items.splice(rowIndex, 1);
                                         rowIndexCorrection--;
                                         prevIndex = -1;
+                                    } else {
+                                        changeType = "update";
+                                        that._items[rowIndex] = newItem;
                                     }
                                     change.changeTypes.push(changeType);
                                 });

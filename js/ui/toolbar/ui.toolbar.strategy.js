@@ -49,8 +49,8 @@ var ToolbarStrategy = Class.inherit({
 
     _menuWidgetClass: abstract,
 
-    _hasVisibleMenuItems: function() {
-        var menuItems = this._toolbar.option("items"),
+    _hasVisibleMenuItems: function(items) {
+        var menuItems = items || this._toolbar.option("items"),
             result = false;
 
         var optionGetter = compileGetter("visible"),
