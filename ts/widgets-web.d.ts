@@ -2227,9 +2227,6 @@ declare module DevExpress.ui {
         /** @docid GridBaseMethods_repaintRows */
         repaintRows(rowIndexes: Array<number>): void;
 
-        /** @docid GridBaseMethods_addRow */
-        addRow(): void;
-
         /** @docid GridBaseMethods_editCell#editCell(rowIndex,visibleColumnIndex) */
         editCell(rowIndex: number, visibleColumnIndex: number): void;
 
@@ -2371,6 +2368,12 @@ declare module DevExpress.ui {
 
         /** @docid dxTreeListMethods_getNodeByKey */
         getNodeByKey(key: any): dxTreeListNode;
+
+        /** @docid dxTreeListMethods_addRow#addRow() */
+        addRow(): void;
+
+        /** @docid dxTreeListMethods_addRow#addRow(parentId) */
+        addRow(parentId: any): void;
     }
 
     /** @docid dxdataGrid */
@@ -2447,6 +2450,9 @@ declare module DevExpress.ui {
 
         /** @docid dxDataGridMethods_getSelectedRowsData */
         getSelectedRowsData(): any;
+
+        /** @docid dxDataGridMethods_addRow */
+        addRow(): void;
     }
 
     export interface dxPivotGridOptions extends WidgetOptions {
