@@ -495,6 +495,9 @@ QUnit.test("removing tags after clicking the 'clear' button", function(assert) {
 
 QUnit.module("multi tag support", {
     beforeEach: function() {
+        this.getTexts = function($tags) {
+            return $tags.map(function(_, tag) { return $(tag).text(); }).toArray();
+        },
         this.clock = sinon.useFakeTimers();
         messageLocalization.load({
             "en": {
@@ -552,7 +555,7 @@ QUnit.test("tagBox should display multiple tags after value was changed", functi
 
     var $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
     assert.equal($tag.length, 2, "two tags should be displayed");
-    assert.equal($tag.text(), "12", "tags have correct text");
+    assert.deepEqual(this.getTexts($tag), ["1", "2"], "tags have correct text");
 });
 
 QUnit.test("tagBox should deselect all items after multi tag removed", function(assert) {
@@ -661,7 +664,7 @@ QUnit.test("multi tag should not be rendered if e.cancel is true", function(asse
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
 
     assert.equal($tag.length, 3, "3 tags was rendered");
-    assert.deepEqual($tag.text(), "124", "text is correct");
+    assert.deepEqual(this.getTexts($tag), ["1", "2", "4"], "tags have correct text");
 });
 
 QUnit.test("multi tag should be rendered after max number of tags if showMultiTagOnly is false", function(assert) {
@@ -674,7 +677,7 @@ QUnit.test("multi tag should be rendered after max number of tags if showMultiTa
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
 
     assert.equal($tag.length, 2, "2 tags rendered");
-    assert.deepEqual($tag.text(), "12 more", "text is correct");
+    assert.deepEqual(this.getTexts($tag), ["1", "2 more"], "tags have correct text");
 });
 
 QUnit.test("tags should be rerendered after showMultiTagOnly option changed", function(assert) {
@@ -708,7 +711,7 @@ QUnit.test("multi tag should deselect overflow tags only when showMultiTagOnly i
 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 2, "only 2 tags remain");
     assert.deepEqual(tagBox.option("value"), [1, 2], "value is correct");
-    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).text(), "12", "text is correct");
+    assert.deepEqual(this.getTexts($tagBox.find("." + TAGBOX_TAG_CLASS)), ["1", "2"], "tags have correct text");
 });
 
 QUnit.test("tagBox should show special text for all selected state", function(assert) {
@@ -970,7 +973,7 @@ QUnit.test("T338728 - onValueChanged action should contain correct previousValue
         tagBox = $tagBox.dxTagBox("instance");
 
     tagBox.option("value", [2]);
-    assert.deepEqual(spy.args[0][0].previousValue, [1, 2], "the 'previousValue' argument is correct");
+    assert.deepEqual(spy.args[0][0].previousValue, ["1", "2"], "the 'previousValue' argument is correct");
 });
 
 QUnit.test("onValueChanged should not be fired on the 'backspace' key press if the editor is already empty (T385450)", function(assert) {
