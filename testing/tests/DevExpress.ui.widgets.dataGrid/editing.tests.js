@@ -10513,7 +10513,7 @@ QUnit.testInActiveWindow("Form should repaint after change data of the column wi
     assert.ok($popupContent.find(".dx-texteditor").first().hasClass("dx-state-focused"), "first cell is focused");
 
     //act
-    $inputElement = $popupContent.find("input[type!='hidden']").eq(1);
+    $inputElement = $popupContent.find("input").not("[type='hidden']").eq(1);
     $inputElement.focus();
     $inputElement.val(666);
     $inputElement.trigger("change");
@@ -10521,6 +10521,6 @@ QUnit.testInActiveWindow("Form should repaint after change data of the column wi
 
     //assert
     assert.ok(callSetCellValue, "setCellValue is called");
-    assert.strictEqual($popupContent.find("input[type!='hidden']").eq(2).val(), "Test2", "value of the third cell");
+    assert.strictEqual($popupContent.find("input").not("[type='hidden']").eq(2).val(), "Test2", "value of the third cell");
     assert.ok($popupContent.find(".dx-texteditor").eq(1).hasClass("dx-state-focused"), "second cell is focused");
 });
