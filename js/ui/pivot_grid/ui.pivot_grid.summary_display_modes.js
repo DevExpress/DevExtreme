@@ -90,6 +90,9 @@ var commonUtils = require("../../core/utils/common"),
     },
 
     createRunningTotalExpr = function(field) {
+        if(!field.runningTotal) {
+            return;
+        }
         var direction = field.runningTotal === COLUMN ? ROW : COLUMN;
         return function(e) {
             var prevCell = field.allowCrossGroupCalculation ? getPrevCellCrossGroup(e, direction) : e.prev(direction, false),
