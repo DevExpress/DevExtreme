@@ -3657,7 +3657,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(draggingHeader.element().offset(), { left: -10007, top: 54 }, 'offset parameters');
+        var offset = draggingHeader.element().offset();
+        assert.equal(offset.left, -10007, 'offset left');
+        assert.equal(offset.top, 54, 'offset top');
     });
 
     QUnit.test('Move drag header for right side of root container', function(assert) {
@@ -3703,7 +3705,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(draggingHeader.element().offset(), { left: -9002, top: 54 }, 'offset parameters');
+        var offset = draggingHeader.element().offset();
+        assert.equal(offset.left, -9002, 'offset left');
+        assert.equal(offset.top, 54, 'offset top');
     });
 
     //B254315
@@ -4553,7 +4557,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(this.draggingHeaderView.element().offset(), { left: -10007, top: 4 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, -10007, 'offset left');
+        assert.equal(offset.top, 4, 'offset top');
     });
 
     QUnit.test('Move drag group panel for right side of root container', function(assert) {
@@ -4595,7 +4601,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(this.draggingHeaderView.element().offset(), { left: -9002, top: 4 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, -9002, 'offset left');
+        assert.equal(offset.top, 4, 'offset top');
     });
 
     QUnit.test('Move drag header in empty group panel', function(assert) {
@@ -4705,7 +4713,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(this.draggingHeaderView.element().offset(), { top: 0, left: 0 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, 0, 'offset left');
+        assert.equal(offset.top, 0, 'offset top');
     });
 
     QUnit.test('Block separator move in group panel when dragging left', function(assert) {
@@ -5638,7 +5648,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(this.draggingHeaderView.element().offset(), { left: -9802, top: -9301 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, -9802, 'offset left');
+        assert.equal(offset.top, -9301, 'offset top');
     });
 
     QUnit.test('Move column chooser for up side of root container', function(assert) {
@@ -5680,7 +5692,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(this.draggingHeaderView.element().offset(), { left: -9802, top: -9491 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, -9802, 'offset left');
+        assert.equal(offset.top, -9491, 'offset top');
     });
 
     /* QUnit.test('Block separator move in column chooser when dragging down', function (assert) {
