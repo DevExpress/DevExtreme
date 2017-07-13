@@ -289,7 +289,7 @@ var cleanData = function(node, cleanSelf) {
 
     renderer.cleanData(childNodes);
     if(cleanSelf) {
-        renderer.cleanData(node);
+        renderer.cleanData([node]);
     }
 };
 
