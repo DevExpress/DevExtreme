@@ -22,7 +22,7 @@ if(!Promise) {
 
     Promise.all = function(promises) {
         return $.when.apply($, promises).then(function() {
-            return $.makeArray(arguments);
+            return Array.prototype.slice.call(arguments);
         });
     };
 }

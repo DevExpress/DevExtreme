@@ -111,7 +111,7 @@ Action.registerExecutor = function(name, executor) {
 };
 
 Action.unregisterExecutor = function() {
-    var args = $.makeArray(arguments);
+    var args = Array.prototype.slice.call(arguments);
 
     $.each(args, function() {
         delete Action.executors[this];

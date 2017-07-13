@@ -565,7 +565,7 @@ var Map = Widget.inherit({
     },
 
     _queueAsyncAction: function(name) {
-        var options = $.makeArray(arguments).slice(1);
+        var options = Array.prototype.slice.call(arguments).slice(1);
 
         this._lastAsyncAction = this._lastAsyncAction.then(function() {
             if(!this._provider) {

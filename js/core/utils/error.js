@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("./extend").extend,
+var extend = require("./extend").extend,
     consoleUtils = require("./console"),
     stringUtils = require("./string"),
     version = require("../version");
@@ -15,7 +14,7 @@ module.exports = function(baseErrors, errors) {
         ERROR_MESSAGES: extend(errors, baseErrors),
 
         Error: function() {
-            return makeError($.makeArray(arguments));
+            return makeError(Array.prototype.slice.call(arguments));
         },
 
         log: function(id) {
@@ -27,7 +26,7 @@ module.exports = function(baseErrors, errors) {
                 method = "warn";
             }
 
-            consoleUtils.logger[method](method === "log" ? id : combineMessage($.makeArray(arguments)));
+            consoleUtils.logger[method](method === "log" ? id : combineMessage(Array.prototype.slice.call(arguments)));
         }
     };
 

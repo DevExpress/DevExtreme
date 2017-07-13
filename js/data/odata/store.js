@@ -171,7 +171,7 @@ var ODataStore = Store.inherit({
 
         if(extraOptions) {
             if(extraOptions.expand) {
-                params["$expand"] = $.map($.makeArray(extraOptions.expand), odataUtils.serializePropName).join();
+                params["$expand"] = $.map(Array.prototype.slice.call(extraOptions.expand), odataUtils.serializePropName).join();
             }
         }
 

@@ -131,7 +131,7 @@ function normalizeStoreLoadOptionAccessorArguments(originalArguments) {
         case 1:
             return originalArguments[0];
     }
-    return $.makeArray(originalArguments);
+    return Array.prototype.slice.call(originalArguments);
 }
 
 function generateStoreLoadOptionAccessor(optionName) {
@@ -593,7 +593,7 @@ var DataSource = Class.inherit({
         }
 
         if(argc > 1) {
-            expr = $.makeArray(arguments);
+            expr = Array.prototype.slice.call(arguments);
         }
 
         this._searchExpr = expr;
@@ -702,7 +702,14 @@ var DataSource = Class.inherit({
                 if(!__isDefined(data) || array.isEmpty(data)) {
                     d.reject(new errors.Error("E4009"));
                 } else {
-                    d.resolve(that._applyMapFunction($.makeArray(data))[0]);
+                    var dataArray = [];
+
+                    if(Array.isArray(data)) {
+                        dataArray = data;
+                    } else {
+                        Array.prototype.push.call(dataArray, data);
+                    }
+                    d.resolve(that._applyMapFunction(dataArray)[0]);
                 }
             };
 
@@ -902,7 +909,10 @@ var DataSource = Class.inherit({
                 }
 
                 if(!Array.isArray(data)) {
-                    data = $.makeArray(data);
+                    var dataArray = [];
+
+                    Array.prototype.push.call(dataArray, data);
+                    data = dataArray;
                 }
 
                 loadResult = extend({

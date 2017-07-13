@@ -527,7 +527,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
 
     var select = function(getter) {
         if(!typeUtils.isFunction(getter) && !Array.isArray(getter)) {
-            getter = $.makeArray(arguments);
+            getter = Array.prototype.slice.call(arguments);
         }
 
         return chainQuery(new SelectIterator(iter, getter));
@@ -572,7 +572,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
 
         filter: function(criteria) {
             if(!Array.isArray(criteria)) {
-                criteria = $.makeArray(arguments);
+                criteria = Array.prototype.slice.call(arguments);
             }
             return chainQuery(new FilterIterator(iter, criteria));
         },
