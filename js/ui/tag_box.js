@@ -1057,7 +1057,7 @@ var TagBox = SelectBox.inherit({
     _lastValue: function() {
         var values = this._getValue(),
             lastValue = values[values.length - 1];
-        return commonUtils.isDefined(lastValue) ? lastValue : null;
+        return isDefined(lastValue) ? lastValue : null;
     },
 
     _valueChangeEventHandler: noop,
