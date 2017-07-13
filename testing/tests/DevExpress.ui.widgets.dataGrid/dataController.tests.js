@@ -8924,7 +8924,7 @@ QUnit.test("update with incorrect rowIndices", function(assert) {
     dataSourceItems[0].age = 31;
     this.dataController.updateItems({
         changeType: 'update',
-        rowIndices: [0, -1, 0]
+        rowIndices: [0, -1, 0, 1000000]
     });
 
     //assert
