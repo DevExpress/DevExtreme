@@ -674,7 +674,7 @@ QUnit.test("multi tag should be rendered after max number of tags if showMultiTa
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
 
     assert.equal($tag.length, 3, "3 tags rendered");
-    assert.deepEqual($tag.text(), "121 more", "text is correct");
+    assert.deepEqual($tag.text(), "12 more", "text is correct");
 });
 
 QUnit.test("tags should be rerendered after showMultiTagOnly option changed", function(assert) {
@@ -789,14 +789,14 @@ QUnit.test("tagbox should show all selected text correctly without datasource", 
 });
 
 QUnit.test("tagbox should never show ordinary tag when all items are selected", function(assert) {
-    var items = [1, 2, 3, 4, 5];
-    var $tagBox = $("#tagBox").dxTagBox({
-        items: items,
-        maxTagCount: 2,
-        showMultiTagOnly: false,
-        opened: true,
-        showSelectionControls: true
-    });
+    var items = [1, 2, 3, 4, 5],
+        $tagBox = $("#tagBox").dxTagBox({
+            items: items,
+            maxTagCount: 2,
+            showMultiTagOnly: false,
+            opened: true,
+            showSelectionControls: true
+        });
 
     $(".dx-list-select-all-checkbox").trigger("dxclick");
     this.clock.tick(TIME_TO_WAIT);

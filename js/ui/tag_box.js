@@ -488,7 +488,7 @@ var TagBox = SelectBox.inherit({
             args.text = messageLocalization.getFormatter("dxTagBox-allSelected")(selectedCount);
         } else {
             if(!this.option("showMultiTagOnly")) {
-                args.text = messageLocalization.getFormatter("dxTagBox-moreSelected")(selectedCount - this.option("maxTagCount"));
+                args.text = messageLocalization.getFormatter("dxTagBox-moreSelected")(selectedCount - this.option("maxTagCount") + 1);
             } else {
                 args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
             }
@@ -827,7 +827,7 @@ var TagBox = SelectBox.inherit({
                 maxTagCount = this.option("maxTagCount");
 
             items.forEach(function(item, index) {
-                if(($multiTag && (showMultiTagOnly || this._allItemsSelected())) || ($multiTag && !showMultiTagOnly && index >= maxTagCount)) {
+                if(($multiTag && (showMultiTagOnly || this._allItemsSelected())) || ($multiTag && !showMultiTagOnly && index - maxTagCount >= -1)) {
                     return false;
                 }
                 this._renderTag(item, $multiTag || $input);
