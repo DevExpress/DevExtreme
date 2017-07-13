@@ -1103,7 +1103,7 @@ var dxChart = AdvancedChart.inherit({
 
     _resetZoom: function() {
         var that = this;
-        that._zoomMinArg = that._zoomMaxArg = undefined;  //T190927
+        that._zoomMinArg = that._zoomMaxArg = that._notApplyMargins = undefined; //T190927
         that._argumentAxes[0] && that._argumentAxes[0].resetZoom();
     },
 
