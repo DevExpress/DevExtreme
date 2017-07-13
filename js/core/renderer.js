@@ -589,51 +589,17 @@ if(!useJQueryRenderer) {
         return typeUtils.isWindow(element) ? element : element.defaultView;
     };
 
-    initRender.prototype.offset = function(options) {
+    initRender.prototype.offset = function() {
         if(!this[0]) return;
 
-        if(!options) {
-            var rect = this[0].getBoundingClientRect();
-            var win = getWindow(this[0].ownerDocument);
-            var docElem = this[0].ownerDocument.documentElement;
+        var rect = this[0].getBoundingClientRect();
+        var win = getWindow(this[0].ownerDocument);
+        var docElem = this[0].ownerDocument.documentElement;
 
-            return {
-                top: rect.top + win.pageYOffset - docElem.clientTop,
-                left: rect.left + win.pageXOffset - docElem.clientLeft
-            };
-        }
-
-        var position = this.css("position");
-        if(position === "static") {
-            this[0].style.position = "relative";
-        }
-
-        var offset = this.offset();
-        var cssTop = this.css("top");
-        var cssLeft = this.css("left");
-        var left;
-        var top;
-
-        if((position === "absolute" || position === "fixed")
-        && (cssTop === "auto" || cssLeft === "auto")) {
-            var pos = this.position();
-            top = pos.top;
-            left = pos.left;
-        } else {
-            top = parseFloat(cssTop) || 0;
-            left = parseFloat(cssLeft) || 0;
-        }
-
-        var props = {};
-
-        if(options.top) {
-            props.top = options.top - offset.top + top;
-        }
-        if(options.left) {
-            props.left = options.left - offset.left + left;
-        }
-
-        return this.css(props);
+        return {
+            top: rect.top + win.pageYOffset - docElem.clientTop,
+            left: rect.left + win.pageXOffset - docElem.clientLeft
+        };
     };
 
     initRender.prototype.offsetParent = function() {

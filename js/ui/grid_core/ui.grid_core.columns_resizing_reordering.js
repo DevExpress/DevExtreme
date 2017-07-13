@@ -460,17 +460,19 @@ var DraggingHeaderView = modules.View.inherit({
             dragOptions = that._dragOptions;
 
         if(that._isDragging && !isResizing) {
+            var $element = that.element();
+
             moveDeltaX = Math.abs(eventData.x - dragOptions.columnElement.offset().left - dragOptions.deltaX);
             moveDeltaY = Math.abs(eventData.y - dragOptions.columnElement.offset().top - dragOptions.deltaY);
 
-            if(that.element().is(":visible") || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
+            if($element.is(":visible") || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
 
-                that.element().show();
+                $element.show();
 
                 newLeft = eventData.x - dragOptions.deltaX;
                 newTop = eventData.y - dragOptions.deltaY;
 
-                that.element().offset({ left: newLeft, top: newTop });
+                $element.css({ left: newLeft, top: newTop });
                 that.dockHeader(eventData);
             }
             e.preventDefault();
