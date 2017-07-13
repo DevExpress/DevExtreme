@@ -169,7 +169,12 @@ declare module DevExpress.viz.charts {
         show(): void;
     }
 
+    /** @docid pieChartSeriesObject */
     export interface PieSeries extends BaseSeries {
+        /** @docid_ignore pieChartSeriesObjectmethods_hover */
+        /** @docid_ignore pieChartSeriesObjectmethods_clearHover */
+        /** @docid_ignore pieChartSeriesObjectmethods_isHovered */
+
         selectPoint(point: PiePoint): void;
         deselectPoint(point: PiePoint): void;
         getAllPoints(): Array<PiePoint>;
@@ -2057,9 +2062,6 @@ declare module DevExpress.viz.charts {
 
         /** @docid basechartmethods_clearselection */
         clearSelection(): void;
-
-        /** @docid basechartmethods_getsize */
-        getSize(): { width: number; height: number };
 
         /** @docid basechartmethods_getallseries */
         getAllSeries(): Array<BaseSeries>;

@@ -130,7 +130,7 @@ var ResizingController = modules.ViewController.inherit({
             columnsController = that._columnsController,
             visibleColumns = columnsController.getVisibleColumns(),
             columnAutoWidth = that.option("columnAutoWidth"),
-            needBestFit = columnAutoWidth || that._maxHeightHappened,
+            needBestFit = that._needBestFit(),
             hasMinWidth = false,
             resetBestFitMode,
             isColumnWidthsCorrected = false,
@@ -167,13 +167,13 @@ var ResizingController = modules.ViewController.inherit({
 
         that._setVisibleWidths(visibleColumns, []);
 
-        if(that._isNeedToCalcBestFitWidths(needBestFit)) {
+        if(needBestFit) {
             that._toggleBestFitMode(true);
             resetBestFitMode = true;
         }
 
         commonUtils.deferUpdate(function() {
-            if(that._isNeedToCalcBestFitWidths(needBestFit)) {
+            if(needBestFit) {
                 resultWidths = that._getBestFitWidths();
 
                 $.each(visibleColumns, function(index, column) {
@@ -214,8 +214,8 @@ var ResizingController = modules.ViewController.inherit({
         });
     },
 
-    _isNeedToCalcBestFitWidths: function(needBestFit) {
-        return needBestFit;
+    _needBestFit: function() {
+        return this.option("columnAutoWidth") || this._maxHeightHappened;
     },
 
     _correctColumnWidths: function(resultWidths, visibleColumns) {
@@ -257,6 +257,7 @@ var ResizingController = modules.ViewController.inherit({
 
         if(!hasAutoWidth && resultWidths.length) {
             var contentWidth = that._rowsView.contentWidth(),
+                scrollbarWidth = that._rowsView.getScrollbarWidth(),
                 totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth <= contentWidth) {
@@ -268,7 +269,7 @@ var ResizingController = modules.ViewController.inherit({
                     resultWidths[lastColumnIndex] = "auto";
                     isColumnWidthsCorrected = true;
                     if(!hasWidth && !hasPercentWidth) {
-                        that._maxWidth = that.option("showBorders") ? totalWidth + 2 : totalWidth;
+                        that._maxWidth = totalWidth + scrollbarWidth + (that.option("showBorders") ? 2 : 0);
                         $element.css("max-width", that._maxWidth);
                     }
                 }
@@ -414,6 +415,7 @@ var ResizingController = modules.ViewController.inherit({
             $rootElement = that.component.element(),
             rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height()),
             maxHeightHappened = maxHeight && rootElementHeight >= maxHeight,
+            hasHeight = that._hasHeight || maxHeightHappened,
             loadPanelOptions = that.option("loadPanel"),
             height = that.option("height") || $rootElement.get(0).style.height,
             rowsViewHeight,
@@ -445,7 +447,7 @@ var ResizingController = modules.ViewController.inherit({
         }
 
         commonUtils.deferRender(function() {
-            rowsView.height(rowsViewHeight, that._hasHeight || maxHeightHappened);
+            rowsView.height(rowsViewHeight, hasHeight);
 
             if(scrollTop && scrollable) {
                 //TODO Use public API
@@ -459,7 +461,7 @@ var ResizingController = modules.ViewController.inherit({
             commonUtils.deferUpdate(function() {
                 that._updateLastSizes($rootElement);
 
-                var vScrollbarWidth = rowsView.getScrollbarWidth();
+                var vScrollbarWidth = hasHeight ? rowsView.getScrollbarWidth() : 0;
                 var hScrollbarWidth = rowsView.getScrollbarWidth(true);
 
                 commonUtils.deferRender(function() {

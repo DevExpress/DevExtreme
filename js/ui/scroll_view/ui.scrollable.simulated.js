@@ -537,7 +537,7 @@ var SimulatedStrategy = Class.inherit({
         this._$element.addClass(SCROLLABLE_SIMULATED_CLASS);
         this._createScrollers();
         if(this.option("useKeyboard")) {
-            this._$container.prop("tabindex", 0);
+            this._$container.prop("tabIndex", 0);
         }
         this._attachKeyboardHandler();
         this._attachCursorHandlers();
@@ -792,9 +792,10 @@ var SimulatedStrategy = Class.inherit({
         var scrollerX = this._scrollers[HORIZONTAL],
             scrollerY = this._scrollers[VERTICAL];
 
+        var location = this.location();
         this._scrollOffset = {
-            top: scrollerY && -scrollerY._location,
-            left: scrollerX && -scrollerX._location
+            top: scrollerY && -location.top,
+            left: scrollerX && -location.left
         };
 
         return {

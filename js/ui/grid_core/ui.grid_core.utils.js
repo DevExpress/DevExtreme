@@ -202,7 +202,7 @@ module.exports = (function() {
             $element = $element || this.element();
 
             var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
-                noDataElement = $element.children("." + noDataClass),
+                noDataElement = $element.find("." + noDataClass).last(),
                 isVisible = this._dataController.isEmpty(),
                 isLoading = this._dataController.isLoading(),
                 rtlEnabled = this.option("rtlEnabled");
@@ -357,7 +357,9 @@ module.exports = (function() {
                 precision: column.precision,
                 getDisplayFormat: column.getDisplayFormat,
                 customizeText: column.customizeText,
-                target: target
+                target: target,
+                trueText: column.trueText,
+                falseText: column.falseText
             };
         },
 

@@ -21,7 +21,7 @@ var $ = require("jquery"),
 require("ui/scheduler/ui.scheduler");
 require("ui/switch");
 
-var APPOINTMENT_DEFAULT_OFFSET = 15;
+var APPOINTMENT_DEFAULT_OFFSET = 25;
 
 function getDeltaTz(schedulerTz, date) {
     var defaultTz = date.getTimezoneOffset() * 60000;
@@ -836,16 +836,16 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
     });
 
     var $commonAppointments = this.instance.element().find(".dx-scheduler-scrollable-appointments .dx-scheduler-appointment"),
-        $allDayAppts = this.instance.element().find(".dx-scheduler-scrollable-appointments .dx-scheduler-appointment"),
+        $allDayAppts = this.instance.element().find(".dx-scheduler-all-day-appointment"),
         cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($allDayAppts.eq(0)).left, 100, 2.001, "Left position is OK");
 
-    assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - 15, 1.001, "Width is OK");
-    assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - 15, 1.001, "Width is OK");
-    assert.roughEqual($allDayAppts.eq(0).outerWidth(), cellWidth - 15, 1.001, "Width is OK");
+    assert.roughEqual($commonAppointments.eq(0).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_OFFSET, 1.001, "Width is OK");
+    assert.roughEqual($commonAppointments.eq(1).outerWidth(), cellWidth - APPOINTMENT_DEFAULT_OFFSET, 1.001, "Width is OK");
+    assert.roughEqual($allDayAppts.eq(0).outerWidth(), cellWidth, 1.001, "Width is OK");
 });
 
 QUnit.test("DblClick on appointment should call scheduler.showAppointmentPopup", function(assert) {
@@ -3307,6 +3307,40 @@ QUnit.test("Many dropDown appts with one multi day task should be grouped correc
     assert.equal(ddAppointments.length, 7, "There are 7 drop down appts");
 });
 
+QUnit.test("Many dropDown appts should be grouped correctly with one multi day task which started before dropDown (T525443)", function(assert) {
+    this.createInstance({
+        views: ['month'],
+        currentView: 'month',
+        currentDate: new Date(2017, 5, 25),
+        width: 800,
+        height: 600
+    });
+
+    this.instance.option("dataSource", [
+        { text: '1', startDate: new Date(2017, 5, 11, 9, 30), endDate: new Date(2017, 5, 11, 11, 30) },
+        { text: '2', startDate: new Date(2017, 5, 11, 12, 0), endDate: new Date(2017, 5, 11, 13, 0) },
+        { text: '3', startDate: new Date(2017, 5, 11, 12, 0), endDate: new Date(2017, 5, 11, 13, 0) },
+        { text: '4', startDate: new Date(2017, 5, 11, 8, 0), endDate: new Date(2017, 5, 11, 23, 59) },
+        { text: '5', startDate: new Date(2017, 5, 11, 9, 45), endDate: new Date(2017, 5, 11, 11, 15) },
+        { text: '6', startDate: new Date(2017, 5, 11, 11, 0), endDate: new Date(2017, 5, 11, 12, 0) },
+        { text: '7', startDate: new Date(2017, 5, 11, 11, 0), endDate: new Date(2017, 5, 11, 13, 30) },
+        { text: '8', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
+        { text: '9', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
+        { text: '10', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
+        { text: '11', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
+        { text: '12', startDate: new Date(2017, 5, 11, 14, 0), endDate: new Date(2017, 5, 11, 15, 30) },
+        { text: '13', startDate: new Date(2017, 5, 11, 14, 30), endDate: new Date(2017, 5, 11, 16, 0) },
+        { text: 'long appt', startDate: new Date(2017, 5, 1, 9, 0), endDate: new Date(2017, 5, 20, 9, 15) }
+    ]);
+
+    var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+
+    dropDown.open();
+    var ddAppointments = dropDown._list.element().find(".dx-scheduler-dropdown-appointment");
+
+    assert.equal(ddAppointments.length, 12, "There are 12 drop down appts");
+});
+
 QUnit.test("DropDown appointment button should have correct coordinates: rtl mode", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 2, 4),
@@ -3979,6 +4013,31 @@ QUnit.test("Appointment should have right width on timeline week view", function
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
 });
 
+QUnit.test("Multiday appointment should have right width on timelineWeek view when set startDayHour > appointment endDate (T533348)", function(assert) {
+    var appointment = {
+        startDate: new Date(2016, 1, 1, 11, 0),
+        endDate: new Date(2016, 1, 2, 1, 0)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2016, 1, 1),
+        views: ["timelineWeek"],
+        currentView: "timelineWeek",
+        cellDuration: 60,
+        firstDayOfWeek: 1,
+        dataSource: [appointment],
+        startDayHour: 8,
+        endDayHour: 20,
+        height: 200
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+        cellsInAppointment = 9;
+
+    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
+});
+
 QUnit.test("Recurrence appointment part should have right width on timeline week view", function(assert) {
     var appointment = {
         startDate: new Date(2015, 4, 25, 21),
@@ -4085,6 +4144,31 @@ QUnit.test("Long multiday appointment should have right width on timeline work w
     var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
         $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
         cellsInAppointment = 28;
+
+    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
+});
+
+QUnit.test("Long multiday appointment should have right width on timeline week view when set startDayHour > appointment endDate (T533348)", function(assert) {
+    var appointment = {
+        startDate: new Date(2016, 1, 1, 11, 0),
+        endDate: new Date(2016, 1, 4, 1, 0)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2016, 1, 1),
+        views: ["timelineWeek"],
+        currentView: "timelineWeek",
+        cellDuration: 60,
+        firstDayOfWeek: 1,
+        dataSource: [appointment],
+        startDayHour: 8,
+        endDayHour: 20,
+        height: 200
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+        cellsInAppointment = 33;
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
 });

@@ -5339,6 +5339,53 @@ QUnit.test("Save edit data when update fails in batch edit mode", function(asser
     assert.deepEqual(that.editingController._editData[0].oldData, that.array[1], "old data");
 });
 
+//T533546
+QUnit.testInActiveWindow("The lookup column should keep focus after changing value when it has 'setCellValue' option", function(assert) {
+   //arrange
+    var that = this,
+        $cellElement,
+        lookupInstance,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    that.options.columns[0] = {
+        dataField: "name",
+        lookup: {
+            dataSource: ["test1", "test2"]
+        },
+        setCellValue: function(rowData, value) {
+            this.defaultSetCellValue(rowData, value);
+        }
+    };
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+    that.element = function() {
+        return $testElement;
+    };
+    rowsView.render($testElement);
+    that.columnsController.init();
+
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    //assert
+    $cellElement = rowsView.element().find("tbody > tr").first().children().first();
+    assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
+
+    lookupInstance = rowsView.element().find(".dx-selectbox").data("dxSelectBox");
+    assert.ok(lookupInstance, "has lookup");
+
+    //act
+    lookupInstance.option("value", "test1");
+    that.clock.tick();
+
+    //assert
+    $cellElement = rowsView.element().find("tbody > tr").first().children().first();
+    assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
+});
+
 if(device.ios || device.android) {
     //T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {
@@ -7125,7 +7172,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
         rowsView = that.rowsView,
         $testElement = $("#container");
 
-    $("#qunit-fixture").addClass("qunit-fixture-static").css("width", 2000);
+    $("#qunit-fixture").addClass("qunit-fixture-static").css("width", "auto");
 
     rowsView.render($testElement);
     that.applyOptions({
@@ -7168,7 +7215,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
     assert.ok(invalidTooltipInstance.content().offset().left + invalidTooltipInstance.content().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after invalid tooltip");
-    assert.equal(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.element().offset().left, "selectbox is shown after revert tooltip");
+    assert.roughEqual(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.element().offset().left, 1, "selectbox is shown after revert tooltip");
 
     $("#qunit-fixture").removeClass("qunit-fixture-static").css("width", "");
 });
@@ -10438,3 +10485,42 @@ QUnit.test("Show error row in header when remove error", function(assert) {
     }
 });
 
+//T534503
+QUnit.testInActiveWindow("Form should repaint after change data of the column with 'setCellValue' option", function(assert) {
+    //arrange
+    var that = this,
+        $popupContent,
+        $inputElement,
+        callSetCellValue;
+
+    that.columns[1] = {
+        dataField: "age",
+        setCellValue: function(rowData, value) {
+            callSetCellValue = true;
+            rowData.lastName = "Test2";
+            this.defaultSetCellValue(rowData, value);
+        }
+    };
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.clock.tick(500);
+    that.preparePopupHelpers();
+    $popupContent = that.editPopupInstance.content();
+
+    //assert
+    assert.ok($popupContent.find(".dx-texteditor").first().hasClass("dx-state-focused"), "first cell is focused");
+
+    //act
+    $inputElement = $popupContent.find("input[type!='hidden']").eq(1);
+    $inputElement.focus();
+    $inputElement.val(666);
+    $inputElement.trigger("change");
+    that.clock.tick(500);
+
+    //assert
+    assert.ok(callSetCellValue, "setCellValue is called");
+    assert.strictEqual($popupContent.find("input[type!='hidden']").eq(2).val(), "Test2", "value of the third cell");
+    assert.ok($popupContent.find(".dx-texteditor").eq(1).hasClass("dx-state-focused"), "second cell is focused");
+});

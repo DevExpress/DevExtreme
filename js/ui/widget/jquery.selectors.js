@@ -33,10 +33,10 @@ var visible = function(element) {
 
 module.exports = {
     focusable: function(index, element) {
-        return focusable(element, $(element).attr("tabindex"));
+        return focusable(element, $(element).attr("tabIndex"));
     },
     tabbable: function(index, element) {
-        var tabIndex = $(element).attr("tabindex");
+        var tabIndex = $(element).attr("tabIndex");
         return (isNaN(tabIndex) || tabIndex >= 0) && focusable(element, tabIndex);
     }
 };

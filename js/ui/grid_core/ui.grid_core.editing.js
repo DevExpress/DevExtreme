@@ -287,7 +287,9 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         getEditFormRowIndex: function() {
-            return getEditMode(this) === EDIT_MODE_FORM ? this._getVisibleEditRowIndex() : -1;
+            var editMode = getEditMode(this);
+
+            return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP ? this._getVisibleEditRowIndex() : -1;
         },
 
         isEditCell: function(rowIndex, columnIndex) {
@@ -301,6 +303,10 @@ var EditingController = modules.ViewController.inherit((function() {
             if(editMode === EDIT_MODE_POPUP && popupVisible) {
                 return this._editPopup.content();
             }
+        },
+
+        getEditForm: function() {
+            return this._editForm;
         },
 
         _needInsertItem: function(editData, changeType) {
@@ -1260,10 +1266,45 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(options.column.showEditorAlways && getEditMode(that) === EDIT_MODE_CELL && options.row && !options.row.inserted) {
                     that.saveEditData();
                 } else if(options.row && (forceUpdateRow || options.column.setCellValue !== options.column.defaultSetCellValue)) {
-                    that._dataController.updateItems({
-                        changeType: "update",
-                        rowIndices: that._getRowIndicesForCascadeUpdating(options.row)
-                    });
+                    that._updateEditRow(options.row, forceUpdateRow);
+                }
+            }
+        },
+
+        _updateEditRow: function(row, forceUpdateRow) {
+            var that = this,
+                editMode = getEditMode(that);
+
+            if(editMode === EDIT_MODE_POPUP) {
+                setTimeout(this._updatePopupForm.bind(this, forceUpdateRow));
+            } else {
+                this._dataController.updateItems({
+                    changeType: "update",
+                    rowIndices: this._getRowIndicesForCascadeUpdating(row)
+                });
+                if(!forceUpdateRow) {
+                    this._focusEditingCell();
+                }
+            }
+        },
+
+        _updatePopupForm: function(forceUpdateRow) {
+            var columnIndex,
+                $focusedItemElement,
+                rowsView = this._rowsView,
+                rowIndex = this.getEditFormRowIndex();
+
+            if(rowIndex >= 0 && this._editForm) {
+                if(!forceUpdateRow) {
+                    $focusedItemElement = this._editForm.element().find(".dx-state-focused");
+                    columnIndex = rowsView.getCellIndex($focusedItemElement, rowIndex);
+                }
+
+                this._editForm.repaint();
+
+                if(columnIndex >= 0) {
+                    $focusedItemElement = rowsView.getCellElement(rowIndex, columnIndex);
+                    this._delayedInputFocus($focusedItemElement);
                 }
             }
         },
@@ -1348,7 +1389,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 that._firstFormItem = undefined;
 
-                that._createComponent($("<div>").appendTo($container), Form, extend({ scrollingEnabled: isScrollingEnabled }, editFormOptions, {
+                that._editForm = that._createComponent($("<div>").appendTo($container), Form, extend({ scrollingEnabled: isScrollingEnabled }, editFormOptions, {
                     items: items,
                     formID: "dx-" + new Guid(),
                     validationGroup: editData,
@@ -1834,7 +1875,9 @@ module.exports = {
                 _updateItemsCore: function(change) {
                     this.callBase(change);
 
-                    var editFormItem = this.items()[this.getController("editing").getEditFormRowIndex()];
+                    var editingController = this._editingController,
+                        editFormRowIndex = editingController.getEditMode() === EDIT_MODE_FORM && editingController.getEditFormRowIndex(),
+                        editFormItem = this.items()[editFormRowIndex];
 
                     if(editFormItem) {
                         editFormItem.rowType = "detail";
@@ -1868,10 +1911,12 @@ module.exports = {
                 },
                 getCellElements: function(rowIndex) {
                     var $cellElements = this.callBase(rowIndex),
-                        editFormRowIndex = this._editingController.getEditFormRowIndex();
+                        editingController = this._editingController,
+                        editForm = editingController.getEditForm(),
+                        editFormRowIndex = editingController.getEditFormRowIndex();
 
-                    if(editFormRowIndex === rowIndex && $cellElements) {
-                        return $cellElements.find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
+                    if(editFormRowIndex === rowIndex && $cellElements && editForm) {
+                        return editForm.element().find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
                     }
 
                     return $cellElements;

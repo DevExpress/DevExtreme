@@ -2336,6 +2336,87 @@ QUnit.test("render should be called once after expand item if virtual scrolling 
     assert.equal(contentReadyCallCount, 1);
 });
 
+QUnit.test("Initial horizontal scroll position when rtl is enabled", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+    var pivotGrid = createPivotGrid({
+        rtlEnabled: true,
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "virtual",
+            timeout: 0
+        },
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+    assert.ok(pivotGrid);
+
+    //assert
+    var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
+    var columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
+    var dataAreaFakeTable = pivotGrid.element().find(".dx-pivotgrid-area-data .dx-pivot-grid-fake-table");
+    var columnAreaFakeTable = pivotGrid.element().find(".dx-pivotgrid-horizontal-headers .dx-pivot-grid-fake-table");
+    var dataAreaContentTable = pivotGrid.element().find(".dx-pivotgrid-area-data .dx-scrollable-content > table");
+    var columnAreaContentTable = pivotGrid.element().find(".dx-pivotgrid-horizontal-headers .dx-scrollable-content > table");
+    assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+    assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.equal(dataAreaFakeTable.css("right"), "0px");
+    assert.equal(columnAreaFakeTable.css("right"), "0px");
+    assert.equal(dataAreaContentTable.css("right"), "0px");
+    assert.equal(columnAreaContentTable.css("right"), "0px");
+    assert.equal(dataAreaFakeTable.css("left"), "auto");
+    assert.equal(columnAreaFakeTable.css("left"), "auto");
+    assert.equal(dataAreaContentTable[0].style.left, "");
+    assert.equal(columnAreaContentTable[0].style.left, "");
+});
+
+QUnit.test("Horizontal scroll position after scroll when rtl is enabled", function(assert) {
+    var done = assert.async();
+
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+    var pivotGrid = createPivotGrid({
+        rtlEnabled: true,
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "virtual",
+            timeout: 0
+        },
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+    assert.ok(pivotGrid);
+
+    var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
+    var columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
+
+    var scrollAssert = function() {
+        dataAreaScrollable.off("scroll", scrollAssert);
+
+        //assert
+        assert.ok(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
+        assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+        assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+        assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+
+        done();
+    };
+
+    dataAreaScrollable.on("scroll", scrollAssert);
+
+    //act
+    dataAreaScrollable.scrollBy({ left: -10 });
+});
+
 QUnit.test("Virtual scrolling if height is not defined", function(assert) {
     var pivotGrid = createPivotGrid({
             width: 120,

@@ -107,7 +107,7 @@
     position: relative;
     width: @COLOR_VIEW_HUE_SCALE_WIDTH;
     height: @COLOR_VIEW_HUE_SCALE_HEIGHT;
-    .gradient-linear(~"bottom, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%");
+    .gradient-linear(~"0deg, #ff0000 0%, #ffff00 17%, #00ff00 33%, #00ffff 50%, #0000ff 67%, #ff00ff 83%, #ff0000 100%");
 }
 
 .dx-colorview-color-preview-container-inner,
@@ -128,11 +128,11 @@
 
 
 .dx-colorview-palette-gradient-white {
-    .gradient-linear(~"180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)");
+    .gradient-linear(~"270deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1)");
 }
 
 .dx-colorview-palette-gradient-black {
-    .gradient-linear(~"-90deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)");
+    .gradient-linear(~"180deg, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)");
 }
 
 .dx-colorview-palette {

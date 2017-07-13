@@ -42,7 +42,7 @@ exports.DataArea = areaItem.AreaItem.inherit({
     },
 
     _moveFakeTable: function(scrollPos) {
-        this._moveFakeTableLeft(scrollPos.x);
+        this._moveFakeTableHorizontally(scrollPos.x);
         this._moveFakeTableTop(scrollPos.y);
         this.callBase();
     },
@@ -70,7 +70,7 @@ exports.DataArea = areaItem.AreaItem.inherit({
 
         this._virtualContent.parent().css("height", params.height);
 
-        this.tableElement().css({
+        this._setTableCss({
             top: params.top,
             left: params.left
         });

@@ -76,6 +76,37 @@ QUnit.test("Select all by one page", function(assert) {
     assert.strictEqual(selection.getSelectAllState(true), true, "select all is true");
 });
 
+//T532618
+QUnit.test("Select all by one page should skip non-selectable items", function(assert) {
+    var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
+
+    var selection = new Selection({
+        key: function() {
+            var store = dataSource.store();
+            return store && store.key();
+        },
+        keyOf: function(item) {
+            var store = dataSource.store();
+            return store && store.keyOf(item);
+        },
+        isSelectableItem: function(data) {
+            return data.id > 1;
+        },
+        dataFields: function() {
+            return dataSource.select();
+        },
+        plainItems: function() {
+            return dataSource.items();
+        }
+    });
+
+    dataSource.load();
+    selection.selectAll(true);
+
+    assert.strictEqual(selection.getSelectAllState(true), true, "select all is true");
+    assert.deepEqual(selection.getSelectedItems(), [this.data[1], this.data[2]], "selected items");
+});
+
 QUnit.test("Select all by one page and changeItemSelection", function(assert) {
     var dataSource = createDataSource(this.data, {}, { paginate: true, pageSize: 3 });
 

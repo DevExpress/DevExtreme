@@ -455,6 +455,15 @@ var PARSERS = {
 
         return PARSERS.year(year);
     },
+    "longdatelongtime": function(text) {
+        return new Date(text);
+    },
+    "shortdateshorttime": function(text) {
+        return new Date(text);
+    },
+    "longdate": function(text) {
+        return new Date(text);
+    },
     "shortdate": function(text) {
         if(!/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/\d{1,4}/.test(text)) {
             return;

@@ -618,7 +618,7 @@ module.exports = {
                                             break;
                                         case "insert":
                                             if(!$rowsElement.length) {
-                                                $newRowElement.prependTo(tableElement);
+                                                $newRowElement.prependTo(tableElement.children("tbody"));
                                             } else if($rowElement.length) {
                                                 $newRowElement.insertBefore($rowElement);
                                             } else {
@@ -973,11 +973,11 @@ module.exports = {
                                 if(!isFreeSpaceRowVisible && $table) {
                                     freeSpaceRowElements.height(0);
                                 } else {
-                                    freeSpaceRowElements.css("display", isFreeSpaceRowVisible ? "" : "none");
+                                    freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
                                 that._updateLastRowBorder(isFreeSpaceRowVisible);
                             } else {
-                                freeSpaceRowElements.css("display", "none");
+                                freeSpaceRowElements.hide();
                                 commonUtils.deferUpdate(function() {
                                     var scrollbarWidth = that.getScrollbarWidth(true),
                                         elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth,
@@ -990,7 +990,7 @@ module.exports = {
                                         commonUtils.deferRender(function() {
                                             freeSpaceRowElements.height(resultHeight);
                                             isFreeSpaceRowVisible = true;
-                                            freeSpaceRowElements.css("display", "");
+                                            freeSpaceRowElements.show();
                                         });
                                     }
                                     commonUtils.deferRender(function() {
@@ -1000,7 +1000,7 @@ module.exports = {
                             }
                         } else {
                             freeSpaceRowElements.height(0);
-                            freeSpaceRowElements.css("display", "");
+                            freeSpaceRowElements.show();
                             that._updateLastRowBorder(true);
                         }
                     }
@@ -1226,7 +1226,7 @@ module.exports = {
                     if($cells) {
                         groupCellIndex = $cells.filter("." + GROUP_CELL_CLASS).index();
                         if(groupCellIndex >= 0 && $cells.length > groupCellIndex + 1) {
-                            $cells.length = groupCellIndex + 1;
+                            return $cells.slice(0, groupCellIndex + 1);
                         }
                     }
                     return $cells;
@@ -1245,7 +1245,7 @@ module.exports = {
                         tableElement = that._getTableElement();
 
                     if(items.length && tableElement) {
-                        rowElements = tableElement.children("tbody").children(".dx-row:visible, .dx-error-row").not("." + FREE_SPACE_CLASS);
+                        rowElements = tableElement.children("tbody").children(".dx-row, .dx-error-row").filter(":visible").not("." + FREE_SPACE_CLASS);
 
                         for(itemIndex = 0; itemIndex < items.length; itemIndex++) {
                             prevOffsetTop = offsetTop;
