@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     objectUtils = require("../../core/utils/object"),
+    arrayUtils = require("../../core/utils/array"),
     extend = require("../../core/utils/extend").extend,
     recurrenceUtils = require("./utils.recurrence"),
     registerComponent = require("../../core/component_registrator"),
@@ -972,7 +973,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _combineAppointments: function(appointments, additionalAppointments) {
         if(additionalAppointments.length) {
-            $.merge(appointments, additionalAppointments);
+            arrayUtils.merge(appointments, additionalAppointments);
         }
         this._sortAppointmentsByStartDate(appointments);
     },

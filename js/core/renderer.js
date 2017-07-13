@@ -647,7 +647,6 @@ renderer.tmpl = function() {
 renderer.templates = function() {
     return $.templates.apply(this, arguments);
 };
-renderer.merge = $.merge;
 renderer.param = $.param;
 renderer._data = $._data;
 renderer.data = $.data;

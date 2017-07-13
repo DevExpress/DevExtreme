@@ -97,9 +97,18 @@ var inArray = function(value, object) {
     return array.indexOf(value);
 };
 
+var merge = function(array1, array2) {
+    for(var i = 0; i < array2.length; i++) {
+        array1[array1.length] = array2[i];
+    }
+
+    return array1;
+};
+
 exports.isEmpty = isEmpty;
 exports.wrapToArray = wrapToArray;
 exports.intersection = intersection;
 exports.removeDuplicates = removeDuplicates;
 exports.normalizeIndexes = normalizeIndexes;
 exports.inArray = inArray;
+exports.merge = merge;
