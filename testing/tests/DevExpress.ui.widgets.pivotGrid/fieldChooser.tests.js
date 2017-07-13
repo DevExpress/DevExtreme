@@ -502,6 +502,36 @@ QUnit.test("Header filter menu for not group field", function(assert) {
         .up();
 });
 
+QUnit.test("Date in the filterValue", function(assert) {
+    var filterValue = new Date();
+    var dataSourceOptions = {
+        columnFields: [
+            { index: 0, caption: "Field 2", area: 'column', allowFiltering: true },
+            { index: 1, caption: "Field 3", area: 'column', filterValues: [filterValue], allowFiltering: true }
+        ],
+        fieldValues: [
+            [{ value: 1 }, { value: 2 }, { value: 4 }, { value: 5 }],
+            [{ value: 6 }, { value: 7 }, { value: new Date(filterValue) }, { value: 9 }, { value: 10 }]
+        ]
+    };
+
+    this.setup(dataSourceOptions);
+
+    assert.ok(this.fieldChooser);
+    assert.ok(this.dataSource);
+
+    var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
+
+    //act
+    $filterIndicatorsInColumnArea.eq(1).trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    var $filterMenuList = $(".dx-header-filter-menu .dx-list");
+    assert.equal($filterMenuList.find(".dx-list-item").length, 5, 'list item count');
+    assert.equal($filterMenuList.find(".dx-list-item-selected").length, 1, 'list selected item count');
+});
+
 QUnit.test("Header filter menu when data with key", function(assert) {
     var dataSourceOptions = {
         columnFields: [

@@ -1486,7 +1486,7 @@ QUnit.test("Filter group field. Exclude Type", function(assert) {
         }, {
             index: 2,
             value: 1998
-        }]),
+        }]);
 
         assert.deepEqual(data.values, [
             [[105], [57], [48]],
@@ -1496,6 +1496,26 @@ QUnit.test("Filter group field. Exclude Type", function(assert) {
     });
 });
 
+QUnit.test("Filter dates without group interval", function(assert) {
+    var dataSource = window.orders.slice();
+    dataSource[10] = { OrderDate: null };
+
+    new LocalStore(dataSource).load({
+        rows: [],
+        columns: [
+            {
+                dataField: "OrderDate", dataType: 'date', filterValues: [
+                    new Date(window.orders[0].OrderDate),
+                    null
+                ], filterType: "include" }
+        ],
+        values: [{ summaryType: 'count' }]
+    }).done(function(data) {
+        assert.equal(data.columns.length, 2);
+        assert.equal(data.columns[0].value.valueOf(), new Date(window.orders[0].OrderDate).valueOf());
+        assert.equal(data.columns[1].value, null);
+    });
+});
 
 QUnit.test("complex dataField", function(assert) {
     var dataSource = [
