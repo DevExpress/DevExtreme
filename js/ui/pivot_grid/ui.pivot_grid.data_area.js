@@ -61,14 +61,14 @@ exports.DataArea = areaItem.AreaItem.inherit({
     reset: function() {
         this.callBase();
         if(this._virtualContent) {
-            this._virtualContent.parent().height("auto");
+            this._virtualContent.parent().css("height", "auto");
         }
     },
 
     setVirtualContentParams: function(params) {
         this.callBase(params);
 
-        this._virtualContent.parent().height(params.height);
+        this._virtualContent.parent().css("height", params.height);
 
         this.tableElement().css({
             top: params.top,
