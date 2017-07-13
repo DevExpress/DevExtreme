@@ -167,7 +167,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         columns.forEach(function(column) {
             if(!that._isColumnHidden(column)) {
-                if(commonUtils.isDefined(column.width)) {
+                if(typeUtils.isDefined(column.width)) {
                     fixedColumnsWidth += column.width;
                 } else {
                     columnsWithoutWidthCount++;
