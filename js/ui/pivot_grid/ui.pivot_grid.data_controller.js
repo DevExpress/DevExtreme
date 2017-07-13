@@ -967,7 +967,9 @@ exports.DataController = Class.inherit((function() {
             when(
                 createHeaderInfo(data.columns, columnFields, dataFieldsForColumns, true, columnOptions),
                 createHeaderInfo(data.rows, rowFields, dataFieldsForRows, false, rowOptions)
-            ).done(function(columnsInfo, rowsInfo) {
+            ).always(function() {
+                dataSource._changeLoadingCount(-1);
+            }).done(function(columnsInfo, rowsInfo) {
                 that._columnsInfo = columnsInfo;
                 that._rowsInfo = rowsInfo;
 
@@ -980,8 +982,6 @@ exports.DataController = Class.inherit((function() {
                     that._columnsScrollController.load();
                     that._lockChanged = false;
                 }
-            }).always(function() {
-                dataSource._changeLoadingCount(-1);
             }).done(function() {
                 that._fireChanged();
                 if(that._stateStoringController.isEnabled() && !that._dataSource.isLoading()) {
