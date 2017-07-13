@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
+    arrayUtils = require("../../core/utils/array"),
     dataGridCore = require("./ui.data_grid.core"),
     exportMixin = require("../grid_core/ui.grid_core.export_mixin"),
     clientExporter = require("../../client_exporter"),
@@ -411,7 +412,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                 }
 
                 if(summaryValues.length > 0) {
-                    $.merge(item.values, summaryValues);
+                    arrayUtils.merge(item.values, summaryValues);
                     summaryValues = [];
                 }
             }

@@ -28,7 +28,7 @@ var processItems = function(groupItems, field) {
 
     if(field.filterValues) {
         each(field.filterValues, function(_, filterValue) {
-            filterValues.push(Array.isArray(filterValue) ? filterValue.join("/") : filterValue);
+            filterValues.push(Array.isArray(filterValue) ? filterValue.join("/") : filterValue && filterValue.valueOf());
         });
     }
 
@@ -39,7 +39,7 @@ var processItems = function(groupItems, field) {
             preparedFilterValue;
 
         item.value = isTree ? path.slice(0) : (item.key || item.value);
-        preparedFilterValue = isTree ? path.join("/") : item.value;
+        preparedFilterValue = isTree ? path.join("/") : item.value && item.value.valueOf();
 
         if(item.children) {
             item.items = item.children;
