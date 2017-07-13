@@ -1389,6 +1389,32 @@ QUnit.test("Render a view template for item of adaptive form  when other columns
     assert.equal($(".dx-adaptive-detail-row .test-template").length, 1, "cell template is shown");
 });
 
+//T519926
+QUnit.test("Calculate correct an average width of column when some columns has no width", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(800);
+
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", FixedColumn1: "Fixed Column 1", FixedColumn2: "Fixed Column 2" },
+        { firstName: 'Super', lastName: "Star", FixedColumn1: "Fixed Column 1", FixedColumn2: "Fixed Column 2" }
+    ];
+
+    this.columns = [
+        { dataField: 'firstName', index: 0 },
+        { dataField: 'lastName', index: 1, width: 100 },
+        { dataField: 'FixedColumn1', index: 2 },
+        { dataField: 'FixedColumn2', index: 3, width: 150 }
+    ];
+
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-data-row .dx-command-adaptive.dx-command-adaptive-hidden").length, 2, "command adaptive element");
+});
+
 QUnit.module("API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
