@@ -431,7 +431,11 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_addRow
+         * @name dxDataGridMethods_addRow
+         * @publicName addRow()
+         */
+        /**
+         * @name dxTreeListMethods_addRow
          * @publicName addRow()
          */
         /**
