@@ -673,7 +673,7 @@ QUnit.test("multi tag should be rendered after max number of tags if showMultiTa
         }),
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
 
-    assert.equal($tag.length, 3, "3 tags rendered");
+    assert.equal($tag.length, 2, "2 tags rendered");
     assert.deepEqual($tag.text(), "12 more", "text is correct");
 });
 
