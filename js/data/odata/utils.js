@@ -111,6 +111,16 @@ function toAbsoluteUrl(basePath, relativePath) {
     return baseParts.join("/");
 }
 
+var param = function(params) {
+    var result = [];
+
+    for(var name in params) {
+        result.push(name + "=" + params[name]);
+    }
+
+    return result.join("&");
+};
+
 var ajaxOptionsForRequest = function(protocolVersion, request, options) {
     request = extend(
         {
@@ -138,7 +148,7 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
         useJsonp = isGet && options.jsonp,
         params = extend({}, request.params),
         ajaxData = isGet ? params : formatPayload(request.payload),
-        qs = !isGet && $.param(params),
+        qs = !isGet && param(params),
         url = request.url,
         contentType = !isGet && JSON_VERBOSE_MIME_TYPE;
 
