@@ -730,6 +730,7 @@ declare module DevExpress.viz.core {
         onExporting?: (e: {
             fileName: string;
             cancel: boolean;
+            format: string;
         }) => void;
 
         /** @docid BaseWidgetOptions_onfilesaving */
@@ -759,6 +760,9 @@ declare module DevExpress.viz.core {
 
         /** @docid BaseWidgetMethods_svg */
         svg(): string;
+
+        /** @docid BaseWidgetMethods_getSize */
+        getSize(): { width: number; height: number };
 
         /** @docid BaseWidgetMethods_exportTo */
         exportTo(fileName: string, format: string): void;

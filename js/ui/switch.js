@@ -171,15 +171,24 @@ var Switch = Editor.inherit({
 
         this.callBase();
 
-        this._handleWidth = parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
+        this._renderHandleWidth();
         this._getHandleOffset = this.option("useOldRendering") ? this._getPixelOffset : this._getCalcOffset;
         this._renderValue();
         this._renderClick();
     },
 
+    _renderHandleWidth: function() {
+        this._handleWidth = parseFloat(window.getComputedStyle(this._$handle.get(0)).width);
+    },
+
     _getCalcOffset: function(value, offset) {
         var ratio = offset - Number(!value);
-        return "calc(" + 100 * ratio + "% + " + -this._handleWidth * ratio + "px)";
+        return "calc(" + 100 * ratio + "% + " + -this._getHandleWidth() * ratio + "px)";
+    },
+
+    _getHandleWidth: function() {
+        !this._handleWidth && this._renderHandleWidth();
+        return this._handleWidth;
     },
 
     _getPixelOffset: function(value, offset) {
@@ -275,7 +284,7 @@ var Switch = Editor.inherit({
 
     _getMarginBound: function() {
         if(!this._marginBound) {
-            this._marginBound = this._$switchContainer.outerWidth(true) - this._handleWidth;
+            this._marginBound = this._$switchContainer.outerWidth(true) - this._getHandleWidth();
         }
         return this._marginBound;
     },
@@ -413,6 +422,12 @@ var Switch = Editor.inherit({
     _setLabelsText: function() {
         this._$labelOn.text(this.option("onText"));
         this._$labelOff.text(this.option("offText"));
+    },
+
+    _visibilityChanged: function(visible) {
+        if(visible) {
+            this.repaint();
+        }
     },
 
     _optionChanged: function(args) {

@@ -630,5 +630,10 @@ exports.AreaItem = Class.inherit({
         }
 
         return columnCount;
+    },
+
+    getData: function() {
+        var tableElement = this._tableElement;
+        return tableElement ? tableElement.data("data") : [];
     }
 });

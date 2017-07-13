@@ -1571,7 +1571,7 @@ var PivotGrid = Widget.inherit({
         };
 
         that._renderHeaders(rowHeaderContainer, columnHeaderContainer, filterHeaderContainer, dataHeaderContainer);
-        if(that._needDelayResizing(that._dataController.getCellsInfo()) && isFirstDrawing) {
+        if(that._needDelayResizing(dataArea.getData()) && isFirstDrawing) {
             setTimeout(updateHandler);
         } else {
             updateHandler();

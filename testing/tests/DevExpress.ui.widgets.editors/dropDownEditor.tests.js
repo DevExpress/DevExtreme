@@ -758,6 +758,26 @@ QUnit.test("onValueChanged should be fired for each change by keyboard when fiel
     assert.equal(valueChangedSpy.callCount, 2, "onValueChanged is fired second time");
 });
 
+QUnit.test("field template should be correctly removed after it is been applied once", function(assert) {
+    var $dropDownEditor = $("#dropDownEditorLazy"),
+        dropDownEditor = $dropDownEditor.dxDropDownEditor({
+            items: [1, 2, 3],
+            opened: true,
+            value: [1],
+            searchEnabled: true,
+            fieldTemplate: function(itemData, $container) {
+                var $textBox = $("<div>").dxTextBox(),
+                    $field = $('<div>Test<div/>');
+
+                $container.append($field).append($textBox);
+            }
+        }).dxDropDownEditor("instance");
+
+    dropDownEditor.option("fieldTemplate", null);
+
+    assert.notEqual($dropDownEditor.text(), "Test", "fieldTemplate was correctly cleared");
+});
+
 QUnit.test("events should be rendered for input after value is changed when field template is specified (T399896)", function(assert) {
     var events = [
             "KeyDown", "KeyPress", "KeyUp",
@@ -824,6 +844,17 @@ QUnit.test("openOnFieldClick", function(assert) {
 
     $input.trigger("dxclick");
     assert.equal(dropDownEditor.option("opened"), false, "not opened by field click");
+});
+
+QUnit.testInActiveWindow("focus editor in the case when 'openOnFieldClick' is false", function(assert) {
+    var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+            openOnFieldClick: false
+        }),
+        $input = $dropDownEditor.find(".dx-texteditor-input");
+
+    $input.trigger("dxclick");
+
+    assert.ok($dropDownEditor.hasClass("dx-state-focused"), "editor is focused on click");
 });
 
 QUnit.test("DropDownEditor doesn't opened on field click when it located in element with disabled state", function(assert) {

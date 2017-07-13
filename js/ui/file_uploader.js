@@ -5,7 +5,6 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     Callbacks = require("../core/utils/callbacks"),
     isDefined = require("../core/utils/type").isDefined,
-    objectUtils = require("../core/utils/object"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     ajax = require("../core/utils/ajax"),
@@ -438,7 +437,6 @@ var FileUploader = Editor.inherit({
         });
     },
 
-
     _inputChangeHandler: function() {
         if(this._doPreventInputChange) {
             return;
@@ -446,11 +444,6 @@ var FileUploader = Editor.inherit({
 
         var fileName = this._$fileInput.val().replace(/^.*\\/, ''),
             files = this._$fileInput.prop("files");
-
-        if(this.option("uploadMode") === "useForm") {
-            files = files ? objectUtils.deepExtendArraySafe([], files) : undefined;
-            this.reset();
-        }
 
         if(files && !files.length) {
             return;
@@ -462,11 +455,10 @@ var FileUploader = Editor.inherit({
         if(this.option("uploadMode") === "instantly") {
             this._uploadFiles();
         }
-
     },
 
     _shouldFileListBeExtended: function() {
-        return this.option("extendSelection") && this.option("multiple");
+        return this.option("uploadMode") !== "useForm" && this.option("extendSelection") && this.option("multiple");
     },
 
     _removeDuplicates: function(files, value) {
