@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     when = require("../../integration/jquery/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     Action = require("../../core/action"),
     Guid = require("../../core/guid"),
     domUtils = require("../../core/utils/dom"),
@@ -294,7 +295,7 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        var items = $.map($items, (function(item) {
+        var items = iteratorUtils.map($items, (function(item) {
             var $item = $(item);
             var result = domUtils.getElementOptions(item).dxItem;
             var isTemplateRequired = $item.html().trim() && !result.template;

@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     wrapToArray = require("../core/utils/array").wrapToArray,
     inArray = require("../core/utils/array").inArray,
+    iteratorUtils = require("../core/utils/iterator"),
     registerEvent = require("./core/event_registrator"),
     eventUtils = require("./utils"),
     GestureEmitter = require("./gesture/emitter.gesture"),
@@ -149,7 +150,7 @@ var DragEmitter = GestureEmitter.inherit({
         this._maxBottomOffset = e.maxBottomOffset;
 
         var dropTargets = wrapToArray(e.targetElements || (e.targetElements === null ? [] : knownDropTargets));
-        this._dropTargets = $.map(dropTargets, function(element) { return $(element).get(0); });
+        this._dropTargets = iteratorUtils.map(dropTargets, function(element) { return $(element).get(0); });
     },
 
     _move: function(e) {

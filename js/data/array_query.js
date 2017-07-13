@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     Class = require("../core/class"),
     typeUtils = require("../core/utils/type"),
+    iteratorUtils = require("../core/utils/iterator"),
     compileGetter = require("../core/utils/data").compileGetter,
     toComparable = require("../core/utils/data").toComparable,
     errorsModule = require("./errors"),
@@ -400,7 +401,7 @@ var GroupIterator = Iterator.inherit({
         }
 
         this.groupedIter = new ArrayIterator(
-            $.map(
+            iteratorUtils.map(
                 keys,
                 function(key) {
                     return { key: key, items: hash[key] };

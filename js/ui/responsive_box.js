@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     typeUtils = require("../core/utils/type"),
     errors = require("./widget/ui.errors"),
     windowUtils = require("../core/utils/window"),
+    iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     registerComponent = require("../core/component_registrator"),
     Box = require("./box"),
@@ -309,7 +310,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _sizesByScreen: function(sizeConfigs) {
-        return $.map(this._filterByScreen(sizeConfigs), (function(sizeConfig) {
+        return iteratorUtils.map(this._filterByScreen(sizeConfigs), (function(sizeConfig) {
             return extend(this._defaultSizeConfig(), sizeConfig);
         }).bind(this));
     },
@@ -369,11 +370,11 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _itemsByScreen: function() {
-        return $.map(this.option("items"), (function(item) {
+        return iteratorUtils.map(this.option("items"), (function(item) {
             var locations = item.location || {};
             locations = typeUtils.isPlainObject(locations) ? [locations] : locations;
 
-            return $.map(this._filterByScreen(locations), function(location) {
+            return iteratorUtils.map(this._filterByScreen(locations), function(location) {
                 return {
                     item: item,
                     location: extend({ rowspan: 1, colspan: 1 }, location)

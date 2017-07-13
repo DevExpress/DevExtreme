@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     noop = require("../../core/utils/common").noop,
+    iteratorUtils = require("../../core/utils/iterator"),
     errors = require("../errors"),
     CommandMapping = require("../command_mapping"),
     commandToDXWidgetAdapters = require("./widget_command_adapters"),
@@ -40,13 +41,13 @@ var CommandManager = Class.inherit({
     },
     findCommands: function($items) {
         var items = $items.find(".dx-command").add($items.filter(".dx-command"));
-        var result = $.map(items, function(element) {
+        var result = iteratorUtils.map(items, function(element) {
             return $(element).dxCommand("instance");
         });
         return result;
     },
     findCommandContainers: function($markup) {
-        var result = $.map($markup.find(".dx-command-container"), function(element) {
+        var result = iteratorUtils.map($markup.find(".dx-command-container"), function(element) {
             return $(element).dxCommandContainer("instance");
         });
         return result;

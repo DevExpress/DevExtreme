@@ -6,6 +6,7 @@ var $ = require("../core/renderer"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
     arrayUtils = require("../core/utils/array"),
+    iteratorUtils = require("../core/utils/iterator"),
     ActionSheetStrategy = require("./toolbar/ui.toolbar.strategy.action_sheet"),
     DropDownMenuStrategy = require("./toolbar/ui.toolbar.strategy.drop_down_menu"),
     ListBottomStrategy = require("./toolbar/ui.toolbar.strategy.list_bottom"),
@@ -286,7 +287,7 @@ var Toolbar = ToolbarBase.inherit({
             .not(".dx-state-invisible");
         this._restoreItems = this._restoreItems || [];
 
-        var overflowItems = $.map($hiddenItems, function(item) {
+        var overflowItems = iteratorUtils.map($hiddenItems, function(item) {
             var itemData = that._getItemData(item),
                 $itemContainer = $(item).children(),
                 $itemMarkup = $itemContainer.children();

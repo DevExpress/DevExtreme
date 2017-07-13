@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     Provider = require("./provider"),
     abstract = Provider.abstract;
 
@@ -64,12 +65,12 @@ var DynamicProvider = Provider.inherit({
     _attachHandlers: abstract,
 
     addMarkers: function(options) {
-        return Promise.all($.map(options, function(options) {
+        return Promise.all(iteratorUtils.map(options, function(options) {
             return this._addMarker(options);
         }.bind(this))).then(function(markerObjects) {
             this._fitBounds();
 
-            return [false, $.map(markerObjects, function(markerObject) {
+            return [false, iteratorUtils.map(markerObjects, function(markerObject) {
                 return markerObject.marker;
             })];
         }.bind(this));
@@ -131,12 +132,12 @@ var DynamicProvider = Provider.inherit({
     },
 
     addRoutes: function(options) {
-        return Promise.all($.map(options, function(options) {
+        return Promise.all(iteratorUtils.map(options, function(options) {
             return this._addRoute(options);
         }.bind(this))).then(function(routeObjects) {
             this._fitBounds();
 
-            return [false, $.map(routeObjects, function(routeObject) {
+            return [false, iteratorUtils.map(routeObjects, function(routeObject) {
                 return routeObject.instance;
             })];
         }.bind(this));

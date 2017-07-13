@@ -6,6 +6,7 @@ var $ = require("../core/renderer"),
     Action = require("../core/action"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
+    iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     mergeCommands = require("./utils").utils.mergeCommands,
     createActionExecutors = require("./action_executors").createActionExecutors,
@@ -113,7 +114,7 @@ var Application = Class.inherit({
 
         var generatedIdCount = 0;
 
-        return $.map(commandConfig, function(item) {
+        return iteratorUtils.map(commandConfig, function(item) {
             var command;
             if(item instanceof dxCommand) {
                 command = item;
@@ -128,7 +129,7 @@ var Application = Class.inherit({
     },
 
     _mapNavigationCommands: function(navigationCommands, commandMapping) {
-        var navigationCommandIds = $.map(navigationCommands, function(command) {
+        var navigationCommandIds = iteratorUtils.map(navigationCommands, function(command) {
             return command.option("id");
         });
         commandMapping.mapCommands("global-navigation", navigationCommandIds);

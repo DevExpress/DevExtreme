@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     commandToContainer = require("../utils").utils.commandToContainer,
     fx = require("../../animation/fx"),
     TransitionExecutorModule = require("../../animation/transition_executor/transition_executor"),
@@ -86,7 +87,7 @@ var WidgetAdapterBase = Class.inherit({
     },
     _setWidgetItemOption: function(optionName, optionValue, itemCommand) {
         var items = this.widget.option("items"),
-            itemIndex = inArray(itemCommand, $.map(items, function(item) {
+            itemIndex = inArray(itemCommand, iteratorUtils.map(items, function(item) {
                 return item.command || {};
             }));
 

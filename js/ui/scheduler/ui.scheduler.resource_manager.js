@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     grep = require("../../core/utils/common").grep,
     isDefined = require("../../core/utils/type").isDefined,
     objectUtils = require("../../core/utils/object"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     query = require("../../data/query"),
@@ -37,7 +38,7 @@ var ResourceManager = Class.inherit({
         var valueGetter = dataCoreUtils.compileGetter(getValueExpr(resource)),
             displayGetter = dataCoreUtils.compileGetter(getDisplayExpr(resource));
 
-        return $.map(data, function(item) {
+        return iteratorUtils.map(data, function(item) {
             var result = {
                 id: valueGetter(item),
                 text: displayGetter(item)
@@ -92,7 +93,7 @@ var ResourceManager = Class.inherit({
             setter: {}
         };
 
-        this._resourceFields = $.map(resources || [], (function(resource) {
+        this._resourceFields = iteratorUtils.map(resources || [], (function(resource) {
             var field = this.getField(resource);
 
             this._dataAccessors.getter[field] = dataCoreUtils.compileGetter(field);

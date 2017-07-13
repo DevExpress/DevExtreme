@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    iteratorUtils = require("../../core/utils/iterator"),
     frameworkUtils = require("../utils"),
     layoutSets = require("./presets").layoutSets,
     EventsMixin = require("../../core/events_mixin"),
@@ -147,7 +148,7 @@ var DefaultLayoutController = Class.inherit({
             }
         });
 
-        when.apply($, $.map(viewsToShow, function(viewInfo) {
+        when.apply($, iteratorUtils.map(viewsToShow, function(viewInfo) {
             return that.showView(viewInfo);
         })).done(function() {
             that._notifyShown(viewsToShow);

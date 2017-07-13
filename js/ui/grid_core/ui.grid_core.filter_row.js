@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
@@ -558,7 +559,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 operationDescriptions = filterRowOptions && filterRowOptions.operationDescriptions || {};
 
             if(column.filterOperations && column.filterOperations.length) {
-                result = $.map(column.filterOperations, function(value) {
+                result = iteratorUtils.map(column.filterOperations, function(value) {
                     var descriptionName = OPERATION_DESCRIPTORS[value];
 
                     return {

@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     ajax = require("../../core/utils/ajax"),
     dataCoreUtils = require("../../core/utils/data"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     dateLocalization = require("../../localization/date"),
     formatHelper = require("../../format_helper"),
@@ -188,7 +189,7 @@ exports.getExpandedLevel = function(options, axisName) {
 };
 
 function createGroupFields(item) {
-    return $.map(["year", "quarter", "month"], function(value, index) {
+    return iteratorUtils.map(["year", "quarter", "month"], function(value, index) {
         return extend({}, item, { groupInterval: value, groupIndex: index });
     });
 }

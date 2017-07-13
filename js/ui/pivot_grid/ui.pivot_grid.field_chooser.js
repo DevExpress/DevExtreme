@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
@@ -438,7 +439,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         var fields = dataSource && dataSource.fields() || [],
             treeItems;
 
-        fields = $.map(fields, function(field) {
+        fields = iteratorUtils.map(fields, function(field) {
             return field.visible === false || isDefined(field.groupIndex) ? null : field;
         });
 

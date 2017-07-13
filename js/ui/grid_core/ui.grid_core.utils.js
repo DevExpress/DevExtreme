@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     stringUtils = require("../../core/utils/string"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     toComparable = require("../../core/utils/data").toComparable,
@@ -60,7 +61,7 @@ module.exports = (function() {
         if(typeUtils.isDate(dateValue)) {
             return [dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate(), dateValue.getHours(), dateValue.getMinutes(), dateValue.getSeconds()];
         }
-        return $.map(("" + dateValue).split("/"), function(value, index) {
+        return iteratorUtils.map(("" + dateValue).split("/"), function(value, index) {
             return index === 1 ? Number(value) - 1 : Number(value);
         });
     };

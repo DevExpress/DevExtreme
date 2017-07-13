@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     compileGetter = require("../../core/utils/data").compileGetter,
     errors = require("../widget/ui.errors"),
@@ -709,7 +710,7 @@ gridCore.registerModule("summary", {
                             calculateCustomSummary = that.option("summary.calculateCustomSummary"),
                             commonSkipEmptyValues = that.option("summary.skipEmptyValues");
 
-                        return $.map(summaryItems || [], function(summaryItem) {
+                        return iteratorUtils.map(summaryItems || [], function(summaryItem) {
 
                             var column = columnsController.columnOption(summaryItem.column),
                                 calculateCellValue = (column && column.calculateCellValue) ? column.calculateCellValue.bind(column) : compileGetter(column ? column.dataField : summaryItem.column),

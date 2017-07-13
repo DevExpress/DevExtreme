@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     TemplateBase = require("./ui.template_base"),
     removeEvent = require("../../core/remove_event"),
+    iteratorUtils = require("../../core/utils/iterator"),
     isPrimitive = require("../../core/utils/type").isPrimitive;
 
 var watchChanges = (function() {
@@ -41,7 +42,7 @@ var watchChanges = (function() {
         var resolvedData = {},
             missedFields = fields.slice();
 
-        var watchHandlers = $.map(fields, function(name) {
+        var watchHandlers = iteratorUtils.map(fields, function(name) {
             var fieldGetter = fieldsMap[name];
 
             return watchMethod(

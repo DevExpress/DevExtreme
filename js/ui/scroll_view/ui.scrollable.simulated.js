@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     math = Math,
     titleize = require("../../core/utils/inflector").titleize,
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     translator = require("../../animation/translator"),
     Class = require("../../core/class"),
     Animator = require("./animator"),
@@ -810,7 +811,7 @@ var SimulatedStrategy = Class.inherit({
 
     _eventHandler: function(eventName) {
         var args = $.makeArray(arguments).slice(1),
-            deferreds = $.map(this._scrollers, function(scroller) {
+            deferreds = iteratorUtils.map(this._scrollers, function(scroller) {
                 return scroller["_" + eventName + "Handler"].apply(scroller, args);
             });
         return when.apply($, deferreds).promise();

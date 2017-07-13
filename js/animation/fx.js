@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     errors = require("../core/errors"),
     extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
+    iteratorUtils = require("../core/utils/iterator"),
     translator = require("./translator"),
     animationFrame = require("./frame"),
     support = require("../core/utils/support"),
@@ -285,7 +286,7 @@ var FrameAnimationStrategy = {
                 var currentValue = extend({}, this.currentValue);
 
                 if(currentValue[TRANSFORM_PROP]) {
-                    currentValue[TRANSFORM_PROP] = $.map(currentValue[TRANSFORM_PROP], function(value, prop) {
+                    currentValue[TRANSFORM_PROP] = iteratorUtils.map(currentValue[TRANSFORM_PROP], function(value, prop) {
                         if(prop === "translate") {
                             return translator.getTranslateCss(value);
                         } else if(prop === "scale") {

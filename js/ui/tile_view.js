@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     inflector = require("../core/utils/inflector"),
+    iteratorUtils = require("../core/utils/iterator"),
     isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
     ScrollView = require("./scroll_view"),
@@ -295,7 +296,7 @@ var TileView = CollectionWidget.inherit({
         var items = this.option("items") || [],
             config = this._config,
             itemMargin = this.option("itemMargin"),
-            maxItemCrossRatio = Math.max.apply(Math, $.map(items || [], function(item) {
+            maxItemCrossRatio = Math.max.apply(Math, iteratorUtils.map(items || [], function(item) {
                 return Math.round(item[config.itemCrossRatio] || 1);
             }));
 

@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     devices = require("../../core/devices"),
@@ -447,7 +448,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(gridCoreUtils.checkChanges(optionNames, ["width", "visibleWidth"])) {
             var visibleColumns = this._columnsController.getVisibleColumns();
-            var widths = $.map(visibleColumns, function(column) { return column.visibleWidth || column.width || "auto"; });
+            var widths = iteratorUtils.map(visibleColumns, function(column) { return column.visibleWidth || column.width || "auto"; });
 
             this.setColumnWidths(widths);
             return;

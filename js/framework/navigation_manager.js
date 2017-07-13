@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     Class = require("../core/class"),
     Callbacks = require("../core/utils/callbacks"),
     commonUtils = require("../core/utils/common"),
+    iteratorUtils = require("../core/utils/iterator"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     extend = require("../core/utils/extend").extend,
     navigationDevices = require("./navigation_devices"),
@@ -239,7 +240,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
             stack = this.navigationStacks[stackKey];
         } else {
             stack = stackOrStackKey;
-            stackKey = $.map(this.navigationStacks, function(stack, key) {
+            stackKey = iteratorUtils.map(this.navigationStacks, function(stack, key) {
                 if(stack === stackOrStackKey) {
                     return key;
                 }
@@ -387,7 +388,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
                 var stackState = {};
                 state.navigationStacks[stackKey] = stackState;
                 stackState.currentIndex = stack.currentIndex;
-                stackState.items = $.map(stack.items, function(item) {
+                stackState.items = iteratorUtils.map(stack.items, function(item) {
                     return {
                         key: item.key,
                         uri: item.uri
@@ -414,7 +415,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
                     var stack = that._createNavigationStack();
                     that.navigationStacks[stackKey] = stack;
                     stack.currentIndex = stackState.currentIndex;
-                    stack.items = $.map(stackState.items, function(item) {
+                    stack.items = iteratorUtils.map(stackState.items, function(item) {
                         item.stack = stack;
                         return item;
                     });

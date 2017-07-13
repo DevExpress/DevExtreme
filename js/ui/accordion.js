@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
+    iteratorUtils = require("../core/utils/iterator"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
@@ -343,7 +344,7 @@ var Accordion = CollectionWidget.inherit({
 
         clearTimeout(this._animationTimer);
 
-        return when.apply($, $.map(this._itemElements(), function(item) {
+        return when.apply($, iteratorUtils.map(this._itemElements(), function(item) {
             return that._updateItemHeight($(item), itemHeight, skipAnimation);
         })).done(function() {
             if(deferredAnimate) {
