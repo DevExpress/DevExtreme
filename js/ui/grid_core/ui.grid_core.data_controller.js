@@ -611,8 +611,6 @@ module.exports = {
 
                                     if(prevIndex === rowIndex) return;
 
-                                    change.rowIndices.push(rowIndex);
-
                                     prevIndex = rowIndex;
                                     oldItem = that._items[rowIndex];
                                     oldNextItem = that._items[rowIndex + 1];
@@ -640,10 +638,14 @@ module.exports = {
                                         that._items.splice(rowIndex, 1);
                                         rowIndexCorrection--;
                                         prevIndex = -1;
-                                    } else {
+                                    } else if(newItem) {
                                         changeType = "update";
                                         that._items[rowIndex] = newItem;
+                                    } else {
+                                        return;
                                     }
+
+                                    change.rowIndices.push(rowIndex);
                                     change.changeTypes.push(changeType);
                                 });
                                 break;
