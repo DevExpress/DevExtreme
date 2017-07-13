@@ -138,6 +138,12 @@ var BaseWidget = {
     */
     svg: function() { },
     /**
+    * @name BaseWidgetMethods_getSize
+    * @publicName getSize()
+    * @return object
+    */
+    getSize: function() { },
+    /**
     * @name BaseWidgetMethods_render
     * @publicName render()
     */
@@ -431,6 +437,7 @@ var BaseWidget = {
     * @type_function_param1 e:object
     * @type_function_param1_field4 fileName:string
     * @type_function_param1_field5 cancel:boolean
+    * @type_function_param1_field6 format:string
     * @extends Action
     * @action
     */

@@ -2289,6 +2289,53 @@ QUnit.test("Scrolling when virtual scrolling is enabled", function(assert) {
     scrollable.scrollTo({ left: 10, top: 1 });
 });
 
+//T518512
+QUnit.test("render should be called once after expand item if virtual scrolling enabled", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+
+    var array = [];
+    for(var i = 0; i < 30; i++) {
+        array.push({ id: i, row: i + 1, column: i + 1, data: 1 });
+    }
+
+    var pivotGrid = createPivotGrid({
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "virtual",
+            timeout: 0
+        },
+        dataSource: {
+            store: array,
+            fields: [
+                { dataField: "column", area: "column" },
+                { dataField: "row", area: "row" },
+                { dataField: "id", area: "row" },
+                { dataField: "data", area: "data" }
+            ]
+        }
+    }, assert);
+
+    this.clock.tick();
+
+    var contentReadyCallCount = 0;
+
+    pivotGrid.on("contentReady", function() {
+        contentReadyCallCount++;
+    });
+
+    //act
+    pivotGrid.getDataSource().expandHeaderItem("row", [1]);
+    pivotGrid.getDataSource().load();
+    this.clock.tick();
+
+    //assert
+    assert.equal(contentReadyCallCount, 1);
+});
+
 QUnit.test("Initial horizontal scroll position when rtl is enabled", function(assert) {
     $('#pivotGrid').empty();
     $('#pivotGrid').width(100);
@@ -3438,6 +3485,7 @@ QUnit.module("Tests with stubs", {
         that.dataArea.element.returns($("<div>"));
         that.dataArea.groupElement.returns($("<div>"));
         that.dataArea.getRowsHeight.returns([]);
+        that.dataArea.getData.returns([]);
         that.dataArea.on.returns(that.dataArea);
         that.dataArea.off.returns(that.dataArea);
 
