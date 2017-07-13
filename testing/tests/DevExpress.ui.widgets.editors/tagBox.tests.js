@@ -973,7 +973,7 @@ QUnit.test("T338728 - onValueChanged action should contain correct previousValue
         tagBox = $tagBox.dxTagBox("instance");
 
     tagBox.option("value", [2]);
-    assert.deepEqual(spy.args[0][0].previousValue, ["1", "2"], "the 'previousValue' argument is correct");
+    assert.deepEqual(spy.args[0][0].previousValue, [1, 2], "the 'previousValue' argument is correct");
 });
 
 QUnit.test("onValueChanged should not be fired on the 'backspace' key press if the editor is already empty (T385450)", function(assert) {
