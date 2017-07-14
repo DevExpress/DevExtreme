@@ -2874,6 +2874,9 @@ QUnit.test("selectbox should not render own components if it was disposed (T5174
     try {
         var instance = $("#selectBox").dxSelectBox({
             dataSource: {
+                load: function() {
+                    return [1];
+                },
                 byKey: function() {
                     var d = $.Deferred();
                     setTimeout(function() {
