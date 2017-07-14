@@ -77,6 +77,7 @@ DevExpress.utils.findBestMatches = require("../../core/utils/common").findBestMa
 DevExpress.createQueue = require("../../core/utils/queue").create;
 DevExpress.utils.dom = require("../../core/utils/dom");
 DevExpress.utils.common = require("../../core/utils/common");
+DevExpress.utils.type = require("../../core/utils/type");
 DevExpress.utils.date = require("../../core/utils/date");
 DevExpress.utils.browser = require("../../core/utils/browser");
 DevExpress.utils.inflector = require("../../core/utils/inflector");
