@@ -138,6 +138,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return options.itemsCount;
             },
 
+            totalItemsCount: function() {
+                return options.totalItemsCount;
+            },
+
             isLoading: function() {
                 return false;
             },
