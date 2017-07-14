@@ -415,6 +415,15 @@ QUnit.test("tag should have correct value when item value is zero", function(ass
     assert.equal($.trim($tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS).text()), "01", "selected first and second items");
 });
 
+QUnit.test("'text' option should have correct value when item value is zero", function(assert) {
+    var tagBox = $("#tagBox").dxTagBox({
+        value: [0],
+        items: [0, 1]
+    }).dxTagBox("instance");
+
+    assert.equal(tagBox.option("text"), "0");
+});
+
 QUnit.test("tag should have correct value when item value is an empty string", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
         items: ["", 1, 2, 3],
