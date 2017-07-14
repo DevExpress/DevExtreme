@@ -383,7 +383,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _renderInputValue: function() {
-        return this.callBase().always(function() {
+        return this.callBase.apply(this, arguments).always(function() {
             this._renderInputValueAsync();
         }.bind(this));
     },

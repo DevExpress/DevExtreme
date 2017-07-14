@@ -381,9 +381,14 @@ var DropDownList = DropDownEditor.inherit({
         return DROPDOWNLIST_POPUP_WRAPPER_CLASS;
     },
 
-    _renderInputValue: function() {
+    _renderInputValue: function(skipItemLoading) {
         var callBase = this.callBase.bind(this),
             value = this._getCurrentValue();
+
+        if(skipItemLoading) {
+            callBase(value);
+            return $.when();
+        }
 
         return this._loadItem(value).always((function(item) {
             this._setSelectedItem(item);

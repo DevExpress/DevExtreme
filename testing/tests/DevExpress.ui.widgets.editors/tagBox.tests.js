@@ -3674,6 +3674,23 @@ QUnit.test("first page should be displayed after search and tag select", functio
     assert.equal($.trim($(".dx-item").first().text()), "0", "first item loaded");
 });
 
+QUnit.test("'byKey' called once per 'value' item (T533200)", function(assert) {
+    var byKeySpy = sinon.spy(function(key) {
+        return key;
+    });
+
+    $("#tagBox").dxTagBox({
+        value: [1],
+        dataSource: {
+            load: function() {
+                return [1, 2];
+            },
+            byKey: byKeySpy
+        }
+    });
+
+    assert.equal(byKeySpy.callCount, 1);
+});
 
 QUnit.module("performance");
 
