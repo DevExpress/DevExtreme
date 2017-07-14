@@ -1055,7 +1055,9 @@ var TagBox = SelectBox.inherit({
     },
 
     _lastValue: function() {
-        return this._getValue().slice(-1).pop() || null;
+        var values = this._getValue(),
+            lastValue = values[values.length - 1];
+        return isDefined(lastValue) ? lastValue : null;
     },
 
     _valueChangeEventHandler: noop,
