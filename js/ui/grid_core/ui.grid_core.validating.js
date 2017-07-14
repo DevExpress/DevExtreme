@@ -178,14 +178,25 @@ var ValidatingController = modules.Controller.inherit((function() {
                 getValue = function() {
                     var value = column.calculateCellValue(editData.data || {});
                     return value !== undefined ? value : parameters.value;
-                };
+                },
+                visibleColumns,
+                columnsController,
+                showEditorAlways = column.showEditorAlways;
 
             if(!column.validationRules || !Array.isArray(column.validationRules) || commonUtils.isDefined(column.command)) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
-            if(editIndex < 0 && column.showEditorAlways) {
-                editIndex = editingController._addEditData({ key: parameters.key });
+            if(editIndex < 0) {
+                if(!showEditorAlways) {
+                    columnsController = that.getController("columns");
+                    visibleColumns = columnsController && columnsController.getVisibleColumns() || [];
+                    showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
+                }
+
+                if(showEditorAlways) {
+                    editIndex = editingController._addEditData({ key: parameters.key });
+                }
             }
 
             if(editIndex >= 0) {
@@ -440,9 +451,10 @@ module.exports = {
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
                     var result = this.callBase(rowIndex, columnIndex, item),
                         $cell = this.component.getCellElement(rowIndex, columnIndex),
-                        validator = $cell && $cell.data("dxValidator");
+                        validator = $cell && $cell.data("dxValidator"),
+                        value = validator && validator.option("adapter").getValue();
 
-                    if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || validator.validate().isValid)) {
+                    if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || value !== undefined && validator.validate().isValid)) {
                         return result;
                     }
                 },
