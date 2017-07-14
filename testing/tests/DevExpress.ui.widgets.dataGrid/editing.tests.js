@@ -8691,6 +8691,83 @@ QUnit.test("Edit cell with custom validation (edit mode is batch)", function(ass
     assert.ok($cellElements.eq(1).hasClass("dx-datagrid-invalid"), "failed validation");
 });
 
+//T535329
+QUnit.test("Cell edit mode - The validation should work correctly when there is column with 'showEditorAlways' enabled", function(assert) {
+    //arrange
+    var that = this,
+        brokenRules,
+        $cellElements,
+        $checkboxElement,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.applyOptions({
+        dataSource: [{ name: "", test: true }],
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: 'test',
+            dataType: "boolean",
+            validationRules: [{ type: "required" }]
+        }],
+        onRowValidating: function(e) {
+            brokenRules = e.brokenRules;
+        }
+    });
+    rowsView.render($testElement);
+
+    //assert
+    $cellElements = rowsView.element().find('tbody > tr').first().children();
+    assert.ok($cellElements.eq(0).hasClass("dx-validator"), "has validator");
+    assert.ok($cellElements.eq(1).hasClass("dx-validator"), "has validator");
+
+    //act
+    $checkboxElement = $cellElements.eq(1).find(".dx-checkbox").first();
+    $checkboxElement.trigger("dxclick");
+
+    //assert
+    assert.strictEqual(brokenRules.length, 2, "count of broken rule");
+});
+
+//T535329
+QUnit.test("Cell edit mode - The validation should not work for column with 'showEditorAlways' enabled when inserting row", function(assert) {
+    //arrange
+    var that = this,
+        $cellElement,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.applyOptions({
+        dataSource: [{ name: "", test: true }],
+        editing: {
+            mode: "cell",
+            allowAdding: true
+        },
+        columns: [{
+            dataField: 'test',
+            dataType: "boolean",
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }]
+    });
+    rowsView.render($testElement);
+
+    //act
+    that.addRow();
+    that.clock.tick();
+
+    //assert
+    $cellElement = rowsView.element().find('tbody > tr.dx-row-inserted').first().children().first();
+    assert.notOk($cellElement.hasClass("dx-datagrid-invalid"), "first cell is valid");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
