@@ -129,10 +129,10 @@
                 }
             }
 
-            window.DevExpress = {
-                config: {
-                    useJQueryRenderer: !@Html.Raw(Json.Serialize(Model.NoJQuery))
-                }
+            window.DevExpress = window.DevExpress || {};
+
+            window.DevExpress.config = {
+                useJQueryRenderer: !@Html.Raw(Json.Serialize(Model.NoJQuery))
             };
             var jqueryVersion = '@(Model.JQueryVersion != null ? Model.JQueryVersion.ToString().ToLowerInvariant() : "default")';
             var jqueryIncludeStrings = {

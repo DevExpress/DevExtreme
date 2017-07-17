@@ -1,9 +1,8 @@
 "use strict";
 
-window.DevExpress = {
-    config: {
-        useJQueryRenderer: false
-    }
+window.DevExpress = window.DevExpress || {};
+window.DevExpress.config = {
+    useJQueryRenderer: false
 };
 
 define(function(require) {
