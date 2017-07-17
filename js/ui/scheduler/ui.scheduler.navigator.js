@@ -71,7 +71,7 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
         count = this.option("count");
 
     shift = shift || 6;
-    
+
     lastWeekDate = new Date(lastWeekDate.setDate(lastWeekDate.getDate() + (count > 1 ? 7 * (count - 1) + shift : shift)));
 
     if(lastWeekDate.getDay() % 6 === 0 && rejectWeekend) {
