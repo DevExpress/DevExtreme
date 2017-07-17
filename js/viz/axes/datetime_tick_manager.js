@@ -14,7 +14,6 @@ var dateUtils = require("../../core/utils/date"),
     _abs = _math.abs,
     _ceil = _math.ceil,
     _floor = _math.floor,
-    _round = _math.round,
 
     MINOR_TICKS_COUNT_LIMIT = 50,
     DEFAULT_DATETIME_MULTIPLIERS = {
@@ -96,10 +95,6 @@ exports.datetime = extend({}, tickManagerContinuous, {
                 }
             }
         }
-    },
-
-    _getMarginValue: function(min, max, margin) {
-        return _convertMillisecondsToDateUnits(_round((_abs(max - min)) * margin));
     },
 
     _getMinorInterval: function(screenDelta, businessDelta) {

@@ -130,7 +130,6 @@ function createThemeManager(options, themeGroupName) {
             }
         }, "theme.label");
         assert.equal(theme.widgetType, 'chart');
-        assert.equal(theme.resolveLabelOverlapping, "none");
     });
 
 
@@ -720,8 +719,7 @@ function createThemeManager(options, themeGroupName) {
                 point: {
                     color: '#222221'
                 }
-            },
-            resolveLabelOverlapping: true
+            }
         });
         themeManager.setTheme({});
         themeManager._theme = { commonSeriesSettings: $.extend(true, {}, commonSeriesThemeTemplate) };
@@ -744,7 +742,6 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.point.hoverStyle.border.color, undefined);
         assert.equal(theme.point.selectionStyle.color, undefined);
         assert.equal(theme.point.selectionStyle.border.color, undefined);
-        assert.equal(theme.resolveLabelOverlapping, true);
     });
 
     QUnit.test("resolveLabelsOverlapping pass to series", function(assert) {

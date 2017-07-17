@@ -17,7 +17,13 @@ var createPoint = function(series, data, options) {
 
 QUnit.module("Point coordinates translation. Financial", {
     beforeEach: function() {
-        this.series = new MockSeries({});
+        var that = this;
+        this.series = new MockSeries({
+            valueAxis: { getTranslator: function() { return that.translators.val; } },
+            argumentAxis: { getTranslator: function() { return that.translators.arg; } }
+        });
+        this.series.getVisibleArea = sinon.stub().returns({ minX: 0, maxX: 200, minY: 0, maxY: 210 });
+
         this.opt = {
             widgetType: "chart",
             type: "stock",
@@ -48,28 +54,37 @@ QUnit.module("Point coordinates translation. Financial", {
                 visible: false
             }
         };
-        var translateXData = { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550 },
-            translateYData = { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555 };
 
-        this.translators = {
-            x: new MockTranslator({
-                translate: translateXData,
+    },
+    translateXData: { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550 },
+    translateYData: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555 },
+    setTranslators: function() {
+        var xTranslator = new MockTranslator({
+                translate: this.translateXData,
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 200 }
             }),
-            y: new MockTranslator({
-                translate: translateYData,
+            yTranslator = new MockTranslator({
+                translate: this.translateYData,
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 210 }
-            })
+            });
+
+        this.translators = this.opt.rotated ? {
+            arg: yTranslator,
+            val: xTranslator
+        } : {
+            arg: xTranslator,
+            val: yTranslator
         };
     }
 });
 
 QUnit.test("Translation", function(assert) {
+    this.setTranslators();
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
-    point.translate(this.translators);
+    point.translate();
 
     assert.equal(point.x, 110);
     assert.equal(point.openY, 333);
@@ -80,9 +95,10 @@ QUnit.test("Translation", function(assert) {
 
 QUnit.test("getCrosshairData", function(assert) {
     this.series.axis = "valueAxisName";
+    this.setTranslators();
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
-    point.translate(this.translators);
+    point.translate();
 
     assert.equal(point.x, 110);
     assert.equal(point.openY, 333);
@@ -102,9 +118,10 @@ QUnit.test("getCrosshairData", function(assert) {
 QUnit.test("getCrosshairData. Rotate", function(assert) {
     this.opt.rotated = true;
     this.series.axis = "valueAxisName";
+    this.setTranslators();
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
 
-    point.translate(this.translators);
+    point.translate();
 
     assert.equal(point.x, 111);
     assert.equal(point.openY, 330);
@@ -124,7 +141,6 @@ QUnit.test("getCrosshairData. Rotate", function(assert) {
 QUnit.module("Point coordinates correction. Candlestick", {
     beforeEach: function() {
         this.point = createPoint(
-
             {
                 name: "series",
                 isFullStackedSeries: function() { return false; },
@@ -409,7 +425,8 @@ QUnit.test("Negative. LowValue", function(assert) {
 
 QUnit.module("Check object in visible area", {
     beforeEach: function() {
-        var translateXData = { 1: -10, 2: 0, 3: 50, 4: 100, 5: 110 },
+        var that = this,
+            translateXData = { 1: -10, 2: 0, 3: 50, 4: 100, 5: 110 },
             translateYData = { 1: 990, 2: 1000, 3: 1010, 4: 1040, 5: 1050, 6: 1090, 7: 1100, 8: 1110 };
 
         this.options = {
@@ -422,24 +439,24 @@ QUnit.module("Check object in visible area", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 1000, maxY: 1100 }; }
         };
 
         this.translators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: translateXData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 100 }
+                failOnWrongData: true
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: translateYData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 1000, max: 1100 }
+                failOnWrongData: true
             })
         };
 
         this.point = createPoint(this.series, { argument: 1, openValue: 1, closeValue: 1, highValue: 1, lowValue: 1 }, this.options);
-        this.point.translators = this.translators;
         this.point.width = 20;
     }
 });
@@ -563,7 +580,8 @@ QUnit.test("Point is visible on the bottom border", function(assert) {
 
 QUnit.module("Check object in visible area. Rotated.", {
     beforeEach: function() {
-        var translateXData = { 1: -10, 2: 0, 3: 10, 4: 40, 5: 50, 6: 90, 7: 100, 8: 110 },
+        var that = this,
+            translateXData = { 1: -10, 2: 0, 3: 10, 4: 40, 5: 50, 6: 90, 7: 100, 8: 110 },
             translateYData = { 1: -10, 2: 0, 3: 50, 4: 100, 5: 110 };
 
         this.options = {
@@ -576,24 +594,24 @@ QUnit.module("Check object in visible area. Rotated.", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 100 }; }
         };
 
         this.translators = {
-            x: new MockTranslator({
+            val: new MockTranslator({
                 translate: translateXData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 100 }
+                failOnWrongData: true
             }),
-            y: new MockTranslator({
+            arg: new MockTranslator({
                 translate: translateYData,
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 0, max: 100 }
+                failOnWrongData: true
             })
         };
 
         this.point = createPoint(this.series, { argument: 1, openValue: 1, closeValue: 1, highValue: 1, lowValue: 1 }, this.options);
-        this.point.translators = this.translators;
         this.point.width = 20;
         this.point._options.rotated = true;
     }
@@ -718,6 +736,7 @@ QUnit.test("Point is visible on the bottom border", function(assert) {
 
 QUnit.module("Draw point. Candlestick", {
     beforeEach: function() {
+        var that = this;
         this.renderer = new vizMocks.Renderer();
         this.renderer.bBoxTemplate = { x: 40, y: 40, height: 10, width: 20 };
         this.group = this.renderer.g();
@@ -727,12 +746,12 @@ QUnit.module("Draw point. Candlestick", {
         this.group.reductionPositiveMarkersGroup = this.renderer.g();
 
         this.translators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: { 1: 11 },
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 600 }
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: { 1: 50, 2: 33, 3: 10, 4: 5 },
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 800 }
@@ -767,7 +786,10 @@ QUnit.module("Draw point. Candlestick", {
             name: "series",
             areLabelsVisible: function() { return false; },
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 100 }; }
         };
 
         this.groups = {
@@ -779,7 +801,7 @@ QUnit.module("Draw point. Candlestick", {
 QUnit.test("Marker (openValue < closeValue)", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -801,7 +823,7 @@ QUnit.test("Marker (openValue < closeValue)", function(assert) {
 QUnit.test("Marker without close value", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: null, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
 
     point.draw(this.renderer, this.groups);
@@ -821,7 +843,7 @@ QUnit.test("Marker without close value", function(assert) {
 QUnit.test("Marker without open value", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
 
     point.draw(this.renderer, this.groups);
@@ -842,7 +864,7 @@ QUnit.test("Marker without open value", function(assert) {
 QUnit.test("Marker without open&close values", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: null, closeValue: null, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -864,11 +886,8 @@ QUnit.test("Marker (openValue < closeValue). Rotated", function(assert) {
 
     point._options.rotated = true;
     point.width = 10;
-    var translateX = this.translators.x;
-    this.translators.x = this.translators.y;
-    this.translators.y = translateX;
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
@@ -889,11 +908,7 @@ QUnit.test("Marker (openValue > closeValue). Rotated", function(assert) {
 
     point._options.rotated = true;
     point.width = 10;
-
-    var translateX = this.translators.x;
-    this.translators.x = this.translators.y;
-    this.translators.y = translateX;
-    point.translate(this.translators);
+    point.translate();
 
     point.draw(this.renderer, this.groups);
 
@@ -913,7 +928,7 @@ QUnit.test("Marker (openValue > closeValue). Rotated", function(assert) {
 QUnit.test("Marker (openValue > closeValue)", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 4, closeValue: 2, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -933,7 +948,7 @@ QUnit.test("Marker (openValue > closeValue)", function(assert) {
 QUnit.test("Marker (openValue = closeValue)", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -955,11 +970,7 @@ QUnit.test("Marker (openValue = closeValue). Rotated", function(assert) {
 
     point._options.rotated = true;
     point.width = 10;
-
-    var translateX = this.translators.x;
-    this.translators.x = this.translators.y;
-    this.translators.y = translateX;
-    point.translate(this.translators);
+    point.translate();
 
     point.draw(this.renderer, this.groups);
 
@@ -979,7 +990,7 @@ QUnit.test("Marker (openValue = closeValue). Rotated", function(assert) {
 QUnit.test("Marker (openValue = closeValue).", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -999,7 +1010,7 @@ QUnit.test("Marker (openValue = closeValue).", function(assert) {
 QUnit.test("Marker, reduction point", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1015,7 +1026,7 @@ QUnit.test("Marker, reduction point", function(assert) {
 QUnit.test("Marker, positive point", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1031,7 +1042,7 @@ QUnit.test("Marker, positive point", function(assert) {
 QUnit.test("Marker, reduction & positive", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1047,7 +1058,7 @@ QUnit.test("Marker, reduction & positive", function(assert) {
 QUnit.test("Marker, default", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1063,13 +1074,13 @@ QUnit.test("Marker, default", function(assert) {
 QUnit.test("Update marker", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
     this.options.styles.normal.fill = "red";
     point.updateOptions(this.options);
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1081,11 +1092,11 @@ QUnit.test("Update marker", function(assert) {
 QUnit.test("Update marker group", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
 
     point._isReduction = true;
@@ -1098,7 +1109,7 @@ QUnit.test("Update marker group", function(assert) {
 QUnit.test("Update marker location", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1121,7 +1132,7 @@ QUnit.test("Update marker location", function(assert) {
 QUnit.test("Marker without state", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
@@ -1132,6 +1143,7 @@ QUnit.test("Marker without state", function(assert) {
 
 QUnit.module("Draw point. Stock", {
     beforeEach: function() {
+        var that = this;
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
         this.group.defaultMarkersGroup = this.renderer.g();
@@ -1140,12 +1152,12 @@ QUnit.module("Draw point. Stock", {
         this.group.reductionPositiveMarkersGroup = this.renderer.g();
 
         this.translators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: { 1: 11 },
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 600 }
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: { 1: 52, 2: 35, 3: 10, 4: 5 },
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 800 }
@@ -1180,7 +1192,10 @@ QUnit.module("Draw point. Stock", {
             name: "series",
             areLabelsVisible: function() { return false; },
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 100 }; }
         };
 
         this.groups = {
@@ -1192,7 +1207,7 @@ QUnit.module("Draw point. Stock", {
 QUnit.test("Marker", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1214,7 +1229,7 @@ QUnit.test("Marker", function(assert) {
 QUnit.test("Marker without openValue", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: null, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1234,7 +1249,7 @@ QUnit.test("Marker without openValue", function(assert) {
 QUnit.test("Marker without closeValue", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: null, lowValue: 1, highValue: 4 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1256,11 +1271,8 @@ QUnit.test("Marker. Rotated", function(assert) {
 
     point._options.rotated = true;
     point.width = 10;
-    var translateX = this.translators.x;
-    this.translators.x = this.translators.y;
-    this.translators.y = translateX;
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
@@ -1279,7 +1291,7 @@ QUnit.test("Marker. Rotated", function(assert) {
 QUnit.test("Marker, reduction point", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1295,7 +1307,7 @@ QUnit.test("Marker, reduction point", function(assert) {
 QUnit.test("Marker, positive point", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1311,7 +1323,7 @@ QUnit.test("Marker, positive point", function(assert) {
 QUnit.test("Marker, reduction & positive", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1, isReduction: true }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1327,7 +1339,7 @@ QUnit.test("Marker, reduction & positive", function(assert) {
 QUnit.test("Marker, default", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1343,13 +1355,13 @@ QUnit.test("Marker, default", function(assert) {
 QUnit.test("Update marker", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
     this.options.styles.normal.fill = "red";
     point.updateOptions(this.options);
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1362,7 +1374,7 @@ QUnit.test("Update marker", function(assert) {
 QUnit.test("Update marker location", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 2, closeValue: 3, highValue: 4, lowValue: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
 
@@ -1386,17 +1398,15 @@ QUnit.test("Update marker location", function(assert) {
 
 QUnit.module("Tooltip", {
     beforeEach: function() {
-
+        var that = this;
         this.translators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: { 1: 11 },
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 10, max: 600 }
+                failOnWrongData: true
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: { 1: 52, 2: 35, 3: 10, 4: 5 },
-                failOnWrongData: true,
-                getCanvasVisibleArea: { min: 5, max: 810 }
+                failOnWrongData: true
             })
         };
         this.renderer = new vizMocks.Renderer();
@@ -1433,7 +1443,10 @@ QUnit.module("Tooltip", {
             name: "series",
             areLabelsVisible: function() { return false; },
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 10, maxX: 600, minY: 5, maxY: 810 }; }
         };
         var StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, {
             formatValue: function(value, specialFormat) {
@@ -1449,7 +1462,6 @@ QUnit.module("Tooltip", {
 
 QUnit.test("Get tooltip coordinates, highY < lowY. Location is center", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1465,7 +1477,6 @@ QUnit.test("Get tooltip coordinates, highY < lowY. Location is center", function
 
 QUnit.test("Get tooltip coordinates, highY < lowY. Location is edge", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1481,7 +1492,6 @@ QUnit.test("Get tooltip coordinates, highY < lowY. Location is edge", function(a
 
 QUnit.test("Get tooltip coordinates, highY > lowY. Location is center", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1497,7 +1507,6 @@ QUnit.test("Get tooltip coordinates, highY > lowY. Location is center", function
 
 QUnit.test("Get tooltip coordinates, highY > lowY. Location is edge", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1513,7 +1522,6 @@ QUnit.test("Get tooltip coordinates, highY > lowY. Location is edge", function(a
 
 QUnit.test("Get tooltip coordinates, point is abroad on the top. Location is center", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1529,7 +1537,6 @@ QUnit.test("Get tooltip coordinates, point is abroad on the top. Location is cen
 
 QUnit.test("Get tooltip coordinates, point is abroad on the top. Location is edge", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1545,7 +1552,6 @@ QUnit.test("Get tooltip coordinates, point is abroad on the top. Location is edg
 
 QUnit.test("Get tooltip coordinates, point is abroad on the bottom. Location is center", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 552;
@@ -1561,7 +1567,6 @@ QUnit.test("Get tooltip coordinates, point is abroad on the bottom. Location is 
 
 QUnit.test("Get tooltip coordinates, point is abroad on the bottom. Location is edge", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 552;
@@ -1576,9 +1581,12 @@ QUnit.test("Get tooltip coordinates, point is abroad on the bottom. Location is 
 });
 
 QUnit.test("Get tooltip coordinates, rotated, point is abroad on the left. Location is center", function(assert) {
+    this.options.rotated = true;
+    var at = this.translators.arg;
+    this.translators.arg = this.translators.val;
+    this.translators.val = at;
+    this.series.getVisibleArea = function() { return { minX: 5, maxX: 810, minY: 10, maxY: 600 }; };
     var point = createPoint(this.series, this.data, this.options);
-    point._options.rotated = true;
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1589,13 +1597,12 @@ QUnit.test("Get tooltip coordinates, rotated, point is abroad on the left. Locat
 
     var cc = point.getTooltipParams('center');
 
-    assert.deepEqual(cc, { x: 40, y: 44, offset: 0 });
+    assert.deepEqual(cc, { x: 37.5, y: 44, offset: 0 });
 });
 
 QUnit.test("Get tooltip coordinates, rotated, point is abroad on the left. Location is edge", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point._options.rotated = true;
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1611,7 +1618,6 @@ QUnit.test("Get tooltip coordinates, rotated, point is abroad on the left. Locat
 QUnit.test("Get tooltip coordinates, rotated, point is abroad on the right. Location is center", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point._options.rotated = true;
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 552;
@@ -1629,7 +1635,6 @@ QUnit.test("Get tooltip coordinates, rotated, point is abroad on the right. Loca
 QUnit.test("Get tooltip coordinates, rotated, point is abroad on the right. Location is edge", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point._options.rotated = true;
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 552;
@@ -1646,7 +1651,6 @@ QUnit.test("Get tooltip coordinates, rotated, point is abroad on the right. Loca
 
 QUnit.test("Get tooltip coordinates, highY < lowY. Location is invalid", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translators = this.translators;
 
     point.x = 44;
     point.openY = 52;
@@ -1736,7 +1740,10 @@ QUnit.module("Styles", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return new MockTranslator({ translate: {} }); } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return new MockTranslator({ translate: {} }); } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 100, minY: 0, maxY: 100 }; }
         };
         this.renderer = new vizMocks.Renderer();
         this.group = {
@@ -1779,7 +1786,7 @@ QUnit.test("Positive reduction Style", function(assert) {
 QUnit.test("Update marker group", function(assert) {
     var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 3, lowValue: 1, highValue: 4 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.width = 10;
     point.draw(this.renderer, this.groups);
     point.graphic.stub("append").reset();
@@ -1803,7 +1810,7 @@ QUnit.test("T111849. Get color from reduction point", function(assert) {
 
 QUnit.module("Draw label", {
     beforeEach: function() {
-
+        var that = this;
         this.translators = {
             x: new MockTranslator({
                 translate: { 1: 11 },
@@ -1851,7 +1858,9 @@ QUnit.module("Draw label", {
             _options: {},
             isFullStackedSeries: function() { return false; },
             areLabelsVisible: function() { return true; },
-            getLabelVisibility: function() { return true; }
+            getLabelVisibility: function() { return true; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
         };
     },
     afterEach: function() {
@@ -1889,7 +1898,6 @@ QUnit.test("Check customize text object", function(assert) {
 
     pt.x = 30;
     pt.y = 30;
-    pt.translators = this.translators;
     pt._drawLabel(this.renderer, this.group);
 
     assert.deepEqual(pt._label.setData.args[0][0], {
@@ -1914,7 +1922,6 @@ QUnit.test("high value = null", function(assert) {
     this.data.highValue = null;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 60;
     point.lowY = 90;
@@ -1929,7 +1936,6 @@ QUnit.test("low value = null", function(assert) {
     this.data.lowValue = null;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 60;
     point.lowY = 90;
@@ -1943,7 +1949,6 @@ QUnit.test("low value = null", function(assert) {
 QUnit.test("Get graphic bbox. Not rotated", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 60;
     point.lowY = 90;
@@ -1961,7 +1966,6 @@ QUnit.test("Get graphic bbox. Rotated", function(assert) {
     this.options.rotated = true;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 90;
     point.lowY = 60;
@@ -1982,7 +1986,6 @@ QUnit.test("Draw label if point isn't reduction", function(assert) {
     this.options.reduction = { color: 'blue' };
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 90;
     point.lowY = 60;
@@ -2004,7 +2007,6 @@ QUnit.test("Draw label if point is reduction", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     this.data.isReduction = false;
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 90;
     point.lowY = 60;
@@ -2023,7 +2025,6 @@ QUnit.test("Update label from reduction to non-reduction", function(assert) {
     this.options.reduction = { color: 'blue' };
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 90;
     point.lowY = 60;
@@ -2044,7 +2045,6 @@ QUnit.test("Draw label. Stock", function(assert) {
     this.options.type = "stock";
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 90;
     point.lowY = 60;
@@ -2059,7 +2059,6 @@ QUnit.test("Draw label. Candlestick", function(assert) {
     this.options.type = "candlestick";
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 50;
     point.highY = 90;
     point.lowY = 60;

@@ -129,7 +129,6 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 isBubble = type === "bubble",
                 mainSeriesColor,
                 resolveLabelsOverlapping = that.getOptions("resolveLabelsOverlapping"),
-                resolveLabelOverlapping = that.getOptions("resolveLabelOverlapping"),
                 containerBackgroundColor = that.getOptions("containerBackgroundColor"),
                 seriesVisibility;
 
@@ -157,7 +156,6 @@ var ThemeManager = BaseThemeManager.inherit((function() {
                 };
             }
             settings.mainSeriesColor = mainSeriesColor;
-            settings.resolveLabelOverlapping = resolveLabelOverlapping;
             settings.resolveLabelsOverlapping = resolveLabelsOverlapping;
 
             if(settings.label && (isLine || (isArea && type !== "rangearea") || type === "scatter")) {

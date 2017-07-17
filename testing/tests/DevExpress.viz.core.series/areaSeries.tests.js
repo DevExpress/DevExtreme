@@ -5,10 +5,9 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     vizUtils = require("viz/core/utils"),
     pointModule = require("viz/series/points/base_point"),
-    Series = require("viz/series/base_series").Series,
-    polarTranslatorModule = require("viz/translators/polar_translator");
+    Series = require("viz/series/base_series").Series;
 
-/* global insertMockFactory, MockTranslator */
+/* global insertMockFactory, MockAxis */
 require("../../helpers/chartMocks.js");
 
 require("viz/chart");
@@ -62,7 +61,7 @@ var createSeries = function(options, renderSettings) {
 function setSeriesState(act, renderSettings) {
     var series = createSeries(this.options, renderSettings);
     series.updateData(this.data);
-    series.draw(this.translators);
+    series.draw();
 
     series[act]();
 
@@ -77,16 +76,6 @@ var environment = {
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
         this.points = [[1, 10], [2, 20], [3, 30], [4, 40]];
         this.areaPoints = this.points.concat([[4, 0], [3, 0], [2, 0], [1, 0]]);
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-                getCanvasVisibleArea: { min: 0, max: 500 }
-            })
-        };
     },
 
     afterEach: function() {
@@ -103,15 +92,7 @@ var createPoint = function() {
     return stub;
 };
 
-function createStubPolarTranslator() {
-    var stub = sinon.createStubInstance(polarTranslatorModule.PolarTranslator);
-    stub.translate.withArgs("canvas_position_start", "canvas_position_top").returns({ x: 0, y: 0 });
-    stub.canvas = { left: 0, right: 0, width: 200, top: 0, bottom: 0, height: 300 };
-    return stub;
-}
-
 var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint()];
-var stubPolarTranslator = createStubPolarTranslator();
 var environmentWithSinonStubPoint = {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -128,7 +109,6 @@ var environmentWithSinonStubPoint = {
             stub.getCoords.returns({ x: data.argument, y: data.value });
             return stub;
         });
-        this.polarTranslator = stubPolarTranslator;
     },
     afterEach: function() {
         pointModule.Point.restore();
@@ -214,18 +194,28 @@ function setDiscreteType(series) {
 }
 
 (function AreaElements() {
-    QUnit.module("Draw elements. Area Series", environment);
+    QUnit.module("Draw elements. Area Series", {
+        beforeEach: environment.beforeEach,
+        afterEach: environment.afterEach,
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        }
+    });
 
     var checkGroups = checkFourGroups;
     var seriesType = "area";
     QUnit.test("Draw without data", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 0);
 
@@ -233,11 +223,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -245,7 +235,7 @@ function setDiscreteType(series) {
             pt.minY = 0;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
 
@@ -261,18 +251,18 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Update simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, false);
+        series.draw(false);
         //act
         series.updateData([{ arg: 1, val: 2 }, { arg: 2, val: 1 }]);
         $.each(series._points, function(i, pt) {
@@ -281,7 +271,7 @@ function setDiscreteType(series) {
             pt.minY = 0;
         });
 
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -317,11 +307,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw simple data with animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -330,7 +320,7 @@ function setDiscreteType(series) {
         });
         //act
 
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
 
@@ -354,7 +344,7 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw simple data with animation without borders", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false },
             border: { visible: false },
@@ -365,7 +355,7 @@ function setDiscreteType(series) {
                 border: { visible: false }
             }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -374,7 +364,7 @@ function setDiscreteType(series) {
         });
         //act
 
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 1);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], this.areaPoints, true, "area on creating");
@@ -389,11 +379,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 3.5, val: 40 }]);
         $.each(series._points, function(i, pt) {
@@ -403,7 +393,7 @@ function setDiscreteType(series) {
         });
         //act
 
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
 
@@ -451,10 +441,10 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values. Add segment", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-        }, { renderer: this.renderer });
+        });
 
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
@@ -462,7 +452,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
 
         //act
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 3.5, val: 40 }]);
@@ -471,7 +461,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
 
@@ -512,10 +502,10 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values. Remove segment", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-        }, { renderer: this.renderer });
+        });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
         $.each(series._points, function(i, pt) {
@@ -523,7 +513,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
 
         var animatePoints,
             element1 = this.renderer.stub("path").getCall(0).returnValue,
@@ -538,7 +528,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
 
@@ -559,11 +549,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw single point. Rotated", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             rotated: true,
             point: { visible: false }
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 10 }]);
         $.each(series._points, function(i, pt) {
             pt.x = pt.value;
@@ -572,7 +562,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[10, 1], [10, 2]], false, "line element");
@@ -588,13 +578,17 @@ function setDiscreteType(series) {
             type: seriesType,
             point: { visible: false },
             width: 2
-        }, { renderer: this.renderer });
+        }, {
+            renderer: this.renderer,
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        series.draw(this.translators, false);
+        series.draw(false);
         //act
         series.drawTrackers();
         //assert
@@ -613,13 +607,17 @@ function setDiscreteType(series) {
             type: seriesType,
             point: { visible: false },
             width: 21
-        }, { renderer: this.renderer });
+        }, {
+            renderer: this.renderer,
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
+        });
         series.updateData([{ arg: 1, val: 3 }]);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        series.draw(this.translators, false);
+        series.draw(false);
         //act
         series.drawTrackers();
         //assert
@@ -639,7 +637,11 @@ function setDiscreteType(series) {
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer });
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
             this.series._updateElement = sinon.stub();
         }
     });
@@ -648,7 +650,7 @@ function setDiscreteType(series) {
         var series = this.series;
         this.series.updateData(this.data);
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, null);
     });
@@ -657,7 +659,7 @@ function setDiscreteType(series) {
         var series = this.series;
         this.series.updateData(this.data);
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, 0.001);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
@@ -667,7 +669,7 @@ function setDiscreteType(series) {
         var series = this.series;
         this.series.updateData(this.data);
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, 0.001);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
@@ -682,7 +684,7 @@ function setDiscreteType(series) {
         var series = this.series;
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 44 }]);
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, 0.001);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
@@ -696,6 +698,13 @@ function setDiscreteType(series) {
     });
 
     QUnit.module("Styles. Area Series", {
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environmentWithSinonStubPoint.beforeEach.call(this);
             this.options = {
@@ -737,23 +746,23 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without borders", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkThreeGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 1);
         assert.equal(this.renderer.stub("path").firstCall.args[1], "area");
     });
 
     QUnit.test("Series without borders. Remove element", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
         series.updateData(this.data);
-        series.draw(this.translators);
+        series.draw();
         //act
         series.updateData([]);
-        series.draw(this.translators);
+        series.draw();
 
         checkThreeGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 1);
@@ -762,11 +771,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on normal Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -774,11 +783,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on selection Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -786,11 +795,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on hover Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -798,10 +807,10 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("First draw - Normal State", function(assert) {
-        var series = createSeries(this.options);
+        var series = this.createSeries(this.options);
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
 
         assert.deepEqual(series._elementsGroup._stored_settings, {
             "class": "dxc-elements",
@@ -830,7 +839,10 @@ function setDiscreteType(series) {
             width: "h-h width",
             opacity: "h-h opacity"
         };
-        var series = setSeriesState.call(this, 'hover');
+        var series = setSeriesState.call(this, 'hover', {
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
+        });
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
             "fill": "h color",
@@ -857,10 +869,10 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Apply normal state after hover", function(assert) {
-        var series = createSeries(this.options);
+        var series = this.createSeries(this.options);
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
 
         series.hover(true);
         series.clearHover(false);
@@ -891,7 +903,10 @@ function setDiscreteType(series) {
             width: "s-h width",
             opacity: "s-h opacity"
         };
-        var series = setSeriesState.call(this, 'select');
+        var series = setSeriesState.call(this, 'select', {
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
+        });
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
             "fill": "s color",
@@ -918,12 +933,12 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Select series before drawing", function(assert) {
-        var series = createSeries(this.options);
+        var series = this.createSeries(this.options);
         series.updateData(this.data);
 
         series.select();
 
-        series.draw(this.translators, undefined, undefined, noop);
+        series.draw(undefined, undefined, noop);
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
             "fill": "s color",
@@ -946,7 +961,7 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Get rid of stroke-width 0 on border style", function(assert) {
-        var series = createSeries($.extend(true, {}, this.options, {
+        var series = this.createSeries($.extend(true, {}, this.options, {
             selectionStyle: {
                 border: {
                     width: 0,
@@ -955,7 +970,7 @@ function setDiscreteType(series) {
             }
         }));
         series.updateData(this.data);
-        series.draw(this.translators);
+        series.draw(undefined, undefined, noop);
 
         series.select();
 
@@ -1033,6 +1048,15 @@ function setDiscreteType(series) {
     });
 
     QUnit.module("Area. Update animation", {
+        createSeries: function() {
+            return createSeries({
+                type: "area"
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
@@ -1041,18 +1065,16 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check label clearing", function(assert) {
-        var series = createSeries({
-                type: "area"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
         var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
             labelSpy = series._labelsGroup.stub("animate");
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingSpy.calledOnce);
 
@@ -1064,18 +1086,16 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check label clearing", function(assert) {
-        var series = createSeries({
-                type: "area"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
         var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
             labelSpy = series._labelsGroup.stub("animate");
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingSpy.calledOnce);
 
@@ -1087,16 +1107,14 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check marker clearing", function(assert) {
-        var series = createSeries({
-                type: "area"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
-        series.draw(this.translators, true);
+        series.draw(true);
         var markerSpy = series._markersGroup.stub("animate");
         series._labelsGroup.stub("animate").lastCall.args[2]();
 
@@ -1108,16 +1126,14 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check segment clearing", function(assert) {
-        var series = createSeries({
-                type: "area"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
-        series.draw(this.translators, true);
+        series.draw(true);
         series._labelsGroup.stub("animate").lastCall.args[2]();
         var updateSpy = sinon.spy(series, "_oldUpdateElement");
         series._markersGroup.stub("animate").lastCall.args[2]();
@@ -1134,6 +1150,13 @@ function setDiscreteType(series) {
 
 (function StepAreaElements() {
     QUnit.module("Draw elements. StepArea Series", {
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 20 }, { arg: 4, val: 40 }];
@@ -1147,13 +1170,12 @@ function setDiscreteType(series) {
     var seriesType = "steparea";
 
     QUnit.test("Draw without data", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 0);
 
@@ -1161,11 +1183,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -1173,7 +1195,7 @@ function setDiscreteType(series) {
             pt.minY = 0;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], this.points, false, "line element");
@@ -1188,18 +1210,18 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Update simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, false);
+        series.draw(false);
         //act
         series.updateData([{ arg: 1, val: 2 }, { arg: 2, val: 1 }]);
         $.each(series._points, function(i, pt) {
@@ -1208,7 +1230,7 @@ function setDiscreteType(series) {
             pt.minY = 0;
         });
 
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -1232,11 +1254,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw simple data with animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -1245,7 +1267,7 @@ function setDiscreteType(series) {
         });
         //act
 
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], this.points, true, "line element on creating");
@@ -1269,11 +1291,10 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
         $.each(series._points, function(i, pt) {
@@ -1283,7 +1304,7 @@ function setDiscreteType(series) {
         });
         //act
 
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[1, 10], [2, 10], [2, 20]], true, "first line element on creating");
@@ -1330,11 +1351,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values. Add segment", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
 
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
@@ -1342,7 +1363,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
 
         //act
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
@@ -1351,7 +1372,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -1391,11 +1412,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values. Remove segment", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
 
         series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 40 }]);
         $.each(series._points, function(i, pt) {
@@ -1403,7 +1424,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
 
         var element1 = this.renderer.stub("path").getCall(0).returnValue,
             element2 = this.renderer.stub("path").getCall(1).returnValue,
@@ -1418,7 +1439,7 @@ function setDiscreteType(series) {
             pt.y = pt.value;
             pt.minY = 0;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
 
@@ -1438,12 +1459,12 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw single point. Rotated", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             rotated: true,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 10 }]);
         $.each(series._points, function(i, pt) {
             pt.x = pt.value;
@@ -1452,7 +1473,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -1464,6 +1485,15 @@ function setDiscreteType(series) {
     });
 
     QUnit.module("Steparea. Update animation", {
+        createSeries: function() {
+            return createSeries({
+                type: "steparea"
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
@@ -1472,18 +1502,16 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check label clearing", function(assert) {
-        var series = createSeries({
-                type: "steparea"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
         var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
             labelSpy = series._labelsGroup.stub("animate");
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingSpy.calledOnce);
 
@@ -1495,18 +1523,16 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check label clearing", function(assert) {
-        var series = createSeries({
-                type: "steparea"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
         var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
             labelSpy = series._labelsGroup.stub("animate");
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingSpy.calledOnce);
 
@@ -1518,16 +1544,14 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check marker clearing", function(assert) {
-        var series = createSeries({
-                type: "steparea"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
-        series.draw(this.translators, true);
+        series.draw(true);
         var markerSpy = series._markersGroup.stub("animate");
         series._labelsGroup.stub("animate").lastCall.args[2]();
 
@@ -1539,16 +1563,14 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check segment clearing", function(assert) {
-        var series = createSeries({
-                type: "steparea"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
-        series.draw(this.translators, true);
+        series.draw(true);
         series._labelsGroup.stub("animate").lastCall.args[2]();
         var updateSpy = sinon.spy(series, "_oldUpdateElement");
         series._markersGroup.stub("animate").lastCall.args[2]();
@@ -1563,6 +1585,13 @@ function setDiscreteType(series) {
     });
 
     QUnit.module("Styles. StepArea Series", {
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environmentWithSinonStubPoint.beforeEach.call(this);
             this.options = {
@@ -1605,23 +1634,23 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without borders", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkThreeGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 1);
         assert.equal(this.renderer.stub("path").firstCall.args[1], "area");
     });
 
     QUnit.test("Series without borders. Remove element", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
         series.updateData(this.data);
-        series.draw(this.translators);
+        series.draw();
         //act
         series.updateData([]);
-        series.draw(this.translators);
+        series.draw();
 
         checkThreeGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 1);
@@ -1630,11 +1659,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on normal Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -1642,11 +1671,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on selection Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -1654,11 +1683,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on hover Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -1668,6 +1697,13 @@ function setDiscreteType(series) {
 
 (function SplineAreaElements() {
     QUnit.module("Draw elements. SplineArea Series", {
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ arg: 0, val: 10 }, { arg: 3, val: 20 }, { arg: 6, val: 10 }, { arg: 9, val: 20 }, { arg: 12, val: 10 }];
@@ -1681,13 +1717,13 @@ function setDiscreteType(series) {
     var seriesType = "splinearea";
 
     QUnit.test("Draw without data", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 0);
 
@@ -1695,11 +1731,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -1708,7 +1744,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
 
@@ -1724,11 +1760,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Update simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -1736,7 +1772,7 @@ function setDiscreteType(series) {
             pt.minX = 0;
             pt.minY = 5;
         });
-        series.draw(this.translators, false);
+        series.draw(false);
         //act
         series.updateData([{ arg: 1, val: 2 }, { arg: 2, val: 1 }]);
         $.each(series._points, function(i, pt) {
@@ -1746,7 +1782,7 @@ function setDiscreteType(series) {
             pt.minY = 0;
         });
 
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "bezier");
@@ -1770,11 +1806,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw simple data with animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -1784,7 +1820,7 @@ function setDiscreteType(series) {
         });
         //act
 
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], this.points, true, "line element on creating");
@@ -1808,11 +1844,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         this.data.splice(2, 1, { arg: 2, val: null });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
@@ -1823,7 +1859,7 @@ function setDiscreteType(series) {
         });
         //act
 
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[0, 5], [0, 5], [3, 5], [3, 5]], true, "first line element on creating");
@@ -1872,11 +1908,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values. Add segment", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
 
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
@@ -1885,7 +1921,7 @@ function setDiscreteType(series) {
             pt.minX = 0;
             pt.minY = 5;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
         this.data.splice(2, 1, { arg: 2, val: null });
         //act
         series.updateData(this.data);
@@ -1895,7 +1931,7 @@ function setDiscreteType(series) {
             pt.minX = 0;
             pt.minY = 5;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "bezier");
@@ -1935,11 +1971,10 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw data with null values. Remove segment", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
-
-            }, { renderer: this.renderer }),
+            }),
             data = this.data.slice();
         this.data.splice(2, 1, { arg: 2, val: null });
         series.updateData(this.data);
@@ -1949,7 +1984,7 @@ function setDiscreteType(series) {
             pt.minX = 0;
             pt.minY = 5;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
 
         var element1 = this.renderer.stub("path").getCall(0).returnValue,
             element2 = this.renderer.stub("path").getCall(1).returnValue,
@@ -1965,7 +2000,7 @@ function setDiscreteType(series) {
             pt.minX = 0;
             pt.minY = 5;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
 
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
@@ -1987,11 +2022,11 @@ function setDiscreteType(series) {
 
     QUnit.test("Points preparation - horizontal line rotated", function(assert) {
         var data = [{ arg: 0, val: 10 }, { arg: 0, val: 15 }, { arg: 0, val: 20 }];
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             rotated: true,
             point: { visible: false }
-        }, { renderer: this.renderer });
+        });
 
         series.updateData(data);
         $.each(series._points, function(i, pt) {
@@ -2000,7 +2035,7 @@ function setDiscreteType(series) {
             pt.minX = 0;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[10, 0], [10, 0], [15, 0], [15, 0], [15, 0], [20, 0], [20, 0]], false, "spline points");
@@ -2010,11 +2045,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Points preparation (rotated)", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             rotated: true,
             point: { visible: false }
-        }, { renderer: this.renderer });
+        });
 
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
@@ -2030,7 +2065,7 @@ function setDiscreteType(series) {
             p.reverse();
         });
 
-        series.draw(this.translators, false);
+        series.draw(false);
 
         assert.equal(this.renderer.stub("path").callCount, 2);
         checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], this.points, false, "spline points");
@@ -2039,11 +2074,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw single point", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 10 }]);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -2052,7 +2087,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         assert.equal(this.renderer.stub("path").callCount, 2);
@@ -2064,12 +2099,12 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Draw single point. Rotated", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             rotated: true,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 10 }]);
         $.each(series._points, function(i, pt) {
             pt.x = pt.value;
@@ -2078,7 +2113,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 2);
 
@@ -2089,6 +2124,13 @@ function setDiscreteType(series) {
     });
 
     QUnit.module("BezierArea. Trackers", {
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ arg: 0, val: 10 }, { arg: 3, val: 20 }, { arg: 6, val: 10 }, { arg: 9, val: 20 }, { arg: 12, val: 10 }];
@@ -2101,18 +2143,18 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("draw tracker.", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false },
             width: 2
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
             pt.minY = 5;
         });
-        series.draw(this.translators, false);
+        series.draw(false);
         //act
         series.drawTrackers();
         //assert
@@ -2127,17 +2169,17 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("draw tracker. one point", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false },
             width: 21
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 3 }]);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
-        series.draw(this.translators, false);
+        series.draw(false);
         //act
         series.drawTrackers();
         //assert
@@ -2152,6 +2194,13 @@ function setDiscreteType(series) {
 
 
     QUnit.module("Styles. SplineArea Series", {
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environmentWithSinonStubPoint.beforeEach.call(this);
             this.options = {
@@ -2194,23 +2243,23 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without borders", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkThreeGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 1);
         assert.equal(this.renderer.stub("path").firstCall.args[1], "bezierarea");
     });
 
     QUnit.test("Series without borders. Remove element", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
         series.updateData(this.data);
-        series.draw(this.translators);
+        series.draw();
         //act
         series.updateData([{}]);
-        series.draw(this.translators);
+        series.draw();
 
         checkThreeGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 1);
@@ -2219,11 +2268,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on normal Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: true }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "bezier");
@@ -2231,11 +2280,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on selection Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: true } }, hoverStyle: { border: { visible: false } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "bezier");
@@ -2243,11 +2292,11 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Series without border on hover Style", function(assert) {
-        var series = createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } }, { renderer: this.renderer });
+        var series = this.createSeries({ type: seriesType, border: { visible: false }, selectionStyle: { border: { visible: false } }, hoverStyle: { border: { visible: true } } });
 
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
         checkGroups(assert, series);
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "bezier");
@@ -2261,7 +2310,11 @@ function setDiscreteType(series) {
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer });
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
             this.series._updateElement = sinon.stub();
         }
     });
@@ -2270,7 +2323,7 @@ function setDiscreteType(series) {
         var series = this.series;
         this.series.updateData(this.data);
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, null);
     });
@@ -2279,7 +2332,7 @@ function setDiscreteType(series) {
         var series = this.series;
         this.series.updateData(this.data);
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, 0.001);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
@@ -2289,7 +2342,7 @@ function setDiscreteType(series) {
         var series = this.series;
         this.series.updateData(this.data);
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, 0.001);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
@@ -2304,7 +2357,7 @@ function setDiscreteType(series) {
         var series = this.series;
         this.series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: null }, { arg: 4, val: 44 }]);
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.strictEqual(series._labelsGroup._stored_settings.opacity, 0.001);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 0.001);
@@ -2318,6 +2371,15 @@ function setDiscreteType(series) {
     });
 
     QUnit.module("Spline area. Update animation", {
+        createSeries: function() {
+            return createSeries({
+                type: "splinearea"
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
@@ -2326,18 +2388,16 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check label clearing", function(assert) {
-        var series = createSeries({
-                type: "splinearea"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
         var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
             labelSpy = series._labelsGroup.stub("animate");
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingSpy.calledOnce);
 
@@ -2349,18 +2409,16 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check label clearing", function(assert) {
-        var series = createSeries({
-                type: "splinearea"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
         var clearingSpy = sinon.spy(series, "_oldClearingAnimation"),
             labelSpy = series._labelsGroup.stub("animate");
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingSpy.calledOnce);
 
@@ -2372,16 +2430,14 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check marker clearing", function(assert) {
-        var series = createSeries({
-                type: "splinearea"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
-        series.draw(this.translators, true);
+        series.draw(true);
         var markerSpy = series._markersGroup.stub("animate");
         series._labelsGroup.stub("animate").lastCall.args[2]();
 
@@ -2393,16 +2449,14 @@ function setDiscreteType(series) {
     });
 
     QUnit.test("Check segment clearing", function(assert) {
-        var series = createSeries({
-                type: "splinearea"
-            }),
+        var series = this.createSeries(),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "bar" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
-        series.draw(this.translators, true);
+        series.draw(true);
         series._labelsGroup.stub("animate").lastCall.args[2]();
         var updateSpy = sinon.spy(series, "_oldUpdateElement");
         series._markersGroup.stub("animate").lastCall.args[2]();
@@ -2417,10 +2471,15 @@ function setDiscreteType(series) {
     });
 })();
 
-
-
 (function StackedSplineAreaElements() {
     QUnit.module("Draw elements. StackedSpline Series", {
+        createSeries: function(options, settings) {
+            return createSeries(options, settings || {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ arg: 0, val: 10 }, { arg: 3, val: 20 }, { arg: 6, val: 10 }, { arg: 9, val: 20 }, { arg: 12, val: 10 }];
@@ -2437,16 +2496,16 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw simple data", function(assert) {
         var that = this,
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer }),
-            series1 = createSeries({
+            }),
+            series1 = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer });
+            });
 
         series.updateData(this.data);
         series1.updateData(this.data1);
@@ -2464,8 +2523,8 @@ function setDiscreteType(series) {
             pt.minY = that.data[i].val;
         });
         //act
-        series.draw(this.translators, false);
-        series1.draw(this.translators, false);
+        series.draw(false);
+        series1.draw(false);
 
         //assert
         assert.equal(this.renderer.stub("path").callCount, 4);
@@ -2488,16 +2547,16 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw data with null value in bottom series", function(assert) {
         var that = this,
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer }),
-            series1 = createSeries({
+            }),
+            series1 = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer });
+            });
 
         this.data[2].val = null;
 
@@ -2517,8 +2576,8 @@ function setDiscreteType(series) {
             pt.minY = that.data[i].val || 0;
         });
         //act
-        series.draw(this.translators, false);
-        series1.draw(this.translators, false);
+        series.draw(false);
+        series1.draw(false);
         //assert
         var path1 = [this.points[0], this.points[0], this.points[3], this.points[3]],
             path2 = [this.points[9], this.points[9]].concat(this.points.slice(11));
@@ -2545,16 +2604,16 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw data with null value in top series", function(assert) {
         var that = this,
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer }),
-            series1 = createSeries({
+            }),
+            series1 = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer });
+            });
 
         this.data1[2].val = null;
 
@@ -2574,8 +2633,8 @@ function setDiscreteType(series) {
             pt.minY = that.data[i].val || 0;
         });
         //act
-        series.draw(this.translators, false);
-        series1.draw(this.translators, false);
+        series.draw(false);
+        series1.draw(false);
         //assert
         var path1 = [this.points1[0], this.points1[0], this.points1[3], this.points1[3]],
             path2 = [this.points1[9], this.points1[9]].concat(this.points1.slice(11));
@@ -2602,16 +2661,16 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw data with null value in bottom series with holes", function(assert) {
         var that = this,
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer }),
-            series1 = createSeries({
+            }),
+            series1 = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer });
+            });
 
         this.data[2].val = null;
 
@@ -2638,8 +2697,8 @@ function setDiscreteType(series) {
         series1.getAllPoints()[3].minLeftHole = 7;
 
         //act
-        series.draw(this.translators, false);
-        series1.draw(this.translators, false);
+        series.draw(false);
+        series1.draw(false);
         //assert
         assert.equal(this.renderer.path.callCount, 6, "elements drawn");
 
@@ -2670,21 +2729,21 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw three series with holes", function(assert) {
         var that = this,
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer }),
-            series1 = createSeries({
+            }),
+            series1 = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer }),
-            series2 = createSeries({
+            }),
+            series2 = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer });
+            });
 
         this.data1[2].val = null;
 
@@ -2728,9 +2787,9 @@ function setDiscreteType(series) {
         series2.getAllPoints()[3].minLeftHole = 7;
 
         //act
-        series.draw(this.translators, false);
-        series1.draw(this.translators, false);
-        series2.draw(this.translators, false);
+        series.draw(false);
+        series1.draw(false);
+        series2.draw(false);
         //assert
         assert.equal(this.renderer.path.callCount, 8, "elements drawn");
 
@@ -2759,9 +2818,14 @@ function setDiscreteType(series) {
     //T398875
     QUnit.test("Series should be brought to background on draw", function(assert) {
         var seriesGroup = this.renderer.g(),
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType
-            }, { renderer: this.renderer, seriesGroup: seriesGroup });
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer }),
+                seriesGroup: seriesGroup
+            });
 
         series.updateData(this.data);
         $.each(series.getAllPoints(), function(i, pt) {
@@ -2771,7 +2835,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(seriesGroup.children.length, 1);
         assert.equal(seriesGroup.children[0].toBackground.callCount, 1);
@@ -2780,9 +2844,14 @@ function setDiscreteType(series) {
     //T398875
     QUnit.test("Series should be brought to background on draw, fullstackedsplinearea", function(assert) {
         var seriesGroup = this.renderer.g(),
-            series = createSeries({
+            series = this.createSeries({
                 type: "fullstackedsplinearea"
-            }, { renderer: this.renderer, seriesGroup: seriesGroup });
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer }),
+                seriesGroup: seriesGroup
+            });
 
         series.updateData(this.data);
         $.each(series.getAllPoints(), function(i, pt) {
@@ -2792,7 +2861,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(seriesGroup.children.length, 1);
         assert.equal(seriesGroup.children[0].toBackground.callCount, 1);
@@ -2801,6 +2870,13 @@ function setDiscreteType(series) {
 
 (function StackedArea() {
     QUnit.module("stacked Area", {
+        createSeries: function(options, settings) {
+            return createSeries(options, settings || {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
         beforeEach: function() {
             environment.beforeEach.call(this);
             this.data = [{ arg: 0, val: 10 }, { arg: 3, val: 20 }, { arg: 6, val: 10 }, { arg: 9, val: 20 }, { arg: 12, val: 10 }];
@@ -2816,11 +2892,11 @@ function setDiscreteType(series) {
     var seriesType = "stackedarea";
 
     QUnit.test("Draw simple data - first series in stack", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
 
         series.updateData(this.data);
         $.each(series.getAllPoints(), function(i, pt) {
@@ -2830,7 +2906,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.path.callCount, 2, "elements drawn");
 
@@ -2842,16 +2918,14 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw simple data", function(assert) {
         var that = this,
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
-
-            }, { renderer: this.renderer }),
-            series1 = createSeries({
+            }),
+            series1 = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
-
-            }, { renderer: this.renderer });
+            });
 
         series.updateData(this.data);
         series1.updateData(this.data1);
@@ -2869,8 +2943,8 @@ function setDiscreteType(series) {
             pt.minY = that.data[i].val;
         });
         //act
-        series.draw(this.translators, false);
-        series1.draw(this.translators, false);
+        series.draw(false);
+        series1.draw(false);
         //assert
         assert.equal(this.renderer.path.callCount, 4, "elements drawn");
 
@@ -2887,16 +2961,15 @@ function setDiscreteType(series) {
 
     QUnit.test("Draw data if first series in stack has null points and holes", function(assert) {
         var that = this,
-            series = createSeries({
+            series = this.createSeries({
+                type: seriesType,
+                point: { visible: false }
+            }),
+            series1 = this.createSeries({
                 type: seriesType,
                 point: { visible: false }
 
-            }, { renderer: this.renderer }),
-            series1 = createSeries({
-                type: seriesType,
-                point: { visible: false }
-
-            }, { renderer: this.renderer });
+            });
 
         series.updateData(this.data);
         series1.updateData(this.data1);
@@ -2926,8 +2999,8 @@ function setDiscreteType(series) {
             sinon.spy(pt, "translate");
         });
         //act
-        series.draw(this.translators, false);
-        series1.draw(this.translators, false);
+        series.draw(false);
+        series1.draw(false);
         //assert
         assert.equal(this.renderer.path.callCount, 6, "elements drawn");
 
@@ -2959,9 +3032,14 @@ function setDiscreteType(series) {
     //T398875
     QUnit.test("Series should be brought to background on draw", function(assert) {
         var seriesGroup = this.renderer.g(),
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType
-            }, { renderer: this.renderer, seriesGroup: seriesGroup });
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer }),
+                seriesGroup: seriesGroup
+            });
 
         series.updateData(this.data);
         $.each(series.getAllPoints(), function(i, pt) {
@@ -2971,7 +3049,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(seriesGroup.children.length, 1);
         assert.equal(seriesGroup.children[0].toBackground.callCount, 1);
@@ -2980,9 +3058,14 @@ function setDiscreteType(series) {
     //T398875
     QUnit.test("Series should be brought to background on draw, fullstackedarea", function(assert) {
         var seriesGroup = this.renderer.g(),
-            series = createSeries({
+            series = this.createSeries({
                 type: "fullstackedarea"
-            }, { renderer: this.renderer, seriesGroup: seriesGroup });
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer }),
+                seriesGroup: seriesGroup
+            });
 
         series.updateData(this.data);
         $.each(series.getAllPoints(), function(i, pt) {
@@ -2992,7 +3075,7 @@ function setDiscreteType(series) {
             pt.minY = 5;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(seriesGroup.children.length, 1);
         assert.equal(seriesGroup.children[0].toBackground.callCount, 1);
@@ -3010,6 +3093,16 @@ function setDiscreteType(series) {
         afterEach: function() {
             environmentWithSinonStubPoint.afterEach.call(this);
             vizUtils.getCosAndSin.restore();
+        },
+        getAxis: function(center, canvas) {
+            return {
+                getCenter: function() {
+                    return { x: 0, y: 0 };
+                },
+                getCanvas: function() {
+                    return { left: 0, right: 0, width: 200, top: 0, bottom: 0, height: 300 };
+                }
+            };
         }
     });
 
@@ -3019,10 +3112,15 @@ function setDiscreteType(series) {
             type: "area",
             width: 10,
             closed: true
-        }, { renderer: this.renderer });
+        }, {
+            renderer: this.renderer,
+            argumentAxis: this.getAxis(),
+            valueAxis: this.getAxis()
+        });
+
         setPolarType(series);
         series.updateData([{ arg: 0, val: 0 }, { arg: 2, val: 2 }]);
-        series.draw(this.polarTranslator);
+        series.draw();
 
         assert.equal(this.renderer.stub("path").callCount, 2);
 
@@ -3039,10 +3137,14 @@ function setDiscreteType(series) {
             type: "area",
             width: 10,
             closed: false
-        }, { renderer: this.renderer });
+        }, {
+            renderer: this.renderer,
+            argumentAxis: this.getAxis(),
+            valueAxis: this.getAxis()
+        });
         setPolarType(series);
         series.updateData([{ arg: 0, val: 0 }, { arg: 2, val: 2 }]);
-        series.draw(this.polarTranslator);
+        series.draw();
 
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(1).args[0].length, 6);
@@ -3058,13 +3160,17 @@ function setDiscreteType(series) {
             type: "area",
             width: 10,
             closed: true
-        }, { renderer: this.renderer });
+        }, {
+            renderer: this.renderer,
+            argumentAxis: this.getAxis(),
+            valueAxis: this.getAxis()
+        });
         setPolarType(series);
         series.updateData([{ arg: 0, val: 10 }, { arg: 2, val: 0 }, { arg: 4, val: null }, { arg: 359, val: 5 }]);
 
         series.getAllPoints()[2].hasValue.returns(false);//set new segment
 
-        series.draw(this.polarTranslator);
+        series.draw();
 
         assert.deepEqual(getPositionRendererPoints(this.renderer.stub("path").getCall(0).args[0]),
             [{ x: 10, y: 10 }, { x: 5, y: 5 }, { x: 0, y: 0 }]);
@@ -3087,12 +3193,16 @@ function setDiscreteType(series) {
             type: "area",
             width: 10,
             closed: true
-        }, { renderer: this.renderer });
+        }, {
+            renderer: this.renderer,
+            argumentAxis: this.getAxis(),
+            valueAxis: this.getAxis()
+        });
 
         setDiscreteType(series);
 
         series.updateData([{ arg: 0, val: 0 }, { arg: 2, val: 358 }]);
-        series.draw(this.polarTranslator);
+        series.draw();
 
         assert.equal(this.renderer.stub("path").getCall(1).args[0].length, 6);
         assert.deepEqual(this.renderer.stub("path").getCall(1).args[1], "area");
@@ -3106,10 +3216,14 @@ function setDiscreteType(series) {
             type: "area",
             width: 10,
             closed: true
-        }, { renderer: this.renderer });
+        }, {
+            renderer: this.renderer,
+            argumentAxis: this.getAxis(),
+            valueAxis: this.getAxis()
+        });
         setPolarType(series);
         series.updateData([{ arg: 0, val: 0 }]);
-        series.draw(this.polarTranslator);
+        series.draw();
 
         assert.equal(this.renderer.stub("path").callCount, 2);
         assert.equal(this.renderer.stub("path").getCall(1).args[0].length, 2);

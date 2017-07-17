@@ -4,11 +4,10 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     vizMocks = require("../../helpers/vizMocks.js"),
     pointModule = require("viz/series/points/base_point"),
-    polarTranslatorModule = require("viz/translators/polar_translator"),
     labelModule = require("viz/series/points/label"),
     Series = require("viz/series/base_series").Series;
 
-/* global insertMockFactory, MockTranslator */
+/* global insertMockFactory, MockTranslator, MockAxis */
 require("../../helpers/chartMocks.js");
 
 require("viz/chart");
@@ -47,7 +46,9 @@ var createSeries = function(options, renderSettings) {
         labelsGroup: renderer.g(),
         seriesGroup: renderer.g(),
         markerTrackerGroup: renderer.g(),
-        trackersGroup: renderer.g()
+        trackersGroup: renderer.g(),
+        valueAxis: new MockAxis({ renderer: renderer }),
+        argumentAxis: new MockAxis({ renderer: renderer })
     }, renderSettings);
 
     renderer.stub("g").reset();
@@ -63,36 +64,7 @@ var createPoint = function() {
     return stub;
 };
 
-function createStubPolarTranslator() {
-    var stub = sinon.createStubInstance(polarTranslatorModule.PolarTranslator);
-    stub.untranslate.withArgs(200, 100).returns({ phi: 0, r: 10 });
-    stub.untranslate.withArgs(100, 200).returns({ phi: 90, r: 10 });
-    stub.untranslate.withArgs(0, 100).returns({ phi: 180, r: 10 });
-    stub.untranslate.withArgs(100, 0).returns({ phi: 270, r: 10 });
-
-    stub.untranslate.withArgs(150, 150).returns({ phi: 45, r: 10 });
-    stub.untranslate.withArgs(50, 150).returns({ phi: 135, r: 10 });
-    stub.untranslate.withArgs(50, 50).returns({ phi: 225, r: 10 });
-    stub.untranslate.withArgs(150, 50).returns({ phi: 315, r: 10 });
-
-    stub.canvas = { left: 0, right: 0, width: 200, top: 0, bottom: 0, height: 300 };
-    return stub;
-}
-
 var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint()];
-
-var stubPolarTranslator = createStubPolarTranslator();
-
-var translators = {
-    x: new MockTranslator({
-        translate: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-        getCanvasVisibleArea: { min: 0, max: 700 }
-    }),
-    y: new MockTranslator({
-        translate: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-        getCanvasVisibleArea: { min: 0, max: 500 }
-    })
-};
 
 function resetStub(stub) {
     $.each(stub, function(_, stubFunc) {
@@ -107,8 +79,6 @@ var environment = {
         this.renderer = new vizMocks.Renderer();
         this.seriesGroup = this.renderer.g();
         this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
-        this.translators = translators;
-        this.polarTranslator = stubPolarTranslator;
         this.createPoint = sinon.stub(pointModule, "Point", function(series, data) {
             var stub = mockPoints[mockPointIndex++];
             data = data || {};
@@ -391,7 +361,7 @@ var checkTwoGroups = function(assert, series) {
             seriesGroup: this.seriesGroup
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         checkGroups(assert, series);
@@ -411,7 +381,7 @@ var checkTwoGroups = function(assert, series) {
             pt.y = pt.value;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         checkGroups(assert, series);
         assert.strictEqual(series._markersGroup._stored_settings.opacity, 1);
@@ -435,7 +405,7 @@ var checkTwoGroups = function(assert, series) {
             pt.y = pt.value;
         });
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         checkGroups(assert, series);
 
@@ -471,7 +441,7 @@ var checkTwoGroups = function(assert, series) {
         });
         series._points[2].isInVisibleArea.returns(false);
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.ok(!series.getPointByPos(2).animate.called);
         assert.ok(series.getPointByPos(0).animate.called);
@@ -503,7 +473,7 @@ var checkTwoGroups = function(assert, series) {
         series.setClippingParams("clipId", "wideClipId", false);
 
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
@@ -562,7 +532,7 @@ var checkTwoGroups = function(assert, series) {
         series.setClippingParams("clipId", "wideClipId", false);
 
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
@@ -630,7 +600,7 @@ var checkTwoGroups = function(assert, series) {
         series.setClippingParams("clipId", "wideClipId", false);
 
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
@@ -696,7 +666,7 @@ var checkTwoGroups = function(assert, series) {
         series.setClippingParams("clipId", "wideClipId", false);
 
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
@@ -754,7 +724,7 @@ var checkTwoGroups = function(assert, series) {
         series.setClippingParams("clipId", "wideClipId", true);
 
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         assert.equal(this.renderer.stub("g").callCount, 4);
@@ -811,7 +781,7 @@ var checkTwoGroups = function(assert, series) {
         series.setClippingParams("clipId", "wideClipId", true);
 
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         checkGroups(assert, series);
@@ -840,7 +810,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("Draw without animation", function(assert) {
         var series = this.series;
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -853,7 +823,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("Draw with animation", function(assert) {
         var series = this.series;
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -876,7 +846,7 @@ var checkTwoGroups = function(assert, series) {
         //act
         series.resamplePoints();
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         series.drawTrackers();
         //assert
         assert.ok(series._originalPoints.length);
@@ -1146,7 +1116,7 @@ var checkTwoGroups = function(assert, series) {
         });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
 
         assert.deepEqual(series._markersGroup._stored_settings, {
             "class": "dxc-markers",
@@ -2455,6 +2425,40 @@ var checkTwoGroups = function(assert, series) {
         assert.strictEqual(series.getStackName(), null);
     });
 
+    QUnit.module("Check visible area", {
+        beforeEach: function() {
+            environment.beforeEach.call(this);
+            var data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
+            this.series = createSeries({
+                rotated: false,
+                type: seriesType,
+            });
+            this.series.getValueAxis().getTranslator = sinon.spy(function() {
+                return new MockTranslator({
+                    getCanvasVisibleArea: { min: 0, max: 500 }
+                });
+            });
+            this.series.getArgumentAxis().getTranslator = sinon.spy(function() {
+                return new MockTranslator({
+                    getCanvasVisibleArea: { min: 10, max: 530 }
+                });
+            });
+            this.series.updateData(data);
+            this.series.draw();
+        },
+        afterEach: environment.afterEach
+    });
+
+    QUnit.test("Visible area, not rotated", function(assert) {
+        assert.deepEqual(this.series.getVisibleArea(), { maxX: 530, minX: 10, maxY: 500, minY: 0 });
+    });
+
+    QUnit.test("Visible area, rotated", function(assert) {
+        this.series.updateOptions($.extend(true, {}, this.series.getOptions(), { rotated: true }));
+        this.series.draw();
+        assert.deepEqual(this.series.getVisibleArea(), { maxX: 500, minX: 0, maxY: 530, minY: 10 });
+    });
+
     QUnit.module("Scatter. Update animation", {
         beforeEach: function() {
             environment.beforeEach.call(this);
@@ -2470,10 +2474,10 @@ var checkTwoGroups = function(assert, series) {
             newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
-        series.draw(this.translators, true);
+        series.draw(true);
 
         series._labelsGroup.stub("animate").lastCall.args[2]();
 
@@ -2487,11 +2491,11 @@ var checkTwoGroups = function(assert, series) {
             newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
         var drawSpy = sinon.spy(series, "_draw");
-        series.draw(this.translators, true);
+        series.draw(true);
 
         series._labelsGroup.stub("animate").lastCall.args[2]();
         series._markersGroup.stub("animate").lastCall.args[2]();
@@ -2506,13 +2510,13 @@ var checkTwoGroups = function(assert, series) {
             newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
 
         series.updateOptions(newOptions);
 
         var clearingAnimation = sinon.spy(series, "_oldClearingAnimation");
 
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingAnimation.calledOnce);
 
@@ -2530,12 +2534,12 @@ var checkTwoGroups = function(assert, series) {
             newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
 
         var clearingAnimation = sinon.spy(series, "_oldClearingAnimation");
 
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingAnimation.calledOnce);
 
@@ -2554,13 +2558,13 @@ var checkTwoGroups = function(assert, series) {
             newData = [{ arg: "arg1", val: "val1", tag: "tag1" }];
 
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
         series.updateOptions(newOptions);
         series.updateData(newData);
 
         var clearingAnimation = sinon.spy(series, "_oldClearingAnimation");
 
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(clearingAnimation.calledOnce);
 
@@ -2767,15 +2771,32 @@ var checkTwoGroups = function(assert, series) {
         assert.ok(series.isUpdated);
     });
 
+    QUnit.test("getVisibleArea", function(assert) {
+        var series = createSeries({ type: seriesType, widgetType: "polar" });
+        series.getValueAxis().getCanvas = sinon.stub().returns({ left: 1, right: 10, top: 15, bottom: 20, width: 300, height: 200 });
+        series.draw();
+
+        assert.deepEqual(series.getVisibleArea(), { minX: 1, maxX: 290, minY: 15, maxY: 180 });
+    });
+
     QUnit.module("Get point by Coord. Polar series", environment);
 
     QUnit.test("getNeighborPoint", function(assert) {
-        var series = createSeries({ type: seriesType, widgetType: "polar" });
+        var series = createSeries({ type: seriesType, widgetType: "polar" }, {
+            valueAxis: {
+                getCenter: function() {
+                    return { x: 100, y: 100 };
+                },
+                getCanvas: function() {
+                    return { left: 0, right: 0, width: 200, top: 0, bottom: 0, height: 300 };
+                }
+            }
+        });
         series.updateData(this.data);
         series.getVisiblePoints = function() {
             return series.getPoints();
         };
-        series.draw(this.polarTranslator);
+        series.draw();
 
         var points = series.getAllPoints();
         points[0].vx = 0;
@@ -2796,12 +2817,21 @@ var checkTwoGroups = function(assert, series) {
     });
 
     QUnit.test("getNeighborPoint. between points", function(assert) {
-        var series = createSeries({ type: seriesType, widgetType: "polar" });
+        var series = createSeries({ type: seriesType, widgetType: "polar" }, {
+            valueAxis: {
+                getCenter: function() {
+                    return { x: 100, y: 100 };
+                },
+                getCanvas: function() {
+                    return { left: 0, right: 0, width: 200, top: 0, bottom: 0, height: 300 };
+                }
+            }
+        });
         series.updateData(this.data);
         series.getVisiblePoints = function() {
             return series.getPoints();
         };
-        series.draw(this.polarTranslator);
+        series.draw();
 
         var points = series.getAllPoints();
         points[0].vx = 0;
@@ -2825,7 +2855,7 @@ var checkTwoGroups = function(assert, series) {
         assert.expect(0);
         var series = createSeries({ type: seriesType, widgetType: "polar", visible: false });
         series.updateData(this.data);
-        series.draw(this.polarTranslator);
+        series.draw();
         series.drawTrackers();
     });
 })();

@@ -9,43 +9,16 @@ var $ = require("../../core/renderer"),
     barSeries = require("./bar_series"),
     chartBarSeries = barSeries.chart.bar,
     lineSeries = require("./line_series").chart,
-    rangeCalculator = require("./helpers/range_data_calculator"),
     _extend = extend,
     vizUtils = require("../core/utils"),
     objectUtils = require("../../core/utils/object"),
     _noop = noop,
     baseStackedSeries = {
-        _processRange: _noop,
         getErrorBarRangeCorrector: _noop,
         _fillErrorBars: _noop,
-        _calculateErrorBars: _noop,
-        _processStackedRange: function() {
-            var that = this,
-                prevPoint;
-            that._resetRangeData();
-            $.each(that.getAllPoints(), function(i, p) {
-                rangeCalculator.processRange(that, p, prevPoint);
-                prevPoint = p;
-            });
-        },
-
-        _getRangeData: function() {
-            this._processStackedRange();
-            return chartAreaSeries._getRangeData.apply(this, arguments);
-        }
+        _calculateErrorBars: _noop
     },
     baseFullStackedSeries = _extend({}, baseStackedSeries, {
-        _getRangeData: function(zoomArgs, calcIntervalFunction) {
-            var that = this;
-            that._processStackedRange();
-            rangeCalculator.calculateRangeData(that, zoomArgs, calcIntervalFunction);
-            rangeCalculator.addLabelPaddings(that);
-            rangeCalculator.processFullStackedRange(that);
-            rangeCalculator.calculateRangeMinValue(that, zoomArgs);
-
-            return that._rangeData;
-        },
-
         isFullStackedSeries: function() {
             return true;
         }
@@ -54,45 +27,33 @@ var $ = require("../../core/renderer"),
 exports.chart = {};
 exports.polar = {};
 
-exports.chart["stackedline"] = _extend({}, lineSeries.line, baseStackedSeries, {
-    _getRangeData: function() {
-        this._processStackedRange();
-        return lineSeries.line._getRangeData.apply(this, arguments);
-    }
-});
+exports.chart["stackedline"] = _extend({}, lineSeries.line, baseStackedSeries, { });
 
-exports.chart["stackedspline"] = _extend({}, lineSeries["spline"], baseStackedSeries, {
-    _getRangeData: exports.chart["stackedline"]._getRangeData
-});
+exports.chart["stackedspline"] = _extend({}, lineSeries["spline"], baseStackedSeries, {});
 
-exports.chart["fullstackedline"] = _extend({}, lineSeries.line, baseFullStackedSeries, {
-    _getRangeData: function(zoomArgs, calcIntervalFunction) {
-        var that = this;
-        that._processStackedRange();
-        rangeCalculator.calculateRangeData(that, zoomArgs, calcIntervalFunction);
-        rangeCalculator.addLabelPaddings(that);
-        rangeCalculator.processFullStackedRange(that);
-        return that._rangeData;
-    }
+var fullStackedLineSeries = exports.chart["fullstackedline"] = _extend({}, lineSeries.line, baseFullStackedSeries, {
+    _processRange: function(range) {
+        lineSeries.line._processRange.apply(this, arguments);
+        range.val.percentStick = true;
+    },
+    getValueRangeInitialValue: areaSeries.area.getValueRangeInitialValue
 });
 
 exports.chart["fullstackedspline"] = _extend({}, lineSeries["spline"], baseFullStackedSeries, {
-    _getRangeData: exports.chart["fullstackedline"]._getRangeData
+    _processRange: function(range) {
+        lineSeries.line._processRange.apply(this, arguments);
+        range.val.percentStick = true;
+    },
+    getValueRangeInitialValue: areaSeries.area.getValueRangeInitialValue
 });
 
-exports.chart["stackedbar"] = _extend({}, chartBarSeries, baseStackedSeries, {
-    _getRangeData: function() {
-        this._processStackedRange();
-        return chartBarSeries._getRangeData.apply(this, arguments);
-    }
-});
+exports.chart["stackedbar"] = _extend({}, chartBarSeries, baseStackedSeries, {});
+
 exports.chart["fullstackedbar"] = _extend({}, chartBarSeries, baseFullStackedSeries, {
-    _getRangeData: function() {
-        var rangeData = baseFullStackedSeries._getRangeData.apply(this, arguments);
-        rangeData.arg.stick = false;
-
-        return rangeData;
-    }
+    _processRange: function(range) {
+        chartBarSeries._processRange.apply(this, arguments);
+        range.val.percentStick = true;
+    },
 });
 
 function clonePoint(point, value, minValue, position) {
@@ -205,17 +166,14 @@ exports.chart["stackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseS
 
 exports.chart["fullstackedarea"] = _extend({}, chartAreaSeries, baseFullStackedSeries, {
     _prepareSegment: exports.chart["stackedarea"]._prepareSegment,
-    _appendInGroup: exports.chart["stackedarea"]._appendInGroup
+    _appendInGroup: exports.chart["stackedarea"]._appendInGroup,
+    _processRange: fullStackedLineSeries._processRange
 });
 
 exports.chart["fullstackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseFullStackedSeries, {
     _prepareSegment: exports.chart["stackedsplinearea"]._prepareSegment,
-    _appendInGroup: exports.chart["stackedarea"]._appendInGroup
+    _appendInGroup: exports.chart["stackedarea"]._appendInGroup,
+    _processRange: fullStackedLineSeries._processRange
 });
 
-exports.polar["stackedbar"] = _extend({}, barSeries.polar.bar, baseStackedSeries, {
-    _getRangeData: function() {
-        this._processStackedRange();
-        return barSeries.polar.bar._getRangeData.apply(this, arguments);
-    }
-});
+exports.polar["stackedbar"] = _extend({}, barSeries.polar.bar, baseStackedSeries, {});

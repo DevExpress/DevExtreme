@@ -158,11 +158,11 @@ module.exports = _extend({}, symbolPoint, {
         return bottomCoord < topCoord + topValue;
     },
 
-    _getOverlayCorrections: function(type, topCoords, bottomCoords) {
-        var isVertical = type === "vertical",
-            coordSelector = isVertical ? "y" : "x",
-            valueSelector = isVertical ? "height" : "width",
-            visibleArea = this.translators[coordSelector].getCanvasVisibleArea(),
+    _getOverlayCorrections: function(topCoords, bottomCoords) {
+        var rotated = this._options.rotated,
+            coordSelector = !rotated ? "y" : "x",
+            valueSelector = !rotated ? "height" : "width",
+            visibleArea = this._getValTranslator().getCanvasVisibleArea(),
             minBound = visibleArea.min,
             maxBound = visibleArea.max,
             delta = _round((topCoords[coordSelector] + topCoords[valueSelector] - bottomCoords[coordSelector]) / 2),
@@ -191,13 +191,13 @@ module.exports = _extend({}, symbolPoint, {
         if(!that._options.rotated) {
             if(topLocation === "top") {
                 if(this._checkOverlay(bottomCoords.y, topCoords.y, topCoords.height)) {
-                    corrections = this._getOverlayCorrections("vertical", topCoords, bottomCoords);
+                    corrections = this._getOverlayCorrections(topCoords, bottomCoords);
                     that._topLabel.shift(topCoords.x, corrections.coord1);
                     that._bottomLabel.shift(bottomCoords.x, corrections.coord2);
                 }
             } else {
                 if(this._checkOverlay(topCoords.y, bottomCoords.y, bottomCoords.height)) {
-                    corrections = this._getOverlayCorrections("vertical", bottomCoords, topCoords);
+                    corrections = this._getOverlayCorrections(bottomCoords, topCoords);
                     that._topLabel.shift(topCoords.x, corrections.coord2);
                     that._bottomLabel.shift(bottomCoords.x, corrections.coord1);
                 }
@@ -205,13 +205,13 @@ module.exports = _extend({}, symbolPoint, {
         } else {
             if(topLocation === "top") {
                 if(this._checkOverlay(topCoords.x, bottomCoords.x, bottomCoords.width)) {
-                    corrections = this._getOverlayCorrections("horizontal", bottomCoords, topCoords);
+                    corrections = this._getOverlayCorrections(bottomCoords, topCoords);
                     that._topLabel.shift(corrections.coord2, topCoords.y);
                     that._bottomLabel.shift(corrections.coord1, bottomCoords.y);
                 }
             } else {
                 if(this._checkOverlay(bottomCoords.x, topCoords.x, topCoords.width)) {
-                    corrections = this._getOverlayCorrections("horizontal", topCoords, bottomCoords);
+                    corrections = this._getOverlayCorrections(topCoords, bottomCoords);
                     that._topLabel.shift(corrections.coord1, topCoords.y);
                     that._bottomLabel.shift(corrections.coord2, bottomCoords.y);
                 }
@@ -349,7 +349,6 @@ module.exports = _extend({}, symbolPoint, {
             argument = !rotated ? that.x : that.y,
             maxValue = !rotated ? _max(that.minY, that.y) : _max(that.minX, that.x),
             minValue = !rotated ? _min(that.minY, that.y) : _min(that.minX, that.x),
-            translators = that.translators,
             notVisibleByArg,
             notVisibleByVal,
             tmp,
@@ -359,23 +358,21 @@ module.exports = _extend({}, symbolPoint, {
             visibleArgArea,
             visibleValArea;
 
-        if(translators) {
-            visibleArgArea = translators[!rotated ? "x" : "y"].getCanvasVisibleArea();
-            visibleValArea = translators[!rotated ? "y" : "x"].getCanvasVisibleArea();
+        visibleArgArea = that._getArgTranslator().getCanvasVisibleArea();
+        visibleValArea = that._getValTranslator().getCanvasVisibleArea();
 
-            notVisibleByArg = (visibleArgArea.max < argument) || (visibleArgArea.min > argument);
-            notVisibleByVal = ((visibleValArea.min > minValue) && (visibleValArea.min > maxValue)) || ((visibleValArea.max < minValue) && (visibleValArea.max < maxValue));
+        notVisibleByArg = (visibleArgArea.max < argument) || (visibleArgArea.min > argument);
+        notVisibleByVal = ((visibleValArea.min > minValue) && (visibleValArea.min > maxValue)) || ((visibleValArea.max < minValue) && (visibleValArea.max < maxValue));
 
-            if(notVisibleByArg || notVisibleByVal) {
-                visibleTopMarker = visibleBottomMarker = visibleRangeArea = false;
-            } else {
-                visibleTopMarker = ((visibleValArea.min <= minValue) && (visibleValArea.max > minValue));
-                visibleBottomMarker = ((visibleValArea.min < maxValue) && (visibleValArea.max >= maxValue));
-                if(rotated) {
-                    tmp = visibleTopMarker;
-                    visibleTopMarker = visibleBottomMarker;
-                    visibleBottomMarker = tmp;
-                }
+        if(notVisibleByArg || notVisibleByVal) {
+            visibleTopMarker = visibleBottomMarker = visibleRangeArea = false;
+        } else {
+            visibleTopMarker = ((visibleValArea.min <= minValue) && (visibleValArea.max > minValue));
+            visibleBottomMarker = ((visibleValArea.min < maxValue) && (visibleValArea.max >= maxValue));
+            if(rotated) {
+                tmp = visibleTopMarker;
+                visibleTopMarker = visibleBottomMarker;
+                visibleBottomMarker = tmp;
             }
         }
         that.visibleTopMarker = visibleTopMarker;
@@ -388,34 +385,29 @@ module.exports = _extend({}, symbolPoint, {
         var that = this,
             x,
             y,
-            min,
-            max,
-            minValue,
-            translators = that.translators,
-            visibleAreaX = translators.x.getCanvasVisibleArea(),
-            visibleAreaY = translators.y.getCanvasVisibleArea();
+            rotated = that._options.rotated,
+            minValue = !rotated ? _min(that.y, that.minY) : _min(that.x, that.minX),
+            side = !rotated ? "height" : "width",
+            visibleArea = that._getVisibleArea(),
+            minVisible = rotated ? visibleArea.minX : visibleArea.minY,
+            maxVisible = rotated ? visibleArea.maxX : visibleArea.maxY,
+            min = _max(minVisible, minValue),
+            max = _min(maxVisible, minValue + that[side]);
 
-        if(!that._options.rotated) {
-            minValue = _min(that.y, that.minY);
+        if(!rotated) {
             x = that.x;
-            min = visibleAreaY.min > minValue ? visibleAreaY.min : minValue;
-            max = visibleAreaY.max < minValue + that.height ? visibleAreaY.max : minValue + that.height;
             y = min + (max - min) / 2;
         } else {
-            minValue = _min(that.x, that.minX);
             y = that.y;
-            min = visibleAreaX.min > minValue ? visibleAreaX.min : minValue;
-            max = visibleAreaX.max < minValue + that.width ? visibleAreaX.max : minValue + that.width;
             x = min + (max - min) / 2;
         }
         return { x: x, y: y, offset: 0 };
     },
 
-    _translate: function(translators) {
+    _translate: function() {
         var that = this,
             rotated = that._options.rotated;
-        that.minX = that.minY = translators.y.translate(that.minValue);
-        symbolPoint._translate.call(that, translators);
+        symbolPoint._translate.call(that);
 
         that.height = rotated ? 0 : _abs(that.minY - that.y);
         that.width = rotated ? _abs(that.x - that.minX) : 0;
@@ -525,5 +517,19 @@ module.exports = _extend({}, symbolPoint, {
         } else {
             return xCond && (yCond || (y >= this.minY - trackerRadius) && (y <= this.minY + trackerRadius));
         }
+    },
+
+    getMaxValue: function() {
+        if(this.series.valueAxisType !== "discrete") {
+            return this.minValue > this.value ? this.minValue : this.value;
+        }
+        return this.value;
+    },
+
+    getMinValue: function() {
+        if(this.series.valueAxisType !== "discrete") {
+            return this.minValue < this.value ? this.minValue : this.value;
+        }
+        return this.minValue;
     }
 });
