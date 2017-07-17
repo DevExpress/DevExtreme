@@ -39,8 +39,9 @@ var getCaptionFormat = function(short, skipCount) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
         if(this && this.option("count") > 1) {
-            var lastIntervalDate = new Date(date);
-            lastIntervalDate.setDate(date.getDate() + this.option("count") - 1);
+            var lastIntervalDate = new Date(date),
+                defaultViewDuration = this._getConfig().duration;
+            lastIntervalDate.setDate(date.getDate() + this.option("count") * defaultViewDuration - 1);
 
             var isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth(),
                 useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),
@@ -66,11 +67,12 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
         firstWeekDate.setDate(firstWeekDate.getDate() + (7 - this.option("firstDayOfWeek") + 1));
     }
 
-    var lastWeekDate = new Date(firstWeekDate);
+    var lastWeekDate = new Date(firstWeekDate),
+        count = this.option("count");
 
     shift = shift || 6;
 
-    lastWeekDate = new Date(lastWeekDate.setDate(lastWeekDate.getDate() + shift));
+    lastWeekDate = new Date(lastWeekDate.setDate(lastWeekDate.getDate() + (count > 1 ? 7 * (count - 1) + shift : shift)));
 
     if(lastWeekDate.getDay() % 6 === 0 && rejectWeekend) {
         lastWeekDate.setDate(lastWeekDate.getDate() + weekendDuration);

@@ -262,6 +262,34 @@ QUnit.test("Caption should be OK for workWeek view & firstDayOfWeek = 0", functi
     assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
 });
 
+QUnit.test("Caption should be OK for workWeek view with count", function(assert) {
+    var $element = this.instance.element(),
+        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
+        date = new Date(2015, 4, 25),
+        caption = "25 May-12 Jun 2015";
+
+    this.instance.option("firstDayOfWeek", 1);
+    this.instance.option("date", date);
+    this.instance.option("count", 3),
+    this.instance.option("step", "workWeek");
+
+    assert.equal(button.option("text"), caption, "Caption is OK");
+});
+
+QUnit.test("Caption should be OK for week view with count", function(assert) {
+    var $element = this.instance.element(),
+        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
+        date = new Date(2015, 4, 25),
+        caption = "25 May-14 Jun 2015";
+
+    this.instance.option("firstDayOfWeek", 1);
+    this.instance.option("date", date);
+    this.instance.option("count", 3),
+    this.instance.option("step", "week");
+
+    assert.equal(button.option("text"), caption, "Caption is OK");
+});
+
 QUnit.test("Calendar popover should be shown on caption click", function(assert) {
     var $element = this.instance.element(),
         $button = $element.find(".dx-scheduler-navigator-caption");
