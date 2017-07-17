@@ -1,23 +1,23 @@
 "use strict";
 
-var map = function(elems, callback, arg) {
+var map = function(values, callback) {
     var result = [];
 
-    var applyCallback = function(index, arg) {
-        var value = callback(elems[index], index, arg);
+    var applyCallback = function(index) {
+        var value = callback(values[index], index);
 
         if(value != null) {
             result.push(value);
         }
     };
 
-    if(Array.isArray(elems) || "length" in elems) {
-        for(var i = 0; i < elems.length; i++) {
-            applyCallback(i, arg);
+    if("length" in values) {
+        for(var i = 0; i < values.length; i++) {
+            applyCallback(i);
         }
     } else {
-        for(var key in elems) {
-            applyCallback(key, arg);
+        for(var key in values) {
+            applyCallback(key);
         }
     }
 
