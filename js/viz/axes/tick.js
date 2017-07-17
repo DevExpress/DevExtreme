@@ -59,7 +59,6 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     points: axis._getTickMarkPoints(tick, tickOptions.length)
                 });
 
-                //TODO test
                 this.coords.angle && axis._rotateTick(this.mark, this.coords);
             },
             drawLabel: function() {

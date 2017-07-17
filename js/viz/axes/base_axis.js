@@ -1176,9 +1176,7 @@ Axis.prototype = {
 
         var offset = that._constantLabelOffset = that._adjustConstantLineLabels(that._outsideConstantLines);
 
-        //TODO test this if
         if(!that._translator.getBusinessRange().stubData) {
-            //TODO test
             that._setLabelsPlacement();
             offset = that._adjustLabels(offset);
         }
@@ -1411,7 +1409,6 @@ Axis.prototype = {
     },
 
     _setLabelsPlacement: function() {
-        //TODO tests this if
         if(!this._options.label.visible) {
             return;
         }

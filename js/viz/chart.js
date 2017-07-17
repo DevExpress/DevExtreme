@@ -626,7 +626,6 @@ var dxChart = AdvancedChart.inherit({
         });
     },
 
-    //TODO check drawOptions.adjustAxes
     _prepareAxesAndDraw: function(drawOptions, panesBorderOptions) {
         var that = this,
             rotated = that._isRotated(),
