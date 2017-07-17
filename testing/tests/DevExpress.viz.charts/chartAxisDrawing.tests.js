@@ -85,10 +85,10 @@ function createAxisStubs() {
     var axisFakes = {
         estimateMargins: sinon.stub(),
         getMargins: sinon.stub(),
-        createTicks: sinon.spy(function(arg) { this.createTicks_test_arg = Object.assign({}, arg); }),
-        draw: sinon.spy(function(arg) { this.draw_test_arg = Object.assign({}, arg); }),
-        updateSize: sinon.spy(function(arg) { this.updateSize_test_arg = Object.assign({}, arg); }),
-        shift: sinon.spy(function(arg) { this.shift_test_arg = Object.assign({}, arg); }),
+        createTicks: sinon.spy(function(arg) { this.createTicks_test_arg = $.extend({}, arg); }),
+        draw: sinon.spy(function(arg) { this.draw_test_arg = $.extend({}, arg); }),
+        updateSize: sinon.spy(function(arg) { this.updateSize_test_arg = $.extend({}, arg); }),
+        shift: sinon.spy(function(arg) { this.shift_test_arg = $.extend({}, arg); }),
         hideTitle: sinon.spy(),
         hideOuterElements: sinon.spy()
     };
