@@ -1108,13 +1108,14 @@ var Overlay = Widget.inherit({
         var position = translator.locate(this._$content),
             deltaSize = this._deltaSize(),
             isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0,
+            shaderOffset = this.option("shading") && !this.option("container") ? translator.locate(this._$wrapper) : { top: 0, left: 0 },
             boundaryOffset = this.option("boundaryOffset");
 
         return {
-            top: isAllowedDrag ? position.top + boundaryOffset.v : 0,
-            bottom: isAllowedDrag ? -position.top + deltaSize.height - boundaryOffset.v : 0,
-            left: isAllowedDrag ? position.left + boundaryOffset.h : 0,
-            right: isAllowedDrag ? -position.left + deltaSize.width - boundaryOffset.h : 0
+            top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
+            bottom: isAllowedDrag ? -position.top - shaderOffset.top + deltaSize.height - boundaryOffset.v : 0,
+            left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h : 0,
+            right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h : 0
         };
     },
 
