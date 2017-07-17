@@ -28,11 +28,11 @@ QUnit.test("Rect and image are created", function(assert) {
     this.rangeView.update({ color: "red", image: { url: "url" } }, { visible: true, image: { location: "loc" } }, this.canvas);
 
     assert.deepEqual(this.root.clear.lastCall.args, [], "root is cleared");
-    assert.deepEqual(this.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 10, y: 20, width: 200, height: 100 }], "clip rect");
-    assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 201, 100], "rect is created");
+    assert.deepEqual(this.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 10, y: 20, width: 190, height: 100 }], "clip rect");
+    assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 191, 100], "rect is created");
     assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.lastCall.args, [{ "class": "dx-range-selector-background", fill: "red" }], "rect settings");
     assert.deepEqual(this.renderer.rect.lastCall.returnValue.append.lastCall.args, [this.root], "rect is appended");
-    assert.deepEqual(this.renderer.image.lastCall.args, [10, 20, 201, 100, "url", "loc"], "image is created");
+    assert.deepEqual(this.renderer.image.lastCall.args, [10, 20, 191, 100, "url", "loc"], "image is created");
     assert.deepEqual(this.renderer.image.lastCall.returnValue.append.lastCall.args, [this.root], "image is appended");
 });
 
@@ -111,7 +111,7 @@ QUnit.test("Nothing is created when mode is compact", function(assert) {
     this.rangeView.update({ color: "red", image: { url: "url" } }, { visible: true, image: { location: "loc" } }, this.canvas, true);
 
     assert.deepEqual(this.root.clear.lastCall.args, [], "root is cleared");
-    assert.deepEqual(this.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 10, y: 20, width: 200, height: 100 }], "clip rect");
+    assert.deepEqual(this.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 10, y: 20, width: 190, height: 100 }], "clip rect");
     assert.strictEqual(this.renderer.stub("rect").lastCall, null);
     assert.strictEqual(this.renderer.stub("image").lastCall, null);
 });

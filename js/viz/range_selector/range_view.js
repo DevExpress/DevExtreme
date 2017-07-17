@@ -46,14 +46,16 @@ RangeView.prototype = {
     update: function(backgroundOption, backgroundTheme, canvas, isCompactMode, isAnimationEnabled, seriesDataSource) {
         var renderer = this._params.renderer,
             root = this._params.root,
+            canvasWidth = canvas.width - canvas.left,
             seriesGroup;
+
         backgroundOption = backgroundOption || {};
         root.clear();
-        this._clipRect.attr({ x: canvas.left, y: canvas.top, width: canvas.width, height: canvas.height });
+        this._clipRect.attr({ x: canvas.left, y: canvas.top, width: canvasWidth, height: canvas.height });
         if(!isCompactMode) {
             if(merge(backgroundOption.visible, backgroundTheme.visible)) {
                 if(backgroundOption.color) {
-                    renderer.rect(canvas.left, canvas.top, canvas.width + 1, canvas.height).attr({
+                    renderer.rect(canvas.left, canvas.top, canvasWidth + 1, canvas.height).attr({
                         // Seems that "backgroundTheme.color" is never used and so can be removed both from here and from themes
                         // TODO: Check it (special attention to WidgetsGallery) and remove the option
                         fill: merge(backgroundOption.color, backgroundTheme.color),
@@ -61,7 +63,7 @@ RangeView.prototype = {
                     }).append(root);
                 }
                 if(backgroundOption.image && backgroundOption.image.url) {
-                    renderer.image(canvas.left, canvas.top, canvas.width + 1, canvas.height,
+                    renderer.image(canvas.left, canvas.top, canvasWidth + 1, canvas.height,
                         backgroundOption.image.url,
                         merge(backgroundOption.image.location, backgroundTheme.image.location)).append(root);
                 }
