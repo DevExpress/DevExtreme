@@ -791,7 +791,7 @@ QUnit.test("CheckBox mode - not update treeview when selected items", function(a
         assert.equal(columnIndex, 0, "column index");
         assert.strictEqual(optionName, "visible", "option name is 'visible'");
         assert.ok(!value, "value of the option");
-        this.columnsChanged.fire({ optionNames: {} });
+        this.columnsChanged.fire({ optionNames: {}, changeTypes: {} });
     };
     columnChooserView._popupContainer.option("visible", true);
     columnChooserView._renderColumnChooserList = function() {
@@ -947,4 +947,25 @@ QUnit.test("CheckBox mode - scroll position after selecting an last item", funct
     //assert
     scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
     assert.ok(scrollableInstance.scrollTop() > 0, "scroll position");
+});
+
+//T535738
+QUnit.test("CheckBox mode - update treeview when changing the column options", function(assert) {
+    //arrange
+    var $testElement = $("#container");
+
+    this.options.columnChooser.mode = "select";
+    $.extend(this.columns, [{ caption: "Column 1", index: 0, visible: true }, { caption: "Column 2", index: 1, visible: true }]);
+    this.setTestElement($testElement);
+
+    this.showColumnChooser();
+    this.clock.tick(1000);
+
+    sinon.spy(this.columnChooserView, "_renderColumnChooserList");
+
+    //act
+    this.columnsController.columnsChanged.fire({ optionNames: { all: true }, changeTypes: { columns: true } });
+
+    //assert
+    assert.strictEqual(this.columnChooserView._renderColumnChooserList.callCount, 1, "update treeview");
 });
