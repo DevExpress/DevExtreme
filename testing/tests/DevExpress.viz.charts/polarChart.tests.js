@@ -11,12 +11,9 @@ var $ = require("jquery"),
     trackerModule = require("viz/chart_components/tracker"),
     ChartTrackerStub = vizMocks.stubClass(trackerModule.ChartTracker),
     dxPolarChart = require("viz/polar_chart"),
-    polarTranslatorModule = require("viz/translators/polar_translator"),
     rendererModule = require("viz/core/renderers/renderer"),
-    vizUtils = require("viz/core/utils"),
     dataValidatorModule = require("viz/components/data_validator"),
     rangeModule = require("viz/translators/range"),
-    stubTranslator = createStubTranslator(),
     tooltipModule = require("viz/core/tooltip"),
     layoutManagerModule = require("viz/chart_components/layout_manager"),
     stubTooltip = sinon.createStubInstance(tooltipModule.Tooltip),
@@ -64,12 +61,6 @@ function createStubThemeManager() {
     themeManager.getOptions.withArgs("rotated").returns(true);
     themeManager.getOptions.returns({});
     return themeManager;
-}
-function createStubTranslator() {
-    var translator = sinon.createStubInstance(polarTranslatorModule.PolarTranslator);
-    translator.getBusinessRange.returns({ arg: {}, val: {} });
-    translator.canvas = { top: 5, bottom: 10, left: 5, right: 10 };
-    return translator;
 }
 function createSeries() {
     var series = sinon.createStubInstance(Series);
@@ -141,24 +132,26 @@ var stubSeries = [createSeries(), createSeries()],
                 return stubTooltip;
             });
 
-            that.polarTranslator = sinon.stub(polarTranslatorModule, "PolarTranslator", function() {
-                resetStub(stubTranslator);
-                return stubTranslator;
-            });
-
             that.range = sinon.stub(rangeModule, "Range", function() {
                 resetStub(stubRange);
                 stubRange.addRange = function() { this.min = 2; };
                 return stubRange;
             });
 
-            that.createSeries = sinon.stub(seriesModule, "Series", function(renderer, seriesTheme) {
+            that.createSeries = sinon.stub(seriesModule, "Series", function(settings, seriesTheme) {
                 resetStub(stubSeries[seriesIndex]);
+                stubSeries[seriesIndex].getValueAxis.returns(settings.valueAxis);
                 return $.extend(true, stubSeries[seriesIndex++], seriesTheme);
             });
 
             that.createAxis = sinon.stub(axisModule, "Axis", function() {
                 resetStub(stubAxes[axesIndex]);
+
+                stubAxes[axesIndex].measureLabels.returns({
+                    width: 50,
+                    height: 70
+                });
+
                 return stubAxes[axesIndex++];
             });
 
@@ -175,8 +168,9 @@ var stubSeries = [createSeries(), createSeries()],
             stubLayoutManager.needMoreSpaceForPanesCanvas.returns(false);
             stubLayoutManager.layoutElements = sinon.spy(function() {
                 arguments[2]();
+                var size = stubLayoutManager.needMoreSpaceForPanesCanvas();
+                size && arguments[2](size);
             });
-            sinon.stub(vizUtils, "updatePanesCanvases");
         },
         afterEach: function() {
             this.createThemeManager.reset();
@@ -187,9 +181,6 @@ var stubSeries = [createSeries(), createSeries()],
 
             this.createRenderer.reset();
             this.createRenderer.restore();
-
-            this.polarTranslator.reset();
-            this.polarTranslator.restore();
 
             this.range.reset();
             this.range.restore();
@@ -210,9 +201,6 @@ var stubSeries = [createSeries(), createSeries()],
             legendModule.Legend.reset();
 
             stubLayoutManager.layoutElements.reset();
-
-            vizUtils.updatePanesCanvases.reset();
-            vizUtils.updatePanesCanvases.restore();
         },
         createPolarChart: function(options) {
             var polarChart = new dxPolarChart(this.$container, options);
@@ -310,31 +298,28 @@ QUnit.test("draw series with correct translators and animation options", functio
     stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ keepLabels: false });
     var chart = this.createSimplePolarChart();
 
-    assert.equal(chart.getSeriesByPos(0).draw.args[0][0], chart.translator);
-    assert.equal(chart.getSeriesByPos(0).draw.args[0][1], chart._renderer.animationEnabled());
-    assert.equal(chart.getSeriesByPos(0).draw.args[0][2], true);
+    assert.equal(chart.getSeriesByPos(0).draw.args[0][0], chart._renderer.animationEnabled());
+    assert.equal(chart.getSeriesByPos(0).draw.args[0][1], true);
 });
 
 QUnit.test("draw series with correct translators and without animation", function(assert) {
     stubThemeManager.getOptions.withArgs("animation").returns({ enabled: false });
     var chart = this.createSimplePolarChart();
 
-    assert.equal(chart.getSeriesByPos(0).draw.args[0][0], chart.translator);
-    assert.strictEqual(chart.getSeriesByPos(0).draw.args[0][1], false);
+    assert.strictEqual(chart.getSeriesByPos(0).draw.args[0][0], false);
 });
 
 QUnit.test("draw series without animation because exceed point limit ", function(assert) {
     stubThemeManager.getOptions.withArgs("animation").returns({ enabled: true, maxPointCountSupported: 1 });
     var chart = this.createSimplePolarChart();
 
-    assert.equal(chart.getSeriesByPos(0).draw.args[0][0], chart.translator);
-    assert.strictEqual(chart.getSeriesByPos(0).draw.args[0][1], false);
+    assert.strictEqual(chart.getSeriesByPos(0).draw.args[0][0], false);
 });
 
 QUnit.test("pass legendcallback to series draw", function(assert) {
     var chart = this.createSimplePolarChart();
 
-    assert.deepEqual(chart.getAllSeries()[0].draw.args[0][3], chart.getAllSeries()[0], "legend callback");
+    assert.deepEqual(chart.getAllSeries()[0].draw.args[0][2], chart.getAllSeries()[0], "legend callback");
 });
 
 QUnit.test("create series with visibility changed", function(assert) {
@@ -356,41 +341,37 @@ QUnit.test("create series with visibility changed", function(assert) {
     assert.ok(chart._renderer.stopAllAnimations.withArgs(true).calledTwice);
 });
 
-QUnit.test("create translators with correct range, canvas and options", function(assert) {
-    var chart = this.createSimplePolarChart();
-
-    assert.notEqual(this.polarTranslator.args[0][0], chart.businessRanges[0]);
-    assert.deepEqual(this.polarTranslator.args[0][0], chart.businessRanges[0]);
-
-    assert.notEqual(this.polarTranslator.args[0][1], chart._canvas);
-    assert.deepEqual(this.polarTranslator.args[0][1], chart._canvas);
-
-    assert.equal(this.themeManager.getOptions.withArgs("argumentAxis").callCount, 2);
-    assert.equal(this.polarTranslator.args[0][2].startAngle, this.themeManager.getOptions.withArgs("argumentAxis").returnValues[0].startAngle, "startAngle");
-    assert.equal(this.polarTranslator.args[0][2].endAngle, this.themeManager.getOptions.withArgs("argumentAxis").returnValues[0].startAngle + 360, "startAngle");
-    assert.equal(this.polarTranslator.args[0][2].firstPointOnStartAngle, this.themeManager.getOptions.withArgs("argumentAxis").returnValues[0].firstPointOnStartAngle, "startAngle");
-});
-
-QUnit.test("create translators with unnormalized angles", function(assert) {
+QUnit.test("Pass angles to axes. Process unnormalized angle", function(assert) {
     this.createSimplePolarChart({
         argumentAxis: {
             startAngle: -526
         }
     });
+    var argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0],
+        valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
 
-    assert.equal(this.polarTranslator.args[0][2].startAngle, 194, "startAngle");
-    assert.equal(this.polarTranslator.args[0][2].endAngle, 554, "endAngle");
+    assert.equal(argumentAxisOptions.startAngle, 194, "startAngle", "argumentAxis startAngle");
+    assert.equal(argumentAxisOptions.endAngle, 554, "endAngle", "argumentAxis endAngle");
+
+    assert.equal(valueAxisOptions.startAngle, 194, "startAngle", "valueAxis startAngle");
+    assert.equal(valueAxisOptions.endAngle, 554, "endAngle", "valueAxis end");
 });
 
-QUnit.test("create translators with string angles", function(assert) {
+QUnit.test("Pass angles to axes. Process incorrect angle", function(assert) {
     this.createSimplePolarChart({
         argumentAxis: {
             startAngle: "string"
         }
     });
 
-    assert.equal(this.polarTranslator.args[0][2].startAngle, 0, "startAngle");
-    assert.equal(this.polarTranslator.args[0][2].endAngle, 360, "endAngle");
+    var argumentAxisOptions = this.createAxis.getCall(0).returnValue.updateOptions.lastCall.args[0],
+        valueAxisOptions = this.createAxis.getCall(1).returnValue.updateOptions.lastCall.args[0];
+
+    assert.equal(argumentAxisOptions.startAngle, 0, "startAngle", "argumentAxis startAngle");
+    assert.equal(argumentAxisOptions.endAngle, 360, "endAngle", "argumentAxis endAngle");
+
+    assert.equal(valueAxisOptions.startAngle, 0, "startAngle", "valueAxis startAngle");
+    assert.equal(valueAxisOptions.endAngle, 360, "endAngle", "valueAxis end");
 });
 
 QUnit.test("create axes", function(assert) {
@@ -398,6 +379,16 @@ QUnit.test("create axes", function(assert) {
 
     assert.equal(chart._valueAxes.length, 1);
     assert.equal(chart._argumentAxes.length, 1);
+});
+
+QUnit.test("Pass axes to series", function(assert) {
+    var chart = this.createSimplePolarChart({ series: [{}, {}] });
+
+    assert.strictEqual(this.createSeries.getCall(0).args[0].valueAxis, chart._valueAxes[0], "value axis for first series");
+    assert.strictEqual(this.createSeries.getCall(1).args[0].valueAxis, chart._valueAxes[0], "value axis for second series");
+
+    assert.strictEqual(this.createSeries.getCall(0).args[0].argumentAxis, chart._argumentAxes[0], "argument axis for first series");
+    assert.strictEqual(this.createSeries.getCall(1).args[0].argumentAxis, chart._argumentAxes[0], "argument axis for second series");
 });
 
 QUnit.test("create argument and value axes with correct parameters", function(assert) {
@@ -420,21 +411,67 @@ QUnit.test("create axes with correct groups", function(assert) {
 QUnit.test("draw Axes", function(assert) {
     var chart = this.createSimplePolarChart();
 
-    assert.ok(chart._argumentAxes[0].draw.called);
+    assert.equal(chart._argumentAxes[0].draw.callCount, 1);
+    assert.deepEqual(chart._argumentAxes[0].draw.getCall(0).args, [{
+        bottom: 70,
+        height: 400,
+        left: 50,
+        right: 50,
+        top: 70,
+        width: 1000,
+        originalTop: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0
+    }]);
 
-    assert.ok(chart._valueAxes[0].draw.called);
+    assert.equal(chart._valueAxes[0].draw.callCount, 1);
+    assert.deepEqual(chart._valueAxes[0].draw.getCall(0).args, [{
+        bottom: 70,
+        height: 400,
+        left: 50,
+        right: 50,
+        top: 70,
+        width: 1000,
+        originalTop: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0
+    }]);
 
     assert.strictEqual(chart._argumentAxes[0].measureLabels.getCall(0).args[0], true);
-    assert.ok(chart.translator.reinit.calledOnce);
 });
 
-QUnit.test("axes set translators and range", function(assert) {
+QUnit.test("Adaptive layout", function(assert) {
+    stubLayoutManager.needMoreSpaceForPanesCanvas.returns({ width: 10 });
+    stubThemeManager.getOptions.withArgs("adaptiveLayout").returns({ width: 1000, keepLabels: false });
     var chart = this.createSimplePolarChart();
 
-    assert.equal(chart._argumentAxes[0].setTranslator.args[0][0], this.polarTranslator.returnValues[0].getComponent.getCall(0).returnValue);
-    assert.equal(chart._argumentAxes[0].setTranslator.args[0][1], this.polarTranslator.returnValues[0].getComponent.getCall(1).returnValue);
-    assert.equal(chart._valueAxes[0].setTranslator.args[0][0], this.polarTranslator.returnValues[0].getComponent.getCall(1).returnValue);
-    assert.equal(chart._valueAxes[0].setTranslator.args[0][1], this.polarTranslator.returnValues[0].getComponent.getCall(0).returnValue);
+    assert.equal(chart._argumentAxes[0].hideOuterElements.callCount, 1);
+    assert.deepEqual(chart._argumentAxes[0].updateSize.getCall(0).args, [{
+        bottom: 0,
+        height: 400,
+        left: 0,
+        right: 0,
+        top: 0,
+        width: 1000,
+        originalTop: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0
+    }]);
+    assert.deepEqual(chart._valueAxes[0].updateSize.getCall(0).args, [{
+        bottom: 0,
+        height: 400,
+        left: 0,
+        right: 0,
+        top: 0,
+        width: 1000,
+        originalTop: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0
+    }]);
 });
 
 QUnit.test("create correct seriesFamily", function(assert) {
@@ -449,19 +486,19 @@ QUnit.test("create correct seriesFamily", function(assert) {
 });
 
 QUnit.test("adjust series dimension in seriesFamily", function(assert) {
-    var chart = this.createSimplePolarChart(),
-        translators = {
-            arg: chart.translator,
-            val: chart.translator
-        };
+    var chart = this.createSimplePolarChart();//,
+        // translators = {
+        //     arg: chart.translator,
+        //     val: chart.translator
+        // };
 
     assert.ok(chart.seriesFamilies);
     assert.equal(chart.seriesFamilies.length, 1);
     assert.ok(chart.seriesFamilies[0].updateSeriesValues.called);
-    assert.deepEqual(chart.seriesFamilies[0].updateSeriesValues.args[0][0], translators);
+    //assert.deepEqual(chart.seriesFamilies[0].updateSeriesValues.args[0][0], translators);
 
     assert.ok(chart.seriesFamilies[0].adjustSeriesDimensions.called);
-    assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
+    //assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
 });
 
 QUnit.test("require not need more space in canvas", function(assert) {
@@ -621,15 +658,4 @@ QUnit.test("isRotated", function(assert) {
     this.createSimplePolarChart();
 
     assert.ok(!this.layoutManagers[0].layoutElements.getCall(0).args[4]);
-});
-
-QUnit.test("getAxesForTransform", function(assert) {
-    this.createSimplePolarChart();
-
-    //horizontal axes
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[5].horizontalAxes.length, 1);
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[5].horizontalAxes[0], stubAxes[0]);
-    //vertical axes
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[5].verticalAxes.length, 1);
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[5].verticalAxes[0], stubAxes[0]);
 });

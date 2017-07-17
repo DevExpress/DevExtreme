@@ -105,26 +105,19 @@ ScrollBar.prototype = {
         return that;
     },
 
-    init: function(range, canvas) {
+    init: function(range) {
         var that = this;
         that._translateWithOffset = (range.axisType === "discrete" && !range.stick && 1) || 0;
         that._translator.update(extend({}, range, {
             minVisible: null,
             maxVisible: null,
             visibleCategories: null
-        }), extend({}, canvas), { isHorizontal: !that._layoutOptions.vertical });
+        }), that._canvas, { isHorizontal: !that._layoutOptions.vertical });
         return that;
     },
 
     getOptions: function() {
         return this._layoutOptions;
-    },
-
-    shift: function(x, y) {
-        this._scroll.attr({
-            translateX: x,
-            translateY: y
-        });
     },
 
     setPane: function(panes) {
@@ -137,46 +130,48 @@ ScrollBar.prototype = {
             pane = panes[panes.length - 1];
         }
         this.pane = pane.name;
-        this._canvas = pane.canvas;
 
         return this;
+    },
+
+    updateSize: function(canvas) {
+        this._canvas = extend({}, canvas);
+
+        var options = this._layoutOptions,
+            pos = options.position,
+            offset = options.offset,
+            width = options.width;
+
+        this._scroll.attr({
+            translateX: _getXCoord(canvas, pos, offset, width),
+            translateY: _getYCoord(canvas, pos, offset, width)
+        });
     },
 
     getMultipleAxesSpacing: function() {
         return 0;
     },
 
-    getBoundingRect: function() {
+    estimateMargins: function() { return this.getMargins(); },
+
+    getMargins: function() {
         var options = this._layoutOptions,
-            isVertical = options.vertical,
-            offset = options.offset,
-            width = options.width,
-            pos = options.position,
-            size = width + offset,
-            canvas = this._canvas;
+            margins = { left: 0, top: 0, right: 0, bottom: 0 };
 
-        return isVertical ? {
-            x: _getXCoord(canvas, pos, offset, width),
-            y: canvas.top,
-            width: size,
-            height: canvas.height - canvas.top - canvas.bottom
-        } : {
-            x: canvas.left,
-            y: _getYCoord(canvas, pos, offset, width),
-            width: canvas.width - canvas.left - canvas.right,
-            height: size
-        };
+        margins[options.position] = options.width + options.offset;
+
+        return margins;
     },
 
-    applyLayout: function() {
-        var canvas = this._canvas,
-            options = this._layoutOptions,
-            pos = options.position,
-            offset = options.offset,
-            width = options.width;
+    //Axis like functions
+    draw: function() {},
 
-        this.shift(_getXCoord(canvas, pos, offset, width), _getYCoord(canvas, pos, offset, width));
-    },
+    shift: function() {},
+
+    hideTitle: function() {},
+
+    hideOuterElements: function() {},
+    //Axis like functions
 
     setPosition: function(min, max) {
         var that = this,

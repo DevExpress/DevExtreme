@@ -11,8 +11,8 @@ var formatHelper = require("../../format_helper"),
     constants = require("./axes_constants"),
     _extend = extend,
     _math = Math,
+    _max = _math.max,
 
-    CANVAS_POSITION_PREFIX = constants.canvasPositionPrefix,
     TOP = constants.top,
     BOTTOM = constants.bottom,
     LEFT = constants.left,
@@ -46,6 +46,7 @@ function prepareDatesDifferences(datesDifferences, tickInterval) {
 function getMarkerDates(min, max, markerInterval) {
     var origMin = min,
         dates;
+
     min = correctDateWithUnitBeginning(min, markerInterval);
     max = correctDateWithUnitBeginning(max, markerInterval);
 
@@ -54,6 +55,28 @@ function getMarkerDates(min, max, markerInterval) {
         dates = dates.slice(1);
     }
     return dates;
+}
+
+function getStripHorizontalAlignmentPosition(alignment) {
+    var position = "start";
+    if(alignment === "center") {
+        position = "center";
+    }
+    if(alignment === "right") {
+        position = "end";
+    }
+    return position;
+}
+
+function getStripVerticalAlignmentPosition(alignment) {
+    var position = "start";
+    if(alignment === "center") {
+        position = "center";
+    }
+    if(alignment === "bottom") {
+        position = "end";
+    }
+    return position;
 }
 
 function getMarkerInterval(tickInterval) {
@@ -76,7 +99,7 @@ function getMarkerFormat(curDate, prevDate, tickInterval, markerInterval) {
 
 function getMaxSide(act, boxes) {
     return boxes.reduce(function(prevValue, box) {
-        return _math.max(prevValue, act(box));
+        return _max(prevValue, act(box));
     }, 0);
 }
 
@@ -92,6 +115,26 @@ function getDistanceByAngle(bBox, rotationAngle) {
     }
 }
 
+function getMaxConstantLinePadding(constantLines) {
+    return constantLines.reduce(function(padding, options) {
+        return _max(padding, options.paddingTopBottom);
+    }, 0);
+}
+
+function getConstantLineLabelMarginForVerticalAlignment(constantLines, alignment, labelHeight) {
+    return constantLines.some(function(options) {
+        return options.label.verticalAlignment === alignment;
+    }) && labelHeight || 0;
+}
+
+function getLeftMargin(bBox) {
+    return _math.abs(bBox.x) || 0;
+}
+
+function getRightMargin(bBox) {
+    return _math.abs(bBox.width - _math.abs(bBox.x)) || 0;
+}
+
 module.exports = {
     linear: {
         _getStep: function(boxes, rotationAngle) {
@@ -105,7 +148,7 @@ module.exports = {
                 maxLabelLength = getDistanceByAngle({ width: maxLabelLength, height: this._getMaxLabelHeight(false, boxes, 0) }, rotationAngle);
             }
 
-            return constants.getTicksCountInRange(this._majorTicks, "posX", maxLabelLength);
+            return constants.getTicksCountInRange(this._majorTicks, this._isHorizontal ? "x" : "y", maxLabelLength);
         },
 
         _getMaxLabelHeight: function(isNegative, boxes, spacing) {
@@ -132,11 +175,20 @@ module.exports = {
         },
 
         _createAxisElement: function() {
-            var axisCoord = this._axisPosition,
-                canvas = this._getCanvasStartEnd(),
-                points = this._isHorizontal ? [canvas.start, axisCoord, canvas.end, axisCoord] : [axisCoord, canvas.start, axisCoord, canvas.end];
+            return this._renderer.path([], "line");
+        },
 
-            return this._renderer.path(points, "line");
+        _updateAxisElementPosition: function() {
+            if(!this._axisElement) {
+                return;
+            }
+
+            var axisCoord = this._axisPosition,
+                canvas = this._getCanvasStartEnd();
+
+            this._axisElement.attr({
+                points: this._isHorizontal ? [canvas.start, axisCoord, canvas.end, axisCoord] : [axisCoord, canvas.start, axisCoord, canvas.end]
+            });
         },
 
         _getTranslatedCoord: function(value, offset) {
@@ -144,72 +196,113 @@ module.exports = {
         },
 
         _getCanvasStartEnd: function() {
+            var isHorizontal = this._isHorizontal,
+                canvas = this._canvas,
+                invert = this._translator.getBusinessRange().invert,
+                coords = isHorizontal ? [canvas.left, canvas.width - canvas.right] : [canvas.height - canvas.bottom, canvas.top];
+
+            invert && coords.reverse();
+
             return {
-                start: this._translator.translateSpecialCase(constants.canvasPositionStart),
-                end: this._translator.translateSpecialCase(constants.canvasPositionEnd)
+                start: coords[0],
+                end: coords[1]
             };
         },
 
         _getScreenDelta: function() {
-            return _math.abs(this._translator.translateSpecialCase(constants.canvasPositionStart) - this._translator.translateSpecialCase(constants.canvasPositionEnd));
+            var canvas = this._getCanvasStartEnd();
+            return _math.abs(canvas.start - canvas.end);
         },
 
         _initAxisPositions: function() {
             var that = this,
-                position = that._options.position,
-                delta = 0;
+                position = that._options.position;
 
-            if(that.delta) {
-                delta = that.delta[position] || 0;
-            }
-            that._axisPosition = that._additionalTranslator.translateSpecialCase(CANVAS_POSITION_PREFIX + position) + delta;
+            that._axisPosition = that._orthogonalPositions[position === "top" || position === "left" ? "start" : "end"];
         },
 
-        _getTickCoord: function(tick) {
-            var coords,
-                corrections = {
-                    top: -1,
-                    middle: -0.5,
-                    bottom: 0,
+        _getTickMarkPoints: function(tick, length) {
+            var coords = tick.coords,
+                isHorizontal = this._isHorizontal,
+                tickCorrection = {
                     left: -1,
-                    center: -0.5,
-                    right: 0
-                },
-                tickCorrection = corrections[this._options.tickOrientation || "center"];
+                    top: -1,
+                    right: 0,
+                    bottom: 0,
+                    center: -0.5
+                }[this._options.tickOrientation || "center"];
 
-            if(_isDefined(tick.posX) && _isDefined(tick.posY)) {
-                coords = { x1: tick.posX, y1: tick.posY + tickCorrection * tick.length, x2: tick.posX, y2: tick.posY + tickCorrection * tick.length + tick.length };
+            return [
+                coords.x + (isHorizontal ? 0 : tickCorrection * length),
+                coords.y + (isHorizontal ? tickCorrection * length : 0),
+                coords.x + (isHorizontal ? 0 : tickCorrection * length + length),
+                coords.y + (isHorizontal ? tickCorrection * length + length : 0)
+            ];
+        },
+
+        _getTitleCoords: function() {
+            var that = this,
+                x = that._axisPosition,
+                y = that._axisPosition,
+                canvas = that._getCanvasStartEnd(),
+                center = canvas.start + (canvas.end - canvas.start) / 2;
+
+            if(that._isHorizontal) {
+                x = center;
             } else {
-                coords = null;
+                y = center;
+            }
+            return { x: x, y: y };
+        },
+
+        _drawTitleText: function(group, coords) {
+            var options = this._options,
+                titleOptions = options.title,
+                attrs = { opacity: titleOptions.opacity, align: "center" };
+
+            if(!titleOptions.text || !group) {
+                return;
             }
 
-            return coords;
+            coords = coords || this._getTitleCoords();
+
+            if(!this._isHorizontal) {
+                attrs.rotate = options.position === LEFT ? 270 : 90;
+            }
+            var text = this._renderer
+                .text(titleOptions.text, coords.x, coords.y)
+                .css(vizUtils.patchFontOptions(titleOptions.font))
+                .attr(attrs)
+                .append(group);
+
+            return text;
+        },
+
+        _updateTitleCoords: function() {
+            this._title && this._title.element.attr(this._getTitleCoords());
         },
 
         _drawTitle: function() {
-            var that = this,
-                options = that._options,
-                titleOptions = options.title,
-                attr = {
-                    opacity: titleOptions.opacity,
-                    align: CENTER
+            var title = this._drawTitleText(this._axisTitleGroup);
+            if(title) {
+                this._title = {
+                    element: title
                 };
-
-            if(!titleOptions.text || !that._axisTitleGroup) {
-                return;
             }
-            that._title = that._renderer.text(titleOptions.text, 0, 0).css(vizUtils.patchFontOptions(titleOptions.font)).attr(attr).append(that._axisTitleGroup);
+        },
+
+        _measureTitle: function() {
+            if(this._title) {
+                this._title.bBox = this._title.element.getBBox();
+            }
         },
 
         _drawDateMarker: function(date, options) {
             var that = this,
                 markerOptions = that._options.marker,
-                labelPosX,
-                labelPosY,
-                textElement,
+                invert = that._translator.getBusinessRange().invert,
+                textIndent = markerOptions.width + markerOptions.textLeftIndent,
                 text,
-                textSize,
-                textIndent,
                 pathElement;
 
             if(options.x === null) return;
@@ -221,33 +314,35 @@ module.exports = {
             }
 
             text = String(constants.formatLabel(date, options.labelFormat));
-            textElement = that._renderer.text(text, 0, 0)
-                .attr({ align: "left" })
-                .css(vizUtils.patchFontOptions(markerOptions.label.font))
-                .append(that._axisElementsGroup);
-
-            textSize = textElement.getBBox();
-            textIndent = markerOptions.width + markerOptions.textLeftIndent;
-
-            labelPosX = this._translator.getBusinessRange().invert ? options.x - textIndent - textSize.width : options.x + textIndent;
-            labelPosY = options.y + markerOptions.textTopIndent + (textSize.height / 2);
-            textElement.move(labelPosX, labelPosY);
 
             return {
-                labelStartPosX: labelPosX - textIndent,
-                labelEndPosX: labelPosX + textSize.width,
                 date: date,
-                dateMarkerStartPosX: options.x,
+                x: options.x,
+                y: options.y,
+                cropped: options.withoutStick,
+                label: that._renderer.text(text, options.x, options.y)
+                    .css(vizUtils.patchFontOptions(markerOptions.label.font))
+                    .append(that._axisElementsGroup),
+                line: pathElement,
+                getEnd: function() {
+                    return this.x + (invert ? -1 : 1) * (textIndent + this.labelBBox.width);
+                },
                 setTitle: function() {
                     this.title = text;
                 },
-                dispose: function(onlyLabel) {
-                    if(!onlyLabel && pathElement) {
+                hideLabel: function() {
+                    this.label.dispose();
+                    this.label = null;
+                    this.title = text;
+                },
+                hide: function() {
+                    if(pathElement) {
                         pathElement.dispose();
                         pathElement = null;
                     }
-                    textElement.dispose();
-                    textElement = null;
+                    this.label.dispose();
+                    this.label = null;
+                    this.hidden = true;
                 }
             };
         },
@@ -261,13 +356,8 @@ module.exports = {
                 markerInterval,
                 markerDates,
                 dateMarkers = [],
-                prevDateMarker,
                 markersAreaTop,
-                invert = translator.getBusinessRange().invert,
-                xBound = translator.translateSpecialCase("canvas_position_end"),
-                dateMarker,
-                curDate,
-                i = 1;
+                dateMarker;
 
             function draw(markerDate, format, withoutStick) {
                 return that._drawDateMarker(markerDate, {
@@ -278,11 +368,11 @@ module.exports = {
                 });
             }
 
-            if(options.argumentType !== "datetime" || options.type === "discrete" || that._majorTicks.length <= 1) {
-                return;
+            if(!options.marker.visible || options.argumentType !== "datetime" || options.type === "discrete" || that._majorTicks.length <= 1) {
+                return [];
             }
 
-            markersAreaTop = that._axisPosition + this._axisElementsGroup.getBBox().height + options.label.indentFromAxis + options.marker.topIndent;
+            markersAreaTop = that._axisPosition + options.marker.topIndent;
             tickInterval = dateUtils.getDateUnitInterval(this._tickManager.getTickInterval());
             markerInterval = getMarkerInterval(tickInterval);
 
@@ -290,86 +380,123 @@ module.exports = {
 
             if(markerDates.length > 1
                 || (markerDates.length === 1 && minBound < markerDates[0])) {
-                for(i = 0; i < markerDates.length; i++) {
-                    curDate = markerDates[i];
-                    dateMarker = draw(curDate, getMarkerFormat(curDate, markerDates[i - 1] || (minBound < curDate && minBound), tickInterval, markerInterval));
 
-                    if(dateMarker) {
-                        if(invert ? dateMarker.labelStartPosX < xBound : dateMarker.labelEndPosX > xBound) {
-                            dateMarkers.push(dateMarker);
-                            dateMarker.dispose(true);
-                            dateMarker.setTitle();
-                        } else if(that._checkMarkersPosition(dateMarker, prevDateMarker)) {
-                            dateMarkers.push(dateMarker);
-                            prevDateMarker = dateMarker;
-                        } else {
-                            dateMarker.dispose();
-                        }
-                    }
-                }
+                dateMarkers = markerDates.reduce(function(markers, curDate, i, dates) {
+                    var marker = draw(curDate, getMarkerFormat(curDate, dates[i - 1] || (minBound < curDate && minBound), tickInterval, markerInterval));
+                    marker && markers.push(marker);
+                    return markers;
+                }, []);
 
                 if(minBound < markerDates[0]) {
                     dateMarker = draw(minBound, getMarkerFormat(minBound, markerDates[0], tickInterval, markerInterval), true);
-                    if(dateMarker) {
-                        if(!that._checkMarkersPosition(dateMarker, dateMarkers[0])) {
-                            dateMarker.dispose();
-                            dateMarker.setTitle();
-                        }
-                        dateMarkers.unshift(dateMarker);
-                    }
+                    dateMarker && dateMarkers.unshift(dateMarker);
+                }
+            }
+            return dateMarkers;
+        },
+
+        _adjustDateMarkers: function(offset) {
+            offset = offset || 0;
+            var that = this,
+                markerOptions = this._options.marker,
+                textIndent = markerOptions.width + markerOptions.textLeftIndent,
+                invert = this._translator.getBusinessRange().invert,
+                canvas = that._getCanvasStartEnd(),
+                dateMarkers = this._dateMarkers;
+
+            if(!dateMarkers.length) {
+                return offset;
+            }
+
+            if(dateMarkers[0].cropped) {
+                if(!this._checkMarkersPosition(invert, dateMarkers[1], dateMarkers[0])) {
+                    dateMarkers[0].hideLabel();
                 }
             }
 
-            that._initializeMarkersTrackers(dateMarkers, that._axisElementsGroup, that._axisGroup.getBBox().width, markersAreaTop);
+            var prevDateMarker;
+            dateMarkers.forEach(function(marker, i, markers) {
+                if(marker.cropped) {
+                    return;
+                }
+
+                if(invert ? marker.getEnd() < canvas.end : marker.getEnd() > canvas.end) {
+                    marker.hideLabel();
+                } else if(that._checkMarkersPosition(invert, marker, prevDateMarker)) {
+                    prevDateMarker = marker;
+                } else {
+                    marker.hide();
+                }
+            });
+
+            this._dateMarkers.forEach(function(marker) {
+                if(marker.label) {
+                    var labelBBox = marker.labelBBox,
+                        dy = marker.y + markerOptions.textTopIndent - labelBBox.y;
+
+                    marker.label.attr({
+                        translateX: invert ? marker.x - textIndent - labelBBox.x - labelBBox.width : marker.x + textIndent - labelBBox.x,
+                        translateY: dy + offset
+                    });
+                }
+
+                if(marker.line) {
+                    marker.line.attr({
+                        translateY: offset
+                    });
+                }
+            });
+
+            that._initializeMarkersTrackers(offset);
+
+            return offset + markerOptions.topIndent + markerOptions.separatorHeight;
         },
 
-        _initializeMarkersTrackers: function(dateMarkers, group, axisWidth, markersAreaTop) {
+        _checkMarkersPosition: function(invert, dateMarker, prevDateMarker) {
+            if(prevDateMarker === undefined) {
+                return true;
+            }
+            return invert ? (dateMarker.x < prevDateMarker.getEnd()) : (dateMarker.x > prevDateMarker.getEnd());
+        },
+
+        _initializeMarkersTrackers: function(offset) {
             var that = this,
                 separatorHeight = that._options.marker.separatorHeight,
                 renderer = that._renderer,
-                markerTracker,
-                nextMarker,
-                i,
-                x,
                 businessRange = this._translator.getBusinessRange(),
-                currentMarker;
+                canvas = that._getCanvasStartEnd(),
+                group = that._axisElementsGroup;
 
-            that._markerTrackers = [];
+            that._markerTrackers = this._dateMarkers
+                .filter(function(marker) { return !marker.hidden; })
+                .map(function(marker, i, markers) {
+                    var nextMarker = markers[i + 1] ||
+                        {
+                            x: canvas.end,
+                            date: businessRange.max
+                        },
+                        x = marker.x,
+                        y = marker.y + offset,
+                        markerTracker = renderer.path([
+                            x, y,
+                            x, y + separatorHeight,
+                            nextMarker.x, y + separatorHeight,
+                            nextMarker.x, y,
+                            x, y
+                        ], "area").attr({
+                            "stroke-width": 1,
+                            stroke: "grey",
+                            fill: "grey",
+                            opacity: 0.0001
+                        }).append(group);
 
-            for(i = 0; i < dateMarkers.length; i++) {
-                currentMarker = dateMarkers[i];
-                nextMarker = dateMarkers[i + 1] ||
-                    {
-                        dateMarkerStartPosX: businessRange.invert ? this._translator.translateSpecialCase("canvas_position_end") : axisWidth,
-                        date: businessRange.max
-                    };
+                    markerTracker.data("range", { startValue: marker.date, endValue: nextMarker.date });
+                    if(marker.title) {
+                        markerTracker.setTitle(marker.title);
+                    }
 
-                x = currentMarker.dateMarkerStartPosX;
-
-                markerTracker = renderer.path([
-                    x, markersAreaTop,
-                    x, markersAreaTop + separatorHeight,
-                    nextMarker.dateMarkerStartPosX, markersAreaTop + separatorHeight,
-                    nextMarker.dateMarkerStartPosX, markersAreaTop,
-                    x, markersAreaTop
-                ]).attr({
-                    "stroke-width": 1,
-                    stroke: "grey",
-                    fill: "grey",
-                    "fill-opacity": 0.0001,
-                    "stroke-opacity": 0.0001
-                }).append(group);
-
-                markerTracker.data("range", { startValue: currentMarker.date, endValue: nextMarker.date });
-                if(currentMarker.title) {
-                    markerTracker.setTitle(currentMarker.title);
-                }
-                that._markerTrackers.push(markerTracker);
-            }
-        },
-
-        _checkMarkersPosition: function(dateMarker, prevDateMarker) {
-            return (prevDateMarker === undefined || (dateMarker.labelStartPosX > prevDateMarker.labelEndPosX || dateMarker.labelEndPosX < prevDateMarker.labelStartPosX));
+                    return markerTracker;
+                });
         },
 
         _getLabelFormatOptions: function(formatString) {
@@ -387,124 +514,179 @@ module.exports = {
             return markerLabelOptions;
         },
 
-        _adjustConstantLineLabels: function() {
+        _adjustConstantLineLabels: function(constantLines) {
             var that = this,
-                options = that._options,
-                isHorizontal = that._isHorizontal,
-                lines = that._constantLines,
-                labels = that._constantLineLabels,
-                label,
-                line,
-                lineBox,
-                linesOptions,
-                labelOptions,
-                box,
-                x,
-                y,
-                i,
-                padding = isHorizontal ? { top: 0, bottom: 0 } : { left: 0, right: 0 },
-                paddingTopBottom,
-                paddingLeftRight,
-                labelVerticalAlignment,
-                labelHorizontalAlignment,
-                labelIsInside,
-                labelHeight,
-                labelWidth,
-                delta = 0;
+                axisPosition = that._options.position,
+                canvas = that.getCanvas(),
+                canvasLeft = canvas.left,
+                canvasRight = canvas.width - canvas.right,
+                canvasTop = canvas.top,
+                canvasBottom = canvas.height - canvas.bottom,
+                verticalCenter = canvasTop + (canvasBottom - canvasTop) / 2,
+                horizontalCenter = canvasLeft + (canvasRight - canvasLeft) / 2,
+                maxLabel = 0;
 
-            if(labels === undefined && lines === undefined) {
-                return;
-            }
+            constantLines.forEach(function(item) {
+                var isHorizontal = that._isHorizontal,
+                    linesOptions = item.options,
+                    paddingTopBottom = linesOptions.paddingTopBottom,
+                    paddingLeftRight = linesOptions.paddingLeftRight,
+                    labelOptions = linesOptions.label,
+                    labelVerticalAlignment = labelOptions.verticalAlignment,
+                    labelHorizontalAlignment = labelOptions.horizontalAlignment,
+                    labelIsInside = labelOptions.position === "inside",
+                    label = item.label,
+                    box = item.labelBBox,
+                    translateX,
+                    translateY;
 
-            for(i = 0; i < labels.length; i++) {
-                x = y = 0;
-                linesOptions = options.constantLines[i];
-                paddingTopBottom = linesOptions.paddingTopBottom;
-                paddingLeftRight = linesOptions.paddingLeftRight;
-                labelOptions = linesOptions.label;
-                labelVerticalAlignment = labelOptions.verticalAlignment;
-                labelHorizontalAlignment = labelOptions.horizontalAlignment;
-                labelIsInside = labelOptions.position === "inside";
+                if(label === null) {
+                    return;
+                }
 
-                label = labels[i];
-                if(label !== null) {
-                    line = lines[i];
-                    box = label.getBBox();
-                    lineBox = line.getBBox();
-                    labelHeight = box.height;
-                    labelWidth = box.width;
-
-                    if(isHorizontal) {
-                        if(labelIsInside) {
-                            if(labelHorizontalAlignment === LEFT) {
-                                x -= paddingLeftRight;
-                            } else {
-                                x += paddingLeftRight;
-                            }
-                            switch(labelVerticalAlignment) {
-                                case CENTER:
-                                    y += lineBox.y + lineBox.height / 2 - box.y - labelHeight / 2;
-                                    break;
-                                case BOTTOM:
-                                    y += lineBox.y + lineBox.height - box.y - labelHeight - paddingTopBottom;
-                                    break;
-                                default:
-                                    y += lineBox.y - box.y + paddingTopBottom;
-                                    break;
-                            }
+                if(isHorizontal) {
+                    if(labelIsInside) {
+                        if(labelHorizontalAlignment === LEFT) {
+                            translateX = item.coord - paddingLeftRight - box.x - box.width;
                         } else {
-                            if(labelVerticalAlignment === BOTTOM) {
-                                delta = that.delta && that.delta[BOTTOM] || 0;
-                                y += paddingTopBottom - box.y + that._additionalTranslator.translateSpecialCase(CANVAS_POSITION_PREFIX + BOTTOM) + delta;
-                                if(padding[BOTTOM] < labelHeight + paddingTopBottom) {
-                                    padding[BOTTOM] = labelHeight + paddingTopBottom;
-                                }
-                            } else {
-                                delta = that.delta && that.delta[TOP] || 0;
-                                y -= paddingTopBottom + box.y + labelHeight - that._additionalTranslator.translateSpecialCase(CANVAS_POSITION_PREFIX + TOP) - delta;
-                                if(padding[TOP] < paddingTopBottom + labelHeight) {
-                                    padding[TOP] = paddingTopBottom + labelHeight;
-                                }
-                            }
+                            translateX = item.coord + paddingLeftRight - box.x;
+                        }
+                        switch(labelVerticalAlignment) {
+                            case CENTER:
+                                translateY = verticalCenter - box.y - box.height / 2;
+                                break;
+                            case BOTTOM:
+                                translateY = canvasBottom - paddingTopBottom - box.y - box.height;
+                                break;
+                            default:
+                                translateY = canvasTop + paddingTopBottom - box.y;
+                                break;
                         }
                     } else {
-                        if(labelIsInside) {
-                            switch(labelHorizontalAlignment) {
-                                case CENTER:
-                                    x += lineBox.x + lineBox.width / 2 - box.x - labelWidth / 2;
-                                    break;
-                                case RIGHT:
-                                    x -= paddingLeftRight;
-                                    break;
-                                default:
-                                    x += paddingLeftRight;
-                                    break;
-                            }
-                            if(labelVerticalAlignment === BOTTOM) {
-                                y += lineBox.y - box.y + paddingTopBottom;
-                            } else {
-                                y += lineBox.y - box.y - labelHeight - paddingTopBottom;
-                            }
+                        if(axisPosition === labelVerticalAlignment) {
+                            maxLabel = _max(maxLabel, box.height + paddingTopBottom);
+                        }
+
+                        translateX = item.coord - box.x - box.width / 2;
+                        if(labelVerticalAlignment === BOTTOM) {
+                            translateY = canvasBottom + paddingTopBottom - box.y;
                         } else {
-                            y += lineBox.y + lineBox.height / 2 - box.y - labelHeight / 2;
-                            if(labelHorizontalAlignment === RIGHT) {
-                                x += paddingLeftRight;
-                                if(padding[RIGHT] < paddingLeftRight + labelWidth) {
-                                    padding[RIGHT] = paddingLeftRight + labelWidth;
-                                }
-                            } else {
-                                x -= paddingLeftRight;
-                                if(padding[LEFT] < paddingLeftRight + labelWidth) {
-                                    padding[LEFT] = paddingLeftRight + labelWidth;
-                                }
-                            }
+                            translateY = canvasTop - paddingTopBottom - box.y - box.height;
                         }
                     }
-                    label.move(x, y);
+                } else {
+                    if(labelIsInside) {
+                        if(labelVerticalAlignment === BOTTOM) {
+                            translateY = item.coord + paddingTopBottom - box.y;
+                        } else {
+                            translateY = item.coord - paddingTopBottom - box.y - box.height;
+                        }
+                        switch(labelHorizontalAlignment) {
+                            case CENTER:
+                                translateX = horizontalCenter - box.x - box.width / 2;
+                                break;
+                            case RIGHT:
+                                translateX = canvasRight - paddingLeftRight - box.x - box.width;
+                                break;
+                            default:
+                                translateX = canvasLeft + paddingLeftRight - box.x;
+                                break;
+                        }
+                    } else {
+                        if(axisPosition === labelHorizontalAlignment) {
+                            maxLabel = _max(maxLabel, box.width + paddingLeftRight);
+                        }
+
+                        translateY = item.coord - box.y - box.height / 2;
+                        if(labelHorizontalAlignment === RIGHT) {
+                            translateX = canvasRight + paddingLeftRight - box.x;
+                        } else {
+                            translateX = canvasLeft - paddingLeftRight - box.x - box.width;
+                        }
+                    }
                 }
+                label.attr({
+                    translateX: translateX,
+                    translateY: translateY
+                });
+            });
+
+            return maxLabel;
+        },
+
+        _drawConstantLinesForEstimating: function(constantLines) {
+            var that = this,
+                renderer = this._renderer,
+                group = renderer.g();
+
+            constantLines.forEach(function(options) {
+                that._drawConstantLineLabelText(options.label.text, 0, 0, options.label, group).attr({ align: "center" });
+            });
+
+            return group.append(renderer.root);
+        },
+
+        _estimateLabelHeight: function(bBox, labelOptions) {
+            var height = bBox.height,
+                drawingType = labelOptions.drawingType;
+
+            if(this._validateDisplayMode(drawingType) === "stagger" || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === "stagger") {
+                height = height * 2 + labelOptions.staggeringSpacing;
             }
 
-            that.padding = padding;
+            if(this._validateDisplayMode(drawingType) === "rotate" || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === "rotate") {
+                var sinCos = vizUtils.getCosAndSin(labelOptions.rotationAngle);
+                height = height * sinCos.cos + bBox.width * sinCos.sin;
+            }
+
+            return height && (height + labelOptions.indentFromAxis || 0) || 0;
+        },
+
+        _estimateLabelFormat: function(canvas) {
+            this.updateCanvas(canvas);
+            this._updateTickManager();
+            this._tickManager.getTicks();
+            this._correctLabelFormat();
+        },
+
+        estimateMargins: function(canvas) {
+            this._estimateLabelFormat(canvas);
+
+            var that = this,
+                options = this._options,
+                constantLineOptions = (options.constantLines || []).filter(function(options) {
+                    that._checkAlignmentConstantLineLabels(options.label);
+                    return options.label.position === "outside" && options.label.visible;
+                }),
+                rootElement = that._renderer.root,
+                businessRange = that._translator.getBusinessRange(),
+                labelIsVisible = options.label.visible && !that._translator.getBusinessRange().stubData,
+                labelValue = labelIsVisible && constants.formatLabel(businessRange.axisType === "discrete" ? businessRange.categories[0] : businessRange.max, options.label),
+                labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
+                    .css(that._textFontStyles)
+                    .attr(that._textOptions)
+                    .append(rootElement),
+                titleElement = that._drawTitleText(rootElement, { x: 0, y: 0 }),
+                constantLinesLabelsElement = that._drawConstantLinesForEstimating(constantLineOptions),
+                labelBox = labelElement && labelElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 },
+                titleBox = titleElement && titleElement.getBBox() || { x: 0, y: 0, width: 0, height: 0 },
+                constantLinesBox = constantLinesLabelsElement.getBBox(),
+                titleHeight = titleBox.height ? titleBox.height + options.title.margin : 0,
+                labelHeight = that._estimateLabelHeight(labelBox, options.label),
+                constantLinesHeight = constantLinesBox.height ? constantLinesBox.height + getMaxConstantLinePadding(constantLineOptions) : 0,
+                height = labelHeight + titleHeight,
+                margins = {
+                    left: _max(getLeftMargin(labelBox), getLeftMargin(constantLinesBox)),
+                    right: _max(getRightMargin(labelBox), getRightMargin(constantLinesBox)),
+                    top: (options.position === "top" ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, "top", constantLinesHeight),
+                    bottom: (options.position !== "top" ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, "bottom", constantLinesHeight)
+                };
+
+            labelElement && labelElement.remove();
+            titleElement && titleElement.remove();
+            constantLinesLabelsElement && constantLinesLabelsElement.remove();
+
+            return margins;
         },
 
         _checkAlignmentConstantLineLabels: function(labelOptions) {
@@ -536,105 +718,116 @@ module.exports = {
 
         _getConstantLineLabelsCoords: function(value, lineLabelOptions) {
             var that = this,
-                additionalTranslator = that._additionalTranslator,
-                align = CENTER,
                 x = value,
                 y = value;
+
             if(that._isHorizontal) {
-                y = additionalTranslator.translateSpecialCase(CANVAS_POSITION_PREFIX + lineLabelOptions.verticalAlignment);
+                y = that._orthogonalPositions[lineLabelOptions.verticalAlignment === "top" ? "start" : "end"];
             } else {
-                x = additionalTranslator.translateSpecialCase(CANVAS_POSITION_PREFIX + lineLabelOptions.horizontalAlignment);
-            }
-            switch(lineLabelOptions.horizontalAlignment) {
-                case LEFT:
-                    align = !that._isHorizontal && lineLabelOptions.position === "inside" ? LEFT : RIGHT;
-                    break;
-                case CENTER:
-                    align = CENTER;
-                    break;
-                case RIGHT:
-                    align = !that._isHorizontal && lineLabelOptions.position === "inside" ? RIGHT : LEFT;
-                    break;
-            }
-            return { x: x, y: y, align: align };
-        },
-
-        _getAdjustedStripLabelCoords: function(strip) {
-            var x = 0,
-                y = 0,
-                stripOptions = strip.options,
-                horizontalAlignment = stripOptions.label.horizontalAlignment,
-                verticalAlignment = stripOptions.label.verticalAlignment,
-                box = strip.label.getBBox(),
-                rectBox = strip.rect.getBBox();
-
-            if(horizontalAlignment === LEFT) {
-                x += stripOptions.paddingLeftRight;
-            } else if(horizontalAlignment === RIGHT) {
-                x -= stripOptions.paddingLeftRight;
-            }
-
-            if(verticalAlignment === TOP) {
-                y += rectBox.y - box.y + stripOptions.paddingTopBottom;
-            } else if(verticalAlignment === CENTER) {
-                y += rectBox.y + rectBox.height / 2 - box.y - box.height / 2;
-            } else if(verticalAlignment === BOTTOM) {
-                y -= stripOptions.paddingTopBottom;
+                x = that._orthogonalPositions[lineLabelOptions.horizontalAlignment === "right" ? "end" : "start"];
             }
             return { x: x, y: y };
         },
 
-        _adjustTitle: function() {
-            var that = this,
-                options = that._options,
-                position = options.position,
-                title = that._title,
-                margin = options.title.margin,
-                boxGroup,
-                boxTitle,
-                params,
-                centerPosition = that._translator.translateSpecialCase(CANVAS_POSITION_PREFIX + CENTER),
-                axisElementsGroup = that._axisElementsGroup,
-                heightTitle,
-                axisPosition = that._axisPosition,
-                noLabels;
+        _getAdjustedStripLabelCoords: function(strip) {
+            var stripOptions = strip.options,
+                paddingTopBottom = stripOptions.paddingTopBottom,
+                paddingLeftRight = stripOptions.paddingLeftRight,
+                horizontalAlignment = stripOptions.label.horizontalAlignment,
+                verticalAlignment = stripOptions.label.verticalAlignment,
+                box = strip.labelBBox,
+                labelHeight = box.height,
+                labelWidth = box.width,
+                labelCoords = strip.labelCoords,
+                y = labelCoords.y - box.y,
+                x = labelCoords.x - box.x;
 
-            if(!title || !axisElementsGroup) {
+            if(verticalAlignment === TOP) {
+                y += paddingTopBottom;
+            } else if(verticalAlignment === CENTER) {
+                y -= labelHeight / 2;
+            } else if(verticalAlignment === BOTTOM) {
+                y -= paddingTopBottom + labelHeight;
+            }
+
+            if(horizontalAlignment === LEFT) {
+                x += paddingLeftRight;
+            } else if(horizontalAlignment === CENTER) {
+                x -= labelWidth / 2;
+            } else if(horizontalAlignment === RIGHT) {
+                x -= paddingLeftRight + labelWidth;
+            }
+
+            return { translateX: x, translateY: y };
+        },
+
+        _adjustTitle: function(offset) {
+            offset = offset || 0;
+            if(!this._title) {
                 return;
             }
 
-            boxTitle = title.getBBox();
-            boxGroup = axisElementsGroup.getBBox();
-            noLabels = boxGroup.isEmpty;
-            heightTitle = boxTitle.height;
+            var that = this,
+                options = that._options,
+                position = options.position,
+                margin = options.title.margin,
+                title = that._title,
+                boxTitle = title.bBox,
+                x = boxTitle.x,
+                y = boxTitle.y,
+                width = boxTitle.width,
+                height = boxTitle.height,
+                axisPosition = that._axisPosition,
+                loCoord = axisPosition - margin - offset,
+                hiCoord = axisPosition + margin + offset,
+                params = {};
 
             if(that._isHorizontal) {
-                if(position === BOTTOM) {
-                    params = { y: (noLabels ? axisPosition : boxGroup.y + boxGroup.height) - boxTitle.y + margin, x: centerPosition };
+                if(position === TOP) {
+                    params.translateY = loCoord - (y + height);
                 } else {
-                    params = { y: (noLabels ? axisPosition : boxGroup.y) - heightTitle - boxTitle.y - margin, x: centerPosition };
+                    params.translateY = hiCoord - y;
                 }
             } else {
                 if(position === LEFT) {
-                    params = { x: (noLabels ? axisPosition : boxGroup.x) - heightTitle - boxTitle.y - margin, y: centerPosition };
+                    params.translateX = loCoord - (x + width);
                 } else {
-                    params = { x: (noLabels ? axisPosition : boxGroup.x + boxGroup.width) + heightTitle + boxTitle.y + margin, y: centerPosition };
+                    params.translateX = hiCoord - x;
                 }
-                params.rotate = options.position === LEFT ? 270 : 90;
             }
-            title.attr(params);
+            title.element.attr(params);
+        },
+
+        _checkTitleOverflow: function() {
+            if(!this._title) {
+                return;
+            }
+
+            var canvasLength = this._getScreenDelta(),
+                title = this._title,
+                boxTitle = title.bBox;
+
+            if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
+                title.element.applyEllipsis(canvasLength) && title.element.setTitle(this._options.title.text);
+            }
         },
 
         coordsIn: function(x, y) {
-            var rect = this.getBoundingRect();
-            return x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height;
+            var canvas = this.getCanvas(),
+                isHorizontal = this._options.isHorizontal,
+                position = this._options.position,
+                coord = isHorizontal ? y : x;
+
+            if(isHorizontal && position === constants.top || !isHorizontal && position === constants.left) {
+                return coord < canvas[position];
+            }
+            return coord > canvas[isHorizontal ? "height" : "width"] - canvas[position];
         },
 
         _boundaryTicksVisibility: {
             min: true,
             max: true
         },
-
 
         _getMinMax: function() {
             return { min: this._options.min, max: this._options.max };
@@ -644,43 +837,46 @@ module.exports = {
             return !this._options.valueMarginsEnabled;
         },
 
-        _getStripLabelCoords: function(stripLabelOptions, stripFrom, stripTo) {
+        _getStripLabelCoords: function(from, to, stripLabelOptions) {
             var that = this,
-                additionalTranslator = that._additionalTranslator,
+                orthogonalPositions = that._orthogonalPositions,
                 isHorizontal = that._isHorizontal,
-                align = isHorizontal ? CENTER : LEFT,
+                horizontalAlignment = stripLabelOptions.horizontalAlignment,
+                verticalAlignment = stripLabelOptions.verticalAlignment,
                 x,
                 y;
 
             if(isHorizontal) {
-                if(stripLabelOptions.horizontalAlignment === CENTER) {
-                    x = stripFrom + (stripTo - stripFrom) / 2;
-                    align = CENTER;
-                } else if(stripLabelOptions.horizontalAlignment === LEFT) {
-                    x = stripFrom;
-                    align = LEFT;
-                } else if(stripLabelOptions.horizontalAlignment === RIGHT) {
-                    x = stripTo;
-                    align = RIGHT;
+                if(horizontalAlignment === CENTER) {
+                    x = from + (to - from) / 2;
+                } else if(horizontalAlignment === LEFT) {
+                    x = from;
+                } else if(horizontalAlignment === RIGHT) {
+                    x = to;
                 }
-                y = additionalTranslator.translateSpecialCase(CANVAS_POSITION_PREFIX + stripLabelOptions.verticalAlignment);
+                y = orthogonalPositions[getStripVerticalAlignmentPosition(verticalAlignment)];
             } else {
-                x = additionalTranslator.translateSpecialCase(CANVAS_POSITION_PREFIX + stripLabelOptions.horizontalAlignment);
-                align = stripLabelOptions.horizontalAlignment;
-                if(stripLabelOptions.verticalAlignment === TOP) {
-                    y = stripFrom;
-                } else if(stripLabelOptions.verticalAlignment === CENTER) {
-                    y = stripTo + (stripFrom - stripTo) / 2;
-                } else if(stripLabelOptions.verticalAlignment === BOTTOM) {
-                    y = stripTo;
+                x = orthogonalPositions[getStripHorizontalAlignmentPosition(horizontalAlignment)];
+                if(verticalAlignment === TOP) {
+                    y = from;
+                } else if(verticalAlignment === CENTER) {
+                    y = to + (from - to) / 2;
+                } else if(verticalAlignment === BOTTOM) {
+                    y = to;
                 }
             }
 
-            return { x: x, y: y, align: align };
+            return { x: x, y: y };
         },
 
-        _getTranslatedValue: function(value, y, offset) {
-            return { x: this._translator.translate(value, offset, this._options.type === "semidiscrete" && this._options.tickInterval), y: y };
+        _getTranslatedValue: function(value, offset) {
+            var pos1 = this._translator.translate(value, offset, this._options.type === "semidiscrete" && this._options.tickInterval),
+                pos2 = this._axisPosition,
+                isHorizontal = this._isHorizontal;
+            return {
+                x: isHorizontal ? pos1 : pos2,
+                y: isHorizontal ? pos2 : pos1
+            };
         },
 
         _getSkippedCategory: function() {
@@ -694,6 +890,34 @@ module.exports = {
             return skippedCategory;
         },
 
-        _getSpiderCategoryOption: noop
+        _getSpiderCategoryOption: noop,
+
+        shift: function(margins) {
+            var that = this,
+                options = that._options,
+                isHorizontal = options.isHorizontal,
+                axesSpacing = that.getMultipleAxesSpacing(),
+                constantLinesGroups = that._axisConstantLineGroups;
+
+            function shiftGroup(side, group) {
+                var attr = {},
+                    shift = margins[side] + axesSpacing;
+                attr[isHorizontal ? "translateY" : "translateX"] = (side === "left" || side === "top" ? -1 : 1) * shift;
+                if(margins[side]) {
+                    (group[side] || group).attr(attr);
+                    return shift;
+                }
+            }
+
+            that._axisShift = shiftGroup(options.position, that._axisGroup);
+
+            if(isHorizontal) {
+                shiftGroup("top", constantLinesGroups);
+                shiftGroup("bottom", constantLinesGroups);
+            } else {
+                shiftGroup("left", constantLinesGroups);
+                shiftGroup("right", constantLinesGroups);
+            }
+        }
     }
 };

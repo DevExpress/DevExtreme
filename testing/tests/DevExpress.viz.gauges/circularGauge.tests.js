@@ -9,8 +9,7 @@ var $ = require("jquery"),
     axisModule = require("viz/axes/base_axis"),
     Class = require("core/class"),
     rangeModule = require("viz/translators/range"),
-    rendererModule = require("viz/core/renderers/renderer"),
-    polarTranslatorModule = require("viz/translators/polar_translator");
+    rendererModule = require("viz/core/renderers/renderer");
 
 $('<div id="test-container">').appendTo("#qunit-fixture");
 
@@ -106,8 +105,7 @@ var TestPointerElement = TestElement.inherit({
 });
 
 (function circularGauge() {
-    var stubTranslator = vizMocks.stubClass(polarTranslatorModule.PolarTranslator),
-        stubRange = vizMocks.stubClass(rangeModule.Range);
+    var stubRange = vizMocks.stubClass(rangeModule.Range);
 
     rendererModule.Renderer = sinon.stub();
 
@@ -122,27 +120,13 @@ var TestPointerElement = TestElement.inherit({
             minorTick: {},
             label: {}
         });
+        axis.stub("getCanvas").returns({});
+        axis.getCenter = sinon.stub().returns({ x: 100, y: 100 });
         return axis;
     });
 
     sinon.stub(rangeModule, "Range", function(parameters) {
         return new stubRange(parameters);
-    });
-
-    sinon.stub(polarTranslatorModule, "PolarTranslator", function(range, canvas, options) {
-        var translator = new stubTranslator(range, canvas, options);
-        sinon.stub(translator, "getComponent", function() {
-            var stub = sinon.stub();
-            stub.reinit = sinon.stub();
-            stub.getBusinessRange = sinon.stub();
-            stub.updateBusinessRange = sinon.stub();
-            return stub;
-        });
-        sinon.stub(translator, "getBusinessRange", function() {
-            return range;
-        });
-        translator.getCenter = sinon.stub().returns({ x: 100, y: 100 });
-        return translator;
     });
 
     var environment = {
@@ -159,7 +143,6 @@ var TestPointerElement = TestElement.inherit({
             this.renderer = null;
             axisModule.Axis.reset();
             rendererModule.Renderer.reset();
-            polarTranslatorModule.PolarTranslator.reset();
             rangeModule.Range.reset();
         }
     };
@@ -170,24 +153,22 @@ var TestPointerElement = TestElement.inherit({
         new dxCircularGauge(this.container, {});
 
         var range = rangeModule.Range.getCall(0).returnValue,
-            translator = polarTranslatorModule.PolarTranslator.getCall(0).returnValue;
+            scale = axisModule.Axis.getCall(0).returnValue;
 
         assert.strictEqual(rendererModule.Renderer.firstCall.args[0]["cssClass"], "dxg dxg-circular-gauge", "root class");
 
-        assert.deepEqual(polarTranslatorModule.PolarTranslator.getCall(0).args[0], { arg: range, val: {} }, "range for translator");
-        assert.deepEqual(polarTranslatorModule.PolarTranslator.getCall(0).args[1], {
+        assert.deepEqual(scale.setBusinessRange.lastCall.args[0], range, "range for scale");
+        assert.deepEqual(scale.draw.getCall(0).args[0], {
             left: 0,
             right: 0,
             top: 0,
             bottom: 0,
             width: 800,
             height: 600
-        }, "canvas for translator");
+        }, "canvas for scale");
 
-        assert.deepEqual(translator.getComponent.getCall(0).args[0], "arg", "get component");
-        assert.deepEqual(translator.getComponent.getCall(1).args[0], "val", "get component");
-
-        assert.deepEqual(translator.setAngles.getCall(0).args, [-135, 135], "angles");
+        assert.deepEqual(scale.updateOptions.getCall(0).args[0].startAngle, -135, "start angle");
+        assert.deepEqual(scale.updateOptions.getCall(0).args[0].endAngle, 135, "end angle");
     });
 
     QUnit.test("Ticks indent with positive value. Outside orientation of ticks", function(assert) {
@@ -327,11 +308,13 @@ var TestPointerElement = TestElement.inherit({
                 assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, expected.radius + 5, "sub pointers set radius");
 
                 var scale = axisModule.Axis.getCall(0).returnValue;
-                assert.deepEqual(scale.shift.getCall(0).args, [expected.x - 100, expected.y - 100], "shift scale");
+                assert.deepEqual(scale.shift.getCall(0).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], "shift scale");
                 assert.equal(scale.draw.callCount, 2, "draw scale");
-                assert.equal(scale.setTranslator.callCount, 2, "draw scale");
                 assert.equal(scale.measureLabels.callCount, 2, "measure labels of scale");
-                assert.equal(polarTranslatorModule.PolarTranslator.getCall(0).returnValue.setCanvasDimension.getCall(0).args[0], expected.radius * 2, "new radius");
+                assert.deepEqual(scale.draw.lastCall.args[0], {
+                    width: expected.radius * 2,
+                    height: expected.radius * 2
+                }, "new radius");
             };
         },
         afterEach: function() {
@@ -532,10 +515,20 @@ var TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._subvalueIndicatorsSet._options.radius, expected.radius + 5, "sub pointers set radius");
 
         var scale = axisModule.Axis.getCall(0).returnValue;
-        assert.deepEqual(scale.shift.getCall(1).args, [expected.x - 100, expected.y - 100], "shift scale");
+        assert.deepEqual(scale.shift.getCall(1).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], "shift scale");
         assert.equal(scale.draw.callCount, 6, "draw scale");
-        assert.equal(scale.setTranslator.callCount, 6, "draw scale");
         assert.equal(scale.measureLabels.callCount, 6, "measure labels of scale");
-        assert.equal(polarTranslatorModule.PolarTranslator.getCall(0).returnValue.setCanvasDimension.getCall(1).args[0], expected.radius * 2, "new radius");
+        assert.deepEqual(scale.draw.getCall(1).args[0], {
+            width: expected.radius * 2,
+            height: expected.radius * 2
+        }, "new radius");
+        assert.deepEqual(gauge._canvas, {
+            bottom: 0,
+            height: 600,
+            left: 0,
+            right: 0,
+            top: 0,
+            width: 800
+        }, "gauge canvas is not changed");
     });
 })();
