@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     axisModule = require("../axes/base_axis"),
     seriesFamilyModule = require("../core/series_family"),
     BaseChart = require("./base_chart").BaseChart,
+    crosshairModule = require("./crosshair"),
 
     _isArray = Array.isArray,
     _isDefined = commonUtils.isDefined,
@@ -17,6 +18,17 @@ var $ = require("../../core/renderer"),
     _extend = extend,
     vizUtils = require("../core/utils"),
     _map = vizUtils.map;
+
+function getCrosshairMargins(crosshairOptions) {
+    crosshairOptions = crosshairOptions || {};
+    var crosshairEnabled = crosshairOptions.enabled,
+        margins = crosshairModule.getMargins();
+
+    return {
+        x: crosshairEnabled && crosshairOptions.horizontalLine.visible ? margins.x : 0,
+        y: crosshairEnabled && crosshairOptions.verticalLine.visible ? margins.y : 0
+    };
+}
 
 function prepareAxis(axisOptions) {
     return _isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
@@ -56,7 +68,8 @@ var AdvancedChart = BaseChart.inherit({
             valueAxesOptions = prepareAxis(valueAxisOptions),
             axisNames = [],
             valueAxesCounter = 0,
-            paneWithNonVirtualAxis;
+            paneWithNonVirtualAxis,
+            crosshairMargins = getCrosshairMargins(that._getCrosshairOptions());
 
         function getNextAxisName() {
             return DEFAULT_AXIS_NAME + valueAxesCounter++;
@@ -72,7 +85,8 @@ var AdvancedChart = BaseChart.inherit({
 
         argumentAxes = _map(panes, function(pane, index) {
             return that._createAxis("argumentAxis", argumentAxesOptions, {
-                pane: pane.name
+                pane: pane.name,
+                crosshairMargin: rotated ? crosshairMargins.x : crosshairMargins.y
             }, rotated, pane.name !== paneWithNonVirtualAxis, index);
         });
 
@@ -101,7 +115,8 @@ var AdvancedChart = BaseChart.inherit({
                 valueAxes.push(that._createAxis("valueAxis", axisOptions, {
                     name: name || getNextAxisName(),
                     pane: pane,
-                    priority: priority
+                    priority: priority,
+                    crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
                 }, rotated));
             });
 

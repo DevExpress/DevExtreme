@@ -775,12 +775,13 @@ Axis.prototype = {
 
     getMargins: function() {
         var that = this,
+            options = that._options,
             canvas = that.getCanvas(),
             cLeft = canvas.left,
             cTop = canvas.top,
             cRight = canvas.width - canvas.right,
             cBottom = canvas.height - canvas.bottom,
-            placeholderSize = that._options.placeholderSize,
+            placeholderSize = options.placeholderSize,
             boxes = [that._axisElementsGroup, that._axisConstantLineGroups.outside1, that._axisConstantLineGroups.outside2]
                 .map(function(group) { return group && group.getBBox(); })
                 .concat((function(group) {
@@ -815,6 +816,8 @@ Axis.prototype = {
                     top: 0,
                     bottom: 0
                 });
+
+        margins[that._options.position] += options.crosshairMargin;
 
         if(placeholderSize) {
             margins[that._options.position] = placeholderSize;
@@ -937,7 +940,6 @@ Axis.prototype = {
                 return vizUtils.getLog(value / prevValue, options.logarithmBase);
             };
         }
-
 
         that._updateTranslator();
     },
