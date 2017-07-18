@@ -490,7 +490,7 @@ var DateBox = DropDownEditor.inherit({
 
     _renderDimensions: function() {
         this.callBase();
-        this.element().toggleClass(DX_AUTO_WIDTH_CLASS, !(!!this.option("width")));
+        this.element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option("width"));
     },
 
     _refreshFormatClass: function() {
