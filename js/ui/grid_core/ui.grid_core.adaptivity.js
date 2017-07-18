@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     equalByValue = commonUtils.equalByValue,
     Guid = require("../../core/guid"),
@@ -196,7 +197,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             columns = that._columnsController.getVisibleColumns(),
             colWidth = 0;
 
-        $.each(columns, function(index, column) {
+        each(columns, function(index, column) {
             if(column.index < 0 || column.command) {
                 colWidth += that._columnsController.columnOption(getColumnId(column), "bestFitWidth") || 0;
             }
@@ -225,7 +226,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
     _getFormItemsByHiddenColumns: function(hiddenColumns) {
         var items = [];
-        $.each(hiddenColumns, function(_, column) {
+        each(hiddenColumns, function(_, column) {
             items.push({
                 column: column,
                 name: column.name,

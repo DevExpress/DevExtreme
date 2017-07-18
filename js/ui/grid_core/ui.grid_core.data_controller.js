@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     CustomStore = require("../../data/custom_store"),
     errors = require("../widget/ui.errors"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     DataHelperMixin = require("../../data_helper"),
@@ -508,7 +509,7 @@ module.exports = {
                         },
                         result = [];
 
-                    $.each(items, function(index, item) {
+                    each(items, function(index, item) {
                         if(typeUtils.isDefined(item)) {
                             options.rowIndex = index;
                             item = that._processItem(item, options);
@@ -601,7 +602,7 @@ module.exports = {
                                     return result;
                                 };
 
-                                $.each(rowIndices, function(index, rowIndex) {
+                                each(rowIndices, function(index, rowIndex) {
                                     var oldItem,
                                         newItem,
                                         oldNextItem,
@@ -654,7 +655,7 @@ module.exports = {
                                 that._items = items.slice(0);
                                 break;
                         }
-                        $.each(that._items, function(index, item) {
+                        each(that._items, function(index, item) {
                             item.rowIndex = index;
                         });
                     } else {
@@ -967,7 +968,7 @@ module.exports = {
                         deferreds = [],
                         data = [];
 
-                    $.each(rowKeys, function(index, key) {
+                    each(rowKeys, function(index, key) {
                         deferreds.push(that.byKey(key).done(function(keyData) {
                             data[index] = keyData;
                         }));

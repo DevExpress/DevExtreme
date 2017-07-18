@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     support = require("../../core/utils/support"),
     clickEvent = require("../../events/click"),
@@ -404,7 +405,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                 indexes = Array.prototype.slice.call(arguments, 0);
             }
 
-            $.each(indexes, function() {
+            each(indexes, function() {
                 var item = items[this];
                 if(item && item.rowType === "data") {
                     keys.push(item.key);
@@ -817,8 +818,8 @@ module.exports = {
 
                     if(change.changeType === "updateSelection") {
                         if(tableElements.length > 0) {
-                            $.each(tableElements, function(_, tableElement) {
-                                $.each(change.itemIndexes || [], function(_, index) {
+                            each(tableElements, function(_, tableElement) {
+                                each(change.itemIndexes || [], function(_, index) {
                                     var $row,
                                         isSelected;
 
@@ -918,7 +919,7 @@ module.exports = {
                         selectionController = this.getController("selection"),
                         isCheckBoxesHidden = selectionController.isSelectColumnVisible() && !selectionController.isSelectionWithCheckboxes();
 
-                    $.each(tableElements, function(_, tableElement) {
+                    each(tableElements, function(_, tableElement) {
                         $(tableElement).toggleClass(CHECKBOXES_HIDDEN_CLASS, isCheckBoxesHidden);
                     });
                 }

@@ -144,7 +144,7 @@ var SortIterator = Iterator.inherit({
             return;
         }
 
-        $.each(that.rules, function() {
+        iteratorUtils.each(that.rules, function() {
             this.getter = compileGetter(this.getter);
         });
 
@@ -223,7 +223,7 @@ var compileCriteria = (function() {
             groupOperator,
             nextGroupOperator;
 
-        $.each(crit, function() {
+        iteratorUtils.each(crit, function() {
             if(Array.isArray(this) || typeUtils.isFunction(this)) {
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
                     throw new errorsModule.errors.Error("E4019");

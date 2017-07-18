@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     ajax = require("../core/utils/ajax"),
     isFunction = require("../core/utils/type").isFunction,
+    each = require("../core/utils/iterator").each,
     getSvgMarkup = require("../core/utils/svg").getSvgMarkup,
     when = require("../integration/jquery/deferred").when;
 
@@ -25,7 +26,7 @@ exports.svgCreator = {
     _loadImages: function() {
         var that = this;
 
-        $.each(that._imageArray, function(src) {
+        each(that._imageArray, function(src) {
             var deferred = new $.Deferred();
 
             that._imageDeferreds.push(deferred);
@@ -61,7 +62,7 @@ exports.svgCreator = {
             }
         }
 
-        $.each(element.childNodes, function(_, element) {
+        each(element.childNodes, function(_, element) {
             that._parseImages(element);
         });
     },
@@ -87,7 +88,7 @@ exports.svgCreator = {
         markup = xmlVersion + getSvgMarkup($svgObject.get(0));
 
         that._prepareImages(svgElem).done(function() {
-            $.each(that._imageArray, function(href, dataURI) {
+            each(that._imageArray, function(href, dataURI) {
                 markup = markup.split(href).join(dataURI);
             });
 

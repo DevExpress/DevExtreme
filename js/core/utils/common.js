@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     config = require("../config"),
     deferredUtils = require("../../integration/jquery/deferred"),
+    each = require("./iterator").each,
     typeUtils = require("./type");
 
 var ensureDefined = function(value, defaultValue) {
@@ -109,11 +110,11 @@ var findBestMatches = function(targetFilter, items, mapFn) {
     var bestMatches = [],
         maxMatchCount = 0;
 
-    $.each(items, function(index, itemSrc) {
+    each(items, function(index, itemSrc) {
         var matchCount = 0,
             item = mapFn ? mapFn(itemSrc) : itemSrc;
 
-        $.each(targetFilter, function(paramName, targetValue) {
+        each(targetFilter, function(paramName, targetValue) {
             var value = item[paramName];
 
             if(value === undefined) {
@@ -145,7 +146,7 @@ var match = function(value, targetValue) {
     if(Array.isArray(value) && Array.isArray(targetValue)) {
         var mismatch = false;
 
-        $.each(value, function(index, valueItem) {
+        each(value, function(index, valueItem) {
             if(valueItem !== targetValue[index]) {
                 mismatch = true;
                 return false;
@@ -200,7 +201,7 @@ var normalizeKey = function(id) {
     var key = typeUtils.isString(id) ? id : id.toString(),
         arr = key.match(/[^a-zA-Z0-9_]/g);
 
-    arr && $.each(arr, function(_, sign) {
+    arr && each(arr, function(_, sign) {
         key = key.replace(sign, "__" + sign.charCodeAt() + "__");
     });
     return key;

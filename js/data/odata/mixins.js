@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    stringUtils = require("../../core/utils/string"),
+var stringUtils = require("../../core/utils/string"),
     iteratorUtils = require("../../core/utils/iterator"),
     odataUtils = require("./utils");
 
@@ -27,7 +26,7 @@ var escapeServiceOperationParams = function(params, version) {
     // The type of each parameter must be a primitive type.
     // Any data of a non-primitive type must be serialized and passed into a string parameter
     var result = {};
-    $.each(params, function(k, v) {
+    iteratorUtils.each(params, function(k, v) {
         result[k] = odataUtils.serializeValue(v, version);
     });
     return result;
