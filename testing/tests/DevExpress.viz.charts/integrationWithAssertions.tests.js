@@ -925,7 +925,7 @@ QUnit.test('T295685. dxChart with adaptive layout', function(assert) {
     assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().min, -2.5, "min arg");
     assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().max, 12.5, "max arg");
     assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().min, 0, "min val");
-    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().max, 12.5, "min val");
+    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().max, 15, "min val");
 });
 
 QUnit.test("Pie chart with sizeGroup, change option in between rendering steps - legend and title should have original place", function(assert) {
