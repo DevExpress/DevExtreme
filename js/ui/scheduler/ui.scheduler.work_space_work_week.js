@@ -9,7 +9,8 @@ var registerComponent = require("../../core/component_registrator"),
 
 var WORK_WEEK_CLASS = "dx-scheduler-work-space-work-week";
 
-var weekendCounter = 0;
+var weekendCounter = 0,
+    weekCounter = 0;
 
 var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
 
@@ -29,18 +30,22 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
         var resultDate = new Date(this._firstViewDate);
 
         resultDate.setDate(this._firstViewDate.getDate() + headerIndex + weekendCounter);
+        var nextDay = resultDate.getDay() + 1;
 
-        var day = resultDate.getDay();
-        if(day % 6 === 0) {
-            weekendCounter = Math.floor(day / 6 + 1);
-            resultDate.setDate(resultDate.getDate() + weekendCounter);
+        if(nextDay % 6 === 0) {
+            weekendCounter = 2;
+
+            if(nextDay === 6) {
+                weekCounter++;
+                weekendCounter *= weekCounter;
+            }
         }
-
         return resultDate;
     },
 
     _renderView: function() {
         weekendCounter = 0;
+        weekCounter = 0;
         this.callBase();
     },
 

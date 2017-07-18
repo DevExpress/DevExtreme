@@ -1270,10 +1270,12 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Scheduler workspace work week view should be correct with any first day of week", function(assert) {
-        var $element = this.instance.element();
+        var instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek({
+            firstDayOfWeek: 2,
+            currentDate: new Date(2015, 1, 4)
+        }).dxSchedulerWorkSpaceWorkWeek("instance");
 
-        this.instance.option("firstDayOfWeek", 2);
-        this.instance.option("currentDate", new Date(2015, 1, 4));
+        var $element = instance.element();
 
         var $headerCells = $element.find(".dx-scheduler-header-row th");
 
@@ -1296,10 +1298,12 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Scheduler workspace work week view should be correct with any first day of week, if currentDate is Sunday", function(assert) {
-        var $element = this.instance.element();
+        var instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek({
+            currentDate: new Date(2016, 0, 10),
+            firstDayOfWeek: 3
+        }).dxSchedulerWorkSpaceWorkWeek("instance");
 
-        this.instance.option("firstDayOfWeek", 3);
-        this.instance.option("currentDate", new Date(2016, 0, 10));
+        var $element = instance.element();
 
         var $headerCells = $element.find(".dx-scheduler-header-row th");
 
@@ -3019,6 +3023,37 @@ QUnit.testStart(function() {
 
         this.instance.option("count", 4);
         assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 21, 23, 59)], "Range is OK");
+    });
+
+    QUnit.test("Workspace work week view should contain 15 headers if count=3", function(assert) {
+        var instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek({
+            currentDate: new Date(2017, 5, 26),
+            firstDayOfWeek: 1,
+            count: 3,
+            width: 1500
+        }).dxSchedulerWorkSpaceWorkWeek("instance");
+
+        var currentDate = instance.option("currentDate"),
+            $element = instance.element(),
+            $headerCells = $element.find(".dx-scheduler-header-panel-cell"),
+            date;
+
+        assert.equal($headerCells.length, 15, "Date table has 15 header cells");
+        for(var i = 0; i < 5; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 7; i < 12; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i - 2).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 14; i < 19; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i - 4).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
     });
 
 })("Work Space Work Week with count");
