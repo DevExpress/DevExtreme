@@ -31,6 +31,7 @@ var $ = require("jquery"),
     DATAGRID_MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     DATAGRID_EDIT_MODE_ROW = "row",
     DATAGRID_EDIT_MODE_FORM = "form",
+    DATAGRID_EDIT_MODE_BATCH = "batch",
 
     DATAGRID_ADAPTIVE_COLUMN_BUTTON_CLASS = "dx-datagrid-adaptive-more";
 
@@ -782,6 +783,17 @@ gridCore.registerModule("adaptivity", {
 
                 editRow: function(rowIndex) {
                     if(this.getEditMode() === DATAGRID_EDIT_MODE_FORM) {
+                        this._adaptiveController.collapseAdaptiveDetailRow();
+                    }
+
+                    this.callBase(rowIndex);
+                },
+
+                deleteRow: function(rowIndex) {
+                    var expandedKey = this._dataController._adaptiveExpandedKey,
+                        expandedRowIndex = gridCoreUtils.getIndexByKey(expandedKey, this._dataController.items());
+
+                    if(this.getEditMode() === DATAGRID_EDIT_MODE_BATCH && expandedRowIndex === rowIndex) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                     }
 
