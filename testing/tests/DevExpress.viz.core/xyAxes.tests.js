@@ -342,6 +342,42 @@ QUnit.test("axis applies valueMargins", function(assert) {
 
     assert.strictEqual(range.min, -10, "minValue");
     assert.strictEqual(range.max, 120, "maxValue");
+
+    assert.strictEqual(range.minVisible, -10, "minVisibleValue");
+    assert.strictEqual(range.maxVisible, 120, "maxVisibleValue");
+});
+
+QUnit.test("axis applies valueMargins to minVisible, maxVisible", function(assert) {
+    var axis = new Axis({
+        renderer: this.renderer,
+        axisType: "xyAxes",
+        drawingType: "linear"
+    });
+
+    axis.updateOptions({
+        isHorizontal: true,
+        label: {
+            overlappingBehavior: {}
+        },
+        valueMarginsEnabled: true,
+        minValueMargin: 0.1,
+        maxValueMargin: 0.2
+    });
+
+    axis.setBusinessRange(new rangeModule.Range({
+        min: 0,
+        max: 100,
+        minVisible: 5,
+        maxVisible: 90
+    }));
+
+    var range = axis.getTranslator().getBusinessRange();
+
+    assert.strictEqual(range.min, -8.5, "minValue");
+    assert.strictEqual(range.max, 117, "maxValue");
+
+    assert.strictEqual(range.minVisible, -3.5, "minVisibleValue");
+    assert.strictEqual(range.maxVisible, 107, "maxVisibleValue");
 });
 
 QUnit.test("axis applies valueMargins. dateTime", function(assert) {
