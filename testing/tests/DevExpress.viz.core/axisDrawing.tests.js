@@ -93,6 +93,7 @@ var environment = {
     },
     updateOptions: function(options) {
         this.axis.updateOptions($.extend(true, {
+            crosshairMargin: 0,
             label: {
                 visible: false, indentFromAxis: 10, overlappingBehavior: { mode: "ignore" }
             },
@@ -7408,13 +7409,35 @@ QUnit.test("Horizontal with labels", function(assert) {
     assert.strictEqual(margins.top, 0, "top");
 });
 
+QUnit.test("Horizontal with crosshairMargin", function(assert) {
+    //arrange
+    var renderer = this.renderer;
+
+    this.updateOptions({
+        isHorizontal: false,
+        position: "right",
+        crosshairMargin: 7
+    });
+
+    renderer.g.getCall(3).returnValue.getBBox = sinon.stub().returns({ x: -10, y: 80, width: 130, height: 40 }); //elements (labels) group
+    //act
+    this.axis.draw(this.canvas);
+
+    var margins = this.axis.getMargins();
+
+    //assert
+    assert.strictEqual(margins.bottom, 50, "bottom");
+    assert.strictEqual(margins.left, 20, "left");
+    assert.strictEqual(margins.right, 37, "right");
+    assert.strictEqual(margins.top, 0, "top");
+});
+
 QUnit.test("Horizontal with title that is less that canvas", function(assert) {
     //arrange
     var renderer = this.renderer;
 
     this.updateOptions({
         title: "Title text",
-
     });
     renderer.g.getCall(5).returnValue.getBBox = sinon.stub().returns({ x: 30, y: 90, width: 30, height: 50 });//title group
     //act

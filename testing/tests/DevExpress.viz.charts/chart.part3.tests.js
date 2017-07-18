@@ -142,6 +142,163 @@ QUnit.test("Value axis is empty array", function(assert) {
     assert.ok(chart._valueAxes[0].gridGroup);
 });
 
+QUnit.test("create axes with crosshair", function(assert) {
+    //Arrange
+    var stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    seriesMockData.series.push(stubSeries);
+
+    //act
+    var chart = this.createChart({
+        crosshair: {
+            enabled: true,
+            horizontalLine: {
+                visible: true
+            },
+            verticalLine: {
+                visible: true
+            }
+        },
+        series: {
+            type: "line"
+        }
+    });
+
+    assert.ok(chart._argumentAxes);
+    assert.ok(chart._valueAxes);
+    assert.equal(chart._argumentAxes.length, 1);
+    assert.equal(chart._valueAxes.length, 1);
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 4);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 8);
+});
+
+QUnit.test("create axes with crosshair. horizontal line is invisible", function(assert) {
+    //Arrange
+    var stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    seriesMockData.series.push(stubSeries);
+
+    //act
+    var chart = this.createChart({
+        crosshair: {
+            enabled: true,
+            horizontalLine: {
+                visible: false
+            },
+            verticalLine: {
+                visible: true
+            }
+        },
+        series: {
+            type: "line"
+        }
+    });
+
+    assert.ok(chart._argumentAxes);
+    assert.ok(chart._valueAxes);
+    assert.equal(chart._argumentAxes.length, 1);
+    assert.equal(chart._valueAxes.length, 1);
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 4);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 0);
+});
+
+QUnit.test("create axes with crosshair. horizontal line is invisible. rotated", function(assert) {
+    //Arrange
+    var stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    seriesMockData.series.push(stubSeries);
+
+    //act
+    var chart = this.createChart({
+        rotated: true,
+        crosshair: {
+            enabled: true,
+            horizontalLine: {
+                visible: false
+            },
+            verticalLine: {
+                visible: true
+            }
+        },
+        series: {
+            type: "line"
+        }
+    });
+
+    assert.ok(chart._argumentAxes);
+    assert.ok(chart._valueAxes);
+    assert.equal(chart._argumentAxes.length, 1);
+    assert.equal(chart._valueAxes.length, 1);
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 4);
+});
+
+QUnit.test("create axes with crosshair. vertical line is invisible", function(assert) {
+    //Arrange
+    var stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    seriesMockData.series.push(stubSeries);
+
+    //act
+    var chart = this.createChart({
+        crosshair: {
+            enabled: true,
+            verticalLine: {
+                visible: false
+            },
+            horizontalLine: {
+                visible: true
+            }
+        },
+        series: {
+            type: "line"
+        }
+    });
+
+    assert.ok(chart._argumentAxes);
+    assert.ok(chart._valueAxes);
+    assert.equal(chart._argumentAxes.length, 1);
+    assert.equal(chart._valueAxes.length, 1);
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 8);
+});
+
+QUnit.test("create axes with crosshair. vertical line is invisible. rotated", function(assert) {
+    //Arrange
+    var stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    seriesMockData.series.push(stubSeries);
+
+    //act
+    var chart = this.createChart({
+        rotated: true,
+        crosshair: {
+            enabled: true,
+            verticalLine: {
+                visible: false
+            },
+            horizontalLine: {
+                visible: true
+            }
+        },
+        series: {
+            type: "line"
+        }
+    });
+
+    assert.ok(chart._argumentAxes);
+    assert.ok(chart._valueAxes);
+    assert.equal(chart._argumentAxes.length, 1);
+    assert.equal(chart._valueAxes.length, 1);
+    assert.ok(chart._argumentAxes[0].getOptions().crosshairMargin, 8);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 0);
+});
+
 QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", function(assert) {
     //Arrange
     var stubSeries = new MockSeries({
