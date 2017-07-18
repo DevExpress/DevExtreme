@@ -651,8 +651,9 @@ module.exports = {
                 }),
                 rootElement = that._renderer.root,
                 businessRange = that._translator.getBusinessRange(),
-                labelValue = constants.formatLabel(businessRange.axisType === "discrete" ? businessRange.categories[0] : businessRange.max, options.label),
-                labelElement = options.label.visible && that._renderer.text(labelValue, 0, 0)
+                labelIsVisible = options.label.visible && !that._translator.getBusinessRange().stubData,
+                labelValue = labelIsVisible && constants.formatLabel(businessRange.axisType === "discrete" ? businessRange.categories[0] : businessRange.max, options.label),
+                labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
                     .css(that._textFontStyles)
                     .attr(that._textOptions)
                     .append(rootElement),

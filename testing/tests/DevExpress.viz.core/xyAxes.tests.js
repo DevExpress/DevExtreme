@@ -2681,6 +2681,24 @@ QUnit.test("Constant line label is wider than label - get constant line label as
     assert.strictEqual(margins.right, 32, "right margin");
 });
 
+QUnit.test("Estimate margins does not include labels if stub data", function(assert) {
+    this.range.stubData = true;
+
+    var customizeText = sinon.stub(),
+        axis = this.createSimpleAxis({
+            isHorizontal: true,
+            label: {
+                customizeText: customizeText,
+                visible: true
+            }
+        });
+
+    axis.estimateMargins();
+
+    assert.strictEqual(this.renderer.stub("text").callCount, 0);
+    assert.ok(!customizeText.called, 0);
+});
+
 QUnit.module("Coors In", $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
