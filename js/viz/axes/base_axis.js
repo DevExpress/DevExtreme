@@ -776,12 +776,13 @@ Axis.prototype = {
     getMargins: function() {
         var that = this,
             options = that._options,
+            position = options.position,
+            placeholderSize = options.placeholderSize,
             canvas = that.getCanvas(),
             cLeft = canvas.left,
             cTop = canvas.top,
             cRight = canvas.width - canvas.right,
             cBottom = canvas.height - canvas.bottom,
-            placeholderSize = options.placeholderSize,
             boxes = [that._axisElementsGroup, that._axisConstantLineGroups.outside1, that._axisConstantLineGroups.outside2]
                 .map(function(group) { return group && group.getBBox(); })
                 .concat((function(group) {
@@ -817,10 +818,10 @@ Axis.prototype = {
                     bottom: 0
                 });
 
-        margins[that._options.position] += options.crosshairMargin;
+        margins[position] += options.crosshairMargin;
 
         if(placeholderSize) {
-            margins[that._options.position] = placeholderSize;
+            margins[position] = placeholderSize;
         }
 
         return margins;
