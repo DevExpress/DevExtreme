@@ -1539,9 +1539,6 @@ QUnit.testStart(function() {
         this.instance.option("firstDayOfWeek", 7);
         this.instance.option("startDayHour", 5);
 
-        // Hack for IE. Force style compilation
-        window.getComputedStyle(document.getElementsByClassName("dx-scheduler-date-table")[0]).borderTopWidth;
-
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
         assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().top, "Cell coordinates are right");
         assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().left, "Cell coordinates are right");
@@ -1553,9 +1550,6 @@ QUnit.testStart(function() {
         this.instance.option("currentDate", new Date(2015, 2, 4));
         this.instance.option("firstDayOfWeek", 7);
         this.instance.option("endDayHour", 10);
-
-        // Hack for IE. Force style compilation
-        window.getComputedStyle(document.getElementsByClassName("dx-scheduler-date-table")[0]).borderTopWidth;
 
         var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 5, 6, 0));
         assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(4).position().top, "Cell coordinates are right");
