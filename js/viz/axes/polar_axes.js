@@ -129,6 +129,7 @@ circularAxes = polarAxes.circular = {
 
     _getStripGraphicAttributes: function(fromAngle, toAngle) {
         var center = this.getCenter(),
+            angle = this.getAngles()[0],
             r = this.getRadius();
 
         return {
@@ -136,8 +137,8 @@ circularAxes = polarAxes.circular = {
             y: center.y,
             innerRadius: 0,
             outerRadius: r,
-            startAngle: -toAngle,
-            endAngle: -fromAngle
+            startAngle: -toAngle - angle,
+            endAngle: -fromAngle - angle
         };
     },
 
@@ -149,8 +150,9 @@ circularAxes = polarAxes.circular = {
 
     _getStripLabelCoords: function(from, to) {
         var that = this,
-            angle = from + (to - from) / 2,
-            cosSin = vizUtils.getCosAndSin(-angle),
+            coords = that._getStripGraphicAttributes(from, to),
+            angle = coords.startAngle + (coords.endAngle - coords.startAngle) / 2,
+            cosSin = vizUtils.getCosAndSin(angle),
             halfRad = that.getRadius() / 2,
             center = that.getCenter(),
             x = _round(center.x + halfRad * cosSin.cos),
@@ -172,26 +174,18 @@ circularAxes = polarAxes.circular = {
         var center = this.getCenter();
 
         return this._createPathElement(this._getConstantLineGraphicAttributes(value).points, attr)
-            .rotate(value, center.x, center.y);
+            .rotate(value + this.getAngles()[0], center.x, center.y);
     },
 
     _getConstantLineLabelsCoords: function(value) {
         var that = this,
-            cosSin = vizUtils.getCosAndSin(-value),
+            cosSin = vizUtils.getCosAndSin(-value - that.getAngles()[0]),
             halfRad = that.getRadius() / 2,
             center = that.getCenter(),
             x = _round(center.x + halfRad * cosSin.cos),
             y = _round(center.y - halfRad * cosSin.sin);
 
         return { x: x, y: y };
-    },
-
-    _adjustConstantLineLabels: function(constantLines) {
-        constantLines.forEach(function(item) {
-            if(item.label) {
-                item.label.attr({ translateX: -item.labelBBox.width / 2 });
-            }
-        });
     },
 
     _checkAlignmentConstantLineLabels: _noop,
@@ -215,10 +209,6 @@ circularAxes = polarAxes.circular = {
             center.x + radiusWithTicks + length,
             center.y
         ];
-    },
-
-    _getAlignment: function() {
-        return "center";
     },
 
     _getLabelAdjustedCoord: function(tick) {
@@ -290,7 +280,6 @@ circularAxes = polarAxes.circular = {
         var box = strip.labelBBox;
 
         return {
-            translateX: -box.width / 2,
             translateY: strip.label.attr("y") - box.y - box.height / 2
         };
     },
@@ -437,7 +426,6 @@ polarAxes.linear = {
     _getMinMax: circularAxes._getMinMax,
     _getStick: xyAxesLinear._getStick,
     _getSpiderCategoryOption: commonUtils.noop,
-    _adjustConstantLineLabels: circularAxes._adjustConstantLineLabels,
 
     _updateTranslator: function() {
         this._translator.update({}, {}, {
@@ -481,8 +469,6 @@ polarAxes.linear = {
             coords.y
         ];
     },
-
-    _getAlignment: circularAxes._getAlignment,
 
     _getLabelAdjustedCoord: function(tick) {
         var that = this,
