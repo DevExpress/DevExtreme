@@ -253,13 +253,14 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     _columnOptionChanged: function(e) {
-        var optionNames = e.optionNames,
+        var changeTypes = e.changeTypes,
+            optionNames = e.optionNames,
             isSelectMode = this.option("columnChooser.mode") === "select";
 
         this.callBase(e);
 
         if(isSelectMode) {
-            if(optionNames.showInColumnChooser || optionNames.visible) {
+            if(optionNames.showInColumnChooser || optionNames.visible || changeTypes.columns && optionNames.all) {
                 this.render(null, true);
             }
         }

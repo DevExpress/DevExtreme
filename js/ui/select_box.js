@@ -385,15 +385,15 @@ var SelectBox = DropDownList.inherit({
     },
 
     _renderInputValue: function() {
-        this._renderInputValueAsync = function() {
-            this._renderTooltip();
-            this._renderInputValueImpl();
-            this._refreshSelected();
-        };
-
-        return this.callBase().always((function() {
+        return this.callBase().always(function() {
             this._renderInputValueAsync();
-        }).bind(this));
+        }.bind(this));
+    },
+
+    _renderInputValueAsync: function() {
+        this._renderTooltip();
+        this._renderInputValueImpl();
+        this._refreshSelected();
     },
 
     _renderInputValueImpl: function() {

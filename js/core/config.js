@@ -1,14 +1,27 @@
 "use strict";
 
-var extendUtils = require("./utils/extend"),
-    config = {
-        rtlEnabled: false,
-        defaultCurrency: "USD",
-        designMode: false,
-        serverDecimalSeparator: ".",
-        forceIsoDateParsing: true,
-        wrapActionsBeforeExecute: false
-    };
+var extendUtils = require("./utils/extend");
+var config = {
+    rtlEnabled: false,
+    defaultCurrency: "USD",
+    designMode: false,
+    serverDecimalSeparator: ".",
+    forceIsoDateParsing: true,
+    wrapActionsBeforeExecute: false,
+    useJQueryRenderer: true
+};
+
+var configMethod = function() {
+    if(!arguments.length) {
+        return config;
+    }
+
+    extendUtils.extend(config, arguments[0]);
+};
+
+if(window && window.DevExpress && window.DevExpress.config) {
+    configMethod(window.DevExpress.config);
+}
 
 /**
  * @name config
@@ -25,10 +38,4 @@ var extendUtils = require("./utils/extend"),
  * @module core/config
  * @export default
  */
-module.exports = function() {
-    if(!arguments.length) {
-        return config;
-    }
-
-    extendUtils.extend(config, arguments[0]);
-};
+module.exports = configMethod;

@@ -202,6 +202,9 @@
         "dxColorView-ariaBlue": "青",
         "dxColorView-ariaAlpha": "透明度",
         "dxColorView-ariaHex": "色コード",
+        "dxTagBox-selected": "{0} つ選択済み",
+        "dxTagBox-allSelected": "すべて選択済み ({0})",
+        "dxTagBox-moreSelected": "その他 {0} つ選択",
         "vizExport-printingButtonText": "印刷",
         "vizExport-titleMenuText": "エクスポート / 印刷",
         "vizExport-exportButtonText": "{0} ファイル"

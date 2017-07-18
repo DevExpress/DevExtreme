@@ -667,7 +667,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _isLastRow: function(rowIndex) {
         if(this._isVirtualScrolling()) {
-            return rowIndex === this._dataController.totalItemsCount() - 1;
+            return rowIndex >= this._dataController.totalItemsCount() - 1;
         }
         return rowIndex === this.getController("data").items().length - 1;
     },

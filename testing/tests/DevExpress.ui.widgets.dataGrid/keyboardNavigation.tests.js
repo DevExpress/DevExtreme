@@ -3090,6 +3090,39 @@ QUnit.testInActiveWindow("Do not prevent default on 'tab' if the current cell is
     assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
 });
 
+//T535101
+QUnit.testInActiveWindow("Do not prevent default on 'tab' if the current cell is the last in the added row if virtual scrolling is enabled", function(assert) {
+    //arrange
+    this.columns = [
+        { caption: 'Column 1', visible: true, dataField: "Column1", allowEditing: true, setCellValue: $.noop },
+        { caption: 'Column 2', visible: true, dataField: "Column2", allowEditing: true, setCellValue: $.noop }
+    ];
+
+    this.dataControllerOptions = {
+        totalItemsCount: 0,
+        items: [
+            { values: ['test1', 'test2'], rowType: 'data', inserted: true }
+        ]
+    };
+
+    setupModules(this);
+
+    this.options.scrolling = { mode: "virtual" };
+    this.options.editing = { mode: "batch" };
+    this.gridView.render($("#container"));
+
+    this.editCell(0, 1);
+
+    var $input = $("#container").find(".dx-texteditor-input");
+    assert.equal($input.length, 1);
+
+    //act
+    var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $input).preventDefault;
+
+    //assert
+    assert.ok(!isPreventDefaultCalled, "preventDefault is not called");
+});
+
 //T381273
 QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current cell is the last editable cell and contains editor", function(assert) {
 

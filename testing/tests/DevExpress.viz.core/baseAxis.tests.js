@@ -166,6 +166,53 @@ QUnit.test("Get ticks options", function(assert) {
     assert.strictEqual(ticksOptions.showMinorCalculatedTicks, true, "showMinorCalculatedTicks");
 });
 
+QUnit.test("Check tickManager data if min and max are small values, close to exponential", function(assert) {
+    var settings = {
+        renderer: this.renderer,
+    };
+    this.translator.getBusinessRange.returns({
+        addRange: sinon.stub(),
+        minVisible: -0.0000017854,
+        maxVisible: 2.88e-9
+    });
+    var axis = new Axis(settings);
+    axis.updateOptions({
+        label: { overlappingBehavior: {} }
+    });
+
+    axis.setTranslator(this.translator, this.additionalTranslator);
+
+    assert.ok(axis);
+
+    var ticksData = this.tickManager.update.lastCall.args[1];
+
+    assert.deepEqual(ticksData.min, -0.000001785, "custom ticks");
+    assert.deepEqual(ticksData.max, 2.88e-9, "custom ticks");
+});
+
+QUnit.test("Check tickManager data if min and max are small values, close to exponential, rounded min can not be less than min", function(assert) {
+    var settings = {
+        renderer: this.renderer,
+    };
+    this.translator.getBusinessRange.returns({
+        addRange: sinon.stub(),
+        minVisible: -0.0000017856,
+        maxVisible: 2.88e-9
+    });
+    var axis = new Axis(settings);
+    axis.updateOptions({
+        label: { overlappingBehavior: {} }
+    });
+
+    axis.setTranslator(this.translator, this.additionalTranslator);
+
+    assert.ok(axis);
+
+    var ticksData = this.tickManager.update.lastCall.args[1];
+
+    assert.deepEqual(ticksData.min, -0.000001785, "custom ticks");
+    assert.deepEqual(ticksData.max, 2.88e-9, "custom ticks");
+});
 
 QUnit.module("API", {
     beforeEach: function() {

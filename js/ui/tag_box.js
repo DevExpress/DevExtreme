@@ -7,7 +7,6 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
     extend = require("../core/utils/extend").extend,
-    inArray = require("../core/utils/array").inArray,
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
@@ -24,6 +23,7 @@ var TAGBOX_TAG_DATA_KEY = "dxTagData";
 var TAGBOX_CLASS = "dx-tagbox",
     TAGBOX_TAG_CONTAINER_CLASS = "dx-tag-container",
     TAGBOX_TAG_CLASS = "dx-tag",
+    TAGBOX_MULTI_TAG_CLASS = "dx-tagbox-multi-tag",
     TAGBOX_CUSTOM_TAG_CLASS = "dx-tag-custom",
     TAGBOX_TAG_REMOVE_BUTTON_CLASS = "dx-tag-remove-button",
     TAGBOX_ONLY_SELECT_CLASS = "dx-tagbox-only-select",
@@ -316,6 +316,34 @@ var TagBox = SelectBox.inherit({
             onSelectAllValueChanged: null,
 
             /**
+             * @name dxTagBoxOptions_maxTagCount
+             * @publicName maxTagCount
+             * @type number
+             * @default undefined
+             */
+            maxTagCount: undefined,
+
+            /**
+             * @name dxTagBoxOptions_showMultiTagOnly
+             * @publicName showMultiTagOnly
+             * @type boolean
+             * @default true
+             */
+            showMultiTagOnly: true,
+
+            /**
+             * @name dxTagBoxOptions_onMultiTagPreparing
+             * @publicName onMultiTagPreparing
+             * @extends Action
+             * @type_function_param1_field4 multiTagElement:jQuery
+             * @type_function_param1_field5 selectedItems:array
+             * @type_function_param1_field6 text:string
+             * @type_function_param1_field7 cancel:boolean
+             * @action
+             */
+            onMultiTagPreparing: null,
+
+            /**
             * @name dxTagBoxOptions_multiline
             * @publicName multiline
             * @type boolean
@@ -438,6 +466,29 @@ var TagBox = SelectBox.inherit({
         this._selectedItems = [];
 
         this._initSelectAllValueChangedAction();
+    },
+
+    _initActions: function() {
+        this.callBase();
+        this._initMultiTagPreparingAction();
+    },
+
+    _initMultiTagPreparingAction: function() {
+        this._multiTagPreparingAction = this._createActionByOption("onMultiTagPreparing", {
+            beforeExecute: (function(e) {
+                this._multiTagPreparingHandler(e.args[0]);
+            }).bind(this)
+        });
+    },
+
+    _multiTagPreparingHandler: function(args) {
+        var selectedCount = this._getValue().length;
+
+        if(!this.option("showMultiTagOnly")) {
+            args.text = messageLocalization.getFormatter("dxTagBox-moreSelected")(selectedCount - this.option("maxTagCount") + 1);
+        } else {
+            args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
+        }
     },
 
     _initTemplates: function() {
@@ -694,18 +745,77 @@ var TagBox = SelectBox.inherit({
         return this.option("value") || [];
     },
 
+    _multiTagRequired: function() {
+        var values = this._getValue(),
+            maxTagCount = this.option("maxTagCount");
+
+        return isDefined(maxTagCount) && values.length > maxTagCount;
+    },
+
+    _renderMultiTag: function($input) {
+        var $tag = $("<div>")
+                .addClass(TAGBOX_TAG_CLASS)
+                .addClass(TAGBOX_MULTI_TAG_CLASS);
+
+        var args = {
+            multiTagElement: $tag,
+            selectedItems: this.option("selectedItems")
+        };
+
+        this._multiTagPreparingAction(args);
+
+        if(args.cancel) {
+            return false;
+        }
+
+        $tag.data(TAGBOX_TAG_DATA_KEY, args.text);
+        $tag.insertBefore($input);
+
+        this._tagTemplate.render({
+            model: args.text,
+            container: $tag
+        });
+
+        return $tag;
+    },
+
     _renderTags: function() {
         this._cleanTags();
 
-        var $input = this._input();
-        var itemLoadDeferreds = $.map(this._getValue(), (function(value) {
-            return this._renderTag(value, $input);
-        }).bind(this));
+        var $input = this._input(),
+            values = this._getValue(),
+            items = [],
+            itemLoadDeferreds = $.map(values, (function(value) {
+                return this._loadItem(value).always((function(item) {
+                    var valueIndex = values.indexOf(value);
 
-        when.apply($, itemLoadDeferreds).done((function() {
+                    if(isDefined(item)) {
+                        this._selectedItems.push(item);
+                        items.splice(valueIndex, 0, item);
+                    } else {
+                        items.splice(valueIndex, 0, value);
+                    }
+                }).bind(this));
+            }).bind(this));
+
+        when.apply($, itemLoadDeferreds).always((function() {
             this._renderInputAddons();
-            this._scrollContainer("end");
+
             this.option("selectedItems", this._selectedItems.slice());
+
+            var $multiTag = this._multiTagRequired() && this._renderMultiTag($input),
+                showMultiTagOnly = this.option("showMultiTagOnly"),
+                maxTagCount = this.option("maxTagCount");
+
+            items.forEach(function(item, index) {
+                if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - maxTagCount >= -1)) {
+                    return false;
+                }
+                this._renderTag(item, $multiTag || $input);
+            }.bind(this));
+
+            this._scrollContainer("end");
+            this._refreshTagElements();
         }).bind(this));
 
         this._renderEmptyState();
@@ -713,8 +823,6 @@ var TagBox = SelectBox.inherit({
         if(!this._preserveFocusedTag) {
             this._clearTagFocus();
         }
-
-        this._refreshTagElements();
     },
 
     _renderEmptyState: function() {
@@ -728,40 +836,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _cleanTags: function() {
-        var $tags = this._tagElements(),
-            values = this._getValue();
-
-        $.each($tags, function(_, tag) {
-            var $tag = $(tag),
-                index = inArray($tag.data(TAGBOX_TAG_DATA_KEY), values);
-
-            if(index < 0) {
-                $tag.remove();
-            }
-        });
-
-        this._cleanSelectedItems();
-    },
-
-    _cleanSelectedItems: function() {
-        if(this.option("fieldTemplate")) {
-            this._selectedItems = [];
-            return;
-        }
-
-        var values = this._getValue(),
-            selectedItemsCount = this._selectedItems.length;
-
-        for(var index = 0; index < selectedItemsCount; index++) {
-            var selectedItem = this._selectedItems[index],
-                value = this._valueGetter(selectedItem);
-
-            if(inArray(value, values) < 0) {
-                this._selectedItems.splice(index, 1);
-                index--;
-                selectedItemsCount--;
-            }
-        }
+        this._tagElements().remove();
+        this._selectedItems = [];
     },
 
     _refreshTagElements: function() {
@@ -776,32 +852,37 @@ var TagBox = SelectBox.inherit({
         return this._defaultTemplates["tag"];
     },
 
-    _renderTag: function(value, $input) {
-        var $tag = this._getTag(value);
-        if($tag && !$tag.hasClass(TAGBOX_CUSTOM_TAG_CLASS)) {
-            return $.Deferred().resolve();
+    _applyTagTemplate: function(item, $tag) {
+        if(this._displayGetterExpr() && this._tagTemplate === this._getDefaultTagTemplate()) {
+            item = this._displayGetter(item);
         }
 
-        $tag && $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
-        $tag = $tag || this._createTag(value, $input);
+        this._tagTemplate.render({
+            model: item,
+            container: $tag
+        });
+    },
 
-        return this._loadItem(value).always((function(item) {
-            if(!isDefined(item)) {
-                $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
-                item = value;
-            } else {
-                this._selectedItems.push(item);
+    _renderTag: function(item, $input) {
+        var value = this._valueGetter(item) || item,
+            $tag = this._getTag(value);
+
+        if($tag) {
+            if(!$tag.hasClass(TAGBOX_CUSTOM_TAG_CLASS)) {
+                return $.Deferred().resolve();
             }
 
-            if(this._displayGetterExpr() && this._tagTemplate === this._getDefaultTagTemplate()) {
-                item = this._displayGetter(item);
-            }
+            $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
+        } else {
+            $tag = this._createTag(value, $input);
+        }
 
-            this._tagTemplate.render({
-                model: item,
-                container: $tag
-            });
-        }).bind(this));
+        if(isDefined(item)) {
+            this._applyTagTemplate(item, $tag);
+        } else {
+            $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
+            this._applyTagTemplate(value, $tag);
+        }
     },
 
     _getTag: function(value) {
@@ -845,6 +926,15 @@ var TagBox = SelectBox.inherit({
     },
 
     _removeTagElement: function($tag) {
+        if($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
+            if(!this.option("showMultiTagOnly")) {
+                this.option("value", this._getValue().slice(0, this.option("maxTagCount")));
+            } else {
+                this.reset();
+            }
+            return;
+        }
+
         var itemValue = $tag.data(TAGBOX_TAG_DATA_KEY);
         this._removeTagWithUpdate(itemValue);
         this._refreshTagElements();
@@ -946,7 +1036,9 @@ var TagBox = SelectBox.inherit({
     },
 
     _lastValue: function() {
-        return this._getValue().slice(-1).pop() || null;
+        var values = this._getValue(),
+            lastValue = values[values.length - 1];
+        return isDefined(lastValue) ? lastValue : null;
     },
 
     _valueChangeEventHandler: noop,
@@ -1064,6 +1156,10 @@ var TagBox = SelectBox.inherit({
             case "onSelectAllValueChanged":
                 this._initSelectAllValueChangedAction();
                 break;
+            case "onMultiTagPreparing":
+                this._initMultiTagPreparingAction();
+                this._renderTags();
+                break;
             case "hideSelectedItems":
                 if(args.value) {
                     this._setListDataSourceFilter();
@@ -1085,6 +1181,10 @@ var TagBox = SelectBox.inherit({
             case "value":
                 this.callBase(args);
                 this._setListDataSourceFilter();
+                break;
+            case "maxTagCount":
+            case "showMultiTagOnly":
+                this._renderTags();
                 break;
             case "selectAllMode":
                 this._setListOption(args.name, args.value);

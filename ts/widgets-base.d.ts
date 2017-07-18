@@ -594,6 +594,15 @@ declare module DevExpress.ui {
         /** @docid dxTagBoxOptions_onSelectAllValueChanged */
         onSelectAllValueChanged?: Function;
 
+        /** @docid dxTagBoxOptions_onMultiTagPreparing */
+        onMultiTagPreparing?: Function;
+
+        /** @docid dxTagBoxOptions_maxTagCount */
+        maxTagCount?: number;
+
+        /** @docid dxTagBoxOptions_showMultiTagOnly */
+        showMultiTagOnly?: boolean;
+
         /** @docid dxTagBoxOptions_multiline */
         multiline?: boolean;
 
