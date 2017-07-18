@@ -104,6 +104,7 @@ var SchedulerHeader = Widget.inherit({
             min: this.option("min"),
             max: this.option("max"),
             count: this.option("count"),
+            offset: this.option("offset"),
             date: this.option("currentDate"),
             step: STEP_MAP[this.option("currentView")],
             firstDayOfWeek: this.option("firstDayOfWeek"),

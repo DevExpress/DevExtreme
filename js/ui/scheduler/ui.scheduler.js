@@ -1682,19 +1682,24 @@ var Scheduler = Widget.inherit({
     _renderWorkSpace: function(groups) {
         var $workSpace = $("<div>").appendTo(this.element());
 
-        var count = this._getViewCount();
-        this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this.option("currentView")].workSpace, this._workSpaceConfig(groups, count));
+        var countConfig = this._getViewCountConfig();
+        this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this.option("currentView")].workSpace, this._workSpaceConfig(groups, countConfig));
         this._workSpace.getWorkArea().append(this._appointments.element());
 
         this._recalculateWorkspace();
     },
 
-    _getViewCount: function() {
+    _getViewCountConfig: function() {
         var currentView = this.option("currentView");
 
-        var view = this._getViewByType(currentView);
+        var view = this._getViewByType(currentView),
+            viewCount = view && view.count || 1,
+            viewOffset = view && view.offset || 0;
 
-        return view && view.count || 1;
+        return {
+            count: viewCount,
+            offset: viewOffset
+        };
     },
 
     _getViewByType: function(type) {
@@ -1712,7 +1717,7 @@ var Scheduler = Widget.inherit({
         this._workSpaceRecalculation.resolve();
     },
 
-    _workSpaceConfig: function(groups, count) {
+    _workSpaceConfig: function(groups, countConfig) {
         var result,
             currentViewOptions = this._getCurrentViewOptions();
 
@@ -1736,7 +1741,8 @@ var Scheduler = Widget.inherit({
         }, currentViewOptions);
 
         result.observer = this;
-        result.count = count;
+        result.count = countConfig.count;
+        result.offset = countConfig.offset;
         result.groups = groups;
         result.onCellClick = this._createActionByOption("onCellClick");
         result.min = new Date(this._dateOption("min"));
