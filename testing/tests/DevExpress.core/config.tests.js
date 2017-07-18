@@ -86,5 +86,4 @@ QUnit.test("default DevExpress.config contains 'forceIsoDateParsing' with true v
 
 QUnit.test("default DevExpress.config contains 'useJQueryRenderer' with true value", function(assert) {
     assert.ok("useJQueryRenderer" in config());
-    assert.strictEqual(config().useJQueryRenderer, true);
 });
