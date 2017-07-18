@@ -217,6 +217,10 @@ circularAxes = polarAxes.circular = {
         ];
     },
 
+    _getAlignment: function() {
+        return "center";
+    },
+
     _getLabelAdjustedCoord: function(tick) {
         var that = this,
             labelCoords = tick.labelCoords,
@@ -229,7 +233,7 @@ circularAxes = polarAxes.circular = {
             halfWidth = box.width / 2,
             halfHeight = box.height / 2,
             indentFromAxis = that._options.label.indentFromAxis || 0,
-            x = labelCoords.x + indentFromAxis * cos - halfWidth,
+            x = labelCoords.x + indentFromAxis * cos,
             y = labelY + (labelY - box.y - halfHeight) + indentFromAxis * sin;
 
         switch(getPolarQuarter(labelAngle)) {
@@ -478,6 +482,8 @@ polarAxes.linear = {
         ];
     },
 
+    _getAlignment: circularAxes._getAlignment,
+
     _getLabelAdjustedCoord: function(tick) {
         var that = this,
             labelCoords = tick.labelCoords,
@@ -488,7 +494,7 @@ polarAxes.linear = {
             x,
             y;
 
-        x = labelCoords.x - _abs(indentFromAxis * cosSin.sin) + _abs(box.width / 2 * cosSin.cos) - box.width;
+        x = labelCoords.x - _abs(indentFromAxis * cosSin.sin) + _abs(box.width / 2 * cosSin.cos) - box.width / 2;
         y = labelY + (labelY - box.y) - _abs(box.height / 2 * cosSin.sin) + _abs(indentFromAxis * cosSin.cos);
 
         return { x: x, y: y };

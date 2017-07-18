@@ -924,7 +924,8 @@ Axis.prototype = {
 
         that._hasLabelFormat = labelOpt.format !== "" && _isDefined(labelOpt.format);
         that._textOptions = {
-            opacity: labelOpt.opacity
+            opacity: labelOpt.opacity,
+            align: that._getAlignment()
         };
         that._textFontStyles = vizUtils.patchFontOptions(labelOpt.font);
 
@@ -1555,6 +1556,8 @@ Axis.prototype = {
     setSpiderTicks: _noop,
 
     _checkBoundedLabelsOverlapping: _noop,
+
+    _getAlignment: _noop,
 
     ///#DEBUG
     _getTickMarkPoints: _noop,
