@@ -605,6 +605,13 @@ var getWindow = function(element) {
 initRender.prototype.offset = function() {
     if(!this[0]) return;
 
+    if(!this[0].getClientRects().length) {
+        return {
+            top: 0,
+            left: 0
+        };
+    }
+
     var rect = this[0].getBoundingClientRect();
     var win = getWindow(this[0].ownerDocument);
     var docElem = this[0].ownerDocument.documentElement;
