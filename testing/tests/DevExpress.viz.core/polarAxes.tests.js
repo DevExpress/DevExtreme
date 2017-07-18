@@ -597,7 +597,7 @@ QUnit.test("draw labels", function(assert) {
     for(var i = 0; i < this.renderer.text.callCount; i++) {
         assert.deepEqual(this.renderer.text.getCall(i).args, ["" + i * 2000]);
 
-        assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(0).args[0], { opacity: 1 });
+        assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(0).args[0], { opacity: 1, align: "center" });
         assert.deepEqual(this.renderer.text.getCall(i).returnValue.attr.getCall(1).args, [{
             x: Math.round(20 + axis.getRadius() * Math.cos(33 * Math.PI / 180)),
             y: Math.round(50 + axis.getRadius() * Math.sin(33 * Math.PI / 180))
@@ -615,7 +615,7 @@ QUnit.test("adjust labels", function(assert) {
 
     assert.equal(text.callCount, 4);
     for(var i = 0; i < text.callCount; i++) {
-        assert.equal(Math.round(text.returnValues[0].attr.lastCall.args[0].x), 37);
+        assert.equal(Math.round(text.returnValues[0].attr.lastCall.args[0].x), 47);
         assert.equal(Math.round(text.returnValues[0].attr.lastCall.args[0].y), 118);
     }
 });
@@ -1134,7 +1134,7 @@ QUnit.test("adjust labels", function(assert) {
     assert.equal(text.callCount, 3);
 
     for(var i = 0; i < text.callCount; i++) {
-        assert.equal(Math.round(text.returnValues[0].attr.lastCall.args[0].x), 8);
+        assert.equal(Math.round(text.returnValues[0].attr.lastCall.args[0].x), 18);
         assert.equal(Math.round(text.returnValues[0].attr.lastCall.args[0].y), 95);
     }
 });
