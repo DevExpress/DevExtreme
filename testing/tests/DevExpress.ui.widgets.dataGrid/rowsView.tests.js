@@ -6677,11 +6677,12 @@ QUnit.test('loadPanel options', function(assert) {
     assert.deepEqual(rowsView._loadPanel.option('container'), rowsView.element());
 });
 
-QUnit.test('Load Panel is not visible when Bottom Load Panel is visible', function(assert) {
+QUnit.test('Load Panel is not visible when Bottom Load Panel is visible and pageIndex is more then 0', function(assert) {
     //arrange
     var container = $('#container'),
         rows = [{ values: [1], data: { field: 1 } }],
         dataController = new MockDataController({
+            pageIndex: 1,
             items: rows,
             hasKnownLastPage: false,
             isLoaded: true
@@ -6704,6 +6705,37 @@ QUnit.test('Load Panel is not visible when Bottom Load Panel is visible', functi
     //assert
     assert.strictEqual(bottomLoadPanel.length, 1);
     assert.ok(!rowsView._loadPanel.option('visible'));
+});
+
+//T536324
+QUnit.test('Load Panel is visible when Bottom Load Panel is visible and pageIndex is 0', function(assert) {
+    //arrange
+    var container = $('#container'),
+        rows = [{ values: [1], data: { field: 1 } }],
+        dataController = new MockDataController({
+            pageIndex: 0,
+            items: rows,
+            hasKnownLastPage: false,
+            isLoaded: true
+        }),
+        rowsView = this.createRowsView(rows, dataController),
+        bottomLoadPanel;
+
+    this.options.loadPanel = {
+        enabled: true
+    };
+    this.options.scrolling = {
+        mode: 'infinite'
+    };
+    rowsView.render(container);
+
+    //act
+    rowsView.setLoading(true);
+    bottomLoadPanel = container.find(".dx-datagrid-bottom-load-panel");
+
+    //assert
+    assert.strictEqual(bottomLoadPanel.length, 1, "bottom load panel is rendered");
+    assert.ok(rowsView._loadPanel.option('visible'), "load panel is visible");
 });
 
 QUnit.test('Load Panel is visible and bottom load panel is not visible when data is not loaded', function(assert) {
