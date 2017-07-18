@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
+    each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
@@ -873,7 +874,7 @@ var Lookup = DropDownList.inherit({
 
         result.maxHeight = function() { return $(window).height(); };
 
-        $.each(["position", "animation", "popupWidth", "popupHeight"], (function(_, optionName) {
+        each(["position", "animation", "popupWidth", "popupHeight"], (function(_, optionName) {
             if(this.option(optionName) !== undefined) {
                 result[this._popupOptionMap(optionName)] = this.option(optionName);
             }

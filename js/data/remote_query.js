@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     queryAdapters = require("./query_adapters"),
     errorsModule = require("./errors"),
+    each = require("../core/utils/iterator").each,
     isFunction = require("../core/utils/type").isFunction,
     arrayQueryImpl = require("./array_query");
 
@@ -56,7 +57,7 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
 
             if(head && head.name === "multiSort") {
                 _taskQueue.shift();
-                $.each(head.args[0], function() {
+                each(head.args[0], function() {
                     unmergedTasks.push(createTask(unmergedTasks.length ? "thenBy" : "sortBy", this));
                 });
             }
@@ -103,7 +104,7 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
                         var clientChain = arrayQueryImpl(result, {
                             errorHandler: queryOptions.errorHandler
                         });
-                        $.each(_taskQueue, function() {
+                        each(_taskQueue, function() {
                             clientChain = clientChain[this.name].apply(clientChain, this.args);
                         });
                         clientChain
@@ -122,7 +123,7 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
 
     var query = {};
 
-    $.each(
+    each(
         ["sortBy", "thenBy", "filter", "slice", "select", "groupBy"],
         function() {
             var name = String(this);
@@ -132,7 +133,7 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
         }
     );
 
-    $.each(
+    each(
         ["count", "min", "max", "sum", "avg", "aggregate", "enumerate"],
         function() {
             var name = String(this);

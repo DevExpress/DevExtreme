@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     translator = require("../animation/translator"),
     camelize = require("../core/utils/inflector").camelize,
     noop = require("../core/utils/common").noop,
+    each = require("../core/utils/iterator").each,
     isDefined = require("../core/utils/type").isDefined,
     inArray = require("../core/utils/array").inArray,
     extend = require("../core/utils/extend").extend,
@@ -546,7 +547,7 @@ var Popup = Overlay.inherit({
         var currentPlatform = devices.current().platform,
             index = 0;
 
-        $.each(toolbarItems, (function(_, data) {
+        each(toolbarItems, (function(_, data) {
             var isShortcut = isDefined(data.shortcut),
                 item = isShortcut ? getButtonPlace(data.shortcut) : data;
 
@@ -629,7 +630,7 @@ var Popup = Overlay.inherit({
     _toggleClasses: function() {
         var aliases = ALLOWED_TOOLBAR_ITEM_ALIASES;
 
-        $.each(aliases, (function(_, alias) {
+        each(aliases, (function(_, alias) {
             var className = POPUP_CLASS + "-" + alias;
 
             if(inArray(className, this._toolbarItemClasses) >= 0) {

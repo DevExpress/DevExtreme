@@ -273,11 +273,11 @@ var ResponsiveBox = CollectionWidget.inherit({
 
         this._prepareRowsAndCols();
 
-        $.each(this._rows, (function() {
+        iteratorUtils.each(this._rows, (function() {
             var row = [];
             grid.push(row);
 
-            $.each(this._cols, (function() {
+            iteratorUtils.each(this._cols, (function() {
                 row.push(this._createEmptyCell());
             }).bind(this));
         }).bind(this));
@@ -304,7 +304,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             return (item1.location.row - item2.location.row) || (item1.location.col - item2.location.col);
         });
 
-        $.each(this._screenItems, function(index, item) {
+        iteratorUtils.each(this._screenItems, function(index, item) {
             extend(item.location, { row: index, col: 0, rowspan: 1, colspan: 1 });
         });
     },
@@ -358,7 +358,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _spreadItems: function() {
-        $.each(this._screenItems, (function(_, itemInfo) {
+        iteratorUtils.each(this._screenItems, (function(_, itemInfo) {
             var location = itemInfo.location || {};
             var itemCol = location.col;
             var itemRow = location.row;
@@ -431,7 +431,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _linkNodeToItem: function() {
-        $.each(this._itemElements(), function(_, itemNode) {
+        iteratorUtils.each(this._itemElements(), function(_, itemNode) {
             var $item = $(itemNode),
                 item = $item.data(BOX_ITEM_DATA_KEY);
             if(!item.box) {
@@ -636,13 +636,13 @@ var ResponsiveBox = CollectionWidget.inherit({
             return;
         }
 
-        $.each(this._assistantRoots, function(_, item) {
+        iteratorUtils.each(this._assistantRoots, function(_, item) {
             $(item).remove();
         });
     },
 
     _clearItemNodeTemplates: function() {
-        $.each(this.option("items"), function() {
+        iteratorUtils.each(this.option("items"), function() {
             delete this.node;
         });
     },
