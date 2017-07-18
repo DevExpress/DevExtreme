@@ -983,11 +983,11 @@ var TagBox = SelectBox.inherit({
 
         var value = this._getValue().slice();
 
-        $.each(e.removedItems || [], (function(_, removedItem) {
+        iteratorUtils.each(e.removedItems || [], (function(_, removedItem) {
             this._removeTag(value, this._valueGetter(removedItem));
         }).bind(this));
 
-        $.each(e.addedItems || [], (function(_, addedItem) {
+        iteratorUtils.each(e.addedItems || [], (function(_, addedItem) {
             this._addTag(value, this._valueGetter(addedItem));
         }).bind(this));
 
@@ -1045,7 +1045,7 @@ var TagBox = SelectBox.inherit({
 
         var result = -1;
 
-        $.each(values, (function(index, selectedValue) {
+        iteratorUtils.each(values, (function(index, selectedValue) {
             if(this._isValueEquals(value, selectedValue)) {
                 result = index;
                 return false;
@@ -1123,7 +1123,7 @@ var TagBox = SelectBox.inherit({
         var itemValue = this._valueGetter(itemData),
             result = true;
 
-        $.each(this._getValue(), (function(index, value) {
+        iteratorUtils.each(this._getValue(), (function(index, value) {
             if(this._isValueEquals(value, itemValue)) {
                 result = false;
                 return false;
@@ -1148,7 +1148,7 @@ var TagBox = SelectBox.inherit({
             selectedItems = this._getPlainItems(this._list.option("selectedItems")),
             result = [];
 
-        $.each(selectedItems, function(index, item) {
+        iteratorUtils.each(selectedItems, function(index, item) {
             result[index] = that._valueGetter(item);
         });
 

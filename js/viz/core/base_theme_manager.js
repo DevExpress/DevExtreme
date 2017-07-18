@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     paletteModule = require("../palette"),
     _isString = typeUtils.isString,
     _parseScalar = require("./utils").parseScalar,
@@ -12,7 +12,7 @@ var $ = require("../../core/renderer"),
     _addCacheItem = themeModule.addCacheItem,
     _removeCacheItem = themeModule.removeCacheItem,
     _extend = extend,
-    _each = $.each;
+    _each = each;
 
 //register themes
 require("./default");

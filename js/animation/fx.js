@@ -231,7 +231,7 @@ var TransitionAnimationStrategy = {
             config.transitionAnimation.finish();
         } else {
             if(isPlainObject(config.to)) {
-                $.each(config.to, function(key) {
+                iteratorUtils.each(config.to, function(key) {
                     $element.css(key, $element.css(key));
                 });
             }
@@ -253,7 +253,7 @@ var FrameAnimationStrategy = {
             return deferred.reject().promise();
         }
 
-        $.each(config.to, function(prop) {
+        iteratorUtils.each(config.to, function(prop) {
             if(config.from[prop] === undefined) {
                 config.from[prop] = that._normalizeValue($element.css(prop));
             }
@@ -327,7 +327,7 @@ var FrameAnimationStrategy = {
     _parseTransform: function(transformString) {
         var result = {};
 
-        $.each(transformString.match(/(\w|\d)+\([^\)]*\)\s*/g), function(i, part) {
+        iteratorUtils.each(transformString.match(/(\w|\d)+\([^\)]*\)\s*/g), function(i, part) {
             var translateData = translator.parseTranslate(part),
                 scaleData = part.match(/scale\((.+?)\)/),
                 rotateData = part.match(/(rotate.)\((.+)deg\)/);
@@ -402,7 +402,7 @@ var FrameAnimationStrategy = {
                 return $.easing[frameAnimation.easing](x, t, b, c, d);
             };
 
-            $.each(to, function(propName, endPropValue) {
+            iteratorUtils.each(to, function(propName, endPropValue) {
                 if(typeof endPropValue === "string" && parseFloat(endPropValue, 10) === false) {
                     return true;
                 }
@@ -473,7 +473,7 @@ var convertTransitionTimingFuncToJQueryEasing = function(cssTransitionEasing) {
     }
 
     coeffs = coeffs.slice(1, 5);
-    $.each(coeffs, function(index, value) {
+    iteratorUtils.each(coeffs, function(index, value) {
         coeffs[index] = parseFloat(value);
     });
 
@@ -534,7 +534,7 @@ var convertTransitionTimingFuncToJQueryEasing = function(cssTransitionEasing) {
 
 
 var baseConfigValidator = function(config, animationType, validate, typeMessage) {
-    $.each(["from", "to"], function() {
+    iteratorUtils.each(["from", "to"], function() {
         if(!validate(config[this])) {
             throw errors.Error("E0010", animationType, this, typeMessage);
         }
@@ -923,7 +923,7 @@ var setupPosition = function($element, config) {
 };
 
 var setProps = function($element, props) {
-    $.each(props, function(key, value) {
+    iteratorUtils.each(props, function(key, value) {
         try {
             $element.css(key, value);
         } catch(e) { }
@@ -935,7 +935,7 @@ var stop = function(element, jumpToEnd) {
         queueData = getAnimQueueData($element);
 
     //TODO: think about complete all animation in queue
-    $.each(queueData, function(_, animation) {
+    iteratorUtils.each(queueData, function(_, animation) {
         animation.config.delay = 0;
         animation.config.duration = 0;
         animation.isSynchronous = true;

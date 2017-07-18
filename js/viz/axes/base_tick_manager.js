@@ -1,12 +1,12 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    TickManager,
+var TickManager,
     coreTickManager = require("./numeric_tick_manager"),
     dateTimeManager = require("./datetime_tick_manager"),
     logarithmicMethods = require("./logarithmic_tick_manager"),
     dateUtils = require("../../core/utils/date"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
@@ -17,7 +17,7 @@ var $ = require("../../core/renderer"),
     _adjustValue = utils.adjustValue,
     _map = utils.map,
 
-    _each = $.each,
+    _each = each,
     _inArray = inArray,
     _noop = require("../../core/utils/common").noop,
 

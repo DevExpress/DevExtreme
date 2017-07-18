@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../../core/renderer"),
-    mixins = {},
+var mixins = {},
     statesConsts = require("../../components/consts").states,
     symbolPoint = require("./symbol_point"),
     barPoint = require("./bar_point"),
@@ -14,7 +13,8 @@ var $ = require("../../../core/renderer"),
     polarPoints = require("./polar_point"),
     _normalizeEnum = require("../../core/utils").normalizeEnum,
     extend = require("../../../core/utils/extend").extend,
-    _each = $.each,
+    each = require("../../../core/utils/iterator").each,
+    _each = each,
     _extend = extend,
     _isDefined = require("../../../core/utils/type").isDefined,
     _noop = require("../../../core/utils/common").noop,

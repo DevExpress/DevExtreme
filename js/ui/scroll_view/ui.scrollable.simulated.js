@@ -119,7 +119,7 @@ var Scroller = Class.inherit({
         this._dimension = options.direction === HORIZONTAL ? "width" : "height";
         this._scrollProp = options.direction === HORIZONTAL ? "scrollLeft" : "scrollTop";
 
-        $.each(options, (function(optionName, optionValue) {
+        iteratorUtils.each(options, (function(optionName, optionValue) {
             this["_" + optionName] = optionValue;
         }).bind(this));
     },
@@ -615,7 +615,7 @@ var SimulatedStrategy = Class.inherit({
 
     _eachScroller: function(callback) {
         callback = callback.bind(this);
-        $.each(this._scrollers, function(direction, scroller) {
+        iteratorUtils.each(this._scrollers, function(direction, scroller) {
             callback(scroller, direction);
         });
     },

@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    devices = require("../core/devices"),
+var devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     inflector = require("../core/utils/inflector"),
     iteratorUtils = require("../core/utils/iterator"),
@@ -318,7 +317,7 @@ var TileView = CollectionWidget.inherit({
 
         this._itemsPositions = [];
 
-        $.each(items, (function(index, item) {
+        iteratorUtils.each(items, (function(index, item) {
             var currentItem = {};
             currentItem[itemMainRatio] = item[itemMainRatio] || 1;
             currentItem[itemCrossRatio] = item[itemCrossRatio] || 1;

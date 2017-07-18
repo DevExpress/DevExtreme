@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    dxBaseGauge = require("./base_gauge").dxBaseGauge,
+var dxBaseGauge = require("./base_gauge").dxBaseGauge,
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     _isDefined = typeUtils.isDefined,
     _isString = typeUtils.isString,
@@ -20,7 +20,7 @@ var $ = require("../../core/renderer"),
     _max = Math.max,
 
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop,
 
     OPTION_VALUE = "value",

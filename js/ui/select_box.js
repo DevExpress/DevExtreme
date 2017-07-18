@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     errors = require("../core/errors"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
@@ -438,7 +439,7 @@ var SelectBox = DropDownList.inherit({
         var items = this._items();
         var selectedItem = this.option("selectedItem");
         var result = -1;
-        $.each(items, (function(index, item) {
+        each(items, (function(index, item) {
             if(this._isValueEquals(item, selectedItem)) {
                 result = index;
                 return false;
@@ -509,7 +510,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _selectionChangeHandler: function(e) {
-        $.each(e.addedItems || [], (function(_, addedItem) {
+        each(e.addedItems || [], (function(_, addedItem) {
             this._setValue(this._valueGetter(addedItem));
         }).bind(this));
     },

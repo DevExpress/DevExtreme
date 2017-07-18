@@ -344,7 +344,7 @@ var Toolbar = ToolbarBase.inherit({
         var items = this.option("items") || [],
             result = false;
 
-        $.each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             if(item.locateInMenu === "auto") {
                 result = true;
             } else if(item.locateInMenu === "always" && item.widget) {
@@ -365,7 +365,7 @@ var Toolbar = ToolbarBase.inherit({
             float: "none"
         });
 
-        $.each(this._restoreItems || [], function(_, obj) {
+        iteratorUtils.each(this._restoreItems || [], function(_, obj) {
             $(obj.container).append(obj.item);
         });
         this._restoreItems = [];
