@@ -53,6 +53,7 @@ var currentDate = new Date(2015, 11, 31),
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
 
     STATE_FOCUSED_CLASS = "dx-state-focused",
+    DX_AUTO_WIDTH_CLASS = "dx-auto-width",
 
     widgetName = "dxDateBox",
 
@@ -1187,6 +1188,18 @@ QUnit.test("default", function(assert) {
     var $element = $("#dateBox").dxDateBox();
 
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
+});
+
+QUnit.test("component should have special css class when the user set the width option", function(assert) {
+    var $element = $("#dateBox").dxDateBox({
+            width: 100
+        }),
+        component = $element.dxDateBox("instance");
+
+    assert.notOk($element.hasClass(DX_AUTO_WIDTH_CLASS), "component has not class");
+
+    component.option("width", undefined);
+    assert.ok($element.hasClass(DX_AUTO_WIDTH_CLASS), "component has class");
 });
 
 QUnit.test("constructor", function(assert) {

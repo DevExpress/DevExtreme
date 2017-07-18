@@ -16,6 +16,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
 
     DATEBOX_CLASS = "dx-datebox",
+    DX_AUTO_WIDTH_CLASS = "dx-auto-width",
     DATEBOX_WRAPPER_CLASS = "dx-datebox-wrapper";
 
 var PICKER_TYPE = {
@@ -485,6 +486,11 @@ var DateBox = DropDownEditor.inherit({
 
         this._updateSize();
         this._strategy.renderInputMinMax(this._input());
+    },
+
+    _renderDimensions: function() {
+        this.callBase();
+        this.element().toggleClass(DX_AUTO_WIDTH_CLASS, !(!!this.option("width")));
     },
 
     _refreshFormatClass: function() {
