@@ -9,7 +9,6 @@ var $ = require("../core/renderer"),
     coreDataUtils = require("./utils/data"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
-    map = require("../core/utils/iterator").map,
     Callbacks = require("./utils/callbacks"),
     EventsMixin = require("./events_mixin"),
     publicComponentUtils = require("./utils/public_component"),
@@ -40,9 +39,15 @@ var Component = Class.inherit({
     },
 
     _getOptionAliasesByName: function(optionName) {
-        return map(this._deprecatedOptions, function(deprecate, aliasName) {
-            return optionName === deprecate.alias ? aliasName : undefined;
+        var result = [];
+
+        $.each(this._deprecatedOptions, function(aliasName, deprecate) {
+            if(optionName === deprecate.alias) {
+                result.push(aliasName);
+            }
         });
+
+        return result;
     },
 
     _getDefaultOptions: function() {

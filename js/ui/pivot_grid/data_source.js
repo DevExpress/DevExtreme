@@ -364,9 +364,11 @@ module.exports = Class.inherit((function() {
     }
 
     function getFieldsByGroup(fields, groupingField) {
-        return iteratorUtils.map(fields, function(field) {
+        var groupFields = [];
+
+        each(fields, function(index, field) {
             if(field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false) {
-                return extend(field, {
+                groupFields.push(extend(field, {
                     areaIndex: groupingField.areaIndex,
                     area: groupingField.area,
                     expanded: isDefined(field.expanded) ? field.expanded : groupingField.expanded,
@@ -379,10 +381,11 @@ module.exports = Class.inherit((function() {
                     visible: field.visible || groupingField.visible,
                     showTotals: isDefined(field.showTotals) ? field.showTotals : groupingField.showTotals,
                     showGrandTotals: isDefined(field.showGrandTotals) ? field.showGrandTotals : groupingField.showGrandTotals
-                });
+                }));
             }
-            return null;
-        }).sort(function(a, b) { return a.groupIndex - b.groupIndex; });
+        });
+
+        return groupFields.sort(function(a, b) { return a.groupIndex - b.groupIndex; });
     }
 
     function sortFieldsByAreaIndex(fields) {

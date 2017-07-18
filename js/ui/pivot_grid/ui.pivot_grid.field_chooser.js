@@ -5,7 +5,6 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
-    iteratorUtils = require("../../core/utils/iterator"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
@@ -437,13 +436,16 @@ var FieldChooser = BaseFieldChooser.inherit({
 
     _createFieldsDataSource: function(dataSource) {
         var fields = dataSource && dataSource.fields() || [],
+            resultFields = [],
             treeItems;
 
-        fields = iteratorUtils.map(fields, function(field) {
-            return field.visible === false || isDefined(field.groupIndex) ? null : field;
+        fields.forEach(function(field) {
+            if(!(field.visible === false || isDefined(field.groupIndex))) {
+                resultFields.push(field);
+            }
         });
 
-        treeItems = this._createTreeItems(fields, ["dimension", "displayFolder"]);
+        treeItems = this._createTreeItems(resultFields, ["dimension", "displayFolder"]);
 
         pivotGridUtils.foreachDataLevel(treeItems, function(items) {
             items.sort(compareItems);
