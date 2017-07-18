@@ -667,8 +667,19 @@ QUnit.test("create strips with label", function(assert) {
     assert.ok(this.renderer.arc.called);
     assert.ok(this.renderer.text.called);
     assert.deepEqual(this.renderer.text.getCall(0).args, ["strip label", 30, 53]);
-    //assert.equal(this.renderer.text.getCall(0).returnValue.attr.firstCall.args[0].align, "center");
+    assert.equal(this.renderer.text.getCall(0).returnValue.attr.firstCall.args[0].align, "center");
     assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.labelAxesGroup.children[0], "Created element attached to the group");
+});
+
+QUnit.test("create strips with label, option 'startAngle' > 0", function(assert) {
+    this.options.startAngle = 50;
+
+    this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "green", label: { text: "strip label" } }], label: { visible: false } });
+
+    assert.ok(this.renderer.arc.called);
+    assert.ok(this.renderer.text.called);
+    assert.deepEqual(this.renderer.arc.getCall(0).args, [20, 50, 0, 20, -70, -60]);
+    assert.deepEqual(this.renderer.text.getCall(0).args, ["strip label", 24, 59]);
 });
 
 QUnit.test("adjusted strip labels", function(assert) {
@@ -677,8 +688,10 @@ QUnit.test("adjusted strip labels", function(assert) {
     assert.ok(this.renderer.arc.called);
     assert.ok(this.renderer.text.called);
 
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.firstCall.args, [{
+        align: "center"
+    }]);
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.lastCall.args, [{
-        translateX: -10,
         translateY: 46
     }]);
 });
@@ -711,12 +724,24 @@ QUnit.test("create constant lines with label", function(assert) {
     assert.equal(this.renderer.text.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.children[0], "Created element attached to the group");
 });
 
+QUnit.test("create constant lines with label, option 'startAngle' > 0", function(assert) {
+    this.options.startAngle = 50;
+
+    this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true } }], label: { visible: false } });
+
+    assert.ok(this.renderer.path.called);
+    assert.ok(this.renderer.text.called);
+    assert.deepEqual(this.renderer.path.getCall(0).args, [[20, 50, 40, 50], "line"]);
+    assert.deepEqual(this.renderer.path.getCall(0).returnValue.rotate.firstCall.args, [60, 20, 50]);
+    assert.deepEqual(this.renderer.text.getCall(0).args, ["10", 25, 59]);
+});
+
 QUnit.test("adjust constaте line labels", function(assert) {
     this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true } }], label: { visible: false } });
 
     assert.ok(this.renderer.text.called);
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.lastCall.args, [{
-        translateX: -10,
+        align: "center"
     }]);
 });
 

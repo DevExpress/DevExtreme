@@ -468,6 +468,7 @@ Axis.prototype = {
 
         return that._renderer.text(text, x, y)
             .css(patchFontOptions(extend({}, labelOptions.font, constantLineLabelOptions.font)))
+            .attr({ align: "center" })
             .append(group);
     },
 
@@ -615,6 +616,7 @@ Axis.prototype = {
         return this._renderer
             .text(stripLabelOptions.text, coords.x, coords.y)
             .css(patchFontOptions(extend({}, this._options.label.font, stripLabelOptions.font)))
+            .attr({ align: "center" })
             .append(this._axisStripLabelGroup);
     },
 
@@ -925,7 +927,7 @@ Axis.prototype = {
         that._hasLabelFormat = labelOpt.format !== "" && _isDefined(labelOpt.format);
         that._textOptions = {
             opacity: labelOpt.opacity,
-            align: that._getAlignment()
+            align: "center"
         };
         that._textFontStyles = vizUtils.patchFontOptions(labelOpt.font);
 
@@ -1556,8 +1558,6 @@ Axis.prototype = {
     setSpiderTicks: _noop,
 
     _checkBoundedLabelsOverlapping: _noop,
-
-    _getAlignment: _noop,
 
     ///#DEBUG
     _getTickMarkPoints: _noop,

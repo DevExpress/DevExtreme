@@ -1848,7 +1848,7 @@ QUnit.test("Check styles", function(assert) {
     this.axis.draw(this.canvas);
 
     //assert
-    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args, [{ opacity: 0.34, align: undefined }], "Text args");
+    assert.deepEqual(renderer.text.getCall(0).returnValue.attr.getCall(0).args, [{ opacity: 0.34, align: "center" }], "Text args");
     assert.deepEqual(renderer.text.getCall(0).returnValue.css.getCall(0).args, [{
         fill: "#123456",
         "font-family": "Tahoma2",
