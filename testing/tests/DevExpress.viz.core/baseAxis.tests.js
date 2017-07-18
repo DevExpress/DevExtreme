@@ -171,6 +171,8 @@ QUnit.test("Get ticks options", function(assert) {
         axisDivisionFactor: 1,
         minorAxisDivisionFactor: 2,
         numberMultipliers: [3],
+        minValueMargin: 0.1,
+        maxValueMargin: 0.2,
         customTicks: [4],
         customBoundTicks: [4, 5],
         customMinorTicks: [5],
@@ -207,6 +209,8 @@ QUnit.test("Get ticks options", function(assert) {
     assert.deepEqual(ticksOptions.numberMultipliers, [3], "number multipliers");
     assert.strictEqual(ticksOptions.showCalculatedTicks, true, "showCalculatedTicks");
     assert.strictEqual(ticksOptions.showMinorCalculatedTicks, true, "showMinorCalculatedTicks");
+    assert.strictEqual(ticksOptions.minValueMargin, 0.1, "minValueMargin");
+    assert.strictEqual(ticksOptions.maxValueMargin, 0.2, "maxValueMargin");
 });
 
 QUnit.test("Check tickManager data if min and max are small values, close to exponential", function(assert) {
@@ -494,12 +498,16 @@ QUnit.test("restore business range. Axis with margins", function(assert) {
         minValueMargin: 0.1,
         maxValueMargin: 0.1
     });
-    this.axis.setBusinessRange(range);
 
+    this.axis.setBusinessRange(range);
     this.axis.restoreBusinessRange();
 
-    assert.strictEqual(this.axis.getTranslator().updateBusinessRange.lastCall.args[0].min, -1);
-    assert.strictEqual(this.axis.getTranslator().updateBusinessRange.lastCall.args[0].max, 11);
+    assert.deepEqual(this.axis.getTranslator().updateBusinessRange.lastCall.args[0].addRange.lastCall.args[0], {
+        min: -1,
+        max: 11,
+        minVisible: undefined,
+        maxVisible: undefined
+    });
 });
 
 QUnit.test("save zooming after restoreRange. zoom without stick", function(assert) {

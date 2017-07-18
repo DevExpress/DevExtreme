@@ -112,7 +112,9 @@ function isEmptyArray(categories) {
 }
 
 function getMarginValue(range, margin) {
-    return (_abs(range.max - range.min) * margin) || 0;
+    var min = _isDefined(range.minVisible) ? range.minVisible : range.min,
+        max = _isDefined(range.maxVisible) ? range.maxVisible : range.max;
+    return (_abs(max - min) * margin) || 0;
 }
 
 function getAddFunction(range) {
@@ -312,7 +314,9 @@ Axis.prototype = {
             maxStickValue: range.maxStickValue,
             percentStick: range.percentStick,
             minSpaceCorrection: range.minSpaceCorrection,
-            maxSpaceCorrection: range.maxSpaceCorrection
+            maxSpaceCorrection: range.maxSpaceCorrection,
+            minValueMargin: this._options.minValueMargin,
+            maxValueMargin: this._options.maxValueMargin
         };
     },
 
@@ -1015,8 +1019,12 @@ Axis.prototype = {
             add = getAddFunction(range);
 
         if(valueMarginsEnabled) {
-            range.min = add(range.min, -minMarginValue);
-            range.max = add(range.max, maxMarginValue);
+            range.addRange({
+                min: add(range.min, -minMarginValue),
+                max: add(range.max, maxMarginValue),
+                minVisible: _isDefined(range.minVisible) ? add(range.minVisible, -minMarginValue) : undefined,
+                maxVisible: _isDefined(range.maxVisible) ? add(range.maxVisible, maxMarginValue) : undefined,
+            });
         }
     },
 
