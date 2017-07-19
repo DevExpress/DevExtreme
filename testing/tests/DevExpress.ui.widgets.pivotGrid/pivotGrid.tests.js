@@ -1499,6 +1499,33 @@ QUnit.test("Render to invisible container", function(assert) {
     assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
 });
 
+QUnit.test("Update scroll info on visibility changed", function(assert) {
+    this.testOptions.scrolling = {
+        useNative: true
+    };
+
+    var $pivotGridElement = $("#pivotGrid").hide().addClass("container-height-200px"),
+        pivotGrid = createPivotGrid(this.testOptions, assert),
+        $scrollDiv = $("<div>").css({
+            width: 100,
+            height: 100,
+            overflow: "scroll",
+            position: "absolute",
+            top: -9999
+        }).appendTo($("body")),
+        scrollBarWidth = $scrollDiv.get(0).offsetWidth - $scrollDiv.get(0).clientWidth;
+
+    $scrollDiv.remove();
+    //act
+    $pivotGridElement.show();
+    domUtils.triggerShownEvent($pivotGridElement);
+    this.clock.tick();
+    //assert
+    assert.ok(pivotGrid._rowsArea.hasScroll());
+    assert.ok(!pivotGrid._columnsArea.hasScroll());
+    assert.roughEqual(scrollBarWidth, pivotGrid.__scrollBarWidth, 3);
+});
+
 QUnit.test("Sorting by Summary context menu when sorting defined for grand total", function(assert) {
     var contextMenuArgs = [],
         pivotGrid = createPivotGrid({
@@ -3754,7 +3781,7 @@ QUnit.test("Virtual Scrolling", function(assert) {
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
-    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid._scrollBarUseNative);
+    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
     assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], 71);
     assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], 71);
     assert.ok(!this.dataController.subscribeToWindowScrollEvents.called);
@@ -3815,7 +3842,7 @@ QUnit.test("Virtual Scrolling. Widget height is not defined", function(assert) {
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
-    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid._scrollBarUseNative);
+    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
 
     assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], "auto");
     assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], "auto");
