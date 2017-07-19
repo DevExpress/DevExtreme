@@ -86,6 +86,11 @@ function getValueForArgument(point, extraPoint, x) {
 }
 
 function getViewPortFilter(viewport) {
+    if(!_isDefined(viewport.max) && !_isDefined(viewport.min)) {
+        return function() {
+            return true;
+        };
+    }
     if(!_isDefined(viewport.max)) {
         return function(argument) {
             return argument >= viewport.min;
@@ -108,12 +113,9 @@ function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, b
 
 function getViewportReducer(series) {
     var rangeCalculator = getRangeCalculator(series.valueAxisType),
-        viewport = series.getArgumentAxis() && series.getArgumentAxis().getViewport(),
+        viewport = series.getArgumentAxis() && series.getArgumentAxis().getViewport() || {},
         viewportFilter;
 
-    if(!viewport) {
-        return function() { };
-    }
     viewportFilter = getViewPortFilter(viewport);
 
     return function(range, point, index, points) {
@@ -183,10 +185,9 @@ module.exports = {
     getViewport: function(series) {
         var points = series.getPoints(),
             range = {},
-            viewport = series.getArgumentAxis() && series.getArgumentAxis().getViewport(),
             reducer;
 
-        if(viewport && series.valueAxisType !== DISCRETE && series.argumentAxisType !== DISCRETE) {
+        if(series.valueAxisType !== DISCRETE && series.argumentAxisType !== DISCRETE) {
             reducer = getViewportReducer(series);
             range = getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined);
             points.some(function(point, index) {
