@@ -14,7 +14,7 @@ module.exports = function(baseErrors, errors) {
         ERROR_MESSAGES: extend(errors, baseErrors),
 
         Error: function() {
-            return makeError(Array.prototype.slice.call(arguments));
+            return makeError([].slice.call(arguments));
         },
 
         log: function(id) {
@@ -26,7 +26,7 @@ module.exports = function(baseErrors, errors) {
                 method = "warn";
             }
 
-            consoleUtils.logger[method](method === "log" ? id : combineMessage(Array.prototype.slice.call(arguments)));
+            consoleUtils.logger[method](method === "log" ? id : combineMessage([].slice.call(arguments)));
         }
     };
 

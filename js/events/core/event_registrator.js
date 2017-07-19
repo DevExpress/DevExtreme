@@ -25,7 +25,7 @@ var registerEvent = function(name, eventObject) {
         }
 
         strategy[methodName] = function() {
-            var args = Array.prototype.slice.call(arguments);
+            var args = [].slice.call(arguments);
             args.unshift(this);
             return eventObject[methodName].apply(eventObject, args);
         };

@@ -427,7 +427,7 @@ var createODataQueryAdapter = function(queryOptions) {
             }
 
             if(!Array.isArray(criterion)) {
-                criterion = Array.prototype.slice.call(arguments);
+                criterion = [].slice.call(arguments);
             }
 
             if(hasFunction(criterion)) {
@@ -447,7 +447,7 @@ var createODataQueryAdapter = function(queryOptions) {
             }
 
             if(!Array.isArray(expr)) {
-                expr = Array.prototype.slice.call(arguments);
+                expr = [].slice.call(arguments);
             }
 
             _select = expr;

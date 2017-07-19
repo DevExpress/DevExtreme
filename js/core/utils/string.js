@@ -56,7 +56,7 @@ var quadToObject = function(raw) {
 
 var stringFormat = function() {
     var s = arguments[0],
-        values = Array.prototype.slice.call(arguments).slice(1),
+        values = [].slice.call(arguments).slice(1),
         replaceDollarCount,
         reg,
         value;

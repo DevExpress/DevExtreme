@@ -49,7 +49,7 @@ var unwrap = function(value, options) {
 
 var compileGetter = function(expr) {
     if(arguments.length > 1) {
-        expr = Array.prototype.slice.call(arguments);
+        expr = [].slice.call(arguments);
     }
 
     if(!expr || expr === "this") {

@@ -131,7 +131,7 @@ function normalizeStoreLoadOptionAccessorArguments(originalArguments) {
         case 1:
             return originalArguments[0];
     }
-    return Array.prototype.slice.call(originalArguments);
+    return [].slice.call(originalArguments);
 }
 
 function generateStoreLoadOptionAccessor(optionName) {
@@ -593,7 +593,7 @@ var DataSource = Class.inherit({
         }
 
         if(argc > 1) {
-            expr = Array.prototype.slice.call(arguments);
+            expr = [].slice.call(arguments);
         }
 
         this._searchExpr = expr;
