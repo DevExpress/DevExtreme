@@ -1475,16 +1475,12 @@ var PivotGrid = Widget.inherit({
             dataArea,
             rowsArea,
             columnsArea,
-            scrollBarInfo = getScrollBarInfo(that.element(), that.option("scrolling.useNative")),
             isFirstDrawing = !that._pivotGridContainer,
             rowHeaderContainer,
             columnHeaderContainer,
             filterHeaderContainer,
             dataHeaderContainer,
             updateHandler;
-
-        that._scrollBarWidth = scrollBarInfo.scrollBarWidth;
-        that._scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
 
         tableElement = !isFirstDrawing && that._tableElement();
 
@@ -1619,6 +1615,7 @@ var PivotGrid = Widget.inherit({
 
     _visibilityChanged: function(visible) {
         if(visible) {
+            scrollBarInfoCache = {};
             this.updateDimensions();
         }
     },
@@ -1671,7 +1668,8 @@ var PivotGrid = Widget.inherit({
             rowsAreaWidth = 0,
             hasRowsScroll,
             hasColumnsScroll,
-            scrollBarWidth = that._scrollBarWidth || 0,
+            scrollBarInfo = getScrollBarInfo(that.element(), that.option("scrolling.useNative")),
+            scrollBarWidth = scrollBarInfo.scrollBarWidth,
             dataAreaCell = tableElement.find("." + DATA_AREA_CELL_CLASS),
             rowAreaCell = tableElement.find("." + ROW_AREA_CELL_CLASS),
             columnAreaCell = tableElement.find("." + COLUMN_AREA_CELL_CLASS),
@@ -1686,6 +1684,11 @@ var PivotGrid = Widget.inherit({
             columnsAreaRowCount,
             needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option("rowHeaderLayout") !== "tree",
             d = $.Deferred();
+
+        ///#DEBUG
+        that.__scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
+        that.__scrollBarWidth = scrollBarWidth;
+        ///#ENDDEBUG
 
         that._detectHasContainerHeight();
 
@@ -1836,7 +1839,7 @@ var PivotGrid = Widget.inherit({
                     updateScrollableResults.push(area && area.updateScrollable());
                 });
 
-                dataArea.processScroll(that._scrollBarUseNative);
+                dataArea.processScroll(scrollBarInfo.scrollBarUseNative);
 
                 that._updateLoading();
                 that._renderNoDataText(dataAreaCell);
