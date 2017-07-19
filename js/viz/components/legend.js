@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    vizUtils = require("../core/utils"),
+var vizUtils = require("../core/utils"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     layoutElementModule = require("../core/layout_element"),
     typeUtils = require("../../core/utils/type"),
 
@@ -22,7 +22,7 @@ var $ = require("../../core/renderer"),
     _normalizeEnum = vizUtils.normalizeEnum,
 
     _extend = extend,
-    _each = $.each,
+    _each = each,
 
     DEFAULT_MARGIN = 10,
     DEFAULT_MARKER_HATCHING_WIDTH = 2,

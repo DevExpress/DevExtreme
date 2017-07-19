@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    commonUtils = require("../core/utils/common"),
+var commonUtils = require("../core/utils/common"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     registerComponent = require("../core/component_registrator"),
     vizUtils = require("./core/utils"),
     overlapping = require("./chart_components/base_chart").overlapping,
@@ -23,7 +23,7 @@ var $ = require("../core/renderer"),
 
 
     _map = vizUtils.map,
-    _each = $.each,
+    _each = each,
     _extend = extend,
     _isArray = Array.isArray,
     _isDefined = require("../core/utils/type").isDefined;
@@ -636,9 +636,9 @@ var dxChart = AdvancedChart.inherit({
 
     _saveBusinessRange: function() {
         var savedBusinessRange = this._savedBusinessRange;
-        $.each(this.translators, function(name, pane) {
+        each(this.translators, function(name, pane) {
             savedBusinessRange[name] = {};
-            $.each(pane, function(axisName, translator) {
+            each(pane, function(axisName, translator) {
                 savedBusinessRange[name][axisName] = {};
                 savedBusinessRange[name][axisName]["arg"] = extend(true, {}, translator.arg.getBusinessRange());
                 savedBusinessRange[name][axisName]["val"] = extend(true, {}, translator.val.getBusinessRange());
@@ -648,8 +648,8 @@ var dxChart = AdvancedChart.inherit({
 
     _restoreOriginalBusinessRange: function() {
         var savedBusinessRange = this._savedBusinessRange;
-        $.each(this.translators, function(name, pane) {
-            $.each(pane, function(axisName, translator) {
+        each(this.translators, function(name, pane) {
+            each(pane, function(axisName, translator) {
                 translator.arg.updateBusinessRange(extend(true, {}, savedBusinessRange[name][axisName]["arg"]));
                 translator.val.updateBusinessRange(extend(true, {}, savedBusinessRange[name][axisName]["val"]));
             });
@@ -1122,7 +1122,7 @@ var dxChart = AdvancedChart.inherit({
 
     _resetZoom: function() {
         var that = this;
-        that._zoomMinArg = that._zoomMaxArg = undefined;  //T190927
+        that._zoomMinArg = that._zoomMaxArg = that._notApplyMargins = undefined; //T190927
         that._argumentAxes[0] && that._argumentAxes[0].resetZoom();
     },
 

@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     errors = require("../errors"),
     domUtils = require("../../core/utils/dom"),
@@ -42,9 +43,9 @@ var ViewEngine = Class.inherit({
 
     _enumerateTemplates: function(processFn) {
         var that = this;
-        $.each(that._templateMap, function(name, templatesByRoleMap) {
-            $.each(templatesByRoleMap, function(role, templates) {
-                $.each(templates, function(index, template) {
+        each(that._templateMap, function(name, templatesByRoleMap) {
+            each(templatesByRoleMap, function(role, templates) {
+                each(templates, function(index, template) {
                     processFn(template);
                 });
             });
@@ -102,7 +103,7 @@ var ViewEngine = Class.inherit({
 
         var components = domUtils.createComponents($markup, [_VIEW_ROLE, _LAYOUT_ROLE]);
 
-        $.each(components, function(index, component) {
+        each(components, function(index, component) {
             var $element = component.element();
             $element.addClass("dx-hidden");
             that._registerTemplateComponent(component);
@@ -128,7 +129,7 @@ var ViewEngine = Class.inherit({
     _applyPartialViews: function($render) {
         var that = this;
         domUtils.createComponents($render, ["dxViewPlaceholder"]);
-        $.each($render.find(".dx-view-placeholder"), function() {
+        each($render.find(".dx-view-placeholder"), function() {
             var $partialPlaceholder = $(this);
 
             if($partialPlaceholder.children().length) return;
@@ -190,8 +191,8 @@ var ViewEngine = Class.inherit({
     _processTemplates: function() {
         var that = this;
 
-        $.each(that._templateMap, function(name, templatesByRoleMap) {
-            $.each(templatesByRoleMap, function(role, templates) {
+        each(that._templateMap, function(name, templatesByRoleMap) {
+            each(templatesByRoleMap, function(role, templates) {
                 that._filterTemplatesByDevice(templates);
             });
         });
@@ -204,7 +205,7 @@ var ViewEngine = Class.inherit({
     _filterTemplatesByDevice: function(components) {
         var filteredComponents = this._filterTemplates(this.device, components);
 
-        $.each(components, function(index, component) {
+        each(components, function(index, component) {
             if(inArray(component, filteredComponents) < 0) {
                 component.element().remove();
             }
@@ -223,7 +224,7 @@ var ViewEngine = Class.inherit({
     _checkMatchedTemplates: function(bestMatches) {
         if(bestMatches.length > 1) {
             var message = "";
-            $.each(bestMatches, function(index, match) {
+            each(bestMatches, function(index, match) {
                 message += match.element().attr("data-options") + "\r\n";
             });
             throw errors.Error("E3020", message, JSON.stringify(this.device));
@@ -255,7 +256,7 @@ var ViewEngine = Class.inherit({
         }
         var $toMerge = $().add($layout).add($view);
         var $placeholderContents = $toMerge.find(".dx-content");
-        $.each($placeholderContents, function() {
+        each($placeholderContents, function() {
             var $placeholderContent = $(this);
             var placeholderId = $placeholderContent.attr("data-dx-target-placeholder-id");
             var $placeholder = $toMerge.find(".dx-content-placeholder-" + placeholderId);

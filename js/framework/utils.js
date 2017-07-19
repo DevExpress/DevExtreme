@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    ko = require("knockout"),
+var ko = require("knockout"),
+    each = require("../core/utils/iterator").each,
     KoTemplate = require("../integration/knockout/template");
 
 var mergeWithReplace = function(targetArray, arrayToMerge, needReplaceFn) {
@@ -18,7 +18,7 @@ var mergeWithReplace = function(targetArray, arrayToMerge, needReplaceFn) {
 var prepareCommandToReplace = function(targetCommand, commandsToMerge) {
     var needToReplace = false;
 
-    $.each(commandsToMerge, function(_, commandToMerge) {
+    each(commandsToMerge, function(_, commandToMerge) {
         var idEqual = (targetCommand.option("id") === commandToMerge.option("id") && commandToMerge.option("id")),
             behaviorEqual = (targetCommand.option("behavior") === commandToMerge.option("behavior") && targetCommand.option("behavior"));
 

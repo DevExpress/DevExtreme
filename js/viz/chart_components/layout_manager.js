@@ -1,14 +1,14 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
     layoutElementModule = require("../core/layout_element"),
+    each = require("../../core/utils/iterator").each,
     _isNumber = require("../../core/utils/type").isNumeric,
     _min = Math.min,
     _max = Math.max,
     _floor = Math.floor,
     _sqrt = Math.sqrt,
-    _each = $.each,
+    _each = each,
     _extend = extend,
     consts = require("../components/consts"),
     pieLabelIndent = consts.pieLabelIndent,
@@ -478,7 +478,7 @@ LayoutManager.prototype = {
             }
         }
 
-        $.each(items.slice().reverse(), function(_, item) {
+        each(items.slice().reverse(), function(_, item) {
             var layoutOptions = _extend({}, item.getLayoutOptions()),
                 sizeObject;
 
@@ -506,7 +506,7 @@ LayoutManager.prototype = {
 
     _probeDrawing: function(canvas) {
         var that = this;
-        $.each(this._elements, function(_, item) {
+        each(this._elements, function(_, item) {
             var layoutOptions = item.getLayoutOptions(),
                 sizeObject;
 
@@ -527,7 +527,7 @@ LayoutManager.prototype = {
     },
 
     _drawElements: function(canvas) {
-        $.each(this._elements.slice().reverse(), function(_, item) {
+        each(this._elements.slice().reverse(), function(_, item) {
             var layoutOptions = item.getLayoutOptions(),
                 sizeObject,
                 cutSide,
@@ -557,7 +557,7 @@ LayoutManager.prototype = {
             bottom: 0
         };
 
-        $.each(this._elements.slice().reverse(), function(_, item) {
+        each(this._elements.slice().reverse(), function(_, item) {
             var layoutOptions = item.getLayoutOptions(),
                 position,
                 cutSide,

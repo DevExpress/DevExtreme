@@ -1,11 +1,11 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     _max = Math.max,
     _min = Math.min,
     _round = Math.round,
-    _each = $.each,
+    _each = each,
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
     objectUtils = require("../../core/utils/object"),

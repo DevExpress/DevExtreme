@@ -1,8 +1,8 @@
 "use strict";
 
 //there are pie, doughnut
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     scatterSeries = require("./scatter_series"),
     vizUtils = require("../core/utils"),
     extend = require("../../core/utils/extend").extend,
@@ -11,7 +11,7 @@ var $ = require("../../core/renderer"),
     barSeries = require("./bar_series").chart.bar,
 
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _noop = noop,
 
     _map = vizUtils.map,

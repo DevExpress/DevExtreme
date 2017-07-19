@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
@@ -128,7 +127,7 @@ var WidgetAdapterBase = Class.inherit({
     clear: function(widgetDisposing) {
         var that = this;
 
-        $.each(that.itemWrappers, function(index, itemWrapper) {
+        iteratorUtils.each(that.itemWrappers, function(index, itemWrapper) {
             itemWrapper.command.off("optionChanged", that._commandChangedHandler);
             itemWrapper.dispose();
         });
@@ -376,7 +375,7 @@ var dxPivotAdapter = WidgetAdapterBase.inherit({
         var that = this;
 
         that.widget.option("items", []);
-        $.each(that.itemWrappers, function(index, itemWrapper) {
+        iteratorUtils.each(that.itemWrappers, function(index, itemWrapper) {
             if(itemWrapper.command.option("visible")) {
                 that._addItemToWidget(itemWrapper);
             }

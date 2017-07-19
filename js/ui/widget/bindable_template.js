@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    TemplateBase = require("./ui.template_base"),
+var TemplateBase = require("./ui.template_base"),
     removeEvent = require("../../core/remove_event"),
     iteratorUtils = require("../../core/utils/iterator"),
     isPrimitive = require("../../core/utils/type").isPrimitive;
@@ -67,7 +66,7 @@ var watchChanges = (function() {
         });
 
         return function() {
-            $.each(watchHandlers, function(_, dispose) {
+            iteratorUtils.each(watchHandlers, function(_, dispose) {
                 dispose();
             });
         };

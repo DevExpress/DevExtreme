@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    extend = require("../core/utils/extend").extend,
+var extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),
     inArray = require("../core/utils/array").inArray,
@@ -51,7 +50,7 @@ var Route = Class.inherit({
             }
         });
 
-        $.each(this._segments, function(index) {
+        iteratorUtils.each(this._segments, function(index) {
             var segment = this,
                 separator = index ? that._separators[index - 1] : "";
 
@@ -83,14 +82,14 @@ var Route = Class.inherit({
             return false;
         }
         var result = extend({}, this._defaults);
-        $.each(this._params, function(i) {
+        iteratorUtils.each(this._params, function(i) {
             var index = i + 1;
             if(matches.length >= index && matches[index]) {
                 result[this] = that.parseSegment(matches[index]);
             }
         });
 
-        $.each(this._constraints, function(key) {
+        iteratorUtils.each(this._constraints, function(key) {
             if(!that._checkConstraint(result[key], that._constraints[key])) {
                 result = false;
                 return false;
@@ -110,14 +109,14 @@ var Route = Class.inherit({
             dels = [],
             unusedRouteValues = {};
 
-        $.each(routeValues, function(paramName, paramValue) {
+        iteratorUtils.each(routeValues, function(paramName, paramValue) {
             routeValues[paramName] = that.formatSegment(paramValue);
             if(!(paramName in mergeValues)) {
                 unusedRouteValues[paramName] = true;
             }
         });
 
-        $.each(this._segments, function(index, segment) {
+        iteratorUtils.each(this._segments, function(index, segment) {
             result[index] = index ? that._separators[index - 1] : '';
 
             if(segment.charAt(0) === ':') {
@@ -151,7 +150,7 @@ var Route = Class.inherit({
             }
         });
 
-        $.each(mergeValues, function(key, value) {
+        iteratorUtils.each(mergeValues, function(key, value) {
             if(!!value && inArray(":" + key, that._segments) === -1 && routeValues[key] !== value) {
                 result = null;
                 return false;
@@ -161,7 +160,7 @@ var Route = Class.inherit({
         var unusedCount = 0;
         if(!typeUtils.isEmptyObject(unusedRouteValues)) {
             query = "?";
-            $.each(unusedRouteValues, function(key) {
+            iteratorUtils.each(unusedRouteValues, function(key) {
                 query += key + "=" + routeValues[key] + "&";
                 unusedCount++;
             });
@@ -242,7 +241,7 @@ var Router = Class.inherit({
         var result = {},
             values = query.split("&");
 
-        $.each(values, function(index, value) {
+        iteratorUtils.each(values, function(index, value) {
             var keyValuePair = value.split("=");
             result[keyValuePair[0]] = decodeURIComponent(keyValuePair[1]);
         });
@@ -264,7 +263,7 @@ var Router = Class.inherit({
             path = parts[0],
             query = parts[1];
 
-        $.each(this._registry, function() {
+        iteratorUtils.each(this._registry, function() {
             var parseResult = this.parse(path);
             if(parseResult !== false) {
                 result = parseResult;
@@ -288,7 +287,7 @@ var Router = Class.inherit({
         var result = false,
             minUnusedCount = 99999;
         obj = obj || {};
-        $.each(this._registry, function() {
+        iteratorUtils.each(this._registry, function() {
             var toFormat = extend(true, {}, obj);
             var formatResult = this.format(toFormat);
             if(formatResult !== false) {

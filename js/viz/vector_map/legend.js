@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     _extend = extend,
-    _each = $.each,
+    _each = each,
     legendModule = require("../components/legend"),
     _BaseLegend = legendModule.Legend;
 

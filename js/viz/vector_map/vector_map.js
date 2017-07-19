@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
     _parseScalar = require("../core/utils").parseScalar,
     extend = require("../../core/utils/extend").extend,
     iteratorUtils = require("../../core/utils/iterator"),
@@ -462,7 +461,7 @@ function resumeLayersData(layerCollection, options, renderer) {
     if(data) {
         layerCollection.__data = undefined;
         if(data.length) {
-            $.each(data, function(i, item) {
+            iteratorUtils.each(data, function(i, item) {
                 swapData(item, options[i]);
             });
         } else {

@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
+    each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
     viewPort = viewPortUtils.value,
@@ -114,7 +115,7 @@ function resolveFullThemeName(desiredThemeName) {
             return desiredThemeName;
         }
 
-        $.each(knownThemes, function(knownThemeName, themeData) {
+        each(knownThemes, function(knownThemeName, themeData) {
             var knownThemeParts = knownThemeName.split(".");
 
             if(knownThemeParts[0] !== desiredThemeParts[0]) {
