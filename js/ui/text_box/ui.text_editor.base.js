@@ -107,9 +107,9 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_valueChangeEvent
             * @publicName valueChangeEvent
             * @type string
-            * @default "change focusout"
+            * @default "change"
             */
-            valueChangeEvent: "change focusout",
+            valueChangeEvent: "change",
 
             /**
             * @name dxTextEditorOptions_placeholder
