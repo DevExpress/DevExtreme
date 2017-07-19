@@ -6,11 +6,11 @@ var typeUtils = require("./utils/type");
 var matches = require("./polyfills/matches");
 
 var methods = [
-    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position",
+    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "html", "css",
-    "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
+    "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
