@@ -170,7 +170,7 @@
                     </script>'
                 );
 
-                if(!window.DevExpress) {
+                if(!window.DevExpress || !window.DevExpress.aspnet) {
                     // modular scenario: DevExpress.aspnet object must be exported manually or from a bundle
                     window.DevExpress = { aspnet: aspnet };
                 }

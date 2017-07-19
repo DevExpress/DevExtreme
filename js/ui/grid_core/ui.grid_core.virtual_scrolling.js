@@ -495,7 +495,8 @@ var VirtualScrollingRowsViewExtender = (function() {
         setLoading: function(isLoading, messageText) {
             var that = this,
                 callBase = that.callBase,
-                hasBottomLoadPanel = !!that._findBottomLoadPanel() && that._dataController.isLoaded();
+                dataController = that._dataController,
+                hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!that._findBottomLoadPanel();
 
             if(hasBottomLoadPanel) {
                 isLoading = false;

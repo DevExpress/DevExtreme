@@ -575,17 +575,18 @@ gridCore.registerModule("summary", {
                     },
 
                     _processGroupItems: function(items, groupCount, options) {
-                        var result = this.callBase.apply(this, arguments);
+                        var data = options && options.data,
+                            result = this.callBase.apply(this, arguments);
 
                         if(options) {
                             if(options.isGroupFooterVisible === undefined) {
                                 options.isGroupFooterVisible = this._isGroupFooterVisible();
                             }
 
-                            if(options.data && options.data.items && options.isGroupFooterVisible && (options.collectContinuationItems || !options.data.isContinuationOnNextPage)) {
+                            if(data && data.items && options.isGroupFooterVisible && (options.collectContinuationItems || !data.isContinuationOnNextPage)) {
                                 result.push({
                                     rowType: DATAGRID_GROUP_FOOTER_ROW_TYPE,
-                                    data: options.data,
+                                    data: data,
                                     groupIndex: options.path.length - 1,
                                     values: []
                                 });

@@ -53,6 +53,7 @@ var currentDate = new Date(2015, 11, 31),
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
 
     STATE_FOCUSED_CLASS = "dx-state-focused",
+    DX_AUTO_WIDTH_CLASS = "dx-auto-width",
 
     widgetName = "dxDateBox",
 
@@ -153,34 +154,10 @@ QUnit.test("render valueChangeEvent", function(assert) {
 
     var value = this.instance.option("value");
 
-    assert.equal(this.instance.option("valueChangeEvent"), "change focusout", "T173149, T507216");
+    assert.equal(this.instance.option("valueChangeEvent"), "change", "T173149");
     assert.equal(value.getFullYear(), 2012);
     assert.equal(value.getMonth(), 10);
     assert.equal(value.getDate(), 26);
-});
-
-//T507216
-QUnit.test("valueChange should be fired on focusout if value is changed", function(assert) {
-    var valueChangedHandler = sinon.spy();
-
-    this.instance.option({
-        type: "date",
-        focusStateEnabled: true,
-        pickerType: "calendar",
-        onValueChanged: valueChangedHandler
-    });
-
-    this.instance.focus();
-    this.instance.option("value", new Date(2017, 4, 24));
-
-    //act
-    this.$input()
-        .val("")
-        .trigger("keypress")
-        .blur();
-
-    assert.equal(valueChangedHandler.callCount, 2, "valueChanged event called twice");
-    assert.strictEqual(this.instance.option("value"), null, "value is correct");
 });
 
 QUnit.test("render disabled state", function(assert) {
@@ -1187,6 +1164,18 @@ QUnit.test("default", function(assert) {
     var $element = $("#dateBox").dxDateBox();
 
     assert.ok($element.outerWidth() > 0, "outer width of the element must be more than zero");
+});
+
+QUnit.test("component should have special css class when the user set the width option", function(assert) {
+    var $element = $("#dateBox").dxDateBox({
+            width: 100
+        }),
+        component = $element.dxDateBox("instance");
+
+    assert.notOk($element.hasClass(DX_AUTO_WIDTH_CLASS), "component has not class");
+
+    component.option("width", undefined);
+    assert.ok($element.hasClass(DX_AUTO_WIDTH_CLASS), "component has class");
 });
 
 QUnit.test("constructor", function(assert) {
