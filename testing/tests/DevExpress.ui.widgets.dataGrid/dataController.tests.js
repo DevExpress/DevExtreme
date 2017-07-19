@@ -8069,6 +8069,60 @@ QUnit.test("groupFooter item when group summary items with showInGroupFooter and
     ]);
 });
 
+//T535240
+QUnit.test("groupFooter item when group by several fields and summary item is defined with showInGroupFooter", function(assert) {
+    this.options = {
+        dataSource: {
+            group: ['name', 'age'],
+            store: [
+                { name: 'Alex', age: 19 },
+                { name: 'Alex', age: 15 },
+                { name: 'Dan', age: 25 }
+            ]
+        },
+        columns: ['name', { dataField: 'age', showWhenGrouped: true }],
+        grouping: {
+            autoExpandAll: true
+        },
+        summary: {
+            groupItems: [{
+                column: 'age',
+                showInGroupFooter: true,
+                summaryType: 'max'
+            }]
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    //assert
+    var items = this.dataController.items();
+    assert.ok(!this.dataController.isLoading());
+    assert.strictEqual(items.length, 13);
+    assert.strictEqual(items[0].rowType, 'group');
+    assert.deepEqual(items[0].key, ['Alex']);
+
+    assert.strictEqual(items[1].rowType, 'group');
+    assert.deepEqual(items[1].key, ['Alex', 15]);
+    assert.strictEqual(items[2].rowType, 'data');
+    assert.strictEqual(items[3].rowType, 'groupFooter');
+    assert.strictEqual(items[3].summaryCells[2][0].value, 15);
+
+    assert.strictEqual(items[4].rowType, 'group');
+    assert.deepEqual(items[4].key, ['Alex', 19]);
+    assert.strictEqual(items[5].rowType, 'data');
+    assert.strictEqual(items[6].rowType, 'groupFooter');
+    assert.strictEqual(items[6].summaryCells[2][0].value, 19);
+
+    assert.strictEqual(items[7].rowType, 'groupFooter');
+    assert.strictEqual(items[7].summaryCells[2][0].value, 19);
+
+    assert.strictEqual(items[8].rowType, 'group');
+    assert.deepEqual(items[8].key, ['Dan']);
+});
+
 QUnit.test("several groupFooter items when group summary items with showInGroupFooter and autoExpandAll", function(assert) {
     this.options = {
         dataSource: {
@@ -8924,7 +8978,7 @@ QUnit.test("update with incorrect rowIndices", function(assert) {
     dataSourceItems[0].age = 31;
     this.dataController.updateItems({
         changeType: 'update',
-        rowIndices: [0, -1, 0]
+        rowIndices: [0, -1, 0, 1000000]
     });
 
     //assert

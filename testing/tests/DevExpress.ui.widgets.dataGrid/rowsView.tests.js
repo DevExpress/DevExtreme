@@ -869,6 +869,90 @@ QUnit.test("Highlight searchText for lookup column (T449327)", function(assert) 
     assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "Lookup<span class=" + searchTextClass + ">1</span>", "highlight text in cell");
 });
 
+//T534059
+QUnit.test("Highlighting search text for boolean column with set to 'trueText' option", function(assert) {
+    //arrange
+    var columns = [{
+            allowFiltering: true,
+            dataType: "boolean",
+            trueText: "Yes",
+            parseValue: function(text) {
+                if(text === this.trueText) {
+                    return true;
+                } else if(text === this.falseText) {
+                    return false;
+                }
+            },
+            customizeText: function(e) {
+                if(e.value === true) {
+                    return this.trueText || "true";
+                } else {
+                    return e.valueText || "";
+                }
+            }
+        }],
+        rowsView = this.createRowsView([
+            { data: { field: true }, values: [true], rowType: 'data', dataIndex: 0 }
+        ], null, columns),
+        $testElement = $("#container"),
+        searchTextClass = "dx-datagrid-search-text",
+        $cells;
+
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "Yes"
+    };
+
+    //act
+    rowsView.render($testElement);
+
+    //assert
+    $cells = $testElement.find(".dx-data-row").find("td");
+    assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "<span class=" + searchTextClass + ">Yes</span>", "highlight text in cell");
+});
+
+//T534059
+QUnit.test("Highlighting search text for boolean column with set to 'falseText' option", function(assert) {
+    //arrange
+    var columns = [{
+            allowFiltering: true,
+            dataType: "boolean",
+            falseText: "No",
+            parseValue: function(text) {
+                if(text === this.trueText) {
+                    return true;
+                } else if(text === this.falseText) {
+                    return false;
+                }
+            },
+            customizeText: function(e) {
+                if(e.value === false) {
+                    return this.falseText || "false";
+                } else {
+                    return e.valueText || "";
+                }
+            }
+        }],
+        rowsView = this.createRowsView([
+            { data: { field: false }, values: [false], rowType: 'data', dataIndex: 0 }
+        ], null, columns),
+        $testElement = $("#container"),
+        searchTextClass = "dx-datagrid-search-text",
+        $cells;
+
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "No"
+    };
+
+    //act
+    rowsView.render($testElement);
+
+    //assert
+    $cells = $testElement.find(".dx-data-row").find("td");
+    assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "<span class=" + searchTextClass + ">No</span>", "highlight text in cell");
+});
+
 QUnit.test('All rows are not isSelected by default', function(assert) {
     //arrange
     var rowsView = this.createRowsView(this.items),
@@ -6594,11 +6678,12 @@ QUnit.test('loadPanel options', function(assert) {
     assert.deepEqual(rowsView._loadPanel.option('container'), rowsView.element());
 });
 
-QUnit.test('Load Panel is not visible when Bottom Load Panel is visible', function(assert) {
+QUnit.test('Load Panel is not visible when Bottom Load Panel is visible and pageIndex is more then 0', function(assert) {
     //arrange
     var container = $('#container'),
         rows = [{ values: [1], data: { field: 1 } }],
         dataController = new MockDataController({
+            pageIndex: 1,
             items: rows,
             hasKnownLastPage: false,
             isLoaded: true
@@ -6621,6 +6706,37 @@ QUnit.test('Load Panel is not visible when Bottom Load Panel is visible', functi
     //assert
     assert.strictEqual(bottomLoadPanel.length, 1);
     assert.ok(!rowsView._loadPanel.option('visible'));
+});
+
+//T536324
+QUnit.test('Load Panel is visible when Bottom Load Panel is visible and pageIndex is 0', function(assert) {
+    //arrange
+    var container = $('#container'),
+        rows = [{ values: [1], data: { field: 1 } }],
+        dataController = new MockDataController({
+            pageIndex: 0,
+            items: rows,
+            hasKnownLastPage: false,
+            isLoaded: true
+        }),
+        rowsView = this.createRowsView(rows, dataController),
+        bottomLoadPanel;
+
+    this.options.loadPanel = {
+        enabled: true
+    };
+    this.options.scrolling = {
+        mode: 'infinite'
+    };
+    rowsView.render(container);
+
+    //act
+    rowsView.setLoading(true);
+    bottomLoadPanel = container.find(".dx-datagrid-bottom-load-panel");
+
+    //assert
+    assert.strictEqual(bottomLoadPanel.length, 1, "bottom load panel is rendered");
+    assert.ok(rowsView._loadPanel.option('visible'), "load panel is visible");
 });
 
 QUnit.test('Load Panel is visible and bottom load panel is not visible when data is not loaded', function(assert) {

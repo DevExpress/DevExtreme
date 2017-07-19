@@ -21,6 +21,8 @@ var SWITCH_EDITOR = "dx-recurrence-switch",
     MONTH_OF_YEAR = "dx-recurrence-selectbox-month-of-year",
     EVERY_INTERVAL = "dx-recurrence-numberbox-interval";
 
+require("common.css!");
+
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="recurrence-editor"></div>');
 });

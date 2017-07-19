@@ -5339,6 +5339,53 @@ QUnit.test("Save edit data when update fails in batch edit mode", function(asser
     assert.deepEqual(that.editingController._editData[0].oldData, that.array[1], "old data");
 });
 
+//T533546
+QUnit.testInActiveWindow("The lookup column should keep focus after changing value when it has 'setCellValue' option", function(assert) {
+   //arrange
+    var that = this,
+        $cellElement,
+        lookupInstance,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    that.options.columns[0] = {
+        dataField: "name",
+        lookup: {
+            dataSource: ["test1", "test2"]
+        },
+        setCellValue: function(rowData, value) {
+            this.defaultSetCellValue(rowData, value);
+        }
+    };
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "cell"
+    };
+    that.element = function() {
+        return $testElement;
+    };
+    rowsView.render($testElement);
+    that.columnsController.init();
+
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    //assert
+    $cellElement = rowsView.element().find("tbody > tr").first().children().first();
+    assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
+
+    lookupInstance = rowsView.element().find(".dx-selectbox").data("dxSelectBox");
+    assert.ok(lookupInstance, "has lookup");
+
+    //act
+    lookupInstance.option("value", "test1");
+    that.clock.tick();
+
+    //assert
+    $cellElement = rowsView.element().find("tbody > tr").first().children().first();
+    assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
+});
+
 if(device.ios || device.android) {
     //T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {
@@ -8644,6 +8691,83 @@ QUnit.test("Edit cell with custom validation (edit mode is batch)", function(ass
     assert.ok($cellElements.eq(1).hasClass("dx-datagrid-invalid"), "failed validation");
 });
 
+//T535329
+QUnit.test("Cell edit mode - The validation should work correctly when there is column with 'showEditorAlways' enabled", function(assert) {
+    //arrange
+    var that = this,
+        brokenRules,
+        $cellElements,
+        $checkboxElement,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.applyOptions({
+        dataSource: [{ name: "", test: true }],
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: [{
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: 'test',
+            dataType: "boolean",
+            validationRules: [{ type: "required" }]
+        }],
+        onRowValidating: function(e) {
+            brokenRules = e.brokenRules;
+        }
+    });
+    rowsView.render($testElement);
+
+    //assert
+    $cellElements = rowsView.element().find('tbody > tr').first().children();
+    assert.ok($cellElements.eq(0).hasClass("dx-validator"), "has validator");
+    assert.ok($cellElements.eq(1).hasClass("dx-validator"), "has validator");
+
+    //act
+    $checkboxElement = $cellElements.eq(1).find(".dx-checkbox").first();
+    $checkboxElement.trigger("dxclick");
+
+    //assert
+    assert.strictEqual(brokenRules.length, 2, "count of broken rule");
+});
+
+//T535329
+QUnit.test("Cell edit mode - The validation should not work for column with 'showEditorAlways' enabled when inserting row", function(assert) {
+    //arrange
+    var that = this,
+        $cellElement,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.applyOptions({
+        dataSource: [{ name: "", test: true }],
+        editing: {
+            mode: "cell",
+            allowAdding: true
+        },
+        columns: [{
+            dataField: 'test',
+            dataType: "boolean",
+            validationRules: [{ type: "required" }]
+        }, {
+            dataField: "name",
+            validationRules: [{ type: "required" }]
+        }]
+    });
+    rowsView.render($testElement);
+
+    //act
+    that.addRow();
+    that.clock.tick();
+
+    //assert
+    $cellElement = rowsView.element().find('tbody > tr.dx-row-inserted').first().children().first();
+    assert.notOk($cellElement.hasClass("dx-datagrid-invalid"), "first cell is valid");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
@@ -10438,3 +10562,42 @@ QUnit.test("Show error row in header when remove error", function(assert) {
     }
 });
 
+//T534503
+QUnit.testInActiveWindow("Form should repaint after change data of the column with 'setCellValue' option", function(assert) {
+    //arrange
+    var that = this,
+        $popupContent,
+        $inputElement,
+        callSetCellValue;
+
+    that.columns[1] = {
+        dataField: "age",
+        setCellValue: function(rowData, value) {
+            callSetCellValue = true;
+            rowData.lastName = "Test2";
+            this.defaultSetCellValue(rowData, value);
+        }
+    };
+    that.setupModules(that);
+    that.renderRowsView();
+
+    that.editRow(0);
+    that.clock.tick(500);
+    that.preparePopupHelpers();
+    $popupContent = that.editPopupInstance.content();
+
+    //assert
+    assert.ok($popupContent.find(".dx-texteditor").first().hasClass("dx-state-focused"), "first cell is focused");
+
+    //act
+    $inputElement = $popupContent.find("input").not("[type='hidden']").eq(1);
+    $inputElement.focus();
+    $inputElement.val(666);
+    $inputElement.trigger("change");
+    that.clock.tick(500);
+
+    //assert
+    assert.ok(callSetCellValue, "setCellValue is called");
+    assert.strictEqual($popupContent.find("input").not("[type='hidden']").eq(2).val(), "Test2", "value of the third cell");
+    assert.ok($popupContent.find(".dx-texteditor").eq(1).hasClass("dx-state-focused"), "second cell is focused");
+});

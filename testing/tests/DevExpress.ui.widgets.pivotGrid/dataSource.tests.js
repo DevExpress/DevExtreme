@@ -4998,10 +4998,15 @@ QUnit.module("Apply summary mode", {
         sinon.stub(summaryDisplayModes, "applyDisplaySummaryMode", function(descriptions, data) {
             that.applyDisplaySummaryModePassedData = $.extend(true, {}, data);
         });
+
+        sinon.stub(summaryDisplayModes, "applyRunningTotal", function(descriptions, data) {
+            that.applyRunningTotalPassedData = $.extend(true, {}, data);
+        });
     },
     afterEach: function() {
         defaultEnvironment.afterEach.apply(this, arguments);
         summaryDisplayModes.applyDisplaySummaryMode.restore();
+        summaryDisplayModes.applyRunningTotal.restore();
     }
 });
 
@@ -5253,7 +5258,9 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
 
     def.resolve(this.storeData);
 
-    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModePassedData.rows), [
+    assert.ok(summaryDisplayModes.applyRunningTotal.calledOnce);
+
+    assert.deepEqual(prepareLoadedData(this.applyRunningTotalPassedData.rows), [
         {
             index: 3,
             value: 1985
@@ -5265,7 +5272,7 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
             value: 1991
         }]);
 
-    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModePassedData.columns), [{
+    assert.deepEqual(prepareLoadedData(this.applyRunningTotalPassedData.columns), [{
         index: 2,
         value: "Boise"
     }, {
@@ -5300,7 +5307,7 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
         }]);
 });
 
-QUnit.test("apply Display Summary Mode when expressions were used when data is sorted", function(assert) {
+QUnit.test("apply Display Summary Mode when expressions were used and data is sorted", function(assert) {
     var def = $.Deferred();
 
     this.testStore.load.returns(def);

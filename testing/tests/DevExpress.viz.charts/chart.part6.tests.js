@@ -96,6 +96,27 @@ QUnit.test("change dataSource only. render call", function(assert) {
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
+//T535468
+QUnit.test("change dataSource after zoomArgument with gesture and useAggregation", function(assert) {
+    var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    seriesMockData.series.push(stubSeries, stubSeries1);
+    var dataSource = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }],
+        chartOptions = {
+            useAggregation: true,
+            series: [{ type: "line" }],
+            dataSource: dataSource,
+            argumentAxis: { visible: true }
+        },
+        chart = this.createChart(chartOptions);
+
+    //act
+    chart.zoomArgument(2, 3, true);
+    chart.option(chartOptions);
+
+    assert.ok(true);
+});
+
 QUnit.test("change series options only - populateSeries", function(assert) {
     //arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
@@ -713,29 +734,6 @@ QUnit.test("change useAggregation options", function(assert) {
     assert.ok(chart._renderCalled);
 });
 
-QUnit.test("change container options", function(assert) {
-    var chart = this.createChart({});
-    chart._dataSourceChangedHandler = function() {
-        this._dataSourceChangedHandlerCalled = true;
-    };
-    this.themeManager.getOptions.withArgs("size").returns({});
-    //Act
-    this.validateData.reset();
-    this.$container.width(400);
-    this.$container.height(300);
-    //this.themeManager.getOptions.withArgs("size").returns({});
-    //chart.option({
-    //    valueAxis: [{ name: "axis1" }, { name: "axis2" }],
-    //    panes: [{ name: "top" }, { name: "bottom" }]
-    //});
-    chart.render();
-    //assert
-    assert.equal(chart.getSize().width, 400);
-    assert.equal(chart.getSize().height, 300);
-
-    //assert.strictEqual(this.validateData.callCount, 1, "validation");
-});
-
 QUnit.test("change container options. Size was set", function(assert) {
     var chart = this.createChart({
         size: {
@@ -793,122 +791,6 @@ QUnit.test("size option changed", function(assert) {
     assert.equal(chart._canvas.width, 300);
     assert.equal(chart._canvas.height, 300);
     assert.strictEqual(this.validateData.callCount, 1, "validation");
-});
-
-QUnit.test("size option changed with initial size. negative width", function(assert) {
-    this.$container.width(200);
-    this.$container.height(200);
-    var chart = this.createChart({
-        size: {
-            width: 500,
-            height: 500
-        }
-    });
-    //Act
-    this.themeManager.getOptions.withArgs("size").returns({
-        width: -100,
-        height: 600
-    });
-    chart.option({
-        size: {
-            width: -100,
-            height: 600
-        }
-    });
-    //assert
-    //assert.equal(chart.getSize().width, 0, "width");
-    //assert.equal(chart.getSize().height, 600, "height");
-    assert.strictEqual(chart.getSize().width, 0, "width");
-    assert.strictEqual(chart.getSize().height, 0, "height");
-
-    //assert.equal(chart.canvas.width, 0);
-    //assert.equal(chart.canvas.height, 600);
-    assert.ok(chart._canvas);
-});
-
-QUnit.test("size option changed with initial size. negative height", function(assert) {
-    this.$container.width(200);
-    this.$container.height(200);
-    var chart = this.createChart({
-        size: {
-            width: 500,
-            height: 500
-        }
-    });
-    //Act
-    this.themeManager.getOptions.withArgs("size").returns({
-        width: 600,
-        height: -100
-    });
-    chart.option({
-        size: {
-            width: 600,
-            height: -100
-        }
-    });
-    //assert
-    //assert.equal(chart.getSize().width, 600);
-    //assert.equal(chart.getSize().height, 0);
-    assert.strictEqual(chart.getSize().width, 0, "width");
-    assert.strictEqual(chart.getSize().height, 0, "height");
-
-    //assert.equal(chart.canvas.width, 600);
-    //assert.equal(chart.canvas.height, 0);
-    assert.ok(chart._canvas);
-});
-
-QUnit.test("size option changed with container size. negative height", function(assert) {
-    this.$container.width(200);
-    this.$container.height(200);
-    var chart = this.createChart({});
-    //Act
-    this.themeManager.getOptions.withArgs("size").returns({
-        width: 600,
-        height: -100
-    });
-    chart.option({
-        size: {
-            width: 600,
-            height: -100
-        }
-    });
-    //assert
-    //assert.equal(chart.getSize().width, 600);
-    //assert.equal(chart.getSize().height, 0);
-    assert.strictEqual(chart.getSize().width, 0, "width");
-    assert.strictEqual(chart.getSize().height, 0, "height");
-
-    //assert.equal(chart.canvas.width, 600);
-    //assert.equal(chart.canvas.height, 0);
-    assert.ok(chart._canvas);
-});
-
-QUnit.test("size option changed. negative width and height", function(assert) {
-    this.$container.width(200);
-    this.$container.height(200);
-    var chart = this.createChart({
-        size: {
-            width: 500,
-            height: 500
-        }
-    });
-    //Act
-    this.themeManager.getOptions.withArgs("size").returns({
-        width: -100,
-        height: -100
-    });
-    chart.option({
-        size: {
-            width: -100,
-            height: -100
-        }
-    });
-    //assert
-    //assert.equal(chart.getSize().width, 0);
-    //assert.equal(chart.getSize().height, 0);
-    assert.strictEqual(chart.getSize().width, 0, "width");
-    assert.strictEqual(chart.getSize().height, 0, "height");
-
 });
 
 QUnit.test("palette option changed", function(assert) {

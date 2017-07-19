@@ -290,7 +290,7 @@ var BlockSeparatorView = SeparatorView.inherit({
             $element = this.element();
 
         if($element && this._isShown) {
-            $element.hide();
+            $element.css("display", "none");
         }
 
         if($parent && !$parent.children("." + BLOCK_SEPARATOR_CLASS).length) {
@@ -333,7 +333,7 @@ var BlockSeparatorView = SeparatorView.inherit({
                     startAnimate({ width: "100%", display: "block" });
                     break;
                 default:
-                    $element.show();
+                    $element.css("display", "");
             }
         }
 
@@ -365,7 +365,7 @@ var DraggingHeaderView = modules.View.inherit({
     _renderCore: function() {
         this.element()
             .addClass(this.addWidgetPrefix(DRAGGING_HEADER_CLASS) + " " + this.addWidgetPrefix(CELL_CONTENT_CLASS) + " " + WIDGET_CLASS)
-            .css("display", "none");
+            .hide();
     },
 
     _resetTargetColumnOptions: function() {
@@ -460,17 +460,19 @@ var DraggingHeaderView = modules.View.inherit({
             dragOptions = that._dragOptions;
 
         if(that._isDragging && !isResizing) {
+            var $element = that.element();
+
             moveDeltaX = Math.abs(eventData.x - dragOptions.columnElement.offset().left - dragOptions.deltaX);
             moveDeltaY = Math.abs(eventData.y - dragOptions.columnElement.offset().top - dragOptions.deltaY);
 
-            if(that.element().is(":visible") || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
+            if($element.is(":visible") || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
 
-                that.element().show();
+                $element.show();
 
                 newLeft = eventData.x - dragOptions.deltaX;
                 newTop = eventData.y - dragOptions.deltaY;
 
-                that.element().offset({ left: newLeft, top: newTop });
+                $element.css({ left: newLeft, top: newTop });
                 that.dockHeader(eventData);
             }
             e.preventDefault();

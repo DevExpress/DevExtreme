@@ -973,11 +973,11 @@ module.exports = {
                                 if(!isFreeSpaceRowVisible && $table) {
                                     freeSpaceRowElements.height(0);
                                 } else {
-                                    freeSpaceRowElements.css("display", isFreeSpaceRowVisible ? "" : "none");
+                                    freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
                                 that._updateLastRowBorder(isFreeSpaceRowVisible);
                             } else {
-                                freeSpaceRowElements.css("display", "none");
+                                freeSpaceRowElements.hide();
                                 commonUtils.deferUpdate(function() {
                                     var scrollbarWidth = that.getScrollbarWidth(true),
                                         elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth,
@@ -990,7 +990,7 @@ module.exports = {
                                         commonUtils.deferRender(function() {
                                             freeSpaceRowElements.height(resultHeight);
                                             isFreeSpaceRowVisible = true;
-                                            freeSpaceRowElements.css("display", "");
+                                            freeSpaceRowElements.show();
                                         });
                                     }
                                     commonUtils.deferRender(function() {
@@ -1000,7 +1000,7 @@ module.exports = {
                             }
                         } else {
                             freeSpaceRowElements.height(0);
-                            freeSpaceRowElements.css("display", "");
+                            freeSpaceRowElements.show();
                             that._updateLastRowBorder(true);
                         }
                     }
