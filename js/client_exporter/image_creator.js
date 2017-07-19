@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     Color = require("../color"),
     isFunction = require("../core/utils/type").isFunction,
+    iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     camelize = require("../core/utils/inflector").camelize,
     when = require("../integration/jquery/deferred").when,
@@ -17,7 +18,7 @@ var $ = require("../core/renderer"),
     _cos = _math.cos,
     _sin = _math.sin,
 
-    _each = $.each,
+    _each = iteratorUtils.each,
     _extend = extend,
     _number = Number,
 
@@ -532,7 +533,7 @@ var parseAttributes = function(attributes) {
     var newAttributes = {},
         attr;
 
-    $.each(attributes, function(index, item) {
+    iteratorUtils.each(attributes, function(index, item) {
         attr = item.textContent;
         if(isFinite(attr)) {
             attr = _number(attr);

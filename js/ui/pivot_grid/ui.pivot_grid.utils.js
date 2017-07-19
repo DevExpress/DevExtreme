@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     ajax = require("../../core/utils/ajax"),
     dataCoreUtils = require("../../core/utils/data"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     dateLocalization = require("../../localization/date"),
     formatHelper = require("../../format_helper"),
@@ -175,7 +176,7 @@ exports.getExpandedLevel = function(options, axisName) {
     if(options.headerName === axisName) {
         expandLevel = options.path.length;
     } else {
-        $.each(expandedPaths, function(_, path) {
+        iteratorUtils.each(expandedPaths, function(_, path) {
             expandLevel = Math.max(expandLevel, path.length);
         });
     }
@@ -196,7 +197,7 @@ function createGroupFields(item) {
 function parseFields(dataSource, fieldsList, path, fieldsDataType) {
     var result = [];
 
-    $.each(fieldsList || [], function(field, value) {
+    iteratorUtils.each(fieldsList || [], function(field, value) {
         var dataIndex = 1,
             currentPath = path.length ? path + "." + field : field,
             dataType = fieldsDataType[currentPath],
@@ -239,7 +240,7 @@ exports.discoverObjectFields = function(items, fields) {
 
 exports.getFieldsDataType = function(fields) {
     var result = {};
-    $.each(fields, function(_, field) {
+    iteratorUtils.each(fields, function(_, field) {
         result[field.dataField] = result[field.dataField] || field.dataType;
     });
     return result;

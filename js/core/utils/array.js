@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    isDefined = require("./type").isDefined,
+var isDefined = require("./type").isDefined,
+    each = require("./iterator").each,
     objectUtils = require("./object");
 
 var isEmpty = function(entity) {
@@ -20,7 +20,7 @@ var intersection = function(a, b) {
 
     var result = [];
 
-    $.each(a, function(_, value) {
+    each(a, function(_, value) {
         var index = inArray(value, b);
 
         if(index !== -1) {
@@ -42,7 +42,7 @@ var removeDuplicates = function(from, what) {
 
     var result = [];
 
-    $.each(from, function(_, value) {
+    each(from, function(_, value) {
         var index = inArray(value, what);
 
         if(index === -1) {
@@ -57,7 +57,7 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
     var indexedItems = {},
         parameterIndex = 0;
 
-    $.each(items, function(index, item) {
+    each(items, function(index, item) {
         index = item[indexParameterName];
         if(isDefined(index)) {
             indexedItems[index] = indexedItems[index] || [];
@@ -72,14 +72,14 @@ var normalizeIndexes = function(items, indexParameterName, currentItem, needInde
     });
 
     objectUtils.orderEach(indexedItems, function(index, items) {
-        $.each(items, function() {
+        each(items, function() {
             if(index >= 0) {
                 this[indexParameterName] = parameterIndex++;
             }
         });
     });
 
-    $.each(items, function() {
+    each(items, function() {
         if(!isDefined(this[indexParameterName]) && (!needIndexCallback || needIndexCallback(this))) {
             this[indexParameterName] = parameterIndex++;
         }

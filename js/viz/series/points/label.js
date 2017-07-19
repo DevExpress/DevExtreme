@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../../core/renderer"),
-    _format = require("../../core/format"),
+var _format = require("../../core/format"),
     vizUtils = require("../../core/utils"),
+    each = require("../../../core/utils/iterator").each,
     _degreesToRadians = vizUtils.degreesToRadians,
     _patchFontOptions = vizUtils.patchFontOptions,
     _math = Math,
@@ -17,7 +17,7 @@ var $ = require("../../../core/renderer"),
 function getClosestCoord(point, coords) {
     var closestDistance = Infinity,
         closestCoord;
-    $.each(coords, function(_, coord) {
+    each(coords, function(_, coord) {
         var x = point[0] - coord[0],
             y = point[1] - coord[1],
             distance = x * x + y * y;
@@ -84,7 +84,7 @@ var piePointStrategy = {
             x0 = center[0],
             y0 = center[1],
             cosSin = _getCosAndSin(angle || 0);
-        $.each(points, function(_, point) {
+        each(points, function(_, point) {
             rotatedPoints.push([
                 _round(((point[0] - x0) * cosSin.cos + (point[1] - y0) * cosSin.sin) + x0),
                 _round((-(point[0] - x0) * cosSin.sin + (point[1] - y0) * cosSin.cos) + y0)

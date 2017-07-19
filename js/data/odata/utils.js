@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     ajax = require("../../core/utils/ajax"),
     Guid = require("../../core/guid"),
     isDefined = typeUtils.isDefined,
@@ -395,7 +396,7 @@ var EdmLiteral = Class.inherit({
 var transformTypes = function(obj, options) {
     options = options || {};
 
-    $.each(obj, function(key, value) {
+    each(obj, function(key, value) {
         if(value !== null && typeof value === "object") {
 
             if("results" in value) {
@@ -484,7 +485,7 @@ var serializeValue = function(value, protocolVersion) {
 var serializeKey = function(key, protocolVersion) {
     if(typeUtils.isPlainObject(key)) {
         var parts = [];
-        $.each(key, function(k, v) {
+        each(key, function(k, v) {
             parts.push(serializePropName(k) + "=" + serializeValue(v, protocolVersion));
         });
         return parts.join();

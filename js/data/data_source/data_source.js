@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     commonUtils = require("../../core/utils/common"),
+    iteratorUtils = require("../../core/utils/iterator"),
     ajax = require("../../core/utils/ajax"),
     typeUtils = require("../../core/utils/type"),
     dataUtils = require("../utils"),
@@ -58,7 +59,7 @@ function normalizeDataSourceOptions(options, normalizationOptions) {
     function createCustomStoreFromLoadFunc() {
         var storeConfig = {};
 
-        $.each(["useDefaultSearch", "key", "load", "loadMode", "cacheRawData", "byKey", "lookup", "totalCount", "insert", "update", "remove"], function() {
+        iteratorUtils.each(["useDefaultSearch", "key", "load", "loadMode", "cacheRawData", "byKey", "lookup", "totalCount", "insert", "update", "remove"], function() {
             storeConfig[this] = options[this];
             delete options[this];
         });
@@ -293,7 +294,7 @@ var DataSource = Class.inherit({
         */
         this._paginate = options.paginate;
 
-        $.each(
+        iteratorUtils.each(
             [
                 /**
                  * @name DataSourceOptions_onChanged
@@ -372,7 +373,7 @@ var DataSource = Class.inherit({
             names = names.concat(customNames);
         }
 
-        $.each(names, function() {
+        iteratorUtils.each(names, function() {
             result[this] = options[this];
         });
         return result;
@@ -874,7 +875,7 @@ var DataSource = Class.inherit({
 
         // TODO optimize for byKey case
 
-        $.each(selector, function(i, item) {
+        iteratorUtils.each(selector, function(i, item) {
             if(searchFilter.length) {
                 searchFilter.push("or");
             }

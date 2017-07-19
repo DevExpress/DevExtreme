@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     formatHelper = require("../../format_helper"),
     clientExporter = require("../../client_exporter"),
     excelExporter = clientExporter.excel,
@@ -148,7 +149,7 @@ exports.DataProvider = Class.inherit({
                 }));
             });
 
-            $.each(columns, function(columnIndex, column) {
+            each(columns, function(columnIndex, column) {
                 column.width = DEFAUL_COLUMN_WIDTH;
             });
 

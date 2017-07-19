@@ -14,6 +14,7 @@ var $ = require("../core/renderer"),
     domUtils = require("../core/utils/dom"),
     noop = require("../core/utils/common").noop,
     typeUtils = require("../core/utils/type"),
+    each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     Widget = require("./widget/ui.widget"),
@@ -467,7 +468,7 @@ var Overlay = Widget.inherit({
         }
 
         var options = this.option();
-        $.each([
+        each([
             "position.of",
             "animation.show.from.position.of",
             "animation.show.to.position.of",
@@ -514,7 +515,7 @@ var Overlay = Widget.inherit({
     _initActions: function() {
         this._actions = {};
 
-        $.each(ACTIONS, (function(_, action) {
+        each(ACTIONS, (function(_, action) {
             this._actions[action] = this._createActionByOption(action, {
                 excludeValidators: ["disabled", "readOnly"]
             }) || noop;

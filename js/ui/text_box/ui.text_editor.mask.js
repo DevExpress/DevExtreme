@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     stringUtils = require("../../core/utils/string"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     messageLocalization = require("../../localization/message"),
     TextEditorBase = require("./ui.text_editor.base"),
     MaskRules = require("./ui.text_editor.mask.rule"),
@@ -115,7 +116,7 @@ var TextEditorMask = TextEditorBase.inherit({
         };
 
         var result = that.callBase();
-        $.each(keyHandlerMap, function(key, callback) {
+        each(keyHandlerMap, function(key, callback) {
             var parentHandler = result[key];
             result[key] = function(e) {
                 that.option("mask") && callback.call(that, e);
@@ -244,7 +245,7 @@ var TextEditorMask = TextEditorBase.inherit({
     _getMaskRule: function(pattern) {
         var ruleConfig;
 
-        $.each(this._maskRules, function(rulePattern, allowedChars) {
+        each(this._maskRules, function(rulePattern, allowedChars) {
             if(rulePattern === pattern) {
                 ruleConfig = {
                     pattern: rulePattern,

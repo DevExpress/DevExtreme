@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     queryAdapters = require("../query_adapters"),
     odataUtils = require("./utils"),
@@ -103,7 +104,7 @@ var compileCriteria = (function() {
             groupOperator,
             nextGroupOperator;
 
-        $.each(criteria, function(index, criterion) {
+        iteratorUtils.each(criteria, function(index, criterion) {
             if(Array.isArray(criterion)) {
 
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
@@ -192,13 +193,13 @@ var createODataQueryAdapter = function(queryOptions) {
                 var hash = {};
 
                 if(_expand) {
-                    $.each($.makeArray(_expand), function() {
+                    iteratorUtils.each($.makeArray(_expand), function() {
                         hash[serializePropName(this)] = 1;
                     });
                 }
 
                 if(_select) {
-                    $.each($.makeArray(_select), function() {
+                    iteratorUtils.each($.makeArray(_select), function() {
                         var path = this.split(".");
                         if(path.length < 2) {
                             return;
@@ -219,7 +220,7 @@ var createODataQueryAdapter = function(queryOptions) {
                             select = [],
                             expand = [];
 
-                        $.each(hash, function(key, value) {
+                        iteratorUtils.each(hash, function(key, value) {
                             if(Array.isArray(value)) {
                                 [].push.apply(select, value);
                             }
@@ -251,7 +252,7 @@ var createODataQueryAdapter = function(queryOptions) {
 
                     var result = [];
 
-                    $.each(hash, function(key, value) {
+                    iteratorUtils.each(hash, function(key, value) {
                         result.push(key + formatCore(value));
                     });
 
@@ -268,7 +269,7 @@ var createODataQueryAdapter = function(queryOptions) {
                         parseCore(exprParts, result, stepper);
                     };
 
-                    $.each(exprs, function(_, x) {
+                    iteratorUtils.each(exprs, function(_, x) {
                         parseCore(x.split("."), root, stepper);
                     });
                 };

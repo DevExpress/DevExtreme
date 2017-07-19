@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    support = require("../core/utils/support"),
+var support = require("../core/utils/support"),
+    each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     registerEvent = require("./core/event_registrator"),
     TouchStrategy = require("./pointer/touch"),
@@ -91,7 +91,7 @@ var EventStrategy = (function() {
     return MouseStrategy;
 })();
 
-$.each(EventStrategy.map, function(pointerEvent, originalEvents) {
+each(EventStrategy.map, function(pointerEvent, originalEvents) {
     registerEvent(pointerEvent, new EventStrategy(pointerEvent, originalEvents));
 });
 

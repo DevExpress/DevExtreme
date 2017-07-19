@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    inArray = require("../core/utils/array").inArray,
+var inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     Class = require("../core/class"),
     EventsMixin = require("../core/events_mixin");
 
@@ -68,7 +68,7 @@ var ViewCache = Class.inherit({
     clear: function() {
         var that = this;
 
-        $.each(this._cache, function(key) {
+        each(this._cache, function(key) {
             that.removeView(key);
         });
     },

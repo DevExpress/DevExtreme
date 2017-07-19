@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../../core/renderer"),
+var each = require("../../../core/utils/iterator").each,
     extend = require("../../../core/utils/extend").extend,
     noop = require("../../../core/utils/common").noop,
     labelModule = require("./label"),
@@ -235,7 +235,7 @@ module.exports = _extend({}, symbolPoint, {
             that.visibleTopMarker !== false && labels.push(topLabel);
             that.visibleBottomMarker !== false && labels.push(bottomLabel);
 
-            $.each(labels, function(_, label) {
+            each(labels, function(_, label) {
                 label.show();
             });
 

@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     VerticalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.vertical"),
     HorizontalAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal"),
     HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line"),
@@ -49,10 +49,10 @@ var AppointmentLayoutManager = Class.inherit({
 
         this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(items);
 
-        $.each(items, (function(index, itemData) {
+        each(items, (function(index, itemData) {
             var appointmentSettings = this._positionMap[index];
 
-            $.each(appointmentSettings, (function(_, settings) {
+            each(appointmentSettings, (function(_, settings) {
                 settings.direction = this.renderingStrategy === "vertical" && !settings.allDay ? "vertical" : "horizontal";
             }).bind(this));
 
@@ -70,10 +70,10 @@ var AppointmentLayoutManager = Class.inherit({
         var itemFound,
             result = [];
 
-        $.each(renderedItems, (function(i, currentItem) {
+        each(renderedItems, (function(i, currentItem) {
             itemFound = false;
 
-            $.each(appointments, (function(i, item) {
+            each(appointments, (function(i, item) {
                 if(currentItem.itemData === item.itemData) {
                     itemFound = true;
                 }
@@ -97,11 +97,11 @@ var AppointmentLayoutManager = Class.inherit({
 
         result = this._markDeletedAppointments(renderedItems, appointments);
 
-        $.each(appointments, (function(_, currentItem) {
+        each(appointments, (function(_, currentItem) {
             itemFound = false;
             currentItem.needRepaint = false;
 
-            $.each(renderedItems, (function(_, item) {
+            each(renderedItems, (function(_, item) {
                 if(currentItem.itemData === item.itemData) {
                     item.needRepaint = false;
                     itemFound = true;

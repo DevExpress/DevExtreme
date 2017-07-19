@@ -1,13 +1,13 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     rangeCalculator = require("./helpers/range_data_calculator"),
     typeUtils = require("../../core/utils/type"),
     vizUtils = require("../core/utils"),
 
-    _each = $.each,
+    _each = each,
     _extend = extend,
     _noop = require("../../core/utils/common").noop,
     _isDefined = typeUtils.isDefined,

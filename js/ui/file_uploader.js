@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     Callbacks = require("../core/utils/callbacks"),
     isDefined = require("../core/utils/type").isDefined,
+    each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     ajax = require("../core/utils/ajax"),
@@ -497,7 +498,7 @@ var FileUploader = Editor.inherit({
     _getFiles: function(fileList) {
         var values = [];
 
-        $.each(fileList, function(_, value) {
+        each(fileList, function(_, value) {
             values.push(value);
         });
 
@@ -542,7 +543,7 @@ var FileUploader = Editor.inherit({
             this._files = [];
         }
 
-        $.each(value.slice(this._files.length), (function(_, value) {
+        each(value.slice(this._files.length), (function(_, value) {
             this._files.push(this._createFile(value));
         }).bind(this));
     },
@@ -595,7 +596,7 @@ var FileUploader = Editor.inherit({
         if(showFileList) {
             var that = this;
 
-            $.each(this._files, function(_, file) {
+            each(this._files, function(_, file) {
                 if(!file.$file) {
                     that._renderFile(file);
                 }
@@ -1015,7 +1016,7 @@ var FileUploader = Editor.inherit({
             return;
         }
 
-        $.each(this._files, (function(_, file) {
+        each(this._files, (function(_, file) {
             this._uploadFile(file);
         }).bind(this));
     },
@@ -1225,7 +1226,7 @@ var FileUploader = Editor.inherit({
             var value = this.option("value"),
                 totalSize = 0;
 
-            $.each(value, function(_, file) {
+            each(value, function(_, file) {
                 totalSize += file.size;
             });
 
@@ -1239,7 +1240,7 @@ var FileUploader = Editor.inherit({
         if(!this._loadedSize) {
             var loadedSize = 0;
 
-            $.each(this._files, function(_, file) {
+            each(this._files, function(_, file) {
                 loadedSize += file.loadedSize;
             });
 

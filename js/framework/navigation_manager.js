@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     Class = require("../core/class"),
     Callbacks = require("../core/utils/callbacks"),
     commonUtils = require("../core/utils/common"),
+    iteratorUtils = require("../core/utils/iterator"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     extend = require("../core/utils/extend").extend,
     navigationDevices = require("./navigation_devices"),
@@ -337,7 +338,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
 
     _removeItems: function(items) {
         var that = this;
-        $.each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             that.fireEvent("itemRemoved", [item]);
         });
     },
@@ -383,7 +384,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
                 navigationStacks: {},
                 currentStackKey: this.currentStackKey
             };
-            $.each(this.navigationStacks, function(stackKey, stack) {
+            iteratorUtils.each(this.navigationStacks, function(stackKey, stack) {
                 var stackState = {};
                 state.navigationStacks[stackKey] = stackState;
                 stackState.currentIndex = stack.currentIndex;
@@ -410,7 +411,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
                 var that = this,
                     state = JSON.parse(json);
 
-                $.each(state.navigationStacks, function(stackKey, stackState) {
+                iteratorUtils.each(state.navigationStacks, function(stackKey, stackState) {
                     var stack = that._createNavigationStack();
                     that.navigationStacks[stackKey] = stack;
                     stack.currentIndex = stackState.currentIndex;
@@ -456,7 +457,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
     itemByKey: function(itemKey) {
         var result;
 
-        $.each(this.navigationStacks, function(stackKey, stack) {
+        iteratorUtils.each(this.navigationStacks, function(stackKey, stack) {
             var item = stack.itemByKey(itemKey);
             if(item) {
                 result = item;

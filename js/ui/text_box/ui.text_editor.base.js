@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     themes = require("../themes"),
     Editor = require("../editor/editor"),
     eventUtils = require("../../events/utils"),
@@ -511,7 +512,7 @@ var TextEditorBase = Editor.inherit({
         var that = this,
             $input = that._input();
 
-        $.each(EVENTS_LIST, function(_, event) {
+        each(EVENTS_LIST, function(_, event) {
             if(that.hasActionSubscription("on" + event)) {
 
                 var action = that._createActionByOption("on" + event, { excludeValidators: ["readOnly"] });
@@ -531,7 +532,7 @@ var TextEditorBase = Editor.inherit({
         var that = this,
             $input = this._input();
 
-        $.each(EVENTS_LIST, function(_, event) {
+        each(EVENTS_LIST, function(_, event) {
             $input.off(eventUtils.addNamespace(event.toLowerCase(), that.NAME));
         });
 

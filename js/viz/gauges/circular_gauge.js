@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    _isFinite = isFinite,
+var _isFinite = isFinite,
     registerComponent = require("../../core/component_registrator"),
     objectUtils = require("../../core/utils/object"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     dxBaseGauge = require("./base_gauge").dxBaseGauge,
     dxGauge = require("./common").dxGauge,
     vizUtils = require("../core/utils"),
@@ -20,7 +20,7 @@ var $ = require("../../core/renderer"),
     _max = Math.max,
     _min = Math.min,
     _round = Math.round,
-    _each = $.each,
+    _each = each,
 
     SHIFT_ANGLE = 90,
     PI = Math.PI;

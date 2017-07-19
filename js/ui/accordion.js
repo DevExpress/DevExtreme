@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
+    iteratorUtils = require("../core/utils/iterator"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
@@ -312,7 +313,7 @@ var Accordion = CollectionWidget.inherit({
         var $items = this._itemElements(),
             that = this;
 
-        $.each(addedSelection, function(_, index) {
+        iteratorUtils.each(addedSelection, function(_, index) {
             that._deferredItems[index].resolve();
 
             var $item = $items.eq(index)
@@ -321,7 +322,7 @@ var Accordion = CollectionWidget.inherit({
             that.setAria("hidden", false, $item.find("." + ACCORDION_ITEM_BODY_CLASS));
         });
 
-        $.each(removedSelection, function(_, index) {
+        iteratorUtils.each(removedSelection, function(_, index) {
             var $item = $items.eq(index)
                 .removeClass(ACCORDION_ITEM_OPENED_CLASS);
             that.setAria("hidden", true, $item.find("." + ACCORDION_ITEM_BODY_CLASS));
@@ -409,7 +410,7 @@ var Accordion = CollectionWidget.inherit({
         var $titles = this._itemTitles(),
             itemsHeight = 0;
 
-        $.each($titles, function(_, title) {
+        iteratorUtils.each($titles, function(_, title) {
             itemsHeight += $(title).outerHeight();
         });
 

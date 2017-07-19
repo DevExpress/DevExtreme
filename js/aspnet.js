@@ -9,7 +9,8 @@
                 require("./ui/set_template_engine"),
                 require("./ui/widget/ui.template_base").renderedCallbacks,
                 require("./core/guid"),
-                require("./ui/validation_engine")
+                require("./ui/validation_engine"),
+                require("./core/utils/iterator")
             );
         });
     } else {
@@ -20,10 +21,11 @@
             ui && ui.setTemplateEngine,
             ui && ui.templateRendered,
             DevExpress.data.Guid,
-            DevExpress.validationEngine
+            DevExpress.validationEngine,
+            DevExpress.utils.iterator
         );
     }
-})(function($, setTemplateEngine, templateRendered, Guid, validationEngine) {
+})(function($, setTemplateEngine, templateRendered, Guid, validationEngine, iteratorUtils) {
     var templateCompiler = createTemplateCompiler();
 
     function createTemplateCompiler() {
@@ -122,7 +124,7 @@
     function createValidationSummaryItemsFromValidators(validators, editorNames) {
         var items = [];
 
-        $.each(validators, function(_, validator) {
+        iteratorUtils.each(validators, function(_, validator) {
             var widget = validator.element().data("dx-validation-target");
             if(widget && $.inArray(widget.option("name"), editorNames) > -1) {
                 items.push({

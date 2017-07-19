@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../../ui/widget/ui.errors"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type");
 
 var DataConverter = Class.inherit({
@@ -19,7 +19,7 @@ var DataConverter = Class.inherit({
     _convertItemsToNodes: function(items, parentKey) {
         var that = this;
 
-        $.each(items, function(_, item) {
+        each(items, function(_, item) {
             var parentId = typeUtils.isDefined(parentKey) ? parentKey : that._getParentId(item),
                 node = that._convertItemToNode(item, parentId);
 
@@ -84,7 +84,7 @@ var DataConverter = Class.inherit({
     setChildrenKeys: function() {
         var that = this;
 
-        $.each(this._dataStructure, function(_, node) {
+        each(this._dataStructure, function(_, node) {
             if(node.internalFields.parentKey === that._rootValue) return;
 
             var parent = that.getParentNode(node);
@@ -133,7 +133,7 @@ var DataConverter = Class.inherit({
         var that = this,
             publicNodes = [];
 
-        $.each(data, function(_, node) {
+        each(data, function(_, node) {
             node = typeUtils.isPrimitive(node) ? that._getByKey(node) : node;
 
             var publicNode = that._convertToPublicNode(node, parent);
@@ -165,7 +165,7 @@ var DataConverter = Class.inherit({
             that = this;
 
         var getByKey = function(data, key) {
-            $.each(data, function(_, element) {
+            each(data, function(_, element) {
                 var currentElementKey = element.internalFields && element.internalFields.key || that._dataAccessors.getters.key(element),
                     items = that._dataAccessors.getters.items(element);
 
@@ -196,7 +196,7 @@ var DataConverter = Class.inherit({
     updateIndexByKey: function() {
         var that = this;
         this._indexByKey = {};
-        $.each(this._dataStructure, function(index, node) {
+        each(this._dataStructure, function(index, node) {
             that._checkForDuplicateId(node.internalFields.key);
             that._indexByKey[node.internalFields.key] = index;
         });
@@ -211,7 +211,7 @@ var DataConverter = Class.inherit({
 
     removeChildrenKeys: function() {
         this._indexByKey = {};
-        $.each(this._dataStructure, function(index, node) {
+        each(this._dataStructure, function(index, node) {
             node.internalFields.childrenKeys = [];
         });
     },

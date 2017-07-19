@@ -6,6 +6,7 @@ var $ = require("../../../core/renderer"),
     errors = require("../../../data/errors").errors,
     noop = require("../../../core/utils/common").noop,
     typeUtils = require("../../../core/utils/type"),
+    iteratorUtils = require("../../../core/utils/iterator"),
     inArray = require("../../../core/utils/array").inArray,
     pivotGridUtils = require("../ui.pivot_grid.utils"),
     when = require("../../../integration/jquery/deferred").when,
@@ -23,7 +24,7 @@ exports.XmlaStore = Class.inherit((function() {
         mdxAxis = "{0} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON {1}",
         mdxCrossJoin = "CrossJoin({0})",
         mdxSet = "{{0}}",
-        each = $.each,
+        each = iteratorUtils.each,
 
         MEASURE_DEMENSION_KEY = "DX_MEASURES",
         MD_DIMTYPE_MEASURE = "2";
