@@ -117,6 +117,7 @@
 
 var $ = require("../core/renderer"),
     commonUtils = require("../core/utils/common"),
+    each = require("../core/utils/iterator").each,
     isWindow = require("../core/utils/type").isWindow,
     stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,
@@ -137,7 +138,7 @@ var normalizeAlign = function(raw) {
     var pair = commonUtils.splitPair(raw);
 
     if(pair) {
-        $.each(pair, function() {
+        each(pair, function() {
             var w = String(this).toLowerCase();
             if(horzRe.test(w)) {
                 result.h = w;

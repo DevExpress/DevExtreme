@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     config = require("./config"),
     typeUtils = require("./utils/type"),
+    each = require("./utils/iterator").each,
     Class = require("./class");
 
 var Action = Class.inherit({
@@ -104,7 +105,7 @@ Action.executors = {};
 
 Action.registerExecutor = function(name, executor) {
     if(typeUtils.isPlainObject(name)) {
-        $.each(name, Action.registerExecutor);
+        each(name, Action.registerExecutor);
         return;
     }
     Action.executors[name] = executor;
@@ -113,7 +114,7 @@ Action.registerExecutor = function(name, executor) {
 Action.unregisterExecutor = function() {
     var args = $.makeArray(arguments);
 
-    $.each(args, function() {
+    each(args, function() {
         delete Action.executors[this];
     });
 };

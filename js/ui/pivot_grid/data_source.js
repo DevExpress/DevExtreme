@@ -9,7 +9,7 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
     isDefined = typeUtils.isDefined,
-    each = $.each,
+    each = iteratorUtils.each,
     when = require("../../integration/jquery/deferred").when,
     Class = require("../../core/class"),
     EventsMixin = require("../../core/events_mixin"),
@@ -80,7 +80,7 @@ function createCaption(field) {
 function resetFieldState(field, properties) {
     var initialProperties = field._initProperties || {};
 
-    $.each(properties, function(_, prop) {
+    iteratorUtils.each(properties, function(_, prop) {
         if(initialProperties.hasOwnProperty(prop)) {
             field[prop] = initialProperties[prop];
         }

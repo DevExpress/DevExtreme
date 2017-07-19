@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Promise = require("../../core/polyfills/promise"),
+var Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
     iteratorUtils = require("../../core/utils/iterator"),
     Provider = require("./provider"),
@@ -96,7 +95,7 @@ var DynamicProvider = Provider.inherit({
     removeMarkers: function(markersOptionsToRemove) {
         var that = this;
 
-        $.each(markersOptionsToRemove, function(_, markerOptionToRemove) {
+        iteratorUtils.each(markersOptionsToRemove, function(_, markerOptionToRemove) {
             that._removeMarker(markerOptionToRemove);
         });
 
@@ -106,7 +105,7 @@ var DynamicProvider = Provider.inherit({
     _removeMarker: function(markersOptionToRemove) {
         var that = this;
 
-        $.each(this._markers, function(markerIndex, markerObject) {
+        iteratorUtils.each(this._markers, function(markerIndex, markerObject) {
             if(markerObject.options !== markersOptionToRemove) {
                 return true;
             }
@@ -163,7 +162,7 @@ var DynamicProvider = Provider.inherit({
     removeRoutes: function(options) {
         var that = this;
 
-        $.each(options, function(routeIndex, options) {
+        iteratorUtils.each(options, function(routeIndex, options) {
             that._removeRoute(options);
         });
 
@@ -173,7 +172,7 @@ var DynamicProvider = Provider.inherit({
     _removeRoute: function(options) {
         var that = this;
 
-        $.each(this._routes, function(routeIndex, routeObject) {
+        iteratorUtils.each(this._routes, function(routeIndex, routeObject) {
             if(routeObject.options !== options) {
                 return true;
             }
@@ -213,11 +212,11 @@ var DynamicProvider = Provider.inherit({
             return;
         }
 
-        $.each(this._markers, function(_, markerObject) {
+        iteratorUtils.each(this._markers, function(_, markerObject) {
             that._extendBounds(markerObject.location);
         });
 
-        $.each(this._routes, function(_, routeObject) {
+        iteratorUtils.each(this._routes, function(_, routeObject) {
             routeObject.northEast && that._extendBounds(routeObject.northEast);
             routeObject.southWest && that._extendBounds(routeObject.southWest);
         });

@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     getFiltersByPath = pivotGridUtils.getFiltersByPath,
     setFieldProperty = pivotGridUtils.setFieldProperty,
@@ -51,7 +52,7 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function prepareFields(fields) {
-        $.each(fields || [], function(_, field) {
+        each(fields || [], function(_, field) {
             var fieldSelector,
                 intervalSelector,
                 dataField = field.dataField,
@@ -250,11 +251,11 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function aggregationFinalize(measures, cells) {
-        $.each(measures, function(aggregatorIndex, cellField) {
+        each(measures, function(aggregatorIndex, cellField) {
             var aggregator = getAggregator(cellField);
             if(aggregator.finalize) {
-                $.each(cells, function(_, row) {
-                    $.each(row, function(_, cell) {
+                each(cells, function(_, row) {
+                    each(row, function(_, cell) {
                         if(cell && cell[aggregatorIndex] !== undefined) {
                             cell[aggregatorIndex] = aggregator.finalize(cell[aggregatorIndex]);
                         }
@@ -287,7 +288,7 @@ exports.LocalStore = Class.inherit((function() {
 
     function getGroupValue(levels, data) {
         var value = [];
-        $.each(levels, function(_, field) {
+        each(levels, function(_, field) {
             value.push(field.selector(data));
         });
         return value;
@@ -295,7 +296,7 @@ exports.LocalStore = Class.inherit((function() {
 
     function createDimensionFilters(dimension) {
         var filters = [];
-        $.each(dimension, function(_, field) {
+        each(dimension, function(_, field) {
             var filterValues = field.filterValues || [],
                 groupName = field.groupName,
                 filter;

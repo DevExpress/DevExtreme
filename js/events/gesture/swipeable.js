@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    swipeEvents = require("../swipe"),
+var swipeEvents = require("../swipe"),
     DOMComponent = require("../../core/dom_component"),
+    each = require("../../core/utils/iterator").each,
     eventUtils = require("../utils"),
     extend = require("../../core/utils/extend").extend,
     publicComponentUtils = require("../../core/utils/public_component");
@@ -51,7 +51,7 @@ var Swipeable = DOMComponent.inherit({
 
         this._createEventData();
 
-        $.each(ACTION_TO_EVENT_MAP, (function(actionName, eventName) {
+        each(ACTION_TO_EVENT_MAP, (function(actionName, eventName) {
             var action = this._createActionByOption(actionName, { context: this });
 
             eventName = eventUtils.addNamespace(eventName, NAME);
