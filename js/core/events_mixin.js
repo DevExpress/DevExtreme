@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    DefaultEventsStrategy = require("./events_strategy"),
+var DefaultEventsStrategy = require("./events_strategy"),
+    each = require("./utils/iterator").each,
     isPlainObject = require("./utils/type").isPlainObject;
 
 /**
@@ -45,7 +45,7 @@ module.exports = {
      */
     on: function(eventName, eventHandler) {
         if(isPlainObject(eventName)) {
-            $.each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
+            each(eventName, (function(e, h) { this.on(e, h); }).bind(this));
         } else {
             this._eventsStrategy.on(eventName, eventHandler);
         }

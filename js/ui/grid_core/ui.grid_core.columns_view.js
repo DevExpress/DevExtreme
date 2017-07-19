@@ -560,7 +560,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             clientRect;
 
         if($cellElements) {
-            $.each($cellElements, function(index, item) {
+            iteratorUtils.each($cellElements, function(index, item) {
                 width = item.offsetWidth;
                 if(item.getBoundingClientRect) {
                     clientRect = item.getBoundingClientRect();
@@ -679,7 +679,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $rowElement = $(),
             $tableElements = that.getTableElements();
 
-        $.each($tableElements, function(_, tableElement) {
+        iteratorUtils.each($tableElements, function(_, tableElement) {
             $rowElement = $rowElement.add(that._getRowElements($(tableElement)).eq(rowIndex));
         });
 

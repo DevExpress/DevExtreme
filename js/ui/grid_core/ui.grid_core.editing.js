@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     extend = require("../../core/utils/extend").extend,
     modules = require("./ui.grid_core.modules"),
@@ -177,7 +178,7 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             if(args.changeType === "prepend") {
-                $.each(this._editData, function(_, editData) {
+                each(this._editData, function(_, editData) {
                     editData.rowIndex += args.items.length;
 
                     if(editData.type === DATA_EDIT_DATA_INSERT_TYPE) {
@@ -203,7 +204,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 columnIndex = this._firstFormItem.column.index;
             } else {
                 var visibleColumns = columnsController.getVisibleColumns();
-                $.each(visibleColumns, function(index, column) {
+                each(visibleColumns, function(index, column) {
                     if(column.allowEditing) {
                         columnIndex = index;
                         return false;
@@ -430,8 +431,17 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_addRow
+         * @name dxDataGridMethods_addRow
          * @publicName addRow()
+         */
+        /**
+         * @name dxTreeListMethods_addRow
+         * @publicName addRow()
+         */
+        /**
+         * @name dxTreeListMethods_addRow
+         * @publicName addRow(parentId)
+         * @param1 parentId:any
          */
         addRow: function(parentKey) {
             var that = this,
@@ -903,7 +913,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 return deferred;
             }
 
-            $.each(that._editData, function(index, editData) {
+            each(that._editData, function(index, editData) {
                 var data = editData.data,
                     oldData = editData.oldData,
                     type = editData.type,
@@ -992,7 +1002,7 @@ var EditingController = modules.ViewController.inherit((function() {
         _fireSaveEditDataEvents: function(editData) {
             var that = this;
 
-            $.each(editData, function(_, itemData) {
+            each(editData, function(_, itemData) {
                 var data = itemData.data,
                     key = itemData.key,
                     type = itemData.type,
@@ -1376,7 +1386,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 if(!items) {
                     var columns = that.getController("columns").getColumns();
                     items = [];
-                    $.each(columns, function(_, column) {
+                    each(columns, function(_, column) {
                         if(!column.isBand) {
                             items.push({
                                 column: column,
@@ -1577,7 +1587,7 @@ var EditingController = modules.ViewController.inherit((function() {
         resetRowAndPageIndices: function(alwaysRest) {
             var that = this;
 
-            $.each(that._editData, function(_, editData) {
+            each(that._editData, function(_, editData) {
                 if(editData.pageIndex !== that._pageIndex || alwaysRest) {
                     delete editData.pageIndex;
                     delete editData.rowIndex;
@@ -1926,7 +1936,7 @@ module.exports = {
                         var $cellElements = this.getCellElements(rowIndex),
                             cellIndex = -1;
 
-                        $.each($cellElements, function(index, cellElement) {
+                        each($cellElements, function(index, cellElement) {
                             if($(cellElement).find($cell).length) {
                                 cellIndex = index;
                                 return false;
@@ -1944,7 +1954,7 @@ module.exports = {
                         editFormRowIndex = this._editingController.getEditFormRowIndex();
 
                     if(editFormRowIndex === rowIndex) {
-                        $.each($cells, function(index, cellElement) {
+                        each($cells, function(index, cellElement) {
                             item = $(cellElement).find(".dx-field-item-content").data("dx-form-item");
 
                             if(item && item.column && item.column.visibleIndex === visibleIndex) {

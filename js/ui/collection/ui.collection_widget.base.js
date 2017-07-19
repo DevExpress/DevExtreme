@@ -832,7 +832,7 @@ var CollectionWidget = Widget.inherit({
 
     _renderItems: function(items) {
         if(items.length) {
-            $.each(items, this._renderItem.bind(this));
+            iteratorUtils.each(items, this._renderItem.bind(this));
         }
 
         this._renderEmptyMessage();

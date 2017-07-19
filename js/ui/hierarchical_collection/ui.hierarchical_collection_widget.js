@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     dataCoreUtils = require("../../core/utils/data"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     devices = require("../../core/devices"),
     iconUtils = require("../../core/utils/icon"),
     HierarchicalDataAdapter = require("./ui.data_adapter"),
@@ -155,7 +156,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _initAccessors: function() {
         var that = this;
-        $.each(this._getAccessors(), function(_, accessor) {
+        each(this._getAccessors(), function(_, accessor) {
             that._compileAccessor(accessor);
         });
     },
@@ -167,7 +168,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _getChildNodes: function(node) {
         var that = this,
             arr = [];
-        $.each(node.internalFields.childrenKeys, function(_, key) {
+        each(node.internalFields.childrenKeys, function(_, key) {
             var childNode = that._dataAdapter.getNodeByKey(key);
             arr.push(childNode);
         });
@@ -204,7 +205,7 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
                 setters: {}
             };
 
-        $.each(this._getAccessors(), function(_, accessor) {
+        each(this._getAccessors(), function(_, accessor) {
             var getterName = "_" + accessor + "Getter",
                 setterName = "_" + accessor + "Setter",
                 newAccessor = accessor === "parentId" ? "parentKey" : accessor;

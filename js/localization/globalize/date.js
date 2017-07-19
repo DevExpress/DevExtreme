@@ -563,8 +563,7 @@ var weekData = {
 
 var ACCEPTABLE_JSON_FORMAT_PROPERTIES = ["skeleton", "date", "time", "datetime", "raw"];
 
-var $ = require("../../core/renderer"),
-    Globalize = require("globalize"),
+var Globalize = require("globalize"),
     dateLocalization = require("../date"),
     isObject = require("../../core/utils/type").isObject,
     inArray = require("../../core/utils/array").inArray,
@@ -668,7 +667,7 @@ if(Globalize && Globalize.formatDate) {
             var result = globalizeFormat.path && that._getFormatStringByPath(globalizeFormat.path) || globalizeFormat.pattern;
 
             if(globalizeFormat.parts) {
-                $.each(globalizeFormat.parts, function(index, part) {
+                iteratorUtils.each(globalizeFormat.parts, function(index, part) {
                     result = result.replace("{" + index + "}", that._getPatternByFormat(part));
                 });
             }

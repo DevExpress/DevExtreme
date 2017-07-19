@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     equalByValue = commonUtils.equalByValue,
     Guid = require("../../core/guid"),
@@ -154,10 +155,34 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return typeUtils.isString(width) && width.slice(-1) === "%";
     },
 
-    _getNotTruncatedColumnWidth: function(column, containerWidth, columnsCount, columnsCanFit) {
+    _isColumnHidden: function(column) {
+        return this._hiddenColumns.filter(function(hiddenColumn) {
+            return hiddenColumn.index === column.index;
+        }).length > 0;
+    },
+
+    _getAverageColumnsWidth: function(containerWidth, columns) {
+        var that = this,
+            fixedColumnsWidth = 0,
+            columnsWithoutWidthCount = 0;
+
+        columns.forEach(function(column) {
+            if(!that._isColumnHidden(column)) {
+                if(typeUtils.isDefined(column.width)) {
+                    fixedColumnsWidth += column.width;
+                } else {
+                    columnsWithoutWidthCount++;
+                }
+            }
+        });
+        return (containerWidth - fixedColumnsWidth) / columnsWithoutWidthCount;
+    },
+
+    _getNotTruncatedColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
         var columnId = getColumnId(column),
             widthOption = this._columnsController.columnOption(columnId, "width"),
             bestFitWidth = this._columnsController.columnOption(columnId, "bestFitWidth"),
+            columnsCount = contentColumns.length,
             colWidth;
 
         if(widthOption && widthOption !== "auto") {
@@ -173,7 +198,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         } else {
             var columnAutoWidth = this.option("columnAutoWidth");
 
-            colWidth = columnAutoWidth || !!column.command ? bestFitWidth : containerWidth / columnsCount;
+            colWidth = columnAutoWidth || !!column.command ? bestFitWidth : this._getAverageColumnsWidth(containerWidth, contentColumns);
         }
 
         var isTruncated = colWidth < bestFitWidth;
@@ -196,7 +221,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             columns = that._columnsController.getVisibleColumns(),
             colWidth = 0;
 
-        $.each(columns, function(index, column) {
+        each(columns, function(index, column) {
             if(column.index < 0 || column.command) {
                 colWidth += that._columnsController.columnOption(getColumnId(column), "bestFitWidth") || 0;
             }
@@ -225,7 +250,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
     _getFormItemsByHiddenColumns: function(hiddenColumns) {
         var items = [];
-        $.each(hiddenColumns, function(_, column) {
+        each(hiddenColumns, function(_, column) {
             items.push({
                 column: column,
                 name: column.name,
@@ -343,7 +368,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 for(i = 0; i < visibleColumns.length; i++) {
                     visibleColumn = visibleColumns[i];
 
-                    var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, contentColumnCount, columnsCanFit),
+                    var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, contentColumns, columnsCanFit),
                         columnId = getColumnId(visibleColumn),
                         widthOption = that._columnsController.columnOption(columnId, "width"),
                         columnBestFitWidth = that._columnsController.columnOption(columnId, "bestFitWidth");
