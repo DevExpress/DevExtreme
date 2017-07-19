@@ -289,7 +289,7 @@ var cleanData = function(node, cleanSelf) {
 
     renderer.cleanData(childNodes);
     if(cleanSelf) {
-        renderer.cleanData(node);
+        renderer.cleanData([node]);
     }
 };
 
@@ -599,7 +599,71 @@ initRender.prototype.toArray = function() {
 };
 
 var getWindow = function(element) {
-    return typeUtils.isWindow(element) ? element : element.nodeType === 9 && element.defaultView;
+    return typeUtils.isWindow(element) ? element : element.defaultView;
+};
+
+initRender.prototype.offset = function() {
+    if(!this[0]) return;
+
+    if(!this[0].getClientRects().length) {
+        return {
+            top: 0,
+            left: 0
+        };
+    }
+
+    var rect = this[0].getBoundingClientRect();
+    var win = getWindow(this[0].ownerDocument);
+    var docElem = this[0].ownerDocument.documentElement;
+
+    return {
+        top: rect.top + win.pageYOffset - docElem.clientTop,
+        left: rect.left + win.pageXOffset - docElem.clientLeft
+    };
+};
+
+initRender.prototype.offsetParent = function() {
+    if(!this[0]) return renderer();
+    return renderer(this[0].offsetParent || document.documentElement);
+};
+
+initRender.prototype.position = function() {
+    if(!this[0]) return;
+
+    var offset;
+    var marginTop = parseFloat(this.css("marginTop"));
+    var marginLeft = parseFloat(this.css("marginLeft"));
+
+    if(this.css("position") === "fixed") {
+        offset = this[0].getBoundingClientRect();
+
+        return {
+            top: offset.top - marginTop,
+            left: offset.left - marginLeft
+        };
+    }
+
+    offset = this.offset();
+
+    var offsetParent = this.offsetParent();
+    var parentOffset = {
+        top: 0,
+        left: 0
+    };
+
+    if(offsetParent[0].nodeName !== "HTML") {
+        parentOffset = offsetParent.offset();
+    }
+
+    parentOffset = {
+        top: parentOffset.top + parseFloat(offsetParent.css("borderTopWidth")),
+        left: parentOffset.left + parseFloat(offsetParent.css("borderLeftWidth"))
+    };
+
+    return {
+        top: offset.top - parentOffset.top - marginTop,
+        left: offset.left - parentOffset.left - marginLeft
+    };
 };
 
 [{

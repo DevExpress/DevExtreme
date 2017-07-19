@@ -2,5 +2,8 @@
 
 var $ = require("jquery");
 var rendererBase = require("../../core/renderer_base");
+var useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 
-rendererBase.set($);
+if(useJQueryRenderer) {
+    rendererBase.set($);
+}
