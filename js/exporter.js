@@ -3,7 +3,6 @@
 /* global DevExpress, jQuery */
 
 var $ = jQuery,
-    iteratorUtils = require("./core/utils/iterator"),
     BaseWidget = DevExpress.viz.BaseWidget,
     registerComponent = DevExpress.registerComponent,
     DOMComponent = DevExpress.DOMComponent;
@@ -78,7 +77,7 @@ var Exporter = DOMComponent.inherit({
     _createExportItems: function(exportFormat) {
         var that = this;
 
-        return iteratorUtils.map(exportFormat, function(value) {
+        return $.map(exportFormat, function(value) {
             value = value.toUpperCase();
             if(that.getSourceContainer().find("svg").length > 1 && value === "SVG") {
                 return null;

@@ -210,7 +210,7 @@ var createODataQueryAdapter = function(queryOptions) {
                     });
                 }
 
-                return iteratorUtils.map(hash, function(k, v) { return v; }).join();
+                return $.map(hash, function(k, v) { return v; }).join();
             };
 
             var generatorV4 = function() {
@@ -234,7 +234,7 @@ var createODataQueryAdapter = function(queryOptions) {
                             result += "(";
 
                             if(select.length) {
-                                result += "$select=" + iteratorUtils.map(select, serializePropName).join();
+                                result += "$select=" + $.map(select, serializePropName).join();
                             }
 
                             if(expand.length) {
@@ -242,7 +242,7 @@ var createODataQueryAdapter = function(queryOptions) {
                                     result += ";";
                                 }
 
-                                result += "$expand=" + iteratorUtils.map(expand, serializePropName).join();
+                                result += "$expand=" + $.map(expand, serializePropName).join();
                             }
                             result += ")";
                         }

@@ -315,7 +315,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function prepareDataFields(withArray, valueFields) {
 
-        return iteratorUtils.map(valueFields, function(cell) {
+        return $.map(valueFields, function(cell) {
             if(typeUtils.isString(cell.expression)) {
                 declare(cell.expression, withArray, cell.dataField, "member");
             }
@@ -553,13 +553,13 @@ exports.XmlaStore = Class.inherit((function() {
 
     function getVisibleChildren(item, visibleLevels) {
         var result = [],
-            children = item.children && (item.children.length ? item.children : iteratorUtils.map(item.children.grandTotalHash || [], function(e) {
+            children = item.children && (item.children.length ? item.children : $.map(item.children.grandTotalHash || [], function(e) {
                 return e.children;
             })),
             firstChild = children && children[0];
 
         if(firstChild && (visibleLevels[firstChild.hierarchyName] && (inArray(firstChild.levelName, visibleLevels[firstChild.hierarchyName]) !== -1) || !visibleLevels[firstChild.hierarchyName] || firstChild.level === 0)) {
-            var newChildren = iteratorUtils.map(children, function(child) {
+            var newChildren = $.map(children, function(child) {
                 return child.hierarchyName === firstChild.hierarchyName ? child : null;
             });
             newChildren.grandTotalHash = children.grandTotalHash;

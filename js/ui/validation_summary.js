@@ -1,6 +1,7 @@
 "use strict";
 
-var registerComponent = require("../core/component_registrator"),
+var $ = require("../core/renderer"),
+    registerComponent = require("../core/component_registrator"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
     iteratorUtils = require("../core/utils/iterator"),
@@ -246,7 +247,7 @@ var ValidationSummary = CollectionWidget.inherit({
 
     _groupValidationHandler: function(params) {
         var that = this,
-            items = that._getOrderedItems(params.validators, iteratorUtils.map(params.brokenRules, function(rule) {
+            items = that._getOrderedItems(params.validators, $.map(params.brokenRules, function(rule) {
                 return {
                     text: rule.message,
                     validator: rule.validator

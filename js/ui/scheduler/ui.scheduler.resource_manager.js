@@ -38,7 +38,7 @@ var ResourceManager = Class.inherit({
         var valueGetter = dataCoreUtils.compileGetter(getValueExpr(resource)),
             displayGetter = dataCoreUtils.compileGetter(getDisplayExpr(resource));
 
-        return iteratorUtils.map(data, function(item) {
+        return $.map(data, function(item) {
             var result = {
                 id: valueGetter(item),
                 text: displayGetter(item)
@@ -93,7 +93,7 @@ var ResourceManager = Class.inherit({
             setter: {}
         };
 
-        this._resourceFields = iteratorUtils.map(resources || [], (function(resource) {
+        this._resourceFields = $.map(resources || [], (function(resource) {
             var field = this.getField(resource);
 
             this._dataAccessors.getter[field] = dataCoreUtils.compileGetter(field);

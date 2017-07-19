@@ -5,7 +5,6 @@ var $ = require("../core/renderer"),
     errors = require("./widget/ui.errors"),
     DOMComponent = require("../core/dom_component"),
     extend = require("../core/utils/extend").extend,
-    map = require("../core/utils/iterator").map,
     ValidationMixin = require("./validation/validation_mixin"),
     ValidationEngine = require("./validation_engine"),
     DefaultAdapter = require("./validation/default_adapter"),
@@ -221,7 +220,7 @@ var Validator = DOMComponent.inherit({
             bypass = adapter.bypass && adapter.bypass(),
             value = adapter.getValue(),
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
-            rules = map(that.option("validationRules"), function(rule) {
+            rules = $.map(that.option("validationRules"), function(rule) {
                 rule.validator = that;
                 return rule;
             }),

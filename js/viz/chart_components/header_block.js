@@ -1,6 +1,7 @@
 "use strict";
 
-var LayoutElementModule = require("../core/layout_element"),
+var $ = require("../../core/renderer"),
+    LayoutElementModule = require("../core/layout_element"),
     extend = require("../../core/utils/extend").extend,
     iteratorUtils = require("../../core/utils/iterator"),
 
@@ -12,7 +13,7 @@ function HeaderBlock() { }
 _extend(HeaderBlock.prototype, LayoutElementModule.LayoutElement.prototype, {
 
     update: function(elements, canvas) {
-        this._elements = iteratorUtils.map(elements, function(element) {
+        this._elements = $.map(elements, function(element) {
             return element.getLayoutOptions() ? element : null;
         });
         this._canvas = canvas;

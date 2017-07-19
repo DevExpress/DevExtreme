@@ -785,7 +785,7 @@ var TagBox = SelectBox.inherit({
         var $input = this._input(),
             values = this._getValue(),
             items = [],
-            itemLoadDeferreds = iteratorUtils.map(values, (function(value) {
+            itemLoadDeferreds = $.map(values, (function(value) {
                 return this._loadItem(value).always((function(item) {
                     var valueIndex = values.indexOf(value);
 

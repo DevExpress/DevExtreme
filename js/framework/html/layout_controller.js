@@ -148,7 +148,7 @@ var DefaultLayoutController = Class.inherit({
             }
         });
 
-        when.apply($, iteratorUtils.map(viewsToShow, function(viewInfo) {
+        when.apply($, $.map(viewsToShow, function(viewInfo) {
             return that.showView(viewInfo);
         })).done(function() {
             that._notifyShown(viewsToShow);

@@ -36,7 +36,7 @@ var processItems = function(groupItems, field) {
     pivotGridUtils.foreachTree(groupItems, function(items) {
         var item = items[0],
             path = pivotGridUtils.createPath(items),
-            preparedFilterValueByText = isTree ? iteratorUtils.map(items, function(item) { return item.text; }).reverse().join("/") : item.text,
+            preparedFilterValueByText = isTree ? $.map(items, function(item) { return item.text; }).reverse().join("/") : item.text,
             preparedFilterValue;
 
         item.value = isTree ? path.slice(0) : (item.key || item.value);

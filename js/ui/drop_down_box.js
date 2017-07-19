@@ -3,7 +3,6 @@
 var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     DataExpressionMixin = require("./editor/ui.data_expression"),
     commonUtils = require("../core/utils/common"),
-    map = require("../core/utils/iterator").map,
     isDefined = require("../core/utils/type").isDefined,
     selectors = require("./widget/jquery.selectors"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
@@ -181,7 +180,7 @@ var DropDownBox = DropDownEditor.inherit({
 
         keys = Array.isArray(keys) ? keys : [keys];
 
-        var itemLoadDeferreds = map(keys, (function(key) {
+        var itemLoadDeferreds = $.map(keys, (function(key) {
             return this._loadItem(key).always((function(item) {
                 var displayValue = this._displayGetter(item);
                 if(isDefined(displayValue)) {

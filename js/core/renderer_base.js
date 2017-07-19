@@ -731,6 +731,7 @@ renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.makeArray = $.makeArray;
 renderer.contains = $.contains;
 renderer.Deferred = $.Deferred;
+renderer.map = $.map;
 
 module.exports = {
     set: function(strategy) { renderer = strategy; },

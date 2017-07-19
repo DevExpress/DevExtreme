@@ -1,6 +1,7 @@
 "use strict";
 
-var Class = require("../../core/class"),
+var $ = require("../../core/renderer"),
+    Class = require("../../core/class"),
     config = require("../../core/config"),
     iteratorUtils = require("../../core/utils/iterator"),
     dateSerialization = require("../../core/utils/date_serialization"),
@@ -124,7 +125,7 @@ var AppointmentModel = Class.inherit({
             }
 
             var appointmentResourceValues = arrayUtils.wrapToArray(resource),
-                resourceData = iteratorUtils.map(resources[i].items, function(item) { return item.id; });
+                resourceData = $.map(resources[i].items, function(item) { return item.id; });
 
             for(var j = 0, itemDataCount = appointmentResourceValues.length; j < itemDataCount; j++) {
                 if(inArray(appointmentResourceValues[j], resourceData) > -1) {

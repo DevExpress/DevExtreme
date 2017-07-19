@@ -1,6 +1,7 @@
 "use strict";
 
-var Class = require("../../core/class"),
+var $ = require("../../core/renderer"),
+    Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
@@ -86,7 +87,7 @@ var WidgetAdapterBase = Class.inherit({
     },
     _setWidgetItemOption: function(optionName, optionValue, itemCommand) {
         var items = this.widget.option("items"),
-            itemIndex = inArray(itemCommand, iteratorUtils.map(items, function(item) {
+            itemIndex = inArray(itemCommand, $.map(items, function(item) {
                 return item.command || {};
             }));
 

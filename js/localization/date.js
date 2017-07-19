@@ -1,6 +1,7 @@
 "use strict";
 
-var numberLocalization = require("./number"),
+var $ = require("../core/renderer"),
+    numberLocalization = require("./number"),
     dependencyInjector = require("../core/utils/dependency_injector"),
     isString = require("../core/utils/type").isString,
     iteratorUtils = require("../core/utils/iterator"),
@@ -558,7 +559,7 @@ var cutCaptions = function(captions, format) {
         narrow: 1
     };
 
-    return iteratorUtils.map(captions, function(caption) {
+    return $.map(captions, function(caption) {
         return caption.substr(0, lengthByFormat[format]);
     });
 };

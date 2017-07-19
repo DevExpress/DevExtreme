@@ -1,6 +1,7 @@
 "use strict";
 
-var stringUtils = require("../../core/utils/string"),
+var $ = require("../../core/renderer"),
+    stringUtils = require("../../core/utils/string"),
     iteratorUtils = require("../../core/utils/iterator"),
     odataUtils = require("./utils");
 
@@ -11,7 +12,7 @@ var DEFAULT_PROTOCOL_VERSION = 2;
 var formatFunctionInvocationUrl = function(baseUrl, args) {
     return stringUtils.format("{0}({1})",
         baseUrl,
-        iteratorUtils.map(args || {}, function(value, key) {
+        $.map(args || {}, function(value, key) {
             return stringUtils.format("{0}={1}", key, value);
         }).join(",")
     );

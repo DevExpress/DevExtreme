@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
-    map = require("../../core/utils/iterator").map,
     DynamicProvider = require("./provider.dynamic"),
     errors = require("../widget/ui.errors"),
     Color = require("../../color"),
@@ -340,13 +339,13 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     _renderRoute: function(options) {
-        return Promise.all(map(options.locations, function(point) {
+        return Promise.all($.map(options.locations, function(point) {
             return this._resolveLocation(point);
         }.bind(this))).then(function(locations) {
             return new Promise(function(resolve) {
                 var origin = locations.shift(),
                     destination = locations.pop(),
-                    waypoints = map(locations, function(location) {
+                    waypoints = $.map(locations, function(location) {
                         return { location: location, stopover: true };
                     });
 
