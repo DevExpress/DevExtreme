@@ -51,9 +51,16 @@ var dateSetterMap = {
             correctDate(date, value);
         }
     },
-    "byday": function(date, dayOfWeek, weekStart) {
-        dayOfWeek += days[weekStart] > dayOfWeek ? 7 : 0;
-        date.setDate(date.getDate() - date.getDay() + dayOfWeek);
+    "byday": function(date, byDay, weekStart, frequency) {
+        var dayOfWeek = byDay;
+
+        if(frequency === "DAILY" && byDay === 0) {
+            dayOfWeek = 7;
+        }
+
+        byDay += days[weekStart] > dayOfWeek ? 7 : 0;
+        date.setDate(date.getDate() - date.getDay() + byDay);
+
     },
     "byweekno": function(date, weekNumber, weekStart) {
         var initialDate = new Date(date),
@@ -667,7 +674,7 @@ var getDatesByRules = function(dateRules, startDate, rule) {
             updatedDate = new Date(startDate);
 
         for(var field in current) {
-            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule["wkst"]);
+            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule["wkst"], rule.freq);
         }
 
         if(commonUtils.isArray(updatedDate)) {
