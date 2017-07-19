@@ -712,7 +712,6 @@ renderer.cleanData = function(element) {
 renderer.when = $.when;
 renderer.event = $.event;
 renderer.Event = $.Event;
-renderer.easing = $.easing;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.makeArray = $.makeArray;
 renderer.contains = $.contains;
