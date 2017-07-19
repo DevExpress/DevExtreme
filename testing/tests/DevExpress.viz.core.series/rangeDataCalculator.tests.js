@@ -2727,8 +2727,8 @@ QUnit.test("GetViewport without zooming", function(assert) {
     rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.min, undefined, "min y");
-    assert.equal(rangeData.max, undefined, "max y");
+    assert.equal(rangeData.min, 0, "min y");
+    assert.equal(rangeData.max, 60, "max y");
 });
 
 QUnit.module("Zooming range data. Simple", {
