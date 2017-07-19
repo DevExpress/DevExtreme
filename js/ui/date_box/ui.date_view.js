@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Editor = require("../editor/editor"),
     DateViewRoller = require("./ui.date_view_roller"),
     dateUtils = require("../../core/utils/date"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     uiDateUtils = require("./ui.date_utils"),
     registerComponent = require("../../core/component_registrator"),
@@ -101,7 +102,7 @@ var DateView = Editor.inherit({
 
         var that = this;
 
-        $.each(that._rollerConfigs, function(name) {
+        each(that._rollerConfigs, function(name) {
             var $roller = $("<div>").appendTo(that._$rollersContainer)
                 .addClass(DATEVIEW_ROLLER_CLASS + "-" + that._rollerConfigs[name].type);
 
@@ -179,14 +180,14 @@ var DateView = Editor.inherit({
     _setActiveRoller: function(currentRoller) {
         var activeRoller = currentRoller && this._rollers[currentRoller.type];
 
-        $.each(this._rollers, function() {
+        each(this._rollers, function() {
             this.toggleActiveState(this === activeRoller);
         });
     },
 
     _updateRollersPosition: function() {
         var that = this;
-        $.each(this._rollers, function(type) {
+        each(this._rollers, function(type) {
             var correctIndex = that._rollerConfigs[type].getIndex(that._getCurrentDate());
             this.option("selectedIndex", correctIndex);
         });

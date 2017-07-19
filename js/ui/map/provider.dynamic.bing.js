@@ -393,7 +393,7 @@ var BingProvider = DynamicProvider.inherit({
                     routeDraggable: false
                 });
 
-                $.each(locations, function(_, location) {
+                iteratorUtils.each(locations, function(_, location) {
                     var waypoint = new Microsoft.Maps.Directions.Waypoint({ location: location });
                     direction.addWaypoint(waypoint);
                 });

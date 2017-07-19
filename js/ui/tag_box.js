@@ -337,9 +337,8 @@ var TagBox = SelectBox.inherit({
              * @extends Action
              * @type_function_param1_field4 multiTagElement:jQuery
              * @type_function_param1_field5 selectedItems:array
-             * @type_function_param1_field6 allSelected:boolean
-             * @type_function_param1_field7 text:string
-             * @type_function_param1_field8 cancel:boolean
+             * @type_function_param1_field6 text:string
+             * @type_function_param1_field7 cancel:boolean
              * @action
              */
             onMultiTagPreparing: null,
@@ -485,14 +484,10 @@ var TagBox = SelectBox.inherit({
     _multiTagPreparingHandler: function(args) {
         var selectedCount = this._getValue().length;
 
-        if(args.allSelected) {
-            args.text = messageLocalization.getFormatter("dxTagBox-allSelected")(selectedCount);
+        if(!this.option("showMultiTagOnly")) {
+            args.text = messageLocalization.getFormatter("dxTagBox-moreSelected")(selectedCount - this.option("maxTagCount") + 1);
         } else {
-            if(!this.option("showMultiTagOnly")) {
-                args.text = messageLocalization.getFormatter("dxTagBox-moreSelected")(selectedCount - this.option("maxTagCount") + 1);
-            } else {
-                args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
-            }
+            args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
         }
     },
 
@@ -757,20 +752,6 @@ var TagBox = SelectBox.inherit({
         return isDefined(maxTagCount) && values.length > maxTagCount;
     },
 
-    _getTotalCount: function() {
-        var dataSourceTotalCount = this._dataSource.totalCount(),
-            pageSize = this._dataSource.pageSize(),
-            isLastPage = this._dataSource.isLastPage(),
-            itemsCount = this.option("items").length;
-
-        if(isLastPage || !pageSize) return itemsCount;
-        return dataSourceTotalCount;
-    },
-
-    _allItemsSelected: function() {
-        return this._getValue().length === this._getTotalCount();
-    },
-
     _renderMultiTag: function($input) {
         var $tag = $("<div>")
                 .addClass(TAGBOX_TAG_CLASS)
@@ -778,8 +759,7 @@ var TagBox = SelectBox.inherit({
 
         var args = {
             multiTagElement: $tag,
-            selectedItems: this.option("selectedItems"),
-            allSelected: this._allItemsSelected()
+            selectedItems: this.option("selectedItems")
         };
 
         this._multiTagPreparingAction(args);
@@ -828,7 +808,7 @@ var TagBox = SelectBox.inherit({
                 maxTagCount = this.option("maxTagCount");
 
             items.forEach(function(item, index) {
-                if(($multiTag && (showMultiTagOnly || this._allItemsSelected())) || ($multiTag && !showMultiTagOnly && index - maxTagCount >= -1)) {
+                if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - maxTagCount >= -1)) {
                     return false;
                 }
                 this._renderTag(item, $multiTag || $input);
@@ -983,11 +963,11 @@ var TagBox = SelectBox.inherit({
 
         var value = this._getValue().slice();
 
-        $.each(e.removedItems || [], (function(_, removedItem) {
+        iteratorUtils.each(e.removedItems || [], (function(_, removedItem) {
             this._removeTag(value, this._valueGetter(removedItem));
         }).bind(this));
 
-        $.each(e.addedItems || [], (function(_, addedItem) {
+        iteratorUtils.each(e.addedItems || [], (function(_, addedItem) {
             this._addTag(value, this._valueGetter(addedItem));
         }).bind(this));
 
@@ -1045,7 +1025,7 @@ var TagBox = SelectBox.inherit({
 
         var result = -1;
 
-        $.each(values, (function(index, selectedValue) {
+        iteratorUtils.each(values, (function(index, selectedValue) {
             if(this._isValueEquals(value, selectedValue)) {
                 result = index;
                 return false;
@@ -1056,7 +1036,9 @@ var TagBox = SelectBox.inherit({
     },
 
     _lastValue: function() {
-        return this._getValue().slice(-1).pop() || null;
+        var values = this._getValue(),
+            lastValue = values[values.length - 1];
+        return isDefined(lastValue) ? lastValue : null;
     },
 
     _valueChangeEventHandler: noop,
@@ -1123,7 +1105,7 @@ var TagBox = SelectBox.inherit({
         var itemValue = this._valueGetter(itemData),
             result = true;
 
-        $.each(this._getValue(), (function(index, value) {
+        iteratorUtils.each(this._getValue(), (function(index, value) {
             if(this._isValueEquals(value, itemValue)) {
                 result = false;
                 return false;
@@ -1148,7 +1130,7 @@ var TagBox = SelectBox.inherit({
             selectedItems = this._getPlainItems(this._list.option("selectedItems")),
             result = [];
 
-        $.each(selectedItems, function(index, item) {
+        iteratorUtils.each(selectedItems, function(index, item) {
             result[index] = that._valueGetter(item);
         });
 

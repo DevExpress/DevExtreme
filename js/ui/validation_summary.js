@@ -230,7 +230,7 @@ var ValidationSummary = CollectionWidget.inherit({
     _getOrderedItems: function(validators, items) {
         var orderedItems = [];
 
-        $.each(validators, function(_, validator) {
+        iteratorUtils.each(validators, function(_, validator) {
             var firstItem = grep(items, function(item) {
                 if(item.validator === validator) {
                     return true;
@@ -256,7 +256,7 @@ var ValidationSummary = CollectionWidget.inherit({
 
         that.validators = params.validators;
 
-        $.each(that.validators, function(_, validator) {
+        iteratorUtils.each(that.validators, function(_, validator) {
             if(validator._validationSummary !== this) {
                 var handler = that._itemValidationHandler.bind(that),
                     disposingHandler = function() {
@@ -281,7 +281,7 @@ var ValidationSummary = CollectionWidget.inherit({
             newMessage = itemValidationResult.brokenRule && itemValidationResult.brokenRule.message,
             validator = itemValidationResult.validator;
 
-        $.each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             if(item.validator === validator) {
                 if(isValid) {
                     elementIndex = index;

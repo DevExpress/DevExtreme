@@ -9,7 +9,7 @@ var $ = require("../../core/renderer"),
     _isString = require("../../core/utils/type").isString,
     _isArray = Array.isArray,
     _isFinite = isFinite,
-    _each = $.each,
+    _each = iterateUtils.each,
     _map = iterateUtils.map;
 
 var BaseRangeContainer = BaseElement.inherit({

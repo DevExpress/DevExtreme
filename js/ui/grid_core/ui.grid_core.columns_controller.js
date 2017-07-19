@@ -615,7 +615,7 @@ module.exports = {
                 var result = [];
 
                 if(columnsOptions) {
-                    $.each(columnsOptions, function(index, columnOptions) {
+                    iteratorUtils.each(columnsOptions, function(index, columnOptions) {
                         var userStateColumnOptions = that._columnsUserState && checkUserStateColumn(columnOptions, that._columnsUserState[index]) && that._columnsUserState[index],
                             column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
 
@@ -691,7 +691,7 @@ module.exports = {
                 var colspan = 0,
                     columns = that.getChildrenByBandColumn(columnID, true);
 
-                $.each(columns, function(_, column) {
+                iteratorUtils.each(columns, function(_, column) {
                     if(column.isBand) {
                         column.colspan = column.colspan || calculateColspan(that, column.index);
                         colspan += column.colspan;
@@ -824,17 +824,17 @@ module.exports = {
             };
 
             var updateColumnIndexes = function(that) {
-                $.each(that._columns, function(index, column) {
+                iteratorUtils.each(that._columns, function(index, column) {
                     column.index = index;
                 });
 
-                $.each(that._columns, function(index, column) {
+                iteratorUtils.each(that._columns, function(index, column) {
                     if(typeUtils.isObject(column.ownerBand)) {
                         column.ownerBand = column.ownerBand.index;
                     }
                 });
 
-                $.each(that._commandColumns, function(index, column) {
+                iteratorUtils.each(that._commandColumns, function(index, column) {
                     column.index = -(index + 1);
                 });
             };
@@ -848,7 +848,7 @@ module.exports = {
             };
 
             var updateColumnSortIndexes = function(that, currentColumn) {
-                $.each(that._columns, function(index, column) {
+                iteratorUtils.each(that._columns, function(index, column) {
                     if(isDefined(column.sortIndex) && !isSortOrderValid(column.sortOrder)) {
                         delete column.sortIndex;
                     }
@@ -1164,7 +1164,7 @@ module.exports = {
                 var result = [];
 
                 rowIndex = rowIndex || 0;
-                columns[rowIndex] && $.each(columns[rowIndex], function(_, column) {
+                columns[rowIndex] && iteratorUtils.each(columns[rowIndex], function(_, column) {
                     if(column.ownerBand === bandColumnID || isDefined(column.groupIndex)) {
                         if(!column.isBand || !column.colspan) {
                             if((!column.command || rowIndex < 1)) {
@@ -1440,7 +1440,7 @@ module.exports = {
                 getGroupColumns: function() {
                     var result = [];
 
-                    $.each(this._columns, function() {
+                    iteratorUtils.each(this._columns, function() {
                         var column = this;
                         if(isDefined(column.groupIndex)) {
                             result[column.groupIndex] = column;
@@ -1556,7 +1556,7 @@ module.exports = {
                 _isColumnFixing: function() {
                     var isColumnFixing = this.option("columnFixing.enabled");
 
-                    !isColumnFixing && $.each(this._columns, function(_, column) {
+                    !isColumnFixing && iteratorUtils.each(this._columns, function(_, column) {
                         if(column.fixed) {
                             isColumnFixing = true;
                             return false;
@@ -1646,7 +1646,7 @@ module.exports = {
                         positiveIndexedColumns[i] = [{}, {}, {}];
                     }
 
-                    $.each(columns, function() {
+                    iteratorUtils.each(columns, function() {
                         var column = this,
                             rowIndex,
                             visibleIndex = column.visibleIndex,
@@ -1694,13 +1694,13 @@ module.exports = {
                         }
                     });
 
-                    $.each(result, function(rowIndex) {
+                    iteratorUtils.each(result, function(rowIndex) {
                         objectUtils.orderEach(negativeIndexedColumns[rowIndex], function(_, columns) {
                             result[rowIndex].unshift.apply(result[rowIndex], columns);
                         });
 
                         firstPositiveIndexColumn = result[rowIndex].length;
-                        $.each(positiveIndexedColumns[rowIndex], function(index, columnsByFixing) {
+                        iteratorUtils.each(positiveIndexedColumns[rowIndex], function(index, columnsByFixing) {
                             objectUtils.orderEach(columnsByFixing, function(_, columnsByVisibleIndex) {
                                 result[rowIndex].push.apply(result[rowIndex], columnsByVisibleIndex);
                             });
@@ -1726,7 +1726,7 @@ module.exports = {
 
                     columns = columns || that._columns;
 
-                    $.each(columns, function(_, column) {
+                    iteratorUtils.each(columns, function(_, column) {
                         if(column.ownerBand !== bandColumnIndex) {
                             return;
                         }
@@ -1860,7 +1860,7 @@ module.exports = {
 
                     if(allowSorting && column && column.allowSorting) {
                         if(needResetSorting && !isDefined(column.groupIndex)) {
-                            $.each(that._columns, function(index) {
+                            iteratorUtils.each(that._columns, function(index) {
                                 if(index !== columnIndex && this.sortOrder && !isDefined(this.groupIndex)) {
                                     delete this.sortOrder;
                                     delete this.sortIndex;
@@ -1894,12 +1894,12 @@ module.exports = {
                         sortColumns = [],
                         sort = [];
 
-                    $.each(that._columns, function() {
+                    iteratorUtils.each(that._columns, function() {
                         if((this.dataField || this.selector || this.calculateCellValue) && isDefined(this.sortIndex) && !isDefined(this.groupIndex)) {
                             sortColumns[this.sortIndex] = this;
                         }
                     });
-                    $.each(sortColumns, function() {
+                    iteratorUtils.each(sortColumns, function() {
                         var sortOrder = this && this.sortOrder;
                         if(isSortOrderValid(sortOrder)) {
                             sort.push({
@@ -1913,7 +1913,7 @@ module.exports = {
                 getGroupDataSourceParameters: function(useLocalSelector) {
                     var group = [];
 
-                    $.each(this.getGroupColumns(), function() {
+                    iteratorUtils.each(this.getGroupColumns(), function() {
                         var selector = this.calculateGroupValue || this.displayField || this.calculateDisplayValue || (useLocalSelector && this.selector) || this.dataField || this.calculateCellValue;
                         if(selector) {
                             group.push({
@@ -1928,7 +1928,7 @@ module.exports = {
                 refresh: function(updateNewLookupsOnly) {
                     var deferreds = [];
 
-                    $.each(this._columns, function() {
+                    iteratorUtils.each(this._columns, function() {
                         var lookup = this.lookup;
 
                         if(lookup && !this.calculateDisplayValue) {
@@ -1946,7 +1946,7 @@ module.exports = {
                 _updateColumnOptions: function(column) {
                     column.selector = column.selector || function(data) { return column.calculateCellValue(data); };
 
-                    $.each(["calculateSortValue", "calculateGroupValue", "calculateDisplayValue"], function(_, calculateCallbackName) {
+                    iteratorUtils.each(["calculateSortValue", "calculateGroupValue", "calculateDisplayValue"], function(_, calculateCallbackName) {
                         var calculateCallback = column[calculateCallbackName];
                         if(typeUtils.isFunction(calculateCallback) && !calculateCallback.originalCallback) {
                             column[calculateCallbackName] = function(data) { return calculateCallback.call(column, data); };
@@ -1987,7 +1987,7 @@ module.exports = {
                         firstItems = that._getFirstItems(dataSource),
                         isColumnDataTypesUpdated = false;
 
-                    $.each(that._columns, function(index, column) {
+                    iteratorUtils.each(that._columns, function(index, column) {
                         var i,
                             value,
                             dataType,
@@ -2110,7 +2110,7 @@ module.exports = {
                                 selector,
                                 isExpanded;
 
-                            $.each(columns, function(index, column) {
+                            iteratorUtils.each(columns, function(index, column) {
                                 delete column[indexParameterName];
                                 if(sortParameters) {
                                     for(i = 0; i < sortParameters.length; i++) {
@@ -2138,10 +2138,10 @@ module.exports = {
                         columnsGroupParameters = that.getGroupDataSourceParameters();
                         columnsSortParameters = that.getSortDataSourceParameters();
                         if(!that._columns.length) {
-                            $.each(groupParameters, function(index, group) {
+                            iteratorUtils.each(groupParameters, function(index, group) {
                                 that._columns.push(group.selector);
                             });
-                            $.each(sortParameters, function(index, sort) {
+                            iteratorUtils.each(sortParameters, function(index, sort) {
                                 that._columns.push(sort.selector);
                             });
                             assignColumns(that, createColumnsFromOptions(that, that._columns));
@@ -2281,7 +2281,7 @@ module.exports = {
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
                         } else if(typeUtils.isObject(option)) {
-                            $.each(option, function(optionName, value) {
+                            iteratorUtils.each(option, function(optionName, value) {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
                             });
@@ -2397,7 +2397,7 @@ module.exports = {
 
                     for(i = 0; i < columns.length; i++) {
                         result[i] = {};
-                        $.each(USER_STATE_FIELD_NAMES, handleStateField);
+                        iteratorUtils.each(USER_STATE_FIELD_NAMES, handleStateField);
                     }
                     return result;
                 },
@@ -2578,7 +2578,7 @@ module.exports = {
                         calculatedColumnOptions.resizedCallbacks.add(columnOptions.resized.bind(columnOptions));
                     }
 
-                    $.each(calculatedColumnOptions, function(optionName) {
+                    iteratorUtils.each(calculatedColumnOptions, function(optionName) {
                         var defaultOptionName;
                         if(typeUtils.isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf("default") !== 0) {
                             defaultOptionName = "default" + optionName.charAt(0).toUpperCase() + optionName.substr(1);
@@ -2621,7 +2621,7 @@ module.exports = {
                         parentBandColumns = column && getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns) { // T416483 - fix for jquery 2.1.4
-                        $.each(parentBandColumns, function(_, bandColumn) {
+                        iteratorUtils.each(parentBandColumns, function(_, bandColumn) {
                             if(bandColumn.index === bandColumnIndex) {
                                 result = true;
                                 return false;
@@ -2636,7 +2636,7 @@ module.exports = {
                         bandColumnsCache = this.getBandColumnsCache(),
                         bandColumns = columnIndex >= 0 && getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
 
-                    bandColumns && $.each(bandColumns, function(_, bandColumn) {
+                    bandColumns && iteratorUtils.each(bandColumns, function(_, bandColumn) {
                         result = result && bandColumn.visible;
                         return result;
                     });

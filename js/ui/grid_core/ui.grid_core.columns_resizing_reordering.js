@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -348,7 +349,7 @@ var DraggingHeaderView = modules.View.inherit({
         var that = this,
             result;
 
-        $.each(that._dragOptions.draggingPanels, function(index, draggingPanel) {
+        each(that._dragOptions.draggingPanels, function(index, draggingPanel) {
             if(draggingPanel) {
                 var boundingRect = draggingPanel.getBoundingRect();
                 if(boundingRect && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom) && (boundingRect.top === undefined || pos.y > boundingRect.top)
@@ -460,17 +461,19 @@ var DraggingHeaderView = modules.View.inherit({
             dragOptions = that._dragOptions;
 
         if(that._isDragging && !isResizing) {
+            var $element = that.element();
+
             moveDeltaX = Math.abs(eventData.x - dragOptions.columnElement.offset().left - dragOptions.deltaX);
             moveDeltaY = Math.abs(eventData.y - dragOptions.columnElement.offset().top - dragOptions.deltaY);
 
-            if(that.element().is(":visible") || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
+            if($element.is(":visible") || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
 
-                that.element().show();
+                $element.show();
 
                 newLeft = eventData.x - dragOptions.deltaX;
                 newTop = eventData.y - dragOptions.deltaY;
 
-                that.element().offset({ left: newLeft, top: newTop });
+                $element.css({ left: newLeft, top: newTop });
                 that.dockHeader(eventData);
             }
             e.preventDefault();
@@ -1015,7 +1018,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     _subscribeToEvents: function(draggingHeader, draggingPanels) {
         var that = this;
 
-        $.each(draggingPanels, function(_, draggingPanel) {
+        each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
                 var i,
                     columns,
@@ -1053,7 +1056,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                     columnElements = draggingPanel.getColumnElements(i) || [];
                     if(columnElements.length) {
                         columns = draggingPanel.getColumns(i) || [];
-                        $.each(columnElements, subscribeToEvents);
+                        each(columnElements, subscribeToEvents);
                     }
                 }
             }
@@ -1063,11 +1066,11 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     _unsubscribeFromEvents: function(draggingHeader, draggingPanels) {
         var that = this;
 
-        $.each(draggingPanels, function(_, draggingPanel) {
+        each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
                 var columnElements = draggingPanel.getColumnElements() || [];
 
-                $.each(columnElements, function(index, columnElement) {
+                each(columnElements, function(index, columnElement) {
                     var $columnElement = $(columnElement);
                     $columnElement.off(addNamespace(dragEvents.start, MODULE_NAMESPACE));
                     $columnElement.off(addNamespace(dragEvents.move, MODULE_NAMESPACE));

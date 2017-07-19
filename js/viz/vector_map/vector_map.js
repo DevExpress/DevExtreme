@@ -462,7 +462,7 @@ function resumeLayersData(layerCollection, options, renderer) {
     if(data) {
         layerCollection.__data = undefined;
         if(data.length) {
-            $.each(data, function(i, item) {
+            iteratorUtils.each(data, function(i, item) {
                 swapData(item, options[i]);
             });
         } else {

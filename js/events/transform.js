@@ -155,9 +155,9 @@ var TransformEmitter = Emitter.inherit({
     _fireEventAliases: function(eventPostfix, originalEvent, eventArgs) {
         eventArgs = eventArgs || {};
 
-        $.each(eventAliases, (function(_, eventAlias) {
+        iteratorUtils.each(eventAliases, (function(_, eventAlias) {
             var args = {};
-            $.each(eventAlias.args, function(name) {
+            iteratorUtils.each(eventAlias.args, function(name) {
                 if(name in eventArgs) {
                     args[name] = eventArgs[name];
                 }
@@ -328,7 +328,7 @@ var TransformEmitter = Emitter.inherit({
 
 var eventNames = iteratorUtils.map(eventAliases, function(eventAlias) {
     var eventNames = [];
-    $.each([START_POSTFIX, UPDATE_POSTFIX, END_POSTFIX], function(_, eventPostfix) {
+    iteratorUtils.each([START_POSTFIX, UPDATE_POSTFIX, END_POSTFIX], function(_, eventPostfix) {
         eventNames.push(DX_PREFIX + eventAlias.name + eventPostfix);
     });
     return eventNames;
@@ -339,6 +339,6 @@ registerEmitter({
     events: eventNames
 });
 
-$.each(eventNames, function(_, eventName) {
+iteratorUtils.each(eventNames, function(_, eventName) {
     exports[eventName.substring(DX_PREFIX.length)] = eventName;
 });

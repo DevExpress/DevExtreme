@@ -460,7 +460,7 @@ module.exports = (function() {
                 groupInterval = this.getGroupInterval(column);
 
             if(groupInterval) {
-                $.each(groupInterval, function(index, interval) {
+                iteratorUtils.each(groupInterval, function(index, interval) {
                     result.push(remoteGrouping ? { selector: dataField, groupInterval: interval, isExpanded: index < groupInterval.length - 1 } : getIntervalSelector.bind(column, interval));
                 });
 

@@ -603,7 +603,7 @@ var DataControllerFilterRowExtender = {
             filters = [that.callBase()],
             columns = that._columnsController.getVisibleColumns();
 
-        $.each(columns, function() {
+        iteratorUtils.each(columns, function() {
             var filter;
 
             if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue)) {

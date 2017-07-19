@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
+    each = require("../../core/utils/iterator").each,
     List = require("../list/ui.list.base");
 
 var TOOLBAR_MENU_ACTION_CLASS = "dx-toolbar-menu-action",
@@ -29,7 +30,7 @@ var ToolbarMenu = List.inherit({
         var that = this,
             $container = this._itemContainer();
 
-        $.each(["before", "center", "after", "menu"], function() {
+        each(["before", "center", "after", "menu"], function() {
             var sectionName = "_$" + this + "Section",
                 $section = that[sectionName];
 

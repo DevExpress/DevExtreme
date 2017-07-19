@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     compileGetter = require("../../core/utils/data").compileGetter,
     extend = require("../../core/utils/extend").extend,
     clickEvent = require("../../events/click"),
@@ -727,7 +728,7 @@ var ListBase = CollectionWidget.inherit({
 
     _renderItems: function(items) {
         if(this.option("grouped")) {
-            $.each(items, this._renderGroup.bind(this));
+            each(items, this._renderGroup.bind(this));
             this._attachGroupCollapseEvent();
             this._renderEmptyMessage();
         } else {
@@ -889,7 +890,7 @@ var ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_BODY_CLASS)
             .appendTo($groupElement);
 
-        $.each(groupItemsGetter(group) || [], (function(index, item) {
+        each(groupItemsGetter(group) || [], (function(index, item) {
             this._renderItem(index, item, $groupBody);
         }).bind(this));
 

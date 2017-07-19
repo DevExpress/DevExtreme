@@ -138,7 +138,7 @@ var Application = Class.inherit({
     _callComponentMethod: function(methodName, args) {
         var tasks = [];
 
-        $.each(this.components, function(index, component) {
+        iteratorUtils.each(this.components, function(index, component) {
             if(component[methodName] && typeUtils.isFunction(component[methodName])) {
                 var result = component[methodName](args);
                 if(result && result.done) {
@@ -250,7 +250,7 @@ var Application = Class.inherit({
     _disposeRemovedViews: function() {
         var that = this,
             args;
-        $.each(that._viewLinksHash, function(key, link) {
+        iteratorUtils.each(that._viewLinksHash, function(key, link) {
             if(!link.linkCount) {
                 args = { viewInfo: link.viewInfo };
                 that._processEvent("viewDisposing", args, args.viewInfo.model);
@@ -269,7 +269,7 @@ var Application = Class.inherit({
     _disposeView: function(viewInfo) {
         var commands = viewInfo.commands || [];
 
-        $.each(commands, function(index, command) {
+        iteratorUtils.each(commands, function(index, command) {
             command._dispose();
         });
     },
@@ -410,7 +410,7 @@ var Application = Class.inherit({
             currentNavigationItemId = viewInfo.model && viewInfo.model.currentNavigationItemId;
 
         if(currentNavigationItemId !== undefined) {
-            $.each(this.navigation, function(index, command) {
+            iteratorUtils.each(this.navigation, function(index, command) {
                 if(command.option("id") === currentNavigationItemId) {
                     selectedCommand = command;
                     return false;
@@ -419,7 +419,7 @@ var Application = Class.inherit({
         }
 
         if(!selectedCommand) {
-            $.each(this.navigation, function(index, command) {
+            iteratorUtils.each(this.navigation, function(index, command) {
                 var commandUri = command.option("onExecute");
                 if(typeUtils.isString(commandUri)) {
                     commandUri = commandUri.replace(/^#+/, "");
@@ -431,7 +431,7 @@ var Application = Class.inherit({
             });
         }
 
-        $.each(this.navigation, function(index, command) {
+        iteratorUtils.each(this.navigation, function(index, command) {
             if(forceUpdate && command === selectedCommand && command.option("highlighted")) {
                 command.fireEvent("optionChanged", [{ name: "highlighted", value: true, previousValue: true }]); //Q587642
             }

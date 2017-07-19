@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    noop = require("../core/utils/common").noop,
+var noop = require("../core/utils/common").noop,
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
+    each = require("../core/utils/iterator").each,
     vizUtils = require("./core/utils"),
     polarTranslatorModule = require("./translators/polar_translator"),
     rangeModule = require("./translators/range"),
@@ -114,7 +114,7 @@ var dxPolarChart = AdvancedChart.inherit({
         that._calcCanvas(argumentAxis.measureLabels(true));
         that.translator.reinit();
         drawAxes(argAxes);
-        $.each(valueAxes, function(_, valAxis) {
+        each(valueAxes, function(_, valAxis) {
             valAxis.setSpiderTicks(argumentAxis.getSpiderTicks());
         });
         drawAxes(valueAxes);

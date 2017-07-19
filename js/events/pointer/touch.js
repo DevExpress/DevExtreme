@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    devices = require("../../core/devices"),
+var devices = require("../../core/devices"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     BaseStrategy = require("./base");
 
 var eventMap = {
@@ -20,7 +20,7 @@ var eventMap = {
 var normalizeTouchEvent = function(e) {
     var pointers = [];
 
-    $.each(e.touches, function(_, touch) {
+    each(e.touches, function(_, touch) {
         pointers.push(extend({
             pointerId: touch.identifier
         }, touch));

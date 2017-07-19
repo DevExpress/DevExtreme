@@ -318,7 +318,7 @@ var TileView = CollectionWidget.inherit({
 
         this._itemsPositions = [];
 
-        $.each(items, (function(index, item) {
+        iteratorUtils.each(items, (function(index, item) {
             var currentItem = {};
             currentItem[itemMainRatio] = item[itemMainRatio] || 1;
             currentItem[itemCrossRatio] = item[itemCrossRatio] || 1;

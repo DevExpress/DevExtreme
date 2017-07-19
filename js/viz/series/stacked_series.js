@@ -1,9 +1,9 @@
 "use strict";
 
 //there stackedline, fullstackedline, stackedbar, fullstackedbar, stackedarea, fullstackedarea
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     areaSeries = require("./area_series").chart,
     chartAreaSeries = areaSeries.area,
     barSeries = require("./bar_series"),
@@ -23,7 +23,7 @@ var $ = require("../../core/renderer"),
             var that = this,
                 prevPoint;
             that._resetRangeData();
-            $.each(that.getAllPoints(), function(i, p) {
+            each(that.getAllPoints(), function(i, p) {
                 rangeCalculator.processRange(that, p, prevPoint);
                 prevPoint = p;
             });
@@ -169,7 +169,7 @@ exports.chart["stackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseS
                 i++;
             }
 
-            $.each(prevSeriesForwardPoints, function(_, p) {
+            each(prevSeriesForwardPoints, function(_, p) {
                 if(p.argument !== null) {
                     var argument = p.argument.valueOf();
                     if(!pointByArg[argument]) {
@@ -181,7 +181,7 @@ exports.chart["stackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseS
             });
             that._prevSeries._segmentByArg = pointByArg;
             backwardPoints = lineSeries["spline"]._calculateBezierPoints(backwardPoints, rotated);
-            $.each(backwardPoints, function(i, p) {
+            each(backwardPoints, function(i, p) {
                 var argument = p.argument.valueOf(),
                     prevSeriesPoints;
                 if(i % 3 === 0) {

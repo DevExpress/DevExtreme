@@ -13,7 +13,7 @@ var $ = require("../../core/renderer"),
     ContextMenu = require("../context_menu"),
     BaseFieldChooser = require("./ui.pivot_grid.field_chooser_base"),
     inArray = inArray,
-    each = $.each,
+    each = iteratorUtils.each,
     DIV = "<div>";
 
 require("./data_source");

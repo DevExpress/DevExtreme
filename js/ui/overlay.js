@@ -14,6 +14,7 @@ var $ = require("../core/renderer"),
     domUtils = require("../core/utils/dom"),
     noop = require("../core/utils/common").noop,
     typeUtils = require("../core/utils/type"),
+    each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     Widget = require("./widget/ui.widget"),
@@ -467,7 +468,7 @@ var Overlay = Widget.inherit({
         }
 
         var options = this.option();
-        $.each([
+        each([
             "position.of",
             "animation.show.from.position.of",
             "animation.show.to.position.of",
@@ -514,7 +515,7 @@ var Overlay = Widget.inherit({
     _initActions: function() {
         this._actions = {};
 
-        $.each(ACTIONS, (function(_, action) {
+        each(ACTIONS, (function(_, action) {
             this._actions[action] = this._createActionByOption(action, {
                 excludeValidators: ["disabled", "readOnly"]
             }) || noop;
@@ -1108,13 +1109,14 @@ var Overlay = Widget.inherit({
         var position = translator.locate(this._$content),
             deltaSize = this._deltaSize(),
             isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0,
+            shaderOffset = this.option("shading") && !this.option("container") ? translator.locate(this._$wrapper) : { top: 0, left: 0 },
             boundaryOffset = this.option("boundaryOffset");
 
         return {
-            top: isAllowedDrag ? position.top + boundaryOffset.v : 0,
-            bottom: isAllowedDrag ? -position.top + deltaSize.height - boundaryOffset.v : 0,
-            left: isAllowedDrag ? position.left + boundaryOffset.h : 0,
-            right: isAllowedDrag ? -position.left + deltaSize.width - boundaryOffset.h : 0
+            top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
+            bottom: isAllowedDrag ? -position.top - shaderOffset.top + deltaSize.height - boundaryOffset.v : 0,
+            left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h : 0,
+            right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h : 0
         };
     },
 

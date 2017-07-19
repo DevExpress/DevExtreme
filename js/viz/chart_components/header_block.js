@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     iteratorUtils = require("../../core/utils/iterator"),
 
     _extend = extend,
-    _each = $.each;
+    _each = iteratorUtils.each;
 
 function HeaderBlock() { }
 

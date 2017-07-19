@@ -1,11 +1,11 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    errors = require("../core/errors"),
+var errors = require("../core/errors"),
     seriesConsts = require("./components/consts"),
     vizUtils = require("./core/utils"),
     extend = require("../core/utils/extend").extend,
     isNumeric = require("../core/utils/type").isNumeric,
+    each = require("../core/utils/iterator").each,
     rangeModule = require("./translators/range"),
     registerComponent = require("../core/component_registrator"),
     baseChartModule = require("./chart_components/base_chart"),
@@ -15,7 +15,7 @@ var $ = require("../core/renderer"),
     translator1DModule = require("./translators/translator1d"),
     OPTIONS_FOR_REFRESH_SERIES = ["startAngle", "innerRadius", "segmentsDirection", "type"],
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _noop = require("../core/utils/common").noop,
     _getVerticallyShiftedAngularCoords = require("./core/utils").getVerticallyShiftedAngularCoords,
 
@@ -295,7 +295,7 @@ var dxPieChart = BaseChart.inherit({
                 lPoints = [],
                 rPoints = [];
 
-            $.each(points, function(_, point) {
+            each(points, function(_, point) {
                 var angle = vizUtils.normalizeAngle(point.middleAngle);
                 (angle <= 90 || angle >= 270 ? rPoints : lPoints).push(point);
             });

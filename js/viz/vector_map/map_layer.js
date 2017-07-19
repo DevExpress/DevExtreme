@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     _Number = Number,
     _String = String,
     _abs = Math.abs,
@@ -19,7 +19,7 @@ var $ = require("../../core/renderer"),
     _normalizeEnum = vizUtils.normalizeEnum,
     _noop = noop,
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _concat = Array.prototype.concat,
 
     TYPE_AREA = "area",

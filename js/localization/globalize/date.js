@@ -668,7 +668,7 @@ if(Globalize && Globalize.formatDate) {
             var result = globalizeFormat.path && that._getFormatStringByPath(globalizeFormat.path) || globalizeFormat.pattern;
 
             if(globalizeFormat.parts) {
-                $.each(globalizeFormat.parts, function(index, part) {
+                iteratorUtils.each(globalizeFormat.parts, function(index, part) {
                     result = result.replace("{" + index + "}", that._getPatternByFormat(part));
                 });
             }

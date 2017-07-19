@@ -67,7 +67,7 @@ var watchChanges = (function() {
         });
 
         return function() {
-            $.each(watchHandlers, function(_, dispose) {
+            iteratorUtils.each(watchHandlers, function(_, dispose) {
                 dispose();
             });
         };

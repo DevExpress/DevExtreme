@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     positionUtils = require("../../animation/position"),
+    each = require("../../core/utils/iterator").each,
     Class = require("../../core/class");
 
 var SCROLLING_MODE_INFINITE = "infinite",
@@ -87,13 +88,13 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
 
     return {
         scrollTo: function(pos) {
-            $.each(scrollToArray, function(_, scrollTo) {
+            each(scrollToArray, function(_, scrollTo) {
                 scrollTo(pos);
             });
         },
 
         dispose: function() {
-            $.each(disposeArray, function(_, dispose) {
+            each(disposeArray, function(_, dispose) {
                 dispose();
             });
         }
@@ -495,7 +496,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             var itemsCount = 0;
 
             if(!isBase && isVirtualMode(this)) {
-                $.each(this._cache, function() {
+                each(this._cache, function() {
                     itemsCount += this.itemsCount;
                 });
             } else {

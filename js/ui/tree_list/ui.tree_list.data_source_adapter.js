@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     dataCoreUtils = require("../../core/utils/data"),
     extend = require("../../core/utils/extend").extend,
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
@@ -50,7 +51,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
             that._indexByKey = {};
 
-            $.each(items, function(index, item) {
+            each(items, function(index, item) {
                 that._indexByKey[item.key] = index;
             });
         },

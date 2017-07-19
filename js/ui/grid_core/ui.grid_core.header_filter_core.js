@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     isDefined = require("../../core/utils/type").isDefined,
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     Popup = require("../popup"),
     TreeView = require("../tree_view"),
@@ -63,7 +64,7 @@ exports.HeaderFilterView = modules.View.inherit({
             filterValues = [];
 
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {
-            $.each(items, function(_, item) {
+            each(items, function(_, item) {
                 if(item.selected !== undefined && (!!item.selected) ^ isExclude) {
                     filterValues.push(item.value);
 
@@ -226,7 +227,7 @@ exports.HeaderFilterView = modules.View.inherit({
                             }
                         }
 
-                        $.each(items, function(index, item) {
+                        each(items, function(index, item) {
                             var selected = gridCoreUtils.getIndexByKey(item, selectedItems, null) >= 0,
                                 oldSelected = !!item.selected,
                                 filterValueIndex;
@@ -253,7 +254,7 @@ exports.HeaderFilterView = modules.View.inherit({
                             items = component.option("items"),
                             selectedItems = [];
 
-                        $.each(items, function() {
+                        each(items, function() {
                             if(this.selected) {
                                 selectedItems.push(this);
                             }

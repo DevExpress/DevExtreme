@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     unwrap = require("../../core/utils/variable_wrapper").unwrap,
     windowUtils = require("../../core/utils/window"),
     stringUtils = require("../../core/utils/string"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     dataUtils = require("../../core/utils/data"),
@@ -110,7 +111,7 @@ var LayoutManager = Widget.inherit({
             userItems = that.option("items");
 
         if(typeUtils.isDefined(userItems)) {
-            $.each(userItems, function(index, item) {
+            each(userItems, function(index, item) {
                 var value;
                 if(item.dataField && that._getDataByField(item.dataField) === undefined) {
                     if(item.editorOptions) {
@@ -158,7 +159,7 @@ var LayoutManager = Widget.inherit({
         if(typeUtils.isDefined(items)) {
             processedItems = [];
 
-            $.each(items, function(index, item) {
+            each(items, function(index, item) {
                 if(that._isAcceptableItem(item)) {
                     item = that._processItem(item);
 
@@ -213,7 +214,7 @@ var LayoutManager = Widget.inherit({
         var result = [];
 
         if(typeUtils.isDefined(layoutData)) {
-            $.each(layoutData, function(dataField) {
+            each(layoutData, function(dataField) {
                 result.push({
                     dataField: dataField
                 });
@@ -554,7 +555,7 @@ var LayoutManager = Widget.inherit({
         var hasRequiredRule;
 
         if(rules && rules.length) {
-            $.each(rules, function(index, rule) {
+            each(rules, function(index, rule) {
                 if(rule.type === "required") {
                     hasRequiredRule = true;
                     return false;
@@ -942,7 +943,7 @@ var LayoutManager = Widget.inherit({
             case "layoutData":
                 if(this.option("items")) {
                     if(!typeUtils.isEmptyObject(args.value)) {
-                        $.each(this._editorInstancesByField, function(name, editor) {
+                        each(this._editorInstancesByField, function(name, editor) {
                             var valueGetter = dataUtils.compileGetter(name),
                                 dataValue = valueGetter(args.value);
 
@@ -1066,7 +1067,7 @@ var LayoutManager = Widget.inherit({
         var that = this;
 
         if(typeUtils.isObject(data)) {
-            $.each(data, function(dataField, fieldValue) {
+            each(data, function(dataField, fieldValue) {
                 that._updateFieldValue(dataField, fieldValue);
             });
         } else if(typeof data === "string") {

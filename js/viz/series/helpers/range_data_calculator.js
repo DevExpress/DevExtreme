@@ -1,13 +1,13 @@
 "use strict";
 
-var $ = require("../../../core/renderer"),
-    typeUtils = require("../../../core/utils/type"),
+var typeUtils = require("../../../core/utils/type"),
+    each = require("../../../core/utils/iterator").each,
     _math = Math,
     _abs = _math.abs,
     _min = _math.min,
     _max = _math.max,
 
-    _each = $.each,
+    _each = each,
     _isEmptyObject = typeUtils.isEmptyObject,
 
     _isDefined = typeUtils.isDefined,

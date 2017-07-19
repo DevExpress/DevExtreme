@@ -373,7 +373,7 @@ var AppointmentModel = Class.inherit({
         var that = this;
 
         var result = false;
-        $.each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             if(that.appointmentTakesAllDay(item, startDayHour, endDayHour)) {
                 result = true;
                 return false;

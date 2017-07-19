@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../../ui/widget/ui.errors"),
@@ -82,7 +82,7 @@ var DataAdapter = Class.inherit({
         var that = this,
             array = [];
 
-        $.each(this._dataStructure, function(_, node) {
+        each(this._dataStructure, function(_, node) {
             if(!that._isNodeVisible(node)) {
                 return;
             }
@@ -113,7 +113,7 @@ var DataAdapter = Class.inherit({
     _setChildrenSelection: function() {
         var that = this;
 
-        $.each(this._dataStructure, function(_, node) {
+        each(this._dataStructure, function(_, node) {
             if(!node.internalFields.childrenKeys.length) {
                 return;
             }
@@ -140,7 +140,7 @@ var DataAdapter = Class.inherit({
     _setParentExpansion: function() {
         var that = this;
 
-        $.each(this._dataStructure, function(_, node) {
+        each(this._dataStructure, function(_, node) {
             if(!node.internalFields.expanded) {
                 return;
             }
@@ -161,7 +161,7 @@ var DataAdapter = Class.inherit({
     _iterateChildren: function(node, recursive, callback) {
         var that = this;
 
-        $.each(node.internalFields.childrenKeys, function(_, key) {
+        each(node.internalFields.childrenKeys, function(_, key) {
             var child = that.getNodeByKey(key);
             typeUtils.isFunction(callback) && callback(child);
             if(child.internalFields.childrenKeys.length && recursive) {
@@ -241,7 +241,7 @@ var DataAdapter = Class.inherit({
     _markChildren: function(keys) {
         var that = this;
 
-        $.each(keys, function(_, key) {
+        each(keys, function(_, key) {
             var index = that.getIndexByKey(key),
                 node = that.getNodeByKey(key);
             that._dataStructure[index] = 0;
@@ -258,7 +258,7 @@ var DataAdapter = Class.inherit({
         var that = this,
             counter = 0,
             items = extend([], this._dataStructure);
-        $.each(items, function(index, item) {
+        each(items, function(index, item) {
             if(!item) {
                 that._dataStructure.splice(index - counter, 1);
                 counter++;
@@ -300,7 +300,7 @@ var DataAdapter = Class.inherit({
     getNodeByItem: function(item) {
         var result = null;
 
-        $.each(this._dataStructure, function(_, node) {
+        each(this._dataStructure, function(_, node) {
             if(node.internalFields.item === item) {
                 result = node;
                 return false;
@@ -314,7 +314,7 @@ var DataAdapter = Class.inherit({
         var that = this,
             nodes = [];
 
-        $.each(items, function(_, item) {
+        each(items, function(_, item) {
             var node = that.getNodeByItem(item);
             node && nodes.push(node);
         });
@@ -387,7 +387,7 @@ var DataAdapter = Class.inherit({
         }
 
         var that = this;
-        $.each(this._dataStructure, function(_, node) {
+        each(this._dataStructure, function(_, node) {
             if(!that._isNodeVisible(node)) {
                 return;
             }
@@ -470,7 +470,7 @@ var DataAdapter = Class.inherit({
         lookForParents(matches, 0);
 
         dataConverter._indexByKey = {};
-        $.each(matches, function(index, node) {
+        each(matches, function(index, node) {
             node.internalFields.childrenKeys = [];
             dataConverter._indexByKey[node.internalFields.key] = index;
         });

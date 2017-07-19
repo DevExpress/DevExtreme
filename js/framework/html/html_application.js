@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     Component = require("../../core/component"),
     extendUtils = require("../../core/utils/extend"),
+    each = require("../../core/utils/iterator").each,
     errors = require("../errors"),
     Application = require("../application").Application,
     ConditionalViewCacheDecorator = require("../view_cache").ConditionalViewCacheDecorator,
@@ -174,8 +175,8 @@ var HtmlApplication = Application.inherit({
             return;
         }
 
-        $.each(animationSet, function(name, configs) {
-            $.each(configs, function(index, config) {
+        each(animationSet, function(name, configs) {
+            each(configs, function(index, config) {
                 animationPresetsModule.presets.registerPreset(name, config);
             });
         });
@@ -208,7 +209,7 @@ var HtmlApplication = Application.inherit({
 
         if(viewEngine.markupLoaded) {
             viewEngine.markupLoaded.add(function(args) {
-                $.each(filters, function(_, filter) {
+                each(filters, function(_, filter) {
                     filter(args.markup);
                 });
             });
@@ -450,7 +451,7 @@ var HtmlApplication = Application.inherit({
     _checkLayoutControllerIsInitialized: function(layoutController) {
         if(layoutController) {
             var isControllerInited = false;
-            $.each(this._layoutSet, function(_, controllerInfo) {
+            each(this._layoutSet, function(_, controllerInfo) {
                 if(controllerInfo.controller === layoutController) {
                     isControllerInited = true;
                     return false;
@@ -634,7 +635,7 @@ var HtmlApplication = Application.inherit({
     _initLayoutControllers: function() {
         var that = this;
 
-        $.each(that._layoutSet, function(index, controllerInfo) {
+        each(that._layoutSet, function(index, controllerInfo) {
             var controller = controllerInfo.controller,
                 target = devices.current();
 
@@ -682,7 +683,7 @@ var HtmlApplication = Application.inherit({
     renderNavigation: function() {
         var that = this;
 
-        $.each(that._availableLayoutControllers, function(index, controllerInfo) {
+        each(that._availableLayoutControllers, function(index, controllerInfo) {
             var controller = controllerInfo.controller;
             if(controller.renderNavigation) {
                 controller.renderNavigation(that.navigation);

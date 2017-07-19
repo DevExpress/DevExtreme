@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     dateSerialization = require("../../core/utils/date_serialization"),
     isDate = require("../../core/utils/type").isDate,
+    each = require("../../core/utils/iterator").each,
     dateLocalization = require("../../localization/date");
 
 // TODO: move to dx.utils
@@ -143,7 +144,7 @@ var dateUtils = {
         var result = new Date(oldValue.valueOf());
         var formatInfo = dateUtils.FORMATS_INFO[format];
 
-        $.each(formatInfo.components, function() {
+        each(formatInfo.components, function() {
             var componentInfo = dateUtils.DATE_COMPONENTS_INFO[this];
             result[componentInfo.setter](newValue[componentInfo.getter]());
         });

@@ -96,6 +96,27 @@ QUnit.test("change dataSource only. render call", function(assert) {
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
+//T535468
+QUnit.test("change dataSource after zoomArgument with gesture and useAggregation", function(assert) {
+    var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    seriesMockData.series.push(stubSeries, stubSeries1);
+    var dataSource = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }],
+        chartOptions = {
+            useAggregation: true,
+            series: [{ type: "line" }],
+            dataSource: dataSource,
+            argumentAxis: { visible: true }
+        },
+        chart = this.createChart(chartOptions);
+
+    //act
+    chart.zoomArgument(2, 3, true);
+    chart.option(chartOptions);
+
+    assert.ok(true);
+});
+
 QUnit.test("change series options only - populateSeries", function(assert) {
     //arrange
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });

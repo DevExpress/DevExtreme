@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     ArrayStore = require("../../data/array_store"),
     when = require("../../integration/jquery/deferred").when;
@@ -78,7 +79,7 @@ module.exports = gridCore.Controller.inherit((function() {
             dataSource.on("loadingChanged", that._loadingChangedHandler);
             dataSource.on("loadError", that._loadErrorHandler);
 
-            $.each(dataSource, function(memberName, member) {
+            each(dataSource, function(memberName, member) {
                 if(!that[memberName] && typeUtils.isFunction(member)) {
                     that[memberName] = function() {
                         return this._dataSource[memberName].apply(this._dataSource, arguments);
@@ -125,7 +126,7 @@ module.exports = gridCore.Controller.inherit((function() {
                     cachedPagingData = undefined;
                 }
 
-                $.each(operationTypes, function(operationType, value) {
+                each(operationTypes, function(operationType, value) {
                     if(value && options.remoteOperations[operationType]) {
                         cachedStoreData = undefined;
                         cachedPagingData = undefined;
@@ -202,7 +203,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 requireTotalCount: !remoteOperations.paging
             };
 
-            $.each(options.storeLoadOptions, function(optionName, optionValue) {
+            each(options.storeLoadOptions, function(optionName, optionValue) {
                 if(localLoadOptionNames[optionName]) {
                     options.loadOptions[optionName] = optionValue;
                     delete options.storeLoadOptions[optionName];
@@ -384,7 +385,7 @@ module.exports = gridCore.Controller.inherit((function() {
                     isCustomLoading: true
                 };
 
-                $.each(store._customLoadOptions() || [], function(_, optionName) {
+                each(store._customLoadOptions() || [], function(_, optionName) {
                     if(!(optionName in loadResult.storeLoadOptions)) {
                         loadResult.storeLoadOptions[optionName] = dataSourceLoadOptions[optionName];
                     }
