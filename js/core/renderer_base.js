@@ -624,7 +624,16 @@ initRender.prototype.offset = function() {
 
 initRender.prototype.offsetParent = function() {
     if(!this[0]) return renderer();
-    return renderer(this[0].offsetParent || document.documentElement);
+
+    var offsetParent = renderer(this[0].offsetParent);
+
+    while(offsetParent[0] && offsetParent.css("position") === "static") {
+        offsetParent = renderer(offsetParent[0].offsetParent);
+    }
+
+    offsetParent = offsetParent[0] ? offsetParent : renderer(document.documentElement);
+
+    return offsetParent;
 };
 
 initRender.prototype.position = function() {
