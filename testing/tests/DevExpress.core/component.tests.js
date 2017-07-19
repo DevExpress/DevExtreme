@@ -1379,6 +1379,26 @@ QUnit.test("action executing should fire event handlers when not exists option a
     assert.strictEqual(eventContext, instance, "event context");
 });
 
+QUnit.test("_createActionByOption should run 'beforeExecute' before the action handler when event was subscribed with 'on' method", function(assert) {
+    var value = "";
+
+    var instance = new TestComponent();
+
+    instance.on("testEvent", function() {
+        value = "value from 'onTestEvent'";
+    });
+
+    var executeAction = instance._createActionByOption("onTestEvent", {
+        beforeExecute: function() {
+            value = "value from 'beforeExecute'";
+        }
+    });
+
+    executeAction({ });
+
+    assert.equal(value, "value from 'onTestEvent'", "action value was not overwritten by the 'beforeExecute' method");
+});
+
 QUnit.test("_createActionByOption should not override user 'afterExecute' option", function(assert) {
     assert.expect(1);
 

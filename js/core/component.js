@@ -427,8 +427,8 @@ var Component = Class.inherit({
             if(!action) {
                 var beforeExecute = config.beforeExecute;
                 config.beforeExecute = function(args) {
-                    that.fireEvent(eventName, args.args);
                     beforeExecute && beforeExecute.apply(that, arguments);
+                    that.fireEvent(eventName, args.args);
                 };
                 that._suppressDeprecatedWarnings();
                 action = that._createAction(actionFunc, config);
