@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
     translator = require("./translator"),
+    easing = require("./easing"),
     animationFrame = require("./frame"),
     support = require("../core/utils/support"),
     positionUtils = require("./position"),
@@ -18,8 +19,7 @@ var $ = require("../core/renderer"),
     noop = require("../core/utils/common").noop;
 
 
-var CSS_TRANSITION_EASING_REGEX = /cubic-bezier\((\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\)/,
-    RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
+var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
     ANIM_DATA_KEY = "dxAnimData",
     ANIM_QUEUE_KEY = "dxAnimQueue",
     TRANSFORM_PROP = "transform";
@@ -267,7 +267,7 @@ var FrameAnimationStrategy = {
             to: config.to,
             from: config.from,
             currentValue: config.from,
-            easing: convertTransitionTimingFuncToJQueryEasing(config.easing),
+            easing: easing.convertTransitionTimingFuncToEasing(config.easing),
             duration: config.duration,
             startTime: new Date().valueOf(),
             finish: function() {
@@ -398,7 +398,7 @@ var FrameAnimationStrategy = {
                     c = to[propName] - from[propName],
                     d = frameAnimation.duration;
 
-                return $.easing[frameAnimation.easing](x, t, b, c, d);
+                return easing.getEasing(frameAnimation.easing)(x, t, b, c, d);
             };
 
             $.each(to, function(propName, endPropValue) {
@@ -453,82 +453,6 @@ var getAnimationStrategy = function(config) {
     }
 
     return animationStrategies[strategy];
-};
-
-var TransitionTimingFuncMap = {
-    "linear": "cubic-bezier(0, 0, 1, 1)",
-    "ease": "cubic-bezier(0.25, 0.1, 0.25, 1)",
-    "ease-in": "cubic-bezier(0.42, 0, 1, 1)",
-    "ease-out": "cubic-bezier(0, 0, 0.58, 1)",
-    "ease-in-out": "cubic-bezier(0.42, 0, 0.58, 1)"
-};
-
-var convertTransitionTimingFuncToJQueryEasing = function(cssTransitionEasing) {
-    cssTransitionEasing = TransitionTimingFuncMap[cssTransitionEasing] || cssTransitionEasing;
-
-    var coeffs = cssTransitionEasing.match(CSS_TRANSITION_EASING_REGEX);
-    if(!coeffs) {
-        return "linear";
-    }
-
-    coeffs = coeffs.slice(1, 5);
-    $.each(coeffs, function(index, value) {
-        coeffs[index] = parseFloat(value);
-    });
-
-    var easingName = "cubicbezier_" + coeffs.join("_").replace(/\./g, "p");
-
-    if(!isFunction($.easing[easingName])) {
-        var polynomBezier = function(x1, y1, x2, y2) {
-            var Cx = 3 * x1,
-                Bx = 3 * (x2 - x1) - Cx,
-                Ax = 1 - Cx - Bx,
-
-                Cy = 3 * y1,
-                By = 3 * (y2 - y1) - Cy,
-                Ay = 1 - Cy - By;
-
-            var bezierX = function(t) {
-                return t * (Cx + t * (Bx + t * Ax));
-            };
-
-            var bezierY = function(t) {
-                return t * (Cy + t * (By + t * Ay));
-            };
-
-            var findXFor = function(t) {
-                var x = t,
-                    i = 0,
-                    z;
-
-                while(i < 14) {
-                    z = bezierX(x) - t;
-                    if(Math.abs(z) < 1e-3) {
-                        break;
-                    }
-
-                    x = x - z / derivativeX(x);
-                    i++;
-                }
-
-                return x;
-            };
-
-            var derivativeX = function(t) {
-                return Cx + t * (2 * Bx + t * 3 * Ax);
-            };
-
-            return function(t) {
-                return bezierY(findXFor(t));
-            };
-        };
-
-        $.easing[easingName] = function(x, t, b, c, d) {
-            return c * polynomBezier(coeffs[0], coeffs[1], coeffs[2], coeffs[3])(t / d) + b;
-        };
-    }
-
-    return easingName;
 };
 
 
@@ -988,11 +912,5 @@ var fx = {
     stop: stop,
     _simulatedTransitionEndDelay: 100
 };
-
-///#DEBUG
-fx.__internals = {
-    convertTransitionTimingFuncToJQueryEasing: convertTransitionTimingFuncToJQueryEasing
-};
-///#ENDDEBUG
 
 module.exports = fx;
