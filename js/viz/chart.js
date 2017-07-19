@@ -196,10 +196,13 @@ function pickMaxValue(val1, val2) {
     return Math.max(val1 || 0, val2 || 0);
 }
 
-function getHorizontalAxesMargins(axes, estimate) {
+function getAxisMargins(axis) {
+    return axis.getMargins();
+}
+
+function getHorizontalAxesMargins(axes, getMarginsFunc) {
     return axes.reduce(function(margins, axis) {
-        var action = estimate && axis.estimateMargins ? "estimateMargins" : "getMargins",
-            axisMargins = axis[action](),
+        var axisMargins = getMarginsFunc(axis),
             paneMargins = margins.panes[axis.pane] = margins.panes[axis.pane] || {},
             spacing = axis.getMultipleAxesSpacing();
 
@@ -301,11 +304,11 @@ function getCommonSize(side, margins) {
 function checkUsedSpace(sizeShortage, side, axes, getMarginFunc) {
     var size = 0;
     if(sizeShortage[side] > 0) {
-        size = getCommonSize(side, getMarginFunc(axes));
+        size = getCommonSize(side, getMarginFunc(axes, getAxisMargins));
 
         performActionOnAxes(axes, "hideTitle");
 
-        sizeShortage[side] -= size - getCommonSize(side, getMarginFunc(axes));
+        sizeShortage[side] -= size - getCommonSize(side, getMarginFunc(axes, getAxisMargins));
     }
     if(sizeShortage[side] > 0) {
         performActionOnAxes(axes, "hideOuterElements");
@@ -652,7 +655,7 @@ var dxChart = AdvancedChart.inherit({
         }
 
         var vAxesMargins = { panes: {} },
-            hAxesMargins = getHorizontalAxesMargins(horizontalAxes, true);
+            hAxesMargins = getHorizontalAxesMargins(horizontalAxes, function(axis) { return axis.estimateMargins(panesCanvases[axis.pane]); });
         panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
 
         drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
@@ -660,7 +663,7 @@ var dxChart = AdvancedChart.inherit({
         panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
 
         drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-        hAxesMargins = getHorizontalAxesMargins(horizontalAxes);
+        hAxesMargins = getHorizontalAxesMargins(horizontalAxes, getAxisMargins);
         panesCanvases = shrinkCanvases(rotated, panesCanvases, vAxesMargins, hAxesMargins);
 
         performActionOnAxes(allAxes, "updateSize", panesCanvases);
@@ -691,7 +694,7 @@ var dxChart = AdvancedChart.inherit({
             checkUsedSpace(sizeShortage, "height", horizontalAxes, getHorizontalAxesMargins);
             checkUsedSpace(sizeShortage, "width", verticalAxes, getVerticalAxesMargins);
 
-            panesCanvases = shrinkCanvases(rotated, panesCanvases, getVerticalAxesMargins(verticalAxes), getHorizontalAxesMargins(horizontalAxes));
+            panesCanvases = shrinkCanvases(rotated, panesCanvases, getVerticalAxesMargins(verticalAxes), getHorizontalAxesMargins(horizontalAxes, getAxisMargins));
             performActionOnAxes(allAxes, "updateSize", panesCanvases);
             horizontalAxes.forEach(shiftAxis("top", "bottom"));
             verticalAxes.forEach(shiftAxis("left", "right"));

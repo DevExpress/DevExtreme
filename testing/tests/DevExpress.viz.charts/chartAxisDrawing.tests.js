@@ -103,6 +103,33 @@ function createAxisStubs() {
 
 QUnit.module("Canvas processing", environment);
 
+QUnit.test("Pass canvas to axis' estimateMargins", function(assert) {
+    var argAxis = createAxisStubs(),
+        valAxis = createAxisStubs();
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    //assert
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.estimateMargins.lastCall.args[0], {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        originalBottom: 0,
+        width: 800,
+        height: 600
+    });
+});
+
 QUnit.test("Take into account max margin on each side of pane", function(assert) {
     var argAxis = createAxisStubs(),
         valAxis = createAxisStubs();

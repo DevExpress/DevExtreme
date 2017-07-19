@@ -153,6 +153,8 @@ ScrollBar.prototype = {
         return 0;
     },
 
+    estimateMargins: function() { return this.getMargins(); },
+
     getMargins: function() {
         var options = this._layoutOptions,
             margins = { left: 0, top: 0, right: 0, bottom: 0 };
