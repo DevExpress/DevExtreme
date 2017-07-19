@@ -388,7 +388,7 @@ initRender.prototype.find = function(selector) {
     } else {
         for(i = 0; i < this.length; i++) {
             selector = selector.nodeType ? selector : selector[0];
-            if(renderer.contains(this[i], selector)) {
+            if(this[i] !== selector && this[i].contains(selector)) {
                 nodes.push(selector);
             }
         }

@@ -58,7 +58,7 @@ var ClickEmitter = Emitter.inherit({
 
     _eventOutOfElement: function(e, element) {
         var target = e.target,
-            targetChanged = !$.contains(element, target) && element !== target,
+            targetChanged = !element.contains(target) && element !== target,
 
             gestureDelta = eventUtils.eventDelta(eventUtils.eventData(e), this._startEventData),
             boundsExceeded = abs(gestureDelta.x) > TOUCH_BOUNDARY || abs(gestureDelta.y) > TOUCH_BOUNDARY;

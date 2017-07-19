@@ -22,7 +22,7 @@ var setCaret = function(input, position) {
         setCaretForObsoleteBrowser(input, position);
         return;
     }
-    if(!$.contains(document, input)) {
+    if(!document.contains(input)) {
         return;
     }
 
@@ -48,7 +48,7 @@ var getCaretForObsoleteBrowser = function(input) {
 };
 
 var setCaretForObsoleteBrowser = function(input, position) {
-    if(!$.contains(document, input)) {
+    if(!document.contains(input)) {
         return;
     }
 

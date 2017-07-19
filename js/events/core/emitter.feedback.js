@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
     devices = require("../../core/devices"),
     eventUtils = require("../utils"),
@@ -83,7 +82,7 @@ var FeedbackEmitter = Emitter.inherit({
 
     start: function(e) {
         if(activeFeedback) {
-            var activeChildExists = $.contains(this.getElement().get(0), activeFeedback.getElement().get(0));
+            var activeChildExists = this.getElement().get(0).contains(activeFeedback.getElement().get(0));
             var childJustActivated = !activeFeedback._active.fired();
 
             if(activeChildExists && childJustActivated) {

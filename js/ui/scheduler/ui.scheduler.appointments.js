@@ -410,7 +410,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
 
         this._appointmentClickTimeout = setTimeout((function() {
-            if(!this._preventSingleAppointmentClick && $.contains(document, $target[0])) {
+            if(!this._preventSingleAppointmentClick && document.contains($target[0])) {
                 this.notifyObserver("showAppointmentTooltip", { data: data, target: $target });
             }
 
