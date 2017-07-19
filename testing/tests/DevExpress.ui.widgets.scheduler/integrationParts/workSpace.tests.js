@@ -1339,3 +1339,21 @@ QUnit.test("Count should be passed to workSpace", function(assert) {
 
     assert.equal(workSpace.option("count"), 2, "option count was passed");
 });
+
+QUnit.test("Offset should be passed to workSpace", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 3, 16),
+        views: [{
+            type: "day",
+            name: "Test Day",
+            count: 2,
+            offset: -1
+        }],
+        currentView: "day",
+        height: 500
+    });
+
+    var workSpace = this.instance.getWorkSpace();
+
+    assert.equal(workSpace.option("offset"), -1, "option offset was passed");
+});
