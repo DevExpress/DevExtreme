@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    iterateUtils = require("../../core/utils/iterator"),
     BaseElement = require("./base_indicators").BaseElement,
 
     _Number = Number,
@@ -8,7 +9,8 @@ var $ = require("../../core/renderer"),
     _isString = require("../../core/utils/type").isString,
     _isArray = Array.isArray,
     _isFinite = isFinite,
-    _each = $.each;
+    _each = $.each,
+    _map = iterateUtils.map;
 
 var BaseRangeContainer = BaseElement.inherit({
     _init: function() {
@@ -51,14 +53,11 @@ var BaseRangeContainer = BaseElement.inherit({
         if(!(startWidth >= 0 && endWidth >= 0 && startWidth + endWidth > 0)) {
             return null;
         }
-        _each(_isArray(options.ranges) ? options.ranges : [], function(i, rangeOptions) {
+        list = _map(_isArray(options.ranges) ? options.ranges : [], function(rangeOptions, i) {
             rangeOptions = rangeOptions || {};
             var start = translator.adjust(rangeOptions.startValue),
                 end = translator.adjust(rangeOptions.endValue);
-
-            if(_isFinite(start) && _isFinite(end) && isNotEmptySegment(start, end, threshold)) {
-                list.push({ start: start, end: end, color: rangeOptions.color, classIndex: i });
-            }
+            return (_isFinite(start) && _isFinite(end) && isNotEmptySegment(start, end, threshold)) ? { start: start, end: end, color: rangeOptions.color, classIndex: i } : null;
         });
         _each(list, function(i, item) {
             var paletteColor = palette.getNextColor();

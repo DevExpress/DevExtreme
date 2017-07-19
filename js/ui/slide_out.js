@@ -219,9 +219,9 @@ var SlideOut = CollectionWidget.inherit({
             var strategy = PlainEditStrategy.inherit({
 
                 _getPlainItems: function() {
-                    return [].concat.apply([], map(this.callBase(), function(group) {
+                    return map(this.callBase(), function(group) {
                         return group.items;
-                    }));
+                    });
                 }
 
             });

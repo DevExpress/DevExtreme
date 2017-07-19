@@ -1,19 +1,27 @@
 "use strict";
 
-var map = function(values, callback, arg) {
+var map = function(values, callback) {
     var result = [];
+
+    var applyCallback = function(index) {
+        var value = callback(values[index], index);
+
+        if(value != null) {
+            result.push(value);
+        }
+    };
 
     if("length" in values) {
         for(var i = 0; i < values.length; i++) {
-            result.push(callback(values[i], i));
+            applyCallback(i);
         }
     } else {
         for(var key in values) {
-            result.push(callback(values[key], key));
+            applyCallback(key);
         }
     }
 
-    return result;
+    return [].concat.apply([], result);
 };
 
 exports.map = map;

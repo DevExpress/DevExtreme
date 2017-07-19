@@ -370,7 +370,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _itemsByScreen: function() {
-        return [].concat.apply([], iteratorUtils.map(this.option("items"), (function(item) {
+        return iteratorUtils.map(this.option("items"), (function(item) {
             var locations = item.location || {};
             locations = typeUtils.isPlainObject(locations) ? [locations] : locations;
 
@@ -380,7 +380,7 @@ var ResponsiveBox = CollectionWidget.inherit({
                     location: extend({ rowspan: 1, colspan: 1 }, location)
                 };
             });
-        }).bind(this)));
+        }).bind(this));
     },
 
     _occupyCells: function(itemCell, itemInfo) {

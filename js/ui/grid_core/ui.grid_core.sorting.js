@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     isDefined = require("../../core/utils/type").isDefined,
+    map = require("../../core/utils/iterator").map,
     extend = require("../../core/utils/extend").extend,
     sortingMixin = require("../grid_core/ui.grid_core.sorting_mixin"),
     messageLocalization = require("../../localization/message"),
@@ -22,22 +23,14 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
                         event = e.jQueryEvent,
                         $cellElementFromEvent = $(event.currentTarget),
                         rowIndex = $cellElementFromEvent.parent().index(),
-                        columnIndex = null,
-                        columnsIndex = [],
+                        columnIndex = map(that.getCellElements(rowIndex), function($cellElement, index) {
+                            if($cellElement === $cellElementFromEvent.get(0)) return index;
+                        })[0],
                         visibleColumns = that._columnsController.getVisibleColumns(rowIndex),
-                        column = null,
+                        column = visibleColumns[columnIndex],
                         editingController = that.getController("editing"),
                         editingMode = that.option("editing.mode"),
                         isCellEditing = editingController && editingController.isEditing() && (editingMode === "batch" || editingMode === "cell");
-
-                    $.each(that.getCellElements(rowIndex), function(index, $cellElement) {
-                        if($cellElement === $cellElementFromEvent.get(0)) {
-                            columnsIndex.push(index);
-                        }
-                    });
-
-                    columnIndex = columnsIndex[0];
-                    column = visibleColumns[columnIndex];
 
                     if(isCellEditing) {
                         return;

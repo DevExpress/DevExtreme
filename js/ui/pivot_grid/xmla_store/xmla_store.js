@@ -553,9 +553,9 @@ exports.XmlaStore = Class.inherit((function() {
 
     function getVisibleChildren(item, visibleLevels) {
         var result = [],
-            children = item.children && (item.children.length ? item.children : [].concat.apply([], iteratorUtils.map(item.children.grandTotalHash || [], function(e) {
+            children = item.children && (item.children.length ? item.children : iteratorUtils.map(item.children.grandTotalHash || [], function(e) {
                 return e.children;
-            }))),
+            })),
             firstChild = children && children[0];
 
         if(firstChild && (visibleLevels[firstChild.hierarchyName] && (inArray(firstChild.levelName, visibleLevels[firstChild.hierarchyName]) !== -1) || !visibleLevels[firstChild.hierarchyName] || firstChild.level === 0)) {

@@ -326,13 +326,13 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 
-var eventNames = [].concat.apply([], iteratorUtils.map(eventAliases, function(eventAlias) {
+var eventNames = iteratorUtils.map(eventAliases, function(eventAlias) {
     var eventNames = [];
     $.each([START_POSTFIX, UPDATE_POSTFIX, END_POSTFIX], function(_, eventPostfix) {
         eventNames.push(DX_PREFIX + eventAlias.name + eventPostfix);
     });
     return eventNames;
-}));
+});
 
 registerEmitter({
     emitter: TransformEmitter,

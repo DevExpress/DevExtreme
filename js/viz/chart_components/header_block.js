@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     LayoutElementModule = require("../core/layout_element"),
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
 
     _extend = extend,
     _each = $.each;
@@ -12,15 +13,9 @@ function HeaderBlock() { }
 _extend(HeaderBlock.prototype, LayoutElementModule.LayoutElement.prototype, {
 
     update: function(elements, canvas) {
-        var result = [];
-
-        $.each(elements, function(index, element) {
-            if(element.getLayoutOptions()) {
-                result.push(element);
-            }
+        this._elements = iteratorUtils.map(elements, function(element) {
+            return element.getLayoutOptions() ? element : null;
         });
-
-        this._elements = result;
         this._canvas = canvas;
     },
 
