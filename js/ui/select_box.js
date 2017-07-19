@@ -237,14 +237,7 @@ var SelectBox = DropDownList.inherit({
                             h: -16,
                             v: -8
                         }
-                    }
-                }
-            },
-            {
-                device: function() {
-                    return /android5/.test(themes.current());
-                },
-                options: {
+                    },
                     useInkRipple: true
                 }
             }
@@ -691,6 +684,10 @@ var SelectBox = DropDownList.inherit({
     },
 
     _setCustomItem: function(item) {
+        if(this._disposed) {
+            return;
+        }
+
         item = item || null;
         this.option("selectedItem", item);
         this._setValue(this._valueGetter(item));
