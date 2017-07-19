@@ -131,7 +131,6 @@ var DropDownBox = DropDownEditor.inherit({
              * @type string
              * @default "change"
              */
-            valueChangeEvent: "change",
 
             valueFormat: function(value) {
                 return Array.isArray(value) ? value.join(", ") : value;
