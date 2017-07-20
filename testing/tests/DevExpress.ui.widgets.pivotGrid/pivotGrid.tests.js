@@ -1509,7 +1509,10 @@ QUnit.test("Sorting by Summary context menu when sorting defined", function(asse
 });
 
 QUnit.test("Render to invisible container", function(assert) {
-    var $pivotGridElement = $("#pivotGrid").hide().addClass("container-height-200px"),
+    var $pivotGridElement = $("#pivotGrid")
+        .hide()
+        .width(2000)
+        .addClass("container-height-200px"),
         pivotGrid = createPivotGrid(this.testOptions, assert);
 
     $pivotGridElement.show();
@@ -1517,7 +1520,7 @@ QUnit.test("Render to invisible container", function(assert) {
     domUtils.triggerShownEvent($pivotGridElement);
 
     assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
-    assert.ok(!pivotGrid._columnsArea.hasScroll(), 'has vertical scroll');
+    assert.ok(!pivotGrid._columnsArea.hasScroll(), 'has no horizontal scroll');
     assert.equal(pivotGrid.__scrollBarWidth, getScrollBarWidth());
 });
 
