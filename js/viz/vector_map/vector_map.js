@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
     _parseScalar = require("../core/utils").parseScalar,
     extend = require("../../core/utils/extend").extend,
     iteratorUtils = require("../../core/utils/iterator"),
@@ -448,7 +447,7 @@ var dxVectorMap = require("../core/base_widget").inherit({
 
 function suspendLayersData(layerCollection, options) {
     if(options) {
-        layerCollection.__data = options.length ? $.map(options, patch) : patch(options);
+        layerCollection.__data = options.length ? iteratorUtils.map(options, patch) : patch(options);
     }
     function patch(ops) {
         var result = {};

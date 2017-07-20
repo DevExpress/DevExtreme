@@ -150,11 +150,11 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
 
     function mapRecursive(items, level) {
         if(!Array.isArray(items)) return items;
-        return level ? mapGroup(items, level) : $.map(items, mapper);
+        return level ? mapGroup(items, level) : iteratorUtils.map(items, mapper);
     }
 
     function mapGroup(group, level) {
-        return $.map(group, function(item) {
+        return iteratorUtils.map(group, function(item) {
             var result = {
                 key: item.key,
                 items: mapRecursive(item.items, level - 1)

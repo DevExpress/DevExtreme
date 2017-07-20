@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("../../core/utils/type"),
+var typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     queryAdapters = require("../query_adapters"),
@@ -214,7 +213,7 @@ var createODataQueryAdapter = function(queryOptions) {
                     });
                 }
 
-                return $.map(hash, function(k, v) { return v; }).join();
+                return iteratorUtils.map(hash, function(k, v) { return v; }).join();
             };
 
             var generatorV4 = function() {
@@ -238,7 +237,7 @@ var createODataQueryAdapter = function(queryOptions) {
                             result += "(";
 
                             if(select.length) {
-                                result += "$select=" + $.map(select, serializePropName).join();
+                                result += "$select=" + iteratorUtils.map(select, serializePropName).join();
                             }
 
                             if(expand.length) {
@@ -246,7 +245,7 @@ var createODataQueryAdapter = function(queryOptions) {
                                     result += ";";
                                 }
 
-                                result += "$expand=" + $.map(expand, serializePropName).join();
+                                result += "$expand=" + iteratorUtils.map(expand, serializePropName).join();
                             }
                             result += ")";
                         }

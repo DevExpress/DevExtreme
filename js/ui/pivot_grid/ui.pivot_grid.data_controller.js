@@ -164,7 +164,7 @@ exports.DataController = Class.inherit((function() {
             if((stringValuesUsed && sortBySummaryPath[0].indexOf("&[") !== -1 && headerItem.key) || !headerItem.key) {
                 path = createPath(items);
             } else {
-                path = $.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
+                path = iteratorUtils.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
             }
 
             if(item.type === GRAND_TOTAL_TYPE) {

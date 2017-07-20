@@ -736,7 +736,6 @@ renderer.Event = $.Event;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.contains = $.contains;
 renderer.Deferred = $.Deferred;
-renderer.map = $.map;
 
 module.exports = {
     set: function(strategy) { renderer = strategy; },

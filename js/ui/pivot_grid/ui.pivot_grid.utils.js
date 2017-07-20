@@ -189,7 +189,7 @@ exports.getExpandedLevel = function(options, axisName) {
 };
 
 function createGroupFields(item) {
-    return $.map(["year", "quarter", "month"], function(value, index) {
+    return iteratorUtils.map(["year", "quarter", "month"], function(value, index) {
         return extend({}, item, { groupInterval: value, groupIndex: index });
     });
 }

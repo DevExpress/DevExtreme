@@ -811,7 +811,7 @@ var SimulatedStrategy = Class.inherit({
 
     _eventHandler: function(eventName) {
         var args = [].slice.call(arguments).slice(1),
-            deferreds = $.map(this._scrollers, function(scroller) {
+            deferreds = iteratorUtils.map(this._scrollers, function(scroller) {
                 return scroller["_" + eventName + "Handler"].apply(scroller, args);
             });
         return when.apply($, deferreds).promise();

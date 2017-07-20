@@ -401,7 +401,7 @@ var GroupIterator = Iterator.inherit({
         }
 
         this.groupedIter = new ArrayIterator(
-            $.map(
+            iteratorUtils.map(
                 keys,
                 function(key) {
                     return { key: key, items: hash[key] };

@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Promise = require("../../core/polyfills/promise"),
+var Promise = require("../../core/polyfills/promise"),
     Class = require("../../core/class"),
+    map = require("../../core/utils/iterator").map,
     typeUtils = require("../../core/utils/type"),
     eventUtils = require("../../events/utils"),
     isPlainObject = typeUtils.isPlainObject,
@@ -115,7 +115,7 @@ var Provider = Class.inherit({
 
     _getLatLng: function(location) {
         if(typeof location === "string") {
-            var coords = $.map(location.split(","), function(item) {
+            var coords = map(location.split(","), function(item) {
                     return item.trim();
                 }),
                 numericRegex = /^[-+]?[0-9]*\.?[0-9]*$/;

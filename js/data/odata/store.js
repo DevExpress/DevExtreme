@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
+    map = require("../../core/utils/iterator").map,
     odataUtils = require("./utils"),
     proxyUrlFormatter = require("../proxy_url_formatter"),
     errors = require("../errors").errors,
@@ -171,7 +172,7 @@ var ODataStore = Store.inherit({
 
         if(extraOptions) {
             if(extraOptions.expand) {
-                params["$expand"] = $.map([].slice.call(extraOptions.expand), odataUtils.serializePropName).join();
+                params["$expand"] = map([].slice.call(extraOptions.expand), odataUtils.serializePropName).join();
             }
         }
 

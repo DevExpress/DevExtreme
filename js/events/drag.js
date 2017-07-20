@@ -155,7 +155,7 @@ var DragEmitter = GestureEmitter.inherit({
         this._maxBottomOffset = e.maxBottomOffset;
 
         var dropTargets = wrapToArray(e.targetElements || (e.targetElements === null ? [] : knownDropTargets));
-        this._dropTargets = $.map(dropTargets, function(element) { return $(element).get(0); });
+        this._dropTargets = iteratorUtils.map(dropTargets, function(element) { return $(element).get(0); });
     },
 
     _move: function(e) {
