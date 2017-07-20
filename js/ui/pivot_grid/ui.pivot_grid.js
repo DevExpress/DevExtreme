@@ -1836,7 +1836,6 @@ var PivotGrid = Widget.inherit({
 
                 dataArea.processScroll(that._scrollBarUseNative);
                 each([columnsArea, rowsArea, dataArea], function(_, area) {
-
                     updateScrollableResults.push(area && area.updateScrollable());
                 });
 
