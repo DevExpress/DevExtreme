@@ -3,7 +3,6 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     commons = require("./chartParts/commons.js"),
-    rangeModule = require("viz/translators/range"),
     rendererModule = require("viz/core/renderers/renderer"),
     legendModule = require("viz/components/legend"),
     translator2DModule = require("viz/translators/translator2d"),
@@ -12,12 +11,10 @@ var $ = require("jquery"),
     Translator = vizMocks.stubClass(translator2DModule.Translator2D),
     chartModule = require("viz/chart");
 
-/* global MockSeries, MockPoint, seriesMockData, categories, commonMethodsForTests */
+/* global MockSeries, MockPoint, seriesMockData, categories */
 require("../../helpers/chartMocks.js");
 
 $('<div id="chartContainer">').appendTo("#qunit-fixture");
-
-var checkTranslatorsCount = commonMethodsForTests.checkTranslatorsCount;
 
 function checkSegmentRectCommon(assert, chart, i, x1, y1, w, h, fill, dashStyle, stroke, strokeWidth, strokeOpacity, segments) {
     assert.equal(chart._renderer.path.getCall(i).args[0][0], x1, "x");
@@ -36,25 +33,6 @@ function checkSegmentRectCommon(assert, chart, i, x1, y1, w, h, fill, dashStyle,
     assert.equal(chart._renderer.path.getCall(i).returnValue.attr.firstCall.args[0]["stroke-linecap"], "square");
 }
 
-function getObjectData(object) {
-    var propertyName,
-        result = {};
-    for(propertyName in object) {
-        if(typeof object[propertyName] !== "function") {
-            if(typeof object[propertyName] === "number") {
-                result[propertyName] = Number(object[propertyName].toFixed(5));
-            } else {
-                result[propertyName] = object[propertyName];
-            }
-        }
-    }
-    return result;
-}
-
-function compareBusinessRanges(assert, range1, range2) {
-    assert.deepEqual(getObjectData(range1), getObjectData(range2));
-}
-
 QUnit.module("dxChart Translators", $.extend({}, commons.environment, {
     beforeEach: function() {
         commons.environment.beforeEach.call(this);
@@ -68,153 +46,6 @@ QUnit.module("dxChart Translators", $.extend({}, commons.environment, {
         this.createTranslator2D.restore();
     }
 }));
-
-QUnit.test("Translator created for single business range", function(assert) {
-    seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 1,
-                max: 3
-            },
-            arg: {
-                min: 2,
-                max: 8
-            }
-        }
-    }));
-    var chart = this.createChart({
-        margin: {
-            left: 0,
-            right: 5,
-            top: 3,
-            bottom: 4
-        },
-        series: {
-            type: "line"
-        }
-    });
-    //assert
-    assert.ok(chart.translators);
-    assert.ok(this.createTranslator2D.calledTwice);
-    checkTranslatorsCount(assert, chart.translators, 1, [1]);
-    var translators = chart.translators["default"][chart._valueAxes[0].name];
-
-    var translator = translators.val;
-    //main translator which is used by series and axes
-    assert.strictEqual(translator.pane, "default");
-    compareBusinessRanges(assert, this.createTranslator2D.firstCall.args[0], new rangeModule.Range(chart.businessRanges[0].val), "business range");
-    assert.deepEqual(this.createTranslator2D.firstCall.args[1], chart._canvas, "translator canvas");
-    //main translator which is used by series and axes
-    compareBusinessRanges(assert, this.createTranslator2D.lastCall.args[0], new rangeModule.Range(chart.businessRanges[0].arg), "business range");
-    assert.deepEqual(this.createTranslator2D.lastCall.args[1], chart._canvas, "translator canvas");
-});
-
-QUnit.test("Translator businessRange after update", function(assert) {
-    seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 1,
-                max: 3
-            },
-            arg: {
-                min: 2,
-                max: 8
-            }
-        }
-    }));
-    var chart = this.createChart({
-        margin: {
-            left: 0,
-            right: 5,
-            top: 3,
-            bottom: 4
-        },
-        series: {
-            type: "line"
-        }
-    });
-    chart._argumentAxes[0].getTranslator = sinon.stub().returns({ getBusinessRange: sinon.stub().returns({}) });
-    chart.translators["default"][chart._valueAxes[0].name].arg._originalBusinessRange = {};
-    chart.translators["default"][chart._valueAxes[0].name].val._originalBusinessRange = {};
-
-    chart.translators["default"][chart._valueAxes[0].name].arg.updateBusinessRange.reset();
-    chart.translators["default"][chart._valueAxes[0].name].val.updateBusinessRange.reset();
-
-    //act
-    chart.zoomArgument(4, 6);
-    //assert
-    assert.ok(chart.translators);
-    checkTranslatorsCount(assert, chart.translators, 1, [1]);
-    assert.ok(this.createTranslator2D.calledTwice);
-    var translators = chart.translators["default"][chart._valueAxes[0].name];
-
-    var translator = translators.val;
-    //main translator which is used by series and axes
-    assert.strictEqual(translator.pane, "default");
-    assert.ok(translator.updateBusinessRange.calledTwice);
-    compareBusinessRanges(assert, translator.updateBusinessRange.firstCall.args[0], new rangeModule.Range(chart.businessRanges[0].val), "business range");
-    assert.ok(!translator._originalBusinessRange);
-
-
-    translator = translators.arg;
-    //main translator which is used by series and axes
-    assert.ok(translator.updateBusinessRange.calledTwice);
-    compareBusinessRanges(assert, translator.updateBusinessRange.firstCall.args[0], new rangeModule.Range(chart.businessRanges[0].arg), "business range");
-    assert.ok(!translator._originalBusinessRange);
-});
-
-QUnit.test("Translator businessRange after update not apply value margins", function(assert) {
-    seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 1,
-                max: 3
-            },
-            arg: {
-                min: 2,
-                max: 8
-            }
-        }
-    }));
-
-    var chart = this.createChart({
-        series: {
-            type: "line"
-        }
-    });
-    chart._argumentAxes[0].getTranslator = sinon.stub().returns({ getBusinessRange: sinon.stub().returns({}) });
-
-    chart.translators["default"][chart._valueAxes[0].name].arg._originalBusinessRange = {};
-    chart.translators["default"][chart._valueAxes[0].name].val._originalBusinessRange = {};
-
-    chart.translators["default"][chart._valueAxes[0].name].arg.updateBusinessRange.reset();
-    chart.translators["default"][chart._valueAxes[0].name].val.updateBusinessRange.reset();
-
-    //act
-    chart.zoomArgument(4, 6, true);
-    //assert
-    assert.ok(chart.translators);
-    checkTranslatorsCount(assert, chart.translators, 1, [1]);
-    assert.ok(this.createTranslator2D.calledTwice);
-    var translators = chart.translators["default"][chart._valueAxes[0].name];
-
-    var translator = translators.val;
-    //main translator which is used by series and axes
-    assert.strictEqual(translator.pane, "default");
-    assert.ok(translator.updateBusinessRange.calledTwice);
-    compareBusinessRanges(assert, translator.updateBusinessRange.firstCall.args[0], new rangeModule.Range(chart.businessRanges[0].val), "business range");
-    assert.ok(!translator._originalBusinessRange);
-
-
-    translator = translators.arg;
-    //main translator which is used by series and axes
-    assert.ok(translator.updateBusinessRange.calledTwice);
-    compareBusinessRanges(assert, translator.updateBusinessRange.firstCall.args[0], new rangeModule.Range($.extend({}, chart.businessRanges[0].arg, {
-        max: 8,
-        min: 2
-    })), "business range");
-    assert.ok(!translator._originalBusinessRange);
-});
 
 ///////////////////////////////////////////////////////
 //////      Axes
@@ -338,8 +169,8 @@ QUnit.test("create axes with crosshair", function(assert) {
     assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
     assert.equal(chart._valueAxes.length, 1);
-    assert.ok(chart._argumentAxes[0].getOptions().crosshairEnabled);
-    assert.ok(chart._valueAxes[0].getOptions().crosshairEnabled);
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 4);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 8);
 });
 
 QUnit.test("create axes with crosshair. horizontal line is invisible", function(assert) {
@@ -369,8 +200,8 @@ QUnit.test("create axes with crosshair. horizontal line is invisible", function(
     assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
     assert.equal(chart._valueAxes.length, 1);
-    assert.ok(chart._argumentAxes[0].getOptions().crosshairEnabled);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairEnabled, false);
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 4);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 0);
 });
 
 QUnit.test("create axes with crosshair. horizontal line is invisible. rotated", function(assert) {
@@ -401,8 +232,8 @@ QUnit.test("create axes with crosshair. horizontal line is invisible. rotated", 
     assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
     assert.equal(chart._valueAxes.length, 1);
-    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairEnabled, false);
-    assert.ok(chart._valueAxes[0].getOptions().crosshairEnabled);
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 4);
 });
 
 QUnit.test("create axes with crosshair. vertical line is invisible", function(assert) {
@@ -432,8 +263,8 @@ QUnit.test("create axes with crosshair. vertical line is invisible", function(as
     assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
     assert.equal(chart._valueAxes.length, 1);
-    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairEnabled, false);
-    assert.ok(chart._valueAxes[0].getOptions().crosshairEnabled);
+    assert.strictEqual(chart._argumentAxes[0].getOptions().crosshairMargin, 0);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 8);
 });
 
 QUnit.test("create axes with crosshair. vertical line is invisible. rotated", function(assert) {
@@ -464,8 +295,8 @@ QUnit.test("create axes with crosshair. vertical line is invisible. rotated", fu
     assert.ok(chart._valueAxes);
     assert.equal(chart._argumentAxes.length, 1);
     assert.equal(chart._valueAxes.length, 1);
-    assert.ok(chart._argumentAxes[0].getOptions().crosshairEnabled);
-    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairEnabled, false);
+    assert.ok(chart._argumentAxes[0].getOptions().crosshairMargin, 8);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 0);
 });
 
 QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", function(assert) {
@@ -807,7 +638,7 @@ QUnit.test("Panes - Percent format for pane with full stacked series", function(
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
-    seriesMockData.series.push(stubSeries);
+    seriesMockData.series.push(new MockSeries({}));
     var valueAxis;
 
     //act
@@ -822,7 +653,7 @@ QUnit.test("Panes - Percent format for pane with full stacked series", function(
             pane: "bottomPane"
         }],
         series: [
-            {},
+            { type: "line" },
             { type: "fullstackedbar" }
         ],
         panes: [{
@@ -839,13 +670,13 @@ QUnit.test("Panes - Percent format for pane with full stacked series", function(
     assert.equal(chart._valueAxes.length, 2, "Both axis specified and should be created");
     valueAxis = chart._valueAxes[0];
     assertCommonAxesProperties(assert, valueAxis, { pane: "topPane" });
-    assert.ok(!valueAxis.percentLabelFormat);
-    assert.ok(valueAxis.resetAutoFormat);
+    assert.ok(!valueAxis.setPercentLabelFormat.called, "no set percent format");
+    assert.ok(valueAxis.resetAutoLabelFormat.called, "reset percent format");
 
     valueAxis = chart._valueAxes[1];
     assertCommonAxesProperties(assert, valueAxis, { pane: "bottomPane" });
-    assert.ok(valueAxis.percentLabelFormat);
-    assert.ok(!valueAxis.resetAutoFormat);
+    assert.ok(valueAxis.setPercentLabelFormat.called, "set percent format");
+    assert.ok(!valueAxis.resetAutoLabelFormat.called, "no reset percent format");
 });
 
 QUnit.test("Panes - Percent format for pane with two axes", function(assert) {
@@ -854,7 +685,7 @@ QUnit.test("Panes - Percent format for pane with two axes", function(assert) {
         range: { val: { min: 1, max: 3 } }
     });
     seriesMockData.series.push(stubSeries);
-    seriesMockData.series.push(stubSeries);
+    seriesMockData.series.push(new MockSeries({}));
     var verticalAxis;
 
     //act
@@ -885,102 +716,13 @@ QUnit.test("Panes - Percent format for pane with two axes", function(assert) {
     assert.equal(chart._valueAxes.length, 2, "Both axis specified and should be created");
     verticalAxis = chart._valueAxes[0];
     assertCommonAxesProperties(assert, verticalAxis, { pane: "default" });
-    assert.ok(!verticalAxis.percentLabelFormat);
+    assert.ok(!verticalAxis.setPercentLabelFormat.called, "no set percent format");
+    assert.ok(verticalAxis.resetAutoLabelFormat.called, "reset percent format");
 
     verticalAxis = chart._valueAxes[1];
     assertCommonAxesProperties(assert, verticalAxis, { pane: "default" });
-    assert.ok(verticalAxis.percentLabelFormat);
-});
-
-QUnit.test("Panes - Percent format for pane with two axes. Rotated", function(assert) {
-    //Arrange
-    var stubSeries = new MockSeries({
-        range: { arg: { min: 1, max: 3 } }
-    });
-    seriesMockData.series.push(stubSeries);
-    seriesMockData.series.push(stubSeries);
-    var horizontalAxis;
-
-    //act
-    var chart = this.createChart({
-        rotated: true,
-        argumentAxis: {
-            categories: categories
-        },
-        valueAxis: [{
-            name: "axis1"
-        }, {
-            name: "axis2"
-        }],
-        series: [
-            {
-                axis: "axis1",
-                type: "line"
-            },
-            {
-                type: "fullstackedbar",
-                axis: "axis2"
-            }
-        ]
-    });
-
-    assert.equal(chart._argumentAxes.length, 1, "Axis should not be duplicated");
-    assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "default" });
-
-    assert.equal(chart._valueAxes.length, 2, "Both axis specified and should be created");
-    horizontalAxis = chart._valueAxes[0];
-    assertCommonAxesProperties(assert, horizontalAxis, { pane: "default" });
-    assert.ok(!horizontalAxis.percentLabelFormat);
-
-    horizontalAxis = chart._valueAxes[1];
-    assertCommonAxesProperties(assert, horizontalAxis, { pane: "default" });
-    assert.ok(horizontalAxis.percentLabelFormat);
-});
-
-
-QUnit.test("Panes - Percent format for pane with full stacked series. Rotated", function(assert) {
-    //Arrange
-    var stubSeries = new MockSeries({
-        range: { arg: { min: 1, max: 3 } }
-    });
-    seriesMockData.series.push(stubSeries);
-    seriesMockData.series.push(stubSeries);
-    var horizontalAxis;
-
-    //act
-    var chart = this.createChart({
-        rotated: true,
-        argumentAxis: {
-            categories: categories,
-            pane: "bottomPane"
-        },
-        valueAxis: [{
-            pane: "topPane"
-        }, {
-            pane: "bottomPane"
-        }],
-        series: [{ type: "line" },
-            { type: "fullstackedbar" }
-        ],
-        panes: [{
-            name: "topPane"
-        }, {
-            name: "bottomPane"
-        }]
-    });
-    //horizontalAxes
-    assert.equal(chart._argumentAxes.length, 2, "Axis should be duplicated");
-    assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "bottomPane" });
-    assertCommonAxesProperties(assert, chart._argumentAxes[1], { pane: "topPane" });
-
-    assert.equal(chart._valueAxes.length, 2, "Both axis specified and should be created");
-    horizontalAxis = chart._valueAxes[0];
-    assertCommonAxesProperties(assert, horizontalAxis, { pane: "topPane" });
-    assert.ok(!horizontalAxis.percentLabelFormat);
-
-    horizontalAxis = chart._valueAxes[1];
-    assertCommonAxesProperties(assert, horizontalAxis, { pane: "bottomPane" });
-    assert.ok(horizontalAxis.percentLabelFormat);
+    assert.ok(verticalAxis.setPercentLabelFormat.called, "set percent format");
+    assert.ok(!verticalAxis.resetAutoLabelFormat.called, "no reset percent format");
 });
 
 //two different
@@ -2114,4 +1856,148 @@ QUnit.test("Negatives as zeroes. misspelling case is ignored when correct option
     });
 
     assert.equal(this.createSeriesFamily.args[0][0].negativesAsZeroes, "correct-value");
+});
+
+QUnit.module("Axes and Series", $.extend({}, commons.environment, {
+    beforeEach: function() {
+        commons.environment.beforeEach.apply(this, arguments);
+        seriesMockData.series.push(new MockSeries({}), new MockSeries({}));
+    },
+
+    afterEach: function() {
+        commons.environment.afterEach.apply(this, arguments);
+    }
+}));
+
+QUnit.test("Argument and value axes are passed to single series", function(assert) {
+    var chart = this.createChart({
+            series: { type: "line" }
+        }),
+        seriesOptions = seriesMockData.args[0][0];
+
+    assert.strictEqual(seriesOptions.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series");
+    assert.strictEqual(seriesOptions.valueAxis, chart._valueAxes[0], "value axis is passed to series");
+});
+
+QUnit.test("Argument and value axes are passed to series with different value axis", function(assert) {
+    var chart = this.createChart({
+            valueAxis: [{ name: "axis1" }, { name: "axis2" }],
+            series: [{ type: "line", axis: "axis1" }, { type: "line", axis: "axis2" }]
+        }),
+        seriesOptions1 = seriesMockData.args[0][0],
+        seriesOptions2 = seriesMockData.args[1][0];
+
+    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions1.valueAxis.name, "axis1", "correct value axis is passed to series1");
+
+    assert.strictEqual(seriesOptions2.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions2.valueAxis.name, "axis2", "correct value axis is passed to series2");
+});
+
+QUnit.test("Argument and value axes are passed to series in defferent panes", function(assert) {
+    var incidentOccurred = sinon.spy(),
+        chart = this.createChart({
+            panes: [{
+                name: "pane1"
+            }, {
+                name: "pane2"
+            }],
+            series: [{ type: "line", pane: "pane1" }, { type: "line", pane: "pane2" }],
+            onIncidentOccurred: incidentOccurred
+        }),
+        seriesOptions1 = seriesMockData.args[0][0],
+        seriesOptions2 = seriesMockData.args[1][0];
+
+    assert.strictEqual(incidentOccurred.callCount, 0, "no incidentOccurred");
+    assert.strictEqual(chart._valueAxes.length, 2, "chart has two value axes");
+
+    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions1.valueAxis.pane, "pane1", "correct value axis is passed to series1");
+
+    assert.strictEqual(seriesOptions2.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions2.valueAxis.pane, "pane2", "correct value axis is passed to series2");
+});
+
+QUnit.test("Argument and value axes are passed to series. Series with undefined axis", function(assert) {
+    var incidentOccurred = sinon.spy(),
+        chart = this.createChart({
+            series: [{ type: "line", axis: "axis1" }],
+            onIncidentOccurred: incidentOccurred
+        }),
+        seriesOptions1 = seriesMockData.args[0][0];
+
+    assert.strictEqual(incidentOccurred.callCount, 1, "incidentOccurred called");
+    assert.strictEqual(chart._valueAxes.length, 2, "chart has two value axes");
+
+    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions1.valueAxis.name, "axis1", "correct value axis is passed to series1");
+});
+
+QUnit.test("Argument and value axes are passed to series. Series with defined axis", function(assert) {
+    var chart = this.createChart({
+            rotated: true,
+            argumentAxis: {
+                categories: categories
+            },
+            valueAxis: [{ name: "axis1" }, { name: "axis2" }],
+            series: [
+                {
+                    axis: "axis1",
+                    type: "line"
+                },
+                {
+                    type: "line",
+                    axis: "axis2"
+                }
+            ]
+        }),
+        seriesOptions1 = seriesMockData.args[0][0],
+        seriesOptions2 = seriesMockData.args[1][0];
+
+    assert.strictEqual(chart._valueAxes.length, 2, "chart has two value axes");
+    assert.strictEqual(seriesOptions1.valueAxis.name, "axis1", "correct value axis is passed to series1");
+    assert.strictEqual(seriesOptions2.valueAxis.name, "axis2", "correct value axis is passed to series1");
+});
+
+QUnit.test("Argument and value axes are passed to series. Series with undefined axis. Two panes", function(assert) {
+    var chart = this.createChart({
+            panes: [
+                { name: "top" },
+                { name: "bottom" }
+            ],
+            series: [{ type: "line", pane: "bottom" }],
+            valueAxis: {},
+        }),
+        seriesOptions1 = seriesMockData.args[0][0];
+
+    assert.strictEqual(chart._valueAxes.length, 2, "chart has one value axis");
+    assert.strictEqual(seriesOptions1.argumentAxis, chart._argumentAxes[0], "argument axis is passed to series1");
+    assert.strictEqual(seriesOptions1.valueAxis.pane, "bottom", "correct value axis is passed to series1");
+});
+
+QUnit.test("Two series, two value axis, one pane (check default)", function(assert) {
+    var chart = this.createChart({
+        series: [{
+            axis: "axis1",
+            type: "line"
+        }, {
+            type: "line"
+        }],
+        valueAxis: [
+            {},
+            { name: "axis1" }
+        ]
+    });
+    //assert
+    var chartSeries = chart.series;
+    assert.equal(chartSeries.length, 2, "chart have two series");
+    assert.equal(chartSeries[0].axis, "axis1", "first series was mapped to axis1 axis");
+    assert.equal(chartSeries[1].getValueAxis().name, "defaultAxisName0", "secons series was mapped to defaultAxisName0 axis");
+    var valueAxis = chart._valueAxes;
+    assert.equal(valueAxis.length, 2, "chart have two value axes");
+    assert.equal(valueAxis[0].pane, "default");
+    assert.equal(valueAxis[1].pane, "default");
+
+    assert.equal(valueAxis[0].name, "defaultAxisName0");
+    assert.equal(valueAxis[1].name, "axis1");
 });

@@ -3,7 +3,6 @@
 //there are area, steparea, stackedarea, fullstackedarea, splinearea
 var objectUtils = require("../../core/utils/object"),
     extend = require("../../core/utils/extend").extend,
-    rangeCalculator = require("./helpers/range_data_calculator"),
     scatterSeries = require("./scatter_series").chart,
     lineSeries = require("./line_series"),
     chartLineSeries = lineSeries.chart.line,
@@ -24,12 +23,12 @@ var baseAreaMethods = {
         return legendState;
     },
 
-    _getRangeData: function(zoomArgs, calcIntervalFunction) {
-        rangeCalculator.calculateRangeData(this, zoomArgs, calcIntervalFunction);
-        rangeCalculator.addLabelPaddings(this);
-        rangeCalculator.calculateRangeMinValue(this, zoomArgs);
-
-        return this._rangeData;
+    getValueRangeInitialValue: function() {
+        if(this.valueAxisType !== "logarithmic" && this.valueType !== "datetime" && this.showZero !== false) {
+            return 0;
+        } else {
+            return scatterSeries.getValueRangeInitialValue.call(this);
+        }
     },
 
     _getDefaultSegment: function(segment) {
