@@ -703,14 +703,10 @@ var DataSource = Class.inherit({
                 if(!__isDefined(data) || array.isEmpty(data)) {
                     d.reject(new errors.Error("E4009"));
                 } else {
-                    var dataArray = [];
-
-                    if(Array.isArray(data)) {
-                        dataArray = data;
-                    } else {
-                        dataArray = [data];
+                    if(!Array.isArray(data)) {
+                        data = [data];
                     }
-                    d.resolve(that._applyMapFunction(dataArray)[0]);
+                    d.resolve(that._applyMapFunction(data)[0]);
                 }
             };
 
