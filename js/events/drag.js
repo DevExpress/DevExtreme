@@ -16,13 +16,14 @@ var DRAG_START_EVENT = "dxdragstart",
 
     DRAG_ENTER_EVENT = "dxdragenter",
     DRAG_LEAVE_EVENT = "dxdragleave",
-    DROP_EVENT = "dxdrop";
+    DROP_EVENT = "dxdrop",
+
+    DX_DRAG_EVENTS_COUNT_KEY = "dxDragEventsCount";
 
 
 var knownDropTargets = [],
     knownDropTargetSelectors = [],
-    knownDropTargetConfigs = [],
-    elementEvents = {};
+    knownDropTargetConfigs = [];
 
 var dropTargetRegistration = {
 
@@ -47,7 +48,8 @@ var dropTargetRegistration = {
 
     updateEventsCounter: function(element, event, value) {
         if([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].indexOf(event) > -1) {
-            elementEvents[element] = Math.max(0, (elementEvents[element] || 0) + value);
+            var eventsCount = $.data(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
+            $.data(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
         }
     },
 
@@ -56,13 +58,13 @@ var dropTargetRegistration = {
     },
 
     teardown: function(element) {
-        var handlersCount = elementEvents[element];
+        var handlersCount = $.data(element, DX_DRAG_EVENTS_COUNT_KEY);
         if(!handlersCount) {
             var index = inArray(element, knownDropTargets);
             knownDropTargets.splice(index, 1);
             knownDropTargetSelectors.splice(index, 1);
             knownDropTargetConfigs.splice(index, 1);
-            delete elementEvents[element];
+            $.removeData(element, DX_DRAG_EVENTS_COUNT_KEY)
         }
     }
 
