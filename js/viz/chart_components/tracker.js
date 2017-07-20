@@ -236,6 +236,7 @@ var baseTrackerPrototype = {
     _showPointTooltip: function(event, point) {
         var that = event.data.tracker,
             pointWithTooltip = that.pointAtShownTooltip;
+
         if(pointWithTooltip && pointWithTooltip !== point) {
             that._hideTooltip(pointWithTooltip);
         }

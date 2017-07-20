@@ -45,7 +45,7 @@ var registerJQueryComponent = function(name, componentClass) {
 
         if(isMemberInvoke) {
             var memberName = options,
-                memberArgs = $.makeArray(arguments).slice(1);
+                memberArgs = [].slice.call(arguments).slice(1);
 
             this.each(function() {
                 var instance = componentClass.getInstance(this);

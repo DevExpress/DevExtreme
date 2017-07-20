@@ -12,7 +12,7 @@ var $ = require("../core/renderer"),
 
 var hasKey = function(target, keyOrKeys) {
     var key,
-        keys = $.makeArray(keyOrKeys);
+        keys = typeof keyOrKeys === "string" ? keyOrKeys.split() : keyOrKeys.slice();
 
     while(keys.length) {
         key = keys.shift();

@@ -200,24 +200,24 @@ module.exports = _extend({}, barPoint, {
         if(that.graphic) {
             var x,
                 y,
-                min,
-                max,
                 minValue = _min(that.lowY, that.highY),
                 maxValue = _max(that.lowY, that.highY),
-                visibleAreaX = that.translators.x.getCanvasVisibleArea(),
-                visibleAreaY = that.translators.y.getCanvasVisibleArea(),
-                edgeLocation = location === 'edge';
+                visibleArea = that._getVisibleArea(),
+                edgeLocation = location === 'edge',
+                rotated = that._options.rotated,
+                minVisible = rotated ? visibleArea.minX : visibleArea.minY,
+                maxVisible = rotated ? visibleArea.maxX : visibleArea.maxY,
+                min = _max(minVisible, minValue),
+                max = _min(maxVisible, maxValue),
+                center = min + (max - min) / 2;
 
-            if(!that._options.rotated) {
-                min = _max(visibleAreaY.min, minValue);
-                max = _min(visibleAreaY.max, maxValue);
-                x = that.x;
-                y = edgeLocation ? min : min + (max - min) / 2;
-            } else {
-                min = _max(visibleAreaX.min, minValue);
-                max = _min(visibleAreaX.max, maxValue);
+
+            if(rotated) {
                 y = that.x;
-                x = edgeLocation ? max : min + (max - min) / 2;
+                x = edgeLocation ? max : center;
+            } else {
+                x = that.x;
+                y = edgeLocation ? min : center;
             }
 
             return { x: x, y: y, offset: 0 };
@@ -231,12 +231,10 @@ module.exports = _extend({}, barPoint, {
     _translate: function() {
         var that = this,
             rotated = that._options.rotated,
-            translators = that.translators,
-            argTranslator = rotated ? translators.y : translators.x,
-            valTranslator = rotated ? translators.x : translators.y,
+            valTranslator = that._getValTranslator(),
             centerValue;
 
-        that.vx = that.vy = that.x = argTranslator.translate(that.argument) + (that.xCorrection || 0);
+        that.vx = that.vy = that.x = that._getArgTranslator().translate(that.argument) + (that.xCorrection || 0);
         that.openY = that.openValue !== null ? valTranslator.translate(that.openValue) : null;
         that.highY = valTranslator.translate(that.highValue);
         that.lowY = valTranslator.translate(that.lowValue);
@@ -362,5 +360,13 @@ module.exports = _extend({}, barPoint, {
             closeValueText: closeValue,
             lowValueText: lowValue
         });
+    },
+
+    getMaxValue: function() {
+        return this.highValue;
+    },
+
+    getMinValue: function() {
+        return this.lowValue;
     }
 });

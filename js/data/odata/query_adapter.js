@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("../../core/utils/type"),
+var typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     queryAdapters = require("../query_adapters"),
@@ -14,6 +13,10 @@ var $ = require("../../core/renderer"),
     grep = require("../../core/utils/common").grep;
 
 var DEFAULT_PROTOCOL_VERSION = 2;
+
+var makeArray = function(value) {
+    return typeUtils.type(value) === "string" ? value.split() : value;
+};
 
 var compileCriteria = (function() {
     var protocolVersion,
@@ -193,13 +196,13 @@ var createODataQueryAdapter = function(queryOptions) {
                 var hash = {};
 
                 if(_expand) {
-                    iteratorUtils.each($.makeArray(_expand), function() {
+                    iteratorUtils.each(makeArray(_expand), function() {
                         hash[serializePropName(this)] = 1;
                     });
                 }
 
                 if(_select) {
-                    iteratorUtils.each($.makeArray(_select), function() {
+                    iteratorUtils.each(makeArray(_select), function() {
                         var path = this.split(".");
                         if(path.length < 2) {
                             return;
@@ -278,7 +281,7 @@ var createODataQueryAdapter = function(queryOptions) {
 
                 if(_expand || _select) {
                     if(_expand) {
-                        parseTree($.makeArray(_expand), hash, function(node, key, path) {
+                        parseTree(makeArray(_expand), hash, function(node, key, path) {
                             node[key] = node[key] || {};
 
                             if(!path.length) {
@@ -290,7 +293,7 @@ var createODataQueryAdapter = function(queryOptions) {
                     }
 
                     if(_select) {
-                        parseTree(grep($.makeArray(_select), hasDot), hash, function(node, key, path) {
+                        parseTree(grep(makeArray(_select), hasDot), hash, function(node, key, path) {
                             if(!path.length) {
                                 node[key] = node[key] || [];
                                 node[key].push(key);
@@ -424,7 +427,7 @@ var createODataQueryAdapter = function(queryOptions) {
             }
 
             if(!Array.isArray(criterion)) {
-                criterion = $.makeArray(arguments);
+                criterion = [].slice.call(arguments);
             }
 
             if(hasFunction(criterion)) {
@@ -444,7 +447,7 @@ var createODataQueryAdapter = function(queryOptions) {
             }
 
             if(!Array.isArray(expr)) {
-                expr = $.makeArray(arguments);
+                expr = [].slice.call(arguments);
             }
 
             _select = expr;

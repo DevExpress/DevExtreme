@@ -14,8 +14,6 @@ var extend = require("../../../core/utils/extend").extend,
     _max = _math.max,
 
     ERROR_BARS_ANGLE_OFFSET = 90,
-    CANVAS_POSITION_START = "canvas_position_start",
-    CANVAS_POSITION_TOP = "canvas_position_top",
     CANVAS_POSITION_END = "canvas_position_end",
     CANVAS_POSITION_DEFAULT = "canvas_position_default";
 
@@ -29,10 +27,23 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
         return "outside";
     },
 
-    _translate: function(translator) {
+    _getCoords: function(argument, value) {
+        var axis = this.series.getValueAxis(),
+            startAngle = axis.getAngles()[0],
+            angle = this._getArgTranslator().translate(argument),
+            radius = this._getValTranslator().translate(value),
+            coords = vizUtils.convertPolarToXY(axis.getCenter(), axis.getAngles()[0], angle, radius);
+
+        coords.angle = angle + startAngle - 90,
+        coords.radius = radius;
+
+        return coords;
+    },
+
+    _translate: function() {
         var that = this,
-            coord = translator.translate(that.argument, that.value),
-            center = translator.translate(CANVAS_POSITION_START, CANVAS_POSITION_TOP);
+            center = that.series.getValueAxis().getCenter(),
+            coord = that._getCoords(that.argument, that.value);
 
         that.vx = normalizeAngle(coord.angle);
         that.vy = that.radiusOuter = that.radiusLabels = coord.radius;
@@ -46,21 +57,22 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
         that.defaultX = that.centerX = center.x;
         that.defaultY = that.centerY = center.y;
 
-        that._translateErrorBars(translator);
+        that._translateErrorBars();
 
         that.inVisibleArea = true;
     },
 
-    _translateErrorBars: function(translator) {
+    _translateErrorBars: function() {
         var that = this,
-            errorBars = that._options.errorBars;
+            errorBars = that._options.errorBars,
+            translator = that._getValTranslator();
 
         if(!errorBars) {
             return;
         }
 
-        isDefined(that.lowError) && (that._lowErrorCoord = that.centerY - translator.translate(that.argument, that.lowError).radius);
-        isDefined(that.highError) && (that._highErrorCoord = that.centerY - translator.translate(that.argument, that.highError).radius);
+        isDefined(that.lowError) && (that._lowErrorCoord = that.centerY - translator.translate(that.lowError));
+        isDefined(that.highError) && (that._highErrorCoord = that.centerY - translator.translate(that.highError));
         that._errorBarPos = that.centerX;
 
         that._baseErrorBarPos = errorBars.type === "stdDeviation" ? that._lowErrorCoord + (that._highErrorCoord - that._lowErrorCoord) / 2 : that.centerY - that.radius;
@@ -72,7 +84,7 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
 
     getDefaultCoords: function() {
         var cosSin = vizUtils.getCosAndSin(-this.angle),
-            radius = this.translators.translate(CANVAS_POSITION_START, CANVAS_POSITION_DEFAULT).radius,
+            radius = this._getValTranslator().translate(CANVAS_POSITION_DEFAULT),
             x = this.defaultX + radius * cosSin.cos,
             y = this.defaultY + radius * cosSin.sin;
 
@@ -126,12 +138,16 @@ exports.polarBarPoint = _extend({}, barPoint, {
 
     _getLabelPosition: piePoint._getLabelPosition,
 
-    _translate: function(translator) {
-        var that = this,
-            maxRadius = translator.translate(CANVAS_POSITION_TOP, CANVAS_POSITION_END).radius;
+    _getCoords: exports.polarSymbolPoint._getCoords,
 
-        that.radiusInner = translator.translate(that.argument, that.minValue).radius;
-        exports.polarSymbolPoint._translate.call(that, translator);
+    _translate: function() {
+        var that = this,
+            translator = that._getValTranslator(),
+            maxRadius = translator.translate(CANVAS_POSITION_END);
+
+        that.radiusInner = translator.translate(that.minValue);
+
+        exports.polarSymbolPoint._translate.call(that);
 
         if(that.radiusInner === null) {
             that.radiusInner = that.radius = maxRadius;
@@ -143,10 +159,6 @@ exports.polarBarPoint = _extend({}, barPoint, {
         that.radiusInner = that.defaultRadius = _math.min(that.radiusInner, that.radius);
 
         that.middleAngle = that.angle = -normalizeAngle(that.middleAngleCorrection - that.angle);
-    },
-
-    _checkVisibility: function(translator) {
-        return translator.checkVisibility(this.radius, this.radiusInner);
     },
 
     getMarkerCoords: function() {
@@ -166,7 +178,8 @@ exports.polarBarPoint = _extend({}, barPoint, {
             coords = that.getMarkerCoords(),
             innerRadius = coords.innerRadius,
             outerRadius = coords.outerRadius,
-            start = that.translators.translate(that.argument, CANVAS_POSITION_DEFAULT),
+
+            start = that._getCoords(that.argument, CANVAS_POSITION_DEFAULT),
             x = coords.x,
             y = coords.y;
 
@@ -203,7 +216,7 @@ exports.polarBarPoint = _extend({}, barPoint, {
     },
 
     coordsIn: function(x, y) {
-        var val = this.translators.untranslate(x, y),
+        var val = vizUtils.convertXYToPolar(this.series.getValueAxis().getCenter(), x, y),
             coords = this.getMarkerCoords(),
             isBetweenAngles = coords.startAngle < coords.endAngle ?
             -val.phi >= coords.startAngle && -val.phi <= coords.endAngle :

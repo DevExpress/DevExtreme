@@ -82,7 +82,7 @@ exports.chart.bubble = _extend({}, scatterSeries, {
         options.tagField = that.getTagField() + name;
     },
 
-    _clearingAnimation: function(translators, drawComplete) {
+    _clearingAnimation: function(drawComplete) {
         var that = this,
             partitionDuration = 0.5,
             lastPointIndex = that._drawnPoints.length - 1,

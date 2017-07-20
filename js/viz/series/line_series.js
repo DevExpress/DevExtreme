@@ -10,8 +10,6 @@ var series = require("./scatter_series"),
     vizUtils = require("../core/utils"),
     normalizeAngle = vizUtils.normalizeAngle,
 
-    CANVAS_POSITION_START = "canvas_position_start",
-    CANVAS_POSITION_TOP = "canvas_position_top",
     DISCRETE = "discrete",
 
     _map = vizUtils.map,
@@ -123,7 +121,7 @@ var lineMethods = {
         animate ? lineElement.animate(params, animateParams, complete) : lineElement.attr(params);
     },
 
-    _clearingAnimation: function(translator, drawComplete) {
+    _clearingAnimation: function(drawComplete) {
         var that = this,
             lastIndex = that._graphics.length - 1,
             settings = { opacity: 0.001 },
@@ -348,7 +346,7 @@ exports.chart["spline"] = _extend({}, exports.chart["line"], {
 exports.polar.line = _extend({}, polarScatterSeries, lineMethods, {
     _prepareSegment: function(points, rotated, lastSegment) {
         var preparedPoints = [],
-            centerPoint = this.translators.translate(CANVAS_POSITION_START, CANVAS_POSITION_TOP),
+            centerPoint = this.getValueAxis().getCenter(),
             i;
         lastSegment && this._closeSegment(points);
 

@@ -21,7 +21,8 @@ var DRAG_START_EVENT = "dxdragstart",
 
 var knownDropTargets = [],
     knownDropTargetSelectors = [],
-    knownDropTargetConfigs = [];
+    knownDropTargetConfigs = [],
+    elementEvents = {};
 
 var dropTargetRegistration = {
 
@@ -36,6 +37,7 @@ var dropTargetRegistration = {
 
     add: function(element, handleObj) {
         var index = inArray(element, knownDropTargets);
+        this.updateEventsCounter(element, handleObj.type, 1);
 
         var selector = handleObj.selector;
         if(inArray(selector, knownDropTargetSelectors[index]) === -1) {
@@ -43,23 +45,24 @@ var dropTargetRegistration = {
         }
     },
 
+    updateEventsCounter: function(element, event, value) {
+        if([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].indexOf(event) > -1) {
+            elementEvents[element] = Math.max(0, (elementEvents[element] || 0) + value);
+        }
+    },
+
+    remove: function(element, handleObj) {
+        this.updateEventsCounter(element, handleObj.type, -1);
+    },
+
     teardown: function(element) {
-        var elementEvents = $._data(element, "events"),
-            handlersCount = 0;
-
-        iteratorUtils.each([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT], function(_, eventName) {
-            var eventHandlers = elementEvents[eventName];
-
-            if(eventHandlers) {
-                handlersCount += eventHandlers.length;
-            }
-        });
-
+        var handlersCount = elementEvents[element];
         if(!handlersCount) {
             var index = inArray(element, knownDropTargets);
             knownDropTargets.splice(index, 1);
             knownDropTargetSelectors.splice(index, 1);
             knownDropTargetConfigs.splice(index, 1);
+            delete elementEvents[element];
         }
     }
 

@@ -4,13 +4,9 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Series = require("viz/series/base_series").Series;
 
-/* global insertMockFactory */
 require("../../helpers/chartMocks.js");
 
-
 require("viz/chart");
-
-insertMockFactory();
 
 function getOriginalData(data) {
     return $.map(data, function(item) {
@@ -26,6 +22,11 @@ function getOriginalData(data) {
 var createSeries = function(options, renderSettings, widgetType) {
     renderSettings = renderSettings || {};
     renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
+    renderSettings.argumentAxis = renderSettings.argumentAxis || {
+        getViewport: function() {
+
+        }
+    };
     options = $.extend(true, {
         visible: true,
         border: { visible: false },
@@ -50,21 +51,29 @@ QUnit.test("Range for empty dataSource", function(assert) {
 
     series.updateData([]);
 
+    var rangeData = series.getRangeData();
+
     assert.ok(series, "Series should be created");
-    assert.ok(series._rangeData, "Range data should be created");
-    assert.ok($.isEmptyObject(series._rangeData.arg), "Range data should be empty");
-    assert.ok($.isEmptyObject(series._rangeData.val), "Range data should be empty");
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
+    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be undefined");
+    assert.strictEqual(rangeData.arg.interval, undefined, "Min arg interval should be undefined");
+    assert.deepEqual(rangeData.arg.categories, undefined, "Categories arg should be correct");
+
+    assert.strictEqual(rangeData.val.min, undefined, "Min val should be undefined");
+    assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
+    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
+    assert.deepEqual(rangeData.val.categories, undefined, "Categories val should be correct");
 });
 
 QUnit.test("Range for dataSource with one point", function(assert) {
     var series = createSeries({ type: "line" });
-
     series.updateData([{ arg: 0, val: 0 }]);
 
     assert.ok(series, "Series should be created");
-    assert.ok(series._rangeData, "Range data should be created");
 
-    var rangeData = series._rangeData;
+    var rangeData = series.getRangeData();
     assert.strictEqual(rangeData.arg.min, 0, "Min arg should be correct");
     assert.strictEqual(rangeData.arg.max, 0, "Max arg should be correct");
     assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
@@ -84,7 +93,8 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
@@ -99,12 +109,12 @@ QUnit.test("Numeric", function(assert) {
 });
 
 QUnit.test("Numeric. Date with same arguments", function(assert) {
-    var data = getOriginalData([{ arg: 2, val: 11 }, { arg: 2, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }]),
+    var data = getOriginalData([{ arg: 2, val: 11 }, { arg: 2, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }, { arg: 20, val: 15 }]),
         rangeData,
         series = createSeries({ type: "line", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
@@ -125,7 +135,7 @@ QUnit.test("Data with valueErrorBar (lowError < highError)", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.val.min, 1, "Min arg should be correct");
@@ -141,7 +151,7 @@ QUnit.test("Data with valueErrorBar (lowError > highError)", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "auto", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.val.min, 3, "Min arg should be correct");
@@ -157,7 +167,7 @@ QUnit.test("Data with valueErrorBar. low mode", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "low", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.val.min, 1, "Min arg should be correct");
@@ -173,7 +183,7 @@ QUnit.test("Data with valueErrorBar. high mode", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "high", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.val.min, 3, "Min arg should be correct");
@@ -189,7 +199,7 @@ QUnit.test("Data with valueErrorBar. none mode", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "none", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.val.min, 3, "Min arg should be correct");
@@ -205,7 +215,7 @@ QUnit.test("Data with valueErrorBar. invalid mode", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous", valueErrorBar: { displayMode: "invalidMode", highValueField: "highError", lowValueField: "lowError" } });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.val.min, 1, "Min arg should be correct");
@@ -228,7 +238,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.deepEqual(rangeData.arg.min, date1, "Min arg should be correct");
@@ -249,7 +259,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -278,7 +288,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -298,7 +308,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "discrete", valueAxisType: "discrete" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -320,7 +330,7 @@ QUnit.test("Numeric.", function(assert) {
         series = createSeries({ type: "line" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
@@ -347,7 +357,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries({ type: "line" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.deepEqual(rangeData.arg.min, date1, "Min arg should be correct");
@@ -368,7 +378,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be correct");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -396,7 +406,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -416,7 +426,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "discrete", valueAxisType: "discrete" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be correct");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -438,7 +448,7 @@ QUnit.test("Line", function(assert) {
         series = createSeries({ type: "line", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
@@ -456,7 +466,7 @@ QUnit.test("Scatter", function(assert) {
         series = createSeries({ type: "scatter", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
@@ -474,7 +484,7 @@ QUnit.test("Spline", function(assert) {
         series = createSeries({ type: "spline", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
@@ -492,7 +502,7 @@ QUnit.test("Stepline", function(assert) {
         series = createSeries({ type: "stepline", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
@@ -502,312 +512,6 @@ QUnit.test("Stepline", function(assert) {
     assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Stackedline", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "stackedline", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Fullstackedline", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "fullstackedline", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("StackedSpline", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "stackedspline", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Fullstackedspline", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "fullstackedspline", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Area", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "area", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Steparea", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "steparea", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Stackedarea", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "stackedarea", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Fullstackedarea", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "fullstackedarea", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Stackedsplinearea", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "stackedsplinearea", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Fullstackedsplinearea", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "fullstackedarea", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Splinearea", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "splinearea", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Bar", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "bar", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Stackedbar", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "stackedbar", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Fullstackedbar", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "fullstackedbar", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Bubble", function(assert) {
-    var data = [{ arg: 2, val: 11, size: 1 }, { arg: 5, val: 22, size: 1 }, { arg: 13, val: 3, size: 1 }, { arg: 20, val: 15, size: 1 }],
-        rangeData,
-        series = createSeries({ type: "bubble", argumentAxisType: "continuous" });
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Pie", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "pie", argumentAxisType: "continuous", mainSeriesColor: function() { } }, null, "pie");
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.minArg, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.maxArg, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.minIntervalArg, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Doughnut", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries({ type: "doughnut", argumentAxisType: "continuous", mainSeriesColor: function() { } }, null, "pie");
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.minArg, undefined, "Min arg should be correct");
-    assert.strictEqual(rangeData.maxArg, undefined, "Max arg should be correct");
-    assert.strictEqual(rangeData.minIntervalArg, undefined, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.min, undefined, "Min val should be correct");
-    assert.strictEqual(rangeData.max, undefined, "Max val should be correct");
-    assert.strictEqual(rangeData.interval, undefined, "Min val interval should be correct");
 });
 
 QUnit.module("Process range data on updating. Range series");
@@ -818,7 +522,7 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous", mainSeriesColor: function() { } });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
@@ -846,7 +550,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.deepEqual(rangeData.arg.min, 1, "Min arg should be correct");
@@ -867,7 +571,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -878,7 +582,7 @@ QUnit.test("Numeric. Categories", function(assert) {
     assert.strictEqual(rangeData.val.min, undefined, "Min val should be undefined");
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.deepEqual(rangeData.val.categories, [110, 11, 100, 22, 15, 3, 115, 15], "Categories val should be correct");
+    assert.deepEqual(rangeData.val.categories, [110, 11, 100, 22, 15, 3, 115], "Categories val should be correct");
 });
 
 QUnit.test("Datetime. Categories", function(assert) {
@@ -896,7 +600,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -916,7 +620,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "discrete", valueAxisType: "discrete" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -938,7 +642,7 @@ QUnit.test("Numeric", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
@@ -964,7 +668,7 @@ QUnit.test("Datetime.", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.deepEqual(rangeData.arg.min, 1, "Min arg should be correct");
@@ -985,7 +689,7 @@ QUnit.test("Numeric. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -1012,7 +716,7 @@ QUnit.test("Datetime. Categories", function(assert) {
         series = createSeries(options);
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -1032,7 +736,7 @@ QUnit.test("String.", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "discrete", valueAxisType: "discrete" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData);
     assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
@@ -1054,7 +758,7 @@ QUnit.test("Rangebar", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
@@ -1072,323 +776,7 @@ QUnit.test("Rangearea", function(assert) {
         series = createSeries({ type: "rangebar", argumentAxisType: "continuous" });
 
     series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.module("Process range data on updating. Financial series", {
-    beforeEach: function() {
-        this.defaultOptions = {
-            type: "stock",
-            argumentAxisType: "continuous",
-            highValueField: "h",
-            lowValueField: "l",
-            openValueField: "o",
-            closeValueField: "c",
-            reduction: {
-                level: "open"
-            }
-        };
-    }
-});
-
-QUnit.test("Numeric", function(assert) {
-    var data = [{ arg: 1, h: 11, l: 110, o: 20, c: 30 }, { arg: 2, h: 22, l: 100, o: 30, c: 40 }, { arg: 3, h: 3, l: 4, o: 3, c: 4 }, { arg: 4, h: 15, l: 115, o: 20, c: 30 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min interval arg should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories arg should be undefined");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-});
-
-QUnit.test("Datetime.", function(assert) {
-    var date1 = new Date(1000),
-        date2 = new Date(2000),
-        date3 = new Date(3000),
-        date4 = new Date(4000),
-        date5 = new Date(1000),
-        date6 = new Date(2000),
-        date7 = new Date(3000),
-        date8 = new Date(4000),
-        data = [{ arg: 1, h: date1, l: date2, o: date1, c: date2 }, { arg: 2, h: date3, l: date4, o: date3, c: date4 }, { arg: 3, h: date5, l: date6, o: date5, c: date6 }, { arg: 4, h: date7, l: date8, o: date7, c: date8 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.deepEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.deepEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min arg interval should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories arg should be undefined");
-
-    assert.deepEqual(rangeData.val.min, date5, "Min val should be correct");
-    assert.deepEqual(rangeData.val.max, date8, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-});
-
-QUnit.test("Numeric. Categories", function(assert) {
-    var data = [{ arg: 1, h: 11, l: 110, o: 11, c: 110 }, { arg: 2, h: 22, l: 100, o: 22, c: 100 }, { arg: 3, h: 3, l: 4, o: 3, c: 4 }, { arg: 4, h: 15, l: 115, o: 15, c: 115 }],
-        options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete", valueAxisType: "discrete" }),
-        rangeData,
-        series = createSeries(options);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be undefined");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min arg interval should be undefined");
-    assert.deepEqual(rangeData.arg.categories, [1, 2, 3, 4], "Categories arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be undefined");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.deepEqual(rangeData.val.categories, [11, 110, 22, 100, 3, 4, 15, 115], "Categories val should be correct");
-});
-
-QUnit.test("Datetime. Categories", function(assert) {
-    var date1 = new Date(1000),
-        date2 = new Date(2000),
-        date3 = new Date(3000),
-        date4 = new Date(4000),
-        date5 = new Date(5000),
-        date6 = new Date(6000),
-        date7 = new Date(7000),
-        date8 = new Date(8000),
-        data = [{ arg: 1, h: date1, l: date2, o: date1, c: date2 }, { arg: 2, h: date3, l: date4, o: date3, c: date4 }, { arg: 3, h: date5, l: date6, o: date5, c: date6 }, { arg: 4, h: date7, l: date8, o: date7, c: date8 }],
-        options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete", valueAxisType: "discrete" }),
-        rangeData,
-        series = createSeries(options);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be undefined");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min arg interval should be undefined");
-    assert.deepEqual(rangeData.arg.categories, [1, 2, 3, 4], "Categories arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be undefined");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.deepEqual(rangeData.val.categories, [date1, date2, date3, date4, date5, date6, date7, date8], "Categories val should be correct");
-});
-
-QUnit.test("String.", function(assert) {
-    var data = [{ arg: "1", h: "11", l: "110", o: "11", c: "110" }, { arg: "2", h: "22", l: "100", o: "22", c: "100" }, { arg: "3", h: "3", l: "4", o: "3", c: "4" }, { arg: "4", h: "15", l: "115", o: "15", c: "115" }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete", valueAxisType: "discrete" }));
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData);
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be undefined");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min arg interval should be undefined");
-    assert.deepEqual(rangeData.arg.categories, ["1", "2", "3", "4"], "Categories arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be undefined");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.deepEqual(rangeData.val.categories, ["11", "110", "22", "100", "3", "4", "15", "115"], "Categories val should be correct");
-});
-
-QUnit.module("Process range data on updating. Financial series. With null values", {
-    beforeEach: function() {
-        this.defaultOptions = {
-            type: "stock",
-            argumentAxisType: "continuous",
-            reduction: {
-                level: "open"
-            },
-            highValueField: "h",
-            lowValueField: "l",
-            openValueField: "o",
-            closeValueField: "c"
-        };
-    }
-});
-
-QUnit.test("Numeric", function(assert) {
-    var data = [{ arg: 1, h: 11, l: 110, o: 11, c: 110 }, { arg: 2, h: 22, l: null, o: 22, c: 22 }, { arg: 3, h: 3, l: 4, o: 3, c: 4 }, { arg: 4, h: null, l: 115, o: 115, c: 115 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min interval arg should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories arg should be undefined");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 110, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-});
-
-QUnit.test("Datetime.", function(assert) {
-    var date1 = new Date(1000),
-        date2 = new Date(2000),
-        date4 = new Date(4000),
-        date5 = new Date(1000),
-        date7 = new Date(3000),
-        date8 = new Date(4000),
-        data = [{ arg: 1, h: date1, l: date2, o: date1, c: date2 }, { arg: 2, h: null, l: date4, o: date4, c: date4 }, { arg: 3, h: date5, l: null, o: date5, c: null }, { arg: 4, h: date7, l: date8, o: date7, c: date8 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.deepEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.deepEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min arg interval should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories arg should be undefined");
-
-    assert.deepEqual(rangeData.val.min, date5, "Min val should be correct");
-    assert.deepEqual(rangeData.val.max, date8, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-});
-
-QUnit.test("Numeric. Categories", function(assert) {
-    var data = [{ arg: 1, h: 11, l: null, o: 11, c: 11 }, { arg: 2, h: 22, l: 100, o: 22, c: 100 }, { arg: 3, h: null, l: 4, o: 4, c: 4 }, { arg: 4, h: 15, l: 115, o: 15, c: 115 }],
-        options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete", valueAxisType: "discrete" }),
-        rangeData,
-        series = createSeries(options);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be undefined");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min arg interval should be undefined");
-    assert.deepEqual(rangeData.arg.categories, [1, 2, 3, 4], "Categories arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be undefined");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.deepEqual(rangeData.val.categories, [22, 100, 15, 115], "Categories val should be correct");
-});
-
-QUnit.test("Datetime. Categories", function(assert) {
-    var date1 = new Date(1000),
-        date3 = new Date(3000),
-        date4 = new Date(4000),
-        date6 = new Date(6000),
-        date7 = new Date(7000),
-        date8 = new Date(8000),
-        data = [{ arg: 1, h: date1, l: null, o: date1, c: date1 }, { arg: 2, h: date3, l: date4, o: date3, c: date4 }, { arg: 3, h: null, l: date6, o: date6, c: date6 }, { arg: 4, h: date7, l: date8, o: date7, c: date8 }],
-        options = $.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete", valueAxisType: "discrete" }),
-        rangeData,
-        series = createSeries(options);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be undefined");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min arg interval should be undefined");
-    assert.deepEqual(rangeData.arg.categories, [1, 2, 3, 4], "Categories arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be undefined");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.deepEqual(rangeData.val.categories, [date3, date4, date7, date8], "Categories val should be correct");
-});
-
-QUnit.test("String.", function(assert) {
-    var data = [{ arg: "1", h: null, l: "110", o: "110", c: "110" }, { arg: "2", h: "22", l: "100", o: "22", c: "100" }, { arg: "3", h: "3", l: null, o: "3", c: "3" }, { arg: "4", h: "15", l: "115", o: "15", c: "115" }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete", valueAxisType: "discrete" }));
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData);
-    assert.strictEqual(rangeData.arg.min, undefined, "Min arg should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max arg should be undefined");
-    assert.strictEqual(rangeData.arg.interval, undefined, "Min arg interval should be undefined");
-    assert.deepEqual(rangeData.arg.categories, ["1", "2", "3", "4"], "Categories arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, undefined, "Min val should be undefined");
-    assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.deepEqual(rangeData.val.categories, ["22", "100", "15", "115"], "Categories val should be correct");
-});
-
-QUnit.module("Process range data on updating. Financial series. For each types", {
-    beforeEach: function() {
-        this.defaultOptions = {
-            type: "stock",
-            argumentAxisType: "continuous",
-            reduction: {
-                level: "open"
-            },
-            highValueField: "h",
-            lowValueField: "l",
-            openValueField: "o",
-            closeValueField: "c"
-        };
-    }
-});
-
-QUnit.test("Stock", function(assert) {
-    var data = [{ arg: 1, h: 11, l: 110, o: 11, c: 110 }, { arg: 2, h: 22, l: 100, o: 22, c: 100 }, { arg: 3, h: 3, l: 4, o: 3, c: 4 }, { arg: 4, h: 15, l: 115, o: 15, c: 115 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series._rangeData;
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min interval arg should be correct");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
-});
-
-QUnit.test("Candlestick", function(assert) {
-    var data = [{ arg: 1, h: 11, l: 110, o: 11, c: 110 }, { arg: 2, h: 22, l: 100, o: 22, c: 100 }, { arg: 3, h: 3, l: 4, o: 3, c: 4 }, { arg: 4, h: 15, l: 115, o: 15, c: 115 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { type: "candlestick" }));
-
-    series.updateData(data);
-    rangeData = series._rangeData;
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
@@ -1726,6 +1114,7 @@ QUnit.test("Stackedline", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "stackedline", argumentAxisType: "continuous" }));
 
     series.updateData(data);
+
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -2901,6 +2290,7 @@ QUnit.test("Labels are visible", function(assert) {
         series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous", label: { visible: true } }));
 
     series.updateData(data);
+
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
@@ -3241,6 +2631,15 @@ QUnit.test("Doughnut", function(assert) {
 
 QUnit.module("Zooming range data", {
     beforeEach: function() {
+        var viewPort;
+        this.zoom = function(min, max) {
+            viewPort = { min: min, max: max };
+        };
+        this.argumentAxis = {
+            getViewport: function() {
+                return viewPort;
+            }
+        };
         this.defaultOptions = {
             type: "line",
             argumentAxisType: "continuous",
@@ -3252,211 +2651,97 @@ QUnit.module("Zooming range data", {
     }
 });
 
-QUnit.test("B253379. Set zoom arguments wider then axis interval", function(assert) {
+QUnit.test("Set incorrect min zoom (null)", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: -10,
-        maxArg: 10
-    });
+
+    this.zoom(null, 4);
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, -10, "min x");
-    assert.equal(rangeData.arg.max, 10, "max x");
-
-    assert.equal(rangeData.arg.minVisible, -10, "min x");
-    assert.equal(rangeData.arg.maxVisible, 10, "max x");
+    assert.equal(rangeData.min, 10, "min y");
+    assert.equal(rangeData.max, 40, "max y");
 });
 
-QUnit.test("Set inverted zoom arguments", function(assert) {
+QUnit.test("Set incorrect max zoom (undefined)", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 6,
-        maxArg: 3
-    });
+
+    this.zoom(3, undefined);
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-
-    assert.equal(rangeData.arg.minVisible, 3, "min x");
-    assert.equal(rangeData.arg.maxVisible, 6, "max x");
-
-    assert.equal(rangeData.val.maxVisible, 60);
-    assert.equal(rangeData.val.minVisible, 20);
-
+    assert.equal(rangeData.min, 30, "min y");
+    assert.equal(rangeData.max, 60, "max y");
 });
 
-QUnit.test("several zooming", function(assert) {
+QUnit.test("Set incorrect max zoom (null)", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 1,
-        maxArg: 6
-    });
 
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 4,
-        maxArg: 6
-    });
+    this.zoom(3, null);
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-
-    assert.equal(rangeData.arg.minVisible, 4, "min x");
-    assert.equal(rangeData.arg.maxVisible, 6, "max x");
-
-    assert.equal(rangeData.val.maxVisible, 60);
-    assert.equal(rangeData.val.minVisible, 30);
-
+    assert.equal(rangeData.min, 30, "min y");
+    assert.equal(rangeData.max, 60, "max y");
 });
 
-QUnit.test("several zooming with minVal& maxVal", function(assert) {
+QUnit.test("Set incorrect min zoom (undefined)", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 1,
-        maxArg: 6
-    });
 
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 4,
-        maxArg: 6,
-        minVal: 0,
-        maxVal: 100
-    });
+    this.zoom(undefined, 5);
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-
-    assert.equal(rangeData.arg.minVisible, 4, "min x");
-    assert.equal(rangeData.arg.maxVisible, 6, "max x");
-
-    assert.equal(rangeData.val.maxVisible, 100);
-    assert.equal(rangeData.val.minVisible, 0);
+    assert.equal(rangeData.min, 10, "min y");
+    assert.equal(rangeData.max, 50, "max y");
 });
 
-QUnit.test("Set inverted zoom arguments. Datetime", function(assert) {
-    var date1 = new Date(1000),
-        date2 = new Date(2000),
-        date3 = new Date(3000),
-        date4 = new Date(4000),
-        date5 = new Date(5000),
-        date6 = new Date(6000),
-        data = [{ arg: date1, val: 10 }, { arg: date2, val: 20 }, { arg: date3, val: 30 }, { arg: date4, val: 40 }, { arg: date5, val: 50 }, { arg: date6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
+QUnit.test("GetViewport without zooming", function(assert) {
+    this.defaultOptions.type = "bar";
 
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: date6,
-        maxArg: date3
-    });
-
-    assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, date1, "min x");
-    assert.equal(rangeData.arg.max, date6, "max x");
-
-    assert.equal(rangeData.arg.minVisible, date3, "min x");
-    assert.equal(rangeData.arg.maxVisible, date6, "max x");
-});
-
-QUnit.test("Set incorrect zoom arguments", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: null,
-        maxArg: 2
-    });
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-
-    assert.equal(rangeData.arg.minVisible, undefined, "min x");
-    assert.equal(rangeData.arg.maxVisible, undefined, "max x");
-});
-
-QUnit.test("Set incorrect zoom arguments", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: undefined,
-        maxArg: 2
-    });
-
-    assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-
-    assert.equal(rangeData.arg.minVisible, undefined, "min x");
-    assert.equal(rangeData.arg.maxVisible, undefined, "max x");
-});
-
-QUnit.test("B253694. Adjust on zoom = false", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: false,
-        minArg: 3,
-        maxArg: 4
-    });
-
-    assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.arg.minVisible, 3, "min x");
-    assert.equal(rangeData.arg.maxVisible, 4, "max x");
-
-    assert.equal(rangeData.val.min, 10, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.equal(rangeData.val.minVisible, undefined, "min y");
-    assert.equal(rangeData.val.maxVisible, undefined, "max y");
+    assert.equal(rangeData.min, 0, "min y");
+    assert.equal(rangeData.max, 60, "max y");
 });
 
 QUnit.module("Zooming range data. Simple", {
     beforeEach: function() {
+        var viewPort = {};
+        this.zoom = function(min, max) {
+            viewPort = { min: min, max: max };
+        };
+        this.argumentAxis = {
+            getViewport: function() {
+                return viewPort;
+            }
+        };
         this.defaultOptions = {
             type: "line",
             argumentAxisType: "continuous",
@@ -3471,25 +2756,73 @@ QUnit.module("Zooming range data. Simple", {
 QUnit.test("Numeric.", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5
-    });
+
+    this.zoom(3, 4.5);
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.arg.minVisible, 3, "min x");
-    assert.equal(rangeData.arg.maxVisible, 4.5, "max x");
+    assert.equal(rangeData.min, 30, "min y");
+    assert.equal(rangeData.max, 45, "max y");
+});
+
+QUnit.test("Numeric. zooming args between points.", function(assert) {
+    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
+        rangeData,
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+
+    this.zoom(3, 4);
+
+    rangeData = series.getViewport();
+
+    assert.ok(rangeData, "Returned object");
+    assert.equal(rangeData.min, 30, "min y");
+    assert.equal(rangeData.max, 40, "max y");
+});
+
+QUnit.test("Numeric. Area", function(assert) {
+    this.defaultOptions.type = "area";
+
+    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
+        rangeData,
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+
+    this.zoom(3, 4.5);
+
+    rangeData = series.getViewport();
+
+    assert.ok(rangeData, "Returned object");
+    assert.equal(rangeData.min, 0, "min y");
+    assert.equal(rangeData.max, 45, "max y");
+    //assert.strictEqual(rangeData.arg.interval, 1);
+});
+
+
+QUnit.test("Range data has viewport", function(assert) {
+    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
+        rangeData,
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+
+    this.zoom(3, 4.5);
+
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Returned object");
+    assert.equal(rangeData.viewport.min, 30, "min visible y");
+    assert.equal(rangeData.viewport.max, 45, "max visible y");
+
     assert.equal(rangeData.val.min, 10, "min y");
     assert.equal(rangeData.val.max, 60, "max y");
-    assert.equal(rangeData.val.minVisible, 20, "min y");
-    assert.equal(rangeData.val.maxVisible, 50, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
+
 });
 
 QUnit.test("T179635. With error bars", function(assert) {
@@ -3511,25 +2844,18 @@ QUnit.test("T179635. With error bars", function(assert) {
             arg: 6, val: 60, low: 55, high: 65
         }]),
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5
-    });
+
+    this.zoom(2, 5);
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.arg.minVisible, 3, "min x");
-    assert.equal(rangeData.arg.maxVisible, 4.5, "max x");
-    assert.equal(rangeData.val.min, 5, "min y");
-    assert.equal(rangeData.val.max, 65, "max y");
-    assert.equal(rangeData.val.minVisible, 15, "min y");
-    assert.equal(rangeData.val.maxVisible, 50, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
+
+    assert.equal(rangeData.min, 15, "min y");
+    assert.equal(rangeData.max, 55, "max y");
 });
 
 QUnit.test("Datetime argument. String value.", function(assert) {
@@ -3542,113 +2868,33 @@ QUnit.test("Datetime argument. String value.", function(assert) {
         testDate = new Date(4500),
         data = [{ arg: argDate1, val: "10" }, { arg: argDate2, val: "20" }, { arg: argDate3, val: "30" }, { arg: argDate4, val: "40" }, { arg: argDate5, val: "50" }, { arg: argDate6, val: "60" }],
         rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { valueAxisType: "discrete" }));
+        series = createSeries($.extend(true, {}, this.defaultOptions, { valueAxisType: "discrete" }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: argDate3,
-        maxArg: testDate
-    });
+
+    this.zoom(argDate3, testDate);
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-    assert.deepEqual(rangeData.arg.min, argDate1, "min x");
-    assert.deepEqual(rangeData.arg.max, argDate6, "max x");
-    assert.strictEqual(rangeData.val.min, undefined, "min y");
-    assert.strictEqual(rangeData.val.max, undefined, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1000);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.arg.minVisible, argDate3, "min Visible X");
-    assert.equal(rangeData.arg.maxVisible, testDate, "max Visible X");
-    assert.strictEqual(rangeData.val.minVisible, undefined, "min Visible Y");
-    assert.strictEqual(rangeData.val.maxVisible, undefined, "max Visible Y");
 
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.val.categories, ["10", "20", "30", "40", "50", "60"], "CategoriesY");
-});
-
-QUnit.test("B253326. With min and max", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 1,
-        maxArg: 6,
-        minVal: 20,
-        maxVal: 30
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 10, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.arg.minVisible, 1, "min Visible X");
-    assert.equal(rangeData.arg.maxVisible, 6, "max Visible X");
-    assert.equal(rangeData.val.minVisible, 20, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 30, "max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-});
-
-QUnit.test("T179635. With error bars and min/max", function(assert) {
-    this.defaultOptions.valueErrorBar = {
-        lowValueField: "low",
-        highValueField: "high"
-    };
-    var data = getOriginalData([{
-            arg: 1, val: 10, low: 5, high: 15
-        }, {
-            arg: 2, val: 20, low: 15, high: 25
-        }, {
-            arg: 3, val: 30, low: 25, high: 35
-        }, {
-            arg: 4, val: 40, low: 35, high: 45
-        }, {
-            arg: 5, val: 50, low: 45, high: 55
-        }, {
-            arg: 6, val: 60, low: 55, high: 65
-        }]),
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minVal: 20,
-        maxVal: 40,
-        minArg: 3,
-        maxArg: 4.5
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.arg.minVisible, 3, "min x");
-    assert.equal(rangeData.arg.maxVisible, 4.5, "max x");
-    assert.equal(rangeData.val.min, 5, "min y");
-    assert.equal(rangeData.val.max, 65, "max y");
-    assert.equal(rangeData.val.minVisible, 20, "min y");
-    assert.equal(rangeData.val.maxVisible, 40, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
+    assert.strictEqual(rangeData.min, undefined, "min Visible Y");
+    assert.strictEqual(rangeData.max, undefined, "max Visible Y");
+    //assert.deepEqual(rangeData.categories, ["30", "40", "50"?], "CategoriesY");
 });
 
 QUnit.test("with calcInterval", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData(undefined, function(a, b) {
+
+    this.argumentAxis.calcInterval = function(a, b) {
         return a / b;
-    });
+    };
+
+    rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Returned object");
     assert.equal(rangeData.arg.min, 1, "min x");
@@ -3661,122 +2907,38 @@ QUnit.test("with calcInterval", function(assert) {
     assert.deepEqual(rangeData.val.categories, undefined, "No categories");
 });
 
-QUnit.test("B253326. With min and max. Adjust on zoom = false", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: false,
-        minArg: 1,
-        maxArg: 6,
-        minVal: 20,
-        maxVal: 30
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 10, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.arg.minVisible, 1, "min Visible X");
-    assert.equal(rangeData.arg.maxVisible, 6, "max Visible X");
-    assert.equal(rangeData.val.minVisible, 20, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 30, "max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.strictEqual(rangeData.val.categories, undefined, "No categories");
-});
-
-QUnit.test("B253326. With inverted min and max", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        minArg: 1,
-        maxArg: 6,
-        minVal: 30,
-        maxVal: 20
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 10, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.arg.minVisible, 1, "min Visible X");
-    assert.equal(rangeData.arg.maxVisible, 6, "max Visible X");
-    assert.equal(rangeData.val.minVisible, 20, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 30, "max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-});
-
-QUnit.test("B253326. With min and max that were wider than value interval", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        minArg: 1,
-        maxArg: 6,
-        minVal: -10,
-        maxVal: 100
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, -10, "min y");
-    assert.equal(rangeData.val.max, 100, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.arg.minVisible, 1, "min Visible X");
-    assert.equal(rangeData.arg.maxVisible, 6, "max Visible X");
-    assert.equal(rangeData.val.minVisible, -10, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 100, "max Visible Y");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-});
-
 QUnit.test("Discrete argument axis.", function(assert) {
     var data = [{ arg: "1", val: 10 }, { arg: "2", val: 20 }, { arg: "3", val: 30 }, { arg: "4", val: 40 }, { arg: "5", val: 50 }, { arg: "6", val: 60 }],
         rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete" }));
+        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete" }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        minArg: "3",
-        maxArg: "4"
-    });
+
+    this.zoom("3", "4");
+
+    rangeData = series.getViewport();
 
     assert.ok(rangeData, "Returned object");
-    assert.strictEqual(rangeData.arg.min, undefined);
-    assert.strictEqual(rangeData.arg.max, undefined);
-    assert.equal(rangeData.val.min, 10, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
+    assert.equal(rangeData.min, undefined, "min y");
+    assert.equal(rangeData.max, undefined, "max y");
     assert.strictEqual(rangeData.interval, undefined);
-    assert.strictEqual(rangeData.val.interval, undefined);
     //should include values inside of range AND neighbour points
-    assert.strictEqual(rangeData.val.minVisible, undefined, "no min Visible Y");
-    assert.strictEqual(rangeData.val.maxVisible, undefined, "no max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, ["1", "2", "3", "4", "5", "6"], "CategoriesX");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
+    assert.strictEqual(rangeData.minVisible, undefined, "no min Visible Y");
+    assert.strictEqual(rangeData.maxVisible, undefined, "no max Visible Y");
+    assert.deepEqual(rangeData.categories, undefined, "No categories");
 });
-
 
 QUnit.module("Zooming range data. Bar/area", {
     beforeEach: function() {
+        var viewPort = {};
+        this.zoom = function(min, max) {
+            viewPort = { min: min, max: max };
+        };
+        this.argumentAxis = {
+            getViewport: function() {
+                return viewPort;
+            }
+        };
         this.defaultOptions = {
             type: "area",
             argumentAxisType: "continuous",
@@ -3791,371 +2953,59 @@ QUnit.module("Zooming range data. Bar/area", {
 QUnit.test("Positive points", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5
-    });
 
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 0, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.val.minVisible, 0, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 50, "max Visible Y");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-});
+    this.zoom(2, 4.5);
 
-QUnit.test("several zooming with minVal& maxVal", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
+    rangeData = series.getViewport();
 
-    series.updateData(data);
-    series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 1,
-        maxArg: 6
-    });
-
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 4,
-        maxArg: 6,
-        minVal: 10,
-        maxVal: 100
-    });
-
-    assert.ok(rangeData, "Returned object");
-
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-
-    assert.equal(rangeData.arg.minVisible, 4, "min x");
-    assert.equal(rangeData.arg.maxVisible, 6, "max x");
-
-    assert.equal(rangeData.val.maxVisible, 100);
-    assert.equal(rangeData.val.minVisible, 10);
+    assert.equal(rangeData.min, 0, "min Visible Y");
+    assert.equal(rangeData.max, 45, "max Visible Y");
 });
 
 QUnit.test("Negative points", function(assert) {
     var data = [{ arg: 1, val: -10 }, { arg: 2, val: -20 }, { arg: 3, val: -30 }, { arg: 4, val: -40 }, { arg: 5, val: -50 }, { arg: 6, val: -60 }],
         rangeData,
-        series = createSeries(this.defaultOptions);
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5
-    });
 
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, -60, "min y");
-    assert.equal(rangeData.val.max, 0, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.val.minVisible, -50, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 0, "max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-});
+    this.zoom(3, 4.5);
 
-QUnit.test("Logarithmic axis", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { valueAxisType: "logarithmic" }));
+    rangeData = series.getViewport();
 
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 10, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.val.minVisible, 20, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 50, "max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
+    assert.equal(rangeData.max, 0, "max Visible Y");
+    assert.equal(rangeData.min, -45, "min Visible Y");
 });
 
 QUnit.test("ShowZero === false", function(assert) {
     var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
         rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { showZero: false }));
+        series = createSeries($.extend(true, {}, this.defaultOptions, { showZero: false }), { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5
-    });
 
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 10, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.val.minVisible, 20, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 50, "max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
+    this.zoom(3, 4.5);
+    rangeData = series.getViewport();
+
+    assert.equal(rangeData.min, 30, "min Visible Y");
+    assert.equal(rangeData.max, 45, "max Visible Y");
 });
 
-QUnit.test("Datetime argument. String value", function(assert) {
-    var argDate1 = new Date(1000),
-        argDate2 = new Date(2000),
-        argDate3 = new Date(3000),
-        argDate4 = new Date(4000),
-        argDate5 = new Date(5000),
-        argDate6 = new Date(6000),
-        data = [{ arg: argDate1, val: "10" }, { arg: argDate2, val: "20" }, { arg: argDate3, val: "30" }, { arg: argDate4, val: "40" }, { arg: argDate5, val: "50" }, { arg: argDate6, val: "60" }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { valueAxisType: "discrete" }));
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: new Date(3000),
-        maxArg: new Date(4500)
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.deepEqual(rangeData.arg.min, argDate1, "min x");
-    assert.deepEqual(rangeData.arg.max, argDate6, "max x");
-    assert.strictEqual(rangeData.val.min, undefined, "min y");
-    assert.strictEqual(rangeData.val.max, undefined, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1000);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.strictEqual(rangeData.val.minVisible, undefined, "min Visible Y");
-    assert.strictEqual(rangeData.val.maxVisible, undefined, "max Visible Y");
-
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.val.categories, ["10", "20", "30", "40", "50", "60"], "CategoriesY");
-});
-
-QUnit.test("Discrete argument axis", function(assert) {
+QUnit.test("Discrete data", function(assert) {
+    this.defaultOptions.argumentAxisType = "discrete";
     var data = [{ arg: "1", val: 10 }, { arg: "2", val: 20 }, { arg: "3", val: 30 }, { arg: "4", val: 40 }, { arg: "5", val: 50 }, { arg: "6", val: 60 }],
         rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete" }));
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
 
     series.updateData(data);
-    rangeData = series.getRangeData({
-        minArg: "3",
-        maxArg: "4"
-    });
 
-    assert.ok(rangeData, "Returned object");
-    assert.strictEqual(rangeData.arg.min, undefined);
-    assert.strictEqual(rangeData.arg.max, undefined);
-    assert.equal(rangeData.val.min, 0, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.strictEqual(rangeData.arg.interval, undefined);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.strictEqual(rangeData.val.minVisible, undefined, "no min Visible Y");
-    assert.strictEqual(rangeData.val.maxVisible, undefined, "no max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, ["1", "2", "3", "4", "5", "6"], "CategoriesX");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-});
+    this.zoom("2", "4");
 
-QUnit.module("Zooming range data. Range series", {
-    beforeEach: function() {
-        this.defaultOptions = {
-            type: "rangearea",
-            argumentAxisType: "continuous",
-            label: {
-                visible: false,
-                position: "outside"
-            }
-        };
-    }
-});
+    rangeData = series.getViewport();
 
-QUnit.test("Partial range. Numeric argument. Numeric value.", function(assert) {
-    var data = [{ arg: 1, val1: 10, val2: 5 }, { arg: 2, val1: 20, val2: 15 }, { arg: 3, val1: 30, val2: 65 }, { arg: 4, val1: 40, val2: 50 }, { arg: 5, val1: 50, val2: 32 }, { arg: 6, val1: 60, val2: 100 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 5, "min y");
-    assert.equal(rangeData.val.max, 100, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.val.minVisible, 15, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 65, "max Visible Y");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-});
-
-QUnit.test("several zooming", function(assert) {
-    var data = [{ arg: 1, val1: 10, val2: 5 }, { arg: 2, val1: 20, val2: 15 }, { arg: 3, val1: 30, val2: 65 }, { arg: 4, val1: 40, val2: 50 }, { arg: 5, val1: 50, val2: 32 }, { arg: 6, val1: 60, val2: 100 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 1,
-        maxArg: 6
-    });
-
-
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 5, "min y");
-    assert.equal(rangeData.val.max, 100, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.val.minVisible, 15, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 65, "max Visible Y");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-
-});
-
-QUnit.test("several zooming with minVal& maxVal", function(assert) {
-    var data = [{ arg: 1, val1: 10, val2: 5 }, { arg: 2, val1: 20, val2: 15 }, { arg: 3, val1: 30, val2: 65 }, { arg: 4, val1: 40, val2: 50 }, { arg: 5, val1: 50, val2: 32 }, { arg: 6, val1: 60, val2: 100 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 1,
-        maxArg: 6
-    });
-
-
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: 3,
-        maxArg: 4.5,
-        minVal: 0,
-        maxVal: 100
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 0, "min y");
-    assert.equal(rangeData.val.max, 100, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.equal(rangeData.val.minVisible, 0, "min Visible Y");
-    assert.equal(rangeData.val.maxVisible, 100, "max Visible Y");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-});
-
-QUnit.test("Datetime argument. Datetime value.", function(assert) {
-    var argDate1 = new Date(1000),
-        argDate2 = new Date(2000),
-        argDate3 = new Date(3000),
-        argDate4 = new Date(4000),
-        argDate5 = new Date(5000),
-        argDate6 = new Date(6000),
-        date1 = new Date(1000),
-        date2 = new Date(2000),
-        date3 = new Date(3000),
-        date4 = new Date(4000),
-        date5 = new Date(5000),
-        date6 = new Date(6000),
-        date10 = new Date(10000),
-        date20 = new Date(20000),
-        date30 = new Date(30000),
-        date40 = new Date(40000),
-        date50 = new Date(50000),
-        date60 = new Date(60000),
-        data = [{ arg: argDate1, val1: date1, val2: date20 }, { arg: argDate2, val1: date2, val2: date10 }, { arg: argDate3, val1: date3, val2: date30 }, { arg: argDate4, val1: date4, val2: date60 }, { arg: argDate5, val1: date5, val2: date50 }, { arg: argDate6, val1: date6, val2: date40 }],
-        rangeData,
-        series = createSeries(this.defaultOptions);
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: new Date(3000),
-        maxArg: new Date(4500)
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.deepEqual(rangeData.arg.min, argDate1, "min x");
-    assert.deepEqual(rangeData.arg.max, argDate6, "max x");
-    assert.deepEqual(rangeData.val.min, date1, "min y");
-    assert.deepEqual(rangeData.val.max, date60, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1000);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.deepEqual(rangeData.val.minVisible, date2, "min Visible Y");
-    assert.deepEqual(rangeData.val.maxVisible, date60, "max Visible Y");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-});
-
-QUnit.test("Discrete argument axis.", function(assert) {
-    var data = [{ arg: "1", val1: 10, val2: 5 }, { arg: "2", val1: 20, val2: 15 }, { arg: "3", val1: 30, val2: 65 }, { arg: "4", val1: 40, val2: 50 }, { arg: "5", val1: 50, val2: 32 }, { arg: "6", val1: 60, val2: 100 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "discrete" }));
-
-    series.updateData(data);
-    rangeData = series.getRangeData({
-        adjustOnZoom: true,
-        minArg: "3",
-        maxArg: "4"
-    });
-
-    assert.ok(rangeData, "Returned object");
-    assert.strictEqual(rangeData.arg.min, undefined);
-    assert.strictEqual(rangeData.arg.max, undefined);
-    assert.equal(rangeData.val.min, 5, "min y");
-    assert.equal(rangeData.val.max, 100, "max y");
-    assert.strictEqual(rangeData.val.interval, undefined);
-    assert.strictEqual(rangeData.arg.interval, undefined);
-    //should include values inside of range AND neighbour points
-    assert.strictEqual(rangeData.val.minVisible, undefined, "no min Visible Y");
-    assert.strictEqual(rangeData.val.maxVisible, undefined, "no max Visible Y");
-    assert.deepEqual(rangeData.arg.categories, ["1", "2", "3", "4", "5", "6"], "CategoriesX");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
+    assert.equal(rangeData.min, undefined, "min Y");
+    assert.equal(rangeData.max, undefined, "max Y");
 });

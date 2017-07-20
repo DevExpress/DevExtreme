@@ -26,7 +26,7 @@ var registerEvent = function(name, eventObject) {
         }
 
         strategy[methodName] = function() {
-            var args = $.makeArray(arguments);
+            var args = [].slice.call(arguments);
             args.unshift(this);
             return eventObject[methodName].apply(eventObject, args);
         };

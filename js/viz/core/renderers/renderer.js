@@ -747,8 +747,7 @@ function createTspans(items, element, fieldName) {
 }
 
 function applyEllipsis(maxWidth) {
-    var element = this.element,
-        lines,
+    var lines,
         width,
         maxLength = 0,
         requiredLength,
@@ -763,13 +762,13 @@ function applyEllipsis(maxWidth) {
     if(this._hasEllipsis) {
         this.attr({ text: this._settings.text });
     }
-    width = this.getBBox().width;
+    width = this._getElementBBox().width;
 
     if(maxWidth < 0) {
         maxWidth = 0;
     }
     if(width > maxWidth) {
-        lines = prepareLines(element, this._texts);
+        lines = prepareLines(this.element, this._texts);
         for(i = 0, ii = lines.length; i < ii; ++i) {
             maxLength = mathMax(maxLength, lines[i].commonLength);
         }
@@ -1255,17 +1254,21 @@ SvgElement.prototype = {
         return this;
     },
 
-    //TODO do we need to round results and consider rotation coordinates?
-    getBBox: function() {
+    _getElementBBox: function() {
         var elem = this.element,
-            transformation = this._settings,
             bBox;
 
         try {
             bBox = elem.getBBox && elem.getBBox();
         } catch(e) { }
 
-        bBox = bBox || { x: 0, y: 0, width: elem.offsetWidth || 0, height: elem.offsetHeight || 0 };
+        return bBox || { x: 0, y: 0, width: elem.offsetWidth || 0, height: elem.offsetHeight || 0 };
+    },
+
+    //TODO do we need to round results and consider rotation coordinates?
+    getBBox: function() {
+        var transformation = this._settings,
+            bBox = this._getElementBBox();
 
         if(transformation.rotate) {
             bBox = _rotateBBox(bBox, [
