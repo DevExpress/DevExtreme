@@ -312,7 +312,7 @@ QUnit.test("all elements should be removed from drop targets after unsubscriptio
     $secondDropTarget.on(dragEvents.enter, noop);
     $secondDropTarget.off(dragEvents.enter);
     $dropTarget.off(dragEvents.enter, noop);
-    assert.equal(dropTargets.length, 0, "drop target present");
+    assert.equal(dropTargets.length, 0, "drop targets aren't present");
 });
 
 QUnit.test("element should be removed from drop targets if it has not any subscription after unsubscription", function(assert) {
