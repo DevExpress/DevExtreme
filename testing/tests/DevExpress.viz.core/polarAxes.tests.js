@@ -103,6 +103,8 @@ var environment = {
         };
 
         this.range = new RangeStubCtor();
+        this.range.min = 0;
+        this.range.max = 100;
 
     },
     afterEach: function() {

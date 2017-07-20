@@ -131,6 +131,8 @@ var environment = {
                 drawingType: "linear"
             };
             this.range = new RangeStubCtor();
+            this.range.min = 0;
+            this.range.max = 100;
             this.css = require("viz/core/utils").patchFontOptions(this.options.marker.label.font);
         },
         afterEach: function() {
@@ -334,17 +336,17 @@ QUnit.test("axis applies valueMargins", function(assert) {
     });
 
     axis.setBusinessRange(new rangeModule.Range({
-        min: 0,
-        max: 100
+        min: 0.1,
+        max: 0.72
     }));
 
     var range = axis.getTranslator().getBusinessRange();
 
-    assert.strictEqual(range.min, -10, "minValue");
-    assert.strictEqual(range.max, 120, "maxValue");
+    assert.strictEqual(range.min, 0, "minValue");
+    assert.strictEqual(range.max, 0.84, "maxValue");
 
-    assert.strictEqual(range.minVisible, -10, "minVisibleValue");
-    assert.strictEqual(range.maxVisible, 120, "maxVisibleValue");
+    assert.strictEqual(range.minVisible, 0, "minVisibleValue");
+    assert.strictEqual(range.maxVisible, 0.84, "maxVisibleValue");
 });
 
 QUnit.test("axis applies valueMargins to minVisible, maxVisible", function(assert) {
@@ -413,8 +415,7 @@ QUnit.test("Discrete axis does not apply value margins", function(assert) {
     var axis = new Axis({
         renderer: this.renderer,
         axisType: "xyAxes",
-        drawingType: "linear",
-        type: "discrete"
+        drawingType: "linear"
     });
 
     axis.updateOptions({
@@ -424,12 +425,12 @@ QUnit.test("Discrete axis does not apply value margins", function(assert) {
         },
         valueMarginsEnabled: true,
         minValueMargin: 0.1,
-        maxValueMargin: 0.2
+        maxValueMargin: 0.2,
+        type: "discrete"
     });
 
     axis.setBusinessRange(new rangeModule.Range({
-        categories: ["cat0", "cat1"],
-        axisType: "discrete"
+        categories: ["cat0", "cat1"]
     }));
 
     var range = axis.getTranslator().getBusinessRange();
@@ -452,13 +453,13 @@ QUnit.test("axis doesn't apply valueMargins. logarithmic axis", function(assert)
         },
         valueMarginsEnabled: true,
         minValueMargin: 0.1,
-        maxValueMargin: 0.2
+        maxValueMargin: 0.2,
+        type: "logarithmic"
     });
 
     axis.setBusinessRange(new rangeModule.Range({
         min: 0,
-        max: 100,
-        axisType: "logarithmic"
+        max: 100
     }));
 
     var range = axis.getTranslator().getBusinessRange();
