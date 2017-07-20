@@ -111,7 +111,9 @@ var baseBarSeriesMethods = {
 
     _getPointSize: function() {
         return DEFAULT_BAR_POINT_SIZE;
-    }
+    },
+
+    getValueRangeInitialValue: areaSeries.getValueRangeInitialValue
 };
 
 exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
@@ -127,8 +129,6 @@ exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
 
         return settings;
     },
-
-    getValueRangeInitialValue: areaSeries.getValueRangeInitialValue,
 
     _processRange: function(range) {
         areaSeries._processRange.apply(this, arguments);
