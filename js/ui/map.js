@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     Widget = require("./widget/ui.widget"),
     inflector = require("../core/utils/inflector"),
+    each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     isNumeric = require("../core/utils/type").isNumeric,
@@ -660,7 +661,7 @@ var Map = Widget.inherit({
         var optionValue = this.option(optionName),
             removingValues = wrapToArray(removingValue);
 
-        $.each(removingValues, function(removingIndex, removingValue) {
+        each(removingValues, function(removingIndex, removingValue) {
             var index = isNumeric(removingValue)
                 ? removingValue
                 : inArray(removingValue, optionValue);

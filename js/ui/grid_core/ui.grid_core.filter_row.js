@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
@@ -602,7 +603,7 @@ var DataControllerFilterRowExtender = {
             filters = [that.callBase()],
             columns = that._columnsController.getVisibleColumns();
 
-        $.each(columns, function() {
+        iteratorUtils.each(columns, function() {
             var filter;
 
             if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue)) {

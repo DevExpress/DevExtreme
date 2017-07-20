@@ -2407,6 +2407,34 @@ QUnit.test("overlay should not be dragged when container size less than overlay 
     assert.equal(startEvent.maxRightOffset, 0, "overlay should not be dragged horizontally");
 });
 
+QUnit.test("overlay should be dragged correctly when position.of and shading (T534551)", function(assert) {
+    var $container = $("<div>").appendTo("#qunit-fixture").height(0).width(200);
+    $container.css("margin-left", "200px");
+    $container.css("margin-top", "200px");
+
+    var $overlay = $("#overlay").dxOverlay({
+        dragEnabled: true,
+        visible: true,
+        shading: true,
+        height: 20,
+        width: 20,
+        position: { of: $container }
+    });
+
+    var $overlayContent = $overlay.dxOverlay("content"),
+        overlayPosition = $overlayContent.position(),
+        containerPosition = $container.position(),
+        viewWidth = viewport().outerWidth(),
+        viewHeight = viewport().outerHeight();
+
+    var pointer = pointerMock($overlayContent);
+    var startEvent = pointer.start().dragStart().lastEvent();
+
+    assert.equal(startEvent.maxRightOffset, viewWidth - $overlayContent.outerWidth() - overlayPosition.left - 200, "overlay should be dragged right");
+    assert.equal(startEvent.maxLeftOffset, 200 + overlayPosition.left, "overlay should be dragged left");
+    assert.roughEqual(startEvent.maxTopOffset, 200 + overlayPosition.top + containerPosition.top, 1, "overlay should be dragged top");
+    assert.roughEqual(startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight() - containerPosition.top - overlayPosition.top - 200, 1, "overlay should be dragged bottom");
+});
 
 QUnit.module("resize", moduleConfig);
 

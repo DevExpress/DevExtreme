@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
     Scrollable = require("../scroll_view/ui.scrollable"),
@@ -59,7 +60,7 @@ var DateViewRoller = Scrollable.inherit({
         this.callBase();
 
         //Note: fx animations in 'moveTo' interrupt by '_correctLocation'
-        $.each(this._strategy._scrollers, function(index, scroller) {
+        each(this._strategy._scrollers, function(index, scroller) {
             scroller._correctLocation = noop;
         });
 
@@ -109,7 +110,7 @@ var DateViewRoller = Scrollable.inherit({
 
         this._$content.empty();
         // NOTE: rendering ~166+30+12+24+60 <div>s >> 50mc
-        $.each(items, function() {
+        each(items, function() {
             $items = $items.add(
                 $("<div>")
                     .addClass(DATEVIEW_ROLLER_ITEM_CLASS)
@@ -185,7 +186,7 @@ var DateViewRoller = Scrollable.inherit({
     _renderActiveStateItem: function() {
         var selectedIndex = this.option("selectedIndex");
 
-        $.each(this._$items, function(index) {
+        each(this._$items, function(index) {
             $(this).toggleClass(DATEVIEW_ROLLER_ITEM_SELECTED_CLASS, selectedIndex === index);
         });
     },

@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     core = require("./ui.grid_core.modules"),
     isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     KeyboardProcessor = require("../widget/ui.keyboard_processor"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer");
@@ -124,14 +125,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         that._focusedViews = [];
 
-        $.each(VIEWS, function(key, viewName) {
+        each(VIEWS, function(key, viewName) {
             var view = that.getView(viewName);
             if(view && view.isVisible()) {
                 that._focusedViews.push(view);
             }
         });
 
-        $.each(that._focusedViews, function(index, view) {
+        each(that._focusedViews, function(index, view) {
             if(view) {
                 view.renderCompleted.add(function() {
                     var $element = view.element();
@@ -887,7 +888,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _getFocusedViewByCondition: function(conditionFunction) {
         var focusView;
 
-        $.each(this._focusedViews, function(index, view) {
+        each(this._focusedViews, function(index, view) {
             if(conditionFunction(view)) {
                 focusView = {
                     viewIndex: index,

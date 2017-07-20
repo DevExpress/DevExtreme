@@ -568,6 +568,7 @@ var $ = require("../../core/renderer"),
     dateLocalization = require("../date"),
     isObject = require("../../core/utils/type").isObject,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     errors = require("../../core/errors");
 
 if(Globalize && Globalize.formatDate) {
@@ -667,7 +668,7 @@ if(Globalize && Globalize.formatDate) {
             var result = globalizeFormat.path && that._getFormatStringByPath(globalizeFormat.path) || globalizeFormat.pattern;
 
             if(globalizeFormat.parts) {
-                $.each(globalizeFormat.parts, function(index, part) {
+                iteratorUtils.each(globalizeFormat.parts, function(index, part) {
                     result = result.replace("{" + index + "}", that._getPatternByFormat(part));
                 });
             }

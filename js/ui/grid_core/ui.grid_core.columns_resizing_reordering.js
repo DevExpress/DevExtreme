@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -348,7 +349,7 @@ var DraggingHeaderView = modules.View.inherit({
         var that = this,
             result;
 
-        $.each(that._dragOptions.draggingPanels, function(index, draggingPanel) {
+        each(that._dragOptions.draggingPanels, function(index, draggingPanel) {
             if(draggingPanel) {
                 var boundingRect = draggingPanel.getBoundingRect();
                 if(boundingRect && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom) && (boundingRect.top === undefined || pos.y > boundingRect.top)
@@ -1017,7 +1018,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     _subscribeToEvents: function(draggingHeader, draggingPanels) {
         var that = this;
 
-        $.each(draggingPanels, function(_, draggingPanel) {
+        each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
                 var i,
                     columns,
@@ -1055,7 +1056,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                     columnElements = draggingPanel.getColumnElements(i) || [];
                     if(columnElements.length) {
                         columns = draggingPanel.getColumns(i) || [];
-                        $.each(columnElements, subscribeToEvents);
+                        each(columnElements, subscribeToEvents);
                     }
                 }
             }
@@ -1065,11 +1066,11 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     _unsubscribeFromEvents: function(draggingHeader, draggingPanels) {
         var that = this;
 
-        $.each(draggingPanels, function(_, draggingPanel) {
+        each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
                 var columnElements = draggingPanel.getColumnElements() || [];
 
-                $.each(columnElements, function(index, columnElement) {
+                each(columnElements, function(index, columnElement) {
                     var $columnElement = $(columnElement);
                     $columnElement.off(addNamespace(dragEvents.start, MODULE_NAMESPACE));
                     $columnElement.off(addNamespace(dragEvents.move, MODULE_NAMESPACE));

@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     compareVersions = require("../../core/utils/version").compare,
     extend = require("../../core/utils/extend").extend,
     support = require("../../core/utils/support"),
@@ -16,6 +17,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
 
     DATEBOX_CLASS = "dx-datebox",
+    DX_AUTO_WIDTH_CLASS = "dx-auto-width",
     DATEBOX_WRAPPER_CLASS = "dx-datebox-wrapper";
 
 var PICKER_TYPE = {
@@ -487,10 +489,15 @@ var DateBox = DropDownEditor.inherit({
         this._strategy.renderInputMinMax(this._input());
     },
 
+    _renderDimensions: function() {
+        this.callBase();
+        this.element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option("width"));
+    },
+
     _refreshFormatClass: function() {
         var $element = this.element();
 
-        $.each(TYPE, function(_, item) {
+        each(TYPE, function(_, item) {
             $element.removeClass(DATEBOX_CLASS + "-" + item);
         });
 
@@ -500,7 +507,7 @@ var DateBox = DropDownEditor.inherit({
     _refreshPickerTypeClass: function() {
         var $element = this.element();
 
-        $.each(PICKER_TYPE, function(_, item) {
+        each(PICKER_TYPE, function(_, item) {
             $element.removeClass(DATEBOX_CLASS + "-" + item);
         });
 
@@ -564,7 +571,7 @@ var DateBox = DropDownEditor.inherit({
         var $element = this.element();
         var classPostfixes = extend({}, TYPE, PICKER_TYPE);
 
-        $.each(classPostfixes, (function(_, item) {
+        each(classPostfixes, (function(_, item) {
             $element.removeClass(DATEBOX_WRAPPER_CLASS + "-" + item);
         }).bind(this));
 

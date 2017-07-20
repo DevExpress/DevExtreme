@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    dependencyInjector = require("../core/utils/dependency_injector"),
+var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     isPlainObject = require("../core/utils/type").isPlainObject,
     errors = require("../core/errors");
 
@@ -38,7 +38,7 @@ var numberLocalization = dependencyInjector({
         if(!formatType || typeof formatType !== 'string') return;
 
         formatList = formatType.split(' ');
-        $.each(formatList, function(index, value) {
+        each(formatList, function(index, value) {
             if(inArray(value, NUMERIC_FORMATS) > -1) {
                 formatObject.formatType = value;
             } else if(value in LargeNumberFormatPowers) {

@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     dependencyInjector = require("../core/utils/dependency_injector"),
     extend = require("../core/utils/extend").extend,
+    each = require("../core/utils/iterator").each,
     stringFormat = require("../core/utils/string").format,
     humanize = require("../core/utils/inflector").humanize,
     coreLocalization = require("./core");
@@ -63,7 +64,7 @@ var messageLocalization = dependencyInjector({
                 nodeItem.nodeValue = that.localizeString(nodeItem.nodeValue);
             } else {
                 if(!$(nodeItem).is("iframe")) { //T199912
-                    $.each(nodeItem.attributes || [], function(index, attr) {
+                    each(nodeItem.attributes || [], function(index, attr) {
                         if(typeof attr.value === "string") {
                             var localizedValue = that.localizeString(attr.value);
 

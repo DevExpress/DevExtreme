@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     stringUtils = require("../../core/utils/string"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     toComparable = require("../../core/utils/data").toComparable,
@@ -459,7 +460,7 @@ module.exports = (function() {
                 groupInterval = this.getGroupInterval(column);
 
             if(groupInterval) {
-                $.each(groupInterval, function(index, interval) {
+                iteratorUtils.each(groupInterval, function(index, interval) {
                     result.push(remoteGrouping ? { selector: dataField, groupInterval: interval, isExpanded: index < groupInterval.length - 1 } : getIntervalSelector.bind(column, interval));
                 });
 

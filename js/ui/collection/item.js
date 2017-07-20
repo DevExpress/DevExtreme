@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
+    each = require("../../core/utils/iterator").each,
     publicComponentUtils = require("../../core/utils/public_component");
 
 var INVISIBLE_STATE_CLASS = "dx-state-invisible",
@@ -68,7 +69,7 @@ var CollectionItem = Class.inherit({
 
     setDataField: function() {
         this._dirty = false;
-        $.each(this._watchers, function(_, watcher) {
+        each(this._watchers, function(_, watcher) {
             watcher.force();
         });
         if(this._dirty) {
@@ -85,7 +86,7 @@ var CollectionItem = Class.inherit({
     },
 
     _dispose: function() {
-        $.each(this._watchers, function(_, watcher) {
+        each(this._watchers, function(_, watcher) {
             watcher.dispose();
         });
     }
