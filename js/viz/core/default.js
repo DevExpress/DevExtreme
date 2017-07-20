@@ -652,8 +652,7 @@ registerTheme({
                     verticalAlignment: TOP
                 }
             },
-            constantLines: {
-            }
+            constantLines: []
         },
         verticalAxis: {
             position: LEFT,
@@ -673,8 +672,7 @@ registerTheme({
                     verticalAlignment: TOP
                 }
             },
-            constantLines: {
-            }
+            constantLines: []
         },
         argumentAxis: {},
         valueAxis: {

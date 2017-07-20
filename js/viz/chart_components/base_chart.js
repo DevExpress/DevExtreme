@@ -1,6 +1,7 @@
 "use strict";
 
 var commonUtils = require("../../core/utils/common"),
+    noop = commonUtils.noop,
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
@@ -23,7 +24,6 @@ var commonUtils = require("../../core/utils/common"),
     ACTIONS_BY_PRIORITY = [REINIT_REFRESH_ACTION, REINIT_DATA_SOURCE_REFRESH_ACTION, DATA_INIT_REFRESH_ACTION, FORCE_RENDER_REFRESH_ACTION, RESIZE_REFRESH_ACTION],
 
     vizUtils = require("../core/utils"),
-    _noop = commonUtils.noop,
     _map = vizUtils.map,
     _each = each,
     _extend = extend,
@@ -32,23 +32,33 @@ var commonUtils = require("../../core/utils/common"),
     _setCanvasValues = vizUtils.setCanvasValues,
     DEFAULT_OPACITY = 0.3,
 
-    REINIT_REFRESH_ACTION_OPTIONS = [
-        "adaptiveLayout",
-        "crosshair",
+    REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
+        "series",
+        "commonSeriesSettings",
+        "containerBackgroundColor",
+        "dataPrepareSettings",
+        "seriesSelectionMode",
+        "pointSelectionMode",
+        "useAggregation",
+        "synchronizeMultiAxes"
+    ],
+
+    REFRESH_SERIES_FAMILIES_ACTION_OPTIONS = [
         "equalBarWidth",
         "minBubbleSize",
         "maxBubbleSize",
         "barWidth",
         "negativesAsZeroes",
-        "negativesAsZeros", //misspelling case
+        "negativesAsZeros" //misspelling case
+    ],
+
+    FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
+        "adaptiveLayout",
+        "crosshair",
         "resolveLabelOverlapping",
-        "seriesSelectionMode",
-        "pointSelectionMode",
         "adjustOnZoom",
-        "synchronizeMultiAxes",
         "zoomingMode",
-        "scrollingMode",
-        "useAggregation"
+        "scrollingMode"
     ];
 
 function checkHeightLabelsInCanvas(points, canvas, isRotated) {
@@ -294,7 +304,7 @@ var overlapping = {
 
 function suppressCommonLayout(layout) {
     layout.forward = function(rect) { return rect; };
-    layout.backward = _noop;
+    layout.backward = noop;
 }
 
 var BaseChart = BaseWidget.inherit({
@@ -362,7 +372,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     // Common functionality is overridden because Chart has its own layout logic. Nevertheless common logic should be used.
-    _getLayoutItems: commonUtils.noop,
+    _getLayoutItems: noop,
 
     _layoutManagerOptions: function() {
         return this._themeManager.getOptions("adaptiveLayout");
@@ -391,7 +401,7 @@ var BaseChart = BaseWidget.inherit({
         /*_skipRender || */that._forceRender();
     },
 
-    _correctAxes: _noop,
+    _correctAxes: noop,
 
     _createHtmlStructure: function() {
         var that = this,
@@ -441,10 +451,9 @@ var BaseChart = BaseWidget.inherit({
             },
             disposeObjectsInArray = this._disposeObjectsInArray;
 
-        clearTimeout(that._delayedRedraw);
         that._renderer.stopAllAnimations();
 
-        that.businessRanges = that.translators = null;
+        that.businessRanges = null;
         disposeObjectsInArray.call(that, "series");
 
         disposeObject("_headerBlock");
@@ -452,7 +461,6 @@ var BaseChart = BaseWidget.inherit({
         disposeObject("_crosshair");
 
         that.layoutManager =
-        that.paneAxis =
         that._userOptions =
         that._canvas =
         that._groupsData = null;
@@ -569,7 +577,6 @@ var BaseChart = BaseWidget.inherit({
         that._resetIsReady(); //T207606
         drawOptions = that._prepareDrawOptions(_options);
         recreateCanvas = drawOptions.recreateCanvas;
-        clearTimeout(that._delayedRedraw);
 
         // T207665
         that.__originalCanvas = that._canvas;
@@ -594,8 +601,6 @@ var BaseChart = BaseWidget.inherit({
         that._renderElements(drawOptions);
     },
 
-    _saveBusinessRange: _noop,
-
     _renderElements: function(drawOptions) {
         var that = this,
             preparedOptions = that._prepareToRender(drawOptions),
@@ -619,15 +624,16 @@ var BaseChart = BaseWidget.inherit({
 
         that._renderer.lock();
 
-        that._saveBusinessRange();
         that.layoutManager.setOptions(that._layoutManagerOptions());
         that.layoutManager.layoutElements(
             drawElements,
             that._canvas,
-            that._getAxisDrawingMethods(drawOptions, preparedOptions, isRotated),
+            function(sizeShortage) {
+                that._renderAxes(drawOptions, preparedOptions, isRotated);
+                sizeShortage && that._shrinkAxes(drawOptions, sizeShortage);
+            },
             layoutTargets,
-            isRotated,
-            that._getAxesForTransform(isRotated)
+            isRotated
         );
         layoutCanvas && that._updateCanvasClipRect(dirtyCanvas);
 
@@ -646,15 +652,15 @@ var BaseChart = BaseWidget.inherit({
         });
 
         if(that._scrollBar) {
-            argBusinessRange = that.businessRanges[0].arg;
-
+            argBusinessRange = that._argumentAxes[0].getTranslator().getBusinessRange();
             if(argBusinessRange.axisType === "discrete" && argBusinessRange.categories && argBusinessRange.categories.length <= 1) {
                 zoomMinArg = zoomMaxArg = undefined;
             } else {
                 zoomMinArg = argBusinessRange.minVisible;
                 zoomMaxArg = argBusinessRange.maxVisible;
             }
-            that._scrollBar.init(argBusinessRange, layoutTargets[0].canvas).setPosition(zoomMinArg, zoomMaxArg);
+
+            that._scrollBar.init(argBusinessRange).setPosition(zoomMinArg, zoomMaxArg);
         }
 
         that._updateTracker(trackerCanvases);
@@ -664,7 +670,7 @@ var BaseChart = BaseWidget.inherit({
         that._renderer.unlock();
     },
 
-    _createCrosshairCursor: _noop,
+    _createCrosshairCursor: noop,
 
     _appendSeriesGroups: function() {
         this._seriesGroup.linkAppend();
@@ -698,8 +704,7 @@ var BaseChart = BaseWidget.inherit({
             singleSeries = series[i];
             that._applyExtraSettings(singleSeries, drawOptions);
 
-            singleSeries.draw(that._prepareTranslators(singleSeries, i, isRotated),
-                drawOptions.animate && singleSeries.getPoints().length <= drawOptions.animationPointsLimit && that._renderer.animationEnabled(),
+            singleSeries.draw(drawOptions.animate && singleSeries.getPoints().length <= drawOptions.animationPointsLimit && that._renderer.animationEnabled(),
                 drawOptions.hideLayoutLabels,
                 that._getLegendCallBack(singleSeries)
             );
@@ -899,11 +904,6 @@ var BaseChart = BaseWidget.inherit({
         dataSource: "DATA_SOURCE",
         palette: "PALETTE",
 
-        series: "REFRESH_SERIES_DATA_INIT",
-        commonSeriesSettings: "REFRESH_SERIES_DATA_INIT",
-        containerBackgroundColor: "REFRESH_SERIES_DATA_INIT",
-        dataPrepareSettings: "REFRESH_SERIES_DATA_INIT",
-
         legend: "DATA_INIT",
         seriesTemplate: "DATA_INIT",
 
@@ -923,7 +923,7 @@ var BaseChart = BaseWidget.inherit({
         scrollBar: "SCROLL_BAR"
     },
 
-    _customChangesOrder: ["ANIMATION", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT",
+    _customChangesOrder: ["ANIMATION", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "REFRESH_SERIES_FAMILIES",
         "FORCE_RENDER", "AXES_AND_PANES", "ROTATED", "REFRESH_SERIES_REINIT", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT"],
 
     _change_ANIMATION: function() {
@@ -948,13 +948,18 @@ var BaseChart = BaseWidget.inherit({
         this._processRefreshData(DATA_INIT_REFRESH_ACTION);
     },
 
+    _change_REFRESH_SERIES_FAMILIES: function() {
+        this._processSeriesFamilies();
+        this._populateBusinessRange();
+        this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
+    },
+
     _change_FORCE_RENDER: function() {
         this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
     },
 
     _change_AXES_AND_PANES: function() {
         this._refreshSeries(REINIT_REFRESH_ACTION);
-        this.paneAxis = {};
     },
 
     _change_ROTATED: function() {
@@ -1015,7 +1020,6 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _dataInit: function() {
-        clearTimeout(this._delayedRedraw);
         this._dataSpecificInit(true);
     },
 
@@ -1052,7 +1056,8 @@ var BaseChart = BaseWidget.inherit({
         that._groupSeries();
         parsedData = dataValidatorModule.validateData(data, that._groupsData, that._incidentOccurred, dataValidatorOptions);
         themeManager.resetPalette();
-        _each(that.series, function(_, singleSeries) {
+
+        that.series.forEach(function(singleSeries) {
             singleSeries.updateData(parsedData[singleSeries.getArgumentField()]);
             that._processSingleSeries(singleSeries);
         });
@@ -1121,7 +1126,7 @@ var BaseChart = BaseWidget.inherit({
         return drawElements;
     },
 
-    _resetZoom: _noop,
+    _resetZoom: noop,
 
     _dataIsReady: function() {
         // In order to support scenario when chart is created without "dataSource" and it is considered
@@ -1188,7 +1193,9 @@ var BaseChart = BaseWidget.inherit({
                 labelsGroup: that._labelsGroup,
                 eventTrigger: that._eventTrigger,
                 commonSeriesModes: that._getSelectionModes(),
-                eventPipe: eventPipe
+                eventPipe: eventPipe,
+                argumentAxis: that._getArgumentAxis(),
+                valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
             }, seriesTheme);
 
             if(!particularSeries.isUpdated) {
@@ -1243,8 +1250,16 @@ var BaseChart = BaseWidget.inherit({
     }
 });
 
-_each(REINIT_REFRESH_ACTION_OPTIONS, function(_, name) {
-    BaseChart.prototype._optionChangesMap[name] = "REINIT";
+REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS.forEach(function(name) {
+    BaseChart.prototype._optionChangesMap[name] = "REFRESH_SERIES_DATA_INIT";
+});
+
+FORCE_RENDER_REFRESH_ACTION_OPTIONS.forEach(function(name) {
+    BaseChart.prototype._optionChangesMap[name] = "FORCE_RENDER";
+});
+
+REFRESH_SERIES_FAMILIES_ACTION_OPTIONS.forEach(function(name) {
+    BaseChart.prototype._optionChangesMap[name] = "REFRESH_SERIES_FAMILIES";
 });
 
 exports.overlapping = overlapping;

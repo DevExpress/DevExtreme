@@ -3924,6 +3924,28 @@ QUnit.test("value must appear in the INPUT ​​after removal of value with sea
     assert.equal($input.val(), "b", "item should be choose after click on list item");
 });
 
+QUnit.testInActiveWindow("dxSelectBox should not filter a dataSource when the widget disposing (T535861)", function(assert) {
+    var instance = $("#selectBox").dxSelectBox({
+            dataSource: [1, 2],
+            acceptCustomValue: true,
+            searchEnabled: true,
+            onCustomItemCreating: function(e) {
+                e.element.remove();
+                return "";
+            }
+        }).dxSelectBox("instance"),
+        $input = instance.element().find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input),
+        filterDataSourceStub = sinon.stub(instance, "_filterDataSource");
+
+    keyboard
+        .focus()
+        .type("t")
+        .change();
+
+    assert.ok(filterDataSourceStub.notCalled, "dataSource didn't filter when widget disposed");
+});
+
 
 QUnit.module("focus policy", {
     beforeEach: function() {

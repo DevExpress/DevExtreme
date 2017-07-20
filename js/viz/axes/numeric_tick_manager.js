@@ -75,10 +75,6 @@ exports.continuous = {
         return _adjustValue(result);
     },
 
-    _getMarginValue: function(min, max, margin) {
-        return vizUtils.applyPrecisionByMinDelta(min, margin, (_abs(max - min)) * margin);
-    },
-
     _getDefaultMinorInterval: function(screenDelta, businessDelta) {
         var deltaCoef = this._getDeltaCoef(screenDelta, businessDelta, this._options.minorGridSpacingFactor),
             multipliers = DEFAULT_MINOR_NUMBER_MULTIPLIERS,

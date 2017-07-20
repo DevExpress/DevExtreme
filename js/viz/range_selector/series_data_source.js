@@ -155,7 +155,11 @@ SeriesDataSource.prototype = {
             seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;//B253068
             if(data && data.length > 0) {
                 //TODO
-                newSeries = new seriesModule.Series({ renderer: options.renderer }, seriesTheme);
+                newSeries = new seriesModule.Series({
+                    renderer: options.renderer,
+                    argumentAxis: options.argumentAxis,
+                    valueAxis: options.valueAxis
+                }, seriesTheme);
                 series.push(newSeries);
             }
             if(hasSeriesTemplate) {
@@ -188,14 +192,14 @@ SeriesDataSource.prototype = {
         return series;
     },
 
-    adjustSeriesDimensions: function(translators) {
+    adjustSeriesDimensions: function() {
         if(this._useAggregation) {
             each(this._series, function(_, s) {
-                s.resamplePoints(translators.x);
+                s.resamplePoints(s.getArgumentAxis().getTranslator().canvasLength);
             });
         }
         each(this._seriesFamilies, function(_, family) {
-            family.adjustSeriesDimensions({ arg: translators.x, val: translators.y });
+            family.adjustSeriesDimensions();
         });
     },
 
