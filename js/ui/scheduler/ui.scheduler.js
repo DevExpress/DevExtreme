@@ -1694,11 +1694,11 @@ var Scheduler = Widget.inherit({
 
         var view = this._getViewByType(currentView),
             viewCount = view && view.count || 1,
-            viewOffset = view && view.offset || 0;
+            viewStartDate = view && view.viewStartDate || this.option("currentDate");
 
         return {
             count: viewCount,
-            offset: viewOffset
+            viewStartDate: viewStartDate
         };
     },
 
@@ -1742,7 +1742,7 @@ var Scheduler = Widget.inherit({
 
         result.observer = this;
         result.count = countConfig.count;
-        result.offset = countConfig.offset;
+        result.viewStartDate = countConfig.viewStartDate;
         result.groups = groups;
         result.onCellClick = this._createActionByOption("onCellClick");
         result.min = new Date(this._dateOption("min"));

@@ -95,9 +95,9 @@ QUnit.testStart(function() {
         assert.ok($element.hasClass("dx-scheduler-work-space"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
     });
 
-    QUnit.test("Scheduler workspace should have a right default count and offset", function(assert) {
+    QUnit.test("Scheduler workspace should have a right default count and viewStartDate", function(assert) {
         assert.equal(this.instance.option("count"), 1, "dxSchedulerWorkSpace count is right");
-        assert.equal(this.instance.option("offset"), 0, "dxSchedulerWorkSpace offset is right");
+        assert.deepEqual(this.instance.option("viewStartDate"), undefined, "dxSchedulerWorkSpace viewStartDate is right");
     });
 
     QUnit.test("Scheduler workspace should contain time panel, header panel, allday panel and content", function(assert) {
@@ -2924,9 +2924,9 @@ QUnit.testStart(function() {
         assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 31, 0), "cell has right endtDate");
     });
 
-    QUnit.test("WorkSpace Day view cells have right cellData with view option count = 3 and offset = -1", function(assert) {
+    QUnit.test("WorkSpace Day view cells have right cellData with view option count = 3 and viewStartDate < currentDate", function(assert) {
         this.instance.option("count", 3);
-        this.instance.option("offset", -1);
+        this.instance.option("viewStartDate", new Date(2017, 5, 27));
         this.instance.option("currentDate", new Date(2017, 5, 28));
 
         var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
@@ -2939,9 +2939,9 @@ QUnit.testStart(function() {
         assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 30, 0), "cell has right endtDate");
     });
 
-    QUnit.test("WorkSpace Day view cells have right cellData with view option count = 3 and offset = 2", function(assert) {
+    QUnit.test("WorkSpace Day view cells have right cellData with view option count = 3 and viewStartDate > currentDate", function(assert) {
         this.instance.option("count", 3);
-        this.instance.option("offset", 2);
+        this.instance.option("viewStartDate", new Date(2017, 5, 27));
         this.instance.option("currentDate", new Date(2017, 5, 25));
 
         var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),

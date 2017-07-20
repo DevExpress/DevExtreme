@@ -339,7 +339,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return extend(this.callBase(), {
             currentDate: new Date(),
             count: 1,
-            offset: 0,
+            viewStartDate: undefined,
             firstDayOfWeek: undefined,
             startDayHour: 0,
             endDayHour: 24,
@@ -373,7 +373,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "currentDate":
             case "groups":
             case "count":
-            case "offset":
+            case "viewStartDate":
                 this._cleanView();
                 this._toggleGroupedClass();
                 this._renderView();
