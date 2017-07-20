@@ -47,6 +47,26 @@ function sumArray(array) {
     return sum;
 }
 
+function getScrollBarWidth() {
+    var container = $("<div>").css({
+        position: 'absolute',
+        visibility: 'hidden',
+        top: -1000,
+        left: -1000,
+        width: 100,
+        height: 100
+    }).appendTo("body");
+
+    var content = $('<p>').css({
+        width: '100%',
+        height: 200
+    }).appendTo(container);
+
+    container.remove();
+
+    return container.width() - content.width();
+}
+
 var moduleConfig = {
     beforeEach: function() {
         var rowItems = [
@@ -1489,7 +1509,10 @@ QUnit.test("Sorting by Summary context menu when sorting defined", function(asse
 });
 
 QUnit.test("Render to invisible container", function(assert) {
-    var $pivotGridElement = $("#pivotGrid").hide().addClass("container-height-200px"),
+    var $pivotGridElement = $("#pivotGrid")
+        .hide()
+        .width(2000)
+        .addClass("container-height-200px"),
         pivotGrid = createPivotGrid(this.testOptions, assert);
 
     $pivotGridElement.show();
@@ -1497,6 +1520,8 @@ QUnit.test("Render to invisible container", function(assert) {
     domUtils.triggerShownEvent($pivotGridElement);
 
     assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
+    assert.ok(!pivotGrid._columnsArea.hasScroll(), 'has no horizontal scroll');
+    assert.equal(pivotGrid.__scrollBarWidth, getScrollBarWidth());
 });
 
 QUnit.test("Sorting by Summary context menu when sorting defined for grand total", function(assert) {
@@ -3778,7 +3803,7 @@ QUnit.test("Virtual Scrolling", function(assert) {
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
-    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid._scrollBarUseNative);
+    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
     assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], 71);
     assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], 71);
     assert.ok(!this.dataController.subscribeToWindowScrollEvents.called);
@@ -3839,7 +3864,7 @@ QUnit.test("Virtual Scrolling. Widget height is not defined", function(assert) {
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
-    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid._scrollBarUseNative);
+    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
 
     assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], "auto");
     assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], "auto");
