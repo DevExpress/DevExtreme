@@ -172,6 +172,7 @@ exports.environment = {
             scrollBar.stub("init").returns(scrollBar);
             scrollBar.stub("update").returns(scrollBar);
             scrollBar.stub("getMargins").returns({ left: 0, top: 0, right: 0, bottom: 0 });
+            scrollBar.stub("estimateMargins").returns({ left: 0, top: 0, right: 0, bottom: 0 });
             return scrollBar;
         });
         that.createChart = function(options) {

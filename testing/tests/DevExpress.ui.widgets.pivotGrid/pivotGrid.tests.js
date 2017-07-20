@@ -2351,7 +2351,31 @@ QUnit.test("render should be called once after expand item if virtual scrolling 
     assert.equal(contentReadyCallCount, 1);
 });
 
+//T529461
 QUnit.test("Initial horizontal scroll position when rtl is enabled", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+    var pivotGrid = createPivotGrid({
+        rtlEnabled: true,
+        fieldChooser: {
+            enabled: false
+        },
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+
+    //assert
+    var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
+    var columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
+    assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+    assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+});
+
+//T529461
+QUnit.test("Initial horizontal scroll position when rtl is enabled and scrolling mode is virtual", function(assert) {
     $('#pivotGrid').empty();
     $('#pivotGrid').width(100);
     $('#pivotGrid').height(150);

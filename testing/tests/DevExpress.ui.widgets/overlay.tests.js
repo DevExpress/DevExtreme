@@ -2432,8 +2432,8 @@ QUnit.test("overlay should be dragged correctly when position.of and shading (T5
 
     assert.equal(startEvent.maxRightOffset, viewWidth - $overlayContent.outerWidth() - overlayPosition.left - 200, "overlay should be dragged right");
     assert.equal(startEvent.maxLeftOffset, 200 + overlayPosition.left, "overlay should be dragged left");
-    assert.equal(startEvent.maxTopOffset, 200 + overlayPosition.top + containerPosition.top, "overlay should be dragged top");
-    assert.equal(startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight() - containerPosition.top - overlayPosition.top - 200, "overlay should be dragged bottom");
+    assert.roughEqual(startEvent.maxTopOffset, 200 + overlayPosition.top + containerPosition.top, 1, "overlay should be dragged top");
+    assert.roughEqual(startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight() - containerPosition.top - overlayPosition.top - 200, 1, "overlay should be dragged bottom");
 });
 
 QUnit.module("resize", moduleConfig);

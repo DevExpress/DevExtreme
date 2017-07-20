@@ -2225,7 +2225,7 @@ QUnit.test("Estimate margins creates text element with maxValue and remove it", 
         }
     });
 
-    axis.estimateMargins();
+    axis.estimateMargins(this.canvas);
 
     assert.strictEqual(this.renderer.text.callCount, 1);
     assert.deepEqual(this.renderer.text.getCall(0).args, ["$1,000", 0, 0], "cteate text args");
@@ -2257,7 +2257,7 @@ QUnit.test("Estimate margins creates text element with first category", function
         }
     });
 
-    axis.estimateMargins();
+    axis.estimateMargins(this.canvas);
 
     assert.strictEqual(this.renderer.text.callCount, 1);
     assert.deepEqual(this.renderer.text.getCall(0).args, ["cat1", 0, 0], "cteate text args");
@@ -2270,7 +2270,7 @@ QUnit.test("Estimate left/right margin. Visible labels", function(assert) {
             visible: true
         }
     });
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.left, 10, "left margin");
     assert.strictEqual(margins.right, 22, "right margin");
@@ -2285,7 +2285,7 @@ QUnit.test("Estimate top/bottom margin. Bottom axis", function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.top, 0, "top margin");
     assert.strictEqual(margins.bottom, 17, "bottom margin");
@@ -2301,7 +2301,7 @@ QUnit.test("Estimate top/bottom margin. Top axis", function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.top, 17, "top margin");
     assert.strictEqual(margins.bottom, 0, "bottom margin");
@@ -2322,7 +2322,7 @@ QUnit.test("Estimate left/right margin. Invisible labels", function(assert) {
         height: 0
     }];
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(this.renderer.stub("text").callCount, 0);
     assert.strictEqual(margins.left, 0, "left margin");
@@ -2347,7 +2347,7 @@ QUnit.test("Estimate draws title text and remove it", function(assert) {
         }
     });
 
-    axis.estimateMargins();
+    axis.estimateMargins(this.canvas);
 
     assert.strictEqual(this.renderer.text.callCount, 2);
     assert.deepEqual(this.renderer.text.getCall(1).args, ["Title text", 0, 0], "cteate text args");
@@ -2383,7 +2383,7 @@ QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
         height: 44
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 17 + (44 + 7), "bottom margin");
     assert.strictEqual(margins.top, 0, "top margin");
@@ -2400,7 +2400,7 @@ QUnit.test("Estimate margin. Staggered labels", function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, "bottom margin");
 });
@@ -2416,7 +2416,7 @@ QUnit.test("Estimate margin. Overlapping mode stagger", function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, "bottom margin");
 });
@@ -2432,7 +2432,7 @@ QUnit.test("Estimate margin. Rotated labels", function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.equal(margins.bottom, 35, "bottom margin");
 });
@@ -2448,7 +2448,7 @@ QUnit.test("Estimate margin. Overlapping mode is rotate", function(assert) {
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.equal(margins.bottom, 35, "bottom margin");
 });
@@ -2465,7 +2465,7 @@ QUnit.test("Estimate margin. Overlapping mode is rotate, drawing type is stagger
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, "bottom margin");
 });
@@ -2484,7 +2484,7 @@ QUnit.test("Estimate margin. Overlapping mode is stagger, drawing type is rotate
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 35, "bottom margin");
 });
@@ -2501,7 +2501,7 @@ QUnit.test("Estimate margin. Overlapping mode is rotate, drawing type is stagger
         }
     });
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.bottom, 3 + 14 * 2 + 10, "bottom margin");
 });
@@ -2553,7 +2553,7 @@ QUnit.test("Estimate draws constant lines with outside labels", function(assert)
 
     this.renderer.g.reset();
 
-    axis.estimateMargins();
+    axis.estimateMargins(this.canvas);
 
     var group = this.renderer.g.getCall(0).returnValue;
 
@@ -2616,7 +2616,7 @@ QUnit.test("Include constant line labels in bottom margin", function(assert) {
 
     this.renderer.g.reset();
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.top, 0);
     assert.strictEqual(margins.bottom, 14 + 10);
@@ -2642,7 +2642,7 @@ QUnit.test("Include constant line labels in top margin", function(assert) {
 
     this.renderer.g.reset();
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.top, 14 + 10, "top margin");
     assert.strictEqual(margins.bottom, 0, "bottom margin");
@@ -2677,7 +2677,7 @@ QUnit.test("Label is wider than constant line label - get label as margin", func
 
     this.renderer.g.reset();
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.left, 10, "top margin");
     assert.strictEqual(margins.right, 22, "right margin");
@@ -2712,7 +2712,7 @@ QUnit.test("Constant line label is wider than label - get constant line label as
 
     this.renderer.g.reset();
 
-    var margins = axis.estimateMargins();
+    var margins = axis.estimateMargins(this.canvas);
 
     assert.strictEqual(margins.left, 12, "top margin");
     assert.strictEqual(margins.right, 32, "right margin");
@@ -2730,10 +2730,33 @@ QUnit.test("Estimate margins does not include labels if stub data", function(ass
             }
         });
 
-    axis.estimateMargins();
+    axis.estimateMargins(this.canvas);
 
     assert.strictEqual(this.renderer.stub("text").callCount, 0);
     assert.ok(!customizeText.called, 0);
+});
+
+QUnit.test("Create ticks for labels format estimation", function(assert) {
+    var that = this;
+
+    this.range.min = new Date(2017, 1, 2, 10);
+    this.range.max = new Date(2017, 1, 2, 16);
+    this.createTickManager.restore();
+    this.tickManager.getOptions.returns({ labelFormat: "shorttime" });
+    this.createTickManager = sinon.stub(tickManagerModule, "TickManager", function() { return that.tickManager; });
+
+    var axis = this.createSimpleAxis({
+        isHorizontal: true,
+        label: {
+            visible: true
+        }
+    });
+
+    axis.estimateMargins(this.canvas);
+
+    assert.strictEqual(this.tickManager.update.lastCall.args[1].screenDelta, 890, "screenDelta");
+    assert.strictEqual(this.tickManager.getTicks.callCount, 1);
+    assert.deepEqual(this.renderer.text.getCall(0).args, ["4:00 PM", 0, 0], "cteate text args");
 });
 
 QUnit.module("Coors In", $.extend({}, environment2DTranslator, {

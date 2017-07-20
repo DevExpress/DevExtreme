@@ -642,7 +642,16 @@ module.exports = {
             return height && (height + labelOptions.indentFromAxis || 0) || 0;
         },
 
-        estimateMargins: function() {
+        _estimateLabelFormat: function(canvas) {
+            this.updateCanvas(canvas);
+            this._updateTickManager();
+            this._tickManager.getTicks();
+            this._correctLabelFormat();
+        },
+
+        estimateMargins: function(canvas) {
+            this._estimateLabelFormat(canvas);
+
             var that = this,
                 options = this._options,
                 constantLineOptions = (options.constantLines || []).filter(function(options) {
