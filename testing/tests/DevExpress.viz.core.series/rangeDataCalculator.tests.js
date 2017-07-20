@@ -1433,6 +1433,25 @@ QUnit.test("logarithmic axis", function(assert) {
     assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
+QUnit.test("Positive points. Polar bar point", function(assert) {
+    var data = [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
+        series = createSeries(this.defaultOptions, undefined, "polar"),
+        rangeData;
+
+    series.updateData(data);
+    rangeData = series.getRangeData();
+
+    assert.ok(rangeData, "Range data should be created");
+    assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
+    assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
+    assert.equal(rangeData.val.min, 0, "Min y should be correct");
+    assert.equal(rangeData.val.max, 10, "Max y should be correct");
+
+    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
+    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
+    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
+});
+
 QUnit.module("Get range data. Bar/area. For each types", {
     beforeEach: function() {
         this.defaultOptions = {
