@@ -1001,7 +1001,7 @@ var PivotGrid = Widget.inherit({
         if(columnsArea && !columnsArea.hasScroll()) {
             that._scrollLeft = null;
         }
-        if(that._scrollTop !== null || that._scrollLeft !== null || scrolled) {
+        if(that._scrollTop !== null || that._scrollLeft !== null || scrolled || that.option("rtlEnabled")) {
             scrollTop = that._scrollTop || 0;
             scrollLeft = that._scrollLeft || 0;
             dataArea.scrollTo({ x: scrollLeft, y: scrollTop });
@@ -1834,11 +1834,11 @@ var PivotGrid = Widget.inherit({
 
                 var updateScrollableResults = [];
 
+                dataArea.processScroll(that._scrollBarUseNative);
                 each([columnsArea, rowsArea, dataArea], function(_, area) {
+
                     updateScrollableResults.push(area && area.updateScrollable());
                 });
-
-                dataArea.processScroll(that._scrollBarUseNative);
 
                 that._updateLoading();
                 that._renderNoDataText(dataAreaCell);
