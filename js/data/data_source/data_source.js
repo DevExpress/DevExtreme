@@ -707,7 +707,7 @@ var DataSource = Class.inherit({
                     if(Array.isArray(data)) {
                         dataArray = data;
                     } else {
-                        Array.prototype.push.call(dataArray, data);
+                        dataArray = [data];
                     }
                     d.resolve(that._applyMapFunction(dataArray)[0]);
                 }
@@ -909,10 +909,7 @@ var DataSource = Class.inherit({
                 }
 
                 if(!Array.isArray(data)) {
-                    var dataArray = [];
-
-                    Array.prototype.push.call(dataArray, data);
-                    data = dataArray;
+                    data = [data];
                 }
 
                 loadResult = extend({
