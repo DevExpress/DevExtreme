@@ -637,6 +637,10 @@ var TagBox = SelectBox.inherit({
         this._renderMultiSelect();
     },
 
+    _loadInputValue: function() {
+        return $.when();
+    },
+
     _clearTextValue: function() {
         this._input().val("");
     },
