@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     rangeModule = require("../translators/range"),
     DEFAULT_AXIS_NAME = "defaultAxisName",
     axisModule = require("../axes/base_axis"),
@@ -11,7 +11,7 @@ var $ = require("../../core/renderer"),
 
     _isArray = Array.isArray,
     _isDefined = require("../../core/utils/type").isDefined,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop,
     _extend = extend,
     vizUtils = require("../core/utils"),

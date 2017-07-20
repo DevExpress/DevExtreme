@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     typeUtils = require("../core/utils/type"),
     translator = require("../animation/translator"),
     fitIntoRange = require("../core/utils/math").fitIntoRange,
@@ -159,7 +160,7 @@ var Resizable = DOMComponent.inherit({
 
         var directions = handles === "all" ? ['top', 'bottom', 'left', 'right'] : handles.split(" ");
 
-        $.each(directions, (function(index, handleName) {
+        each(directions, (function(index, handleName) {
             this._renderHandle(handleName);
         }).bind(this));
 

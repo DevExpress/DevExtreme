@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../../core/renderer"),
-    extend = require("../../../core/utils/extend").extend,
+var extend = require("../../../core/utils/extend").extend,
+    each = require("../../../core/utils/iterator").each,
     noop = require("../../../core/utils/common").noop,
     labelModule = require("./label"),
     _extend = extend,
@@ -463,7 +463,7 @@ module.exports = {
             points.push([pos, high, pos, low]);
             !highErrorOnly && points.push([pos + edgeLength, low, pos - edgeLength, low]);
 
-            options.rotated && $.each(points, function(_, p) {
+            options.rotated && each(points, function(_, p) {
                 p.reverse();
             });
 

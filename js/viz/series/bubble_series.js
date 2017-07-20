@@ -1,17 +1,17 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    lineSeries = require("./line_series").chart.line,
+var lineSeries = require("./line_series").chart.line,
     scatterSeries = require("./scatter_series").chart,
     areaSeries = require("./area_series").chart.area,
     barSeries = require("./bar_series"),
     chartBarSeries = barSeries.chart.bar,
     polarBarSeries = barSeries.polar.bar,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
 
     _isDefined = require("../../core/utils/type").isDefined,
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop;
 
 exports.chart = {};

@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     noop = require("../../core/utils/common").noop,
+    iteratorUtils = require("../../core/utils/iterator"),
     errors = require("../errors"),
     CommandMapping = require("../command_mapping"),
     commandToDXWidgetAdapters = require("./widget_command_adapters"),
@@ -62,7 +63,7 @@ var CommandManager = Class.inherit({
             commandIds = [],
             deferreds = [];
 
-        $.each(commands, function(i, command) {
+        iteratorUtils.each(commands, function(i, command) {
             var id = command.option("id");
             that._checkCommandId(id, command); // don't remove this function. It's used in VS design-time part.
             commandIds.push(id);
@@ -71,9 +72,9 @@ var CommandManager = Class.inherit({
 
         that.commandMapping.checkCommandsExist(commandIds);
 
-        $.each(containers, function(k, container) {
+        iteratorUtils.each(containers, function(k, container) {
             var commandInfos = [];
-            $.each(commandHash, function(id, command) {
+            iteratorUtils.each(commandHash, function(id, command) {
                 var commandId = id;//command.option("id")/* || command.option("location")*/;//TODO remove location check
                 var commandOptions = that.commandMapping.getCommandMappingForContainer(commandId, container.option("id"));
                 if(commandOptions) {
@@ -107,7 +108,7 @@ var CommandManager = Class.inherit({
         if(adapter.beginUpdate) {
             adapter.beginUpdate($container);
         }
-        $.each(commandInfos, function(index, commandInfo) {
+        iteratorUtils.each(commandInfos, function(index, commandInfo) {
             adapter.addCommand($container, commandInfo.command, commandInfo.options);
         });
         if(adapter.endUpdate) {

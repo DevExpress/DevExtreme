@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    each = require("../../core/utils/iterator").each,
     MemorizedCallbacks = require("../../core/memorized_callbacks");
 
 var callbacks = new MemorizedCallbacks();
@@ -19,7 +20,7 @@ var registerEvent = function(name, eventObject) {
         strategy.delegateType = eventObject.delegateType;
     }
 
-    $.each(["setup", "teardown", "add", "remove", "trigger", "handle", "_default", "dispose"], function(_, methodName) {
+    each(["setup", "teardown", "add", "remove", "trigger", "handle", "_default", "dispose"], function(_, methodName) {
         if(!eventObject[methodName]) {
             return;
         }

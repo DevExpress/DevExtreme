@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    debug = require("../../core/utils/console").debug,
+var debug = require("../../core/utils/console").debug,
     Range = require("../translators/range").Range,
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     vizUtils = require("../core/utils"),
     _adjustValue = vizUtils.adjustValue,
     _applyPrecisionByMinDelta = vizUtils.applyPrecisionByMinDelta,
@@ -14,7 +14,7 @@ var $ = require("../../core/renderer"),
     _max = _math.max,
     _abs = _math.abs,
 
-    _each = $.each,
+    _each = each,
     _map = require("../core/utils").map,
 
     MIN_RANGE_FOR_ADJUST_BOUNDS = 0.1; //B254389

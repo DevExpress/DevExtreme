@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    iterateUtils = require("../../core/utils/iterator"),
     BaseElement = require("./base_indicators").BaseElement,
 
     _Number = Number,
@@ -8,7 +9,7 @@ var $ = require("../../core/renderer"),
     _isString = require("../../core/utils/type").isString,
     _isArray = Array.isArray,
     _isFinite = isFinite,
-    _each = $.each,
+    _each = iterateUtils.each,
     _map = $.map;
 
 var BaseRangeContainer = BaseElement.inherit({

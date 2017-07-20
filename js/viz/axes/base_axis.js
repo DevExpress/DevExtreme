@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    vizUtils = require("../core/utils"),
+var vizUtils = require("../core/utils"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     constants = require("./axes_constants"),
@@ -23,7 +23,7 @@ var $ = require("../../core/renderer"),
     _abs = _math.abs,
 
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _noop = commonUtils.noop,
 
     DEFAULT_AXIS_LABEL_SPACING = 5,

@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     eventUtils = require("../../events/utils"),
     addNamespace = eventUtils.addNamespace,
     registerComponent = require("../../core/component_registrator"),
@@ -38,7 +39,7 @@ function getIndex($items, $item) {
     var index = -1,
         itemElement = $item.get(0);
 
-    $.each($items, function(elementIndex, element) {
+    each($items, function(elementIndex, element) {
         var $element = $(element);
 
         if(!($element.attr("item-group") && $element.attr("item-group") === $items.eq(elementIndex - 1).attr("item-group"))) {
@@ -57,7 +58,7 @@ function getIndex($items, $item) {
 function getTargetGroup(e, $groups) {
     var result;
 
-    $.each($groups, function() {
+    each($groups, function() {
         if(elementHasPoint(this, e.pageX, e.pageY)) {
             result = $(this);
         }
@@ -262,7 +263,7 @@ var Sortable = DOMComponent.inherit({
 
         var setStartPositions = function() {
             startPositions = [];
-            $.each($sourceItem, function(_, item) {
+            each($sourceItem, function(_, item) {
                 startPositions.push($(item).offset());
             });
         };
@@ -337,7 +338,7 @@ var Sortable = DOMComponent.inherit({
 
                 that._indicator.detach();
 
-                $.each(that._$draggable, function(index, draggableElement) {
+                each(that._$draggable, function(index, draggableElement) {
                     $(draggableElement).css({
                         top: startPositions[index].top + e.offset.y,
                         left: startPositions[index].left + e.offset.x

@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     Class = require("../core/class"),
     abstract = Class.abstract,
     EventsMixin = require("../core/events_mixin"),
+    each = require("../core/utils/iterator").each,
     errorsModule = require("./errors"),
     dataUtils = require("./utils"),
     compileGetter = require("../core/utils/data").compileGetter,
@@ -27,7 +28,7 @@ var Store = Class.inherit({
         var that = this;
         options = options || {};
 
-        $.each(
+        each(
             [
                 /**
                  * @name StoreOptions_onLoaded

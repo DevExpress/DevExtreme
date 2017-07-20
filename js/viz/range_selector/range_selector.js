@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    registerComponent = require("../../core/component_registrator"),
+var registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     vizUtils = require("../core/utils"),
     adjustValue = vizUtils.adjustValue,
     dateUtils = require("../../core/utils/date"),
@@ -1013,7 +1013,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     }
 });
 
-$.each(["selectedRangeColor", "containerBackgroundColor", "sliderMarker", "sliderHandle",
+each(["selectedRangeColor", "containerBackgroundColor", "sliderMarker", "sliderHandle",
     "shutter", OPTION_BACKGROUND, "behavior", "chart", "indent"
 ], function(_, name) {
     dxRangeSelector.prototype._optionChangesMap[name] = "MOSTLY_TOTAL";
@@ -1048,7 +1048,7 @@ function prepareAxisOptions(scaleOptions, isCompactMode, height, axisPosition) {
 }
 
 function createDateMarkersEvent(scaleOptions, markerTrackers, setSelectedRange) {
-    $.each(markerTrackers, function(_, value) {
+    each(markerTrackers, function(_, value) {
         value.on("dxpointerdown", onPointerDown);
     });
     function onPointerDown(e) {

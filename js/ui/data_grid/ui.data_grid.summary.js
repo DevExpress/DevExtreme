@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     compileGetter = require("../../core/utils/data").compileGetter,
     errors = require("../widget/ui.errors"),
@@ -173,7 +174,7 @@ var SummaryDataSourceAdapterClientExtender = (function() {
 
         if(group && sorts && sorts.length) {
             query = dataQuery(items);
-            $.each(sorts, function(index) {
+            iteratorUtils.each(sorts, function(index) {
                 if(index === 0) {
                     query = query.sortBy(this.selector, this.desc);
                 } else {
@@ -188,7 +189,7 @@ var SummaryDataSourceAdapterClientExtender = (function() {
         groups = groups.slice(1);
         sortByGroups = sortByGroups.slice(1);
         if(groups.length && sortByGroups.length) {
-            $.each(items, function() {
+            iteratorUtils.each(items, function() {
                 this.items = sortGroupsBySummaryCore(this.items, groups, sortByGroups);
             });
         }
@@ -604,7 +605,7 @@ gridCore.registerModule("summary", {
                             var groupColumnIndex = -1,
                                 afterGroupColumnIndex = -1;
 
-                            $.each(options.visibleColumns, function(visibleIndex) {
+                            iteratorUtils.each(options.visibleColumns, function(visibleIndex) {
                                 var prevColumn = options.visibleColumns[visibleIndex - 1];
 
                                 if(groupItem.groupIndex === this.groupIndex) {
@@ -642,7 +643,7 @@ gridCore.registerModule("summary", {
                             summaryCells = [],
                             summaryCellsByColumns = {};
 
-                        $.each(summaryItems, function(summaryIndex, summaryItem) {
+                        iteratorUtils.each(summaryItems, function(summaryIndex, summaryItem) {
                             var column = that._columnsController.columnOption(summaryItem.column),
                                 showInColumn = summaryItem.showInColumn && that._columnsController.columnOption(summaryItem.showInColumn) || column,
                                 columnIndex = calculateTargetColumnIndex(summaryItem, showInColumn),
@@ -664,7 +665,7 @@ gridCore.registerModule("summary", {
                             }
                         });
                         if(!typeUtils.isEmptyObject(summaryCellsByColumns)) {
-                            $.each(visibleColumns, function() {
+                            iteratorUtils.each(visibleColumns, function() {
                                 summaryCells.push(summaryCellsByColumns[this.index] || []);
                             });
                         }
@@ -804,7 +805,7 @@ gridCore.registerModule("summary", {
                         };
 
                         if(typeUtils.isDefined(name)) {
-                            $.each(summaryItems || [], function(index) {
+                            iteratorUtils.each(summaryItems || [], function(index) {
                                 if(this.name === name || index === name || this.summaryType === name || this.column === name || getFullName(this) === name) {
                                     summaryItemIndex = index;
                                     return false;
@@ -822,7 +823,7 @@ gridCore.registerModule("summary", {
 
                         if(!groupSummaryItems || !groupSummaryItems.length) return;
 
-                        $.each(sortByGroupSummaryInfo || [], function() {
+                        iteratorUtils.each(sortByGroupSummaryInfo || [], function() {
                             var sortOrder = this.sortOrder,
                                 groupColumn = this.groupColumn,
                                 summaryItemIndex = that._findSummaryItem(groupSummaryItems, this.summaryItem);
@@ -837,7 +838,7 @@ gridCore.registerModule("summary", {
                                 groupColumn = columnsController.columnOption(groupColumn);
                                 that._addSortInfo(sortByGroups, groupColumn, selector, sortOrder);
                             } else {
-                                $.each(groupColumns, function(groupIndex, groupColumn) {
+                                iteratorUtils.each(groupColumns, function(groupIndex, groupColumn) {
                                     that._addSortInfo(sortByGroups, groupColumn, selector, sortOrder);
                                 });
                             }

@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     gridCore = require("./ui.data_grid.core"),
     normalizeSortingInfo = gridCore.normalizeSortingInfo,
     groupingCore = require("./ui.data_grid.grouping.core"),
@@ -241,7 +242,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
             currentGroup = groups[groupLevel + 1],
             deferreds = [];
 
-        $.each(expandedInfo.paths, function(expandedItemIndex) {
+        each(expandedInfo.paths, function(expandedItemIndex) {
             var loadOptions = {
                 requireTotalCount: false,
                 requireGroupCount: true,
@@ -286,7 +287,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
         var expandedFilters = [],
             groups = options.group || [];
 
-        $.each(expandedInfo.paths, function(_, expandedPath) {
+        each(expandedInfo.paths, function(_, expandedPath) {
             expandedFilters.push(createGroupFilter(expandedPath, {
                 group: options.isCustomLoading ? options.storeLoadOptions.group : groups
             }));
@@ -309,7 +310,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
         loadOptions.take = expandedInfo.take;
 
         when(expandedInfo.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions)).done(function(items, extra) {
-            $.each(expandedInfo.items, function(index, item) {
+            each(expandedInfo.items, function(index, item) {
                 var itemCount = item.count - (index === 0 && loadOptions.skip || 0),
                     expandedItems = items.splice(0, itemCount);
 

@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     compareVersion = require("../../core/utils/version").compare,
+    each = require("../../core/utils/iterator").each,
     isNumeric = require("../../core/utils/type").isNumeric,
     registerEvent = require("./event_registrator");
 
@@ -26,7 +27,7 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
         4: "mouse"
     };
 
-    $.each([
+    each([
         "MSPointerDown", "MSPointerMove", "MSPointerUp", "MSPointerCancel", "MSPointerOver", "MSPointerOut", "mouseenter", "mouseleave",
         "pointerdown", "pointermove", "pointerup", "pointercancel", "pointerover", "pointerout", "pointerenter", "pointerleave"
     ], function() {
@@ -58,10 +59,10 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
         };
     });
 
-    $.each(["touchstart", "touchmove", "touchend", "touchcancel"], function() {
+    each(["touchstart", "touchmove", "touchend", "touchcancel"], function() {
         $.event.fixHooks[this] = {
             filter: function(event, originalEvent) {
-                $.each(touchPropsToHook, function(_, name) {
+                each(touchPropsToHook, function(_, name) {
                     event[name] = touchPropHook(name, originalEvent);
                 });
 
@@ -111,7 +112,7 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
         return fix($.Event(originalEvent));
     };
 } else {
-    $.each(touchPropsToHook, function(_, name) {
+    each(touchPropsToHook, function(_, name) {
         $.event.addProp(name, function(event) {
             return touchPropHook(name, event);
         });

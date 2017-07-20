@@ -162,7 +162,9 @@
     }
 
     &, &:not(.dx-texteditor-empty) {
-        .invalid-dropdowneditor-input-padding();
+        &.dx-auto-width {
+            .invalid-dropdowneditor-input-padding();
+        }
     }
 }
 

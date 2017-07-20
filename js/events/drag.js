@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     wrapToArray = require("../core/utils/array").wrapToArray,
     inArray = require("../core/utils/array").inArray,
+    iteratorUtils = require("../core/utils/iterator"),
     registerEvent = require("./core/event_registrator"),
     eventUtils = require("./utils"),
     GestureEmitter = require("./gesture/emitter.gesture"),
@@ -46,7 +47,7 @@ var dropTargetRegistration = {
         var elementEvents = $._data(element, "events"),
             handlersCount = 0;
 
-        $.each([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT], function(_, eventName) {
+        iteratorUtils.each([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT], function(_, eventName) {
             var eventHandlers = elementEvents[eventName];
 
             if(eventHandlers) {
@@ -233,13 +234,13 @@ var DragEmitter = GestureEmitter.inherit({
         var that = this,
             result;
 
-        $.each(knownDropTargets, function(_, target) {
+        iteratorUtils.each(knownDropTargets, function(_, target) {
             if(!that._checkDropTargetActive(target)) {
                 return;
             }
 
             var $target = $(target);
-            $.each(getItemDelegatedTargets($target), function(_, delegatedTarget) {
+            iteratorUtils.each(getItemDelegatedTargets($target), function(_, delegatedTarget) {
                 var $delegatedTarget = $(delegatedTarget);
                 if(that._checkDropTarget(getItemConfig($target), $delegatedTarget, e)) {
                     result = delegatedTarget;
@@ -253,7 +254,7 @@ var DragEmitter = GestureEmitter.inherit({
     _checkDropTargetActive: function(target) {
         var active = false;
 
-        $.each(this._dropTargets, function(_, activeTarget) {
+        iteratorUtils.each(this._dropTargets, function(_, activeTarget) {
             active = active || activeTarget === target || $.contains(activeTarget, target);
             return !active;
         });

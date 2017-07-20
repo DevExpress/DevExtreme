@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
@@ -12,7 +13,7 @@ var $ = require("../../core/renderer"),
     ContextMenu = require("../context_menu"),
     BaseFieldChooser = require("./ui.pivot_grid.field_chooser_base"),
     inArray = inArray,
-    each = $.each,
+    each = iteratorUtils.each,
     DIV = "<div>";
 
 require("./data_source");

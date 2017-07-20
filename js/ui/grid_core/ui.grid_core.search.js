@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     compileGetter = require("../../core/utils/data").compileGetter,
+    each = require("../../core/utils/iterator").each,
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
     dataQuery = require("../../data/query");
@@ -311,8 +312,8 @@ module.exports = {
                             }
                         });
 
-                        $.each($items, function(index, element) {
-                            $.each($(element).contents(), function(index, content) {
+                        each($items, function(index, element) {
+                            each($(element).contents(), function(index, content) {
                                 if(content.nodeType !== 3) return;
 
                                 var highlightSearchTextInTextNode = function($content, searchText) {

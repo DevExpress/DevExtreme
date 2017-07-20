@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     Class = require("../core/class"),
     typeUtils = require("../core/utils/type"),
+    iteratorUtils = require("../core/utils/iterator"),
     compileGetter = require("../core/utils/data").compileGetter,
     toComparable = require("../core/utils/data").toComparable,
     errorsModule = require("./errors"),
@@ -143,7 +144,7 @@ var SortIterator = Iterator.inherit({
             return;
         }
 
-        $.each(that.rules, function() {
+        iteratorUtils.each(that.rules, function() {
             this.getter = compileGetter(this.getter);
         });
 
@@ -222,7 +223,7 @@ var compileCriteria = (function() {
             groupOperator,
             nextGroupOperator;
 
-        $.each(crit, function() {
+        iteratorUtils.each(crit, function() {
             if(Array.isArray(this) || typeUtils.isFunction(this)) {
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
                     throw new errorsModule.errors.Error("E4019");

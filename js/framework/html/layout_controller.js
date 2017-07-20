@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    iteratorUtils = require("../../core/utils/iterator"),
     frameworkUtils = require("../utils"),
     layoutSets = require("./presets").layoutSets,
     EventsMixin = require("../../core/events_mixin"),
@@ -104,7 +105,7 @@ var DefaultLayoutController = Class.inherit({
         var that = this;
 
         views = views || this._visibleViews;
-        $.each(views, function(index, viewInfo) {
+        iteratorUtils.each(views, function(index, viewInfo) {
             that.fireEvent(eventName, [viewInfo]);
         });
     },
@@ -130,7 +131,7 @@ var DefaultLayoutController = Class.inherit({
     _releaseVisibleViews: function() {
         var that = this;
 
-        $.each(this._visibleViews, function(index, viewInfo) {
+        iteratorUtils.each(this._visibleViews, function(index, viewInfo) {
             that._hideView(viewInfo);
             that._releaseView(viewInfo);
         });
@@ -141,7 +142,7 @@ var DefaultLayoutController = Class.inherit({
         var that = this,
             viewsToShow = [];
 
-        $.each(that._visibleViews, function(index, viewInfo) {
+        iteratorUtils.each(that._visibleViews, function(index, viewInfo) {
             if(viewInfo.currentViewTemplateId !== that._getViewTemplateId(viewInfo)) {
                 viewsToShow.push(viewInfo);
             }
@@ -194,7 +195,7 @@ var DefaultLayoutController = Class.inherit({
         var containers = this._findCommandContainers(this._$mainLayout),
             result;
 
-        $.each(containers, function(k, container) {
+        iteratorUtils.each(containers, function(k, container) {
             if(container.option("id") === "global-navigation") {
                 result = container.element();
                 return false;
@@ -353,7 +354,7 @@ var DefaultLayoutController = Class.inherit({
         viewInfo.commands = frameworkUtils.utils.mergeCommands(viewInfo.commands || [], viewCommands);
         viewInfo.commandsToRenderMap = commandsToRenderMap;
 
-        $.each(viewInfo.commands, function(index, command) {
+        iteratorUtils.each(viewInfo.commands, function(index, command) {
             var renderStage = command.option("renderStage") || DEFAULT_COMMAND_RENDER_STAGE,
                 targetArray = commandsToRenderMap[renderStage] = commandsToRenderMap[renderStage] || [];
 
@@ -436,11 +437,11 @@ var DefaultLayoutController = Class.inherit({
             $transitionContentElements = $(),
             animationItems = [];
 
-        $.each($markup.find(".dx-content-placeholder"), function(index, el) {
+        iteratorUtils.each($markup.find(".dx-content-placeholder"), function(index, el) {
             that._prepareTransition($(el), $(el).attr("data-dx-content-placeholder-name"));
         });
 
-        $.each(that._getTransitionElements($viewFrame), function(index, transitionElement) {
+        iteratorUtils.each(that._getTransitionElements($viewFrame), function(index, transitionElement) {
             var $transition = $(transitionElement),
                 $viewElement = $markup.find(transitionSelector($transition.attr("data-dx-transition-name"))).children(),
                 animationItem = {
@@ -472,7 +473,7 @@ var DefaultLayoutController = Class.inherit({
     _enter: function(animationItems, animationModifier) {
         var transitionExecutor = this.transitionExecutor;
 
-        $.each(animationItems, function(index, item) {
+        iteratorUtils.each(animationItems, function(index, item) {
             transitionExecutor.enter(item.$element, item.animation, animationModifier);
         });
     },
@@ -480,7 +481,7 @@ var DefaultLayoutController = Class.inherit({
     _leave: function(animationItems, animationModifier) {
         var transitionExecutor = this.transitionExecutor;
 
-        $.each(animationItems, function(index, item) {
+        iteratorUtils.each(animationItems, function(index, item) {
             transitionExecutor.leave(item.$element, item.animation, animationModifier);
         });
     },
@@ -676,7 +677,7 @@ var DefaultLayoutController = Class.inherit({
 
     _processIds: function($markup, process) {
         var elementsWithIds = $markup.find("[id]");
-        $.each(elementsWithIds, function(index, element) {
+        iteratorUtils.each(elementsWithIds, function(index, element) {
             var $el = $(element),
                 id = $el.attr("id");
             $el.attr("id", process(id));
@@ -685,7 +686,7 @@ var DefaultLayoutController = Class.inherit({
 
     _enableInputs: function($markup) {
         var $inputs = this._getInputs($markup).filter("[data-disabled='true']");
-        $.each($inputs, function(index, input) {
+        iteratorUtils.each($inputs, function(index, input) {
             $(input).removeAttr("disabled")
                 .removeAttr("data-disabled");
         });
@@ -694,7 +695,7 @@ var DefaultLayoutController = Class.inherit({
     _disableInputs: function($markup) {
         var $inputs = this._getInputs($markup);
         $inputs = $inputs.filter(":not([disabled])").add($inputs.filter("[disabled=true]"));
-        $.each($inputs, function(index, input) {
+        iteratorUtils.each($inputs, function(index, input) {
             $(input).attr({
                 "disabled": true,
                 "data-disabled": true

@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     version = require("../../core/version"),
     _windowResizeCallbacks = require("../../core/utils/window").resizeCallbacks,
     _stringFormat = require("../../core/utils/string").format,
@@ -143,14 +143,14 @@ module.exports = DOMComponent.inherit({
 
     _initPlugins: function() {
         var that = this;
-        $.each(that._plugins, function(_, plugin) {
+        each(that._plugins, function(_, plugin) {
             plugin.init.call(that);
         });
     },
 
     _disposePlugins: function() {
         var that = this;
-        $.each(that._plugins.slice().reverse(), function(_, plugin) {
+        each(that._plugins.slice().reverse(), function(_, plugin) {
             plugin.dispose.call(that);
         });
     },
@@ -185,7 +185,7 @@ module.exports = DOMComponent.inherit({
 
         that._optionsQueue = null;
         that.beginUpdate();
-        $.each(queue, function(_, action) {
+        each(queue, function(_, action) {
             action();
         });
         that.endUpdate();
@@ -506,7 +506,7 @@ helpers.replaceInherit(module.exports);
 function createEventTrigger(eventsMap, callbackGetter) {
     var triggers = {};
 
-    $.each(eventsMap, function(name, info) {
+    each(eventsMap, function(name, info) {
         if(info.name) {
             createEvent(name);
         }
@@ -521,7 +521,7 @@ function createEventTrigger(eventsMap, callbackGetter) {
     };
     triggerEvent.applyChanges = function() {
         if(changes) {
-            $.each(changes, function(name, eventInfo) {
+            each(changes, function(name, eventInfo) {
                 createEvent(eventInfo.newName || name);
             });
             changes = null;

@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     toComparable = require("../../core/utils/data").toComparable,
     dataUtils = require("../../data/utils"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     storeHelper = require("../../data/store_helper"),
     gridCore = require("./ui.data_grid.core"),
@@ -253,7 +254,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                 }
             });
 
-            $.each(collapsedGroups, function() {
+            each(collapsedGroups, function() {
                 loadOptions.filter = createNotGroupFilter(this.path, loadOptions, group);
             });
 

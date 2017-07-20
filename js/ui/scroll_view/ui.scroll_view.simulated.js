@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     Callbacks = require("../../core/utils/callbacks"),
+    each = require("../../core/utils/iterator").each,
     commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
     math = Math,
@@ -299,7 +300,7 @@ var SimulatedScrollViewStrategy = simulatedStrategy.SimulatedStrategy.inherit({
     },
 
     dispose: function() {
-        $.each(this._scrollers, function() {
+        each(this._scrollers, function() {
             this.dispose();
         });
         this.callBase();

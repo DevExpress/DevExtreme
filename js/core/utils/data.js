@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     Class = require("../class"),
     objectUtils = require("./object"),
     typeUtils = require("./type"),
+    each = require("./iterator").each,
     variableWrapper = require("./variable_wrapper"),
     unwrapVariable = variableWrapper.unwrap,
     isWrapped = variableWrapper.isWrapped,
@@ -101,7 +102,7 @@ var combineGetters = function(getters) {
     return function(obj, options) {
         var result;
 
-        $.each(compiledGetters, function(name) {
+        each(compiledGetters, function(name) {
             var value = this(obj, options),
                 current,
                 path,

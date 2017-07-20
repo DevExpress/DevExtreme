@@ -1,14 +1,14 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    isNumeric = require("../../core/utils/type").isNumeric,
+var isNumeric = require("../../core/utils/type").isNumeric,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     _math = Math,
     _round = _math.round,
     _abs = _math.abs,
     _pow = _math.pow,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop,
     vizUtils = require("./utils"),
     _normalizeEnum = vizUtils.normalizeEnum;
