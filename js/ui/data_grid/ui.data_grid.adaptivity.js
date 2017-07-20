@@ -790,10 +790,9 @@ gridCore.registerModule("adaptivity", {
                 },
 
                 deleteRow: function(rowIndex) {
-                    var expandedKey = this._dataController._adaptiveExpandedKey,
-                        expandedRowIndex = gridCoreUtils.getIndexByKey(expandedKey, this._dataController.items());
+                    var rowKey = this._dataController.getKeyByRowIndex(rowIndex);
 
-                    if(this.getEditMode() === DATAGRID_EDIT_MODE_BATCH && expandedRowIndex === rowIndex) {
+                    if(this.getEditMode() === DATAGRID_EDIT_MODE_BATCH && this._adaptiveController.isAdaptiveDetailRowExpanded(rowKey)) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                     }
 
