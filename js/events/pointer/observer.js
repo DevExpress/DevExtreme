@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer");
+var each = require("../../core/utils/iterator").each;
 
 var addEventsListener = function(events, handler) {
     events
@@ -19,7 +19,7 @@ var Observer = function(eventMap, pointerEquals, onPointerAdding) {
     var getPointerIndex = function(e) {
         var index = -1;
 
-        $.each(pointers, function(i, pointer) {
+        each(pointers, function(i, pointer) {
             if(!pointerEquals(e, pointer)) {
                 return true;
             }

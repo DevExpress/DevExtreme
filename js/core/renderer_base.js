@@ -6,12 +6,11 @@ var typeUtils = require("./utils/type");
 var matches = require("./polyfills/matches");
 
 var methods = [
-    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight", "offset", "offsetParent", "position",
+    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "html", "css",
-    "val",
-    "hide", "show", "toggle", "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
+    "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
@@ -351,6 +350,14 @@ initRender.prototype.text = function(text) {
     return this;
 };
 
+initRender.prototype.val = function(value) {
+    if(arguments.length === 1) {
+        return this.prop("value", value);
+    }
+
+    return this.prop("value");
+};
+
 initRender.prototype.contents = function() {
     return renderer(this[0] ? this[0].childNodes : []);
 };
@@ -624,7 +631,16 @@ initRender.prototype.offset = function() {
 
 initRender.prototype.offsetParent = function() {
     if(!this[0]) return renderer();
-    return renderer(this[0].offsetParent || document.documentElement);
+
+    var offsetParent = renderer(this[0].offsetParent);
+
+    while(offsetParent[0] && offsetParent.css("position") === "static") {
+        offsetParent = renderer(offsetParent[0].offsetParent);
+    }
+
+    offsetParent = offsetParent[0] ? offsetParent : renderer(document.documentElement);
+
+    return offsetParent;
 };
 
 initRender.prototype.position = function() {
@@ -707,7 +723,6 @@ renderer.tmpl = function() {
 renderer.templates = function() {
     return $.templates.apply(this, arguments);
 };
-renderer.param = $.param;
 renderer._data = $._data;
 renderer.data = $.data;
 renderer.removeData = $.removeData;
@@ -719,12 +734,10 @@ renderer.cleanData = function(element) {
 renderer.when = $.when;
 renderer.event = $.event;
 renderer.Event = $.Event;
-renderer.easing = $.easing;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.contains = $.contains;
 renderer.Deferred = $.Deferred;
 renderer.map = $.map;
-renderer.each = $.each;
 
 module.exports = {
     set: function(strategy) { renderer = strategy; },

@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     extend = require("./utils/extend").extend,
     isPlainObject = require("./utils/type").isPlainObject,
+    each = require("./utils/iterator").each,
     Class = require("./class"),
     errors = require("./errors"),
     Callbacks = require("./utils/callbacks"),
@@ -395,7 +396,7 @@ var Devices = Class.inherit({
     _fromUA: function(ua) {
         var config;
 
-        $.each(uaParsers, function(platform, parser) {
+        each(uaParsers, function(platform, parser) {
             config = parser(ua);
             return !config;
         });
