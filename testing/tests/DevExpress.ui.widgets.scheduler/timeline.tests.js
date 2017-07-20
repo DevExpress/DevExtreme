@@ -1134,6 +1134,17 @@ QUnit.test("Get date range", function(assert) {
     assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 23, 23, 59)], "Range is OK");
 });
 
+QUnit.test("TimelineWeek view should contain right header if count=3", function(assert) {
+    this.instance.option("currentDate", new Date(2017, 5, 26));
+    this.instance.option("count", 3);
+
+    var $element = this.instance.element(),
+        $firstRow = $element.find(".dx-scheduler-header-row").first();
+
+    assert.equal($firstRow.find(".dx-scheduler-header-panel-cell").length, 21, "Header row has 21 cells");
+    checkHeaderCells(this.instance.element(), assert);
+});
+
 QUnit.module("TimelineWorkWeek with count", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineWorkWeek({
@@ -1178,4 +1189,14 @@ QUnit.test("Get date range", function(assert) {
 
     this.instance.option("count", 4);
     assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 21, 23, 59)], "Range is OK");
+});
+
+QUnit.test("TimelineWorkWeek view should contain right header if count=3", function(assert) {
+    this.instance.option("currentDate", new Date(2017, 5, 26));
+    this.instance.option("count", 3);
+
+    var $element = this.instance.element(),
+        $firstRow = $element.find(".dx-scheduler-header-row").first();
+
+    assert.equal($firstRow.find(".dx-scheduler-header-panel-cell").length, 15, "Header row has 15 cells");
 });
