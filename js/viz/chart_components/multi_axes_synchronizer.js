@@ -1,9 +1,8 @@
 "use strict";
 
 var debug = require("../../core/utils/console").debug,
-    Range = require("../translators/range").Range,
     typeUtils = require("../../core/utils/type"),
-    each = require("../../core/utils/iterator").each,
+    _each = require("../../core/utils/iterator").each,
     vizUtils = require("../core/utils"),
     _adjustValue = vizUtils.adjustValue,
     _applyPrecisionByMinDelta = vizUtils.applyPrecisionByMinDelta,
@@ -14,7 +13,6 @@ var debug = require("../../core/utils/console").debug,
     _max = _math.max,
     _abs = _math.abs,
 
-    _each = each,
     _map = require("../core/utils").map,
 
     MIN_RANGE_FOR_ADJUST_BOUNDS = 0.1; //B254389
@@ -31,18 +29,6 @@ var getValueAxesPerPanes = function(valueAxes) {
     });
 
     return result;
-};
-
-var restoreOriginalBusinessRange = function(axis) {
-    var businessRange,
-        translator = axis.getTranslator();
-
-    if(!translator._originalBusinessRange) {
-        translator._originalBusinessRange = new Range(translator.getBusinessRange());
-    } else {
-        businessRange = new Range(translator._originalBusinessRange);
-        translator.updateBusinessRange(businessRange);
-    }
 };
 
 var linearConverter = {
@@ -112,7 +98,6 @@ var convertAxisInfo = function(axisInfo, converter) {
 
 var populateAxesInfo = function(axes) {
     return _map(axes, function(axis) {
-        restoreOriginalBusinessRange(axis);
         var ticksValues = axis.getTicksValues(),
             majorTicks = ticksValues.majorTicksValues,
             options = axis.getOptions(),

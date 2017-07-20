@@ -151,8 +151,8 @@ module.exports = _extend({}, symbolPoint, {
         return coord;
     },
 
-    drawLabel: function(translators) {
-        this.translate(translators);
+    drawLabel: function() {
+        this.translate();
 
         // this function is called for drawing labels without points for checking size of labels
         this._isLabelDrawingWithoutPoints = true;
@@ -262,11 +262,12 @@ module.exports = _extend({}, symbolPoint, {
         };
     },
 
-    _translate: function(translator) {
+    _translate: function() {
         var that = this,
             angle = that.shiftedAngle || 0,
             value = that.value,
-            minValue = that.minValue;
+            minValue = that.minValue,
+            translator = that._getValTranslator();
 
         that.fromAngle = translator.translate(minValue) + angle;
         that.toAngle = translator.translate(value) + angle;

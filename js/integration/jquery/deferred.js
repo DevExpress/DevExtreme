@@ -12,9 +12,9 @@ exports.fromPromise = function(promise, context) {
 
     var d = $.Deferred();
     promise.then(function() {
-        d.resolveWith.apply(d, [context].concat([$.makeArray(arguments)]));
+        d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
     }, function() {
-        d.rejectWith.apply(d, [context].concat([$.makeArray(arguments)]));
+        d.rejectWith.apply(d, [context].concat([[].slice.call(arguments)]));
     });
     return d;
 };
