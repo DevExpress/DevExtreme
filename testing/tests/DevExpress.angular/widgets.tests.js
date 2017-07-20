@@ -20,9 +20,12 @@ require("ui/popover");
 require("ui/data_grid");
 require("ui/toolbar");
 require("ui/box");
+require("ui/date_box");
 require("ui/scheduler");
 require("ui/defer_rendering");
 require("ui/slide_out_view");
+
+require("common.css!");
 
 fx.off = true;
 var ignoreAngularBrowserDeferTimer = function(args) {
@@ -686,6 +689,36 @@ QUnit.test("innerBox with nested box item", function(assert) {
     assert.equal($.trim($markup.text()), "Box1", "inner box rendered");
 });
 
+QUnit.module("date box", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+//T533858
+QUnit.test("dxDateBox with list strategy automatically scrolls to selected item on opening", function(assert) {
+    var $markup = $("\
+        <div dx-date-box=\"{\
+            type: 'time',\
+            value: '2017-07-01 08:30',\
+            opened: true\
+        }\">\
+        </div>\
+    ");
+
+    initMarkup($markup, function() {}, this);
+
+    this.clock.tick();
+
+    var $popupContent = $(".dx-popup-content");
+    var $selectedItem = $popupContent.find(".dx-list-item-selected");
+
+    assert.equal($selectedItem.length, 1, "one item is selected");
+    assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible");
+});
 
 QUnit.module("tree view", {
     beforeEach: function() {
