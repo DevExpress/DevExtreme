@@ -62,16 +62,7 @@ var environment = {
     createBullet: function(options, container) {
         container = container || this.$container;
         return container.dxBullet(options).dxBullet("instance");
-    },
-    getCanvas: function() {
-        return translator2DModule.Translator2D.lastCall.args[1];
-    },
-    getRanges: function() {
-        return {
-            arg: translator2DModule.Translator2D.firstCall.args[0],
-            val: translator2DModule.Translator2D.secondCall.args[0]
-        };
-    },
+    }
 };
 
 
@@ -87,8 +78,10 @@ QUnit.test('Create canvas when size option is defined', function(assert) {
 
     this.createBullet(options);
 
-    var canvas = this.getCanvas();
-    assert.deepEqual(canvas, { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
+    assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
     assert.equal(this.renderer.resize.callCount, 1, 'Resize call count'); //renderer for sparkline and tooltip
     assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
 });
@@ -112,8 +105,10 @@ QUnit.test('Create canvas when margin option is defined', function(assert) {
 
     this.createBullet(options);
 
-    var canvas = this.getCanvas();
-    assert.deepEqual(canvas, { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
+    assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
     assert.equal(this.renderer.resize.callCount, 1);
     assert.deepEqual(this.renderer.stub("resize").firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
 });
@@ -121,8 +116,10 @@ QUnit.test('Create canvas when margin option is defined', function(assert) {
 QUnit.test('Create canvas when container size is defined', function(assert) {
     this.createBullet({});
 
-    var canvas = this.getCanvas();
-    assert.deepEqual(canvas, { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
+    assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 2, bottom: 2, left: 1, right: 1 }, 'Canvas object is correct');
     assert.equal(this.renderer.stub("resize").callCount, 1);
     assert.deepEqual(this.renderer.stub("resize").firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
 });
@@ -132,113 +129,120 @@ QUnit.module('Range', environment);
 QUnit.test('Create range when all value options are defined', function(assert) {
     this.createBullet({ value: 10, target: 20, startScaleValue: 0, endScaleValue: 30 });
 
-    var ranges = this.getRanges();
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-    assert.equal(ranges.arg.min, 0, 'Min arg should be like startScaleValue');
-    assert.equal(ranges.arg.max, 30, 'Max arg should be like endScaleValue');
-    assert.equal(ranges.arg.axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(ranges.arg.dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
 
-    assert.equal(ranges.val.min, 0, 'Min val should have value 0');
-    assert.equal(ranges.val.max, 1, 'Max val should have value 1');
-    assert.equal(ranges.val.axisType, "continuous", 'Val AxisType provided');
-    assert.equal(ranges.val.dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
+    assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
 });
 
 QUnit.test('Create range without min level', function(assert) {
     this.createBullet({ value: 10, target: 20, endScaleValue: 30 });
 
-    var ranges = this.getRanges();
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-    assert.equal(ranges.arg.min, 0, 'Min arg should be like startScaleValue');
-    assert.equal(ranges.arg.max, 30, 'Max arg should be like endScaleValue');
-    assert.equal(ranges.arg.axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(ranges.arg.dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
 
-    assert.equal(ranges.val.min, 0, 'Min val should have value 0');
-    assert.equal(ranges.val.max, 1, 'Max val should have value 1');
-    assert.equal(ranges.val.axisType, "continuous", 'Val AxisType provided');
-    assert.equal(ranges.val.dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
+    assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
 });
 
 QUnit.test('Create range without max level when target > value', function(assert) {
     this.createBullet({ value: 10, target: 20 });
 
-    var ranges = this.getRanges();
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-    assert.equal(ranges.arg.min, 0, 'Min arg should be like startScaleValue');
-    assert.equal(ranges.arg.max, 20, 'Max arg should be like target');
-    assert.equal(ranges.arg.axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(ranges.arg.dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].max, 20, 'Max arg should be like target');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
 
-    assert.equal(ranges.val.min, 0, 'Min val should have value 0');
-    assert.equal(ranges.val.max, 1, 'Max val should have value 1');
-    assert.equal(ranges.val.axisType, "continuous", 'Val AxisType provided');
-    assert.equal(ranges.val.dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
+    assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
 });
 
 QUnit.test('Create range without max level when value > target', function(assert) {
     this.createBullet({ value: 20, target: 10 });
 
-    var ranges = this.getRanges();
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-    assert.equal(ranges.arg.min, 0, 'Min arg should be like startScaleValue');
-    assert.equal(ranges.arg.max, 20, 'Max arg should be like target');
-    assert.equal(ranges.arg.axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(ranges.arg.dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].max, 20, 'Max arg should be like target');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
 
-    assert.equal(ranges.val.min, 0, 'Min val should have value 0');
-    assert.equal(ranges.val.max, 1, 'Max val should have value 1');
-    assert.equal(ranges.val.axisType, "continuous", 'Val AxisType provided');
-    assert.equal(ranges.val.dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
+    assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
 });
 
 QUnit.test('Create range without value', function(assert) {
     this.createBullet({ target: 20, endScaleValue: 30 });
 
-    var ranges = this.getRanges();
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-    assert.equal(ranges.arg.min, 0, 'Min arg should be like startScaleValue');
-    assert.equal(ranges.arg.max, 30, 'Max arg should be like endScaleValue');
-    assert.equal(ranges.arg.axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(ranges.arg.dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
 
-    assert.equal(ranges.val.min, 0, 'Min val should have value 0');
-    assert.equal(ranges.val.max, 1, 'Max val should have value 1');
-    assert.equal(ranges.val.axisType, "continuous", 'Val AxisType provided');
-    assert.equal(ranges.val.dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
+    assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
 });
 
 QUnit.test('Create range without target', function(assert) {
     this.createBullet({ value: 10, endScaleValue: 30 });
 
-    var ranges = this.getRanges();
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-    assert.equal(ranges.arg.min, 0, 'Min arg should be like startScaleValue');
-    assert.equal(ranges.arg.max, 30, 'Max arg should be like endScaleValue');
-    assert.equal(ranges.arg.axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(ranges.arg.dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].min, 0, 'Min arg should be like startScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].max, 30, 'Max arg should be like endScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
 
-    assert.equal(ranges.val.min, 0, 'Min val should have value 0');
-    assert.equal(ranges.val.max, 1, 'Max val should have value 1');
-    assert.equal(ranges.val.axisType, "continuous", 'Val AxisType provided');
-    assert.equal(ranges.val.dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
+    assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
 });
 
 QUnit.test('Create range when all value are negative', function(assert) {
     this.createBullet({ value: -10, target: -20, startScaleValue: 0, endScaleValue: -30 });
 
-    var ranges = this.getRanges();
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-    assert.equal(ranges.arg.min, -30, 'Min arg should be like endScaleValue');
-    assert.equal(ranges.arg.max, 0, 'Max arg should be like startScaleValue');
-    assert.equal(ranges.arg.axisType, "continuous", 'Arg AxisType provided');
-    assert.equal(ranges.arg.dataType, "numeric", 'Arg DataType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].min, -30, 'Min arg should be like endScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].max, 0, 'Max arg should be like startScaleValue');
+    assert.equal(argTranslator.update.lastCall.args[0].axisType, "continuous", 'Arg AxisType provided');
+    assert.equal(argTranslator.update.lastCall.args[0].dataType, "numeric", 'Arg DataType provided');
 
-    assert.equal(ranges.val.min, 0, 'Min val should have value 0');
-    assert.equal(ranges.val.max, 1, 'Max val should have value 1');
-    assert.equal(ranges.val.axisType, "continuous", 'Val AxisType provided');
-    assert.equal(ranges.val.dataType, "numeric", 'Val DataType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'Min val should have value 0');
+    assert.equal(valTranslator.update.lastCall.args[0].max, 1, 'Max val should have value 1');
+    assert.equal(valTranslator.update.lastCall.args[0].axisType, "continuous", 'Val AxisType provided');
+    assert.equal(valTranslator.update.lastCall.args[0].dataType, "numeric", 'Val DataType provided');
 });
 
 QUnit.module('Prepare options', $.extend({}, environment, {
@@ -395,11 +399,11 @@ QUnit.module('Creating', environment);
 QUnit.test('Create helpers', function(assert) {
     this.createBullet({});
 
-    var ranges = this.getRanges();
-    assert.ok(this.getCanvas(), 'Canvas should be created');
-    assert.ok(ranges, 'Ranges should be create');
-    assert.ok(ranges.arg, 'Arg Range should be create');
-    assert.ok(ranges.val, 'Val Range should be create');
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+    assert.ok(argTranslator.update.lastCall.args[0], 'Arg Range should be create');
+    assert.ok(valTranslator.update.lastCall.args[0], 'Val Range should be create');
     assert.ok(translator2DModule.Translator2D.firstCall.args[0], 'X Translator should be created'); //bullet._translatorX
     assert.ok(translator2DModule.Translator2D.secondCall.args[0], 'Y Translator should be created'); //bullet._translatorY
     assert.ok(this.renderer, 'Renderer should be created');
@@ -1055,8 +1059,10 @@ QUnit.test('Refresh', function(assert) {
 
     bullet.render();
 
-    assert.equal(this.getCanvas().width, 300, 'Canvas width should have new value');
-    assert.equal(this.getCanvas().height, 40, 'Canvas height should have new value');
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas width should have new value');
+    assert.deepEqual(valTranslator.update.lastCall.args[1].height, 40, 'Canvas height should have new value');
 
     assert.equal(this.renderer.stub("resize").callCount, 2);
     assert.deepEqual(this.renderer.stub("resize").lastCall.args, [300, 40], 'Pass new width and height to renderer');
@@ -1075,8 +1081,10 @@ QUnit.test('Change size of container', function(assert) {
 
     assert.ok(bullet, 'bullet should be created');
 
-    assert.equal(this.getCanvas().width, 300, 'Canvas should have new width');
-    assert.equal(this.getCanvas().height, 100, 'Canvas should have new height');
+    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+    assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas should have new width');
+    assert.deepEqual(valTranslator.update.lastCall.args[1].height, 100, 'Canvas should have new height');
 
     assert.equal(this.renderer.stub("resize").callCount, 2);
     assert.deepEqual(this.renderer.stub("resize").lastCall.args, [300, 100], 'Pass new width and height to renderer');

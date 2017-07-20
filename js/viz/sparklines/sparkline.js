@@ -110,7 +110,10 @@ var dxSparkline = BaseSparkline.inherit({
         this._series = new seriesModule.Series({
             renderer: this._renderer,
             seriesGroup: this._seriesGroup,
-            labelsGroup: this._seriesLabelGroup
+            labelsGroup: this._seriesLabelGroup,
+
+            argumentAxis: this._argumentAxis,
+            valueAxis: this._valueAxis
         }, {
             widgetType: "chart",
             type: "line"
@@ -472,7 +475,7 @@ var dxSparkline = BaseSparkline.inherit({
 
         if(that._simpleDataSource.length > 0) {
             that._correctPoints();
-            that._series.draw({ x: that._translatorX, y: that._translatorY });
+            that._series.draw();
             that._seriesGroup.append(that._renderer.root);
         }
     },

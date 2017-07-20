@@ -85,6 +85,9 @@ var environment = {
                 axis.name = options.name;
                 axis.pane = options.pane;
             });
+            axis.setPane = function(pane) {
+                axis.pane = pane;
+            };
             axis.stub("getOptions").returns({});
             return axis;
         });
@@ -166,10 +169,6 @@ QUnit.test("getLayoutTargets", function(assert) {
         },
         canvas: {
             bottom: 0,
-            deltaBottom: 0,
-            deltaLeft: 0,
-            deltaRight: 0,
-            deltaTop: 0,
             height: 400,
             left: 0,
             originalBottom: 0,
@@ -189,37 +188,6 @@ QUnit.test("isRotated", function(assert) {
     this.createChart();
 
     assert.strictEqual(this.layoutManagers[0].layoutElements.getCall(0).args[4], false);
-});
-
-QUnit.test("getAxesForTransform", function(assert) {
-    this.createChart();
-
-    //horizontal axes
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[5].horizontalAxes.length, 1);
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[5].horizontalAxes[0], this.axes[0]);
-    //vertical axes
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[5].verticalAxes.length, 1);
-    assert.equal(this.layoutManagers[0].layoutElements.getCall(0).args[5].verticalAxes[0], this.axes[2]);
-});
-
-QUnit.module("layout manager. legend is inside", $.extend({}, environment, {
-    _stubLegend: function() {
-        this.Legend = sinon.stub(legendModule, "Legend", function() {
-            var legend = new Legend();
-
-            legend.getPosition = sinon.spy(function() {
-                return "inside";
-            });
-            return legend;
-        });
-    }
-}));
-
-//T350392
-QUnit.test("chart breaked on draw", function(assert) {
-    this.createChart();
-
-    assert.deepEqual(this.LayoutManager.lastCall.returnValue.layoutElements.lastCall.args[5], { verticalAxes: [], horizontalAxes: [] });
 });
 
 QUnit.module("dxChart user options of dataValidator", environment);
