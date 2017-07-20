@@ -64,7 +64,7 @@ var dropTargetRegistration = {
             knownDropTargets.splice(index, 1);
             knownDropTargetSelectors.splice(index, 1);
             knownDropTargetConfigs.splice(index, 1);
-            $.removeData(element, DX_DRAG_EVENTS_COUNT_KEY)
+            $.removeData(element, DX_DRAG_EVENTS_COUNT_KEY);
         }
     }
 
