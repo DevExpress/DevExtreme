@@ -111,10 +111,11 @@ function isEmptyArray(categories) {
     return categories && categories.length;
 }
 
-function getMarginValue(range, margin) {
+function getMarginValue(range, margin, checkMax) {
     var min = _isDefined(range.minVisible) ? range.minVisible : range.min,
         max = _isDefined(range.maxVisible) ? range.maxVisible : range.max;
-    return (_abs(max - min) * margin) || 0;
+
+    return vizUtils.applyPrecisionByMinDelta(checkMax ? max : min, margin || 0, _abs(max - min) * margin);
 }
 
 function getAddFunction(range) {
@@ -1013,12 +1014,16 @@ Axis.prototype = {
 
     _applyMargins: function(range) {
         var options = this._options,
-            minMarginValue = getMarginValue(range, options.minValueMargin),
-            maxMarginValue = getMarginValue(range, options.maxValueMargin),
-            valueMarginsEnabled = options.valueMarginsEnabled && range.axisType !== "logarithmic" && range.axisType !== "discrete",
+            minMarginValue,
+            maxMarginValue,
+            type = options.type,
+            valueMarginsEnabled = options.valueMarginsEnabled && type !== "logarithmic" && type !== "discrete",
             add = getAddFunction(range);
 
         if(valueMarginsEnabled) {
+            minMarginValue = getMarginValue(range, options.minValueMargin);
+            maxMarginValue = getMarginValue(range, options.maxValueMargin, true);
+
             range.addRange({
                 min: add(range.min, -minMarginValue),
                 max: add(range.max, maxMarginValue),
