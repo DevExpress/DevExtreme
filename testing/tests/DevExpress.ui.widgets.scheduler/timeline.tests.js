@@ -1155,27 +1155,27 @@ QUnit.test("TimelineWorkWeek has right count of cells with view option count", f
     assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 4, "view has right cell count");
 });
 
-// QUnit.test("TimelineWorkWeek view cells have right cellData with view option count=2", function(assert) {
-//     this.instance.option("count", 2);
-//     this.instance.option("currentDate", new Date(2017, 5, 29));
+QUnit.test("TimelineWorkWeek view cells have right cellData with view option count=2", function(assert) {
+    this.instance.option("count", 2);
+    this.instance.option("currentDate", new Date(2017, 5, 29));
 
-//     var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(5 * 48).data("dxCellData"),
-//         secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(2 * 5 * 48 - 1).data("dxCellData");
+    var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(5 * 48).data("dxCellData"),
+        secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(2 * 5 * 48 - 1).data("dxCellData");
 
-//     assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 2, 0), "cell has right startDate");
-//     assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 2, 0, 30), "cell has right endtDate");
+    assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
+    assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 3, 0, 30), "cell has right endtDate");
 
-//     assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 8, 23, 30), "cell has right startDate");
-//     assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 9, 0), "cell has right endtDate");
-// });
+    assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 7, 23, 30), "cell has right startDate");
+    assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 8, 0), "cell has right endtDate");
+});
 
-// QUnit.test("Get date range", function(assert) {
-//     this.instance.option("currentDate", new Date(2017, 5, 26));
-//     this.instance.option("count", 2);
-//     this.instance.option("firstDayOfWeek", 1);
+QUnit.test("Get date range", function(assert) {
+    this.instance.option("currentDate", new Date(2017, 5, 26));
+    this.instance.option("count", 2);
+    this.instance.option("firstDayOfWeek", 1);
 
-//     assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 9, 23, 59)], "Range is OK");
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 7, 23, 59)], "Range is OK");
 
-//     this.instance.option("count", 4);
-//     assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 23, 23, 59)], "Range is OK");
-// });
+    this.instance.option("count", 4);
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 21, 23, 59)], "Range is OK");
+});
