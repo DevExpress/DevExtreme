@@ -381,19 +381,15 @@ var DropDownList = DropDownEditor.inherit({
         return DROPDOWNLIST_POPUP_WRAPPER_CLASS;
     },
 
-    _renderInputValue: function(skipItemLoading) {
-        var callBase = this.callBase.bind(this),
-            value = this._getCurrentValue();
+    _renderInputValue: function() {
+        var value = this._getCurrentValue();
 
-        if(skipItemLoading) {
-            callBase(value);
-            return $.when();
-        }
+        return this._loadInputValue(value, this._setSelectedItem.bind(this))
+            .always(this.callBase.bind(this, value));
+    },
 
-        return this._loadItem(value).always((function(item) {
-            this._setSelectedItem(item);
-            callBase(value);
-        }).bind(this));
+    _loadInputValue: function(value, callback) {
+        return this._loadItem(value).always(callback);
     },
 
     _loadItem: function(value) {
