@@ -735,7 +735,6 @@ renderer.when = $.when;
 renderer.event = $.event;
 renderer.Event = $.Event;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
-renderer.makeArray = $.makeArray;
 renderer.contains = $.contains;
 renderer.Deferred = $.Deferred;
 renderer.map = $.map;

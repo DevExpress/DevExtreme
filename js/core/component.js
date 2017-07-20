@@ -115,10 +115,12 @@ var Component = Class.inherit({
         var options = {};
         var currentDevice = devices.current();
         var deviceMatch = function(device, filter) {
-            filter = $.makeArray(filter);
+            var filterArray = [];
 
-            return (filter.length === 1 && typeUtils.isEmptyObject(filter[0]))
-                || commonUtils.findBestMatches(device, filter).length > 0;
+            Array.prototype.push.call(filterArray, filter);
+
+            return (filterArray.length === 1 && typeUtils.isEmptyObject(filterArray[0]))
+                || commonUtils.findBestMatches(device, filterArray).length > 0;
         };
 
         for(var i = 0; i < rules.length; i++) {
