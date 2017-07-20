@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     config = require("../../core/config"),
+    iteratorUtils = require("../../core/utils/iterator"),
     dateSerialization = require("../../core/utils/date_serialization"),
     recurrenceUtils = require("./utils.recurrence"),
     dateUtils = require("../../core/utils/date"),
@@ -372,7 +373,7 @@ var AppointmentModel = Class.inherit({
         var that = this;
 
         var result = false;
-        $.each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             if(that.appointmentTakesAllDay(item, startDayHour, endDayHour)) {
                 result = true;
                 return false;

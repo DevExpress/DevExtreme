@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var each = require("../../core/utils/iterator").each,
     BaseSparkline = require("./base_sparkline"),
 
     TARGET_MIN_Y = 0.02,
@@ -255,7 +255,7 @@ var dxBullet = BaseSparkline.inherit({
     }
 });
 
-$.each(["color", "targetColor", "targetWidth", "showTarget", "showZeroLevel",
+each(["color", "targetColor", "targetWidth", "showTarget", "showZeroLevel",
     "value", "target", "startScaleValue", "endScaleValue"
 ], function(_, name) {
     dxBullet.prototype._optionChangesMap[name] = "OPTIONS";

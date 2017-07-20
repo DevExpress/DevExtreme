@@ -1,16 +1,16 @@
 "use strict";
 
 //there are stock, candlestick
-var $ = require("../../core/renderer"),
-    scatterSeries = require("./scatter_series").chart,
+var scatterSeries = require("./scatter_series").chart,
     barSeries = require("./bar_series").chart.bar,
     rangeCalculator = require("./helpers/range_data_calculator"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
 
     _isDefined = require("../../core/utils/type").isDefined,
     _normalizeEnum = require("../core/utils").normalizeEnum,
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop,
 
     DEFAULT_FINANCIAL_POINT_SIZE = 10;

@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     dateUtils = require("../../core/utils/date"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     objectUtils = require("../../core/utils/object"),
     arrayUtils = require("../../core/utils/array"),
     extend = require("../../core/utils/extend").extend,
@@ -229,7 +230,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        $.each($items, function(index, $item) {
+        each($items, function(index, $item) {
             that._applyAppointmentColor($item, item.itemData, item.settings[index]);
         });
     },
@@ -240,7 +241,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        $.each($items, function(_, $item) {
+        each($items, function(_, $item) {
             $item.detach();
             $item.remove();
         });
@@ -254,7 +255,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        $.each($items, function(_, $item) {
+        each($items, function(_, $item) {
             $($item).detach();
             $($item).remove();
         });
@@ -537,7 +538,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             itemData: this._getItemData($appointment),
             callback: function(resources) {
                 if(resources) {
-                    $.each(resources, function(name, values) {
+                    each(resources, function(name, values) {
                         var attr = "data-" + commonUtils.normalizeKey(name.toLowerCase()) + "-";
                         for(var i = 0; i < values.length; i++) {
                             $appointment.attr(attr + commonUtils.normalizeKey(values[i]), true);
@@ -845,7 +846,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             rtlOffset = buttonWidth;
         }
 
-        $.each(this._virtualAppointments, (function(groupIndex) {
+        each(this._virtualAppointments, (function(groupIndex) {
             var virtualGroup = this._virtualAppointments[groupIndex],
                 virtualItems = virtualGroup.items,
                 virtualCoordinates = virtualGroup.coordinates,
@@ -966,7 +967,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _reduceRecurrenceAppointments: function(recurrenceIndexes, appointments) {
-        $.each(recurrenceIndexes, function(i, index) {
+        each(recurrenceIndexes, function(i, index) {
             appointments.splice(index - i, 1);
         });
     },

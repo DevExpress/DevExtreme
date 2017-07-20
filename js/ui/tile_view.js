@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     inflector = require("../core/utils/inflector"),
+    iteratorUtils = require("../core/utils/iterator"),
     isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
     ScrollView = require("./scroll_view"),
@@ -317,7 +318,7 @@ var TileView = CollectionWidget.inherit({
 
         this._itemsPositions = [];
 
-        $.each(items, (function(index, item) {
+        iteratorUtils.each(items, (function(index, item) {
             var currentItem = {};
             currentItem[itemMainRatio] = item[itemMainRatio] || 1;
             currentItem[itemCrossRatio] = item[itemCrossRatio] || 1;

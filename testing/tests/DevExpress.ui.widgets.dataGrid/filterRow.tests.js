@@ -440,8 +440,8 @@ QUnit.test('update filter text with timeout', function(assert) {
     var filterRowInput = this.columnHeadersView.element().find('.dx-texteditor');
     assert.equal(filterRowInput.length, 1);
 
-    filterRowInput.find('input').val(90);
-    filterRowInput.find('input').trigger('keyup');
+    filterRowInput.find('.dx-texteditor-input').val(90);
+    filterRowInput.find('.dx-texteditor-input').trigger('keyup');
 
     //act
     this.clock.tick(600);
@@ -473,8 +473,8 @@ QUnit.test('update filter text to empty string', function(assert) {
     var filterRowInput = this.columnHeadersView.element().find('.dx-texteditor');
     assert.equal(filterRowInput.length, 1);
 
-    filterRowInput.find('input').val('');
-    filterRowInput.find('input').trigger('keyup');
+    filterRowInput.find('.dx-texteditor-input').val('');
+    filterRowInput.find('.dx-texteditor-input').trigger('keyup');
 
     //act
     this.clock.tick(600);
@@ -506,8 +506,8 @@ QUnit.test("update filter text for number column with format", function(assert) 
 
     //act
     var filterRowInput = this.columnHeadersView.element().find(".dx-texteditor");
-    filterRowInput.find("input").val(90);
-    filterRowInput.find("input").trigger("keyup");
+    filterRowInput.find(".dx-texteditor-input").val(90);
+    filterRowInput.find(".dx-texteditor-input").trigger("keyup");
 
     this.clock.tick(700);
 
@@ -538,7 +538,7 @@ QUnit.test("update filter text for date column with format", function(assert) {
 
     //act
 
-    var filterRowInput = this.columnHeadersView.element().find(".dx-texteditor input");
+    var filterRowInput = this.columnHeadersView.element().find(".dx-texteditor-input");
 
     filterRowInput
         .val("1992/08/06")

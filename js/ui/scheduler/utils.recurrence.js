@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    errors = require("../../core/errors"),
+var errors = require("../../core/errors"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     dateUtils = require("../../core/utils/date");
 
@@ -52,9 +52,15 @@ var dateSetterMap = {
             correctDate(date, value);
         }
     },
-    "byday": function(date, dayOfWeek, weekStart) {
-        dayOfWeek += days[weekStart] > dayOfWeek ? 7 : 0;
-        date.setDate(date.getDate() - date.getDay() + dayOfWeek);
+    "byday": function(date, byDay, weekStart, frequency) {
+        var dayOfWeek = byDay;
+
+        if(frequency === "DAILY" && byDay === 0) {
+            dayOfWeek = 7;
+        }
+
+        byDay += days[weekStart] > dayOfWeek ? 7 : 0;
+        date.setDate(date.getDate() - date.getDay() + byDay);
     },
     "byweekno": function(date, weekNumber, weekStart) {
         var initialDate = new Date(date),
@@ -275,12 +281,12 @@ var getDatesByRecurrence = function(options) {
     }
 
     if(rule["bysetpos"]) {
-        $.each(iterationResult, function(iterationIndex, iterationDates) {
+        each(iterationResult, function(iterationIndex, iterationDates) {
             iterationResult[iterationIndex] = filterDatesBySetPos(iterationDates, rule["bysetpos"]);
         });
     }
 
-    $.each(iterationResult, function(_, iterationDates) {
+    each(iterationResult, function(_, iterationDates) {
         result = result.concat(iterationDates);
     });
 
@@ -477,7 +483,7 @@ var wrongDayOfWeek = function(rule) {
     var daysByRule = daysFromByDayRule(rule),
         brokenDaysExist = false;
 
-    $.each(daysByRule, function(_, day) {
+    each(daysByRule, function(_, day) {
         if(!days.hasOwnProperty(day)) {
             brokenDaysExist = true;
             return false;
@@ -490,7 +496,7 @@ var wrongDayOfWeek = function(rule) {
 var brokenRuleNameExists = function(rule) {
     var brokenRuleExists = false;
 
-    $.each(rule, function(ruleName) {
+    each(rule, function(ruleName) {
         if(inArray(ruleName, ruleNames) === -1) {
             brokenRuleExists = true;
             return false;
@@ -673,7 +679,7 @@ var getDatesByRules = function(dateRules, startDate, rule) {
             updatedDate = new Date(startDate);
 
         for(var field in current) {
-            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule["wkst"]);
+            dateSetterMap[field] && dateSetterMap[field](updatedDate, current[field], rule["wkst"], rule.freq);
         }
 
         if(Array.isArray(updatedDate)) {

@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    Class = require("../core/class"),
+var Class = require("../core/class"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     EventsMixin = require("../core/events_mixin"),
     errors = require("../core/errors"),
     commonUtils = require("../core/utils/common"),
@@ -452,7 +452,7 @@ var GroupConfig = Class.inherit({
             validators: []
         };
 
-        $.each(this.validators, function(_, validator) {
+        each(this.validators, function(_, validator) {
             var validatorResult = validator.validate();
             result.isValid = result.isValid && validatorResult.isValid;
 
@@ -472,7 +472,7 @@ var GroupConfig = Class.inherit({
     },
 
     reset: function() {
-        $.each(this.validators, function(_, validator) {
+        each(this.validators, function(_, validator) {
             validator.reset();
         });
     }
@@ -559,7 +559,7 @@ var ValidationEngine = {
             },
             that = this;
 
-        $.each(rules || [], function(_, rule) {
+        each(rules || [], function(_, rule) {
             var ruleValidator = rulesValidators[rule.type],
                 ruleValidationResult;
 

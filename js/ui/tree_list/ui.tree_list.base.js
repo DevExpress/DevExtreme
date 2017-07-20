@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    registerComponent = require("../../core/component_registrator"),
+var registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     Widget = require("../widget/ui.widget"),
     treeListCore = require("./ui.tree_list.core"),
@@ -67,7 +67,7 @@ var TreeList = Widget.inherit({
         var that = this,
             result = that.callBase();
 
-        $.each(treeListCore.modules, function() {
+        each(treeListCore.modules, function() {
             if(typeUtils.isFunction(this.defaultOptions)) {
                 extend(true, result, this.defaultOptions());
             }

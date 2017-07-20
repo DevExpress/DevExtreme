@@ -3,9 +3,10 @@
 var $ = require("../../core/renderer"),
     LayoutElementModule = require("../core/layout_element"),
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
 
     _extend = extend,
-    _each = $.each;
+    _each = iteratorUtils.each;
 
 function HeaderBlock() { }
 

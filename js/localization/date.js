@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     numberLocalization = require("./number"),
     dependencyInjector = require("../core/utils/dependency_injector"),
     isString = require("../core/utils/type").isString,
+    iteratorUtils = require("../core/utils/iterator"),
     inArray = require("../core/utils/array").inArray,
     errors = require("../core/errors");
 
@@ -540,7 +541,7 @@ var PARSERS = {
 };
 
 // generating pattern aliases
-$.each(FORMATS_TO_PATTERN_MAP, function(key, value) {
+iteratorUtils.each(FORMATS_TO_PATTERN_MAP, function(key, value) {
     value = value.replace(/'/g, "");
     FORMATTERS[value] = FORMATTERS[key];
     PARSERS[value] = PARSERS[key];
@@ -591,8 +592,8 @@ var dateLocalization = dependencyInjector({
         var pattern = this._getPatternByFormat(format) || format,
             result = [];
 
-        $.each(pattern.split(/\W+/), function(_, formatPart) {
-            $.each(possiblePartPatterns, function(partName, possiblePatterns) {
+        iteratorUtils.each(pattern.split(/\W+/), function(_, formatPart) {
+            iteratorUtils.each(possiblePartPatterns, function(partName, possiblePatterns) {
                 if(inArray(formatPart, possiblePatterns) > -1) {
                     result.push(partName);
                 }

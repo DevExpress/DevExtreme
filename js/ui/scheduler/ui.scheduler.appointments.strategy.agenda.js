@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
     dateUtils = require("../../core/utils/date"),
+    each = require("../../core/utils/iterator").each,
     arrayUtils = require("../../core/utils/array"),
     BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base");
 
@@ -26,12 +26,12 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 appointmentsByResources = this.instance.fire("groupAppointmentsByResources", appointments),
                 groupedAppts = [];
 
-            $.each(appointmentsByResources, function(i, appts) {
+            each(appointmentsByResources, function(i, appts) {
 
                 var additionalAppointments = [],
                     recurrentIndexes = [];
 
-                $.each(appts, function(index, appointment) {
+                each(appts, function(index, appointment) {
                     var recurrenceBatch = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index),
                         appointmentBatch = null;
 
@@ -167,7 +167,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var groupedAppointments = this.instance.fire("groupAppointmentsByResources", appointments);
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
-        $.each(groupedAppointments, function(groupIndex, currentAppointments) {
+        each(groupedAppointments, function(groupIndex, currentAppointments) {
 
             var groupResult = [];
 
@@ -176,7 +176,7 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 return true;
             }
 
-            $.each(currentAppointments, function(index, appointment) {
+            each(currentAppointments, function(index, appointment) {
                 needClearSettings && delete appointment.settings;
 
                 var result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
