@@ -723,7 +723,6 @@ renderer.tmpl = function() {
 renderer.templates = function() {
     return $.templates.apply(this, arguments);
 };
-renderer._data = $._data;
 renderer.data = $.data;
 renderer.removeData = $.removeData;
 
