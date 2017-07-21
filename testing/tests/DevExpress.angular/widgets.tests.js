@@ -11,6 +11,8 @@ var $ = require("jquery"),
     positionUtils = require("animation/position"),
     ValidationGroup = require("ui/validation_group");
 
+require("common.css!");
+require("generic_light.css!");
 require("integration/angular");
 
 require("ui/accordion");
@@ -24,8 +26,6 @@ require("ui/date_box");
 require("ui/scheduler");
 require("ui/defer_rendering");
 require("ui/slide_out_view");
-
-require("common.css!");
 
 fx.off = true;
 var ignoreAngularBrowserDeferTimer = function(args) {
@@ -72,7 +72,7 @@ QUnit.test("dxPopup", function(assert) {
     var contentHeight;
 
     positionUtils.setup = function($content, position) {
-        contentHeight = $content.height();
+        contentHeight = $content.find(".dx-popup-content").height();
 
         originalPositionSetup($content, position);
     };
@@ -608,7 +608,7 @@ QUnit.test("item height is correct in animation config (T520346)", function(asse
     this.clock.tick();
 
     fx.animate = function($element, config) {
-        assert.roughEqual(config.to.height, 18, 0.5);
+        assert.roughEqual(config.to.height, 68, 0.5);
 
         return originalAnimate($element, config);
     };
@@ -651,7 +651,7 @@ QUnit.test("title height is correct if the title is customized using ng-class (T
     this.clock.tick();
 
     var $titles = $markup.find(".dx-accordion-item");
-    assert.equal($titles.height(), 100);
+    assert.equal($titles.children().height(), 100);
 
     this.clock.restore();
 });
