@@ -61,7 +61,7 @@ var CollectionWidget = Widget.inherit({
     _activeStateUnit: "." + ITEM_CLASS,
 
     _supportedKeys: function() {
-        var click = function(e) {
+        var enter = function(e) {
                 var $itemElement = this.option("focusedElement");
 
                 if(!$itemElement) {
@@ -73,14 +73,18 @@ var CollectionWidget = Widget.inherit({
 
                 this._itemClickHandler(e);
             },
+            space = function(e) {
+                e.preventDefault();
+                enter.call(this, e);
+            },
             move = function(location, e) {
                 e.preventDefault();
                 e.stopPropagation();
                 this._moveFocus(location, e);
             };
         return extend(this.callBase(), {
-            space: click,
-            enter: click,
+            space: space,
+            enter: enter,
             leftArrow: move.bind(this, FOCUS_LEFT),
             rightArrow: move.bind(this, FOCUS_RIGHT),
             upArrow: move.bind(this, FOCUS_UP),
