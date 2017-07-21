@@ -546,14 +546,17 @@
 }
 
 .dx-scheduler-work-space-day {
-    .dx-scheduler-all-day-table-cell {
-        border-top: none;
-        border-left: none;
+    &:not(.dx-scheduler-work-space-count) {
+        .dx-scheduler-all-day-table-cell {
+            border-top: none;
+            border-left: none;
+        }
     }
 }
 
 .dx-scheduler-work-space-week,
-.dx-scheduler-work-space-work-week {
+.dx-scheduler-work-space-work-week,
+.dx-scheduler-work-space-day.dx-scheduler-work-space-count {
     .dx-scheduler-all-day-title {
         border-top: @SCHEDULER_BASE_BORDER;
     }
