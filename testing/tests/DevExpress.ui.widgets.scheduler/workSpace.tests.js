@@ -100,6 +100,16 @@ QUnit.testStart(function() {
         assert.deepEqual(this.instance.option("viewStartDate"), null, "dxSchedulerWorkSpace viewStartDate is right");
     });
 
+    QUnit.test("Scheduler workspace with count should have a right css class", function(assert) {
+        this.instance.option("count", 3);
+        var $element = this.instance.element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-count"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
+
+        this.instance.option("count", 1);
+        $element = this.instance.element();
+        assert.notOk($element.hasClass("dx-scheduler-work-space-count"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
+    });
+
     QUnit.test("Scheduler workspace should contain time panel, header panel, allday panel and content", function(assert) {
         var $element = this.instance.element();
 

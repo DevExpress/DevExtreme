@@ -25,6 +25,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
 
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
+    WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
 
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
@@ -372,11 +373,8 @@ var SchedulerWorkSpace = Widget.inherit({
             case "firstDayOfWeek":
             case "currentDate":
             case "groups":
-            case "count":
             case "viewStartDate":
-                this._cleanView();
-                this._toggleGroupedClass();
-                this._renderView();
+                this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
                 this._toggleAllDayVisibility();
@@ -389,6 +387,10 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "onCellClick":
                 this._createCellClickAction();
+                break;
+            case "count":
+                this._cleanWorkSpace();
+                this._toggleWorkSpaceCountClass();
                 break;
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
@@ -405,10 +407,17 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
+    _cleanWorkSpace: function() {
+        this._cleanView();
+        this._toggleGroupedClass();
+        this._renderView();
+    },
+
     _init: function() {
         this.callBase();
 
         this._toggleHorizontalScrollClass();
+        this._toggleWorkSpaceCountClass();
         this.element()
             .addClass(COMPONENT_CLASS)
             .addClass(this._getElementClass());
@@ -422,6 +431,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _toggleHorizontalScrollClass: function() {
         this.element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
+    },
+
+    _toggleWorkSpaceCountClass: function() {
+        this.element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this.option("count") > 1);
     },
 
     _getTimePanelClass: function() {
