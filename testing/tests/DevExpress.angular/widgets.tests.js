@@ -437,7 +437,7 @@ QUnit.test("Change selection.mode option via binding and refresh", function(asse
 
 
     //act
-    $markup.find(".dx-data-row").eq(0).children().first().trigger("dxclick");
+    $($markup.find(".dx-data-row").eq(0).children().first()).trigger("dxclick");
 
     this.clock.tick(30);
 
@@ -491,7 +491,7 @@ QUnit.test("Adaptive menu should support angular integration", function(assert) 
 
     var $treeViewItem = $markup.find(".dx-treeview-item").eq(0);
 
-    $treeViewItem.trigger("dxclick");
+    $($treeViewItem).trigger("dxclick");
 
     assert.equal(scope.test, "Test text 2", "scope value is updated");
     assert.equal($("#testDiv").text(), "Test text 2", "test div is updated");
@@ -674,7 +674,7 @@ QUnit.test("item height is correct in animation config (T520346)", function(asse
     };
 
     var $titles = $markup.find(".dx-accordion-item-title");
-    $titles.eq(0).trigger("dxclick");
+    $($titles.eq(0)).trigger("dxclick");
 
     this.clock.tick();
 

@@ -1959,7 +1959,7 @@ QUnit.test("Edit row. Editor is not rendered inside the form widget when clicked
     var $itemContent = $(".dx-field-item-content"),
         form = $(".dx-master-detail-row .dx-form").data("dxForm");
 
-    $itemContent.trigger("dxclick");
+    $($itemContent).trigger("dxclick");
 
     //assert
     assert.ok(form !== undefined, "form is initialized");
@@ -2038,7 +2038,7 @@ QUnit.test("Check 'onAdaptiveDetailRowPreparing' action", function(assert) {
     var $itemContent = $(".dx-field-item-content"),
         form = $(".dx-master-detail-row .dx-form").data("dxForm");
 
-    $itemContent.trigger("dxclick");
+    $($itemContent).trigger("dxclick");
 
     //assert
     assert.ok(form.option("colCount"), 5, "colCount of form");
@@ -2369,7 +2369,7 @@ QUnit.test("Edit batch. Editor is rendered only one when click on text", functio
     assert.equal($itemsContent.length, 2, "items count");
 
     //act
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
 
     //assert
     assert.equal($(".dx-texteditor").length, 1, "editor's count");
@@ -2378,7 +2378,7 @@ QUnit.test("Edit batch. Editor is rendered only one when click on text", functio
 
     //act
     $itemsContent = $(".dx-field-item-content");
-    $itemsContent.eq(0).trigger("dxclick");
+    $($itemsContent.eq(0)).trigger("dxclick");
 
     //assert
     assert.equal($(".dx-texteditor").length, 1, "editor's count");
@@ -2424,7 +2424,7 @@ QUnit.test("Edit batch. Close edit mode for the form widget when a data is saved
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 102);
     this.editingController.saveEditData();
@@ -2472,7 +2472,7 @@ QUnit.test("Edit batch. Close edit mode and cancel editing when click out the da
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     this.clock.tick();
     editor.option("value", 102);
@@ -2523,7 +2523,7 @@ QUnit.test("Edit batch. Close edit mode for the form widget when a editing is ca
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 102);
     this.editingController.cancelEditData();
@@ -2570,12 +2570,12 @@ QUnit.test("Edit batch. Form's item is marked as modified", function(assert) {
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
     this.clock.tick();
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 14);
     $itemsContent = $(".dx-field-item-content");
-    $itemsContent.eq(0).trigger("dxclick");
+    $($itemsContent.eq(0)).trigger("dxclick");
     this.clock.tick();
     editor = $(".dx-texteditor").first().dxTextBox("instance");
     editor.option("value", "Test");
@@ -2625,12 +2625,12 @@ QUnit.test("Edit batch. Form's item is marked as modified for other adaptive row
     //act
     this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
     $itemsContent = $(".dx-field-item-content");
-    $itemsContent.eq(1).trigger("dxclick");
+    $($itemsContent.eq(1)).trigger("dxclick");
     this.clock.tick();
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 30);
     $itemsContent = $(".dx-field-item-content");
-    $itemsContent.eq(0).trigger("dxclick");
+    $($itemsContent.eq(0)).trigger("dxclick");
     this.clock.tick();
     editor = $(".dx-texteditor").first().dxTextBox("instance");
     editor.option("value", "test");
@@ -2691,11 +2691,11 @@ QUnit.test("Edit batch. Modified is removed from form's item when data is saved"
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 14);
     $itemsContent = $(".dx-field-item-content");
-    $itemsContent.eq(0).trigger("dxclick");
+    $($itemsContent.eq(0)).trigger("dxclick");
     this.editingController.saveEditData();
 
     //assert
@@ -2739,11 +2739,11 @@ QUnit.test("Edit batch. Modified is removed from form's item when editing is can
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 14);
     $itemsContent = $(".dx-field-item-content");
-    $itemsContent.eq(0).trigger("dxclick");
+    $($itemsContent.eq(0)).trigger("dxclick");
     $itemsContent = $(".dx-field-item-content");
     this.editingController.cancelEditData();
 
@@ -2823,7 +2823,7 @@ QUnit.test("Edit batch. Show modified state in a cell when cell is edited inside
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
     this.clock.tick();
 
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
@@ -2876,7 +2876,7 @@ QUnit.test("Edit batch. Repaint form with unsaved data", function(assert) {
         editor,
         formInstance;
 
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
     editor = $(".dx-texteditor").first().dxNumberBox("instance");
     editor.option("value", 102);
 
@@ -2953,7 +2953,7 @@ QUnit.test("Edit cell. Editor is rendered only one when click on text", function
     assert.equal($itemsContent.length, 2, "items count");
 
     //act
-    $itemsContent.last().trigger("dxclick");
+    $($itemsContent.last()).trigger("dxclick");
 
     //assert
     assert.equal($(".dx-texteditor").length, 1, "editor's count");
@@ -2963,7 +2963,7 @@ QUnit.test("Edit cell. Editor is rendered only one when click on text", function
     //act
     editor.option("value", 300);
     $itemsContent = $(".dx-field-item-content");
-    $itemsContent.eq(0).trigger("dxclick");
+    $($itemsContent.eq(0)).trigger("dxclick");
     $itemsContent = $(".dx-field-item-content");
 
     //assert
@@ -3054,7 +3054,7 @@ QUnit.test("Create new row is the batch mode. Save new values", function(assert)
     var $itemsContent = $(".dx-adaptive-detail-row .dx-field-item-content"),
         editors;
 
-    $itemsContent.first().trigger("dxclick");
+    $($itemsContent.first()).trigger("dxclick");
 
     editors = $(".dx-adaptive-detail-row .dx-texteditor");
     editors.first().data("dxTextBox").option("value", "12test");
@@ -3087,7 +3087,7 @@ QUnit.test("Create new row is the batch mode. Cancel new values", function(asser
     var $itemsContent = $(".dx-adaptive-detail-row .dx-field-item-content"),
         editors;
 
-    $itemsContent.first().trigger("dxclick");
+    $($itemsContent.first()).trigger("dxclick");
 
     editors = $(".dx-texteditor");
     editors.first().data("dxTextBox").option("value", "12test");
@@ -3148,7 +3148,7 @@ QUnit.test("Create new row is the cell mode. Save new values", function(assert) 
     var $itemsContent = $(".dx-adaptive-detail-row .dx-field-item-content"),
         editors;
 
-    $itemsContent.first().trigger("dxclick");
+    $($itemsContent.first()).trigger("dxclick");
     this.clock.tick();
     editors = $(".dx-texteditor");
 
@@ -3300,7 +3300,7 @@ QUnit.testInActiveWindow("Batch edit mode", function(assert) {
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.first().trigger("dxclick");
+    $($itemsContent.first()).trigger("dxclick");
     this.clock.tick();
 
     editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
@@ -3314,7 +3314,7 @@ QUnit.testInActiveWindow("Batch edit mode", function(assert) {
 
     //act
     $itemsContent = $(".dx-field-item-content");
-    $itemsContent.first().trigger("dxclick");
+    $($itemsContent.first()).trigger("dxclick");
     this.clock.tick();
 
     //assert
@@ -3358,7 +3358,7 @@ QUnit.testInActiveWindow("Batch edit mode. Editor is not marked as invalid when 
     this.editingController.addRow();
     var $itemsContent = $(".dx-field-item-content");
 
-    $itemsContent.first().trigger("dxclick");
+    $($itemsContent.first()).trigger("dxclick");
     this.clock.tick();
 
     //assert
@@ -3401,7 +3401,7 @@ QUnit.testInActiveWindow("Cell edit mode", function(assert) {
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.first().trigger("dxclick");
+    $($itemsContent.first()).trigger("dxclick");
     this.clock.tick();
 
     editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
@@ -3468,7 +3468,7 @@ QUnit.testInActiveWindow("Cell edit mode. Validation works only for editable for
     var $itemsContent = $(".dx-field-item-content"),
         editor;
 
-    $itemsContent.eq(1).trigger("dxclick");
+    $($itemsContent.eq(1)).trigger("dxclick");
     this.clock.tick();
 
     editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");

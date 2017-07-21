@@ -166,7 +166,7 @@ QUnit.test("No data", function(assert) {
         }, assert);
     assert.ok(pivotGrid);
 
-    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata"),
+    var $noDataElement = $(pivotGrid.element().find(".dx-pivotgrid-nodata")),
         dataAreaCell = $(".dx-area-data-cell"),
         dataAreaCellOffset = dataAreaCell.offset(),
         noDataElementOffset = $noDataElement.offset();
@@ -194,7 +194,7 @@ QUnit.test("No data when pivot grid rendered to invisible container", function(a
     domUtils.triggerShownEvent($pivotGridElement);
     this.clock.tick();
 
-    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata"),
+    var $noDataElement = $(pivotGrid.element().find(".dx-pivotgrid-nodata")),
         dataAreaCell = $(".dx-area-data-cell"),
         dataAreaCellOffset = dataAreaCell.offset(),
         noDataElementOffset = $noDataElement.offset();
@@ -213,7 +213,7 @@ QUnit.test("Create PivotGrid with Data", function(assert) {
 
     pivotGrid = createPivotGrid(this.testOptions, assert);
 
-    $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata");
+    $noDataElement = $(pivotGrid.element().find(".dx-pivotgrid-nodata"));
 
     assert.equal($noDataElement.length, 1);
     assert.ok(!$noDataElement.is(":visible"));
@@ -249,7 +249,7 @@ QUnit.test("Loading DataSource", function(assert) {
         onContentReady: onContentReadyCallback
     }, assert);
 
-    $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata");
+    $noDataElement = $(pivotGrid.element().find(".dx-pivotgrid-nodata"));
 
     assert.equal($noDataElement.length, 1);
     assert.ok(!$noDataElement.is(":visible"));
@@ -362,7 +362,7 @@ QUnit.test("collapse column item", function(assert) {
     assert.strictEqual($expandedSpan.length, 1);
 
     //act
-    $expandedSpan.trigger('dxclick');
+    $($expandedSpan).trigger('dxclick');
 
     this.clock.tick();
 
@@ -390,7 +390,7 @@ QUnit.test("expand column item", function(assert) {
     assert.strictEqual($collapsedSpan.length, 1);
 
     //act
-    $collapsedSpan.trigger('dxclick');
+    $($collapsedSpan).trigger('dxclick');
 
     this.clock.tick();
 
@@ -421,7 +421,7 @@ QUnit.test("onCellClick prevents expansion", function(assert) {
     assert.strictEqual($collapsedSpan.length, 1);
 
     //act
-    $collapsedSpan.trigger('dxclick');
+    $($collapsedSpan).trigger('dxclick');
 
     this.clock.tick();
 
@@ -446,7 +446,7 @@ QUnit.test("T248253. DataSource changed", function(assert) {
     assert.strictEqual($collapsedSpan.length, 1);
 
     //act
-    $collapsedSpan.trigger('dxclick');
+    $($collapsedSpan).trigger('dxclick');
 
     this.clock.tick();
 
@@ -483,9 +483,9 @@ QUnit.test("onCellClick event", function(assert) {
 
     this.clock.tick();
     //act
-    $dataArea.find('tr').eq(1).find('td').eq(3).trigger('dxclick');
-    $dataArea.find('tr').eq(2).find('td').eq(4).trigger('dxclick');
-    $fieldsArea.find('td').eq(1).trigger('dxclick');
+    $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxclick');
+    $($dataArea.find('tr').eq(2).find('td').eq(4)).trigger('dxclick');
+    $($fieldsArea.find('td').eq(1)).trigger('dxclick');
 
     //assert
     assert.equal(cellClickArgs.length, 2, 'onCellClick call count');
@@ -536,8 +536,8 @@ QUnit.test("onCellClick event after resize", function(assert) {
 
     var $dataArea = $("#pivotGrid").find('.dx-pivotgrid-area-data');
 
-    $dataArea.find('tr').eq(1).find('td').eq(3).trigger('dxclick');
-    $dataArea.find('tr').eq(2).find('td').eq(4).trigger('dxclick');
+    $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxclick');
+    $($dataArea.find('tr').eq(2).find('td').eq(4)).trigger('dxclick');
 
     //assert
     assert.equal(cellClickArgs.length, 2, 'onCellClick call count');
@@ -584,7 +584,7 @@ QUnit.test("show field chooser popup on field chooser button click", function(as
     assert.strictEqual($fieldChooserButton.length, 1, 'fieldChooser button is rendered');
 
     //act
-    $fieldChooserButton.trigger('dxclick');
+    $($fieldChooserButton).trigger('dxclick');
     this.clock.tick(500);
     //assert
     assert.ok($(".dx-fieldchooser-popup").is(":visible"), 'fieldChooser popup is visible');
@@ -686,7 +686,7 @@ QUnit.test("export to excel on export click", function(assert) {
     assert.equal($exportButton.length, 1, 'export button exists');
 
     //act
-    $exportButton.trigger("dxclick");
+    $($exportButton).trigger("dxclick");
 
     //assert
     assert.equal(pivotGrid.exportToExcel.callCount, 1, "exportToExcel method called one");
@@ -733,7 +733,7 @@ QUnit.test("not show field chooser popup on description area click when fieldCho
 
     this.clock.tick();
     //act
-    $descriptionCell.trigger('dxclick');
+    $($descriptionCell).trigger('dxclick');
 
     //assert
     assert.ok(!$(".dx-fieldchooser-popup").is(":visible"), 'fieldChooser popup is not visible');
@@ -1079,7 +1079,7 @@ QUnit.test("contextMenu", function(assert) {
     this.clock.tick();
 
     //act
-    $dataArea.find('tr').eq(1).find('td').eq(3).trigger('dxcontextmenu');
+    $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
     //assert
     assert.equal(contextMenuArgs.length, 1, 'onCellClick call count');
@@ -1104,7 +1104,7 @@ QUnit.test("contextMenu", function(assert) {
     assert.equal($menuItems.length, 2, 'context menu items count');
 
     //act
-    $menuItems.eq(1).trigger("dxclick");
+    $($menuItems.eq(1)).trigger("dxclick");
 
     //assert
     assert.ok(testItemClicked, "Test item clicked");
@@ -1189,8 +1189,8 @@ QUnit.test("Context menu when click on field chooser", function(assert) {
         $filterFields = $fieldsArea.eq(0);
 
     //act
-    $filterFields.children().eq(0).trigger('dxcontextmenu');
-    $dataFields.find("td").eq(0).children().trigger("dxcontextmenu");
+    $($filterFields.children().eq(0)).trigger('dxcontextmenu');
+    $($dataFields.find("td").eq(0).children()).trigger("dxcontextmenu");
 
     //assert
     assert.equal(contextMenuArgs.length, 2, 'onContextMenuPreparing call count');
@@ -1211,7 +1211,7 @@ QUnit.test("Context menu when no data", function(assert) {
     this.clock.tick();
     $dataArea = $("#pivotGrid").find('.dx-pivotgrid-area-data');
     //act
-    $dataArea.children().eq(0).trigger('dxcontextmenu');
+    $($dataArea.children().eq(0)).trigger('dxcontextmenu');
 
     //assert
     assert.equal(contextMenuArgs.length, 1, 'onCellClick call count');
@@ -1229,7 +1229,7 @@ QUnit.test("Context menu when click target no pivot table", function(assert) {
     $target = $("#pivotGrid").find('.dx-widget.dx-pivotgrid');
 
     //act
-    $target.trigger('dxcontextmenu');
+    $($target).trigger('dxcontextmenu');
 
     //assert
     assert.ok(!pivotGrid.option("onContextMenuPreparing").called, "should not be context menu");
@@ -1463,7 +1463,7 @@ QUnit.test("Sorting by Summary context menu when sorting defined", function(asse
 
     //act
     var $cell = $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers tr').last().children().eq(1);
-    $cell.trigger('dxcontextmenu');
+    $($cell).trigger('dxcontextmenu');
 
     //assert
     assert.equal($cell.find(".dx-icon-sorted").length, 1, "sorted icon applied");
@@ -1545,7 +1545,7 @@ QUnit.test("Sorting by Summary context menu when sorting defined for grand total
 
     //act
     var $cell = $("#pivotGrid").find('.dx-pivotgrid-horizontal-headers tr').first().children().last();
-    $cell.trigger('dxcontextmenu');
+    $($cell).trigger('dxcontextmenu');
 
     //assert
     assert.equal($cell.find(".dx-icon-sorted").length, 1, "sorted icon applied");

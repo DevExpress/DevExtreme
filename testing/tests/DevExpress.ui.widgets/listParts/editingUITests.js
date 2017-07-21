@@ -41,7 +41,7 @@ QUnit.module("switchable menu decorator", {
             modifyElement: function(config) {
                 this.callBase.apply(this, arguments);
 
-                var $itemElement = config.$itemElement;
+                var $itemElement = $(config.$itemElement);
 
                 $itemElement.on("dxpreparetodelete", $.proxy(function(e) {
                     this._toggleDeleteReady($itemElement);
@@ -66,11 +66,11 @@ QUnit.module("switchable menu decorator", {
 });
 
 QUnit.test("positioning should be enabled while item prepared to delete", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "test"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -87,11 +87,11 @@ QUnit.test("active state should be enabled while item prepared to delete", funct
     var clock = sinon.useFakeTimers();
 
     try {
-        var $list = $("#templated-list").dxList({
+        var $list = $($("#templated-list").dxList({
             items: ["0"],
             allowItemDeleting: true,
             itemDeleteMode: "test"
-        });
+        }));
 
         var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
             $item = $items.eq(0),
@@ -157,11 +157,11 @@ QUnit.test("click on item should not remove delete ready class if widget is disa
 });
 
 QUnit.test("shields should be generated", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1", "2", "3"],
         allowItemDeleting: true,
         itemDeleteMode: "test"
-    });
+    }));
 
     var $topShield = $list.find(toSelector(SWITCHABLE_DELETE_TOP_SHIELD_CLASS)),
         $bottomShield = $list.find(toSelector(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS));
@@ -173,11 +173,11 @@ QUnit.test("shields should be generated", function(assert) {
 });
 
 QUnit.test("prepare delete should add shields before and after element", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1", "2", "3"],
         allowItemDeleting: true,
         itemDeleteMode: "test"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(1),
@@ -192,11 +192,11 @@ QUnit.test("prepare delete should add shields before and after element", functio
 });
 
 QUnit.test("pointerdown on shields should cancel delete", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1", "2", "3"],
         allowItemDeleting: true,
         itemDeleteMode: "test"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(1),
@@ -234,12 +234,12 @@ QUnit.test("prepare delete should add shield above item content", function(asser
 });
 
 QUnit.test("prepare delete should disable scrolling", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "test",
         useNativeScrolling: false
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -255,11 +255,11 @@ QUnit.test("prepare delete should disable scrolling", function(assert) {
 });
 
 QUnit.test("forget delete should not enable scrolling that already was disabled", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "test"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -287,7 +287,7 @@ QUnit.module("switchable button delete decorator", {
             modifyElement: function(config) {
                 this.callBase.apply(this, arguments);
 
-                var $itemElement = config.$itemElement;
+                var $itemElement = $(config.$itemElement);
 
                 $itemElement.on("dxpreparetodelete", $.proxy(function(e) {
                     this._toggleDeleteReady($itemElement);
@@ -305,11 +305,11 @@ QUnit.module("switchable button delete decorator", {
 });
 
 QUnit.test("list item markup", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "test"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -318,11 +318,11 @@ QUnit.test("list item markup", function(assert) {
 });
 
 QUnit.test("button should be added only when item is ready to delete", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "test"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -342,11 +342,11 @@ QUnit.test("button should be added only when item is ready to delete", function(
 QUnit.test("delete button click should delete list item", function(assert) {
     assert.expect(1);
 
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0"],
             allowItemDeleting: true,
             itemDeleteMode: "test"
-        }),
+        })),
         list = $list.dxList("instance");
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
@@ -369,11 +369,11 @@ var TOGGLE_DELETE_SWITCH_CLASS = "dx-list-toggle-delete-switch",
 QUnit.module("toggle delete decorator");
 
 QUnit.test("list item markup", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "toggle"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -384,11 +384,11 @@ QUnit.test("list item markup", function(assert) {
 });
 
 QUnit.test("toggling delete toggle button should switch delete ready class", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "toggle"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -406,11 +406,11 @@ var STATIC_DELETE_BUTTON_CONTAINER_CLASS = "dx-list-static-delete-button-contain
 QUnit.module("static delete decorator");
 
 QUnit.test("list item markup", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: ["0", "1", "2"],
         allowItemDeleting: true,
         itemDeleteMode: "static"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -425,11 +425,11 @@ QUnit.test("list item markup", function(assert) {
 QUnit.test("delete button click should delete list item", function(assert) {
     assert.expect(1);
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
             items: ["0"],
             allowItemDeleting: true,
             itemDeleteMode: "static"
-        }),
+        })),
         list = $list.dxList("instance");
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
@@ -471,11 +471,11 @@ QUnit.test("click on delete button should not raise item click event when item d
 QUnit.module("slideButton delete decorator");
 
 QUnit.test("item swiping should add delete ready class", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "slideButton"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -486,12 +486,12 @@ QUnit.test("item swiping should add delete ready class", function(assert) {
 });
 
 QUnit.test("item swiping should not add delete ready class if widget is disabled", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         disabled: true,
         allowItemDeleting: true,
         itemDeleteMode: "slideButton"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -529,11 +529,11 @@ QUnit.module("slideItem delete decorator", {
 });
 
 QUnit.test("list item markup", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -553,11 +553,11 @@ QUnit.test("list item markup", function(assert) {
 });
 
 QUnit.test("swipe should prepare item for delete", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -587,12 +587,12 @@ QUnit.test("swipe should prepare item for delete", function(assert) {
 });
 
 QUnit.test("swipe should not prepare item for delete if widget is disabled", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         disabled: true,
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -602,11 +602,11 @@ QUnit.test("swipe should not prepare item for delete if widget is disabled", fun
 });
 
 QUnit.test("swipe should be canceled if swipe in opposite direction", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -616,11 +616,11 @@ QUnit.test("swipe should be canceled if swipe in opposite direction", function(a
 });
 
 QUnit.test("swipe should not be canceled if swipe in opposite direction and item is ready to delete", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -631,11 +631,11 @@ QUnit.test("swipe should not be canceled if swipe in opposite direction and item
 });
 
 QUnit.test("swipe should not move item righter", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -646,11 +646,11 @@ QUnit.test("swipe should not move item righter", function(assert) {
 });
 
 QUnit.test("swipe loop should not be canceled", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -660,11 +660,11 @@ QUnit.test("swipe loop should not be canceled", function(assert) {
 });
 
 QUnit.test("click should undo readiness to delete", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -679,11 +679,11 @@ QUnit.test("click should undo readiness to delete", function(assert) {
 });
 
 QUnit.test("click on button should remove item", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0"],
             allowItemDeleting: true,
             itemDeleteMode: "slideItem"
-        }),
+        })),
         list = $list.dxList("instance");
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
@@ -747,12 +747,12 @@ QUnit.test("click on button should not remove item if widget disabled", function
 });
 
 QUnit.test("swipe should prepare item for delete in RTL mode", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         rtlEnabled: true,
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -783,12 +783,12 @@ QUnit.test("swipe should prepare item for delete in RTL mode", function(assert) 
 });
 
 QUnit.test("swipe should not move item lefter in RTL mode", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         rtlEnabled: true,
         allowItemDeleting: true,
         itemDeleteMode: "slideItem"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -805,11 +805,11 @@ QUnit.test("multiple swipes should not break deletion", function(assert) {
     try {
         fx.off = false;
 
-        var $list = $("#templated-list").dxList({
+        var $list = $($("#templated-list").dxList({
             items: ["0"],
             allowItemDeleting: true,
             itemDeleteMode: "slideItem"
-        });
+        }));
 
         var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
             $item = $items.eq(0);
@@ -839,11 +839,11 @@ QUnit.test("optimizations", function(assert) {
         outerWidthCallCount = 0;
 
     try {
-        var $list = $("#templated-list").dxList({
+        var $list = $($("#templated-list").dxList({
             items: ["0"],
             allowItemDeleting: true,
             itemDeleteMode: "slideItem"
-        });
+        }));
 
         var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
             $item = $items.eq(0),
@@ -943,7 +943,7 @@ QUnit.test("click on menu item should open menu", function(assert) {
 
     var $menu = $list.find(toSelector(SLIDE_MENU_CLASS)),
         menu = $menu.dxActionSheet("instance"),
-        $menuItems = menu.itemElements();
+        $menuItems = $(menu.itemElements());
 
     assert.equal($menuItems.length, 2, "menu items was rendered");
     assert.equal(menu.option("visible"), true, "menu is shown");
@@ -1009,7 +1009,7 @@ QUnit.test("menu item action should be fired after item click", function(assert)
 
     var $menu = $list.find(toSelector(SLIDE_MENU_CLASS)),
         menu = $menu.dxActionSheet("instance"),
-        $menuItems = menu.itemElements();
+        $menuItems = $(menu.itemElements());
 
     $menuItems.eq(0).trigger("dxclick");
     assert.equal(deleteButtonContent().length, 0, "ready to delete mode is disabled");
@@ -1140,13 +1140,13 @@ QUnit.module("swipe delete decorator", {
 });
 
 QUnit.test("delete item by swipe gesture", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [0, 1, 2],
             allowItemDeleting: true,
             itemDeleteMode: "swipe"
-        }),
+        })),
         list = $list.dxList("instance"),
-        $item = list.itemElements().eq(0),
+        $item = $(list.itemElements()).eq(0),
         pointer = pointerMock($item);
 
     list.deleteItem = function($itemElement) {
@@ -1158,13 +1158,13 @@ QUnit.test("delete item by swipe gesture", function(assert) {
 });
 
 QUnit.test("item should be at normal position if confirmation not passed", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [0, 1, 2],
             allowItemDeleting: true,
             itemDeleteMode: "swipe"
-        }),
+        })),
         list = $list.dxList("instance"),
-        $item = list.itemElements().eq(0),
+        $item = $(list.itemElements()).eq(0),
         pointer = pointerMock($item);
 
     list.deleteItem = function($itemElement) {
@@ -1177,14 +1177,14 @@ QUnit.test("item should be at normal position if confirmation not passed", funct
 });
 
 QUnit.test("swipe should not delete item if widget is disabled", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [0, 1, 2],
             disabled: true,
             allowItemDeleting: true,
             itemDeleteMode: "swipe"
-        }),
+        })),
         list = $list.dxList("instance"),
-        $item = list.itemElements().eq(0);
+        $item = $(list.itemElements()).eq(0);
 
     var startEvent = pointerMock($item).start().swipeStart().lastEvent();
     assert.ok(startEvent.cancel, "swipe canceled");
@@ -1204,37 +1204,37 @@ QUnit.module("context delete decorator", {
 });
 
 QUnit.test("overlay content markup", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [0, 1, 2],
             allowItemDeleting: true,
             itemDeleteMode: "context"
-        }),
+        })),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     var $menu = $list.find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance"),
-        $deleteMenuItem = menu.content().find(toSelector(CONTEXTMENU_MENUITEM));
+        $deleteMenuItem = $(menu.content()).find(toSelector(CONTEXTMENU_MENUITEM));
 
     assert.ok($deleteMenuItem.length, "delete menu item generated");
     assert.equal($deleteMenuItem.text(), "Delete", "delete menu item text set");
 });
 
 QUnit.test("item should be deleted from menu", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [0, 1, 2],
             editEnabled: true,
             allowItemDeleting: true,
             itemDeleteMode: "context"
-        }),
+        })),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     var $menu = $list.find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance"),
-        $deleteMenuItem = menu.content().find(toSelector(CONTEXTMENU_MENUITEM));
+        $deleteMenuItem = $(menu.content()).find(toSelector(CONTEXTMENU_MENUITEM));
 
     list.deleteItem = function($itemElement) {
         assert.ok(true, "item is deleted");
@@ -1262,11 +1262,11 @@ QUnit.test("menu content markup", function(assert) {
         }),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     var $menu = $list.find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance"),
-        $menuContent = menu.content(),
+        $menuContent = $(menu.content()),
         $contextMenuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
     assert.ok($menuContent.hasClass(CONTEXTMENU_MENUCONTENT_CLASS), "menu content class set");
@@ -1283,11 +1283,11 @@ QUnit.test("delete button should be rendered in menu if delete enabled", functio
         }),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     var $menu = $list.find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance"),
-        $menuContent = menu.content(),
+        $menuContent = $(menu.content()),
         $contextMenuItems = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
     assert.equal($contextMenuItems.length, 2, "context menu item and delete item menu generated");
@@ -1297,14 +1297,14 @@ QUnit.test("delete button should be rendered in menu if delete enabled", functio
 QUnit.test("item hold should open overlay", function(assert) {
     assert.expect(1);
 
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [0, 1, 2],
             allowItemDeleting: true,
             itemDeleteMode: "context"
-        }),
+        })),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -1318,11 +1318,11 @@ QUnit.test("item hold should open overlay", function(assert) {
 QUnit.test("item hold should not open overlay if editing disabled", function(assert) {
     assert.expect(1);
 
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [0, 1, 2],
             allowItemDeleting: true,
             itemDeleteMode: "context"
-        }),
+        })),
         list = $list.data("dxList");
 
     list.option("allowItemDeleting", false);
@@ -1332,15 +1332,15 @@ QUnit.test("item hold should not open overlay if editing disabled", function(ass
 });
 
 QUnit.test("item hold should not open overlay if widget is disabled", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [0, 1, 2],
             disabled: true,
             allowItemDeleting: true,
             itemDeleteMode: "context"
-        }),
+        })),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -1366,14 +1366,14 @@ QUnit.test("menu item click action should be fired with correct arguments", func
         }),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
 
     var $menu = $list.find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance"),
-        $menuContent = menu.content(),
+        $menuContent = $(menu.content()),
         $menuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
     $item.trigger(contextMenuEvent.name);
@@ -1393,7 +1393,7 @@ QUnit.test("delete menu item click should remove item and hide overlay", functio
         }),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     list.deleteItem = function(itemElement) {
         assert.ok(true, "delete action executed");
@@ -1404,7 +1404,7 @@ QUnit.test("delete menu item click should remove item and hide overlay", functio
         $item = $items.eq(0),
         $menu = list.element().find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance"),
-        $menuContent = menu.content(),
+        $menuContent = $(menu.content()),
         $deleteMenuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
     $item.trigger(contextMenuEvent.name);
@@ -1420,14 +1420,14 @@ QUnit.test("menu should be closed after click", function(assert) {
         }),
         list = $list.data("dxList");
 
-    list.itemElements().eq(0).trigger("dxcontextmenu");
+    $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
 
     var $menu = $list.find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance"),
-        $menuContent = menu.content(),
+        $menuContent = $(menu.content()),
         $menuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
 
     $item.trigger(contextMenuEvent.name);
@@ -1479,12 +1479,12 @@ QUnit.test("onItemHold should not be fired if context menu was not opened by hol
 QUnit.test("rtlEnabled option should be passed to overlay", function(assert) {
     assert.expect(1);
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: [0, 1, 2],
         allowItemDeleting: true,
         itemDeleteMode: "context",
         rtlEnabled: true
-    });
+    }));
 
     var menu = $list.find(toSelector(CONTEXTMENU_CLASS)).dxOverlay("instance");
 
@@ -1500,11 +1500,11 @@ var SELECT_DECORATOR_ENABLED_CLASS = "dx-list-select-decorator-enabled",
     SELECT_CHECKBOX_CLASS = "dx-list-select-checkbox";
 
 QUnit.test("list item markup", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         showSelectionControls: true,
         selectionMode: "multiple"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -1517,11 +1517,11 @@ QUnit.test("list item markup", function(assert) {
 });
 
 QUnit.test("selection control has focusStateEnabled = false and hoverStateEnabled = false", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         showSelectionControls: true,
         selectionMode: "multiple"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -1538,11 +1538,11 @@ QUnit.test("checkbox click should trigger select callback only once with correct
 
     var item = "0";
 
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [item],
             showSelectionControls: true,
             selectionMode: "multiple"
-        }),
+        })),
         list = $list.dxList("instance");
 
     list.selectItem = function() {
@@ -1559,11 +1559,11 @@ QUnit.test("checkbox click should trigger unselect callback only once with corre
 
     var item = "0";
 
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: [item],
             showSelectionControls: true,
             selectionMode: "multiple"
-        }),
+        })),
         list = $list.dxList("instance");
 
     list.unselectItem = function() {
@@ -1577,11 +1577,11 @@ QUnit.test("checkbox click should trigger unselect callback only once with corre
 });
 
 QUnit.test("rendering if selecting is disabled", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         showSelectionControls: true,
         selectionMode: "none"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -1594,11 +1594,11 @@ QUnit.test("rendering if selecting is disabled", function(assert) {
 QUnit.test("checkbox should be refreshed with correct state", function(assert) {
     assert.expect(1);
 
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0"],
             showSelectionControls: true,
             selectionMode: "multiple"
-        }),
+        })),
         list = $list.dxList("instance");
 
     var checkbox = function() {
@@ -1612,11 +1612,11 @@ QUnit.test("checkbox should be refreshed with correct state", function(assert) {
 });
 
 QUnit.test("checkbox should be refreshed when selectItem is called on it", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0"],
             showSelectionControls: true,
             selectionMode: "multiple"
-        }),
+        })),
         list = $list.dxList("instance");
 
     var item = function() {
@@ -1632,11 +1632,11 @@ QUnit.test("checkbox should be refreshed when selectItem is called on it", funct
 });
 
 QUnit.test("checkbox should be refreshed when unselectItem is called on it", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0"],
             showSelectionControls: true,
             selectionMode: "multiple"
-        }),
+        })),
         list = $list.dxList("instance");
 
     var item = function() {
@@ -1653,11 +1653,11 @@ QUnit.test("checkbox should be refreshed when unselectItem is called on it", fun
 });
 
 QUnit.test("selection enabled class should be added when needed", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0"],
             showSelectionControls: true,
             selectionMode: "multiple"
-        }),
+        })),
         list = $list.dxList("instance");
 
     assert.ok($list.hasClass(SELECT_DECORATOR_ENABLED_CLASS), "class added");
@@ -1666,11 +1666,11 @@ QUnit.test("selection enabled class should be added when needed", function(asser
 });
 
 QUnit.test("item click changes checkbox state", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         showSelectionControls: true,
         selectionMode: "multiple"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -1742,12 +1742,12 @@ QUnit.test("click on checkbox should trigger events only once", function(assert)
 });
 
 QUnit.test("click on item should not change selected state if widget is disabled", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             disabled: true,
             items: ["0"],
             showSelectionControls: true,
             selectionMode: "multiple"
-        }),
+        })),
         list = $("#templated-list").dxList("instance");
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
@@ -1759,13 +1759,13 @@ QUnit.test("click on item should not change selected state if widget is disabled
 });
 
 QUnit.test("click on delete toggle should not change selected state", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemDeleting: true,
         itemDeleteMode: "toggle",
         showSelectionControls: true,
         selectionMode: "multiple"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -1779,13 +1779,13 @@ QUnit.test("click on delete toggle should not change selected state", function(a
 });
 
 QUnit.test("click on item ready to delete with toggle mode should not change selected state", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1"],
         allowItemDeleting: true,
         itemDeleteMode: "toggle",
         showSelectionControls: true,
         selectionMode: "multiple"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -1802,13 +1802,13 @@ QUnit.test("click on item ready to delete with toggle mode should not change sel
 });
 
 QUnit.test("click on item ready to delete with slideButton mode should not change selected state", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1"],
         allowItemDeleting: true,
         itemDeleteMode: "slideButton",
         showSelectionControls: true,
         selectionMode: "multiple"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -1879,13 +1879,13 @@ QUnit.test("next loaded page should be selected when selectAll is enabled", func
         paginate: true
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all",
         pageLoadMode: "nextButton",
         selectAllMode: "allPages"
-    });
+    }));
 
     var $selectAll = $list.find(".dx-list-select-all .dx-checkbox"),
         $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
@@ -1910,12 +1910,12 @@ QUnit.test("selectAll should not select items if they are not in current filter"
         filter: ["id", 1]
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all",
         selectAllMode: "allPages"
-    });
+    }));
 
     var $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
     $selectAll.trigger("dxclick");
@@ -1932,13 +1932,13 @@ QUnit.test("selectAll checkbox should change it's state to undefined when one it
         paginate: true
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all",
         pageLoadMode: "nextButton",
         selectAllMode: "allPages"
-    });
+    }));
 
     var $selectAll = $list.find(".dx-list-select-all .dx-checkbox"),
         $checkBox = $list.find(".dx-checkbox").eq(1),
@@ -1960,13 +1960,13 @@ QUnit.test("selectAll should change state after page loading when all items was 
         paginate: true
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all",
         pageLoadMode: "nextButton",
         selectAllMode: "allPages"
-    });
+    }));
 
     var $selectAll = $list.find(".dx-list-select-all .dx-checkbox"),
         $checkBox = $list.find(".dx-checkbox:gt(0)"),
@@ -1989,13 +1989,13 @@ QUnit.test("selectAll should change state after page loading if selectAllMode wa
         paginate: true
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all",
         pageLoadMode: "nextButton",
         selectAllMode: "page"
-    });
+    }));
 
     $list.dxList("option", "selectAllMode", "allPages");
 
@@ -2019,12 +2019,12 @@ QUnit.test("items should starts from first page after selectAllMode was changed"
         paginate: true
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         selectionMode: "all",
         pageLoadMode: "nextButton",
         selectAllMode: "page"
-    });
+    }));
 
     var $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
 
@@ -2042,13 +2042,13 @@ QUnit.test("more button is shown if selectAllMode was changed after load allpage
         paginate: true
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all",
         pageLoadMode: "nextButton",
         selectAllMode: "page"
-    });
+    }));
 
     var $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
     $moreButton.trigger("dxclick");
@@ -2064,12 +2064,12 @@ QUnit.test("more button is shown if selectAllMode was changed after load allpage
 QUnit.module("item select decorator with all selection mode");
 
 QUnit.test("render selectAll item when showSelectedAll is true", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: [0],
         showSelectionControls: true,
         selectionMode: "all",
         selectAllText: "Test"
-    });
+    }));
 
     var $multipleContainer = $list.find(".dx-list-select-all");
     assert.equal($multipleContainer.length, 1, "container for SelectAll rendered");
@@ -2079,12 +2079,12 @@ QUnit.test("render selectAll item when showSelectedAll is true", function(assert
 });
 
 QUnit.test("render selectAll item when showSelectedAll is true", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: [],
         showSelectionControls: true,
         selectionMode: "all",
         selectAllText: "Test"
-    });
+    }));
 
     var $multipleContainer = $list.find(".dx-list-select-all");
     assert.ok($multipleContainer.is(":hidden"), "container for SelectAll is hidden");
@@ -2093,22 +2093,22 @@ QUnit.test("render selectAll item when showSelectedAll is true", function(assert
 QUnit.test("selectAll updated on init", function(assert) {
     var items = [0, 1];
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: items,
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
     assert.equal($checkbox.dxCheckBox("option", "value"), false, "selectAll updated after init");
 });
 
 QUnit.test("selectAll should be removed when editEnabled switched off", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: [0, 1],
         showSelectionControls: false,
         selectionMode: "all"
-    });
+    }));
 
     assert.equal($list.find(".dx-list-select-all").length, 0, "selectAll not rendered");
 
@@ -2122,11 +2122,11 @@ QUnit.test("selectAll should be removed when editEnabled switched off", function
 QUnit.test("selectAll selects all items", function(assert) {
     var items = [0, 1];
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: items,
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
     $checkbox.trigger("dxclick");
@@ -2152,12 +2152,12 @@ QUnit.test("selectAll triggers callback when selects all items", function(assert
 
 QUnit.test("selectAll unselect all items when all items selected", function(assert) {
     var items = [0, 1];
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: items,
         selectedItems: items.slice(),
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
     $checkbox.trigger("dxclick");
@@ -2183,11 +2183,11 @@ QUnit.test("selectAll triggers callback when unselect all items when all items s
 QUnit.test("selectAll selects all items when click on item", function(assert) {
     var items = [0, 1];
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: items,
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $selectAll = $list.find(".dx-list-select-all");
     $selectAll.trigger("dxclick");
@@ -2198,11 +2198,11 @@ QUnit.test("selectAll selects all items when click on item", function(assert) {
 QUnit.test("selectAll selects all items when click on checkBox and selectionType is item", function(assert) {
     var items = [0, 1];
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: items,
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $checkbox = $list.find(".dx-list-select-all .dx-checkbox");
     $checkbox.trigger("dxclick");
@@ -2211,11 +2211,11 @@ QUnit.test("selectAll selects all items when click on checkBox and selectionType
 });
 
 QUnit.test("selectAll checkbox is selected when all items selected", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: [0, 1],
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $items = $list.find(".dx-list-item");
     $items.trigger("dxclick");
@@ -2231,11 +2231,11 @@ QUnit.test("selectAll checkbox is selected when all items selected (ds w/o total
         paginate: true
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $items = $list.find(".dx-list-item");
     $items.trigger("dxclick");
@@ -2252,11 +2252,11 @@ QUnit.test("selectAll checkbox is selected when all items selected (ds with tota
         requireTotalCount: true
     });
 
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $items = $list.find(".dx-list-item");
     $items.trigger("dxclick");
@@ -2288,11 +2288,11 @@ QUnit.test("", function(assert) {
 });
 
 QUnit.test("selectAll checkbox has indeterminate state when not all items selected", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: [0, 1],
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $items = $list.find(".dx-list-item");
     $items.trigger("dxclick"); // NOTE: select all
@@ -2304,11 +2304,11 @@ QUnit.test("selectAll checkbox has indeterminate state when not all items select
 });
 
 QUnit.test("selectAll checkbox is unselected when all items unselected", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: [0, 1],
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $items = $list.find(".dx-list-item");
     $items.trigger("dxclick"); // NOTE: select all
@@ -2320,7 +2320,7 @@ QUnit.test("selectAll checkbox is unselected when all items unselected", functio
 });
 
 QUnit.test("selectAll checkbox should be updated after load next page", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         dataSource: new DataSource({
             store: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
             paginate: true,
@@ -2329,7 +2329,7 @@ QUnit.test("selectAll checkbox should be updated after load next page", function
         pageLoadMode: "nextButton",
         showSelectionControls: true,
         selectionMode: "all"
-    });
+    }));
 
     var $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
     $selectAll.trigger("dxclick");
@@ -2378,11 +2378,11 @@ var SELECT_RADIO_BUTTON_CONTAINER_CLASS = "dx-list-select-radiobutton-container"
     SELECT_RADIO_BUTTON_CLASS = "dx-list-select-radiobutton";
 
 QUnit.test("list item markup", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         showSelectionControls: true,
         selectionMode: "single"
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -2394,11 +2394,11 @@ QUnit.test("list item markup", function(assert) {
 });
 
 QUnit.test("item click changes radio button state only to true in single selection mode", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         showSelectionControls: true,
         selectionMode: 'single'
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -2469,10 +2469,10 @@ var topTranslation = function($item) {
 };
 
 QUnit.test("list item markup should be correct", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0);
@@ -2485,10 +2485,10 @@ QUnit.test("list item markup should be correct", function(assert) {
 });
 
 QUnit.test("reordering class should be present on item during drag", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -2516,10 +2516,10 @@ QUnit.test("reordering should not be possible if item disabled", function(assert
 });
 
 QUnit.test("list item should be duplicated on drag start", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -2539,10 +2539,10 @@ QUnit.test("list item should be duplicated on drag start", function(assert) {
 });
 
 QUnit.test("ghost item should be moved by drag", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -2563,10 +2563,10 @@ QUnit.test("ghost item should be moved by drag", function(assert) {
 });
 
 QUnit.test("item position should be reset after drag", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
@@ -2577,10 +2577,10 @@ QUnit.test("item position should be reset after drag", function(assert) {
 });
 
 QUnit.test("next item should be moved", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1", "2"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item0 = $items.eq(0),
@@ -2602,10 +2602,10 @@ QUnit.test("next item should be moved", function(assert) {
 });
 
 QUnit.test("prev item should be moved", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1", "2"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item0 = $items.eq(0),
@@ -2627,10 +2627,10 @@ QUnit.test("prev item should be moved", function(assert) {
 });
 
 QUnit.test("next item should be moved back if item moved to start position", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1", "2"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item0 = $items.eq(0),
@@ -2647,10 +2647,10 @@ QUnit.test("next item should be moved back if item moved to start position", fun
 });
 
 QUnit.test("prev item should be moved back if item moved to start position", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
         items: ["0", "1", "2"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item0 = $items.eq(0),
@@ -2675,10 +2675,10 @@ QUnit.test("item should be moved with animation", function(assert) {
     };
 
     try {
-        var $list = $("#templated-list").dxList({
+        var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2"],
             allowItemReordering: true
-        });
+        }));
 
         var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
             $item1 = $items.eq(1),
@@ -2700,10 +2700,10 @@ QUnit.test("item should be dropped with animation", function(assert) {
     };
 
     try {
-        var $list = $("#templated-list").dxList({
+        var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2"],
             allowItemReordering: true
-        });
+        }));
 
         var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
             $item1 = $items.eq(1),
@@ -2719,10 +2719,10 @@ QUnit.test("item should be dropped with animation", function(assert) {
 });
 
 QUnit.test("drop item should reorder list items with correct indexes", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
             items: ["0", "1", "2"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     list.reorderItem = function(itemElement, toItemElement) {
@@ -2744,10 +2744,10 @@ QUnit.test("drop item should reorder list items with correct indexes", function(
 });
 
 QUnit.test("items should reset positions after dragend", function(assert) {
-    var $list = $("#list").dxList({
+    var $list = $($("#list").dxList({
         items: ["0", "1", "2"],
         allowItemReordering: true
-    });
+    }));
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item1 = $items.eq(1),
@@ -2820,10 +2820,10 @@ var mockScrollViewForReordering = function(list) {
 };
 
 QUnit.test("list should be scrolled if drag near bottom continuously", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -2844,10 +2844,10 @@ QUnit.test("list should be scrolled if drag near bottom continuously", function(
 });
 
 QUnit.test("last item should be moved with scrolling", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -2868,10 +2868,10 @@ QUnit.test("last item should be moved with scrolling", function(assert) {
 });
 
 QUnit.test("item should be moved without timeout if pointerType is mouse", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -2892,10 +2892,10 @@ QUnit.test("item should be moved without timeout if pointerType is mouse", funct
 });
 
 QUnit.test("list should not be scrolled greater then scroll height", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -2916,10 +2916,10 @@ QUnit.test("list should not be scrolled greater then scroll height", function(as
 });
 
 QUnit.test("list should be scrolled if drag near top continuously", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -2941,10 +2941,10 @@ QUnit.test("list should be scrolled if drag near top continuously", function(ass
 });
 
 QUnit.test("list should be scrolled less then scroll height", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -2966,10 +2966,10 @@ QUnit.test("list should be scrolled less then scroll height", function(assert) {
 });
 
 QUnit.test("animator should be stopped", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -2994,10 +2994,10 @@ QUnit.test("animator should be stopped", function(assert) {
 });
 
 QUnit.test("animator should be stopped on drag end", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -3017,10 +3017,10 @@ QUnit.test("animator should be stopped on drag end", function(assert) {
 });
 
 QUnit.test("scroll step should be adjusted if scroll bottom", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);
@@ -3042,10 +3042,10 @@ QUnit.test("scroll step should be adjusted if scroll bottom", function(assert) {
 });
 
 QUnit.test("scroll step should be adjusted if scroll top", function(assert) {
-    var $list = $("#templated-list").dxList({
+    var $list = $($("#templated-list").dxList({
             items: ["0", "1", "2", "3"],
             allowItemReordering: true
-        }),
+        })),
         list = $list.dxList("instance");
 
     mockScrollViewForReordering(list);

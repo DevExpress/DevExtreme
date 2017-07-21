@@ -858,7 +858,7 @@ QUnit.test("Tooltip should appear by appointment click", function(assert) {
         ]
     });
 
-    this.instance.element().find(".dx-scheduler-appointment").trigger("dxclick");
+    $(this.instance.element()).find(".dx-scheduler-appointment").trigger("dxclick");
 
     this.clock.tick(300);
 
@@ -1263,7 +1263,7 @@ QUnit.test("Long appointment parts popup should have original data", function(as
         ]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(1);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1);
     $appointment.trigger(dblclickEvent.name);
 
     var detailsForm = this.instance.getAppointmentDetailsForm(),

@@ -2483,7 +2483,7 @@ QUnit.test("Show the export to excel button and a context menu via an option", f
     this.headerPanel.endUpdate();
 
     $exportButton = $container.find(".dx-datagrid-export-button").first();
-    $exportButton.trigger("dxclick");
+    $($exportButton).trigger("dxclick");
     $exportMenu = $(".dx-context-menu.dx-datagrid-export-menu").first();
 
     //assert
@@ -2625,7 +2625,7 @@ QUnit.test("The export context menu is shown", function(assert) {
     //act
     this.headerPanel.render($container);
     $exportButton = $container.find(".dx-datagrid-export-button").first();
-    $exportButton.trigger("dxclick");
+    $($exportButton).trigger("dxclick");
 
     //assert
     $exportMenu = $(".dx-context-menu.dx-datagrid-export-menu").first();
@@ -2692,8 +2692,8 @@ QUnit.test("Context menu is hidden when item with export format is clicked", fun
     this.exportController.exportToExcel = noop;
     menuInstance.option("animation", false);
 
-    $menuItems = menuInstance.element().find(".dx-menu-item");
-    $menuItems.first().trigger("dxclick");
+    $menuItems = $(menuInstance.element().find(".dx-menu-item"));
+    $($menuItems.first()).trigger("dxclick");
 
     assert.ok(!menuInstance.option("visible"), "menu is hidden");
 });
@@ -2723,8 +2723,8 @@ QUnit.test("Context menu is hidden when item with export selected is clicked", f
     this.exportController.exportToExcel = noop;
     menuInstance.option("animation", false);
 
-    $menuItems = menuInstance.element().find(".dx-menu-item");
-    $menuItems.eq(1).trigger("dxclick");
+    $menuItems = $(menuInstance.element().find(".dx-menu-item"));
+    $($menuItems.eq(1)).trigger("dxclick");
 
     assert.ok(!menuInstance.option("visible"), "menu is hidden");
 });
@@ -2773,7 +2773,7 @@ QUnit.test("Export to Excel button call`s exportTo when the button text is local
         exportToCalled = true;
     };
 
-    $menuItems.first().trigger("dxclick");
+    $($menuItems.first()).trigger("dxclick");
 
     // assert
     assert.ok(exportToCalled, "exportTo Called");

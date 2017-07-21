@@ -255,7 +255,7 @@ QUnit.test("'currentViewUpdated' observer should be notified after selection of 
     var stub = sinon.stub(this.instance, "notifyObserver").withArgs("currentViewUpdated");
     var $item = $switcher.find(".dx-item").eq(1);
 
-    $item.trigger("dxclick");
+    $($item).trigger("dxclick");
     var args = stub.getCall(0).args;
     assert.ok(stub.calledOnce, "Observer is notified");
     assert.equal(args[1], "day", "Arguments are OK");
@@ -277,7 +277,7 @@ QUnit.test("'currentViewUpdated' observer should be notified after click on dxDr
     var stub = sinon.stub(this.instance, "notifyObserver").withArgs("currentViewUpdated"),
         $item = switcher._popup.content().find(".dx-item").eq(1);
 
-    $item.trigger("dxclick");
+    $($item).trigger("dxclick");
 
     var args = stub.getCall(0).args;
     assert.ok(stub.calledOnce, "Observer is notified");

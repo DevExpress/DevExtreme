@@ -533,7 +533,7 @@ QUnit.test("Drag event should not contain maxBottomOffset & maxRightOffset", fun
     var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
-    $appointment.on(dragEvents.start, function(e) {
+    $($appointment).on(dragEvents.start, function(e) {
         assert.equal(e.maxBottomOffset, null, "maxBottomOffset is not set");
         assert.equal(e.maxRightOffset, null, "maxRightOffset is not set");
     });
@@ -587,7 +587,7 @@ QUnit.test("Drag event should not contain maxBottomOffset & maxLeftOffset for RT
     var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
-    $appointment.on(dragEvents.start, function(e) {
+    $($appointment).on(dragEvents.start, function(e) {
         assert.equal(e.maxBottomOffset, null, "maxBottomOffset is not set");
         assert.equal(e.maxLeftOffset, null, "maxLeftOffset is not set");
     });
@@ -984,7 +984,7 @@ QUnit.test("Default behavior of item click should prevented when set e.cancel", 
     var stub = sinon.stub(this.instance, "notifyObserver").withArgs("showAppointmentTooltip");
     var $item = $(".dx-scheduler-appointment").eq(0);
 
-    $item.trigger("dxclick");
+    $($item).trigger("dxclick");
     this.clock.tick(300);
 
     assert.notOk(stub.called, "showAppointmentTooltip doesn't shown");
@@ -1023,7 +1023,7 @@ QUnit.test("onAppointmentDblClick should fires when item is dbl clicked", functi
     });
 
     var $item = $(".dx-scheduler-appointment").eq(0);
-    $item.trigger(dblclickEvent.name);
+    $($item).trigger(dblclickEvent.name);
 });
 
 QUnit.test("Popup should be shown when onAppointmentDblClick", function(assert) {
@@ -1047,7 +1047,7 @@ QUnit.test("Popup should be shown when onAppointmentDblClick", function(assert) 
     var stub = sinon.stub(this.instance, "notifyObserver").withArgs("showEditAppointmentPopup");
     var $item = $(".dx-scheduler-appointment").eq(0);
 
-    $item.trigger(dblclickEvent.name);
+    $($item).trigger(dblclickEvent.name);
 
     assert.notOk(stub.called, "showEditAppointmentPopup doesn't shown");
 });
@@ -1125,10 +1125,10 @@ QUnit.test("Focused element should be changed on focusin", function(assert) {
         focusStateEnabled: true
     });
     var $appointments = $(".dx-scheduler-appointment");
-    $appointments.eq(0).trigger("focusin");
+    $($appointments.eq(0)).trigger("focusin");
     assert.deepEqual($appointments.get(0), this.instance.option("focusedElement").get(0), "right element is focused");
 
-    $appointments.eq(1).trigger("focusin");
+    $($appointments.eq(1)).trigger("focusin");
     assert.deepEqual($appointments.get(1), this.instance.option("focusedElement").get(0), "right element is focused");
 });
 
@@ -1167,7 +1167,7 @@ QUnit.test("Appointment popup should be opened after enter key press", function(
         keyboard = keyboardMock($appointments.eq(0));
 
 
-    $appointments.eq(0).trigger("focusin");
+    $($appointments.eq(0)).trigger("focusin");
     keyboard.keyDown("enter");
     this.clock.tick(300);
 
@@ -1213,7 +1213,7 @@ QUnit.test("Appointment should be deleted after delete key press, if allowDelete
         $appointments = $(".dx-scheduler-appointment"),
         $targetAppointment = $appointments.eq(1);
 
-    $targetAppointment.trigger("focusin");
+    $($targetAppointment).trigger("focusin");
 
     var keyboard = keyboardMock($targetAppointment);
     keyboard.keyDown("del");
@@ -1267,7 +1267,7 @@ QUnit.test("Appointment should not be deleted after delete key press, if allowDe
         $appointments = $(".dx-scheduler-appointment"),
         $targetAppointment = $appointments.eq(1);
 
-    $targetAppointment.trigger("focusin");
+    $($targetAppointment).trigger("focusin");
 
     var keyboard = keyboardMock($targetAppointment);
     keyboard.keyDown("del");
@@ -1297,7 +1297,7 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
 
     var $appointment = $(".dx-scheduler-appointment").eq(0);
 
-    $appointment.trigger("focusin");
+    $($appointment).trigger("focusin");
 
     var focusSpy = sinon.spy(this.instance.option("focusedElement"), "focus"),
         appointmentFocusedStub = sinon.stub(this.instance, "notifyObserver").withArgs("appointmentFocused");
@@ -1344,14 +1344,14 @@ QUnit.test("Default behavior of tab button should be prevented for apps", functi
     var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
         keyboard = keyboardMock($appointments.eq(0));
 
-    this.instance.element().on("keydown", function(e) {
+    $(this.instance.element()).on("keydown", function(e) {
         assert.ok(e.isDefaultPrevented(), "default tab prevented");
     });
 
-    $appointments.eq(0).trigger("focusin");
+    $($appointments.eq(0)).trigger("focusin");
     keyboard.keyDown("tab");
 
-    $appointments.off("keydown");
+    $($appointments).off("keydown");
 });
 
 QUnit.test("Focus shouldn't be prevent when first appointment is reached in back order", function(assert) {
@@ -1386,13 +1386,13 @@ QUnit.test("Focus shouldn't be prevent when first appointment is reached in back
     var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
         keyboard = keyboardMock($appointments.eq(0));
 
-    this.instance.element().on("keydown", function(e) {
+    $(this.instance.element()).on("keydown", function(e) {
         assert.notOk(e.isDefaultPrevented(), "default tab isn't prevented");
     });
 
-    $appointments.eq(0).trigger("focusin");
+    $($appointments.eq(0)).trigger("focusin");
     keyboard.keyDown("tab", { shiftKey: true });
 
-    $appointments.off("keydown");
+    $($appointments).off("keydown");
 });
 

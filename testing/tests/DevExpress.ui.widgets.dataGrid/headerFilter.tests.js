@@ -575,7 +575,7 @@ QUnit.test("Header filter with items when column with dataType date", function(a
     assert.strictEqual($popupContent.find(".dx-treeview-item").eq(1).text(), "1986", "text treeview item");
 
     //act
-    $popupContent.find(".dx-treeview-toggle-item-visibility").trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
 
     //assert
     assert.equal($popupContent.find(".dx-treeview-node-container-opened").length, 1, "treeview node container opened");
@@ -583,7 +583,7 @@ QUnit.test("Header filter with items when column with dataType date", function(a
     assert.strictEqual($popupContent.find(".dx-treeview-item").last().text(), "January", "text the nested treeview item");
 
     //act
-    $popupContent.find(".dx-treeview-toggle-item-visibility").last().trigger("dxclick"); // expanded nested item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").last()).trigger("dxclick"); // expanded nested item
 
     //assert
     assert.equal($popupContent.find(".dx-treeview-node-container-opened").length, 2, "treeview node container opened");
@@ -716,13 +716,13 @@ QUnit.test("Header filter with items when column with dataType date and filterVa
     assert.strictEqual($popupContent.find(".dx-treeview-item").text(), "1986", "text treeview item");
 
     //act
-    $popupContent.find(".dx-treeview-toggle-item-visibility").trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
 
     //assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 2, "count treeview items");
 
     //act
-    $popupContent.find(".dx-treeview-toggle-item-visibility").last().trigger("dxclick"); // expanded nested item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").last()).trigger("dxclick"); // expanded nested item
 
     //assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 4, "count treeview items");
@@ -759,7 +759,7 @@ QUnit.test("Save state when selecting", function(assert) {
     assert.ok($popupContent.find(".dx-list-item").last().hasClass("dx-list-item-selected"), "selected second item");
 
     //act
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
     that.clock.tick(500);
 
 
@@ -808,14 +808,14 @@ QUnit.test("Update selecting for first page when filterValues for second page is
     assert.equal($popupContent.find(".dx-list-item").length, 20, "count list items");
 
     //act
-    $popupContent.find(".dx-list-item .dx-checkbox").eq(0).trigger("dxclick");
+    $($popupContent.find(".dx-list-item .dx-checkbox").eq(0)).trigger("dxclick");
 
     //assert
     assert.ok(!$popupContent.find(".dx-list-item").eq(0).hasClass("dx-list-item-selected"), "first item is unselected");
     assert.ok($popupContent.find(".dx-list-item").eq(1).hasClass("dx-list-item-selected"), "second item is selected");
 
     //act
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
     that.clock.tick(500);
 
 
@@ -967,7 +967,7 @@ QUnit.test("Second page selection after select all", function(assert) {
     assert.strictEqual($popupContent.find(".dx-list-select-all-checkbox").dxCheckBox("option", "value"), undefined, "select all checkbox value is unchecked");
 
     //act
-    $popupContent.find(".dx-list-select-all-checkbox").trigger("dxclick");
+    $($popupContent.find(".dx-list-select-all-checkbox")).trigger("dxclick");
     $popupContent.find(".dx-scrollview").dxScrollView("option", "onReachBottom")();
 
     //assert
@@ -1006,8 +1006,8 @@ QUnit.test("Second page selection after unselect all", function(assert) {
     assert.strictEqual($popupContent.find(".dx-list-select-all-checkbox").dxCheckBox("option", "value"), undefined, "select all checkbox value is unchecked");
 
     //act
-    $popupContent.find(".dx-list-select-all-checkbox").trigger("dxclick");
-    $popupContent.find(".dx-list-select-all-checkbox").trigger("dxclick");
+    $($popupContent.find(".dx-list-select-all-checkbox")).trigger("dxclick");
+    $($popupContent.find(".dx-list-select-all-checkbox")).trigger("dxclick");
     $popupContent.find(".dx-scrollview").dxScrollView("option", "onReachBottom")();
 
     //assert
@@ -1042,19 +1042,19 @@ QUnit.test("Save state when selecting for column with dataType date", function(a
     assert.strictEqual($popupContent.find(".dx-treeview-item").text(), "1986", "text treeview item");
 
     //act
-    $popupContent.find(".dx-treeview-toggle-item-visibility").trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
 
     //assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 3, "count treeview items");
 
     //act
-    $popupContent.find(".dx-treeview-node").last().children(".dx-checkbox").trigger("dxclick"); // select second item
+    $($popupContent.find(".dx-treeview-node").last().children(".dx-checkbox")).trigger("dxclick"); // select second item
 
     //assert
     assert.ok($popupContent.find(".dx-treeview-node").last().children(".dx-checkbox").hasClass("dx-checkbox-checked"), "selected last item");
 
     //act
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
     that.clock.tick(500);
 
 
@@ -1076,7 +1076,7 @@ QUnit.test("Save state when selecting for column with dataType date", function(a
     assert.equal($popupContent.find(".dx-checkbox-indeterminate").length, 2, "count an indeterminate checkboxes");
 
     //act
-    $popupContent.find(".dx-treeview-toggle-item-visibility").trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
 
     //assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 3, "count treeview items");
@@ -1109,19 +1109,19 @@ QUnit.test("Save state when selecting for column with dataType date. filterType 
     assert.strictEqual($popupContent.find(".dx-treeview-item").text(), "1986", "text treeview item");
 
     //act
-    $popupContent.find(".dx-treeview-toggle-item-visibility").trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility")).trigger("dxclick"); // expanded first item
     that.clock.tick(500);
     //assert
     assert.equal($popupContent.find(".dx-treeview-item").length, 3, "count treeview items");
 
     //act
-    $popupContent.find(".dx-treeview-node").last().children(".dx-checkbox").trigger("dxclick"); // uncheck second item
+    $($popupContent.find(".dx-treeview-node").last().children(".dx-checkbox")).trigger("dxclick"); // uncheck second item
     that.clock.tick(500);
     //assert
     assert.ok(!$popupContent.find(".dx-treeview-node").last().children(".dx-checkbox").hasClass("dx-checkbox-checked"), "unchecked last item");
 
     //act
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
     that.clock.tick(500);
 
     //assert
@@ -1133,7 +1133,7 @@ QUnit.test("Save state when selecting for column with dataType date. filterType 
     //act
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
     that.clock.tick(500);
     assert.deepEqual(that.columnsController.updateOptions[1].optionName, {
         filterValues: ["1986/4"],
@@ -1166,8 +1166,8 @@ QUnit.test("Update when select all items", function(assert) {
     assert.equal($popupContent.find(".dx-list-item").length, 2, "count list items");
 
     //act
-    $popupContent.find(".dx-list-select-all-checkbox").trigger("dxclick");
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $($popupContent.find(".dx-list-select-all-checkbox")).trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
     that.clock.tick(500);
 
     //assert
@@ -1204,14 +1204,14 @@ QUnit.test("Update when selected all items and column with filterValues", functi
     assert.equal($popupContent.find(".dx-list-item").length, 2, "count list items");
 
     //act
-    $popupContent.find(".dx-checkbox").eq(0).trigger("dxclick");
+    $($popupContent.find(".dx-checkbox").eq(0)).trigger("dxclick");
 
     //assert
     assert.ok($popupContent.find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"), "select all items");
 
     //act
-    $popupContent.find(".dx-checkbox").eq(2).trigger("dxclick"); // uncheck test3
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $($popupContent.find(".dx-checkbox").eq(2)).trigger("dxclick"); // uncheck test3
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
     that.clock.tick(500);
 
     //assert
@@ -1225,7 +1225,7 @@ QUnit.test("Update when selected all items and column with filterValues", functi
     //act
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    that.headerFilterView.getPopupContainer().content().parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $(that.headerFilterView.getPopupContainer().content().parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
 
     //assert
     assert.equal(that.columnsController.updateOptions[0].columnIndex, 0, "column index");
@@ -1317,7 +1317,7 @@ QUnit.test("Header filter popup should be shown on header filter icon click in g
     $headerFilter = that.headerPanel.element().find(".dx-group-panel-item").first().find(".dx-header-filter");
 
     //act
-    $headerFilter.trigger("dxclick");
+    $($headerFilter).trigger("dxclick");
 
     //assert
     var $popupContent = that.headerFilterView.getPopupContainer().content();
@@ -1366,7 +1366,7 @@ QUnit.test("Header filter popup should be shown on header filter icon click for 
 
     $headerFilter = that.columnHeadersView.element().find("td").first().find(".dx-header-filter");
     //act
-    $headerFilter.trigger("dxclick");
+    $($headerFilter).trigger("dxclick");
 
     //assert
     var $popupContent = that.headerFilterView.getPopupContainer().content();
@@ -1457,7 +1457,7 @@ QUnit.test("Save size of the header filter after resize", function(assert) {
 
     //act
     that.headerFilterView.getPopupContainer().option({ width: 400, height: 500 });
-    $popupContainer.find(".dx-resizable-handle-corner-bottom-right").trigger(dragEvents.end);
+    $($popupContainer.find(".dx-resizable-handle-corner-bottom-right")).trigger(dragEvents.end);
     that.headerFilterController.hideHeaderFilterMenu();
     that.clock.tick(500);
 
@@ -1519,13 +1519,13 @@ QUnit.test("Checking filterValues of the column after deselect item of a loaded 
     this.headerFilterController.showHeaderFilterMenu(0);
 
     $popupContent = this.headerFilterView.getPopupContainer().content();
-    $popupContent.find(".dx-list-item").first().trigger("dxclick"); // deselect first item
+    $($popupContent.find(".dx-list-item").first()).trigger("dxclick"); // deselect first item
 
     //assert
     assert.ok($popupContent.find(".dx-list-select-all-checkbox").hasClass("dx-checkbox-indeterminate"), "checkbox in an indeterminate state");
 
     //act
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // apply filter
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
     this.clock.tick(500);
 
     //assert
@@ -1724,13 +1724,13 @@ QUnit.test("Header filter with filter row and apply filter button", function(ass
 
 
     $popupContent = that.headerFilterView.getPopupContainer().content();
-    $popupContent.find(".dx-list-item").first().trigger("dxclick");
+    $($popupContent.find(".dx-list-item").first()).trigger("dxclick");
 
     //assert
     assert.ok($popupContent.find(".dx-list-item").first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.equal(applyFilterCallCount, 1, "call applyFilter");
@@ -1794,13 +1794,13 @@ QUnit.test("Filtering by empty null value", function(assert) {
     assert.strictEqual($popupContent.find(".dx-list-item").first().text(), "(Blanks)", "empty text item");
 
     //arrange
-    $popupContent.parent().find(".dx-list-item").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-list-item").first()).trigger("dxclick");
 
     //assert
     assert.ok($popupContent.find(".dx-list-item").first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     items = that.dataController.items();
@@ -1839,13 +1839,13 @@ QUnit.test("Filtering by empty undefined value", function(assert) {
     assert.strictEqual($popupContent.find(".dx-list-item").first().text(), "(Blanks)", "empty text item");
 
     //arrange
-    $popupContent.parent().find(".dx-list-item").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-list-item").first()).trigger("dxclick");
 
     //assert
     assert.ok($popupContent.find(".dx-list-item").first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     items = that.dataController.items();
@@ -1885,13 +1885,13 @@ QUnit.test("Filtering by empty string", function(assert) {
     assert.strictEqual($popupContent.find(".dx-list-item").first().text(), "(Blanks)", "empty text item");
 
     //arrange
-    $popupContent.parent().find(".dx-list-item").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-list-item").first()).trigger("dxclick");
 
     //assert
     assert.ok($popupContent.find(".dx-list-item").first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     items = that.dataController.items();
@@ -1932,13 +1932,13 @@ QUnit.test("Filtering by empty string with filterType is exclude", function(asse
     assert.strictEqual($popupContent.find(".dx-list-item").first().text(), "(Blanks)", "empty text item");
 
     //arrange
-    $popupContent.parent().find(".dx-list-item").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-list-item").first()).trigger("dxclick");
 
     //assert
     assert.ok(!$popupContent.find(".dx-list-item").first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     items = that.dataController.items();
@@ -2291,13 +2291,13 @@ QUnit.test("Header Filter with CustomStore", function(assert) {
     assert.strictEqual($listItems.first().text(), "Value1", "text of the first item");
     assert.strictEqual($listItems.last().text(), "Value2", "text of the second item");
 
-    $listItems.last().trigger("dxclick");
+    $($listItems.last()).trigger("dxclick");
 
     //assert
     assert.ok($listItems.last().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.equal(applyFilterCallCount, 1, "call applyFilter");
@@ -2338,13 +2338,13 @@ QUnit.test("Header Filter - customStore value with filter data options", functio
     assert.strictEqual($listItems.first().text(), "Value1", "text of the first item");
     assert.strictEqual($listItems.last().text(), "Value2", "text of the second item");
 
-    $listItems.first().trigger("dxclick");
+    $($listItems.first()).trigger("dxclick");
 
     //assert
     assert.ok($listItems.first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.equal(applyFilterCallCount, 1, "call applyFilter");
@@ -2426,13 +2426,13 @@ QUnit.test("Header Filter - customization dataSource via event", function(assert
     assert.strictEqual($listItems.eq(1).text(), "value1", "text of the second item");
     assert.strictEqual($listItems.eq(2).text(), "value3", "text of the third item");
 
-    $listItems.first().trigger("dxclick");
+    $($listItems.first()).trigger("dxclick");
 
     //assert
     assert.ok($listItems.first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.equal(applyFilterCallCount, 1, "call applyFilter");
@@ -2478,13 +2478,13 @@ QUnit.test("Header Filter (List) - saving state with changed dataSource via even
     assert.strictEqual($listItems.eq(1).text(), "value1", "text of the second item");
     assert.strictEqual($listItems.eq(2).text(), "value3", "text of the third item");
 
-    $listItems.first().trigger("dxclick");
+    $($listItems.first()).trigger("dxclick");
 
     //assert
     assert.ok($listItems.first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.deepEqual(that.columnsController.getVisibleColumns()[0].filterValues, ["test1"], "filter values of the first column");
@@ -2537,14 +2537,14 @@ QUnit.test("Header Filter (TreeView) - saving state with changed dataSource via 
     assert.strictEqual($treeViewItems.eq(1).text(), "1993", "text of the second item");
     assert.strictEqual($treeViewItems.eq(2).text(), "1994", "text of the third item");
 
-    $popupContent.find(".dx-treeview-toggle-item-visibility").first().trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
     $treeViewItems = $popupContent.find(".dx-treeview-item");
 
     //assert
     assert.equal($treeViewItems.length, 4, "count item");
     assert.strictEqual($treeViewItems.eq(1).text(), "August", "text of the second item");
 
-    $popupContent.find(".dx-treeview-toggle-item-visibility").eq(1).trigger("dxclick"); // expanded nested item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").eq(1)).trigger("dxclick"); // expanded nested item
     $treeViewItems = $popupContent.find(".dx-treeview-item");
 
     //assert
@@ -2553,13 +2553,13 @@ QUnit.test("Header Filter (TreeView) - saving state with changed dataSource via 
     assert.strictEqual($treeViewItems.eq(3).text(), "28", "text of the fourth item");
 
     //act
-    $treeViewItems.eq(3).parent().find(".dx-checkbox").trigger("dxclick");
+    $($treeViewItems.eq(3).parent().find(".dx-checkbox")).trigger("dxclick");
 
     //assert
     assert.ok($treeViewItems.eq(3).parent().find(".dx-checkbox").hasClass("dx-checkbox-checked"), "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.deepEqual(that.columnsController.getVisibleColumns()[0].filterValues, ["1992/8/28"], "filter values of the first column");
@@ -2568,8 +2568,8 @@ QUnit.test("Header Filter (TreeView) - saving state with changed dataSource via 
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent.find(".dx-treeview-toggle-item-visibility").first().trigger("dxclick"); // expanded first item
-    $popupContent.find(".dx-treeview-toggle-item-visibility").eq(1).trigger("dxclick"); // expanded nested item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").eq(1)).trigger("dxclick"); // expanded nested item
 
     //assert
     $treeViewItems = $popupContent.find(".dx-treeview-item");
@@ -2618,13 +2618,13 @@ QUnit.test("Header Filter with customize text", function(assert) {
     assert.strictEqual($listItems.eq(0).text(), "Custom Text 1", "text of the first item");
     assert.strictEqual($listItems.eq(1).text(), "Custom Text 2", "text of the second item");
 
-    $listItems.first().trigger("dxclick");
+    $($listItems.first()).trigger("dxclick");
 
     //assert
     assert.ok($listItems.first().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.equal(applyFilterCallCount, 1, "call applyFilter");
@@ -2670,7 +2670,7 @@ QUnit.test("Header Filter with customize text for column with dataType the date"
     assert.equal($listItems.length, 1, "count treeview item");
     assert.strictEqual($listItems.eq(0).text(), "1992", "text of the first item");
 
-    $popupContent.find(".dx-treeview-toggle-item-visibility").first().trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
 
     //assert
     $listItems = $popupContent.find(".dx-treeview-item");
@@ -2679,13 +2679,13 @@ QUnit.test("Header Filter with customize text for column with dataType the date"
     assert.strictEqual($listItems.eq(1).text(), "Custom Text 1", "text the nested treeview item");
     assert.strictEqual($listItems.eq(2).text(), "Custom Text 2", "text the nested treeview item");
 
-    $listItems.eq(1).parent().find(".dx-checkbox").trigger("dxclick");
+    $($listItems.eq(1).parent().find(".dx-checkbox")).trigger("dxclick");
 
     //assert
     assert.equal($popupContent.find(".dx-checkbox-checked").length, 1, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.equal(applyFilterCallCount, 1, "call applyFilter");
@@ -2727,13 +2727,13 @@ QUnit.test("Header Filter with calculateFilterExpression", function(assert) {
     assert.strictEqual($listItems.eq(0).text(), "value1", "text of the first item");
     assert.strictEqual($listItems.eq(1).text(), "value3", "text of the second item");
 
-    $listItems.last().trigger("dxclick");
+    $($listItems.last()).trigger("dxclick");
 
     //assert
     assert.ok($listItems.last().find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     filter = that.getCombinedFilter();
@@ -2771,13 +2771,13 @@ QUnit.test("Apply header filter", function(assert) {
     assert.equal($listItems.length, 3, "count item");
     assert.ok($listItems.first().find(".dx-checkbox-checked").length, "checkbox checked");
 
-    $listItems.eq(1).trigger("dxclick");
+    $($listItems.eq(1)).trigger("dxclick");
 
     //assert
     assert.ok($listItems.eq(1).find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     assert.equal(countCallColumnsChanged, 1, "count call columnsChanged");
@@ -2816,13 +2816,13 @@ QUnit.test("Header filter with group interval 'year' for column with dataType 'd
     assert.strictEqual($listItems.last().text(), "1997", "text of the second item");
 
     //act
-    $listItems.eq(1).trigger("dxclick");
+    $($listItems.eq(1)).trigger("dxclick");
 
     //assert
     assert.ok($listItems.eq(1).find(".dx-checkbox-checked").length, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     filter = that.getCombinedFilter();
@@ -2863,7 +2863,7 @@ QUnit.test("Header filter with group interval 'quarter' for column with dataType
     assert.equal($listItems.length, 1, "count treeview item");
     assert.strictEqual($listItems.eq(0).text(), "1992", "text of the first item");
 
-    $popupContent.find(".dx-treeview-toggle-item-visibility").first().trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
 
     //assert
     $listItems = $popupContent.find(".dx-treeview-item");
@@ -2873,13 +2873,13 @@ QUnit.test("Header filter with group interval 'quarter' for column with dataType
     assert.strictEqual($listItems.eq(2).text(), "Q2", "text of the nested treeview item");
     assert.strictEqual($listItems.eq(3).text(), "Q4", "text of the nested treeview item");
 
-    $listItems.eq(3).parent().find(".dx-checkbox").trigger("dxclick");
+    $($listItems.eq(3).parent().find(".dx-checkbox")).trigger("dxclick");
 
     //assert
     assert.equal($popupContent.find(".dx-checkbox-checked").length, 1, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     filter = that.getCombinedFilter();
@@ -2920,7 +2920,7 @@ QUnit.test("Header filter with group interval for column with dataType 'number'"
     assert.strictEqual($listItems.eq(0).text(), "0 - 100", "text of the first item");
     assert.strictEqual($listItems.eq(1).text(), "200 - 300", "text of the first item");
 
-    $popupContent.find(".dx-treeview-toggle-item-visibility").first().trigger("dxclick"); // expanded first item
+    $($popupContent.find(".dx-treeview-toggle-item-visibility").first()).trigger("dxclick"); // expanded first item
 
     //assert
     $listItems = $popupContent.find(".dx-treeview-item");
@@ -2929,13 +2929,13 @@ QUnit.test("Header filter with group interval for column with dataType 'number'"
     assert.strictEqual($listItems.eq(1).text(), "0 - 10", "text of the nested treeview item");
     assert.strictEqual($listItems.eq(2).text(), "10 - 20", "text of the nested treeview item");
 
-    $listItems.eq(2).parent().find(".dx-checkbox").trigger("dxclick");
+    $($listItems.eq(2).parent().find(".dx-checkbox")).trigger("dxclick");
 
     //assert
     assert.equal($popupContent.find(".dx-checkbox-checked").length, 1, "checkbox checked");
 
     //act
-    $popupContent.parent().find(".dx-button").first().trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").first()).trigger("dxclick");
 
     //assert
     filter = that.getCombinedFilter();
@@ -3120,13 +3120,13 @@ QUnit.test("Not apply filter when selected all items", function(assert) {
     assert.equal($popupContent.find(".dx-list-item").length, 1, "count list items");
 
     //act
-    $popupContent.find(".dx-list-item").first().trigger("dxclick");
+    $($popupContent.find(".dx-list-item").first()).trigger("dxclick");
 
     //assert
     assert.ok($popupContent.find(".dx-list-item").first().find(".dx-checkbox-checked").length, "checked checkbox in first item");
 
     //act
-    $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // OK button
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
     that.clock.tick(500);
 
     //assert

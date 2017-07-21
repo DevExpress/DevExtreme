@@ -71,7 +71,7 @@ var toSelector = function(val) {
 };
 
 var openPopupWithList = function(lookup) {
-    lookup._$field.trigger("dxclick");
+    $(lookup._$field).trigger("dxclick");
 };
 
 QUnit.module("Lookup", {
@@ -82,10 +82,10 @@ QUnit.module("Lookup", {
 
         this.element = $("#lookup");
         this.instance = this.element.dxLookup({ fullScreen: false }).dxLookup("instance");
-        this.$field = this.instance._$field;
+        this.$field = $(this.instance._$field);
 
         this.togglePopup = function() {
-            this.instance._$field.trigger("dxclick");
+            $(this.instance._$field).trigger("dxclick");
 
             this.$popup = $(".dx-lookup-popup");
             this.popup = this.$popup.data("dxPopup") || this.$popup.data("dxPopover");
@@ -93,7 +93,7 @@ QUnit.module("Lookup", {
             this.$list = $(".dx-list");
             this.list = this.$list.dxList("instance");
 
-            this.$search = this.instance._$searchBox;
+            this.$search = $(this.instance._$searchBox);
             this.search = this.instance._searchBox;
         };
     },
@@ -157,10 +157,10 @@ QUnit.test("show popup on click", function(assert) {
     assert.equal(instance.option("displayValue"), 2, "'displayValue' option is clicked item value");
     assert.equal($field.text(), 2, "field text is clicked item value");
 
-    $field.trigger("dxclick");
+    $($field).trigger("dxclick");
     assert.ok(popup.option("visible"));
 
-    popup._wrapper().find(".dx-button").eq(0).trigger("dxclick");
+    $(popup._wrapper()).find(".dx-button").eq(0).trigger("dxclick");
     assert.equal(popup.option("visible"), false);
 });
 
@@ -179,13 +179,13 @@ QUnit.test("selecting item on click", function(assert) {
         $secondItem = $(this.$list.find(".dx-list-item")[1]);
 
     $firstItem = $(this.$list.find(".dx-list-item")[0]);
-    $firstItem.trigger("dxclick");
+    $($firstItem).trigger("dxclick");
     assert.equal(this.instance.option("value"), 1, "first value selected");
     assert.equal(this.instance.option("displayValue"), 1, "first value selected as displayValue");
     assert.equal(this.$field.text(), "1", "field text sets correctly");
 
     $secondItem = $(this.$list.find(".dx-list-item")[1]);
-    $secondItem.trigger("dxclick");
+    $($secondItem).trigger("dxclick");
     assert.equal(this.instance.option("value"), 2, "second value selected");
     assert.equal(this.instance.option("displayValue"), 2, "second value selected as displayValue");
     assert.equal(this.$field.text(), "2", "field text sets correctly");
@@ -344,7 +344,7 @@ QUnit.test("complex items", function(assert) {
     this.togglePopup();
 
     var $secondItem = $(lookup._list.element().find(".dx-list-item")[1]);
-    $secondItem.trigger("dxclick");
+    $($secondItem).trigger("dxclick");
     assert.equal(lookup.option("value"), 2);
     assert.equal(this.$field.text(), "two", "display field work in text");
     assert.equal(lookup.option("displayValue"), "two", "option 'displayValue' work in text");
@@ -394,7 +394,7 @@ QUnit.test("selectedItem should be changed correctly with composite keys and val
     var $popup = $(".dx-popup-wrapper"),
         $listItems = $popup.find(".dx-list-item");
 
-    $listItems.eq(1).trigger("dxclick");
+    $($listItems.eq(1)).trigger("dxclick");
 
     assert.strictEqual(instance.option("selectedItem"), data[1], "selectedItem is changed correctly");
 });
@@ -447,12 +447,12 @@ QUnit.test("change value expr refresh selected item", function(assert) {
 
     this.togglePopup();
 
-    var $selectedItem = this.popup.content().find("." + LIST_ITEM_SELECTED_CLASS);
+    var $selectedItem = $(this.popup.content().find("." + LIST_ITEM_SELECTED_CLASS));
     assert.equal($selectedItem.text(), "item1");
     assert.equal(this.$field.text(), "item1");
 
     $lookup.dxLookup("option", "valueExpr", "param2");
-    $selectedItem = this.popup.content().find("." + LIST_ITEM_SELECTED_CLASS);
+    $selectedItem = $(this.popup.content().find("." + LIST_ITEM_SELECTED_CLASS));
     assert.equal($selectedItem.text(), "item2");
     assert.equal(this.$field.text(), "item2");
 });
@@ -513,7 +513,7 @@ QUnit.test("option value returns object when valueExpr is 'this'", function(asse
 
     assert.equal(this.instance.option("value"), dataArray[0], "option value return object");
 
-    this.$field.trigger("dxclick");
+    $(this.$field).trigger("dxclick");
     $(".dx-list-item", this.$list).eq(3).trigger("dxclick");
     assert.equal(this.instance.option("value"), dataArray[3], "option value return object");
 });
@@ -538,7 +538,7 @@ QUnit.test("highlight item when dataSource is mapped", function(assert) {
         value: value
     });
 
-    $lookup.find("." + LOOKUP_FIELD_CLASS).trigger("dxclick");
+    $($lookup.find("." + LOOKUP_FIELD_CLASS)).trigger("dxclick");
     var $popup = $(".dx-popup-wrapper");
 
     var $listItems = $popup.find(".dx-list-item");
@@ -565,7 +565,7 @@ QUnit.test("highlight item when dataSource is mapped and valueExpr was set", fun
         valueExpr: "id"
     });
 
-    $lookup.find("." + LOOKUP_FIELD_CLASS).trigger("dxclick");
+    $($lookup.find("." + LOOKUP_FIELD_CLASS)).trigger("dxclick");
     var $popup = $(".dx-popup-wrapper");
 
     var $listItems = $popup.find(".dx-list-item");
@@ -944,12 +944,12 @@ QUnit.test("lookup with Done does not closed after item click", function(assert)
         }).dxLookup("instance"),
         $list = lookup._$list;
 
-    $list.find(".dx-list-item").eq(1).trigger("dxclick");
+    $($list.find(".dx-list-item").eq(1)).trigger("dxclick");
     assert.ok(lookup.option("opened"), "popup dont hide after click");
     assert.ok($list.find(".dx-list-item").eq(1).hasClass(LIST_ITEM_SELECTED_CLASS), "second item selected");
     assert.equal(lookup.option("value"), 1, "value dont changed without Done click");
 
-    lookup._popup._wrapper().find(".dx-popup-done.dx-button").eq(0).trigger("dxclick");
+    $(lookup._popup._wrapper()).find(".dx-popup-done.dx-button").eq(0).trigger("dxclick");
 
     assert.ok(!lookup.option("opened"), "popup hide after click by Done");
     assert.equal(lookup.option("value"), 2, "value changed after Done click");
@@ -975,7 +975,7 @@ QUnit.test("regression: can not select value after loading more items (B233390)"
 
     openPopupWithList(lookup);
 
-    var $firstListItem = lookup._list.element().find(".dx-list-item").eq(0),
+    var $firstListItem = $(lookup._list.element().find(".dx-list-item").eq(0)),
         mouse = pointerMock($firstListItem).start();
 
     mouse.down().move(0, 10).up();
@@ -1000,7 +1000,7 @@ QUnit.test("regression: B236007 (check that selection item in one lookup do not 
     openPopupWithList(firstLookup);
     assert.equal($("." + LIST_ITEM_SELECTED_CLASS).length, 1);
 
-    var $firstListItem = firstLookup._list.element().find(".dx-list-item").eq(0),
+    var $firstListItem = $(firstLookup._list.element().find(".dx-list-item").eq(0)),
         mouse = pointerMock($firstListItem);
     mouse.start().down().move(0, 10).up();
 
@@ -1115,10 +1115,10 @@ QUnit.test("Popup with Done Button hide after one click on item", function(asser
 
     this.togglePopup();
 
-    $(".dx-list-item", lookup._list.element()).eq(1).trigger("dxclick");
-    $(".dx-popup-cancel.dx-button", lookup._popup._wrapper()).eq(0).trigger("dxclick");
-    lookup._$field.trigger("dxclick");
-    $(".dx-list-item", lookup._list.element()).eq(1).trigger("dxclick");
+    $($(".dx-list-item", lookup._list.element()).eq(1)).trigger("dxclick");
+    $(".dx-popup-cancel.dx-button", $(lookup._popup._wrapper())).eq(0).trigger("dxclick");
+    $(lookup._$field).trigger("dxclick");
+    $($(".dx-list-item", lookup._list.element()).eq(1)).trigger("dxclick");
 
     this.clock.tick(250);
     assert.ok(lookup._popup.option("visible"), "popup hide after click by no selected item after hide->show events");
@@ -1142,7 +1142,7 @@ QUnit.test("B238773 - dxLookup does not work properly if the valueExpr option is
 
     this.clock.tick(200);
 
-    lookup._popup._wrapper().find(".dx-list-item").eq(0).trigger("dxclick");
+    $(lookup._popup._wrapper()).find(".dx-list-item").eq(0).trigger("dxclick");
 
     assert.equal(lookup.option("value").id, dataSource[0].id);
     assert.equal(lookup._$field.text(), "item 0");
@@ -1199,7 +1199,7 @@ QUnit.test("lookup empty class is attached when no item is selected", function(a
     assert.ok(!$lookup.hasClass(LOOKUP_EMPTY_CLASS), "Lookup with selected item has not empty class");
 
     openPopupWithList(lookup);
-    lookup._popup._wrapper().find(".dx-button.dx-popup-clear").trigger("dxclick");
+    $(lookup._popup._wrapper()).find(".dx-button.dx-popup-clear").trigger("dxclick");
 
     var $lookupField = $lookup.find(".dx-lookup-field");
 
@@ -1302,7 +1302,7 @@ QUnit.test("dxLookup should accept undefined value (T141821)", function(assert) 
 
     this.togglePopup();
     this.clock.tick(10);
-    this.$list.find(".dx-list-item").eq(0).trigger("dxclick");
+    $(this.$list.find(".dx-list-item").eq(0)).trigger("dxclick");
 });
 
 QUnit.test("data source should be paginated by default", function(assert) {
@@ -1480,7 +1480,7 @@ QUnit.test("popupWidth", function(assert) {
         usePopover: false
     }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     assert.equal(instance._popup.option("width"), 100, "Option initialized correctly");
 
@@ -1494,7 +1494,7 @@ QUnit.test("popupWidth option test for usePopover mode", function(assert) {
         usePopover: true
     }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     assert.equal(instance._popup.option("width"), 100, "Option initialized correctly");
 
@@ -1508,7 +1508,7 @@ QUnit.test("popoverWidth", function(assert) {
         width: 200
     }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     assert.equal(Math.round(instance._$popup.width()), Math.round(instance.element().width()), "Option initialized correctly");
 
@@ -1542,7 +1542,7 @@ QUnit.test("setting popupWidth to auto returns initial value", function(assert) 
 QUnit.test("popupHeight", function(assert) {
     var instance = $("#lookup").dxLookup({ popupHeight: 100, usePopover: false }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     assert.equal(instance._popup.option("height"), 100, "Option initialized correctly");
 
@@ -1580,7 +1580,7 @@ QUnit.test("searchPlaceholder", function(assert) {
         }).dxLookup("instance"),
         search;
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
     search = instance._searchBox;
 
     assert.equal(search.option("placeholder"), instance.option("searchPlaceholder"));
@@ -1600,11 +1600,11 @@ QUnit.test("searchEnabled", function(assert) {
     popup = instance._popup;
     $search = instance._$searchBox;
 
-    assert.ok(popup._wrapper().hasClass("dx-lookup-popup-search"));
+    assert.ok($(popup._wrapper()).hasClass("dx-lookup-popup-search"));
     assert.ok($search.is(":visible"), "default value");
 
     instance.option("searchEnabled", false);
-    assert.ok(!popup._wrapper().hasClass("dx-lookup-popup-search"));
+    assert.ok(!$(popup._wrapper()).hasClass("dx-lookup-popup-search"));
     assert.ok($search.is(":hidden"), "hidden");
 });
 
@@ -1625,14 +1625,14 @@ QUnit.test("cleanSearchOnOpening", function(assert) {
         $listItems = $list.find(".dx-list-item");
 
     searchBox.option("value", 1);
-    $listItems.eq(2).trigger("dxpointerdown");
+    $($listItems.eq(2)).trigger("dxpointerdown");
 
     instance.option("opened", false);
     instance.option("opened", true);
 
     assert.equal(searchBox.option("value"), "", "search value has been cleared");
 
-    $list.trigger("focusin");
+    $($list).trigger("focusin");
     assert.equal($list.find(".dx-state-focused").eq(0).text(), $listItems.eq(0).text(), "list focused item has been refreshed");
 });
 
@@ -1642,11 +1642,11 @@ QUnit.test("click on readOnly lookup doesn't toggle popup visibility", function(
         readOnly: true
     }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
     assert.ok(!instance.option("opened"), "when we click on field - list is still hidden");
 
     instance.option("readOnly", false);
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
     assert.ok(instance.option("opened"), "when we click on field - list is visible after option changed");
 });
 
@@ -1656,7 +1656,7 @@ QUnit.test("noDataText (B253876)", function(assert) {
     var instance = $("#lookup").dxLookup({ noDataText: "nope" }).dxLookup("instance"),
         listInstance;
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
     listInstance = instance._list;
 
     assert.equal(listInstance.option("noDataText"), "nope", "correct initialization");
@@ -1677,7 +1677,7 @@ QUnit.test("popup buttons text rerender (B253876 - notes)", function(assert) {
         applyValueMode: 'useButtons'
     }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     var $popupWrapper = $(".dx-popup-wrapper");
 
@@ -1709,11 +1709,11 @@ QUnit.test("displayExpr, valueExpr", function(assert) {
             displayExpr: "caption"
         }).dxLookup("instance"),
         $firstItem,
-        $field = instance._$field;
+        $field = $(instance._$field);
 
     assert.equal($field.text(), instance.option("placeholder"), "no field text if no selected value");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     $firstItem = $(instance._list.element().find(".dx-list-item")[0]);
     assert.equal($firstItem.text(), "one", "displayExpr work in list items");
@@ -1731,7 +1731,7 @@ QUnit.test("displayExpr, valueExpr", function(assert) {
 QUnit.test("value", function(assert) {
     var items = [1, 2, 3],
         instance = $("#lookup").dxLookup({ dataSource: items }).dxLookup("instance"),
-        $field = instance._$field;
+        $field = $(instance._$field);
 
     assert.equal($field.text(), instance.option("placeholder"), "no field text if no selected value");
 
@@ -1739,7 +1739,7 @@ QUnit.test("value", function(assert) {
     assert.equal($field.text(), 1, "field text is selected item value");
     assert.equal(instance.option("displayValue"), 1, "displayValue is selected item value");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     var $selectedItem = $("." + LIST_ITEM_SELECTED_CLASS, instance._list.element());
     assert.equal($selectedItem.text(), "1", "select right item after render list");
@@ -1752,7 +1752,7 @@ QUnit.test("value should be assigned by reference", function(assert) {
             value: items[0],
             displayExpr: "name"
         }).dxLookup("instance"),
-        $field = instance._$field;
+        $field = $(instance._$field);
 
     assert.equal($field.text(), "name", "item was found in items by reference");
 });
@@ -1765,9 +1765,9 @@ QUnit.test("value in field should be selected", function(assert) {
             value: date
         }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
-    var $selectedItem = instance._list.element().find("." + LIST_ITEM_SELECTED_CLASS);
+    var $selectedItem = $(instance._list.element().find("." + LIST_ITEM_SELECTED_CLASS));
 
     assert.ok($selectedItem.length, "select item after render list");
 });
@@ -1783,11 +1783,11 @@ QUnit.test("value with dataSource", function(assert) {
             value: 2
         }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     var $firstItem = $(instance._list._itemElements()[0]),
         $secondItem = $(instance._list._itemElements()[1]),
-        $field = instance._$field;
+        $field = $(instance._$field);
 
     assert.ok($secondItem.hasClass(LIST_ITEM_SELECTED_CLASS), "class selected was added");
     assert.ok(!$firstItem.hasClass(LIST_ITEM_SELECTED_CLASS), "class selected was not added to unselected item");
@@ -1816,11 +1816,11 @@ QUnit.test("value with dataSource and complex items", function(assert) {
             value: 2
         }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     var $firstItem = $(instance._list.element().find(".dx-list-item")[0]),
         $secondItem = $(instance._list.element().find(".dx-list-item")[1]),
-        $field = instance._$field;
+        $field = $(instance._$field);
 
     assert.ok(!$firstItem.hasClass(LIST_ITEM_SELECTED_CLASS), "class selected was not added to unselected item");
     assert.ok($secondItem.hasClass(LIST_ITEM_SELECTED_CLASS), "class selected was added");
@@ -1840,7 +1840,7 @@ QUnit.test("dataSource", function(assert) {
         instance = $("#lookup").dxLookup({ dataSource: dataSource1 }).dxLookup("instance"),
         list;
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
     list = instance._list;
 
     assert.strictEqual(instance._dataSource, list._dataSource);
@@ -1857,7 +1857,7 @@ QUnit.test("items", function(assert) {
         instance = $("#lookup").dxLookup({ items: items1 }).dxLookup("instance"),
         list;
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
     list = instance._list;
 
     assert.deepEqual(list._dataSource._items, items1);
@@ -1872,7 +1872,7 @@ QUnit.test("items after null data source", function(assert) {
 
     instance.option("items", items2);
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     assert.deepEqual(instance._list._dataSource._items, items2);
 });
@@ -1883,7 +1883,7 @@ QUnit.test("title", function(assert) {
         title: "title"
     }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     assert.equal(instance._popup.option("title"), "title", "title sets to popup correctly on init");
 
@@ -1899,13 +1899,13 @@ QUnit.test("fullScreen", function(assert) {
         }).dxLookup("instance"),
         popup;
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     popup = instance._popup;
     assert.equal(popup.option("fullScreen"), true, "fullScreen sets to popup correctly on init");
 
     instance.option("fullScreen", false);
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
     popup = instance._popup;
     assert.equal(popup.option("fullScreen"), false, "fullScreen sets to popup correctly on change");
 });
@@ -1916,10 +1916,10 @@ QUnit.test("placeholder", function(assert) {
     })
         .dxLookup("instance");
 
-    assert.equal(instance._$field.text(), "Select...", "default value");
+    assert.equal($(instance._$field).text(), "Select...", "default value");
 
     instance.option("placeholder", "placeholder");
-    assert.equal(instance._$field.text(), "placeholder", "set as option");
+    assert.equal($(instance._$field).text(), "placeholder", "set as option");
 });
 
 QUnit.test("minSearchLength", function(assert) {
@@ -1931,11 +1931,11 @@ QUnit.test("minSearchLength", function(assert) {
             placeholder: placeholder
         }).dxLookup("instance");
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
 
     var search = instance._searchBox,
-        $field = instance._$field,
-        $list = instance._list.element();
+        $field = $(instance._$field),
+        $list = $(instance._list.element());
 
     assert.equal($list.find(".dx-list-item").filter(":visible").length, 0, 'No items are expected to be shown');
     assert.equal($field.text(), placeholder);
@@ -1950,15 +1950,15 @@ QUnit.test("minSearchLength", function(assert) {
 
     var selectedValueText = "def";
     instance.option("value", selectedValueText);
-    assert.equal(instance._$field.text(), selectedValueText);
+    assert.equal($(instance._$field).text(), selectedValueText);
 
     search.option("value", "abc");
     assert.ok($list.find(".dx-list-item").filter(":visible").length === 1);
-    assert.equal(instance._$field.text(), selectedValueText);
+    assert.equal($(instance._$field).text(), selectedValueText);
 
     search.option("value", "ab");
     assert.ok($list.find(".dx-list-item").filter(":visible").length === 0);
-    assert.equal(instance._$field.text(), selectedValueText);
+    assert.equal($(instance._$field).text(), selectedValueText);
 });
 
 QUnit.test("applyValueMode affects on Apply button rendering", function(assert) {
@@ -2112,7 +2112,7 @@ QUnit.test("lookup popup should be hidden after click outside was present", func
 
     var $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
 
-    $overlay.trigger("dxpointerdown");
+    $($overlay).trigger("dxpointerdown");
     assert.equal($overlay.is(":visible"), true, "overlay is not hidden");
 
     $(document).trigger("dxpointerdown");
@@ -2513,11 +2513,11 @@ QUnit.testInActiveWindow("T338144 - focused element should not be reset after po
             opened: true,
             searchEnabled: false
         }).dxLookup("instance"),
-        $list = instance.content().find(".dx-list"),
+        $list = $(instance.content().find(".dx-list")),
         $listItems = $list.find(".dx-item"),
         list = $list.dxList("instance");
 
-    $listItems.eq(1).trigger("dxclick");
+    $($listItems.eq(1)).trigger("dxclick");
     instance.open();
 
     assert.equal(list.option("focusedElement").text(), $listItems.eq(1).text(), "clicked item is focused after popup is reopened");
@@ -2570,13 +2570,13 @@ QUnit.test("lookup should not lose focus when clicking inside popup", function(a
             opened: true
         }),
         instance = $element.dxLookup("instance"),
-        $content = instance._popup.content();
+        $content = $(instance._popup.content());
 
-    $content.on("dxpointerdown", function(e) {
+    $($content).on("dxpointerdown", function(e) {
         assert.ok(!e.isDefaultPrevented(), "elements inside popup get focus");
     });
 
-    $content.trigger("dxpointerdown");
+    $($content).trigger("dxpointerdown");
 });
 
 
@@ -2596,7 +2596,7 @@ QUnit.test("lookup popup open by enter key press", function(assert) {
             focusStateEnabled: true
         }),
         instance = $element.dxLookup("instance"),
-        $field = instance._$field.focusin(),
+        $field = $(instance._$field).focusin(),
         keyboard = keyboardMock($field);
 
     assert.ok(!instance.option("opened"));
@@ -2612,7 +2612,7 @@ QUnit.test("lookup popup open by space key press", function(assert) {
             focusStateEnabled: true
         }),
         instance = $element.dxLookup("instance"),
-        $field = instance._$field.focusin(),
+        $field = $(instance._$field).focusin(),
         keyboard = keyboardMock($field);
 
     assert.ok(!instance.option("opened"));
@@ -2748,7 +2748,7 @@ QUnit.test("space key press on readOnly lookup doesn't toggle popup visibility",
             readOnly: true,
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $field = instance._$field.focusin(),
+        $field = $(instance._$field).focusin(),
         keyboard = keyboardMock($field);
 
     keyboard.keyDown("space");
@@ -2765,7 +2765,7 @@ QUnit.test("enter key press on readOnly lookup doesn't toggle popup visibility",
             readOnly: true,
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $field = instance._$field.focusin(),
+        $field = $(instance._$field).focusin(),
         keyboard = keyboardMock($field);
 
     keyboard.keyDown("enter");
@@ -2817,13 +2817,13 @@ QUnit.test("T320459 - the 'space' key press should prevent default behavior whil
             opened: true,
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $popupInput = lookup.content().find("input"),
+        $popupInput = $(lookup.content().find("input")),
         keyboard = keyboardMock($popupInput),
         event;
 
     lookup._list.option("focusStateEnabled", true);
 
-    $popupInput.on("keydown", function(e) {
+    $($popupInput).on("keydown", function(e) {
         if(e.which === 32) {
             event = e;
         }
@@ -2847,7 +2847,7 @@ QUnit.test("T320459 - the 'space' key press on editor should prevent default beh
         keyboard = keyboardMock($input),
         event;
 
-    $input.on("keydown", function(e) {
+    $($input).on("keydown", function(e) {
         if(e.which === 32) {
             event = e;
         }
@@ -2904,7 +2904,7 @@ QUnit.test("search should be execute after paste", function(assert) {
         });
 
         var $input = $(toSelector(POPUP_CONTENT_CLASS) + " input");
-        $input.val("o").trigger("input");
+        $($input.val("o")).trigger("input");
         clock.tick();
         assert.equal($(".dx-list-item").length, 2, "filters execute on input event");
 
@@ -3021,10 +3021,10 @@ QUnit.test("popup title collapse if empty title option (B232073)", function(asse
     var instance = $("#lookup").dxLookup({}).dxLookup("instance"),
         popup;
 
-    instance._$field.trigger("dxclick");
+    $(instance._$field).trigger("dxclick");
     popup = instance._popup;
 
-    var $popupTitle = popup._wrapper().find(".dx-popup-title");
+    var $popupTitle = $(popup._wrapper()).find(".dx-popup-title");
     assert.ok($popupTitle.height() > 0);
 });
 
@@ -3034,7 +3034,7 @@ QUnit.test("Lookup-specific validation message should be rendered in lookup's po
 
     instance.option("usePopover", false);
 
-    $element.find("." + LOOKUP_FIELD_CLASS).trigger("dxclick");
+    $($element.find("." + LOOKUP_FIELD_CLASS)).trigger("dxclick");
     var $popup = $(".dx-popup-wrapper");
     var $popupValidationMessage = $popup.find(".dx-lookup-validation-message");
 
@@ -3047,7 +3047,7 @@ QUnit.test("Lookup-specific validation message should NOT be rendered in popover
 
     instance.option("usePopover", true);
 
-    $element.find("." + LOOKUP_FIELD_CLASS).trigger("dxclick");
+    $($element.find("." + LOOKUP_FIELD_CLASS)).trigger("dxclick");
 
     if(instance._popup.NAME === "dxPopup") {
         assert.ok(true, "Looks like we are running on real device and usage of Popup is forced by code. Stopping test case.");

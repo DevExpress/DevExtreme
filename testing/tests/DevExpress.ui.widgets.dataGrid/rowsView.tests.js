@@ -2838,7 +2838,7 @@ QUnit.test('Change Row Expand for master detail on expand button click ', functi
     };
 
     //act
-    $expandCell.trigger('dxclick');
+    $($expandCell).trigger('dxclick');
 
     //assert
     assert.strictEqual(changeRowExpandKey, 1);
@@ -2897,7 +2897,7 @@ QUnit.test('Show master detail with native checkbox', function(assert) {
     assert.equal($checkbox.length, 1);
 
     //act
-    $checkbox.trigger("dxclick");
+    $($checkbox).trigger("dxclick");
 
     //assert
     assert.ok(rowClickArgs, 'onRowClick called');
@@ -3710,7 +3710,7 @@ QUnit.test("Width of column in master detail are not changed when it is changed 
     //act
     rowsView.render(testElement);
     rowsView.setColumnWidths([100, 100]);
-    $colgroup = rowsView.element().find("colgroup");
+    $colgroup = $(rowsView.element().find("colgroup"));
     $cols1 = $colgroup.eq(0).children();
     $cols2 = $colgroup.eq(1).children();
 
@@ -3823,7 +3823,7 @@ QUnit.test("Rows view (with wordWrapEnabled is true) in container with 'nowrap' 
     rowsView.render($testElement);
 
     //assert
-    $rowsViewElement = rowsView.element();
+    $rowsViewElement = $(rowsView.element());
     assert.ok(!$rowsViewElement.hasClass('dx-datagrid-nowrap'));
     assert.strictEqual($rowsViewElement.find("tbody > tr").find("td").first().css("whiteSpace"), "normal", "value of the white-space property");
 });
@@ -4281,7 +4281,7 @@ QUnit.test('click expand/collapse group', function(assert) {
     assert.ok($groupCell.length, 'group cell exist');
 
     //act
-    $groupCell.trigger("dxclick");
+    $($groupCell).trigger("dxclick");
 
     //assert
     assert.ok(rowClickArgs, 'rowClick called');
@@ -6036,7 +6036,7 @@ QUnit.test("Last data row of the last tbody should not have border bottom width"
     rowsView.render($testElement);
 
     //assert
-    $tbodyElements = rowsView.element().find("tbody");
+    $tbodyElements = $(rowsView.element().find("tbody"));
     assert.ok(rowsView.element().hasClass("dx-last-row-border"), "has class 'dx-last-row-border'");
     assert.strictEqual($tbodyElements.length, 1, "count tbody");
     assert.strictEqual($tbodyElements.eq(0).children(".dx-data-row:nth-last-child(2)").children().first().css("borderBottomWidth"), "0px", "bottom border is hidden");
@@ -6051,7 +6051,7 @@ QUnit.test("Last data row of the last tbody should not have border bottom width"
     });
 
     //assert
-    $tbodyElements = rowsView.element().find("tbody");
+    $tbodyElements = $(rowsView.element().find("tbody"));
     assert.strictEqual($tbodyElements.length, 2, "count tbody");
     assert.notStrictEqual($tbodyElements.eq(0).children(".dx-data-row:nth-last-child(2)").children().first().css("borderBottomWidth"), "0px", "bottom border is visible");
     assert.strictEqual($tbodyElements.eq(1).children(".dx-data-row:nth-last-child(2)").children().first().css("borderBottomWidth"), "0px", "bottom border is hidden");

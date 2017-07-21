@@ -96,7 +96,7 @@ QUnit.test("context menu items with submenu should have 'has-submenu' class", fu
         }),
         $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
 
     $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
@@ -153,7 +153,7 @@ QUnit.test("submenus should not be rendered without items", function(assert) {
         $itemsContainer = instance.itemsContainer(),
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
 
     var submenus = instance.itemsContainer().find("." + DX_SUBMENU_CLASS);
 
@@ -172,15 +172,15 @@ QUnit.test("onSubmenuCreated should be fired after submenu was rendered", functi
         $itemsContainer = instance.itemsContainer(),
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
     assert.equal(onSubmenuCreated.callCount, 1, "handler was called once");
 
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
     assert.equal(onSubmenuCreated.callCount, 1, "handler should not be called after the second click");
 
     instance.hide();
     instance.show();
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
     assert.equal(onSubmenuCreated.callCount, 1, "handler should not be called after the second showing");
 });
 
@@ -205,11 +205,11 @@ QUnit.test("submenus in the same level should have same horizontal offset", func
         $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS),
         offsets = [];
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
     offsets[0] = $items.eq(1).offset().left;
 
-    $items.eq(2).trigger("dxclick");
+    $($items.eq(2)).trigger("dxclick");
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
     offsets[1] = $items.eq(3).offset().left;
 
@@ -224,7 +224,7 @@ QUnit.test("event handlers should be bound for detached target", function(assert
 
     var contextMenu = new ContextMenu(this.$element, { target: "#menuTarget", items: [{ text: "a" }] });
     $parent.append($target);
-    $target.trigger("dxcontextmenu");
+    $($target).trigger("dxcontextmenu");
 
     assert.ok(contextMenu.option("visible"), "context menu is shown after detached target been attached");
 });
@@ -273,8 +273,8 @@ QUnit.test("expanded class should be removed from submenus after hiding menu wit
         }),
         $itemsContainer = instance.itemsContainer();
 
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0)).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1)).trigger("dxclick");
 
     instance.hide();
 
@@ -295,8 +295,8 @@ QUnit.test("expanded class should be removed from submenus after hiding menu wit
         }),
         $itemsContainer = instance.itemsContainer();
 
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0)).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1)).trigger("dxclick");
 
     instance.option("visible", false);
 
@@ -317,8 +317,8 @@ QUnit.test("expanded class should be removed from submenus after hiding menu wit
         }),
         $itemsContainer = instance.itemsContainer();
 
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0)).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1)).trigger("dxclick");
 
     $(document).trigger("dxpointerdown");
 
@@ -516,7 +516,7 @@ QUnit.test("submenu should be shown after click on root item", function(assert) 
         $itemsContainer = instance.itemsContainer(),
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
 
     var submenus = $itemsContainer.find("." + DX_SUBMENU_CLASS);
 
@@ -533,9 +533,9 @@ QUnit.test("all submenus should hide after click on item from different branch",
         $itemsContainer = instance.itemsContainer(),
         $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
-    $items.eq(2).trigger("dxclick");
+    $($items.eq(2)).trigger("dxclick");
 
     assert.notOk($items.eq(0).is(":visible"), "first submenu item was hidden");
     assert.notOk($items.eq(1).is(":visible"), "second submenu item was hidden");
@@ -550,13 +550,13 @@ QUnit.test("submenu should not hide after click on parent submenu", function(ass
         $itemsContainer = instance.itemsContainer(),
         $items;
 
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0)).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1)).trigger("dxclick");
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
 
     assert.ok($items.eq(2).is(":visible"), "last submenu item was shown");
 
-    $items.eq(1).trigger("dxclick");
+    $($items.eq(1)).trigger("dxclick");
     assert.ok($items.eq(1).is(":visible"), "first submenu item is visible");
     assert.ok($items.eq(1).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), "expanded class was not removed");
 });
@@ -569,8 +569,8 @@ QUnit.test("submenu should not hide after second click on root item", function(a
         $itemsContainer = instance.itemsContainer(),
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $rootItem.trigger("dxclick");
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
+    $($rootItem).trigger("dxclick");
 
     var submenus = $itemsContainer.find("." + DX_SUBMENU_CLASS);
 
@@ -596,10 +596,10 @@ QUnit.test("context menu should not blink after second hover on root item", func
         //todo: remove private spy if better solution will found
         hideSubmenu = sinon.spy(instance, "_hideSubmenu");
 
-        $itemsContainer.trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
+        $($itemsContainer).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
         this.clock.tick(0);
 
-        $itemsContainer.trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
+        $($itemsContainer).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
         this.clock.tick(0);
 
         assert.equal(hideSubmenu.callCount, 0, "submenu should not hides anytime");
@@ -626,7 +626,7 @@ QUnit.test("custom slide animation should work for submenus", function(assert) {
 
     try {
         fx.off = false;
-        $rootItem.trigger("dxclick");
+        $($rootItem).trigger("dxclick");
         this.clock.tick(500);
     } finally {
         fx.off = true;
@@ -716,8 +716,8 @@ QUnit.test("visibility callbacks should not fire for submenus", function(assert)
 
     events = [];
 
-    $items.eq(0).trigger("dxclick");
-    $items.eq(1).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
+    $($items.eq(1)).trigger("dxclick");
 
     assert.deepEqual(events, [], "events was not triggered");
 });
@@ -788,7 +788,7 @@ QUnit.test("onItemClick option", function(assert) {
         }),
         $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
 });
 
 QUnit.test("itemsExpr option", function(assert) {
@@ -799,7 +799,7 @@ QUnit.test("itemsExpr option", function(assert) {
         }),
         $item = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $item.trigger("dxclick");
+    $($item).trigger("dxclick");
 
     var $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
@@ -871,7 +871,7 @@ QUnit.test("showSubmenuMode hover without delay", function(assert) {
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0),
         $items;
 
-    $itemsContainer.trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
+    $($itemsContainer).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
     this.clock.tick(0);
 
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
@@ -891,7 +891,7 @@ QUnit.test("showSubmenuMode hover with custom delay", function(assert) {
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0),
         $items;
 
-    $itemsContainer.trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
+    $($itemsContainer).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
     this.clock.tick(1);
 
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
@@ -911,9 +911,9 @@ QUnit.test("submenu should not be shown if hover was ended before show delay tim
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0),
         $items;
 
-    $itemsContainer.trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
+    $($itemsContainer).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
     this.clock.tick(400);
-    $itemsContainer.trigger($.Event("dxhoverend", { target: $rootItem.get(0) }));
+    $($itemsContainer).trigger($.Event("dxhoverend", { target: $rootItem.get(0) }));
     this.clock.tick(100);
 
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
@@ -931,7 +931,7 @@ QUnit.test("showSubmenuMode click with custom delay", function(assert) {
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0),
         $items;
 
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
 
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
 
@@ -948,9 +948,9 @@ QUnit.test("showSubmenuMode click during hover delay", function(assert) {
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0),
         $items;
 
-    $itemsContainer.trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
+    $($itemsContainer).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
     this.clock.tick(1);
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
 
     $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
 
@@ -1033,7 +1033,7 @@ QUnit.test("disabling for nested item should work correctly", function(assert) {
         }),
         $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
     $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
     instance.option("items[0].items[0].disabled", true);
@@ -1061,7 +1061,7 @@ QUnit.test("onItemContextMenu option when context menu initially hidden", functi
     });
 
     var $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
-    $items.eq(0).trigger("dxcontextmenu");
+    $($items.eq(0)).trigger("dxcontextmenu");
 
     assert.equal(fired, 1, "event fired only in action");
     assert.strictEqual(args.itemElement[0], $items[0], "item element is correct");
@@ -1087,8 +1087,8 @@ QUnit.test("Separator should not be shown if last rendered item was in other lev
         }),
         $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
-    $items.eq(0).trigger("dxclick");
-    $items.eq(1).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
+    $($items.eq(1)).trigger("dxclick");
 
     assert.equal(instance.itemsContainer().find(".dx-menu-separator").length, 0, "separator should not be rendered");
 });
@@ -1189,7 +1189,7 @@ QUnit.test("it should be possible to update items on item click", function(asser
     $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
     assert.equal($items.eq(0).text(), "a", "items was rendered");
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
     instance.show();
     $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
@@ -1204,7 +1204,7 @@ QUnit.test("context menu should hide after click on item without children", func
         }),
         $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
     assert.notOk(instance.option("visible"), "menu was hidden");
 });
 
@@ -1215,7 +1215,7 @@ QUnit.test("сontext menu should not hide after click when item.closeMenuOnClick
         }),
         $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
     assert.ok(instance.option("visible"), "menu is visible");
 });
 
@@ -1271,8 +1271,8 @@ QUnit.test("onItemClick should fire for submenus", function(assert) {
     instance.show();
     $itemsContainer = instance.itemsContainer();
 
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
-    $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0)).trigger("dxclick");
+    $($itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(1)).trigger("dxclick");
 
     assert.deepEqual(itemClickArgs, [items[0], items[0].items[0]], "onItemClick fired with correct arguments");
 });
@@ -1319,8 +1319,8 @@ QUnit.test("incomplete show animation should be stopped when new submenu item st
     try {
         fx.off = false;
 
-        $items.eq(0).trigger("dxclick");
-        $items.eq(1).trigger("dxclick");
+        $($items.eq(0)).trigger("dxclick");
+        $($items.eq(1)).trigger("dxclick");
 
         assert.equal(stopCalls, 3, "animation should stops before each submenu showing");
     } finally {
@@ -1341,7 +1341,7 @@ QUnit.test("select item via item.selected property", function(assert) {
 
     assert.equal($itemContainer.find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 0, "no selected items");
 
-    $itemContainer.find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
+    $($itemContainer.find("." + DX_MENU_ITEM_CLASS).eq(0)).trigger("dxclick");
     assert.equal($itemContainer.find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1, "one selected items");
 });
 
@@ -1357,7 +1357,7 @@ QUnit.test("select item via selectedItem option", function(assert) {
     assert.equal($itemContainer.find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 0, "no selected items");
     assert.notOk(items[0].selected, "selection was removed from 1st item");
 
-    $itemContainer.find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
+    $($itemContainer.find("." + DX_MENU_ITEM_CLASS).eq(0)).trigger("dxclick");
     assert.equal($itemContainer.find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1, "one selected items");
     assert.ok(items[0].items[0].selected, "nested item selected");
 });
@@ -1372,7 +1372,7 @@ QUnit.test("changing selection via selectedItem option", function(assert) {
 
     assert.ok(items[0].selected, "1st item is selected");
 
-    $itemContainer.find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
+    $($itemContainer.find("." + DX_MENU_ITEM_CLASS).eq(0)).trigger("dxclick");
     instance.option("selectedItem", items[0].items[0]);
 
     assert.ok(items[0].items[0].selected, "nested item is selected");
@@ -1824,7 +1824,7 @@ QUnit.test("Moving focus should starts from the hovered item", function(assert) 
     var $itemsContainer = instance.itemsContainer(),
         $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
 
-    $itemsContainer.trigger({ target: $items.eq(1).get(0), type: "dxpointerenter", pointerType: "mouse" });
+    $($itemsContainer).trigger({ target: $items.eq(1).get(0), type: "dxpointerenter", pointerType: "mouse" });
 
     assert.equal($items.filter("." + DX_STATE_FOCUSED_CLASS).length, 0, "There are no focused items on show");
     assert.ok($items.eq(1).hasClass(DX_STATE_HOVER_CLASS), "Item 2 was hovered");
@@ -1858,12 +1858,12 @@ QUnit.test("Moving focus should starts from the hovered item in nested level", f
         $rootItem = $itemsContainer.find("." + DX_MENU_ITEM_CLASS).eq(0);
 
     kb.keyDown("down");
-    $rootItem.trigger("dxclick");
+    $($rootItem).trigger("dxclick");
     assert.ok($rootItem.hasClass(DX_STATE_FOCUSED_CLASS), "root item is stay focused after the click");
 
     var $items = $itemsContainer.find("." + DX_MENU_ITEM_CLASS);
 
-    $itemsContainer.trigger({ target: $items.eq(2).get(0), type: "dxpointerenter", pointerType: "mouse" });
+    $($itemsContainer).trigger({ target: $items.eq(2).get(0), type: "dxpointerenter", pointerType: "mouse" });
 
     assert.ok($items.eq(2).hasClass(DX_STATE_HOVER_CLASS), "Item 12 was hovered");
     assert.notOk($items.eq(2).hasClass(DX_STATE_FOCUSED_CLASS), "Item 12 was not focused on hover");
@@ -1908,11 +1908,11 @@ QUnit.test("Focus should follow the nested hovered item if item in the parent le
         $items = instance.itemElements(),
         kb = keyboardMock($itemsContainer);
 
-    $items.eq(1).trigger("dxclick");
+    $($items.eq(1)).trigger("dxclick");
     kb.keyDown("up");
 
     var $nestedItem = instance.itemElements().eq(2);
-    $itemsContainer.trigger({ target: $nestedItem.get(0), type: "dxpointerenter", pointerType: "mouse" });
+    $($itemsContainer).trigger({ target: $nestedItem.get(0), type: "dxpointerenter", pointerType: "mouse" });
 
     assert.ok($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), "Item 1 is focused");
     assert.ok($nestedItem.hasClass(DX_STATE_HOVER_CLASS), "Item 21 is hovered");

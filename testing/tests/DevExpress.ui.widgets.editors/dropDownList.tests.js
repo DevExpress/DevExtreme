@@ -77,7 +77,7 @@ QUnit.test("popup should not focus when we selecting an item", function(assert) 
     assert.expect(1);
 
     this.instance.option("opened", true);
-    var popupContent = this.instance._popup.content(),
+    var popupContent = $(this.instance._popup.content()),
         isDefaultPrevented = false;
 
     popupContent.on("mousedown", function(e) {
@@ -437,7 +437,7 @@ QUnit.test("T321572: dxSelectBox - Use clear button with custom store leads to d
     assert.ok(dataSource.isLastPage(), "last page is loaded");
 
     $(".dx-list-item").last().trigger("dxclick");
-    $element.find(".dx-clear-button-area").trigger("dxclick");
+    $($element.find(".dx-clear-button-area")).trigger("dxclick");
 
     assert.ok(dataSource.isLastPage(), "last page is not changed");
 });
@@ -934,7 +934,7 @@ QUnit.test("onItemClick action", function(assert) {
         assert.strictEqual(e.itemIndex, 1, "itemIndex is correct");
     });
 
-    $listItem.trigger("dxclick");
+    $($listItem).trigger("dxclick");
 });
 
 QUnit.module("render input addons", moduleConfig);

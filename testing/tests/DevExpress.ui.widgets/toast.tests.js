@@ -249,7 +249,7 @@ QUnit.test("it should be possible to select a message in the toast by the mouse"
         }),
         $shader = $toast.dxToast("content").closest(".dx-overlay-shader");
 
-    $shader.on("dxdrag", function(e) {
+    $($shader).on("dxdrag", function(e) {
         assert.equal(e.isDefaultPrevented(), false, "touchmove is not prevented");
     });
 
@@ -259,7 +259,7 @@ QUnit.test("it should be possible to select a message in the toast by the mouse"
         })
     });
 
-    $shader.trigger(event);
+    $($shader).trigger(event);
 });
 
 
@@ -310,11 +310,11 @@ QUnit.test("closeOnClick option", function(assert) {
         instance = $element.dxToast("instance"),
         $content = $element.find(".dx-toast-content");
 
-    $content.trigger("dxclick");
+    $($content).trigger("dxclick");
     assert.ok(instance.option("visible"), "toast should not hide on click if option is false");
 
     instance.option("closeOnClick", true);
-    $content.trigger("dxclick");
+    $($content).trigger("dxclick");
 
     assert.ok(!instance.option("visible"), "toast should hide on click if option is true");
 });
