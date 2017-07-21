@@ -79,6 +79,10 @@ exports.exportFromMarkup = function(markup, options) {
     options.format = validateFormat(options.format) || "PNG";
     options.fileName = options.fileName || "file";
 
+    options.exportingAction = options.onExporting;
+    options.exportedAction = options.onExported;
+    options.fileSavingAction = options.onFileSaving;
+
     clientExporter.export(markup, options, getCreatorFunc(options.format));
 };
 
