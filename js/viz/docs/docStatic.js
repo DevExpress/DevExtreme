@@ -52,15 +52,6 @@ var staticMethods = {
     * @module viz/export
     * @export exportFromMarkup
     */
-    // onExporting:function(e)
-    // e.fileName:string
-    // e.format:string
-    // e.cancel:boolean
-    // onFileSaving:function(e)
-    // e.fileName:string
-    // e.format:string
-    // e.data:blod
-    // e.cancel:boolean
     exportFromMarkup: function() { },
     /**
     * @name vizmethods_getMarkup
