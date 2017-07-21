@@ -2624,7 +2624,7 @@ QUnit.test("Translator interval is too small - bar width is 1px", function(asser
     var series = createSeries({ points: pointsForStacking.points1() }, undefined, undefined, 2),
         expectedWidth = 1;
 
-    createSeriesFamily("bar", [series], { equalBarWidth: true });
+    createSeriesFamily("bar", [series], { equalBarWidth: true, barWidth: 0.3 });
 
     checkSeries(assert, series, expectedWidth, 0);
 });
