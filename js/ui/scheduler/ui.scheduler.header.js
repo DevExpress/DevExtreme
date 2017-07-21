@@ -66,6 +66,7 @@ var SchedulerHeader = Widget.inherit({
                 this._changeViewSwitcherLabelText();
                 break;
             case "currentDate":
+            case "viewStartDate":
                 this._navigator.option("date", value);
                 break;
             case "min":
@@ -104,8 +105,7 @@ var SchedulerHeader = Widget.inherit({
             min: this.option("min"),
             max: this.option("max"),
             count: this.option("count"),
-            viewStartDate: this.option("viewStartDate"),
-            date: this.option("currentDate"),
+            date: this.option("viewStartDate") || this.option("currentDate"),
             step: STEP_MAP[this.option("currentView")],
             firstDayOfWeek: this.option("firstDayOfWeek"),
             tabIndex: this.option("tabIndex"),

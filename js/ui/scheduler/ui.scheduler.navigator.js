@@ -96,7 +96,7 @@ var getConfig = function(step) {
     switch(step) {
         case "day":
             return {
-                duration: 1,
+                duration: 1 * this.option("count"),
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,
@@ -104,7 +104,7 @@ var getConfig = function(step) {
             };
         case "week":
             return {
-                duration: 7,
+                duration: 7 * this.option("count"),
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,

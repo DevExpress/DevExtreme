@@ -1093,7 +1093,7 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("view.viewStartDate is passed to workspace & header & navigator", function(assert) {
-        var date = new Date();
+        var date = new Date(2017, 3, 4);
 
         this.createInstance({
             currentView: "week",
@@ -1109,9 +1109,9 @@ QUnit.testStart(function() {
             header = this.instance.getHeader(),
             navigator = header._navigator;
 
-        assert.deepEqual(workSpaceWeek.option("viewStartDate"), date, "workspace has correct offset");
-        assert.deepEqual(header.option("viewStartDate"), date, "header has correct offset");
-        assert.deepEqual(navigator.option("viewStartDate"), date, "navigator has correct offset");
+        assert.deepEqual(workSpaceWeek.option("viewStartDate"), date, "workspace has correct viewStartDate");
+        assert.deepEqual(header.option("viewStartDate"), date, "header has correct viewStartDate");
+        assert.deepEqual(navigator.option("date"), date, "navigator has correct date depending on viewStartDate");
     });
 
     // QUnit.test("view.offset isn't passed to workspace & header & navigator if count is undefined", function(assert) {

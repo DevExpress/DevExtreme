@@ -1005,6 +1005,7 @@ var Scheduler = Widget.inherit({
                 this._updateOption("header", name, value);
                 break;
             case "currentDate":
+            case "viewStartDate":
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
                 this._workSpace.option(name, value);
@@ -1380,6 +1381,14 @@ var Scheduler = Widget.inherit({
 
         this._dropDownAppointments = new DropDownAppointments();
         this._subscribes = subscribes;
+
+        this._setViewStartDate();
+    },
+
+    _setViewStartDate: function() {
+        var viewCountConfig = this._getViewCountConfig();
+        this.option("viewStartDate", viewCountConfig.viewStartDate);
+        //this._viewStartDate = viewCountConfig.viewStartDate;
     },
 
     _initTemplates: function() {
@@ -1773,6 +1782,9 @@ var Scheduler = Widget.inherit({
     },
 
     _getCurrentViewOption: function(optionName) {
+        if(optionName === "viewStartDate") {
+            return this.option(optionName);
+        }
         var currentViewOptions = this._getCurrentViewOptions();
 
         if(currentViewOptions && currentViewOptions[optionName]) {
