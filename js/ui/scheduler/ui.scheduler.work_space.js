@@ -339,7 +339,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return extend(this.callBase(), {
             currentDate: new Date(),
             count: 1,
-            viewStartDate: undefined,
+            viewStartDate: null,
             firstDayOfWeek: undefined,
             startDayHour: 0,
             endDayHour: 24,

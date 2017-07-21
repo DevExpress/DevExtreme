@@ -1694,7 +1694,7 @@ var Scheduler = Widget.inherit({
 
         var view = this._getViewByType(currentView),
             viewCount = view && view.count || 1,
-            viewStartDate = view && view.viewStartDate || this.option("currentDate");
+            viewStartDate = view && view.viewStartDate || null;
 
         return {
             count: viewCount,
