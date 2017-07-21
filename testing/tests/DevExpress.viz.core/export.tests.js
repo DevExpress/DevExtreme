@@ -348,7 +348,10 @@ QUnit.test("exportFromMarkup method", function(assert) {
             proxyUrl: "testUrl",
             width: 600,
             height: 400,
-            backgroundColor: "#00ff00"
+            backgroundColor: "#00ff00",
+            onFileSaving: "file saving callback",
+            onExporting: "exporting callback",
+            onExported: "exported callback"
         },
         markup = "testMarkup";
 
@@ -364,7 +367,13 @@ QUnit.test("exportFromMarkup method", function(assert) {
         proxyUrl: "testUrl",
         width: 600,
         height: 400,
-        backgroundColor: "#00ff00"
+        backgroundColor: "#00ff00",
+        onFileSaving: "file saving callback",
+        onExporting: "exporting callback",
+        onExported: "exported callback",
+        fileSavingAction: "file saving callback",
+        exportingAction: "exporting callback",
+        exportedAction: "exported callback"
     }, "Export options");
 });
 
