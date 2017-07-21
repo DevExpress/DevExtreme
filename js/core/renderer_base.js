@@ -343,16 +343,14 @@ initRender.prototype.text = function(text) {
     }
 
     cleanData(this[0], false);
-
-    text = text === undefined ? "" : text;
-    rendererStrategy.setText(this[0], text);
+    rendererStrategy.setText(this[0], typeUtils.isDefined(text) ? text : "");
 
     return this;
 };
 
 initRender.prototype.val = function(value) {
     if(arguments.length === 1) {
-        return this.prop("value", value);
+        return this.prop("value", typeUtils.isDefined(value) ? value : "");
     }
 
     return this.prop("value");
