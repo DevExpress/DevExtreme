@@ -315,12 +315,12 @@ var TagBox = SelectBox.inherit({
             onSelectAllValueChanged: null,
 
             /**
-             * @name dxTagBoxOptions_maxTagCount
-             * @publicName maxTagCount
+             * @name dxTagBoxOptions_separateTagLimit
+             * @publicName separateTagLimit
              * @type number
              * @default undefined
              */
-            maxTagCount: undefined,
+            separateTagLimit: undefined,
 
             /**
              * @name dxTagBoxOptions_showMultiTagOnly
@@ -484,7 +484,7 @@ var TagBox = SelectBox.inherit({
         var selectedCount = this._getValue().length;
 
         if(!this.option("showMultiTagOnly")) {
-            args.text = messageLocalization.getFormatter("dxTagBox-moreSelected")(selectedCount - this.option("maxTagCount") + 1);
+            args.text = messageLocalization.getFormatter("dxTagBox-moreSelected")(selectedCount - this.option("separateTagLimit") + 1);
         } else {
             args.text = messageLocalization.getFormatter("dxTagBox-selected")(selectedCount);
         }
@@ -746,9 +746,9 @@ var TagBox = SelectBox.inherit({
 
     _multiTagRequired: function() {
         var values = this._getValue(),
-            maxTagCount = this.option("maxTagCount");
+            separateTagLimit = this.option("separateTagLimit");
 
-        return isDefined(maxTagCount) && values.length > maxTagCount;
+        return isDefined(separateTagLimit) && values.length > separateTagLimit;
     },
 
     _renderMultiTag: function($input) {
@@ -804,10 +804,10 @@ var TagBox = SelectBox.inherit({
 
             var $multiTag = this._multiTagRequired() && this._renderMultiTag($input),
                 showMultiTagOnly = this.option("showMultiTagOnly"),
-                maxTagCount = this.option("maxTagCount");
+                separateTagLimit = this.option("separateTagLimit");
 
             items.forEach(function(item, index) {
-                if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - maxTagCount >= -1)) {
+                if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - separateTagLimit >= -1)) {
                     return false;
                 }
                 this._renderTag(item, $multiTag || $input);
@@ -927,7 +927,7 @@ var TagBox = SelectBox.inherit({
     _removeTagElement: function($tag) {
         if($tag.hasClass(TAGBOX_MULTI_TAG_CLASS)) {
             if(!this.option("showMultiTagOnly")) {
-                this.option("value", this._getValue().slice(0, this.option("maxTagCount")));
+                this.option("value", this._getValue().slice(0, this.option("separateTagLimit")));
             } else {
                 this.reset();
             }
@@ -1181,7 +1181,7 @@ var TagBox = SelectBox.inherit({
                 this.callBase(args);
                 this._setListDataSourceFilter();
                 break;
-            case "maxTagCount":
+            case "separateTagLimit":
             case "showMultiTagOnly":
                 this._renderTags();
                 break;
