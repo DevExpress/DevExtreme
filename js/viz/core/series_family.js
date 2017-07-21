@@ -100,13 +100,12 @@ function calculateParams(barsArea, count, percentWidth) {
     if(!percentWidth) {
         spacing = _round(barsArea / count * 0.2);
         width = _round((barsArea - spacing * (count - 1)) / count);
-        width < 2 && (width = 2);
     } else {
         width = _round(barsArea * percentWidth / count);
         spacing = _round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
     }
 
-    return { width: width, spacing: spacing, middleIndex: middleIndex };
+    return { width: width > 1 ? width : 1, spacing: spacing, middleIndex: middleIndex };
 }
 
 function getOffset(stackIndex, parameters) {
