@@ -10,7 +10,6 @@ var _isFinite = isFinite,
     vizUtils = require("../core/utils"),
     _normalizeAngle = vizUtils.normalizeAngle,
     _getCosAndSin = vizUtils.getCosAndSin,
-    polarTranslatorModule = require("../translators/polar_translator"),
     circularIndicatorsModule = require("./circular_indicators"),
     createIndicatorCreator = require("./common").createIndicatorCreator,
     CircularRangeContainer = require("./circular_range_container"),
@@ -22,7 +21,6 @@ var _isFinite = isFinite,
     _round = Math.round,
     _each = each,
 
-    SHIFT_ANGLE = 90,
     PI = Math.PI;
 
 function getSides(startAngle, endAngle) {
@@ -61,14 +59,6 @@ var dxCircularGauge = dxGauge.inherit({
         drawingType: "circular"
     },
 
-    _initScaleTranslator: function(range) {
-        return new polarTranslatorModule.PolarTranslator({ arg: range, val: {} }, this._canvas, {});
-    },
-
-    _getScaleTranslatorComponent: function(name) {
-        return this._scaleTranslator.getComponent(name);
-    },
-
     _updateScaleTickIndent: function(scaleOptions) {
         var indentFromTick = scaleOptions.label.indentFromTick,
             length = scaleOptions.tick.length,
@@ -83,12 +73,6 @@ var dxCircularGauge = dxGauge.inherit({
 
         scaleOptions.label.indentFromAxis = indentFromTick >= 0 ? indentFromTick + tickCorrection : indentFromTick - tickCorrection - _max(textParams.width, textParams.height);
         this._scale.updateOptions(scaleOptions);
-    },
-
-    _updateScaleAngles: function() {
-        var angles = this._translator.getCodomain();
-
-        this._scaleTranslator.setAngles(SHIFT_ANGLE - angles[0], SHIFT_ANGLE - angles[1]);
     },
 
     _setupCodomain: function() {
@@ -119,17 +103,15 @@ var dxCircularGauge = dxGauge.inherit({
     },
 
     _shiftScale: function(layout) {
-        var scaleTranslator = this._scaleTranslator,
-            scale = this._scale,
-            centerCoords;
+        var scale = this._scale,
+            centerCoords,
+            canvas = scale.getCanvas();
 
-        scaleTranslator.setCanvasDimension(layout.radius * 2);
+        canvas.width = canvas.height = layout.radius * 2;
 
-        scale.setTranslator(scaleTranslator.getComponent("arg"), scaleTranslator.getComponent("val"));
-        scale.draw();
-
-        centerCoords = scaleTranslator.getCenter();
-        scale.shift(layout.x - centerCoords.x, layout.y - centerCoords.y);
+        scale.draw(canvas);
+        centerCoords = scale.getCenter();
+        scale.shift({ right: layout.x - centerCoords.x, bottom: layout.y - centerCoords.y });
     },
 
     _getScaleLayoutValue: function() {

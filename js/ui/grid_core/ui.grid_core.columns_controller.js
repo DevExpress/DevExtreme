@@ -1205,7 +1205,7 @@ module.exports = {
                     expandColumnsByRow = expandColumns.slice(0);
 
                 if(rowspan > 1) {
-                    expandColumnsByRow = $.map(expandColumnsByRow, function(expandColumn) { return extend({}, expandColumn, { rowspan: rowspan }); });
+                    expandColumnsByRow = iteratorUtils.map(expandColumnsByRow, function(expandColumn) { return extend({}, expandColumn, { rowspan: rowspan }); });
                 }
                 expandColumnsByRow.unshift(columnIndex, 0);
                 columns.splice.apply(columns, expandColumnsByRow);
@@ -1576,7 +1576,7 @@ module.exports = {
                         expandColumn = this.columnOption("command:expand");
                     }
 
-                    expandColumns = $.map(expandColumns, function(column) {
+                    expandColumns = iteratorUtils.map(expandColumns, function(column) {
                         return extend({}, column, { visibleWidth: null }, expandColumn, { index: column.index });
                     });
 

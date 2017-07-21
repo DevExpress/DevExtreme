@@ -1,5 +1,29 @@
 "use strict";
 
+var applyCallback = function(index, values, callback, result) {
+    var value = callback(values[index], index);
+
+    if(value != null) {
+        result.push(value);
+    }
+};
+
+var map = function(values, callback) {
+    var result = [];
+
+    if("length" in values) {
+        for(var index = 0; index < values.length; index++) {
+            applyCallback(index, values, callback, result);
+        }
+    } else {
+        for(var key in values) {
+            applyCallback(key, values, callback, result);
+        }
+    }
+
+    return [].concat.apply([], result);
+};
+
 var each = function(values, callback) {
     if(!values) return;
 
@@ -20,4 +44,5 @@ var each = function(values, callback) {
     return values;
 };
 
+exports.map = map;
 exports.each = each;

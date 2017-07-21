@@ -563,8 +563,7 @@ var weekData = {
 
 var ACCEPTABLE_JSON_FORMAT_PROPERTIES = ["skeleton", "date", "time", "datetime", "raw"];
 
-var $ = require("../../core/renderer"),
-    Globalize = require("globalize"),
+var Globalize = require("globalize"),
     dateLocalization = require("../date"),
     isObject = require("../../core/utils/type").isObject,
     inArray = require("../../core/utils/array").inArray,
@@ -682,13 +681,13 @@ if(Globalize && Globalize.formatDate) {
         getMonthNames: function(format) {
             var months = Globalize.locale().main("dates/calendars/gregorian/months/stand-alone/" + (format || "wide"));
 
-            return $.map(months, function(month) { return month; });
+            return iteratorUtils.map(months, function(month) { return month; });
         },
 
         getDayNames: function(format) {
             var days = Globalize.locale().main("dates/calendars/gregorian/days/stand-alone/" + (format || "wide"));
 
-            return $.map(days, function(day) { return day; });
+            return iteratorUtils.map(days, function(day) { return day; });
         },
 
         getTimeSeparator: function() {
@@ -782,7 +781,7 @@ if(Globalize && Globalize.formatDate) {
         _getDayKeys: function() {
             var days = Globalize.locale().main("dates/calendars/gregorian/days/format/short");
 
-            return $.map(days, function(day, key) { return key; });
+            return iteratorUtils.map(days, function(day, key) { return key; });
         }
     };
 

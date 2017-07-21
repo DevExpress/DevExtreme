@@ -488,7 +488,7 @@ function setLineDash(context, options) {
     var matches = options["stroke-dasharray"] && options["stroke-dasharray"].match(/(\d+)/g);
 
     if(matches && matches.length && context.setLineDash) { //IE10 does not have setLineDash
-        matches = $.map(matches, function(item) {
+        matches = iteratorUtils.map(matches, function(item) {
             return _number(item);
         });
         context.setLineDash(matches);

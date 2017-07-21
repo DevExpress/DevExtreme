@@ -637,6 +637,10 @@ var TagBox = SelectBox.inherit({
         this._renderMultiSelect();
     },
 
+    _loadInputValue: function() {
+        return $.when();
+    },
+
     _clearTextValue: function() {
         this._input().val("");
     },
@@ -785,7 +789,7 @@ var TagBox = SelectBox.inherit({
         var $input = this._input(),
             values = this._getValue(),
             items = [],
-            itemLoadDeferreds = $.map(values, (function(value) {
+            itemLoadDeferreds = iteratorUtils.map(values, (function(value) {
                 return this._loadItem(value).always((function(item) {
                     var valueIndex = values.indexOf(value);
 

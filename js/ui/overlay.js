@@ -1109,7 +1109,7 @@ var Overlay = Widget.inherit({
         var position = translator.locate(this._$content),
             deltaSize = this._deltaSize(),
             isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0,
-            shaderOffset = this.option("shading") && !this.option("container") ? translator.locate(this._$wrapper) : { top: 0, left: 0 },
+            shaderOffset = this.option("shading") && !this.option("container") && !this._isWindow(this._getContainer()) ? translator.locate(this._$wrapper) : { top: 0, left: 0 },
             boundaryOffset = this.option("boundaryOffset");
 
         return {

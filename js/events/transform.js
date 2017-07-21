@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    mathUtils = require("../core/utils/math"),
+var mathUtils = require("../core/utils/math"),
     iteratorUtils = require("../core/utils/iterator"),
     errors = require("../core/errors"),
     eventUtils = require("./utils"),
@@ -326,7 +325,7 @@ var TransformEmitter = Emitter.inherit({
   * @module events/transform
 */
 
-var eventNames = $.map(eventAliases, function(eventAlias) {
+var eventNames = iteratorUtils.map(eventAliases, function(eventAlias) {
     var eventNames = [];
     iteratorUtils.each([START_POSTFIX, UPDATE_POSTFIX, END_POSTFIX], function(_, eventPostfix) {
         eventNames.push(DX_PREFIX + eventAlias.name + eventPostfix);

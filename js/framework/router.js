@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    extend = require("../core/utils/extend").extend,
+var extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),
     inArray = require("../core/utils/array").inArray,
@@ -173,7 +172,7 @@ var Route = Class.inherit({
         }
 
         if(dels.length) {
-            $.map(dels, function(i) {
+            iteratorUtils.map(dels, function(i) {
                 if(i >= useStatic) {
                     result[i] = '';
                 }

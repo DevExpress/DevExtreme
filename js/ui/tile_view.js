@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    devices = require("../core/devices"),
+var devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     inflector = require("../core/utils/inflector"),
     iteratorUtils = require("../core/utils/iterator"),
@@ -296,7 +295,7 @@ var TileView = CollectionWidget.inherit({
         var items = this.option("items") || [],
             config = this._config,
             itemMargin = this.option("itemMargin"),
-            maxItemCrossRatio = Math.max.apply(Math, $.map(items || [], function(item) {
+            maxItemCrossRatio = Math.max.apply(Math, iteratorUtils.map(items || [], function(item) {
                 return Math.round(item[config.itemCrossRatio] || 1);
             }));
 

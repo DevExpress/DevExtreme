@@ -33,6 +33,7 @@ var $ = require("../../core/renderer"),
     ADAPTIVE_ITEM_TEXT_CLASS = "dx-adaptive-item-text",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     ADAPTIVE_COLUMN_NAME = "adaptive",
+    EDIT_MODE_BATCH = "batch",
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
     EDIT_MODE_POPUP = "popup";
@@ -815,6 +816,16 @@ module.exports = {
 
                 editRow: function(rowIndex) {
                     if(this._adaptiveController.isFormEditMode()) {
+                        this._adaptiveController.collapseAdaptiveDetailRow();
+                    }
+
+                    this.callBase(rowIndex);
+                },
+
+                deleteRow: function(rowIndex) {
+                    var rowKey = this._dataController.getKeyByRowIndex(rowIndex);
+
+                    if(this.getEditMode() === EDIT_MODE_BATCH && this._adaptiveController.isAdaptiveDetailRowExpanded(rowKey)) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                     }
 

@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    config = require("./config"),
+var config = require("./config"),
     typeUtils = require("./utils/type"),
     each = require("./utils/iterator").each,
     Class = require("./class");
@@ -112,7 +111,7 @@ Action.registerExecutor = function(name, executor) {
 };
 
 Action.unregisterExecutor = function() {
-    var args = $.makeArray(arguments);
+    var args = [].slice.call(arguments);
 
     each(args, function() {
         delete Action.executors[this];

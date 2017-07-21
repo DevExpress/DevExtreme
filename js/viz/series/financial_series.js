@@ -56,7 +56,7 @@ exports.stock = _extend({}, scatterSeries, {
         scatterSeries._setGroupsSettings.call(this, false);
     },
 
-    _clearingAnimation: function(translators, drawComplete) {
+    _clearingAnimation: function(drawComplete) {
         drawComplete();
     },
 
@@ -81,16 +81,6 @@ exports.stock = _extend({}, scatterSeries, {
 
     _checkData: function(data) {
         return _isDefined(data.argument) && data.highValue !== undefined && data.lowValue !== undefined && data.openValue !== undefined && data.closeValue !== undefined;
-    },
-
-    _processRange: function(point, prevPoint) {
-        rangeCalculator.processTwoValues(this, point, prevPoint, "highValue", "lowValue");
-    },
-
-    _getRangeData: function(zoomArgs, calcIntervalFunction) {
-        rangeCalculator.calculateRangeData(this, zoomArgs, calcIntervalFunction, "highValue", "lowValue");
-        rangeCalculator.addRangeSeriesLabelPaddings(this);
-        return this._rangeData;
     },
 
     _getPointData: function(data, options) {
@@ -272,7 +262,11 @@ exports.stock = _extend({}, scatterSeries, {
         return this._options.argumentField || "date";
     },
 
-    _beginUpdateData: _noop
+    _beginUpdateData: _noop,
+
+    _processRange: function(range) {
+        rangeCalculator.addRangeSeriesLabelPaddings(this, range.val);
+    }
 });
 
 exports.candlestick = _extend({}, exports.stock, {

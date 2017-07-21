@@ -10,7 +10,6 @@ var methods = [
     "data", "removeData",
     "on", "off", "one", "trigger", "triggerHandler", "focusin", "focusout", "click",
     "html", "css",
-    "val",
     "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
@@ -344,11 +343,17 @@ initRender.prototype.text = function(text) {
     }
 
     cleanData(this[0], false);
-
-    text = text === undefined ? "" : text;
-    rendererStrategy.setText(this[0], text);
+    rendererStrategy.setText(this[0], typeUtils.isDefined(text) ? text : "");
 
     return this;
+};
+
+initRender.prototype.val = function(value) {
+    if(arguments.length === 1) {
+        return this.prop("value", typeUtils.isDefined(value) ? value : "");
+    }
+
+    return this.prop("value");
 };
 
 initRender.prototype.contents = function() {
@@ -716,7 +721,6 @@ renderer.tmpl = function() {
 renderer.templates = function() {
     return $.templates.apply(this, arguments);
 };
-renderer._data = $._data;
 renderer.data = $.data;
 renderer.removeData = $.removeData;
 
@@ -728,9 +732,7 @@ renderer.when = $.when;
 renderer.event = $.event;
 renderer.Event = $.Event;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
-renderer.makeArray = $.makeArray;
 renderer.Deferred = $.Deferred;
-renderer.map = $.map;
 
 module.exports = {
     set: function(strategy) { renderer = strategy; },

@@ -61,7 +61,7 @@ module.exports = (function() {
         if(typeUtils.isDate(dateValue)) {
             return [dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate(), dateValue.getHours(), dateValue.getMinutes(), dateValue.getSeconds()];
         }
-        return $.map(("" + dateValue).split("/"), function(value, index) {
+        return iteratorUtils.map(("" + dateValue).split("/"), function(value, index) {
             return index === 1 ? Number(value) - 1 : Number(value);
         });
     };

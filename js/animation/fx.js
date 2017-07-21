@@ -286,7 +286,7 @@ var FrameAnimationStrategy = {
                 var currentValue = extend({}, this.currentValue);
 
                 if(currentValue[TRANSFORM_PROP]) {
-                    currentValue[TRANSFORM_PROP] = $.map(currentValue[TRANSFORM_PROP], function(value, prop) {
+                    currentValue[TRANSFORM_PROP] = iteratorUtils.map(currentValue[TRANSFORM_PROP], function(value, prop) {
                         if(prop === "translate") {
                             return translator.getTranslateCss(value);
                         } else if(prop === "scale") {

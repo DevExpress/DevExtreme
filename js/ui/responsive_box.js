@@ -310,7 +310,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _sizesByScreen: function(sizeConfigs) {
-        return $.map(this._filterByScreen(sizeConfigs), (function(sizeConfig) {
+        return iteratorUtils.map(this._filterByScreen(sizeConfigs), (function(sizeConfig) {
             return extend(this._defaultSizeConfig(), sizeConfig);
         }).bind(this));
     },
@@ -370,11 +370,11 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _itemsByScreen: function() {
-        return $.map(this.option("items"), (function(item) {
+        return iteratorUtils.map(this.option("items"), (function(item) {
             var locations = item.location || {};
             locations = typeUtils.isPlainObject(locations) ? [locations] : locations;
 
-            return $.map(this._filterByScreen(locations), function(location) {
+            return iteratorUtils.map(this._filterByScreen(locations), function(location) {
                 return {
                     item: item,
                     location: extend({ rowspan: 1, colspan: 1 }, location)

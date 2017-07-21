@@ -12,6 +12,7 @@ var $ = require("jquery"),
     ValidationGroup = require("ui/validation_group");
 
 require("common.css!");
+require("generic_light.css!");
 require("integration/angular");
 
 require("ui/accordion");
@@ -21,6 +22,7 @@ require("ui/defer_rendering");
 require("ui/menu");
 require("ui/popup");
 require("ui/popover");
+require("ui/date_box");
 require("ui/scheduler");
 require("ui/slide_out_view");
 require("ui/tabs");
@@ -668,7 +670,7 @@ QUnit.test("item height is correct in animation config (T520346)", function(asse
     this.clock.tick();
 
     fx.animate = function($element, config) {
-        assert.roughEqual(config.to.height, 18, 0.5);
+        assert.roughEqual(config.to.height, 68, 0.5);
 
         return originalAnimate($element, config);
     };
@@ -711,7 +713,7 @@ QUnit.test("title height is correct if the title is customized using ng-class (T
     this.clock.tick();
 
     var $titles = $markup.find(".dx-accordion-item");
-    assert.equal($titles.height(), 100);
+    assert.equal($titles.children().height(), 100);
 
     this.clock.restore();
 });
@@ -749,6 +751,36 @@ QUnit.test("innerBox with nested box item", function(assert) {
     assert.equal($.trim($markup.text()), "Box1", "inner box rendered");
 });
 
+QUnit.module("date box", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+//T533858
+QUnit.test("dxDateBox with list strategy automatically scrolls to selected item on opening", function(assert) {
+    var $markup = $("\
+        <div dx-date-box=\"{\
+            type: 'time',\
+            value: '2017-07-01 08:30',\
+            opened: true\
+        }\">\
+        </div>\
+    ");
+
+    initMarkup($markup, function() {}, this);
+
+    this.clock.tick();
+
+    var $popupContent = $(".dx-popup-content");
+    var $selectedItem = $popupContent.find(".dx-list-item-selected");
+
+    assert.equal($selectedItem.length, 1, "one item is selected");
+    assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible");
+});
 
 QUnit.module("tree view", {
     beforeEach: function() {

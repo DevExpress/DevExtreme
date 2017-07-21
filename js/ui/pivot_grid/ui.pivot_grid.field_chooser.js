@@ -439,7 +439,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         var fields = dataSource && dataSource.fields() || [],
             treeItems;
 
-        fields = $.map(fields, function(field) {
+        fields = iteratorUtils.map(fields, function(field) {
             return field.visible === false || isDefined(field.groupIndex) ? null : field;
         });
 

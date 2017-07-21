@@ -132,7 +132,7 @@ function normalizeStoreLoadOptionAccessorArguments(originalArguments) {
         case 1:
             return originalArguments[0];
     }
-    return $.makeArray(originalArguments);
+    return [].slice.call(originalArguments);
 }
 
 function generateStoreLoadOptionAccessor(optionName) {
@@ -150,11 +150,11 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
 
     function mapRecursive(items, level) {
         if(!Array.isArray(items)) return items;
-        return level ? mapGroup(items, level) : $.map(items, mapper);
+        return level ? mapGroup(items, level) : iteratorUtils.map(items, mapper);
     }
 
     function mapGroup(group, level) {
-        return $.map(group, function(item) {
+        return iteratorUtils.map(group, function(item) {
             var result = {
                 key: item.key,
                 items: mapRecursive(item.items, level - 1)
@@ -594,7 +594,7 @@ var DataSource = Class.inherit({
         }
 
         if(argc > 1) {
-            expr = $.makeArray(arguments);
+            expr = [].slice.call(arguments);
         }
 
         this._searchExpr = expr;
@@ -703,7 +703,10 @@ var DataSource = Class.inherit({
                 if(!__isDefined(data) || array.isEmpty(data)) {
                     d.reject(new errors.Error("E4009"));
                 } else {
-                    d.resolve(that._applyMapFunction($.makeArray(data))[0]);
+                    if(!Array.isArray(data)) {
+                        data = [data];
+                    }
+                    d.resolve(that._applyMapFunction(data)[0]);
                 }
             };
 
@@ -903,7 +906,7 @@ var DataSource = Class.inherit({
                 }
 
                 if(!Array.isArray(data)) {
-                    data = $.makeArray(data);
+                    data = [data];
                 }
 
                 loadResult = extend({

@@ -75,6 +75,15 @@ QUnit.test("Numbers. Categories.", function(assert) {
         "discrete", "numeric", "discrete", "numeric");
 });
 
+QUnit.test("Check Types with empty group", function(assert) {
+    var groupsData = createGroupsData();
+    groupsData.groups[1] = $.extend({}, groupsData.groups[0]);
+
+    groupsData.groups[0].series = [];
+    testValidateData([{ arg: "1000", val: "1" }, { arg: "2000", val: "2" }, { arg: "3000", val: "3" }], groupsData, null, null);
+    assert.strictEqual(groupsData.argumentAxisType, "discrete");
+});
+
 QUnit.test("DateTime. Categories.", function(assert) {
     var date1000 = new Date(1000),
         date2000 = new Date(2000),
