@@ -698,8 +698,12 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _setFirstViewDate: function() {
-        this._firstViewDate = dateUtils.getFirstWeekDate(this.option("currentDate"), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
+        this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
         this._setStartDayHour(this._firstViewDate);
+    },
+
+    _getViewStartByOptions: function() {
+        return this.option("viewStartDate") ? new Date(this.option("viewStartDate").getTime()) : new Date(this.option("currentDate").getTime());
     },
 
     _setStartDayHour: function(date) {

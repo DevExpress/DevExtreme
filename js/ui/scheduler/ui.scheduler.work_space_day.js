@@ -1,7 +1,6 @@
 "use strict";
 
-var noop = require("../../core/utils/common").noop,
-    registerComponent = require("../../core/component_registrator"),
+var registerComponent = require("../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space");
 
 var DAY_CLASS = "dx-scheduler-work-space-day";
@@ -20,19 +19,31 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _setFirstViewDate: function() {
-        this._firstViewDate = this.option("viewStartDate") ? new Date(this.option("viewStartDate").getTime()) : new Date(this.option("currentDate").getTime());
+        this._firstViewDate = this._getViewStartByOptions();
         this._setStartDayHour(this._firstViewDate);
     },
 
-    _getDateByIndex: function() {
-        return this._firstViewDate;
+    _getDateByIndex: function(headerIndex) {
+        if(this.option("count") === 1) {
+            return this._firstViewDate;
+        }
+
+        var resultDate = new Date(this._firstViewDate);
+        resultDate.setDate(this._firstViewDate.getDate() + headerIndex);
+        return resultDate;
     },
 
     _getFormat: function() {
-        return "longdate";
+        return this._formatWeekdayAndDay;
     },
 
-    _renderDateHeader: noop,
+    _renderDateHeader: function() {
+        if(this.option("count") === 1) {
+            return;
+        }
+
+        return this.callBase();
+    },
 
     _getRightCell: function(isMultiSelection) {
         if(!isMultiSelection) {
