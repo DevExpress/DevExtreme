@@ -40,9 +40,27 @@ var staticMethods = {
     * @publicName exportFromMarkup(markup, options)
     * @param1 markup:string
     * @param2 options:object
+    * @param2_field1 fileName:string
+    * @param2_field2 format:string
+    * @param2_field3 backgroundColor:string
+    * @param2_field4 proxyUrl:string
+    * @param2_field5 width:number
+    * @param2_field6 height:number
+    * @param2_field7 onExporting:function(e)
+    * @param2_field8 onExported:function
+    * @param2_field9 onFileSaving:function(e)
     * @module viz/export
     * @export exportFromMarkup
     */
+    // onExporting:function(e)
+    // e.fileName:string
+    // e.format:string
+    // e.cancel:boolean
+    // onFileSaving:function(e)
+    // e.fileName:string
+    // e.format:string
+    // e.data:blod
+    // e.cancel:boolean
     exportFromMarkup: function() { },
     /**
     * @name vizmethods_getMarkup
