@@ -440,11 +440,11 @@ function checkPercentValue(assert, point, total) {
     assert.equal(point.percent, point.value / total);
 }
 
-function getArgAxis(visibleArea) {
+function getArgAxis(visibleArea, interval) {
     return {
         getTranslator: function() {
             return new MockTranslator({
-                interval: 100,
+                interval: interval || 100,
                 getCanvasVisibleArea: visibleArea || { min: 0 },
                 translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
                 untranslate: { 0: 0, 10: 10 }
@@ -484,9 +484,9 @@ function getValAxes(name, visibleArea) {
     }[name || "axis1"];
 }
 
-function createSeries(options, valAxis, visibleArea) {
+function createSeries(options, valAxis, visibleArea, interval) {
     return new MockSeries($.extend({
-        argumentAxis: getArgAxis(visibleArea && visibleArea.arg),
+        argumentAxis: getArgAxis(visibleArea && visibleArea.arg, interval),
         valueAxis: getValAxes(valAxis, visibleArea && visibleArea.val)
     }, options));
 }
@@ -2616,6 +2616,17 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     checkFullStackedPoints(assert, mixedPoints1);
     checkFullStackedPoints(assert, mixedPoints2);
     checkFullStackedPoints(assert, mixedPoints3);
+});
+
+QUnit.module("Bar series common");
+
+QUnit.test("Translator interval is too small - bar width is 1px", function(assert) {
+    var series = createSeries({ points: pointsForStacking.points1() }, undefined, undefined, 2),
+        expectedWidth = 1;
+
+    createSeriesFamily("bar", [series], { equalBarWidth: true, barWidth: 0.3 });
+
+    checkSeries(assert, series, expectedWidth, 0);
 });
 
 QUnit.module("Stacked Area series. Positive values");
