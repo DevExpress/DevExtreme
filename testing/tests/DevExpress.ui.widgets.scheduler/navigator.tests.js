@@ -290,27 +290,31 @@ QUnit.test("Caption should be OK for week view with count", function(assert) {
     assert.equal(button.option("text"), caption, "Caption is OK");
 });
 
-QUnit.test("Caption should be OK after date switching for Day with count", function(assert) {
+QUnit.test("Click on 'next' button should notify observer, day with count", function(assert) {
     var $element = this.instance.element(),
         $nextButton = $element.find(".dx-scheduler-navigator-next"),
-        navigatorButton = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 4, 25),
-        caption = "28-30 May 2015";
+        date = new Date(2015, 4, 25);
+
+    var updateSpy = sinon.spy(noop);
+    this.instance.notifyObserver = updateSpy;
 
     this.instance.option("date", date);
     this.instance.option("count", 3),
     this.instance.option("step", "day");
 
     $nextButton.trigger("dxclick");
-    assert.equal(navigatorButton.option("text"), caption, "Caption is OK");
+    assert.ok(updateSpy.calledOnce, "Observer is notified");
+    assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 4, 28), "Arguments are OK");
 });
 
-QUnit.test("Caption should be OK after date switching for Week view with count", function(assert) {
+QUnit.test("Click on 'next' button should notify observer, week with count", function(assert) {
     var $element = this.instance.element(),
         $nextButton = $element.find(".dx-scheduler-navigator-next"),
-        navigatorButton = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 4, 25),
-        caption = "15 Jun-5 Jul 2015";
+        date = new Date(2015, 4, 25);
+
+    var updateSpy = sinon.spy(noop);
+    this.instance.notifyObserver = updateSpy;
 
     this.instance.option("firstDayOfWeek", 1);
     this.instance.option("date", date);
@@ -318,34 +322,9 @@ QUnit.test("Caption should be OK after date switching for Week view with count",
     this.instance.option("step", "week");
 
     $nextButton.trigger("dxclick");
-    assert.equal(navigatorButton.option("text"), caption, "Caption is OK");
-});
-
-QUnit.test("Caption should be OK for Day with count & viewStartDate", function(assert) {
-    var $element = this.instance.element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 4, 25),
-        caption = "24-26 May 2015";
-
-    this.instance.option("date", date);
-    this.instance.option("count", 3);
-    this.instance.option("viewStartDate", new Date(2015, 4, 24));
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
-});
-
-QUnit.test("Caption should be OK for week view with count", function(assert) {
-    var $element = this.instance.element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 4, 25),
-        caption = "8 Jun-29 Jun 2015";
-
-    this.instance.option("firstDayOfWeek", 1);
-    this.instance.option("date", date);
-    this.instance.option("count", 3),
-    this.instance.option("viewStartDate", new Date(2015, 4, 18));
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
+    assert.ok(updateSpy.calledOnce, "Observer is notified");
+    assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 5, 15), "Arguments are OK");
 });
 
 QUnit.test("Calendar popover should be shown on caption click", function(assert) {

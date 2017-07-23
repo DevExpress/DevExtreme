@@ -41,7 +41,7 @@ var getCaptionFormat = function(short, skipCount) {
         if(this && this.option("count") > 1) {
             var lastIntervalDate = new Date(date),
                 defaultViewDuration = this._getConfig().duration;
-            lastIntervalDate.setDate(date.getDate() + this.option("count") * defaultViewDuration - 1);
+            lastIntervalDate.setDate(date.getDate() + defaultViewDuration - 1);
 
             var isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth(),
                 useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),

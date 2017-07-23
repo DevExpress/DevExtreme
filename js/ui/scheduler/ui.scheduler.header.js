@@ -40,6 +40,7 @@ var SchedulerHeader = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             views: [],
+            count: 1,
             currentView: "day",
             firstDayOfWeek: undefined,
             currentDate: new Date(),

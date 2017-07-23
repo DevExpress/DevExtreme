@@ -26,6 +26,19 @@ QUnit.test("Click on the 'next' button should update currentDate", function(asse
     assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 10), "New date is correct");
 });
 
+QUnit.test("Click on the 'next' button should update currentDate correctly, when count & viewStartDate", function(assert) {
+    this.createInstance({ currentDate: new Date(2015, 1, 9), views: [{
+        type: "day",
+        count: 3,
+        viewStartDate: new Date(2015, 1, 11)
+    }] });
+
+    this.instance.element().find(".dx-scheduler-navigator-next").trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("viewStartDate"), new Date(2015, 1, 14), "New date is correct");
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 9), "New date is correct");
+});
+
 QUnit.test("Click on the 'previous' button should update currentDate", function(assert) {
 
     this.createInstance({ currentDate: new Date(2015, 1, 9) });
@@ -33,6 +46,20 @@ QUnit.test("Click on the 'previous' button should update currentDate", function(
     this.instance.element().find(".dx-scheduler-navigator-previous").trigger("dxclick");
 
     assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 8), "New date is correct");
+});
+
+QUnit.test("Click on the 'previous' button should update currentDate correctly, when count & viewStartDate", function(assert) {
+
+    this.createInstance({ currentDate: new Date(2015, 1, 9), views: [{
+        type: "day",
+        count: 3,
+        viewStartDate: new Date(2015, 1, 10)
+    }] });
+
+    this.instance.element().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("viewStartDate"), new Date(2015, 1, 7), "New date is correct");
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 9), "New date is correct");
 });
 
 QUnit.test("Caption should be updated when currentDate is changed", function(assert) {
