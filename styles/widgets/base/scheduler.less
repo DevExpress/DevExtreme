@@ -908,6 +908,18 @@
             }
         }
     }
+
+    &.dx-scheduler-work-space-day {
+        .dx-scheduler-header-panel-cell, .dx-scheduler-date-table-cell, .dx-scheduler-all-day-table-cell {
+            &:nth-child(1n) {
+                border-right: @SCHEDULER_ACCENT_BORDER;
+
+                .dx-rtl & {
+                    border-left: @SCHEDULER_ACCENT_BORDER;
+                }
+            }
+        }
+    }
 }
 
 .dx-scheduler-header-panel {
