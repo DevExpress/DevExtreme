@@ -884,6 +884,32 @@
     }
 }
 
+.dx-scheduler-work-space-count {
+    &.dx-scheduler-work-space-week {
+        .dx-scheduler-header-panel-cell, .dx-scheduler-date-table-cell, .dx-scheduler-all-day-table-cell {
+            &:nth-child(7n) {
+                border-right: @SCHEDULER_ACCENT_BORDER;
+
+                .dx-rtl & {
+                    border-left: @SCHEDULER_ACCENT_BORDER;
+                }
+            }
+        }
+    }
+
+    &.dx-scheduler-work-space-work-week {
+        .dx-scheduler-header-panel-cell, .dx-scheduler-date-table-cell, .dx-scheduler-all-day-table-cell {
+            &:nth-child(5n) {
+                border-right: @SCHEDULER_ACCENT_BORDER;
+
+                .dx-rtl & {
+                    border-left: @SCHEDULER_ACCENT_BORDER;
+                }
+            }
+        }
+    }
+}
+
 .dx-scheduler-header-panel {
     border-collapse: collapse;
     table-layout: fixed;
