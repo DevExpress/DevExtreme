@@ -4385,3 +4385,59 @@ QUnit.test("Appointments should be rendered correctly, Week view with count and 
     assert.equal($appointments.length, 4, "Appointments were rendered correctly");
 });
 
+QUnit.test("Appointments should be rendered correctly after switching Day view with count and viewStartDate", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2017, 5, 28, 4), endDate: new Date(2017, 5, 28, 4, 30) },
+        { text: "Two", startDate: new Date(2017, 5, 29, 0), endDate: new Date(2017, 5, 29, 0, 30) },
+        { text: "Three", startDate: new Date(2017, 5, 30, 10), endDate: new Date(2017, 5, 30, 11) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2017, 5, 26),
+        dataSource: dataSource,
+        views: [{
+            type: "day",
+            name: "day",
+            count: 3,
+            viewStartDate: new Date(2017, 5, 25)
+        }],
+        currentView: "day"
+    });
+
+    this.instance.element().find(".dx-scheduler-navigator-next").trigger("dxclick");
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 3, "Appointments were rendered correctly");
+});
+
+QUnit.test("Appointments should be rendered correctly after switching Week view with count and viewStartDate", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2017, 6, 10, 4), endDate: new Date(2017, 6, 10, 4, 30) },
+        { text: "Two", startDate: new Date(2017, 6, 18, 0), endDate: new Date(2017, 6, 18, 0, 30) },
+        { text: "Three", startDate: new Date(2017, 6, 25, 10), endDate: new Date(2017, 6, 25, 11) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2017, 5, 26),
+        dataSource: dataSource,
+        views: [{
+            type: "week",
+            name: "week",
+            count: 3,
+            viewStartDate: new Date(2017, 5, 19)
+        }],
+        currentView: "week",
+        firstDayOfWeek: 1
+    });
+
+    this.instance.element().find(".dx-scheduler-navigator-next").trigger("dxclick");
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 3, "Appointments were rendered correctly");
+});

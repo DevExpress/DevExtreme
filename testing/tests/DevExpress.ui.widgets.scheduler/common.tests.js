@@ -1114,6 +1114,22 @@ QUnit.testStart(function() {
         assert.deepEqual(navigator.option("date"), date, "navigator has correct date depending on viewStartDate");
     });
 
+    QUnit.test("Scheduler should have viewStartDate option if workspace have view.viewStartDate option", function(assert) {
+        var date = new Date(2017, 3, 4);
+
+        this.createInstance({
+            currentView: "week",
+            views: [{
+                type: "week",
+                name: "Week",
+                count: 3,
+                viewStartDate: date
+            }]
+        });
+
+        assert.deepEqual(this.instance.option("viewStartDate"), date, "Scheduler has correct viewStartDate");
+    });
+
     // QUnit.test("view.offset isn't passed to workspace & header & navigator if count is undefined", function(assert) {
     //     this.createInstance({
     //         currentView: "week",
