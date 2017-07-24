@@ -174,8 +174,8 @@ QUnit.test("dxDataGrid", function(assert) {
     this.clock.tick(30);
 
     var $cols = $(".dx-datagrid-rowsview col");
-    assert.equal($cols[0].style.width, "100px");
-    assert.equal($cols[1].style.width, "100px");
+    assert.roughEqual(parseInt($cols[0].style.width), 100, 1.01);
+    assert.roughEqual(parseInt($cols[1].style.width), 100, 1.01);
 });
 
 
@@ -703,7 +703,8 @@ QUnit.test("dxDateBox with list strategy automatically scrolls to selected item 
     var $markup = $("\
         <div dx-date-box=\"{\
             type: 'time',\
-            value: '2017-07-01 08:30',\
+            value: '2017/07/01 08:30',\
+            pickerType: 'list',\
             opened: true\
         }\">\
         </div>\
