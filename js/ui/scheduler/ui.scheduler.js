@@ -1041,12 +1041,14 @@ var Scheduler = Widget.inherit({
                 this._header.option(name, value);
                 break;
             case "currentView":
+                var viewCountConfig = this._getViewCountConfig();
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
                     allowResize: this._allowResizing(),
                     appointmentDurationInMinutes: this._getCurrentViewOption("cellDuration")
                 });
+                this._header.option("count", viewCountConfig.count);
                 this._header.option("min", this._dateOption("min"));
                 this._header.option("max", this._dateOption("max"));
                 this._header.option("currentDate", this._dateOption("currentDate"));

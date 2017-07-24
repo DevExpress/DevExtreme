@@ -73,6 +73,7 @@ var SchedulerHeader = Widget.inherit({
             case "min":
             case "max":
             case "firstDayOfWeek":
+            case "count":
                 this._navigator.option(args.name, value);
                 break;
             case "tabIndex":
