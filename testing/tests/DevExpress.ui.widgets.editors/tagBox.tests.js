@@ -524,7 +524,7 @@ QUnit.test("tagBox should display one tag after limit overflow", function(assert
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2
+            maxDisplayedTags: 2
         }),
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
 
@@ -537,7 +537,7 @@ QUnit.test("tagBox should display one tag after new tags was added", function(as
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2
+            maxDisplayedTags: 2
         }),
         tagBox = $tagBox.dxTagBox("instance");
 
@@ -555,7 +555,7 @@ QUnit.test("tagBox should display multiple tags after value was changed", functi
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2
+            maxDisplayedTags: 2
         }),
         tagBox = $tagBox.dxTagBox("instance");
 
@@ -570,7 +570,7 @@ QUnit.test("tagBox should deselect all items after multi tag removed", function(
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2
+            maxDisplayedTags: 2
         }),
         tagBox = $tagBox.dxTagBox("instance"),
         $tagRemoveButton = $tagBox.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS).eq(0);
@@ -584,7 +584,7 @@ QUnit.test("tagBox should deselect all items after multi tag removed", function(
     assert.strictEqual($tagBox.find("." + TAGBOX_TAG_CLASS).length, 0, "there are no tags in the field");
 });
 
-QUnit.test("tags should be recalculated after maxTagCount option changed", function(assert) {
+QUnit.test("tags should be recalculated after maxDisplayedTags option changed", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4]
@@ -593,21 +593,21 @@ QUnit.test("tags should be recalculated after maxTagCount option changed", funct
 
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 3, "3 tags by default");
 
-    tagBox.option("maxTagCount", 2);
+    tagBox.option("maxDisplayedTags", 2);
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 1, "1 tag when limit is over");
 
-    tagBox.option("maxTagCount", 3);
+    tagBox.option("maxDisplayedTags", 3);
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 3, "3 tags when limit is not over");
 
     tagBox.option("value", [1, 2, 3, 4]);
-    tagBox.option("maxTagCount", undefined);
+    tagBox.option("maxDisplayedTags", undefined);
     assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).length, 4, "4 tags when option was disabled");
 });
 
-QUnit.test("multitag should be rendered always when maxTagCount is 0", function(assert) {
+QUnit.test("multitag should be rendered always when maxDisplayedTags is 0", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
-            maxTagCount: 0,
+            maxDisplayedTags: 0,
             value: [1]
         }),
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
@@ -622,7 +622,7 @@ QUnit.test("onMultitagPreparing option", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2,
+            maxDisplayedTags: 2,
             onMultiTagPreparing: function(e) {
                 assert.equal(e.component.NAME, "dxTagBox", "component is correct");
                 assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
@@ -648,7 +648,7 @@ QUnit.test("onMultitagPreparing option change", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2
+            maxDisplayedTags: 2
         }),
         tagBox = $tagBox.dxTagBox("instance");
 
@@ -662,7 +662,7 @@ QUnit.test("multi tag should not be rendered if e.cancel is true", function(asse
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2,
+            maxDisplayedTags: 2,
             onMultiTagPreparing: function(e) {
                 e.cancel = true;
             }
@@ -677,7 +677,7 @@ QUnit.test("multi tag should be rendered after max number of tags if showMultiTa
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2,
+            maxDisplayedTags: 2,
             showMultiTagOnly: false
         }),
         $tag = $tagBox.find("." + TAGBOX_TAG_CLASS);
@@ -690,7 +690,7 @@ QUnit.test("tags should be rerendered after showMultiTagOnly option changed", fu
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2,
+            maxDisplayedTags: 2,
             showMultiTagOnly: false
         }),
         tagBox = $tagBox.dxTagBox("instance");
@@ -707,7 +707,7 @@ QUnit.test("multi tag should deselect overflow tags only when showMultiTagOnly i
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
             value: [1, 2, 4],
-            maxTagCount: 2,
+            maxDisplayedTags: 2,
             showMultiTagOnly: false
         }),
         tagBox = $tagBox.dxTagBox("instance"),
@@ -728,7 +728,7 @@ QUnit.test("tagbox should show count of selected items when only first page is l
             paginate: true,
             pageSize: 5
         },
-        maxTagCount: 2,
+        maxDisplayedTags: 2,
         opened: true,
         selectAllMode: "page",
         showSelectionControls: true
