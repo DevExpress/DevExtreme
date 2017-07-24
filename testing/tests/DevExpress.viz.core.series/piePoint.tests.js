@@ -34,13 +34,14 @@ function createLabelWithConnector() {
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
 
-    point.translate(this.angleTranslator);
+    point.translate();
     point.correctLabelPosition(label);
 
     return label;
 }
 
 function environmentWithStubLabels() {
+    var that = this;
     this.renderer = new vizMocks.Renderer();
     this.group = this.renderer.g();
     this.translateData = { 0: 300, 10: 270, 20: 240 };
@@ -70,6 +71,7 @@ function environmentWithStubLabels() {
     };
     this.series = {
         _visibleArea: { minX: 0, maxX: 600, minY: 0, maxY: 600 },
+        getVisibleArea: function() { return this._visibleArea; },
         name: "series1",
         areLabelsVisible: function() {
             return true;
@@ -80,7 +82,8 @@ function environmentWithStubLabels() {
         _options: {
             containerBackgroundColor: "#ffffff"
         },
-        getLabelVisibility: function() { return true; }
+        getLabelVisibility: function() { return true; },
+        getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
     };
     this.stubLabel = function(point) {
         point._label = sinon.createStubInstance(labelModule.Label);
@@ -92,9 +95,9 @@ function environmentWithStubLabels() {
 function createPointWithStubLabelForDraw(translateData, isFirstDrawn) {
     var point = createPointWithStubLabel.call(this, translateData);
     if(isFirstDrawn) {
-        point.drawLabel(undefined, this.renderer, this.group);
+        point.drawLabel(undefined);
     } else {
-        point._drawLabel(this.renderer, this.group);
+        point._drawLabel();
     }
     return point;
 }
@@ -114,11 +117,12 @@ function createPointWithStubLabel(translateData) {
     var point = createPoint(this.series, this.data, this.options);
     this.stubLabel(point);
 
-    point.translate(this.angleTranslator);
+    point.translate();
     return point;
 }
 
 function environment() {
+    var that = this;
     this.series = {
         name: "series1",
         getOptions: function() {
@@ -126,7 +130,8 @@ function environment() {
         },
         _options: {},
         getLabelVisibility: function() { return false; },
-        hidePointTooltip: noop
+        hidePointTooltip: noop,
+        getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
     };
     this.opt = {
         widgetType: "pie",
@@ -175,7 +180,7 @@ QUnit.test("Angles translation, shiftedAngle is zero", function(assert) {
     var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
 
     point.shiftedAngle = 0;
-    point.translate(this.angleTranslator);
+    point.translate();
 
     assert.equal(point.fromAngle, this.translateData[0]);
     assert.equal(point.toAngle, this.translateData[10]);
@@ -186,7 +191,7 @@ QUnit.test("Angles translation, shiftedAngle is not zero", function(assert) {
     var point = createPoint(this.series, { argument: "cat2", value: 10, minValue: 0 }, this.opt);
 
     point.shiftedAngle = 30;
-    point.translate(this.angleTranslator);
+    point.translate();
 
     assert.equal(point.fromAngle, this.translateData[0] + 30);
     assert.equal(point.toAngle, this.translateData[10] + 30);
@@ -198,7 +203,7 @@ QUnit.test("translate when point is invisible", function(assert) {
 
     point.hide();
     point.shiftedAngle = 30;
-    point.translate(this.angleTranslator);
+    point.translate();
 
     assert.equal(point.fromAngle, this.translateData[0] + 30);
     assert.equal(point.toAngle, point.fromAngle);
@@ -310,10 +315,12 @@ QUnit.test("Positive offset", function(assert) {
 
 QUnit.module("coordsIn API", {
     beforeEach: function() {
+        var that = this;
         this.series = {
             name: "series1",
             _options: {},
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
         };
         this.options = {
             widgetType: "pie",
@@ -326,19 +333,19 @@ QUnit.module("coordsIn API", {
 });
 
 QUnit.test("fromAngle > to Angle", function(assert) {
+    this.angleTranslator = new MockAngularTranslator({
+        translate: { 0: 200, 5: 150, 10: 100 }
+    });
     var point = createPoint(this.series, { value: 5, argument: 5, minValue: 0 }, this.options),
         correction = {
             radiusInner: 10,
             radiusOuter: 20,
             centerX: 30,
             centerY: 40
-        },
-        angleTranslator = new MockAngularTranslator({
-            translate: { 0: 200, 5: 150, 10: 100 }
-        });
+        };
 
     point.shiftedAngle = 0;
-    point.translate(angleTranslator);
+    point.translate();
 
     point.correctPosition(correction);
 
@@ -372,19 +379,19 @@ QUnit.test("fromAngle > to Angle", function(assert) {
 });
 
 QUnit.test("toAngle > fromAngle", function(assert) {
+    this.angleTranslator = new MockAngularTranslator({
+        translate: { 0: 380, 5: 340, 10: 100 }
+    });
     var point = createPoint(this.series, { value: 5, argument: 5, minValue: 0 }, this.options),
         correction = {
             radiusInner: 10,
             radiusOuter: 20,
             centerX: 30,
             centerY: 40
-        },
-        angleTranslator = new MockAngularTranslator({
-            translate: { 0: 380, 5: 340, 10: 100 }
-        });
+        };
 
     point.shiftedAngle = 0;
-    point.translate(angleTranslator);
+    point.translate();
 
     point.correctPosition(correction);
 
@@ -422,19 +429,19 @@ QUnit.test("toAngle > fromAngle", function(assert) {
 });
 
 QUnit.test("circle point", function(assert) {
+    this.angleTranslator = new MockAngularTranslator({
+        translate: { 0: 0, 5: 360 }
+    });
     var point = createPoint(this.series, { value: 5, argument: 5, minValue: 0 }, this.options),
         correction = {
             radiusInner: 10,
             radiusOuter: 20,
             centerX: 30,
             centerY: 40
-        },
-        angleTranslator = new MockAngularTranslator({
-            translate: { 0: 0, 5: 360 }
-        });
+        };
 
     point.shiftedAngle = 0;
-    point.translate(angleTranslator);
+    point.translate();
 
     point.correctPosition(correction);
 
@@ -463,8 +470,13 @@ QUnit.test("circle point", function(assert) {
 
 QUnit.module("Draw Point", {
     beforeEach: function() {
+        var that = this;
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
+        this.translateData = { 0: 300, 10: 270, 20: 240 };
+        this.angleTranslator = new MockAngularTranslator({
+            translate: this.translateData
+        });
         this.series = {
             name: "series1",
             areLabelsVisible: function() { return false; },
@@ -472,7 +484,8 @@ QUnit.module("Draw Point", {
                 return this._options;
             },
             _options: {},
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
         };
         this.options = {
             widgetType: "pie",
@@ -744,7 +757,7 @@ QUnit.test("Hide marker when marker is visible", function(assert) {
     this.options.styles.normal.visibility = "visible";
     var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     var labelSpy = sinon.spy(point._label, "hide");
@@ -758,7 +771,7 @@ QUnit.test("Hide marker when marker is visible", function(assert) {
 QUnit.test("Hide marker when marker has no visibility setting", function(assert) {
     var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     var labelSpy = sinon.spy(point._label, "hide");
@@ -771,17 +784,17 @@ QUnit.test("Hide marker when marker has no visibility setting", function(assert)
 
 QUnit.test("Draw point if option visible is false", function(assert) {
     this.options.visible = false;
-    var point = createPoint(this.series, {}, this.options);
+    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
 });
 
 QUnit.test("Apply style", function(assert) {
-    var point = createPoint(this.series, {}, this.options);
-    point.translate(this.translators);
+    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     point.applyStyle("selection");
@@ -790,10 +803,10 @@ QUnit.test("Apply style", function(assert) {
 });
 
 QUnit.test("Apply style with legend callback", function(assert) {
-    var point = createPoint(this.series, {}, this.options),
+    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options),
         callback = sinon.stub();
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     point.applyStyle("selection", callback);
@@ -803,7 +816,7 @@ QUnit.test("Apply style with legend callback", function(assert) {
 });
 
 QUnit.test("Apply view with legend callback", function(assert) {
-    var point = createPoint(this.series, {}, this.options),
+    var point = createPoint(this.series, { argument: "4", value: 3 }, this.options),
         callback = sinon.stub();
 
     point.fullState = 2;
@@ -950,7 +963,7 @@ QUnit.test("hide label on draw if it invisible", function(assert) {
     };
 
     point.updateOptions(this.options);
-    point._drawLabel(this.renderer, this.group);
+    point._drawLabel();
 
     assert.ok(point._label.hide.called);
 });
@@ -1159,10 +1172,12 @@ QUnit.module("Connector", {
             getOptions: function() {
                 return this._options;
             },
+            getVisibleArea: function() { return {}; },
             _options: {
                 containerBackgroundColor: "#ffffff"
             },
             getLabelVisibility: function() { return true; },
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
         };
         this.label = sinon.createStubInstance(labelModule.Label);
         this.label.getLayoutOptions.returns(this.options.label);
@@ -1205,6 +1220,7 @@ QUnit.test("Draw connector, color of border and containerBackgroundColor are equ
 
 QUnit.module("show/hide API", {
     beforeEach: function() {
+        var that = this;
         this.visibilityChanged = sinon.spy();
         this.series = {
             name: "series1",
@@ -1215,7 +1231,8 @@ QUnit.module("show/hide API", {
 
             },
             getLabelVisibility: function() { return false; },
-            hidePointTooltip: function() { }
+            hidePointTooltip: function() { },
+            getValueAxis: function() { return { getTranslator: function() { return that.angleTranslator; } }; }
         };
         this.opt = {
             type: "pie",

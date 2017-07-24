@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     registerComponent = require("../core/component_registrator"),
     CheckBox = require("./check_box"),
     HierarchicalCollectionWidget = require("./hierarchical_collection/ui.hierarchical_collection_widget"),
@@ -501,7 +502,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     _removeSelection: function() {
         var that = this;
 
-        $.each(this._dataAdapter.getFullData(), function(_, node) {
+        each(this._dataAdapter.getFullData(), function(_, node) {
             if(!that._hasChildren(node)) {
                 return;
             }
@@ -720,7 +721,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         var that = this,
             keys = node.internalFields.childrenKeys;
 
-        $.each(keys, function(_, key) {
+        each(keys, function(_, key) {
             that.option("items")[that._dataAdapter.getIndexByKey(key)] = 0;
             that._markChildrenItemsToRemove(that._dataAdapter.getNodeByKey(key));
         });
@@ -730,7 +731,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         var that = this,
             counter = 0,
             items = extend(true, [], this.option("items"));
-        $.each(items, function(index, item) {
+        each(items, function(index, item) {
             if(!item) {
                 that.option("items").splice(index - counter, 1);
                 counter++;
@@ -1387,7 +1388,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     _updateItemsUI: function() {
         var that = this;
 
-        $.each(this._dataAdapter.getData(), function(_, node) {
+        each(this._dataAdapter.getData(), function(_, node) {
             var $node = that._getNodeElement(node),
                 nodeSelection = node.internalFields.selected;
 
@@ -1823,7 +1824,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     collapseAll: function() {
         var that = this;
 
-        $.each(this._dataAdapter.getExpandedNodesKeys(), function(_, key) {
+        each(this._dataAdapter.getExpandedNodesKeys(), function(_, key) {
             that._toggleExpandedState(key, false);
         });
     }

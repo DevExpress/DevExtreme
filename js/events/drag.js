@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     wrapToArray = require("../core/utils/array").wrapToArray,
     inArray = require("../core/utils/array").inArray,
+    iteratorUtils = require("../core/utils/iterator"),
     registerEvent = require("./core/event_registrator"),
     eventUtils = require("./utils"),
     GestureEmitter = require("./gesture/emitter.gesture"),
@@ -15,7 +16,9 @@ var DRAG_START_EVENT = "dxdragstart",
 
     DRAG_ENTER_EVENT = "dxdragenter",
     DRAG_LEAVE_EVENT = "dxdragleave",
-    DROP_EVENT = "dxdrop";
+    DROP_EVENT = "dxdrop",
+
+    DX_DRAG_EVENTS_COUNT_KEY = "dxDragEventsCount";
 
 
 var knownDropTargets = [],
@@ -35,6 +38,7 @@ var dropTargetRegistration = {
 
     add: function(element, handleObj) {
         var index = inArray(element, knownDropTargets);
+        this.updateEventsCounter(element, handleObj.type, 1);
 
         var selector = handleObj.selector;
         if(inArray(selector, knownDropTargetSelectors[index]) === -1) {
@@ -42,23 +46,25 @@ var dropTargetRegistration = {
         }
     },
 
+    updateEventsCounter: function(element, event, value) {
+        if([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].indexOf(event) > -1) {
+            var eventsCount = $.data(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
+            $.data(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
+        }
+    },
+
+    remove: function(element, handleObj) {
+        this.updateEventsCounter(element, handleObj.type, -1);
+    },
+
     teardown: function(element) {
-        var elementEvents = $._data(element, "events"),
-            handlersCount = 0;
-
-        $.each([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT], function(_, eventName) {
-            var eventHandlers = elementEvents[eventName];
-
-            if(eventHandlers) {
-                handlersCount += eventHandlers.length;
-            }
-        });
-
+        var handlersCount = $.data(element, DX_DRAG_EVENTS_COUNT_KEY);
         if(!handlersCount) {
             var index = inArray(element, knownDropTargets);
             knownDropTargets.splice(index, 1);
             knownDropTargetSelectors.splice(index, 1);
             knownDropTargetConfigs.splice(index, 1);
+            $.removeData(element, DX_DRAG_EVENTS_COUNT_KEY);
         }
     }
 
@@ -149,7 +155,7 @@ var DragEmitter = GestureEmitter.inherit({
         this._maxBottomOffset = e.maxBottomOffset;
 
         var dropTargets = wrapToArray(e.targetElements || (e.targetElements === null ? [] : knownDropTargets));
-        this._dropTargets = $.map(dropTargets, function(element) { return $(element).get(0); });
+        this._dropTargets = iteratorUtils.map(dropTargets, function(element) { return $(element).get(0); });
     },
 
     _move: function(e) {
@@ -233,13 +239,13 @@ var DragEmitter = GestureEmitter.inherit({
         var that = this,
             result;
 
-        $.each(knownDropTargets, function(_, target) {
+        iteratorUtils.each(knownDropTargets, function(_, target) {
             if(!that._checkDropTargetActive(target)) {
                 return;
             }
 
             var $target = $(target);
-            $.each(getItemDelegatedTargets($target), function(_, delegatedTarget) {
+            iteratorUtils.each(getItemDelegatedTargets($target), function(_, delegatedTarget) {
                 var $delegatedTarget = $(delegatedTarget);
                 if(that._checkDropTarget(getItemConfig($target), $delegatedTarget, e)) {
                     result = delegatedTarget;
@@ -253,7 +259,7 @@ var DragEmitter = GestureEmitter.inherit({
     _checkDropTargetActive: function(target) {
         var active = false;
 
-        $.each(this._dropTargets, function(_, activeTarget) {
+        iteratorUtils.each(this._dropTargets, function(_, activeTarget) {
             active = active || activeTarget === target || $.contains(activeTarget, target);
             return !active;
         });

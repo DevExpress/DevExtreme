@@ -385,13 +385,14 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _renderInputValue: function() {
-        var callBase = this.callBase.bind(this),
-            value = this._getCurrentValue();
+        var value = this._getCurrentValue();
 
-        return this._loadItem(value).always((function(item) {
-            this._setSelectedItem(item);
-            callBase(value);
-        }).bind(this));
+        return this._loadInputValue(value, this._setSelectedItem.bind(this))
+            .always(this.callBase.bind(this, value));
+    },
+
+    _loadInputValue: function(value, callback) {
+        return this._loadItem(value).always(callback);
     },
 
     _loadItem: function(value) {

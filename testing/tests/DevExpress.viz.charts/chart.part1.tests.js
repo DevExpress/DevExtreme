@@ -170,7 +170,6 @@ QUnit.test("actions sequence on render chart", function(assert) {
     //assert
     assert.equal(resamplePointsSpy.callCount, 1);
 
-    assert.deepEqual(resamplePointsSpy.lastCall.args, [chart.translators["default"].defaultAxisName0.arg, undefined, undefined]);
     assert.equal(updatePanesCanvasesSpy.callCount, 2);
     assert.ok(resamplePointsSpy.firstCall.calledAfter(updatePanesCanvasesSpy.firstCall), "resample points after first call updatePanes");
     assert.equal(layoutElementsSpy.callCount, 1);

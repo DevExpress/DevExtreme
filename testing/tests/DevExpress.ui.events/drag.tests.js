@@ -304,6 +304,17 @@ QUnit.test("element should not be removed from drop targets if it has dragleave 
     assert.equal(dropTargets.length, 1, "drop target present");
 });
 
+QUnit.test("all elements should be removed from drop targets after unsubscription", function(assert) {
+    var $dropTarget = $("<div>").appendTo("#qunit-fixture"),
+        $secondDropTarget = $("<div>").appendTo("#qunit-fixture");
+
+    $dropTarget.on(dragEvents.enter, noop);
+    $secondDropTarget.on(dragEvents.enter, noop);
+    $secondDropTarget.off(dragEvents.enter);
+    $dropTarget.off(dragEvents.enter, noop);
+    assert.equal(dropTargets.length, 0, "drop targets aren't present");
+});
+
 QUnit.test("element should be removed from drop targets if it has not any subscription after unsubscription", function(assert) {
     var $dropTarget = $("<div>").appendTo("#qunit-fixture");
 

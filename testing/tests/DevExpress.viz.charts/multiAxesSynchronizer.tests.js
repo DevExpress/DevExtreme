@@ -48,14 +48,14 @@ function checkAxesSynchronization(assert, options) {
             axis.updateOptions({
                 mockRange: range,
                 pane: options.pane,
+                mockTranslator: new translator2DModule.Translator2D(range, canvas),
                 mockTickInterval: options.tickInterval,
                 mockTickValues: options.tickValues,
                 mockMinorTicks: options.minorTickValues,
                 synchronizedValue: options.synchronizedValue,
                 type: options.type
             });
-            var translator = new translator2DModule.Translator2D(range, canvas);
-            axis.setTranslator(translator);
+
             return axis;
         };
         return $.map(axesOptions, function(axisOptions) {
@@ -92,7 +92,7 @@ function checkAxesSynchronization(assert, options) {
             assert.deepEqual(axis.getTicksValues().majorTicksValues, axesOptionsAfterSync[i].tickValues, 'tickValues after synchronization for axis ' + i);
         }
         if(axesOptionsAfterSync[i].range) {
-            assert.deepEqual(getObjectData(axis._translator.getBusinessRange()), axesOptionsAfterSync[i].range, 'range after synchronization for axis ' + i);
+            assert.deepEqual(getObjectData(axis.getTranslator().getBusinessRange()), axesOptionsAfterSync[i].range, 'range after synchronization for axis ' + i);
         }
     });
 
@@ -101,7 +101,7 @@ function checkAxesSynchronization(assert, options) {
             var tickValues = axis.getTicksValues().majorTicksValues;
             if(tickValues) {
                 axesTickPositions.push($.map(tickValues, function(val) {
-                    return axis._translator.translate(val);
+                    return axis.getTranslator().translate(val);
                 }));
             } else {
                 axesTickPositions.push([]);

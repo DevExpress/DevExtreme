@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     _isFinite = isFinite,
     _Number = Number,
     _round = Math.round,
@@ -15,7 +15,7 @@ var $ = require("../../core/renderer"),
 var BaseElement = Class.inherit({
     ctor: function(parameters) {
         var that = this;
-        $.each(parameters, function(name, value) {
+        each(parameters, function(name, value) {
             that["_" + name] = value;
         });
         that._init();
@@ -24,7 +24,7 @@ var BaseElement = Class.inherit({
     dispose: function() {
         var that = this;
         that._dispose();
-        $.each(that, function(name) {
+        each(that, function(name) {
             that[name] = null;
         });
         return that;

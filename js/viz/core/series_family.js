@@ -1,14 +1,14 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    isNumeric = require("../../core/utils/type").isNumeric,
+var isNumeric = require("../../core/utils/type").isNumeric,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     _math = Math,
     _round = _math.round,
     _abs = _math.abs,
     _pow = _math.pow,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop,
     vizUtils = require("./utils"),
     _normalizeEnum = vizUtils.normalizeEnum;
@@ -45,7 +45,7 @@ function correctPointCoordinatesForStacks(stackKeepers, stacksWithArgument, argu
     });
 }
 
-function adjustBarSeriesDimensionsCore(series, interval, stackCount, options, seriesStackIndexCallback) {
+function adjustBarSeriesDimensionsCore(series, stackCount, options, seriesStackIndexCallback) {
     var percentWidth,
         stackIndex,
         i,
@@ -54,7 +54,7 @@ function adjustBarSeriesDimensionsCore(series, interval, stackCount, options, se
         argumentsKeeper = {},
         stackKeepers = {},
         stacksWithArgument,
-        barsArea = interval * 0.7,
+        barsArea = series[0] && series[0].getArgumentAxis().getTranslator().getInterval() * 0.7,
         barWidth = options.barWidth,
         parameters;
 
@@ -102,13 +102,12 @@ function calculateParams(barsArea, count, percentWidth) {
     if(!percentWidth) {
         spacing = _round(barsArea / count * 0.2);
         width = _round((barsArea - spacing * (count - 1)) / count);
-        width < 2 && (width = 2);
     } else {
         width = _round(barsArea * percentWidth / count);
         spacing = _round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
     }
 
-    return { width: width, spacing: spacing, middleIndex: middleIndex };
+    return { width: width > 1 ? width : 1, spacing: spacing, middleIndex: middleIndex };
 }
 
 function getOffset(stackIndex, parameters) {
@@ -133,8 +132,8 @@ function getValueType(value) {
 }
 
 function getVisibleSeries(that) {
-    return vizUtils.map(that.series, function(s) {
-        return s.isVisible() ? s : null;
+    return that.series.filter(function(s) {
+        return s.isVisible();
     });
 }
 
@@ -152,22 +151,14 @@ function getSeriesStackIndexCallback(rotated, series, stackIndexes) {
     }
 }
 
-function adjustBarSeriesDimensions(translators) {
-    ///#DEBUG
-    var debug = require("../../core/utils/console").debug;
-    debug.assert(translators, "translator was not passed or empty");
-    ///#ENDDEBUG
+function adjustBarSeriesDimensions() {
     var that = this,
         series = getVisibleSeries(that);
 
-    adjustBarSeriesDimensionsCore(series, translators.arg.getInterval(), series.length, that._options, getSeriesStackIndexCallback(that.rotated, series));
+    adjustBarSeriesDimensionsCore(series, series.length, that._options, getSeriesStackIndexCallback(that.rotated, series));
 }
 
-function adjustStackedBarSeriesDimensions(translators) {
-    ///#DEBUG
-    var debug = require("../../core/utils/console").debug;
-    debug.assert(translators, "translators was not passed or empty");
-    ///#ENDDEBUG
+function adjustStackedBarSeriesDimensions() {
     var that = this,
         series = getVisibleSeries(that),
         stackIndexes = {},
@@ -180,7 +171,7 @@ function adjustStackedBarSeriesDimensions(translators) {
         }
     });
 
-    adjustBarSeriesDimensionsCore(series, translators.arg.getInterval(), stackCount, that._options, getSeriesStackIndexCallback(that.rotated, series, stackIndexes));
+    adjustBarSeriesDimensionsCore(series, stackCount, that._options, getSeriesStackIndexCallback(that.rotated, series, stackIndexes));
 }
 
 function adjustStackedSeriesValues() {
@@ -263,7 +254,7 @@ function adjustStackedSeriesValues() {
     });
 }
 
-function updateStackedSeriesValues(translators) {
+function updateStackedSeriesValues() {
     var that = this,
         series = getVisibleSeries(that),
         stack = that._stackKeepers,
@@ -273,8 +264,7 @@ function updateStackedSeriesValues(translators) {
         };
     _each(series, function(_, singleSeries) {
         var minBarSize = singleSeries.getOptions().minBarSize,
-            tr = singleSeries.axis ? translators.axesTrans[singleSeries.axis] : translators,
-            minShownBusinessValue = minBarSize && tr.val.getMinBarSize(minBarSize),
+            minShownBusinessValue = minBarSize && singleSeries.getValueAxis().getTranslator().getMinBarSize(minBarSize),
             stackName = singleSeries.getStackName();
 
         _each(singleSeries.getPoints(), function(index, point) {
@@ -324,11 +314,10 @@ function updateFullStackedSeriesValues(series, stackKeepers) {
     });
 }
 
-function updateBarSeriesValues(translators) {
+function updateBarSeriesValues() {
     _each(this.series, function(_, singleSeries) {
         var minBarSize = singleSeries.getOptions().minBarSize,
-            tr = singleSeries.axis ? translators.axesTrans[singleSeries.axis] : translators,
-            minShownBusinessValue = minBarSize && tr.val.getMinBarSize(minBarSize);
+            minShownBusinessValue = minBarSize && singleSeries.getValueAxis().getTranslator().getMinBarSize(minBarSize);
 
         if(minShownBusinessValue) {
             _each(singleSeries.getPoints(), function(index, point) {
@@ -340,26 +329,24 @@ function updateBarSeriesValues(translators) {
     });
 }
 
-function adjustCandlestickSeriesDimensions(translators) {
-    ///#DEBUG
-    var debug = require("../../core/utils/console").debug;
-    debug.assert(translators, "translator was not passed or empty");
-    ///#ENDDEBUG
+function adjustCandlestickSeriesDimensions() {
     var series = getVisibleSeries(this);
 
-    adjustBarSeriesDimensionsCore(series, translators.arg.getInterval(), series.length, { barWidth: null, equalBarWidth: true }, getSeriesStackIndexCallback(this.rotated, series));
+    adjustBarSeriesDimensionsCore(series, series.length, { barWidth: null, equalBarWidth: true }, getSeriesStackIndexCallback(this.rotated, series));
 }
 
-function adjustBubbleSeriesDimensions(translators) {
-    ///#DEBUG
-    var debug = require("../../core/utils/console").debug;
-    debug.assert(translators, "translator was not passed or empty");
-    ///#ENDDEBUG
-    var that = this,
-        series = getVisibleSeries(that),
-        options = that._options,
-        visibleAreaX = translators.arg.getCanvasVisibleArea(),
-        visibleAreaY = translators.val.getCanvasVisibleArea(),
+function adjustBubbleSeriesDimensions() {
+    var series = getVisibleSeries(this);
+
+    if(!series.length) {
+        return;
+    }
+
+    var options = this._options,
+        argTranslator = series[0].getArgumentAxis().getTranslator(),
+        valTranslator = series[0].getValueAxis().getTranslator(),
+        visibleAreaX = argTranslator.getCanvasVisibleArea(),
+        visibleAreaY = valTranslator.getCanvasVisibleArea(),
         min = _math.min((visibleAreaX.max - visibleAreaX.min), (visibleAreaY.max - visibleAreaY.min)),
         minBubbleArea = _pow(options.minBubbleSize, 2),
         maxBubbleArea = _pow(min * options.maxBubbleSize, 2),
@@ -476,7 +463,7 @@ SeriesFamily.prototype = {
     },
 
     dispose: function() {
-        this.series = this.translators = null;
+        this.series = null;
     },
 
     add: function(series) {

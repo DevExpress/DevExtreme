@@ -2,7 +2,7 @@
 
 var Class = require("../core/class"),
     inArray = require("../core/utils/array").inArray,
-    $ = require("jquery");
+    each = require("../core/utils/iterator").each;
 
 var MemoryKeyValueStorage = Class.inherit({
     ctor: function() {
@@ -66,7 +66,7 @@ var StateManager = Class.inherit({
     */
     saveState: function() {
         var that = this;
-        $.each(this.stateSources, function(index, stateSource) {
+        each(this.stateSources, function(index, stateSource) {
             stateSource.saveState(that.storage);
         });
     },
@@ -77,7 +77,7 @@ var StateManager = Class.inherit({
     */
     restoreState: function() {
         var that = this;
-        $.each(this.stateSources, function(index, stateSource) {
+        each(this.stateSources, function(index, stateSource) {
             stateSource.restoreState(that.storage);
         });
     },
@@ -88,7 +88,7 @@ var StateManager = Class.inherit({
     */
     clearState: function() {
         var that = this;
-        $.each(this.stateSources, function(index, stateSource) {
+        each(this.stateSources, function(index, stateSource) {
             stateSource.removeState(that.storage);
         });
     }

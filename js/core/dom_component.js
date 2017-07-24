@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     errors = require("./errors"),
     windowResizeCallbacks = require("./utils/window").resizeCallbacks,
     commonUtils = require("./utils/common"),
+    each = require("./utils/iterator").each,
     typeUtils = require("./utils/type"),
     inArray = require("./utils/array").inArray,
     publicComponentUtils = require("./utils/public_component"),
@@ -288,7 +289,7 @@ var DOMComponent = Component.inherit({
     },
 
     _extendConfig: function(config, extendConfig) {
-        $.each(extendConfig, function(key, value) {
+        each(extendConfig, function(key, value) {
             config[key] = config.hasOwnProperty(key) ? config[key] : value;
         });
     },

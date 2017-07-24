@@ -4,6 +4,7 @@ var $ = require("jquery"),
     dataCoreUtils = require("../core/utils/data"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,
+    map = require("../core/utils/iterator").map,
     Route = require("./router").Route;
 
 function prepareNavigateOptions(options, actionArguments) {
@@ -77,7 +78,7 @@ var createActionExecutors = function(app) {
                 uri = uriTemplate.replace(/\{([^}]+)\}/g, function(entry, expr) {
                     expr = expr.trim();
                     if(expr.indexOf(",") > -1) {
-                        expr = $.map(expr.split(","), function(item) {
+                        expr = map(expr.split(","), function(item) {
                             return item.trim();
                         });
                     }

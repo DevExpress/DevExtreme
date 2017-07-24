@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
     extend = require("../core/utils/extend").extend,
+    each = require("../core/utils/iterator").each,
     domUtils = require("../core/utils/dom"),
     TransitionExecutorModule = require("../animation/transition_executor/transition_executor"),
     Widget = require("./widget/ui.widget"),
@@ -124,7 +125,7 @@ var DeferRendering = Widget.inherit({
     _initActions: function() {
         this._actions = {};
 
-        $.each(ACTIONS, (function(_, action) {
+        each(ACTIONS, (function(_, action) {
             this._actions[action] = this._createActionByOption(action) || commonUtils.noop;
         }).bind(this));
     },

@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     Locker = require("../../core/utils/locker"),
     Widget = require("../../ui/widget/ui.widget"),
@@ -93,7 +94,7 @@ var ComponentBuilder = Class.inherit({
         }
 
         if(options.bindingOptions) {
-            $.each(options.bindingOptions, function(key, value) {
+            each(options.bindingOptions, function(key, value) {
                 if(typeUtils.type(value) === 'string') {
                     that._ngOptions.bindingOptions[key] = { dataPath: value };
                 }
@@ -134,7 +135,7 @@ var ComponentBuilder = Class.inherit({
             return;
         }
 
-        $.each(that._ngOptions.bindingOptions, function(optionPath, value) {
+        each(that._ngOptions.bindingOptions, function(optionPath, value) {
             var separatorIndex = optionPath.search(/\[|\./),
                 optionForSubscribe = separatorIndex > -1 ? optionPath.substring(0, separatorIndex) : optionPath,
                 prevWatchMethod,
@@ -200,7 +201,7 @@ var ComponentBuilder = Class.inherit({
 
             that._ngLocker.obtain(fullName);
             safeApply(function() {
-                $.each(optionDependencies[optionName], function(optionPath, valuePath) {
+                each(optionDependencies[optionName], function(optionPath, valuePath) {
                     if(!that._optionsAreLinked(fullName, optionPath)) {
                         return;
                     }
@@ -365,7 +366,7 @@ var ComponentBuilder = Class.inherit({
         delete result.bindingOptions;
 
         if(this._ngOptions.bindingOptions) {
-            $.each(this._ngOptions.bindingOptions, function(key, value) {
+            each(this._ngOptions.bindingOptions, function(key, value) {
                 result[key] = scope.$eval(value.dataPath);
             });
         }

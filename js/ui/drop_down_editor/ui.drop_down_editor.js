@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     errors = require("../widget/ui.errors"),
@@ -742,7 +743,7 @@ var DropDownEditor = TextBox.inherit({
         if(buttonsLocation !== "default") {
             var position = commonUtils.splitPair(buttonsLocation);
 
-            $.each(resultConfig, function(_, element) {
+            each(resultConfig, function(_, element) {
                 extend(element, {
                     toolbar: position[0],
                     location: position[1]

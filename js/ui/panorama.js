@@ -9,6 +9,7 @@ var $ = require("../core/renderer"),
     Class = require("../core/class"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     abstract = abstract,
     registerComponent = require("../core/component_registrator"),
     PanoramaItem = require("./panorama/item"),
@@ -99,7 +100,7 @@ var endAnimation = function(elements) {
         return;
     }
 
-    $.each(elements, function(_, element) {
+    each(elements, function(_, element) {
         fx.stop(element, true);
     });
 };

@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     wheelEvent = require("../../events/core/wheel"),
     messageLocalization = require("../../localization/message"),
     gridCoreUtils = require("../grid_core/ui.grid_core.utils");
@@ -22,7 +23,7 @@ var CONTENT_CLASS = "content",
     getTransparentColumnIndex = function(fixedColumns) {
         var transparentColumnIndex = -1;
 
-        $.each(fixedColumns, function(index, column) {
+        each(fixedColumns, function(index, column) {
             if(column.command === "transparent") {
                 transparentColumnIndex = index;
                 return false;
@@ -182,7 +183,7 @@ var baseFixedColumns = {
             fixedColumns = that.getFixedColumns(index);
 
             fixedCellElements = that._getRowElements(that._fixedTableElement).eq(rowIndex).children("td");
-            $.each(fixedColumns, function(columnIndex, column) {
+            each(fixedColumns, function(columnIndex, column) {
                 if(column.command === "transparent") {
                     if(fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CELL_CLASS)) {
                         cellElements[columnIndex] = fixedCellElements.get(columnIndex) || cellElements[columnIndex];
@@ -645,7 +646,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         if($fixedTable && $fixedTable.find($cell).length) {
             columns = this.getFixedColumns();
 
-            $.each(columns, function(index, column) {
+            each(columns, function(index, column) {
                 if(index === $cell[0].cellIndex) {
                     return false;
                 }
@@ -777,7 +778,7 @@ module.exports = {
                 var transparentColumnIndex = getTransparentColumnIndex(fixedColumns),
                     correctIndex = columns.length - fixedColumns.length;
 
-                $.each(pointsByColumns, function(_, point) {
+                each(pointsByColumns, function(_, point) {
                     if(point.index > transparentColumnIndex) {
                         point.columnIndex += correctIndex;
                         point.index += correctIndex;

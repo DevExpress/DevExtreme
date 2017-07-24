@@ -3166,6 +3166,72 @@ QUnit.test("Create new row is the cell mode. Save new values", function(assert) 
     assert.equal($(".dx-field-item-content").first().text(), "12test", "text of item");
 });
 
+QUnit.test("Not collapse adaptive detail form when other row is deleted", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(200);
+    this.options = {
+        editing: {
+            mode: 'batch',
+            allowUpdating: true,
+            allowAdding: true
+        }
+    };
+    this.items = [];
+    this.columns = [
+        { dataField: 'firstName', index: 0, allowEditing: true, width: 100 },
+        { dataField: 'lastName', index: 1, allowEditing: true, width: 100 },
+        { dataField: 'Column 1', index: 2, allowEditing: true, width: 100 },
+        { dataField: 'Column 2', index: 3, allowEditing: true, width: 100 },
+        { dataField: 'Column 3', index: 4, allowEditing: true, width: 100 }
+    ];
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.editingController.addRow();
+    this.editingController.addRow();
+    this.editingController.addRow();
+    this.editingController.deleteRow(1);
+
+    //assert
+    assert.equal($(".dx-adaptive-detail-row").length, 1, "adaptive detail form should be removed");
+});
+
+QUnit.test("Collapse adaptive detail form when single row is deleted", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(200);
+    this.options = {
+        editing: {
+            mode: 'batch',
+            allowUpdating: true,
+            allowAdding: true
+        }
+    };
+    this.items = [];
+    this.columns = [
+        { dataField: 'firstName', index: 0, allowEditing: true, width: 100 },
+        { dataField: 'lastName', index: 1, allowEditing: true, width: 100 },
+        { dataField: 'Column 1', index: 2, allowEditing: true, width: 100 },
+        { dataField: 'Column 2', index: 3, allowEditing: true, width: 100 },
+        { dataField: 'Column 3', index: 4, allowEditing: true, width: 100 }
+    ];
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.editingController.addRow();
+    this.editingController.deleteRow(0);
+
+    //assert
+    assert.equal($(".dx-adaptive-detail-row").length, 0, "adaptive detail form should be removed");
+});
+
 QUnit.module("Validation", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

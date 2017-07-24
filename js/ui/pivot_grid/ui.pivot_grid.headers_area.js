@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     areaItem = require("./ui.pivot_grid.area_item");
 
 var PIVOTGRID_AREA_CLASS = "dx-pivotgrid-area",
@@ -143,7 +144,7 @@ exports.HorizontalHeadersArea = areaItem.AreaItem.inherit({
 
         offset -= parseInt(tableElement[0].style.left, 10) || 0;
 
-        $.each(tableElement.find("td"), function(_, td) {
+        each(tableElement.find("td"), function(_, td) {
             if(td.colSpan === 1 && td.offsetLeft < offset && td.offsetWidth + td.offsetLeft > offset) {
                 cell = td;
                 return false;
@@ -242,7 +243,7 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
 
         offset -= parseInt(tableElement[0].style.top, 10) || 0;
 
-        $.each(tableElement.find("tr"), function(_, tr) {
+        each(tableElement.find("tr"), function(_, tr) {
             var td = tr.childNodes[tr.childNodes.length - 1];
 
             if(td && td.rowSpan === 1 && td.offsetTop < offset && td.offsetHeight + td.offsetTop > offset) {

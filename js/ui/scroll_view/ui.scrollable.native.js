@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     devices = require("../../core/devices"),
     Class = require("../../core/class"),
     Scrollbar = require("./ui.scrollbar");
@@ -114,7 +115,7 @@ var NativeStrategy = Class.inherit({
 
     _eachScrollbar: function(callback) {
         callback = callback.bind(this);
-        $.each(this._scrollbars || {}, function(direction, scrollbar) {
+        each(this._scrollbars || {}, function(direction, scrollbar) {
             callback(scrollbar, direction);
         });
     },

@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var each = require("../core/utils/iterator").each,
     location = window.location,
     DXPROXY_HOST = "dxproxy.devexpress.com:8000",
     IS_DXPROXY_ORIGIN = location.host === DXPROXY_HOST,
@@ -21,7 +21,7 @@ var parseUrl = (function() {
     return function(url) {
         a.href = url;
         var result = {};
-        $.each(props, function() {
+        each(props, function() {
             result[this] = a[this];
         });
         result.pathname = normalizePath(result.pathname);

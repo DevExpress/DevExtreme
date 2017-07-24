@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     registerEvent = require("./event_registrator"),
     eventUtils = require("../utils"),
     pointerEvents = require("../pointer"),
@@ -84,7 +85,7 @@ var EventManager = Class.inherit({
 
         var setChanged = currentSet.length !== previousSet.length;
 
-        $.each(currentSet, function(index, emitter) {
+        each(currentSet, function(index, emitter) {
             setChanged = setChanged || previousSet[index] !== emitter;
             return !setChanged;
         });
@@ -110,7 +111,7 @@ var EventManager = Class.inherit({
 
         while($element.length) {
             var emitters = $.data($element.get(0), EMITTER_DATA) || [];
-            $.each(emitters, handleEmitter);
+            each(emitters, handleEmitter);
             $element = $element.parent();
         }
 
@@ -236,7 +237,7 @@ var registerEmitter = function(emitterConfig) {
         emitterName = emitterConfig.events[0],
         emitterEvents = emitterConfig.events;
 
-    $.each(emitterEvents, function(_, eventName) {
+    each(emitterEvents, function(_, eventName) {
         registerEvent(eventName, {
 
             noBubble: !emitterConfig.bubble,
@@ -272,7 +273,7 @@ var registerEmitter = function(emitterConfig) {
                 delete subscriptions[eventName];
 
                 var disposeEmitter = true;
-                $.each(emitterEvents, function(_, eventName) {
+                each(emitterEvents, function(_, eventName) {
                     disposeEmitter = disposeEmitter && !subscriptions[eventName];
                     return disposeEmitter;
                 });

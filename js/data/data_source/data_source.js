@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     commonUtils = require("../../core/utils/common"),
+    iteratorUtils = require("../../core/utils/iterator"),
     ajax = require("../../core/utils/ajax"),
     typeUtils = require("../../core/utils/type"),
     dataUtils = require("../utils"),
@@ -58,7 +59,7 @@ function normalizeDataSourceOptions(options, normalizationOptions) {
     function createCustomStoreFromLoadFunc() {
         var storeConfig = {};
 
-        $.each(["useDefaultSearch", "key", "load", "loadMode", "cacheRawData", "byKey", "lookup", "totalCount", "insert", "update", "remove"], function() {
+        iteratorUtils.each(["useDefaultSearch", "key", "load", "loadMode", "cacheRawData", "byKey", "lookup", "totalCount", "insert", "update", "remove"], function() {
             storeConfig[this] = options[this];
             delete options[this];
         });
@@ -131,7 +132,7 @@ function normalizeStoreLoadOptionAccessorArguments(originalArguments) {
         case 1:
             return originalArguments[0];
     }
-    return $.makeArray(originalArguments);
+    return [].slice.call(originalArguments);
 }
 
 function generateStoreLoadOptionAccessor(optionName) {
@@ -149,11 +150,11 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
 
     function mapRecursive(items, level) {
         if(!Array.isArray(items)) return items;
-        return level ? mapGroup(items, level) : $.map(items, mapper);
+        return level ? mapGroup(items, level) : iteratorUtils.map(items, mapper);
     }
 
     function mapGroup(group, level) {
-        return $.map(group, function(item) {
+        return iteratorUtils.map(group, function(item) {
             var result = {
                 key: item.key,
                 items: mapRecursive(item.items, level - 1)
@@ -293,7 +294,7 @@ var DataSource = Class.inherit({
         */
         this._paginate = options.paginate;
 
-        $.each(
+        iteratorUtils.each(
             [
                 /**
                  * @name DataSourceOptions_onChanged
@@ -372,7 +373,7 @@ var DataSource = Class.inherit({
             names = names.concat(customNames);
         }
 
-        $.each(names, function() {
+        iteratorUtils.each(names, function() {
             result[this] = options[this];
         });
         return result;
@@ -593,7 +594,7 @@ var DataSource = Class.inherit({
         }
 
         if(argc > 1) {
-            expr = $.makeArray(arguments);
+            expr = [].slice.call(arguments);
         }
 
         this._searchExpr = expr;
@@ -702,7 +703,10 @@ var DataSource = Class.inherit({
                 if(!__isDefined(data) || array.isEmpty(data)) {
                     d.reject(new errors.Error("E4009"));
                 } else {
-                    d.resolve(that._applyMapFunction($.makeArray(data))[0]);
+                    if(!Array.isArray(data)) {
+                        data = [data];
+                    }
+                    d.resolve(that._applyMapFunction(data)[0]);
                 }
             };
 
@@ -874,7 +878,7 @@ var DataSource = Class.inherit({
 
         // TODO optimize for byKey case
 
-        $.each(selector, function(i, item) {
+        iteratorUtils.each(selector, function(i, item) {
             if(searchFilter.length) {
                 searchFilter.push("or");
             }
@@ -902,7 +906,7 @@ var DataSource = Class.inherit({
                 }
 
                 if(!Array.isArray(data)) {
-                    data = $.makeArray(data);
+                    data = [data];
                 }
 
                 loadResult = extend({

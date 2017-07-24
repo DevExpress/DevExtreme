@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
+    each = require("../../core/utils/iterator").each,
     modules = require("./ui.grid_core.modules");
 
 var ERROR_ROW_CLASS = "dx-error-row",
@@ -34,7 +35,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
                     errorRowIndex = $(e.currentTarget).closest("." + ERROR_ROW_CLASS).index();
 
                 e.stopPropagation();
-                $.each($tableElements, function(_, tableElement) {
+                each($tableElements, function(_, tableElement) {
                     $errorRow = $(tableElement).children("tbody").children("tr").eq(errorRowIndex);
                     that.removeErrorRow($errorRow);
                 });
@@ -73,7 +74,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
         viewElement = rowIndex >= 0 ? that._rowsView : that._columnHeadersView,
         $tableElements = $popupContent || viewElement.getTableElements();
 
-        $.each($tableElements, function(_, tableElement) {
+        each($tableElements, function(_, tableElement) {
             $errorMessageElement = that._createErrorRow(message, $tableElements);
             rowElements = $(tableElement).children("tbody").children("tr");
 

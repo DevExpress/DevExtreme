@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     consts = require("../components/consts"),
     eventsConsts = consts.events,
 
@@ -16,7 +17,7 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     _normalizeEnum = require("../core/utils").normalizeEnum,
     _floor = Math.floor,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop,
 
     HOVER_STATE = consts.states.hoverMark,
@@ -235,6 +236,7 @@ var baseTrackerPrototype = {
     _showPointTooltip: function(event, point) {
         var that = event.data.tracker,
             pointWithTooltip = that.pointAtShownTooltip;
+
         if(pointWithTooltip && pointWithTooltip !== point) {
             that._hideTooltip(pointWithTooltip);
         }

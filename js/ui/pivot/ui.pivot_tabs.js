@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     translator = require("../../animation/translator"),
     eventUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
     config = require("../../core/config"),
     BindableTemplate = require("../widget/bindable_template");
@@ -66,7 +67,7 @@ var animation = {
             return;
         }
 
-        $.each(elements, function(_, $element) {
+        each(elements, function(_, $element) {
             fx.stop($element, true);
         });
     },
@@ -76,7 +77,7 @@ var animation = {
             return;
         }
 
-        $.each(elements, function(_, $element) {
+        each(elements, function(_, $element) {
             fx.stop($element);
         });
     }
@@ -374,8 +375,8 @@ var PivotTabs = CollectionWidget.inherit({
             nextPosition += width * signCorrection;
         };
 
-        $.each(widths.slice(currentIndex), calculateTabPosition);
-        $.each(widths.slice(0, currentIndex), calculateTabPosition);
+        each(widths.slice(currentIndex), calculateTabPosition);
+        each(widths.slice(0, currentIndex), calculateTabPosition);
 
         switch(ghostPosition) {
             case "replace":

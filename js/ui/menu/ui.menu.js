@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
@@ -340,7 +341,7 @@ var Menu = MenuBase.inherit({
     _initActions: function() {
         this._actions = {};
 
-        $.each(ACTIONS, (function(index, action) {
+        each(ACTIONS, (function(index, action) {
             this._actions[action] = this._createActionByOption(action);
         }).bind(this));
     },
@@ -446,11 +447,11 @@ var Menu = MenuBase.inherit({
             ],
             actionsToTransfer = ["onItemContextMenu", "onSelectionChanged"];
 
-        $.each(optionsToTransfer, function(_, option) {
+        each(optionsToTransfer, function(_, option) {
             menuOptions[option] = that.option(option);
         });
 
-        $.each(actionsToTransfer, function(_, actionName) {
+        each(actionsToTransfer, function(_, actionName) {
             menuOptions[actionName] = (function(e) {
                 this._actions[actionName](e);
             }).bind(that);
@@ -621,7 +622,7 @@ var Menu = MenuBase.inherit({
         var that = this,
             cleanAllSubmenus = !arguments.length;
 
-        $.each(this._submenus, function(index, submenu) {
+        each(this._submenus, function(index, submenu) {
             var $submenu = submenu._itemContainer(),
                 isOtherItem = !$submenu.is(targetSubmenu && targetSubmenu._itemContainer()),
                 $selectedItem = $submenu.find("." + that._selectedItemClass());
@@ -671,7 +672,7 @@ var Menu = MenuBase.inherit({
             onHidden: this._submenuOnHiddenHandler.bind(this, $rootItem, submenu)
         });
 
-        $.each(submenus, function(index, submenu) {
+        each(submenus, function(index, submenu) {
             eventsEngine.off(submenu, submenuMouseLeaveName);
             eventsEngine.on(submenu, submenuMouseLeaveName, null, that._submenuMouseLeaveHandler.bind(that, $rootItem));
         });
@@ -1011,7 +1012,7 @@ var Menu = MenuBase.inherit({
     },
 
     _changeSubmenusOption: function(name, value) {
-        $.each(this._submenus, function(index, submenu) {
+        each(this._submenus, function(index, submenu) {
             submenu.option(name, value);
         });
     },

@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     eventUtils = require("../../events/utils");
 
 var KeyboardProcessor = Class.inherit({
@@ -101,7 +102,7 @@ var KeyboardProcessor = Class.inherit({
         var handlerResult = this._handler && this._handler.call(this._context, args);
 
         if(handlerResult && this._childProcessors) {
-            $.each(this._childProcessors, function(index, childProcessor) {
+            each(this._childProcessors, function(index, childProcessor) {
                 childProcessor.process(e);
             });
         }

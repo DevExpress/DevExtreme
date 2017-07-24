@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     errorsModule = require("../errors"),
     ODataStore = require("./store"),
     mixins = require("./mixins"),
@@ -71,7 +72,7 @@ var ODataContext = Class.inherit({
          * @publicName entities
          * @type object
          */
-        $.each(options.entities || [], function(entityAlias, entityOptions) {
+        each(options.entities || [], function(entityAlias, entityOptions) {
             that[entityAlias] = new ODataStore(extend(
                 {},
                 options,

@@ -80,6 +80,7 @@ DevExpress.utils.common = require("../../core/utils/common");
 DevExpress.utils.date = require("../../core/utils/date");
 DevExpress.utils.browser = require("../../core/utils/browser");
 DevExpress.utils.inflector = require("../../core/utils/inflector");
+DevExpress.utils.iterator = require("../../core/utils/iterator");
 DevExpress.utils.resizeCallbacks = require("../../core/utils/window").resizeCallbacks;
 DevExpress.utils.console = require("../../core/utils/console");
 DevExpress.utils.string = require("../../core/utils/string");

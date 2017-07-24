@@ -24,7 +24,8 @@ $("<div>")
 
 QUnit.begin(function() {
     var FakeTranslator = vizMocks.stubClass({
-            getCanvasVisibleArea: function() { return {}; }
+            getCanvasVisibleArea: function() { return {}; },
+            update: sinon.spy()
         }),
         StubSeries = vizMocks.Series,
         StubTooltip = vizMocks.Tooltip;
@@ -34,7 +35,7 @@ QUnit.begin(function() {
     });
 
     translator2DModule.Translator2D = sinon.spy(function() {
-        return currentTest().translator;
+        return new FakeTranslator();
     });
 
     seriesModule.Series = sinon.spy(function() {
@@ -85,15 +86,6 @@ QUnit.begin(function() {
         forceTimeout: function() {
             this.clock.tick(0);
         },
-        getCanvas: function() {
-            return translator2DModule.Translator2D.lastCall.args[1];
-        },
-        getRanges: function() {
-            return {
-                arg: translator2DModule.Translator2D.firstCall.args[0],
-                val: translator2DModule.Translator2D.secondCall.args[0]
-            };
-        },
         getSeriesOptions: function() {
             return this.series.updateOptions.lastCall.args[0];
         }
@@ -132,10 +124,12 @@ QUnit.begin(function() {
                 height: 30
             }
         });
-        canvas = this.getCanvas();
-        var canvas = this.getCanvas();
 
-        assert.deepEqual(canvas, { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
     });
@@ -154,10 +148,12 @@ QUnit.begin(function() {
                 right: 4
             }
         });
-        canvas = this.getCanvas();
-        var canvas = this.getCanvas();
 
-        assert.deepEqual(canvas, { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 1, bottom: 2, left: 3, right: 4 }, 'Canvas object is correct');
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
     });
@@ -166,10 +162,12 @@ QUnit.begin(function() {
         this.createSparkline({
             dataSource: [1]
         });
-        canvas = this.getCanvas();
-        var canvas = this.getCanvas();
 
-        assert.deepEqual(canvas, { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 250, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [250, 30], 'Pass canvas width and height to renderer');
     });
@@ -180,9 +178,11 @@ QUnit.begin(function() {
 
         this.createSparkline({ dataSource: [1] }, container);
 
-        var canvas = this.getCanvas();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.deepEqual(canvas, { width: 100, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        assert.deepEqual(argTranslator.update.lastCall.args[1], { width: 100, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
+        assert.deepEqual(valTranslator.update.lastCall.args[1], { width: 100, height: 30, top: 3, bottom: 3, left: 5, right: 5 }, 'Canvas object is correct');
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [100, 30], 'Pass canvas width and height to renderer');
     });
@@ -192,40 +192,34 @@ QUnit.begin(function() {
     QUnit.test('Create range when datasource has one point. Line', function(assert) {
         this.createSparkline({ dataSource: ["1"] }, null, { arg: {}, val: { min: 4, max: 4 } });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 1, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, 4, 'MinY is correct');
-        assert.equal(ranges.val.max, 4, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 1, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, 4, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 4, 'MaxY is correct');
     });
 
     QUnit.test('Create range when datasource has one point. Area/bar', function(assert) {
         this.createSparkline({ type: "area", dataSource: ["1"] }, null, { arg: { }, val: { min: 0, max: 4 } });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 1, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, 0, 'MinY is correct');
-        assert.equal(ranges.val.max, 4.6, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 1, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 4.6, 'MaxY is correct');
     });
 
     QUnit.test('Create range when datasource has one point. Winloss', function(assert) {
         this.createSparkline({ type: 'winloss', dataSource: ["1"] }, null, { arg: {}, val: { min: 0, max: 1 } });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 1, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, 0, 'MinY is correct');
-        assert.equal(ranges.val.max, 1.15, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 1, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 1.15, 'MaxY is correct');
     });
 
     QUnit.test('Create range when all points are positive. Line', function(assert) {
@@ -237,14 +231,12 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 23, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min.toPrecision(2), -0.20, 'MinY is correct');
-        assert.equal(ranges.val.max, 10.2, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 23, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min.toPrecision(2), -0.20, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 10.2, 'MaxY is correct');
     });
 
     QUnit.test('Create range when all points are positive. Bar/area', function(assert) {
@@ -256,14 +248,12 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 23, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, 0, 'MinY is correct');
-        assert.equal(ranges.val.max, 10.35, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 23, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 10.35, 'MaxY is correct');
     });
 
     QUnit.test('Create range when all points are positive. Winloss', function(assert) {
@@ -275,14 +265,12 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 23, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, 0, 'MinY is correct');
-        assert.equal(ranges.val.max, 1.15, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 23, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, 0, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 1.15, 'MaxY is correct');
     });
 
     QUnit.test('Create range when all points are negative. Line', function(assert) {
@@ -294,14 +282,12 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 18, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -10.05, 'MinY is correct');
-        assert.equal(ranges.val.max, -0.95, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 18, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -10.05, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, -0.95, 'MaxY is correct');
     });
 
     QUnit.test('Create range when all points are negative. Bar/area', function(assert) {
@@ -313,14 +299,12 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 18, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -10.35, 'MinY is correct');
-        assert.equal(ranges.val.max, 0, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 18, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -10.35, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 0, 'MaxY is correct');
     });
 
     QUnit.test('Create range when all points are negative. Winloss', function(assert) {
@@ -332,14 +316,12 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 18, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -1.15, 'MinY is correct');
-        assert.equal(ranges.val.max, 0, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 18, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -1.15, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 0, 'MaxY is correct');
     });
 
     QUnit.test('Create range when datasource is continuous. Bar', function(assert) {
@@ -353,14 +335,12 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -7.3, 'MinY is correct');
-        assert.equal(ranges.val.max, 21.3, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -7.3, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 21.3, 'MaxY is correct');
     });
 
     QUnit.test('Create range when datasource is continuous. Winloss', function(assert) {
@@ -372,14 +352,12 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -1.3, 'MinY is correct');
-        assert.equal(ranges.val.max, 1.3, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -1.3, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 1.3, 'MaxY is correct');
     });
 
     QUnit.test('Create range when there are minY and maxY options. part 1', function(assert) {
@@ -391,16 +369,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -13, 'MinY is correct');
-        assert.equal(ranges.val.max, 13, 'MaxY is correct');
-        assert.equal(ranges.val.minVisible, -5, 'MinY is correct');
-        assert.equal(ranges.val.maxVisible, 5, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 13, 'MaxY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].minVisible, -5);
+        assert.equal(valTranslator.update.lastCall.args[0].maxVisible, 5);
     });
 
     QUnit.test('Create range when there are minY and maxY options. part 2', function(assert) {
@@ -412,16 +388,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -13, 'MinY is correct');
-        assert.equal(ranges.val.max, 13, 'MaxY is correct');
-        assert.equal(ranges.val.minVisible, -15, 'MinY is correct');
-        assert.equal(ranges.val.maxVisible, 15, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 13, 'MaxY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].minVisible, -15);
+        assert.equal(valTranslator.update.lastCall.args[0].maxVisible, 15);
     });
 
     QUnit.test('Create range when there are minY and maxY null options', function(assert) {
@@ -433,16 +407,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -13, 'MinY is correct');
-        assert.equal(ranges.val.max, 13, 'MaxY is correct');
-        assert.strictEqual(ranges.val.minVisible, undefined, 'MinY is correct');
-        assert.strictEqual(ranges.val.maxVisible, undefined, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 13, 'MaxY is correct');
+        assert.strictEqual(valTranslator.update.lastCall.args[0].minVisible, undefined);
+        assert.strictEqual(valTranslator.update.lastCall.args[0].maxVisible, undefined);
     });
 
     QUnit.test('Create range when there are minY and maxY incorrect options. part 1', function(assert) {
@@ -454,16 +426,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -13, 'MinY is correct');
-        assert.equal(ranges.val.max, 13, 'MaxY is correct');
-        assert.strictEqual(ranges.val.minVisible, undefined, 'MinY is correct');
-        assert.strictEqual(ranges.val.maxVisible, undefined, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 13, 'MaxY is correct');
+        assert.strictEqual(valTranslator.update.lastCall.args[0].minVisible, undefined);
+        assert.strictEqual(valTranslator.update.lastCall.args[0].maxVisible, undefined);
     });
 
     QUnit.test('Create range when there are minY and maxY incorrect options. part 2', function(assert) {
@@ -475,16 +445,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -13, 'MinY is correct');
-        assert.equal(ranges.val.max, 13, 'MaxY is correct');
-        assert.equal(ranges.val.minVisible, 5, 'MinY is correct');
-        assert.strictEqual(ranges.val.maxVisible, undefined, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 13, 'MaxY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].minVisible, 5);
+        assert.strictEqual(valTranslator.update.lastCall.args[0].maxVisible, undefined);
     });
 
     QUnit.test('Create range when there are minY and maxY. min > max', function(assert) {
@@ -496,16 +464,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -13, 'MinY is correct');
-        assert.equal(ranges.val.max, 13, 'MaxY is correct');
-        assert.equal(ranges.val.minVisible, -1, 'MinY is correct');
-        assert.equal(ranges.val.maxVisible, 2, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 13, 'MaxY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].minVisible, -1);
+        assert.equal(valTranslator.update.lastCall.args[0].maxVisible, 2);
     });
 
     QUnit.test('Create range when there are minY and maxY. min = max', function(assert) {
@@ -517,16 +483,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -13, 'MinY is correct');
-        assert.equal(ranges.val.max, 13, 'MaxY is correct');
-        assert.equal(ranges.val.minVisible, 5, 'MinY is correct');
-        assert.equal(ranges.val.maxVisible, 5, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -13, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 13, 'MaxY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].minVisible, 5);
+        assert.equal(valTranslator.update.lastCall.args[0].maxVisible, 5);
     });
 
     QUnit.test('Create range when there are minY and maxY options for winloss. part 1', function(assert) {
@@ -538,16 +502,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -1.3, 'MinY is correct');
-        assert.equal(ranges.val.max, 1.3, 'MaxY is correct');
-        assert.equal(ranges.val.minVisible, -0.6, 'MinY is correct');
-        assert.equal(ranges.val.maxVisible, 0.2, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -1.3, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 1.3, 'MaxY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].minVisible, -0.6);
+        assert.equal(valTranslator.update.lastCall.args[0].maxVisible, 0.2);
     });
 
     QUnit.test('Create range when there are minY and maxY options for winloss. part 2', function(assert) {
@@ -559,16 +521,14 @@ QUnit.begin(function() {
             }
         });
 
-        var ranges = this.getRanges();
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
 
-        assert.ok(ranges.arg, 'Arg range was created');
-        assert.ok(ranges.val, 'Val range was created');
-
-        assert.equal(ranges.arg.categories.length, 13, 'Range categoriesX length is correct');
-        assert.equal(ranges.val.min, -1.3, 'MinY is correct');
-        assert.equal(ranges.val.max, 1.3, 'MaxY is correct');
-        assert.equal(ranges.val.minVisible, -1, 'MinY is correct');
-        assert.equal(ranges.val.maxVisible, 1, 'MaxY is correct');
+        assert.equal(argTranslator.update.lastCall.args[0].categories.length, 13, 'Range categoriesX length is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].min, -1.3, 'MinY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].max, 1.3, 'MaxY is correct');
+        assert.equal(valTranslator.update.lastCall.args[0].minVisible, -1);
+        assert.equal(valTranslator.update.lastCall.args[0].maxVisible, 1);
     });
 
     QUnit.module('Prepare series options', $.extend({}, environment, {
@@ -1558,7 +1518,7 @@ QUnit.begin(function() {
         assert.ok(translator2DModule.Translator2D.firstCall.args[1]);
         assert.ok(translator2DModule.Translator2D.secondCall.args[1]);
         assert.deepEqual(translator2DModule.Translator2D.firstCall.args[2], { isHorizontal: true });
-        assert.deepEqual(translator2DModule.Translator2D.secondCall.args[2], undefined);
+        assert.deepEqual(translator2DModule.Translator2D.secondCall.args[2], { isHorizontal: false });
     });
 
     QUnit.test('Create line series with default options', function(assert) {
@@ -1934,8 +1894,11 @@ QUnit.begin(function() {
         this.$container.height(40);
         sparkline.render();
 
-        assert.equal(this.getCanvas().width, 300, 'Canvas width should have new value');
-        assert.equal(this.getCanvas().height, 40, 'Canvas height should have new value');
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas width should have new value');
+        assert.deepEqual(valTranslator.update.lastCall.args[1].height, 40, 'Canvas height should have new value');
 
         assert.equal(this.getSeriesOptions().type, 'area', 'Sparkline should have old type');
 
@@ -1952,8 +1915,11 @@ QUnit.begin(function() {
 
         sparkline.option('size', { width: 300, height: 100 });
 
-        assert.equal(this.getCanvas().width, 300, 'Canvas should have new width');
-        assert.equal(this.getCanvas().height, 100, 'Canvas should have new height');
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
+            valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
+
+        assert.deepEqual(argTranslator.update.lastCall.args[1].width, 300, 'Canvas should have new width');
+        assert.deepEqual(valTranslator.update.lastCall.args[1].height, 100, 'Canvas should have new height');
 
         assert.equal(this.renderer.resize.callCount, 1);
         assert.deepEqual(this.renderer.resize.firstCall.args, [300, 100], 'Pass changed canvas width and height to renderer');
@@ -2057,7 +2023,8 @@ QUnit.begin(function() {
 
         sparkline.option('size', { width: 200 });
 
-        assert.equal(this.getCanvas().width, 200, 'Width was corrected');
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+        assert.deepEqual(argTranslator.update.lastCall.args[1].width, 200, 'Width was corrected');
     });
 
     QUnit.test('Change datasource with small container. B254479', function(assert) {

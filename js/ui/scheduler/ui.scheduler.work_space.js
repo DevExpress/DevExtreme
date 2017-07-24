@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     messageLocalization = require("../../localization/message"),
     dateLocalization = require("../../localization/date"),
     toMs = dateUtils.dateToMilliseconds,
@@ -277,7 +278,7 @@ var SchedulerWorkSpace = Widget.inherit({
         if(this._getGroupCount() > 1) {
             var result = [],
                 focusedGroupIndex = this._getGroupIndexByCell($first);
-            $.each($cells, (function(_, cell) {
+            each($cells, (function(_, cell) {
                 var groupIndex = this._getGroupIndexByCell($(cell));
                 if(focusedGroupIndex === groupIndex) {
                     result.push(cell);

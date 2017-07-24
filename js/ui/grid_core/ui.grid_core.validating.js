@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
@@ -76,13 +77,13 @@ var ValidatingController = modules.Controller.inherit((function() {
 
             that._isValidationInProgress = true;
             if(isFull) {
-                $.each(editingController._editData, function(index, editData) {
+                each(editingController._editData, function(index, editData) {
                     var validationResult;
 
                     if(editData.type && editData.type !== "remove") {
                         validationResult = that.validateGroup(editData);
                         if(!validationResult.isValid) {
-                            $.each(validationResult.brokenRules, function() {
+                            each(validationResult.brokenRules, function() {
                                 var value = this.validator.option("adapter").getValue();
                                 if(value === undefined) {
                                     value = null;
@@ -143,7 +144,7 @@ var ValidatingController = modules.Controller.inherit((function() {
             var that = this,
                 editingController = that._editingController;
 
-            $.each(editingController._editData, function(index, editData) {
+            each(editingController._editData, function(index, editData) {
                 var validateGroup = ValidationEngine.getGroupConfig(editData);
 
                 if(!typeUtils.isDefined(editIndex) || editIndex === index) {
@@ -295,7 +296,7 @@ module.exports = {
                         startInsertIndex = that.getView("rowsView").getTopVisibleItemIndex(),
                         rowIndex = startInsertIndex;
 
-                    $.each(that._editData, function(_, editData) {
+                    each(that._editData, function(_, editData) {
                         if(!editData.isValid && editData.pageIndex !== that._pageIndex) {
                             editData.pageIndex = that._pageIndex;
                             if(editData.type === "insert") {
@@ -330,7 +331,7 @@ module.exports = {
                                 isInsert = editData.type === "insert",
                                 key = editData.key;
 
-                            $.each(items, function(i, item) {
+                            each(items, function(i, item) {
                                 if(equalByValue(key, isInsert ? item : dataController.keyOf(item))) {
                                     index = i;
                                     return false;
@@ -399,7 +400,7 @@ module.exports = {
                         invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; });
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
-                        $.each(invisibleColumns, function(_, column) {
+                        each(invisibleColumns, function(_, column) {
                             validatingController.createValidator({
                                 column: column,
                                 key: options.key,
@@ -468,7 +469,7 @@ module.exports = {
                 _afterSaveEditData: function() {
                     var that = this;
 
-                    $.each(that._editData, function(_, editData) {
+                    each(that._editData, function(_, editData) {
                         that._showErrorRow(editData);
                     });
                 },

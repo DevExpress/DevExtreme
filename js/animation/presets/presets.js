@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Component = require("../../core/component"),
+var Component = require("../../core/component"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     devices = require("../../core/devices"),
     fx = require("../fx");
@@ -210,7 +210,7 @@ var AnimationPresetCollection = Component.inherit({
         var that = this,
             newRegisteredPresets = [];
 
-        $.each(this._registeredPresets, function(index, preset) {
+        each(this._registeredPresets, function(index, preset) {
             if(!name || name === preset.name) {
                 that.option(that._getPresetOptionName(preset.name), undefined);
             } else {
@@ -232,7 +232,7 @@ var AnimationPresetCollection = Component.inherit({
         var that = this;
         var customRules = [];
 
-        $.each(this._registeredPresets, function(index, preset) {
+        each(this._registeredPresets, function(index, preset) {
             var rule = {
                 device: preset.config.device,
                 options: {}

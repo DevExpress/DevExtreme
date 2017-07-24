@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     modules = require("./ui.grid_core.modules"),
     ContextMenu = require("../context_menu");
 
@@ -37,7 +38,7 @@ var ContextMenuController = modules.ViewController.inherit({
             $targetCellElement,
             menuItems;
 
-        $.each(VIEW_NAMES, function() {
+        each(VIEW_NAMES, function() {
             view = that.getView(this);
             $element = view && view.element();
 

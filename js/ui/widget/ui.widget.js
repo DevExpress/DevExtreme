@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     Action = require("../../core/action"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom"),
@@ -288,7 +289,7 @@ var Widget = DOMComponent.inherit({
             templatesMap[templateOptions.name].push(template);
         });
 
-        $.each(templatesMap, (function(templateName, value) {
+        each(templatesMap, (function(templateName, value) {
             var deviceTemplate = this._findTemplateByDevice(value);
             if(deviceTemplate) {
                 templates[templateName] = this._createTemplate(deviceTemplate);
@@ -301,7 +302,7 @@ var Widget = DOMComponent.inherit({
             return domUtils.getElementOptions(template).dxTemplate;
         })[0];
 
-        $.each(templates, function(index, template) {
+        each(templates, function(index, template) {
             if(template !== suitableTemplate) {
                 $(template).remove();
             }
@@ -796,7 +797,7 @@ var Widget = DOMComponent.inherit({
         }
 
         if(typeUtils.isPlainObject(args[0])) {
-            $.each(args[0], (function(option, value) {
+            each(args[0], (function(option, value) {
                 this._setWidgetOption(widgetName, [option, value]);
             }).bind(this));
             return;
@@ -904,7 +905,7 @@ var Widget = DOMComponent.inherit({
         } else {
             var $target = arguments[1] || this._getAriaTarget();
 
-            $.each(arguments[0], function(key, value) {
+            each(arguments[0], function(key, value) {
                 setAttribute({
                     name: key,
                     value: value,

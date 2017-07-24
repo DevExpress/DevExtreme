@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     equalByValue = commonUtils.equalByValue,
     Guid = require("../../core/guid"),
@@ -33,6 +34,7 @@ var $ = require("../../core/renderer"),
     ADAPTIVE_ITEM_TEXT_CLASS = "dx-adaptive-item-text",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     ADAPTIVE_COLUMN_NAME = "adaptive",
+    EDIT_MODE_BATCH = "batch",
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
     EDIT_MODE_POPUP = "popup";
@@ -221,7 +223,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             columns = that._columnsController.getVisibleColumns(),
             colWidth = 0;
 
-        $.each(columns, function(index, column) {
+        each(columns, function(index, column) {
             if(column.index < 0 || column.command) {
                 colWidth += that._columnsController.columnOption(getColumnId(column), "bestFitWidth") || 0;
             }
@@ -250,7 +252,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
     _getFormItemsByHiddenColumns: function(hiddenColumns) {
         var items = [];
-        $.each(hiddenColumns, function(_, column) {
+        each(hiddenColumns, function(_, column) {
             items.push({
                 column: column,
                 name: column.name,
@@ -812,6 +814,16 @@ module.exports = {
 
                 editRow: function(rowIndex) {
                     if(this._adaptiveController.isFormEditMode()) {
+                        this._adaptiveController.collapseAdaptiveDetailRow();
+                    }
+
+                    this.callBase(rowIndex);
+                },
+
+                deleteRow: function(rowIndex) {
+                    var rowKey = this._dataController.getKeyByRowIndex(rowIndex);
+
+                    if(this.getEditMode() === EDIT_MODE_BATCH && this._adaptiveController.isAdaptiveDetailRowExpanded(rowKey)) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                     }
 

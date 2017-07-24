@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     dataUtils = require("../../data/utils"),
     dataCoreUtils = require("../../core/utils/data"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
@@ -416,7 +417,7 @@ var DataControllerFilterRowExtender = {
             headerFilterController = that.getController("headerFilter"),
             currentColumn = headerFilterController.getCurrentColumn();
 
-        $.each(columns, function(_, column) {
+        each(columns, function(_, column) {
             var filter;
 
             if(currentColumn && currentColumn.index === column.index) {
@@ -427,7 +428,7 @@ var DataControllerFilterRowExtender = {
                 var filterValues = [],
                     isExclude = column.filterType === "exclude";
 
-                $.each(column.filterValues, function(_, filterValue) {
+                each(column.filterValues, function(_, filterValue) {
 
                     if(Array.isArray(filterValue)) {
                         filter = isExclude ? invertFilterExpression(filterValue) : filterValue;

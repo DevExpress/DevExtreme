@@ -10,47 +10,6 @@ require("../../helpers/chartMocks.js");
 
 var ZERO = 0;
 
-var environment = {
-    beforeEach: function() {
-        this.options = {
-            type: "stackedbar"
-        };
-        this.series = [];
-        this.points = [];
-        this.pointIndex = 0;
-        this.seriesDefaultOptions = {
-            visible: true
-        };
-    },
-    afterEach: function() {
-    },
-    createSeriesFamily: function() {
-        var family = new SeriesFamily(this.options);
-        family.add(this.series);
-        return family;
-    },
-    createSeries: function(options) {
-        var series = new vizMocks.Series(),
-            points = [this._createPoint(), this._createPoint()];
-
-        options = $.extend({}, this.seriesDefaultOptions, options);
-        series.stub("getPoints").returns(points);
-        series.stub("getStackName").returns(options.stack);
-        series.stub("isVisible").returns(options.visible);
-        series.type = this.options.type;
-        return series;
-    },
-    _createPoint: function() {
-        var point = new vizMocks.Point();
-        this.points.push(point);
-        point.argument = "argument";
-        point.__index = this.pointIndex;
-        this.pointIndex++;
-        return point;
-    }
-};
-
-
 document.title = "Series Family " + document.title;
 var createPoint = function(value) {
     var stub = sinon.createStubInstance(pointModule.Point);
@@ -481,35 +440,29 @@ function checkPercentValue(assert, point, total) {
     assert.equal(point.percent, point.value / total);
 }
 
-function createSeriesFamily(type, series, options, visibleArea) {
-    var translators = getTranslators(visibleArea),
-        family = new SeriesFamily($.extend({ type: type }, options));
-    setCommonSeriesType(series, type);
-    family.add(series);
-
-    family.adjustSeriesValues();
-    family.updateSeriesValues(translators);
-    family.adjustSeriesDimensions(translators);
-
-    return family;
+function getArgAxis(visibleArea, interval) {
+    return {
+        getTranslator: function() {
+            return new MockTranslator({
+                interval: interval || 100,
+                getCanvasVisibleArea: visibleArea || { min: 0 },
+                translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
+                untranslate: { 0: 0, 10: 10 }
+            });
+        }
+    };
 }
 
-function getTranslators(visibleArea) {
-    var argTrans = new MockTranslator({
+function getValAxes(name, visibleArea) {
+    var val1Trans = new MockTranslator({
             interval: 100,
-            getCanvasVisibleArea: visibleArea && visibleArea.arg || { min: 0 },
-            translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
-            untranslate: { 0: 0, 10: 10 }
-        }),
-        val1Trans = new MockTranslator({
-            interval: 100,
-            getCanvasVisibleArea: visibleArea && visibleArea.val || { min: 0 },
+            getCanvasVisibleArea: visibleArea || { min: 0 },
             translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
             untranslate: { 0: 0, 10: 10 }
         }),
         val2Trans = new MockTranslator({
             interval: 200,
-            getCanvasVisibleArea: visibleArea && visibleArea.val || { min: 0 },
+            getCanvasVisibleArea: visibleArea || { min: 0 },
             translate: { 20: 311, 21: 312, 22: 313, 30: 222, 31: 310, 32: 223, 40: 114, 41: 112, 42: 218, 0: 315 },
             untranslate: { 0: 0, 10: 20 }
         });
@@ -518,19 +471,36 @@ function getTranslators(visibleArea) {
     val2Trans.getMinBarSize && (val2Trans.getMinBarSize = function() { return arguments[0] * 2; });
 
     return {
-        arg: argTrans,
-        val: val1Trans,
-        axesTrans: {
-            axis1: {
-                arg: argTrans,
-                val: val1Trans
-            },
-            axis2: {
-                arg: argTrans,
-                val: val2Trans
+        axis1: {
+            getTranslator: function() {
+                return val1Trans;
+            }
+        },
+        axis2: {
+            getTranslator: function() {
+                return val2Trans;
             }
         }
-    };
+    }[name || "axis1"];
+}
+
+function createSeries(options, valAxis, visibleArea, interval) {
+    return new MockSeries($.extend({
+        argumentAxis: getArgAxis(visibleArea && visibleArea.arg, interval),
+        valueAxis: getValAxes(valAxis, visibleArea && visibleArea.val)
+    }, options));
+}
+
+function createSeriesFamily(type, series, options) {
+    var family = new SeriesFamily($.extend({ type: type }, options));
+    setCommonSeriesType(series, type);
+    family.add(series);
+
+    family.adjustSeriesValues();
+    family.updateSeriesValues();
+    family.adjustSeriesDimensions();
+
+    return family;
 }
 
 var checkSeries = function(assert, series, expectedWidth, expectedOffset) {
@@ -664,7 +634,7 @@ QUnit.test("Add array of different series", function(assert) {
 QUnit.module("Bar series - side-by-side width calculation");
 
 QUnit.test("Set single series", function(assert) {
-    var series = new MockSeries({ points: pointsForStacking.points1() }),
+    var series = createSeries({ points: pointsForStacking.points1() }),
         expectedWidth = 42;
 
     createSeriesFamily("bar", [series], { equalBarWidth: true, barWidth: 0.6 });
@@ -673,7 +643,7 @@ QUnit.test("Set single series", function(assert) {
 });
 
 QUnit.test("Set single series, bar width is specify", function(assert) {
-    var series = new MockSeries({ points: pointsForStacking.points1() }),
+    var series = createSeries({ points: pointsForStacking.points1() }),
         expectedWidth = 70;
 
     createSeriesFamily("bar", [series], { equalBarWidth: true });
@@ -682,8 +652,8 @@ QUnit.test("Set single series, bar width is specify", function(assert) {
 });
 
 QUnit.test("Set two series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
         series = [series1, series2],
         expectedSpacing = 7,
         expectedWidth = 32;
@@ -695,8 +665,8 @@ QUnit.test("Set two series", function(assert) {
 });
 
 QUnit.test("Set two series with invisible series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
         series = [series1, series2],
         expectedWidth = 70;
 
@@ -712,11 +682,11 @@ QUnit.test("Set two series with invisible series", function(assert) {
 });
 
 QUnit.test("Set five series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -731,11 +701,11 @@ QUnit.test("Set five series", function(assert) {
 });
 
 QUnit.test("Set five series, width is specified", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 14,
         expectedWidth = 3;
@@ -750,11 +720,11 @@ QUnit.test("Set five series, width is specified", function(assert) {
 });
 
 QUnit.test("Set five series, only width is specified, negative value", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -769,11 +739,11 @@ QUnit.test("Set five series, only width is specified, negative value", function(
 });
 
 QUnit.test("Set five series. rotated", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -791,8 +761,8 @@ QUnit.test("Set five series. rotated", function(assert) {
 QUnit.test("Stackedbar with negative values", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         mixedPoints = pointsForStacking.mixedPoints2(),
-        series1 = new MockSeries({ points: negativePoints1 }),
-        series2 = new MockSeries({ points: mixedPoints }),
+        series1 = createSeries({ points: negativePoints1 }),
+        series2 = createSeries({ points: mixedPoints }),
         series = [series1, series2];
 
     createSeriesFamily("stackedbar", series);
@@ -804,8 +774,8 @@ QUnit.test("Stackedbar with negative values", function(assert) {
 QUnit.module("Bar series - side-by-side with equalBarWidth calculation");
 
 QUnit.test("Set two series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1FirstOnly() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2FirstAndSecondOnly() }),
+    var series1 = createSeries({ points: pointsForStacking.points1FirstOnly() }),
+        series2 = createSeries({ points: pointsForStacking.points2FirstAndSecondOnly() }),
         series = [series1, series2],
         expectedSpacing = 7,
         expectedWidthTwoBars = 32;
@@ -832,8 +802,8 @@ QUnit.test("Set two series", function(assert) {
 QUnit.module("Bar series - side-by-side width different width calculation");
 
 QUnit.test("Set two series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1FirstOnly() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2FirstAndSecondOnly() }),
+    var series1 = createSeries({ points: pointsForStacking.points1FirstOnly() }),
+        series2 = createSeries({ points: pointsForStacking.points2FirstAndSecondOnly() }),
         series = [series1, series2],
         expectedWidthOneBar = 70,
         expectedWidthTwoBars = 32,
@@ -859,8 +829,8 @@ QUnit.test("Set two series", function(assert) {
 });
 
 QUnit.test("Set two series with points with the same arguments", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1WithSameArguments() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2WithSameArguments() }),
+    var series1 = createSeries({ points: pointsForStacking.points1WithSameArguments() }),
+        series2 = createSeries({ points: pointsForStacking.points2WithSameArguments() }),
         series = [series1, series2],
         expectedWidthTwoBars = 32,
         expectedSpacing = 7;
@@ -889,8 +859,8 @@ QUnit.test("Set two series with points with the same arguments", function(assert
 });
 
 QUnit.test("Set two series with points with the same arguments. With null points", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points3WithSameArguments() }),
-        series2 = new MockSeries({ points: pointsForStacking.points4WithSameArguments() }),
+    var series1 = createSeries({ points: pointsForStacking.points3WithSameArguments() }),
+        series2 = createSeries({ points: pointsForStacking.points4WithSameArguments() }),
         series = [series1, series2],
         expectedWidthTwoBars = 32,
         expectedSpacing = 7;
@@ -921,8 +891,8 @@ QUnit.test("Set two series with points with the same arguments. With null points
 QUnit.test("Set two series, first series is invisible", function(assert) {
     var points1 = [createPoint(1)],
         points2 = [createPoint(2)],
-        series1 = new MockSeries({ points: points1 }),
-        series2 = new MockSeries({ points: points2 }),
+        series1 = createSeries({ points: points1 }),
+        series2 = createSeries({ points: points2 }),
         series = [series1, series2];
     series1.isVisible = function() {
         return false;
@@ -934,7 +904,7 @@ QUnit.test("Set two series, first series is invisible", function(assert) {
 });
 
 QUnit.test("Set one series with datetime argument", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1DateArgument() }),
+    var series1 = createSeries({ points: pointsForStacking.points1DateArgument() }),
         expectedWidthOneBar = 70;
 
     createSeriesFamily("bar", [series1], { equalBarWidth: false });
@@ -943,8 +913,8 @@ QUnit.test("Set one series with datetime argument", function(assert) {
 });
 
 QUnit.test("Set two series with datetime argument", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1DateArgument() }),
-        series2 = new MockSeries({ points: pointsForStacking.points1DateArgument() }),
+    var series1 = createSeries({ points: pointsForStacking.points1DateArgument() }),
+        series2 = createSeries({ points: pointsForStacking.points1DateArgument() }),
         series = [series1, series2],
         expectedWidthTwoBars = 32;
 
@@ -955,8 +925,8 @@ QUnit.test("Set two series with datetime argument", function(assert) {
 });
 
 QUnit.test("Set two series with zero values", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1FirstGoodAndSecondZero() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2FirstAndSecondOnly() }),
+    var series1 = createSeries({ points: pointsForStacking.points1FirstGoodAndSecondZero() }),
+        series2 = createSeries({ points: pointsForStacking.points2FirstAndSecondOnly() }),
         series = [series1, series2],
         expectedWidthTwoBars = 32,
         expectedSpacing = 7;
@@ -984,15 +954,15 @@ QUnit.test("Set three series", function(assert) {
     var points1 = pointsForStacking.minHeightPoints5(),
         points2 = pointsForStacking.minHeightPoints6(),
         points3 = pointsForStacking.minHeightPoints7(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             minBarSize: 10
         }),
@@ -1008,15 +978,15 @@ QUnit.test("Set three series, zero values", function(assert) {
     var points1 = pointsForStacking.minHeightPoints5(),
         points2 = pointsForStacking.minHeightPoints4(),
         points3 = pointsForStacking.minHeightPoints7(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             minBarSize: 10
         }),
@@ -1031,11 +1001,11 @@ QUnit.test("Set three series, zero values", function(assert) {
 QUnit.test("Update minBarSize", function(assert) {
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
@@ -1045,7 +1015,7 @@ QUnit.test("Update minBarSize", function(assert) {
 
     series1.getOptions = sinon.stub().returns({ minBarSize: 8 });
 
-    family.updateSeriesValues(getTranslators());
+    family.updateSeriesValues();
 
     checkStackedPointHeight(assert, family.series[0], 8, 8, 8, 0, 0, 0);
     checkStackedPointHeight(assert, family.series[1], 10, 10, 10, 0, 0, 0);
@@ -1055,15 +1025,15 @@ QUnit.test("Set three series, null values", function(assert) {
     var points1 = pointsForStacking.minHeightPoints8(),
         points2 = pointsForStacking.minHeightPoints9(),
         points3 = pointsForStacking.minHeightPoints10(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             minBarSize: 10
         }),
@@ -1079,13 +1049,13 @@ QUnit.test("Set three series - custom min size is not specify ", function(assert
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints2(),
         points3 = pointsForStacking.minHeightPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3],
@@ -1100,21 +1070,21 @@ QUnit.test("Set three series. one series in different axis", function(assert) {
     var points1 = pointsForStacking.minHeightPoints5(),
         points2 = pointsForStacking.minHeightPoints6(),
         points3 = pointsForStacking.minHeightPoints7(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10,
             axis: 'axis1'
-        }),
-        series2 = new MockSeries({
+        }, "axis1"),
+        series2 = createSeries({
             points: points2,
             minBarSize: 10,
             axis: 'axis1'
-        }),
-        series3 = new MockSeries({
+        }, "axis1"),
+        series3 = createSeries({
             points: points3,
             minBarSize: 10,
             axis: 'axis2'
-        }),
+        }, "axis2"),
         series = [series1, series2, series3],
         family = createSeriesFamily("bar", series);
 
@@ -1126,7 +1096,7 @@ QUnit.test("Set three series. one series in different axis", function(assert) {
 QUnit.module("Range Bar series - side-by-side width calculation");
 
 QUnit.test("Set single series", function(assert) {
-    var series = new MockSeries({ points: pointsForStacking.points1() }),
+    var series = createSeries({ points: pointsForStacking.points1() }),
         expectedWidth = 70;
 
     createSeriesFamily("rangebar", [series], { equalBarWidth: true });
@@ -1135,8 +1105,8 @@ QUnit.test("Set single series", function(assert) {
 });
 
 QUnit.test("Set two series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
         series = [series1, series2],
         expectedSpacing = 7,
         expectedWidth = 32;
@@ -1148,9 +1118,9 @@ QUnit.test("Set two series", function(assert) {
 });
 
 QUnit.test("Set three series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
         series = [series1, series2, series3],
         expectedSpacing = 5,
         expectedWidth = 20;
@@ -1163,10 +1133,10 @@ QUnit.test("Set three series", function(assert) {
 });
 
 QUnit.test("Set four series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
         series = [series1, series2, series3, series4],
         expectedSpacing = 4,
         expectedWidth = 15;
@@ -1181,11 +1151,11 @@ QUnit.test("Set four series", function(assert) {
 });
 
 QUnit.test("Set five series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -1200,11 +1170,11 @@ QUnit.test("Set five series", function(assert) {
 });
 
 QUnit.test("Set five series. rotated", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -1222,7 +1192,7 @@ QUnit.module("Stacked Bar series - single column. Positive values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
         expectedWidth = 70;
@@ -1236,10 +1206,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2],
@@ -1267,10 +1237,10 @@ QUnit.test("Set two series - matching points. Points with null values", function
 
     points2[2].value = null;
 
-    var series1 = new MockSeries({
+    var series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2],
@@ -1295,10 +1265,10 @@ QUnit.test("Set two series - matching points. Points with null values", function
 QUnit.test("Set two series - matching points. all series are visible", function(assert) {
     var points1 = [createPoint(1)],
         points2 = [createPoint(2)],
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2];
@@ -1313,8 +1283,8 @@ QUnit.test("Set two series - matching points. all series are visible", function(
 });
 
 QUnit.test("Set two series with invisible series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
         series = [series1, series2];
 
     series2.isVisible = function() {
@@ -1331,11 +1301,8 @@ QUnit.test("Set two series with invisible series", function(assert) {
 });
 
 QUnit.test("Set two series with invisible series. different stack", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({
-            points: pointsForStacking.points2(),
-            stack: "second"
-        }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2(), stack: "second" }),
         series = [series1, series2];
 
     series2.isVisible = function() {
@@ -1354,10 +1321,10 @@ QUnit.test("Set two series with invisible series. different stack", function(ass
 QUnit.test("Set two series - matching points. first series is invisible", function(assert) {
     var points1 = [createPoint(1)],
         points2 = [createPoint(2)],
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2];
@@ -1376,10 +1343,10 @@ QUnit.test("Set two series - matching points. first series is invisible", functi
 QUnit.test("Set two series - matching points. second series is invisible", function(assert) {
     var points1 = [createPoint(1)],
         points2 = [createPoint(2)],
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2];
@@ -1399,13 +1366,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3],
@@ -1423,13 +1390,13 @@ QUnit.test("Set three series - set percent values", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3];
@@ -1453,13 +1420,13 @@ QUnit.test("Set three series in two groups - matching points", function(assert) 
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             stack: "second"
         }),
@@ -1481,17 +1448,17 @@ QUnit.test("Set four series in two groups - matching points", function(assert) {
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
         points4 = pointsForStacking.points4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
-        series4 = new MockSeries({
+        series4 = createSeries({
             points: points4,
             stack: "second"
         }),
@@ -1513,15 +1480,15 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             stack: "first"
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             stack: "third"
         }),
@@ -1543,15 +1510,15 @@ QUnit.test("Set three series - custom min size", function(assert) {
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints2(),
         points3 = pointsForStacking.minHeightPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             minBarSize: 10
         }),
@@ -1567,21 +1534,21 @@ QUnit.test("Set three series - custom min size. One series in different axis", f
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints2(),
         points3 = pointsForStacking.minHeightPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10,
             axis: 'axis1'
-        }),
-        series2 = new MockSeries({
+        }, "axis1"),
+        series2 = createSeries({
             points: points2,
             minBarSize: 10,
             axis: 'axis1'
-        }),
-        series3 = new MockSeries({
+        }, "axis1"),
+        series3 = createSeries({
             points: points3,
             minBarSize: 10,
             axis: 'axis2'
-        }),
+        }, "axis2"),
         series = [series1, series2, series3],
         family = createSeriesFamily("stackedbar", series);
 
@@ -1594,15 +1561,15 @@ QUnit.test("Set three series - custom min size, zero values", function(assert) {
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints4(),
         points3 = pointsForStacking.minHeightPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             minBarSize: 10
         }),
@@ -1617,11 +1584,11 @@ QUnit.test("Set three series - custom min size, zero values", function(assert) {
 QUnit.test("Update minBarSize", function(assert) {
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
@@ -1631,7 +1598,7 @@ QUnit.test("Update minBarSize", function(assert) {
 
     series1.getOptions = sinon.stub().returns({ minBarSize: 8 });
 
-    family.updateSeriesValues(getTranslators());
+    family.updateSeriesValues();
 
     checkStackedPointHeight(assert, family.series[0], 8, 8, 8, 0, 0, 0);
     checkStackedPointHeight(assert, family.series[1], 18, 18, 18, 8, 8, 8);
@@ -1641,13 +1608,13 @@ QUnit.test("Set three series - custom min size is not specify", function(assert)
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints2(),
         points3 = pointsForStacking.minHeightPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3],
@@ -1660,7 +1627,7 @@ QUnit.test("Set three series - custom min size is not specify", function(assert)
 
 QUnit.test("Set single series date argument - matching points", function(assert) {
     var points1 = pointsForStacking.points1DateArgument(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
         expectedWidth = 70;
@@ -1675,13 +1642,13 @@ QUnit.test("Set three series - 2 groups. rotated", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             stack: "second"
         }),
@@ -1702,15 +1669,15 @@ QUnit.test("Set three series. rotated", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             stack: "first"
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             stack: "third"
         }),
@@ -1732,7 +1699,7 @@ QUnit.module("Stacked Bar series - single column. Negative values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
         expectedWidth = 70;
@@ -1746,10 +1713,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
         series = [series1, series2],
@@ -1767,13 +1734,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3
         }),
         series = [series1, series2, series3],
@@ -1791,13 +1758,13 @@ QUnit.test("Set three series in two groups - matching points", function(assert) 
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3,
             stack: "second"
         }),
@@ -1819,17 +1786,17 @@ QUnit.test("Set four series in two groups - matching points", function(assert) {
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
         negativePoints4 = pointsForStacking.negativePoints4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3
         }),
-        series4 = new MockSeries({
+        series4 = createSeries({
             points: negativePoints4,
             stack: "second"
         }),
@@ -1851,15 +1818,15 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1,
             stack: "first"
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3,
             stack: "third"
         }),
@@ -1881,7 +1848,7 @@ QUnit.module("Stacked Bar series - single column. Positive and negative values")
 
 QUnit.test("Set single series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
         expectedWidth = 70;
@@ -1896,10 +1863,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
         series = [series1, series2],
@@ -1918,13 +1885,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3
         }),
         series = [series1, series2, series3],
@@ -1946,13 +1913,13 @@ QUnit.test("Set three series in two groups - matching points", function(assert) 
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3,
             stack: "second"
         }),
@@ -1974,17 +1941,17 @@ QUnit.test("Set four series in two groups - matching points", function(assert) {
         mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
         mixedPoints4 = pointsForStacking.mixedPoints4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3
         }),
-        series4 = new MockSeries({
+        series4 = createSeries({
             points: mixedPoints4,
             stack: "second"
         }),
@@ -2006,15 +1973,15 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints3(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1,
             stack: "first"
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3,
             stack: "third"
         }),
@@ -2036,7 +2003,7 @@ QUnit.module("Full Stacked Bar series. Positive values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
         expectedWidth = 70;
@@ -2050,10 +2017,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2],
@@ -2072,13 +2039,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3],
@@ -2096,13 +2063,13 @@ QUnit.test("Set three series in two groups - matching points", function(assert) 
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             stack: "second"
         }),
@@ -2124,17 +2091,17 @@ QUnit.test("Set four series in two groups - matching points", function(assert) {
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
         points4 = pointsForStacking.points4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
-        series4 = new MockSeries({
+        series4 = createSeries({
             points: points4,
             stack: "second"
         }),
@@ -2156,15 +2123,15 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             stack: "first"
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             stack: "third"
         }),
@@ -2184,7 +2151,7 @@ QUnit.test("Set three series in three groups - matching points", function(assert
 
 QUnit.test("Set single series date argument- matching points", function(assert) {
     var points1 = pointsForStacking.points1DateArgument(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
         expectedWidth = 70;
@@ -2199,15 +2166,15 @@ QUnit.test("Set three series - custom min size", function(assert) {
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints2(),
         points3 = pointsForStacking.minHeightPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             minBarSize: 10
         }),
@@ -2225,15 +2192,15 @@ QUnit.test("Set three series - custom min size, zero values", function(assert) {
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints4(),
         points3 = pointsForStacking.minHeightPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             minBarSize: 10
         }),
@@ -2250,15 +2217,15 @@ QUnit.test("Set three series - custom min size, zero values", function(assert) {
     var points1 = pointsForStacking.minHeightPoints9(),
         points2 = pointsForStacking.minHeightPoints11(),
         points3 = pointsForStacking.minHeightPoints12(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 10
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 10
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             minBarSize: 10
         }),
@@ -2273,11 +2240,11 @@ QUnit.test("Set three series - custom min size, zero values", function(assert) {
 QUnit.test("Update minBarSize", function(assert) {
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1,
             minBarSize: 30
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2,
             minBarSize: 1
         }),
@@ -2286,7 +2253,7 @@ QUnit.test("Update minBarSize", function(assert) {
         family = createSeriesFamily("fullstackedbar", series);
 
     series1.getOptions = sinon.stub().returns({ minBarSize: 1 });
-    family.updateSeriesValues(getTranslators());
+    family.updateSeriesValues();
 
     checkStackedPointHeight(assert, family.series[0], 0.5, 0.5, 0.5, 0, 0, 0);
     checkStackedPointHeight(assert, family.series[1], 1, 1, 1, 0.5, 0.5, 0.5);
@@ -2296,13 +2263,13 @@ QUnit.test("Set three series - custom min size is not specify", function(assert)
     var points1 = pointsForStacking.minHeightPoints1(),
         points2 = pointsForStacking.minHeightPoints2(),
         points3 = pointsForStacking.minHeightPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3],
@@ -2323,13 +2290,13 @@ QUnit.test("Set three series. rotated", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3,
             stack: "second"
         }),
@@ -2350,7 +2317,7 @@ QUnit.module("Full Stacked Bar series. Negative values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
         expectedWidth = 70;
@@ -2364,10 +2331,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
         series = [series1, series2],
@@ -2386,13 +2353,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3
         }),
         series = [series1, series2, series3],
@@ -2410,13 +2377,13 @@ QUnit.test("Set three series in two groups - matching points", function(assert) 
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3,
             stack: "second"
         }),
@@ -2438,17 +2405,17 @@ QUnit.test("Set four series in two groups - matching points", function(assert) {
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
         negativePoints4 = pointsForStacking.negativePoints4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3
         }),
-        series4 = new MockSeries({
+        series4 = createSeries({
             points: negativePoints4,
             stack: "second"
         }),
@@ -2470,15 +2437,15 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1,
             stack: "first"
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3,
             stack: "third"
         }),
@@ -2500,7 +2467,7 @@ QUnit.module("Full Stacked Bar series. Positive and negative values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
         expectedWidth = 70;
@@ -2514,10 +2481,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
         series = [series1, series2],
@@ -2539,13 +2506,13 @@ QUnit.test("Set three series - matching points", function(assert) {
         arg1Stack = 10 + 20 + 30,
         arg2Stack = 20 + 40 + 60,
         arg3Stack = 30 + 60 + 90,
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3
         }),
         series = [series1, series2, series3],
@@ -2565,13 +2532,13 @@ QUnit.test("Set three series in two groups - matching points", function(assert) 
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3,
             stack: "second"
         }),
@@ -2593,17 +2560,17 @@ QUnit.test("Set four series in two groups - matching points", function(assert) {
         mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
         mixedPoints4 = pointsForStacking.mixedPoints4(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3
         }),
-        series4 = new MockSeries({
+        series4 = createSeries({
             points: mixedPoints4,
             stack: "second"
         }),
@@ -2625,15 +2592,15 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1,
             stack: "first"
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2,
             stack: "second"
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3,
             stack: "third"
         }),
@@ -2651,11 +2618,22 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     checkFullStackedPoints(assert, mixedPoints3);
 });
 
+QUnit.module("Bar series common");
+
+QUnit.test("Translator interval is too small - bar width is 1px", function(assert) {
+    var series = createSeries({ points: pointsForStacking.points1() }, undefined, undefined, 2),
+        expectedWidth = 1;
+
+    createSeriesFamily("bar", [series], { equalBarWidth: true, barWidth: 0.3 });
+
+    checkSeries(assert, series, expectedWidth, 0);
+});
+
 QUnit.module("Stacked Area series. Positive values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         });
 
@@ -2667,10 +2645,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2];
@@ -2685,13 +2663,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3];
@@ -2714,13 +2692,13 @@ QUnit.test("Set three series. null point in the middle of first series", functio
         p.resetHoles = sinon.stub();
     });
 
-    var series1 = new MockSeries({
+    var series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3];
@@ -2778,13 +2756,13 @@ QUnit.test("Set three series. first point has null value", function(assert) {
         p.setHole = sinon.stub();
     });
 
-    var series1 = new MockSeries({
+    var series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3];
@@ -2837,13 +2815,13 @@ QUnit.test("Set three series. last point has null value", function(assert) {
         p.setHole = sinon.stub();
     });
 
-    var series1 = new MockSeries({
+    var series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3];
@@ -2896,13 +2874,13 @@ QUnit.test("Set three series. null point in the middle of first and second serie
         p.setHole = sinon.stub();
     });
 
-    var series1 = new MockSeries({
+    var series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3];
@@ -2946,7 +2924,7 @@ QUnit.module("Stacked Area series. Negative values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         });
 
@@ -2959,10 +2937,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
         series = [series1, series2];
@@ -2978,13 +2956,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3
         }),
         series = [series1, series2, series3];
@@ -2998,7 +2976,7 @@ QUnit.module("Stacked Area series. Positive and negative values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         });
 
@@ -3010,10 +2988,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
         series = [series1, series2];
@@ -3027,13 +3005,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3
         }),
         series = [series1, series2, series3];
@@ -3047,7 +3025,7 @@ QUnit.module("Full Stacked Area series. Positive values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         });
 
@@ -3059,10 +3037,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2];
@@ -3076,13 +3054,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var points1 = pointsForStacking.points1(),
         points2 = pointsForStacking.points2(),
         points3 = pointsForStacking.points3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: points3
         }),
         series = [series1, series2, series3];
@@ -3096,7 +3074,7 @@ QUnit.module("Full Stacked Area series. Negative values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         });
 
@@ -3108,10 +3086,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
         series = [series1, series2];
@@ -3125,13 +3103,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var negativePoints1 = pointsForStacking.negativePoints1(),
         negativePoints2 = pointsForStacking.negativePoints2(),
         negativePoints3 = pointsForStacking.negativePoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: negativePoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: negativePoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: negativePoints3
         }),
         series = [series1, series2, series3];
@@ -3145,7 +3123,7 @@ QUnit.module("Full Stacked Area series. Positive and negative values");
 
 QUnit.test("Set single series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         });
 
@@ -3157,10 +3135,10 @@ QUnit.test("Set single series - matching points", function(assert) {
 QUnit.test("Set two series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
         series = [series1, series2];
@@ -3174,13 +3152,13 @@ QUnit.test("Set three series - matching points", function(assert) {
     var mixedPoints1 = pointsForStacking.mixedPoints1(),
         mixedPoints2 = pointsForStacking.mixedPoints2(),
         mixedPoints3 = pointsForStacking.mixedPoints3(),
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: mixedPoints1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: mixedPoints2
         }),
-        series3 = new MockSeries({
+        series3 = createSeries({
             points: mixedPoints3
         }),
         series = [series1, series2, series3];
@@ -3204,9 +3182,9 @@ QUnit.test("When negativesAsZeroes true - all negative values treated as zeroes"
     var points1 = [createPoint(1, -10), createPoint(2, 20), createPoint(3, -30)],
         points2 = [createPoint(1, 20), createPoint(2, 40), createPoint(3, -60)],
         points3 = [createPoint(1, -30), createPoint(2, -60), createPoint(3, -90)],
-        series = [new MockSeries({ points: points1 }),
-            new MockSeries({ points: points2 }),
-            new MockSeries({ points: points3 })];
+        series = [createSeries({ points: points1 }),
+            createSeries({ points: points2 }),
+            createSeries({ points: points3 })];
 
     createSeriesFamily("stackedarea", series, { negativesAsZeroes: true });
 
@@ -3238,7 +3216,7 @@ QUnit.test("When negativesAsZeroes true - all negative values treated as zeroes"
 QUnit.module("Candlestick series - side-by-side width calculation");
 
 QUnit.test("Set single series", function(assert) {
-    var series = new MockSeries({ points: pointsForStacking.points1() }),
+    var series = createSeries({ points: pointsForStacking.points1() }),
         expectedWidth = 70;
 
     createSeriesFamily("candlestick", [series]);
@@ -3247,8 +3225,8 @@ QUnit.test("Set single series", function(assert) {
 });
 
 QUnit.test("Set two series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
         series = [series1, series2],
         expectedSpacing = 7,
         expectedWidth = 32;
@@ -3262,10 +3240,10 @@ QUnit.test("Set two series", function(assert) {
 QUnit.test("Set two series, first series is invisible", function(assert) {
     var points1 = [createPoint(1)],
         points2 = [createPoint(2)],
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2];
@@ -3281,9 +3259,9 @@ QUnit.test("Set two series, first series is invisible", function(assert) {
 });
 
 QUnit.test("Set three series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
         series = [series1, series2, series3],
         expectedSpacing = 5,
         expectedWidth = 20;
@@ -3296,10 +3274,10 @@ QUnit.test("Set three series", function(assert) {
 });
 
 QUnit.test("Set four series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
         series = [series1, series2, series3, series4],
         expectedSpacing = 4,
         expectedWidth = 15;
@@ -3314,11 +3292,11 @@ QUnit.test("Set four series", function(assert) {
 });
 
 QUnit.test("Set five series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -3333,11 +3311,11 @@ QUnit.test("Set five series", function(assert) {
 });
 
 QUnit.test("Set five series. rotated", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -3354,7 +3332,7 @@ QUnit.test("Set five series. rotated", function(assert) {
 QUnit.module("Stock series - side-by-side width calculation");
 
 QUnit.test("Set single series", function(assert) {
-    var series = new MockSeries({ points: pointsForStacking.points1() }),
+    var series = createSeries({ points: pointsForStacking.points1() }),
         expectedWidth = 70;
 
     createSeriesFamily("stock", [series]);
@@ -3363,8 +3341,8 @@ QUnit.test("Set single series", function(assert) {
 });
 
 QUnit.test("Set two series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
         series = [series1, series2],
         expectedSpacing = 7,
         expectedWidth = 32;
@@ -3378,10 +3356,10 @@ QUnit.test("Set two series", function(assert) {
 QUnit.test("Set two series, first series is invisible", function(assert) {
     var points1 = [createPoint(1)],
         points2 = [createPoint(2)],
-        series1 = new MockSeries({
+        series1 = createSeries({
             points: points1
         }),
-        series2 = new MockSeries({
+        series2 = createSeries({
             points: points2
         }),
         series = [series1, series2];
@@ -3396,9 +3374,9 @@ QUnit.test("Set two series, first series is invisible", function(assert) {
 });
 
 QUnit.test("Set three series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
         series = [series1, series2, series3],
         expectedSpacing = 5,
         expectedWidth = 20;
@@ -3411,10 +3389,10 @@ QUnit.test("Set three series", function(assert) {
 });
 
 QUnit.test("Set four series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
         series = [series1, series2, series3, series4],
         expectedSpacing = 4,
         expectedWidth = 15;
@@ -3429,11 +3407,11 @@ QUnit.test("Set four series", function(assert) {
 });
 
 QUnit.test("Set five series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -3448,11 +3426,11 @@ QUnit.test("Set five series", function(assert) {
 });
 
 QUnit.test("Set five series. rotated", function(assert) {
-    var series1 = new MockSeries({ points: pointsForStacking.points1() }),
-        series2 = new MockSeries({ points: pointsForStacking.points2() }),
-        series3 = new MockSeries({ points: pointsForStacking.points3() }),
-        series4 = new MockSeries({ points: pointsForStacking.points4() }),
-        series5 = new MockSeries({ points: pointsForStacking.points5() }),
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
         series = [series1, series2, series3, series4, series5],
         expectedSpacing = 3,
         expectedWidth = 12;
@@ -3469,12 +3447,12 @@ QUnit.test("Set five series. rotated", function(assert) {
 QUnit.module("Bubble Series");
 
 QUnit.test("Set series", function(assert) {
-    var series1 = new MockSeries({ points: pointsForBubble.points1() }),
-        series2 = new MockSeries({ points: pointsForBubble.points2() }),
-        series3 = new MockSeries({ points: pointsForBubble.points3() }),
+    var series1 = createSeries({ points: pointsForBubble.points1() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
+        series2 = createSeries({ points: pointsForBubble.points2() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
+        series3 = createSeries({ points: pointsForBubble.points3() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
         series = [series1, series2, series3];
 
-    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 }, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
+    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     assert.equal(series1.getPoints()[0].coordinatesCorrection, 8);
     assert.equal(series1.getPoints()[1].coordinatesCorrection, 7);
@@ -3490,11 +3468,11 @@ QUnit.test("Set series", function(assert) {
 });
 
 QUnit.test("Set series, points size are not much different", function(assert) {
-    var series1 = new MockSeries({ points: pointsForBubble.points4() }),
-        series2 = new MockSeries({ points: pointsForBubble.points5() }),
+    var series1 = createSeries({ points: pointsForBubble.points4() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
+        series2 = createSeries({ points: pointsForBubble.points5() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
         series = [series1, series2];
 
-    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 }, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
+    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     assert.equal(series1.getPoints()[0].coordinatesCorrection, 9);
     assert.equal(series1.getPoints()[1].coordinatesCorrection, 5);
@@ -3506,17 +3484,17 @@ QUnit.test("Set series, points size are not much different", function(assert) {
 });
 
 QUnit.test("Set series, one point", function(assert) {
-    var series1 = new MockSeries({ points: pointsForBubble.points6() });
+    var series1 = createSeries({ points: pointsForBubble.points6() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
 
-    createSeriesFamily("bubble", [series1], { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 }, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
+    createSeriesFamily("bubble", [series1], { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     assert.equal(series1.getPoints()[0].coordinatesCorrection, 6);
 });
 
 QUnit.test("set minBubbleSize option", function(assert) {
-    var series = [new MockSeries({ points: pointsForBubble.points3() })];
+    var series = [createSeries({ points: pointsForBubble.points3() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } })];
 
-    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 20, maxBubbleSize: 0.1 }, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
+    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 20, maxBubbleSize: 0.1 });
 
     assert.ok(series[0].getPoints()[0].coordinatesCorrection >= 20, "size > minSize");
     assert.ok(series[0].getPoints()[1].coordinatesCorrection >= 20, "size > minSize");
@@ -3524,9 +3502,9 @@ QUnit.test("set minBubbleSize option", function(assert) {
 });
 
 QUnit.test("set maxBubbleSize option", function(assert) {
-    var series = [new MockSeries({ points: pointsForBubble.points3() })];
+    var series = [createSeries({ points: pointsForBubble.points3() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } })];
 
-    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 5, maxBubbleSize: 0.1 }, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
+    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 5, maxBubbleSize: 0.1 });
 
     assert.ok(series[0].getPoints()[0].coordinatesCorrection <= 10, "size < maxSize");
     assert.ok(series[0].getPoints()[1].coordinatesCorrection <= 10, "size < maxSize");
@@ -3534,15 +3512,15 @@ QUnit.test("set maxBubbleSize option", function(assert) {
 });
 
 QUnit.test("maxBubbleSize === minBubbleSize", function(assert) {
-    var series = [new MockSeries({
+    var series = [createSeries({
         points: [
             new MockPoint({ argument: "First", value: 30, size: 10 }),
             new MockPoint({ argument: "Second", value: 31, size: 10 }),
             new MockPoint({ argument: "Third", value: 32, size: 10 })
         ]
-    })];
+    }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } })];
 
-    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 6, maxBubbleSize: 0.1 }, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
+    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 6, maxBubbleSize: 0.1 });
 
     assert.equal(series[0].getPoints()[0].coordinatesCorrection, 8, "size < maxSize");
     assert.equal(series[0].getPoints()[1].coordinatesCorrection, 8, "size < maxSize");
@@ -3551,14 +3529,14 @@ QUnit.test("maxBubbleSize === minBubbleSize", function(assert) {
 
 //T129206
 QUnit.test("Set two series with invisible series. Bubble", function(assert) {
-    var series1 = new MockSeries({ points: pointsForBubble.points1() }),
-        series2 = new MockSeries({ points: pointsForBubble.points2() }),
+    var series1 = createSeries({ points: pointsForBubble.points1() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
+        series2 = createSeries({ points: pointsForBubble.points2() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } }),
         series = [series1, series2];
     series2.isVisible = function() {
         return false;
     };
 
-    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 }, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
+    createSeriesFamily("bubble", series, { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
 
     assert.equal(series1.getPoints()[0].coordinatesCorrection, 9);
     assert.equal(series1.getPoints()[1].coordinatesCorrection, 2);
@@ -3569,7 +3547,33 @@ QUnit.test("Set two series with invisible series. Bubble", function(assert) {
     });
 });
 
-QUnit.module("Life cycle", environment);
+QUnit.test("All series are invisible. Bubble", function(assert) {
+    var series = createSeries({ points: pointsForBubble.points1() }, undefined, { arg: { min: 0, max: 100 }, val: { min: 10, max: 200 } });
+
+    series.isVisible = function() {
+        return false;
+    };
+
+    createSeriesFamily("bubble", [series], { equalBarWidth: null, minBubbleSize: 2, maxBubbleSize: 0.1 });
+
+    $.each(series.getPoints(), function(i, point) {
+        assert.ok(!point.coordinatesCorrected, "Point [" + i.toString() + "] has no mark about corrected coordinates");
+    });
+});
+
+QUnit.module("Life cycle", {
+    beforeEach: function() {
+        this.options = {
+            type: "stackedbar"
+        };
+        this.series = [];
+    },
+    createSeriesFamily: function() {
+        var family = new SeriesFamily(this.options);
+        family.add(this.series);
+        return family;
+    }
+});
 
 QUnit.test("Creation", function(assert) {
     assert.ok(this.createSeriesFamily());
@@ -3581,5 +3585,4 @@ QUnit.test("Disposing", function(assert) {
     family.dispose();
 
     assert.equal(family.series, null);
-    assert.equal(family.translators, null);
 });

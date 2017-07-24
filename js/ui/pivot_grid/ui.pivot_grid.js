@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     clickEvent = require("../../events/click"),
@@ -51,7 +52,7 @@ var $ = require("../../core/renderer"),
 function getArraySum(array) {
     var sum = 0;
 
-    $.each(array, function(_, value) {
+    each(array, function(_, value) {
         sum += (value || 0);
     });
 
@@ -75,7 +76,7 @@ function subscribeToScrollEvent(area, handler) {
 
 var scrollBarInfoCache = {};
 
-function getScrollBarInfo(rootElement, useNativeScrolling) {
+function getScrollBarInfo(useNativeScrolling) {
     if(scrollBarInfoCache[useNativeScrolling]) {
         return scrollBarInfoCache[useNativeScrolling];
     }
@@ -87,9 +88,11 @@ function getScrollBarInfo(rootElement, useNativeScrolling) {
     var container = $(DIV).css({
         position: 'absolute',
         visibility: 'hidden',
+        top: -1000,
+        left: -1000,
         width: 100,
         height: 100
-    }).appendTo(rootElement);
+    }).appendTo("body");
 
     var content = $('<p>').css({
         width: '100%',
@@ -120,7 +123,7 @@ function getCommonBorderWidth(elements, direction) {
     var outerSize = direction === "width" ? "outerWidth" : "outerHeight",
         width = 0;
 
-    $.each(elements, function(_, elem) {
+    each(elements, function(_, elem) {
         width += elem[outerSize]() - elem[direction]();
     });
 
@@ -824,8 +827,8 @@ var PivotGrid = Widget.inherit({
             hideEmptySummaryCells: that.option("hideEmptySummaryCells"),
 
             onFieldsPrepared: function(fields) {
-                $.each(fields, function(index, field) {
-                    $.each(["allowSorting", "allowSortingBySummary", "allowFiltering", "allowExpandAll"], function(_, optionName) {
+                each(fields, function(index, field) {
+                    each(["allowSorting", "allowSortingBySummary", "allowFiltering", "allowExpandAll"], function(_, optionName) {
                         if(field[optionName] === undefined) {
                             pivotGridUtils.setFieldProperty(field, optionName, that.option(optionName));
                         }
@@ -1001,7 +1004,7 @@ var PivotGrid = Widget.inherit({
         if(columnsArea && !columnsArea.hasScroll()) {
             that._scrollLeft = null;
         }
-        if(that._scrollTop !== null || that._scrollLeft !== null || scrolled) {
+        if(that._scrollTop !== null || that._scrollLeft !== null || scrolled || that.option("rtlEnabled")) {
             scrollTop = that._scrollTop || 0;
             scrollLeft = that._scrollLeft || 0;
             dataArea.scrollTo({ x: scrollLeft, y: scrollTop });
@@ -1031,7 +1034,7 @@ var PivotGrid = Widget.inherit({
                 }
             };
 
-        $.each([columnsArea, rowsArea, dataArea], function(_, area) {
+        each([columnsArea, rowsArea, dataArea], function(_, area) {
             subscribeToScrollEvent(area, scrollHandler);
         });
 
@@ -1154,12 +1157,12 @@ var PivotGrid = Widget.inherit({
 
             if(e.cell.isLast) {
                 var sortingBySummaryItemCount = 0;
-                $.each(oppositeAreaFields, function(index, field) {
+                each(oppositeAreaFields, function(index, field) {
                     if(!field.allowSortingBySummary) {
                         return;
                     }
 
-                    $.each(e.dataFields, function(dataIndex, dataField) {
+                    each(e.dataFields, function(dataIndex, dataField) {
                         if(isDefined(e.cell.dataIndex) && e.cell.dataIndex !== dataIndex) {
                             return;
                         }
@@ -1186,7 +1189,7 @@ var PivotGrid = Widget.inherit({
                     });
 
                 });
-                $.each(oppositeAreaFields, function(index, field) {
+                each(oppositeAreaFields, function(index, field) {
                     if(!field.allowSortingBySummary || !isDefined(field.sortBySummaryField)) {
                         return;
                     }
@@ -1195,7 +1198,7 @@ var PivotGrid = Widget.inherit({
                         icon: "none",
                         text: texts.removeAllSorting,
                         onItemClick: function() {
-                            $.each(oppositeAreaFields, function(index, field) {
+                            each(oppositeAreaFields, function(index, field) {
                                 dataSource.field(field.index, {
                                     sortBySummaryField: undefined,
                                     sortBySummaryPath: undefined,
@@ -1480,16 +1483,12 @@ var PivotGrid = Widget.inherit({
             dataArea,
             rowsArea,
             columnsArea,
-            scrollBarInfo = getScrollBarInfo(that.element(), that.option("scrolling.useNative")),
             isFirstDrawing = !that._pivotGridContainer,
             rowHeaderContainer,
             columnHeaderContainer,
             filterHeaderContainer,
             dataHeaderContainer,
             updateHandler;
-
-        that._scrollBarWidth = scrollBarInfo.scrollBarWidth;
-        that._scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
 
         tableElement = !isFirstDrawing && that._tableElement();
 
@@ -1676,7 +1675,8 @@ var PivotGrid = Widget.inherit({
             rowsAreaWidth = 0,
             hasRowsScroll,
             hasColumnsScroll,
-            scrollBarWidth = that._scrollBarWidth || 0,
+            scrollBarInfo = getScrollBarInfo(that.option("scrolling.useNative")),
+            scrollBarWidth = scrollBarInfo.scrollBarWidth,
             dataAreaCell = tableElement.find("." + DATA_AREA_CELL_CLASS),
             rowAreaCell = tableElement.find("." + ROW_AREA_CELL_CLASS),
             columnAreaCell = tableElement.find("." + COLUMN_AREA_CELL_CLASS),
@@ -1691,6 +1691,11 @@ var PivotGrid = Widget.inherit({
             columnsAreaRowCount,
             needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option("rowHeaderLayout") !== "tree",
             d = $.Deferred();
+
+        ///#DEBUG
+        that.__scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
+        that.__scrollBarWidth = scrollBarWidth;
+        ///#ENDDEBUG
 
         that._detectHasContainerHeight();
 
@@ -1837,11 +1842,10 @@ var PivotGrid = Widget.inherit({
 
                 var updateScrollableResults = [];
 
-                $.each([columnsArea, rowsArea, dataArea], function(_, area) {
+                dataArea.processScroll(scrollBarInfo.scrollBarUseNative);
+                each([columnsArea, rowsArea, dataArea], function(_, area) {
                     updateScrollableResults.push(area && area.updateScrollable());
                 });
-
-                dataArea.processScroll(that._scrollBarUseNative);
 
                 that._updateLoading();
                 that._renderNoDataText(dataAreaCell);

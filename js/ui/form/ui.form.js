@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     utils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     stringUtils = require("../../core/utils/string"),
@@ -1137,7 +1138,7 @@ var Form = Widget.inherit({
                 }
 
                 if(that._cachedLayoutManagers.length) {
-                    $.each(that._cachedLayoutManagers, function(index, layoutManager) {
+                    each(that._cachedLayoutManagers, function(index, layoutManager) {
                         if(optionFullName === "formData") {
                             that._isDataUpdating = true;
                             layoutManager.option("layoutData", args.value);
@@ -1295,7 +1296,7 @@ var Form = Widget.inherit({
     _triggerOnFieldDataChangedByDataSet: function(data) {
         var that = this;
         if(data && typeUtils.isObject(data)) {
-            $.each(data, function(dataField, value) {
+            each(data, function(dataField, value) {
                 that._triggerOnFieldDataChanged({ dataField: dataField, value: value });
             });
         }
@@ -1322,7 +1323,7 @@ var Form = Widget.inherit({
             result = [];
 
         if(!items && typeUtils.isDefined(formData)) {
-            $.each(formData, function(dataField) {
+            each(formData, function(dataField) {
                 result.push({
                     dataField: dataField
                 });
@@ -1330,7 +1331,7 @@ var Form = Widget.inherit({
         }
 
         if(items) {
-            $.each(items, function(index, item) {
+            each(items, function(index, item) {
                 if(typeUtils.isObject(item)) {
                     result.push(item);
                 } else {
@@ -1352,7 +1353,7 @@ var Form = Widget.inherit({
             resultItem;
 
         if(items.length) {
-            $.each(items, function(index, item) {
+            each(items, function(index, item) {
                 var itemType = item.itemType;
 
                 if(fieldPath.length) {
@@ -1444,7 +1445,7 @@ var Form = Widget.inherit({
         var that = this,
             result;
 
-        $.each(items, function(index, groupItem) {
+        each(items, function(index, groupItem) {
             result = that._getItemByFieldPath(path, fieldName, groupItem);
             if(result) {
                 return false;
@@ -1489,7 +1490,7 @@ var Form = Widget.inherit({
     _isColCountChanged: function(oldScreenSize, newScreenSize) {
         var isChanged = false;
 
-        $.each(this._cachedColCountOptions, function(index, item) {
+        each(this._cachedColCountOptions, function(index, item) {
             if(item.colCountByScreen[oldScreenSize] !== item.colCountByScreen[newScreenSize]) {
                 isChanged = true;
                 return false;
@@ -1511,7 +1512,7 @@ var Form = Widget.inherit({
         var validationGroup = ValidationEngine.getGroupConfig(this);
 
         validationGroup && validationGroup.reset();
-        $.each(this._editorInstancesByField, function(dataField, editor) {
+        each(this._editorInstancesByField, function(dataField, editor) {
             editor.reset();
             editor.option("isValid", true);
         });
@@ -1522,7 +1523,7 @@ var Form = Widget.inherit({
             _data = isComplexData ? value : data;
 
         if(typeUtils.isObject(_data)) {
-            $.each(_data, function(dataField, fieldValue) {
+            each(_data, function(dataField, fieldValue) {
                 that._updateData(isComplexData ? data + "." + dataField : dataField, fieldValue, typeUtils.isObject(fieldValue));
             });
         } else if(typeUtils.isString(data)) {
@@ -1533,7 +1534,7 @@ var Form = Widget.inherit({
     registerKeyHandler: function(key, handler) {
         this.callBase(key, handler);
 
-        $.each(this._editorInstancesByField, function(dataField, editor) {
+        each(this._editorInstancesByField, function(dataField, editor) {
             editor.registerKeyHandler(key, handler);
         });
     },
@@ -1634,7 +1635,7 @@ var Form = Widget.inherit({
                 break;
             default:
                 if(typeUtils.isObject(option)) {
-                    $.each(option, function(optionName, optionValue) {
+                    each(option, function(optionName, optionValue) {
                         that._changeItemOption(item, optionName, optionValue);
                     });
                 }

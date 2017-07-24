@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     DynamicProvider = require("./provider.dynamic"),
     Color = require("../../color"),
     ajax = require("../../core/utils/ajax"),
@@ -365,7 +365,7 @@ var BingProvider = DynamicProvider.inherit({
     },
 
     _renderRoute: function(options) {
-        return Promise.all($.map(options.locations, function(point) {
+        return Promise.all(iteratorUtils.map(options.locations, function(point) {
             return this._resolveLocation(point);
         }.bind(this))).then(function(locations) {
             return new Promise(function(resolve) {
@@ -392,7 +392,7 @@ var BingProvider = DynamicProvider.inherit({
                     routeDraggable: false
                 });
 
-                $.each(locations, function(_, location) {
+                iteratorUtils.each(locations, function(_, location) {
                     var waypoint = new Microsoft.Maps.Directions.Waypoint({ location: location });
                     direction.addWaypoint(waypoint);
                 });

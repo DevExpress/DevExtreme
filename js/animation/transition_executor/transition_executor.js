@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    iteratorUtils = require("../../core/utils/iterator"),
     fx = require("../fx"),
     animationPresetsModule = require("../presets/presets"),
     when = require("../../integration/jquery/deferred").when;
@@ -170,7 +171,7 @@ var TransitionExecutor = Class.inherit({
             that.reset();
             result = $.Deferred().resolve().promise();
         } else {
-            var animationDeferreds = $.map(this._animations, function(animation) {
+            var animationDeferreds = iteratorUtils.map(this._animations, function(animation) {
                 var result = $.Deferred();
 
                 animation.deferred.always(function() {

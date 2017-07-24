@@ -6,4 +6,5 @@ var jquery = require("jquery");
 if(jquery) {
     require("./jquery/renderer");
     require("./jquery/events");
+    require("./jquery/easing");
 }

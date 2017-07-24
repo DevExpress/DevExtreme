@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("./type"),
+var typeUtils = require("./type"),
+    each = require("./iterator").each,
     camelize = require("./inflector").camelize,
 
     isObject = typeUtils.isObject,
@@ -91,7 +91,7 @@ var convertMillisecondsToDateUnits = function(value) {
 var dateToMilliseconds = function(tickInterval) {
     var milliseconds = 0;
     if(isObject(tickInterval)) {
-        $.each(tickInterval, function(key, value) {
+        each(tickInterval, function(key, value) {
             milliseconds += convertDateUnitToMilliseconds(key.substr(0, key.length - 1), value);
         });
     }
@@ -115,7 +115,7 @@ var getDateUnitInterval = function(tickInterval) {
     }
 
     if(isObject(tickInterval)) {
-        $.each(tickInterval, function(key, value) {
+        each(tickInterval, function(key, value) {
             for(i = 0; i < dateUnitIntervals.length; i++) {
                 if(value && (key === dateUnitIntervals[i] + 's' || key === dateUnitIntervals[i]) && maxInterval < i) {
                     maxInterval = i;
@@ -218,7 +218,7 @@ var getDatesDifferences = function(date1, date2) {
         millisecond: date1.getMilliseconds() !== date2.getMilliseconds()
     };
 
-    $.each(differences, function(key, value) {
+    each(differences, function(key, value) {
         if(value) {
             counter++;
         }

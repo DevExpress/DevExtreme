@@ -7,8 +7,9 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     isDefined = typeUtils.isDefined,
-    each = $.each,
+    each = iteratorUtils.each,
     when = require("../../integration/jquery/deferred").when,
     Class = require("../../core/class"),
     EventsMixin = require("../../core/events_mixin"),
@@ -79,7 +80,7 @@ function createCaption(field) {
 function resetFieldState(field, properties) {
     var initialProperties = field._initProperties || {};
 
-    $.each(properties, function(_, prop) {
+    iteratorUtils.each(properties, function(_, prop) {
         if(initialProperties.hasOwnProperty(prop)) {
             field[prop] = initialProperties[prop];
         }
@@ -363,7 +364,7 @@ module.exports = Class.inherit((function() {
     }
 
     function getFieldsByGroup(fields, groupingField) {
-        return $.map(fields, function(field) {
+        return iteratorUtils.map(fields, function(field) {
             if(field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false) {
                 return extend(field, {
                     areaIndex: groupingField.areaIndex,
@@ -474,7 +475,7 @@ module.exports = Class.inherit((function() {
             foreachTree(items, function(items) {
                 var item = items[0],
                     itemPath = createPath(items).join("."),
-                    textPath = $.map(items, function(item) { return item.text; }).reverse().join(".");
+                    textPath = iteratorUtils.map(items, function(item) { return item.text; }).reverse().join(".");
 
                 if(pathValue === itemPath || (item.key && textPath === pathValue)) {
                     index = items[0].index;

@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var each = require("../../core/utils/iterator").each,
     Class = require("../../core/class"),
     EventsMixin = require("../../core/events_mixin"),
     ValidationEngine = require("../../ui/validation_engine"),
@@ -15,7 +15,7 @@ var koDxValidator = Class.inherit({
         that.isValid = ko.observable(true);
         that.validationError = ko.observable();
 
-        $.each(this.validationRules, function(_, rule) {
+        each(this.validationRules, function(_, rule) {
             rule.validator = that;
         });
     },
@@ -61,7 +61,7 @@ ko.extenders.dxValidator = function(target, option) {
 * @param1 model:object
 */
 ValidationEngine.registerModelForValidation = function(model) {
-    $.each(model, function(name, member) {
+    each(model, function(name, member) {
         if(ko.isObservable(member) && member.dxValidator) {
             ValidationEngine.registerValidatorInGroup(model, member.dxValidator);
         }
@@ -74,7 +74,7 @@ ValidationEngine.registerModelForValidation = function(model) {
 * @param1 model:object
 */
 ValidationEngine.unregisterModelForValidation = function(model) {
-    $.each(model, function(name, member) {
+    each(model, function(name, member) {
         if(ko.isObservable(member) && member.dxValidator) {
             ValidationEngine.removeRegisteredValidator(model, member.dxValidator);
         }

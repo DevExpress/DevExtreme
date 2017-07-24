@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     stringUtils = require("../../core/utils/string"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     clickEvent = require("../../events/click"),
@@ -155,7 +156,7 @@ var Pager = Widget.inherit({
             selectedPageIndex;
 
         if(that._pages) {
-            $.each(that._pages, function(key, page) {
+            each(that._pages, function(key, page) {
                 if(pageIndex === page.value()) {
                     isPageIndexValid = true;
                 }

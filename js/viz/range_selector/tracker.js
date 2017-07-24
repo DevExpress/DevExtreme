@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
+var eventsEngine = require("../../events/core/events_engine"),
     pointerEvents = require("../../events/pointer"),
+    each = require("../../core/utils/iterator").each,
     msPointerEnabled = require("../../core/utils/support").pointer,
 
     MIN_MANUAL_SELECTING_WIDTH = 10;
@@ -177,7 +177,7 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
     };
     docEvents[pointerEvents.up] = cancel;
 
-    $.each(sliders, function(i, slider) {
+    each(sliders, function(i, slider) {
         var events = {};
         events[pointerEvents.down] = function(e) {
             if(!state.enabled || !isLeftButtonPressed(e) || isActive) return;
@@ -218,7 +218,7 @@ function Tracker(params) {
         initializeSliderEvents(params.controller, targets.sliders, state, getRootOffsetLeft)
     ];
     // TODO: 3 "move" and 3 "end" events - do we really need that much?
-    $.each(this._docEvents, function(_, events) {
+    each(this._docEvents, function(_, events) {
         eventsEngine.on(document, events);
     });
 
@@ -231,7 +231,7 @@ Tracker.prototype = {
     constructor: Tracker,
 
     dispose: function() {
-        $.each(this._docEvents, function(_, events) {
+        each(this._docEvents, function(_, events) {
             eventsEngine.off(document, events);
         });
     },

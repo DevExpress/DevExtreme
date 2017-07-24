@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     stringUtils = require("../../core/utils/string"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
@@ -598,7 +599,7 @@ module.exports = {
 
                     switch(changeType) {
                         case "update":
-                            $.each(change.rowIndices, function(index, rowIndex) {
+                            each(change.rowIndices, function(index, rowIndex) {
                                 var $newRowElement = that._getRowElements(newTableElement).eq(index),
                                     changeType = change.changeTypes[index],
                                     item = change.items && change.items[index];
@@ -632,7 +633,7 @@ module.exports = {
                                     }
                                 });
                             });
-                            $.each(executors, function() {
+                            each(executors, function() {
                                 this();
                             });
 
@@ -1206,7 +1207,7 @@ module.exports = {
                         columnID = column && column.isBand && column.index,
                         $rows = that._getRowElements().not("." + GROUP_ROW_CLASS) || [];
 
-                    $.each($rows, function(rowIndex, row) {
+                    each($rows, function(rowIndex, row) {
                         if(!$(row).hasClass(GROUP_ROW_CLASS)) {
                             for(i = 0; i < visibleColumns.length; i++) {
                                 if(typeUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {

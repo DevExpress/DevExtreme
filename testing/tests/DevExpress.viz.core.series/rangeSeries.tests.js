@@ -8,7 +8,7 @@ var $ = require("jquery"),
     Series = require("viz/series/base_series").Series,
     seriesType;
 
-/* global insertMockFactory, MockTranslator */
+/* global insertMockFactory, MockAxis */
 require("../../helpers/chartMocks.js");
 
 require("viz/chart");
@@ -60,16 +60,6 @@ var environment = {
         this.data = [{ arg: 1, val1: 10, val2: 10 }, { arg: 2, val1: 20, val2: 20 }, { arg: 3, val1: 30, val2: 30 }, { arg: 4, val1: 40 }];
         this.points = [[1, 10], [2, 20], [3, 30], [4, 40]];
         this.areaPoints = this.points.concat([[4, 0], [3, 0], [2, 0], [1, 0]]);
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-                getCanvasVisibleArea: { min: 0, max: 500 }
-            })
-        };
     },
 
     afterEach: function() {
@@ -391,31 +381,39 @@ var environmentWithSinonStubPoint = {
         assert.equal(series._points.length, 1);
     });
 
-    QUnit.module("Draw elements. Range area series", environment);
+    QUnit.module("Draw elements. Range area series", {
+        beforeEach: environment.beforeEach,
+        afterEach: environment.afterEach,
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        }
+    });
 
     seriesType = "rangearea";
 
     QUnit.test("Draw without data", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 0);
     });
 
     QUnit.test("Draw simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false },
             border: {
                 visible: true
             }
-
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -425,7 +423,7 @@ var environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 3);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -434,15 +432,14 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test("Update simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             border: {
                 visible: true,
                 width: 1
             },
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
@@ -451,7 +448,7 @@ var environmentWithSinonStubPoint = {
             pt.visibleTopMarker = true;
             pt.visibleBottomMarker = true;
         });
-        series.draw(this.translators, false);
+        series.draw(false);
         //act
         series.updateData([{ arg: 1, val1: 2, val2: 4 }, { arg: 2, val1: 1, val2: 2 }]);
         $.each(series._points, function(i, pt) {
@@ -462,7 +459,7 @@ var environmentWithSinonStubPoint = {
             pt.visibleBottomMarker = true;
         });
 
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 3);
 
@@ -504,15 +501,14 @@ var environmentWithSinonStubPoint = {
 
     QUnit.test("Draw simple data with animation", function(assert) {
         var renderer = this.renderer,
-            series = createSeries({
+            series = this.createSeries({
                 type: seriesType,
                 point: { visible: false },
                 border: {
                     visible: true,
                     width: 1
                 }
-
-            }, { renderer: renderer });
+            });
         series.updateData(this.data);
         $.each(series.getPoints(), function(i, pt) {
             pt.x = pt.argument;
@@ -523,7 +519,7 @@ var environmentWithSinonStubPoint = {
             sinon.spy(pt, "draw");
         });
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 3);
 
@@ -557,15 +553,14 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test("Draw data with null values. Remove segment", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false },
             border: {
                 visible: true,
                 width: 2
             }
-
-        }, { renderer: this.renderer });
+        });
 
         series.updateData([{ arg: 1, val1: 2, val2: 4 }, { arg: 2, val1: 1, val2: 2 }, { arg: 3, val1: null, val2: 2 }, { arg: 4, val1: 1, val2: 2 }, { arg: 5, val1: 1, val2: 2 }]);
         $.each(series._points, function(i, pt) {
@@ -575,7 +570,7 @@ var environmentWithSinonStubPoint = {
             pt.visibleTopMarker = true;
             pt.visibleBottomMarker = true;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
 
         var element1 = this.renderer.stub("path").getCall(0).returnValue,
             element2 = this.renderer.stub("path").getCall(1).returnValue,
@@ -593,7 +588,7 @@ var environmentWithSinonStubPoint = {
             pt.visibleTopMarker = true;
             pt.visibleBottomMarker = true;
         });
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.equal(this.renderer.stub("path").callCount, 6);
         assert.equal(this.renderer.stub("path").getCall(0).args[1], "line");
@@ -653,14 +648,21 @@ var environmentWithSinonStubPoint = {
                 }
             };
         },
-        afterEach: environmentWithSinonStubPoint.afterEach
+        afterEach: environmentWithSinonStubPoint.afterEach,
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        }
     });
 
     QUnit.test("First draw - Normal State", function(assert) {
-        var series = createSeries(this.options);
+        var series = this.createSeries(this.options);
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
 
         assert.deepEqual(series._elementsGroup._stored_settings, {
             "class": "dxc-elements",
@@ -684,10 +686,10 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test("Apply hover state", function(assert) {
-        var series = createSeries(this.options);
+        var series = this.createSeries(this.options);
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
 
         series.hover();
 
@@ -710,10 +712,10 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test("Apply normal state after hover", function(assert) {
-        var series = createSeries(this.options);
+        var series = this.createSeries(this.options);
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
 
         series.hover();
         series.clearHover();
@@ -737,10 +739,10 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test("Apply selection state", function(assert) {
-        var series = createSeries(this.options);
+        var series = this.createSeries(this.options);
         series.updateData(this.data);
 
-        series.draw(this.translators);
+        series.draw();
 
         series.select();
 
@@ -763,12 +765,12 @@ var environmentWithSinonStubPoint = {
     });
 
     QUnit.test("Select series before drawing", function(assert) {
-        var series = createSeries(this.options);
+        var series = this.createSeries(this.options);
         series.updateData(this.data);
 
         series.select();
 
-        series.draw(this.translators, undefined, undefined, noop);
+        series.draw(undefined, undefined, noop);
 
         assert.deepEqual(series._elementsGroup.smartAttr.lastCall.args[0], {
             "fill": "s color",

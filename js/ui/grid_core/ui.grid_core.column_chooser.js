@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     messageLocalization = require("../../localization/message"),
     themes = require("../themes"),
     Button = require("../button"),
@@ -30,7 +31,7 @@ var COLUMN_CHOOSER_CLASS = "column-chooser",
             isSelectMode = that.option("columnChooser.mode") === "select";
 
         if(chooserColumns.length) {
-            $.each(chooserColumns, function(index, column) {
+            each(chooserColumns, function(index, column) {
                 item = {
                     text: column.caption,
                     cssClass: column.cssClass,

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    each = require("../../core/utils/iterator").each,
     eventsEngine = require("../../events/core/events_engine"),
     translator = require("../../animation/translator"),
     fx = require("../../animation/fx"),
@@ -134,7 +135,7 @@ registerDecorator(
 
         _cacheItemsPositions: function() {
             var itemPositions = this._itemPositions = [];
-            $.each(this._list.itemElements(), function(index, item) {
+            each(this._list.itemElements(), function(index, item) {
                 var cachedPosition = null;
 
                 itemPositions.push(function() {
