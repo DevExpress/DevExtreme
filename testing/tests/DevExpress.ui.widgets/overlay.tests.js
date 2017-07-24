@@ -1499,7 +1499,7 @@ QUnit.test("click on overlay during the start animation should end the animation
         fx.off = false;
         overlay.show();
 
-        overlay.content().trigger("dxpointerdown");
+        $(overlay.content()).trigger("dxpointerdown");
         assert.ok(overlay.option("visible"), "overlay is stay visible");
     } finally {
         fx.off = true;
