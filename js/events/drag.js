@@ -134,6 +134,10 @@ var getItemSize = function(dropTargetConfig, $element) {
     };
 };
 
+var contains = function(container, element) {
+    return container.nodeType === 9 ? container.body.contains(element) : container.contains(element);
+};
+
 var DragEmitter = GestureEmitter.inherit({
 
     ctor: function(element) {
@@ -260,7 +264,7 @@ var DragEmitter = GestureEmitter.inherit({
         var active = false;
 
         iteratorUtils.each(this._dropTargets, function(_, activeTarget) {
-            active = active || activeTarget === target || activeTarget.contains(target);
+            active = active || activeTarget === target || contains(activeTarget, target);
             return !active;
         });
 
