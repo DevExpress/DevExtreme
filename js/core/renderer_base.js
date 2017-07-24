@@ -3,7 +3,6 @@
 var $ = require("jquery");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
-var contains = require("./utils/dom").contains;
 var matches = require("./polyfills/matches");
 
 var methods = [
@@ -394,7 +393,7 @@ initRender.prototype.find = function(selector) {
     } else {
         for(i = 0; i < this.length; i++) {
             selector = selector.nodeType ? selector : selector[0];
-            if(this[i] !== selector && contains(this[i], selector)) {
+            if(this[i] !== selector && this[i].contains(selector)) {
                 nodes.push(selector);
             }
         }
