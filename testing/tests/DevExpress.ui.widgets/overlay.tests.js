@@ -1110,8 +1110,8 @@ QUnit.test("'animation.hide.from.position' should be configured according to wid
     }
 });
 
-QUnit.test("pointer events should be disabled during animation", function(assert) {
-    assert.expect(4);
+QUnit.test("pointer events should be disabled during hide animation", function(assert) {
+    assert.expect(2);
 
     if(!$("body").css("pointer-events")) {
         assert.expect(0);
@@ -1121,23 +1121,22 @@ QUnit.test("pointer events should be disabled during animation", function(assert
     var animationConfig = {
         duration: 0,
         start: function() {
-            assert.equal(instance.content().css("pointer-events"), "none");
+            assert.equal(instance.content().css("pointer-events"), "none", "start of the hiding animation has correct pointer-events");
         },
         complete: function() {
-            assert.equal(instance.content().css("pointer-events"), originalPointerEvents);
+            assert.equal(instance.content().css("pointer-events"), originalPointerEvents, "complete of the hiding animation has correct pointer-events");
         }
     };
 
     var $element = $("#overlay").dxOverlay({
+            visible: true,
             animation: {
-                show: animationConfig,
                 hide: animationConfig
             }
         }),
         instance = $element.dxOverlay("instance"),
         originalPointerEvents = instance.content().css("pointer-events");
 
-    instance.show();
     instance.hide();
 });
 
@@ -1500,7 +1499,7 @@ QUnit.test("click on overlay during the start animation should end the animation
         fx.off = false;
         overlay.show();
 
-        $("body").trigger("dxpointerdown");
+        overlay.content().trigger("dxpointerdown");
         assert.ok(overlay.option("visible"), "overlay is stay visible");
     } finally {
         fx.off = true;

@@ -531,7 +531,6 @@ var Overlay = Widget.inherit({
     _documentDownHandler: function(e) {
         if(this._showAnimationProcessing) {
             this._stopAnimation();
-            return;
         }
 
         var closeOnOutsideClick = this.option("closeOnOutsideClick");
@@ -687,6 +686,7 @@ var Overlay = Widget.inherit({
             deferred = $.Deferred(),
             animation = that._getAnimationConfig() || {},
             hideAnimation = this._normalizeAnimation(animation.hide, "from"),
+            startHideAnimation = (hideAnimation && hideAnimation.start) || commonUtils.noop,
             completeHideAnimation = (hideAnimation && hideAnimation.complete) || commonUtils.noop,
             hidingArgs = { cancel: false };
 
@@ -701,14 +701,22 @@ var Overlay = Widget.inherit({
             this._toggleShading(false);
             this._toggleSubscriptions(false);
 
-            this._animate(hideAnimation, function() {
-                that._renderVisibility(false);
+            this._animate(hideAnimation,
+                function() {
+                    that._$content.css("pointer-events", "");
+                    that._renderVisibility(false);
 
-                completeHideAnimation.apply(this, arguments);
-                that._actions.onHidden();
+                    completeHideAnimation.apply(this, arguments);
+                    that._actions.onHidden();
 
-                deferred.resolve();
-            });
+                    deferred.resolve();
+                },
+
+                function() {
+                    that._$content.css("pointer-events", "none");
+                    startHideAnimation.apply(this, arguments);
+                }
+            );
         }
         return deferred.promise();
     },
@@ -721,19 +729,9 @@ var Overlay = Widget.inherit({
         if(animation) {
             startCallback = startCallback || animation.start || commonUtils.noop;
 
-            var $content = this._$content;
-
             fx.animate(this._$content, extend({}, animation, {
-                start: function() {
-                    $content.css("pointer-events", "none");
-
-                    startCallback.apply(this, arguments);
-                },
-                complete: function() {
-                    $content.css("pointer-events", "");
-
-                    completeCallback.apply(this, arguments);
-                }
+                start: startCallback,
+                complete: completeCallback
             }));
         } else {
             completeCallback();
