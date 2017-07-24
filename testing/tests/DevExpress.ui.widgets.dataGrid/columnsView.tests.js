@@ -164,7 +164,7 @@ QUnit.test("Set title attribute when cell text is trimmed", function(assert) {
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
-    $table = that.columnsView._createTable();
+    $table = $(that.columnsView._createTable());
     $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
 
     //act
@@ -196,7 +196,7 @@ QUnit.test("Not set title attribute when cell text is trimmed with cellHintEnabl
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
-    $table = that.columnsView._createTable();
+    $table = $(that.columnsView._createTable());
     $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td>Test</td><td>Test Test Test Test Test</td></tr>'))));
 
     //act
@@ -228,7 +228,7 @@ QUnit.test("Not set title attribute when cell text is trimmed and cellTemplate d
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100, cellTemplate: function() { } });
 
-    $table = that.columnsView._createTable();
+    $table = $(that.columnsView._createTable());
     $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-data-row"><td>Test Test Test Test Test</td><td>Test Test Test Test Test</td></tr>'))));
 
     //act
@@ -261,7 +261,7 @@ QUnit.test("Not set title attribute when group cell text is trimmed and groupCel
     that.columns.push({ caption: 'Column 2', width: 50, groupIndex: 1, groupCellTemplate: function() { } });
     that.columns.push({ caption: 'Column 3', width: 50 });
 
-    $table = that.columnsView._createTable();
+    $table = $(that.columnsView._createTable());
     $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns),
         $('<tr class = "dx-row dx-group-row"><td class="dx-datagrid-group-space"></td><td colspan="2">Test Test Test Test Test</td></tr>'),
         $('<tr class = "dx-row dx-group-row"><td class="dx-datagrid-group-space"></td><td class="dx-datagrid-group-space"></td><td>Test Test Test Test Test</td></tr>')
@@ -300,7 +300,7 @@ QUnit.test("Not set title attribute when cell text is trimmed and headerCellTemp
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100, headerCellTemplate: function() { } });
 
-    $table = that.columnsView._createTable();
+    $table = $(that.columnsView._createTable());
     $container.html($("<div class = 'dx-datagrid-headers dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-header-row"><td>Test Test Test Test Test</td><td>Test Test Test Test Test</td></tr>'))));
 
     //act
@@ -332,7 +332,7 @@ QUnit.test("Not set title attribute when cell text is trimmed and user title def
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
-    $table = that.columnsView._createTable();
+    $table = $(that.columnsView._createTable());
     $container.html($("<div class = 'dx-datagrid-rowsview dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row dx-data-row"><td><div title="User Title">Test Test Test Test Test</div></td><td><div>Test Test Test Test Test</div></td></tr>'))));
 
     //act
@@ -366,7 +366,7 @@ QUnit.test("Set title attribute when cell text is trimmed in dx-datagrid-text-co
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
-    $table = that.columnsView._createTable();
+    $table = $(that.columnsView._createTable());
     $container.html($("<div class = 'dx-datagrid-headers dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test</div></td><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
 
     //act
@@ -398,7 +398,7 @@ QUnit.test("Not set title attribute when cell text is trimmed in dx-datagrid-tex
     that.columns.push({ caption: 'Column 1', width: 100 });
     that.columns.push({ caption: 'Column 2', width: 100 });
 
-    $table = that.columnsView._createTable();
+    $table = $(that.columnsView._createTable());
     $container.html($("<div class = 'dx-datagrid-headers dx-datagrid-nowrap' />").append($table.append(that.columnsView._createColGroup(that.columns), $('<tr class = "dx-row"><td><div class="dx-datagrid-text-content">Test</div></td><td><div class="dx-datagrid-text-content">Test Test Test Test Test</div></td></tr>'))));
 
     //act

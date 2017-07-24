@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -451,14 +452,14 @@ var ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
 var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _detachHoverEvents: function() {
-        this._fixedTableElement && this._fixedTableElement.off("mouseover mouseout", ".dx-data-row");
-        this._tableElement && this._tableElement.off("mouseover mouseout", ".dx-data-row");
+        this._fixedTableElement && eventsEngine.off(this._fixedTableElement, "mouseover mouseout", ".dx-data-row");
+        this._tableElement && eventsEngine.off(this._tableElement, "mouseover mouseout", ".dx-data-row");
     },
 
     _attachHoverEvents: function() {
         var that = this,
             attachHoverEvent = function($table) {
-                $table.on("mouseover mouseout", ".dx-data-row", that.createAction(function(args) {
+                eventsEngine.on($table, "mouseover mouseout", ".dx-data-row", that.createAction(function(args) {
                     var event = args.jQueryEvent,
                         rowIndex = that.getRowIndex($(event.target).closest(".dx-row")),
                         isHover = event.type === "mouseover";
@@ -489,26 +490,27 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
             scrollable = that.getScrollable();
             if(!$content.length && scrollable) {
-                $content = $("<div/>")
-                    .addClass(contentClass)
-                    .on("scroll", function(e) {
-                        scrollTop = $(e.target).scrollTop();
-                        if(scrollTop) {
-                            $(e.target).scrollTop(0);
-                            scrollable.scrollTo({ y: that._scrollTop + scrollTop });
-                        }
-                    })
-                    .on(wheelEvent.name, function(e) {
-                        if(scrollable) {
-                            scrollTop = scrollable.scrollTop();
-                            scrollable.scrollTo({ y: scrollTop - e.delta });
+                $content = $("<div/>").addClass(contentClass);
 
-                            if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
-                                return false;
-                            }
+                eventsEngine.on($content, "scroll", function(e) {
+                    scrollTop = $(e.target).scrollTop();
+                    if(scrollTop) {
+                        $(e.target).scrollTop(0);
+                        scrollable.scrollTo({ y: that._scrollTop + scrollTop });
+                    }
+                });
+                eventsEngine.on($content, wheelEvent.name, function(e) {
+                    if(scrollable) {
+                        scrollTop = scrollable.scrollTop();
+                        scrollable.scrollTo({ y: scrollTop - e.delta });
+
+                        if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
+                            return false;
                         }
-                    })
-                    .appendTo(element);
+                    }
+                });
+
+                $content.appendTo(element);
             }
 
             return $content;

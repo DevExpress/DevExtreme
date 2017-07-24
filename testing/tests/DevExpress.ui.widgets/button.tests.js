@@ -290,8 +290,9 @@ QUnit.test("inkRipple should be removed when widget is removed", function(assert
     $("#inkButton").dxButton({
         useInkRipple: true,
         onClick: function(e) {
-            e.component.element().triggerHandler({ type: 'dxremove' });
-            e.component.element().trigger("dxinactive");
+            var $element = $(e.component.element());
+            $element.triggerHandler({ type: 'dxremove' });
+            $element.trigger("dxinactive");
             assert.ok(true, "no exceptions");
         }
     });

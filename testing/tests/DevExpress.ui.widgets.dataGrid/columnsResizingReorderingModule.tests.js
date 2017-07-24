@@ -1117,7 +1117,7 @@ function getJQueryEvent(options) {
         resizeController2._columnsSeparatorView.render($("#container2"));
 
         //act
-        resizeController1._columnsSeparatorView.element().trigger("dxpointerup");
+        $(resizeController1._columnsSeparatorView.element()).trigger("dxpointerup");
 
         //assert
         assert.ok(isEndResizingCalled);
@@ -4149,9 +4149,9 @@ function getJQueryEvent(options) {
         this.renderViews(testElement);
 
         $draggingHeader = controller._columnHeadersView.element().find("td").first();
-        $draggingHeader.trigger(dragEvents.start);
-        $draggingHeader.trigger(dragEvents.move);
-        $draggingHeader.trigger(dragEvents.end);
+        $($draggingHeader).trigger(dragEvents.start);
+        $($draggingHeader).trigger(dragEvents.move);
+        $($draggingHeader).trigger(dragEvents.end);
 
         assert.equal(controller._draggingHeaderView.callDragCounter, 1, 'drag start');
         assert.equal(controller._draggingHeaderView.callMoveCounter, 1, 'drag');
@@ -4255,14 +4255,14 @@ function getJQueryEvent(options) {
         that.renderViews($("#container2").height(500));
 
         //act
-        controller1._columnHeadersView.element().find("td").first().trigger(dragEvents.move + '.dxDataGridResizingReordering');
+        $(controller1._columnHeadersView.element().find("td").first()).trigger(dragEvents.move + '.dxDataGridResizingReordering');
 
         //assert
         assert.equal(moveHeaderDataSelfArgs.length, 1);
         assert.ok(moveHeaderDataSelfArgs[0] === controller1._draggingHeaderView);
 
         //act
-        controller2._columnHeadersView.element().find("td").first().trigger(dragEvents.move + '.dxDataGridResizingReordering');
+        $(controller2._columnHeadersView.element().find("td").first()).trigger(dragEvents.move + '.dxDataGridResizingReordering');
 
         //assert
         assert.equal(moveHeaderDataSelfArgs.length, 2);

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     Class = require("../core/class"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
@@ -201,9 +202,8 @@ var FallbackLayoutStrategy = Class.inherit({
             verticalAlign: "top"
         });
 
-        this._$element
-            .off(UPDATE_EVENT)
-            .on(UPDATE_EVENT, this.update.bind(this));
+        eventsEngine.off(this._$element, UPDATE_EVENT);
+        eventsEngine.on(this._$element, UPDATE_EVENT, this.update.bind(this));
     },
 
     renderAlign: function() {

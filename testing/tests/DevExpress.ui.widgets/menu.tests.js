@@ -75,7 +75,7 @@ QUnit.module("Render content delimiters", {
 QUnit.test("Don't render content delimiter", function(assert) {
     var options = { _hideDelimiter: true, showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
         menu = createMenuInWindow(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         delimiter;
 
@@ -91,7 +91,7 @@ QUnit.test("Don't render content delimiter", function(assert) {
 QUnit.test("Render horizontal content delimiter", function(assert) {
     var options = { showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
         menu = createMenuInWindow(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         delimiter;
 
@@ -105,14 +105,14 @@ QUnit.test("Render horizontal content delimiter", function(assert) {
     assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
     assert.equal(delimiter.height(), 2, "ok");
     assert.notEqual(delimiter.width(), 0, "ok");
-    assert.roughEqual(submenu._overlay.content().offset().left + 1, delimiter.offset().left, 1, "ok");
-    assert.roughEqual(submenu._overlay.content().offset().top - 1, delimiter.offset().top, 1, "ok");
+    assert.roughEqual($(submenu._overlay.content()).offset().left + 1, delimiter.offset().left, 1, "ok");
+    assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, "ok");
 });
 
 QUnit.test("Render vertical content delimiter", function(assert) {
     var options = { orientation: "vertical", showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
         menu = createMenuInWindow(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         delimiter;
 
@@ -126,14 +126,14 @@ QUnit.test("Render vertical content delimiter", function(assert) {
     assert.ok(delimiter.hasClass(DX_CONTEXT_MENU_DELIMETER_CLASS));
     assert.equal(delimiter.width(), 2, "ok");
     assert.notEqual(delimiter.height(), 0, "ok");
-    assert.roughEqual(submenu._overlay.content().offset().left - 1, delimiter.offset().left, 1, "ok");
-    assert.roughEqual(submenu._overlay.content().offset().top + 1, delimiter.offset().top, 1, "ok");
+    assert.roughEqual($(submenu._overlay.content()).offset().left - 1, delimiter.offset().left, 1, "ok");
+    assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, "ok");
 });
 
 QUnit.test("Render horizontal rtl content delimiter", function(assert) {
     var options = { rtlEnabled: true, showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
         menu = createMenuInWindow(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         delimiter;
 
@@ -148,13 +148,13 @@ QUnit.test("Render horizontal rtl content delimiter", function(assert) {
     assert.equal(delimiter.height(), 2, "ok");
     assert.notEqual(delimiter.width(), 0, "ok");
     assert.roughEqual(rootMenuItem.offset().left + 1, delimiter.offset().left, 1, "ok");
-    assert.roughEqual(submenu._overlay.content().offset().top - 1, delimiter.offset().top, 1, "ok");
+    assert.roughEqual($(submenu._overlay.content()).offset().top - 1, delimiter.offset().top, 1, "ok");
 });
 
 QUnit.test("Render vertical rtl content delimiter", function(assert) {
     var options = { rtlEnabled: true, orientation: "vertical", showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
         menu = createMenuInWindow(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         delimiter;
 
@@ -169,7 +169,7 @@ QUnit.test("Render vertical rtl content delimiter", function(assert) {
     assert.equal(delimiter.width(), 2, "ok");
     assert.notEqual(delimiter.height(), 0, "ok");
     assert.roughEqual(rootMenuItem.offset().left - 1, delimiter.offset().left, 1, "ok");
-    assert.roughEqual(submenu._overlay.content().offset().top + 1, delimiter.offset().top, 1, "ok");
+    assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, "ok");
 });
 
 QUnit.module("Menu rendering", {
@@ -196,7 +196,7 @@ QUnit.test("Render items with custom model", function(assert) {
             itemsExpr: "child",
             showFirstSubmenuMode: "onClick"
         }),
-        $item1 = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        $item1 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         $item11,
         $item111;
@@ -204,13 +204,13 @@ QUnit.test("Render items with custom model", function(assert) {
     assert.equal($item1.text(), "item 1", "root item rendered correct");
     assert.ok($item1.find("." + DX_MENU_ITEM_POPOUT_CLASS).length, "popout was rendered");
 
-    $item1.trigger("dxclick");
+    $($item1).trigger("dxclick");
     submenu = getSubMenuInstance($item1)._overlay.content();
     $item11 = submenu.find("." + DX_MENU_ITEM_CLASS).eq(0);
     assert.equal($item11.text(), "item 11");
     assert.ok($item11.find("." + DX_MENU_ITEM_POPOUT_CLASS).length, "popout was rendered");
 
-    $item11.trigger("dxclick");
+    $($item11).trigger("dxclick");
     submenu = getSubMenuInstance($item1)._overlay.content();
     $item111 = submenu.find("." + DX_MENU_ITEM_CLASS).eq(1);
     assert.equal($item111.text(), "item 111");
@@ -219,13 +219,13 @@ QUnit.test("Render items with custom model", function(assert) {
 QUnit.test("Check default css class", function(assert) {
     var menu = createMenu({});
 
-    assert.ok(menu.element.hasClass(DX_MENU_CLASS));
+    assert.ok($(menu.element).hasClass(DX_MENU_CLASS));
 });
 
 QUnit.test("Do not render menu with empty items", function(assert) {
     var menu = createMenu({ items: [] }),
-        submenus = menu.element.find("." + DX_SUBMENU_CLASS),
-        root = menu.element.find("." + DX_MENU_HORIZONTAL);
+        submenus = $(menu.element).find("." + DX_SUBMENU_CLASS),
+        root = $(menu.element).find("." + DX_MENU_HORIZONTAL);
 
     assert.ok(menu);
     assert.equal(submenus.length, 0, "no levels");
@@ -234,8 +234,8 @@ QUnit.test("Do not render menu with empty items", function(assert) {
 
 QUnit.test("Do not render submenu with empty items", function(assert) {
     var menu = createMenu({ items: [{ text: "item1" }, { text: "item2", items: [] }] }),
-        submenus = menu.element.find("." + DX_SUBMENU_CLASS),
-        root = menu.element.find("." + DX_MENU_HORIZONTAL);
+        submenus = $(menu.element).find("." + DX_SUBMENU_CLASS),
+        root = $(menu.element).find("." + DX_MENU_HORIZONTAL);
 
     assert.ok(menu);
     assert.equal(submenus.length, 0, "no levels");
@@ -244,7 +244,7 @@ QUnit.test("Do not render submenu with empty items", function(assert) {
 
 QUnit.test("Don't create submenu on rendering", function(assert) {
     var menu = createMenu({ items: [{ text: "item1", items: [{}] }] }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
     assert.equal($rootMenuItem.children("." + DX_CONTEXT_MENU_CLASS).length, 0);
 });
@@ -257,13 +257,13 @@ QUnit.test("Render custom template for submenu items", function(assert) {
                 items: [{ template: "custom" }]
             }]
         }),
-        rootMenuItem = $menu.dxMenu("instance").element().find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $($menu.dxMenu("instance").element()).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu;
 
     assert.equal($menu.find("." + DX_MENU_ITEM_CLASS).length, 1);
     rootMenuItem.trigger("dxclick");
     submenu = getSubMenuInstance(rootMenuItem);
-    assert.equal(submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test");
+    assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test");
 });
 
 QUnit.test("Render custom template via script (T195165)", function(assert) {
@@ -275,13 +275,13 @@ QUnit.test("Render custom template via script (T195165)", function(assert) {
                     items: [{ selectable: false, disabled: false, template: $("#menuScriptTemplate") }]
                 }]
         }),
-        rootMenuItem = $menu.dxMenu("instance").element().find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $($menu.dxMenu("instance").element()).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu;
 
     assert.equal($menu.find("." + DX_MENU_ITEM_CLASS).length, 1);
     rootMenuItem.trigger("dxclick");
     submenu = getSubMenuInstance(rootMenuItem);
-    assert.equal($.trim(submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0).text()), "Menu Test");
+    assert.equal($.trim($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text()), "Menu Test");
 });
 
 QUnit.test("Render horizontal menu with default submenuDirection", function(assert) {
@@ -289,7 +289,7 @@ QUnit.test("Render horizontal menu with default submenuDirection", function(asse
             showFirstSubmenuMode: "onClick",
             items: [{ text: "itemA", items: [{ text: "itemA-A" }] }]
         }),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu;
 
     assert.ok(menu);
@@ -388,16 +388,16 @@ QUnit.test("Menu should not crash when items changed (T310030)", function(assert
                 e.component.option("items", changedItems);
             }
         }),
-        $rootItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
-    $rootItem.trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
+    $($rootItem).trigger("dxpointermove");
     this.clock.tick(0);
 
     var submenu = getSubMenuInstance($rootItem),
-        $submenuItem = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $submenuItem = $($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0));
 
-    $submenuItem.trigger("dxclick");
+    $($submenuItem).trigger("dxclick");
     assert.ok(true, "menu does not crash");
 });
 
@@ -406,7 +406,7 @@ QUnit.test("Create root childfree item selected", function(assert) {
             items: [{ text: "root", selected: true }],
             selectionMode: "single"
         }),
-        item1 = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        item1 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
     assert.ok(item1.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
 });
 
@@ -431,7 +431,7 @@ QUnit.test("Try to set selected state of several items via item.selected option 
         selectionMode: "single"
     });
 
-    $items = menu.element.find("." + DX_MENU_ITEM_SELECTED_CLASS);
+    $items = $(menu.element).find("." + DX_MENU_ITEM_SELECTED_CLASS);
     assert.equal($items.length, 1);
     assert.equal($items.find("." + DX_MENU_ITEM_TEXT_CLASS).text(), "item3");
 });
@@ -448,30 +448,30 @@ QUnit.test("Selection in different submenus", function(assert) {
             selectByClick: true,
             selectionMode: "single"
         }),
-        item1 = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
-        item2 = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(1),
-        item3 = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(2),
+        item1 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
+        item2 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(1),
+        item3 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(2),
         item11, item21, item31, submenu;
 
 
     assert.ok(menu, "menu is created");
-    assert.equal(menu.element.find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 0, "no selected items");
+    assert.equal($(menu.element).find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 0, "no selected items");
     item1.trigger("dxclick");
     submenu = getSubMenuInstance(item1);
-    item11 = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0);
+    item11 = $(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0);
     item11.trigger("dxclick");
     assert.ok(item11.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
 
     item2.trigger("dxclick");
     submenu = getSubMenuInstance(item2);
-    item21 = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0);
+    item21 = $(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0);
     item21.trigger("dxclick");
     assert.ok(!item11.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
     assert.ok(item21.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
 
     item3.trigger("dxclick");
     submenu = getSubMenuInstance(item3);
-    item31 = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0);
+    item31 = $(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0);
     item31.trigger("dxclick");
     assert.ok(!item11.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
     assert.ok(!item21.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
@@ -490,11 +490,11 @@ QUnit.test("Change selection in submenu (T310158)", function(assert) {
             selectByClick: true,
             selectionMode: "single"
         }),
-        $item1 = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $item1 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $item1.trigger("dxclick");
+    $($item1).trigger("dxclick");
     var submenu = getSubMenuInstance($item1),
-        $nestedItem = submenu._overlay.content().find("." + DX_MENU_ITEM_SELECTED_CLASS);
+        $nestedItem = $($(submenu._overlay.content()).find("." + DX_MENU_ITEM_SELECTED_CLASS));
 
     submenu.unselectItem($nestedItem.get(0));
 
@@ -524,13 +524,13 @@ QUnit.test("Change selection via API in single selection mode", function(assert)
     };
 
     menu.instance.option("selectedItem", items[0].items[0]);
-    $itemElements.eq(0).trigger("dxclick");
+    $($itemElements.eq(0)).trigger("dxclick");
     var $selectedItems = getSelectedSubmenuItems($itemElements.eq(0));
     assert.equal($selectedItems.length, 1, "only one item in first submenu is selected");
     assert.equal($selectedItems.eq(0).text(), "Item 11", "selected item is correct");
 
     menu.instance.option("selectedItem", items[1].items[0]);
-    $itemElements.eq(1).trigger("dxclick");
+    $($itemElements.eq(1)).trigger("dxclick");
     assert.equal(getSelectedSubmenuItems($itemElements.eq(0)).length, 0, "first submenu has no selected items after option changed");
     $selectedItems = getSelectedSubmenuItems($itemElements.eq(1));
     assert.equal($selectedItems.length, 1, "only one item in second submenu is selected");
@@ -547,32 +547,32 @@ QUnit.test("Change selection via API function .select()", function(assert) {
             selectByClick: true,
             selectionMode: "single"
         }),
-        $items = menu.element.find("." + DX_MENU_ITEM_CLASS),
+        $items = $(menu.element).find("." + DX_MENU_ITEM_CLASS),
         $item1 = $items.eq(0),
         $item2 = $items.eq(1),
         submenu, $item11;
 
     assert.ok(menu, "menu is created");
-    assert.equal(menu.element.find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 0, "no selected items");
+    assert.equal($(menu.element).find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 0, "no selected items");
     menu.instance.selectItem(items[0].items[0]);
     assert.equal(menu.instance.option("selectedItem").text, "item1-1");
-    $item1.trigger("dxclick");
+    $($item1).trigger("dxclick");
     submenu = getSubMenuInstance($item1);
-    assert.equal(submenu._overlay.content().find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1);
-    $item11 = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0);
+    assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1);
+    $item11 = $($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0));
 
     menu.instance.selectItem(items[1].items[0]);
     assert.equal(menu.instance.option("selectedItem").text, "item2-1");
     assert.ok(!$item11.hasClass(DX_MENU_ITEM_SELECTED_CLASS));
-    $item2.trigger("dxclick");
+    $($item2).trigger("dxclick");
     submenu = getSubMenuInstance($item2);
-    assert.equal(submenu._overlay.content().find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1);
+    assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1);
 
     menu.instance.selectItem($item11[0]);
     assert.equal(menu.instance.option("selectedItem").text, "item1-1");
-    $item1.trigger("dxclick");
+    $($item1).trigger("dxclick");
     submenu = getSubMenuInstance($item1);
-    assert.equal(submenu._overlay.content().find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1);
+    assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 1);
 });
 
 QUnit.test("onSelectionChanged fires only at childfree item", function(assert) {
@@ -585,14 +585,14 @@ QUnit.test("onSelectionChanged fires only at childfree item", function(assert) {
                 counter++;
             }
         }),
-        item1 = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0), submenu, item11;
+        item1 = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0), submenu, item11;
 
     assert.ok(menu, "menu is created");
-    assert.equal(menu.element.find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 0, "no selected items");
+    assert.equal($(menu.element).find("." + DX_MENU_ITEM_SELECTED_CLASS).length, 0, "no selected items");
     item1.trigger("dxclick");
     assert.equal(counter, 0);
     submenu = getSubMenuInstance(item1);
-    item11 = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0);
+    item11 = $(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
     item11.trigger("dxclick");
     this.clock.tick(CLICKTIMEOUT);
@@ -613,20 +613,20 @@ QUnit.test("It should be possible to select nested submenu by itemData", functio
         }),
         $rootItem = menu.instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS).eq(0),
         getSubmenuItem = function(submenu, index) {
-            return submenu.itemsContainer().find("." + DX_MENU_ITEM_CLASS).eq(index);
+            return $(submenu.itemsContainer()).find("." + DX_MENU_ITEM_CLASS).eq(index);
         };
 
     try {
         fx.off = false;
-        $rootItem.trigger("dxclick");
+        $($rootItem).trigger("dxclick");
 
         var submenu = getSubMenuInstance($rootItem),
             $item = getSubmenuItem(submenu, 0);
 
-        $item.trigger("dxclick");
+        $($item).trigger("dxclick");
 
         $item = getSubmenuItem(submenu, 1);
-        $item.trigger("dxclick");
+        $($item).trigger("dxclick");
 
         assert.ok($item.hasClass(DX_MENU_ITEM_SELECTED_CLASS), "nested item was selected");
     } finally {
@@ -649,16 +649,16 @@ QUnit.module("Menu tests", {
 QUnit.test("Show submenu onClick", function(assert) {
     var options = { showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
         menu = createMenu(options),
-        $itemB = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        $itemB = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu;
 
-    $itemB.trigger("dxclick");
+    $($itemB).trigger("dxclick");
 
     submenu = getSubMenuInstance($itemB);
     assert.ok($itemB.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), "expanded submenu should have expanded class");
     assert.ok(submenu.option("visible"), "submenu was shown");
 
-    $itemB.trigger("dxclick");
+    $($itemB).trigger("dxclick");
 
     this.clock.tick(51);
     assert.ok(!$itemB.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), "collapsed submenu should not have expanded class");
@@ -674,23 +674,23 @@ QUnit.test("Submenu should be shown on touch click", function(assert) {
         $rootItem = menu.instance.itemElements().eq(0),
         e = $.Event("dxpointerdown", { target: $rootItem.get(0) });
 
-    $itemsContainer.trigger(e);
+    $($itemsContainer).trigger(e);
     assert.notOk(e.isDefaultPrevented(), "item pointerdown should not be prevented");
 });
 
 QUnit.test("Hide submenu when click on another item", function(assert) {
     var options = { showFirstSubmenuMode: "onClick", items: [{ text: "item 1", items: [{ text: "item 11" }] }, { text: "item 2", items: [{ text: "item 21" }] }] },
         menu = createMenu(options),
-        $items = menu.element.find("." + DX_MENU_ITEM_CLASS),
+        $items = $(menu.element).find("." + DX_MENU_ITEM_CLASS),
         $item1 = $items.eq(0),
         $item2 = $items.eq(1),
         submenu;
 
-    $item2.trigger("dxclick");
+    $($item2).trigger("dxclick");
     submenu = getSubMenuInstance($item2);
     assert.ok(submenu.option("visible"), "item 21 was shown");
 
-    $item1.trigger("dxclick");
+    $($item1).trigger("dxclick");
     assert.ok(!submenu.option("visible"), "item 21 was hidden");
 
     submenu = getSubMenuInstance($item1);
@@ -708,7 +708,7 @@ QUnit.test("Don't hide submenu when cancel is true", function(assert) {
             }
         },
         menu = createMenu(options),
-        $items = menu.element.find("." + DX_MENU_ITEM_CLASS),
+        $items = $(menu.element).find("." + DX_MENU_ITEM_CLASS),
         $itemA = $items.eq(0),
         submenu = getSubMenuInstance($itemA);
 
@@ -727,7 +727,7 @@ QUnit.test("Don't hide submenu when cancel is true", function(assert) {
 QUnit.test("Do not show contextmenu on hover with pressed mouse button", function(assert) {
     var options = { showFirstSubmenuMode: "onHover", items: [{ text: "item1", items: [{ text: "item1-1" }] }] },
         menu = createMenu(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         e = $.Event("mouseenter");
     e.which = 1;
@@ -741,7 +741,7 @@ QUnit.test("Do not show contextmenu on hover with pressed mouse button", functio
 QUnit.test("Menu was not shown on some browsers with not synchronized mouse event arguments (T191149)", function(assert) {
     var options = { showFirstSubmenuMode: "onHover", items: [{ text: "item1", items: [{ text: "item1-1" }] }] },
         menu = createMenu(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         $itemContainer = menu.instance._itemContainer(),
         e = $.Event("dxhoverstart", { target: rootMenuItem.get(0) });
@@ -750,7 +750,7 @@ QUnit.test("Menu was not shown on some browsers with not synchronized mouse even
 
     if(isDeviceDesktop(assert)) {
         assert.ok(menu);
-        $itemContainer.trigger(e);
+        $($itemContainer).trigger(e);
         $(rootMenuItem).trigger("dxpointermove");
         this.clock.tick(MOUSETIMEOUT);
         submenu = getSubMenuInstance(rootMenuItem),
@@ -760,12 +760,12 @@ QUnit.test("Menu was not shown on some browsers with not synchronized mouse even
 
 QUnit.test("Show submenu onHover", function(assert) {
     var menu = createMenuForHoverStay({ showFirstSubmenuMode: "onHover", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] }),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         $itemContainer = menu.instance._itemContainer();
 
     if(isDeviceDesktop(assert)) {
-        $itemContainer.trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
+        $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
         $(rootMenuItem).trigger("dxpointermove");
         submenu = getSubMenuInstance(rootMenuItem);
         this.clock.tick(MOUSETIMEOUT / 2);
@@ -777,12 +777,12 @@ QUnit.test("Show submenu onHover", function(assert) {
 
 QUnit.test("Show submenu onHover with custom timeout set as an object", function(assert) {
     var menu = createMenuForHoverStay({ showFirstSubmenuMode: { name: "onHover", delay: { show: 300, hide: 700 } }, items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] }),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         $itemContainer = menu.instance._itemContainer();
 
     if(isDeviceDesktop(assert)) {
-        $itemContainer.trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
+        $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
         $(rootMenuItem).trigger("dxpointermove");
         submenu = getSubMenuInstance(rootMenuItem);
         this.clock.tick(150);
@@ -794,12 +794,12 @@ QUnit.test("Show submenu onHover with custom timeout set as an object", function
 
 QUnit.test("Show submenu onHover with custom timeout set as a number", function(assert) {
     var menu = createMenuForHoverStay({ showFirstSubmenuMode: { name: "onHover", delay: 500 }, items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] }),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         $itemContainer = menu.instance._itemContainer();
 
     if(isDeviceDesktop(assert)) {
-        $itemContainer.trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
+        $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
         $(rootMenuItem).trigger("dxpointermove");
         submenu = getSubMenuInstance(rootMenuItem);
         this.clock.tick(250);
@@ -824,7 +824,7 @@ QUnit.test("Show submenu and sub-submenu by default", function(assert) {
         }],
         options = { items: items },
         menu = createMenu(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         $menuItem,
         $submenu;
@@ -834,10 +834,10 @@ QUnit.test("Show submenu and sub-submenu by default", function(assert) {
     submenu = getSubMenuInstance(rootMenuItem);
     assert.ok(submenu._overlay.option("visible"));
 
-    $menuItem = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).first(),
+    $menuItem = $($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).first()),
     assert.equal($menuItem.text(), "itemA-A");
-    $menuItem.trigger("dxclick");
-    $submenu = submenu._overlay.content().find("." + DX_SUBMENU_CLASS).eq(1);
+    $($menuItem).trigger("dxclick");
+    $submenu = $($(submenu._overlay.content()).find("." + DX_SUBMENU_CLASS).eq(1));
     this.clock.tick(ANIMATION_TIMEOUT);
     assert.equal($submenu.css("visibility"), "visible");
 });
@@ -857,25 +857,25 @@ QUnit.test("Show submenu and sub-submenu on hover", function(assert) {
         }],
         options = { showFirstSubmenuMode: "onHover", items: items },
         menu = createMenu(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         $menuItem,
         $submenu,
         $itemContainer = menu.instance._itemContainer();
 
     if(isDeviceDesktop(assert)) {
-        $itemContainer.trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
+        $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
         $(rootMenuItem).trigger("dxpointermove");
         submenu = getSubMenuInstance(rootMenuItem);
         this.clock.tick(MOUSETIMEOUT);
         assert.ok(submenu._overlay.option("visible"));
 
-        $menuItem = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).first();
+        $menuItem = $($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).first());
         assert.equal($menuItem.text(), "itemA-A");
-        submenu._itemContainer().trigger($.Event("dxhoverstart", { target: $menuItem.get(0) }));
+        $(submenu._itemContainer()).trigger($.Event("dxhoverstart", { target: $menuItem.get(0) }));
         $($menuItem).trigger("dxpointermove");
         this.clock.tick(ANIMATION_TIMEOUT);
-        $submenu = submenu._overlay.content().find("." + DX_SUBMENU_CLASS).eq(1);
+        $submenu = $($(submenu._overlay.content()).find("." + DX_SUBMENU_CLASS).eq(1));
         assert.equal($submenu.css("visibility"), "visible");
     }
 });
@@ -891,12 +891,12 @@ QUnit.test("Do not show submenu on hover if item is disabled", function(assert) 
         }
         ],
         menu = createMenu({ showFirstSubmenuMode: "onHover", items: items }),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         $itemContainer = menu.instance._itemContainer(),
         submenu;
 
     if(isDeviceDesktop(assert)) {
-        $itemContainer.trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
+        $($itemContainer).trigger($.Event("dxhoverstart", { target: rootMenuItem.get(0) }));
         $(rootMenuItem).trigger("dxpointermove");
         submenu = rootMenuItem.children("." + DX_CONTEXT_MENU_CLASS);
         assert.ok(!submenu.length, "Submenu is not visible yet");
@@ -918,7 +918,7 @@ QUnit.test("Show submenu on hover and sub-submenu onClick", function(assert) {
         }],
         options = { showFirstSubmenuMode: "onHover", showSubmenuMode: "onClick", items: items },
         menu = createMenu(options),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu,
         $menuItem,
         $submenu,
@@ -927,16 +927,16 @@ QUnit.test("Show submenu on hover and sub-submenu onClick", function(assert) {
     if(isDeviceDesktop(assert)) {
         assert.ok(menu);
 
-        $itemContainer.trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
+        $($itemContainer).trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
         $($rootMenuItem).trigger("dxpointermove");
         submenu = getSubMenuInstance($rootMenuItem);
 
         this.clock.tick(MOUSETIMEOUT);
         assert.ok(submenu._overlay.option("visible"));
 
-        $menuItem = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).first();
-        $menuItem.trigger("dxclick");
-        $submenu = submenu._overlay.content().find("." + DX_SUBMENU_CLASS).eq(1);
+        $menuItem = $($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).first());
+        $($menuItem).trigger("dxclick");
+        $submenu = $($(submenu._overlay.content()).find("." + DX_SUBMENU_CLASS).eq(1));
         this.clock.tick(ANIMATION_TIMEOUT);
         assert.equal($submenu.css("visibility"), "visible");
     }
@@ -949,7 +949,7 @@ QUnit.test("onItemRendered should fire for submenus", function(assert) {
             showFirstSubmenuMode: "onClick",
             onItemRendered: function() { calls++; }
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
     assert.ok(menu);
     assert.equal(calls, 1, "onItemRendered called once");
@@ -968,10 +968,10 @@ QUnit.test("hover should not open menu when mouse button is pressed", function(a
             items: [{ text: "Item 1", items: [{ text: "item 11" }] }],
             showFirstSubmenuMode: "onHover"
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
-    $rootMenuItem.trigger($.Event("dxpointermove", { pointers: [ 1 ] }));
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
+    $($rootMenuItem).trigger($.Event("dxpointermove", { pointers: [ 1 ] }));
 
     this.clock.tick(300);
 
@@ -987,14 +987,14 @@ QUnit.test("hover on opened menu should not close it (T317062)", function(assert
             items: [{ text: "Item 1", items: [{ text: "item 11" }] }],
             showFirstSubmenuMode: "onHover"
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
-    $rootMenuItem.trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
+    $($rootMenuItem).trigger("dxpointermove");
     this.clock.tick(300);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
-    $rootMenuItem.trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
+    $($rootMenuItem).trigger("dxpointermove");
     this.clock.tick(300);
 
     var submenu = getSubMenuInstance($rootMenuItem);
@@ -1009,10 +1009,10 @@ QUnit.test("Menu should show when show delay is 0", function(assert) {
             items: [{ text: "Item 1", items: [{ text: "item 11" }] }],
             showFirstSubmenuMode: { name: "onHover", delay: 0 }
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
-    $rootMenuItem.trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
+    $($rootMenuItem).trigger("dxpointermove");
     this.clock.tick(0);
 
     var submenu = getSubMenuInstance($rootMenuItem);
@@ -1026,13 +1026,13 @@ QUnit.test("Menu should not be shown if hover was ended before show delay time e
             items: [{ text: "Item 1", items: [{ text: "Item 11" }] }],
             showFirstSubmenuMode: { name: "onHover", delay: 500 }
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
-    $rootMenuItem.trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.get(0) }));
+    $($rootMenuItem).trigger("dxpointermove");
 
     this.clock.tick(400);
-    menu.element.trigger($.Event("dxhoverend", { target: $rootMenuItem.get(0) }));
+    $(menu.element).trigger($.Event("dxhoverend", { target: $rootMenuItem.get(0) }));
     this.clock.tick(100);
 
     var submenu = getSubMenuInstance($rootMenuItem);
@@ -1046,18 +1046,18 @@ QUnit.test("Submenu should not be shown if hover was ended before show delay tim
             items: [{ text: "Item 1", items: [{ text: "Item 11", items: [{ text: "Item 111" }] }] }],
             showSubmenuMode: { name: "onHover", delay: 500 }
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $rootMenuItem.trigger("dxclick");
+    $($rootMenuItem).trigger("dxclick");
 
     var submenu = getSubMenuInstance($rootMenuItem),
         $itemsContainer = submenu.itemsContainer(),
         $rootItem = submenu.itemElements().eq(0);
 
-    $itemsContainer.trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
+    $($itemsContainer).trigger($.Event("dxhoverstart", { target: $rootItem.get(0) }));
 
     this.clock.tick(400);
-    $itemsContainer.trigger($.Event("dxhoverend", { target: $rootItem.get(0) }));
+    $($itemsContainer).trigger($.Event("dxhoverend", { target: $rootItem.get(0) }));
     this.clock.tick(100);
 
     assert.equal(submenu.itemElements().length, 1, "nested submenu was not rendered");
@@ -1074,18 +1074,18 @@ QUnit.test("Submenu shoyld not be hidden if other submenu was opened before hide
             ],
             showFirstSubmenuMode: { name: "onHover", delay: { show: 100, hide: 500 } }
         }),
-        $rootMenuItems = menu.element.find("." + DX_MENU_ITEM_CLASS);
+        $rootMenuItems = $(menu.element).find("." + DX_MENU_ITEM_CLASS);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItems.eq(0).get(0) }));
-    $rootMenuItems.eq(0).trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItems.eq(0).get(0) }));
+    $($rootMenuItems.eq(0)).trigger("dxpointermove");
     this.clock.tick(100);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItems.eq(1).get(0) }));
-    $rootMenuItems.eq(1).trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItems.eq(1).get(0) }));
+    $($rootMenuItems.eq(1)).trigger("dxpointermove");
     this.clock.tick(100);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItems.eq(2).get(0) }));
-    $rootMenuItems.eq(2).trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItems.eq(2).get(0) }));
+    $($rootMenuItems.eq(2)).trigger("dxpointermove");
     this.clock.tick(500);
 
     var submenu = getSubMenuInstance($rootMenuItems.eq(2));
@@ -1099,9 +1099,9 @@ QUnit.test("Submenu should not be closed after showFirstSubmenuMode option is ch
             items: [{ text: "Item 1", items: [{ text: "Item 11", items: [{ text: "Item 111" }] }] }],
             showFirstSubmenuMode: { name: "onHover", delay: { show: 500, hide: 400 } }
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $rootMenuItem.trigger("dxclick");
+    $($rootMenuItem).trigger("dxclick");
     var submenu = getSubMenuInstance($rootMenuItem);
     assert.ok(submenu.option("visible"), "submenu is visible");
 
@@ -1118,17 +1118,17 @@ QUnit.test("Menu should hide after mouseleave when pointer goes through siblings
             showFirstSubmenuMode: { name: "onHover", delay: 0 },
             hideSubmenuOnMouseLeave: true
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.eq(0).get(0) }));
-    $rootMenuItem.eq(0).trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.eq(0).get(0) }));
+    $($rootMenuItem.eq(0)).trigger("dxpointermove");
     this.clock.tick(0);
 
     var submenu = getSubMenuInstance($rootMenuItem);
     assert.ok(submenu.option("visible"), "submenu shown");
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.eq(1).get(0) }));
-    $rootMenuItem.eq(1).trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.eq(1).get(0) }));
+    $($rootMenuItem.eq(1)).trigger("dxpointermove");
     this.clock.tick(0);
 
     assert.notOk(submenu.option("visible"), "submenu hidden");
@@ -1142,22 +1142,22 @@ QUnit.test("Menu should hide after mouseleave when hideOnMouseLeave = true", fun
             showFirstSubmenuMode: { name: "onHover", delay: 0 },
             hideSubmenuOnMouseLeave: true
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.eq(0).get(0) }));
-    $rootMenuItem.eq(0).trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.eq(0).get(0) }));
+    $($rootMenuItem.eq(0)).trigger("dxpointermove");
     this.clock.tick(0);
 
     var submenu = getSubMenuInstance($rootMenuItem);
     assert.ok(submenu.option("visible"), "submenu shown");
 
-    var $item = submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS);
+    var $item = $($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS));
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $item.eq(0).get(0) }));
-    menu.element.trigger($.Event("dxhoverend", { target: $item.eq(0).get(0) }));
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $item.eq(0).get(0) }));
+    $(menu.element).trigger($.Event("dxhoverend", { target: $item.eq(0).get(0) }));
 
-    menu.element.trigger($.Event("dxhoverstart", { target: window }));
-    submenu._overlay.content().find(".dx-submenu").trigger("dxhoverend");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: window }));
+    $($(submenu._overlay.content()).find(".dx-submenu")).trigger("dxhoverend");
     this.clock.tick(0);
 
     assert.notOk(submenu.option("visible"), "submenu hidden");
@@ -1168,17 +1168,17 @@ QUnit.test("Menu should show after it's submenu has been selected", function(ass
             items: [{ text: "Item 1", items: [{ text: "item 11" }] }, { text: "Item 2" }],
             showFirstSubmenuMode: { name: "onClick", delay: 0 }
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    $rootMenuItem.trigger("dxclick");
+    $($rootMenuItem).trigger("dxclick");
 
     var submenu = getSubMenuInstance($rootMenuItem);
     assert.ok(submenu.option("visible"), "submenu shown");
 
-    submenu.itemsContainer().find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
+    $(submenu.itemsContainer()).find("." + DX_MENU_ITEM_CLASS).eq(0).trigger("dxclick");
     assert.ok(!submenu.option("visible"), "submenu hidden");
 
-    $rootMenuItem.trigger("dxclick");
+    $($rootMenuItem).trigger("dxclick");
     assert.ok(submenu.option("visible"), "submenu shown again");
 });
 
@@ -1189,10 +1189,10 @@ QUnit.test("Menu should not hide when root item clicked", function(assert) {
             items: [{ text: "Item 1", items: [{ text: "item 11" }] }],
             showFirstSubmenuMode: { name: "onHover", delay: 0 }
         }),
-        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+        $rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
-    menu.element.trigger($.Event("dxhoverstart", { target: $rootMenuItem.eq(0).get(0) }));
-    $rootMenuItem.eq(0).trigger("dxpointermove");
+    $(menu.element).trigger($.Event("dxhoverstart", { target: $rootMenuItem.eq(0).get(0) }));
+    $($rootMenuItem.eq(0)).trigger("dxpointermove");
     this.clock.tick(0);
 
     var submenu = getSubMenuInstance($rootMenuItem),
@@ -1202,7 +1202,7 @@ QUnit.test("Menu should not hide when root item clicked", function(assert) {
         hidingCount++;
     });
 
-    $rootMenuItem.trigger("dxclick");
+    $($rootMenuItem).trigger("dxclick");
 
     assert.ok(submenu.option("visible"), "submenu shown");
     assert.equal(hidingCount, 0, "submenu should not hides");
@@ -1217,10 +1217,10 @@ QUnit.test("Menu should stop show submenu timeout when another level submenu was
             showFirstSubmenuMode: { name: "onHover", delay: 50 }
         }),
         hoverMenuItem = function($item) {
-            menu.element.trigger($.Event("dxhoverstart", { target: $item.get(0) }));
-            $item.trigger("dxpointermove");
+            $(menu.element).trigger($.Event("dxhoverstart", { target: $item.get(0) }));
+            $($item).trigger("dxpointermove");
         },
-        $rootMenuItems = menu.element.find("." + DX_MENU_ITEM_CLASS);
+        $rootMenuItems = $(menu.element).find("." + DX_MENU_ITEM_CLASS);
 
     hoverMenuItem($rootMenuItems.eq(0));
     this.clock.tick(50);
@@ -1231,7 +1231,7 @@ QUnit.test("Menu should stop show submenu timeout when another level submenu was
     hoverMenuItem($rootMenuItems.eq(1));
     this.clock.tick(25);
 
-    submenu.itemsContainer().trigger($.Event("dxhoverstart", { target: $submenuItem.get(0) }));
+    $(submenu.itemsContainer()).trigger($.Event("dxhoverstart", { target: $submenuItem.get(0) }));
     this.clock.tick(25);
 
     assert.ok(submenu.isOverlayVisible(), "submenu is still visible");
@@ -1422,8 +1422,7 @@ QUnit.test("Correct work of navigation after click", function(assert) {
 
         //act
 
-        instance
-            ._itemContainer()
+        $(instance._itemContainer())
             .find("." + DX_MENU_ITEM_CLASS)
             .eq(1)
             .trigger("mouseenter")
@@ -1553,8 +1552,7 @@ QUnit.test("right key in submenu can move focus to next item of main menu (horiz
 
     visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
 
-    visibleSubmenu
-        ._itemContainer()
+    $(visibleSubmenu._itemContainer())
         .trigger(rightKeyKeydown)
         .trigger(rightKeyKeydown)
         .trigger(rightKeyKeydown);
@@ -1606,8 +1604,7 @@ QUnit.test("RTL: left key in submenu can move focus to next item of main menu (h
 
     visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
 
-    visibleSubmenu
-        ._itemContainer()
+    $(visibleSubmenu._itemContainer())
         .trigger(leftKeyKeydown)
         .trigger(leftKeyKeydown)
         .trigger(leftKeyKeydown);
@@ -1664,7 +1661,7 @@ QUnit.test("Submenu should close in vertical direction after press left button (
 
     keyboardMock(this.menu.element).keyDown("right");
 
-    var $item1 = this.menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
+    var $item1 = $(this.menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu = getSubMenuInstance($item1);
 
     assert.ok(submenu.option("visible"), "submenu is visible");
@@ -1688,7 +1685,7 @@ QUnit.testInActiveWindow("Root item should not get focus on pointerdown when it 
         this.menu.instance.focus();
         assert.ok($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), "first item was focused");
 
-        $items.eq(1).trigger("dxpointerdown");
+        $($items.eq(1)).trigger("dxpointerdown");
         clock.tick(0);
 
         assert.notOk($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), "item was not focused");
@@ -1725,15 +1722,15 @@ QUnit.test("Create items with template", function(assert) {
             itemTemplate: $template
         },
         menu = createMenu(options),
-        $item = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(1),
+        $item = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(1),
         submenu;
 
-    $item.trigger("dxclick");
+    $($item).trigger("dxclick");
     submenu = getSubMenuInstance($item);
 
     assert.equal($($item).text(), "test", "template rendered");
-    assert.equal(submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test", "template rendered");
-    assert.equal(submenu._overlay.content().find("." + DX_MENU_ITEM_CLASS).eq(1).text(), "test", "template rendered");
+    assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test", "template rendered");
+    assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(1).text(), "test", "template rendered");
 });
 
 
@@ -1970,13 +1967,13 @@ QUnit.module("adaptivity: transfer options", {
 transferActionTest("itemClick", [
     "component", "element", "itemData", "itemElement", "itemIndex", "jQueryEvent"
 ], function(treeview) {
-    treeview.itemElements().eq(1).trigger("dxclick");
+    $(treeview.itemElements()).eq(1).trigger("dxclick");
 });
 
 transferActionTest("itemContextMenu", [
     "component", "element", "itemData", "itemElement", "itemIndex", "jQueryEvent"
 ], function(treeview) {
-    treeview.itemElements().eq(1).trigger("dxcontextmenu");
+    $(treeview.itemElements()).eq(1).trigger("dxcontextmenu");
 });
 
 transferActionTest("selectionChanged", [
@@ -2011,7 +2008,7 @@ QUnit.test("onSubmenuShown action should be transferred to the treeview", functi
 
     var $item = this.$element.find("." + DX_TREEVIEW_ITEM_CLASS).eq(1);
 
-    $item.trigger("dxclick");
+    $($item).trigger("dxclick");
 
     assert.equal(onSubmenuShown, 1, "onSubmenuShown fired");
 });
@@ -2029,8 +2026,8 @@ QUnit.test("onSubmenuHidden action should be transferred to the treeview", funct
 
     var $item = this.$element.find("." + DX_TREEVIEW_ITEM_CLASS).eq(1);
 
-    $item.trigger("dxclick");
-    $item.trigger("dxclick");
+    $($item).trigger("dxclick");
+    $($item).trigger("dxclick");
 
     assert.equal(onSubmenuHidden, 1, "onSubmenuHidden fired");
 });
@@ -2147,7 +2144,7 @@ QUnit.test("Adaptive menu should be shown when hamburger button clicked", functi
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
         $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
 
     assert.ok($button.is(":visible"), "hamburger button was not hidden");
     assert.ok($treeview.is(":visible"), "treeview was shown");
@@ -2165,8 +2162,8 @@ QUnit.test("Adaptive menu should disappear after the second click on the hamburg
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
         $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
-    $button.trigger("dxclick");
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
+    $($button).trigger("dxclick");
 
     assert.ok($button.is(":visible"), "hamburger button is visible");
     assert.ok($treeview.is(":hidden"), "treeview is hidden");
@@ -2184,8 +2181,8 @@ QUnit.test("Click on list item should hide adaptive menu", function(assert) {
         $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $item = this.$element.find("." + DX_TREEVIEW_ITEM_CLASS).eq(0);
 
-    $button.trigger("dxclick");
-    $item.trigger("dxclick");
+    $($button).trigger("dxclick");
+    $($item).trigger("dxclick");
 
     assert.ok($treeview.is(":hidden"), "treeview is hidden");
     assert.notOk($button.hasClass(DX_STATE_ACTIVE_CLASS), "button has no active class");
@@ -2200,7 +2197,7 @@ QUnit.test("Outside click should close adaptive menu", function(assert) {
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0);
 
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     $(document).trigger("dxpointerdown");
 
     assert.ok($treeview.is(":hidden"), "treeview is hidden");
@@ -2216,8 +2213,8 @@ QUnit.test("Click on hamburger button should not call outside click handler", fu
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0);
 
-    $button.trigger("dxclick");
-    $button.trigger("dxpointerdown");
+    $($button).trigger("dxclick");
+    $($button).trigger("dxpointerdown");
 
     assert.ok($treeview.is(":visible"), "treeview is visible");
 });
@@ -2331,7 +2328,7 @@ QUnit.test("Visible submenus should be hidden when adaptive mode toggling on", f
     var $item = this.$element.find("." + DX_MENU_ITEM_CLASS).eq(1),
         submenu;
 
-    $item.trigger("dxclick");
+    $($item).trigger("dxclick");
 
     submenu = getSubMenuInstance($item);
     assert.ok(submenu.option("visible"), "submenu is visible");
@@ -2350,7 +2347,7 @@ QUnit.test("TreeView should disappear when menu transform to common view", funct
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0);
 
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     $("#qunit-fixture").width(500);
     resizeCallbacks.fire();
 
@@ -2368,18 +2365,18 @@ QUnit.test("Overlay should change dimensions after any node expanded or collapse
         $item2 = $treeview.find(".dx-treeview-item").eq(1),
         overlay = this.$element.find(".dx-overlay").dxOverlay("instance"),
         overlayPositioned = sinon.stub(),
-        $overlayContent = overlay.content();
+        $overlayContent = $(overlay.content());
 
     overlay.on("positioned", overlayPositioned);
 
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     var height = $overlayContent.outerHeight();
 
-    $item2.trigger("dxclick");
+    $($item2).trigger("dxclick");
     assert.ok($overlayContent.outerHeight() > height, "overlay should be enlarged");
     assert.equal(overlayPositioned.callCount, 2, "overlay's position should be recalculated");
 
-    $item2.trigger("dxclick");
+    $($item2).trigger("dxclick");
     assert.equal($overlayContent.outerHeight(), height, "overlay should be shrinked");
     assert.equal(overlayPositioned.callCount, 3, "overlay's position should be recalculated");
 });
@@ -2395,7 +2392,7 @@ QUnit.test("Adaptive width limit should contain only root items", function(asser
     $("#qunit-fixture").width(50);
     resizeCallbacks.fire();
 
-    $item2.trigger("dxclick");
+    $($item2).trigger("dxclick");
 
     $("#qunit-fixture").width(MENU_ITEM_WIDTH * this.items.length + 1);
     resizeCallbacks.fire();
@@ -2417,24 +2414,24 @@ function getSubMenuInstance($rootItem) {
 }
 
 function createMenuInWindow(options) {
-    var $menu = $("#simpleMenu").dxMenu(options).css({
+    var $menu = $($("#simpleMenu").dxMenu(options).css({
             position: "absolute",
             top: 10100,
             left: 10100,
             background: "blue"
-        }),
+        })),
         menuInstance = $menu.dxMenu("instance");
 
     return { instance: menuInstance, element: $menu };
 }
 
 function createMenuForHoverStay(options) {
-    var $menu = $("#simpleMenu").dxMenu(options).css({
+    var $menu = $($("#simpleMenu").dxMenu(options).css({
             position: "absolute",
             top: 10000,
             left: 10000,
             background: "blue"
-        }),
+        })),
         menuInstance = $menu.dxMenu("instance");
 
     return { instance: menuInstance, element: $menu };

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
@@ -1436,11 +1437,14 @@ var PivotGrid = Widget.inherit({
 
     _createTableElement: function() {
         var that = this;
-        return $('<table>')
+        var $table = $('<table>')
             .css({ width: "100%" })
             .toggleClass(BORDERS_CLASS, !!that.option("showBorders"))
-            .toggleClass("dx-word-wrap", !!that.option("wordWrapEnabled"))
-            .on(eventUtils.addNamespace(clickEvent.name, "dxPivotGrid"), 'td', that._handleCellClick.bind(that));
+            .toggleClass("dx-word-wrap", !!that.option("wordWrapEnabled"));
+
+        eventsEngine.on($table, eventUtils.addNamespace(clickEvent.name, "dxPivotGrid"), 'td', that._handleCellClick.bind(that));
+
+        return $table;
     },
 
     _renderDataArea: function(dataAreaElement) {

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
@@ -886,7 +887,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     },
 
     toggle: function() {
-        this._switchEditor.element().trigger(clickEvent.name);
+        eventsEngine.trigger(this._switchEditor.element(), clickEvent.name);
     },
 
     setAria: function() {

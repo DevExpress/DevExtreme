@@ -244,7 +244,7 @@ QUnit.test("nested widget rendering", function(assert) {
         }
     });
 
-    nested.itemElements().eq(1).trigger("dxclick");
+    $(nested.itemElements()).eq(1).trigger("dxclick");
     assert.equal(nested.isItemSelected(1), true, "item selected by click");
 });
 
@@ -294,9 +294,9 @@ QUnit.test("'onItemTitleClick' option", function(assert) {
 
     var $titles = this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS);
 
-    $titles.eq(0).trigger("dxclick");
+    $($titles.eq(0)).trigger("dxclick");
     assert.equal(actionFiredValue, 1, "first item was clicked");
-    $titles.eq(1).trigger("dxclick");
+    $($titles.eq(1)).trigger("dxclick");
     assert.equal(actionFiredValue, 2, "second item was clicked");
 });
 
@@ -343,7 +343,7 @@ QUnit.test("'onItemHold' option", function(assert) {
         itemHoldTimeout: 0
     });
 
-    this.$element.find("." + ACCORDION_ITEM_CLASS).eq(0).trigger(holdEvent.name);
+    $(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(0)).trigger(holdEvent.name);
     assert.equal(actionFiredValue, 1, "action is fired");
 });
 
@@ -376,7 +376,7 @@ QUnit.test("'onSelectionChanged' option", function(assert) {
         }
     });
 
-    this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1).trigger("dxclick");
+    $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger("dxclick");
     assert.equal(actionFiredValue, 1, "action is fired");
 });
 
@@ -427,7 +427,7 @@ QUnit.test("collapsible option", function(assert) {
     var $titles = this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS);
 
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 1, "one item content is visible");
-    $titles.eq(0).trigger("dxclick");
+    $($titles.eq(0)).trigger("dxclick");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 0, "zero item content is visible");
 });
 
@@ -442,7 +442,7 @@ QUnit.test("Closed class should be set after selection changed", function(assert
 
     assert.equal($element.find("." + ACCORDION_ITEM_CLOSED_CLASS).length, $titles.length - 1, "one item content is visible");
 
-    $titles.eq(1).trigger('dxclick');
+    $($titles.eq(1)).trigger('dxclick');
 
     assert.equal($titles.eq(0).hasClass(ACCORDION_ITEM_CLOSED_CLASS), true, "one item content is visible");
     assert.equal($titles.eq(1).hasClass(ACCORDION_ITEM_CLOSED_CLASS), false, "one item content is visible");
@@ -457,11 +457,11 @@ QUnit.test("multiple option", function(assert) {
     var $titles = this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS);
 
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 1, "one item content is visible");
-    $titles.eq(1).trigger("dxclick");
+    $($titles.eq(1)).trigger("dxclick");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 2, "two item content is visible");
-    $titles.eq(2).trigger("dxclick");
+    $($titles.eq(2)).trigger("dxclick");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 3, "three item content is visible");
-    $titles.eq(2).trigger("dxclick");
+    $($titles.eq(2)).trigger("dxclick");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 2, "two item content is visible");
 });
 
@@ -479,7 +479,7 @@ QUnit.test("animationDuration option", function(assert) {
 
         assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), "content is hidden before animation is started");
 
-        $title.trigger("dxclick");
+        $($title).trigger("dxclick");
         assert.roughEqual($item.height(), $title.outerHeight(), 0.1, "height of the item is equal to the title height");
         this.clock.tick(1000);
 
@@ -497,7 +497,7 @@ QUnit.test("disabled state option", function(assert) {
 
     assert.ok(this.$element.hasClass("dx-state-disabled"), "widget has 'disabled' class");
 
-    this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1).trigger("dxclick");
+    $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger("dxclick");
     assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), "no reaction after clicking on disabled widget");
     assert.ok(!this.$element.find("." + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), "no reaction after clicking on disabled widget");
 });
@@ -655,7 +655,7 @@ QUnit.test("'onItemTitleClick' option changed", function(assert) {
         secondActionFired = true;
     });
 
-    this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).trigger("dxclick");
+    $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS)).trigger("dxclick");
     assert.ok(!firstActionFired, "first action was not fired");
     assert.ok(secondActionFired, "second action was fired");
 });
@@ -742,7 +742,7 @@ QUnit.test("collapsible option changed", function(assert) {
         }).dxAccordion("instance"),
         $titles = this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS);
 
-    $titles.eq(1).trigger("dxclick");
+    $($titles.eq(1)).trigger("dxclick");
     instance.option("collapsible", false);
 
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 1, "only one item is opened");
@@ -764,7 +764,7 @@ QUnit.test("animationDuration option changed", function(assert) {
 
         assert.ok(!$item.hasClass(ACCORDION_ITEM_OPENED_CLASS), "content is hidden before animation is started");
 
-        $title.trigger("dxclick");
+        $($title).trigger("dxclick");
         assert.roughEqual($item.height(), $title.outerHeight(), 0.1, "height of the item is equal to the title height");
         this.clock.tick(1000);
 
@@ -802,13 +802,13 @@ QUnit.test("disabled state option", function(assert) {
 
     instance.option("disabled", true);
     assert.ok(this.$element.hasClass("dx-state-disabled"), "widget has 'disabled' class");
-    this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1).trigger("dxclick");
+    $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger("dxclick");
     assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), "no reaction after clicking on disabled widget");
     assert.ok(!this.$element.find("." + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), "no reaction after clicking on disabled widget");
 
     instance.option("disabled", false);
     assert.ok(!this.$element.hasClass("dx-state-disabled"), "widget has no 'disabled' class");
-    this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1).trigger("dxclick");
+    $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger("dxclick");
     assert.ok(!this.$element.find("." + ACCORDION_ITEM_CLASS).eq(0).hasClass(ACCORDION_ITEM_OPENED_CLASS), "item is unselected after clicking on the other title on enabled widget");
     assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), "item is selected after clicking on enabled widget");
 });
@@ -856,7 +856,7 @@ QUnit.test("item selection", function(assert) {
         items: this.items
     }).dxAccordion("instance");
 
-    this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1).trigger("dxclick");
+    $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger("dxclick");
 
     assert.equal(instance.option("selectedIndex"), 1, "second item is selected");
     assert.notEqual(this.$element.find("." + ACCORDION_ITEM_BODY_CLASS).eq(1).css("display"), "none", "selected item's content is shown");
@@ -867,11 +867,11 @@ QUnit.test("only clicked item is opened", function(assert) {
         items: this.items
     });
 
-    this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1).trigger("dxclick");
+    $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(1)).trigger("dxclick");
     assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(1).hasClass(ACCORDION_ITEM_OPENED_CLASS), "second item is opened");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 1, "only one item is opened");
 
-    this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(2).trigger("dxclick");
+    $(this.$element.find("." + ACCORDION_ITEM_TITLE_CLASS).eq(2)).trigger("dxclick");
     this.clock.tick(300);
     assert.ok(this.$element.find("." + ACCORDION_ITEM_CLASS).eq(2).hasClass(ACCORDION_ITEM_OPENED_CLASS), "third item is opened");
     assert.equal(this.$element.find("." + ACCORDION_ITEM_OPENED_CLASS).length, 1, "only one item is opened");
@@ -977,11 +977,11 @@ QUnit.test("'onItemClick' firing conditions", function(assert) {
 
     var $items = this.$element.find("." + ACCORDION_ITEM_CLASS);
 
-    $items.eq(0).find("." + ACCORDION_ITEM_TITLE_CLASS).trigger("dxclick");
+    $($items.eq(0).find("." + ACCORDION_ITEM_TITLE_CLASS)).trigger("dxclick");
     assert.equal(titleActionFired, 1, "onItemTitleClick was fired on itemTitle click");
     assert.equal(itemActionFired, 1, "'onItemClick' was fired on itemTitle click");
 
-    $items.eq(0).find("." + ACCORDION_ITEM_BODY_CLASS).trigger("dxclick");
+    $($items.eq(0).find("." + ACCORDION_ITEM_BODY_CLASS)).trigger("dxclick");
     assert.equal(titleActionFired, 1, "onItemTitleClick was not fired on itemContent click");
     assert.equal(itemActionFired, 2, "'onItemClick' was fired on itemContent click");
 });
@@ -1055,7 +1055,7 @@ QUnit.test("selectedIndex changes by keyboard", function(assert) {
         }).dxAccordion("instance"),
         keyboard = keyboardMock(this.$element);
 
-    this.$element.trigger("focusin");
+    $(this.$element).trigger("focusin");
     keyboard.keyDown("down");
     keyboard.keyDown("space");
     assert.equal(instance.option("selectedIndex"), 1, "index is right");

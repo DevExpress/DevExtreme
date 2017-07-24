@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
@@ -152,7 +153,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                $(document).on(clickEvent.name, that._saveEditorHandler);
+                eventsEngine.on(document, clickEvent.name, that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();
@@ -244,7 +245,7 @@ var EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            $(document).off(clickEvent.name, this._saveEditorHandler);
+            eventsEngine.off(document, clickEvent.name, this._saveEditorHandler);
         },
 
         optionChanged: function(args) {
@@ -499,7 +500,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._delayedInputFocus($firstCell, function() {
                     that._editCellInProgress = false;
                     var $cell = that.getFirstEditableCellInRow(insertKey.rowIndex);
-                    $cell && $cell.trigger(clickEvent.name);
+                    $cell && eventsEngine.trigger($cell, clickEvent.name);
                 });
             }
 
@@ -1492,15 +1493,16 @@ var EditingController = modules.ViewController.inherit((function() {
                 $link = $("<a>")
                 .addClass(LINK_CLASS)
                 .addClass(linkClass)
-                .text(text)
-                .on(addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(params) {
-                    var e = params.jQueryEvent;
+                .text(text);
 
-                    e.stopPropagation();
-                    setTimeout(function() {
-                        options.row && that[methodName](options.row.rowIndex);
-                    });
-                }));
+            eventsEngine.on($link, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(params) {
+                var e = params.jQueryEvent;
+
+                e.stopPropagation();
+                setTimeout(function() {
+                    options.row && that[methodName](options.row.rowIndex);
+                });
+            }));
 
             options.rtlEnabled ? container.prepend($link, "&nbsp;") : container.append($link, "&nbsp;");
         },
@@ -1983,14 +1985,14 @@ module.exports = {
                         $table = that.callBase.apply(that, arguments);
 
                     if(!isRowEditMode(that) && that.option("editing.allowUpdating")) {
-                        $table
-                            .on(addNamespace(holdEvent.name, "dxDataGridRowsView"), "td:not(." + EDITOR_CELL_CLASS + ")", that.createAction(function() {
-                                var editingController = that._editingController;
 
-                                if(editingController.isEditing()) {
-                                    editingController.closeEditCell();
-                                }
-                            }));
+                        eventsEngine.on($table, addNamespace(holdEvent.name, "dxDataGridRowsView"), "td:not(." + EDITOR_CELL_CLASS + ")", that.createAction(function() {
+                            var editingController = that._editingController;
+
+                            if(editingController.isEditing()) {
+                                editingController.closeEditCell();
+                            }
+                        }));
                     }
 
                     return $table;

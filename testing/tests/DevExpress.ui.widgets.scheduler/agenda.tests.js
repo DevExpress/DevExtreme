@@ -189,7 +189,7 @@ QUnit.test("Agenda date table cell should not handle hover", function(assert) {
     var $element = this.instance.element(),
         $cell = $element.find(".dx-scheduler-date-table-cell").first();
 
-    $element.trigger($.Event("dxhoverstart", { target: $cell.get(0) }));
+    $($element).trigger($.Event("dxhoverstart", { target: $cell.get(0) }));
 
     assert.notOk($cell.hasClass("dx-state-hover"), "Cell is not hovered");
 });

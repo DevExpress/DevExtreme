@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     iteratorUtils = require("../../core/utils/iterator"),
@@ -262,7 +263,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions = that._getEditorOptions($editor, column);
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-                    $editor.find(EDITORS_INPUT_SELECTOR).on("keydown", function(e) {
+                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
                         if(e.which === 9 && e.shiftKey) {
@@ -281,7 +282,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-                    $editor.find(EDITORS_INPUT_SELECTOR).on("keydown", function(e) {
+                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         if(e.which === 9 && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
@@ -437,13 +438,15 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $editorContainer = $cell.find("." + EDITOR_CONTAINER_CLASS).first();
 
             $editorContainer.empty();
-            $("<div>")
+            var $filterRangeContent = $("<div>")
                 .addClass(FILTER_RANGE_CONTENT_CLASS)
-                .attr("tabindex", this.option("tabIndex"))
-                .on("focusin", function() {
-                    that._showFilterRange($cell, column);
-                })
-                .appendTo($editorContainer);
+                .attr("tabindex", this.option("tabIndex"));
+
+            eventsEngine.on($filterRangeContent, "focusin", function() {
+                that._showFilterRange($cell, column);
+            });
+
+            $filterRangeContent.appendTo($editorContainer);
 
             that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
         },

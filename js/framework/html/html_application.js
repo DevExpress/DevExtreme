@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var $ = require("jquery"),
     commonUtils = require("../../core/utils/common"),
     Component = require("../../core/component"),
     extendUtils = require("../../core/utils/extend"),

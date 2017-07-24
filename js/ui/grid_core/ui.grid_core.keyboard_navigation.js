@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     core = require("./ui.grid_core.modules"),
     isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
@@ -136,8 +137,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(view) {
                 view.renderCompleted.add(function() {
                     var $element = view.element();
-                    $element.off(eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-                    $element.on(eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " td", {
+                    eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
+                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " td", {
                         viewIndex: index,
                         view: view
                     }, clickAction);
@@ -847,7 +848,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             that.createAction("onKeyDown");
 
-            $(document).on(eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), that._documentClickHandler);
+            eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), that._documentClickHandler);
         }
     },
 
@@ -939,7 +940,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._focusedView = null;
         this._focusedViews = null;
         this._keyDownProcessor && this._keyDownProcessor.dispose();
-        $(document).off(eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
+        eventsEngine.off(document, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
     }
 });
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     math = Math,
     titleize = require("../../core/utils/inflector").titleize,
     extend = require("../../core/utils/extend").extend,
@@ -677,10 +678,10 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _attachKeyboardHandler: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_KEYBOARD);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_KEYBOARD);
 
         if(!this.option("disabled") && this.option("useKeyboard")) {
-            this._$element.on(eventUtils.addNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
         }
     },
 
@@ -829,12 +830,11 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _attachCursorHandlers: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_CURSOR);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_CURSOR);
 
         if(!this.option("disabled") && this._isHoverMode()) {
-            this._$element
-                .on(eventUtils.addNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this))
-                .on(eventUtils.addNamespace("mouseleave", SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("mouseleave", SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
         }
     },
 
@@ -1000,8 +1000,8 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _detachEventHandlers: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_CURSOR);
-        this._$container.off("." + SCROLLABLE_SIMULATED_KEYBOARD);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_CURSOR);
+        eventsEngine.off(this._$container, "." + SCROLLABLE_SIMULATED_KEYBOARD);
     }
 
 });

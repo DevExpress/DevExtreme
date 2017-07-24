@@ -91,7 +91,7 @@ QUnit.test('Draw filterRow with operation choosers', function(assert) {
     //act
     this.columnHeadersView.render($testElement);
 
-    $filterMenu = this.columnHeadersView.element().find('.dx-menu').first();
+    $filterMenu = $(this.columnHeadersView.element().find('.dx-menu').first());
     rootMenuItem = $filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
 
@@ -186,7 +186,7 @@ QUnit.test('Draw descriptions for operation chooser of filterRow', function(asse
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu').first();
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu').first();
     rootMenuItem = filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
@@ -208,7 +208,7 @@ QUnit.test('Draw operation chooser when filterOperations null', function(assert)
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
     //assert
     assert.ok(!filterMenu.length, 'disabled option menu');
@@ -223,7 +223,7 @@ QUnit.test('Check that dxMenu have correct rtlEnabled option value', function(as
 
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu').dxMenu('instance');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu').dxMenu('instance');
 
     assert.ok(filterMenu.option('rtlEnabled'), 'dxMenu have correct "rtlEnabled" option value');
 });
@@ -238,7 +238,7 @@ QUnit.test('Default operation chooser', function(assert) {
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
     //assert
     assert.ok(filterMenu.find('.dx-icon').first().hasClass('dx-icon-filter-operation-default'), 'default menu image');
@@ -256,7 +256,7 @@ QUnit.test('Change operation via operation chooser', function(assert) {
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
     rootMenuItem = filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
@@ -283,7 +283,7 @@ QUnit.test('Reset operation via operation chooser', function(assert) {
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
     rootMenuItem = filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
@@ -319,7 +319,7 @@ QUnit.test('Reset operation via operation chooser when applyMode is onClick', fu
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
     rootMenuItem = filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
@@ -353,7 +353,7 @@ QUnit.test('Change operation on columnsChanged event with filterValue optionName
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
     //act
     this.columnsController.columnOption = function(index) {
@@ -381,7 +381,7 @@ QUnit.test('Change operation on columnsChanged event with filterValue optionName
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
     //act
     this.columnsController.columnOption = function(index) {
@@ -409,7 +409,7 @@ QUnit.test('Reset operation on columnsChanged event with filterValue optionName 
     //act
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
 
     this.columnsController.columnOption = function(index) {
         return that.columns[this.getVisibleIndex(index)];
@@ -437,7 +437,7 @@ QUnit.test('update filter text with timeout', function(assert) {
     //act
     this.columnHeadersView.render(testElement);
 
-    var filterRowInput = this.columnHeadersView.element().find('.dx-texteditor');
+    var filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
     assert.equal(filterRowInput.length, 1);
 
     filterRowInput.find('.dx-texteditor-input').val(90);
@@ -470,7 +470,7 @@ QUnit.test('update filter text to empty string', function(assert) {
     //act
     this.columnHeadersView.render(testElement);
 
-    var filterRowInput = this.columnHeadersView.element().find('.dx-texteditor');
+    var filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
     assert.equal(filterRowInput.length, 1);
 
     filterRowInput.find('.dx-texteditor-input').val('');
@@ -505,7 +505,7 @@ QUnit.test("update filter text for number column with format", function(assert) 
     this.columnHeadersView.render(testElement);
 
     //act
-    var filterRowInput = this.columnHeadersView.element().find(".dx-texteditor");
+    var filterRowInput = $(this.columnHeadersView.element()).find(".dx-texteditor");
     filterRowInput.find(".dx-texteditor-input").val(90);
     filterRowInput.find(".dx-texteditor-input").trigger("keyup");
 
@@ -538,7 +538,7 @@ QUnit.test("update filter text for date column with format", function(assert) {
 
     //act
 
-    var filterRowInput = this.columnHeadersView.element().find(".dx-texteditor-input");
+    var filterRowInput = $(this.columnHeadersView.element()).find(".dx-texteditor-input");
 
     filterRowInput
         .val("1992/08/06")
@@ -881,7 +881,7 @@ QUnit.test("Apply filter button is changed enabled state", function(assert) {
     this.headerPanel.render(testElement);
     this.columnHeadersView.render(testElement);
 
-    filterRowInput = this.columnHeadersView.element().find('.dx-texteditor');
+    filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
     filterRowInput.find('input').val(90);
     filterRowInput.find('input').trigger('keyup');
     this.clock.tick(0);
@@ -909,7 +909,7 @@ QUnit.test("Set highlight when filter operation is changed", function(assert) {
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
     rootMenuItem = filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
@@ -934,7 +934,7 @@ QUnit.test("Apply filter button is changed enabled state when filter operation i
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
 
     $(filterMenuItems.find('.dx-menu-item')[1]).trigger('dxclick');
@@ -957,7 +957,7 @@ QUnit.test("Column option is changed when filter operation is changed", function
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
 
-    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
     rootMenuItem = filterMenu.find(".dx-menu-item");
     $(rootMenuItem).trigger("dxclick");
     filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
@@ -1000,7 +1000,7 @@ QUnit.test("Set highlight to editor container when filter is changed", function(
     this.applyFilterController.init();
     this.columnHeadersView.render(testElement);
 
-    filterRowInput = this.columnHeadersView.element().find('.dx-texteditor');
+    filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
     filterRowInput.find('input').val(90);
     filterRowInput.find('input').trigger('keyup');
     this.clock.tick(0);
@@ -1029,16 +1029,16 @@ QUnit.test("Remove highlights from editor container when filter is applied", fun
     this.columnHeadersView.render(testElement);
     this.headerPanel.render(testElement);
 
-    filterRowInput = this.columnHeadersView.element().find('.dx-texteditor');
+    filterRowInput = $(this.columnHeadersView.element()).find('.dx-texteditor');
     filterRowInput.find('input').val(90);
     filterRowInput.find('input').trigger('keyup');
     this.clock.tick(0);
 
     $button = testElement.find(".dx-apply-button");
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
 
     $button = testElement.find(".dx-apply-button");
-    $editorContainer = this.columnHeadersView.element().find(".dx-highlight-outline");
+    $editorContainer = $(this.columnHeadersView.element().find(".dx-highlight-outline"));
     assert.equal($editorContainer.length, 0, "highlights");
     assert.ok($button.hasClass("dx-state-disabled"), "button is enabled");
     //assert.ok(this.dataController._isFilterApplied, "is filter applied");
@@ -1353,7 +1353,7 @@ QUnit.test('Return to selectedFilterOperation when reset is chosen', function(as
 
     //act
     this.columnHeadersView.render(testElement);
-    var $columnHeadersView = this.columnHeadersView.element();
+    var $columnHeadersView = $(this.columnHeadersView.element());
 
     getFilterMenuItem($columnHeadersView, 3).trigger('dxclick'); //startswith
 
@@ -1378,7 +1378,7 @@ QUnit.testInActiveWindow('Filter row with menu: focus behavior', function(assert
     //act
     this.columnHeadersView.render($testElement);
 
-    $filterMenu = this.columnHeadersView.element().find('.dx-menu').first();
+    $filterMenu = $(this.columnHeadersView.element().find('.dx-menu').first());
 
     $filterMenu
         .parent()
@@ -1523,7 +1523,7 @@ QUnit.test("Date column - select filter operation via menu", function(assert) {
 
     //arrange
     $menuItem = $filterMenu.find(".dx-menu-item");
-    $menuItem.trigger("dxclick"); // show menu
+    $($menuItem).trigger("dxclick"); // show menu
     $("#qunit-fixture").find(".dx-menu-item:contains('Between')").trigger("dxclick"); // select filter operation is 'between'
 
     //assert
@@ -1547,7 +1547,7 @@ QUnit.test("Show filter range popup when column with selectedFilterOperation is 
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
 
     //act
-    $testElement.find("td").last().find(".dx-filter-range-content").trigger("focusin");
+    $($testElement.find("td").last().find(".dx-filter-range-content")).trigger("focusin");
     that.clock.tick();
 
     //assert
@@ -1575,7 +1575,7 @@ QUnit.test("Show filter range popup when column with selectedFilterOperation is 
     assert.strictEqual($testElement.find(".dx-filter-range-content").text(), "15 - 18", "filter range value");
 
     //act
-    $testElement.find("td").last().find(".dx-filter-range-content").trigger("focusin");
+    $($testElement.find("td").last().find(".dx-filter-range-content")).trigger("focusin");
     that.clock.tick();
 
     //assert
@@ -1699,7 +1699,7 @@ QUnit.test("Reset filter range when changed selectedFilterOperation", function(a
     //arrange
     $filterMenu = $testElement.find(".dx-menu").last();
     $rootMenuItem = $filterMenu.find(".dx-menu-item");
-    $rootMenuItem.trigger("dxclick"); // show operation chooser
+    $($rootMenuItem).trigger("dxclick"); // show operation chooser
 
     //act
     $filterMenuItems = $("#qunit-fixture").find(".dx-overlay-content").first().find("li");
@@ -1735,7 +1735,7 @@ QUnit.test("Reset filter value when changed selectedFilterOperation on 'between'
     //arrange
     $filterMenu = $testElement.find(".dx-menu").last();
     $rootMenuItem = $filterMenu.find(".dx-menu-item");
-    $rootMenuItem.trigger("dxclick"); // show operation chooser
+    $($rootMenuItem).trigger("dxclick"); // show operation chooser
 
     //act
     $filterMenuItems = $("#qunit-fixture").find(".dx-overlay-content").first().find("li");
@@ -1768,7 +1768,7 @@ QUnit.test("Apply filter by range when entering the filter value quickly", funct
     assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
 
     //arrange
-    $testElement.find("td").last().find(".dx-filter-range-content").trigger("focusin");
+    $($testElement.find("td").last().find(".dx-filter-range-content")).trigger("focusin");
     that.clock.tick();
 
     //assert
@@ -1779,9 +1779,9 @@ QUnit.test("Apply filter by range when entering the filter value quickly", funct
 
     //act
     $startRangeInput.val(17);
-    $startRangeInput.trigger("change");
+    $($startRangeInput).trigger("change");
     $endRangeInput.val(18);
-    $endRangeInput.trigger("change");
+    $($endRangeInput).trigger("change");
     that.clock.tick(750);
 
     //assert
@@ -1819,7 +1819,7 @@ QUnit.test("filter by 0 value for number column", function(assert) {
 
     //act
     $filterRowInput.val("0");
-    $filterRowInput.trigger("change");
+    $($filterRowInput).trigger("change");
 
     $filterRowInput = testElement.find(TEXTEDITOR_INPUT_SELECTOR).eq(1);
 
@@ -1854,7 +1854,7 @@ QUnit.test("buffered filter is not applied on refresh when applyFilter mode is o
 
     //act
     $filterRowInput.val("1");
-    $filterRowInput.trigger("change");
+    $($filterRowInput).trigger("change");
 
     that.dataController.refresh();
 
@@ -1868,7 +1868,7 @@ QUnit.test("buffered filter is not applied on refresh when applyFilter mode is o
 
     //act
     var $button = testElement.find(".dx-apply-button");
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
 
     //assert
     assert.equal(countApplyFilter, 1, "applyFilter called once");
@@ -1934,7 +1934,7 @@ QUnit.test("Rows view is not rendered when value is entered to editor of the fil
     };
     var $input = $(".dx-datagrid-filter-row input").first();
     $input.val("test value");
-    $input.trigger("keyup");
+    $($input).trigger("keyup");
 
     this.clock.tick(700);
 
@@ -1965,9 +1965,9 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
     $input.val("test");
     $input.change();
 
-    var $resetMenuItem = getFilterMenuItem(this.columnHeadersView.element(), 7);
+    var $resetMenuItem = $(getFilterMenuItem(this.columnHeadersView.element(), 7));
 
-    $resetMenuItem.trigger('dxclick'); //reset
+    $($resetMenuItem).trigger('dxclick'); //reset
 
     //assert
     assert.equal($resetMenuItem.text(), "My Reset");
@@ -1989,7 +1989,7 @@ QUnit.test("There are no errors on repaint a filter row when filter range popup 
 
     that.columnHeadersView.render($testElement);
 
-    $testElement.find("td").last().find(".dx-filter-range-content").trigger("focusin");
+    $($testElement.find("td").last().find(".dx-filter-range-content")).trigger("focusin");
     that.clock.tick();
 
     //assert
@@ -2021,7 +2021,7 @@ QUnit.test("Add custom tabIndex to filter range content", function(assert) {
     $filterMenu = $testElement.find(".dx-menu").last();
 
     $menuItem = $filterMenu.find(".dx-menu-item");
-    $menuItem.trigger("dxclick");
+    $($menuItem).trigger("dxclick");
     $(".dx-menu-item:contains('Between')").trigger("dxclick");
 
     $filterRangeContent = $(".dx-filter-range-content");
@@ -2050,7 +2050,7 @@ if(device.deviceType === "desktop") {
         assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
 
         //act
-        $testElement.find(".dx-filter-range-content").trigger("focusin"); //show range
+        $($testElement.find(".dx-filter-range-content")).trigger("focusin"); //show range
 
         //assert
         $cells = $testElement.find("td");
@@ -2060,7 +2060,7 @@ if(device.deviceType === "desktop") {
         assert.equal($numberBoxElements.length, 2, "count number box");
 
         //act
-        $numberBoxElements.last().find(TEXTEDITOR_INPUT_SELECTOR).trigger($.Event("keydown", { which: 9 })); // focus on menu of the second cell, hide range
+        $($numberBoxElements.last().find(TEXTEDITOR_INPUT_SELECTOR)).trigger($.Event("keydown", { which: 9 })); // focus on menu of the second cell, hide range
 
         //assert
         assert.equal($cells.first().find(".dx-filter-range-content").length, 1, "has filter range content");
@@ -2087,7 +2087,7 @@ if(device.deviceType === "desktop") {
         assert.equal($testElement.find(".dx-filter-range-content").length, 1, "has filter range content");
 
         //act
-        $testElement.find(".dx-filter-range-content").trigger("focusin"); //show range
+        $($testElement.find(".dx-filter-range-content")).trigger("focusin"); //show range
 
         //assert
         $cells = $testElement.find("td");
@@ -2097,7 +2097,7 @@ if(device.deviceType === "desktop") {
         assert.equal($numberBoxElements.length, 2, "count number box");
 
         //act
-        $numberBoxElements.first().find("input").trigger($.Event("keydown", { which: 9, shiftKey: true })); // focus on menu of the first cell, hide range
+        $($numberBoxElements.first().find("input")).trigger($.Event("keydown", { which: 9, shiftKey: true })); // focus on menu of the first cell, hide range
 
         //assert
         assert.equal($cells.first().find(".dx-filter-range-content").length, 1, "has filter range content");

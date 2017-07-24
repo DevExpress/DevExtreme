@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     domUtils = require("../core/utils/dom"),
     animationFrame = require("../animation/frame"),
@@ -116,7 +117,7 @@ var ClickEmitter = Emitter.inherit({
                 this.callBase($element);
             }
 
-            $element.on("click", clickHandler);
+            eventsEngine.on($element, "click", clickHandler);
         },
 
         configure: function(data) {
@@ -147,7 +148,7 @@ var ClickEmitter = Emitter.inherit({
         dispose: function() {
             this.callBase();
 
-            this.getElement().off("click", clickHandler);
+            eventsEngine.off(this.getElement(), "click", clickHandler);
         }
     });
 
@@ -181,9 +182,8 @@ var ClickEmitter = Emitter.inherit({
         };
 
         var NATIVE_CLICK_FIXER_NAMESPACE = "NATIVE_CLICK_FIXER";
-        $(document)
-            .on(eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler)
-            .on(eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.on(document, eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 

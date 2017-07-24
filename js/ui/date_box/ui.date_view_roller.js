@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
@@ -87,11 +88,11 @@ var DateViewRoller = Scrollable.inherit({
 
         var clickAction = this._createActionByOption("onClick");
 
-        this._$container
-            .off(eventName)
-            .on(eventName, function(e) {
-                clickAction({ jQueryEvent: e });
-            });
+
+        eventsEngine.off(this._$container, eventName);
+        eventsEngine.on(this._$container, eventName, function(e) {
+            clickAction({ jQueryEvent: e });
+        });
     },
 
     _wrapAction: function(actionName, callback) {
@@ -163,8 +164,8 @@ var DateViewRoller = Scrollable.inherit({
         var itemSelector = this._getItemSelector(),
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        this.element().off(eventName, itemSelector);
-        this.element().on(eventName, itemSelector, this._itemClickHandler.bind(this));
+        eventsEngine.off(this.element(), eventName, itemSelector);
+        eventsEngine.on(this.element(), eventName, itemSelector, this._itemClickHandler.bind(this));
     },
 
     _getItemSelector: function() {

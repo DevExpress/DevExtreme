@@ -742,7 +742,7 @@ QUnit.test("selected index should not be changed by click on item", function(ass
         }),
         panorama = $panorama.dxPanorama("instance");
 
-    panorama.itemElements().eq(1).trigger("dxclick");
+    $(panorama.itemElements()).eq(1).trigger("dxclick");
     assert.equal(panorama.option("selectedIndex"), 0, "selected index not changed");
 });
 

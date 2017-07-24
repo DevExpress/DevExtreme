@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     caret = require("./utils.caret"),
     domUtils = require("../../core/utils/dom"),
     isDefined = require("../../core/utils/type").isDefined,
@@ -169,21 +170,21 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _attachMaskEventHandlers: function() {
-        this._input()
-            .on(eventUtils.addNamespace("focus", MASK_EVENT_NAMESPACE), this._maskFocusHandler.bind(this))
-            .on(eventUtils.addNamespace("keydown", MASK_EVENT_NAMESPACE), this._maskKeyDownHandler.bind(this))
-            .on(eventUtils.addNamespace("keypress", MASK_EVENT_NAMESPACE), this._maskKeyPressHandler.bind(this))
-            .on(eventUtils.addNamespace("input", MASK_EVENT_NAMESPACE), this._maskInputHandler.bind(this))
-            .on(eventUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this))
-            .on(eventUtils.addNamespace("cut", MASK_EVENT_NAMESPACE), this._maskCutHandler.bind(this))
-            .on(eventUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), this._maskDragHandler.bind(this));
+        var $input = this._input();
+
+        eventsEngine.on($input, eventUtils.addNamespace("focus", MASK_EVENT_NAMESPACE), this._maskFocusHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("keydown", MASK_EVENT_NAMESPACE), this._maskKeyDownHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("keypress", MASK_EVENT_NAMESPACE), this._maskKeyPressHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("input", MASK_EVENT_NAMESPACE), this._maskInputHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("paste", MASK_EVENT_NAMESPACE), this._maskPasteHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("cut", MASK_EVENT_NAMESPACE), this._maskCutHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("drop", MASK_EVENT_NAMESPACE), this._maskDragHandler.bind(this));
 
         this._attachChangeEventHandlers();
     },
 
     _detachMaskEventHandlers: function() {
-        this._input()
-            .off("." + MASK_EVENT_NAMESPACE);
+        eventsEngine.off(this._input(), "." + MASK_EVENT_NAMESPACE);
     },
 
     _attachChangeEventHandlers: function() {
@@ -191,7 +192,7 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        this._input().on(eventUtils.addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
+        eventsEngine.on(this._input(), eventUtils.addNamespace(BLUR_EVENT, MASK_EVENT_NAMESPACE), (function(e) {
             // NOTE: input is focused on caret changing in IE(T304159)
             this._suppressCaretChanging(this._changeHandler, [e]);
             this._changeHandler(e);
@@ -218,7 +219,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
         this._changedValue = inputValue;
         var changeEvent = eventUtils.createEvent(e, { type: "change" });
-        $input.trigger(changeEvent);
+        eventsEngine.trigger($input, changeEvent);
     },
 
     _parseMask: function() {

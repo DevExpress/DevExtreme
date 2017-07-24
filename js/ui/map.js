@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     Promise = require("../core/polyfills/promise"),
     deferredUtils = require("../integration/jquery/deferred"),
     registerComponent = require("../core/component_registrator"),
@@ -428,8 +429,7 @@ var Map = Widget.inherit({
     _grabEvents: function() {
         var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
 
-        this.element()
-            .on(eventName, this._cancelEvent.bind(this));
+        eventsEngine.on(this.element(), eventName, this._cancelEvent.bind(this));
     },
 
     _cancelEvent: function(e) {

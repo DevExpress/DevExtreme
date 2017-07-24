@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     translator = require("../../animation/translator"),
     dateUtils = require("../../core/utils/date"),
     commonUtils = require("../../core/utils/common"),
@@ -444,18 +445,18 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _attachAppointmentDblClick: function() {
-        var that = this,
-            itemSelector = that._itemSelector();
+        var that = this;
+        var itemSelector = that._itemSelector();
+        var itemContainer = this._itemContainer();
 
-        this._itemContainer()
-            .off(DBLCLICK_EVENT_NAME, itemSelector)
-            .on(DBLCLICK_EVENT_NAME, itemSelector, function(e) {
-                that._itemJQueryEventHandler(e, "onAppointmentDblClick", {}, {
-                    afterExecute: function(e) {
-                        that._dblClickHandler(e.args[0].jQueryEvent);
-                    }
-                });
+        eventsEngine.off(itemContainer, DBLCLICK_EVENT_NAME, itemSelector);
+        eventsEngine.on(itemContainer, DBLCLICK_EVENT_NAME, itemSelector, function(e) {
+            that._itemJQueryEventHandler(e, "onAppointmentDblClick", {}, {
+                afterExecute: function(e) {
+                    that._dblClickHandler(e.args[0].jQueryEvent);
+                }
             });
+        });
     },
 
     _dblClickHandler: function(e) {

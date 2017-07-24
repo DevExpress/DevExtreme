@@ -38,7 +38,7 @@ var move = function($element, position) {
 
 var showColorBox = function(options) {
     var $colorBox = this.element.dxColorBox(options);
-    $colorBox.find(".dx-dropdowneditor-button").trigger("dxclick");
+    $($colorBox.find(".dx-dropdowneditor-button")).trigger("dxclick");
 
     return $colorBox;
 };
@@ -69,7 +69,7 @@ QUnit.module("Color Box", {
                 $input = getColorBoxOverlay().find("label ." + TEXTEDITOR_INPUT_CLASS).eq(inputIndex);
 
             $input.val(value);
-            $input.trigger("change");
+            $($input).trigger("change");
         };
 
         this.checkColor = function(expectedColor, assert) {
@@ -165,7 +165,7 @@ QUnit.test("If value is set as 'null' color result preview should not have backg
         colorBoxInstance = this.element.data("dxColorBox");
 
     colorBoxInstance._colorView._currentColor = new Color("#ff0000");
-    $applyButton.trigger("dxclick");
+    $($applyButton).trigger("dxclick");
 
     colorBoxInstance.option("value", null);
 
@@ -232,7 +232,7 @@ QUnit.test("Click on apply button", function(assert) {
 
     colorBoxInstance._colorView.option("value", newColor);
 
-    $applyButton.trigger("dxclick");
+    $($applyButton).trigger("dxclick");
 
     assert.equal(colorBoxInstance.option("value"), newColor);
     assert.equal($("." + COLOR_BOX_INPUT_CLASS).val(), newColor);
@@ -254,7 +254,7 @@ QUnit.test("Click on cancel button", function(assert) {
     var $overlayContent = getColorBoxOverlayContent(),
         $cancelButton = $overlayContent.find(".dx-colorview-buttons-container .dx-colorview-cancel-button");
 
-    $cancelButton.trigger("dxclick");
+    $($cancelButton).trigger("dxclick");
     assert.ok($("." + COLOR_BOX_OVERLAY_CLASS).is(":hidden"));
 
     this.checkColor({
@@ -283,7 +283,7 @@ QUnit.test("Cancel event should work right when color was changed", function(ass
         top: 80
     });
 
-    $cancelButton.trigger("dxclick");
+    $($cancelButton).trigger("dxclick");
 
     this.checkColor({
         r: 44,
@@ -309,7 +309,7 @@ QUnit.test("Cancel event should work right when opacity was changed", function(a
         top: 0
     });
 
-    $cancelButton.trigger("dxclick");
+    $($cancelButton).trigger("dxclick");
 
     this.checkColor({
         r: 0,
@@ -395,7 +395,7 @@ QUnit.test("Validate value of colorbox input", function(assert) {
     var $colorBoxInput = $("." + COLOR_BOX_INPUT_CLASS),
         $colorBoxResultsPreview = $("." + COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS);
 
-    $colorBoxInput.val("unknown value").trigger("change");
+    $($colorBoxInput.val("unknown value")).trigger("change");
 
     assert.equal(new Color($colorBoxResultsPreview.css("background-color")).toHex().toLowerCase(), "#ff0000");
     assert.equal($colorBoxInput.val(), "#ff0000");
@@ -406,7 +406,7 @@ QUnit.test("Validate value of colorbox hex-input", function(assert) {
     var $colorBoxInput = $("." + COLOR_BOX_INPUT_CLASS),
         $colorBoxResultsPreview = $("." + COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS);
 
-    $colorBoxInput.val("#zzzzzz").trigger("change");
+    $($colorBoxInput.val("#zzzzzz")).trigger("change");
 
     assert.equal(new Color($colorBoxResultsPreview.css("background-color")).toHex().toLowerCase(), "#ff0000");
     assert.equal($colorBoxInput.val(), "#ff0000");
@@ -503,7 +503,7 @@ QUnit.test("Alpha channel input should be updated if value is changed", function
         value: "rgba(44, 119, 184, 1)"
     }).dxColorBox("instance");
 
-    colorBox._input().val("rgba(44, 119, 184, 0.5)").trigger("change");
+    $(colorBox._input()).val("rgba(44, 119, 184, 0.5)").trigger("change");
     assert.equal(colorBox._colorView._alphaChannelInput.option("value"), 0.5);
 });
 
@@ -511,7 +511,7 @@ QUnit.test("When value was updated twice, color editors should have right values
     var colorBox = this.element.dxColorBox({ value: "rgba(44, 119, 184, 1)", editAlphaChannel: true }).dxColorBox("instance");
     colorBox.open();
     colorBox.close();
-    colorBox._input().val("rgba(100, 150, 200, 0.5)").trigger("change");
+    $(colorBox._input()).val("rgba(100, 150, 200, 0.5)").trigger("change");
     colorBox.open();
 
     assert.equal(colorBox._colorView._alphaChannelInput.option("value"), 0.5);
@@ -608,13 +608,13 @@ QUnit.test("enter key test on inputs", function(assert) {
         editAlphaChannel: true
     });
 
-    var $popup = instance.content();
+    var $popup = $(instance.content());
 
     $popup.find(".dx-texteditor-input").each(function(_, itemInput) {
         var $itemInput = $(itemInput);
 
-        $input.trigger($.Event("keydown", { which: 37 }));
-        $itemInput.trigger($.Event("keydown", { which: 13 }));
+        $($input).trigger($.Event("keydown", { which: 37 }));
+        $($itemInput).trigger($.Event("keydown", { which: 13 }));
         assert.equal(instance.option("value"), "rgba(153, 73, 72, 1)", "value was changed correctly after press enter");
         assert.equal(instance.option("opened"), false, "overlay has been closed");
 
@@ -705,7 +705,7 @@ QUnit.test("ColorBox opening fine when focusStateEnabled set to false", function
 QUnit.testInActiveWindow("focus policy", function(assert) {
     this.instance.option("opened", true);
     this.keyboard.keyDown("tab");
-    var $inputR = this.instance._colorView._rgbInputs[0].element();
+    var $inputR = $(this.instance._colorView._rgbInputs[0].element());
     assert.ok($inputR.hasClass(STATE_FOCUSED_CLASS), "tab set focus to first input in overlay");
 
     this.instance._colorView.element().triggerHandler("focus");
@@ -743,7 +743,7 @@ QUnit.test("T196473", function(assert) {
     var $overlayContent = getColorBoxOverlayContent(),
         $applyButton = $overlayContent.find(".dx-colorview-buttons-container .dx-colorview-apply-button");
 
-    $applyButton.trigger("dxclick");
+    $($applyButton).trigger("dxclick");
 
     assert.ok(!colorView.element().is(":visible"));
 });
@@ -753,7 +753,7 @@ QUnit.test("Value should not be changed by 'down' key when colorbox was opened a
         value: "#ff0000"
     }).dxColorBox("instance");
 
-    var $input = colorBox.element().find("." + TEXTEDITOR_INPUT_CLASS),
+    var $input = $(colorBox.element().find("." + TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($input);
 
     colorBox.open();
@@ -761,7 +761,7 @@ QUnit.test("Value should not be changed by 'down' key when colorbox was opened a
     var $overlayContent = getColorBoxOverlayContent(),
         $applyButton = $overlayContent.find(".dx-colorview-buttons-container .dx-colorview-apply-button");
 
-    $applyButton.trigger("dxclick");
+    $($applyButton).trigger("dxclick");
 
     keyboard.keyDown("down");
     keyboard.keyDown("down");
@@ -775,7 +775,7 @@ QUnit.test("Value should not be changed by 'up' key when colorbox was opened and
         value: "#326b8a"
     }).dxColorBox("instance");
 
-    var $input = colorBox.element().find("." + TEXTEDITOR_INPUT_CLASS),
+    var $input = $(colorBox.element().find("." + TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($input);
 
     colorBox.open();
@@ -783,7 +783,7 @@ QUnit.test("Value should not be changed by 'up' key when colorbox was opened and
     var $overlayContent = getColorBoxOverlayContent(),
         $applyButton = $overlayContent.find(".dx-colorview-buttons-container .dx-colorview-apply-button");
 
-    $applyButton.trigger("dxclick");
+    $($applyButton).trigger("dxclick");
 
     keyboard.keyDown("up");
     keyboard.keyDown("up");

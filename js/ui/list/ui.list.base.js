@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
@@ -747,9 +748,9 @@ var ListBase = CollectionWidget.inherit({
 
         $element.toggleClass(LIST_COLLAPSIBLE_GROUPS_CLASS, collapsibleGroups);
 
-        $element.off(eventName, selector);
+        eventsEngine.off($element, eventName, selector);
         if(collapsibleGroups) {
-            $element.on(eventName, selector, (function(e) {
+            eventsEngine.on($element, eventName, selector, (function(e) {
                 this._createAction((function(e) {
                     var $group = $(e.jQueryEvent.currentTarget).parent();
                     this._collapseGroupHandler($group);
@@ -844,8 +845,7 @@ var ListBase = CollectionWidget.inherit({
     _attachSwipeEvent: function($itemElement) {
         var endEventName = eventUtils.addNamespace(swipeEvents.end, this.NAME);
 
-        $itemElement
-            .on(endEventName, this._itemSwipeEndHandler.bind(this));
+        eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
     },
 
     _itemSwipeEndHandler: function(e) {

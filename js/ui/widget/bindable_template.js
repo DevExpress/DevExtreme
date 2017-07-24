@@ -1,6 +1,7 @@
 "use strict";
 
 var TemplateBase = require("./ui.template_base"),
+    eventsEngine = require("../../events/core/events_engine"),
     removeEvent = require("../../core/remove_event"),
     iteratorUtils = require("../../core/utils/iterator"),
     isPrimitive = require("../../core/utils/type").isPrimitive;
@@ -92,7 +93,7 @@ module.exports = TemplateBase.inherit({
             $container.empty();
             this._render($container, data, options.model);
         }.bind(this));
-        $container.on(removeEvent, dispose);
+        eventsEngine.on($container, removeEvent, dispose);
 
         return $container.contents();
     }

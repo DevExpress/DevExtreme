@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var eventsEngine = require("../../events/core/events_engine"),
     pointerEvents = require("../../events/pointer"),
     each = require("../../core/utils/iterator").each,
     msPointerEnabled = require("../../core/utils/support").pointer,
@@ -219,7 +219,7 @@ function Tracker(params) {
     ];
     // TODO: 3 "move" and 3 "end" events - do we really need that much?
     each(this._docEvents, function(_, events) {
-        $(document).on(events);
+        eventsEngine.on(document, events);
     });
 
     function getRootOffsetLeft() {
@@ -232,7 +232,7 @@ Tracker.prototype = {
 
     dispose: function() {
         each(this._docEvents, function(_, events) {
-            $(document).off(events);
+            eventsEngine.off(document, events);
         });
     },
 

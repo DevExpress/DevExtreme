@@ -456,10 +456,11 @@ QUnit.test("click", function(assert) {
                 clicked++;
             },
             onReady: function(e) {
-                e.element.dxMap("instance").on("click", function() {
+                var $element = $(e.element);
+                $element.dxMap("instance").on("click", function() {
                     eventFired++;
                 });
-                e.element.children().trigger("dxclick");
+                $element.children().trigger("dxclick");
 
                 resolve();
             }

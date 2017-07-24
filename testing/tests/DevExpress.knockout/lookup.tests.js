@@ -28,7 +28,7 @@ var toSelector = function(val) {
 };
 
 var openPopupWithList = function(lookup) {
-    lookup._$field.trigger("dxclick");
+    $(lookup._$field).trigger("dxclick");
 };
 
 QUnit.module("list options", {

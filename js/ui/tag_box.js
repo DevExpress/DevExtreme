@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
@@ -574,23 +575,23 @@ var TagBox = SelectBox.inherit({
     _renderPreventBlur: function() {
         var eventName = eventUtils.addNamespace(pointerEvents.down, "dxTagBoxContainer");
 
-        this._$tagsContainer && this._$tagsContainer
-            .off(eventName)
-            .on(eventName, function(e) {
+        if(this._$tagsContainer) {
+            eventsEngine.off(this._$tagsContainer, eventName);
+            eventsEngine.on(this._$tagsContainer, eventName, function(e) {
                 e.preventDefault();
             });
+        }
     },
 
     _renderTagRemoveAction: function() {
         var tagRemoveAction = this._createAction(this._removeTagHandler.bind(this));
         var eventName = eventUtils.addNamespace(clickEvent.name, "dxTagBoxTagRemove");
+        var $container = this.element().find(".dx-texteditor-container");
 
-        this.element()
-            .find(".dx-texteditor-container")
-            .off(eventName)
-            .on(eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
-                tagRemoveAction({ jQueryEvent: e });
-            });
+        eventsEngine.off($container, eventName);
+        eventsEngine.on($container, eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
+            tagRemoveAction({ jQueryEvent: e });
+        });
 
         this._renderTypingEvent();
     },
@@ -600,7 +601,7 @@ var TagBox = SelectBox.inherit({
             $element = this.element(),
             isMultiline = this.option("multiline");
 
-        $element.off(mouseWheelEvent);
+        eventsEngine.off($element, mouseWheelEvent);
 
         if(devices.real().deviceType !== "desktop") {
             this._$tagsContainer && this._$tagsContainer.css("overflow-x", isMultiline ? "" : "auto");
@@ -611,7 +612,7 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        $element.on(mouseWheelEvent, this._tagContainerMouseWheelHandler.bind(this));
+        eventsEngine.on($element, mouseWheelEvent, this._tagContainerMouseWheelHandler.bind(this));
     },
 
     _tagContainerMouseWheelHandler: function(e) {
@@ -622,7 +623,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderTypingEvent: function() {
-        this._input().on(eventUtils.addNamespace("keydown", this.NAME), (function(e) {
+        eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), (function(e) {
             if(!this._isControlKey(e.key) && this._isEditable()) {
                 this._clearTagFocus();
             }

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
@@ -710,7 +711,11 @@ var SelectBox = DropDownList.inherit({
 
     _createClearButton: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        return this.callBase().on(eventName, function() { return false; });
+        var $clearButton = this.callBase();
+
+        eventsEngine.on($clearButton, eventName, function() { return false; });
+
+        return $clearButton;
     },
 
     _wasSearch: function(value) {

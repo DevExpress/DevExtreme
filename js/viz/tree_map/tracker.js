@@ -11,8 +11,7 @@ var proto = require("./tree_map.base").prototype,
     clickEventName = require("../../events/click").name,
     downPointerEventName = require("../../events/pointer").down,
     movePointerEventName = require("../../events/pointer").move,
-    $ = require("../../core/renderer"),
-    $doc = $(document),
+    eventsEngine = require("../../events/core/events_engine"),
 
     DATA_KEY_BASE = "__treemap_data_",
     dataKeyModifier = 0;
@@ -84,13 +83,13 @@ Tracker.prototype = {
         };
         parameters.root.on(clickEventName, clickHandler);
         parameters.root.on(downPointerEventName, downHandler);
-        $doc.on(downPointerEventName, downHandler);
-        $doc.on(movePointerEventName, moveHandler);
+        eventsEngine.on(document, downPointerEventName, downHandler);
+        eventsEngine.on(document, movePointerEventName, moveHandler);
         this._disposeHandlers = function() {
             parameters.root.off(clickEventName, clickHandler);
             parameters.root.off(downPointerEventName, downHandler);
-            $doc.off(downPointerEventName, downHandler);
-            $doc.off(movePointerEventName, moveHandler);
+            eventsEngine.off(document, downPointerEventName, downHandler);
+            eventsEngine.off(document, movePointerEventName, moveHandler);
         };
 
         function clickHandler(e) {

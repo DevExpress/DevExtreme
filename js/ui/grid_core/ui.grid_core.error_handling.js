@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     each = require("../../core/utils/iterator").each,
     modules = require("./ui.grid_core.modules");
@@ -28,7 +29,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
             $errorRow = $("<tr />").addClass(ERROR_ROW_CLASS);
             $closeButton = $("<div/>").addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
-            $closeButton.on(clickEvent.name, that.createAction(function(args) {
+            eventsEngine.on($closeButton, clickEvent.name, that.createAction(function(args) {
                 var e = args.jQueryEvent,
                     $errorRow,
                     errorRowIndex = $(e.currentTarget).closest("." + ERROR_ROW_CLASS).index();

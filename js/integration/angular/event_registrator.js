@@ -1,6 +1,7 @@
 "use strict";
 
 var eventRegistrator = require("../../events/core/event_registrator"),
+    eventsEngine = require("../../events/core/events_engine"),
     ngModule = require("./module");
 
 eventRegistrator.callbacks.add(function(name) {
@@ -18,7 +19,7 @@ eventRegistrator.callbacks.add(function(name) {
                 handler = $parse(attr[ngEventName]);
             }
 
-            element.on(name, eventOptions, function(e) {
+            eventsEngine.on(element, name, eventOptions, function(e) {
                 scope.$apply(function() {
                     handler(scope, { $event: e });
                 });

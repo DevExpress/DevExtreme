@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
     compareVersions = require("../core/utils/version").compare,
@@ -80,7 +81,7 @@ var getElement = function(value) {
     return value && $(value instanceof $.Event ? value.target : value);
 };
 
-$(document).on(pointerEvents.down, function(e) {
+eventsEngine.on(document, pointerEvents.down, function(e) {
     for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
         if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -447,9 +448,9 @@ var Overlay = Widget.inherit({
         this._$wrapper.attr("data-bind", "dxControlsDescendantBindings: true");
 
         // NOTE: hack to fix B251087
-        this._$wrapper.on("MSPointerDown", noop);
+        eventsEngine.on(this._$wrapper, "MSPointerDown", noop);
         // NOTE: bootstrap integration T342292
-        this._$wrapper.on("focusin", function(e) { e.stopPropagation(); });
+        eventsEngine.on(this._$wrapper, "focusin", function(e) { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
     },
@@ -817,9 +818,9 @@ var Overlay = Widget.inherit({
     _toggleTabTerminator: function(enabled) {
         var eventName = eventUtils.addNamespace("keydown", this.NAME);
         if(enabled) {
-            $(document).on(eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.on(document, eventName, this._proxiedTabTerminatorHandler);
         } else {
-            $(document).off(eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.off(document, eventName, this._proxiedTabTerminatorHandler);
         }
     },
 
@@ -882,10 +883,10 @@ var Overlay = Widget.inherit({
         this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
             || (function(e) { this._targetParentsScrollHandler(e); }).bind(this);
 
-        $().add(this._$prevTargetParents)
-            .off(scrollEvent, this._proxiedTargetParentsScrollHandler);
+        eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._proxiedTargetParentsScrollHandler);
+
         if(subscribe && closeOnScroll) {
-            $parents.on(scrollEvent, this._proxiedTargetParentsScrollHandler);
+            eventsEngine.on($parents, scrollEvent, this._proxiedTargetParentsScrollHandler);
             this._$prevTargetParents = $parents;
         }
     },
@@ -978,17 +979,15 @@ var Overlay = Widget.inherit({
         var startEventName = eventUtils.addNamespace(dragEvents.start, this.NAME),
             updateEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
-        $dragTarget
-            .off(startEventName)
-            .off(updateEventName);
+        eventsEngine.off($dragTarget, startEventName);
+        eventsEngine.off($dragTarget, updateEventName);
 
         if(!this.option("dragEnabled")) {
             return;
         }
 
-        $dragTarget
-            .on(startEventName, this._dragStartHandler.bind(this))
-            .on(updateEventName, this._dragUpdateHandler.bind(this));
+        eventsEngine.on($dragTarget, startEventName, this._dragStartHandler.bind(this));
+        eventsEngine.on($dragTarget, updateEventName, this._dragUpdateHandler.bind(this));
     },
 
     _renderResize: function() {
@@ -1019,26 +1018,25 @@ var Overlay = Widget.inherit({
         var $scrollTerminator = this._wrapper();
         var terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
-        $scrollTerminator
-            .off(terminatorEventName)
-            .on(terminatorEventName, {
-                validate: function() {
-                    return true;
-                },
-                getDirection: function() {
-                    return "both";
-                },
-                _toggleGestureCover: noop,
-                _clearSelection: noop,
-                isNative: true
-            }, function(e) {
-                var originalEvent = e.originalEvent.originalEvent;
-                e._cancelPreventDefault = true;
+        eventsEngine.off($scrollTerminator, terminatorEventName);
+        eventsEngine.on($scrollTerminator, terminatorEventName, {
+            validate: function() {
+                return true;
+            },
+            getDirection: function() {
+                return "both";
+            },
+            _toggleGestureCover: noop,
+            _clearSelection: noop,
+            isNative: true
+        }, function(e) {
+            var originalEvent = e.originalEvent.originalEvent;
+            e._cancelPreventDefault = true;
 
-                if(originalEvent && originalEvent.type !== "mousemove") {
-                    e.preventDefault();
-                }
-            });
+            if(originalEvent && originalEvent.type !== "mousemove") {
+                e.preventDefault();
+            }
+        });
     },
 
     _getDragTarget: function() {

@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var $ = require("jquery"),
     Class = require("../../core/class"),
     noop = require("../../core/utils/common").noop,
     iteratorUtils = require("../../core/utils/iterator"),

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,
@@ -192,7 +193,7 @@ var Resizable = DOMComponent.inherit({
         handlers[DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
         handlers[DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
 
-        $handle.on(handlers, {
+        eventsEngine.on($handle, handlers, {
             direction: "both",
             immediate: true
         });

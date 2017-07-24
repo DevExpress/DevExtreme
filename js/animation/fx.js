@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     errors = require("../core/errors"),
     extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
@@ -162,22 +163,21 @@ var TransitionAnimationStrategy = {
         config.transitionAnimation.cleanup = function() {
             clearTimeout(simulatedEndEventTimer);
             clearTimeout(waitForJSCompleteTimer);
-            $element.off(transitionEndEventName);
-            $element.off(removeEventName);
+            eventsEngine.off($element, transitionEndEventName);
+            eventsEngine.off($element, removeEventName);
         };
 
-        $element
-            .one(transitionEndEventName, function() {
-                //NOTE: prevent native transitionEnd event from previous animation in queue (Chrome)
-                if(Date.now() - startTime >= config.duration) {
-                    transitionEndFired.reject();
-                }
-            })
-            .off(removeEventName)
-            .on(removeEventName, function() {
-                that.stop($element, config);
-                deferred.reject();
-            });
+        eventsEngine.one($element, transitionEndEventName, function() {
+            //NOTE: prevent native transitionEnd event from previous animation in queue (Chrome)
+            if(Date.now() - startTime >= config.duration) {
+                transitionEndFired.reject();
+            }
+        });
+        eventsEngine.off(eventsEngine, $element, removeEventName);
+        eventsEngine.on($element, removeEventName, function() {
+            that.stop($element, config);
+            deferred.reject();
+        });
 
         waitForJSCompleteTimer = setTimeout(function() { //Fix for a visual bug (T244514): do not setup the timer until all js code has finished working
             simulatedEndEventTimer = setTimeout(function() {
@@ -313,13 +313,12 @@ var FrameAnimationStrategy = {
     },
 
     _startAnimation: function($element, config) {
-        $element
-            .off(removeEventName)
-            .on(removeEventName, function() {
-                if(config.frameAnimation) {
-                    animationFrame.cancelAnimationFrame(config.frameAnimation.animationFrameId);
-                }
-            });
+        eventsEngine.off($element, removeEventName);
+        eventsEngine.on($element, removeEventName, function() {
+            if(config.frameAnimation) {
+                animationFrame.cancelAnimationFrame(config.frameAnimation.animationFrameId);
+            }
+        });
 
         this._animationStep($element, config);
     },
@@ -721,14 +720,13 @@ var stopAnimationOnElement = function(jumpToEnd) {
 var scopedRemoveEvent = eventUtils.addNamespace(removeEvent, "dxFXStartAnimation");
 
 var subscribeToRemoveEvent = function(animation) {
-    animation.element
-        .off(scopedRemoveEvent)
-        .on(scopedRemoveEvent, function() {
-            fx.stop(animation.element);
-        });
+    eventsEngine.off(animation.element, scopedRemoveEvent);
+    eventsEngine.on(animation.element, scopedRemoveEvent, function() {
+        fx.stop(animation.element);
+    });
 
     animation.deferred.always(function() {
-        animation.element.off(scopedRemoveEvent);
+        eventsEngine.off(animation.element, scopedRemoveEvent);
     });
 };
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
@@ -799,7 +800,7 @@ var LayoutManager = Widget.inherit({
             }
          );
 
-        $container.on(removeEvent, dispose);
+        eventsEngine.on($container, removeEvent, dispose);
     },
 
     _getWatch: function() {
@@ -901,8 +902,8 @@ var LayoutManager = Widget.inherit({
         var isBooleanEditors = editorType === "dxCheckBox" || editorType === "dxSwitch";
 
         if($label && isBooleanEditors) {
-            $label.on(clickEvent.name, function() {
-                $editor.children().trigger(clickEvent.name);
+            eventsEngine.on($label, clickEvent.name, function() {
+                eventsEngine.trigger($editor.children(), clickEvent.name);
             });
         }
     },

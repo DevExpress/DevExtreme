@@ -208,7 +208,7 @@ QUnit.test("'onSelectionChanged' should be fired when 'selectAll' item is select
             onSelectionChanged: onSelectionChangedHandler
         }).dxTreeView("instance");
 
-    treeView._$selectAllItem.trigger("dxclick");
+    $(treeView._$selectAllItem).trigger("dxclick");
     var args = onSelectionChangedHandler.getCall(0).args[0];
 
     assert.ok(onSelectionChangedHandler.calledOnce);
@@ -227,7 +227,7 @@ QUnit.test("'onSelectionChanged' should be fired when 'selectAll' item is unsele
             onSelectionChanged: onSelectionChangedHandler
         }).dxTreeView("instance");
 
-    treeView._$selectAllItem.trigger("dxclick");
+    $(treeView._$selectAllItem).trigger("dxclick");
     var args = onSelectionChangedHandler.getCall(0).args[0];
 
     assert.ok(onSelectionChangedHandler.calledOnce);
@@ -522,7 +522,7 @@ QUnit.test("T184799: expand item", function(assert) {
             onItemExpanded: handler
         }).dxTreeView("instance");
 
-        var $rootItem = treeView.element().find("." + internals.ITEM_CLASS).eq(0);
+        var $rootItem = $(treeView.element()).find("." + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
         this.clock.tick(0);
@@ -629,7 +629,7 @@ QUnit.test("T184799: collapse item", function(assert) {
             onItemCollapsed: handler
         }).dxTreeView("instance");
 
-        var $rootItem = treeView.element().find("." + internals.ITEM_CLASS).eq(0);
+        var $rootItem = $(treeView.element()).find("." + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
 

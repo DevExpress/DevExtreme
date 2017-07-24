@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     Callbacks = require("../core/utils/callbacks"),
     isDefined = require("../core/utils/type").isDefined,
@@ -65,7 +66,7 @@ var FileUploader = Editor.inherit({
         var click = function(e) {
             e.preventDefault();
             var $selectButton = this._selectButton.element();
-            $selectButton.trigger(clickEvent.name);
+            eventsEngine.trigger($selectButton, clickEvent.name);
         };
 
         return extend(this.callBase(), {
@@ -423,12 +424,11 @@ var FileUploader = Editor.inherit({
         if(!this._$fileInput) {
             this._$fileInput = $(FILEUPLOADER_FILEINPUT_TAG);
 
-            this._$fileInput
-                .on("change", this._inputChangeHandler.bind(this))
-                .on("click", (function(e) {
-                    e.stopPropagation();
-                    return this.option("useNativeInputClick") || this._isCustomClickEvent;
-                }).bind(this));
+            eventsEngine.on(this._$fileInput, "change", this._inputChangeHandler.bind(this));
+            eventsEngine.on(this._$fileInput, "click", (function(e) {
+                e.stopPropagation();
+                return this.option("useNativeInputClick") || this._isCustomClickEvent;
+            }).bind(this));
         }
 
         this._$fileInput.prop({
@@ -768,9 +768,8 @@ var FileUploader = Editor.inherit({
         if(devices.real().deviceType === "desktop") {
             this._selectButton.option("onClick", this._selectButtonClickHandler.bind(this));
         } else {
-            $button
-                .off("click")
-                .on("click", this._selectButtonClickHandler.bind(this));
+            eventsEngine.off($button, "click");
+            eventsEngine.on($button, "click", this._selectButtonClickHandler.bind(this));
         }
     },
 
@@ -786,7 +785,7 @@ var FileUploader = Editor.inherit({
         }
 
         that._isCustomClickEvent = true;
-        that._$fileInput.trigger("click");
+        eventsEngine.trigger(that._$fileInput, "click");
         that._isCustomClickEvent = false;
     },
 
@@ -862,8 +861,7 @@ var FileUploader = Editor.inherit({
     },
 
     _renderDragEvents: function() {
-        this._$inputWrapper
-            .off("." + this.NAME);
+        eventsEngine.off(this._$inputWrapper, "." + this.NAME);
 
         if(!this._shouldDragOverBeRendered()) {
             return;
@@ -871,11 +869,10 @@ var FileUploader = Editor.inherit({
 
         this._dragEventsCount = 0;
 
-        this._$inputWrapper
-            .on(eventUtils.addNamespace("dragenter", this.NAME), this._dragEnterHandler.bind(this))
-            .on(eventUtils.addNamespace("dragover", this.NAME), this._dragOverHandler.bind(this))
-            .on(eventUtils.addNamespace("dragleave", this.NAME), this._dragLeaveHandler.bind(this))
-            .on(eventUtils.addNamespace("drop", this.NAME), this._dropHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragenter", this.NAME), this._dragEnterHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragover", this.NAME), this._dragOverHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragleave", this.NAME), this._dragLeaveHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("drop", this.NAME), this._dropHandler.bind(this));
     },
 
     _useInputForDrop: function() {

@@ -41,13 +41,13 @@ QUnit.module("Common", {
 
         this.renderDropDownAppointmentsContainer = function(items) {
             items = items || { data: [{ text: "a", startDate: new Date(2015, 1, 1) }], colors: [] };
-            return new DropDownAppointments().render({
+            return $(new DropDownAppointments().render({
                 $container: $("#ddAppointments"),
                 coordinates: { top: 0, left: 0 },
                 items: items,
                 buttonWidth: this.buttonWidth,
                 buttonColor: this.color
-            }, this.widgetMock);
+            }, this.widgetMock));
         };
     },
     afterEach: function() {
@@ -95,7 +95,7 @@ QUnit.test("DropDown menu should be rendered on dxclick", function(assert) {
     var $dropDownMenu = this.renderDropDownAppointmentsContainer(),
         menu;
 
-    $dropDownMenu.trigger("dxclick");
+    $($dropDownMenu).trigger("dxclick");
     menu = $dropDownMenu.dxDropDownMenu("instance");
 
     assert.ok($dropDownMenu.hasClass("dx-dropdownmenu"), "DropDown menu is rendered");
@@ -107,7 +107,7 @@ QUnit.test("DropDown menu should have a correct button template", function(asser
         menu,
         $buttonTemplate;
 
-    $dropDownMenu.trigger("dxclick");
+    $($dropDownMenu).trigger("dxclick");
     menu = $dropDownMenu.dxDropDownMenu("instance"),
     $buttonTemplate = menu.option("buttonTemplate");
 
@@ -120,7 +120,7 @@ QUnit.test("DropDown menu button should have a correct width", function(assert) 
     var $dropDownMenu = this.renderDropDownAppointmentsContainer(),
         menu;
 
-    $dropDownMenu.trigger("dxclick");
+    $($dropDownMenu).trigger("dxclick");
     menu = $dropDownMenu.dxDropDownMenu("instance");
 
     assert.equal(menu.option("buttonWidth"), this.buttonWidth, "DropDown menu button has a correct width");
@@ -128,8 +128,8 @@ QUnit.test("DropDown menu button should have a correct width", function(assert) 
 
 QUnit.test("DropDown menu should be rendered only once", function(assert) {
     var $dropDownMenu = this.renderDropDownAppointmentsContainer();
-    $dropDownMenu.trigger("dxclick");
-    $dropDownMenu.trigger("dxclick");
+    $($dropDownMenu).trigger("dxclick");
+    $($dropDownMenu).trigger("dxclick");
 
     assert.equal($(".dx-dropdownmenu").length, 1, "DropDown menu is rendered once");
 });
@@ -234,11 +234,11 @@ QUnit.test("Propagation should be stopped after click on remove/edit button", fu
 
     dropDownMenu.open();
 
-    $removeButton.on("dxclick", function(e) {
+    $($removeButton).on("dxclick", function(e) {
         assert.ok(e.isPropagationStopped(), "Propagation is stopped");
     }).trigger("dxclick");
 
-    $editButton.on("dxclick", function(e) {
+    $($editButton).on("dxclick", function(e) {
         assert.ok(e.isPropagationStopped(), "Propagation is stopped");
     }).trigger("dxclick");
 });
@@ -253,7 +253,7 @@ QUnit.test("Click on the remove button should trigger the 'deleteAppointment' me
 
     dropDownMenu.open();
 
-    $removeButton.trigger("dxclick");
+    $($removeButton).trigger("dxclick");
 
     assert.ok(deleteStub.calledOnce, "The 'deleteAppointment' method was called");
     assert.deepEqual(deleteStub.getCall(0).args[0], {
@@ -273,7 +273,7 @@ QUnit.test("Click on the edit button should trigger the 'showEditAppointmentPopu
 
     dropDownMenu.open();
 
-    $editButton.trigger("dxclick");
+    $($editButton).trigger("dxclick");
 
     assert.ok(notifyObserverStub.called, "Observer was notified");
     assert.equal(notifyObserverStub.getCall(4).args[0], "showEditAppointmentPopup", "The 'showAppointmentPopup' method was called");

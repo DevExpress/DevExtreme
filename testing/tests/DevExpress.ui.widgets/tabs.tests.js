@@ -84,7 +84,7 @@ QUnit.test("mouseup switch selected tab", function(assert) {
         tabsInstance = tabsElement.data("dxTabs");
 
     $.each(tabsInstance.option("items"), function(clickedTabIndex) {
-        var tabs = tabsInstance._itemElements();
+        var tabs = $(tabsInstance._itemElements());
         tabs.eq(clickedTabIndex).trigger("dxclick");
 
         tabs.each(function(tabIndex) {
@@ -108,7 +108,7 @@ QUnit.test("repeated click doesn't change selected tab state", function(assert) 
         }),
         tabsInstance = tabsElement.data("dxTabs");
 
-    var tabElements = tabsInstance._itemElements(),
+    var tabElements = $(tabsInstance._itemElements()),
         tabElement = tabElements.eq(1);
 
     tabElement.trigger("dxclick");
@@ -134,7 +134,7 @@ QUnit.test("disabled tab can't be selected by click", function(assert) {
         }),
         tabsInstance = tabsElement.data("dxTabs");
 
-    var tabElements = tabsInstance._itemElements();
+    var tabElements = $(tabsInstance._itemElements());
 
     tabElements.eq(2).trigger("dxclick");
 
@@ -474,7 +474,7 @@ QUnit.test("click on right nav button should scroll tabs to right", function(ass
         $button = $element.find("." + TABS_RIGHT_NAV_BUTTON_CLASS),
         scrollable = $element.find("." + SCROLLABLE_CLASS).dxScrollable("instance");
 
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     assert.equal(scrollable.scrollLeft(), TAB_OFFSET, "scroll position is correct");
 });
 
@@ -492,9 +492,9 @@ QUnit.test("hold on right nav button should scroll tabs to right to end", functi
 
     this.clock = sinon.useFakeTimers();
 
-    $button.trigger(holdEvent.name);
+    $($button).trigger(holdEvent.name);
     this.clock.tick(100);
-    $button.trigger("mouseup");
+    $($button).trigger("mouseup");
 
     assert.equal(scrollable.scrollLeft(), 120, "scroll position is correct");
 
@@ -529,7 +529,7 @@ QUnit.test("click on left nav button should scroll tabs to left", function(asser
 
     scrollable.update();
     scrollable.scrollTo(TAB_OFFSET);
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     assert.equal(scrollable.scrollLeft(), 0, "scroll position is correct");
 });
 
@@ -550,9 +550,9 @@ QUnit.test("hold on left nav button should scroll tabs to left to end", function
     scrollable.update();
     scrollable.scrollTo(200);
 
-    $button.trigger(holdEvent.name);
+    $($button).trigger(holdEvent.name);
     this.clock.tick(100);
-    $button.trigger("mouseup");
+    $($button).trigger("mouseup");
 
     assert.equal(scrollable.scrollLeft(), 80, "scroll position is correct");
 
@@ -641,7 +641,7 @@ QUnit.test("button should update disabled state after dxresize", function(assert
 
     $button.dxButton("instance").option("disabled", true);
 
-    $element.trigger("dxresize");
+    $($element).trigger("dxresize");
     assert.ok(!$button.dxButton("instance").option("disabled"));
 });
 
@@ -679,7 +679,7 @@ QUnit.test("tabs should not be refreshed after dimension changed", function(asse
 
     instance.itemElements().data("rendered", true);
 
-    $element.trigger("dxresize");
+    $($element).trigger("dxresize");
 
     assert.ok(instance.itemElements().data("rendered"), "tabs was not refreshed");
     assert.equal($element.find("." + TABS_SCROLLABLE_CLASS).length, 1, "only one scrollable wrapper should exist");
@@ -695,7 +695,7 @@ QUnit.test("tabs should hide navigation if scrollable is not allowed after resiz
         instance = $element.dxTabs("instance");
 
     instance.option("width", 700);
-    $element.trigger("dxresize");
+    $($element).trigger("dxresize");
 
     assert.equal($element.find("." + TABS_NAV_BUTTON_CLASS).length, 0, "nav buttons was removed");
     assert.equal($element.find("." + TABS_SCROLLABLE_CLASS).length, 0, "scrollable was removed");

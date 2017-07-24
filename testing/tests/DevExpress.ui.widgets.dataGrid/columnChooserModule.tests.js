@@ -245,7 +245,7 @@ QUnit.test("Hide column via column chooser (select mode)", function(assert) {
     $treeViewItem = $columnChooser.find(".dx-checkbox").first();
 
     //act
-    $treeViewItem.trigger("dxclick");
+    $($treeViewItem).trigger("dxclick");
     this.clock.tick(500);
 
     //assert
@@ -271,7 +271,7 @@ QUnit.test("Prevent hiding the last column via column chooser when select mode i
     $treeViewItem = $columnChooser.find(".dx-checkbox").first();
 
     //act
-    $treeViewItem.trigger("dxclick");
+    $($treeViewItem).trigger("dxclick");
     this.clock.tick(500);
 
     //assert
@@ -298,7 +298,7 @@ QUnit.test("Show column via column chooser (select mode)", function(assert) {
     $treeViewItem = $columnChooser.find(".dx-checkbox").first();
 
     //act
-    $treeViewItem.trigger("dxclick");
+    $($treeViewItem).trigger("dxclick");
     this.clock.tick(500);
 
     //assert
@@ -874,7 +874,7 @@ QUnit.test("CheckBox mode - check hidden band column", function(assert) {
     this.renderColumnChooser();
     columnChooserView._popupContainer.option("visible", true);
 
-    columnChooserView._popupContainer.content().find(".dx-checkbox").first().trigger("dxclick");
+    $(columnChooserView._popupContainer.content().find(".dx-checkbox").first()).trigger("dxclick");
 
 
     //assert

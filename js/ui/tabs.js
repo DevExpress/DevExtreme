@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     Button = require("./button"),
@@ -422,13 +423,15 @@ var Tabs = CollectionWidget.inherit({
             integrationOptions: {}
         });
 
-        navButton.element()
-            .on(holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ jQueryEvent: e }); }).bind(this))
-            .on(pointerUpEventName, function() {
-                that._clearInterval();
-            }).on(pointerOutEventName, function() {
-                that._clearInterval();
-            });
+        var $navButton = navButton.element();
+
+        eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ jQueryEvent: e }); }).bind(this));
+        eventsEngine.on($navButton, pointerUpEventName, function() {
+            that._clearInterval();
+        });
+        eventsEngine.on($navButton, pointerOutEventName, function() {
+            that._clearInterval();
+        });
 
         return navButton;
     },

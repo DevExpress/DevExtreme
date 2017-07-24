@@ -407,10 +407,10 @@ QUnit.test("toolbar should get 'list-visible' class when menu is visible", funct
     });
     var $menu = $element.find("." + TOOLBAR_MENU_BUTTON_CLASS);
 
-    $menu.trigger("dxclick");
+    $($menu).trigger("dxclick");
     assert.ok($element.hasClass(TOOLBAR_LIST_VISIBLE_CLASS), "'list-visible' class is attached when list is shown");
 
-    $menu.trigger("dxclick");
+    $($menu).trigger("dxclick");
     assert.ok(!$element.hasClass(TOOLBAR_LIST_VISIBLE_CLASS), "'list-visible' class is removed when list is hidden");
 });
 
@@ -485,7 +485,7 @@ QUnit.test("changing field of item in submenu", function(assert) {
     });
 
     var $button = this.element.find("." + TOOLBAR_MENU_BUTTON_CLASS);
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     this.element.dxToolbar("option", "items[0].disabled", false);
     assert.equal($(".dx-state-disabled").length, 0, "disabled state changed");
 });
@@ -568,10 +568,10 @@ QUnit.test("menu button click", function(assert) {
 
     var position = $container.position().top;
 
-    $menuButton.trigger("dxclick");
+    $($menuButton).trigger("dxclick");
     assert.equal($container.position().top, -swipeHeight);
 
-    $menuButton.trigger("dxclick");
+    $($menuButton).trigger("dxclick");
     assert.equal($container.position().top, position);
 });
 
@@ -593,7 +593,7 @@ QUnit.test("close win8 appbar on 'back' button click", function(assert) {
 
     var position = $container.position().top;
 
-    $menuButton.trigger("dxclick");
+    $($menuButton).trigger("dxclick");
     assert.equal($container.position().top, -swipeHeight);
 
     hideTopOverlayCallback.fire();
@@ -618,7 +618,7 @@ QUnit.test("close win8 appbar on menu item click", function(assert) {
         $container = this.$element.find(".dx-overlay-content"),
         position = $container.position().top;
 
-    $menuButton.trigger("dxclick");
+    $($menuButton).trigger("dxclick");
 
     var submenu = this.$element.find(".dx-list-item").get(0);
     $(submenu).trigger("dxclick");
@@ -701,7 +701,7 @@ QUnit.test("it should be possible to expand toolbar with no items in submenu", f
         return toolbar._menuStrategy._menuShown;
     };
 
-    $menuButton.trigger("dxclick");
+    $($menuButton).trigger("dxclick");
     assert.ok(isMenuVisible(instance), "toolbar is expanded");
 });
 
@@ -1365,7 +1365,7 @@ QUnit.test("dropdown menu shouldn't be closed after click on editors", function(
         dropDown = $dropDown.dxDropDownMenu("instance");
     dropDown.open();
 
-    $beforeItem.trigger("dxclick");
+    $($beforeItem).trigger("dxclick");
 
     assert.ok(dropDown.option("opened"), "dropdown isn't closed");
 });
@@ -1389,11 +1389,11 @@ QUnit.test("dropdown menu should be closed after click on button or menu items",
     var $items = $element.find(".dx-list-item");
 
     dropDown.open();
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
     assert.ok(!dropDown.option("opened"), "dropdown is closed");
 
     dropDown.open();
-    $items.eq(1).trigger("dxclick");
+    $($items.eq(1)).trigger("dxclick");
     assert.ok(!dropDown.option("opened"), "dropdown is closed");
 });
 
@@ -1483,7 +1483,7 @@ QUnit.test("toolbar menu should have correct focused element", function(assert) 
     var $item1 = $(".dx-list-item").eq(0),
         $item2 = $(".dx-list-item").eq(1);
 
-    $item2.trigger("dxpointerdown");
+    $($item2).trigger("dxpointerdown");
     this.clock.tick();
 
     assert.ok($item2.hasClass("dx-state-focused"), "only item2 is focused");
@@ -1710,7 +1710,7 @@ QUnit.test("T430159 dropdown menu should be closed after click on item if locati
     dropDown.open();
     var $items = $(".dx-dropdownmenu-list .dx-list-item");
 
-    $items.eq(0).trigger("dxclick");
+    $($items.eq(0)).trigger("dxclick");
 
     assert.ok(!dropDown.option("opened"), "dropdown is closed");
     assert.equal(onClickActionStub.callCount, 1, "onClick was fired");

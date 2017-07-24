@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     columnsView = require("./ui.grid_core.columns_view"),
     isDefined = require("../../core/utils/type").isDefined,
     each = require("../../core/utils/iterator").each,
@@ -70,7 +71,7 @@ module.exports = {
                 _createTable: function() {
                     var $table = this.callBase.apply(this, arguments);
 
-                    $table.on("mousedown selectstart", this.createAction(function(e) {
+                    eventsEngine.on($table, "mousedown selectstart", this.createAction(function(e) {
                         var event = e.jQueryEvent;
 
                         if(event.shiftKey) {

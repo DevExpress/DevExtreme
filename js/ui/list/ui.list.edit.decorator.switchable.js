@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     EditDecorator = require("./ui.list.edit.decorator"),
     abstract = EditDecorator.abstract,
@@ -28,8 +29,8 @@ var SwitchableEditDecorator = EditDecorator.inherit({
         this._$bottomShield = $("<div />").addClass(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS);
         this._$itemContentShield = $("<div />").addClass(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS);
 
-        this._$topShield.on(POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
-        this._$bottomShield.on(POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
+        eventsEngine.on(this._$topShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
+        eventsEngine.on(this._$bottomShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
 
         this._list.element()
             .append(this._$topShield.toggle(false))
@@ -140,12 +141,12 @@ var SwitchableEditDecorator = EditDecorator.inherit({
 
     _enablePositioning: function($itemElement) {
         $itemElement.addClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS);
-        $itemElement.on(ACTIVE_EVENT_NAME, noop);
+        eventsEngine.on($itemElement, ACTIVE_EVENT_NAME, noop);
     },
 
     _disablePositioning: function($itemElement) {
         $itemElement.removeClass(SWITCHABLE_MENU_ITEM_SHIELD_POSITIONING_CLASS);
-        $itemElement.off(ACTIVE_EVENT_NAME);
+        eventsEngine.off($itemElement, ACTIVE_EVENT_NAME);
     },
 
     _prepareDeleteReady: function($itemElement) {

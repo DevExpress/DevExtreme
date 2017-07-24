@@ -93,7 +93,7 @@ QUnit.test("selected item should be changed by item click", function(assert) {
         instance = $element.dxDateViewRoller("instance"),
         $items = $element.find("." + DATEVIEW_ROLLER_ITEM_CLASS);
 
-    $items.eq(1).trigger("dxclick");
+    $($items.eq(1)).trigger("dxclick");
     assert.equal(instance.option("selectedIndex"), 1, "selectedIndex changed");
 });
 
@@ -184,7 +184,7 @@ QUnit.test("clicking on non-selected item changes selectedIndex", function(asser
         }),
         instance = $element.dxDateViewRoller("instance");
 
-    $element.find("." + DATEVIEW_ROLLER_ITEM_CLASS).eq(1).trigger("dxclick");
+    $($element.find("." + DATEVIEW_ROLLER_ITEM_CLASS).eq(1)).trigger("dxclick");
     assert.equal(instance.option("selectedIndex"), 1, "selectedIndex is changed correctly");
 });
 
@@ -438,7 +438,7 @@ QUnit.test("rollers are opened on click on win8", function(assert) {
         var $roller = instance._$rollersContainer.find("." + DATEVIEW_ROLLER_CLASS).eq(0),
             $rollerContainer = $roller.find(".dx-scrollable-container");
 
-        $rollerContainer.trigger("dxclick");
+        $($rollerContainer).trigger("dxclick");
 
         assert.ok($roller.hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), "roller is active ");
     } finally {

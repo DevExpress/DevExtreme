@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     clickEvent = require("../events/click"),
     devices = require("../core/devices"),
@@ -289,9 +290,8 @@ var Accordion = CollectionWidget.inherit({
         var itemSelector = "." + ACCORDION_ITEM_TITLE_CLASS,
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        this._itemContainer()
-            .off(eventName, itemSelector)
-            .on(eventName, itemSelector, this._itemTitleClickHandler.bind(this));
+        eventsEngine.off(this._itemContainer(), eventName, itemSelector);
+        eventsEngine.on(this._itemContainer(), eventName, itemSelector, this._itemTitleClickHandler.bind(this));
     },
 
     _itemTitleClickHandler: function(e) {

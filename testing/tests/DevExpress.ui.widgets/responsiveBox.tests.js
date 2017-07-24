@@ -545,7 +545,7 @@ QUnit.test("dxUpdate trigger async after render and dimension changed", function
 
         var $box = $responsiveBox.find(".dx-box").eq(0);
         var dxUpdateEventCounter = 0;
-        $box.on("dxupdate", function() {
+        $($box).on("dxupdate", function() {
             dxUpdateEventCounter++;
         });
 
@@ -557,7 +557,7 @@ QUnit.test("dxUpdate trigger async after render and dimension changed", function
         dxUpdateEventCounter = 0;
         this.updateScreenSize(1000);
         $box = $responsiveBox.find(".dx-box").eq(0);
-        $box.on("dxupdate", function() {
+        $($box).on("dxupdate", function() {
             dxUpdateEventCounter++;
         });
 
@@ -620,7 +620,7 @@ QUnit.test("dxUpdate should not be bubbling to parent container", function(asser
         });
         $responsiveBox.appendTo($parentContainer);
 
-        $parentContainer.on("dxupdate", dxUpdateStub);
+        $($parentContainer).on("dxupdate", dxUpdateStub);
 
         $responsiveBox.dxResponsiveBox("repaint");
         clock.tick();
@@ -848,7 +848,7 @@ QUnit.test("onItemClick", function(assert) {
         assert.ok(true, "clicked");
     });
 
-    responsiveBox.itemElements().eq(0).trigger("dxclick");
+    $(responsiveBox.itemElements()).eq(0).trigger("dxclick");
 });
 
 
@@ -935,7 +935,7 @@ QUnit.test("onOptionChanged should not be fired after click on item", function(a
     });
     var initCallCount = onOptionChangedStub.callCount;
 
-    $responsiveBox.find(".dx-item").trigger("dxclick");
+    $($responsiveBox.find(".dx-item")).trigger("dxclick");
 
     assert.equal(onOptionChangedStub.callCount, initCallCount, "onOptionChanged wasn't fired");
 });

@@ -72,7 +72,7 @@ QUnit.test("scrolling with dxpointer events", function(assert) {
         assert.ok(false, "dxpointermove should be prevented");
     });
 
-    $input.on("dxpointermove", function(e) {
+    $($input).on("dxpointermove", function(e) {
         assert.ok(e.isScrollingEvent);
     });
 
@@ -287,9 +287,9 @@ QUnit.test("widget is resized on input", function(assert) {
         }),
         $input = $element.find(".dx-texteditor-input");
 
-    $input.trigger("focus");
+    $($input).trigger("focus");
     keyboardMock($input).type("\n\n");
-    $input.trigger("input");
+    $($input).trigger("input");
 
     var inputHeight = $input.outerHeight();
     $input.height(0);

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -446,7 +447,7 @@ var TextEditorBase = Editor.inherit({
                 .attr("data-dx_placeholder", placeholderText),
             startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
 
-        $placeholder.on(startEvent, function() {
+        eventsEngine.on($placeholder, startEvent, function() {
             $input.focus();
         });
 
@@ -486,15 +487,18 @@ var TextEditorBase = Editor.inherit({
     },
 
     _createClearButton: function() {
-        return $("<span>")
+        var $clearButton = $("<span>")
             .addClass(TEXTEDITOR_CLEAR_BUTTON_CLASS)
-            .append($("<span>").addClass(TEXTEDITOR_ICON_CLASS).addClass(TEXTEDITOR_CLEAR_ICON_CLASS))
-            .on(eventUtils.addNamespace(pointerEvents.down, this.NAME), function(e) {
-                if(e.pointerType === "mouse") {
-                    e.preventDefault();
-                }
-            })
-            .on(eventUtils.addNamespace(clickEvent.name, this.NAME), this._clearValueHandler.bind(this));
+            .append($("<span>").addClass(TEXTEDITOR_ICON_CLASS).addClass(TEXTEDITOR_CLEAR_ICON_CLASS));
+
+        eventsEngine.on($clearButton, eventUtils.addNamespace(pointerEvents.down, this.NAME), function(e) {
+            if(e.pointerType === "mouse") {
+                e.preventDefault();
+            }
+        });
+        eventsEngine.on($clearButton, eventUtils.addNamespace(clickEvent.name, this.NAME), this._clearValueHandler.bind(this));
+
+        return $clearButton;
     },
 
     _clearValueHandler: function(e) {
@@ -505,7 +509,7 @@ var TextEditorBase = Editor.inherit({
         this.reset();
 
         !$input.is(":focus") && $input.focus();
-        $input.trigger("input");
+        eventsEngine.trigger($input, "input");
     },
 
     _renderEvents: function() {
@@ -517,7 +521,7 @@ var TextEditorBase = Editor.inherit({
 
                 var action = that._createActionByOption("on" + event, { excludeValidators: ["readOnly"] });
 
-                $input.on(eventUtils.addNamespace(event.toLowerCase(), that.NAME), function(e) {
+                eventsEngine.on($input, eventUtils.addNamespace(event.toLowerCase(), that.NAME), function(e) {
                     if(that._disposed) {
                         return;
                     }
@@ -533,7 +537,7 @@ var TextEditorBase = Editor.inherit({
             $input = this._input();
 
         each(EVENTS_LIST, function(_, event) {
-            $input.off(eventUtils.addNamespace(event.toLowerCase(), that.NAME));
+            eventsEngine.off($input, eventUtils.addNamespace(event.toLowerCase(), that.NAME));
         });
 
         this._renderEvents();
@@ -547,18 +551,16 @@ var TextEditorBase = Editor.inherit({
         var keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), this.NAME + "TextChange"),
             valueChangeEvent = eventUtils.addNamespace(this.option("valueChangeEvent"), this.NAME + "ValueChange");
 
-        this._input()
-            .on(keyPressEvent, this._keyPressHandler.bind(this))
-            .on(valueChangeEvent, this._valueChangeEventHandler.bind(this));
+        eventsEngine.on(this._input(), keyPressEvent, this._keyPressHandler.bind(this));
+        eventsEngine.on(this._input(), valueChangeEvent, this._valueChangeEventHandler.bind(this));
     },
 
     _cleanValueChangeEvent: function() {
         var eventNamespace = this.NAME + "ValueChange",
             keyPressEvent = eventUtils.addNamespace(this._renderValueEventName(), this.NAME + "TextChange");
 
-        this._input()
-            .off("." + eventNamespace)
-            .off(keyPressEvent);
+        eventsEngine.off(this._input(), "." + eventNamespace);
+        eventsEngine.off(this._input(), keyPressEvent);
     },
 
     _refreshValueChangeEvent: function() {
@@ -589,7 +591,7 @@ var TextEditorBase = Editor.inherit({
     _renderEmptinessEvent: function() {
         var $input = this._input();
 
-        $input.on("input blur", this._toggleEmptinessEventHandler.bind(this));
+        eventsEngine.on($input, "input blur", this._toggleEmptinessEventHandler.bind(this));
     },
 
     _toggleEmptinessEventHandler: function() {
@@ -609,9 +611,8 @@ var TextEditorBase = Editor.inherit({
             excludeValidators: ["readOnly"]
         });
 
-        this._input()
-            .off("keyup.onEnterKey.dxTextEditor")
-            .on("keyup.onEnterKey.dxTextEditor", this._enterKeyHandlerUp.bind(this));
+        eventsEngine.off(this._input(), "keyup.onEnterKey.dxTextEditor");
+        eventsEngine.on(this._input(), "keyup.onEnterKey.dxTextEditor", this._enterKeyHandlerUp.bind(this));
     },
 
     _enterKeyHandlerUp: function(e) {

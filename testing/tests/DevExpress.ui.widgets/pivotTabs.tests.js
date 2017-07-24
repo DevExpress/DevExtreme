@@ -294,7 +294,7 @@ QUnit.test("disabled should reject tab click", function(assert) {
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS));
 
-    $items.eq(1).trigger("dxclick");
+    $($items.eq(1)).trigger("dxclick");
     assert.strictEqual(pivotTabs.option("selectedIndex"), 0, "index should not change");
 });
 
@@ -624,7 +624,7 @@ QUnit.test("tab click should change selected item", function(assert) {
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS));
 
-    $items.eq(1).trigger("dxclick");
+    $($items.eq(1)).trigger("dxclick");
 
     assert.equal(pivotTabs.option("selectedIndex"), 1, "item selected");
 });

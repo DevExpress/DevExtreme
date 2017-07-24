@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../integration/jquery/deferred").when,
@@ -714,16 +715,15 @@ var CollectionWidget = Widget.inherit({
             that._itemPointerDownHandler(event);
         });
 
-        this._itemContainer()
-            .off(clickEventNamespace, itemSelector)
-            .off(pointerDownEventNamespace, itemSelector)
-            .on(clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this))
-            .on(pointerDownEventNamespace, itemSelector, function(e) {
-                pointerDownAction.execute({
-                    element: $(e.target),
-                    event: e
-                });
+        eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
+        eventsEngine.off(this._itemContainer(), pointerDownEventNamespace, itemSelector);
+        eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this));
+        eventsEngine.on(this._itemContainer(), pointerDownEventNamespace, itemSelector, function(e) {
+            pointerDownAction.execute({
+                element: $(e.target),
+                event: e
             });
+        });
     },
 
     _itemClickHandler: function(e, args, config) {
@@ -784,8 +784,8 @@ var CollectionWidget = Widget.inherit({
             itemSelector = this._itemSelector(),
             eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
 
-        $itemContainer.off(eventName, itemSelector);
-        $itemContainer.on(eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
+        eventsEngine.off($itemContainer, eventName, itemSelector);
+        eventsEngine.on($itemContainer, eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
     },
 
     _getHoldTimeout: function() {
@@ -809,8 +809,8 @@ var CollectionWidget = Widget.inherit({
             itemSelector = this._itemSelector(),
             eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
 
-        $itemContainer.off(eventName, itemSelector);
-        $itemContainer.on(eventName, itemSelector, this._itemContextMenuHandler.bind(this));
+        eventsEngine.off($itemContainer, eventName, itemSelector);
+        eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));
     },
 
     _shouldFireContextMenuEvent: function() {
@@ -880,7 +880,7 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        $itemElement.on(clickEvent.name, (function(e) {
+        eventsEngine.on($itemElement, clickEvent.name, (function(e) {
             this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
                 jQueryEvent: e
             });

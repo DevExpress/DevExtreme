@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     ko = require("knockout"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     eventRegistrator = require("../../events/core/event_registrator"),
@@ -15,11 +16,10 @@ eventRegistrator.callbacks.add(function(name) {
                 unwrappedValue = ko.utils.unwrapObservable(valueAccessor()),
                 eventSource = unwrappedValue.execute ? unwrappedValue.execute : unwrappedValue;
 
-            $element
-                .off(koBindingEventName)
-                .on(koBindingEventName, isPlainObject(unwrappedValue) ? unwrappedValue : {}, function(e) {
-                    eventSource.call(viewModel, viewModel, e);
-                });
+            eventsEngine.off($element, koBindingEventName);
+            eventsEngine.on($element, koBindingEventName, isPlainObject(unwrappedValue) ? unwrappedValue : {}, function(e) {
+                eventSource.call(viewModel, viewModel, e);
+            });
         }
     };
 });

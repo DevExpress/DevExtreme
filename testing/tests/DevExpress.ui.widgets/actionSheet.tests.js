@@ -27,7 +27,7 @@ QUnit.module("action sheet", {
         this.clock = sinon.useFakeTimers();
         fx.off = true;
 
-        this.element = $("#actionSheet").dxActionSheet();
+        this.element = $($("#actionSheet").dxActionSheet());
         this.instance = this.element.dxActionSheet("instance");
         this.instance.show();
         this.instance.hide();
@@ -188,7 +188,7 @@ QUnit.test("cancel button click hides popup", function(assert) {
     this.instance.show();
     assert.equal(popup.option("visible"), true, "shown before click");
 
-    $cancelButton.trigger("dxclick");
+    $($cancelButton).trigger("dxclick");
     assert.equal(popup.option("visible"), false, "hides on click");
 });
 
@@ -216,7 +216,7 @@ QUnit.test("render items", function(assert) {
 
     this.instance.option("items", items);
     this.instance.show();
-    itemElements = $(".dx-actionsheet-item", $(".dx-popup", this.element).data("dxPopup").content());
+    itemElements = $(".dx-actionsheet-item", $($(".dx-popup", this.element).data("dxPopup").content()));
     assert.equal(itemElements.length, 2, "correct items count");
 
     first = itemElements.find(".dx-button").eq(0);
@@ -246,7 +246,7 @@ QUnit.test("'onItemHold' should be fired after hold (T106668)", function(assert)
 
     actionSheet.show();
 
-    actionSheet.itemElements().eq(0).trigger(holdEvent.name);
+    $(actionSheet.itemElements()).eq(0).trigger(holdEvent.name);
     assert.equal(actionSheet.option("visible"), false, "closed after hold");
 });
 
@@ -318,7 +318,7 @@ QUnit.test("regression: B233570 Menu isn't hidden after click on action", functi
     this.instance.option("items", items);
     this.instance.show();
 
-    itemElements = $(".dx-actionsheet-item", $(".dx-popup", this.element).data("dxPopup").content());
+    itemElements = $(".dx-actionsheet-item", $($(".dx-popup", this.element).data("dxPopup").content()));
     first = itemElements.first();
     second = itemElements.last();
 
@@ -411,7 +411,7 @@ QUnit.test("initialized with disabled state widget should not be disabled at all
 QUnit.test("'visible' option", function(assert) {
     this.instance.show();
     var $cancelButton = this.element.find("dx-button");
-    $cancelButton.trigger("dxclick");
+    $($cancelButton).trigger("dxclick");
     assert.ok(this.instance.option("visible"), false);
 });
 
@@ -560,7 +560,7 @@ QUnit.test("fails when using custom itemTemplate or itemRender (B253839)", funct
         visible: true
     });
 
-    $actionSheet.find(".dx-actionsheet-item").trigger("dxclick");
+    $($actionSheet.find(".dx-actionsheet-item")).trigger("dxclick");
     assert.expect(0);
 });
 

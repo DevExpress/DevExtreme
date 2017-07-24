@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
@@ -529,7 +530,7 @@ module.exports = {
                         }
                      );
 
-                    arg.rowElement.on(removeEvent, dispose);
+                    eventsEngine.on(arg.rowElement, removeEvent, dispose);
                 },
 
                 _renderScrollable: function(force) {

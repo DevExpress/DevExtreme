@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
     each = require("../../core/utils/iterator").each,
@@ -672,9 +673,8 @@ var Menu = MenuBase.inherit({
         });
 
         each(submenus, function(index, submenu) {
-            $(submenu)
-                .off(submenuMouseLeaveName)
-                .on(submenuMouseLeaveName, null, that._submenuMouseLeaveHandler.bind(that, $rootItem));
+            eventsEngine.off(submenu, submenuMouseLeaveName);
+            eventsEngine.on(submenu, submenuMouseLeaveName, null, that._submenuMouseLeaveHandler.bind(that, $rootItem));
         });
     },
 
@@ -818,7 +818,7 @@ var Menu = MenuBase.inherit({
             return;
         }
 
-        $item.off(mouseMoveEventName);
+        eventsEngine.off($item, mouseMoveEventName);
 
         if(!this._hasChildren(node)) {
             this._showSubmenuTimer = setTimeout(this._hideSubmenuAfterTimeout.bind(this), this._getDelay("hide"));
@@ -831,7 +831,7 @@ var Menu = MenuBase.inherit({
             this._clearTimeouts();
 
             if(!submenu.isOverlayVisible()) {
-                $item.on(mouseMoveEventName, this._itemMouseMoveHandler.bind(this));
+                eventsEngine.on($item, mouseMoveEventName, this._itemMouseMoveHandler.bind(this));
                 this._showSubmenuTimer = this._getDelay("hide");
             }
         }

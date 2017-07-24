@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -214,12 +215,8 @@ var Sortable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        this._getEventListener()
-            .off(addNamespace(
-                [dragEvents.move, dragEvents.start, dragEvents.end, dragEvents.enter, dragEvents.leave, dragEvents.drop].join(" "),
-                SORTABLE_NAMESPACE
-                )
-            );
+        var dragEventsString = [dragEvents.move, dragEvents.start, dragEvents.end, dragEvents.enter, dragEvents.leave, dragEvents.drop].join(" ");
+        eventsEngine.off(this._getEventListener(), addNamespace(dragEventsString, SORTABLE_NAMESPACE));
     },
 
     _getItemOffset: function(isVertical, itemsOffset, e) {
@@ -298,8 +295,11 @@ var Sortable = DOMComponent.inherit({
         };
 
         that._detachEventHandlers();
-        that.option("allowDragging") && that._getEventListener()
-            .on(addNamespace(dragEvents.start, SORTABLE_NAMESPACE), itemSelector, function(e) {
+
+        if(that.option("allowDragging")) {
+            var $eventListener = that._getEventListener();
+
+            eventsEngine.on($eventListener, addNamespace(dragEvents.start, SORTABLE_NAMESPACE), itemSelector, function(e) {
                 $sourceItem = $(e.currentTarget);
                 var $sourceGroup = $sourceItem.closest(groupSelector);
                 sourceGroup = $sourceGroup.attr("group");
@@ -319,8 +319,8 @@ var Sortable = DOMComponent.inherit({
                 setStartPositions();
                 $groups = createGroups();
                 that._indicator = $("<div>").addClass("dx-position-indicator");
-            })
-            .on(addNamespace(dragEvents.move, SORTABLE_NAMESPACE), function(e) {
+            });
+            eventsEngine.on($eventListener, addNamespace(dragEvents.move, SORTABLE_NAMESPACE), function(e) {
                 var $item,
                     $itemContainer,
                     $items,
@@ -422,8 +422,8 @@ var Sortable = DOMComponent.inherit({
                     }
                 }
 
-            })
-            .on(addNamespace(dragEvents.end, SORTABLE_NAMESPACE), function() {
+            });
+            eventsEngine.on($eventListener, addNamespace(dragEvents.end, SORTABLE_NAMESPACE), function() {
                 disposeScrollWrapper();
 
                 if(!$sourceItem) {
@@ -462,6 +462,7 @@ var Sortable = DOMComponent.inherit({
                 $targetItem = null;
 
             });
+        }
     },
 
     _init: function() {

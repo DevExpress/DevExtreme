@@ -1,6 +1,6 @@
 "use strict";
 
-/* global internals, initTree */
+/* global internals, initTree, $ */
 
 var commonUtils = require("core/utils/common");
 
@@ -37,7 +37,7 @@ QUnit.test("Nested items should be rendered correctly", function(assert) {
         items: [{ text: "Item 1", items: [{ text: "Nested item 1" }, { text: "Nested item 2" }] }, { text: "Item 2" }]
     }).dxTreeView("instance");
 
-    treeView.element().find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
+    $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
 
     assert.equal(treeView.element().find("." + internals.ITEM_CLASS).length, 4);
 });
@@ -50,7 +50,7 @@ QUnit.test("onItemSelectionChanged event should work correctly", function(assert
         onItemSelectionChanged: onItemSelectionChanged
     }).dxTreeView("instance");
 
-    treeView.element().find(".dx-checkbox").eq(0).trigger("dxclick");
+    $(treeView.element()).find(".dx-checkbox").eq(0).trigger("dxclick");
     var args = onItemSelectionChanged.getCall(0).args[0];
 
     assert.strictEqual(args.itemData.id, undefined);
@@ -63,7 +63,7 @@ QUnit.test("Parent should be updated correctly", function(assert) {
         showCheckBoxesMode: "normal"
     }).dxTreeView("instance");
 
-    treeView.element().find(".dx-checkbox").eq(1).trigger("dxclick");
+    $(treeView.element()).find(".dx-checkbox").eq(1).trigger("dxclick");
     assert.ok(treeView.getNodes()[0].selected);
 });
 
@@ -210,7 +210,7 @@ QUnit.test("'selectAllEnabled' option is activated", function(assert) {
         showCheckBoxesMode: "selectAll"
     }).dxTreeView("instance");
 
-    treeView._$selectAllItem.trigger("dxclick");
+    $(treeView._$selectAllItem).trigger("dxclick");
     var nodes = treeView.getNodes(),
         items = treeView.option("items");
 
@@ -222,7 +222,7 @@ QUnit.test("'selectAllEnabled' option is activated", function(assert) {
     assert.ok(items[0].items[0].selected);
     assert.ok(items[1].selected);
 
-    treeView._$selectAllItem.trigger("dxclick");
+    $(treeView._$selectAllItem).trigger("dxclick");
     nodes = treeView.getNodes();
 
     assert.ok(!nodes[0].selected);

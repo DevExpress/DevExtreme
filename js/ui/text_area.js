@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
@@ -133,11 +134,11 @@ var TextArea = TextBox.inherit({
         var $input = this._input(),
             eventY = 0;
 
-        $input.on(eventUtils.addNamespace(pointerEvents.down, this.NAME), function(e) {
+        eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.down, this.NAME), function(e) {
             eventY = eventUtils.eventData(e).y;
         });
 
-        $input.on(eventUtils.addNamespace(pointerEvents.move, this.NAME), function(e) {
+        eventsEngine.on($input, eventUtils.addNamespace(pointerEvents.move, this.NAME), function(e) {
             var scrollTopPos = $input.scrollTop(),
                 scrollBottomPos = $input.prop("scrollHeight") - $input.prop("clientHeight") - scrollTopPos;
 
@@ -186,14 +187,14 @@ var TextArea = TextBox.inherit({
 
     _renderEvents: function() {
         if(this.option("autoResizeEnabled")) {
-            this._input().on(eventUtils.addNamespace("input paste", this.NAME), this._updateInputHeight.bind(this));
+            eventsEngine.on(this._input(), eventUtils.addNamespace("input paste", this.NAME), this._updateInputHeight.bind(this));
         }
 
         this.callBase();
     },
 
     _refreshEvents: function() {
-        this._input().off(eventUtils.addNamespace("input paste", this.NAME));
+        eventsEngine.off(this._input(), eventUtils.addNamespace("input paste", this.NAME));
         this.callBase();
     },
 

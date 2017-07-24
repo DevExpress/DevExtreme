@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     isDefined = require("../../core/utils/type").isDefined,
     map = require("../../core/utils/iterator").map,
@@ -17,36 +18,35 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
             $row = that.callBase(row);
 
         if(row.rowType === "header") {
-            $row
-                .on(eventUtils.addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "> td", that.createAction(function(e) {
-                    var keyName = null,
-                        event = e.jQueryEvent,
-                        $cellElementFromEvent = $(event.currentTarget),
-                        rowIndex = $cellElementFromEvent.parent().index(),
-                        columnIndex = map(that.getCellElements(rowIndex), function($cellElement, index) {
-                            if($cellElement === $cellElementFromEvent.get(0)) return index;
-                        })[0],
-                        visibleColumns = that._columnsController.getVisibleColumns(rowIndex),
-                        column = visibleColumns[columnIndex],
-                        editingController = that.getController("editing"),
-                        editingMode = that.option("editing.mode"),
-                        isCellEditing = editingController && editingController.isEditing() && (editingMode === "batch" || editingMode === "cell");
+            eventsEngine.on($row, eventUtils.addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "> td", that.createAction(function(e) {
+                var keyName = null,
+                    event = e.jQueryEvent,
+                    $cellElementFromEvent = $(event.currentTarget),
+                    rowIndex = $cellElementFromEvent.parent().index(),
+                    columnIndex = map(that.getCellElements(rowIndex), function($cellElement, index) {
+                        if($cellElement === $cellElementFromEvent.get(0)) return index;
+                    })[0],
+                    visibleColumns = that._columnsController.getVisibleColumns(rowIndex),
+                    column = visibleColumns[columnIndex],
+                    editingController = that.getController("editing"),
+                    editingMode = that.option("editing.mode"),
+                    isCellEditing = editingController && editingController.isEditing() && (editingMode === "batch" || editingMode === "cell");
 
-                    if(isCellEditing) {
-                        return;
-                    }
+                if(isCellEditing) {
+                    return;
+                }
 
-                    if(column && !isDefined(column.groupIndex) && !column.command) {
-                        if(event.shiftKey) {
-                            keyName = "shift";
-                        } else if(event.ctrlKey) {
-                            keyName = "ctrl";
-                        }
-                        setTimeout(function() {
-                            that._columnsController.changeSortOrder(column.index, keyName);
-                        });
+                if(column && !isDefined(column.groupIndex) && !column.command) {
+                    if(event.shiftKey) {
+                        keyName = "shift";
+                    } else if(event.ctrlKey) {
+                        keyName = "ctrl";
                     }
-                }));
+                    setTimeout(function() {
+                        that._columnsController.changeSortOrder(column.index, keyName);
+                    });
+                }
+            }));
         }
 
         return $row;
@@ -98,7 +98,7 @@ var HeaderPanelSortingExtender = extend({}, sortingMixin, {
         var that = this,
             $item = that.callBase.apply(that, arguments);
 
-        $item.on(eventUtils.addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(function() {
+        eventsEngine.on($item, eventUtils.addNamespace(clickEvent.name, "dxDataGridHeaderPanel"), that.createAction(function() {
             setTimeout(function() {
                 that.getController("columns").changeSortOrder(groupColumn.index);
             });

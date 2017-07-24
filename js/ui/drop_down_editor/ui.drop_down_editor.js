@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
@@ -335,7 +336,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
 
         if(this.option("fieldTemplate")) {
-            this._input().off("focusin focusout beforeactivate");
+            eventsEngine.off(this._input(), "focusin focusout beforeactivate");
         }
     },
 
@@ -442,7 +443,7 @@ var DropDownEditor = TextBox.inherit({
         $button
             .removeClass("dx-button");
 
-        $button.on("mousedown", function(e) {
+        eventsEngine.on($button, "mousedown", function(e) {
             e.preventDefault();
         });
 
@@ -455,10 +456,8 @@ var DropDownEditor = TextBox.inherit({
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             openOnFieldClick = that.option("openOnFieldClick");
 
-        $inputWrapper
-            .off(eventName)
-            .on(eventName, that._getInputClickHandler(openOnFieldClick));
-
+        eventsEngine.off($inputWrapper, eventName);
+        eventsEngine.on($inputWrapper, eventName, that._getInputClickHandler(openOnFieldClick));
         that.element().toggleClass(DROP_DOWN_EDITOR_FIELD_CLICKABLE, openOnFieldClick);
 
         if(openOnFieldClick) {

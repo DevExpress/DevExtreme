@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -709,29 +710,29 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _attachEvents: function() {
-        var that = this,
-            pointerDownAction = this._createAction(function(e) {
-                that._pointerDownHandler(e.jQueryEvent);
-            });
+        var that = this;
+        var pointerDownAction = this._createAction(function(e) {
+            that._pointerDownHandler(e.jQueryEvent);
+        });
 
         this._createCellClickAction();
 
         var cellSelector = "." + this._getDateTableCellClass() + ",." + ALL_DAY_TABLE_CELL_CLASS;
+        var $element = this.element();
 
-        this.element()
-            .off(SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME)
-            .off(SCHEDULER_CELL_DXCLICK_EVENT_NAME)
-            .on(SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME, function(e) {
-                if(eventUtils.isMouseEvent(e) && e.which > 1) {
-                    e.preventDefault();
-                    return;
-                }
-                pointerDownAction({ jQueryEvent: e });
-            })
-            .on(SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, function(e) {
-                var $cell = $(e.target);
-                that._cellClickAction({ jQueryEvent: e, cellElement: $cell, cellData: that.getCellData($cell) });
-            });
+        eventsEngine.off($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME);
+        eventsEngine.off($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME);
+        eventsEngine.on($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME, function(e) {
+            if(eventUtils.isMouseEvent(e) && e.which > 1) {
+                e.preventDefault();
+                return;
+            }
+            pointerDownAction({ jQueryEvent: e });
+        });
+        eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, function(e) {
+            var $cell = $(e.target);
+            that._cellClickAction({ jQueryEvent: e, cellElement: $cell, cellData: that.getCellData($cell) });
+        });
     },
 
     _createCellClickAction: function() {
@@ -1140,55 +1141,53 @@ var SchedulerWorkSpace = Widget.inherit({
             cellHeight,
             cellWidth;
 
-        $table
-            .off(SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME)
-            .off(SCHEDULER_CELL_DXDROP_EVENT_NAME)
-            .off(SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME)
-            .off(SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME)
-            .on(SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, "td", {
-                itemSizeFunc: function($element) {
-                    if(!cellHeight) {
-                        cellHeight = $element.height();
-                    }
-                    if(!cellWidth) {
-                        cellWidth = $element.width();
-                    }
-                    return {
-                        width: cellWidth,
-                        height: cellHeight
-                    };
+        eventsEngine.off($table, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
+        eventsEngine.off($table, SCHEDULER_CELL_DXDROP_EVENT_NAME);
+        eventsEngine.off($table, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME);
+        eventsEngine.off($table, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME);
+        eventsEngine.on($table, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME, "td", {
+            itemSizeFunc: function($element) {
+                if(!cellHeight) {
+                    cellHeight = $element.height();
                 }
-            }, function(e) {
-                if(that._$currentTableTarget) {
-                    that._$currentTableTarget.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+                if(!cellWidth) {
+                    cellWidth = $element.width();
                 }
-                that._$currentTableTarget = $(e.target);
-                that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
-            })
-            .on(SCHEDULER_CELL_DXDROP_EVENT_NAME, "td", function(e) {
-                $(e.target).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
-                cellHeight = 0;
-                cellWidth = 0;
-            })
-            .on(SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, "td", function(e) {
-                if(eventUtils.isMouseEvent(e) && e.which === 1) {
-                    isPointerDown = true;
-                    that.element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
-                    $(document)
-                        .off(SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME)
-                        .on(SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, function() {
-                            isPointerDown = false;
-                            that.element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
-                        });
-                }
-            })
-            .on(SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, "td", function(e) {
-                if(isPointerDown) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    that._moveToCell($(e.target), true);
-                }
-            });
+                return {
+                    width: cellWidth,
+                    height: cellHeight
+                };
+            }
+        }, function(e) {
+            if(that._$currentTableTarget) {
+                that._$currentTableTarget.removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            }
+            that._$currentTableTarget = $(e.target);
+            that._$currentTableTarget.addClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+        });
+        eventsEngine.on($table, SCHEDULER_CELL_DXDROP_EVENT_NAME, "td", function(e) {
+            $(e.target).removeClass(DATE_TABLE_DROPPABLE_CELL_CLASS);
+            cellHeight = 0;
+            cellWidth = 0;
+        });
+        eventsEngine.on($table, SCHEDULER_CELL_DXPOINTERDOWN_EVENT_NAME, "td", function(e) {
+            if(eventUtils.isMouseEvent(e) && e.which === 1) {
+                isPointerDown = true;
+                that.element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
+                eventsEngine.off(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+                eventsEngine.on(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, function() {
+                    isPointerDown = false;
+                    that.element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
+                });
+            }
+        });
+        eventsEngine.on($table, SCHEDULER_CELL_DXPOINTERMOVE_EVENT_NAME, "td", function(e) {
+            if(isPointerDown) {
+                e.preventDefault();
+                e.stopPropagation();
+                that._moveToCell($(e.target), true);
+            }
+        });
     },
 
     _getDateTables: function() {

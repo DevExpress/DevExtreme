@@ -1,6 +1,7 @@
 "use strict";
 
 var each = require("../../core/utils/iterator").each,
+    eventsEngine = require("../../events/core/events_engine"),
     Promise = require("../../core/polyfills/promise"),
     Provider = require("./provider"),
     Color = require("../../color"),
@@ -101,7 +102,7 @@ var GoogleStaticProvider = Provider.inherit({
 
     clean: function() {
         this._$container.css("background-image", "none");
-        this._$container.off(this._addEventNamespace(clickEvent.name));
+        eventsEngine.off(this._$container, this._addEventNamespace(clickEvent.name));
 
         return Promise.resolve();
     },
@@ -175,11 +176,10 @@ var GoogleStaticProvider = Provider.inherit({
         var that = this,
             eventName = this._addEventNamespace(clickEvent.name);
 
-        this._$container
-            .off(eventName)
-            .on(eventName, function(e) {
-                that._fireClickAction({ jQueryEvent: e });
-            });
+        eventsEngine.off(this._$container, eventName);
+        eventsEngine.on(this._$container, eventName, function(e) {
+            that._fireClickAction({ jQueryEvent: e });
+        });
     }
 
 });

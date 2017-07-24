@@ -68,7 +68,7 @@ var ScrollViewMock = DOMComponent.inherit({
     release: function(hideOrShow) {
         this._history.push(new Date());
         this.toggleLoading(!hideOrShow);
-        this.element().trigger("released");
+        $(this.element()).trigger("released");
     },
 
     toggleLoading: function(showOrHide) {

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     mathUtils = require("../../core/utils/math"),
     extend = require("../../core/utils/extend").extend,
@@ -231,11 +232,10 @@ var NumberBox = TextEditor.inherit({
             this._mouseWheelHandler(e.jQueryEvent);
         }).bind(this));
 
-        this._input()
-            .off(eventName)
-            .on(eventName, function(e) {
-                mouseWheelAction({ jQueryEvent: e });
-            });
+        eventsEngine.off(this._input(), eventName);
+        eventsEngine.on(this._input(), eventName, function(e) {
+            mouseWheelAction({ jQueryEvent: e });
+        });
     },
 
     _mouseWheelHandler: function(jQueryEvent) {
@@ -334,11 +334,12 @@ var NumberBox = TextEditor.inherit({
         var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
         var pointerDownAction = this._createAction(this._spinButtonsPointerDownHandler.bind(this));
 
-        var $spinContainer = $("<div>").addClass(SPIN_CONTAINER_CLASS)
-            .off(eventName)
-            .on(eventName, function(e) {
-                pointerDownAction({ jQueryEvent: e });
-            });
+        var $spinContainer = $("<div>").addClass(SPIN_CONTAINER_CLASS);
+
+        eventsEngine.off($spinContainer, eventName);
+        eventsEngine.on($spinContainer, eventName, function(e) {
+            pointerDownAction({ jQueryEvent: e });
+        });
 
         this._$spinUp = $("<div>").appendTo($spinContainer);
         this._createComponent(this._$spinUp, SpinButton, { direction: "up", onChange: this._spinUpChangeHandler.bind(this) });
@@ -352,7 +353,7 @@ var NumberBox = TextEditor.inherit({
     _spinButtonsPointerDownHandler: function() {
         var $input = this._input();
         if(!this.option("useLargeSpinButtons") && document.activeElement !== $input[0]) {
-            $input.trigger("focus");
+            eventsEngine.trigger($input, "focus");
         }
     },
 

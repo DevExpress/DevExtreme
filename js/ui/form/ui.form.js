@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
     Guid = require("../../core/guid"),
     utils = require("../../core/utils/common"),
@@ -1502,9 +1503,7 @@ var Form = Widget.inherit({
     _refresh: function() {
         var editorSelector = "." + FOCUSED_STATE_CLASS + " input, ." + FOCUSED_STATE_CLASS + " textarea";
 
-        this.element()
-            .find(editorSelector)
-            .trigger("change");
+        eventsEngine.trigger(this.element().find(editorSelector), "change");
 
         this.callBase();
     },

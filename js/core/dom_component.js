@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     extend = require("./utils/extend").extend,
     config = require("./config"),
     errors = require("./errors"),
@@ -165,11 +166,11 @@ var DOMComponent = Component.inherit({
         var that = this;
         var resizeEventName = "dxresize." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
 
-        that.element()
-            .off(resizeEventName)
-            .on(resizeEventName, function() {
-                that._dimensionChanged();
-            });
+
+        eventsEngine.off(that.element(), resizeEventName);
+        eventsEngine.on(that.element(), resizeEventName, function() {
+            that._dimensionChanged();
+        });
     },
 
     _attachVisibilityChangeHandlers: function() {
@@ -178,15 +179,14 @@ var DOMComponent = Component.inherit({
         var shownEventName = "dxshown." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
 
         that._isHidden = !that._isVisible();
-        that.element()
-            .off(hidingEventName)
-            .on(hidingEventName, function() {
-                that._checkVisibilityChanged("hiding");
-            })
-            .off(shownEventName)
-            .on(shownEventName, function() {
-                that._checkVisibilityChanged("shown");
-            });
+        eventsEngine.off(that.element(), hidingEventName);
+        eventsEngine.on(that.element(), hidingEventName, function() {
+            that._checkVisibilityChanged("hiding");
+        });
+        eventsEngine.off(that.element(), shownEventName);
+        eventsEngine.on(that.element(), shownEventName, function() {
+            that._checkVisibilityChanged("shown");
+        });
     },
 
     _isVisible: function() {

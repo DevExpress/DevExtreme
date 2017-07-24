@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Color = require("../../color"),
     ColorView = require("./color_view"),
     extend = require("../../core/utils/extend").extend,
@@ -217,7 +218,7 @@ var ColorBox = DropDownEditor.inherit({
 
         this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
 
-        $colorView.on("focus", (function() {
+        eventsEngine.on($colorView, "focus", (function() {
             this.focus();
         }).bind(this));
     },
