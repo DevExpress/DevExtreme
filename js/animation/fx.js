@@ -313,7 +313,7 @@ var FrameAnimationStrategy = {
     },
 
     _startAnimation: function($element, config) {
-        eventsEngine.on($element, removeEventName);
+        eventsEngine.off($element, removeEventName);
         eventsEngine.on($element, removeEventName, function() {
             if(config.frameAnimation) {
                 animationFrame.cancelAnimationFrame(config.frameAnimation.animationFrameId);
