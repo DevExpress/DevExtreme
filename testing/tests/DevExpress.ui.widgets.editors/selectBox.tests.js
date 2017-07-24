@@ -360,6 +360,7 @@ QUnit.test("click on arrow toggle popup visibility", function(assert) {
     pointerMock($arrow).start().click();
     assert.ok($list.is(':visible'), "when we click on arrow - show list");
     pointerMock($arrow).start().click();
+    this.clock.tick();
     assert.ok($list.is(':hidden'), "when we click on arrow once again - hide list");
 });
 
