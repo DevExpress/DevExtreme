@@ -1683,7 +1683,7 @@ QUnit.testInActiveWindow("the input should be focused on the 'shift+tab' key pre
         opened: true
     });
 
-    var $selectAllCheckbox = this.instance._popup._wrapper().find(".dx-list-select-all-checkbox");
+    var $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
 
     $selectAllCheckbox
         .focus()
@@ -1707,7 +1707,7 @@ QUnit.testInActiveWindow("popup should be closed on the 'esc' key press if the s
         opened: true
     });
 
-    var $selectAllCheckbox = this.instance._popup._wrapper().find(".dx-list-select-all-checkbox");
+    var $selectAllCheckbox = $(this.instance._popup._wrapper()).find(".dx-list-select-all-checkbox");
 
     $selectAllCheckbox
         .focus()
