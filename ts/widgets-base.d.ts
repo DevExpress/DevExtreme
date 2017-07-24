@@ -597,8 +597,8 @@ declare module DevExpress.ui {
         /** @docid dxTagBoxOptions_onMultiTagPreparing */
         onMultiTagPreparing?: Function;
 
-        /** @docid dxTagBoxOptions_separateTagLimit */
-        separateTagLimit?: number;
+        /** @docid dxTagBoxOptions_maxDisplayedTags */
+        maxDisplayedTags?: number;
 
         /** @docid dxTagBoxOptions_showMultiTagOnly */
         showMultiTagOnly?: boolean;
