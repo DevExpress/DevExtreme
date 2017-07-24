@@ -1816,6 +1816,9 @@ declare module DevExpress.ui {
         /** @docid dxDropDownBoxOptions_dropDownOptions */
         dropDownOptions?: DevExpress.ui.dxPopupOptions;
 
+        /** @docid dxDropDownBoxOptions_fieldTemplate */
+        fieldTemplate?: any;
+
         /** @docid dxDropDownBoxOptions_valueChangeEvent */
         valueChangeEvent?: string;
     }

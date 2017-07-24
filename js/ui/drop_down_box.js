@@ -92,6 +92,16 @@ var DropDownBox = DropDownEditor.inherit({
             dropDownOptions: {},
 
             /**
+             * @name dxDropDownBoxOptions_fieldTemplate
+             * @publicName fieldTemplate
+             * @type template
+             * @default null
+             * @type_function_param1 value:object
+             * @type_function_param2 fieldElement:jQuery
+             * @type_function_return string|Node|jQuery
+             */
+
+            /**
              * @name dxDropDownBoxOptions_maxLength
              * @publicName maxLength
              * @type string|number
