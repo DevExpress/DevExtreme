@@ -3192,22 +3192,23 @@ QUnit.testStart(function() {
         assert.equal(rows.length, 7 * 10, "view has right cells count");
     });
 
-    QUnit.test("WorkSpace Month view cells have right cellData with view option count", function(assert) {
+    QUnit.test("WorkSpace Month view cells have right cellData with view option count & viewStartDate", function(assert) {
         this.instance.option("count", 2);
         this.instance.option("currentDate", new Date(2017, 5, 25));
+        this.instance.option("viewStartDate", new Date(2017, 4, 25));
 
-        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(4).data("dxCellData"),
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(1).data("dxCellData"),
             secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(35).data("dxCellData"),
             thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
 
-        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 1, 0), "cell has right startDate");
-        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 2, 0), "cell has right endtDate");
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 4, 1, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 4, 2, 0), "cell has right endtDate");
 
-        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 2, 0), "cell has right startDate");
-        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 3, 0), "cell has right endtDate");
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 5, 4, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 5, 0), "cell has right endtDate");
 
-        assert.deepEqual(thirdCellData.startDate, new Date(2017, 7, 5, 0), "cell has right startDate");
-        assert.deepEqual(thirdCellData.endDate, new Date(2017, 7, 6, 0), "cell has right endtDate");
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 8, 0), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 9, 0), "cell has right endtDate");
     });
 
     QUnit.test("WorkSpace Month view with option count has cells with special firstDayOfMonth class", function(assert) {

@@ -4385,6 +4385,34 @@ QUnit.test("Appointments should be rendered correctly, Week view with count and 
     assert.equal($appointments.length, 4, "Appointments were rendered correctly");
 });
 
+QUnit.test("Appointments should be rendered correctly, Month view with count and viewStartDate", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2017, 5, 22, 4), endDate: new Date(2017, 5, 22, 4, 30) },
+        { text: "Two", startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
+        { text: "Three", startDate: new Date(2017, 6, 2, 10), endDate: new Date(2017, 6, 2, 11) },
+        { text: "Four", startDate: new Date(2017, 6, 9, 8), endDate: new Date(2017, 6, 9, 8, 30) },
+        { text: "Five", startDate: new Date(2017, 7, 9, 8), endDate: new Date(2017, 7, 9, 8, 30) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2010, 5, 26),
+        dataSource: dataSource,
+        views: [{
+            type: "month",
+            count: 3,
+            viewStartDate: new Date(2017, 5, 19)
+        }],
+        currentView: "month",
+        firstDayOfWeek: 1
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 5, "Appointments were rendered correctly");
+});
+
 QUnit.test("Appointments should be rendered correctly after switching Day view with count and viewStartDate", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2017, 5, 28, 4), endDate: new Date(2017, 5, 28, 4, 30) },

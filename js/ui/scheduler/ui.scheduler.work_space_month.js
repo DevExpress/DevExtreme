@@ -85,7 +85,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _changeAllDayVisibility: noop,
 
     _setFirstViewDate: function() {
-        var firstMonthDate = dateUtils.getFirstMonthDate(this.option("currentDate"));
+        var firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
         this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, this.option("firstDayOfWeek") || dateLocalization.firstDayOfWeekIndex());
         this._setStartDayHour(this._firstViewDate);
     },
