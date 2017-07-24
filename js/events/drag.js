@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     wrapToArray = require("../core/utils/array").wrapToArray,
     inArray = require("../core/utils/array").inArray,
     iteratorUtils = require("../core/utils/iterator"),
+    contains = require("../core/utils/dom").contains,
     registerEvent = require("./core/event_registrator"),
     eventUtils = require("./utils"),
     GestureEmitter = require("./gesture/emitter.gesture"),
@@ -260,7 +261,7 @@ var DragEmitter = GestureEmitter.inherit({
         var active = false;
 
         iteratorUtils.each(this._dropTargets, function(_, activeTarget) {
-            active = active || activeTarget === target || activeTarget.contains(target);
+            active = active || activeTarget === target || contains(activeTarget, target);
             return !active;
         });
 
