@@ -10,6 +10,7 @@ var $ = require("../../core/renderer"),
 var MONTH_CLASS = "dx-scheduler-work-space-month",
 
     DATE_TABLE_CURRENT_DATE_CLASS = "dx-scheduler-date-table-current-date",
+    DATE_TABLE_FIRST_OF_MONTH_CLASS = "dx-scheduler-date-table-first-of-month",
     DATE_TABLE_OTHER_MONTH_DATE_CLASS = "dx-scheduler-date-table-other-month";
 
 var DAYS_IN_WEEK = 7,
@@ -21,7 +22,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getRowCount: function() {
-        return 6;
+        return this.option("count") > 1 ? 4 * this.option("count") + 2 : 6;
     },
 
     _getCellCount: function() {
@@ -98,6 +99,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         cellIndex = cellIndex % this._getCellCount();
 
         var date = this._getDate(rowIndex, cellIndex);
+
+        if(this.option("count") > 1 && this._isFirstDayOfMonth(date)) {
+            return this._formatWeekdayAndDay(date);
+        }
         return dateLocalization.format(date, "dd");
     },
 
@@ -117,6 +122,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
         $cell
             .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, this._isCurrentDate(data.startDate))
+            .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, this._isFirstDayOfMonth(data.startDate))
             .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, this._isOtherMonth(data.startDate));
 
         return data;
@@ -126,6 +132,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         var today = new Date();
 
         return dateUtils.sameDate(cellDate, today);
+    },
+
+    _isFirstDayOfMonth: function(cellDate) {
+        return cellDate.getDate() === 1;
     },
 
     _isOtherMonth: function(cellDate) {

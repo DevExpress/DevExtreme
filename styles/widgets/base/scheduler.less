@@ -563,9 +563,11 @@
 }
 
 .dx-scheduler-work-space-month {
-
-    .dx-scrollable .dx-scrollable-content {
-        height: 100%;
+    
+    &:not(.dx-scheduler-work-space-count) {
+        .dx-scrollable .dx-scrollable-content {
+            height: 100%;
+        }
     }
 
     .dx-scheduler-all-day-title {
@@ -646,6 +648,16 @@
 
     .dx-scheduler-fixed-appointments {
         left: 0;
+    }
+
+    &.dx-scheduler-work-space-count {
+        .dx-scheduler-date-table-cell {
+            height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 1.5;
+        }
+        .dx-scheduler-date-table-first-of-month {
+            color: @SCHEDULER_WORKSPACE_ACCENT_COLOR;
+            font-weight: bold;
+        }
     }
 }
 
