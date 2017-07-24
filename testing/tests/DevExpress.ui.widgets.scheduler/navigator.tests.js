@@ -200,18 +200,6 @@ QUnit.test("Caption should be OK with default options", function(assert) {
     assert.equal(button.option("text"), caption, "Caption is OK");
 });
 
-QUnit.test("Caption should be OK for Day with count", function(assert) {
-    var $element = this.instance.element(),
-        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2015, 4, 25),
-        caption = "25-27 May 2015";
-
-    this.instance.option("date", date);
-    this.instance.option("count", 3);
-
-    assert.equal(button.option("text"), caption, "Caption is OK");
-});
-
 QUnit.test("Caption should be OK when step and date are changed", function(assert) {
     var $element = this.instance.element(),
         button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
@@ -262,6 +250,36 @@ QUnit.test("Caption should be OK for workWeek view & firstDayOfWeek = 0", functi
     assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
 });
 
+QUnit.test("Click on 'next' button should notify observer, day with count", function(assert) {
+    var $element = this.instance.element(),
+        $nextButton = $element.find(".dx-scheduler-navigator-next"),
+        date = new Date(2015, 4, 25);
+
+    var updateSpy = sinon.spy(noop);
+    this.instance.notifyObserver = updateSpy;
+
+    this.instance.option("date", date);
+    this.instance.option("count", 3),
+    this.instance.option("step", "day");
+
+    $nextButton.trigger("dxclick");
+    assert.ok(updateSpy.calledOnce, "Observer is notified");
+    assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 4, 28), "Arguments are OK");
+});
+
+QUnit.test("Caption should be OK for Day with count", function(assert) {
+    var $element = this.instance.element(),
+        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
+        date = new Date(2015, 4, 25),
+        caption = "25-27 May 2015";
+
+    this.instance.option("date", date);
+    this.instance.option("count", 3);
+
+    assert.equal(button.option("text"), caption, "Caption is OK");
+});
+
 QUnit.test("Caption should be OK for workWeek view with count", function(assert) {
     var $element = this.instance.element(),
         button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
@@ -290,22 +308,30 @@ QUnit.test("Caption should be OK for week view with count", function(assert) {
     assert.equal(button.option("text"), caption, "Caption is OK");
 });
 
-QUnit.test("Click on 'next' button should notify observer, day with count", function(assert) {
+QUnit.test("Caption should be OK for Month with count", function(assert) {
     var $element = this.instance.element(),
-        $nextButton = $element.find(".dx-scheduler-navigator-next"),
-        date = new Date(2015, 4, 25);
-
-    var updateSpy = sinon.spy(noop);
-    this.instance.notifyObserver = updateSpy;
+        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
+        date = new Date(2017, 4, 25),
+        caption = "May-Jun 2017";
 
     this.instance.option("date", date);
-    this.instance.option("count", 3),
-    this.instance.option("step", "day");
+    this.instance.option("count", 2);
+    this.instance.option("step", "month");
 
-    $nextButton.trigger("dxclick");
-    assert.ok(updateSpy.calledOnce, "Observer is notified");
-    assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 4, 28), "Arguments are OK");
+    assert.equal(button.option("text"), caption, "Caption is OK");
+});
+
+QUnit.test("Caption should be OK for Month with count for different years", function(assert) {
+    var $element = this.instance.element(),
+        button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
+        date = new Date(2017, 11, 25),
+        caption = "Dec 2017-Feb 2018";
+
+    this.instance.option("date", date);
+    this.instance.option("count", 3);
+    this.instance.option("step", "month");
+
+    assert.equal(button.option("text"), caption, "Caption is OK");
 });
 
 QUnit.test("Click on 'next' button should notify observer, week with count", function(assert) {

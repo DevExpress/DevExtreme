@@ -35,6 +35,10 @@ var getDateMonthFormat = function(short) {
     };
 };
 
+var getMonthYearFormat = function(date) {
+    return dateLocalization.getMonthNames("abbreviated")[date.getMonth()] + " " + dateLocalization.format(date, "year");
+};
+
 var getCaptionFormat = function(short, skipCount) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
@@ -86,6 +90,20 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
     return firstWeekDateText + "-" + lastWeekDateText;
 };
 
+var getMonthCaption = function(date) {
+    if(this.option("count") > 1) {
+        var firstDate = new Date(date),
+            lastDate = new Date(date.setMonth(date.getMonth() + this.option("count") - 1)),
+            isSameYear = firstDate.getYear() === lastDate.getYear(),
+            lastDateText = getMonthYearFormat(lastDate),
+            firstDateText = isSameYear ? dateLocalization.getMonthNames("abbreviated")[firstDate.getMonth()] : getMonthYearFormat(firstDate);
+
+        return firstDateText + "-" + lastDateText;
+    } else {
+        return dateLocalization.format(date, "monthandyear");
+    }
+};
+
 var dateGetter = function(date, offset) {
     return new Date(date[this.setter](date[this.getter]() + offset));
 };
@@ -135,9 +153,7 @@ var getConfig = function(step) {
                     date.setDate(currentDate < lastDate ? currentDate : lastDate);
                     return date;
                 },
-                getCaption: function(date) {
-                    return dateLocalization.format(date, "monthandyear");
-                }
+                getCaption: getMonthCaption
             };
         case "agenda":
             agendaDuration = this.invoke("getAgendaDuration");
