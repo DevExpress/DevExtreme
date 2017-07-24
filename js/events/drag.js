@@ -260,7 +260,7 @@ var DragEmitter = GestureEmitter.inherit({
         var active = false;
 
         iteratorUtils.each(this._dropTargets, function(_, activeTarget) {
-            active = active || activeTarget === target || $.contains(activeTarget, target);
+            active = active || activeTarget === target || activeTarget.contains(target);
             return !active;
         });
 
