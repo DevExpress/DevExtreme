@@ -513,6 +513,10 @@ var SelectBox = DropDownList.inherit({
 
         isVisible = arguments.length ? isVisible : !this.option("opened");
 
+        if(!isVisible) {
+            this._restoreInputText();
+        }
+
         if(this._wasSearch() && isVisible) {
             this._wasSearch(false);
 
@@ -539,16 +543,16 @@ var SelectBox = DropDownList.inherit({
         this._setPopupOption("width");
     },
 
-    _focusOutHandler: function(e) {
-        this.callBase(e);
-
-        if(!this.option("searchEnabled") || this.option("acceptCustomValue")) {
+    _restoreInputText: function() {
+        if(this.option("acceptCustomValue")) {
             return;
         }
 
-        if(!this._searchValue() && this.option("allowClearing")) {
-            this._clearTextValue();
-            return;
+        if(this.option("searchEnabled")) {
+            if(!this._searchValue() && this.option("allowClearing")) {
+                this._clearTextValue();
+                return;
+            }
         }
 
         var oldSelectedItem = this.option("selectedItem");
@@ -558,6 +562,12 @@ var SelectBox = DropDownList.inherit({
             this._updateField(newSelectedItem);
             this._clearFilter();
         }).bind(this));
+    },
+
+    _focusOutHandler: function(e) {
+        this.callBase(e);
+
+        this._restoreInputText();
     },
 
     _clearTextValue: function() {

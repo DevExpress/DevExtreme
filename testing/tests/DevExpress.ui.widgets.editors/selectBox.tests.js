@@ -52,6 +52,7 @@ var WIDGET_CLASS = "dx-selectbox",
     POPUP_CLASS = "dx-selectbox-popup",
     LIST_ITEM_CLASS = "dx-list-item",
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
+    DX_DROP_DOWN_BUTTON = "dx-dropdowneditor-button",
     STATE_FOCUSED_CLASS = "dx-state-focused",
     TEXTBOX_CLASS = "dx-texteditor-input",
     TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container",
@@ -3637,6 +3638,51 @@ QUnit.testInActiveWindow("value should be reset on the 'tab' press after input v
 
     assert.equal($input.val(), "", "input value is reset");
     assert.equal(selectBox.option("value"), null, "widget value is reset");
+});
+
+QUnit.test("value should be restored after the focusout when selection was not changed", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "not actual");
+        return;
+    }
+
+    var items = ["first", "second"],
+        $selectBox = $("#selectBox").dxSelectBox({
+            items: items,
+            opened: true,
+            value: items[0]
+        }),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input);
+
+    keyboard.keyDown(KEY_DOWN);
+    assert.equal($input.val(), "second", "value has been changed");
+
+    $input.blur();
+    assert.equal($input.val(), "first", "value has been restored");
+});
+
+QUnit.test("value should be restored after the drop down button pressed when selection was not changed", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "not actual");
+        return;
+    }
+
+    var items = ["first", "second"],
+        $selectBox = $("#selectBox").dxSelectBox({
+            items: items,
+            opened: true,
+            value: items[0]
+        }),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        $dropDownButton = $selectBox.find("." + DX_DROP_DOWN_BUTTON),
+        keyboard = keyboardMock($input);
+
+    keyboard.keyDown(KEY_DOWN);
+    assert.equal($input.val(), "second", "value has been changed");
+
+    $dropDownButton.trigger("dxclick");
+    assert.equal($input.val(), "first", "value has been restored");
 });
 
 
