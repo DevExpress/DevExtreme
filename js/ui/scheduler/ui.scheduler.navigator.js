@@ -93,10 +93,10 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
 var getMonthCaption = function(date) {
     if(this.option("count") > 1) {
         var firstDate = new Date(date),
-            lastDate = new Date(date.setMonth(date.getMonth() + this.option("count") - 1)),
-            isSameYear = firstDate.getYear() === lastDate.getYear(),
+            lastDate = new Date(firstDate.setMonth(firstDate.getMonth() + this.option("count") - 1)),
+            isSameYear = date.getYear() === lastDate.getYear(),
             lastDateText = getMonthYearFormat(lastDate),
-            firstDateText = isSameYear ? dateLocalization.getMonthNames("abbreviated")[firstDate.getMonth()] : getMonthYearFormat(firstDate);
+            firstDateText = isSameYear ? dateLocalization.getMonthNames("abbreviated")[date.getMonth()] : getMonthYearFormat(date);
 
         return firstDateText + "-" + lastDateText;
     } else {
@@ -140,7 +140,7 @@ var getConfig = function(step) {
             };
         case "month":
             return {
-                duration: 1,
+                duration: 1 * this.option("count"),
                 setter: "setMonth",
                 getter: "getMonth",
                 getDate: function(date, offset) {
