@@ -97,7 +97,7 @@ var DropDownBox = DropDownEditor.inherit({
              * @type template
              * @default null
              * @type_function_param1 value:object
-             * @type_function_param2 fieldElement:object
+             * @type_function_param2 fieldElement:jQuery
              * @type_function_return string|Node|jQuery
              */
 
