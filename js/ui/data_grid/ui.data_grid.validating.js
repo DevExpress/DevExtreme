@@ -550,6 +550,7 @@ gridCore.registerModule("validating", {
 
                 _showValidationMessage: function($cell, message, alignment) {
                     var that = this,
+                        needRepaint,
                         $highlightContainer = $cell.find("." + DATAGRID_CELL_HIGHLIGHT_OUTLINE),
                         isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay:visible").length,
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
@@ -577,8 +578,14 @@ gridCore.registerModule("validating", {
                                 my: myPosition,
                                 at: atPosition
                             },
-                            onPositioned: function() {
-                                that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();
+                            onPositioned: function(e) {
+                                if(!needRepaint) {
+                                    needRepaint = that._rowsView.updateFreeSpaceRowHeight();
+
+                                    if(needRepaint) {
+                                        e.component.repaint();
+                                    }
+                                }
                             }
                         });
                 },
@@ -646,17 +653,24 @@ gridCore.registerModule("validating", {
             rowsView: {
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
-                        $rowElements = that._getRowElements(),
-                        $freeSpaceRowElements = that._getFreeSpaceRowElements($table),
-                        $freeSpaceRowElement = $freeSpaceRowElements.first(),
-                        $tooltipContent = that.element().find(".dx-invalid-message .dx-overlay-content");
+                        $rowElements,
+                        $freeSpaceRowElement,
+                        $freeSpaceRowElements,
+                        $element = that.element(),
+                        $tooltipContent = $element && $element.find(".dx-invalid-message .dx-overlay-content");
 
                     that.callBase($table);
 
+                    if($tooltipContent && $tooltipContent.length) {
+                        $rowElements = that._getRowElements();
+                        $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
+                        $freeSpaceRowElement = $freeSpaceRowElements.first();
 
-                    if($tooltipContent.length && $freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(":visible") || $tooltipContent.outerHeight() > $freeSpaceRowElement.outerHeight())) {
-                        $freeSpaceRowElements.show();
-                        $freeSpaceRowElements.height($tooltipContent.outerHeight());
+                        if($freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(":visible") || $tooltipContent.outerHeight() > $freeSpaceRowElement.outerHeight())) {
+                            $freeSpaceRowElements.show();
+                            $freeSpaceRowElements.height($tooltipContent.outerHeight());
+                            return true;
+                        }
                     }
                 },
                 _formItemPrepared: function(cellOptions, $container) {
