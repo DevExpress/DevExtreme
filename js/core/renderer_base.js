@@ -275,8 +275,10 @@ initRender.prototype.wrapInner = function(wrapper) {
 };
 
 initRender.prototype.replaceWith = function(element) {
-    this.$element.replaceWith(element.$element || element);
-    return this;
+    element.insertBefore(this);
+    this.remove();
+
+    return element;
 };
 
 var cleanData = function(node, cleanSelf) {
@@ -284,9 +286,12 @@ var cleanData = function(node, cleanSelf) {
         return;
     }
 
-    var childNodes = node.getElementsByTagName("*");
+    if(node instanceof Element) {
+        var childNodes = node.getElementsByTagName("*");
 
-    renderer.cleanData(childNodes);
+        renderer.cleanData(childNodes);
+    }
+
     if(cleanSelf) {
         renderer.cleanData([node]);
     }
