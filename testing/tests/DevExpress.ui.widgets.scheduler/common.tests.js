@@ -1073,13 +1073,13 @@ QUnit.testStart(function() {
         assert.notEqual(this.instance.element().find(".dx-scheduler-appointment").eq(0).outerHeight(), initialAppointmentHeight, "Appointment was repainted");
     });
 
-    QUnit.test("view.count is passed to workspace & header & navigator", function(assert) {
+    QUnit.test("view.intervalCount is passed to workspace & header & navigator", function(assert) {
         this.createInstance({
             currentView: "week",
             views: [{
                 type: "week",
                 name: "Week",
-                count: 3
+                intervalCount: 3
             }]
         });
 
@@ -1087,9 +1087,9 @@ QUnit.testStart(function() {
             header = this.instance.getHeader(),
             navigator = header._navigator;
 
-        assert.equal(workSpaceWeek.option("count"), 3, "workspace has correct count");
-        assert.equal(header.option("count"), 3, "header has correct count");
-        assert.equal(navigator.option("count"), 3, "navigator has correct count");
+        assert.equal(workSpaceWeek.option("intervalCount"), 3, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 3, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
     });
 
     QUnit.test("view.viewStartDate is passed to workspace & header & navigator", function(assert) {
@@ -1100,7 +1100,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "week",
                 name: "Week",
-                count: 3,
+                intervalCount: 3,
                 viewStartDate: date
             }]
         });
@@ -1122,7 +1122,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "week",
                 name: "Week",
-                count: 3,
+                intervalCount: 3,
                 viewStartDate: date
             }]
         });
@@ -1130,18 +1130,18 @@ QUnit.testStart(function() {
         assert.deepEqual(this.instance.option("viewStartDate"), date, "Scheduler has correct viewStartDate");
     });
 
-    QUnit.test("currentView option changing should work correctly, when count & viewStartDate is set", function(assert) {
+    QUnit.test("currentView option changing should work correctly, when intervalCount & viewStartDate is set", function(assert) {
         this.createInstance({
             currentView: "day",
             views: [{
                 type: "day",
                 name: "day",
-                count: 3,
+                intervalCount: 3,
                 viewStartDate: new Date(2017, 1, 1)
             }, {
                 type: "week",
                 name: "Week",
-                count: 2,
+                intervalCount: 2,
                 viewStartDate: new Date(2017, 10, 1)
             }]
         });
@@ -1151,9 +1151,9 @@ QUnit.testStart(function() {
             header = this.instance.getHeader(),
             navigator = header._navigator;
 
-        assert.equal(workSpaceWeek.option("count"), 2, "workspace has correct count");
-        assert.equal(header.option("count"), 2, "header has correct count");
-        assert.equal(navigator.option("count"), 2, "navigator has correct count");
+        assert.equal(workSpaceWeek.option("intervalCount"), 2, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 2, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 2, "navigator has correct count");
 
         assert.deepEqual(workSpaceWeek.option("viewStartDate"), new Date(2017, 10, 1), "workspace has correct viewStartDate");
         assert.deepEqual(header.option("viewStartDate"), new Date(2017, 10, 1), "header has correct viewStartDate");

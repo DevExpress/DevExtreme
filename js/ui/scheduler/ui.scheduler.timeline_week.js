@@ -27,7 +27,7 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
             cellTemplate = this.option("dateCellTemplate"),
             headerCellWidth = colspan * CELL_WIDTH;
 
-        for(var i = 0; i < this._getWeekDuration() * this.option("count"); i++) {
+        for(var i = 0; i < this._getWeekDuration() * this.option("intervalCount"); i++) {
             var $th = $("<th>"),
                 text = this._formatWeekdayAndDay(firstViewDate);
 

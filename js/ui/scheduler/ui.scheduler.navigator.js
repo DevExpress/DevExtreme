@@ -42,7 +42,7 @@ var getMonthYearFormat = function(date) {
 var getCaptionFormat = function(short, skipCount) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
-        if(this && this.option("count") > 1) {
+        if(this && this.option("intervalCount") > 1) {
             var lastIntervalDate = new Date(date),
                 defaultViewDuration = this._getConfig().duration;
             lastIntervalDate.setDate(date.getDate() + defaultViewDuration - 1);
@@ -72,11 +72,11 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
     }
 
     var lastWeekDate = new Date(firstWeekDate),
-        count = this.option("count");
+        intervalCount = this.option("intervalCount");
 
     shift = shift || 6;
 
-    lastWeekDate = new Date(lastWeekDate.setDate(lastWeekDate.getDate() + (count > 1 ? 7 * (count - 1) + shift : shift)));
+    lastWeekDate = new Date(lastWeekDate.setDate(lastWeekDate.getDate() + (intervalCount > 1 ? 7 * (intervalCount - 1) + shift : shift)));
 
     if(lastWeekDate.getDay() % 6 === 0 && rejectWeekend) {
         lastWeekDate.setDate(lastWeekDate.getDate() + weekendDuration);
@@ -91,9 +91,9 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
 };
 
 var getMonthCaption = function(date) {
-    if(this.option("count") > 1) {
+    if(this.option("intervalCount") > 1) {
         var firstDate = new Date(date),
-            lastDate = new Date(firstDate.setMonth(firstDate.getMonth() + this.option("count") - 1)),
+            lastDate = new Date(firstDate.setMonth(firstDate.getMonth() + this.option("intervalCount") - 1)),
             isSameYear = date.getYear() === lastDate.getYear(),
             lastDateText = getMonthYearFormat(lastDate),
             firstDateText = isSameYear ? dateLocalization.getMonthNames("abbreviated")[date.getMonth()] : getMonthYearFormat(date);
@@ -114,7 +114,7 @@ var getConfig = function(step) {
     switch(step) {
         case "day":
             return {
-                duration: 1 * this.option("count"),
+                duration: 1 * this.option("intervalCount"),
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,
@@ -122,7 +122,7 @@ var getConfig = function(step) {
             };
         case "week":
             return {
-                duration: 7 * this.option("count"),
+                duration: 7 * this.option("intervalCount"),
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,
@@ -140,7 +140,7 @@ var getConfig = function(step) {
             };
         case "month":
             return {
-                duration: 1 * this.option("count"),
+                duration: 1 * this.option("intervalCount"),
                 setter: "setMonth",
                 getter: "getMonth",
                 getDate: function(date, offset) {
@@ -186,7 +186,7 @@ var SchedulerNavigator = Widget.inherit({
         return extend(this.callBase(), {
             date: new Date(),
             step: "day",
-            count: 1,
+            intervalCount: 1,
             min: undefined,
             max: undefined,
             firstDayOfWeek: undefined,
@@ -211,7 +211,7 @@ var SchedulerNavigator = Widget.inherit({
         switch(args.name) {
             case "step":
             case "date":
-            case "count":
+            case "intervalCount":
                 this._updateButtonsState();
                 this._renderCaption();
                 this._setCalendarOption("value", this.option("date"));

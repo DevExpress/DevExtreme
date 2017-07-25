@@ -1048,7 +1048,7 @@ var Scheduler = Widget.inherit({
                     allowResize: this._allowResizing(),
                     appointmentDurationInMinutes: this._getCurrentViewOption("cellDuration")
                 });
-                this._header.option("count", viewCountConfig.count);
+                this._header.option("intervalCount", viewCountConfig.intervalCount);
                 this._header.option("viewStartDate", viewCountConfig.viewStartDate || new Date(this.option("currentDate")));
                 this._header.option("min", this._dateOption("min"));
                 this._header.option("max", this._dateOption("max"));
@@ -1391,7 +1391,6 @@ var Scheduler = Widget.inherit({
     _setViewStartDate: function() {
         var viewCountConfig = this._getViewCountConfig();
         this.option("viewStartDate", viewCountConfig.viewStartDate);
-        //this._viewStartDate = viewCountConfig.viewStartDate;
     },
 
     _initTemplates: function() {
@@ -1705,11 +1704,11 @@ var Scheduler = Widget.inherit({
         var currentView = this.option("currentView");
 
         var view = this._getViewByType(currentView),
-            viewCount = view && view.count || 1,
+            viewCount = view && view.intervalCount || 1,
             viewStartDate = view && view.viewStartDate || null;
 
         return {
-            count: viewCount,
+            intervalCount: viewCount,
             viewStartDate: viewStartDate
         };
     },
@@ -1753,7 +1752,7 @@ var Scheduler = Widget.inherit({
         }, currentViewOptions);
 
         result.observer = this;
-        result.count = countConfig.count;
+        result.intervalCount = countConfig.intervalCount;
         result.viewStartDate = countConfig.viewStartDate;
         result.groups = groups;
         result.onCellClick = this._createActionByOption("onCellClick");

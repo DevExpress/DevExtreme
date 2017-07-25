@@ -339,7 +339,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             currentDate: new Date(),
-            count: 1,
+            intervalCount: 1,
             viewStartDate: null,
             firstDayOfWeek: undefined,
             startDayHour: 0,
@@ -388,7 +388,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "onCellClick":
                 this._createCellClickAction();
                 break;
-            case "count":
+            case "intervalCount":
                 this._cleanWorkSpace();
                 this._toggleWorkSpaceCountClass();
                 break;
@@ -434,7 +434,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleWorkSpaceCountClass: function() {
-        this.element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this.option("count") > 1);
+        this.element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this.option("intervalCount") > 1);
     },
 
     _getTimePanelClass: function() {

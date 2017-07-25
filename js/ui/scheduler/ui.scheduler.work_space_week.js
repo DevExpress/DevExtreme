@@ -16,7 +16,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _getCellCount: function() {
-        return 7 * this.option("count");
+        return 7 * this.option("intervalCount");
     },
 
     _getDateByIndex: function(headerIndex) {

@@ -15,7 +15,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _getCellCount: function() {
-        return this.option("count");
+        return this.option("intervalCount");
     },
 
     _setFirstViewDate: function() {
@@ -24,7 +24,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _getDateByIndex: function(headerIndex) {
-        if(this.option("count") === 1) {
+        if(this.option("intervalCount") === 1) {
             return this._firstViewDate;
         }
 
@@ -38,7 +38,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _renderDateHeader: function() {
-        if(this.option("count") === 1) {
+        if(this.option("intervalCount") === 1) {
             return;
         }
 

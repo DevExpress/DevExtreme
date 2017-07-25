@@ -4279,7 +4279,7 @@ QUnit.test("Exception should not be thrown on second details view opening if for
     }
 });
 
-QUnit.test("Appointments should be rendered correctly, Day view with count", function(assert) {
+QUnit.test("Appointments should be rendered correctly, Day view with intervalCount", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2015, 2, 16, 7), endDate: new Date(2015, 2, 16, 7, 30) },
         { text: "Two", startDate: new Date(2015, 2, 16, 11), endDate: new Date(2015, 2, 16, 11, 30) },
@@ -4295,7 +4295,7 @@ QUnit.test("Appointments should be rendered correctly, Day view with count", fun
         views: [{
             type: "day",
             name: "Day",
-            count: 3
+            intervalCount: 3
         }],
         currentView: "day"
     });
@@ -4305,7 +4305,7 @@ QUnit.test("Appointments should be rendered correctly, Day view with count", fun
     assert.equal($appointments.length, 4, "Appointments were rendered correctly");
 });
 
-QUnit.test("Appointments should be rendered correctly, Week view with count", function(assert) {
+QUnit.test("Appointments should be rendered correctly, Week view with intervalCount", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2015, 4, 25, 7), endDate: new Date(2015, 4, 25, 7, 30) },
         { text: "Two", startDate: new Date(2015, 5, 1, 11), endDate: new Date(2015, 5, 1, 11, 30) },
@@ -4321,7 +4321,7 @@ QUnit.test("Appointments should be rendered correctly, Week view with count", fu
         views: [{
             type: "week",
             name: "week",
-            count: 3
+            intervalCount: 3
         }],
         currentView: "week"
     });
@@ -4331,7 +4331,7 @@ QUnit.test("Appointments should be rendered correctly, Week view with count", fu
     assert.equal($appointments.length, 4, "Appointments were rendered correctly");
 });
 
-QUnit.test("Appointments should be rendered correctly, Day view with count and viewStartDate", function(assert) {
+QUnit.test("Appointments should be rendered correctly, Day view with intervalCount and viewStartDate", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2017, 5, 25, 4), endDate: new Date(2017, 5, 25, 4, 30) },
         { text: "Two", startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
@@ -4346,7 +4346,7 @@ QUnit.test("Appointments should be rendered correctly, Day view with count and v
         views: [{
             type: "day",
             name: "day",
-            count: 3,
+            intervalCount: 3,
             viewStartDate: new Date(2017, 5, 25)
         }],
         currentView: "day"
@@ -4357,7 +4357,7 @@ QUnit.test("Appointments should be rendered correctly, Day view with count and v
     assert.equal($appointments.length, 3, "Appointments were rendered correctly");
 });
 
-QUnit.test("Appointments should be rendered correctly, Week view with count and viewStartDate", function(assert) {
+QUnit.test("Appointments should be rendered correctly, Week view with intervalCount and viewStartDate", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2017, 5, 22, 4), endDate: new Date(2017, 5, 22, 4, 30) },
         { text: "Two", startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
@@ -4373,7 +4373,7 @@ QUnit.test("Appointments should be rendered correctly, Week view with count and 
         views: [{
             type: "week",
             name: "week",
-            count: 3,
+            intervalCount: 3,
             viewStartDate: new Date(2017, 5, 19)
         }],
         currentView: "week",
@@ -4385,7 +4385,7 @@ QUnit.test("Appointments should be rendered correctly, Week view with count and 
     assert.equal($appointments.length, 4, "Appointments were rendered correctly");
 });
 
-QUnit.test("Appointments should be rendered correctly, Month view with count and viewStartDate", function(assert) {
+QUnit.test("Appointments should be rendered correctly, Month view with intervalCount and viewStartDate", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2017, 5, 22, 4), endDate: new Date(2017, 5, 22, 4, 30) },
         { text: "Two", startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
@@ -4401,7 +4401,7 @@ QUnit.test("Appointments should be rendered correctly, Month view with count and
         dataSource: dataSource,
         views: [{
             type: "month",
-            count: 3,
+            intervalCount: 3,
             viewStartDate: new Date(2017, 5, 19)
         }],
         currentView: "month",
@@ -4413,7 +4413,7 @@ QUnit.test("Appointments should be rendered correctly, Month view with count and
     assert.equal($appointments.length, 5, "Appointments were rendered correctly");
 });
 
-QUnit.test("Appointments should be rendered correctly after switching Day view with count and viewStartDate", function(assert) {
+QUnit.test("Appointments should be rendered correctly after switching Day view with intervalCount and viewStartDate", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2017, 5, 28, 4), endDate: new Date(2017, 5, 28, 4, 30) },
         { text: "Two", startDate: new Date(2017, 5, 29, 0), endDate: new Date(2017, 5, 29, 0, 30) },
@@ -4428,7 +4428,7 @@ QUnit.test("Appointments should be rendered correctly after switching Day view w
         views: [{
             type: "day",
             name: "day",
-            count: 3,
+            intervalCount: 3,
             viewStartDate: new Date(2017, 5, 25)
         }],
         currentView: "day"
@@ -4441,7 +4441,7 @@ QUnit.test("Appointments should be rendered correctly after switching Day view w
     assert.equal($appointments.length, 3, "Appointments were rendered correctly");
 });
 
-QUnit.test("Appointments should be rendered correctly after switching Week view with count and viewStartDate", function(assert) {
+QUnit.test("Appointments should be rendered correctly after switching Week view with intervalCount and viewStartDate", function(assert) {
     var tasks = [
         { text: "One", startDate: new Date(2017, 6, 10, 4), endDate: new Date(2017, 6, 10, 4, 30) },
         { text: "Two", startDate: new Date(2017, 6, 18, 0), endDate: new Date(2017, 6, 18, 0, 30) },
@@ -4456,7 +4456,7 @@ QUnit.test("Appointments should be rendered correctly after switching Week view 
         views: [{
             type: "week",
             name: "week",
-            count: 3,
+            intervalCount: 3,
             viewStartDate: new Date(2017, 5, 19)
         }],
         currentView: "week",

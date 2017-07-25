@@ -26,10 +26,10 @@ QUnit.test("Click on the 'next' button should update currentDate", function(asse
     assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 10), "New date is correct");
 });
 
-QUnit.test("Click on the 'next' button should update currentDate correctly, when count & viewStartDate", function(assert) {
+QUnit.test("Click on the 'next' button should update currentDate correctly, when intervalCount & viewStartDate", function(assert) {
     this.createInstance({ currentDate: new Date(2015, 1, 9), views: [{
         type: "day",
-        count: 3,
+        intervalCount: 3,
         viewStartDate: new Date(2015, 1, 11)
     }] });
 
@@ -48,11 +48,11 @@ QUnit.test("Click on the 'previous' button should update currentDate", function(
     assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 8), "New date is correct");
 });
 
-QUnit.test("Click on the 'previous' button should update currentDate correctly, when count & viewStartDate", function(assert) {
+QUnit.test("Click on the 'previous' button should update currentDate correctly, when intervalCount & viewStartDate", function(assert) {
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), views: [{
         type: "day",
-        count: 3,
+        intervalCount: 3,
         viewStartDate: new Date(2015, 1, 10)
     }] });
 

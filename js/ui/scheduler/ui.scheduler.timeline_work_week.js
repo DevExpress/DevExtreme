@@ -8,9 +8,6 @@ var registerComponent = require("../../core/component_registrator"),
 var TIMELINE_CLASS = "dx-scheduler-timeline-work-week",
     MONDAY_INDEX = 1;
 
-// var weekendCounter = 0,
-//     weekCounter = 0;
-
 var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
     _getElementClass: function() {
         return TIMELINE_CLASS;
@@ -32,23 +29,6 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
             return 0;
         }
     },
-
-    // _getDateByIndex: function(headerIndex) {
-    //     var resultDate = new Date(this._firstViewDate);
-
-    //     resultDate.setDate(this._firstViewDate.getDate() + headerIndex + weekendCounter);
-    //     var nextDay = resultDate.getDay() + 1;
-
-    //     if(nextDay % 6 === 0) {
-    //         weekendCounter = 2;
-
-    //         if(nextDay === 6) {
-    //             weekCounter++;
-    //             weekendCounter *= weekCounter;
-    //         }
-    //     }
-    //     return resultDate;
-    // },
 
     _setFirstViewDate: function() {
         this._firstViewDate = dateUtils.getFirstWeekDate(this.option("currentDate"), this._firstDayOfWeek());

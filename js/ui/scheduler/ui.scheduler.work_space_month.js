@@ -22,7 +22,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getRowCount: function() {
-        return this.option("count") > 1 ? 4 * this.option("count") + 2 : 6;
+        return this.option("intervalCount") > 1 ? 4 * this.option("intervalCount") + 2 : 6;
     },
 
     _getCellCount: function() {
@@ -91,7 +91,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
         var date = this._getViewStartByOptions();
         this._minVisibleDate = new Date(date.setDate(1));
-        this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option("count"))).setDate(0));
+        this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option("intervalCount"))).setDate(0));
     },
 
     _renderTableBody: function(options) {
@@ -104,7 +104,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
         var date = this._getDate(rowIndex, cellIndex);
 
-        if(this.option("count") > 1 && this._isFirstDayOfMonth(date)) {
+        if(this.option("intervalCount") > 1 && this._isFirstDayOfMonth(date)) {
             return this._formatWeekdayAndDay(date);
         }
         return dateLocalization.format(date, "dd");

@@ -19,7 +19,7 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
     },
 
     _getCellCount: function() {
-        return 5 * this.option("count");
+        return 5 * this.option("intervalCount");
     },
 
     _firstDayOfWeek: function() {

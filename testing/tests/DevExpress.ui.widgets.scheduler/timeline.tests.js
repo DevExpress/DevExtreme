@@ -1043,7 +1043,7 @@ QUnit.test("Timeline should select/unselect cells with mouse", function(assert) 
     assert.equal(cells.filter(".dx-state-focused").length, 1, "right quantity of focused cells");
 });
 
-QUnit.module("TimelineDay with count", {
+QUnit.module("TimelineDay with intervalCount", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay({
             currentDate: new Date(2015, 9, 16)
@@ -1052,20 +1052,20 @@ QUnit.module("TimelineDay with count", {
     }
 });
 
-QUnit.test("TimelineDay has right count of cells with view option count", function(assert) {
-    this.instance.option("count", 2);
+QUnit.test("TimelineDay has right intervalCount of cells with view option intervalCount", function(assert) {
+    this.instance.option("intervalCount", 2);
 
     var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 2, "view has right cell count");
 
-    this.instance.option("count", 4);
+    this.instance.option("intervalCount", 4);
 
     cells = this.instance.element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 4, "view has right cell count");
 });
 
-QUnit.test("TimelineDay Day view cells have right cellData with view option count=2", function(assert) {
-    this.instance.option("count", 2);
+QUnit.test("TimelineDay Day view cells have right cellData with view option intervalCount=2", function(assert) {
+    this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
     var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
@@ -1080,15 +1080,15 @@ QUnit.test("TimelineDay Day view cells have right cellData with view option coun
 
 QUnit.test("Get date range", function(assert) {
     this.instance.option("currentDate", new Date(2015, 2, 16));
-    this.instance.option("count", 2);
+    this.instance.option("intervalCount", 2);
 
     assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 17, 23, 59)], "Range is OK");
 
-    this.instance.option("count", 4);
+    this.instance.option("intervalCount", 4);
     assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 19, 23, 59)], "Range is OK");
 });
 
-QUnit.module("TimelineWeek with count", {
+QUnit.module("TimelineWeek with intervalCount", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineWeek({
             currentDate: new Date(2015, 9, 16)
@@ -1097,20 +1097,20 @@ QUnit.module("TimelineWeek with count", {
     }
 });
 
-QUnit.test("TimelineWeek has right count of cells with view option count", function(assert) {
-    this.instance.option("count", 2);
+QUnit.test("TimelineWeek has right count of cells with view option intervalCount", function(assert) {
+    this.instance.option("intervalCount", 2);
 
     var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 2, "view has right cell count");
 
-    this.instance.option("count", 4);
+    this.instance.option("intervalCount", 4);
 
     cells = this.instance.element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 4, "view has right cell count");
 });
 
-QUnit.test("TimelineWeek view cells have right cellData with view option count=2", function(assert) {
-    this.instance.option("count", 2);
+QUnit.test("TimelineWeek view cells have right cellData with view option intervalCount=2", function(assert) {
+    this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
     var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(7 * 48).data("dxCellData"),
@@ -1125,27 +1125,26 @@ QUnit.test("TimelineWeek view cells have right cellData with view option count=2
 
 QUnit.test("Get date range", function(assert) {
     this.instance.option("currentDate", new Date(2017, 5, 26));
-    this.instance.option("count", 2);
+    this.instance.option("intervalCount", 2);
     this.instance.option("firstDayOfWeek", 1);
 
     assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 9, 23, 59)], "Range is OK");
 
-    this.instance.option("count", 4);
+    this.instance.option("intervalCount", 4);
     assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 23, 23, 59)], "Range is OK");
 });
 
-QUnit.test("TimelineWeek view should contain right header if count=3", function(assert) {
+QUnit.test("TimelineWeek view should contain right header if intervalCount=3", function(assert) {
     this.instance.option("currentDate", new Date(2017, 5, 26));
-    this.instance.option("count", 3);
+    this.instance.option("intervalCount", 3);
 
     var $element = this.instance.element(),
         $firstRow = $element.find(".dx-scheduler-header-row").first();
 
     assert.equal($firstRow.find(".dx-scheduler-header-panel-cell").length, 21, "Header row has 21 cells");
-    //checkHeaderCells(this.instance.element(), assert);
 });
 
-QUnit.module("TimelineWorkWeek with count", {
+QUnit.module("TimelineWorkWeek with intervalCount", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineWorkWeek({
             currentDate: new Date(2015, 9, 16)
@@ -1154,20 +1153,20 @@ QUnit.module("TimelineWorkWeek with count", {
     }
 });
 
-QUnit.test("TimelineWorkWeek has right count of cells with view option count", function(assert) {
-    this.instance.option("count", 2);
+QUnit.test("TimelineWorkWeek has right count of cells with view option intervalCount", function(assert) {
+    this.instance.option("intervalCount", 2);
 
     var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 2, "view has right cell count");
 
-    this.instance.option("count", 4);
+    this.instance.option("intervalCount", 4);
 
     cells = this.instance.element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 4, "view has right cell count");
 });
 
-QUnit.test("TimelineWorkWeek view cells have right cellData with view option count=2", function(assert) {
-    this.instance.option("count", 2);
+QUnit.test("TimelineWorkWeek view cells have right cellData with view option intervalCount=2", function(assert) {
+    this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
     var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(5 * 48).data("dxCellData"),
@@ -1182,18 +1181,18 @@ QUnit.test("TimelineWorkWeek view cells have right cellData with view option cou
 
 QUnit.test("Get date range", function(assert) {
     this.instance.option("currentDate", new Date(2017, 5, 26));
-    this.instance.option("count", 2);
+    this.instance.option("intervalCount", 2);
     this.instance.option("firstDayOfWeek", 1);
 
     assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 7, 23, 59)], "Range is OK");
 
-    this.instance.option("count", 4);
+    this.instance.option("intervalCount", 4);
     assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 21, 23, 59)], "Range is OK");
 });
 
-QUnit.test("TimelineWorkWeek view should contain right header if count=3", function(assert) {
+QUnit.test("TimelineWorkWeek view should contain right header if intervalCount=3", function(assert) {
     this.instance.option("currentDate", new Date(2017, 5, 26));
-    this.instance.option("count", 3);
+    this.instance.option("intervalCount", 3);
 
     var $element = this.instance.element(),
         $firstRow = $element.find(".dx-scheduler-header-row").first();
