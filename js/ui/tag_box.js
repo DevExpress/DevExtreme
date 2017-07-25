@@ -667,13 +667,12 @@ var TagBox = SelectBox.inherit({
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._clearFilter();
         this._renderTags();
         this._popup && this._popup.refreshPosition();
     },
 
     _listItemClickHandler: function(e) {
-        this._clearTextValue();
+        !this.option("showSelectionControls") && this._clearTextValue();
 
         if(this.option("applyValueMode") === "useButtons") {
             return;
