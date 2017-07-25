@@ -136,10 +136,6 @@ var getItemSize = function(dropTargetConfig, $element) {
     };
 };
 
-var contains = function(container, element) {
-    return container.nodeType === 9 ? container.body.contains(element) : container.contains(element);
-};
-
 var DragEmitter = GestureEmitter.inherit({
 
     ctor: function(element) {
