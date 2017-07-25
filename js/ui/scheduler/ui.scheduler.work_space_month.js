@@ -88,6 +88,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         var firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
         this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, this.option("firstDayOfWeek") || dateLocalization.firstDayOfWeekIndex());
         this._setStartDayHour(this._firstViewDate);
+
+        var date = this._getViewStartByOptions();
+        this._minVisibleDate = new Date(date.setDate(1));
+        this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option("count"))).setDate(0));
     },
 
     _renderTableBody: function(options) {
@@ -139,13 +143,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _isOtherMonth: function(cellDate) {
-        var date = this._getViewStartByOptions(),
-            min = new Date(date.setDate(1)),
-            max = new Date(date.setMonth(date.getMonth() + this.option("count")));
-
-        max.setDate(0);
-
-        return !dateUtils.dateInRange(cellDate, min, max, "date");
+        return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, "date");
     },
 
     getCellDuration: function() {
