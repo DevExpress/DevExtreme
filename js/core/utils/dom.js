@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
     inArray = require("./array").inArray,
     isDefined = require("./type").isDefined;
@@ -58,7 +59,7 @@ var triggerVisibilityChangeEvent = function(eventName) {
             add($element.find(VISIBILITY_CHANGE_SELECTOR));
 
         for(var i = 0; i < changeHandlers.length; i++) {
-            $(changeHandlers[i]).triggerHandler(eventName);
+            eventsEngine.triggerHandler(changeHandlers[i], eventName);
         }
     };
 };

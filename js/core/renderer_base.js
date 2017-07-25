@@ -8,7 +8,7 @@ var matches = require("./polyfills/matches");
 
 var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
-    "triggerHandler", "focusin", "focusout", "click",
+    "focusin", "focusout", "click",
     "html", "css",
     "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
