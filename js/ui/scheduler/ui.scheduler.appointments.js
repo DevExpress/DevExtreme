@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    dataUtils = require("../../core/element_data"),
     translator = require("../../animation/translator"),
     dateUtils = require("../../core/utils/date"),
     commonUtils = require("../../core/utils/common"),
@@ -75,7 +76,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var appointments = this._getAccessAppointments();
 
         return appointments.filter(function(_, $item) {
-            return $.data($item, "dxAppointmentSettings").sortedIndex === sortedIndex;
+            return dataUtils.data($item, "dxAppointmentSettings").sortedIndex === sortedIndex;
         }).eq(0);
     },
 

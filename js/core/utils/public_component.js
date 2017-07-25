@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var dataUtils = require("../../core/element_data"),
     eventsEngine = require("../../events/core/events_engine"),
     WeakMap = require("../polyfills/weak_map"),
     isDefined = require("./type").isDefined,
@@ -28,7 +28,7 @@ var getName = exports.name = function(componentClass, newName) {
 };
 
 exports.attachInstanceToElement = function($element, componentInstance, disposeFn) {
-    var data = $.data($element.get(0)),
+    var data = dataUtils.data($element.get(0)),
         name = getName(componentInstance.constructor);
 
     data[name] = componentInstance;
@@ -49,5 +49,5 @@ exports.attachInstanceToElement = function($element, componentInstance, disposeF
 exports.getInstanceByElement = function($element, componentClass) {
     var name = getName(componentClass);
 
-    return $.data($element.get(0), name);
+    return dataUtils.data($element.get(0), name);
 };
