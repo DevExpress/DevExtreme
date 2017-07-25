@@ -1130,24 +1130,35 @@ QUnit.testStart(function() {
         assert.deepEqual(this.instance.option("viewStartDate"), date, "Scheduler has correct viewStartDate");
     });
 
-    // QUnit.test("view.offset isn't passed to workspace & header & navigator if count is undefined", function(assert) {
-    //     this.createInstance({
-    //         currentView: "week",
-    //         views: [{
-    //             type: "week",
-    //             name: "Week",
-    //             offset: 2
-    //         }]
-    //     });
+    QUnit.test("currentView option changing should work correctly, when count & viewStartDate is set", function(assert) {
+        this.createInstance({
+            currentView: "day",
+            views: [{
+                type: "day",
+                name: "day",
+                count: 3,
+                viewStartDate: new Date(2017, 1, 1)
+            }, {
+                type: "week",
+                name: "Week",
+                count: 2,
+                viewStartDate: new Date(2017, 10, 1)
+            }]
+        });
 
-    //     var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
-    //         header = this.instance.getHeader(),
-    //         navigator = header._navigator;
+        this.instance.option("currentView", "week");
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
 
-    //     assert.equal(workSpaceWeek.option("offset"), 2, "workspace has correct offset");
-    //     assert.equal(header.option("offset"), 2, "header has correct offset");
-    //     assert.equal(navigator.option("offset"), 2, "navigator has correct offset");
-    // });
+        assert.equal(workSpaceWeek.option("count"), 2, "workspace has correct count");
+        assert.equal(header.option("count"), 2, "header has correct count");
+        assert.equal(navigator.option("count"), 2, "navigator has correct count");
+
+        assert.deepEqual(workSpaceWeek.option("viewStartDate"), new Date(2017, 10, 1), "workspace has correct viewStartDate");
+        assert.deepEqual(header.option("viewStartDate"), new Date(2017, 10, 1), "header has correct viewStartDate");
+        assert.deepEqual(navigator.option("date"), new Date(2017, 10, 1), "navigator has correct viewStartDate");
+    });
 
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
         this.createInstance({
