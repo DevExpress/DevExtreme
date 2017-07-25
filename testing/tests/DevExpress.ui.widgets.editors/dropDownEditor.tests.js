@@ -590,7 +590,7 @@ QUnit.module("keyboard navigation inside popup", {
 
         this.$input = this.$element.find(".dx-texteditor-input");
 
-        var $popupWrapper = this.instance._popup._wrapper();
+        var $popupWrapper = $(this.instance._popup._wrapper());
         this.$doneButton = $popupWrapper.find(".dx-popup-done.dx-button");
         this.$cancelButton = $popupWrapper.find(".dx-popup-cancel.dx-button");
 
@@ -601,7 +601,7 @@ QUnit.module("keyboard navigation inside popup", {
                 eventConfig.shiftKey = shiftKey;
             }
 
-            $element
+            $($element)
                 .focus()
                 .trigger($.Event("keydown", eventConfig));
         };
