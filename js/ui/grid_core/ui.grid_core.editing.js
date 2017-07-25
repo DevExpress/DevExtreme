@@ -184,6 +184,9 @@ var EditingController = modules.ViewController.inherit((function() {
 
                     if(editData.type === DATA_EDIT_DATA_INSERT_TYPE) {
                         editData.key.rowIndex += args.items.length;
+                        editData.key.dataRowIndex += args.items.filter(function(item) {
+                            return item.rowType === "data";
+                        }).length;
                     }
                 });
             }
@@ -327,6 +330,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         return editData.key.pageIndex === beginPageIndex;
                     case "refresh":
                         editData.key.rowIndex = 0;
+                        editData.key.dataRowIndex = 0;
                         editData.key.pageIndex = 0;
                         break;
                     default:
@@ -362,7 +366,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 item = that._generateNewItem(key);
 
                 if(editData[i].type === DATA_EDIT_DATA_INSERT_TYPE && that._needInsertItem(editData[i], changeType, items, item)) {
-                    items.splice(key.rowIndex, 0, item);
+                    items.splice(key.dataRowIndex, 0, item);
                 }
             }
 
@@ -482,6 +486,10 @@ var EditingController = modules.ViewController.inherit((function() {
             if(editMode !== EDIT_MODE_BATCH) {
                 that._editRowIndex = insertKey.rowIndex + that._dataController.getRowIndexOffset();
             }
+
+            insertKey.dataRowIndex = dataController.items().filter(function(row, index) {
+                return index < insertKey.rowIndex && row.rowType === "data";
+            }).length;
 
             insertKey[INSERT_INDEX] = insertIndex;
 
