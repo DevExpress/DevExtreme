@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var dataUtils = require("../core/element_data"),
     Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),
     DOMComponent = require("../core/dom_component"),
@@ -159,7 +159,7 @@ var Validator = DOMComponent.inherit({
     _initAdapter: function() {
         var that = this,
             element = that.element()[0],
-            dxStandardEditor = $.data(element, "dx-validation-target"),
+            dxStandardEditor = dataUtils.data(element, "dx-validation-target"),
             adapter = that.option("adapter");
         if(!adapter) {
             if(dxStandardEditor) {

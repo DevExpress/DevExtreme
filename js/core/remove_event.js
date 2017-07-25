@@ -1,14 +1,14 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    jQuery = require("jquery"),
-    cleanData = jQuery.cleanData,
+    dataUtilsStrategy = require("../core/element_data").getDataStrategy(),
+    cleanData = dataUtilsStrategy.cleanData,
     specialEvents = $.event.special;
 
 var eventName = "dxremove",
     eventPropName = "dxRemoveEvent";
 
-jQuery.cleanData = function(elements) {
+dataUtilsStrategy.cleanData = function(elements) {
     elements = [].slice.call(elements);
     for(var i = 0; i < elements.length; i++) {
         var $element = $(elements[i]);

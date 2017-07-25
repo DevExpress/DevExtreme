@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var jQuery = require("jquery"),
     ko = require("knockout"),
     compareVersion = require("../../core/utils/version").compare;
 
-if(compareVersion($.fn.jquery, [2, 0]) < 0) {
+if(jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) < 0) {
 
     var cleanKoData = function(element, andSelf) {
         var cleanNode = function() {
@@ -19,13 +19,13 @@ if(compareVersion($.fn.jquery, [2, 0]) < 0) {
     };
 
     var originalEmpty = $.fn.empty;
-    $.fn.empty = function() {
+    jQuery.fn.empty = function() {
         cleanKoData(this, false);
         return originalEmpty.apply(this, arguments);
     };
 
     var originalRemove = $.fn.remove;
-    $.fn.remove = function(selector, keepData) {
+    jQuery.fn.remove = function(selector, keepData) {
         if(!keepData) {
             var subject = this;
             if(selector) {
@@ -37,7 +37,7 @@ if(compareVersion($.fn.jquery, [2, 0]) < 0) {
     };
 
     var originalHtml = $.fn.html;
-    $.fn.html = function(value) {
+    jQuery.fn.html = function(value) {
         if(typeof value === "string") {
             cleanKoData(this, false);
         }
@@ -45,7 +45,7 @@ if(compareVersion($.fn.jquery, [2, 0]) < 0) {
     };
 
     var originalReplaceWith = $.fn.replaceWith;
-    $.fn.replaceWith = function() {
+    jQuery.fn.replaceWith = function() {
         var result = originalReplaceWith.apply(this, arguments);
 
         if(!this.parent().length) {

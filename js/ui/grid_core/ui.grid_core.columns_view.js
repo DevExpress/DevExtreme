@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    dataUtils = require("../../core/element_data"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
@@ -438,7 +439,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _rowPrepared: function($row, options) {
-        $.data($row.get(0), "options", options);
+        dataUtils.data($row.get(0), "options", options);
 
         options.rowElement = $row;
         this.executeAction("onRowPrepared", options);
