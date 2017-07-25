@@ -78,7 +78,7 @@ var dropDownAppointments = Class.inherit({
     },
 
     _createButtonTemplate: function(appointmentCount) {
-        return $("<div />").html(
+        return $("<div />").append(
             [$("<span />").text(appointmentCount), $("<span />").text("...")]
         ).addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
     },

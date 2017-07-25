@@ -530,7 +530,8 @@ var TagBox = SelectBox.inherit({
             );
         }
 
-        this._$submitElement.html($options);
+        this._$submitElement.empty();
+        this._$submitElement.append($options);
     },
 
     _render: function() {

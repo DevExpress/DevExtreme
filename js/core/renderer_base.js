@@ -9,7 +9,7 @@ var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
     "data", "removeData",
     "triggerHandler", "focusin", "focusout", "click",
-    "html", "css",
+    "css",
     "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
 var renderer = function(selector, context) {
@@ -354,6 +354,24 @@ initRender.prototype.val = function(value) {
     }
 
     return this.prop("value");
+};
+
+initRender.prototype.html = function(value) {
+    if(!arguments.length) {
+        return this[0].innerHTML;
+    }
+
+    this.empty();
+
+    if(typeof value === "string" || typeof value === "number") {
+        try {
+            this[0].innerHTML = value;
+
+            return this;
+        } catch(e) { }
+    }
+
+    return this.append(value);
 };
 
 initRender.prototype.contents = function() {
