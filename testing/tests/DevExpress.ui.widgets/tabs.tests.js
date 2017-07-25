@@ -159,10 +159,10 @@ QUnit.test("design mode", function(assert) {
         });
 
         var tabsInstance = tabsElement.data("dxTabs"),
-            tabItems = tabsInstance._itemElements();
+            $tabItems = $(tabsInstance._itemElements());
 
-        tabItems.eq(1).click();
-        assert.ok(!tabItems.eq(1).hasClass(TAB_SELECTED_CLASS));
+        $tabItems.eq(1).click();
+        assert.ok(!$tabItems.eq(1).hasClass(TAB_SELECTED_CLASS));
     } finally {
         config({ designMode: false });
     }
