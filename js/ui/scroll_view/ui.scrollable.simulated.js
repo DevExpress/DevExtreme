@@ -155,7 +155,7 @@ var Scroller = Class.inherit({
             return;
         }
 
-        this._$container.triggerHandler({ type: "scroll" });
+        eventsEngine.triggerHandler(this._$container, { type: "scroll" });
     },
 
     _suppressBounce: function() {

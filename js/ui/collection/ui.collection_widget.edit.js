@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     BaseCollectionWidget = require("./ui.collection_widget.base"),
     errors = require("../widget/ui.errors"),
     extend = require("../../core/utils/extend").extend,
@@ -536,7 +537,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(indexExists(normalizedIndex)) {
             $itemElement.removeClass(this._selectedItemClass());
             this._setAriaSelected($itemElement, "false");
-            $itemElement.triggerHandler("stateChanged", false);
+            eventsEngine.triggerHandler($itemElement, "stateChanged", false);
         }
     },
 
@@ -551,7 +552,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(indexExists(normalizedIndex)) {
             $itemElement.addClass(this._selectedItemClass());
             this._setAriaSelected($itemElement, "true");
-            $itemElement.triggerHandler("stateChanged", true);
+            eventsEngine.triggerHandler($itemElement, "stateChanged", true);
         }
     },
 

@@ -421,7 +421,7 @@ var FallbackLayoutStrategy = Class.inherit({
 
         this._$items.find(BOX_SELECTOR).each(function() {
             if(element === $(this).parent().closest(BOX_SELECTOR).get(0)) {
-                $(this).triggerHandler(UPDATE_EVENT);
+                eventsEngine.triggerHandler(this, UPDATE_EVENT);
             }
         });
     }

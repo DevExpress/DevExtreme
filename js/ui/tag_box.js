@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
+    dataUtils = require("../core/element_data"),
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
@@ -898,7 +899,7 @@ var TagBox = SelectBox.inherit({
 
         for(var i = 0; i < tagsLength; i++) {
             var $tag = $tags[i];
-            if(value === $.data($tag, TAGBOX_TAG_DATA_KEY)) {
+            if(value === dataUtils.data($tag, TAGBOX_TAG_DATA_KEY)) {
                 result = $($tag);
                 break;
             }

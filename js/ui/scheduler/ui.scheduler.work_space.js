@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -1474,7 +1475,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getCellData: function($cell) {
-        var data = $cell[0] ? $.data($cell[0], CELL_DATA) : undefined;
+        var data = $cell[0] ? dataUtils.data($cell[0], CELL_DATA) : undefined;
         return extend(true, {}, data);
     },
 

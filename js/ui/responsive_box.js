@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     errors = require("./widget/ui.errors"),
@@ -237,7 +238,7 @@ var ResponsiveBox = CollectionWidget.inherit({
 
         this._updateTimer = setTimeout((function() {
             if(this._$root) {
-                this._$root.triggerHandler("dxupdate");
+                eventsEngine.triggerHandler(this._$root, "dxupdate");
             }
         }).bind(this));
     },

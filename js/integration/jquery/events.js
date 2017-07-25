@@ -17,6 +17,9 @@ if(useJQueryRenderer) {
         },
         trigger: function(element) {
             $(element).trigger.apply($(element), Array.prototype.slice.call(arguments, 1));
+        },
+        triggerHandler: function(element) {
+            $(element).triggerHandler.apply($(element), Array.prototype.slice.call(arguments, 1));
         }
     });
 }

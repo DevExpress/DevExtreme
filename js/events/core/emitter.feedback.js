@@ -2,6 +2,7 @@
 
 var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    contains = require("../../core/utils/dom").contains,
     devices = require("../../core/devices"),
     eventUtils = require("../utils"),
     pointerEvents = require("../pointer"),
@@ -82,7 +83,7 @@ var FeedbackEmitter = Emitter.inherit({
 
     start: function(e) {
         if(activeFeedback) {
-            var activeChildExists = this.getElement().get(0).contains(activeFeedback.getElement().get(0));
+            var activeChildExists = contains(this.getElement().get(0), activeFeedback.getElement().get(0));
             var childJustActivated = !activeFeedback._active.fired();
 
             if(activeChildExists && childJustActivated) {
