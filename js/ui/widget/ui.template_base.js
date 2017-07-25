@@ -1,7 +1,7 @@
 "use strict";
 
 var Callbacks = require("../../core/utils/callbacks"),
-    triggerShownEvent = require("../../core/utils/dom").triggerShownEvent,
+    domUtils = require("../../core/utils/dom"),
     Class = require("../../core/class"),
     abstract = Class.abstract;
 
@@ -39,7 +39,7 @@ var TemplateBase = Class.inherit({
             return;
         }
 
-        var resultInContainer = $container.get(0).contains($result.get(0));
+        var resultInContainer = domUtils.contains($container.get(0), $result.get(0));
         $container.append($result);
         if(resultInContainer) {
             return;
@@ -50,7 +50,7 @@ var TemplateBase = Class.inherit({
             return;
         }
 
-        triggerShownEvent($result);
+        domUtils.triggerShownEvent($result);
     },
 
     _renderCore: abstract
