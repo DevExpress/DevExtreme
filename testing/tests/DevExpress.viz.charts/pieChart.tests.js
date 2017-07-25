@@ -1541,6 +1541,19 @@ var environment = {
         assert.strictEqual(chart.series[0].hideLayoutLabels, false);
     });
 
+    QUnit.test("Adaptive layout with small canvas does not cause exceptions", function(assert) {
+        seriesMockData.series.push(new MockSeries({}));
+        var chart = this.createPieChart({
+            dataSource: [{}],
+            series: {}
+        });
+        chart.layoutManager.layoutElements = sinon.spy(function() { arguments[2](true); });
+
+        chart.render({ force: true });
+
+        assert.ok(true);
+    });
+
     QUnit.module("drawn", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
