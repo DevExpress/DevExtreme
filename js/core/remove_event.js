@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     dataUtilsStrategy = require("../core/element_data").getDataStrategy(),
+    eventsEngine = require("../events/core/events_engine"),
     cleanData = dataUtilsStrategy.cleanData,
     specialEvents = $.event.special;
 
@@ -14,7 +15,7 @@ dataUtilsStrategy.cleanData = function(elements) {
         var $element = $(elements[i]);
         if($element.prop(eventPropName)) {
             $element[0][eventPropName] = null;
-            $element.triggerHandler(eventName);
+            eventsEngine.triggerHandler($element, eventName);
         }
     }
 
