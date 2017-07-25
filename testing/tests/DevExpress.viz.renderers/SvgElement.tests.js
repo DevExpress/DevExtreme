@@ -5288,7 +5288,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
         hasEllipsis = text.applyEllipsis(100);
 
-        this.checkSimple(assert, text, { text: "There is test t..." }, { x: 0, y: 0 });
+        this.checkSimple(assert, text, { text: "There is test tex..." }, { x: 0, y: 0 });
         assert.strictEqual(hasEllipsis, true);
     });
 
@@ -5302,7 +5302,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "There " },
             { text: "is" },
-            { text: " test ..." },
+            { text: " test te..." },
         ], { x: 0, y: 0 });
         assert.strictEqual(hasEllipsis, true);
     });
@@ -5363,10 +5363,10 @@ function checkDashStyle(assert, elem, result, style, value) {
         hasEllipsis = text.applyEllipsis(150);
 
         this.checkTspans(assert, text, [
-            { x: 0, y: 0, text: "There..." },
-            { x: 0, dy: 12, text: "text ..." },
-            { x: 0, dy: 12, text: "ellip..." },
-            { x: 0, dy: 12, text: "line ..." }
+            { x: 0, y: 0, text: "There i..." },
+            { x: 0, dy: 12, text: "text fo..." },
+            { x: 0, dy: 12, text: "ellipsi..." },
+            { x: 0, dy: 12, text: "line an..." }
         ], { x: 0, y: 0 });
         assert.strictEqual(hasEllipsis, true);
     });
@@ -5379,8 +5379,8 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "There " },
-            { x: 0, dy: 12, text: "te..." },
-            { x: 0, dy: 12, text: "el..." },
+            { x: 0, dy: 12, text: "text..." },
+            { x: 0, dy: 12, text: "elli..." },
             { x: 0, dy: 12, text: "line " },
             { text: "..." }
         ], { x: 0, y: 0 });
@@ -5393,9 +5393,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         text.applyEllipsis(105);
 
         this.checkTspans(assert, text, [
-            { x: 0, y: 0, text: "T..." },
-            { x: 0, dy: 12, text: "t..." },
-            { x: 0, dy: 12, text: "e..." },
+            { x: 0, y: 0, text: "The..." },
+            { x: 0, dy: 12, text: "tex..." },
+            { x: 0, dy: 12, text: "ell..." },
             { x: 0, dy: 12, text: "line " }
         ], { x: 0, y: 0 }, { stroke: "black", "stroke-width": 3, "stroke-opacity": 1 });
     });
@@ -5408,8 +5408,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         text.applyEllipsis(110);
 
         this.checkTspans(assert, text, [
-            { x: 0, y: 0, text: "There i..." },
-            { x: 0, dy: 12, text: "text fo..." },
+            { x: 0, y: 0, text: "There is ..." },
+            { x: 0, dy: 12, text: "text for ..." },
             { x: 0, dy: 12, text: "line" }
         ], { x: 0, y: 0 });
     });

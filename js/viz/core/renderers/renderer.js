@@ -781,7 +781,7 @@ function applyEllipsis(maxWidth) {
             for(j = 0, jj = lineParts.length; j < jj; ++j) {
                 text = lineParts[j];
                 if(text.startIndex <= requiredLength && text.endIndex > requiredLength) {
-                    setNewText(text, requiredLength - text.startIndex - 4);
+                    setNewText(text, requiredLength - text.startIndex - 2);
                     hasEllipsis = true;
                 } else if(text.startIndex > requiredLength) {
                     removeTextSpan(text);
