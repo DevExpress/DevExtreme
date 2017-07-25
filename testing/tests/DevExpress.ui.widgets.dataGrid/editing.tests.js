@@ -8924,7 +8924,7 @@ QUnit.module('Editing with scrolling', {
         };
 
         this.setupDataGrid = function() {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'validating'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'validating', 'grouping', 'masterDetail'], {
                 initViews: true
             });
         };
@@ -9130,6 +9130,38 @@ QUnit.test("Edit row after the virtual scrolling when there is inserted row", fu
     //assert
     assert.equal(testElement.find("input").length, 1, "has input");
     assert.equal(testElement.find("input").val(), "Item51", "text edit cell");
+});
+
+//T538954
+QUnit.test("Position of the inserted row if masterDetail is used", function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        items;
+
+    this.options.dataSource = generateDataSource(10, 1);
+    this.options.paging.pageSize = 20;
+    this.options.scrolling = { useNative: false };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(150);
+    this.rowsView.resize();
+
+    this.expandRow(this.options.dataSource[0]);
+    this.expandRow(this.options.dataSource[1]);
+    this.expandRow(this.options.dataSource[2]);
+
+    var y = this.rowsView.getRowElement(4).offset().top - this.rowsView.getRowElement(0).offset().top;
+
+    this.rowsView.scrollTo({ y: y });
+
+    //act
+    this.addRow();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 14, "count items");
+    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 4, "insert item");
 });
 
 //T343567
