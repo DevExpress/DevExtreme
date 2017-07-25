@@ -18,13 +18,13 @@ if(jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) < 0) {
         }
     };
 
-    var originalEmpty = $.fn.empty;
+    var originalEmpty = jQuery.fn.empty;
     jQuery.fn.empty = function() {
         cleanKoData(this, false);
         return originalEmpty.apply(this, arguments);
     };
 
-    var originalRemove = $.fn.remove;
+    var originalRemove = jQuery.fn.remove;
     jQuery.fn.remove = function(selector, keepData) {
         if(!keepData) {
             var subject = this;
@@ -36,7 +36,7 @@ if(jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) < 0) {
         return originalRemove.call(this, selector, keepData);
     };
 
-    var originalHtml = $.fn.html;
+    var originalHtml = jQuery.fn.html;
     jQuery.fn.html = function(value) {
         if(typeof value === "string") {
             cleanKoData(this, false);
@@ -44,7 +44,7 @@ if(jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) < 0) {
         return originalHtml.apply(this, arguments);
     };
 
-    var originalReplaceWith = $.fn.replaceWith;
+    var originalReplaceWith = jQuery.fn.replaceWith;
     jQuery.fn.replaceWith = function() {
         var result = originalReplaceWith.apply(this, arguments);
 
