@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery");
+var isWindow = require("../../core/utils/type").isWindow;
 var eventsEngine;
 var setEngine = function(engine) {
     eventsEngine = engine;
@@ -29,7 +30,18 @@ var result = {};
 
 Object.keys(eventsEngine).forEach(function(methodName) {
     result[methodName] = function() {
-        eventsEngine[methodName].apply(eventsEngine, arguments);
+        var element = arguments[0];
+
+        if(element.nodeType || isWindow(element)) {
+            eventsEngine[methodName].apply(eventsEngine, arguments);
+        } else if(element.each) {
+            var args = Array.prototype.slice.call(arguments, 0);
+
+            element.each(function() {
+                args[0] = this;
+                result[methodName].apply(result, args);
+            });
+        }
     };
 });
 

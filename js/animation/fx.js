@@ -173,7 +173,7 @@ var TransitionAnimationStrategy = {
                 transitionEndFired.reject();
             }
         });
-        eventsEngine.off(eventsEngine, $element, removeEventName);
+        eventsEngine.off($element, removeEventName);
         eventsEngine.on($element, removeEventName, function() {
             that.stop($element, config);
             deferred.reject();
