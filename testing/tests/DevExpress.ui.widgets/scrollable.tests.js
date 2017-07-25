@@ -3019,8 +3019,12 @@ QUnit.test("scroll by thumb", function(assert) {
     $content.height(contentHeight);
     $scrollable.dxScrollable("update");
 
-    mouse.down().move(0, distance);
+    mouse.down();
+    var downEvent = mouse.lastEvent();
+    mouse.move(0, distance);
     location = getScrollOffset($scrollable);
+
+    assert.notOk(downEvent.isDefaultPrevented(), "default is not prevented"); //T516691
     assert.equal(location.top, -distance / containerToContentRatio, "scroll follows pointer");
 
     mouse.move(0, distance);
