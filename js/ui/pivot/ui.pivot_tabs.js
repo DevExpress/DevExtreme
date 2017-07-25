@@ -167,7 +167,7 @@ var PivotTabs = CollectionWidget.inherit({
 
         this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
             var text = (data && data.title) ? data.title : String(data);
-            $container.html($("<span>").text(text));
+            $container.html("<span>" + text + "</span>");
         }, ["title"], this.option("integrationOptions.watchMethod"));
     },
 
