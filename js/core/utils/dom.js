@@ -158,6 +158,10 @@ var clipboardText = function(event, text) {
 };
 
 var contains = function(container, element) {
+    if(element) {
+        element = element.nodeType === 3 ? element.parentNode : element;
+    }
+
     return container.nodeType === 9 ? container.body.contains(element) : container.contains(element);
 };
 
