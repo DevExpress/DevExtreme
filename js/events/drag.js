@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    dataUtils = require("../core/element_data"),
     wrapToArray = require("../core/utils/array").wrapToArray,
     inArray = require("../core/utils/array").inArray,
     iteratorUtils = require("../core/utils/iterator"),
+    contains = require("../core/utils/dom").contains,
     registerEvent = require("./core/event_registrator"),
     eventUtils = require("./utils"),
     GestureEmitter = require("./gesture/emitter.gesture"),
@@ -48,8 +50,8 @@ var dropTargetRegistration = {
 
     updateEventsCounter: function(element, event, value) {
         if([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].indexOf(event) > -1) {
-            var eventsCount = $.data(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
-            $.data(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
+            var eventsCount = dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
+            dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
         }
     },
 
@@ -58,13 +60,13 @@ var dropTargetRegistration = {
     },
 
     teardown: function(element) {
-        var handlersCount = $.data(element, DX_DRAG_EVENTS_COUNT_KEY);
+        var handlersCount = dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY);
         if(!handlersCount) {
             var index = inArray(element, knownDropTargets);
             knownDropTargets.splice(index, 1);
             knownDropTargetSelectors.splice(index, 1);
             knownDropTargetConfigs.splice(index, 1);
-            $.removeData(element, DX_DRAG_EVENTS_COUNT_KEY);
+            dataUtils.removeData(element, DX_DRAG_EVENTS_COUNT_KEY);
         }
     }
 
@@ -132,10 +134,6 @@ var getItemSize = function(dropTargetConfig, $element) {
         width: $element.width(),
         height: $element.height()
     };
-};
-
-var contains = function(container, element) {
-    return container.nodeType === 9 ? container.body.contains(element) : container.contains(element);
 };
 
 var DragEmitter = GestureEmitter.inherit({

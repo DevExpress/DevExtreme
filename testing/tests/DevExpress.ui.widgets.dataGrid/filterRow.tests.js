@@ -305,6 +305,42 @@ QUnit.test('Reset operation via operation chooser', function(assert) {
     });
 });
 
+//T537880
+QUnit.test('Reset operation via operation chooser several times', function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        filterMenu,
+        rootMenuItem,
+        filterMenuItems;
+
+    $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], selectedFilterOperation: '<>', index: 0 }, { caption: 'Column 2', allowFiltering: true, initialIndex: 1 }, { caption: 'Column 3', index: 2 }]);
+
+    //act
+    this.columnHeadersView.render(testElement);
+
+    filterMenu = this.columnHeadersView.element().find('.dx-menu');
+    rootMenuItem = filterMenu.find(".dx-menu-item");
+    $(rootMenuItem).trigger("dxclick");
+    filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
+
+    var $resetItem = filterMenuItems.find('.dx-menu-item').last();
+
+    //act
+    $resetItem.trigger('dxclick');
+    $resetItem.trigger('dxclick');
+
+    //assert
+    assert.deepEqual(this.columnsController.updateOptions.length, 2, "columnOption is called twice");
+    assert.deepEqual(this.columnsController.updateOptions[1], {
+        columnIndex: 0,
+        optionName: {
+            selectedFilterOperation: null,
+            filterValue: null
+        },
+        optionValue: undefined
+    });
+});
+
 //T516687
 QUnit.test('Reset operation via operation chooser when applyMode is onClick', function(assert) {
     //arrange

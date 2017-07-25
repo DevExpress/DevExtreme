@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    dataUtils = require("../../core/element_data"),
     Widget = require("../widget/ui.widget"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
@@ -108,7 +109,7 @@ var BaseView = Widget.inherit({
             cell.className = className;
 
             cell.setAttribute("data-value", dateSerialization.serializeDate(cellDate, dateUtils.getShortDateFormat()));
-            $.data(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
+            dataUtils.data(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
 
             that.setAria({
                 "role": "option",

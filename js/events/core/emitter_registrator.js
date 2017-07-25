@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    dataUtils = require("../../core/element_data"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -110,7 +111,7 @@ var EventManager = Class.inherit({
         }
 
         while($element.length) {
-            var emitters = $.data($element.get(0), EMITTER_DATA) || [];
+            var emitters = dataUtils.data($element.get(0), EMITTER_DATA) || [];
             each(emitters, handleEmitter);
             $element = $element.parent();
         }
@@ -243,20 +244,20 @@ var registerEmitter = function(emitterConfig) {
             noBubble: !emitterConfig.bubble,
 
             setup: function(element) {
-                var subscriptions = $.data(element, EMITTER_SUBSCRIPTION_DATA) || {},
+                var subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA) || {},
 
-                    emitters = $.data(element, EMITTER_DATA) || {},
+                    emitters = dataUtils.data(element, EMITTER_DATA) || {},
                     emitter = emitters[emitterName] || new emitterClass(element);
 
                 subscriptions[eventName] = true;
                 emitters[emitterName] = emitter;
 
-                $.data(element, EMITTER_DATA, emitters);
-                $.data(element, EMITTER_SUBSCRIPTION_DATA, subscriptions);
+                dataUtils.data(element, EMITTER_DATA, emitters);
+                dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA, subscriptions);
             },
 
             add: function(element, handleObj) {
-                var emitters = $.data(element, EMITTER_DATA),
+                var emitters = dataUtils.data(element, EMITTER_DATA),
                     emitter = emitters[emitterName];
 
                 emitter.configure(extend({
@@ -265,9 +266,9 @@ var registerEmitter = function(emitterConfig) {
             },
 
             teardown: function(element) {
-                var subscriptions = $.data(element, EMITTER_SUBSCRIPTION_DATA),
+                var subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA),
 
-                    emitters = $.data(element, EMITTER_DATA),
+                    emitters = dataUtils.data(element, EMITTER_DATA),
                     emitter = emitters[emitterName];
 
                 delete subscriptions[eventName];

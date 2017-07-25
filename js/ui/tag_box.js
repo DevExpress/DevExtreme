@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
+    dataUtils = require("../core/element_data"),
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
@@ -721,13 +722,12 @@ var TagBox = SelectBox.inherit({
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._clearFilter();
         this._renderTags();
         this._popup && this._popup.refreshPosition();
     },
 
     _listItemClickHandler: function(e) {
-        this._clearTextValue();
+        !this.option("showSelectionControls") && this._clearTextValue();
 
         if(this.option("applyValueMode") === "useButtons") {
             return;
@@ -897,7 +897,7 @@ var TagBox = SelectBox.inherit({
 
         for(var i = 0; i < tagsLength; i++) {
             var $tag = $tags[i];
-            if(value === $.data($tag, TAGBOX_TAG_DATA_KEY)) {
+            if(value === dataUtils.data($tag, TAGBOX_TAG_DATA_KEY)) {
                 result = $($tag);
                 break;
             }

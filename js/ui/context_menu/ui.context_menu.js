@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
+    contains = require("../../core/utils/dom").contains,
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
@@ -809,7 +810,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 shownSubmenus = extend([], that._shownSubmenus);
 
             each(shownSubmenus, function(index, $submenu) {
-                if($curSubmenu.is($submenu) || $curSubmenu[0].contains($submenu[0])) {
+                if($curSubmenu.is($submenu) || contains($curSubmenu[0], $submenu[0])) {
                     $submenu.parent().removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
                     that._hideSubmenuCore($submenu);
                 }

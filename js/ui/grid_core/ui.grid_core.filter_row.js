@@ -487,7 +487,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                         isOnClickMode = isOnClickApplyFilterMode(that),
                         options = {};
 
-                    if(properties.itemData.items || selectedFilterOperation === columnSelectedFilterOperation) {
+                    if(properties.itemData.items || (selectedFilterOperation && selectedFilterOperation === columnSelectedFilterOperation)) {
                         return;
                     }
 

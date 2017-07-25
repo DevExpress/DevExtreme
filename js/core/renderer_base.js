@@ -1,14 +1,14 @@
 "use strict";
 
 var $ = require("jquery");
+var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
 var matches = require("./polyfills/matches");
 
 var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
-    "data", "removeData",
-    "triggerHandler", "focusin", "focusout", "click",
+    "focusin", "focusout",
     "html", "css",
     "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
 
@@ -289,11 +289,11 @@ var cleanData = function(node, cleanSelf) {
     if(node instanceof Element) {
         var childNodes = node.getElementsByTagName("*");
 
-        renderer.cleanData(childNodes);
+        dataUtils.cleanData(childNodes);
     }
 
     if(cleanSelf) {
-        renderer.cleanData([node]);
+        dataUtils.cleanData([node]);
     }
 };
 
@@ -720,19 +720,29 @@ initRender.prototype.position = function() {
     };
 });
 
+initRender.prototype.data = function(key, value) {
+    if(!this[0]) return;
+
+    if(arguments.length < 2) {
+        return dataUtils.data.call(renderer, this[0], key);
+    }
+
+    dataUtils.data.call(renderer, this[0], key, value);
+    return this;
+};
+
+initRender.prototype.removeData = function(key) {
+    this[0] && dataUtils.removeData(this[0], key);
+
+    return this;
+};
+
 renderer.tmpl = function() {
     return $.tmpl.apply(this, arguments);
 };
 renderer.templates = function() {
     return $.templates.apply(this, arguments);
 };
-renderer.data = $.data;
-renderer.removeData = $.removeData;
-
-renderer.cleanData = function(element) {
-    $.cleanData($(element));
-};
-
 renderer.when = $.when;
 renderer.event = $.event;
 renderer.Event = $.Event;

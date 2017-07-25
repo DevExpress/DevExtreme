@@ -2595,6 +2595,22 @@ QUnit.test("input should be cleared after list item is clicked", function(assert
     assert.equal($input.val(), "", "input is clear");
 });
 
+QUnit.test("input should not be cleared after list item is clicked when checkboxes are visible", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: ["one", "two"],
+            searchEnabled: true,
+            showSelectionControls: true,
+            searchTimeout: 0,
+            opened: true
+        }),
+        $input = $tagBox.find("input");
+
+    $input.val("one");
+    $(".dx-list-item").eq(0).trigger("dxclick");
+
+    assert.equal($input.val(), "one", "input was not cleared");
+});
+
 QUnit.test("input should not be cleared after tag is removed", function(assert) {
     var items = [1, 2, 3],
         $element = $("#tagBox").dxTagBox({

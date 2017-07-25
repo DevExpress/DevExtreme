@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer");
+var $ = require("../../core/renderer"),
+    dataUtils = require("../../core/element_data");
 
 var SchedulerTableCreator = {
 
@@ -38,7 +39,7 @@ var SchedulerTableCreator = {
                     cellDataObject = options.getCellData(td, i, j);
                     dataKey = cellDataObject.key;
                     dataValue = cellDataObject.value;
-                    dataKey && $.data(td, dataKey, dataValue);
+                    dataKey && dataUtils.data(td, dataKey, dataValue);
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
