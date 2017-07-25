@@ -247,7 +247,9 @@ QUnit.test("format", function(assert) {
         data = $.makeArray(data);
 
         $.each(data, function(_, data) {
-            assert.equal(dateLocalization.format(data.date, format), data.expected, data.date + " in " + format + " format");
+            var localizedDate = dateLocalization.format(data.date, format);
+            assert.equal(typeof (localizedDate), "string");
+            assert.equal(localizedDate, data.expected, data.date + " in " + format + " format");
         });
     });
 

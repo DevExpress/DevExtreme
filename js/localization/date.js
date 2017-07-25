@@ -108,7 +108,7 @@ var FORMATTERS = {
     },
 
     "day": function(date) {
-        return date.getDate();
+        return String(date.getDate());
     },
     "dayofweek": function(date) {
         return days[date.getDay()];
@@ -125,7 +125,7 @@ var FORMATTERS = {
     },
 
     "year": function(date) {
-        return date.getFullYear();
+        return String(date.getFullYear());
     },
     "shortyear": function(date) {
         return String(date.getFullYear()).substr(2, 2);
@@ -192,10 +192,10 @@ var FORMATTERS = {
     },
 
     "d": function(date) {
-        return formatNumber(FORMATTERS["day"](date), 1);
+        return formatNumber(date.getDate(), 1);
     },
     "dd": function(date) {
-        return formatNumber(FORMATTERS["day"](date), 2);
+        return formatNumber(date.getDate(), 2);
     },
 
     "d MMMM": function(date) {
