@@ -473,12 +473,7 @@ var Scroller = Class.inherit({
     _validateEvent: function(e) {
         var $target = $(e.originalEvent.target);
 
-        if(this._isThumb($target) || this._isScrollbar($target)) {
-            e.preventDefault();
-            return true;
-        }
-
-        return this._isContent($target);
+        return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
     },
 
     _isThumb: function($element) {
