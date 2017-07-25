@@ -139,7 +139,13 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _isOtherMonth: function(cellDate) {
-        return cellDate.getMonth() !== this.option("currentDate").getMonth();
+        var date = this._getViewStartByOptions(),
+            min = new Date(date.setDate(1)),
+            max = new Date(date.setMonth(date.getMonth() + this.option("count")));
+
+        max.setDate(0);
+
+        return !dateUtils.dateInRange(cellDate, min, max, "date");
     },
 
     getCellDuration: function() {

@@ -1523,6 +1523,27 @@ QUnit.testStart(function() {
         assert.equal($cells.length, 11, "Other-month cells count is correct");
     });
 
+    QUnit.test("Scheduler workspace month view should have a dates with other-month class, if viewStartDate is set", function(assert) {
+        var $element = this.instance.element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 1));
+        this.instance.option("viewStartDate", new Date(2015, 5, 1));
+
+        var $cells = $element.find(".dx-scheduler-date-table-other-month");
+        assert.equal($cells.length, 12, "Other-month cells count is correct");
+    });
+
+    QUnit.test("Scheduler workspace month view should have a dates with other-month class, if viewStartDate & count is set", function(assert) {
+        var $element = this.instance.element();
+
+        this.instance.option("currentDate", new Date(2015, 2, 1));
+        this.instance.option("viewStartDate", new Date(2015, 11, 1));
+        this.instance.option("count", 3);
+
+        var $cells = $element.find(".dx-scheduler-date-table-other-month");
+        assert.equal($cells.length, 7, "Other-month cells count is correct");
+    });
+
     QUnit.test("Scheduler workspace should have a right first day of week", function(assert) {
         var $element = this.instance.element();
 
