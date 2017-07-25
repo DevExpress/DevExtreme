@@ -340,7 +340,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return extend(this.callBase(), {
             currentDate: new Date(),
             intervalCount: 1,
-            viewStartDate: null,
+            startDate: null,
             firstDayOfWeek: undefined,
             startDayHour: 0,
             endDayHour: 24,
@@ -373,7 +373,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "firstDayOfWeek":
             case "currentDate":
             case "groups":
-            case "viewStartDate":
+            case "startDate":
                 this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
@@ -716,7 +716,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getViewStartByOptions: function() {
-        return this.option("viewStartDate") ? new Date(this.option("viewStartDate").getTime()) : new Date(this.option("currentDate").getTime());
+        return this.option("startDate") ? new Date(this.option("startDate").getTime()) : new Date(this.option("currentDate").getTime());
     },
 
     _setStartDayHour: function(date) {

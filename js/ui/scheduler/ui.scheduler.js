@@ -1005,7 +1005,7 @@ var Scheduler = Widget.inherit({
                 this._updateOption("header", name, value);
                 break;
             case "currentDate":
-            case "viewStartDate":
+            case "startDate":
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
                 this._workSpace.option(name, value);
@@ -1049,7 +1049,7 @@ var Scheduler = Widget.inherit({
                     appointmentDurationInMinutes: this._getCurrentViewOption("cellDuration")
                 });
                 this._header.option("intervalCount", viewCountConfig.intervalCount);
-                this._header.option("viewStartDate", viewCountConfig.viewStartDate || new Date(this.option("currentDate")));
+                this._header.option("startDate", viewCountConfig.startDate || new Date(this.option("currentDate")));
                 this._header.option("min", this._dateOption("min"));
                 this._header.option("max", this._dateOption("max"));
                 this._header.option("currentDate", this._dateOption("currentDate"));
@@ -1390,7 +1390,7 @@ var Scheduler = Widget.inherit({
 
     _setViewStartDate: function() {
         var viewCountConfig = this._getViewCountConfig();
-        this.option("viewStartDate", viewCountConfig.viewStartDate);
+        this.option("startDate", viewCountConfig.startDate);
     },
 
     _initTemplates: function() {
@@ -1705,11 +1705,11 @@ var Scheduler = Widget.inherit({
 
         var view = this._getViewByType(currentView),
             viewCount = view && view.intervalCount || 1,
-            viewStartDate = view && view.viewStartDate || null;
+            startDate = view && view.startDate || null;
 
         return {
             intervalCount: viewCount,
-            viewStartDate: viewStartDate
+            startDate: startDate
         };
     },
 
@@ -1753,7 +1753,7 @@ var Scheduler = Widget.inherit({
 
         result.observer = this;
         result.intervalCount = countConfig.intervalCount;
-        result.viewStartDate = countConfig.viewStartDate;
+        result.startDate = countConfig.startDate;
         result.groups = groups;
         result.onCellClick = this._createActionByOption("onCellClick");
         result.min = new Date(this._dateOption("min"));
@@ -1784,7 +1784,7 @@ var Scheduler = Widget.inherit({
     },
 
     _getCurrentViewOption: function(optionName) {
-        if(optionName === "viewStartDate") {
+        if(optionName === "startDate") {
             return this.option(optionName);
         }
         var currentViewOptions = this._getCurrentViewOptions();
