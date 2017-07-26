@@ -852,118 +852,201 @@ QUnit.test("Text", function(assert) {
     });
 });
 
-QUnit.test("Text offset position calculation", function(assert) {
+QUnit.test("Text offset position calculation with start alignment", function(assert) {
     var that = this,
         done = assert.async(),
-        markup = testingMarkupStart + '<text x="0" y="50" style="font-size: 10px; font-family: sans-serif;" transform="translate(0, 0)">' +
-            'test part1' +
-            '<tspan>test part2</tspan>' +
-            '<tspan dx="15" dy="15">test part3</tspan>' +
-            'test part4' +
-            '<tspan x="200" y="200">test part5</tspan>' +
-            '<tspan x="0">test part6</tspan>' +
-            '<tspan y="0">test part7</tspan>' +
-            '</text>' +
+        markup = testingMarkupStart +
+            '<text x="10" y="30" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
+            '<tspan x="10" y="30">World</tspan><tspan>Population</tspan><tspan>by Decade</tspan></text>' +
+
             testingMarkupEnd,
         imageBlob = getData(markup),
         canvas = $("<canvas width='1000' height='1000'>").appendTo("#qunit-fixture")[0],
         ctx = canvas.getContext("2d");
 
-    ctx.font = "10px sans-serif";
+    ctx.font = "28px sans-serif";
 
-    assert.expect(15);
+    assert.expect(10);
 
     $.when(imageBlob).done(function(blob) {
         try {
-            var part1Width = ctx.measureText("test part1").width,
-                part2Width = ctx.measureText("test part2").width,
-                part3Width = ctx.measureText("test part3").width,
-                part6Width = ctx.measureText("test part6").width;
+            var part1Width = ctx.measureText("World").width,
+                part2Width = ctx.measureText("Population").width;
 
-            assert.equal(that.drawnElements.length, 8, "Canvas elements count");
+            assert.equal(that.drawnElements.length, 4, "Canvas elements count");
 
-            assert.equal(that.drawnElements[1].args[1], 0, "Text out of tspanElement position X");
-            assert.equal(that.drawnElements[1].args[2], 50, "Text out of tspanElement position Y");
+            assert.equal(that.drawnElements[1].args[1], 10, "Text out of tspanElement position X");
+            assert.equal(that.drawnElements[1].args[2], 30, "Text out of tspanElement position Y");
+            assert.equal(that.drawnElements[1].style.textAlign, "start", "text align");
 
-            assert.strictEqual(that.drawnElements[2].args[1], part1Width, "tSpan text element without x,y,dx,dy attributes position X");
-            assert.equal(that.drawnElements[2].args[2], 50, "tSpan text element without x,y,dx,dy attributes position Y");
+            assert.strictEqual(that.drawnElements[2].args[1], 10 + part1Width, "tSpan text element without x,y,dx,dy attributes position X");
+            assert.equal(that.drawnElements[2].args[2], 30, "tSpan text element without x,y,dx,dy attributes position Y");
+            assert.equal(that.drawnElements[2].style.textAlign, "start", "text align");
 
-            assert.strictEqual(that.drawnElements[3].args[1], part1Width + part2Width, "tSpan text element with dx,dy attributes position X");
-            assert.equal(that.drawnElements[3].args[2], 65, "tSpan text element with dx,dy attributes position Y");
-
-            assert.strictEqual(that.drawnElements[4].args[1], part1Width + part2Width + part3Width, "Text out of tspanElement in the middle text block position X");
-            assert.equal(that.drawnElements[4].args[2], 65, "Text out of tspanElement in the middle text block position Y");
-
-            assert.equal(that.drawnElements[5].args[1], 200, "tSpan text element with x,y attributes position X");
-            assert.equal(that.drawnElements[5].args[2], 200, "tSpan text element with x,y attributes position Y");
-
-            assert.equal(that.drawnElements[6].args[1], 0, "tSpan text element with x=0 attributte position X");
-            assert.equal(that.drawnElements[6].args[2], 200, "tSpan text element with x=0 attributte position Y");
-
-            assert.strictEqual(that.drawnElements[7].args[1], part6Width, "tSpan text element with y=0 attributte position X");
-            assert.equal(that.drawnElements[7].args[2], 0, "tSpan text element with y=0 attributte position Y");
+            assert.strictEqual(that.drawnElements[3].args[1], 10 + part1Width + part2Width, "tSpan text element with dx,dy attributes position X");
+            assert.equal(that.drawnElements[3].args[2], 30, "tSpan text element with dx,dy attributes position Y");
+            assert.equal(that.drawnElements[3].style.textAlign, "start", "text align");
         } finally {
-            done(); // roughEqual
+            done();
         }
     });
 });
 
-QUnit.test("Multi lines text", function(assert) {
+QUnit.test("Text with default coordinates", function(assert) {
     var that = this,
         done = assert.async(),
-        realDevice = devices.real(),
-        isIPhone = realDevice.deviceType === "phone" ||
-                    realDevice.deviceType === "tablet" &&
-                    realDevice.platform === "ios",
-        markup = testingMarkupStart + "<text x=\"50\" y=\"50\" text-anchor=\"middle\" style=\"font-size:28px;font-style:italic;font-family:'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;font-weight:bold;fill:#232323;\"><tspan x=\"0\" y=\"30\">Male</tspan><tspan style=\"font-size:30px;\" x=\"0\" dy=\"28\">Age</tspan></text>" + testingMarkupEnd,
+        markup = testingMarkupStart +
+            '<text text-anchor="middle" style="font-size:28px; fill:#232323; font-family: sans-serif;">Text</text>' +
+            testingMarkupEnd,
         imageBlob = getData(markup);
 
-    assert.expect(23);
+    assert.expect(2);
+
     $.when(imageBlob).done(function(blob) {
         try {
-            assert.equal(that.drawnElements.length, 3, "Canvas elements count");
+            assert.equal(that.drawnElements[1].args[1], 0, "X");
+            assert.equal(that.drawnElements[1].args[2], 0, "Y");
+        } finally {
+            done();
+        }
+    });
+});
 
-            var firstTextElem = that.drawnElements[1],
-                secondTextElem = that.drawnElements[2];
+QUnit.test("tspan element inside other tspan", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart +
+            '<text x="100" y="100" text-anchor="middle" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
+            '<tspan x="0" y="30" text-anchor="start">' +
+            '<tspan>Imports, Dec 2014 - May 2015</tspan>' +
+            '<tspan style="font-size:13px;" dy="-5">(Mod)</tspan>' +
+            '</tspan>' +
+            '</text > ' +
+            testingMarkupEnd,
+        imageBlob = getData(markup);
 
-            assert.equal(firstTextElem.type, "text", "The second element on canvas is text");
-            assert.equal(secondTextElem.type, "text", "The third element on canvas is text");
+    assert.expect(2);
 
-            //first text - 10 asserts
-            if(!isIPhone) {
-                assert.equal(firstTextElem.style.weight, "bold", "First line. Style weight");
-            } else {
-                assert.ok(true, "Not for iPhone Devices (bold attribute)");
-            }
+    $.when(imageBlob).done(function(blob) {
+        try {
+            assert.equal(that.drawnElements[1].args[1], 0, "X");
+            assert.equal(that.drawnElements[1].args[2], 30, "Y");
+        } finally {
+            done();
+        }
+    });
+});
 
-            assert.equal(firstTextElem.style.font, "\"Segoe UI Light\",\"Helvetica Neue Light\",\"Segoe UI\",\"Helvetica Neue\",\"Trebuchet MS\",Verdana", "First line. Style font");
-            assert.equal(firstTextElem.style.size, "28px", "First line. Style size");
-            assert.equal(firstTextElem.style.style, "italic", "First line. Style");
-            assert.equal(firstTextElem.style.fillStyle, "#232323", "First line. Style fill");
-            assert.equal(firstTextElem.style.textAlign, "center", "First line. Style text align");
-            assert.equal(firstTextElem.style.globalAlpha, 1, "First line. Style opacity");
+QUnit.test("Text offset position calculation with center alignment", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart +
+            '<text x="10" y="30" text-anchor="middle" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
+            '<tspan x="10" y="30">World</tspan><tspan>Population</tspan><tspan>by Decade</tspan></text>' +
+            testingMarkupEnd,
+        imageBlob = getData(markup),
+        canvas = $("<canvas width='1000' height='1000'>").appendTo("#qunit-fixture")[0],
+        ctx = canvas.getContext("2d");
 
-            assert.equal(firstTextElem.args[0], "Male", "First line. Text");
-            assert.equal(firstTextElem.args[1], 0, "First line. X coord");
-            assert.equal(firstTextElem.args[2], 30, "First line. Y coord");
+    ctx.font = "28px sans-serif";
 
-            //second text - 10 asserts
-            if(!isIPhone) {
-                assert.equal(firstTextElem.style.weight, "bold", "Second line. Style weight");
-            } else {
-                assert.ok(true, "Not for iPhone Devices (bold attribute)");
-            }
+    assert.expect(7);
 
-            assert.equal(secondTextElem.style.font, "\"Segoe UI Light\",\"Helvetica Neue Light\",\"Segoe UI\",\"Helvetica Neue\",\"Trebuchet MS\",Verdana", "Second line. Style font");
-            assert.equal(secondTextElem.style.size, "30px", "Second line. Style size");
-            assert.equal(secondTextElem.style.style, "italic", "Second line. Style");
-            assert.equal(secondTextElem.style.fillStyle, "#232323", "Second line. Style fill");
-            assert.equal(secondTextElem.style.textAlign, "center", "Second line. Style text align");
-            assert.equal(secondTextElem.style.globalAlpha, 1, "Second line. Style opacity");
+    $.when(imageBlob).done(function(blob) {
+        try {
+            var part1Width = ctx.measureText("World").width,
+                part2Width = ctx.measureText("Population").width,
+                part3Width = ctx.measureText("by Decade").width,
+                center = (part1Width + part2Width + part3Width) / 2;
 
-            assert.equal(secondTextElem.args[0], "Age", "Second line. Text");
-            assert.equal(secondTextElem.args[1], 0, "Second line. X coord");
-            assert.equal(secondTextElem.args[2], 58, "Second line. Y coord");
+            assert.equal(that.drawnElements.length, 4, "Canvas elements count");
+
+            assert.equal(that.drawnElements[1].args[1], 10 - center, "Text out of tspanElement position X");
+            assert.equal(that.drawnElements[1].style.textAlign, "start", "text align");
+
+            assert.strictEqual(that.drawnElements[2].args[1], 10 - center + part1Width, "tSpan text element without x,y,dx,dy attributes position X");
+            assert.equal(that.drawnElements[2].style.textAlign, "start", "text align");
+
+            assert.strictEqual(that.drawnElements[3].args[1], 10 - center + part1Width + part2Width, "tSpan text element with dx,dy attributes position X");
+            assert.equal(that.drawnElements[3].style.textAlign, "start", "text align");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Text offset position calculation with end alignment", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart +
+            '<text x="10" y="30" text-anchor="end" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
+            '<tspan x="10" y="30">World</tspan><tspan>Population</tspan><tspan>by Decade</tspan></text>' +
+
+            testingMarkupEnd,
+        imageBlob = getData(markup),
+        canvas = $("<canvas width='1000' height='1000'>").appendTo("#qunit-fixture")[0],
+        ctx = canvas.getContext("2d");
+
+    ctx.font = "28px sans-serif";
+
+    assert.expect(10);
+
+    $.when(imageBlob).done(function(blob) {
+        try {
+            var part1Width = ctx.measureText("World").width,
+                part2Width = ctx.measureText("Population").width,
+                part3Width = ctx.measureText("by Decade").width,
+                commonWidth = (part1Width + part2Width + part3Width);
+
+            assert.equal(that.drawnElements.length, 4, "Canvas elements count");
+
+            assert.equal(that.drawnElements[1].args[1], 10 - commonWidth, "Text out of tspanElement position X");
+            assert.equal(that.drawnElements[1].args[2], 30, "Text out of tspanElement position Y");
+            assert.equal(that.drawnElements[1].style.textAlign, "start", "text align");
+
+            assert.strictEqual(that.drawnElements[2].args[1], 10 - commonWidth + part1Width, "tSpan text element without x,y,dx,dy attributes position X");
+            assert.equal(that.drawnElements[2].args[2], 30, "tSpan text element without x,y,dx,dy attributes position Y");
+            assert.equal(that.drawnElements[2].style.textAlign, "start", "text align");
+
+            assert.strictEqual(that.drawnElements[3].args[1], 10 - commonWidth + part1Width + part2Width, "tSpan text element with dx,dy attributes position X");
+            assert.equal(that.drawnElements[3].args[2], 30, "tSpan text element with dx,dy attributes position Y");
+            assert.equal(that.drawnElements[3].style.textAlign, "start", "text align");
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test("Multiline text", function(assert) {
+    var that = this,
+        done = assert.async(),
+        markup = testingMarkupStart +
+            '<text x="10" y="30" text-anchor="start" style="font-size:28px; fill:#232323; font-family: sans-serif;">' +
+
+            '<tspan x="10" y="30">World </tspan>' +
+            '<tspan x="10" dy="28">Populationby</tspan>' +
+            '<tspan x="10" dy="28"> Decade</tspan>' +
+
+            '</text > ' +
+
+            testingMarkupEnd,
+        imageBlob = getData(markup);
+
+    assert.expect(7);
+
+    $.when(imageBlob).done(function(blob) {
+        try {
+
+            assert.equal(that.drawnElements.length, 5, "Canvas elements count");
+
+            assert.equal(that.drawnElements[1].args[1], 10, "Text out of tspanElement position X");
+            assert.equal(that.drawnElements[1].args[2], 30, "Text out of tspanElement position Y");
+
+            assert.strictEqual(that.drawnElements[2].args[1], 10, "tSpan text element without x,y,dx,dy attributes position X");
+            assert.equal(that.drawnElements[2].args[2], 30 + 28, "tSpan text element without x,y,dx,dy attributes position Y");
+
+            assert.strictEqual(that.drawnElements[3].args[1], 10, "tSpan text element with dx,dy attributes position X");
+            assert.equal(that.drawnElements[3].args[2], 30 + 28 + 28, "tSpan text element with dx,dy attributes position Y");
         } finally {
             done();
         }
@@ -1003,7 +1086,7 @@ QUnit.test("Stroke text", function(assert) {
         isIPhone = realDevice.deviceType === "phone" ||
                     realDevice.deviceType === "tablet" &&
                     realDevice.platform === "ios",
-        markup = testingMarkupStart + "<text x=\"50\" y=\"50\" text-anchor=\"middle\" stroke-width=\"5\" style=\"fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;\"><tspan style=\"font-weight: bold; font-style: italic; \" stroke-opacity=\"0.7\">Age</tspan></text>" + testingMarkupEnd,
+        markup = testingMarkupStart + "<text x=\"50\" y=\"50\" text-anchor=\"start\" stroke-width=\"5\" style=\"fill:#222; font-family:\'Trebuchet MS\', Verdana; stroke: #F2f2f2; stroke-width: 5px;\"><tspan style=\"font-weight: bold; font-style: italic; \" stroke-opacity=\"0.7\">Age</tspan></text>" + testingMarkupEnd,
         imageBlob = getData(markup);
 
     assert.expect(14);
@@ -1027,7 +1110,7 @@ QUnit.test("Stroke text", function(assert) {
             assert.equal(strokeText.style.strokeStyle, "#f2f2f2", "Stroke element stroke color");
             assert.roughEqual(strokeText.style.globalAlpha, 0.7, 0.05, "Stroke element stroke opacity");
             assert.equal(strokeText.style.lineWidth, 5, "Stroke element stroke width");
-            assert.equal(strokeText.style.textAlign, "center", "Stroke element stroke textAlign");
+            assert.equal(strokeText.style.textAlign, "start", "Stroke element stroke textAlign");
             assert.equal(strokeText.args[0], "Age", "First line. Text");
             assert.equal(strokeText.args[1], 50, "First line. X coord");
             assert.equal(strokeText.args[2], 50, "First line. Y coord");
@@ -1068,8 +1151,8 @@ QUnit.test("Text with title does not break context. T450370", function(assert) {
     assert.expect(2);
     $.when(getData(markup)).done(function(blob) {
         try {
-            assert.equal(context.save.callCount, 3, "Context saving count");
-            assert.equal(context.restore.callCount, 3, "Context restoring count");
+            assert.equal(context.save.callCount, 2, "Context saving count");
+            assert.equal(context.restore.callCount, 2, "Context restoring count");
         } finally {
             done();
         }
@@ -1126,14 +1209,14 @@ QUnit.test("Text decoration", function(assert) {
             assert.equal(context.rect.callCount, 5, "Rect function called 4 times");
 
             // Underline decoration assert
-            assert.roughEqual(underlineDecoration.args.x, 253, 12.5, "Underline decoration line x");
+            assert.equal(underlineDecoration.args.x, 500, "Underline decoration line x");
             assert.roughEqual(underlineDecoration.args.y, 91.9, 0.5, "Underline decoration line y");
             assert.roughEqual(underlineDecoration.args.height, 1.9, 0.1, "Underline decoration line height");
             assert.roughEqual(underlineDecoration.args.width, 249, 12, "Underline decoration line width");
             assert.equal(that.drawnElements[4].style.fillStyle, "#23ff23", "Underline decoration line fill color");
 
             // Overline decoration assert
-            assert.roughEqual(overlineDecoration.args.x, 179, 4, "Overline decoration line x");
+            assert.equal(overlineDecoration.args.x, 250, "Overline decoration line x");
             assert.roughEqual(overlineDecoration.args.y, 7.2, 0.5, "Overline decoration line y");
             assert.roughEqual(overlineDecoration.args.height, 1.2, 0.1, "Overline decoration line height");
             assert.roughEqual(overlineDecoration.args.width, 143, 8, "Overline decoration line width");
@@ -1148,7 +1231,7 @@ QUnit.test("Text decoration", function(assert) {
 
 
             // noDisplay decoration (no stroke, no fill) assert
-            assert.roughEqual(noDisplayDecoration.args.x, 196.5, 5, "noDisplay line-through decoration line x");
+            assert.equal(noDisplayDecoration.args.x, 250, "noDisplay line-through decoration line x");
             assert.roughEqual(noDisplayDecoration.args.y, 186.16, 0.5, "noDisplay line-through decoration line y");
             assert.equal(noDisplayDecoration.args.height, 1, "noDisplay line-through decoration line height");
             assert.roughEqual(noDisplayDecoration.args.width, 104.5, 4.5, " noDisplay line-through decoration line width");
@@ -1156,7 +1239,7 @@ QUnit.test("Text decoration", function(assert) {
             assert.ok(that.drawnElements[14].type !== "fill", "noDisplay line-through decoration has no fill");
 
             // noFill (only stroke) decoration assert
-            assert.roughEqual(noFillDecoration.args.x, 197.5, 2.5, "noFill line-through decoration line x");
+            assert.equal(noFillDecoration.args.x, 250, "noFill line-through decoration line x");
             assert.roughEqual(noFillDecoration.args.y, 186.16, 0.5, "noFill line-through decoration line y");
             assert.equal(noFillDecoration.args.height, 1, "noFill line-through decoration line height");
             assert.roughEqual(noFillDecoration.args.width, 105.19, 5, " noFill line-through decoration line width");
