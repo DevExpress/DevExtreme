@@ -129,6 +129,18 @@ var Views = {
 
         isBoundary: function(date) {
             return dateUtils.sameMonthAndYear(date, this.option("min")) || dateUtils.sameMonthAndYear(date, this.option("max"));
+        },
+
+        _getDefaultDisabledDatesHandler: function(disabledDates) {
+            return function(args) {
+                var isDisabledDate = disabledDates.some(function(item) {
+                    return dateUtils.sameDate(item, args.date);
+                });
+
+                if(isDisabledDate) {
+                    return true;
+                }
+            };
         }
     }),
 

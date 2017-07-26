@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Widget = require("../widget/ui.widget"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
+    noop = require("../../core/utils/common").noop,
     dateSerialization = require("../../core/utils/date_serialization"),
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click");
@@ -32,6 +33,7 @@ var BaseView = Widget.inherit({
             date: new Date(),
             focusStateEnabled: false,
             cellTemplate: null,
+            disabledDates: null,
             onCellClick: null,
             rowCount: 3,
             colCount: 4,
@@ -62,6 +64,7 @@ var BaseView = Widget.inherit({
         this._$table = $("<table>");
         this.element().append(this._$table);
 
+        this._createDisabledDatesHandler();
         this._renderBody();
         this._renderContouredDate();
         this._renderValue();
@@ -90,13 +93,14 @@ var BaseView = Widget.inherit({
             prevCellDate = cellDate;
 
             var cell = document.createElement("td"),
+                $cell = $(cell),
                 className = CALENDAR_CELL_CLASS;
 
             if(that._isTodayCell(cellDate)) {
                 className = className + " " + CALENDAR_TODAY_CLASS;
             }
 
-            if(that._isDateOutOfRange(cellDate)) {
+            if(that._isDateOutOfRange(cellDate) || that.isDateDisabled(cellDate)) {
                 className = className + " " + CALENDAR_EMPTY_CELL_CLASS;
             }
 
@@ -112,7 +116,7 @@ var BaseView = Widget.inherit({
             that.setAria({
                 "role": "option",
                 "label": that.getCellAriaLabel(cellDate)
-            }, $(cell));
+            }, $cell);
 
             appendChild(row, cell);
 
@@ -123,7 +127,7 @@ var BaseView = Widget.inherit({
                         date: cellDate,
                         view: that._getViewName()
                     },
-                    container: $(cell),
+                    container: $cell,
                     index: cellIndex
                 });
             } else {
@@ -171,9 +175,29 @@ var BaseView = Widget.inherit({
         this._cellClickAction = this._createActionByOption("onCellClick");
     },
 
+    _createDisabledDatesHandler: function() {
+        var disabledDates = this.option("disabledDates");
+
+        this._disabledDatesHandler = Array.isArray(disabledDates) ? this._getDefaultDisabledDatesHandler(disabledDates) : disabledDates || noop;
+    },
+
+    _getDefaultDisabledDatesHandler: function(disabledDates) {
+        return noop;
+    },
+
     _isTodayCell: abstract,
 
     _isDateOutOfRange: abstract,
+
+    isDateDisabled: function(cellDate) {
+        var dateParts = {
+            date: cellDate,
+            text: this._getCellText(cellDate),
+            view: this._getViewName()
+        };
+
+        return this._disabledDatesHandler(dateParts);
+    },
 
     _isOtherView: abstract,
 
@@ -262,6 +286,7 @@ var BaseView = Widget.inherit({
             case "onCellClick":
                 this._createCellClickAction();
                 break;
+            case "disabledDates":
             case "cellTemplate":
                 this._invalidate();
                 break;

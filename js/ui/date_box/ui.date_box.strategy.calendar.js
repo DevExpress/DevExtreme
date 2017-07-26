@@ -4,6 +4,7 @@ var Calendar = require("../calendar"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
     dateUtils = require("../../core/utils/date"),
     commonUtils = require("../../core/utils/common"),
+    isFunction = require("../../core/utils/type").isFunction,
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message");
 
@@ -52,6 +53,8 @@ var CalendarStrategy = DateBoxStrategy.inherit({
     },
 
     _getWidgetOptions: function() {
+        var disabledDates = this.dateBox.option("disabledDates");
+
         return extend(this.dateBox.option("calendarOptions"), {
             value: this.dateBoxValue() || null,
             _keyboardProcessor: this._widgetKeyboardProcessor,
@@ -60,6 +63,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
             onValueChanged: this._valueChangedHandler.bind(this),
             onCellClick: this._cellClickHandler.bind(this),
             tabIndex: null,
+            disabledDates: isFunction(disabledDates) ? this.dateBox._createAction(disabledDates).bind(this.dateBox) : disabledDates,
             maxZoomLevel: this.dateBox.option("maxZoomLevel"),
             minZoomLevel: this.dateBox.option("minZoomLevel"),
             onContouredChanged: this._refreshActiveDescendant.bind(this),

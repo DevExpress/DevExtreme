@@ -2154,6 +2154,145 @@ QUnit.test("correct views rendering with max option", function(assert) {
 });
 
 
+QUnit.module("disabledDates option", {
+    beforeEach: function() {
+        fx.off = true;
+
+        this.value = new Date(2010, 10, 10);
+        this.disabledDates = function(args) {
+            var month = args.date.getMonth();
+
+            if(month === 9 || month === 11) {
+                return true;
+            }
+        };
+
+        this.$element = $("<div>").appendTo("body");
+        this.calendar = this.$element.dxCalendar({
+            disabledDates: this.disabledDates,
+            value: this.value,
+            focusStateEnabled: true
+        }).dxCalendar("instance");
+
+        this.clock = sinon.useFakeTimers();
+    },
+    reinit: function(options) {
+        this.$element.remove();
+        this.$element = $("<div>").appendTo("body");
+        this.calendar = this.$element.dxCalendar(options).dxCalendar("instance");
+    },
+    afterEach: function() {
+        this.$element.remove();
+        this.clock.restore();
+        fx.off = false;
+    }
+});
+
+QUnit.test("calendar should not allow to navigate to a disabled date via keyboard events", function(assert) {
+    var isAnimationOff = fx.off,
+        animate = fx.animate;
+
+    try {
+        var animateCount = 0;
+
+        fx.off = false;
+
+        fx.animate = function($element, config) {
+            animateCount++;
+            return animate.apply(fx, arguments);
+        };
+
+        var that = this,
+            trigger = function(which) {
+                var e = $.Event("keydown", { which: which });
+                that.$element.trigger(e);
+            };
+
+        this.$element.trigger("focusin");
+
+        trigger(PAGE_UP_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+
+        assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 8, 30), "Skip disabled dates");
+        assert.equal(animateCount, 1, "view is changed with animation after the 'page up' key press the first time");
+
+        trigger(PAGE_UP_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+
+        assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 7, 30));
+        assert.equal(animateCount, 2, "view is changed after the 'page up' key press the second time");
+
+        trigger(PAGE_DOWN_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 8, 30));
+        assert.equal(animateCount, 3, "view is changed with animation after the 'page down' key press the first time");
+
+        trigger(PAGE_DOWN_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 10, 1));
+        assert.equal(animateCount, 4, "view is changed with animation after the 'page down' key press the first time");
+
+        trigger(PAGE_DOWN_KEY_CODE);
+        this.clock.tick(VIEW_ANIMATION_DURATION);
+        assert.deepEqual(this.calendar.option("currentDate"), new Date(2011, 0, 1), "Skip disabled dates");
+        assert.equal(animateCount, 5, "view is changed after the 'page down' key press the second time");
+    } finally {
+        fx.off = isAnimationOff;
+        fx.animate = animate;
+    }
+});
+
+QUnit.test("calendar should properly set the first and the last available cells", function(assert) {
+    this.reinit({
+        disabledDates: function(args) {
+            var disabledDays = [1, 2, 28, 30];
+            if(disabledDays.indexOf(args.date.getDate()) > -1) {
+                return true;
+            }
+        },
+        value: this.value,
+        focusStateEnabled: true
+    });
+
+    var that = this,
+        trigger = function(which) {
+            var e = $.Event("keydown", { which: which });
+            that.$element.trigger(e);
+        };
+
+    this.$element.trigger("focusin");
+
+    trigger(HOME_KEY_CODE);
+    assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 10, 3));
+
+    trigger(END_KEY_CODE);
+    assert.deepEqual(this.calendar.option("currentDate"), new Date(2010, 10, 29));
+});
+
+QUnit.test("calendar should properly initialize currentDate when initial value is disabled", function(assert) {
+    this.reinit({
+        disabledDates: function(args) {
+            if(args.date.valueOf() === new Date(2010, 10, 10).valueOf()) {
+                return true;
+            }
+        },
+        value: this.value,
+        focusStateEnabled: true
+    });
+
+    var calendar = this.calendar;
+    assert.ok(dateUtils.sameView(calendar.option("zoomLevel"), calendar.option("currentDate"), new Date(2010, 10, 11)));
+});
+
+QUnit.test("value should not be changed when disabledDates option is set", function(assert) {
+    var calendar = this.calendar;
+    var disabledDate = new Date(2010, 9, 10);
+
+    calendar.option("value", disabledDate);
+    assert.equal(calendar.option("value"), disabledDate, "value is not changed");
+});
+
+
 QUnit.module("Current date", {
     beforeEach: function() {
         fx.off = true;

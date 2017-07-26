@@ -191,6 +191,21 @@ var DateBox = DropDownEditor.inherit({
             interval: 30,
 
             /**
+            * @name dxDateBoxOptions_disabledDates
+            * @publicName disabledDates
+            * @type array|function(data)
+            * @default null
+            * @type_function_param1 data:object
+            * @type_function_param1_field1 component:object
+            * @type_function_param1_field2 element:jQuery
+            * @type_function_param1_field3 date:Date
+            * @type_function_param1_field4 text:string
+            * @type_function_param1_field5 view:string
+            * @type_function_return boolean
+            */
+            disabledDates: null,
+
+            /**
             * @name dxDateBoxOptions_maxZoomLevel
             * @publicName maxZoomLevel
             * @type string
@@ -814,6 +829,7 @@ var DateBox = DropDownEditor.inherit({
             case "min":
             case "max":
             case "interval":
+            case "disabledDates":
             case "minZoomLevel":
             case "maxZoomLevel":
                 this._invalidate();
