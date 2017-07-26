@@ -1003,7 +1003,7 @@ var dxRangeSelector = {
         * @name dxrangeselectoroptions_chart_seriestemplate_customizeSeries
         * @publicName customizeSeries
         * @type function(seriesName)
-        * @type_function_param1 seriesName:string
+        * @type_function_param1 seriesName:any
         * @type_function_return Series configuration
         */
         customizeSeries: function() { }
