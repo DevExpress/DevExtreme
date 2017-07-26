@@ -1203,10 +1203,6 @@ declare module DevExpress {
             /** @docid_ignore CollectionWidgetItemTemplate_text */
             /** @docid_ignore CollectionWidgetItemTemplate_visible */
             /** @docid_ignore CollectionWidgetItemTemplate_template */
-            /** @docid_ignore CollectionWidgetEvents_ItemClick */
-            /** @docid_ignore CollectionWidgetEvents_ItemContextMenu */
-            /** @docid_ignore CollectionWidgetEvents_ItemHold */
-            /** @docid_ignore CollectionWidgetEvents_ItemRendered */
             /** @docid_ignore CollectionWidgetmethods_itemElements */
             /** @docid_ignore CollectionWidgetmethods_itemsContainer */
             /** @docid_ignore CollectionWidgetmethods_getFocusedItemId */
