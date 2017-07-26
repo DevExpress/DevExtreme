@@ -299,6 +299,8 @@ var DropDownBox = DropDownEditor.inherit({
         }, this);
     },
 
+    _setCollectionWidgetOption: commonUtils.noop,
+
     _optionChanged: function(args) {
         this._dataExpressionOptionChanged(args);
         switch(args.name) {
@@ -314,6 +316,9 @@ var DropDownBox = DropDownEditor.inherit({
                 break;
             case "displayValue":
                 this.option("text", args.value);
+                break;
+            case "displayExpr":
+                this._renderValue();
                 break;
             default:
                 this.callBase(args);
