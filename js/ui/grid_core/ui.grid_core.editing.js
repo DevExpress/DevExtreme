@@ -424,8 +424,19 @@ var EditingController = modules.ViewController.inherit((function() {
             return this.addRow();
         },
 
-        _initNewRow: function(options) {
+        _initNewRow: function(options, insertKey) {
             this.executeAction("onInitNewRow", options);
+
+            var rows = this._dataController.items(),
+                row = rows[insertKey.rowIndex];
+
+            if(row && !row.isEditing && row.rowType === "detail") {
+                insertKey.rowIndex++;
+            }
+
+            insertKey.dataRowIndex = rows.filter(function(row, index) {
+                return index < insertKey.rowIndex && row.rowType === "data";
+            }).length;
         },
 
         _getInsertIndex: function() {
@@ -485,10 +496,6 @@ var EditingController = modules.ViewController.inherit((function() {
             if(editMode !== EDIT_MODE_BATCH) {
                 that._editRowIndex = insertKey.rowIndex + that._dataController.getRowIndexOffset();
             }
-
-            insertKey.dataRowIndex = dataController.items().filter(function(row, index) {
-                return index < insertKey.rowIndex && row.rowType === "data";
-            }).length;
 
             insertKey[INSERT_INDEX] = insertIndex;
 

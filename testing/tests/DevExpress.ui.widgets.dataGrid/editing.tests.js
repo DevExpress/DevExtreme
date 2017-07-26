@@ -9164,6 +9164,39 @@ QUnit.test("Position of the inserted row if masterDetail is used", function(asse
     assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 4, "insert item");
 });
 
+//T538954
+QUnit.test("Position of the inserted row if top visible row is master detail", function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        items;
+
+    this.options.dataSource = generateDataSource(10, 1);
+    this.options.paging.pageSize = 20;
+    this.options.scrolling = { useNative: false };
+    this.options.masterDetail = {
+        template: function($container) {
+            $container.height(150);
+        }
+    };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(150);
+    this.rowsView.resize();
+
+    this.expandRow(this.options.dataSource[8]);
+
+    this.rowsView.scrollTo({ y: 10000 });
+
+    //act
+    this.addRow();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 12, "count items");
+    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 10, "insert item");
+});
+
 //T343567
 QUnit.test("Save edit data with set onRowValidating and infinite scrolling", function(assert) {
     //arrange
