@@ -379,7 +379,7 @@ var DropDownEditor = TextBox.inherit({
 
     _resetFocus: function(isFocused) {
         this._cleanFocusState();
-        isFocused && this._input().focusout();
+        isFocused && eventsEngine.trigger(this._input(), "focusout");
     },
 
 
