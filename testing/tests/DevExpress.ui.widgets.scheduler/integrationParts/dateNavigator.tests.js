@@ -35,7 +35,7 @@ QUnit.test("Click on the 'next' button should update currentDate correctly, when
 
     this.instance.element().find(".dx-scheduler-navigator-next").trigger("dxclick");
 
-    assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 1), "New date is correct");
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 11), "New date is correct");
 });
 
 QUnit.test("Click on the 'previous' button should update currentDate", function(assert) {

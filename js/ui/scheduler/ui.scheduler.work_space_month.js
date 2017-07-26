@@ -99,12 +99,13 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
             return new Date(this.option("currentDate").getTime());
         } else {
             var startDate = this._getStartViewDate(),
+                startDateByOption = new Date(this.option("startDate")),
                 currentDate = this.option("currentDate"),
                 diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
                 endDate;
 
             if(diff > 0) {
-                endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option("intervalCount"))).setDate(0));
+                endDate = new Date(new Date(startDateByOption.setMonth(startDateByOption.getMonth() + diff * this.option("intervalCount"))).setDate(0));
             } else {
                 endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option("intervalCount") + 1)).setDate(1));
             }

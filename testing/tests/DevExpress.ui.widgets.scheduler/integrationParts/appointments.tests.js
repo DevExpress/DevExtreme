@@ -4397,12 +4397,12 @@ QUnit.test("Appointments should be rendered correctly, Month view with intervalC
         store: tasks
     });
     this.createInstance({
-        currentDate: new Date(2010, 5, 26),
+        currentDate: new Date(2017, 5, 26),
         dataSource: dataSource,
         views: [{
             type: "month",
             intervalCount: 3,
-            startDate: new Date(2017, 5, 19)
+            startDate: new Date(2017, 0, 19)
         }],
         currentView: "month",
         firstDayOfWeek: 1
@@ -4410,7 +4410,7 @@ QUnit.test("Appointments should be rendered correctly, Month view with intervalC
 
     var $appointments = this.instance.element().find(".dx-scheduler-appointment");
 
-    assert.equal($appointments.length, 5, "Appointments were rendered correctly");
+    assert.equal($appointments.length, 3, "Appointments were rendered correctly");
 });
 
 QUnit.test("Appointments should be rendered correctly after switching Day view with intervalCount and startDate", function(assert) {
