@@ -724,7 +724,7 @@ var Widget = DOMComponent.inherit({
 
     _attachFeedbackEvents: function() {
         var that = this,
-            feedbackSelector = that._activeStateUnit,
+            feedbackSelector = that._getFeedbackSelector(),
             activeEventName = eventUtils.addNamespace(feedbackEvents.active, UI_FEEDBACK),
             inactiveEventName = eventUtils.addNamespace(feedbackEvents.inactive, UI_FEEDBACK),
             feedbackAction,
@@ -761,6 +761,10 @@ var Widget = DOMComponent.inherit({
                     });
                 });
         }
+    },
+
+    _getFeedbackSelector: function() {
+        return this._activeStateUnit;
     },
 
     _toggleActiveState: function($element, value) {
