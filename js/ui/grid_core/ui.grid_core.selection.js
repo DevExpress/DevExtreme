@@ -52,7 +52,7 @@ var processLongTap = function(that, jQueryEvent) {
 exports.SelectionController = gridCore.Controller.inherit((function() {
     var isSeveralRowsSelected = function(that, selectionFilter) {
         var keyIndex = 0,
-            store = that.getController("data").store(),
+            store = that._dataController.store(),
             key = store && store.key(),
             isComplexKey = Array.isArray(key);
 
@@ -80,6 +80,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             var that = this,
                 dataController = that.getController("data"),
                 selectionOptions = that.option("selection") || {};
+
+            that._dataController = dataController;
 
             that._selectionMode = that.option(SELECTION_MODE);
 
@@ -149,7 +151,11 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             return new Selection(options);
         },
 
-        _fireSelectionChanged: function() {
+        _fireSelectionChanged: function(options) {
+            if(options) {
+                this.executeAction("onSelectionChanged", options);
+            }
+
             var argument = this.option("selection.deferred") ?
                 { selectionFilter: this.option("selectionFilter") } :
                 { selectedRowKeys: this.option("selectedRowKeys") };
@@ -176,7 +182,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             var that = this,
                 isDeferredMode = that.option("selection.deferred"),
                 selectionFilter = that._selection.selectionFilter(),
-                dataController = that.getController("data"),
+                dataController = that._dataController,
                 items = dataController.items();
 
             if(!items) {
@@ -202,23 +208,20 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
             if(isDeferredMode) {
                 that.option("selectionFilter", selectionFilter);
-                that._fireSelectionChanged();
-                that.executeAction("onSelectionChanged", {});
+                that._fireSelectionChanged({});
             } else {
                 if(args.addedItemKeys.length || args.removedItemKeys.length) {
                     that._selectedItemsInternalChange = true;
                     that.option("selectedRowKeys", args.selectedItemKeys.slice(0));
                     that._selectedItemsInternalChange = false;
-
-                    that.executeAction("onSelectionChanged", {
-                        selectedRowsData: args.selectedItems,
-                        selectedRowKeys: args.selectedItemKeys,
-                        currentSelectedRowKeys: args.addedItemKeys,
-                        currentDeselectedRowKeys: args.removedItemKeys
-                    });
                 }
 
-                that._fireSelectionChanged();
+                that._fireSelectionChanged({
+                    selectedRowsData: args.selectedItems.slice(0),
+                    selectedRowKeys: args.selectedItemKeys.slice(0),
+                    currentSelectedRowKeys: args.addedItemKeys.slice(0),
+                    currentDeselectedRowKeys: args.removedItemKeys.slice(0)
+                });
             }
         },
 
@@ -229,7 +232,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
             for(var i = 0, length = items.length; i < length; i++) {
                 var row = items[i];
-                var isItemSelected = that._selection.isItemSelected(isDeferredSelection ? row.data : row.key);
+                var isItemSelected = that.isRowSelected(isDeferredSelection ? row.data : row.key);
 
                 if(that._selection.isDataItem(row) && row.isSelected !== isItemSelected) {
                     itemIndexes.push(i);
@@ -399,7 +402,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
          * @return Promise
          */
         selectRowsByIndexes: function(indexes) {
-            var items = this.getController("data").items(),
+            var items = this._dataController.items(),
                 keys = [];
 
             if(!Array.isArray(indexes)) {
@@ -827,9 +830,9 @@ module.exports = {
                                     //T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
-                                        isSelected = !!change.items[index].isSelected;
+                                        isSelected = change.items[index].isSelected;
                                         $row
-                                            .toggleClass(ROW_SELECTION_CLASS, isSelected)
+                                            .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
                                             .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
                                         that.setAria("selected", isSelected, $row);
                                     }

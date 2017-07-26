@@ -1402,6 +1402,8 @@ declare module DevExpress.ui {
     }
 
     export interface dxTreeListSelection extends GridBaseSelection {
+        /** @docid dxTreeListOptions_selection_recursive */
+        recursive?: boolean;
     }
 
     export interface dxDataGridOptions extends GridBaseOptions {
@@ -2365,6 +2367,12 @@ declare module DevExpress.ui {
 
         /** @docid dxTreeListMethods_collapseRow */
         collapseRow(key: any): void;
+
+        /** @docid dxTreeListMethods_getSelectedRowKeys#getSelectedRowKeys() */
+        getSelectedRowKeys(): Array<any>;
+
+        /** @docid dxTreeListMethods_getSelectedRowKeys#getSelectedRowKeys(leavesOnly) */
+        getSelectedRowKeys(leavesOnly: boolean): Array<any>;
 
         /** @docid dxTreeListMethods_getSelectedRowsData */
         getSelectedRowsData(): Array<any>;
