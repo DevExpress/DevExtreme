@@ -118,6 +118,7 @@
             this._stored_styles = {};
 
             this.element = {
+                nodeType: 1,
                 getScreenCTM: function() { return [0, 1, 1, 0, 210, 240]; },
                 createSVGPoint: function() { return { matrixTransform: function() { return { x: 3, y: 5 }; } }; }
             };
