@@ -1662,9 +1662,9 @@ QUnit.test("When typing a correct date, dateBox must not make a redundant _setIn
 });
 
 QUnit.test("Swiping must not close the calendar", function(assert) {
-    this.fixture.dateBox._input().focus();
+    $(this.fixture.dateBox._input()).focus();
     if(browser.msie && browser.version < 11) {
-        this.fixture.dateBox._input().focus();
+        $(this.fixture.dateBox._input()).focus();
     }
     this.fixture.dateBox.open();
     pointerMock(this.fixture.dateBox._strategy._calendarContainer).start().swipeStart().swipeEnd(1);

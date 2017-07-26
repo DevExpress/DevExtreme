@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     Component = require("../core/component"),
     isFunction = require("../core/utils/type").isFunction,
     Action = require("../core/action"),
@@ -169,11 +170,12 @@ exports.custom = function(options) {
             domUtils.resetActiveElement();
         },
         onShown: function(e) {
-            e.component
+            var $firstButton = e.component
                 .bottomToolbar()
                 .find(".dx-button")
-                .first()
-                .focus();
+                .first();
+
+            eventsEngine.trigger($firstButton, "focus");
         },
         onHiding: function() {
             deferred.reject();

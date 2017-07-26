@@ -639,7 +639,7 @@ var Overlay = Widget.inherit({
 
                 this._animate(showAnimation, function() {
                     if(that.option("focusStateEnabled")) {
-                        that._focusTarget().focus();
+                        eventsEngine.trigger(that._focusTarget(), "focus");
                     }
 
                     completeShowAnimation.apply(this, arguments);
@@ -845,7 +845,10 @@ var Overlay = Widget.inherit({
 
             e.preventDefault();
 
-            (e.shiftKey ? $lastTabbable : $firstTabbable).focusin().focus();
+            var $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
+
+            eventsEngine.trigger($focusElement, "focusin");
+            eventsEngine.trigger($focusElement, "focus");
         }
     },
 

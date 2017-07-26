@@ -68,7 +68,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._testInteractiveElement = $focusedElement;
         ///#ENDDEBUG
 
-        $focusedElement.focus();
+        eventsEngine.trigger($focusedElement, "focus");
     },
 
     _updateFocus: function() {
@@ -89,7 +89,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                             that._focusInteractiveElement.bind(that)($cell);
                         }
                     } else {
-                        $cell.focus();
+                        eventsEngine.trigger($cell, "focus");
                     }
                 });
             }
@@ -113,7 +113,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(!this._editingController.isEditing()) {
                 this._applyTabIndexToElement(data.view.element());
                 data.view.element().find(".dx-row > td[tabIndex]").removeAttr("tabIndex");
-                $cell.focus();
+                eventsEngine.trigger($cell, "focus");
             }
         } else {
             this._resetFocusedCell();
@@ -286,7 +286,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         if($focusElement) {
             this._applyTabIndexToElement($focusElement);
-            $focusElement.focus();
+            eventsEngine.trigger($focusElement, "focus");
         }
 
         this.getController("editorFactory").focus($focusElement);
@@ -413,7 +413,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                     var $rowsView = that.getView("rowsView").element();
                     that._applyTabIndexToElement($rowsView);
-                    $rowsView.focus();
+                    eventsEngine.trigger($rowsView, "focus");
 
                     that._focusedCellPosition.rowIndex = rowIndex;
                     that._focusedCellPosition.columnIndex = columnIndex;

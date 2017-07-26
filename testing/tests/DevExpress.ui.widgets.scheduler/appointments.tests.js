@@ -8,6 +8,7 @@ var $ = require("jquery"),
     HorizontalMonthAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month"),
     SchedulerAppointments = require("ui/scheduler/ui.scheduler.appointments"),
     dropDownAppointments = require("ui/scheduler/ui.scheduler.appointments.drop_down"),
+    eventsEngine = require("events/core/events_engine"),
     dblclickEvent = require("events/dblclick"),
     translator = require("animation/translator"),
     dataCoreUtils = require("core/utils/data"),
@@ -1299,7 +1300,7 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
 
     $($appointment).trigger("focusin");
 
-    var focusSpy = sinon.spy(this.instance.option("focusedElement"), "focus"),
+    var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(this.instance.option("focusedElement").get(0), "focus"),
         appointmentFocusedStub = sinon.stub(this.instance, "notifyObserver").withArgs("appointmentFocused");
 
     this.instance.focus();
@@ -1307,6 +1308,7 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
     this.clock.tick();
     assert.ok(focusSpy.called, "focus is called");
     assert.ok(appointmentFocusedStub.called, "appointmentFocused is fired");
+    sinon.restore();
 });
 
 QUnit.test("Default behavior of tab button should be prevented for apps", function(assert) {

@@ -9,6 +9,7 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
     when = require("../integration/jquery/deferred").when,
     $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
     registerComponent = require("../core/component_registrator");
@@ -34,7 +35,7 @@ var DropDownBox = DropDownEditor.inherit({
                 var $tabbableElements = this._getTabbableElements(),
                     $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
-                $focusableElement && $focusableElement.focus();
+                $focusableElement && eventsEngine.trigger($focusableElement, "focus");
                 e.preventDefault();
             }
         });
@@ -243,7 +244,7 @@ var DropDownBox = DropDownEditor.inherit({
 
         if(moveBackward || moveForward) {
             this.close();
-            this._input().focus();
+            eventsEngine.trigger(this._input(), "focus");
 
             if(moveBackward) {
                 e.originalEvent.preventDefault();
@@ -287,7 +288,7 @@ var DropDownBox = DropDownEditor.inherit({
     _popupShownHandler: function() {
         this.callBase();
         var $firstElement = this._getTabbableElements().first();
-        $firstElement.focus();
+        eventsEngine.trigger($firstElement, "focus");
     },
 
     _popupOptionChanged: function(args) {
