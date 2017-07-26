@@ -250,7 +250,7 @@ LayoutManager.prototype = {
         this._probeDrawing(canvas);
         this._drawElements(canvas);
 
-        funcAxisDrawer && funcAxisDrawer();
+        funcAxisDrawer();
         this._processAdaptiveLayout(panes, rotated, canvas, funcAxisDrawer);
         this._positionElements(canvas);
     },
@@ -289,7 +289,7 @@ LayoutManager.prototype = {
             }
         });
 
-        funcAxisDrawer && funcAxisDrawer(size);
+        funcAxisDrawer(size);
     },
 
     _probeDrawing: function(canvas) {
