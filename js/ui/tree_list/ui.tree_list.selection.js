@@ -39,10 +39,12 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
             data: {
                 _handleDataChanged: function(e) {
                     var selectionController = this.getController("selection"),
+                        dataSource = this.dataSource(),
+                        remoteOperations = dataSource && dataSource.remoteOperations(),
                         isRecursiveSelection = selectionController.isRecursiveSelection();
 
-                    if(isRecursiveSelection && (!e || e.changeType !== "updateSelection")) {
-                        selectionController.updateSelection({
+                    if(remoteOperations.filtering && isRecursiveSelection && (!e || e.changeType !== "updateSelectionState")) {
+                        selectionController.updateSelectionState({
                             selectedItemKeys: this.option("selectedRowKeys")
                         });
                     }
@@ -53,7 +55,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
             selection: {
                 init: function() {
                     this.callBase.apply(this, arguments);
-                    this._selectionStateMap = {};
+                    this._selectionStateByKey = {};
                 },
 
                 renderSelectCheckBoxContainer: function($container, model) {
@@ -85,21 +87,19 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 isSelectAll: function() {
                     var component = this.component,
-                        isIndeterminateLeastOne,
+                        hasIndeterminateState,
                         visibleKeys = this._getVisibleNodeKeys();
 
                     var selectedVisibleKeys = visibleKeys.filter(function(key) {
-                        var state = component.isRowSelected(key);
-
-                        if(!isIndeterminateLeastOne) {
-                            isIndeterminateLeastOne = state === undefined;
-                        }
-
-                        return state;
+                        return component.isRowSelected(key);
                     });
 
                     if(!selectedVisibleKeys.length) {
-                        return isIndeterminateLeastOne ? undefined : false;
+                        hasIndeterminateState = visibleKeys.some(function(key) {
+                            return component.isRowSelected(key) === undefined;
+                        });
+
+                        return hasIndeterminateState ? undefined : false;
                     } else if(selectedVisibleKeys.length === visibleKeys.length) {
                         return true;
                     }
@@ -123,34 +123,26 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     var that = this,
                         state = isSelected,
                         parentNode = node.parent,
-                        isUnselectedLeastOne,
-                        isSelectedLeastOne;
+                        hasNonSelectedState,
+                        hasSelectedState;
 
                     if(parentNode.children.length > 1) {
                         if(isSelected === false) {
-                            isSelectedLeastOne = parentNode.children.some(function(childNode, index, children) {
-                                return that._selectionStateMap[childNode.key];
+                            hasSelectedState = parentNode.children.some(function(childNode, index, children) {
+                                return that._selectionStateByKey[childNode.key];
                             });
 
-                            if(isSelectedLeastOne) {
-                                state = undefined;
-                            } else {
-                                state = false;
-                            }
+                            state = hasSelectedState ? undefined : false;
                         } else if(isSelected === true) {
-                            isUnselectedLeastOne = parentNode.children.some(function(childNode) {
-                                return !that._selectionStateMap[childNode.key];
+                            hasNonSelectedState = parentNode.children.some(function(childNode) {
+                                return !that._selectionStateByKey[childNode.key];
                             });
 
-                            if(!isUnselectedLeastOne) {
-                                state = true;
-                            } else {
-                                state = undefined;
-                            }
+                            state = hasNonSelectedState ? undefined : true;
                         }
                     }
 
-                    this._selectionStateMap[parentNode.key] = state;
+                    this._selectionStateByKey[parentNode.key] = state;
 
                     if(parentNode.parent && parentNode.parent.level >= 0) {
                         this._updateParentSelectionState(parentNode, state);
@@ -162,7 +154,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         children = node.children;
 
                     children.forEach(function(childNode) {
-                        that._selectionStateMap[childNode.key] = isSelected;
+                        that._selectionStateByKey[childNode.key] = isSelected;
 
                         if(childNode.children.length > 0) {
                             that._updateChildrenSelectionState(childNode, isSelected);
@@ -170,12 +162,12 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     });
                 },
 
-                _updateSelectionCore: function(keys, isSelected) {
+                _updateSelectionStateCore: function(keys, isSelected) {
                     var node,
                         dataController = this._dataController;
 
                     for(var i = 0; i < keys.length; i++) {
-                        this._selectionStateMap[keys[i]] = isSelected;
+                        this._selectionStateByKey[keys[i]] = isSelected;
                         node = dataController.getNodeByKey(keys[i]);
 
                         if(node) {
@@ -185,100 +177,114 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     }
                 },
 
-                _processParentKeys: function(key, result) {
-                    var that = this,
-                        index = -1,
-                        parentIndex,
-                        childKeys = [],
-                        ignoreKeys = [key],
-                        node = that._dataController.getNodeByKey(key),
+                _getSelectedParentNode: function(node, selectedItemKeys, keysToIgnore) {
+                    var index,
                         parentNode = node && node.parent;
 
                     while(parentNode) {
-                        parentIndex = result.selectedItemKeys.indexOf(parentNode.key);
+                        index = selectedItemKeys.indexOf(parentNode.key);
 
-                        if(parentIndex < 0) {
-                            ignoreKeys.push(parentNode.key);
+                        if(index < 0) {
+                            keysToIgnore.push(parentNode.key);
                             parentNode = parentNode.parent;
                         } else {
                             break;
                         }
                     }
 
-                    if(parentIndex >= 0) {
-                        result.removedItemKeys.push(parentNode.key);
-                        result.selectedItemKeys.splice(parentIndex, 1);
+                    return parentNode;
+                },
 
-                        index = result.selectedItemKeys.indexOf(key);
-                        if(index >= 0) {
-                            result.removedItemKeys.push(key);
-                            result.selectedItemKeys.splice(index, 1);
+                _getChildKeys: function(node, keysToIgnore) {
+                    var that = this,
+                        childKeys = [];
+
+                    node && foreachNodes(node.children, function(childNode) {
+                        var ignoreKeyIndex = keysToIgnore.indexOf(childNode.key);
+
+                        if(ignoreKeyIndex < 0) {
+                            childKeys.push(childNode.key);
                         }
 
-                        foreachNodes(parentNode.children, function(childNode) {
-                            var ignoreKeyIndex = ignoreKeys.indexOf(childNode.key);
+                        return ignoreKeyIndex > 0 || ignoreKeyIndex < 0 && that._selectionStateByKey[childNode.key] === undefined;
+                    });
 
-                            if(ignoreKeyIndex < 0) {
-                                childKeys.push(childNode.key);
-                            }
+                    return childKeys;
+                },
 
-                            return ignoreKeyIndex > 0 || ignoreKeyIndex < 0 && that._selectionStateMap[childNode.key] === undefined;
-                        });
-                        result.addedItemKeys = result.addedItemKeys.concat(childKeys);
-                        result.selectedItemKeys = result.selectedItemKeys.concat(childKeys);
+                _normalizeParentKeys: function(key, args) {
+                    var that = this,
+                        index,
+                        childKeys,
+                        keysToIgnore = [key],
+                        node = that._dataController.getNodeByKey(key),
+                        parentNode = that._getSelectedParentNode(node, args.selectedRowKeys, keysToIgnore);
+
+                    if(parentNode) {
+                        index = args.selectedRowKeys.indexOf(parentNode.key);
+                        args.currentDeselectedRowKeys.push(parentNode.key);
+                        args.selectedRowKeys.splice(index, 1);
+
+                        index = args.selectedRowKeys.indexOf(key);
+                        if(index >= 0) {
+                            args.currentDeselectedRowKeys.push(key);
+                            args.selectedRowKeys.splice(index, 1);
+                        }
+
+                        childKeys = that._getChildKeys(parentNode, keysToIgnore);
+                        args.currentSelectedRowKeys = args.currentSelectedRowKeys.concat(childKeys);
+                        args.selectedRowKeys = args.selectedRowKeys.concat(childKeys);
                     }
                 },
 
-                _processChildrenKeys: function(key, result) {
+                _normalizeChildrenKeys: function(key, args) {
                     var that = this,
                         index,
                         node = that._dataController.getNodeByKey(key);
 
-                    if(node && node.children.length) {
-                        node.children.forEach(function(childNode) {
-                            index = result.selectedItemKeys.indexOf(childNode.key);
-                            if(index >= 0) {
-                                result.removedItemKeys.push(childNode.key);
-                                result.selectedItemKeys.splice(index, 1);
-                            }
+                    node && node.children.forEach(function(childNode) {
+                        index = args.selectedRowKeys.indexOf(childNode.key);
+                        if(index >= 0) {
+                            args.currentDeselectedRowKeys.push(childNode.key);
+                            args.selectedRowKeys.splice(index, 1);
+                        }
 
-                            that._processChildrenKeys(childNode.key, result);
-                        });
-                    }
+                        that._normalizeChildrenKeys(childNode.key, args);
+                    });
                 },
 
-                _normalizeSelectedRowKeysCore: function(keys, result) {
+                _normalizeSelectedRowKeysCore: function(keys, args) {
                     var that = this,
                         index;
 
                     keys.forEach(function(key) {
-                        that._processChildrenKeys(key, result);
+                        that._normalizeChildrenKeys(key, args);
 
-                        if(that._selectionStateMap[key]) {
-                            index = result.selectedItemKeys.indexOf(key);
+                        if(that._selectionStateByKey[key]) {
+                            index = args.selectedRowKeys.indexOf(key);
                             if(index >= 0) {
-                                result.removedItemKeys.push(key);
-                                result.selectedItemKeys.splice(index, 1);
+                                args.currentDeselectedRowKeys.push(key);
+                                args.selectedRowKeys.splice(index, 1);
                             }
                         } else {
-                            result.addedItemKeys.push(key);
+                            args.currentSelectedRowKeys.push(key);
                         }
 
-                        that._processParentKeys(key, result);
+                        that._normalizeParentKeys(key, args);
                     });
                 },
 
-                _normalizeSelectedRowKeys: function(args) {
+                _normalizeSelectionArgs: function(args) {
                     var addedItemKeys = args.addedItemKeys || [],
                         result = {
-                            addedItemKeys: [],
-                            removedItemKeys: [],
-                            selectedItemKeys: args.selectedItemKeys.slice(0) || []
+                            currentSelectedRowKeys: [],
+                            currentDeselectedRowKeys: [],
+                            selectedRowKeys: args.selectedItemKeys.slice(0) || []
                         };
 
                     this._normalizeSelectedRowKeysCore(addedItemKeys, result);
 
-                    if(!commonUtils.equalByValue(result.selectedItemKeys, args.selectedItemKeys)) {
+                    if(!commonUtils.equalByValue(result.selectedRowKeys, args.selectedItemKeys)) {
                         return result;
                     }
                 },
@@ -288,34 +294,59 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         isRecursiveSelection = that.isRecursiveSelection();
 
                     if(isRecursiveSelection) {
-                        if(!that._notNormalizeSelection) {
-                            var result = that._normalizeSelectedRowKeys(args);
+                        if(!that._isSelectionNormalizing) {
+                            var normalizedArgs = that._normalizeSelectionArgs(args);
 
-                            if(result) {
-                                that._notNormalizeSelection = true;
-                                that.selectRows(result.selectedItemKeys).done(function(items) {
-                                    that._fireSelectionChanged({
-                                        selectedRowsData: items,
-                                        selectedRowKeys: result.selectedItemKeys,
-                                        currentSelectedRowKeys: result.addedItemKeys,
-                                        currentDeselectedRowKeys: result.removedItemKeys
+                            if(normalizedArgs) {
+                                that._isSelectionNormalizing = true;
+                                that.selectRows(normalizedArgs.selectedRowKeys)
+                                    .always(function() {
+                                        that._isSelectionNormalizing = false;
+                                    })
+                                    .done(function(items) {
+                                        normalizedArgs.selectedRowsData = items;
+                                        that._fireSelectionChanged(normalizedArgs);
                                     });
-                                });
                                 return;
                             }
                         }
 
-                        that.updateSelection(args);
+                        that.updateSelectionState(args);
                     }
 
                     that.callBase.apply(that, arguments);
-                    that._notNormalizeSelection = false;
                 },
 
                 _fireSelectionChanged: function() {
-                    if(!this._notNormalizeSelection) {
+                    if(!this._isSelectionNormalizing) {
                         this.callBase.apply(this, arguments);
                     }
+                },
+
+                _getNodeLeafKeys: function(selectedRowKeys) {
+                    var that = this,
+                        node,
+                        result = [],
+                        dataController = that._dataController;
+
+                    selectedRowKeys.forEach(function(key) {
+                        node = dataController.getNodeByKey(key);
+
+                        if(node) {
+                            if(node.hasChildren) {
+                                foreachNodes(node.children, function(childNode) {
+                                    if(!childNode.hasChildren && that.isRowSelected(childNode.key)) {
+                                        result.push(childNode.key);
+                                    }
+                                    return true;
+                                });
+                            } else {
+                                result.push(key);
+                            }
+                        }
+                    });
+
+                    return result;
                 },
 
                 isRecursiveSelection: function() {
@@ -325,12 +356,12 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     return selectionMode === "multiple" && isRecursive;
                 },
 
-                updateSelection: function(options) {
+                updateSelectionState: function(options) {
                     var removedItemKeys = options.removedItemKeys || [],
                         selectedItemKeys = options.selectedItemKeys || [];
 
-                    this._updateSelectionCore(removedItemKeys, false);
-                    this._updateSelectionCore(selectedItemKeys, true);
+                    this._updateSelectionStateCore(removedItemKeys, false);
+                    this._updateSelectionStateCore(selectedItemKeys, true);
                 },
 
                 isRowSelected: function(key) {
@@ -338,8 +369,8 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         isRecursiveSelection = this.isRecursiveSelection();
 
                     if(!result && isRecursiveSelection) {
-                        if(key in this._selectionStateMap) {
-                            return this._selectionStateMap[key];
+                        if(key in this._selectionStateByKey) {
+                            return this._selectionStateByKey[key];
                         }
                         return false;
                     }
@@ -349,7 +380,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 deselectRows: function(keys) {
                     var that = this,
-                        isNotSelected,
+                        needNormalization,
                         isRecursiveSelection = that.isRecursiveSelection(),
                         selectedItemKeys = that.option("selectedRowKeys");
 
@@ -357,11 +388,11 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         keys = keys || [];
                         keys = Array.isArray(keys) ? keys : [keys];
 
-                        isNotSelected = keys.some(function(key) {
-                            return selectedItemKeys.indexOf(key) < 0 && that._selectionStateMap[key];
+                        needNormalization = keys.some(function(key) {
+                            return selectedItemKeys.indexOf(key) < 0 && that._selectionStateByKey[key];
                         });
 
-                        if(isNotSelected) {
+                        if(needNormalization) {
                             return that.selectRows(keys, true);
                         }
                     }
@@ -376,36 +407,9 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 * @return array
                 */
                 getSelectedRowKeys: function(leavesOnly) {
-                    var that = this,
-                        dataController = that._dataController,
-                        selectedRowKeys = that.callBase.apply(that, arguments);
+                    var selectedRowKeys = this.callBase.apply(this, arguments) || [];
 
-                    if(leavesOnly) {
-                        var node,
-                            result = [];
-
-                        selectedRowKeys.forEach(function(key) {
-                            node = dataController.getNodeByKey(key);
-
-                            if(node) {
-                                if(node.hasChildren) {
-                                    foreachNodes(node.children, function(childNode) {
-                                        if(!childNode.hasChildren && that.isRowSelected(childNode.key)) {
-                                            result.push(childNode.key);
-                                        }
-
-                                        return true;
-                                    });
-                                } else {
-                                    result.push(key);
-                                }
-                            }
-                        });
-
-                        return result;
-                    }
-
-                    return selectedRowKeys;
+                    return leavesOnly ? this._getNodeLeafKeys(selectedRowKeys) : selectedRowKeys;
                 }
             }
         },
@@ -444,10 +448,6 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
             },
 
             rowsView: {
-                _getSelectionStateByItem: function(item) {
-                    return item && item.isSelected;
-                },
-
                 _renderExpandIcon: function($container, options) {
                     var $iconContainer = this.callBase($container, options);
 
@@ -471,4 +471,3 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
         }
     }
 }));
-

@@ -830,9 +830,9 @@ module.exports = {
                                     //T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
-                                        isSelected = that._getSelectionStateByItem(change.items[index]);
+                                        isSelected = change.items[index].isSelected;
                                         $row
-                                            .toggleClass(ROW_SELECTION_CLASS, !!isSelected)
+                                            .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
                                             .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
                                         that.setAria("selected", isSelected, $row);
                                     }
@@ -844,10 +844,6 @@ module.exports = {
                     } else {
                         that.callBase(change);
                     }
-                },
-
-                _getSelectionStateByItem: function(item) {
-                    return item && !!item.isSelected;
                 },
 
                 _createTable: function() {
