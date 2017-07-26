@@ -26,7 +26,7 @@ var dxChart = {
         * @name dxchartoptions_seriestemplate_customizeSeries
         * @publicName customizeSeries
         * @type function(seriesName)
-        * @type_function_param1 seriesName:string
+        * @type_function_param1 seriesName:any
         * @type_function_return Series configuration
         */
         customizeSeries: function() { }
@@ -907,7 +907,7 @@ var dxChart = {
         * @publicName customizeText
         * @type function(seriesInfo)
         * @type_function_param1 seriesInfo:object
-        * @type_function_param1_field1 seriesName:string
+        * @type_function_param1_field1 seriesName:any
         * @type_function_param1_field2 seriesIndex:Number
         * @type_function_param1_field3 seriesColor:string
         * @type_function_return string
@@ -919,7 +919,7 @@ var dxChart = {
         * @publicName customizeHint
         * @type function(seriesInfo)
         * @type_function_param1 seriesInfo:object
-        * @type_function_param1_field1 seriesName:string
+        * @type_function_param1_field1 seriesName:any
         * @type_function_param1_field2 seriesIndex:Number
         * @type_function_param1_field3 seriesColor:string
         * @type_function_return string
@@ -2285,7 +2285,7 @@ var dxPieChart = {
         * @name dxpiechartoptions_seriestemplate_customizeSeries
         * @publicName customizeSeries
         * @type function(seriesName)
-        * @type_function_param1 seriesName:string
+        * @type_function_param1 seriesName:any
         * @type_function_return PieSeries configuration
         */
         customizeSeries: function() { }
@@ -2309,7 +2309,7 @@ var dxPieChart = {
         * @publicName customizeText
         * @type function(pointInfo)
         * @type_function_param1 pointInfo:object
-        * @type_function_param1_field1 pointName:string
+        * @type_function_param1_field1 pointName:any
         * @type_function_param1_field2 pointIndex:Number
         * @type_function_param1_field3 pointColor:string
         * @type_function_return string
@@ -2321,7 +2321,7 @@ var dxPieChart = {
        * @publicName customizeHint
        * @type function(pointInfo)
        * @type_function_param1 pointInfo:object
-       * @type_function_param1_field1 pointName:string
+       * @type_function_param1_field1 pointName:any
        * @type_function_param1_field2 pointIndex:Number
        * @type_function_param1_field3 pointColor:string
        * @type_function_return string
@@ -2498,7 +2498,7 @@ var dxPolarChart = {
         * @name dxpolarchartoptions_seriestemplate_customizeSeries
         * @publicName customizeSeries
         * @type function(seriesName)
-        * @type_function_param1 seriesName:string
+        * @type_function_param1 seriesName:any
         * @type_function_return PolarSeries configuration
         */
         customizeSeries: function() { }
@@ -2689,7 +2689,7 @@ var dxPolarChart = {
         * @publicName customizeText
         * @type function(seriesInfo)
         * @type_function_param1 seriesInfo:object
-        * @type_function_param1_field1 seriesName:string
+        * @type_function_param1_field1 seriesName:any
         * @type_function_param1_field2 seriesIndex:Number
         * @type_function_param1_field3 seriesColor:string
         * @type_function_return string
@@ -2701,7 +2701,7 @@ var dxPolarChart = {
         * @publicName customizeHint
         * @type function(seriesInfo)
         * @type_function_param1 seriesInfo:object
-        * @type_function_param1_field1 seriesName:string
+        * @type_function_param1_field1 seriesName:any
         * @type_function_param1_field2 seriesIndex:Number
         * @type_function_param1_field3 seriesColor:string
         * @type_function_return string
@@ -4117,7 +4117,7 @@ var BaseChart = {
     /**
     * @name basechartmethods_getseriesbyname
     * @publicName getSeriesByName(seriesName)
-    * @param1 seriesName:string
+    * @param1 seriesName:any
     * @return object
     */
     getSeriesByName: function() { },
