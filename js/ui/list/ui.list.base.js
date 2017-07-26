@@ -40,11 +40,7 @@ var groupItemsGetter = compileGetter("items");
 
 var ListBase = CollectionWidget.inherit({
 
-    _activeStateUnit: LIST_ITEM_SELECTOR,
-
-    _getFeedbackSelector: function() {
-        return [LIST_ITEM_SELECTOR, SELECT_ALL_SELECTOR].join(",");
-    },
+    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_SELECTOR].join(","),
 
     _supportedKeys: function() {
         var that = this;
