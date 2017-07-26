@@ -2180,7 +2180,6 @@ declare module DevExpress.ui {
 
         /** @docid_ignore dxAccordionItemTemplate_icon */
         /** @docid_ignore dxAccordionItemTemplate_iconSrc */
-        /** @docid_ignore dxAccordionEvents_ItemTitleClick */
 
         /** @docid dxAccordionMethods_collapseItem */
         collapseItem(index: number): JQueryPromise<dxAccordion>;
