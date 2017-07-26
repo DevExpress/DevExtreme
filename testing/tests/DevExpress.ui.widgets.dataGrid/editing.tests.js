@@ -4964,14 +4964,14 @@ QUnit.testInActiveWindow('Update be called once in cell mode on value change for
     rowsView.render(testElement);
     that.columnsController.init();
 
-    var $checkBox = rowsView.getCellElement(0, 0).find(".dx-checkbox");
+    var $checkBox = $(rowsView.getCellElement(0, 0)).find(".dx-checkbox");
 
     //assert
     assert.strictEqual($checkBox.length, 1, "has checkBox");
 
     //act
     that.editCell(0, 0);
-    $($checkBox.focus()).trigger("dxclick");
+    $checkBox.focus().trigger("dxclick");
 
     updateDeferred.resolve();
     that.clock.tick();

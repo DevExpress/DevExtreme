@@ -3337,8 +3337,8 @@ QUnit.testInActiveWindow("Focus link elements on tab key", function(assert) {
 
 
     //act
-    var $cell = this.rowsView.element().find(".dx-row").filter(":visible").eq(0).find("td").eq(0);
-    $($cell.focus()).trigger("dxpointerdown");
+    var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(0);
+    $cell.focus().trigger("dxpointerdown");
 
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $cell).preventDefault;
 
@@ -3397,8 +3397,8 @@ QUnit.testInActiveWindow("Focus link elements on shift+tab key", function(assert
 
 
     //act
-    var $cell = this.rowsView.element().find(".dx-row").filter(":visible").eq(0).find("td").eq(2);
-    $($cell.focus()).trigger("dxpointerdown");
+    var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(2);
+    $cell.focus().trigger("dxpointerdown");
     var isPreventDefaultCalled = this.triggerKeyDown("tab", false, true, $cell).preventDefault;
     this.clock.tick();
 
@@ -3455,8 +3455,8 @@ if(device.deviceType === "desktop") {
 
 
         //act
-        var $cell = this.rowsView.element().find(".dx-row").filter(":visible").eq(0).find("td").eq(0);
-        $($cell.focus()).trigger("dxpointerdown");
+        var $cell = $(this.rowsView.element()).find(".dx-row").filter(":visible").eq(0).find("td").eq(0);
+        $cell.focus().trigger("dxpointerdown");
         var isPreventDefaultCalled = this.triggerKeyDown("tab", false, false, $cell).preventDefault;
         this.clock.tick();
 
