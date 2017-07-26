@@ -91,7 +91,7 @@ var BaseBaseSeries = {
     /**
     * @name baseSeriesObjectFields_name
     * @publicName name
-    * @type string
+    * @type any
     */
     name: null,
     /**
