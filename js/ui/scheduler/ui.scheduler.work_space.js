@@ -719,17 +719,16 @@ var SchedulerWorkSpace = Widget.inherit({
         if(!this.option("startDate")) {
             return new Date(this.option("currentDate").getTime());
         } else {
-            var intervalCount = this.option("intervalCount"),
-                startDate = new Date(this.option("startDate")),
+            var startDate = this._getStartViewDate(),
                 currentDate = this.option("currentDate"),
                 diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
-                endDate = new Date(startDate.getTime() + toMs("day") * intervalCount * diff),
+                endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff),
                 dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, endDate, "date") : dateUtils.dateInRange(currentDate, endDate, startDate, "date"),
                 counter = 0;
 
             while(!dateInRange) {
                 startDate = endDate;
-                endDate = new Date(startDate.getTime() + toMs("day") * intervalCount * diff);
+                endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
 
                 dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, endDate, "date") : dateUtils.dateInRange(currentDate, endDate, startDate, "date");
                 counter++;
@@ -738,6 +737,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
             return diff > 0 ? startDate : endDate;
         }
+    },
+
+    _getStartViewDate: function() {
+        return this.option("startDate");
+    },
+
+    _getIntervalDuration: function() {
+        return toMs("day") * this.option("intervalCount");
     },
 
     _setStartDayHour: function(date) {
