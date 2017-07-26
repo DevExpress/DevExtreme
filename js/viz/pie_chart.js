@@ -342,6 +342,8 @@ var dxPieChart = BaseChart.inherit({
 
     _renderAxes: _noop,
 
+    _shrinkAxes: _noop,
+
     _isRotated: _noop,
 
     _seriesPopulatedHandlerCore: _noop,
