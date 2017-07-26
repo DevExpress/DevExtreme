@@ -610,7 +610,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
                 that._editPopup.on("hidden", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
-                    e.component.content().find(FOCUSABLE_ELEMENT_SELECTOR).first().focus();
+                    eventsEngine.trigger(e.component.content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
                 });
             }
 
@@ -759,7 +759,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     beforeFocusCallback();
                 }
 
-                $cell && $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first().focus();
+                $cell && eventsEngine.trigger($cell.find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
                 that._beforeFocusCallback = null;
             }
 

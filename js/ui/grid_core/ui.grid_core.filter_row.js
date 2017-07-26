@@ -273,7 +273,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                             if(!$prevElement.length) {
                                 $prevElement = $cell.prev().find("[tabindex]").last();
                             }
-                            $prevElement.focus();
+                            eventsEngine.trigger($prevElement, "focus");
                         }
                     });
 
@@ -286,7 +286,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                         if(e.which === 9 && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
-                            $cell.next().find("[tabindex]").first().focus();
+                            eventsEngine.trigger($cell.next().find("[tabindex]").first(), "focus");
                         }
                     });
 
@@ -295,7 +295,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 onShown: function(e) {
                     var $editor = e.component.content().find("." + EDITOR_CONTAINER_CLASS).first();
 
-                    $editor.find(EDITORS_INPUT_SELECTOR).focus();
+                    eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), "focus");
                 },
                 onHidden: function() {
                     column = that._columnsController.columnOption(column.index);
@@ -539,9 +539,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         _focusEditor: function($container) {
             this.getController("editorFactory").focus($container);
-            $container
-                .find(EDITORS_INPUT_SELECTOR)
-                .focus();
+            eventsEngine.trigger($container.find(EDITORS_INPUT_SELECTOR), "focus");
         },
 
         _renderFilterOperationChooser: function($container, column, $editorContainer) {

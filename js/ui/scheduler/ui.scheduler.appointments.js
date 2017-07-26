@@ -51,7 +51,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 var $nextAppointment = this._getAppointmentByIndex(index);
                 this._resetTabIndex($nextAppointment);
-                $nextAppointment.focus();
+                eventsEngine.trigger($nextAppointment, "focus");
             }
         };
 
@@ -1026,7 +1026,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var $appointment = this._$currentAppointment;
         if($appointment) {
             this.option("focusedElement", $appointment);
-            this.option("focusedElement").focus();
+            eventsEngine.trigger(this.option("focusedElement"), "focus");
         }
     },
 

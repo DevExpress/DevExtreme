@@ -174,7 +174,10 @@ var ValidatingController = modules.Controller.inherit((function() {
                         if(!options.isValid) {
                             var $focus = $container.find(":focus");
                             editingController.showHighlighting($container, true);
-                            if(!$focus.is(":focus")) eventsEngine.trigger($focus.focus(), pointerEvents.down);
+                            if(!$focus.is(":focus")) {
+                                eventsEngine.trigger($focus, "focus");
+                                eventsEngine.trigger($focus, pointerEvents.down);
+                            }
                         }
                         $container.toggleClass(that.addWidgetPrefix(INVALIDATE_CLASS), !options.isValid);
                     }

@@ -639,7 +639,7 @@ var Overlay = Widget.inherit({
 
                 this._animate(showAnimation, function() {
                     if(that.option("focusStateEnabled")) {
-                        that._focusTarget().focus();
+                        eventsEngine.trigger(that._focusTarget(), "focus");
                     }
 
                     completeShowAnimation.apply(this, arguments);
