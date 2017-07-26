@@ -4133,7 +4133,7 @@ QUnit.testInActiveWindow("Ctrl + F", function(assert) {
 
     this.gridView.render($("#container"));
 
-    this.rowsView.element().click();
+    $(this.rowsView.element()).click();
 
     var isPreventDefaultCalled = this.triggerKeyDown("F", true).preventDefault;
 
