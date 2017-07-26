@@ -1557,7 +1557,7 @@ QUnit.test("disabledDates correctly displays after optionChanged", function(asse
 
     instance.option("disabledDates", function(e) {
         if(e.date.getDate() === 14 && e.date.getMonth() === 3) {
-            e.disabled = true;
+            return true;
         }
     });
 
