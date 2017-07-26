@@ -1097,6 +1097,7 @@ QUnit.testStart(function() {
 
         this.createInstance({
             currentView: "week",
+            currentDate: new Date(2017, 2, 10),
             views: [{
                 type: "week",
                 name: "Week",
@@ -1111,7 +1112,7 @@ QUnit.testStart(function() {
 
         assert.deepEqual(workSpaceWeek.option("startDate"), date, "workspace has correct startDate");
         assert.deepEqual(header.option("startDate"), date, "header has correct startDate");
-        assert.deepEqual(navigator.option("date"), date, "navigator has correct date depending on startDate");
+        assert.deepEqual(navigator.option("date"), new Date(2017, 1, 19), "navigator has correct date depending on startDate");
     });
 
     QUnit.test("Scheduler should have startDate option if workspace have view.startDate option", function(assert) {
@@ -1133,6 +1134,7 @@ QUnit.testStart(function() {
     QUnit.test("currentView option changing should work correctly, when intervalCount & startDate is set", function(assert) {
         this.createInstance({
             currentView: "day",
+            currentDate: new Date(2017, 10, 25),
             views: [{
                 type: "day",
                 name: "day",
@@ -1157,7 +1159,7 @@ QUnit.testStart(function() {
 
         assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2017, 10, 1), "workspace has correct startDate");
         assert.deepEqual(header.option("startDate"), new Date(2017, 10, 1), "header has correct startDate");
-        assert.deepEqual(navigator.option("date"), new Date(2017, 10, 1), "navigator has correct startDate");
+        assert.deepEqual(navigator.option("date"), new Date(2017, 10, 12), "navigator has correct date");
     });
 
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
