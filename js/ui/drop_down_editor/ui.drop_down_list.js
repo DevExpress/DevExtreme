@@ -45,7 +45,7 @@ var DropDownList = DropDownEditor.inherit({
                     var $focusedItem = this._list.option("focusedElement");
                     $focusedItem && this._setSelectedElement($focusedItem);
                 } else {
-                    this._focusTarget().focusout();
+                    eventsEngine.trigger(this._focusTarget(), "focusout");
                 }
 
                 parent.tab.apply(this, arguments);

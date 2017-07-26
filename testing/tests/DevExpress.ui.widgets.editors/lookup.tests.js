@@ -2843,7 +2843,7 @@ QUnit.test("T320459 - the 'space' key press on editor should prevent default beh
             items: [1, 2, 3],
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $input = lookup.field(),
+        $input = $(lookup.field()),
         keyboard = keyboardMock($input),
         event;
 

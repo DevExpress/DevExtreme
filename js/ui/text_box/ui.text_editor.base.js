@@ -448,7 +448,7 @@ var TextEditorBase = Editor.inherit({
             startEvent = eventUtils.addNamespace(pointerEvents.up, this.NAME);
 
         eventsEngine.on($placeholder, startEvent, function() {
-            $input.focus();
+            eventsEngine.trigger($input, "focus");
         });
 
         $placeholder.insertAfter($input);
@@ -508,7 +508,7 @@ var TextEditorBase = Editor.inherit({
         this._valueChangeEventHandler(e);
         this.reset();
 
-        !$input.is(":focus") && $input.focus();
+        !$input.is(":focus") && eventsEngine.trigger($input, "focus");
         eventsEngine.trigger($input, "input");
     },
 
@@ -718,7 +718,7 @@ var TextEditorBase = Editor.inherit({
     * @publicName focus()
     */
     focus: function() {
-        this._input().focus();
+        eventsEngine.trigger(this._input(), "focus");
     },
 
     /**

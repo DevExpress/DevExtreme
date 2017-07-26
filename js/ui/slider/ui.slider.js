@@ -484,8 +484,12 @@ var Slider = TrackBar.inherit({
         });
         eventsEngine.off($element, clickEventName);
         eventsEngine.on($element, clickEventName, (function(e) {
-            var handle = this._activeHandle();
-            handle && handle.focusin() && handle.focus();
+            var $handle = this._activeHandle();
+
+            if($handle) {
+                eventsEngine.trigger($handle, "focusin");
+                eventsEngine.trigger($handle, "focus");
+            }
             startAction({ jQueryEvent: e });
         }).bind(this));
     },

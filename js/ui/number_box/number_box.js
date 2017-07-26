@@ -421,7 +421,7 @@ var NumberBox = TextEditor.inherit({
 
     _renderValueChangeEvent: function() {
         this.callBase();
-        this._input().focusout(this._forceRefreshInputValue.bind(this));
+        eventsEngine.on(this._input(), "focusout", this._forceRefreshInputValue.bind(this));
     },
 
     _forceRefreshInputValue: function() {

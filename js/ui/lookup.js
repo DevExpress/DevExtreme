@@ -1114,7 +1114,7 @@ var Lookup = DropDownList.inherit({
         if(this.option("searchEnabled")) {
             this._searchBox.focus();
         } else {
-            this._$list.focus();
+            eventsEngine.trigger(this._$list, "focus");
         }
     },
 
@@ -1254,7 +1254,7 @@ var Lookup = DropDownList.inherit({
     },
 
     focus: function() {
-        this.option("opened") ? this._setFocusPolicy() : this._focusTarget().focus();
+        this.option("opened") ? this._setFocusPolicy() : eventsEngine.trigger(this._focusTarget(), "focus");
     },
 
     field: function() {
