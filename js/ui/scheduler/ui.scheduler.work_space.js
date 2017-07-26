@@ -716,7 +716,28 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getViewStartByOptions: function() {
-        return this.option("startDate") ? new Date(this.option("startDate").getTime()) : new Date(this.option("currentDate").getTime());
+        if(!this.option("startDate")) {
+            return new Date(this.option("currentDate").getTime());
+        } else {
+            var intervalCount = this.option("intervalCount"),
+                startDate = new Date(this.option("startDate")),
+                currentDate = this.option("currentDate"),
+                diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
+                endDate = new Date(startDate.getTime() + toMs("day") * intervalCount * diff),
+                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, endDate, "date") : dateUtils.dateInRange(currentDate, endDate, startDate, "date"),
+                counter = 0;
+
+            while(!dateInRange) {
+                startDate = endDate;
+                endDate = new Date(startDate.getTime() + toMs("day") * intervalCount * diff);
+
+                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, endDate, "date") : dateUtils.dateInRange(currentDate, endDate, startDate, "date");
+                counter++;
+                if(counter > 100) dateInRange = true;
+            }
+
+            return diff > 0 ? startDate : endDate;
+        }
     },
 
     _setStartDayHour: function(date) {
