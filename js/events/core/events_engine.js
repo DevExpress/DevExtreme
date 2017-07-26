@@ -31,6 +31,9 @@ var result = {};
 Object.keys(eventsEngine).forEach(function(methodName) {
     result[methodName] = function() {
         var element = arguments[0];
+        if(!element) {
+            return;
+        }
 
         if(element.nodeType || isWindow(element)) {
             eventsEngine[methodName].apply(eventsEngine, arguments);
