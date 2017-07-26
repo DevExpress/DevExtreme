@@ -665,17 +665,7 @@ QUnit.testInActiveWindow("Remove .dx-state-focused class after disabled of the e
 QUnit.module("api", moduleConfig);
 
 QUnit.test("focus method", function(assert) {
-    // var done = assert.async();
-    // var $input = this.input;
-
     var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(this.input.get(0), "focus");
-
-    // var originalJQueryFocus = $.fn.focus;
-    // $.fn.focus = function() {
-    //     assert.strictEqual(this[0], $input[0]);
-    //     $.fn.focus = originalJQueryFocus;
-    //     done();
-    // };
 
     this.instance.focus();
     assert.ok(focusSpy.called);
