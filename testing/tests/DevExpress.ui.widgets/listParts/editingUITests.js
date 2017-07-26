@@ -1897,6 +1897,26 @@ QUnit.test("next loaded page should be selected when selectAll is enabled", func
     assert.equal($list.find(".dx-list-item-selected").length, 4, "all items has selected class");
 });
 
+QUnit.test("selectAll should have active state", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $list = $("#list").dxList({
+            dataSource: new DataSource({
+                store: [1, 2, 3, 4, 5, 6],
+            }),
+            showSelectionControls: true,
+            selectionMode: "all",
+            selectAllMode: "allPages"
+        });
+
+    var $selectAll = $list.find(".dx-list-select-all");
+
+    var pointer = pointerMock($selectAll);
+    pointer.start("touch").down();
+    clock.tick(100);
+    assert.ok($selectAll.hasClass("dx-state-active"), "selectAll has active state");
+    clock.restore();
+});
+
 QUnit.test("selectAll should not select items if they are not in current filter", function(assert) {
     var ds = new DataSource({
         store: [
