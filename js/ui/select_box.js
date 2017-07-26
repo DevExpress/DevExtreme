@@ -548,11 +548,9 @@ var SelectBox = DropDownList.inherit({
             return;
         }
 
-        if(this.option("searchEnabled")) {
-            if(!this._searchValue() && this.option("allowClearing")) {
-                this._clearTextValue();
-                return;
-            }
+        if(!this._searchValue() && this.option("allowClearing")) {
+            this._clearTextValue();
+            return;
         }
 
         var oldSelectedItem = this.option("selectedItem");
