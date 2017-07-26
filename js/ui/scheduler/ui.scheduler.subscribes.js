@@ -20,13 +20,7 @@ var subscribes = {
     },
 
     currentDateUpdated: function(date) {
-        var viewCountConfig = this._getViewCountConfig();
-
-        if(viewCountConfig.startDate) {
-            this.option("startDate", date);
-        } else {
-            this.option("currentDate", date);
-        }
+        this.option("currentDate", date);
     },
 
     setCellDataCacheAlias: function(appointment, geometry) {

@@ -723,14 +723,13 @@ var SchedulerWorkSpace = Widget.inherit({
                 currentDate = this.option("currentDate"),
                 diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
                 endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff),
-                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, endDate, "date") : dateUtils.dateInRange(currentDate, endDate, startDate, "date"),
+                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(currentDate, endDate, startDate, "date"),
                 counter = 0;
 
             while(!dateInRange) {
                 startDate = endDate;
                 endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
-
-                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, endDate, "date") : dateUtils.dateInRange(currentDate, endDate, startDate, "date");
+                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(currentDate, endDate, startDate, "date");
                 counter++;
                 if(counter > 100) dateInRange = true;
             }

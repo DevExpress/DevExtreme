@@ -1698,6 +1698,8 @@ var Scheduler = Widget.inherit({
         this._workSpace.getWorkArea().append(this._appointments.element());
 
         this._recalculateWorkspace();
+
+        this._header && this._header.option("currentDate", this._workSpace.getStartViewDate());
     },
 
     _getViewCountConfig: function() {
