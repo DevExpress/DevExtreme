@@ -2298,9 +2298,6 @@ declare module DevExpress.ui {
         /** @docid GridBaseMethods_clearSelection */
         clearSelection(): void;
 
-        /** @docid GridBaseMethods_getSelectedRowKeys */
-        getSelectedRowKeys(): any;
-
         /** @docid GridBaseMethods_startSelectionWithCheckboxes */
         startSelectionWithCheckboxes(): boolean;
 
@@ -2461,6 +2458,9 @@ declare module DevExpress.ui {
 
         /** @docid dxDataGridMethods_getSelectedRowsData */
         getSelectedRowsData(): any;
+
+        /** @docid dxDataGridMethods_getSelectedRowKeys */
+        getSelectedRowKeys(): any;
 
         /** @docid dxDataGridMethods_addRow */
         addRow(): void;
