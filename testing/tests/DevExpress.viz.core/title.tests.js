@@ -407,27 +407,6 @@ QUnit.test("Do not set title if text has correct size", function(assert) {
     assert.strictEqual(this.renderer.text.getCall(1).returnValue.stub("setTitle").called, false);
 });
 
-QUnit.test("Dispose renderer elements. Width", function(assert) {
-    var title = this.createTitle().draw(10, 100);
-
-    this.rendererElementsIsDispose(assert);
-
-    assert.deepEqual(title.getLayoutOptions(), {
-        cutLayoutSide: "top",
-        cutSide: "vertical",
-        height: 0,
-        horizontalAlignment: "center",
-        position: {
-            horizontal: "center",
-            vertical: "top"
-        },
-        verticalAlignment: "top",
-        width: 0,
-        x: 1,
-        y: 24
-    }, "layoutOptions");
-});
-
 QUnit.test("Dispose renderer elements. Height", function(assert) {
     var title = this.createTitle().draw(100, 3);
 
