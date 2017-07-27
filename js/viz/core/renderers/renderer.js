@@ -762,12 +762,12 @@ function applyEllipsis(maxWidth) {
     if(that._hasEllipsis) {
         that.attr({ text: that._settings.text });
     }
-    ellipsis = that.renderer.text("...").attr(that._styles).append();
+    ellipsis = that.renderer.text("...").attr(that._styles).append(that.renderer.root);
     ellipsisWidth = ellipsis.getBBox().width;
 
     if(maxWidth - ellipsisWidth < 0) {
         maxWidth = 0;
-    } else if(maxWidth > ellipsisWidth) {
+    } else {
         maxWidth -= ellipsisWidth;
     }
 
