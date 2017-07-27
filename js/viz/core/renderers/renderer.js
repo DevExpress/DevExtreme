@@ -833,7 +833,7 @@ function prepareLines(element, texts, maxWidth) {
     } else {
         text = { value: element.textContent, tspan: element };
         text.startBox = startBox = 0;
-        endBox = startBox + text.tspan.getSubStringLength(0, text.value.length);
+        endBox = text.value.length ? startBox + text.tspan.getSubStringLength(0, text.value.length) : 0;
         text.endIndex = getIndexForEllipsis(text, maxWidth, startBox, endBox);
         lines = [{ commonLength: element.textContent.length, parts: [text] }];
     }
