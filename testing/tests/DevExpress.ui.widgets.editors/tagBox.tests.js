@@ -720,6 +720,24 @@ QUnit.test("multi tag should deselect overflow tags only when showMultiTagOnly i
     assert.deepEqual(this.getTexts($tagBox.find("." + TAGBOX_TAG_CLASS)), ["1", "2"], "tags have correct text");
 });
 
+QUnit.test("only one multi tag should be rendered when selectAll checked and value changind on runtime", function(assert) {
+    var suppressSelectionChanged = false,
+        $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2],
+            value: [1, 2],
+            maxDisplayedTags: 1,
+            onSelectionChanged: function(e) {
+                if(!suppressSelectionChanged) {
+                    suppressSelectionChanged = true;
+                    e.component.option("value", e.removedItems.length > 0 ? e.removedItems : e.addedItems);
+                }
+            }
+        }),
+        $multiTag = $tagBox.find("." + TAGBOX_MULTI_TAG_CLASS);
+
+    assert.equal($multiTag.length, 1, "only 1 tag rendered");
+});
+
 QUnit.test("tagbox should show count of selected items when only first page is loaded", function(assert) {
     var items = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
     var $tagBox = $("#tagBox").dxTagBox({
