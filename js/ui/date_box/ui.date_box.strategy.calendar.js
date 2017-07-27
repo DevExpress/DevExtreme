@@ -63,12 +63,20 @@ var CalendarStrategy = DateBoxStrategy.inherit({
             onValueChanged: this._valueChangedHandler.bind(this),
             onCellClick: this._cellClickHandler.bind(this),
             tabIndex: null,
-            disabledDates: isFunction(disabledDates) ? this.dateBox._createAction(disabledDates).bind(this.dateBox) : disabledDates,
+            disabledDates: isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this.dateBox)) : disabledDates,
             maxZoomLevel: this.dateBox.option("maxZoomLevel"),
             minZoomLevel: this.dateBox.option("minZoomLevel"),
             onContouredChanged: this._refreshActiveDescendant.bind(this),
             hasFocus: function() { return true; }
         });
+    },
+
+    _injectComponent: function(func) {
+        var that = this;
+        return function(params) {
+            extend(params, { component: that.dateBox });
+            return func(params);
+        };
     },
 
     _refreshActiveDescendant: function(e) {

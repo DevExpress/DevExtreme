@@ -2292,6 +2292,19 @@ QUnit.test("value should not be changed when disabledDates option is set", funct
     assert.equal(calendar.option("value"), disabledDate, "value is not changed");
 });
 
+QUnit.test("disabledDates argument contains correct component parameter", function(assert) {
+    var stub = sinon.stub();
+
+    this.reinit({
+        disabledDates: stub,
+        value: this.value,
+        focusStateEnabled: true
+    });
+
+    var component = stub.lastCall.args[0].component;
+    assert.equal(component.NAME, "dxCalendar", "Correct component");
+});
+
 
 QUnit.module("Current date", {
     beforeEach: function() {

@@ -173,10 +173,9 @@ var Calendar = Editor.inherit({
              * @default null
              * @type_function_param1 data:object
              * @type_function_param1_field1 component:object
-             * @type_function_param1_field2 element:jQuery
-             * @type_function_param1_field3 date:Date
-             * @type_function_param1_field4 text:string
-             * @type_function_param1_field5 view:string
+             * @type_function_param1_field2 date:Date
+             * @type_function_param1_field3 text:string
+             * @type_function_param1_field4 view:string
              * @type_function_return boolean
              */
             disabledDates: null,
@@ -649,7 +648,7 @@ var Calendar = Editor.inherit({
     _viewConfig: function(date) {
         var disabledDates = this.option("disabledDates");
 
-        disabledDates = typeUtils.isFunction(disabledDates) ? this._createAction(disabledDates).bind(this) : disabledDates;
+        disabledDates = typeUtils.isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
         return {
             date: date,
             min: this._getMinDate(),
@@ -665,6 +664,14 @@ var Calendar = Editor.inherit({
             onCellClick: this._cellClickHandler.bind(this),
             cellTemplate: this._getTemplateByOption("cellTemplate"),
             allowValueSelection: this._isMaxZoomLevel()
+        };
+    },
+
+    _injectComponent: function(func) {
+        var that = this;
+        return function(params) {
+            extend(params, { component: that });
+            return func(params);
         };
     },
 

@@ -1568,6 +1568,21 @@ QUnit.test("disabledDates correctly displays after optionChanged", function(asse
     assert.equal($disabledCell.text(), "14", "Correct cell is disabled");
 });
 
+QUnit.test("disabledDates argument contains correct component parameter", function(assert) {
+    var stub = sinon.stub();
+
+    $("#dateBox").dxDateBox({
+        type: "date",
+        pickerType: "calendar",
+        value: new Date(2015, 4, 12),
+        disabledDates: stub,
+        opened: true
+    });
+
+    var component = stub.lastCall.args[0].component;
+    assert.equal(component.NAME, "dxDateBox", "Correct component");
+});
+
 
 QUnit.module("datebox w/ calendar", {
     beforeEach: function() {

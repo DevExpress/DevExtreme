@@ -197,10 +197,9 @@ var DateBox = DropDownEditor.inherit({
             * @default null
             * @type_function_param1 data:object
             * @type_function_param1_field1 component:object
-            * @type_function_param1_field2 element:jQuery
-            * @type_function_param1_field3 date:Date
-            * @type_function_param1_field4 text:string
-            * @type_function_param1_field5 view:string
+            * @type_function_param1_field2 date:Date
+            * @type_function_param1_field3 text:string
+            * @type_function_param1_field4 view:string
             * @type_function_return boolean
             */
             disabledDates: null,
