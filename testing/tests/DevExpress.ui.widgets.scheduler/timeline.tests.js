@@ -1195,7 +1195,11 @@ QUnit.test("TimelineWorkWeek view should contain right header if intervalCount=3
     this.instance.option("intervalCount", 3);
 
     var $element = this.instance.element(),
-        $firstRow = $element.find(".dx-scheduler-header-row").first();
+        $firstRow = $element.find(".dx-scheduler-header-row").first(),
+        $headerCells = $firstRow.find(".dx-scheduler-header-panel-cell");
 
-    assert.equal($firstRow.find(".dx-scheduler-header-panel-cell").length, 15, "Header row has 15 cells");
+    assert.equal($headerCells.length, 15, "Header row has 15 cells");
+    assert.equal($headerCells.eq(0).text(), "Mon 26", "Header cell text is correct");
+    assert.equal($headerCells.eq(5).text(), "Mon 3", "Header cell text is correct");
+    assert.equal($headerCells.eq(14).text(), "Fri 14", "Header cell text is correct");
 });

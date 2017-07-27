@@ -21,6 +21,14 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
         return this.option("firstDayOfWeek") || MONDAY_INDEX;
     },
 
+    _incrementDate: function(date) {
+        var day = date.getDay();
+        if(day === 5) {
+            date.setDate(date.getDate() + 2);
+        }
+        date.setDate(date.getDate() + 1);
+    },
+
     _getOffsetByCount: function(cellIndex, rowIndex) {
         var weekendCount = Math.floor(cellIndex / (5 * this._getCellCountInDay()));
         if(weekendCount > 0) {
