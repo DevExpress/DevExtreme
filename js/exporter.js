@@ -3,6 +3,7 @@
 /* global DevExpress, jQuery */
 
 var $ = jQuery,
+    eventsEngine = require("./events/core/events_engine"),
     iteratorUtils = require("./core/utils/iterator"),
     BaseWidget = DevExpress.viz.BaseWidget,
     registerComponent = DevExpress.registerComponent,
@@ -51,12 +52,12 @@ var Exporter = DOMComponent.inherit({
         }).appendTo(rootElement);
     },
 
-    _formSubmit: function(form) {
-        form.submit();
-        form.remove();
+    _formSubmit: function($form) {
+        eventsEngine.trigger($form, "submit");
+        $form.remove();
 
         ///#DEBUG
-        return form.submit();
+        return eventsEngine.trigger($form, "submit");
         ///#ENDDEBUG
     },
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    eventsEngine = require("events/core/events_engine"),
     browser = require("core/utils/browser"),
     fileSaver = require("client_exporter").fileSaver,
     errors = require("ui/widget/ui.errors"),
@@ -62,14 +63,18 @@ QUnit.test("exportLinkElement generate", function(assert) {
 });
 
 QUnit.test("Proxy Url exportForm generate", function(assert) {
+    var originalTrigger = eventsEngine.trigger;
+    eventsEngine.trigger = $.noop;
     //act
-    var testForm = fileSaver._saveByProxy("#", "testFile.xlsx", "EXCEL", "testData", function() { return false; });
+    var testForm = fileSaver._saveByProxy("#", "testFile.xlsx", "EXCEL", "testData");
 
     //assert
     assert.equal(testForm.attr("action"), "#", "Set proxy as form action");
     assert.equal(testForm.children("input[name=contentType]").eq(0).val(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Set contentType in form Post data");
     assert.equal(testForm.children("input[name=fileName]").eq(0).val(), "testFile.xlsx", "Set fileName in form Post data");
     assert.equal(testForm.children("input[name=data]").eq(0).val(), "testData", "Set data in form Post data");
+
+    eventsEngine.trigger = originalTrigger;
 });
 
 QUnit.test("Save blob by _winJSBlobSave on winJS devices", function(assert) {
