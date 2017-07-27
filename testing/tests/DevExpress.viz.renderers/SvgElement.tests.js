@@ -4640,6 +4640,13 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.svg = (new this.SvgElement({}, "svg")).append({ element: this.parent });
             $("#qunit-fixture").append(this.parent);
         },
+        prepareRenderBeforeEllipsis: function() {
+            var element;
+            this.renderer.root = new this.SvgElement({}, "svg");
+            element = new this.Element(this.renderer);
+            element.getBBox = sinon.stub().returns({ width: 20 });
+            this.renderer.text = sinon.stub().returns(element);
+        },
         createText: function() {
             return new this.Element(this.renderer);
         },
@@ -5285,8 +5292,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test text for checking ellipsis with single line" }),
             hasEllipsis;
 
-        text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
-        hasEllipsis = text.applyEllipsis(100);
+        text.element.getBBox = sinon.stub().returns({ width: 300 });
+        this.prepareRenderBeforeEllipsis();
+        hasEllipsis = text.applyEllipsis(110);
 
         this.checkSimple(assert, text, { text: "There is test t..." }, { x: 0, y: 0 });
         assert.strictEqual(hasEllipsis, true);
@@ -5296,8 +5304,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There <b>is</b> test text for <i>checking</i> ellipsis with single line" }),
             hasEllipsis;
 
-        text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
-        hasEllipsis = text.applyEllipsis(100);
+        text.element.getBBox = sinon.stub().returns({ width: 300 });
+        this.prepareRenderBeforeEllipsis();
+        hasEllipsis = text.applyEllipsis(105);
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "There " },
@@ -5311,7 +5320,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test text for checking ellipsis with single line" }),
             hasEllipsis;
 
-        text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
+        text.element.getBBox = sinon.stub().returns({ width: 300 });
+        this.prepareRenderBeforeEllipsis();
         hasEllipsis = text.applyEllipsis(1000);
 
         this.checkSimple(assert, text, { text: "There is test text for checking ellipsis with single line" }, { x: 0, y: 0 });
@@ -5322,7 +5332,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test text for checking ellipsis with single line" }),
             hasEllipsis;
 
-        text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
+        text.element.getBBox = sinon.stub().returns({ width: 300 });
+        this.prepareRenderBeforeEllipsis();
         hasEllipsis = text.applyEllipsis(0);
 
         this.checkSimple(assert, text, { text: "..." }, { x: 0, y: 0 });
@@ -5333,7 +5344,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test text for checking ellipsis with single line" }),
             hasEllipsis;
 
-        text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
+        text.element.getBBox = sinon.stub().returns({ width: 300 });
+        this.prepareRenderBeforeEllipsis();
         hasEllipsis = text.applyEllipsis(-10);
 
         this.checkSimple(assert, text, { text: "..." }, { x: 0, y: 0 });
@@ -5344,8 +5356,9 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There <b>is</b> test text for <i>checking</i> ellipsis with single line" }),
             hasEllipsis;
 
-        text.element.getBBox = sinon.stub().returns({ width: 280, height: 20, x: 0, y: 0 });
-        hasEllipsis = text.applyEllipsis(45);
+        text.element.getBBox = sinon.stub().returns({ width: 280 });
+        this.prepareRenderBeforeEllipsis();
+        hasEllipsis = text.applyEllipsis(75);
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "There " },
@@ -5355,18 +5368,33 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.strictEqual(hasEllipsis, true);
     });
 
+    QUnit.test("Apply ellipsis. Required length less than width of the ellipsis", function(assert) {
+        var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There <b>is</b> test text for <i>checking</i> ellipsis with single line" }),
+            hasEllipsis;
+
+        text.element.getBBox = sinon.stub().returns({ width: 280 });
+        this.prepareRenderBeforeEllipsis();
+        hasEllipsis = text.applyEllipsis(18);
+
+        this.checkTspans(assert, text, [
+            { x: 0, y: 0, text: "..." }
+        ], { x: 0, y: 0 });
+        assert.strictEqual(hasEllipsis, true);
+    });
+
     QUnit.test("Apply ellipsis. Multiline", function(assert) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test\ntext for checking<br/>ellipsis with multi\nline and four lines" }),
             hasEllipsis;
 
-        text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
-        hasEllipsis = text.applyEllipsis(150);
+        text.element.getBBox = sinon.stub().returns({ width: 300 });
+        this.prepareRenderBeforeEllipsis();
+        hasEllipsis = text.applyEllipsis(60);
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "There..." },
-            { x: 0, dy: 12, text: "text ..." },
-            { x: 0, dy: 12, text: "ellip..." },
-            { x: 0, dy: 12, text: "line ..." }
+            { x: 0, dy: 12, text: "text f..." },
+            { x: 0, dy: 12, text: "ellipsi..." },
+            { x: 0, dy: 12, text: "line a..." }
         ], { x: 0, y: 0 });
         assert.strictEqual(hasEllipsis, true);
     });
@@ -5374,29 +5402,31 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test("Apply ellipsis. Multiline. Complex lines", function(assert) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <i>and</i> <b>four</b> lines" });
 
-        text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
-        text.applyEllipsis(106);
+        text.element.getBBox = sinon.stub().returns({ width: 117 });
+        this.prepareRenderBeforeEllipsis();
+        text.applyEllipsis(60);
 
         this.checkTspans(assert, text, [
-            { x: 0, y: 0, text: "There " },
-            { x: 0, dy: 12, text: "te..." },
-            { x: 0, dy: 12, text: "el..." },
+            { x: 0, y: 0, text: "There..." },
+            { x: 0, dy: 12, text: "text f..." },
+            { x: 0, dy: 12, text: "ellipsi..." },
             { x: 0, dy: 12, text: "line " },
-            { text: "..." }
+            { text: "a..." }
         ], { x: 0, y: 0 });
     });
 
     QUnit.test("Apply ellipsis. Multiline. Complex lines. With stroked", function(assert) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <i>and</i> <b>four</b> lines", stroke: "black", "stroke-width": 3 });
 
-        text.element.getBBox = sinon.stub().returns({ width: 350, height: 20, x: 0, y: 0 });
-        text.applyEllipsis(105);
+        text.element.getBBox = sinon.stub().returns({ width: 117 });
+        this.prepareRenderBeforeEllipsis();
+        text.applyEllipsis(35);
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "T..." },
-            { x: 0, dy: 12, text: "t..." },
-            { x: 0, dy: 12, text: "e..." },
-            { x: 0, dy: 12, text: "line " }
+            { x: 0, dy: 12, text: "te..." },
+            { x: 0, dy: 12, text: "el..." },
+            { x: 0, dy: 12, text: "li..." }
         ], { x: 0, y: 0 }, { stroke: "black", "stroke-width": 3, "stroke-opacity": 1 });
     });
 
@@ -5404,12 +5434,13 @@ function checkDashStyle(assert, elem, result, style, value) {
         this.renderer.encodeHtml = true;
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test\ntext for checking<br/>ellipsis with single\nline" });
 
-        text.element.getBBox = sinon.stub().returns({ width: 400, height: 20, x: 0, y: 0 });
-        text.applyEllipsis(110);
+        text.element.getBBox = sinon.stub().returns({ width: 400 });
+        this.prepareRenderBeforeEllipsis();
+        text.applyEllipsis(70);
 
         this.checkTspans(assert, text, [
             { x: 0, y: 0, text: "There i..." },
-            { x: 0, dy: 12, text: "text fo..." },
+            { x: 0, dy: 12, text: "text for..." },
             { x: 0, dy: 12, text: "line" }
         ], { x: 0, y: 0 });
     });
@@ -5419,6 +5450,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             hasEllipsis;
 
         text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
+        this.prepareRenderBeforeEllipsis();
         hasEllipsis = text.applyEllipsis(1);
 
         this.checkSimple(assert, text, { text: "7" }, { x: 0, y: 0 });
@@ -5429,6 +5461,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test text for checking ellipsis" }),
             textAfterFirstIteration,
             textAfterSecondIteration;
+        this.prepareRenderBeforeEllipsis();
         text.applyEllipsis(40);
         textAfterFirstIteration = text.element.childNodes[0].wholeText;
 
@@ -5444,7 +5477,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test("Apply new text after ellipsis - draw new text, reset ellipsis", function(assert) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <i>and</i> <b>four</b> lines" });
         text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });
-        text.applyEllipsis(106);
+        this.prepareRenderBeforeEllipsis();
+        text.applyEllipsis(40);
 
         text.attr({ text: "There is test\ntext for checking<br/>ellipsis with single\nline" });
 
@@ -5459,7 +5493,8 @@ function checkDashStyle(assert, elem, result, style, value) {
     QUnit.test("Apply stroke after ellipsis - draw old text with stroke, reset ellipsis", function(assert) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test\ntext for checking<br/>ellipsis with single\nline" });
         text.element.getBBox = sinon.stub().returns({ width: 400, height: 20, x: 0, y: 0 });
-        text.applyEllipsis(110);
+        this.prepareRenderBeforeEllipsis();
+        text.applyEllipsis(40);
 
         text.attr({ stroke: "black", "stroke-width": 3 });
 
@@ -5475,6 +5510,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, rotate: 270, text: "There is test text for checking ellipsis with single line" }),
             hasEllipsis;
 
+        this.prepareRenderBeforeEllipsis();
         hasEllipsis = text.applyEllipsis(100);
 
         assert.strictEqual(hasEllipsis, true);
@@ -5485,6 +5521,7 @@ function checkDashStyle(assert, elem, result, style, value) {
         var text = this.createText().attr({ x: 0, y: 0, text: "There is test text for checking ellipsis with single line" }),
             hasEllipsis;
 
+        this.prepareRenderBeforeEllipsis();
         hasEllipsis = text.applyEllipsis(100);
 
         assert.strictEqual(hasEllipsis, false);
