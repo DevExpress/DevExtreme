@@ -764,14 +764,12 @@ function applyEllipsis(maxWidth) {
     }
     ellipsis = that.renderer.text("...").attr(that._styles).append(that.renderer.root);
     ellipsisWidth = ellipsis.getBBox().width;
-
-    if(maxWidth - ellipsisWidth < 0) {
-        maxWidth = 0;
-    } else {
-        maxWidth -= ellipsisWidth;
-    }
-
     if(that._getElementBBox().width > maxWidth) {
+        if(maxWidth - ellipsisWidth < 0) {
+            maxWidth = 0;
+        } else {
+            maxWidth -= ellipsisWidth;
+        }
         lines = prepareLines(that.element, that._texts, maxWidth);
 
         for(i = 0, ii = lines.length; i < ii; ++i) {
@@ -835,7 +833,7 @@ function prepareLines(element, texts, maxWidth) {
     } else {
         text = { value: element.textContent, tspan: element };
         text.startBox = startBox = 0;
-        endBox = startBox + text.tspan.getSubStringLength(0, text.value.length);
+        endBox = text.value.length ? startBox + text.tspan.getSubStringLength(0, text.value.length) : 0;
         text.endIndex = getIndexForEllipsis(text, maxWidth, startBox, endBox);
         lines = [{ commonLength: element.textContent.length, parts: [text] }];
     }
