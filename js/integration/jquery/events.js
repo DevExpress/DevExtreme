@@ -2,7 +2,7 @@
 
 var $ = require("jquery");
 var eventsEngine = require("../../events/core/events_engine");
-var useJQueryRenderer = window.useJQueryRenderer !== false;
+var useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 
 if(useJQueryRenderer) {
     eventsEngine.set({
