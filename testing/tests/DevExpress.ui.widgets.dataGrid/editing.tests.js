@@ -9027,7 +9027,7 @@ QUnit.module('Editing with scrolling', {
         };
 
         this.setupDataGrid = function() {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'validating', 'grouping', 'masterDetail'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'validating', 'grouping', 'masterDetail', 'adaptivity'], {
                 initViews: true
             });
         };
@@ -9298,6 +9298,37 @@ QUnit.test("Position of the inserted row if top visible row is master detail", f
     items = this.dataController.items();
     assert.equal(items.length, 12, "count items");
     assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 10, "insert item");
+});
+
+//T538954
+QUnit.test("Position of the inserted row if top visible row is adaptive detail", function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        items;
+
+    testElement.width(150);
+
+    this.options.dataSource = generateDataSource(10, 1);
+    this.options.paging.pageSize = 20;
+    this.options.columnHidingEnabled = true;
+    this.options.scrolling = { useNative: false };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(150);
+    this.rowsView.resize();
+
+    this.expandAdaptiveDetailRow(this.options.dataSource[6]);
+
+    this.rowsView.scrollTo({ y: 10000 });
+
+    //act
+    this.addRow();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 12, "count items");
+    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 8, "insert item");
 });
 
 //T343567

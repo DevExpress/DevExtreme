@@ -431,7 +431,7 @@ var EditingController = modules.ViewController.inherit((function() {
             var rows = this._dataController.items(),
                 row = rows[insertKey.rowIndex];
 
-            if(row && !row.isEditing && row.rowType === "detail") {
+            if(row && (!row.isEditing && row.rowType === "detail" || row.rowType === "detailAdaptive")) {
                 insertKey.rowIndex++;
             }
 
