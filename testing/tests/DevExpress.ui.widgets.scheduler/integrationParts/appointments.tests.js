@@ -445,6 +445,39 @@ QUnit.test("Appointments on Day view should have a right height and position if 
     assert.equal($appointment.outerHeight(), cellHeight, "Appointment has a right height");
 });
 
+QUnit.test("Appointment with resources should have a right height and position if it ends on the next day", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            startDate: new Date(2017, 6, 22, 20),
+            endDate: new Date(2017, 6, 23, 4),
+            text: "Appointment",
+            ownerId: 1
+        }],
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2017, 6, 22),
+        views: ["day"],
+        currentView: "day",
+        cellDuration: 60
+    });
+
+    var $element = this.instance.element(),
+        $appointment = $element.find(".dx-scheduler-appointment"),
+        cellHeight = $element.find(".dx-scheduler-date-table-cell").first().outerHeight();
+
+    assert.equal($appointment.length, 1, "Only one appt is rendered");
+    assert.equal($appointment.position().top, cellHeight * 20, "Appointment has a right top position");
+    assert.equal($appointment.outerHeight(), cellHeight * 4, "Appointment has a right height");
+});
+
 QUnit.test("The part of the appointment that ends after midnight should be shown on Week view", function(assert) {
     this.createInstance({
         dataSource: [{
