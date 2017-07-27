@@ -554,6 +554,13 @@ var fixTimezoneGap = function(oldDate, newDate) {
     }
 };
 
+var roundToHour = function(date) {
+    date.setHours(date.getHours() + 1);
+    date.setMinutes(0);
+
+    return date;
+};
+
 var getTimezonesDifference = function(min, max) {
     return (max.getTimezoneOffset() - min.getTimezoneOffset()) * 60 * 1000;
 };
@@ -604,6 +611,7 @@ var dateUtils = {
     getQuarter: getQuarter,
     getFirstQuarterMonth: getFirstQuarterMonth,
     dateInRange: dateInRange,
+    roundToHour: roundToHour,
     normalizeDate: normalizeDate,
     getViewMinBoundaryDate: getViewMinBoundaryDate,
     getViewMaxBoundaryDate: getViewMaxBoundaryDate,
