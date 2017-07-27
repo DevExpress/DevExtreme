@@ -12,7 +12,7 @@ function run_lint {
 
 function run_test {
     local port=`node -e "console.log(require('./ports.json').qunit)"`
-    local url="http://localhost:$port/run?notimers=true"
+    local url="http://localhost:$port/run?notimers=true&nojquery=true"
     local runner_pid
     local runner_result=0
 
