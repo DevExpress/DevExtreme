@@ -748,74 +748,97 @@ function createTspans(items, element, fieldName) {
 }
 
 function applyEllipsis(maxWidth) {
-    var lines,
-        width,
-        maxLength = 0,
-        requiredLength,
+    var that = this,
+        lines,
         hasEllipsis = false,
         i,
         ii,
         lineParts,
         j,
         jj,
-        text;
+        text,
+        ellipsis,
+        ellipsisWidth;
 
-    if(this._hasEllipsis) {
-        this.attr({ text: this._settings.text });
+    if(that._hasEllipsis) {
+        that.attr({ text: that._settings.text });
     }
-    width = this._getElementBBox().width;
+    ellipsis = that.renderer.text("...").attr(that._styles).append(that.renderer.root);
+    ellipsisWidth = ellipsis.getBBox().width;
 
-    if(maxWidth < 0) {
+    if(maxWidth - ellipsisWidth < 0) {
         maxWidth = 0;
+    } else {
+        maxWidth -= ellipsisWidth;
     }
-    if(width > maxWidth) {
-        lines = prepareLines(this.element, this._texts);
+
+    if(that._getElementBBox().width > maxWidth) {
+        lines = prepareLines(that.element, that._texts, maxWidth);
+
         for(i = 0, ii = lines.length; i < ii; ++i) {
-            maxLength = mathMax(maxLength, lines[i].commonLength);
-        }
-        if(maxLength === 1) {
-            return false;
-        }
-        requiredLength = mathFloor(maxLength * maxWidth / width);
-        for(i = 0; i < ii; ++i) {
             lineParts = lines[i].parts;
+            if(lines[i].commonLength === 1) {
+                continue;
+            }
             for(j = 0, jj = lineParts.length; j < jj; ++j) {
                 text = lineParts[j];
-                if(text.startIndex <= requiredLength && text.endIndex > requiredLength) {
-                    setNewText(text, requiredLength - text.startIndex - 4);
+                if(_isDefined(text.endIndex)) {
+                    setNewText(text, text.endIndex);
                     hasEllipsis = true;
-                } else if(text.startIndex > requiredLength) {
+                } else if(text.startBox > maxWidth) {
                     removeTextSpan(text);
                 }
             }
         }
     }
-    this._hasEllipsis = hasEllipsis;
+
+    ellipsis.remove();
+    that._hasEllipsis = hasEllipsis;
+
     return hasEllipsis;
 }
 
-function prepareLines(element, texts) {
+function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
+    var k,
+        kk;
+    if(startBox <= maxWidth && endBox > maxWidth) {
+        for(k = 1, kk = text.value.length; k <= kk; ++k) {
+            if(startBox + text.tspan.getSubStringLength(0, k) > maxWidth) {
+                return k - 1;
+            }
+        }
+    }
+}
+
+function prepareLines(element, texts, maxWidth) {
     var lines = [],
         i,
         ii,
-        text;
+        text,
+        startBox,
+        endBox;
 
     if(texts) {
         for(i = 0, ii = texts.length; i < ii; ++i) {
             text = texts[i];
             if(!lines[text.line]) {
-                text.startIndex = 0;
-                text.endIndex = text.value.length;
+                text.startBox = startBox = 0;
                 lines.push({ commonLength: text.value.length, parts: [text] });
             } else {
-                text.startIndex = lines[text.line].commonLength + 1;
-                text.endIndex = lines[text.line].commonLength + text.value.length;
+                text.startBox = startBox;
                 lines[text.line].parts.push(text);
                 lines[text.line].commonLength += text.value.length;
             }
+            endBox = startBox + text.tspan.getSubStringLength(0, text.value.length);
+            text.endIndex = getIndexForEllipsis(text, maxWidth, startBox, endBox);
+            startBox = endBox;
         }
     } else {
-        lines = [{ commonLength: element.textContent.length, parts: [{ value: element.textContent, tspan: element, startIndex: 0, endIndex: element.textContent.length }] }];
+        text = { value: element.textContent, tspan: element };
+        text.startBox = startBox = 0;
+        endBox = startBox + text.tspan.getSubStringLength(0, text.value.length);
+        text.endIndex = getIndexForEllipsis(text, maxWidth, startBox, endBox);
+        lines = [{ commonLength: element.textContent.length, parts: [text] }];
     }
     return lines;
 }
