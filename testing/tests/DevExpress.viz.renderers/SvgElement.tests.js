@@ -5380,6 +5380,18 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.strictEqual(hasEllipsis, false);
     });
 
+    QUnit.test("There is not text", function(assert) {
+        var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "" }),
+            hasEllipsis;
+
+        text.element.getBBox = sinon.stub().returns({ width: 0 });
+        this.prepareRenderBeforeEllipsis();
+        hasEllipsis = text.applyEllipsis(-10);
+
+        this.checkSimple(assert, text, { text: "" }, { x: 0, y: 0 });
+        assert.strictEqual(hasEllipsis, false);
+    });
+
     QUnit.test("Apply ellipsis. Required length less than width of the ellipsis", function(assert) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There <b>is</b> test text for <i>checking</i> ellipsis with single line" }),
             hasEllipsis;
