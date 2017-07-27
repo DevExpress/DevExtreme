@@ -1203,3 +1203,49 @@ QUnit.test("TimelineWorkWeek view should contain right header if intervalCount=3
     assert.equal($headerCells.eq(5).text(), "Mon 3", "Header cell text is correct");
     assert.equal($headerCells.eq(14).text(), "Fri 14", "Header cell text is correct");
 });
+
+QUnit.module("TimelineMonth with intervalCount", {
+    beforeEach: function() {
+        this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth({
+            currentDate: new Date(2015, 9, 16)
+        }).dxSchedulerTimelineMonth("instance");
+        stubInvokeMethod(this.instance);
+    }
+});
+
+QUnit.test("TimelineMonth has right count of cells with view option intervalCount", function(assert) {
+    this.instance.option("intervalCount", 2);
+
+    var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    assert.equal(cells.length, 61, "view has right cell count");
+
+    this.instance.option("intervalCount", 4);
+
+    cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    assert.equal(cells.length, 123, "view has right cell count");
+});
+
+QUnit.test("TimelineMonth view cells have right cellData with view option intervalCount=2", function(assert) {
+    this.instance.option("intervalCount", 2);
+    this.instance.option("currentDate", new Date(2017, 5, 29));
+
+    var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+        secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+
+    assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 1, 0), "cell has right startDate");
+    assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 2, 0), "cell has right endtDate");
+
+    assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 31, 0), "cell has right startDate");
+    assert.deepEqual(secondCellData.endDate, new Date(2017, 7, 1, 0), "cell has right endtDate");
+});
+
+QUnit.test("Get date range", function(assert) {
+    this.instance.option("currentDate", new Date(2017, 5, 26));
+    this.instance.option("intervalCount", 2);
+    this.instance.option("firstDayOfWeek", 1);
+
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 6, 31, 0, 29)], "Range is OK");
+
+    this.instance.option("intervalCount", 4);
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 8, 30, 0, 29)], "Range is OK");
+});
