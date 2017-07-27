@@ -11,14 +11,6 @@ var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all";
 
 var originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
 
-function foreachNodes(nodes, func) {
-    for(var i = 0; i < nodes.length; i++) {
-        if(func(nodes[i]) !== false && nodes[i].hasChildren && nodes[i].children.length) {
-            foreachNodes(nodes[i].children, func);
-        }
-    }
-}
-
 treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
     defaultOptions: function() {
         return extend(true, selectionModule.defaultOptions(), {
@@ -74,7 +66,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         root = component.getRootNode(),
                         keys = [];
 
-                    root && foreachNodes(root.children, function(node) {
+                    root && treeListCore.foreachNodes(root.children, function(node) {
                         if(node.key !== undefined && node.visible) {
                             keys.push(node.key);
                         }
@@ -199,7 +191,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     var that = this,
                         childKeys = [];
 
-                    node && foreachNodes(node.children, function(childNode) {
+                    node && treeListCore.foreachNodes(node.children, function(childNode) {
                         var ignoreKeyIndex = keysToIgnore.indexOf(childNode.key);
 
                         if(ignoreKeyIndex < 0) {
@@ -323,32 +315,6 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     }
                 },
 
-                _getNodeLeafKeys: function(selectedRowKeys) {
-                    var that = this,
-                        node,
-                        result = [],
-                        dataController = that._dataController;
-
-                    selectedRowKeys.forEach(function(key) {
-                        node = dataController.getNodeByKey(key);
-
-                        if(node) {
-                            if(node.hasChildren) {
-                                foreachNodes(node.children, function(childNode) {
-                                    if(!childNode.hasChildren && that.isRowSelected(childNode.key)) {
-                                        result.push(childNode.key);
-                                    }
-                                    return true;
-                                });
-                            } else {
-                                result.push(key);
-                            }
-                        }
-                    });
-
-                    return result;
-                },
-
                 isRecursiveSelection: function() {
                     var selectionMode = this.option("selection.mode"),
                         isRecursive = this.option("selection.recursive");
@@ -407,9 +373,17 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 * @return array
                 */
                 getSelectedRowKeys: function(leavesOnly) {
-                    var selectedRowKeys = this.callBase.apply(this, arguments) || [];
+                    var that = this,
+                        dataController = that._dataController,
+                        selectedRowKeys = that.callBase.apply(that, arguments) || [];
 
-                    return leavesOnly ? this._getNodeLeafKeys(selectedRowKeys) : selectedRowKeys;
+                    if(leavesOnly && dataController) {
+                        selectedRowKeys = dataController.getNodeLeafKeys(selectedRowKeys, function(childNode, nodes) {
+                            return !childNode.hasChildren && that.isRowSelected(childNode.key);
+                        });
+                    }
+
+                    return selectedRowKeys;
                 }
             }
         },
