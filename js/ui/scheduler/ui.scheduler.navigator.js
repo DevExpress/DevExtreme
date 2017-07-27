@@ -136,7 +136,7 @@ var getConfig = function(step) {
             };
         case "workWeek":
             return {
-                duration: 7,
+                duration: 7 * this.option("intervalCount"),
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,
