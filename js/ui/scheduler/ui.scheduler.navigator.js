@@ -92,11 +92,17 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
 
 var getMonthCaption = function(date) {
     if(this.option("intervalCount") > 1) {
-        var firstDate = new Date(date),
-            lastDate = new Date(firstDate.setMonth(firstDate.getMonth() + this.option("intervalCount") - 1)),
-            isSameYear = date.getYear() === lastDate.getYear(),
+        var firstDate = new Date(date);
+
+        if(firstDate.getDate() !== 1) {
+            firstDate.setMonth(firstDate.getMonth() + 1);
+        }
+        var lastDate = new Date(firstDate);
+        lastDate.setMonth(lastDate.getMonth() + this.option("intervalCount") - 1);
+
+        var isSameYear = firstDate.getYear() === lastDate.getYear(),
             lastDateText = getMonthYearFormat(lastDate),
-            firstDateText = isSameYear ? dateLocalization.getMonthNames("abbreviated")[date.getMonth()] : getMonthYearFormat(date);
+            firstDateText = isSameYear ? dateLocalization.getMonthNames("abbreviated")[firstDate.getMonth()] : getMonthYearFormat(firstDate);
 
         return firstDateText + "-" + lastDateText;
     } else {

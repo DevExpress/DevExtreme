@@ -312,7 +312,7 @@ QUnit.test("Caption should be OK for Month with intervalCount", function(assert)
     var $element = this.instance.element(),
         button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
         date = new Date(2017, 4, 25),
-        caption = "May-Jun 2017";
+        caption = "Jun-Jul 2017";
 
     this.instance.option("date", date);
     this.instance.option("intervalCount", 2);
@@ -324,7 +324,7 @@ QUnit.test("Caption should be OK for Month with intervalCount", function(assert)
 QUnit.test("Caption should be OK for Month with intervalCount for different years", function(assert) {
     var $element = this.instance.element(),
         button = $element.find(".dx-scheduler-navigator-caption").dxButton("instance"),
-        date = new Date(2017, 11, 25),
+        date = new Date(2017, 10, 25),
         caption = "Dec 2017-Feb 2018";
 
     this.instance.option("date", date);
