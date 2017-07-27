@@ -174,8 +174,7 @@ var Calendar = Editor.inherit({
              * @type_function_param1 data:object
              * @type_function_param1_field1 component:object
              * @type_function_param1_field2 date:Date
-             * @type_function_param1_field3 text:string
-             * @type_function_param1_field4 view:string
+             * @type_function_param1_field3 view:string
              * @type_function_return boolean
              */
             disabledDates: null,
@@ -284,11 +283,7 @@ var Calendar = Editor.inherit({
                     ? min
                     : dateUtils.getViewFirstCellDate(zoomLevel, currentDate);
 
-                if(this._view.isDateDisabled(date)) {
-                    this._moveCurrentDate(1, date);
-                } else {
-                    this.option("currentDate", date);
-                }
+                this._moveToClosestAvailableDate(date, 1);
             },
             end: function(e) {
                 e.preventDefault();
@@ -301,11 +296,7 @@ var Calendar = Editor.inherit({
                     ? max
                     : dateUtils.getViewLastCellDate(zoomLevel, currentDate);
 
-                if(this._view.isDateDisabled(date)) {
-                    this._moveCurrentDate(-1, date);
-                } else {
-                    this.option("currentDate", date);
-                }
+                this._moveToClosestAvailableDate(date, -1);
             },
             pageUp: function(e) {
                 e.preventDefault();
@@ -400,6 +391,14 @@ var Calendar = Editor.inherit({
         }
 
         this.option("currentDate", newDate);
+    },
+
+    _moveToClosestAvailableDate: function(baseDate, offset) {
+        if(this._view.isDateDisabled(baseDate)) {
+            this._moveCurrentDate(offset, baseDate);
+        } else {
+            this.option("currentDate", baseDate);
+        }
     },
 
     _init: function() {
@@ -546,11 +545,7 @@ var Calendar = Editor.inherit({
 
         var date = this._getDateByOffset(offset * this._getRtlCorrection());
 
-        if(this._view.isDateDisabled(date)) {
-            this._moveCurrentDate(offset, date);
-        } else {
-            this.option("currentDate", date);
-        }
+        this._moveToClosestAvailableDate(date, offset);
 
         setTimeout((function() {
             this._alreadyViewRender = false;
@@ -788,12 +783,7 @@ var Calendar = Editor.inherit({
     _navigatorClickHandler: function(e) {
         var currentDate = this._getDateByOffset(e.direction, this.option("currentDate"));
 
-        if(this._view.isDateDisabled(currentDate)) {
-            this._moveCurrentDate(1 * e.direction, currentDate);
-        } else {
-            this.option("currentDate", currentDate);
-        }
-
+        this._moveToClosestAvailableDate(currentDate, 1 * e.direction);
         this._updateNavigatorCaption(-e.direction * this._getRtlCorrection());
     },
 

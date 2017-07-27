@@ -192,7 +192,6 @@ var BaseView = Widget.inherit({
     isDateDisabled: function(cellDate) {
         var dateParts = {
             date: cellDate,
-            text: this._getCellText(cellDate),
             view: this._getViewName()
         };
 
