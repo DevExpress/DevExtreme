@@ -5498,6 +5498,15 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.equal(textAfterSecondIteration.substr(-3), "...");
     });
 
+    QUnit.test("restore text after ellipsis", function(assert) {
+        var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There is test text for checking ellipsis" });
+        this.prepareRenderBeforeEllipsis();
+        text.applyEllipsis(40);
+
+        text.restoreText();
+        assert.equal(text.element.childNodes[0].wholeText, 'There is test text for checking ellipsis');
+    });
+
     QUnit.test("Apply new text after ellipsis - draw new text, reset ellipsis", function(assert) {
         var text = this.createText().append(this.svg).attr({ x: 0, y: 0, text: "There <b>is</b> test\ntext for <i>checking</i><br/>ellipsis <b>with</b> multi\nline <i>and</i> <b>four</b> lines" });
         text.element.getBBox = sinon.stub().returns({ width: 300, height: 20, x: 0, y: 0 });

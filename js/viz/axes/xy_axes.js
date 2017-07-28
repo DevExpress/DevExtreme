@@ -809,6 +809,8 @@ module.exports = {
 
             if((this._isHorizontal ? boxTitle.width : boxTitle.height) > canvasLength) {
                 title.element.applyEllipsis(canvasLength) && title.element.setTitle(this._options.title.text);
+            } else {
+                title.element.restoreText();
             }
         },
 
