@@ -2602,7 +2602,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing'], {
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
             initViews: true
         });
 
@@ -4197,6 +4197,37 @@ QUnit.test("onEditingStart should not have key if row is inserted and showEditor
     assert.deepEqual(editingStartKeys, [undefined, undefined], "onEditingStart called twice with undefined key");
 });
 
+QUnit.test("onRowUpdating should have oldData parameter if modify column with showEditorAlways true and with validationRules", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $("#container");
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true
+    };
+
+    rowsView.render(testElement);
+
+    that.columnOption(0, { showEditorAlways: true, validationRules: [{ type: "required" }] });
+
+    var onRowUpdatingArgs = [];
+    that.options.onRowUpdating = function(e) {
+        onRowUpdatingArgs.push(e);
+    };
+    that.editingController.optionChanged({ name: "onRowUpdating" });
+
+    //act
+    that.cellValue(0, 0, "Test");
+    that.saveEditData();
+    that.clock.tick();
+
+    //assert
+    assert.equal(onRowUpdatingArgs.length, 1, "onRowUpdating called once");
+    assert.deepEqual(onRowUpdatingArgs[0].oldData, this.array[0], "onEditingStart have oldData parameter");
+});
+
 QUnit.test('Cancel Inserting Row after change page', function(assert) {
     //arrange
     var that = this,
@@ -5097,6 +5128,7 @@ QUnit.test("Add edit data with save array without extend_T256598", function(asse
     //assert
     assert.deepEqual(this.editingController._editData[0], {
         key: 1,
+        isValid: true,
         data: { A: [13] },
         test: "test",
         type: "number"

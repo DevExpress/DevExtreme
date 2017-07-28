@@ -195,7 +195,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 }
 
                 if(showEditorAlways) {
-                    editIndex = editingController._addEditData({ key: parameters.key });
+                    editIndex = editingController._addEditData({ key: parameters.key, oldData: parameters.data });
                 }
             }
 
