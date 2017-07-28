@@ -2108,6 +2108,37 @@ QUnit.test("scroll right", function(assert) {
     assert.deepEqual(this.options.chart.zoomArgument.lastCall.args, ["minArg", "maxArg", true]);
 });
 
+QUnit.test("dispose tracker doesn't affect other trackers", function(assert) {
+    var renderer = new vizMocks.Renderer(),
+        options = {
+            seriesGroup: renderer.g(),
+            tooltipEnabled: false,
+            argumentAxis: createAxis(),
+            tooltip: createTooltip(),
+            legend: createLegend,
+            canvases: this.canvases,
+            series: [],
+            crosshair: createCrosshair(),
+            renderer: renderer,
+            mainCanvas: {
+                left: 0,
+                right: 300,
+                top: 0,
+                bottom: 400
+            },
+            eventTrigger: sinon.stub()
+        },
+        otherTracker = this.createTracker(options);
+
+    //act
+    otherTracker.dispose();
+    $(this.renderer.root.element).trigger(getEvent("dxpointerdown", { pageX: 30, pointers: [{ pageX: 30, pageY: 40 }] }));
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 50, pointers: [{ pageX: 50, pageY: 40 }] }));
+    $(document).trigger(getEvent("dxpointerup", {}));
+    //assert
+    assert.deepEqual(this.options.chart.zoomArgument.lastCall.args, ["minArg", "maxArg", true]);
+});
+
 QUnit.test("scroll top. Rotated", function(assert) {
     this.options.rotated = true;
     this.tracker.update(this.options);
