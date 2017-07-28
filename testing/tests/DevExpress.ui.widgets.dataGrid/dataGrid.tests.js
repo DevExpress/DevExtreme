@@ -5832,7 +5832,7 @@ QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled a
     this.clock.tick();
 
     //assert
-    var $dataRows = dataGrid.element().find(".dx-data-row");
+    var $dataRows = $(dataGrid.element()).find(".dx-data-row");
     assert.equal($dataRows.length, 20, "rendered data row count");
     assert.equal($dataRows.filter(":contains(Test)").length, 1, "only one row contains text 'Test'");
 });
