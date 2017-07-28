@@ -584,14 +584,10 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event", function(asse
     this.deselectRows([2]);
 
     //assert
-    assert.strictEqual(selectionChangedArgs.length, 2, "count call 'onSelectionChanged' event");
-    assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [1], "selected row keys (arguments of the first call)");
-    assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [], "current selected row keys (arguments of the first call)");
-    assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [], "current deselected row keys (arguments of the first call)");
-
-    assert.deepEqual(selectionChangedArgs[1].selectedRowKeys, [3, 4], "selected row keys (arguments of the second call)");
-    assert.deepEqual(selectionChangedArgs[1].currentSelectedRowKeys, [3, 4], "current selected row keys (arguments of the second call)");
-    assert.deepEqual(selectionChangedArgs[1].currentDeselectedRowKeys, [2, 1], "current deselected row keys (arguments of the second call)");
+    assert.strictEqual(selectionChangedArgs.length, 1, "count call 'onSelectionChanged' event");
+    assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [3, 4], "selected row keys");
+    assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [3, 4], "current selected row keys");
+    assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [2, 1], "current deselected row keys");
 });
 
 QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {

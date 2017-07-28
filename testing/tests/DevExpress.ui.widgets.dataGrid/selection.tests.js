@@ -877,6 +877,25 @@ QUnit.test("On selection changed argument contents actual parameters (T239237, d
     assert.equal(onSelectionChangedCounter, 3, "onSelectionChanged calls three times");
 });
 
+QUnit.test("onSelectionChanged should not be called when loading data and given the selectedRowKeys", function(assert) {
+    //arrange
+    var onSelectionChangedCounter = 0;
+
+    this.applyOptions({
+        onSelectionChanged: function() {
+            onSelectionChangedCounter++;
+        }
+    });
+
+    //act
+    this.options.selectedRowKeys = [{ name: 'Dan', age: 16 }];
+    this.dataController.init();
+    this.clock.tick();
+
+    //act
+    assert.strictEqual(onSelectionChangedCounter, 0, "onSelectionChanged not called");
+});
+
 QUnit.test("clearSelection", function(assert) {
     this.applyOptions({
         selection: { mode: 'multiple' }

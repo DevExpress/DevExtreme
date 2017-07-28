@@ -180,6 +180,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
         _updateSelectedItems: function(args) {
             var that = this,
+                selectionChangedOptions,
                 isDeferredMode = that.option("selection.deferred"),
                 selectionFilter = that._selection.selectionFilter(),
                 dataController = that._dataController,
@@ -208,21 +209,20 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
             if(isDeferredMode) {
                 that.option("selectionFilter", selectionFilter);
-                that._fireSelectionChanged({});
-            } else {
-                if(args.addedItemKeys.length || args.removedItemKeys.length) {
-                    that._selectedItemsInternalChange = true;
-                    that.option("selectedRowKeys", args.selectedItemKeys.slice(0));
-                    that._selectedItemsInternalChange = false;
-                }
-
-                that._fireSelectionChanged({
+                selectionChangedOptions = {};
+            } else if(args.addedItemKeys.length || args.removedItemKeys.length) {
+                that._selectedItemsInternalChange = true;
+                that.option("selectedRowKeys", args.selectedItemKeys.slice(0));
+                that._selectedItemsInternalChange = false;
+                selectionChangedOptions = {
                     selectedRowsData: args.selectedItems.slice(0),
                     selectedRowKeys: args.selectedItemKeys.slice(0),
                     currentSelectedRowKeys: args.addedItemKeys.slice(0),
                     currentDeselectedRowKeys: args.removedItemKeys.slice(0)
-                });
+                };
             }
+
+            that._fireSelectionChanged(selectionChangedOptions);
         },
 
         getChangedItemIndexes: function(items) {
