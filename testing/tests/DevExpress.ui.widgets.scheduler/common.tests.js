@@ -1115,22 +1115,6 @@ QUnit.testStart(function() {
         assert.deepEqual(navigator.option("date"), new Date(2017, 1, 19), "navigator has correct date depending on startDate");
     });
 
-    QUnit.test("Scheduler should have startDate option if workspace have view.startDate option", function(assert) {
-        var date = new Date(2017, 3, 4);
-
-        this.createInstance({
-            currentView: "week",
-            views: [{
-                type: "week",
-                name: "Week",
-                intervalCount: 3,
-                startDate: date
-            }]
-        });
-
-        assert.deepEqual(this.instance.option("startDate"), date, "Scheduler has correct startDate");
-    });
-
     QUnit.test("currentView option changing should work correctly, when intervalCount & startDate is set", function(assert) {
         this.createInstance({
             currentView: "day",
