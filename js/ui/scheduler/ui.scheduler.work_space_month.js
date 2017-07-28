@@ -115,10 +115,11 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
                     startDate.setMonth(startDate.getMonth() + 1);
                 }
 
-                endDate = new Date(new Date(endDate.setMonth(startDate.getMonth() + diff * this.option("intervalCount"))));
-                if(diff > 0) {
-                    endDate.setDate(0);
-                }
+                endDate = new Date(new Date(endDate.setMonth(endDate.getMonth() + diff * this.option("intervalCount"))));
+
+                // if(diff > 0) {
+                //     endDate.setDate(0);
+                // }
             }
 
             return diff > 0 ? startDate : endDate;
