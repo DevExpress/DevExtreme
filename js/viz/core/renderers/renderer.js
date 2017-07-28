@@ -746,6 +746,12 @@ function createTspans(items, element, fieldName) {
     }
 }
 
+function restoreText() {
+    if(this._hasEllipsis) {
+        this.attr({ text: this._settings.text });
+    }
+}
+
 function applyEllipsis(maxWidth) {
     var that = this,
         lines,
@@ -759,9 +765,8 @@ function applyEllipsis(maxWidth) {
         ellipsis,
         ellipsisWidth;
 
-    if(that._hasEllipsis) {
-        that.attr({ text: that._settings.text });
-    }
+    restoreText.call(that);
+
     ellipsis = that.renderer.text("...").attr(that._styles).append(that.renderer.root);
     ellipsisWidth = ellipsis.getBBox().width;
     if(that._getElementBBox().width > maxWidth) {
@@ -1409,7 +1414,8 @@ extend(TextSvgElement.prototype, {
     constructor: TextSvgElement,
     attr: textAttr,
     css: textCss,
-    applyEllipsis: applyEllipsis
+    applyEllipsis: applyEllipsis,
+    restoreText: restoreText
 });
 //TextSvgElement
 
