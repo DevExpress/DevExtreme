@@ -1031,7 +1031,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _getNode: function(identifier) {
-        if(!commonUtils.isDefined(identifier)) {
+        if(!typeUtils.isDefined(identifier)) {
             return null;
         }
 
