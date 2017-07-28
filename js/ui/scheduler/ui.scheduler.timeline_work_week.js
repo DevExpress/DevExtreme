@@ -26,7 +26,7 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
         if(day === 5) {
             date.setDate(date.getDate() + 2);
         }
-        date.setDate(date.getDate() + 1);
+        this.callBase(date);
     },
 
     _getOffsetByCount: function(cellIndex, rowIndex) {

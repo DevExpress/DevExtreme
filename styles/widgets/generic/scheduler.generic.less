@@ -47,6 +47,8 @@
 
 @GENERIC_SCHEDULER_SWITCHER_LABEL_OFFSET: 60px;
 
+@SCHEDULER_FIRST_OF_MONTH_BORDER: 1px solid @SCHEDULER_FIRST_MONTH_BORDER_COLOR;
+
 .dx-scheduler-time-panel {
     margin-top: -@GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
 }
@@ -138,6 +140,11 @@
 
     .dx-scheduler-appointment-content {
         font-size: @GENERIC_SCHEDULER_APPOINTMENT_MONTH_TEXT_SIZE;
+    }
+
+    .dx-scheduler-date-table-first-of-month {
+        border-left: @SCHEDULER_FIRST_OF_MONTH_BORDER;
+        border-top: @SCHEDULER_FIRST_OF_MONTH_BORDER;
     }
 }
 

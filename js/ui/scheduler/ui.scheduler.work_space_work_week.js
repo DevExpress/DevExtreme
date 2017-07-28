@@ -58,7 +58,7 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
     },
 
     _getOffsetByCount: function(cellIndex) {
-        var weekendCount = Math.floor((cellIndex) / 5);
+        var weekendCount = Math.floor(cellIndex / 5);
         if(weekendCount > 0) {
             return toMs("day") * weekendCount * 2;
         } else {

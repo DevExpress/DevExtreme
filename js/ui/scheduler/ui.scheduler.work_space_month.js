@@ -185,7 +185,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _isFirstDayOfMonth: function(cellDate) {
-        return cellDate.getDate() === 1;
+        return this._isWorkSpaceWithCount() && cellDate.getDate() === 1;
     },
 
     _isOtherMonth: function(cellDate) {

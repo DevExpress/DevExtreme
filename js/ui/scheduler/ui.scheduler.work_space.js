@@ -721,21 +721,16 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getViewStartByOptions: function() {
         if(!this.option("startDate")) {
-            return new Date(this.option("currentDate").getTime());
+            return this.option("currentDate");
         } else {
             var startDate = this._getStartViewDate(),
                 currentDate = this.option("currentDate"),
                 diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
-                endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff),
-                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(currentDate, endDate, startDate, "date"),
-                counter = 0;
+                endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
 
-            while(!dateInRange) {
+            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
                 startDate = endDate;
                 endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
-                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(currentDate, endDate, startDate, "date");
-                counter++;
-                if(counter > 100) dateInRange = true;
             }
 
             return diff > 0 ? startDate : endDate;
@@ -744,6 +739,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getStartViewDate: function() {
         return this.option("startDate");
+    },
+
+    _dateInRange: function(date, startDate, endDate, diff) {
+        return diff > 0 ? dateUtils.dateInRange(date, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(date, endDate, startDate, "date");
     },
 
     _getIntervalDuration: function() {
