@@ -8119,6 +8119,7 @@ QUnit.test("Update title coords", function(assert) {
 
     this.tickManager.stub("getTicks").returns([]);
     this.axis.draw(this.zeroMarginCanvas);
+    renderer.text.getCall(0).returnValue.restoreText = sinon.stub();
 
     //act
     this.axis.updateSize(this.canvas);
@@ -8146,6 +8147,7 @@ QUnit.test("Horizontal. Title does not fit to canvas - apply Ellipsis and set hi
 
     var title = renderer.text.getCall(0).returnValue;
     title.applyEllipsis = sinon.stub().returns(true);
+    title.restoreText = sinon.stub();
 
     //act
     this.axis.updateSize(this.canvas);
@@ -8153,6 +8155,7 @@ QUnit.test("Horizontal. Title does not fit to canvas - apply Ellipsis and set hi
     //assert
     assert.deepEqual(title.applyEllipsis.lastCall.args, [80]);
     assert.deepEqual(title.setTitle.lastCall.args, ["Title text"]);
+    assert.equal(title.restoreText.callCount, 0);
 });
 
 QUnit.test("Horizontal. Title fit to canvas - do not apply Ellipsis nor set hint", function(assert) {
@@ -8174,6 +8177,7 @@ QUnit.test("Horizontal. Title fit to canvas - do not apply Ellipsis nor set hint
 
     var title = renderer.text.getCall(0).returnValue;
     title.applyEllipsis = sinon.stub().returns(true);
+    title.restoreText = sinon.stub();
 
     //act
     this.axis.updateSize(this.canvas);
@@ -8181,6 +8185,7 @@ QUnit.test("Horizontal. Title fit to canvas - do not apply Ellipsis nor set hint
     //assert
     assert.equal(title.applyEllipsis.callCount, 0);
     assert.equal(title.stub("setTitle").callCount, 0);
+    assert.equal(title.restoreText.callCount, 1);
 });
 
 QUnit.test("Vertical. Title does not fit to canvas - apply Ellipsis and set hint", function(assert) {
@@ -8202,6 +8207,7 @@ QUnit.test("Vertical. Title does not fit to canvas - apply Ellipsis and set hint
 
     var title = renderer.text.getCall(0).returnValue;
     title.applyEllipsis = sinon.stub().returns(true);
+    title.restoreText = sinon.stub();
 
     //act
     this.axis.updateSize(this.canvas);
@@ -8209,6 +8215,7 @@ QUnit.test("Vertical. Title does not fit to canvas - apply Ellipsis and set hint
     //assert
     assert.deepEqual(title.applyEllipsis.lastCall.args, [40]);
     assert.deepEqual(title.setTitle.lastCall.args, ["Title text"]);
+    assert.equal(title.restoreText.callCount, 0);
 });
 
 QUnit.test("Vertical. Title fit to canvas - do not apply Ellipsis nor set hint", function(assert) {
@@ -8230,6 +8237,7 @@ QUnit.test("Vertical. Title fit to canvas - do not apply Ellipsis nor set hint",
 
     var title = renderer.text.getCall(0).returnValue;
     title.applyEllipsis = sinon.stub().returns(true);
+    title.restoreText = sinon.stub();
 
     //act
     this.axis.updateSize(this.canvas);
@@ -8237,6 +8245,7 @@ QUnit.test("Vertical. Title fit to canvas - do not apply Ellipsis nor set hint",
     //assert
     assert.equal(title.applyEllipsis.callCount, 0);
     assert.equal(title.stub("setTitle").callCount, 0);
+    assert.equal(title.restoreText.callCount, 1);
 });
 
 QUnit.test("Update grid points", function(assert) {
