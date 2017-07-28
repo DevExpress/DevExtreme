@@ -795,7 +795,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     dispose: function() {
-        $(document).off(DOT_EVENT_NS);
+        $(document).off(DOT_EVENT_NS, this._gestureEndHandler);
         this._resetTimer();
         baseTrackerPrototype.dispose.call(this);
     }
