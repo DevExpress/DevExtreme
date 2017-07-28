@@ -434,7 +434,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleWorkSpaceCountClass: function() {
-        this.element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this.option("intervalCount") > 1);
+        this.element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this._isWorkSpaceWithCount());
+    },
+
+    _isWorkSpaceWithCount: function() {
+        return this.option("intervalCount") > 1;
     },
 
     _getTimePanelClass: function() {

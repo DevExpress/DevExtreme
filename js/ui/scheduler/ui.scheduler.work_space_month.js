@@ -22,7 +22,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getRowCount: function() {
-        return this.option("intervalCount") > 1 ? 4 * this.option("intervalCount") + 2 : 6;
+        return this._isWorkSpaceWithCount() ? 4 * this.option("intervalCount") + 2 : 6;
     },
 
     _getCellCount: function() {
@@ -150,7 +150,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
         var date = this._getDate(rowIndex, cellIndex);
 
-        if(this.option("intervalCount") > 1 && this._isFirstDayOfMonth(date)) {
+        if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {
             return this._formatWeekdayAndDay(date);
         }
         return dateLocalization.format(date, "dd");
