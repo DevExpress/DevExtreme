@@ -39,7 +39,7 @@ var getMonthYearFormat = function(date) {
     return dateLocalization.getMonthNames("abbreviated")[date.getMonth()] + " " + dateLocalization.format(date, "year");
 };
 
-var getCaptionFormat = function(short, skipCount) {
+var getCaptionFormat = function(short) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
         if(this && this.option("intervalCount") > 1) {

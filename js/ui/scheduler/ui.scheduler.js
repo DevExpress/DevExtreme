@@ -1778,9 +1778,6 @@ var Scheduler = Widget.inherit({
     },
 
     _getCurrentViewOption: function(optionName) {
-        if(optionName === "startDate") {
-            return this.option(optionName);
-        }
         var currentViewOptions = this._getCurrentViewOptions();
 
         if(currentViewOptions && currentViewOptions[optionName]) {
