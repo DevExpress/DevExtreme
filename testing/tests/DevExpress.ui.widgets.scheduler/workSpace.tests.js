@@ -3293,6 +3293,25 @@ QUnit.testStart(function() {
         assert.deepEqual(thirdCellData.endDate, new Date(2017, 2, 5, 0), "cell has right endtDate");
     });
 
+    QUnit.test("WorkSpace Month view cells have right cellData with view option intervalCount & startDate = currentDate", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("currentDate", new Date(2017, 6, 15));
+        this.instance.option("startDate", new Date(2017, 5, 15));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(35).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 4, 28, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 4, 29, 0), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 2, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 3, 0), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 8, 2, 0), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 8, 3, 0), "cell has right endtDate");
+    });
+
     QUnit.test("WorkSpace Month view with option intervalCount has cells with special firstDayOfMonth class", function(assert) {
         this.instance.option("intervalCount", 2);
         this.instance.option("currentDate", new Date(2017, 5, 25));

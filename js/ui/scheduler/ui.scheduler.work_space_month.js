@@ -99,36 +99,26 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
             return new Date(this.option("currentDate").getTime());
         } else {
             var startDate = this._getStartViewDate(),
-                startDateByOption = new Date(this.option("startDate")),
                 currentDate = this.option("currentDate"),
                 diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
-                endDate;
+                endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option("intervalCount"))));
 
             if(diff > 0) {
-                endDate = new Date(new Date(startDateByOption.setMonth(startDateByOption.getMonth() + diff * this.option("intervalCount"))).setDate(0));
-            } else {
-                endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option("intervalCount") + 1)).setDate(1));
+                endDate.setDate(0);
             }
 
-            var dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(currentDate, endDate, startDate, "date"),
-                counter = 0;
-            while(!dateInRange) {
+            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
                 startDate = new Date(endDate);
 
                 if(diff > 0) {
-                    var months = startDate.getMonth() + 1;
                     startDate.setDate(1);
-                    startDate.setMonth(months);
-                    startDate.setDate(1);
+                    startDate.setMonth(startDate.getMonth() + 1);
                 }
+
+                endDate = new Date(new Date(endDate.setMonth(startDate.getMonth() + diff * this.option("intervalCount"))));
                 if(diff > 0) {
-                    endDate = new Date(new Date(endDate.setMonth(startDate.getMonth() + diff * this.option("intervalCount"))).setDate(0));
-                } else {
-                    endDate = new Date(new Date(endDate.setMonth(startDate.getMonth() + diff * this.option("intervalCount"))).setDate(1));
+                    endDate.setDate(0);
                 }
-                dateInRange = diff > 0 ? dateUtils.dateInRange(currentDate, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(currentDate, endDate, startDate, "date");
-                counter++;
-                if(counter > 100) dateInRange = true;
             }
 
             return diff > 0 ? startDate : endDate;
@@ -137,7 +127,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
     _getStartViewDate: function() {
         var firstMonthDate = dateUtils.getFirstMonthDate(this.option("startDate"));
-        return dateUtils.getFirstWeekDate(firstMonthDate, this.option("firstDayOfWeek") || dateLocalization.firstDayOfWeekIndex());
+        return firstMonthDate;
     },
 
     _renderTableBody: function(options) {
