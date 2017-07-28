@@ -5809,6 +5809,34 @@ QUnit.test("loading count after refresh when scrolling mode virtual", function(a
     assert.equal(contentReadyCount, 1, "contentReady is called once");
 });
 
+QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled and column has values on second page only", function(assert) {
+    //arrange, act
+
+    var array = [];
+    for(var i = 1; i <= 20; i++) {
+        array.push({ id: i, text: i === 11 ? "Test" : null });
+    }
+
+    var dataGrid = createDataGrid({
+        height: 200,
+        dataSource: array,
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 10
+        }
+    });
+
+    //act
+    this.clock.tick();
+
+    //assert
+    var $dataRows = dataGrid.element().find(".dx-data-row");
+    assert.equal($dataRows.length, 20, "rendered data row count");
+    assert.equal($dataRows.filter(":contains(Test)").length, 1, "only one row contains text 'Test'");
+});
+
 //T307737
 QUnit.test("scroll position after refresh with native scrolling", function(assert) {
     var $dataGrid = $("#dataGrid").dxDataGrid({
