@@ -157,7 +157,7 @@ QUnit.test("Check root layout width on init", function(assert) {
         rootLayoutManager = instance._rootLayoutManager;
 
     //assert
-    assert.equal(rootLayoutManager.option("width"), 100, "Correct width");
+    assert.equal(rootLayoutManager.element().width(), 100, "Correct width");
 });
 
 QUnit.test("Check root layout width on option change", function(assert) {
