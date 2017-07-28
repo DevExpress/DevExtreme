@@ -1864,7 +1864,7 @@ declare module DevExpress.ui {
         interval?: number;
 
         /** @docid dxDateBoxOptions_disabledDates */
-        disabledDates?: Function | Array<Date>;
+        disabledDates?: any;
 
         /** @docid dxDateBoxOptions_maxZoomLevel */
         maxZoomLevel?: string;
@@ -1970,7 +1970,7 @@ declare module DevExpress.ui {
         cellTemplate?: any;
 
         /** @docid dxCalendarOptions_disabledDates */
-        disabledDates?: Function | Array<Date>;
+        disabledDates?: any;
 
         /** @docid dxCalendarOptions_name */
         name?: string;
