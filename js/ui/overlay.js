@@ -78,7 +78,7 @@ var forceRepaint = function($element) {
 
 
 var getElement = function(value) {
-    return value && $(value instanceof $.Event ? value.target : value);
+    return value && $(value.target || value);
 };
 
 eventsEngine.on(document, pointerEvents.down, function(e) {

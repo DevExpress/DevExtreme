@@ -1,10 +1,10 @@
 "use strict";
 
-var eventRegistrator = require("../../events/core/event_registrator"),
+var eventRegistratorCallbacks = require("../../events/core/event_registrator_callbacks"),
     eventsEngine = require("../../events/core/events_engine"),
     ngModule = require("./module");
 
-eventRegistrator.callbacks.add(function(name) {
+eventRegistratorCallbacks.add(function(name) {
     var ngEventName = name.slice(0, 2) + name.charAt(2).toUpperCase() + name.slice(3);
     ngModule.directive(ngEventName, ['$parse', function($parse) {
         return function(scope, element, attr) {

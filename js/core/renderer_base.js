@@ -744,6 +744,10 @@ renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.Deferred = $.Deferred;
 
 module.exports = {
-    set: function(strategy) { renderer = strategy; },
-    get: function() { return renderer; }
+    set: function(strategy) {
+        renderer = strategy;
+    },
+    get: function() {
+        return renderer;
+    }
 };

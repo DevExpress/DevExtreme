@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var $ = require("jquery"),
     config = require("../config"),
     deferredUtils = require("../../integration/jquery/deferred"),
     each = require("./iterator").each,

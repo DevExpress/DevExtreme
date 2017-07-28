@@ -1,12 +1,7 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    jQuery = require("jquery"),
-    errors = require("./errors"),
-    MemorizedCallbacks = require("./memorized_callbacks"),
+var callbacks = require("./component_registrator_callbacks"),
     publicComponentUtils = require("./utils/public_component");
-
-var callbacks = new MemorizedCallbacks();
 
 /**
  * @name registerComponent
@@ -35,48 +30,5 @@ var registerComponent = function(name, namespace, componentClass) {
     publicComponentUtils.name(componentClass, name);
     callbacks.fire(name, componentClass);
 };
-registerComponent.callbacks = callbacks;
-
-
-var registerJQueryComponent = function(name, componentClass) {
-    $.fn[name] = jQuery.fn[name] = function(options) {
-        var isMemberInvoke = typeof options === "string",
-            result;
-
-        if(isMemberInvoke) {
-            var memberName = options,
-                memberArgs = [].slice.call(arguments).slice(1);
-
-            this.each(function() {
-                var instance = componentClass.getInstance(this);
-
-                if(!instance) {
-                    throw errors.Error("E0009", name);
-                }
-
-                var member = instance[memberName],
-                    memberValue = member.apply(instance, memberArgs);
-
-                if(result === undefined) {
-                    result = memberValue;
-                }
-            });
-        } else {
-            this.each(function() {
-                var instance = componentClass.getInstance(this);
-                if(instance) {
-                    instance.option(options);
-                } else {
-                    new componentClass(this, options);
-                }
-            });
-
-            result = this;
-        }
-
-        return result;
-    };
-};
-callbacks.add(registerJQueryComponent);
 
 module.exports = registerComponent;

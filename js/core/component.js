@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    Config = require("./config"),
+var Config = require("./config"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
     Action = require("./action"),
@@ -380,12 +379,6 @@ var Component = Class.inherit({
             if(!arguments.length) {
                 e = {};
             }
-
-            ///#DEBUG
-            if(e instanceof $.Event) {
-                throw Error("Action must be executed with jQuery.Event like action({ jQueryEvent: event })");
-            }
-            ///#ENDDEBUG
 
             if(!typeUtils.isPlainObject(e)) {
                 e = { actionValue: e };
