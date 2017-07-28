@@ -1372,6 +1372,7 @@ module.exports = {
                     } else if(isDataSourceLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSource)) {
                         updateColumnChanges(that, "columns");
                         fireColumnsChanged(that);
+                        return $.Deferred().reject().promise();
                     }
                 },
                 reset: function() {
