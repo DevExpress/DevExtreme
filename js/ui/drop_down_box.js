@@ -16,6 +16,7 @@ var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
 
 /**
  * @name dxDropDownBox
+ * @isEditor
  * @publicName dxDropDownBox
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @module ui/drop_down_box
