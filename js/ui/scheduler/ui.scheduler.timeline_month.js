@@ -20,7 +20,9 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
         var currentDate = this.option("currentDate"),
             cellCount = 0;
         if(this._isWorkSpaceWithCount()) {
-            for(var i = 1; i <= this.option("intervalCount"); i++) {
+            var intervalCount = this.option("intervalCount");
+
+            for(var i = 1; i <= intervalCount; i++) {
                 cellCount += new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 0).getDate();
             }
         } else {
