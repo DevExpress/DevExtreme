@@ -692,3 +692,29 @@ QUnit.test("Update selection after expanding node when 'remoteOperations' is tru
     assert.ok(items[0].isSelected, "first item is selected");
     assert.ok(items[1].isSelected, "second item is selected");
 });
+
+QUnit.test("Changing recursive option at runtime - Deselecting row when all rows are selected", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.options.selection.recursive = false;
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2001, 0, 2) },
+            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 2, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+    ];
+    this.options.expandedRowKeys = [1, 2];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    this.selectAll();
+
+    //act
+    this.options.selection.recursive = true;
+    this.selectionController.optionChanged({ name: "selection" });
+    this.deselectRows(3);
+
+    //assert
+    assert.deepEqual(this.option("selectedRowKeys"), [4], "selectedRowKeys");
+});

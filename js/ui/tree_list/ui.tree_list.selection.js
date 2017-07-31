@@ -186,25 +186,29 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     }
                 },
 
-                _getSelectedParentNode: function(node, selectedItemKeys, keysToIgnore) {
+                _getSelectedParentKeys: function(node, selectedItemKeys) {
                     var index,
-                        parentNode = node && node.parent;
+                        selectedParentNode,
+                        parentNode = node && node.parent,
+                        result = [];
 
-                    while(parentNode) {
+                    while(parentNode && parentNode.level >= 0) {
+                        result.push(parentNode.key);
+
                         index = selectedItemKeys.indexOf(parentNode.key);
-
-                        if(index < 0) {
-                            keysToIgnore.push(parentNode.key);
-                            parentNode = parentNode.parent;
-                        } else {
+                        if(index >= 0) {
+                            selectedParentNode = parentNode;
+                            result = result.concat(this._getSelectedParentKeys(selectedParentNode, selectedItemKeys));
                             break;
                         }
+
+                        parentNode = parentNode.parent;
                     }
 
-                    return parentNode;
+                    return selectedParentNode && result || [];
                 },
 
-                _getChildKeys: function(node, keysToIgnore) {
+                _getSelectedChildKeys: function(node, keysToIgnore) {
                     var that = this,
                         childKeys = [];
 
@@ -225,24 +229,27 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     var that = this,
                         index,
                         childKeys,
+                        parentNode,
                         keysToIgnore = [key],
                         node = that._dataController.getNodeByKey(key),
-                        parentNode = that._getSelectedParentNode(node, args.selectedRowKeys, keysToIgnore);
+                        parentNodeKeys = that._getSelectedParentKeys(node, args.selectedRowKeys);
 
-                    if(parentNode) {
-                        index = args.selectedRowKeys.indexOf(parentNode.key);
-                        args.currentDeselectedRowKeys.push(parentNode.key);
-                        args.selectedRowKeys.splice(index, 1);
+                    if(parentNodeKeys.length) {
+                        keysToIgnore = keysToIgnore.concat(parentNodeKeys);
 
-                        index = args.selectedRowKeys.indexOf(key);
-                        if(index >= 0) {
-                            args.currentDeselectedRowKeys.push(key);
-                            args.selectedRowKeys.splice(index, 1);
-                        }
+                        keysToIgnore.forEach(function(key) {
+                            index = args.selectedRowKeys.indexOf(key);
 
-                        childKeys = that._getChildKeys(parentNode, keysToIgnore);
-                        args.currentSelectedRowKeys = args.currentSelectedRowKeys.concat(childKeys);
-                        args.selectedRowKeys = args.selectedRowKeys.concat(childKeys);
+                            if(index >= 0) {
+                                args.currentDeselectedRowKeys.push(key);
+                                args.selectedRowKeys.splice(index, 1);
+                            }
+                        });
+
+                        parentNode = that._dataController.getNodeByKey(parentNodeKeys[parentNodeKeys.length - 1]);
+                        childKeys = that._getSelectedChildKeys(parentNode, keysToIgnore);
+                        extend(args.currentSelectedRowKeys, childKeys);
+                        extend(args.selectedRowKeys, childKeys);
                     }
                 },
 
@@ -285,13 +292,18 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 _normalizeSelectionArgs: function(args) {
                     var addedItemKeys = args.addedItemKeys || [],
+                        removedItemKeys = args.removedItemKeys || [],
                         result = {
                             currentSelectedRowKeys: [],
                             currentDeselectedRowKeys: [],
                             selectedRowKeys: args.selectedItemKeys.slice(0) || []
                         };
 
-                    this._normalizeSelectedRowKeysCore(addedItemKeys, result);
+                    if(addedItemKeys.length) {
+                        this._normalizeSelectedRowKeysCore(addedItemKeys, result);
+                    } else if(removedItemKeys.length) {
+                        this._normalizeSelectedRowKeysCore(removedItemKeys, result);
+                    }
 
                     if(!commonUtils.equalByValue(result.selectedRowKeys, args.selectedItemKeys)) {
                         return result;
