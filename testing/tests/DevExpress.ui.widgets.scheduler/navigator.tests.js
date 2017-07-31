@@ -250,7 +250,7 @@ QUnit.test("Caption should be OK for workWeek view & firstDayOfWeek = 0", functi
     assert.equal(button.option("text"), caption, "Step is workWeek: Caption is OK");
 });
 
-QUnit.test(", day with intervalCount", function(assert) {
+QUnit.test("Click on 'next' button should notify observer, day with intervalCount", function(assert) {
     var $element = this.instance.element(),
         $nextButton = $element.find(".dx-scheduler-navigator-next"),
         date = new Date(2015, 4, 25);
@@ -262,7 +262,7 @@ QUnit.test(", day with intervalCount", function(assert) {
     this.instance.option("intervalCount", 3),
     this.instance.option("step", "day");
 
-    $nextButton.trigger("dxclick");
+    $($nextButton).trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
     assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 4, 28), "Arguments are OK");
@@ -347,7 +347,7 @@ QUnit.test("Click on 'next' button should notify observer, week with intervalCou
     this.instance.option("intervalCount", 3),
     this.instance.option("step", "week");
 
-    $nextButton.trigger("dxclick");
+    $($nextButton).trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
     assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 5, 15), "Arguments are OK");
@@ -366,7 +366,7 @@ QUnit.test("Click on 'next' button should notify observer, workWeek with interva
     this.instance.option("intervalCount", 3),
     this.instance.option("step", "workWeek");
 
-    $nextButton.trigger("dxclick");
+    $($nextButton).trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
     assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 5, 15), "Arguments are OK");
@@ -385,7 +385,7 @@ QUnit.test("Click on 'previous' button should notify observer, week with interva
     this.instance.option("intervalCount", 3),
     this.instance.option("step", "week");
 
-    $nextButton.trigger("dxclick");
+    $($nextButton).trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
     assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 4, 4), "Arguments are OK");
@@ -404,7 +404,7 @@ QUnit.test("Click on 'previous' button should notify observer, workWeek with int
     this.instance.option("intervalCount", 3),
     this.instance.option("step", "workWeek");
 
-    $nextButton.trigger("dxclick");
+    $($nextButton).trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
     assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 4, 4), "Arguments are OK");
@@ -422,7 +422,7 @@ QUnit.test("Click on 'next' button should notify observer, month with intervalCo
     this.instance.option("intervalCount", 3),
     this.instance.option("step", "month");
 
-    $nextButton.trigger("dxclick");
+    $($nextButton).trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
     assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 8, 25), "Arguments are OK");
@@ -440,7 +440,7 @@ QUnit.test("Click on 'previous' button should notify observer, month with interv
     this.instance.option("intervalCount", 3),
     this.instance.option("step", "month");
 
-    $nextButton.trigger("dxclick");
+    $($nextButton).trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
     assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 1, 25), "Arguments are OK");

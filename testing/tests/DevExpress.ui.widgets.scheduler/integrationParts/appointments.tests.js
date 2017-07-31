@@ -4551,7 +4551,7 @@ QUnit.test("Appointments should be rendered correctly after switching Day view w
         currentView: "day"
     });
 
-    this.instance.element().find(".dx-scheduler-navigator-next").trigger("dxclick");
+    $(this.instance.element().find(".dx-scheduler-navigator-next")).trigger("dxclick");
 
     var $appointments = this.instance.element().find(".dx-scheduler-appointment");
 
@@ -4580,7 +4580,7 @@ QUnit.test("Appointments should be rendered correctly after switching Week view 
         firstDayOfWeek: 1
     });
 
-    this.instance.element().find(".dx-scheduler-navigator-next").trigger("dxclick");
+    $(this.instance.element().find(".dx-scheduler-navigator-next")).trigger("dxclick");
 
     var $appointments = this.instance.element().find(".dx-scheduler-appointment");
 

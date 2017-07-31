@@ -33,7 +33,7 @@ QUnit.test("Click on the 'next' button should update currentDate correctly, when
         startDate: new Date(2015, 1, 11)
     }] });
 
-    this.instance.element().find(".dx-scheduler-navigator-next").trigger("dxclick");
+    $(this.instance.element().find(".dx-scheduler-navigator-next")).trigger("dxclick");
 
     assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 11), "New date is correct");
 });
@@ -48,7 +48,7 @@ QUnit.test("Click on the 'next' button should update currentDate correctly, when
             startDate: new Date(2017, 11, 11)
         }] });
 
-    this.instance.element().find(".dx-scheduler-navigator-next").trigger("dxclick");
+    $(this.instance.element().find(".dx-scheduler-navigator-next")).trigger("dxclick");
 
     assert.deepEqual(this.instance.option("currentDate"), new Date(2017, 8, 28), "New date is correct");
 });
@@ -70,7 +70,7 @@ QUnit.test("Click on the 'previous' button should update currentDate correctly, 
         startDate: new Date(2015, 1, 10)
     }] });
 
-    this.instance.element().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+    $(this.instance.element().find(".dx-scheduler-navigator-previous")).trigger("dxclick");
 
     assert.deepEqual(this.instance.option("currentDate"), new Date(2015, 1, 4), "New date is correct");
 });
@@ -85,7 +85,7 @@ QUnit.test("Click on the 'previous' button should update currentDate correctly, 
             startDate: new Date(2017, 11, 11)
         }] });
 
-    this.instance.element().find(".dx-scheduler-navigator-previous").trigger("dxclick");
+    $(this.instance.element().find(".dx-scheduler-navigator-previous")).trigger("dxclick");
 
     assert.deepEqual(this.instance.option("currentDate"), new Date(2017, 1, 28), "New date is correct");
 });
