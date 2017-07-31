@@ -41,6 +41,23 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         });
                     }
                     this.callBase.apply(this, arguments);
+                },
+
+                loadChildren: function() {
+                    var that = this,
+                        d = that.callBase.apply(that, arguments),
+                        selectionController = that.getController("selection"),
+                        isRecursiveSelection = selectionController.isRecursiveSelection();
+
+                    if(isRecursiveSelection) {
+                        d.done(function() {
+                            selectionController.updateSelectionState({
+                                selectedItemKeys: that.option("selectedRowKeys")
+                            });
+                        });
+                    }
+
+                    return d;
                 }
             },
 
