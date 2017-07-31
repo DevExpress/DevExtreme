@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    seriesNS = {},
+var seriesNS = {},
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -14,7 +13,6 @@ var $ = require("../../core/renderer"),
     _extend = extend,
     _isEmptyObject = typeUtils.isEmptyObject,
     _normalizeEnum = vizUtils.normalizeEnum,
-    _Event = $.Event,
     _noop = require("../../core/utils/common").noop,
     _inArray = inArray,
     states = require("../components/consts").states,
@@ -959,11 +957,11 @@ Series.prototype = {
     },
 
     showPointTooltip: function(point) {
-        triggerEvent(this._extGroups.seriesGroup, new _Event("showpointtooltip"), point);
+        triggerEvent(this._extGroups.seriesGroup, "showpointtooltip", point);
     },
 
     hidePointTooltip: function(point) {
-        triggerEvent(this._extGroups.seriesGroup, new _Event("hidepointtooltip"), point);
+        triggerEvent(this._extGroups.seriesGroup, "hidepointtooltip", point);
     },
 
     select: function() {

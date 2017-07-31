@@ -739,7 +739,6 @@ renderer.templates = function() {
 };
 renderer.when = $.when;
 renderer.event = $.event;
-renderer.Event = $.Event;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.Deferred = $.Deferred;
 
