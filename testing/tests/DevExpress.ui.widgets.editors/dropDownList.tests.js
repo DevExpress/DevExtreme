@@ -235,6 +235,16 @@ QUnit.test("all items", function(assert) {
     assert.deepEqual($dropDownList.dxDropDownList("option", "items"), items, "rendered all items");
 });
 
+QUnit.test("widget should be openable if dataSource is null", function(assert) {
+    var dropDownList = $("#dropDownList").dxDropDownList({
+        dataSource: [1]
+    }).dxDropDownList("instance");
+
+    dropDownList.option("dataSource", null);
+    dropDownList.open();
+    assert.ok(true, "Widget works correctly");
+});
+
 QUnit.test("itemTemplate accepts template", function(assert) {
     var $template = $("<div>").text("test");
     $("#dropDownList").dxDropDownList({

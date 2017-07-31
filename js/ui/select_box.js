@@ -350,7 +350,7 @@ var SelectBox = DropDownList.inherit({
     _listContentReadyHandler: function() {
         this.callBase();
 
-        var isPaginate = this._dataSource.paginate();
+        var isPaginate = this._dataSource && this._dataSource.paginate();
 
         if(isPaginate && this._needPopupRepaint()) {
             return;
