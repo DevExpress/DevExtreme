@@ -610,6 +610,37 @@ QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
     assert.deepEqual(this.getSelectedRowKeys(true), [2, 3, 5], "leaves");
 });
 
+QUnit.test("Selection state of rows should be updated on loadChildren", function(assert) {
+   //arrange
+    var clock = sinon.useFakeTimers(),
+        $testElement = $('#treeList');
+
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+    ];
+    this.options.remoteOperations = true;
+    this.options.loadingTimeout = 0;
+    this.options.selectedRowKeys = [1];
+    this.setupTreeList();
+    clock.tick();
+
+    this.rowsView.render($testElement);
+
+    //assert
+    assert.deepEqual(this.getSelectedRowKeys(true), [], "leaves");
+
+    //act
+    this.loadChildren();
+    clock.tick();
+
+    //assert
+    assert.deepEqual(this.getSelectedRowKeys(true), [2, 3, 4], "leaves");
+    clock.restore();
+});
+
 QUnit.test("Checkbox of the parent node should be in an indeterminate state when deselecting child node", function(assert) {
    //arrange
     var items,
@@ -660,4 +691,30 @@ QUnit.test("Update selection after expanding node when 'remoteOperations' is tru
     assert.strictEqual(items.length, 2, "count item");
     assert.ok(items[0].isSelected, "first item is selected");
     assert.ok(items[1].isSelected, "second item is selected");
+});
+
+QUnit.test("Changing recursive option at runtime - Deselecting row when all rows are selected", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.options.selection.recursive = false;
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2001, 0, 2) },
+            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 2, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+    ];
+    this.options.expandedRowKeys = [1, 2];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    this.selectAll();
+
+    //act
+    this.options.selection.recursive = true;
+    this.selectionController.optionChanged({ name: "selection" });
+    this.deselectRows(3);
+
+    //assert
+    assert.deepEqual(this.option("selectedRowKeys"), [4], "selectedRowKeys");
 });

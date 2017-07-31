@@ -2353,7 +2353,7 @@ QUnit.test("overlay can be dragged out of target if viewport and container is no
 
         var $container = $(window),
             viewWidth = $container.outerWidth(),
-            viewHeight = $container.outerHeight(),
+            viewHeight = Math.max($(document).outerHeight(), $container.outerHeight()),
             position = $overlayContent.position();
 
         var startEvent = pointer.start().dragStart().lastEvent();

@@ -429,6 +429,8 @@ module.exports = {
                             } else {
                                 that.updateItems(e);
                             }
+                        }).fail(function() {
+                            that._isDataSourceApplying = false;
                         });
                         if(that._isDataSourceApplying) {
                             isAsyncDataSourceApplying = true;
