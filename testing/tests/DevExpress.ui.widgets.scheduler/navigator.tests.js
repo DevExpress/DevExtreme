@@ -425,7 +425,7 @@ QUnit.test("Click on 'next' button should notify observer, month with intervalCo
     $nextButton.trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 7, 25), "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 8, 25), "Arguments are OK");
 });
 
 QUnit.test("Click on 'previous' button should notify observer, month with intervalCount", function(assert) {
