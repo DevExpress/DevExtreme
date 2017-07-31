@@ -1786,8 +1786,8 @@ var PivotGrid = Widget.inherit({
 
                 needSynchronizeFieldPanel && rowFieldsHeader.setColumnsWidth(rowsAreaColumnWidths);
 
-                dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !(hasRowsScroll || scrollBarWidth));
-                rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !(hasRowsScroll && !scrollBarWidth));
+                dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
+                rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll && !hasColumnsScroll && !!scrollBarWidth || !hasRowsScroll && !scrollBarWidth);
 
                 //T317921
                 if(!that._hasHeight && (elementWidth !== that.element().width())) {

@@ -15,6 +15,7 @@ var PIVOTGRID_AREA_CLASS = "dx-pivotgrid-area",
     PIVOTGRID_COLLAPSED_CLASS = "dx-pivotgrid-collapsed",
     PIVOTGRID_LAST_CELL_CLASS = "dx-last-cell",
     PIVOTGRID_VERTICAL_SCROLL_CLASS = "dx-vertical-scroll",
+    PIVOTGRID_HORIZONTAL_SCROLL_CLASS = "dx-horizontal-scroll",
     PIVOTGRID_EXPAND_BORDER = "dx-expand-border";
 
 
@@ -224,6 +225,8 @@ exports.VerticalHeadersArea = exports.HorizontalHeadersArea.inherit({
         if(that._scrollBarWidth) {
             that._groupElement.next().remove();
         }
+
+        that._groupElement.toggleClass(PIVOTGRID_HORIZONTAL_SCROLL_CLASS, scrollBarWidth > 0);
 
         if(scrollBarWidth) {
             that._groupElement.after(
