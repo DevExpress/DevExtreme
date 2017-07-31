@@ -30,6 +30,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             dataSource: function() {
                 return {
+                    _changeLoadingCount: function() {
+                    },
                     remoteOperations: function() {
                         return {};
                     },
