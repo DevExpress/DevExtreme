@@ -42,7 +42,7 @@ var getMonthYearFormat = function(date) {
 var getCaptionFormat = function(short) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
-        if(this.option("intervalCount") > 1) {
+        if(this && this.option("intervalCount") > 1) {
             var lastIntervalDate = new Date(date),
                 defaultViewDuration = this._getConfig().duration;
             lastIntervalDate.setDate(date.getDate() + defaultViewDuration - 1);
