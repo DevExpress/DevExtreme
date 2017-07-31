@@ -784,8 +784,9 @@ var TagBox = SelectBox.inherit({
         return $tag;
     },
 
-    _renderTags: function() {
+    _loadTagData: function() {
         var values = this._getValue(),
+            tagData = $.Deferred(),
             items = [];
 
         this._selectedItems = [];
@@ -803,7 +804,15 @@ var TagBox = SelectBox.inherit({
             }).bind(this));
         }).bind(this));
 
-        when.apply($, itemLoadDeferreds).always((function() {
+        when.apply($, itemLoadDeferreds)
+            .done(function() { tagData.resolve(items); })
+            .fail(function() { tagData.reject(items); });
+
+        return tagData.promise();
+    },
+
+    _renderTags: function() {
+        this._loadTagData().always((function(items) {
             this._renderTagsCore(items);
         }).bind(this));
 
@@ -843,11 +852,6 @@ var TagBox = SelectBox.inherit({
 
     _renderDisplayText: function() {
         this._renderInputSize();
-    },
-
-    _cleanTags: function() {
-        this._tagElements().remove();
-        this._selectedItems = [];
     },
 
     _refreshTagElements: function() {
