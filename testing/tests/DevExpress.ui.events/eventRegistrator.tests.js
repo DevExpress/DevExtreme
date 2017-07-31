@@ -4,7 +4,6 @@ var $ = require("jquery"),
     registerEvent = require("events/core/event_registrator"),
     Class = require("core/class");
 
-// TODO: extract jquery integration tests
 require("integration/jquery");
 
 QUnit.testStart(function() {

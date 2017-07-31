@@ -22,33 +22,36 @@ setEngine({
     }
 });
 
-var result = {};
-
-// TODO: refactor
-Object.keys(eventsEngine).forEach(function(methodName) {
-    result[methodName] = function() {
-        var element = arguments[0];
+var getHandler = function(methodName) {
+    var result = function(element) {
         if(!element) {
             return;
         }
+
         if(element.nodeType || isWindow(element)) {
             eventsEngine[methodName].apply(eventsEngine, arguments);
         } else if(element.each) {
-            var args = Array.prototype.slice.call(arguments, 0);
+            var itemArgs = Array.prototype.slice.call(arguments, 0);
 
             element.each(function() {
-                args[0] = this;
-                result[methodName].apply(result, args);
+                itemArgs[0] = this;
+                result.apply(result, itemArgs);
             });
         }
     };
-});
 
-result.copy = function() {
-    return eventsEngine.copy.apply(eventsEngine, arguments);
+    return result;
 };
 
-result.set = setEngine;
-
-module.exports = result;
+module.exports = {
+    on: getHandler("on"),
+    one: getHandler("one"),
+    off: getHandler("off"),
+    trigger: getHandler("trigger"),
+    triggerHandler: getHandler("triggerHandler"),
+    copy: function() {
+        return eventsEngine.copy.apply(eventsEngine, arguments);
+    },
+    set: setEngine
+};
 

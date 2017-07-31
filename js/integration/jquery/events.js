@@ -4,11 +4,10 @@ var $ = require("jquery");
 var eventsEngine = require("../../events/core/events_engine");
 var useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 var hooks = require("./hooks");
+var registerEventCallbacks = require("../../events/core/event_registrator_callbacks");
 
 // TODO: Fix condition after nojquery strategy will be implemented
 if(true || useJQueryRenderer) {
-    // TODO: extract
-    var registerEventCallbacks = require("../../events/core/event_registrator_callbacks");
     var registerJQueryEvent = function(name, eventObject) {
         $.event.special[name] = eventObject;
     };

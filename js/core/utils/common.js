@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("jquery"),
+var $ = require("jquery"), // TODO: Get rid of jQuery after deferred utility extracting
     config = require("../config"),
     deferredUtils = require("../../integration/jquery/deferred"),
     each = require("./iterator").each,

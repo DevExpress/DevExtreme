@@ -4,8 +4,7 @@ var $ = require("../core/renderer"),
     errors = require("../core/errors"),
     extend = require("../core/utils/extend").extend,
     each = require("../core/utils/iterator").each,
-    ee = require("./core/events_engine"),
-    copyEvent = ee.copy;
+    copyEvent = require("./core/events_engine").copy;
 
 var eventSource = (function() {
     var EVENT_SOURCES_REGEX = {
