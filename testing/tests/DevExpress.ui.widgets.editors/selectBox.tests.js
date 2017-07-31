@@ -2226,6 +2226,19 @@ QUnit.test("dataSource load is not called when showDataBeforeSearch is false", f
     }
 });
 
+QUnit.test("Widget should works correctly after setting dataSource to null", function(assert) {
+    var dataSource = new DataSource(["one", "two", "three"]);
+    var selectBox = $("#selectBox").dxSelectBox({
+        dataSource: dataSource,
+    }).dxSelectBox("instance");
+
+    selectBox.option("dataSource", null);
+    selectBox.open();
+
+    var $list = $(".dx-list");
+    assert.equal($list.dxList("option", "noDataText"), "No data to display", "SelectBox works correctly");
+});
+
 QUnit.testInActiveWindow("Value should be null after input is cleared and enter key is tapped", function(assert) {
     var items = [1, 2],
         $selectBox = $("#selectBox").dxSelectBox({
