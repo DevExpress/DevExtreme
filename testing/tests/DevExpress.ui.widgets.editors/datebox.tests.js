@@ -3533,6 +3533,33 @@ QUnit.test("Validation should be correct when year of the value less than 100", 
     assert.equal(validationError, "Value is out of range", "validation message is correct");
 });
 
+QUnit.test("dxDateBox should validate value after change 'max' option", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        max: new Date(2015, 6, 14),
+        value: new Date(2015, 6, 12),
+        pickerType: "calendar"
+    }).dxDateBox("instance");
+
+    dateBox.option("value", new Date(2015, 6, 20));
+    dateBox.option("max", new Date(2015, 6, 25));
+
+    assert.ok(dateBox.option("isValid"), "datebox is valid");
+});
+
+QUnit.test("dxDateBox should validate value after change 'min' option", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        min: new Date(2015, 6, 14),
+        value: new Date(2015, 6, 18),
+        pickerType: "calendar"
+    }).dxDateBox("instance");
+
+    dateBox.option("value", new Date(2015, 6, 10));
+    dateBox.option("min", new Date(2015, 6, 5));
+
+    assert.ok(dateBox.option("isValid"), "datebox is valid");
+});
+
+
 QUnit.module("DateBox number and string value support", {
     beforeEach: function() {
         fx.off = true;
