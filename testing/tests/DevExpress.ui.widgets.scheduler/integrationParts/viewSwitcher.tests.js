@@ -18,7 +18,7 @@ QUnit.test("View switcher should contain default 2 items if scheduler option 'vi
     this.createInstance({
         useDropDownViewSwitcher: false
     });
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
 
     assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher").dxTabs("instance").option("items").length, 2, "If 'views' option is empty views switcher contains default 2 items");
 });
@@ -27,7 +27,7 @@ QUnit.test("View switcher should contain default items if scheduler option 'view
     this.createInstance({
         useDropDownViewSwitcher: true
     });
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
 
     assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher").dxDropDownMenu("instance").option("items").length, 2, "If 'views' option is empty views switcher contains default 2 items");
 });
@@ -37,7 +37,7 @@ QUnit.test("View switcher items count should be equal to option 'views' length",
         useDropDownViewSwitcher: false
     });
     this.instance.option("views", ["day", "week"]);
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
 
     assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher").dxTabs("instance").option("items").length, 2, "View switcher has a right count of items");
 });
@@ -47,7 +47,7 @@ QUnit.test("View switcher items count should not be equal to option 'views' leng
         useDropDownViewSwitcher: true,
         views: ["day", "week"]
     });
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
 
     assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher").dxDropDownMenu("instance").option("items").length, 2, "View switcher has a right count of items");
 });
@@ -57,7 +57,7 @@ QUnit.test("If view switcher has a single item it should be selected", function(
         useDropDownViewSwitcher: false
     });
     this.instance.option("views", ["day"]);
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
 
     assert.equal($element.find(".dx-scheduler-header .dx-scheduler-view-switcher .dx-tab-selected").length, 1, "View switcher has a single selected item");
 });
@@ -69,7 +69,7 @@ QUnit.test("View switcher should select a correct item", function(assert) {
     this.instance.option("views", ["day", "week"]);
     this.instance.option("currentView", "week");
 
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
     var $secondItem = $element.find(".dx-scheduler-header .dx-scheduler-view-switcher .dx-tab").eq(1);
 
     assert.ok($secondItem.hasClass("dx-tab-selected"), "View switcher selects a right item");
@@ -82,7 +82,7 @@ QUnit.test("View switcher should update scheduler and header currentView correct
     this.instance.option("views", ["day", "week"]);
     this.instance.option("currentView", "day");
 
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
     var $secondItem = $element.find(".dx-scheduler-header .dx-scheduler-view-switcher .dx-tab").eq(1);
     $secondItem.trigger("dxclick");
 
@@ -97,13 +97,13 @@ QUnit.test("View switcher should update scheduler and header currentView correct
         currentView: "day"
     });
 
-    var $element = this.instance.element(),
+    var $element = $(this.instance.element()),
         $switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher"),
         switcher = $switcher.dxDropDownMenu("instance");
 
     switcher.open();
 
-    var $secondItem = switcher._popup.content().find(".dx-item").eq(1);
+    var $secondItem = $(switcher._popup.content()).find(".dx-item").eq(1);
 
     assert.deepEqual(switcher.option("items"), ["day", "week"], "Switcher items is correct on init");
 
@@ -121,7 +121,7 @@ QUnit.test("View switcher should be initialized with correct items and selectedI
         currentView: "week",
         useDropDownViewSwitcher: false
     });
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
     assert.deepEqual($element.find(".dx-scheduler-view-switcher").dxTabs("instance").option("items"), ["day", "week"], "View switcher has a correct items");
     assert.equal($element.find(".dx-scheduler-view-switcher").dxTabs("instance").option("selectedItem"), "week", "View switcher has a selectedItem");
 });
@@ -132,7 +132,7 @@ QUnit.test("View switcher should be initialized with correct items options, useD
         currentView: "week",
         useDropDownViewSwitcher: true
     });
-    var $element = this.instance.element();
+    var $element = $(this.instance.element());
     assert.deepEqual($element.find(".dx-scheduler-view-switcher").dxDropDownMenu("instance").option("items"), ["day", "week"], "View switcher has a correct items");
 });
 

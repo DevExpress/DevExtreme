@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
     fx = require("../animation/fx"),
     clickEvent = require("../events/click"),
@@ -212,13 +213,14 @@ var SlideOutView = Widget.inherit({
         this.element().append($wrapper);
 
         // NOTE: B251455
-        this._$container.on("MSPointerDown", noop);
+        eventsEngine.on(this._$container, "MSPointerDown", noop);
     },
 
     _renderShield: function() {
         this._$shield = this._$shield || $("<div>").addClass(SLIDEOUTVIEW_SHIELD_CLASS);
         this._$shield.appendTo(this.content());
-        this._$shield.off(clickEvent.name).on(clickEvent.name, this.hideMenu.bind(this));
+        eventsEngine.off(this._$shield, clickEvent.name);
+        eventsEngine.on(this._$shield, clickEvent.name, this.hideMenu.bind(this));
         this._toggleShieldVisibility(this.option("menuVisible"));
     },
 

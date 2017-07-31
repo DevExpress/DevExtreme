@@ -1,68 +1,18 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
+    Callbacks = require("../../core/utils/callbacks"),
     grep = require("../../core/utils/common").grep,
     isFunction = require("../../core/utils/type").isFunction,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     errors = require("../widget/ui.errors"),
     messageLocalization = require("../../localization/message"),
 
     WIDGET_WITH_LEGACY_CONTAINER_NAME = "dxDataGrid";
 
-var CallBacks = function(options) {
-    options = options || {};
-
-    var list = [],
-        firing,
-        firingIndex,
-        fireCore = function(context, args) {
-            firing = true;
-            for(firingIndex = 0; firingIndex < list.length; firingIndex++) {
-                if(list[firingIndex] && list[firingIndex].apply(context, args) === false && options.stopOnFalse) {
-                    break;
-                }
-            }
-            firing = false;
-        },
-        that = {
-            add: function(fn) {
-                if(typeof fn === "function" && !that.has(fn)) {
-                    list.push(fn);
-                }
-                return this;
-            },
-            has: function(fn) {
-                return fn ? inArray(fn, list) > -1 : !!list.length;
-            },
-            remove: function(fn) {
-                var index = inArray(fn, list);
-
-                if(index > -1) {
-                    list.splice(index, 1);
-
-                    if(firing && index <= firingIndex) {
-                        firingIndex--;
-                    }
-                }
-                return this;
-            },
-            fireWith: function(context, args) {
-                args = args || [];
-                fireCore(context, args.slice ? args.slice() : args);
-            },
-            fire: function() {
-                that.fireWith(this, arguments);
-                return this;
-            },
-            empty: function() {
-                list = [];
-                return this;
-            }
-        };
-
-    return that;
-};
 
 var ModuleItem = Class.inherit({
     _endUpdateCore: function() { },
@@ -74,9 +24,13 @@ var ModuleItem = Class.inherit({
         that._actions = {};
         that._actionConfigs = {};
 
-        $.each(this.callbackNames() || [], function(index, name) {
-            var flags = that.callbackFlags(name);
-            that[this] = CallBacks(flags);
+        each(this.callbackNames() || [], function(index, name) {
+            var flags = that.callbackFlags(name) || {};
+
+            flags.unique = true,
+            flags.syncStrategy = true;
+
+            that[this] = Callbacks(flags);
         });
     },
 
@@ -190,7 +144,7 @@ var ModuleItem = Class.inherit({
 
     dispose: function() {
         var that = this;
-        $.each(that.callbackNames() || [], function() {
+        each(that.callbackNames() || [], function() {
             that[this].empty();
         });
     },
@@ -256,8 +210,8 @@ var View = ModuleItem.inherit({
 
     ctor: function(component) {
         this.callBase(component);
-        this.renderCompleted = $.Callbacks();
-        this.resizeCompleted = $.Callbacks();
+        this.renderCompleted = Callbacks();
+        this.resizeCompleted = Callbacks();
     },
 
     element: function() {
@@ -315,7 +269,7 @@ var View = ModuleItem.inherit({
     },
 
     focus: function() {
-        this.element().focus();
+        eventsEngine.trigger(this.element(), "focus");
     }
 });
 
@@ -345,12 +299,12 @@ var processModules = function(that, componentClass) {
             });
         }
 
-        $.each(modules, function() {
+        each(modules, function() {
             var controllers = this.controllers,
                 moduleName = this.name,
                 views = this.views;
 
-            controllers && $.each(controllers, function(name, type) {
+            controllers && each(controllers, function(name, type) {
                 if(controllerTypes[name]) {
                     throw errors.Error("E1001", moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(Controller))) {
@@ -359,7 +313,7 @@ var processModules = function(that, componentClass) {
                 }
                 controllerTypes[name] = type;
             });
-            views && $.each(views, function(name, type) {
+            views && each(views, function(name, type) {
                 if(viewTypes[name]) {
                     throw errors.Error("E1003", moduleName, name);
                 } else if(!(type && type.subclassOf && type.subclassOf(View))) {
@@ -369,16 +323,16 @@ var processModules = function(that, componentClass) {
             });
         });
 
-        $.each(modules, function() {
+        each(modules, function() {
             var extenders = this.extenders;
 
             if(extenders) {
-                extenders.controllers && $.each(extenders.controllers, function(name, extender) {
+                extenders.controllers && each(extenders.controllers, function(name, extender) {
                     if(controllerTypes[name]) {
                         controllerTypes[name] = controllerTypes[name].inherit(extender);
                     }
                 });
-                extenders.views && $.each(extenders.views, function(name, extender) {
+                extenders.views && each(extenders.views, function(name, extender) {
                     if(viewTypes[name]) {
                         viewTypes[name] = viewTypes[name].inherit(extender);
                     }
@@ -393,7 +347,7 @@ var processModules = function(that, componentClass) {
     var registerPublicMethods = function(that, name, moduleItem) {
         var publicMethods = moduleItem.publicMethods();
         if(publicMethods) {
-            $.each(publicMethods, function(index, methodName) {
+            each(publicMethods, function(index, methodName) {
                 if(moduleItem[methodName]) {
                     if(!that[methodName]) {
                         that[methodName] = function() {
@@ -412,7 +366,7 @@ var processModules = function(that, componentClass) {
     var createModuleItems = function(moduleTypes) {
         var moduleItems = {};
 
-        $.each(moduleTypes, function(name, moduleType) {
+        each(moduleTypes, function(name, moduleType) {
             var moduleItem = new moduleType(that);
             moduleItem.name = name;
             registerPublicMethods(that, name, moduleItem);
@@ -430,12 +384,12 @@ var processModules = function(that, componentClass) {
 var callModuleItemsMethod = function(that, methodName, args) {
     args = args || [];
     if(that._controllers) {
-        $.each(that._controllers, function() {
+        each(that._controllers, function() {
             this[methodName] && this[methodName].apply(this, args);
         });
     }
     if(that._views) {
-        $.each(that._views, function() {
+        each(that._views, function() {
             this[methodName] && this[methodName].apply(this, args);
         });
     }
@@ -481,7 +435,3 @@ module.exports = {
 
     callModuleItemsMethod: callModuleItemsMethod
 };
-
-///#DEBUG
-module.exports.CallBacks = CallBacks;
-///#ENDDEBUG

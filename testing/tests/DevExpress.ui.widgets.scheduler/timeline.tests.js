@@ -1036,9 +1036,9 @@ QUnit.test("Timeline should select/unselect cells with mouse", function(assert) 
         cells = $element.find("." + CELL_CLASS),
         $table = $element.find(".dx-scheduler-date-table");
 
-    $table.trigger($.Event("dxpointerdown", { target: cells.eq(3).get(0), which: 1, pointerType: "mouse" }));
+    $($table).trigger($.Event("dxpointerdown", { target: cells.eq(3).get(0), which: 1, pointerType: "mouse" }));
 
-    $table.trigger($.Event("dxpointermove", { target: cells.eq(35).get(0), which: 1 }));
+    $($table).trigger($.Event("dxpointermove", { target: cells.eq(35).get(0), which: 1 }));
 
     assert.equal(cells.filter(".dx-state-focused").length, 1, "right quantity of focused cells");
 });

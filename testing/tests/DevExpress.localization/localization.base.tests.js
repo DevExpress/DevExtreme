@@ -247,7 +247,9 @@ QUnit.test("format", function(assert) {
         data = $.makeArray(data);
 
         $.each(data, function(_, data) {
-            assert.equal(dateLocalization.format(data.date, format), data.expected, data.date + " in " + format + " format");
+            var localizedDate = dateLocalization.format(data.date, format);
+            assert.equal(typeof (localizedDate), "string");
+            assert.equal(localizedDate, data.expected, data.date + " in " + format + " format");
         });
     });
 
@@ -260,6 +262,13 @@ QUnit.test("object syntax", function(assert) {
 });
 
 QUnit.test("parse", function(assert) {
+    var originalLoggerWarn = logger.warn;
+    var warnLog = [];
+
+    logger.warn = function(text) {
+        warnLog.push(text);
+    };
+
     var assertData = {
         "day": {
             text: "2",
@@ -396,20 +405,25 @@ QUnit.test("parse", function(assert) {
         ]
     };
 
-    $.each(assertData, function(format, data) {
-        data = $.makeArray(data);
+    try {
+        $.each(assertData, function(format, data) {
+            data = $.makeArray(data);
 
-        $.each(data, function(_, data) {
-            var expected = data.expectedConfig && generateExpectedDate(data.expectedConfig) || data.expected;
-            assert.equal(dateLocalization.parse(data.text, format), expected && String(expected), format + " format");
+            $.each(data, function(_, data) {
+                var expected = data.expectedConfig && generateExpectedDate(data.expectedConfig) || data.expected;
+                assert.equal(dateLocalization.parse(data.text, format), expected && String(expected), format + " format");
+            });
         });
-    });
 
-    assert.equal(dateLocalization.parse("550", "millisecond").getMilliseconds(), 550, "millisecond format");
-    assert.equal(dateLocalization.parse("550", "SSS").getMilliseconds(), 550, "millisecond format");
+        assert.equal(dateLocalization.parse("550", "millisecond").getMilliseconds(), 550, "millisecond format");
+        assert.equal(dateLocalization.parse("550", "SSS").getMilliseconds(), 550, "millisecond format");
 
-    assert.equal(dateLocalization.parse(dateLocalization.format(new Date(), "shortdate")), String(generateExpectedDate({ hours: 0 })), "without format");
-    assert.notOk(dateLocalization.parse(), "without date");
+        assert.equal(dateLocalization.parse(dateLocalization.format(new Date(), "shortdate")), String(generateExpectedDate({ hours: 0 })), "without format");
+        assert.notOk(dateLocalization.parse(), "without date");
+    } finally {
+        assert.equal(warnLog.length, 0);
+        logger.warn = originalLoggerWarn;
+    }
 });
 
 QUnit.test("parse with shortDate format (T478962, T511282)", function(assert) {

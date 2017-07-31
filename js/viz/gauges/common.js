@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    dxBaseGauge = require("./base_gauge").dxBaseGauge,
+var dxBaseGauge = require("./base_gauge").dxBaseGauge,
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     _isDefined = typeUtils.isDefined,
     _isString = typeUtils.isString,
@@ -20,8 +20,9 @@ var $ = require("../../core/renderer"),
     _max = Math.max,
 
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop,
+    SHIFT_ANGLE = 90,
 
     OPTION_VALUE = "value",
     OPTION_SUBVALUES = "subvalues",
@@ -69,7 +70,6 @@ exports.dxGauge = dxBaseGauge.inherit({
             drawingType: that._scaleTypes.drawingType,
             widgetClass: "dxg"
         });
-        that._scaleTranslator = that._initScaleTranslator(new rangeModule.Range({ axisType: "continuous", dataType: "numeric", stick: true }));
     },
 
     _disposeCore: function() {
@@ -82,7 +82,7 @@ exports.dxGauge = dxBaseGauge.inherit({
         that._rangeContainer.dispose();
         that._disposeValueIndicators();
 
-        that._scale = that._scaleGroup = that._scaleTranslator = that._rangeContainer = null;
+        that._scale = that._scaleGroup = that._rangeContainer = null;
     },
 
     _disposeValueIndicators: function() {
@@ -234,26 +234,27 @@ exports.dxGauge = dxBaseGauge.inherit({
         var that = this,
             bounds = that._translator.getDomain(),
             startValue = bounds[0],
-            endValue = bounds[1];
+            endValue = bounds[1],
+            angles = that._translator.getCodomain();
 
         scaleOptions.min = startValue;
         scaleOptions.max = endValue;
+        scaleOptions.startAngle = SHIFT_ANGLE - angles[0];
+        scaleOptions.endAngle = SHIFT_ANGLE - angles[1];
 
         that._scale.updateOptions(scaleOptions);
-        that._updateScaleTranslator(startValue, endValue);
         that._updateScaleTickIndent(scaleOptions);
+        that._scale.setBusinessRange(new rangeModule.Range({
+            axisType: "continuous",
+            dataType: "numeric",
+            stick: true,
+            minVisible: startValue,
+            maxVisible: endValue,
+            invert: startValue > endValue
+        }));
+
         that._scaleGroup.linkAppend();
-        that._scale.draw();
-    },
-
-    _updateScaleTranslator: function(startValue, endValue) {
-        var that = this,
-            argTranslator = that._getScaleTranslatorComponent("arg");
-
-        that._updateScaleAngles();
-        argTranslator.updateBusinessRange(_extend(argTranslator.getBusinessRange(), { minVisible: startValue, maxVisible: endValue, invert: startValue > endValue }));
-
-        that._scale.setTranslator(argTranslator, that._getScaleTranslatorComponent("val"));
+        that._scale.draw(extend({}, that._canvas));
     },
 
     _updateIndicatorSettings: function(settings) {

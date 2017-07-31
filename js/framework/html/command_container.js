@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var $ = require("jquery"),
     MarkupComponent = require("./markup_component").MarkupComponent,
     isPlainObject = require("../../core/utils/type").isPlainObject,
     registerComponent = require("../../core/component_registrator");

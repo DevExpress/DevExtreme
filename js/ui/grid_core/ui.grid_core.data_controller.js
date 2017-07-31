@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     CustomStore = require("../../data/custom_store"),
     errors = require("../widget/ui.errors"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     DataHelperMixin = require("../../data_helper"),
@@ -428,6 +429,8 @@ module.exports = {
                             } else {
                                 that.updateItems(e);
                             }
+                        }).fail(function() {
+                            that._isDataSourceApplying = false;
                         });
                         if(that._isDataSourceApplying) {
                             isAsyncDataSourceApplying = true;
@@ -497,16 +500,18 @@ module.exports = {
                     var dataSource = this._dataSource;
                     return dataSource ? dataSource.load() : $.Deferred().resolve().promise();
                 },
-                _processItems: function(items) {
+                _processItems: function(items, changeType) {
                     var that = this,
                         visibleColumns = that._columnsController.getVisibleColumns(),
+                        visibleItems = that._items,
+                        dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
                         options = {
                             visibleColumns: visibleColumns,
-                            dataIndex: 0
+                            dataIndex: dataIndex
                         },
                         result = [];
 
-                    $.each(items, function(index, item) {
+                    each(items, function(index, item) {
                         if(typeUtils.isDefined(item)) {
                             options.rowIndex = index;
                             item = that._processItem(item, options);
@@ -592,10 +597,14 @@ module.exports = {
                                 change.changeTypes = [];
 
                                 var equalItems = function(item1, item2, strict) {
-                                    return item1 && item2 && equalKeys(item1.key, item2.key) && (!strict || item1.rowType === item2.rowType);
+                                    var result = item1 && item2 && equalKeys(item1.key, item2.key);
+                                    if(result && strict) {
+                                        result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
+                                    }
+                                    return result;
                                 };
 
-                                $.each(rowIndices, function(index, rowIndex) {
+                                each(rowIndices, function(index, rowIndex) {
                                     var oldItem,
                                         newItem,
                                         oldNextItem,
@@ -605,8 +614,6 @@ module.exports = {
                                     rowIndex += rowIndexCorrection;
 
                                     if(prevIndex === rowIndex) return;
-
-                                    change.rowIndices.push(rowIndex);
 
                                     prevIndex = rowIndex;
                                     oldItem = that._items[rowIndex];
@@ -635,7 +642,14 @@ module.exports = {
                                         that._items.splice(rowIndex, 1);
                                         rowIndexCorrection--;
                                         prevIndex = -1;
+                                    } else if(newItem) {
+                                        changeType = "update";
+                                        that._items[rowIndex] = newItem;
+                                    } else {
+                                        return;
                                     }
+
+                                    change.rowIndices.push(rowIndex);
                                     change.changeTypes.push(changeType);
                                 });
                                 break;
@@ -643,7 +657,7 @@ module.exports = {
                                 that._items = items.slice(0);
                                 break;
                         }
-                        $.each(that._items, function(index, item) {
+                        each(that._items, function(index, item) {
                             item.rowIndex = index;
                         });
                     } else {
@@ -956,7 +970,7 @@ module.exports = {
                         deferreds = [],
                         data = [];
 
-                    $.each(rowKeys, function(index, key) {
+                    each(rowKeys, function(index, key) {
                         deferreds.push(that.byKey(key).done(function(keyData) {
                             data[index] = keyData;
                         }));

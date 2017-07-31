@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     errors = require("../widget/ui.errors"),
     decoratorRegistry = require("./ui.list.edit.decorator_registry");
 
@@ -102,7 +103,7 @@ var EditProvider = Class.inherit({
 
     dispose: function() {
         if(this._decorators && this._decorators.length) {
-            $.each(this._decorators, function(_, decorator) {
+            each(this._decorators, function(_, decorator) {
                 decorator.dispose();
             });
         }
@@ -111,7 +112,7 @@ var EditProvider = Class.inherit({
     _fetchRequiredDecorators: function() {
         this._decorators = [];
 
-        $.each(editOptionsRegistry, (function(_, option) {
+        each(editOptionsRegistry, (function(_, option) {
             var optionEnabled = option.enabled.call(this._list);
             if(optionEnabled) {
                 var decoratorType = option.decoratorType.call(this._list),
@@ -169,7 +170,7 @@ var EditProvider = Class.inherit({
     _collectDecoratorsMarkup: function(method, config, containerClass) {
         var $collector = $("<div />");
 
-        $.each(this._decorators, function() {
+        each(this._decorators, function() {
             var $container = $("<div />").addClass(containerClass);
             this[method](extend({
                 $container: $container
@@ -183,7 +184,7 @@ var EditProvider = Class.inherit({
     },
 
     _applyDecorators: function(method, config) {
-        $.each(this._decorators, function() {
+        each(this._decorators, function() {
             this[method](config);
         });
     },

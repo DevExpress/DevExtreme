@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var jQuery = require("jquery"),
     ko = require("knockout"),
     compareVersion = require("../../core/utils/version").compare;
 
-if(compareVersion($.fn.jquery, [2, 0]) < 0) {
+if(jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) < 0) {
 
     var cleanKoData = function(element, andSelf) {
         var cleanNode = function() {
@@ -18,14 +18,14 @@ if(compareVersion($.fn.jquery, [2, 0]) < 0) {
         }
     };
 
-    var originalEmpty = $.fn.empty;
-    $.fn.empty = function() {
+    var originalEmpty = jQuery.fn.empty;
+    jQuery.fn.empty = function() {
         cleanKoData(this, false);
         return originalEmpty.apply(this, arguments);
     };
 
-    var originalRemove = $.fn.remove;
-    $.fn.remove = function(selector, keepData) {
+    var originalRemove = jQuery.fn.remove;
+    jQuery.fn.remove = function(selector, keepData) {
         if(!keepData) {
             var subject = this;
             if(selector) {
@@ -36,16 +36,16 @@ if(compareVersion($.fn.jquery, [2, 0]) < 0) {
         return originalRemove.call(this, selector, keepData);
     };
 
-    var originalHtml = $.fn.html;
-    $.fn.html = function(value) {
+    var originalHtml = jQuery.fn.html;
+    jQuery.fn.html = function(value) {
         if(typeof value === "string") {
             cleanKoData(this, false);
         }
         return originalHtml.apply(this, arguments);
     };
 
-    var originalReplaceWith = $.fn.replaceWith;
-    $.fn.replaceWith = function() {
+    var originalReplaceWith = jQuery.fn.replaceWith;
+    jQuery.fn.replaceWith = function() {
         var result = originalReplaceWith.apply(this, arguments);
 
         if(!this.parent().length) {

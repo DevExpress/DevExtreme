@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var eventsEngine = require("../../events/core/events_engine"),
     _abs = Math.abs,
     Class = require("../../core/class"),
     wheelEvent = require("../../events/core/wheel"),
@@ -221,7 +221,7 @@ function handleTooltipDocumentTouchEnd() {
     }
 }
 
-$(window.document).on({
+eventsEngine.on(window.document, {
     'touchstart.gauge-tooltip': handleTooltipDocumentTouchStart,
     'touchend.gauge-tooltip': handleTooltipDocumentTouchEnd
 });

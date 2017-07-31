@@ -813,10 +813,10 @@ QUnit.test("Check clickable fielditem", function(assert) {
     //act
     assert.deepEqual(instance.option("layoutData"), { isRich: false, hasMansion: false }, "Correct initial data");
 
-    $fieldItemLabels.eq(0).trigger("dxclick");
+    $($fieldItemLabels.eq(0)).trigger("dxclick");
     clock.tick();
 
-    $fieldItemLabels.eq(1).trigger("dxclick");
+    $($fieldItemLabels.eq(1)).trigger("dxclick");
     clock.tick(200);
 
     //assert
@@ -2122,7 +2122,7 @@ QUnit.test("Render empty item", function(assert) {
 function triggerKeyUp($element, keyCode) {
     var e = $.Event("keyup");
     e.which = keyCode;
-    $element.find("input").first().trigger(e);
+    $($element.find("input").first()).trigger(e);
 }
 
 QUnit.test("onEditorEnterKey", function(assert) {

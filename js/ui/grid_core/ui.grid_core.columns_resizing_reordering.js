@@ -1,7 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
+    Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -289,7 +292,7 @@ var BlockSeparatorView = SeparatorView.inherit({
             $element = this.element();
 
         if($element && this._isShown) {
-            $element.hide();
+            $element.css("display", "none");
         }
 
         if($parent && !$parent.children("." + BLOCK_SEPARATOR_CLASS).length) {
@@ -332,7 +335,7 @@ var BlockSeparatorView = SeparatorView.inherit({
                     startAnimate({ width: "100%", display: "block" });
                     break;
                 default:
-                    $element.show();
+                    $element.css("display", "");
             }
         }
 
@@ -347,7 +350,7 @@ var DraggingHeaderView = modules.View.inherit({
         var that = this,
             result;
 
-        $.each(that._dragOptions.draggingPanels, function(index, draggingPanel) {
+        each(that._dragOptions.draggingPanels, function(index, draggingPanel) {
             if(draggingPanel) {
                 var boundingRect = draggingPanel.getBoundingRect();
                 if(boundingRect && (boundingRect.bottom === undefined || pos.y < boundingRect.bottom) && (boundingRect.top === undefined || pos.y > boundingRect.top)
@@ -364,7 +367,7 @@ var DraggingHeaderView = modules.View.inherit({
     _renderCore: function() {
         this.element()
             .addClass(this.addWidgetPrefix(DRAGGING_HEADER_CLASS) + " " + this.addWidgetPrefix(CELL_CONTENT_CLASS) + " " + WIDGET_CLASS)
-            .css("display", "none");
+            .hide();
     },
 
     _resetTargetColumnOptions: function() {
@@ -459,17 +462,19 @@ var DraggingHeaderView = modules.View.inherit({
             dragOptions = that._dragOptions;
 
         if(that._isDragging && !isResizing) {
+            var $element = that.element();
+
             moveDeltaX = Math.abs(eventData.x - dragOptions.columnElement.offset().left - dragOptions.deltaX);
             moveDeltaY = Math.abs(eventData.y - dragOptions.columnElement.offset().top - dragOptions.deltaY);
 
-            if(that.element().is(":visible") || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
+            if($element.is(":visible") || moveDeltaX > DRAGGING_DELTA || moveDeltaY > DRAGGING_DELTA) {
 
-                that.element().show();
+                $element.show();
 
                 newLeft = eventData.x - dragOptions.deltaX;
                 newTop = eventData.y - dragOptions.deltaY;
 
-                that.element().offset({ left: newLeft, top: newTop });
+                $element.css({ left: newLeft, top: newTop });
                 that.dockHeader(eventData);
             }
             e.preventDefault();
@@ -739,11 +744,11 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _unsubscribeFromEvents: function() {
-        this._moveSeparatorHandler && $(document).off(addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
-        this._startResizingHandler && this._$parentContainer.off(addNamespace(pointerEvents.down, MODULE_NAMESPACE), this._startResizingHandler);
+        this._moveSeparatorHandler && eventsEngine.off(document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
+        this._startResizingHandler && eventsEngine.off(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this._startResizingHandler);
         if(this._endResizingHandler) {
-            this._columnsSeparatorView.element().off(addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
-            $(document).off(addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
+            eventsEngine.off(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
+            eventsEngine.off(document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
         }
     },
 
@@ -752,10 +757,10 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         this._startResizingHandler = this.createAction(this._startResizing);
         this._endResizingHandler = this.createAction(this._endResizing);
 
-        $(document).on(addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, this._moveSeparatorHandler);
-        this._$parentContainer.on(addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, this._startResizingHandler);
-        this._columnsSeparatorView.element().on(addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
-        $(document).on(addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
+        eventsEngine.on(document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, this._moveSeparatorHandler);
+        eventsEngine.on(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, this._startResizingHandler);
+        eventsEngine.on(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
+        eventsEngine.on(document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
     },
 
     _updateColumnsWidthIfNeeded: function(posX) {
@@ -984,7 +989,7 @@ var TablePositionViewController = modules.ViewController.inherit({
 
     ctor: function(component) {
         this.callBase(component);
-        this.positionChanged = $.Callbacks();
+        this.positionChanged = Callbacks();
     }
 });
 
@@ -1014,7 +1019,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     _subscribeToEvents: function(draggingHeader, draggingPanels) {
         var that = this;
 
-        $.each(draggingPanels, function(_, draggingPanel) {
+        each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
                 var i,
                     columns,
@@ -1027,7 +1032,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
 
                         if(draggingPanel.allowDragging(columns[index], nameDraggingPanel, draggingPanels)) {
                             $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
-                            $columnElement.on(addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
+                            eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
                                 var e = args.jQueryEvent,
                                     eventData = eventUtils.eventData(e);
 
@@ -1043,8 +1048,8 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                                     rowIndex: that._columnsController.getRowIndex(column.index, true)
                                 });
                             }));
-                            $columnElement.on(addNamespace(dragEvents.move, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.moveHeader));
-                            $columnElement.on(addNamespace(dragEvents.end, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.dropHeader));
+                            eventsEngine.on($columnElement, addNamespace(dragEvents.move, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.moveHeader));
+                            eventsEngine.on($columnElement, addNamespace(dragEvents.end, MODULE_NAMESPACE), { that: draggingHeader }, that.createAction(draggingHeader.dropHeader));
                         }
                     };
 
@@ -1052,7 +1057,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                     columnElements = draggingPanel.getColumnElements(i) || [];
                     if(columnElements.length) {
                         columns = draggingPanel.getColumns(i) || [];
-                        $.each(columnElements, subscribeToEvents);
+                        each(columnElements, subscribeToEvents);
                     }
                 }
             }
@@ -1062,15 +1067,15 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
     _unsubscribeFromEvents: function(draggingHeader, draggingPanels) {
         var that = this;
 
-        $.each(draggingPanels, function(_, draggingPanel) {
+        each(draggingPanels, function(_, draggingPanel) {
             if(draggingPanel) {
                 var columnElements = draggingPanel.getColumnElements() || [];
 
-                $.each(columnElements, function(index, columnElement) {
+                each(columnElements, function(index, columnElement) {
                     var $columnElement = $(columnElement);
-                    $columnElement.off(addNamespace(dragEvents.start, MODULE_NAMESPACE));
-                    $columnElement.off(addNamespace(dragEvents.move, MODULE_NAMESPACE));
-                    $columnElement.off(addNamespace(dragEvents.end, MODULE_NAMESPACE));
+                    eventsEngine.off($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE));
+                    eventsEngine.off($columnElement, addNamespace(dragEvents.move, MODULE_NAMESPACE));
+                    eventsEngine.off($columnElement, addNamespace(dragEvents.end, MODULE_NAMESPACE));
                     $columnElement.removeClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
                 });
             }

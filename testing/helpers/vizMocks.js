@@ -107,10 +107,6 @@
             $(this.element).off.apply($(this.element), arguments);
             return this;
         },
-        data: function(a1, a2, a3) {
-            $(this.element).data.apply($(this.element), arguments);
-            return this;
-        },
         trigger: function(a1, a2, a3) {
             $(this.element).trigger.apply($(this.element), arguments);
             return this;
@@ -122,11 +118,12 @@
             this._stored_styles = {};
 
             this.element = {
+                nodeType: 1,
                 getScreenCTM: function() { return [0, 1, 1, 0, 210, 240]; },
                 createSVGPoint: function() { return { matrixTransform: function() { return { x: 3, y: 5 }; } }; }
             };
         },
-        $thisReturnFunctions: ["toBackground", "sharp", "rotate", "enableLinks", "virtualLink", "linkOn", "linkOff", "linkAppend", "linkRemove"]
+        $thisReturnFunctions: ["toBackground", "sharp", "rotate", "enableLinks", "virtualLink", "linkOn", "linkOff", "linkAppend", "linkRemove", "data"]
     });
 
     var patternCounter = 0,

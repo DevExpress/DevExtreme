@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     columnsView = require("./ui.grid_core.columns_view"),
     isDefined = require("../../core/utils/type").isDefined,
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message");
 
@@ -69,7 +71,7 @@ module.exports = {
                 _createTable: function() {
                     var $table = this.callBase.apply(this, arguments);
 
-                    $table.on("mousedown selectstart", this.createAction(function(e) {
+                    eventsEngine.on($table, "mousedown selectstart", this.createAction(function(e) {
                         var event = e.jQueryEvent;
 
                         if(event.shiftKey) {
@@ -198,7 +200,7 @@ module.exports = {
                     var column = options.column,
                         $cellElement = this.callBase.apply(this, arguments);
 
-                    column.rowspan > 1 && $cellElement.attr("rowspan", column.rowspan);
+                    column.rowspan > 1 && $cellElement.attr("rowSpan", column.rowspan);
 
                     return $cellElement;
                 },
@@ -314,7 +316,7 @@ module.exports = {
                             result = [];
                             visibleColumns = isDefined(bandColumnIndex) ? columnsController.getChildrenByBandColumn(bandColumnIndex, true) : columnsController.getVisibleColumns();
 
-                            $.each(visibleColumns, function(_, column) {
+                            each(visibleColumns, function(_, column) {
                                 rowIndex = isDefined(index) ? index : columnsController.getRowIndex(column.index);
                                 $cellElement = that.getCellElement(rowIndex, columnsController.getVisibleIndex(column.index, rowIndex));
                                 $cellElement && result.push($cellElement.get(0));
@@ -466,7 +468,7 @@ module.exports = {
                         rowIndex = rowIndex || 0;
                         for(i = rowIndex; i < rowCount; i++) {
                             columnElements = that.getCellElements(i);
-                            $.each(that.getColumns(i), setColumnOpacity);
+                            each(that.getColumns(i), setColumnOpacity);
                         }
                     }
                 }

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     Button = require("./button"),
@@ -365,7 +366,7 @@ var Tabs = CollectionWidget.inherit({
         }
 
         var tabItemsWidth = 0;
-        this.itemElements().each(function(_, tabItem) {
+        this._getAvailableItems().each(function(_, tabItem) {
             tabItemsWidth += $(tabItem).outerWidth(true);
         });
         // NOTE: "-1" is a hack fix for IE (T190044)
@@ -422,13 +423,15 @@ var Tabs = CollectionWidget.inherit({
             integrationOptions: {}
         });
 
-        navButton.element()
-            .on(holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ jQueryEvent: e }); }).bind(this))
-            .on(pointerUpEventName, function() {
-                that._clearInterval();
-            }).on(pointerOutEventName, function() {
-                that._clearInterval();
-            });
+        var $navButton = navButton.element();
+
+        eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ jQueryEvent: e }); }).bind(this));
+        eventsEngine.on($navButton, pointerUpEventName, function() {
+            that._clearInterval();
+        });
+        eventsEngine.on($navButton, pointerOutEventName, function() {
+            that._clearInterval();
+        });
 
         return navButton;
     },

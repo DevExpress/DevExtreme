@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
@@ -25,6 +27,7 @@ var INVALIDATE_CLASS = "invalid",
     CELL_HIGHLIGHT_OUTLINE = "dx-highlight-outline",
 
     INSERT_INDEX = "__DX_INSERT_INDEX__",
+    PADDING_BETWEEN_TOOLTIPS = 2,
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
     EDIT_MODE_BATCH = "batch",
@@ -74,13 +77,13 @@ var ValidatingController = modules.Controller.inherit((function() {
 
             that._isValidationInProgress = true;
             if(isFull) {
-                $.each(editingController._editData, function(index, editData) {
+                each(editingController._editData, function(index, editData) {
                     var validationResult;
 
                     if(editData.type && editData.type !== "remove") {
                         validationResult = that.validateGroup(editData);
                         if(!validationResult.isValid) {
-                            $.each(validationResult.brokenRules, function() {
+                            each(validationResult.brokenRules, function() {
                                 var value = this.validator.option("adapter").getValue();
                                 if(value === undefined) {
                                     value = null;
@@ -141,7 +144,7 @@ var ValidatingController = modules.Controller.inherit((function() {
             var that = this,
                 editingController = that._editingController;
 
-            $.each(editingController._editData, function(index, editData) {
+            each(editingController._editData, function(index, editData) {
                 var validateGroup = ValidationEngine.getGroupConfig(editData);
 
                 if(!typeUtils.isDefined(editIndex) || editIndex === index) {
@@ -171,7 +174,10 @@ var ValidatingController = modules.Controller.inherit((function() {
                         if(!options.isValid) {
                             var $focus = $container.find(":focus");
                             editingController.showHighlighting($container, true);
-                            if(!$focus.is(":focus")) $focus.focus().trigger(pointerEvents.down);
+                            if(!$focus.is(":focus")) {
+                                eventsEngine.trigger($focus, "focus");
+                                eventsEngine.trigger($focus, pointerEvents.down);
+                            }
                         }
                         $container.toggleClass(that.addWidgetPrefix(INVALIDATE_CLASS), !options.isValid);
                     }
@@ -179,14 +185,25 @@ var ValidatingController = modules.Controller.inherit((function() {
                 getValue = function() {
                     var value = column.calculateCellValue(editData.data || {});
                     return value !== undefined ? value : parameters.value;
-                };
+                },
+                visibleColumns,
+                columnsController,
+                showEditorAlways = column.showEditorAlways;
 
             if(!column.validationRules || !Array.isArray(column.validationRules) || typeUtils.isDefined(column.command)) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
-            if(editIndex < 0 && column.showEditorAlways) {
-                editIndex = editingController._addEditData({ key: parameters.key });
+            if(editIndex < 0) {
+                if(!showEditorAlways) {
+                    columnsController = that.getController("columns");
+                    visibleColumns = columnsController && columnsController.getVisibleColumns() || [];
+                    showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
+                }
+
+                if(showEditorAlways) {
+                    editIndex = editingController._addEditData({ key: parameters.key, oldData: parameters.data });
+                }
             }
 
             if(editIndex >= 0) {
@@ -282,7 +299,7 @@ module.exports = {
                         startInsertIndex = that.getView("rowsView").getTopVisibleItemIndex(),
                         rowIndex = startInsertIndex;
 
-                    $.each(that._editData, function(_, editData) {
+                    each(that._editData, function(_, editData) {
                         if(!editData.isValid && editData.pageIndex !== that._pageIndex) {
                             editData.pageIndex = that._pageIndex;
                             if(editData.type === "insert") {
@@ -317,7 +334,7 @@ module.exports = {
                                 isInsert = editData.type === "insert",
                                 key = editData.key;
 
-                            $.each(items, function(i, item) {
+                            each(items, function(i, item) {
                                 if(equalByValue(key, isInsert ? item : dataController.keyOf(item))) {
                                     index = i;
                                     return false;
@@ -386,7 +403,7 @@ module.exports = {
                         invisibleColumns = commonUtils.grep(this.getController("columns").getInvisibleColumns(), function(column) { return !column.isBand; });
 
                     if(FORM_BASED_MODES.indexOf(this.getEditMode()) === -1) {
-                        $.each(invisibleColumns, function(_, column) {
+                        each(invisibleColumns, function(_, column) {
                             validatingController.createValidator({
                                 column: column,
                                 key: options.key,
@@ -444,9 +461,10 @@ module.exports = {
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
                     var result = this.callBase(rowIndex, columnIndex, item),
                         $cell = this.component.getCellElement(rowIndex, columnIndex),
-                        validator = $cell && $cell.data("dxValidator");
+                        validator = $cell && $cell.data("dxValidator"),
+                        value = validator && validator.option("adapter").getValue();
 
-                    if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || validator.validate().isValid)) {
+                    if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || value !== undefined && validator.validate().isValid)) {
                         return result;
                     }
                 },
@@ -454,7 +472,7 @@ module.exports = {
                 _afterSaveEditData: function() {
                     var that = this;
 
-                    $.each(that._editData, function(_, editData) {
+                    each(that._editData, function(_, editData) {
                         that._showErrorRow(editData);
                     });
                 },
@@ -514,7 +532,7 @@ module.exports = {
                     var that = this;
 
                     if($targetElement && $targetElement.length) {
-                        new Tooltip(
+                        return new Tooltip(
                         $("<div>")
                             .addClass(that.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
                             .appendTo($container),
@@ -547,7 +565,7 @@ module.exports = {
                     }
                 },
 
-                _showValidationMessage: function($cell, message, alignment) {
+                _showValidationMessage: function($cell, message, alignment, revertTooltip) {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
@@ -580,13 +598,26 @@ module.exports = {
                             onPositioned: function(e) {
                                 if(!needRepaint) {
                                     needRepaint = that._rowsView.updateFreeSpaceRowHeight();
-
                                     if(needRepaint) {
                                         e.component.repaint();
                                     }
                                 }
+
+                                that._shiftValidationMessageIfNeed(e.component.content(), revertTooltip && revertTooltip.content(), $cell);
                             }
                         });
+                },
+
+                _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
+                    if(!$revertContent) return;
+
+                    var contentOffset = $content.offset(),
+                        revertContentOffset = $revertContent.offset();
+
+                    if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
+                        var left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
+                        $content.css("left", revertContentOffset.left < $cell.offset().left ? -left : left);
+                    }
                 },
 
                 _getTooltipsSelector: function() {
@@ -615,6 +646,8 @@ module.exports = {
                         validationResult,
                         $tooltips = $focus && $focus.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector()),
                         $cell = $focus && $focus.is("td") ? $focus : null,
+                        showValidationMessage = false,
+                        revertTooltip,
                         column = $cell && that.getController("columns").getVisibleColumns()[$cell.index()];
 
                     if(!arguments.length) return that.callBase();
@@ -629,18 +662,18 @@ module.exports = {
 
                             if(!validationResult.isValid) {
                                 hideBorder = true;
-
-                                if($cell && column) {
-                                    that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment);
-                                }
+                                showValidationMessage = true;
                             }
                         }
                     }
 
                     if((validationResult && !validationResult.isValid) || (editData && editData.type === "update")) {
                         if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
-                            that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
+                            revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
                         }
+                    }
+                    if(showValidationMessage && $cell && column) {
+                        that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment, revertTooltip);
                     }
 
                     !hideBorder && that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();

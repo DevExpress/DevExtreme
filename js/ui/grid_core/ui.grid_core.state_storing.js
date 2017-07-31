@@ -1,18 +1,20 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
     errors = require("../widget/ui.errors"),
     browser = require("../../core/utils/browser"),
     sessionStorage = require("../../core/utils/storage").sessionStorage,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type");
 
 var DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
 
 var parseDates = function(state) {
     if(!state) return;
-    $.each(state, function(key, value) {
+    each(state, function(key, value) {
         var date;
         if(typeUtils.isPlainObject(value) || Array.isArray(value)) {
             parseDates(value);
@@ -92,7 +94,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
                 }
             };
 
-            $(window).on("unload", that._windowUnloadHandler);
+            eventsEngine.on(window, "unload", that._windowUnloadHandler);
 
             return that;
         },
@@ -163,7 +165,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
 
         dispose: function() {
             clearTimeout(this._savingTimeoutID);
-            $(window).off("unload", this._windowUnloadHandler);
+            eventsEngine.off(window, "unload", this._windowUnloadHandler);
         }
     };
 })());

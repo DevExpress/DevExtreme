@@ -317,7 +317,7 @@ QUnit.test("Context menu with export", function(assert) {
     //act
     var $dataArea = this.pivotGrid.element().find('.dx-pivotgrid-area-data');
 
-    $dataArea.find('tr').eq(1).find('td').eq(3).trigger('dxcontextmenu');
+    $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
     this.clock.tick();
 
@@ -331,7 +331,7 @@ QUnit.test("Hide export from the context menu when the export.enabled option is 
 
     var $dataArea = this.pivotGrid.element().find('.dx-pivotgrid-area-data');
 
-    $dataArea.find('tr').eq(1).find('td').eq(3).trigger('dxcontextmenu');
+    $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
     this.clock.tick();
 

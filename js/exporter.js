@@ -3,6 +3,8 @@
 /* global DevExpress, jQuery */
 
 var $ = jQuery,
+    eventsEngine = require("./events/core/events_engine"),
+    iteratorUtils = require("./core/utils/iterator"),
     BaseWidget = DevExpress.viz.BaseWidget,
     registerComponent = DevExpress.registerComponent,
     DOMComponent = DevExpress.DOMComponent;
@@ -50,12 +52,12 @@ var Exporter = DOMComponent.inherit({
         }).appendTo(rootElement);
     },
 
-    _formSubmit: function(form) {
-        form.submit();
-        form.remove();
+    _formSubmit: function($form) {
+        eventsEngine.trigger($form, "submit");
+        $form.remove();
 
         ///#DEBUG
-        return form.submit();
+        return eventsEngine.trigger($form, "submit");
         ///#ENDDEBUG
     },
 
@@ -77,7 +79,7 @@ var Exporter = DOMComponent.inherit({
     _createExportItems: function(exportFormat) {
         var that = this;
 
-        return $.map(exportFormat, function(value) {
+        return iteratorUtils.map(exportFormat, function(value) {
             value = value.toUpperCase();
             if(that.getSourceContainer().find("svg").length > 1 && value === "SVG") {
                 return null;

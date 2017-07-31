@@ -1,11 +1,14 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
+    Callbacks = require("../core/utils/callbacks"),
     isDefined = require("../core/utils/type").isDefined,
-    objectUtils = require("../core/utils/object"),
+    each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    ajax = require("../core/utils/ajax"),
     Editor = require("./editor/editor"),
     Button = require("./button"),
     ProgressBar = require("./progress_bar"),
@@ -63,7 +66,7 @@ var FileUploader = Editor.inherit({
         var click = function(e) {
             e.preventDefault();
             var $selectButton = this._selectButton.element();
-            $selectButton.trigger(clickEvent.name);
+            eventsEngine.trigger($selectButton, clickEvent.name);
         };
 
         return extend(this.callBase(), {
@@ -421,21 +424,19 @@ var FileUploader = Editor.inherit({
         if(!this._$fileInput) {
             this._$fileInput = $(FILEUPLOADER_FILEINPUT_TAG);
 
-            this._$fileInput
-                .on("change", this._inputChangeHandler.bind(this))
-                .on("click", (function(e) {
-                    e.stopPropagation();
-                    return this.option("useNativeInputClick") || this._isCustomClickEvent;
-                }).bind(this));
+            eventsEngine.on(this._$fileInput, "change", this._inputChangeHandler.bind(this));
+            eventsEngine.on(this._$fileInput, "click", (function(e) {
+                e.stopPropagation();
+                return this.option("useNativeInputClick") || this._isCustomClickEvent;
+            }).bind(this));
         }
 
         this._$fileInput.prop({
             multiple: this.option("multiple"),
             accept: this.option("accept"),
-            tabindex: -1
+            tabIndex: -1
         });
     },
-
 
     _inputChangeHandler: function() {
         if(this._doPreventInputChange) {
@@ -444,11 +445,6 @@ var FileUploader = Editor.inherit({
 
         var fileName = this._$fileInput.val().replace(/^.*\\/, ''),
             files = this._$fileInput.prop("files");
-
-        if(this.option("uploadMode") === "useForm") {
-            files = files ? objectUtils.deepExtendArraySafe([], files) : undefined;
-            this.reset();
-        }
 
         if(files && !files.length) {
             return;
@@ -460,11 +456,10 @@ var FileUploader = Editor.inherit({
         if(this.option("uploadMode") === "instantly") {
             this._uploadFiles();
         }
-
     },
 
     _shouldFileListBeExtended: function() {
-        return this.option("extendSelection") && this.option("multiple");
+        return this.option("uploadMode") !== "useForm" && this.option("extendSelection") && this.option("multiple");
     },
 
     _removeDuplicates: function(files, value) {
@@ -503,7 +498,7 @@ var FileUploader = Editor.inherit({
     _getFiles: function(fileList) {
         var values = [];
 
-        $.each(fileList, function(_, value) {
+        each(fileList, function(_, value) {
             values.push(value);
         });
 
@@ -548,7 +543,7 @@ var FileUploader = Editor.inherit({
             this._files = [];
         }
 
-        $.each(value.slice(this._files.length), (function(_, value) {
+        each(value.slice(this._files.length), (function(_, value) {
             this._files.push(this._createFile(value));
         }).bind(this));
     },
@@ -577,11 +572,11 @@ var FileUploader = Editor.inherit({
         return {
             value: value,
             loadedSize: 0,
-            onProgress: $.Callbacks(),
-            onAbort: $.Callbacks(),
-            onLoad: $.Callbacks(),
-            onError: $.Callbacks(),
-            onLoadStart: $.Callbacks()
+            onProgress: Callbacks(),
+            onAbort: Callbacks(),
+            onLoad: Callbacks(),
+            onError: Callbacks(),
+            onLoadStart: Callbacks()
         };
     },
 
@@ -601,7 +596,7 @@ var FileUploader = Editor.inherit({
         if(showFileList) {
             var that = this;
 
-            $.each(this._files, function(_, file) {
+            each(this._files, function(_, file) {
                 if(!file.$file) {
                     that._renderFile(file);
                 }
@@ -773,9 +768,8 @@ var FileUploader = Editor.inherit({
         if(devices.real().deviceType === "desktop") {
             this._selectButton.option("onClick", this._selectButtonClickHandler.bind(this));
         } else {
-            $button
-                .off("click")
-                .on("click", this._selectButtonClickHandler.bind(this));
+            eventsEngine.off($button, "click");
+            eventsEngine.on($button, "click", this._selectButtonClickHandler.bind(this));
         }
     },
 
@@ -791,7 +785,7 @@ var FileUploader = Editor.inherit({
         }
 
         that._isCustomClickEvent = true;
-        that._$fileInput.trigger("click");
+        eventsEngine.trigger(that._$fileInput, "click");
         that._isCustomClickEvent = false;
     },
 
@@ -867,8 +861,7 @@ var FileUploader = Editor.inherit({
     },
 
     _renderDragEvents: function() {
-        this._$inputWrapper
-            .off("." + this.NAME);
+        eventsEngine.off(this._$inputWrapper, "." + this.NAME);
 
         if(!this._shouldDragOverBeRendered()) {
             return;
@@ -876,11 +869,10 @@ var FileUploader = Editor.inherit({
 
         this._dragEventsCount = 0;
 
-        this._$inputWrapper
-            .on(eventUtils.addNamespace("dragenter", this.NAME), this._dragEnterHandler.bind(this))
-            .on(eventUtils.addNamespace("dragover", this.NAME), this._dragOverHandler.bind(this))
-            .on(eventUtils.addNamespace("dragleave", this.NAME), this._dragLeaveHandler.bind(this))
-            .on(eventUtils.addNamespace("drop", this.NAME), this._dropHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragenter", this.NAME), this._dragEnterHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragover", this.NAME), this._dragOverHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("dragleave", this.NAME), this._dragLeaveHandler.bind(this));
+        eventsEngine.on(this._$inputWrapper, eventUtils.addNamespace("drop", this.NAME), this._dropHandler.bind(this));
     },
 
     _useInputForDrop: function() {
@@ -1021,7 +1013,7 @@ var FileUploader = Editor.inherit({
             return;
         }
 
-        $.each(this._files, (function(_, file) {
+        each(this._files, (function(_, file) {
             this._uploadFile(file);
         }).bind(this));
     },
@@ -1033,8 +1025,6 @@ var FileUploader = Editor.inherit({
 
         var $file = file.$file,
             value = file.value;
-
-        this._initUploadRequest(file);
 
         if($file) {
             file.progressBar = this._createProgressBar(value.size);
@@ -1048,7 +1038,7 @@ var FileUploader = Editor.inherit({
         file.onError.add(this._onErrorHandler.bind(this, file));
         file.onAbort.add(this._onAbortHandler.bind(this, file));
         file.onProgress.add(this._onProgressHandler.bind(this, file));
-        file.request.send(this._createFormData(this.option("name"), value));
+        this._sendFileData(file, this._createFormData(this.option("name"), value));
     },
 
     _onUploadStarted: function(file, e) {
@@ -1165,68 +1155,48 @@ var FileUploader = Editor.inherit({
         file.onError.add(hideCancelButton);
     },
 
-    _initUploadRequest: function(file) {
+    _sendFileData: function(file, data) {
         var that = this;
 
-        file.request = this._createRequest(this.option("uploadUrl"));
         file.loadedSize = 0;
 
-        this._initUploadHeaders(file.request);
+        ajax.sendRequest({
+            url: this.option("uploadUrl"),
+            method: this.option("uploadMethod"),
+            headers: this.option("uploadHeaders"),
+            beforeSend: function(xhr) {
+                file.request = xhr;
+            },
+            upload: {
+                "onprogress": function(e) {
+                    if(file._isError) {
+                        return;
+                    }
 
-        file.request["onreadystatechange"] = (function(e) {
-            if(e.currentTarget.readyState === 4) {
-                var status = e.currentTarget.status;
-
-                if(that._isStatusSuccess(status)) {
-                    this.onLoad.fire(e);
-                } else if(that._isStatusError(status) || !this._isProgressStarted) {
-                    this._isError = true;
-                    this.onError.fire(e);
+                    file._isProgressStarted = true;
+                    file.onProgress.fire(e);
+                },
+                "onloadstart": function() {
+                    file.onLoadStart.fire();
+                },
+                "onabort": function() {
+                    file.onAbort.fire();
                 }
+            },
+            data: data
+        }).done(function() {
+            file.onLoad.fire();
+        }).fail(function(e) {
+            if(that._isStatusError(e.status) || !file._isProgressStarted) {
+                file._isError = true;
+                file.onError.fire();
             }
-        }).bind(file);
-
-        file.request.upload["onprogress"] = (function(e) {
-            if(this._isError) {
-                return;
-            }
-
-            this._isProgressStarted = true;
-            this.onProgress.fire(e);
-        }).bind(file);
-
-        file.request.upload["onloadstart"] = (function(e) {
-            this.onLoadStart.fire(e);
-        }).bind(file);
-
-        file.request.upload["onabort"] = (function(e) {
-            this.onAbort.fire(e);
-        }).bind(file);
-    },
-
-    _initUploadHeaders: function(request) {
-        var headers = this.option("uploadHeaders");
-
-        for(var name in headers) {
-            if(headers.hasOwnProperty(name)) {
-                request.setRequestHeader(name, headers[name]);
-            }
-        }
-    },
-
-    _isStatusSuccess: function(status) {
-        return 200 <= status && status < 300;
+        });
     },
 
     _isStatusError: function(status) {
         return 400 <= status && status < 500
             || 500 <= status && status < 600;
-    },
-
-    _createRequest: function(url) {
-        var request = new XMLHttpRequest();
-        request.open(this.option("uploadMethod"), url, true);
-        return request;
     },
 
     _createFormData: function(fieldName, fieldValue) {
@@ -1253,7 +1223,7 @@ var FileUploader = Editor.inherit({
             var value = this.option("value"),
                 totalSize = 0;
 
-            $.each(value, function(_, file) {
+            each(value, function(_, file) {
                 totalSize += file.size;
             });
 
@@ -1267,7 +1237,7 @@ var FileUploader = Editor.inherit({
         if(!this._loadedSize) {
             var loadedSize = 0;
 
-            $.each(this._files, function(_, file) {
+            each(this._files, function(_, file) {
                 loadedSize += file.loadedSize;
             });
 

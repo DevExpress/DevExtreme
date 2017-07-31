@@ -1,12 +1,12 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    TickManager,
+var TickManager,
     coreTickManager = require("./numeric_tick_manager"),
     dateTimeManager = require("./datetime_tick_manager"),
     logarithmicMethods = require("./logarithmic_tick_manager"),
     dateUtils = require("../../core/utils/date"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
@@ -17,7 +17,7 @@ var $ = require("../../core/renderer"),
     _adjustValue = utils.adjustValue,
     _map = utils.map,
 
-    _each = $.each,
+    _each = each,
     _inArray = inArray,
     _noop = require("../../core/utils/common").noop,
 
@@ -107,7 +107,6 @@ exports.discrete = extend({}, coreTickManager.continuous, {
     _createTicks: function() {
         return [];
     },
-    _getMarginValue: _noop,
     _generateBounds: _noop,
     _correctMin: _noop,
     _correctMax: _noop,
@@ -261,32 +260,12 @@ TickManager.prototype = {
         return ticks;
     },
 
-    _applyMargin: function(margin, min, max, isNegative) {
-        var coef,
-            value = min;
-
-        if(isFinite(margin)) {
-            coef = this._getMarginValue(min, max, margin);
-            if(coef) {
-                value = this._getNextTickValue(min, coef, isNegative, false);
-            }
-        }
-
-        return value;
-    },
-
     _applyMinMaxMargins: function(min, max) {
-        var options = this._options,
-            newMin = min > max ? max : min,
+        var newMin = min > max ? max : min,
             newMax = max > min ? max : min;
 
         this._minCorrectionEnabled = this._getCorrectionEnabled(min, "min");
         this._maxCorrectionEnabled = this._getCorrectionEnabled(max, "max");
-
-        if(options && !options.stick) {
-            newMin = this._applyMargin(options.minValueMargin, min, max, true);
-            newMax = this._applyMargin(options.maxValueMargin, max, min, false);
-        }
 
         return { min: newMin, max: newMax };
     },

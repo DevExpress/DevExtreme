@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     dateUtils = require("../../core/utils/date"),
     dateLocalization = require("../../localization/date"),
+    each = require("../../core/utils/iterator").each,
     SchedulerWorkSpace = require("./ui.scheduler.work_space");
 
 var WEEK_CLASS = "dx-scheduler-work-space-week";
@@ -75,7 +76,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         if(!!this._getGroupCount()) {
             var arr = [],
                 focusedGroupIndex = this._getGroupIndexByCell($first);
-            $.each($cells, (function(_, cell) {
+            each($cells, (function(_, cell) {
                 var groupIndex = this._getGroupIndexByCell($(cell));
                 if(focusedGroupIndex === groupIndex) {
                     arr.push(cell);

@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     isFunction = require("../core/utils/type").isFunction,
+    map = require("../core/utils/iterator").map,
     toComparable = require("../core/utils/data").toComparable;
 
 var normalizeBinaryCriterion = function(crit) {
@@ -17,7 +18,7 @@ var normalizeSortingInfo = function(info) {
         info = [info];
     }
 
-    return $.map(info, function(i) {
+    return map(info, function(i) {
         return {
             selector: (isFunction(i) || typeof i === "string") ? i : (i.getter || i.field || i.selector),
             desc: !!(i.desc || String(i.dir).charAt(0).toLowerCase() === "d")
@@ -139,7 +140,7 @@ var keysEqual = function(keyExpr, key1, key2) {
     /* jshint eqeqeq:false */
 
     if(Array.isArray(keyExpr)) {
-        var names = $.map(key1, function(v, k) { return k; }),
+        var names = map(key1, function(v, k) { return k; }),
             name;
         for(var i = 0; i < names.length; i++) {
             name = names[i];
@@ -171,7 +172,7 @@ var base64_encode = function(input) {
             octet2 = input[i + 1],
             octet3 = input[i + 2];
 
-        result += $.map(
+        result += map(
             [
                 octet1 >> 2,
                 ((octet1 & 3) << 4) | octet2 >> 4,

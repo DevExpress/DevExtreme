@@ -641,6 +641,62 @@ var environment = {
         assert.ok(!chart.getAllSeries().wasAnimated, "Series should be not animated");
     });
 
+    QUnit.module("Axes and Series", {
+        beforeEach: function() {
+            environment.beforeEach.apply(this, arguments);
+            var translatorClass = new vizMocks.stubClass(translator1DModule.Translator1D);
+
+            sinon.stub(translator1DModule, "Translator1D", function() {
+                var translator = new translatorClass();
+                translator.stub("setDomain").returnsThis();
+                translator.stub("setCodomain").returnsThis();
+                return translator;
+            });
+
+            var stubSeries1 = new MockSeries({ range: { val: { min: 0, max: 10 } } }),
+                stubSeries2 = new MockSeries({ range: { val: { min: 0, max: 110 } } });
+
+            seriesMockData.series.push(stubSeries1, stubSeries2);
+        },
+
+        afterEach: function() {
+            translator1DModule.Translator1D.restore();
+            environment.afterEach.apply(this, arguments);
+        }
+    });
+
+    QUnit.test("Pass axis pretender to series, axis pretender can return translator", function(assert) {
+        this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}],
+        });
+
+        var seriesOptions1 = seriesMockData.args[0][0],
+            seriesOptions2 = seriesMockData.args[1][0];
+
+        assert.strictEqual(seriesOptions1.argumentAxis, null);
+        assert.strictEqual(seriesOptions1.valueAxis.getTranslator(), translator1DModule.Translator1D.returnValues[0]);
+
+        assert.strictEqual(seriesOptions2.argumentAxis, null);
+        assert.strictEqual(seriesOptions2.valueAxis.getTranslator(), translator1DModule.Translator1D.returnValues[1]);
+    });
+
+    QUnit.test("Set correct business ranges", function(assert) {
+        this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}, {}],
+        });
+
+        var translator1 = seriesMockData.args[0][0].valueAxis.getTranslator(),
+            translator2 = seriesMockData.args[1][0].valueAxis.getTranslator();
+
+        assert.deepEqual(translator1.stub("setDomain").lastCall.args, [0, 10]);
+        assert.deepEqual(translator1.stub("setCodomain").firstCall.args, [360, 0]);
+
+        assert.deepEqual(translator2.stub("setDomain").lastCall.args, [0, 110]);
+        assert.deepEqual(translator2.stub("setCodomain").firstCall.args, [360, 0]);
+    });
+
     QUnit.module("Multi level pie chart", {
         beforeEach: function() {
             environment.beforeEach.apply(this, arguments);
@@ -686,7 +742,7 @@ var environment = {
         assert.equal(series[1], seriesMockData.series[1]);
 
         $.each(series, function(i, singleSeries) {
-            var translator = translator1DModule.Translator1D.returnValues[2 + i];
+            var translator = translator1DModule.Translator1D.returnValues[i];
             assert.equal(singleSeries.drawLabelsWOPoints.callCount, 1);
             assert.equal(singleSeries.correctPosition.callCount, 1);
             checkCorrectPosition(assert, singleSeries.correctPosition.getCall(0).args, 100, 200, 300, 0, chart.DEBUG_canvas);
@@ -694,7 +750,6 @@ var environment = {
             assert.equal(singleSeries.correctRadius.getCall(0).args[0].radiusOuter, 148 + i * 152, "correction radiusOuter");
             assert.equal(singleSeries.correctRadius.getCall(0).args[0].radiusInner, 0 + i * 152, "correction radiusInner");
             assert.equal(singleSeries.draw.callCount, 1);
-            assert.equal(singleSeries.draw.args[0][0], translator);
             assert.equal(translator.stub("setDomain").callCount, 1);
             assert.deepEqual(translator.stub("setDomain").firstCall.args, [0, 10]);
             assert.equal(translator.stub("setCodomain").callCount, 1);
@@ -1402,13 +1457,6 @@ var environment = {
 
         assert.ok(!this.layoutManager.layoutElements.getCall(0).args[4]);
     });
-
-    QUnit.test("getAxesForTransform", function(assert) {
-        this.createPieChart();
-
-        assert.deepEqual(this.layoutManager.layoutElements.getCall(0).args[5].horizontalAxes, []);
-        assert.deepEqual(this.layoutManager.layoutElements.getCall(0).args[5].verticalAxes, []);
-    });
 }());
 
 (function dynamicTests() {
@@ -1491,6 +1539,19 @@ var environment = {
         chart.render({ force: true });
 
         assert.strictEqual(chart.series[0].hideLayoutLabels, false);
+    });
+
+    QUnit.test("Adaptive layout with small canvas does not cause exceptions", function(assert) {
+        seriesMockData.series.push(new MockSeries({}));
+        var chart = this.createPieChart({
+            dataSource: [{}],
+            series: {}
+        });
+        chart.layoutManager.layoutElements = sinon.spy(function() { arguments[2](true); });
+
+        chart.render({ force: true });
+
+        assert.ok(true);
     });
 
     QUnit.module("drawn", {

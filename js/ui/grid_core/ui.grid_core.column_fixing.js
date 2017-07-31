@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     wheelEvent = require("../../events/core/wheel"),
     messageLocalization = require("../../localization/message"),
     gridCoreUtils = require("../grid_core/ui.grid_core.utils");
@@ -21,7 +23,7 @@ var CONTENT_CLASS = "content",
     getTransparentColumnIndex = function(fixedColumns) {
         var transparentColumnIndex = -1;
 
-        $.each(fixedColumns, function(index, column) {
+        each(fixedColumns, function(index, column) {
             if(column.command === "transparent") {
                 transparentColumnIndex = index;
                 return false;
@@ -181,7 +183,7 @@ var baseFixedColumns = {
             fixedColumns = that.getFixedColumns(index);
 
             fixedCellElements = that._getRowElements(that._fixedTableElement).eq(rowIndex).children("td");
-            $.each(fixedColumns, function(columnIndex, column) {
+            each(fixedColumns, function(columnIndex, column) {
                 if(column.command === "transparent") {
                     if(fixedCellElements.eq(columnIndex).hasClass(MASTER_DETAIL_CELL_CLASS)) {
                         cellElements[columnIndex] = fixedCellElements.get(columnIndex) || cellElements[columnIndex];
@@ -450,14 +452,14 @@ var ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
 var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _detachHoverEvents: function() {
-        this._fixedTableElement && this._fixedTableElement.off("mouseover mouseout", ".dx-data-row");
-        this._tableElement && this._tableElement.off("mouseover mouseout", ".dx-data-row");
+        this._fixedTableElement && eventsEngine.off(this._fixedTableElement, "mouseover mouseout", ".dx-data-row");
+        this._tableElement && eventsEngine.off(this._tableElement, "mouseover mouseout", ".dx-data-row");
     },
 
     _attachHoverEvents: function() {
         var that = this,
             attachHoverEvent = function($table) {
-                $table.on("mouseover mouseout", ".dx-data-row", that.createAction(function(args) {
+                eventsEngine.on($table, "mouseover mouseout", ".dx-data-row", that.createAction(function(args) {
                     var event = args.jQueryEvent,
                         rowIndex = that.getRowIndex($(event.target).closest(".dx-row")),
                         isHover = event.type === "mouseover";
@@ -488,26 +490,27 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
             scrollable = that.getScrollable();
             if(!$content.length && scrollable) {
-                $content = $("<div/>")
-                    .addClass(contentClass)
-                    .on("scroll", function(e) {
-                        scrollTop = $(e.target).scrollTop();
-                        if(scrollTop) {
-                            $(e.target).scrollTop(0);
-                            scrollable.scrollTo({ y: that._scrollTop + scrollTop });
-                        }
-                    })
-                    .on(wheelEvent.name, function(e) {
-                        if(scrollable) {
-                            scrollTop = scrollable.scrollTop();
-                            scrollable.scrollTo({ y: scrollTop - e.delta });
+                $content = $("<div/>").addClass(contentClass);
 
-                            if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
-                                return false;
-                            }
+                eventsEngine.on($content, "scroll", function(e) {
+                    scrollTop = $(e.target).scrollTop();
+                    if(scrollTop) {
+                        $(e.target).scrollTop(0);
+                        scrollable.scrollTo({ y: that._scrollTop + scrollTop });
+                    }
+                });
+                eventsEngine.on($content, wheelEvent.name, function(e) {
+                    if(scrollable) {
+                        scrollTop = scrollable.scrollTop();
+                        scrollable.scrollTo({ y: scrollTop - e.delta });
+
+                        if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
+                            return false;
                         }
-                    })
-                    .appendTo(element);
+                    }
+                });
+
+                $content.appendTo(element);
             }
 
             return $content;
@@ -643,7 +646,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         if($fixedTable && $fixedTable.find($cell).length) {
             columns = this.getFixedColumns();
 
-            $.each(columns, function(index, column) {
+            each(columns, function(index, column) {
                 if(index === $cell[0].cellIndex) {
                     return false;
                 }
@@ -775,7 +778,7 @@ module.exports = {
                 var transparentColumnIndex = getTransparentColumnIndex(fixedColumns),
                     correctIndex = columns.length - fixedColumns.length;
 
-                $.each(pointsByColumns, function(_, point) {
+                each(pointsByColumns, function(_, point) {
                     if(point.index > transparentColumnIndex) {
                         point.columnIndex += correctIndex;
                         point.index += correctIndex;

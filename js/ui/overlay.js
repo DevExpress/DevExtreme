@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
     compareVersions = require("../core/utils/version").compare,
@@ -14,6 +15,7 @@ var $ = require("../core/renderer"),
     domUtils = require("../core/utils/dom"),
     noop = require("../core/utils/common").noop,
     typeUtils = require("../core/utils/type"),
+    each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     Widget = require("./widget/ui.widget"),
@@ -79,7 +81,7 @@ var getElement = function(value) {
     return value && $(value instanceof $.Event ? value.target : value);
 };
 
-$(document).on(pointerEvents.down, function(e) {
+eventsEngine.on(document, pointerEvents.down, function(e) {
     for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
         if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -446,9 +448,9 @@ var Overlay = Widget.inherit({
         this._$wrapper.attr("data-bind", "dxControlsDescendantBindings: true");
 
         // NOTE: hack to fix B251087
-        this._$wrapper.on("MSPointerDown", noop);
+        eventsEngine.on(this._$wrapper, "MSPointerDown", noop);
         // NOTE: bootstrap integration T342292
-        this._$wrapper.on("focusin", function(e) { e.stopPropagation(); });
+        eventsEngine.on(this._$wrapper, "focusin", function(e) { e.stopPropagation(); });
 
         this._toggleViewPortSubscription(true);
     },
@@ -467,7 +469,7 @@ var Overlay = Widget.inherit({
         }
 
         var options = this.option();
-        $.each([
+        each([
             "position.of",
             "animation.show.from.position.of",
             "animation.show.to.position.of",
@@ -514,7 +516,7 @@ var Overlay = Widget.inherit({
     _initActions: function() {
         this._actions = {};
 
-        $.each(ACTIONS, (function(_, action) {
+        each(ACTIONS, (function(_, action) {
             this._actions[action] = this._createActionByOption(action, {
                 excludeValidators: ["disabled", "readOnly"]
             }) || noop;
@@ -531,7 +533,6 @@ var Overlay = Widget.inherit({
     _documentDownHandler: function(e) {
         if(this._showAnimationProcessing) {
             this._stopAnimation();
-            return;
         }
 
         var closeOnOutsideClick = this.option("closeOnOutsideClick");
@@ -541,7 +542,7 @@ var Overlay = Widget.inherit({
         }
         if(closeOnOutsideClick) {
             var $container = this._$content,
-                outsideClick = (!$container.is(e.target) && !$.contains($container.get(0), e.target) && $(e.target).closest(document).length);
+                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && $(e.target).closest(document).length);
 
             if(outsideClick) {
                 if(this.option("shading")) {
@@ -638,7 +639,7 @@ var Overlay = Widget.inherit({
 
                 this._animate(showAnimation, function() {
                     if(that.option("focusStateEnabled")) {
-                        that._focusTarget().focus();
+                        eventsEngine.trigger(that._focusTarget(), "focus");
                     }
 
                     completeShowAnimation.apply(this, arguments);
@@ -687,6 +688,7 @@ var Overlay = Widget.inherit({
             deferred = $.Deferred(),
             animation = that._getAnimationConfig() || {},
             hideAnimation = this._normalizeAnimation(animation.hide, "from"),
+            startHideAnimation = (hideAnimation && hideAnimation.start) || noop,
             completeHideAnimation = (hideAnimation && hideAnimation.complete) || noop,
             hidingArgs = { cancel: false };
 
@@ -701,14 +703,22 @@ var Overlay = Widget.inherit({
             this._toggleShading(false);
             this._toggleSubscriptions(false);
 
-            this._animate(hideAnimation, function() {
-                that._renderVisibility(false);
+            this._animate(hideAnimation,
+                function() {
+                    that._$content.css("pointer-events", "");
+                    that._renderVisibility(false);
 
-                completeHideAnimation.apply(this, arguments);
-                that._actions.onHidden();
+                    completeHideAnimation.apply(this, arguments);
+                    that._actions.onHidden();
 
-                deferred.resolve();
-            });
+                    deferred.resolve();
+                },
+
+                function() {
+                    that._$content.css("pointer-events", "none");
+                    startHideAnimation.apply(this, arguments);
+                }
+            );
         }
         return deferred.promise();
     },
@@ -721,19 +731,9 @@ var Overlay = Widget.inherit({
         if(animation) {
             startCallback = startCallback || animation.start || noop;
 
-            var $content = this._$content;
-
             fx.animate(this._$content, extend({}, animation, {
-                start: function() {
-                    $content.css("pointer-events", "none");
-
-                    startCallback.apply(this, arguments);
-                },
-                complete: function() {
-                    $content.css("pointer-events", "");
-
-                    completeCallback.apply(this, arguments);
-                }
+                start: startCallback,
+                complete: completeCallback
             }));
         } else {
             completeCallback();
@@ -818,9 +818,9 @@ var Overlay = Widget.inherit({
     _toggleTabTerminator: function(enabled) {
         var eventName = eventUtils.addNamespace("keydown", this.NAME);
         if(enabled) {
-            $(document).on(eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.on(document, eventName, this._proxiedTabTerminatorHandler);
         } else {
-            $(document).off(eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.off(document, eventName, this._proxiedTabTerminatorHandler);
         }
     },
 
@@ -845,7 +845,10 @@ var Overlay = Widget.inherit({
 
             e.preventDefault();
 
-            (e.shiftKey ? $lastTabbable : $firstTabbable).focusin().focus();
+            var $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
+
+            eventsEngine.trigger($focusElement, "focusin");
+            eventsEngine.trigger($focusElement, "focus");
         }
     },
 
@@ -883,10 +886,10 @@ var Overlay = Widget.inherit({
         this._proxiedTargetParentsScrollHandler = this._proxiedTargetParentsScrollHandler
             || (function(e) { this._targetParentsScrollHandler(e); }).bind(this);
 
-        $().add(this._$prevTargetParents)
-            .off(scrollEvent, this._proxiedTargetParentsScrollHandler);
+        eventsEngine.off($().add(this._$prevTargetParents), scrollEvent, this._proxiedTargetParentsScrollHandler);
+
         if(subscribe && closeOnScroll) {
-            $parents.on(scrollEvent, this._proxiedTargetParentsScrollHandler);
+            eventsEngine.on($parents, scrollEvent, this._proxiedTargetParentsScrollHandler);
             this._$prevTargetParents = $parents;
         }
     },
@@ -951,7 +954,7 @@ var Overlay = Widget.inherit({
             }
         });
 
-        return isHidden || !$.contains(document, $parent.get(0));
+        return isHidden || !document.body.contains($parent.get(0));
     },
 
     _renderContentImpl: function() {
@@ -979,17 +982,15 @@ var Overlay = Widget.inherit({
         var startEventName = eventUtils.addNamespace(dragEvents.start, this.NAME),
             updateEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
-        $dragTarget
-            .off(startEventName)
-            .off(updateEventName);
+        eventsEngine.off($dragTarget, startEventName);
+        eventsEngine.off($dragTarget, updateEventName);
 
         if(!this.option("dragEnabled")) {
             return;
         }
 
-        $dragTarget
-            .on(startEventName, this._dragStartHandler.bind(this))
-            .on(updateEventName, this._dragUpdateHandler.bind(this));
+        eventsEngine.on($dragTarget, startEventName, this._dragStartHandler.bind(this));
+        eventsEngine.on($dragTarget, updateEventName, this._dragUpdateHandler.bind(this));
     },
 
     _renderResize: function() {
@@ -1020,26 +1021,25 @@ var Overlay = Widget.inherit({
         var $scrollTerminator = this._wrapper();
         var terminatorEventName = eventUtils.addNamespace(dragEvents.move, this.NAME);
 
-        $scrollTerminator
-            .off(terminatorEventName)
-            .on(terminatorEventName, {
-                validate: function() {
-                    return true;
-                },
-                getDirection: function() {
-                    return "both";
-                },
-                _toggleGestureCover: noop,
-                _clearSelection: noop,
-                isNative: true
-            }, function(e) {
-                var originalEvent = e.originalEvent.originalEvent;
-                e._cancelPreventDefault = true;
+        eventsEngine.off($scrollTerminator, terminatorEventName);
+        eventsEngine.on($scrollTerminator, terminatorEventName, {
+            validate: function() {
+                return true;
+            },
+            getDirection: function() {
+                return "both";
+            },
+            _toggleGestureCover: noop,
+            _clearSelection: noop,
+            isNative: true
+        }, function(e) {
+            var originalEvent = e.originalEvent.originalEvent;
+            e._cancelPreventDefault = true;
 
-                if(originalEvent && originalEvent.type !== "mousemove") {
-                    e.preventDefault();
-                }
-            });
+            if(originalEvent && originalEvent.type !== "mousemove") {
+                e.preventDefault();
+            }
+        });
     },
 
     _getDragTarget: function() {
@@ -1108,13 +1108,14 @@ var Overlay = Widget.inherit({
         var position = translator.locate(this._$content),
             deltaSize = this._deltaSize(),
             isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0,
+            shaderOffset = this.option("shading") && !this.option("container") && !this._isWindow(this._getContainer()) ? translator.locate(this._$wrapper) : { top: 0, left: 0 },
             boundaryOffset = this.option("boundaryOffset");
 
         return {
-            top: isAllowedDrag ? position.top + boundaryOffset.v : 0,
-            bottom: isAllowedDrag ? -position.top + deltaSize.height - boundaryOffset.v : 0,
-            left: isAllowedDrag ? position.left + boundaryOffset.h : 0,
-            right: isAllowedDrag ? -position.left + deltaSize.width - boundaryOffset.h : 0
+            top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
+            bottom: isAllowedDrag ? -position.top - shaderOffset.top + deltaSize.height - boundaryOffset.v : 0,
+            left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h : 0,
+            right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h : 0
         };
     },
 

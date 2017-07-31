@@ -1,9 +1,12 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
+    dataUtils = require("../../core/element_data"),
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     registerEvent = require("./event_registrator"),
     eventUtils = require("../utils"),
     pointerEvents = require("../pointer"),
@@ -23,12 +26,10 @@ var EventManager = Class.inherit({
     },
 
     _attachHandlers: function() {
-        $(document)
-            .on(eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this))
-            .on(eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this))
-            .on(eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(" "), MANAGER_EVENT), this._pointerUpHandler.bind(this))
-
-            .on(eventUtils.addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
+        eventsEngine.on(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(" "), MANAGER_EVENT), this._pointerUpHandler.bind(this));
+        eventsEngine.on(document, eventUtils.addNamespace(wheelEvent.name, MANAGER_EVENT), this._mouseWheelHandler.bind(this));
     },
 
     _eachEmitter: function(callback) {
@@ -85,7 +86,7 @@ var EventManager = Class.inherit({
 
         var setChanged = currentSet.length !== previousSet.length;
 
-        $.each(currentSet, function(index, emitter) {
+        each(currentSet, function(index, emitter) {
             setChanged = setChanged || previousSet[index] !== emitter;
             return !setChanged;
         });
@@ -110,8 +111,8 @@ var EventManager = Class.inherit({
         }
 
         while($element.length) {
-            var emitters = $.data($element.get(0), EMITTER_DATA) || [];
-            $.each(emitters, handleEmitter);
+            var emitters = dataUtils.data($element.get(0), EMITTER_DATA) || [];
+            each(emitters, handleEmitter);
             $element = $element.parent();
         }
 
@@ -237,26 +238,26 @@ var registerEmitter = function(emitterConfig) {
         emitterName = emitterConfig.events[0],
         emitterEvents = emitterConfig.events;
 
-    $.each(emitterEvents, function(_, eventName) {
+    each(emitterEvents, function(_, eventName) {
         registerEvent(eventName, {
 
             noBubble: !emitterConfig.bubble,
 
             setup: function(element) {
-                var subscriptions = $.data(element, EMITTER_SUBSCRIPTION_DATA) || {},
+                var subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA) || {},
 
-                    emitters = $.data(element, EMITTER_DATA) || {},
+                    emitters = dataUtils.data(element, EMITTER_DATA) || {},
                     emitter = emitters[emitterName] || new emitterClass(element);
 
                 subscriptions[eventName] = true;
                 emitters[emitterName] = emitter;
 
-                $.data(element, EMITTER_DATA, emitters);
-                $.data(element, EMITTER_SUBSCRIPTION_DATA, subscriptions);
+                dataUtils.data(element, EMITTER_DATA, emitters);
+                dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA, subscriptions);
             },
 
             add: function(element, handleObj) {
-                var emitters = $.data(element, EMITTER_DATA),
+                var emitters = dataUtils.data(element, EMITTER_DATA),
                     emitter = emitters[emitterName];
 
                 emitter.configure(extend({
@@ -265,15 +266,15 @@ var registerEmitter = function(emitterConfig) {
             },
 
             teardown: function(element) {
-                var subscriptions = $.data(element, EMITTER_SUBSCRIPTION_DATA),
+                var subscriptions = dataUtils.data(element, EMITTER_SUBSCRIPTION_DATA),
 
-                    emitters = $.data(element, EMITTER_DATA),
+                    emitters = dataUtils.data(element, EMITTER_DATA),
                     emitter = emitters[emitterName];
 
                 delete subscriptions[eventName];
 
                 var disposeEmitter = true;
-                $.each(emitterEvents, function(_, eventName) {
+                each(emitterEvents, function(_, eventName) {
                     disposeEmitter = disposeEmitter && !subscriptions[eventName];
                     return disposeEmitter;
                 });

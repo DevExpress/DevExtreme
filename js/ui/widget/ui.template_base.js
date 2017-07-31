@@ -1,12 +1,12 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    triggerShownEvent = require("../../core/utils/dom").triggerShownEvent,
+var Callbacks = require("../../core/utils/callbacks"),
+    domUtils = require("../../core/utils/dom"),
     Class = require("../../core/class"),
     abstract = Class.abstract;
 
 
-var renderedCallbacks = $.Callbacks();
+var renderedCallbacks = Callbacks();
 
 /**
  * @name dxTemplate
@@ -39,18 +39,18 @@ var TemplateBase = Class.inherit({
             return;
         }
 
-        var resultInContainer = $.contains($container.get(0), $result.get(0));
+        var resultInContainer = domUtils.contains($container.get(0), $result.get(0));
         $container.append($result);
         if(resultInContainer) {
             return;
         }
 
-        var resultInBody = $.contains(document.body, $container.get(0));
+        var resultInBody = document.body.contains($container.get(0));
         if(!resultInBody) {
             return;
         }
 
-        triggerShownEvent($result);
+        domUtils.triggerShownEvent($result);
     },
 
     _renderCore: abstract

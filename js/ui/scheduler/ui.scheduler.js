@@ -1,12 +1,14 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     translator = require("../../animation/translator"),
     errors = require("../widget/ui.errors"),
     dialog = require("../dialog"),
     recurrenceUtils = require("./utils.recurrence"),
     domUtils = require("../../core/utils/dom"),
     dateUtils = require("../../core/utils/date"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     dateSerialization = require("../../core/utils/date_serialization"),
@@ -1285,7 +1287,7 @@ var Scheduler = Widget.inherit({
         return result.promise();
     },
 
-    _dataSourceLoadedCallback: $.Callbacks(),
+    _dataSourceLoadedCallback: Callbacks(),
 
     _reloadDataSource: function() {
         if(this._dataSource) {
@@ -1417,7 +1419,7 @@ var Scheduler = Widget.inherit({
         var resourcesDataAccessors = this._resourcesManager._dataAccessors,
             result = extend(true, {}, this._dataAccessors);
 
-        $.each(resourcesDataAccessors, (function(type, accessor) {
+        each(resourcesDataAccessors, (function(type, accessor) {
             result[type].resources = accessor;
         }).bind(this));
 
@@ -1469,7 +1471,7 @@ var Scheduler = Widget.inherit({
             };
         }
 
-        $.each(fields, (function(name, expr) {
+        each(fields, (function(name, expr) {
             if(!!expr) {
 
                 var getter = dataCoreUtils.compileGetter(expr),
@@ -1767,7 +1769,7 @@ var Scheduler = Widget.inherit({
         var result,
             currentView = this.option("currentView");
 
-        $.each(this.option("views"), function(_, view) {
+        each(this.option("views"), function(_, view) {
             if(typeUtils.isObject(view) && view.type === currentView) {
                 result = view;
                 return false;
@@ -1879,7 +1881,7 @@ var Scheduler = Widget.inherit({
             startDate = this.fire("getField", "startDate", appointmentData),
             endDate = this.fire("getField", "endDate", appointmentData);
 
-        $.each(this._resourcesManager.getResourcesFromItem(appointmentData, true) || {}, function(resourceName, resourceValue) {
+        each(this._resourcesManager.getResourcesFromItem(appointmentData, true) || {}, function(resourceName, resourceValue) {
             appointmentData[resourceName] = resourceValue;
         });
 
@@ -2553,7 +2555,7 @@ var Scheduler = Widget.inherit({
                 };
             }
 
-            $.each(getGroups.call(this), setResourceCallback);
+            each(getGroups.call(this), setResourceCallback);
         }
     },
 

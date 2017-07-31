@@ -1,9 +1,9 @@
 "use strict";
 
 module.exports = function(object) {
-    var $ = require("../../core/renderer"),
-        extend = require("./extend").extend,
+    var extend = require("./extend").extend,
         isFunction = require("./type").isFunction,
+        each = require("./iterator").each,
         Class = require("../class");
 
     var BaseClass = Class.inherit(object),
@@ -12,7 +12,7 @@ module.exports = function(object) {
         initialFields = {};
 
     var injectFields = function(injectionObject, initial) {
-        $.each(injectionObject, function(key) {
+        each(injectionObject, function(key) {
             if(isFunction(instance[key])) {
                 if(initial || !object[key]) {
                     object[key] = function() {

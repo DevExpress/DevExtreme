@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     config = require("../../core/config"),
+    iteratorUtils = require("../../core/utils/iterator"),
     dateSerialization = require("../../core/utils/date_serialization"),
     recurrenceUtils = require("./utils.recurrence"),
     dateUtils = require("../../core/utils/date"),
@@ -124,7 +124,7 @@ var AppointmentModel = Class.inherit({
             }
 
             var appointmentResourceValues = arrayUtils.wrapToArray(resource),
-                resourceData = $.map(resources[i].items, function(item) { return item.id; });
+                resourceData = iteratorUtils.map(resources[i].items, function(item) { return item.id; });
 
             for(var j = 0, itemDataCount = appointmentResourceValues.length; j < itemDataCount; j++) {
                 if(inArray(appointmentResourceValues[j], resourceData) > -1) {
@@ -372,7 +372,7 @@ var AppointmentModel = Class.inherit({
         var that = this;
 
         var result = false;
-        $.each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             if(that.appointmentTakesAllDay(item, startDayHour, endDayHour)) {
                 result = true;
                 return false;

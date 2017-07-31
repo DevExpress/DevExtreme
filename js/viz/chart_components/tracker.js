@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     consts = require("../components/consts"),
     eventsConsts = consts.events,
 
@@ -15,7 +17,7 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     _normalizeEnum = require("../core/utils").normalizeEnum,
     _floor = Math.floor,
-    _each = $.each,
+    _each = each,
     _noop = require("../../core/utils/common").noop,
 
     HOVER_STATE = consts.states.hoverMark,
@@ -131,11 +133,10 @@ var baseTrackerPrototype = {
             $parents = $parents.add(window);
         }
 
-        $().add(that._$prevRootParents)
-            .off(scrollEvents);
+        eventsEngine.off($().add(that._$prevRootParents), scrollEvents);
 
         if(subscribe) {
-            $parents.on(scrollEvents, function() {
+            eventsEngine.on($parents, scrollEvents, function() {
                 that._pointerOut();
             });
             that._$prevRootParents = $parents;
@@ -235,6 +236,7 @@ var baseTrackerPrototype = {
     _showPointTooltip: function(event, point) {
         var that = event.data.tracker,
             pointWithTooltip = that.pointAtShownTooltip;
+
         if(pointWithTooltip && pointWithTooltip !== point) {
             that._hideTooltip(pointWithTooltip);
         }
@@ -260,12 +262,12 @@ var baseTrackerPrototype = {
                 }
             };
 
-        $(document).on(POINTER_ACTION, handler);
+        eventsEngine.on(document, POINTER_ACTION, handler);
         this._outHandler = handler;
     },
 
     _disableOutHandler: function() {
-        this._outHandler && $(document).off(POINTER_ACTION, this._outHandler);
+        this._outHandler && eventsEngine.off(document, POINTER_ACTION, this._outHandler);
         this._outHandler = null;
     },
 
@@ -538,7 +540,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
                 that._gestureEnd && that._gestureEnd();     // T235643
             };
 
-            $(document).on(addNamespace(pointerEvents.up, EVENT_NS), that._gestureEndHandler);
+            eventsEngine.on(document, addNamespace(pointerEvents.up, EVENT_NS), that._gestureEndHandler);
         }
         wheelZoomingEnabled && root.on(addNamespace(wheelEvent.name, EVENT_NS), function(e) {
             var rootOffset = that._renderer.getRootOffset(),
@@ -793,7 +795,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     dispose: function() {
-        $(document).off(DOT_EVENT_NS);
+        eventsEngine.off(document, DOT_EVENT_NS, this._gestureEndHandler);
         this._resetTimer();
         baseTrackerPrototype.dispose.call(this);
     }

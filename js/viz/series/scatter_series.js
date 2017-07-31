@@ -1,13 +1,13 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     rangeCalculator = require("./helpers/range_data_calculator"),
     typeUtils = require("../../core/utils/type"),
     vizUtils = require("../core/utils"),
 
-    _each = $.each,
+    _each = each,
     _extend = extend,
     _noop = require("../../core/utils/common").noop,
     _isDefined = typeUtils.isDefined,
@@ -145,16 +145,8 @@ var baseScatterMethods = {
         that._markersGroup.attr(settings);
     },
 
-    _applyVisibleArea: function() {
-        var that = this,
-            visibleX = that.translators.x.getCanvasVisibleArea(),
-            visibleY = that.translators.y.getCanvasVisibleArea();
-        that._visibleArea = {
-            minX: visibleX.min,
-            maxX: visibleX.max,
-            minY: visibleY.min,
-            maxY: visibleY.max
-        };
+    getVisibleArea: function() {
+        return this._visibleArea;
     },
 
     areErrorBarsVisible: function() {
@@ -267,15 +259,16 @@ var baseScatterMethods = {
         return func;
     },
 
-    _processRange: function(point, prevPoint, errorBarCorrector) {
-        rangeCalculator.processRange(this, point, prevPoint, errorBarCorrector);
+    getValueRangeInitialValue: function() {
+        return undefined;
     },
 
-    _getRangeData: function(zoomArgs, calcIntervalFunction) {
-        rangeCalculator.calculateRangeData(this, zoomArgs, calcIntervalFunction);
-        rangeCalculator.addLabelPaddings(this);
+    _getRangeData: function() {
+        return rangeCalculator.getRangeData(this);
+    },
 
-        return this._rangeData;
+    _processRange: function(range) {
+        rangeCalculator.addLabelPaddings(this, range.val);
     },
 
     _getPointData: function(data, options) {
@@ -313,7 +306,7 @@ var baseScatterMethods = {
         }
     },
 
-    _clearingAnimation: function(translators, drawComplete) {
+    _clearingAnimation: function(drawComplete) {
         var that = this,
             params = { opacity: 0.001 },
             options = { duration: that._defaultDuration, partitionDuration: 0.5 };
@@ -562,6 +555,20 @@ exports.chart = _extend({}, baseScatterMethods, {
         }
 
         return point;
+    },
+
+    _applyVisibleArea: function() {
+        var that = this,
+            rotated = that._options.rotated,
+            visibleX = (rotated ? that.getValueAxis() : that.getArgumentAxis()).getTranslator().getCanvasVisibleArea(),
+            visibleY = (rotated ? that.getArgumentAxis() : that.getValueAxis()).getTranslator().getCanvasVisibleArea();
+
+        that._visibleArea = {
+            minX: visibleX.min,
+            maxX: visibleX.max,
+            minY: visibleY.min,
+            maxY: visibleY.max
+        };
     }
 });
 
@@ -586,13 +593,13 @@ exports.polar = _extend({}, baseScatterMethods, {
     },
 
     getNeighborPoint: function(x, y) {
-        var pos = this.translators.untranslate(x, y);
+        var pos = vizUtils.convertXYToPolar(this.getValueAxis().getCenter(), x, y);
         return exports.chart.getNeighborPoint.call(this, pos.phi, pos.r);
     },
 
     _applyVisibleArea: function() {
         var that = this,
-            canvas = that.translators.canvas;
+            canvas = that.getValueAxis().getCanvas();
         that._visibleArea = {
             minX: canvas.left,
             maxX: canvas.width - canvas.right,

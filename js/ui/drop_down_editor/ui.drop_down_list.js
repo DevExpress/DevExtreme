@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
@@ -44,7 +45,7 @@ var DropDownList = DropDownEditor.inherit({
                     var $focusedItem = this._list.option("focusedElement");
                     $focusedItem && this._setSelectedElement($focusedItem);
                 } else {
-                    this._focusTarget().focusout();
+                    eventsEngine.trigger(this._focusTarget(), "focusout");
                 }
 
                 parent.tab.apply(this, arguments);
@@ -361,7 +362,7 @@ var DropDownList = DropDownEditor.inherit({
 
     _renderField: function() {
         this.callBase();
-        this._input().on("input", this._setFocusPolicy.bind(this));
+        eventsEngine.on(this._input(), "input", this._setFocusPolicy.bind(this));
     },
 
     _preventFocusOnPopup: function(e) {
@@ -373,9 +374,10 @@ var DropDownList = DropDownEditor.inherit({
     _createPopup: function() {
         this.callBase();
         this._popup._wrapper().addClass(this._popupWrapperClass());
-        this._popup.content()
-            .off("mousedown")
-            .on("mousedown", this._preventFocusOnPopup.bind(this));
+
+        var $popupContent = this._popup.content();
+        eventsEngine.off($popupContent, "mousedown");
+        eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
     },
 
     _popupWrapperClass: function() {
@@ -383,13 +385,14 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _renderInputValue: function() {
-        var callBase = this.callBase.bind(this),
-            value = this._getCurrentValue();
+        var value = this._getCurrentValue();
 
-        return this._loadItem(value).always((function(item) {
-            this._setSelectedItem(item);
-            callBase(value);
-        }).bind(this));
+        return this._loadInputValue(value, this._setSelectedItem.bind(this))
+            .always(this.callBase.bind(this, value));
+    },
+
+    _loadInputValue: function(value, callback) {
+        return this._loadItem(value).always(callback);
     },
 
     _loadItem: function(value) {
@@ -666,7 +669,7 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
 
         if(this._shouldRenderSearchEvent()) {
-            this._input().on(this._getSearchEvent(), this._searchHandler.bind(this));
+            eventsEngine.on(this._input(), this._getSearchEvent(), this._searchHandler.bind(this));
         }
     },
 
@@ -675,7 +678,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _refreshEvents: function() {
-        this._input().off(this._getSearchEvent());
+        eventsEngine.off(this._input(), this._getSearchEvent());
         this.callBase();
     },
 

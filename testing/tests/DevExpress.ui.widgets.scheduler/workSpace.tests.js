@@ -678,7 +678,7 @@ QUnit.testStart(function() {
     QUnit.test("droppable class should be added on dxdragenter", function(assert) {
         var $cell = this.instance.element().find("." + CELL_CLASS).eq(2);
 
-        $cell.trigger(dragEvents.enter);
+        $($cell).trigger(dragEvents.enter);
         assert.ok($cell.hasClass(DROPPABLE_CELL_CLASS), "cell has droppable class");
     });
 
@@ -686,7 +686,7 @@ QUnit.testStart(function() {
         var $cell = this.instance.element().find("." + CELL_CLASS).eq(2);
         $cell.addClass(DROPPABLE_CELL_CLASS);
 
-        $cell.trigger(dragEvents.drop);
+        $($cell).trigger(dragEvents.drop);
         assert.ok(!$cell.hasClass(DROPPABLE_CELL_CLASS), "cell has no droppable class");
     });
 
@@ -1771,7 +1771,7 @@ QUnit.testStart(function() {
 
         $element.dxSchedulerWorkSpaceMonth("instance");
 
-        $element.trigger("focusin");
+        $($element).trigger("focusin");
         var cells = $element.find("." + CELL_CLASS);
         assert.equal(cells.find("dx-state-focused").length, 0, "cells is not focused");
 
@@ -1805,7 +1805,7 @@ QUnit.testStart(function() {
 
         $element.dxSchedulerWorkSpaceMonth("instance");
 
-        $element.trigger("focusin");
+        $($element).trigger("focusin");
         var cells = $element.find("." + CELL_CLASS);
 
         keyboard.keyDown("left");
@@ -1826,7 +1826,7 @@ QUnit.testStart(function() {
         $element.dxSchedulerWorkSpaceMonth("instance");
 
         var cells = $element.find("." + CELL_CLASS);
-        $element.trigger("focusin");
+        $($element).trigger("focusin");
         assert.ok(cells.eq(0).hasClass("dx-state-focused"), "cell is focused");
 
         keyboard.keyDown("up");
@@ -1847,7 +1847,7 @@ QUnit.testStart(function() {
 
         var cells = $element.find("." + CELL_CLASS);
 
-        $element.trigger("focusin");
+        $($element).trigger("focusin");
         keyboard.keyDown("down");
         assert.ok(scrollToElement.getCall(0).args[0].is(cells.eq(7)), "scrollToElement is called with right args");
 
@@ -1869,12 +1869,12 @@ QUnit.testStart(function() {
 
         instance.notifyObserver = updateSpy;
 
-        $element.find("." + CELL_CLASS).eq(0).trigger("focusin");
+        $($element.find("." + CELL_CLASS).eq(0)).trigger("focusin");
 
         keyboard.keyDown("enter");
         assert.notOk(updateSpy.called, "enter is not handled");
 
-        $element.trigger("focusin");
+        $($element).trigger("focusin");
         keyboard.keyDown("enter");
         assert.equal(updateSpy.getCall(0).args[0], "showAddAppointmentPopup", "Correct method of observer is called");
 
@@ -1902,7 +1902,7 @@ QUnit.testStart(function() {
 
         var cells = $element.find("." + CELL_CLASS);
 
-        $element.trigger("focusin");
+        $($element).trigger("focusin");
         keyboard.keyDown("right", { shiftKey: true });
 
         assert.equal(cells.filter(".dx-state-focused").length, 2, "right quantity of focused cells");
@@ -2122,9 +2122,9 @@ QUnit.testStart(function() {
 
         instance.notifyObserver = updateSpy;
 
-        $element.find("." + CELL_CLASS).eq(0).trigger("focusin");
+        $($element.find("." + CELL_CLASS).eq(0)).trigger("focusin");
 
-        $element.trigger("focusin");
+        $($element).trigger("focusin");
         keyboard.keyDown("down", { shiftKey: true });
         keyboard.keyDown("enter");
         assert.equal(updateSpy.getCall(0).args[0], "showAddAppointmentPopup", "Correct method of observer is called");
@@ -2154,7 +2154,7 @@ QUnit.testStart(function() {
 
         var cells = $element.find("." + CELL_CLASS);
 
-        $element.trigger("focusin");
+        $($element).trigger("focusin");
         keyboard.keyDown("down", { shiftKey: true });
         assert.equal(cells.filter(".dx-state-focused").length, 8, "right quantity of focused cells");
 
@@ -2181,13 +2181,13 @@ QUnit.testStart(function() {
         keyboard.keyDown("right", { shiftKey: true });
         assert.equal(cells.filter(".dx-state-focused").length, 2, "right quantity of focused cells");
         assert.equal(cells.filter(".dx-state-focused").last().index(), 0, "right quantity of focused cells");
-        $element.trigger("focusout");
+        $($element).trigger("focusout");
 
         pointerMock(cells.eq(13)).start().click();
         keyboard.keyDown("right", { shiftKey: true });
         assert.equal(cells.filter(".dx-state-focused").length, 2, "right quantity of focused cells");
         assert.equal(cells.filter(".dx-state-focused").last().index(), 7, "right quantity of focused cells");
-        $element.trigger("focusout");
+        $($element).trigger("focusout");
 
         pointerMock(cells.eq(7)).start().click();
         keyboard.keyDown("left", { shiftKey: true });
@@ -2215,13 +2215,13 @@ QUnit.testStart(function() {
         keyboard.keyDown("right", { shiftKey: true });
         assert.equal(cells.filter(".dx-state-focused").length, 1, "right quantity of focused cells");
         assert.equal(cells.filter(".dx-state-focused").last().index(), 7, "right quantity of focused cells");
-        $element.trigger("focusout");
+        $($element).trigger("focusout");
 
         pointerMock(cells.eq(14)).start().click();
         keyboard.keyDown("right", { shiftKey: true });
         assert.equal(cells.filter(".dx-state-focused").length, 2, "right quantity of focused cells");
         assert.equal(cells.filter(".dx-state-focused").first().index(), 6, "right quantity of focused cells");
-        $element.trigger("focusout");
+        $($element).trigger("focusout");
 
         pointerMock(cells.eq(6)).start().click();
         keyboard.keyDown("left", { shiftKey: true });
@@ -2365,8 +2365,8 @@ QUnit.testStart(function() {
 
         pointerMock(cells.eq(10)).start().click();
         assert.ok(cells.eq(10).hasClass("dx-scheduler-focused-cell"), "right focused cell");
-        $element.trigger("focusout");
-        $element.trigger("focusin");
+        $($element).trigger("focusout");
+        $($element).trigger("focusin");
         assert.ok(cells.eq(10).hasClass("dx-scheduler-focused-cell"), "right focused cell");
     });
 
@@ -2401,7 +2401,7 @@ QUnit.testStart(function() {
             $table = $element.find(".dx-scheduler-date-table");
 
         pointerMock(cells.eq(2)).start().click();
-        $table.trigger($.Event("dxpointermove", { target: cell, toElement: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointermove", { target: cell, toElement: cell, which: 1 }));
 
         assert.equal(cells.filter(".dx-state-focused").length, 1, "right quantity of focused cells");
     });
@@ -2427,13 +2427,13 @@ QUnit.testStart(function() {
 
         pointerMock(cells.eq(15)).start().click();
 
-        $table.on("dxpointermove", "td", function(e) {
+        $($table).on("dxpointermove", "td", function(e) {
             assert.ok(e.isDefaultPrevented(), "default is prevented");
             assert.ok(e.isPropagationStopped(), "propagation is stopped");
         });
 
-        $table.trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
-        $table.trigger($.Event("dxpointermove", { target: cells.eq(16).get(0), which: 1 }));
+        $($table).trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
+        $($table).trigger($.Event("dxpointermove", { target: cells.eq(16).get(0), which: 1 }));
 
     });
 
@@ -2451,12 +2451,12 @@ QUnit.testStart(function() {
             cell = cells.eq(23).get(0),
             $table = $element.find(".dx-scheduler-date-table");
 
-        $table.trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
+        $($table).trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
 
         assert.ok($element.hasClass("dx-scheduler-work-space-mouse-selection"), "right first focused cell");
 
-        $table.trigger($.Event("dxpointermove", { target: cell, which: 1 }));
-        $table.trigger($.Event("dxpointerup", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointermove", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointerup", { target: cell, which: 1 }));
 
         assert.notOk($element.hasClass("dx-scheduler-work-space-mouse-selection"), "right first focused cell");
     });
@@ -2477,9 +2477,9 @@ QUnit.testStart(function() {
 
         pointerMock(cells.eq(15)).start().click();
 
-        $table.trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
+        $($table).trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
 
-        $table.trigger($.Event("dxpointermove", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointermove", { target: cell, which: 1 }));
 
         assert.equal(cells.filter(".dx-state-focused").length, 10, "right quantity of focused cells");
         assert.ok(cells.eq(15).hasClass("dx-state-focused"), "right first focused cell");
@@ -2487,7 +2487,7 @@ QUnit.testStart(function() {
 
         cell = cells.eq(22).get(0);
 
-        $table.trigger($.Event("dxpointermove", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointermove", { target: cell, which: 1 }));
 
         assert.equal(cells.filter(".dx-state-focused").length, 2, "right quantity of focused cells");
         assert.ok(cells.eq(15).hasClass("dx-state-focused"), "right first focused cell");
@@ -2495,13 +2495,13 @@ QUnit.testStart(function() {
 
         cell = cells.eq(21).get(0);
 
-        $table.trigger($.Event("dxpointermove", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointermove", { target: cell, which: 1 }));
 
         assert.equal(cells.filter(".dx-state-focused").length, 8, "right quantity of focused cells");
         assert.ok(cells.eq(21).hasClass("dx-state-focused"), "right first focused cell");
         assert.ok(cells.eq(15).hasClass("dx-state-focused"), "right last focused cell");
 
-        $table.trigger($.Event("dxpointerup", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointerup", { target: cell, which: 1 }));
     });
 
     QUnit.test("Workspace with groups should allow select cells within one group via mouse", function(assert) {
@@ -2526,20 +2526,20 @@ QUnit.testStart(function() {
         var cell = cells.eq(20).get(0),
             $table = $element.find(".dx-scheduler-date-table");
 
-        $table.trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
+        $($table).trigger($.Event("dxpointerdown", { target: cells.eq(15).get(0), which: 1, pointerType: "mouse" }));
 
-        $table.trigger($.Event("dxpointermove", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointermove", { target: cell, which: 1 }));
 
         var $focusedCells = cells.filter(".dx-state-focused");
         assert.equal($focusedCells.length, 6, "right quantity of focused cells");
 
         cell = cells.eq(22).get(0);
 
-        $table.trigger($.Event("dxpointermove", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointermove", { target: cell, which: 1 }));
 
         assert.equal(cells.filter(".dx-state-focused").length, 6, "right quantity of focused cells");
 
-        $table.trigger($.Event("dxpointerup", { target: cell, which: 1 }));
+        $($table).trigger($.Event("dxpointerup", { target: cell, which: 1 }));
     });
 
     QUnit.test("Workspace should handle pointerdown by only left mouse key", function(assert) {
@@ -2569,7 +2569,7 @@ QUnit.testStart(function() {
         $element.dxSchedulerWorkSpaceMonth("instance");
         try {
             var cells = $element.find("." + CELL_CLASS);
-            $element.on("dxpointerdown.WorkspaceTests", function(e) {
+            $($element).on("dxpointerdown.WorkspaceTests", function(e) {
                 if(e.which > 1) {
                     assert.ok(e.isDefaultPrevented(), "default prevented");
                 } else {
@@ -2580,7 +2580,7 @@ QUnit.testStart(function() {
             cells.eq(0).trigger($.Event("dxpointerdown", { which: 1, pointerType: "mouse" }));
             cells.eq(1).trigger($.Event("dxpointerdown", { which: 2, pointerType: "mouse" }));
         } finally {
-            $element.off("dxpointerdown.WorkspaceTests");
+            $($element).off("dxpointerdown.WorkspaceTests");
         }
     });
 
@@ -2597,7 +2597,7 @@ QUnit.testStart(function() {
         });
 
         var $cell = $element.find("." + CELL_CLASS).eq(0);
-        $cell.trigger("dxclick");
+        $($cell).trigger("dxclick");
     });
 
     QUnit.test("onCellClick should fires when defines after option change", function(assert) {
@@ -2612,7 +2612,7 @@ QUnit.testStart(function() {
             assert.ok(true, "click is handled after option change");
         });
         var $cell = $element.find("." + CELL_CLASS).eq(0);
-        $cell.trigger("dxclick");
+        $($cell).trigger("dxclick");
     });
 
     QUnit.test("Popup should be shown when onCellClick", function(assert) {

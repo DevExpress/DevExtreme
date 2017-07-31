@@ -167,7 +167,7 @@ QUnit.test("Show context menu when several views", function(assert) {
     assert.strictEqual(contextMenuInstance._overlay.content().find("li").last().text(), "none1", "text item");
 
     //act
-    contextMenuInstance._overlay.content().find(".dx-menu-item").first().trigger("dxclick");
+    $(contextMenuInstance._overlay.content().find(".dx-menu-item").first()).trigger("dxclick");
 
     //assert
     assert.strictEqual(text, 'asc1', "first item text of first view");
@@ -182,7 +182,7 @@ QUnit.test("Show context menu when several views", function(assert) {
     assert.strictEqual(contextMenuInstance._overlay.content().find("li").last().text(), "none2", "text item");
 
     //act
-    contextMenuInstance._overlay.content().find(".dx-menu-item").first().trigger("dxclick");
+    $(contextMenuInstance._overlay.content().find(".dx-menu-item").first()).trigger("dxclick");
 
     //assert
     assert.strictEqual(text, 'asc2', "first item text of first view");
@@ -276,7 +276,7 @@ QUnit.test("Context menu with option onContextMenuPreparing", function(assert) {
     assert.ok(!contextMenuInstance._overlay, "not visible context menu");
 
     //act
-    $testElement.find("td").eq(3).trigger("contextmenu");
+    $($testElement.find("td").eq(3)).trigger("contextmenu");
 
     //assert
     assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");
@@ -328,7 +328,7 @@ QUnit.test("Context menu with option onContextMenuPreparing when no data and scr
     assert.ok(!contextMenuInstance._overlay, "not visible context menu");
 
     //act
-    $testElement.find(".dx-datagrid-rowsview").first().trigger("contextmenu");
+    $($testElement.find(".dx-datagrid-rowsview").first()).trigger("contextmenu");
 
     //assert
     assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");
@@ -359,11 +359,11 @@ QUnit.test("Context menu should not be shown without items", function(assert) {
     contextMenuInstance = that.contextMenuView.element().dxContextMenu("instance");
 
     //act
-    $testElement.find("td").eq(3).trigger("contextmenu");
+    $($testElement.find("td").eq(3)).trigger("contextmenu");
     contextMenuInstance.hide();
 
     contextMenuItems = null;
-    $testElement.find("td").eq(3).trigger("contextmenu");
+    $($testElement.find("td").eq(3)).trigger("contextmenu");
 
     //assert
     assert.notOk(contextMenuInstance.option("visible"), "visible context menu");
@@ -402,7 +402,7 @@ QUnit.test("Context menu with option onContextMenuPreparing for group row", func
     assert.ok(!contextMenuInstance._overlay, "not visible context menu");
 
     //act
-    $testElement.find("td").eq(1).trigger("contextmenu");
+    $($testElement.find("td").eq(1)).trigger("contextmenu");
 
     //assert
     assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");

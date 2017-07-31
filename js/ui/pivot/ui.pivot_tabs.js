@@ -1,12 +1,14 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     when = require("../../integration/jquery/deferred").when,
     fx = require("../../animation/fx"),
     swipeEvents = require("../../events/swipe"),
     translator = require("../../animation/translator"),
     eventUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
     config = require("../../core/config"),
     BindableTemplate = require("../widget/bindable_template");
@@ -65,7 +67,7 @@ var animation = {
             return;
         }
 
-        $.each(elements, function(_, $element) {
+        each(elements, function(_, $element) {
             fx.stop($element, true);
         });
     },
@@ -75,7 +77,7 @@ var animation = {
             return;
         }
 
-        $.each(elements, function(_, $element) {
+        each(elements, function(_, $element) {
             fx.stop($element);
         });
     }
@@ -175,17 +177,6 @@ var PivotTabs = CollectionWidget.inherit({
         this.callBase();
 
         this._renderGhostTab();
-    },
-
-    _renderContent: function() {
-        var that = this;
-
-        this.callBase();
-        if(this.option("templatesRenderAsynchronously")) {
-            this._resizeEventTimer = setTimeout(function() {
-                that._dimensionChanged();
-            }, 0);
-        }
     },
 
     _renderGhostTab: function() {
@@ -384,8 +375,8 @@ var PivotTabs = CollectionWidget.inherit({
             nextPosition += width * signCorrection;
         };
 
-        $.each(widths.slice(currentIndex), calculateTabPosition);
-        $.each(widths.slice(0, currentIndex), calculateTabPosition);
+        each(widths.slice(currentIndex), calculateTabPosition);
+        each(widths.slice(0, currentIndex), calculateTabPosition);
 
         switch(ghostPosition) {
             case "replace":
@@ -409,12 +400,13 @@ var PivotTabs = CollectionWidget.inherit({
     },
 
     _initSwipeHandlers: function() {
-        this.element()
-            .on(eventUtils.addNamespace(swipeEvents.start, this.NAME), {
-                itemSizeFunc: this._elementWidth.bind(this)
-            }, this._swipeStartHandler.bind(this))
-            .on(eventUtils.addNamespace(swipeEvents.swipe, this.NAME), this._swipeUpdateHandler.bind(this))
-            .on(eventUtils.addNamespace(swipeEvents.end, this.NAME), this._swipeEndHandler.bind(this));
+        var $element = this.element();
+
+        eventsEngine.on($element, eventUtils.addNamespace(swipeEvents.start, this.NAME), {
+            itemSizeFunc: this._elementWidth.bind(this)
+        }, this._swipeStartHandler.bind(this));
+        eventsEngine.on($element, eventUtils.addNamespace(swipeEvents.swipe, this.NAME), this._swipeUpdateHandler.bind(this));
+        eventsEngine.on($element, eventUtils.addNamespace(swipeEvents.end, this.NAME), this._swipeEndHandler.bind(this));
     },
 
     _swipeStartHandler: function(e) {

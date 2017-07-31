@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     support = require("../../core/utils/support"),
     browser = require("../../core/utils/browser"),
@@ -45,7 +46,7 @@ var gestureCover = (function() {
         .addClass(GESTURE_COVER_CLASS)
         .css("pointerEvents", "none");
 
-    $cover.on("dxmousewheel", function(e) {
+    eventsEngine.on($cover, "dxmousewheel", function(e) {
         e.preventDefault();
     });
 

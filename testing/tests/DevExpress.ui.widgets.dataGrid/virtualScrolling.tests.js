@@ -579,14 +579,14 @@ QUnit.test("Native scroll event", function(assert) {
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    this.$fixtureElement.on("scroll", assertFunction);
+    $(this.$fixtureElement).on("scroll", assertFunction);
     //act
     this.$fixtureElement.scrollTop(24000);
 
     function assertFunction() {
         assert.roughEqual(scrollController.getViewportPosition(), 24000 - 300, 1);
 
-        $fixtureElement.off("scroll", assertFunction);
+        $($fixtureElement).off("scroll", assertFunction);
         done();
     }
 });
@@ -704,14 +704,14 @@ QUnit.test("Scroll to when native scroll", function(assert) {
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    this.$fixtureElement.on("scroll", assertFunction);
+    $(this.$fixtureElement).on("scroll", assertFunction);
 
     scrollController.scrollTo(24000);
 
     function assertFunction() {
         assert.roughEqual(scrollController.getViewportPosition(), 24000, 1);
 
-        $fixtureElement.off("scroll", assertFunction);
+        $($fixtureElement).off("scroll", assertFunction);
         done();
     }
 });
@@ -752,7 +752,7 @@ QUnit.test("Scroll To after disposing", function(assert) {
 
     this.scrollController.subscribeToWindowScrollEvents($element);
 
-    this.$fixtureElement.on("scroll", assertFunction);
+    $(this.$fixtureElement).on("scroll", assertFunction);
     //act
     scrollController.dispose();
 

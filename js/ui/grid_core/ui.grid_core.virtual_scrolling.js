@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     virtualScrollingCore = require("./ui.grid_core.virtual_scrolling_core"),
     gridCoreUtils = require("./ui.grid_core.utils"),
+    each = require("../../core/utils/iterator").each,
     browser = require("../../core/utils/browser"),
     translator = require("../../animation/translator"),
     LoadIndicator = require("../load_indicator");
@@ -355,7 +356,7 @@ var VirtualScrollingRowsViewExtender = (function() {
             var result = $columns.length === $virtualColumns.length;
 
             if(result) {
-                $.each($columns, function(index, element) {
+                each($columns, function(index, element) {
                     if(element.style.width !== $virtualColumns[index].style.width) {
                         result = false;
                         return result;
@@ -494,7 +495,8 @@ var VirtualScrollingRowsViewExtender = (function() {
         setLoading: function(isLoading, messageText) {
             var that = this,
                 callBase = that.callBase,
-                hasBottomLoadPanel = !!that._findBottomLoadPanel() && that._dataController.isLoaded();
+                dataController = that._dataController,
+                hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!that._findBottomLoadPanel();
 
             if(hasBottomLoadPanel) {
                 isLoading = false;

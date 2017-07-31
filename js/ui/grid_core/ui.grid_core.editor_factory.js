@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
@@ -35,7 +36,7 @@ var CHECKBOX_SIZE_CLASS = "checkbox-size",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
-    FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, .dx-lookup-field:focus",
+    FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus",
     DX_HIDDEN = "dx-hidden",
     TAB_KEY = 9;
 
@@ -396,7 +397,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             this.createAction("onEditorPrepared", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
 
             this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-            $(document).on(UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+            eventsEngine.on(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
             this._attachContainerEventHandlers();
         },
@@ -408,14 +409,14 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
             if($container) {
                 //T179518
-                $container.on(addNamespace("keydown", MODULE_NAMESPACE), function(e) {
+                eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
                     if(e.which === TAB_KEY) {
                         that._updateFocusHandler(e);
                     }
                 });
 
                 //T112103, T110581, T174768
-                isIE10OrLower && $container.on([pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
+                isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
             }
         },
 
@@ -441,13 +442,13 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
             $currentTarget.removeClass(DX_HIDDEN);
 
-            $focusedElement && $focusedElement.find(EDITORS_INPUT_SELECTOR).focus();
+            $focusedElement && eventsEngine.trigger($focusedElement.find(EDITORS_INPUT_SELECTOR), "focus");
         },
 
         dispose: function() {
             clearTimeout(this._focusTimeoutID);
             clearTimeout(this._updateFocusTimeoutID);
-            $(document).off(UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+            eventsEngine.off(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
         },
 
         createEditor: function($container, options) {

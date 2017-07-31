@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var eventsEngine = require("../../events/core/events_engine"),
     _math = Math,
     _abs = _math.abs,
     _sqrt = _math.sqrt,
@@ -394,7 +394,7 @@ Tracker.prototype = {
                 off(_addNamespace("MSHoldVisual", _NAME)).
                 off(_addNamespace("contextmenu", _NAME));
         }
-        $(document).off(that._docHandlers);
+        eventsEngine.off(document, that._docHandlers);
         that._root.off(that._rootHandlers);
     },
 
@@ -409,7 +409,7 @@ Tracker.prototype = {
                     isTouchEvent(event) && event.preventDefault();
                 });
         }
-        $(document).on(that._docHandlers);
+        eventsEngine.on(document, that._docHandlers);
         that._root.on(that._rootHandlers);
     }
 };

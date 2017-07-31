@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
     numberLocalization = require("../../localization/number"),
     devices = require("../../core/devices"),
@@ -470,23 +471,27 @@ var Slider = TrackBar.inherit({
     },
 
     _renderStartHandler: function() {
-        var pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME),
-            clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            startAction = this._createAction(this._startHandler.bind(this));
+        var pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        var clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        var startAction = this._createAction(this._startHandler.bind(this));
+        var $element = this.element();
 
-        this.element()
-            .off(pointerDownEventName)
-            .on(pointerDownEventName, function(e) {
-                if(eventUtils.isMouseEvent(e)) {
-                    startAction({ jQueryEvent: e });
-                }
-            })
-            .off(clickEventName)
-            .on(clickEventName, (function(e) {
-                var handle = this._activeHandle();
-                handle && handle.focusin() && handle.focus();
+        eventsEngine.off($element, pointerDownEventName);
+        eventsEngine.on($element, pointerDownEventName, function(e) {
+            if(eventUtils.isMouseEvent(e)) {
                 startAction({ jQueryEvent: e });
-            }).bind(this));
+            }
+        });
+        eventsEngine.off($element, clickEventName);
+        eventsEngine.on($element, clickEventName, (function(e) {
+            var $handle = this._activeHandle();
+
+            if($handle) {
+                eventsEngine.trigger($handle, "focusin");
+                eventsEngine.trigger($handle, "focus");
+            }
+            startAction({ jQueryEvent: e });
+        }).bind(this));
     },
 
     _itemWidthFunc: function() {

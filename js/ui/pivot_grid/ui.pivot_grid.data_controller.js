@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     when = require("../../integration/jquery/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     Class = require("../../core/class"),
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
@@ -162,7 +164,7 @@ exports.DataController = Class.inherit((function() {
             if((stringValuesUsed && sortBySummaryPath[0].indexOf("&[") !== -1 && headerItem.key) || !headerItem.key) {
                 path = createPath(items);
             } else {
-                path = $.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
+                path = iteratorUtils.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
             }
 
             if(item.type === GRAND_TOTAL_TYPE) {
@@ -238,7 +240,7 @@ exports.DataController = Class.inherit((function() {
 
                         item.isLast = !item.children || !item.children.length;
                         if(item.isLast) {
-                            $.each(options.sortBySummaryPaths, function(index, sortBySummaryPath) {
+                            iteratorUtils.each(options.sortBySummaryPaths, function(index, sortBySummaryPath) {
                                 if(!typeUtils.isDefined(item.dataIndex)) {
                                     sortBySummaryPath = sortBySummaryPath.slice(0);
                                     sortBySummaryPath.pop();
@@ -433,7 +435,7 @@ exports.DataController = Class.inherit((function() {
     function createSortPaths(headerFields, dataFields) {
         var sortBySummaryPaths = [];
 
-        $.each(headerFields, function(index, headerField) {
+        iteratorUtils.each(headerFields, function(index, headerField) {
             var fieldIndex = pivotGridUtils.findField(dataFields, headerField.sortBySummaryField);
             if(fieldIndex >= 0) {
                 sortBySummaryPaths.push((headerField.sortBySummaryPath || []).concat([fieldIndex]));
@@ -658,7 +660,7 @@ exports.DataController = Class.inherit((function() {
 
     function getHiddenTotals(dataFields) {
         var result = [];
-        $.each(dataFields, function(index, field) {
+        iteratorUtils.each(dataFields, function(index, field) {
             if(field.showTotals === false) {
                 result.push(index);
             }
@@ -680,7 +682,7 @@ exports.DataController = Class.inherit((function() {
 
     function getHiddenGrandTotalsTotals(dataFields, columnFields) {
         var result = [];
-        $.each(dataFields, function(index, field) {
+        iteratorUtils.each(dataFields, function(index, field) {
             if(field.showGrandTotals === false) {
                 result.push(index);
             }
@@ -700,7 +702,7 @@ exports.DataController = Class.inherit((function() {
 
             options = that._options = options || {};
 
-            that.dataSourceChanged = $.Callbacks();
+            that.dataSourceChanged = Callbacks();
             that._dataSource = that._createDataSource(options);
 
             that._rowsScrollController = createScrollController(that, options.component, {
@@ -749,13 +751,14 @@ exports.DataController = Class.inherit((function() {
             that._rowsInfo = [];
             that._cellsInfo = [];
 
-            that.expandValueChanging = $.Callbacks();
-            that.loadingChanged = $.Callbacks();
-            that.scrollChanged = $.Callbacks();
+            that.expandValueChanging = Callbacks();
+            that.loadingChanged = Callbacks();
+            that.progressChanged = Callbacks();
+            that.scrollChanged = Callbacks();
 
             that.load();
             that._update();
-            that.changed = $.Callbacks();
+            that.changed = Callbacks();
         },
 
         _fireChanged: function() {
@@ -852,8 +855,11 @@ exports.DataController = Class.inherit((function() {
         _handleExpandValueChanging: function(e) {
             this.expandValueChanging.fire(e);
         },
-        _handleLoadingChanged: function(isLoading, progress) {
-            this.loadingChanged.fire(isLoading, progress);
+        _handleLoadingChanged: function(isLoading) {
+            this.loadingChanged.fire(isLoading);
+        },
+        _handleProgressChanged: function(progress) {
+            this.progressChanged.fire(progress);
         },
         _handleFieldsPrepared: function(e) {
             this._options.onFieldsPrepared && this._options.onFieldsPrepared(e);
@@ -873,6 +879,9 @@ exports.DataController = Class.inherit((function() {
 
             that._expandValueChangingHandler = that._handleExpandValueChanging.bind(that);
             that._loadingChangedHandler = that._handleLoadingChanged.bind(that);
+            that._progressChangedHandler = function(progress) {
+                that._handleProgressChanged(progress * 0.8);
+            };
             that._fieldsPreparedHandler = that._handleFieldsPrepared.bind(that);
             that._changedHandler = function() {
                 that._update();
@@ -882,6 +891,7 @@ exports.DataController = Class.inherit((function() {
             dataSource.on("changed", that._changedHandler);
             dataSource.on("expandValueChanging", that._expandValueChangingHandler);
             dataSource.on("loadingChanged", that._loadingChangedHandler);
+            dataSource.on("progressChanged", that._progressChangedHandler);
             dataSource.on("fieldsPrepared", that._fieldsPreparedHandler);
 
             return dataSource;
@@ -920,7 +930,7 @@ exports.DataController = Class.inherit((function() {
                 grandTotalsAreHiddenForNotAllDataFields = dataFields.length > 0 ? hiddenGrandTotals.length !== dataFields.length : true,
                 notifyProgress = function(progress) {
                     this.progress = progress;
-                    dataSource._changeLoadingCount(0, 0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
+                    that._handleProgressChanged(0.8 + 0.1 * rowOptions.progress + 0.1 * columnOptions.progress);
                 },
                 rowOptions = {
                     isEmptyGrandTotal: data.isEmptyGrandTotalRow, //TODO bool or array
@@ -963,12 +973,14 @@ exports.DataController = Class.inherit((function() {
                 data.grandTotalColumnIndex = getHeaderIndexedItems(data.columns, columnOptions).length;
             }
 
-            dataSource._changeLoadingCount(1, 0.8);
+            dataSource._changeLoadingCount(1);
 
             when(
                 createHeaderInfo(data.columns, columnFields, dataFieldsForColumns, true, columnOptions),
                 createHeaderInfo(data.rows, rowFields, dataFieldsForRows, false, rowOptions)
-            ).done(function(columnsInfo, rowsInfo) {
+            ).always(function() {
+                dataSource._changeLoadingCount(-1);
+            }).done(function(columnsInfo, rowsInfo) {
                 that._columnsInfo = columnsInfo;
                 that._rowsInfo = rowsInfo;
 
@@ -981,8 +993,6 @@ exports.DataController = Class.inherit((function() {
                     that._columnsScrollController.load();
                     that._lockChanged = false;
                 }
-            }).always(function() {
-                dataSource._changeLoadingCount(-1);
             }).done(function() {
                 that._fireChanged();
                 if(that._stateStoringController.isEnabled() && !that._dataSource.isLoading()) {
@@ -1159,6 +1169,7 @@ exports.DataController = Class.inherit((function() {
                 that._dataSource.off("changed", that._changedHandler);
                 that._dataSource.off("expandValueChanging", that._expandValueChangingHandler);
                 that._dataSource.off("loadingChanged", that._loadingChangedHandler);
+                that._dataSource.off("progressChanged", that._progressChangedHandler);
             } else {
                 that._dataSource.dispose();
             }
@@ -1171,6 +1182,7 @@ exports.DataController = Class.inherit((function() {
             that.expandValueChanging.empty();
             that.changed.empty();
             that.loadingChanged.empty();
+            that.progressChanged.empty();
             that.scrollChanged.empty();
             that.dataSourceChanged.empty();
         }

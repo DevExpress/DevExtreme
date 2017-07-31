@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     camelize = require("../../core/utils/inflector").camelize,
     registerComponent = require("../../core/component_registrator"),
@@ -133,7 +134,7 @@ var SchedulerHeader = Widget.inherit({
     _validateViews: function() {
         var views = this.option("views");
 
-        $.each(views, function(_, view) {
+        each(views, function(_, view) {
             var viewName = typeUtils.isObject(view) && view.type ? view.type : view;
 
             if(inArray(viewName, VIEWS) === -1) {

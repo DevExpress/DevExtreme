@@ -1,7 +1,8 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("jquery"),
     Class = require("../core/class"),
+    Callbacks = require("../core/utils/callbacks"),
     queue = require("../core/utils/queue");
 
 var ROOT_PAGE_URL = "__root__",
@@ -12,7 +13,7 @@ var DefaultBrowserAdapter = Class.inherit({
         options = options || {};
         this._window = options.window || window;
 
-        this.popState = $.Callbacks();
+        this.popState = Callbacks();
         $(this._window).on("hashchange", this._onHashChange.bind(this));
         this._tasks = queue.create();
         this.canWorkInPureBrowser = true;
@@ -160,7 +161,7 @@ var HistorylessBrowserAdapter = DefaultBrowserAdapter.inherit({
         options = options || {};
         this._window = options.window || window;
 
-        this.popState = $.Callbacks();
+        this.popState = Callbacks();
         $(this._window).on("dxback", this._onHashChange.bind(this));
 
         this._currentHash = this._window.location.hash;

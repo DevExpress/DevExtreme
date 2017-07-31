@@ -7,8 +7,9 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     isDefined = typeUtils.isDefined,
-    each = $.each,
+    each = iteratorUtils.each,
     when = require("../../integration/jquery/deferred").when,
     Class = require("../../core/class"),
     EventsMixin = require("../../core/events_mixin"),
@@ -79,7 +80,7 @@ function createCaption(field) {
 function resetFieldState(field, properties) {
     var initialProperties = field._initProperties || {};
 
-    $.each(properties, function(_, prop) {
+    iteratorUtils.each(properties, function(_, prop) {
         if(initialProperties.hasOwnProperty(prop)) {
             field[prop] = initialProperties[prop];
         }
@@ -93,17 +94,16 @@ function updateCalculatedFieldProperties(field, calculatedProperties) {
     }
 }
 
-function areExpressionsUsed(descriptions) {
-    var expressionsUsed = false;
-
-    each(descriptions.values, function(_, field) {
-        if(field.summaryDisplayMode || field.calculateSummaryValue || field.runningTotal) {
-            expressionsUsed = true;
-            return false;
-        }
+function areExpressionsUsed(dataFields) {
+    return dataFields.some(function(field) {
+        return field.summaryDisplayMode || field.calculateSummaryValue;
     });
+}
 
-    return expressionsUsed;
+function isRunningTotalUsed(dataFields) {
+    return dataFields.some(function(field) {
+        return !!field.runningTotal;
+    });
 }
 
 module.exports = Class.inherit((function() {
@@ -216,20 +216,22 @@ module.exports = Class.inherit((function() {
         }
     };
 
-    function createLocalOrRemoteStore(dataSourceOptions) {
+    function createLocalOrRemoteStore(dataSourceOptions, notifyProgress) {
         var StoreConstructor = dataSourceOptions.remoteOperations ? RemoteStore : localStore.LocalStore;
 
         return new StoreConstructor(extend(DataSourceModule.normalizeDataSourceOptions(dataSourceOptions), {
-            onChanged: null
+            onChanged: null,
+            onLoadingChanged: null,
+            onProgressChanged: notifyProgress
         }));
     }
 
-    function createStore(dataSourceOptions) {
+    function createStore(dataSourceOptions, notifyProgress) {
         var store,
             storeOptions;
 
         if(typeUtils.isPlainObject(dataSourceOptions) && dataSourceOptions.load) {
-            store = createLocalOrRemoteStore(dataSourceOptions);
+            store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
         } else {
             //TODO remove
             if(dataSourceOptions && !dataSourceOptions.store) {
@@ -241,7 +243,7 @@ module.exports = Class.inherit((function() {
             if(storeOptions.type === "xmla") {
                 store = new xmlaStore.XmlaStore(storeOptions);
             } else if((typeUtils.isPlainObject(storeOptions) && storeOptions.type) || (storeOptions instanceof Store) || Array.isArray(storeOptions)) {
-                store = createLocalOrRemoteStore(dataSourceOptions);
+                store = createLocalOrRemoteStore(dataSourceOptions, notifyProgress);
             } else if(storeOptions instanceof Class) {
                 store = storeOptions;
             }
@@ -362,7 +364,7 @@ module.exports = Class.inherit((function() {
     }
 
     function getFieldsByGroup(fields, groupingField) {
-        return $.map(fields, function(field) {
+        return iteratorUtils.map(fields, function(field) {
             if(field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false) {
                 return extend(field, {
                     areaIndex: groupingField.areaIndex,
@@ -385,7 +387,7 @@ module.exports = Class.inherit((function() {
 
     function sortFieldsByAreaIndex(fields) {
         fields.sort(function(field1, field2) {
-            return field1.areaIndex - field2.areaIndex;
+            return field1.areaIndex - field2.areaIndex || field1.groupIndex - field2.groupIndex;
         });
     }
 
@@ -473,7 +475,7 @@ module.exports = Class.inherit((function() {
             foreachTree(items, function(items) {
                 var item = items[0],
                     itemPath = createPath(items).join("."),
-                    textPath = $.map(items, function(item) { return item.text; }).reverse().join(".");
+                    textPath = iteratorUtils.map(items, function(item) { return item.text; }).reverse().join(".");
 
                 if(pathValue === itemPath || (item.key && textPath === pathValue)) {
                     index = items[0].index;
@@ -605,7 +607,9 @@ module.exports = Class.inherit((function() {
             options = options || {};
 
             var that = this,
-                store = createStore(options);
+                store = createStore(options, function(progress) {
+                    that.fireEvent("progressChanged", [progress]);
+                });
 
             /**
             * @name PivotGridDataSourceOptions_store
@@ -654,6 +658,7 @@ module.exports = Class.inherit((function() {
                     "changed",
                     "loadError",
                     "loadingChanged",
+                    "progressChanged",
                     "fieldsPrepared",
                     "expandValueChanging"
                 ],
@@ -1112,10 +1117,6 @@ module.exports = Class.inherit((function() {
 
             that._changeLoadingCount(1);
 
-            d.progress(function(progress) {
-                that._changeLoadingCount(0, progress * 0.8);
-            });
-
             d.fail(function(e) {
                 that.fireEvent("loadError", [e]);
             }).always(function() {
@@ -1284,15 +1285,15 @@ module.exports = Class.inherit((function() {
             }
         },
 
-        _changeLoadingCount: function(increment, progress) {
+        _changeLoadingCount: function(increment) {
             var oldLoading = this.isLoading(),
                 newLoading;
 
             this._loadingCount += increment;
             newLoading = this.isLoading();
 
-            if((oldLoading ^ newLoading) || progress) {
-                this.fireEvent("loadingChanged", [newLoading, progress]);
+            if(oldLoading ^ newLoading) {
+                this.fireEvent("loadingChanged", [newLoading]);
             }
         },
 
@@ -1317,7 +1318,7 @@ module.exports = Class.inherit((function() {
                 deferred.always(function() {
                     that._changeLoadingCount(-1);
                 });
-                when(store.load(options)).progress(deferred.notify).done(function(data) {
+                when(store.load(options)).done(function(data) {
                     if(options.path) {
                         that.applyPartialDataSource(options.area, options.path, data, deferred);
                     } else {
@@ -1344,7 +1345,8 @@ module.exports = Class.inherit((function() {
             var that = this,
                 descriptions = that._descriptions,
                 loadedData = that._data,
-                expressionsUsed = areExpressionsUsed(descriptions);
+                dataFields = descriptions.values,
+                expressionsUsed = areExpressionsUsed(dataFields);
 
             when(formatHeaders(descriptions, loadedData), updateCache(loadedData.rows), updateCache(loadedData.columns)).done(function() {
                 if(expressionsUsed) {
@@ -1353,6 +1355,8 @@ module.exports = Class.inherit((function() {
                 }
 
                 that._sort(descriptions, loadedData);
+
+                isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
 
                 that._data = loadedData;
                 when(deferred).done(function() {
@@ -1366,6 +1370,7 @@ module.exports = Class.inherit((function() {
                 });
                 deferred && deferred.resolve(that._data);
             });
+            return deferred;
         },
 
         store: function() {

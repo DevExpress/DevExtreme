@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     clickEvent = require("../../events/click"),
     messageLocalization = require("../../localization/message"),
@@ -43,9 +44,9 @@ registerDecorator(
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            this._$buttonsContainer = $("<div/>")
-                .addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS)
-                .on(ACTIVE_EVENT_NAME, noop);
+            this._$buttonsContainer = $("<div/>").addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS);
+            eventsEngine.on(this._$buttonsContainer, ACTIVE_EVENT_NAME, noop);
+
             this._$buttons = $("<div/>")
                 .addClass(SLIDE_MENU_BUTTONS_CLASS)
                 .appendTo(this._$buttonsContainer);
@@ -95,7 +96,7 @@ registerDecorator(
                 .text(text);
 
             this._$buttons.append($menuButton);
-            $menuButton.on(CLICK_EVENT_NAME, action);
+            eventsEngine.on($menuButton, CLICK_EVENT_NAME, action);
 
             return $menuButton;
         },
@@ -110,7 +111,7 @@ registerDecorator(
                 .addClass(SLIDE_MENU_BUTTON_DELETE_CLASS)
                 .text(messageLocalization.format("dxListEditDecorator-delete"));
 
-            $deleteButton.on(CLICK_EVENT_NAME, (function(e) {
+            eventsEngine.on($deleteButton, CLICK_EVENT_NAME, (function(e) {
                 e.stopPropagation();
                 this._deleteItem();
             }).bind(this));

@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     registerComponent = require("../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
     extend = require("../../core/utils/extend").extend,
@@ -155,7 +156,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
     _setGroupHeaderCellsHeight: function() {
         var $cells = this._getGroupHeaderCells().filter(function(_, element) {
-                return !element.getAttribute("rowspan");
+                return !element.getAttribute("rowSpan");
             }),
             rows = this._removeEmptyRows(this._rows);
 
@@ -368,7 +369,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         }).bind(this);
 
         for(var i = 0; i < this._rows.length; i++) {
-            $.each(this._rows[i], fillTableBody);
+            each(this._rows[i], fillTableBody);
             this._setLastRowClass();
         }
 

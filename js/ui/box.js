@@ -1,12 +1,14 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     Class = require("../core/class"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
     support = require("../core/utils/support"),
+    each = require("../core/utils/iterator").each,
     browser = require("../core/utils/browser"),
     CollectionWidgetItem = require("./collection/item"),
     devices = require("../core/devices"),
@@ -107,7 +109,7 @@ var FlexLayoutStrategy = Class.inherit({
     renderItems: function($items) {
         var direction = this._option("direction");
 
-        $.each($items, function() {
+        each($items, function() {
             var $item = $(this);
             var item = $item.data(BOX_ITEM_DATA_KEY);
 
@@ -200,9 +202,8 @@ var FallbackLayoutStrategy = Class.inherit({
             verticalAlign: "top"
         });
 
-        this._$element
-            .off(UPDATE_EVENT)
-            .on(UPDATE_EVENT, this.update.bind(this));
+        eventsEngine.off(this._$element, UPDATE_EVENT);
+        eventsEngine.on(this._$element, UPDATE_EVENT, this.update.bind(this));
     },
 
     renderAlign: function() {
@@ -270,7 +271,7 @@ var FallbackLayoutStrategy = Class.inherit({
             case "start":
                 break;
             case "end":
-                $.each($items, function() {
+                each($items, function() {
                     var $item = $(this),
                         itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]](),
                         shift = size - itemSize;
@@ -278,7 +279,7 @@ var FallbackLayoutStrategy = Class.inherit({
                 });
                 break;
             case "center":
-                $.each($items, function() {
+                each($items, function() {
                     var $item = $(this),
                         itemSize = $item[FALLBACK_CROSS_SIZE_MAP[direction]](),
                         shift = 0.5 * (size - itemSize);
@@ -312,7 +313,7 @@ var FallbackLayoutStrategy = Class.inherit({
             totalWeightedShrink = 0,
             totalBaseSize = 0;
 
-        $.each($items, (function(_, item) {
+        each($items, (function(_, item) {
             var $item = $(item);
 
             $item.css({
@@ -349,7 +350,7 @@ var FallbackLayoutStrategy = Class.inherit({
 
         var totalItemSize = 0;
 
-        $.each($items, function(_, item) {
+        each($items, function(_, item) {
             var $item = $(item),
                 itemData = $(item).data(BOX_ITEM_DATA_KEY),
                 size = itemSize($item);
@@ -392,7 +393,7 @@ var FallbackLayoutStrategy = Class.inherit({
     _totalBaseSize: function() {
         var result = 0;
 
-        $.each(this._$items, (function(_, item) {
+        each(this._$items, (function(_, item) {
             result += this._baseSize(item);
         }).bind(this));
 
@@ -420,7 +421,7 @@ var FallbackLayoutStrategy = Class.inherit({
 
         this._$items.find(BOX_SELECTOR).each(function() {
             if(element === $(this).parent().closest(BOX_SELECTOR).get(0)) {
-                $(this).triggerHandler(UPDATE_EVENT);
+                eventsEngine.triggerHandler(this, UPDATE_EVENT);
             }
         });
     }

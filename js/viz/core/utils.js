@@ -1,13 +1,13 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     _isDefined = typeUtils.isDefined,
     _inArray = inArray,
-    _each = $.each,
+    _each = each,
     _math = Math,
     _round = _math.round,
     _sqrt = Math.sqrt,
@@ -442,7 +442,7 @@ extend(exports, {
         _each(panes, function(_, pane) {
             var calcLength = _round(pane.weight * oneWeight);
             pane.canvas = pane.canvas || {};
-            _extend(pane.canvas, { deltaLeft: 0, deltaRight: 0, deltaTop: 0, deltaBottom: 0 }, canvas);
+            _extend(pane.canvas, canvas);
             pane.canvas[startName] = canvas[startName] + distributedSpace;
             pane.canvas[endName] = canvas[endName] + (paneSpace - calcLength - distributedSpace);
 

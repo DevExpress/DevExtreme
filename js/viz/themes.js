@@ -1,13 +1,13 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    extend = require("../core/utils/extend").extend,
+var extend = require("../core/utils/extend").extend,
+    each = require("../core/utils/iterator").each,
     vizUtils = require("./core/utils"),
     themes = {},
     themesMapping = {},
     themesSchemeMapping = {},
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _normalizeEnum = vizUtils.normalizeEnum,
     currentThemeName = null,
     nextCacheUid = 0,

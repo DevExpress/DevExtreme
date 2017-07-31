@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
@@ -261,7 +263,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     editorOptions = that._getEditorOptions($editor, column);
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-                    $editor.find(EDITORS_INPUT_SELECTOR).on("keydown", function(e) {
+                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         var $prevElement = $cell.find("[tabindex]").not(e.target).first();
 
                         if(e.which === 9 && e.shiftKey) {
@@ -271,7 +273,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                             if(!$prevElement.length) {
                                 $prevElement = $cell.prev().find("[tabindex]").last();
                             }
-                            $prevElement.focus();
+                            eventsEngine.trigger($prevElement, "focus");
                         }
                     });
 
@@ -280,11 +282,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
                     editorOptions.sharedData = sharedData;
                     that._renderEditor($editor, editorOptions);
-                    $editor.find(EDITORS_INPUT_SELECTOR).on("keydown", function(e) {
+                    eventsEngine.on($editor.find(EDITORS_INPUT_SELECTOR), "keydown", function(e) {
                         if(e.which === 9 && !e.shiftKey) {
                             e.preventDefault();
                             that._hideFilterRange();
-                            $cell.next().find("[tabindex]").first().focus();
+                            eventsEngine.trigger($cell.next().find("[tabindex]").first(), "focus");
                         }
                     });
 
@@ -293,7 +295,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 onShown: function(e) {
                     var $editor = e.component.content().find("." + EDITOR_CONTAINER_CLASS).first();
 
-                    $editor.find(EDITORS_INPUT_SELECTOR).focus();
+                    eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), "focus");
                 },
                 onHidden: function() {
                     column = that._columnsController.columnOption(column.index);
@@ -436,13 +438,15 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $editorContainer = $cell.find("." + EDITOR_CONTAINER_CLASS).first();
 
             $editorContainer.empty();
-            $("<div>")
+            var $filterRangeContent = $("<div>")
                 .addClass(FILTER_RANGE_CONTENT_CLASS)
-                .attr("tabindex", this.option("tabIndex"))
-                .on("focusin", function() {
-                    that._showFilterRange($cell, column);
-                })
-                .appendTo($editorContainer);
+                .attr("tabindex", this.option("tabIndex"));
+
+            eventsEngine.on($filterRangeContent, "focusin", function() {
+                that._showFilterRange($cell, column);
+            });
+
+            $filterRangeContent.appendTo($editorContainer);
 
             that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
         },
@@ -483,7 +487,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                         isOnClickMode = isOnClickApplyFilterMode(that),
                         options = {};
 
-                    if(properties.itemData.items || selectedFilterOperation === columnSelectedFilterOperation) {
+                    if(properties.itemData.items || (selectedFilterOperation && selectedFilterOperation === columnSelectedFilterOperation)) {
                         return;
                     }
 
@@ -521,7 +525,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     that.getController("editorFactory").loseFocus();
                 },
                 onSubmenuHiding: function() {
-                    $menu.blur();
+                    eventsEngine.trigger($menu, "blur");
                     Menu.getInstance($menu).option("focusedElement", null);
                     isCellWasFocused && that._focusEditor($editorContainer);
                 },
@@ -535,9 +539,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
         _focusEditor: function($container) {
             this.getController("editorFactory").focus($container);
-            $container
-                .find(EDITORS_INPUT_SELECTOR)
-                .focus();
+            eventsEngine.trigger($container.find(EDITORS_INPUT_SELECTOR), "focus");
         },
 
         _renderFilterOperationChooser: function($container, column, $editorContainer) {
@@ -558,7 +560,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 operationDescriptions = filterRowOptions && filterRowOptions.operationDescriptions || {};
 
             if(column.filterOperations && column.filterOperations.length) {
-                result = $.map(column.filterOperations, function(value) {
+                result = iteratorUtils.map(column.filterOperations, function(value) {
                     var descriptionName = OPERATION_DESCRIPTORS[value];
 
                     return {
@@ -602,7 +604,7 @@ var DataControllerFilterRowExtender = {
             filters = [that.callBase()],
             columns = that._columnsController.getVisibleColumns();
 
-        $.each(columns, function() {
+        iteratorUtils.each(columns, function() {
             var filter;
 
             if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue)) {

@@ -9,6 +9,8 @@ var $ = require("../core/renderer"),
     coreDataUtils = require("./utils/data"),
     commonUtils = require("./utils/common"),
     typeUtils = require("./utils/type"),
+    map = require("../core/utils/iterator").map,
+    Callbacks = require("./utils/callbacks"),
     EventsMixin = require("./events_mixin"),
     publicComponentUtils = require("./utils/public_component"),
     devices = require("./devices"),
@@ -38,7 +40,7 @@ var Component = Class.inherit({
     },
 
     _getOptionAliasesByName: function(optionName) {
-        return $.map(this._deprecatedOptions, function(deprecate, aliasName) {
+        return map(this._deprecatedOptions, function(deprecate, aliasName) {
             return optionName === deprecate.alias ? aliasName : undefined;
         });
     },
@@ -114,10 +116,12 @@ var Component = Class.inherit({
         var options = {};
         var currentDevice = devices.current();
         var deviceMatch = function(device, filter) {
-            filter = $.makeArray(filter);
+            var filterArray = [];
 
-            return (filter.length === 1 && typeUtils.isEmptyObject(filter[0]))
-                || commonUtils.findBestMatches(device, filter).length > 0;
+            Array.prototype.push.call(filterArray, filter);
+
+            return (filterArray.length === 1 && typeUtils.isEmptyObject(filterArray[0]))
+                || commonUtils.findBestMatches(device, filterArray).length > 0;
         };
 
         for(var i = 0; i < rules.length; i++) {
@@ -165,8 +169,8 @@ var Component = Class.inherit({
 
         this._updateLockCount = 0;
 
-        this._optionChangedCallbacks = options._optionChangedCallbacks || $.Callbacks();
-        this._disposingCallbacks = options._disposingCallbacks || $.Callbacks();
+        this._optionChangedCallbacks = options._optionChangedCallbacks || Callbacks();
+        this._disposingCallbacks = options._disposingCallbacks || Callbacks();
 
         this.beginUpdate();
 
@@ -426,8 +430,8 @@ var Component = Class.inherit({
             if(!action) {
                 var beforeExecute = config.beforeExecute;
                 config.beforeExecute = function(args) {
-                    that.fireEvent(eventName, args.args);
                     beforeExecute && beforeExecute.apply(that, arguments);
+                    that.fireEvent(eventName, args.args);
                 };
                 that._suppressDeprecatedWarnings();
                 action = that._createAction(actionFunc, config);

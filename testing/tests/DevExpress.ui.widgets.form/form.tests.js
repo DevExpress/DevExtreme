@@ -970,8 +970,7 @@ QUnit.test("dxshown event fire when visible option changed to true", function(as
         }).data("dxForm"),
         dxShownEventCounter = 0;
 
-    form
-        .element()
+    $(form.element())
         .find(".dx-visibility-change-handler")
         .first()
         .on("dxshown", function() {
@@ -2525,7 +2524,7 @@ QUnit.test("UpdateDimensions", function(assert) {
 function triggerKeyUp($element, keyCode) {
     var e = $.Event("keyup");
     e.which = keyCode;
-    $element.find("input").first().trigger(e);
+    $($element.find("input").first()).trigger(e);
 }
 
 QUnit.test("Check component instance onEditorEnterKey", function(assert) {

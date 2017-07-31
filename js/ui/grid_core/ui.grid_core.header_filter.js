@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     headerFilterCore = require("./ui.grid_core.header_filter_core"),
@@ -10,6 +11,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     dataUtils = require("../../data/utils"),
     dataCoreUtils = require("../../core/utils/data"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     extend = require("../../core/utils/extend").extend,
@@ -308,7 +310,7 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterCore.headerFi
         var that = this;
 
         if(indicatorName === "headerFilter") {
-            $indicator.on(clickEvent.name, that.createAction(function(e) {
+            eventsEngine.on($indicator, clickEvent.name, that.createAction(function(e) {
                 var event = e.jQueryEvent;
 
                 event.stopPropagation();
@@ -355,7 +357,7 @@ var HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
                 showColumnLines: true
             });
 
-            $headerFilterIndicator && $headerFilterIndicator.on(clickEvent.name, that.createAction(function(e) {
+            $headerFilterIndicator && eventsEngine.on($headerFilterIndicator, clickEvent.name, that.createAction(function(e) {
                 var event = e.jQueryEvent;
 
                 event.stopPropagation();
@@ -415,7 +417,7 @@ var DataControllerFilterRowExtender = {
             headerFilterController = that.getController("headerFilter"),
             currentColumn = headerFilterController.getCurrentColumn();
 
-        $.each(columns, function(_, column) {
+        each(columns, function(_, column) {
             var filter;
 
             if(currentColumn && currentColumn.index === column.index) {
@@ -426,7 +428,7 @@ var DataControllerFilterRowExtender = {
                 var filterValues = [],
                     isExclude = column.filterType === "exclude";
 
-                $.each(column.filterValues, function(_, filterValue) {
+                each(column.filterValues, function(_, filterValue) {
 
                     if(Array.isArray(filterValue)) {
                         filter = isExclude ? invertFilterExpression(filterValue) : filterValue;

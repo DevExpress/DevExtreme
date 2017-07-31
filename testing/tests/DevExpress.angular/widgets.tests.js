@@ -12,6 +12,7 @@ var $ = require("jquery"),
     ValidationGroup = require("ui/validation_group");
 
 require("common.css!");
+require("generic_light.css!");
 require("integration/angular");
 
 require("ui/accordion");
@@ -21,6 +22,7 @@ require("ui/defer_rendering");
 require("ui/menu");
 require("ui/popup");
 require("ui/popover");
+require("ui/date_box");
 require("ui/scheduler");
 require("ui/slide_out_view");
 require("ui/tabs");
@@ -174,8 +176,8 @@ QUnit.test("dxDataGrid", function(assert) {
     this.clock.tick(30);
 
     var $cols = $(".dx-datagrid-rowsview col");
-    assert.equal($cols[0].style.width, "100px");
-    assert.equal($cols[1].style.width, "100px");
+    assert.roughEqual(parseInt($cols[0].style.width), 100, 1.01);
+    assert.roughEqual(parseInt($cols[1].style.width), 100, 1.01);
 });
 
 QUnit.test("dxTabs - navigation buttons should show/hide after showing/hiding items (T343231)", function(assert) {
@@ -437,7 +439,7 @@ QUnit.test("Change selection.mode option via binding and refresh", function(asse
 
 
     //act
-    $markup.find(".dx-data-row").eq(0).children().first().trigger("dxclick");
+    $($markup.find(".dx-data-row").eq(0).children().first()).trigger("dxclick");
 
     this.clock.tick(30);
 
@@ -491,7 +493,7 @@ QUnit.test("Adaptive menu should support angular integration", function(assert) 
 
     var $treeViewItem = $markup.find(".dx-treeview-item").eq(0);
 
-    $treeViewItem.trigger("dxclick");
+    $($treeViewItem).trigger("dxclick");
 
     assert.equal(scope.test, "Test text 2", "scope value is updated");
     assert.equal($("#testDiv").text(), "Test text 2", "test div is updated");
@@ -668,13 +670,13 @@ QUnit.test("item height is correct in animation config (T520346)", function(asse
     this.clock.tick();
 
     fx.animate = function($element, config) {
-        assert.roughEqual(config.to.height, 18, 0.5);
+        assert.roughEqual(config.to.height, 68, 0.5);
 
         return originalAnimate($element, config);
     };
 
     var $titles = $markup.find(".dx-accordion-item-title");
-    $titles.eq(0).trigger("dxclick");
+    $($titles.eq(0)).trigger("dxclick");
 
     this.clock.tick();
 
@@ -711,7 +713,7 @@ QUnit.test("title height is correct if the title is customized using ng-class (T
     this.clock.tick();
 
     var $titles = $markup.find(".dx-accordion-item");
-    assert.equal($titles.height(), 100);
+    assert.equal($titles.children().height(), 100);
 
     this.clock.restore();
 });
@@ -749,6 +751,37 @@ QUnit.test("innerBox with nested box item", function(assert) {
     assert.equal($.trim($markup.text()), "Box1", "inner box rendered");
 });
 
+QUnit.module("date box", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+//T533858
+QUnit.test("dxDateBox with list strategy automatically scrolls to selected item on opening", function(assert) {
+    var $markup = $("\
+        <div dx-date-box=\"{\
+            type: 'time',\
+            value: '2017/07/01 08:30',\
+            pickerType: 'list',\
+            opened: true\
+        }\">\
+        </div>\
+    ");
+
+    initMarkup($markup, function() {}, this);
+
+    this.clock.tick();
+
+    var $popupContent = $(".dx-popup-content");
+    var $selectedItem = $popupContent.find(".dx-list-item-selected");
+
+    assert.equal($selectedItem.length, 1, "one item is selected");
+    assert.ok($popupContent.offset().top + $popupContent.height() > $selectedItem.offset().top, "selected item is visible");
+});
 
 QUnit.module("tree view", {
     beforeEach: function() {

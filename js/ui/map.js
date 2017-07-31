@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     Promise = require("../core/polyfills/promise"),
     deferredUtils = require("../integration/jquery/deferred"),
     registerComponent = require("../core/component_registrator"),
@@ -8,6 +9,7 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     Widget = require("./widget/ui.widget"),
     inflector = require("../core/utils/inflector"),
+    each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     isNumeric = require("../core/utils/type").isNumeric,
@@ -427,8 +429,7 @@ var Map = Widget.inherit({
     _grabEvents: function() {
         var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
 
-        this.element()
-            .on(eventName, this._cancelEvent.bind(this));
+        eventsEngine.on(this.element(), eventName, this._cancelEvent.bind(this));
     },
 
     _cancelEvent: function(e) {
@@ -565,7 +566,7 @@ var Map = Widget.inherit({
     },
 
     _queueAsyncAction: function(name) {
-        var options = $.makeArray(arguments).slice(1);
+        var options = [].slice.call(arguments).slice(1);
 
         this._lastAsyncAction = this._lastAsyncAction.then(function() {
             if(!this._provider) {
@@ -660,7 +661,7 @@ var Map = Widget.inherit({
         var optionValue = this.option(optionName),
             removingValues = wrapToArray(removingValue);
 
-        $.each(removingValues, function(removingIndex, removingValue) {
+        each(removingValues, function(removingIndex, removingValue) {
             var index = isNumeric(removingValue)
                 ? removingValue
                 : inArray(removingValue, optionValue);

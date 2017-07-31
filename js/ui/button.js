@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     iconUtils = require("../core/utils/icon"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
@@ -299,13 +300,15 @@ var Button = Widget.inherit({
             }
             e.stopPropagation();
         });
+
         this._$submitInput = $("<input>")
             .attr("type", "submit")
             .addClass("dx-button-submit-input")
-            .appendTo(this._$content)
-            .on("click", function(e) {
-                submitAction({ jQueryEvent: e });
-            });
+            .appendTo(this._$content);
+
+        eventsEngine.on(this._$submitInput, "click", function(e) {
+            submitAction({ jQueryEvent: e });
+        });
     },
 
     _getContentData: function() {
@@ -338,11 +341,10 @@ var Button = Widget.inherit({
 
         this._clickAction = this._createActionByOption("onClick", actionConfig);
 
-        this.element()
-            .off(eventName)
-            .on(eventName, function(e) {
-                that._executeClickAction(e);
-            });
+        eventsEngine.off(this.element(), eventName);
+        eventsEngine.on(this.element(), eventName, function(e) {
+            that._executeClickAction(e);
+        });
     },
 
     _executeClickAction: function(e) {

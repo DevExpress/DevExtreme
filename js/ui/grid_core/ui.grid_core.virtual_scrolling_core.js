@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
     positionUtils = require("../../animation/position"),
+    each = require("../../core/utils/iterator").each,
     Class = require("../../core/class");
 
 var SCROLLING_MODE_INFINITE = "infinite",
@@ -54,31 +56,43 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
         };
     }
 
-    function subscribeToScrollEvents($scrollElement) {
-        var isDocument = $scrollElement.get(0).nodeName === "#document",
-            scrollable = $scrollElement.data("dxScrollable") || isDocument && $(window) || $scrollElement.css("overflow-y") === "auto" && $scrollElement,
-            handler;
-
-        if(scrollable) {
-
-            handler = createWindowScrollHandler(scrollable);
+    var widgetScrollStrategy = {
+        on: function(scrollable, eventName, handler) {
             scrollable.on("scroll", handler);
-
-            scrollToArray.push(function(pos) {
-                var topOffset = getElementOffset(scrollable),
-                    scrollMethod = scrollable.scrollTo ? "scrollTo" : "scrollTop";
-
-                if(pos - topOffset >= 0) {
-                    scrollable[scrollMethod](pos + topOffset);
-                }
-            });
-
-            scrollableArray.push(scrollable);
-
-            disposeArray.push(function() {
-                scrollable.off("scroll", handler);
-            });
+        },
+        off: function(scrollable, eventName, handler) {
+            scrollable.off("scroll", handler);
         }
+    };
+
+    function subscribeToScrollEvents($scrollElement) {
+        var isDocument = $scrollElement.get(0).nodeName === "#document";
+        var scrollable = $scrollElement.data("dxScrollable");
+        var eventsStrategy = widgetScrollStrategy;
+
+        if(!scrollable) {
+            scrollable = isDocument && $(window) || $scrollElement.css("overflow-y") === "auto" && $scrollElement;
+            eventsStrategy = eventsEngine;
+            if(!scrollable) return;
+        }
+
+        var handler = createWindowScrollHandler(scrollable);
+        eventsStrategy.on(scrollable, "scroll", handler);
+
+        scrollToArray.push(function(pos) {
+            var topOffset = getElementOffset(scrollable),
+                scrollMethod = scrollable.scrollTo ? "scrollTo" : "scrollTop";
+
+            if(pos - topOffset >= 0) {
+                scrollable[scrollMethod](pos + topOffset);
+            }
+        });
+
+        scrollableArray.push(scrollable);
+
+        disposeArray.push(function() {
+            eventsStrategy.off(scrollable, "scroll", handler);
+        });
     }
 
     for($scrollElement = $targetElement.parent(); $scrollElement.length; $scrollElement = $scrollElement.parent()) {
@@ -87,13 +101,13 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
 
     return {
         scrollTo: function(pos) {
-            $.each(scrollToArray, function(_, scrollTo) {
+            each(scrollToArray, function(_, scrollTo) {
                 scrollTo(pos);
             });
         },
 
         dispose: function() {
-            $.each(disposeArray, function(_, dispose) {
+            each(disposeArray, function(_, dispose) {
                 dispose();
             });
         }
@@ -495,7 +509,7 @@ exports.VirtualScrollController = Class.inherit((function() {
             var itemsCount = 0;
 
             if(!isBase && isVirtualMode(this)) {
-                $.each(this._cache, function() {
+                each(this._cache, function() {
                     itemsCount += this.itemsCount;
                 });
             } else {

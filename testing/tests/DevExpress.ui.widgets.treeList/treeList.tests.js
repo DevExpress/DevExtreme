@@ -43,7 +43,7 @@ var createTreeList = function(options) {
 
 QUnit.test("Empty options", function(assert) {
     var treeList = createTreeList({}),
-        $treeListElement = treeList.element(),
+        $treeListElement = $(treeList.element()),
         $noDataElement = $treeListElement.find(".dx-treelist-nodata");
 
     assert.ok(treeList);
@@ -66,13 +66,13 @@ QUnit.test("Sorting should be applied on header cell click", function(assert) {
     this.clock.tick();
 
     //act
-    var $headerCell = treeList.element().find(".dx-header-row td").first();
+    var $headerCell = $(treeList.element().find(".dx-header-row td").first());
 
-    $headerCell.trigger("dxclick");
+    $($headerCell).trigger("dxclick");
     this.clock.tick();
 
     //assert
-    var $dataRows = treeList.element().find(".dx-data-row");
+    var $dataRows = $(treeList.element().find(".dx-data-row"));
     assert.equal($dataRows.eq(0).children().eq(0).text(), "Name 1", "row 0 is sorted");
     assert.equal($dataRows.eq(1).children().eq(0).text(), "Name 2", "row 1 is sorted");
     assert.equal($dataRows.eq(2).children().eq(0).text(), "Name 3", "row 2 is sorted");
@@ -169,7 +169,7 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
         });
 
     //assert
-    $cellElement = treeList.element().find(".dx-header-row > td");
+    $cellElement = $(treeList.element().find(".dx-header-row > td"));
     assert.equal($cellElement.length, 3, "count cell");
     assert.equal($cellElement.eq(0).text(), "First Name", "caption of the first cell");
     assert.notOk($cellElement.eq(0).hasClass("dx-treelist-hidden-column"), "first cell is visible");
@@ -180,7 +180,7 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
     treeList.option("width", 800);
 
     //assert
-    $cellElement = treeList.element().find(".dx-header-row > td");
+    $cellElement = $(treeList.element().find(".dx-header-row > td"));
     assert.equal($cellElement.length, 3, "count cell");
     assert.equal($cellElement.eq(0).text(), "First Name", "caption of the first cell");
     assert.notOk($cellElement.eq(0).hasClass("dx-treelist-hidden-column"), "first cell is visible");
@@ -227,7 +227,7 @@ QUnit.test("Virtual scrolling enabled by default and should render two tables in
 
     //assert
     assert.equal(treeList.option("scrolling.mode"), "virtual", "scrolling mode is virtual");
-    var $rowsViewTables = treeList.element().find(".dx-treelist-rowsview table");
+    var $rowsViewTables = $(treeList.element().find(".dx-treelist-rowsview table"));
     assert.equal($rowsViewTables.length, 2, "two tables are rendered");
     assert.equal($rowsViewTables.eq(0).find(".dx-data-row").length, 3, "three data rows in first table");
     assert.equal($rowsViewTables.eq(1).find(".dx-data-row").length, 0, "no data rows in second table");
@@ -312,8 +312,8 @@ QUnit.test("Filter menu items should have icons", function(assert) {
     this.clock.tick();
 
     //act
-    $filterMenuElement = treeList.element().find(".dx-treelist-filter-row").find(".dx-menu").first().find(".dx-menu-item");
-    $filterMenuElement.trigger("dxclick"); // show menu
+    $filterMenuElement = $(treeList.element().find(".dx-treelist-filter-row").find(".dx-menu").first().find(".dx-menu-item"));
+    $($filterMenuElement).trigger("dxclick"); // show menu
 
     //assert
     $menuItemElements = $(".dx-overlay-wrapper").find(".dx-menu-item");
@@ -459,7 +459,7 @@ QUnit.test("Click on selectCheckBox shouldn't render editor, editing & selection
     //act
     this.clock.tick();
     var $selectCheckbox = $("#treeList").find(".dx-treelist-cell-expandable").eq(0).find(".dx-select-checkbox").eq(0);
-    $selectCheckbox.trigger("dxclick");
+    $($selectCheckbox).trigger("dxclick");
     this.clock.tick();
 
     //assert
@@ -486,7 +486,7 @@ QUnit.test("Aria accessibility", function(assert) {
     this.clock.tick();
 
     //assert
-    $treeList = treeList.element();
+    $treeList = $(treeList.element());
     assert.equal($treeList.attr("aria-label"), "Tree list", "TreeList container - value of 'aria-lebel' attribute");
 
     $headerTable = $treeList.find(".dx-treelist-headers table").first();

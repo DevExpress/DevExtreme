@@ -48,19 +48,19 @@ var moduleConfig = function(usePopover) {
             this.ddMenu = this.element.data("dxDropDownMenu");
 
             this.button = this.ddMenu._button;
-            this.$button = this.button.element();
+            this.$button = $(this.button.element());
             this.mouse = pointerMock(this.$button);
             this.popup = this.ddMenu._popup;
 
             this.toggleMenu = function() {
-                this.$button.trigger("dxclick");
+                $(this.$button).trigger("dxclick");
 
                 this.popup = this.ddMenu._popup;
-                this.$popup = this.popup.element();
-                this.$popupContent = this.popup.content();
+                this.$popup = $(this.popup.element());
+                this.$popupContent = $(this.popup.content());
 
                 this.list = this.ddMenu._list;
-                this.$list = this.list.element();
+                this.$list = $(this.list.element());
             };
         },
         afterEach: function() {
@@ -357,7 +357,7 @@ QUnit.test("check position for LTR and RTL", function(assert) {
         instance = element.dxDropDownMenu("instance"),
         positionConfig;
 
-    element.data("dxDropDownMenu")._button.element().trigger("dxclick");
+    $(element.data("dxDropDownMenu")._button.element()).trigger("dxclick");
 
     positionConfig = instance._popup.option("position");
     assert.equal(positionConfig, instance.option("popupPosition"));
@@ -402,10 +402,10 @@ QUnit.test("click on list item hides drop-down list", function(assert) {
 
     assert.equal(popup.option("visible"), true, "popup is visible");
 
-    $list.trigger("dxclick");
+    $($list).trigger("dxclick");
     assert.equal(popup.option("visible"), true, "click on list does not hide popup");
 
-    $list.find(".dx-list-item").first().trigger("dxclick");
+    $($list.find(".dx-list-item").first()).trigger("dxclick");
     assert.equal(popup.option("visible"), false, "click on item hides popup");
 });
 
@@ -547,8 +547,8 @@ QUnit.module("regression", moduleConfig());
 QUnit.test("B233109: dropDownMenu menu interference", function(assert) {
     var ddMenu1 = $("#dropDownMenu").dxDropDownMenu({ items: [{ text: "test1" }], opened: true }).dxDropDownMenu("instance"),
         ddMenu2 = $("#dropDownMenuSecond").dxDropDownMenu({ items: [{ text: "test2" }], opened: true }).dxDropDownMenu("instance"),
-        $button1 = ddMenu1._button.element(),
-        $button2 = ddMenu2._button.element(),
+        $button1 = $(ddMenu1._button.element()),
+        $button2 = $(ddMenu2._button.element()),
         popup1 = ddMenu1._popup,
         popup2 = ddMenu2._popup;
 
@@ -669,16 +669,16 @@ QUnit.module("keyboard navigation", {
         this.instance = this.element.data("dxDropDownMenu");
 
         this.button = this.instance._button;
-        this.$button = this.button.element();
+        this.$button = $(this.button.element());
         this.keyboard = keyboardMock(this.$button);
         this.popup = this.instance._popup;
 
         this.popup = this.instance._popup;
-        this.$popup = this.popup.element();
-        this.$popupContent = this.popup.content();
+        this.$popup = $(this.popup.element());
+        this.$popupContent = $(this.popup.content());
 
         this.list = this.instance._list;
-        this.$list = this.list.element();
+        this.$list = $(this.list.element());
         this.$items = this.$list.find(".dx-list-item");
     },
     afterEach: function() {
@@ -766,7 +766,7 @@ QUnit.test("Enter or space press should call onItemClick (T318240)", function(as
 QUnit.test("No exceptions on 'tab' key pressing when popup is not opened", function(assert) {
     assert.expect(0);
     var instance = $("#dropDownMenuKeyboard").dxDropDownMenu({ focusStateEnabled: true }).dxDropDownMenu("instance"),
-        $element = instance.element(),
+        $element = $(instance.element()),
         keyboard = keyboardMock($element);
 
     keyboard.keyDown("tab");
@@ -860,16 +860,16 @@ QUnit.test("aria-expanded property", function(assert) {
     instance.close();
     assert.equal($element.attr("aria-expanded"), "false", "collapsed by default");
 
-    $element.trigger("dxclick");
+    $($element).trigger("dxclick");
     assert.equal($element.attr("aria-expanded"), "true", "expanded after click");
 
-    $element.trigger("dxclick");
+    $($element).trigger("dxclick");
     assert.equal($element.attr("aria-expanded"), "false", "collapsed after click");
 
     instance.open();
     assert.equal($element.attr("aria-expanded"), "true", "expanded after option change");
 
-    var $listItem = instance._popup.content().find(".dx-list-item").first();
-    $listItem.trigger("dxclick");
+    var $listItem = $(instance._popup.content().find(".dx-list-item").first());
+    $($listItem).trigger("dxclick");
     assert.equal($element.attr("aria-expanded"), "false", "collapsed after item click");
 });

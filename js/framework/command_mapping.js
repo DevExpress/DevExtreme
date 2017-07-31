@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    Class = require("../core/class"),
+var Class = require("../core/class"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
+    each = require("../core/utils/iterator").each,
     inArray = require("../core/utils/array").inArray,
     errors = require("./errors");
 
@@ -18,7 +18,7 @@ var CommandMapping = Class.inherit({
     },
     mapCommands: function(containerId, commandMappings) {
         var that = this;
-        $.each(commandMappings, function(index, commandMapping) {
+        each(commandMappings, function(index, commandMapping) {
             if(typeof commandMapping === "string") {
                 commandMapping = { id: commandMapping };
             }
@@ -32,7 +32,7 @@ var CommandMapping = Class.inherit({
     },
     unmapCommands: function(containerId, commandIds) {
         var that = this;
-        $.each(commandIds, function(index, commandId) {
+        each(commandIds, function(index, commandId) {
             var mappings = that._commandMappings[containerId] || {};
             if(mappings) {
                 delete mappings[commandId];
@@ -56,7 +56,7 @@ var CommandMapping = Class.inherit({
     load: function(config) {
         if(!config) return;
         var that = this;
-        $.each(config, function(name, container) {
+        each(config, function(name, container) {
             that.setDefaults(name, container.defaults);
             that.mapCommands(name, container.commands);
         });
@@ -65,8 +65,8 @@ var CommandMapping = Class.inherit({
     _initExistingCommands: function() {
         var that = this;
         this._existingCommands = [];
-        $.each(that._commandMappings, function(name, _commands) {
-            $.each(_commands, function(index, command) {
+        each(that._commandMappings, function(name, _commands) {
+            each(_commands, function(index, command) {
                 if(inArray(command.id, that._existingCommands) < 0) {
                     that._existingCommands.push(command.id);
                 }

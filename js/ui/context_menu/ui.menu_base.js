@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     inkRipple = require("../widget/utils.ink_ripple"),
     HierarchicalCollectionWidget = require("../hierarchical_collection/ui.hierarchical_collection_widget"),
@@ -576,7 +577,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
             $nodeContainer = this._renderContainer(this.element(), submenuContainer);
 
-            $.each(nodes, function(index, node) {
+            each(nodes, function(index, node) {
                 that._renderItem(index, node, $nodeContainer);
             });
 
@@ -622,7 +623,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
         this._addContentClasses(node, $itemFrame);
 
-        $itemFrame.attr("tabindex", -1);
+        $itemFrame.attr("tabIndex", -1);
 
         if(this._hasSubmenu(node)) this.setAria("haspopup", "true", $itemFrame);
     },
@@ -776,7 +777,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         var that = this,
             result;
 
-        $.each(this._itemElements(), function(_, itemElement) {
+        each(this._itemElements(), function(_, itemElement) {
             if($(itemElement).data(that._itemDataKey()) !== itemData) {
                 return true;
             }

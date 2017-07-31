@@ -648,75 +648,6 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.equal(axisOptions.title, "Title");
     });
 
-    QUnit.test("Pass seriesFamily translators", function(assert) {
-        //arrange
-        var stubSeries = new MockSeries({});
-        seriesMockData.series.push(stubSeries);
-        //act
-        var chart = this.createChart({
-            dateSource: [{ arg: "First", val: 1 }, { arg: "2", val: 2 }, { arg: "3", val: 3 }, { arg: "4", val: 4 }, { arg: "Last", val: 5 }],
-            series: {
-                name: "Custom name",
-                type: "line"
-            }
-        });
-        //assert
-        var tr = chart.translators.default.defaultAxisName0,
-            translators = {
-                arg: tr.arg,
-                val: tr.val,
-                axesTrans: {
-                    defaultAxisName0: {
-                        arg: tr.arg,
-                        val: tr.val
-                    }
-                }
-            };
-        assert.ok(chart.series, "dxChart has series");
-        assert.ok(chart.seriesFamilies[0].adjustSeriesValues.called);
-        assert.ok(chart.seriesFamilies[0].updateSeriesValues.called);
-
-        assert.deepEqual(chart.seriesFamilies[0].updateSeriesValues.args[0][0], translators);
-
-        assert.ok(chart.seriesFamilies[0].adjustSeriesDimensions.called);
-        assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
-    });
-
-    QUnit.test("Pass seriesFamily translators, rotated", function(assert) {
-        //arrange
-        var stubSeries = new MockSeries({});
-        seriesMockData.series.push(stubSeries);
-
-        //act
-        var chart = this.createChart({
-            rotated: true,
-            dateSource: [{ arg: "First", val: 1 }, { arg: "2", val: 2 }, { arg: "3", val: 3 }, { arg: "4", val: 4 }, { arg: "Last", val: 5 }],
-            series: {
-                name: "Custom name",
-                type: "line"
-            }
-        });
-        //assert
-        var tr = chart.translators.default.defaultAxisName0,
-            translators = {
-                arg: tr.arg,
-                val: tr.val,
-                axesTrans: {
-                    defaultAxisName0: {
-                        arg: tr.arg,
-                        val: tr.val
-                    }
-                }
-            };
-        assert.ok(chart.series, "dxChart has series");
-        assert.ok(chart.seriesFamilies[0].adjustSeriesValues.called);
-        assert.ok(chart.seriesFamilies[0].updateSeriesValues.called);
-
-        assert.deepEqual(chart.seriesFamilies[0].updateSeriesValues.args[0][0], translators);
-        assert.ok(chart.seriesFamilies[0].adjustSeriesDimensions.called);
-        assert.deepEqual(chart.seriesFamilies[0].adjustSeriesDimensions.args[0][0], translators);
-    });
-
     QUnit.test("tracker repaired tooltip. after series rendering", function(assert) {
         //arrange
         var stubSeries = new MockSeries({});
@@ -1357,6 +1288,32 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
 
         assert.ok(!this.labels[0].hide.called);
         assert.ok(this.labels[1].hide.calledOnce);
+    });
+
+    QUnit.test("Change resolveLabelOverlapping option only - option changed, series and axes are not recreated", function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 10, width: 10, height: 10 }, { x: 5, y: 10, width: 10, height: 10 }]);
+        this.createFakeSeriesWithLabels([{ x: 5, y: 10, width: 10, height: 10 }, { x: 5, y: 10, width: 10, height: 10 }]);
+
+        var chart = this.createChart({
+            resolveLabelOverlapping: "none",
+            series: [{ type: "mockType" }]
+        });
+        this.themeManager.getOptions.withArgs("resolveLabelOverlapping").returns("hide");
+
+        var series = chart.getAllSeries()[0],
+            valAxis = chart._valueAxes[0],
+            argAxis = chart._argumentAxes[0];
+
+        chart.option({
+            resolveLabelOverlapping: "hide"
+        });
+
+        assert.ok(!this.labels[0].hide.called);
+        assert.ok(this.labels[1].hide.calledOnce);
+
+        assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+        assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+        assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
     });
 
     QUnit.module("resolveLabelOverlapping. stack", $.extend({}, commons.environment, {

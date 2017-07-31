@@ -1,10 +1,12 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     Component = require("../core/component"),
     isFunction = require("../core/utils/type").isFunction,
     Action = require("../core/action"),
     domUtils = require("../core/utils/dom"),
+    each = require("../core/utils/iterator").each,
     viewPortUtils = require("../core/utils/view_port"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,
@@ -119,7 +121,7 @@ exports.custom = function(options) {
         toolbarItemsOption = options.buttons;
     }
 
-    $.each(toolbarItemsOption || [DEFAULT_BUTTON], function() {
+    each(toolbarItemsOption || [DEFAULT_BUTTON], function() {
         var action = new Action(this.onClick, {
             context: popupInstance
         });
@@ -168,11 +170,12 @@ exports.custom = function(options) {
             domUtils.resetActiveElement();
         },
         onShown: function(e) {
-            e.component
+            var $firstButton = e.component
                 .bottomToolbar()
                 .find(".dx-button")
-                .first()
-                .focus();
+                .first();
+
+            eventsEngine.trigger($firstButton, "focus");
         },
         onHiding: function() {
             deferred.reject();

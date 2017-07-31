@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     errors = require("../../core/errors"),
     compileGetter = require("../../core/utils/data").compileGetter,
     Class = require("../../core/class"),
@@ -49,15 +50,15 @@ var ToolbarStrategy = Class.inherit({
 
     _menuWidgetClass: abstract,
 
-    _hasVisibleMenuItems: function() {
-        var menuItems = this._toolbar.option("items"),
+    _hasVisibleMenuItems: function(items) {
+        var menuItems = items || this._toolbar.option("items"),
             result = false;
 
         var optionGetter = compileGetter("visible"),
             overflowGetter = compileGetter("locateInMenu");
 
         var menuLocation = false;
-        $.each(menuItems, function(index, item) {
+        each(menuItems, function(index, item) {
             var itemVisible = optionGetter(item, { functionsAsIs: true }),
                 itemOverflow = overflowGetter(item, { functionsAsIs: true });
 

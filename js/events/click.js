@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     domUtils = require("../core/utils/dom"),
     animationFrame = require("../animation/frame"),
@@ -58,7 +59,7 @@ var ClickEmitter = Emitter.inherit({
 
     _eventOutOfElement: function(e, element) {
         var target = e.target,
-            targetChanged = !$.contains(element, target) && element !== target,
+            targetChanged = !domUtils.contains(element, target) && element !== target,
 
             gestureDelta = eventUtils.eventDelta(eventUtils.eventData(e), this._startEventData),
             boundsExceeded = abs(gestureDelta.x) > TOUCH_BOUNDARY || abs(gestureDelta.y) > TOUCH_BOUNDARY;
@@ -88,8 +89,8 @@ var ClickEmitter = Emitter.inherit({
             realDevice.ios && compareVersions(realDevice.version, [9, 3]) >= 0 ||
             realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
 
-    var isNativeClickEvent = function(e) {
-        return useNativeClick || $(e.target).closest("." + NATIVE_CLICK_CLASS).length;
+    var isNativeClickEvent = function(target) {
+        return useNativeClick || $(target).closest("." + NATIVE_CLICK_CLASS).length;
     };
 
 
@@ -101,7 +102,7 @@ var ClickEmitter = Emitter.inherit({
             eventAlreadyFired = lastFiredEvent !== originalEvent,
             leftButton = !e.which || e.which === 1;
 
-        if(leftButton && !prevented && isNativeClickEvent(e) && eventAlreadyFired) {
+        if(leftButton && !prevented && isNativeClickEvent(e.target) && eventAlreadyFired) {
             lastFiredEvent = originalEvent;
             eventUtils.fireEvent({
                 type: CLICK_EVENT_NAME,
@@ -112,9 +113,11 @@ var ClickEmitter = Emitter.inherit({
 
     ClickEmitter = ClickEmitter.inherit({
         _makeElementClickable: function($element) {
-            this.callBase($element);
+            if(!isNativeClickEvent($element)) {
+                this.callBase($element);
+            }
 
-            $element.on("click", clickHandler);
+            eventsEngine.on($element, "click", clickHandler);
         },
 
         configure: function(data) {
@@ -127,13 +130,13 @@ var ClickEmitter = Emitter.inherit({
         start: function(e) {
             prevented = null;
 
-            if(!isNativeClickEvent(e)) {
+            if(!isNativeClickEvent(e.target)) {
                 this.callBase(e);
             }
         },
 
         end: function(e) {
-            if(!isNativeClickEvent(e)) {
+            if(!isNativeClickEvent(e.target)) {
                 this.callBase(e);
             }
         },
@@ -145,7 +148,7 @@ var ClickEmitter = Emitter.inherit({
         dispose: function() {
             this.callBase();
 
-            this.getElement().off("click", clickHandler);
+            eventsEngine.off(this.getElement(), "click", clickHandler);
         }
     });
 
@@ -179,9 +182,8 @@ var ClickEmitter = Emitter.inherit({
         };
 
         var NATIVE_CLICK_FIXER_NAMESPACE = "NATIVE_CLICK_FIXER";
-        $(document)
-            .on(eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler)
-            .on(eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.on(document, eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 

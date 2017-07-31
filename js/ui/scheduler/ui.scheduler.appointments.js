@@ -1,11 +1,15 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
+    dataUtils = require("../../core/element_data"),
     translator = require("../../animation/translator"),
     dateUtils = require("../../core/utils/date"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     objectUtils = require("../../core/utils/object"),
+    arrayUtils = require("../../core/utils/array"),
     extend = require("../../core/utils/extend").extend,
     recurrenceUtils = require("./utils.recurrence"),
     registerComponent = require("../../core/component_registrator"),
@@ -47,7 +51,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 var $nextAppointment = this._getAppointmentByIndex(index);
                 this._resetTabIndex($nextAppointment);
-                $nextAppointment.focus();
+                eventsEngine.trigger($nextAppointment, "focus");
             }
         };
 
@@ -72,7 +76,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var appointments = this._getAccessAppointments();
 
         return appointments.filter(function(_, $item) {
-            return $.data($item, "dxAppointmentSettings").sortedIndex === sortedIndex;
+            return dataUtils.data($item, "dxAppointmentSettings").sortedIndex === sortedIndex;
         }).eq(0);
     },
 
@@ -81,8 +85,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _resetTabIndex: function($appointment) {
-        this._focusTarget().attr("tabindex", -1);
-        $appointment.attr("tabindex", this.option("tabIndex"));
+        this._focusTarget().attr("tabIndex", -1);
+        $appointment.attr("tabIndex", this.option("tabIndex"));
     },
 
     _moveFocus: commonUtils.noop,
@@ -228,7 +232,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        $.each($items, function(index, $item) {
+        each($items, function(index, $item) {
             that._applyAppointmentColor($item, item.itemData, item.settings[index]);
         });
     },
@@ -239,7 +243,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        $.each($items, function(_, $item) {
+        each($items, function(_, $item) {
             $item.detach();
             $item.remove();
         });
@@ -253,7 +257,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        $.each($items, function(_, $item) {
+        each($items, function(_, $item) {
             $($item).detach();
             $($item).remove();
         });
@@ -408,7 +412,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
 
         this._appointmentClickTimeout = setTimeout((function() {
-            if(!this._preventSingleAppointmentClick && $.contains(document, $target[0])) {
+            if(!this._preventSingleAppointmentClick && document.body.contains($target[0])) {
                 this.notifyObserver("showAppointmentTooltip", { data: data, target: $target });
             }
 
@@ -442,18 +446,18 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _attachAppointmentDblClick: function() {
-        var that = this,
-            itemSelector = that._itemSelector();
+        var that = this;
+        var itemSelector = that._itemSelector();
+        var itemContainer = this._itemContainer();
 
-        this._itemContainer()
-            .off(DBLCLICK_EVENT_NAME, itemSelector)
-            .on(DBLCLICK_EVENT_NAME, itemSelector, function(e) {
-                that._itemJQueryEventHandler(e, "onAppointmentDblClick", {}, {
-                    afterExecute: function(e) {
-                        that._dblClickHandler(e.args[0].jQueryEvent);
-                    }
-                });
+        eventsEngine.off(itemContainer, DBLCLICK_EVENT_NAME, itemSelector);
+        eventsEngine.on(itemContainer, DBLCLICK_EVENT_NAME, itemSelector, function(e) {
+            that._itemJQueryEventHandler(e, "onAppointmentDblClick", {}, {
+                afterExecute: function(e) {
+                    that._dblClickHandler(e.args[0].jQueryEvent);
+                }
             });
+        });
     },
 
     _dblClickHandler: function(e) {
@@ -536,7 +540,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             itemData: this._getItemData($appointment),
             callback: function(resources) {
                 if(resources) {
-                    $.each(resources, function(name, values) {
+                    each(resources, function(name, values) {
                         var attr = "data-" + commonUtils.normalizeKey(name.toLowerCase()) + "-";
                         for(var i = 0; i < values.length; i++) {
                             $appointment.attr(attr + commonUtils.normalizeKey(values[i]), true);
@@ -844,7 +848,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             rtlOffset = buttonWidth;
         }
 
-        $.each(this._virtualAppointments, (function(groupIndex) {
+        each(this._virtualAppointments, (function(groupIndex) {
             var virtualGroup = this._virtualAppointments[groupIndex],
                 virtualItems = virtualGroup.items,
                 virtualCoordinates = virtualGroup.coordinates,
@@ -965,14 +969,14 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _reduceRecurrenceAppointments: function(recurrenceIndexes, appointments) {
-        $.each(recurrenceIndexes, function(i, index) {
+        each(recurrenceIndexes, function(i, index) {
             appointments.splice(index - i, 1);
         });
     },
 
     _combineAppointments: function(appointments, additionalAppointments) {
         if(additionalAppointments.length) {
-            $.merge(appointments, additionalAppointments);
+            arrayUtils.merge(appointments, additionalAppointments);
         }
         this._sortAppointmentsByStartDate(appointments);
     },
@@ -1022,7 +1026,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var $appointment = this._$currentAppointment;
         if($appointment) {
             this.option("focusedElement", $appointment);
-            this.option("focusedElement").focus();
+            eventsEngine.trigger(this.option("focusedElement"), "focus");
         }
     },
 

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     stringUtils = require("../core/utils/string"),
     registerComponent = require("../core/component_registrator"),
     translator = require("../animation/translator"),
@@ -60,15 +61,15 @@ var Draggable = DOMComponent.inherit({
             $element = this._getArea();
         }
 
-        $element.on(eventHandlers, {
+        eventsEngine.on($element, eventHandlers, {
             direction: this.option("direction"),
             immediate: this.option("immediate")
         });
     },
 
     _detachEventHandlers: function() {
-        this.element().off("." + DRAGGABLE);
-        this._getArea().off("." + DRAGGABLE);
+        eventsEngine.off(this.element(), "." + DRAGGABLE);
+        eventsEngine.off(this._getArea(), "." + DRAGGABLE);
     },
 
     _move: function(position) {

@@ -696,6 +696,110 @@ QUnit.test('size and margin', function(assert) {
     }, 'canvas');
 });
 
+QUnit.module('getSize and size manipulations', environment);
+
+QUnit.test("Call render after container is resized", function(assert) {
+    this.createWidget();
+    this.$container.width(400);
+    this.$container.height(300);
+
+    this.widget.render();
+
+    var size = this.widget.getSize();
+
+    //assert
+    assert.equal(size.width, 400);
+    assert.equal(size.height, 300);
+});
+
+QUnit.test("size option changed", function(assert) {
+    this.createWidget({
+        size: {
+            width: 500,
+            height: 500
+        }
+    });
+    this.widget.option({
+        size: {
+            width: 300,
+            height: 300
+        }
+    });
+
+    //Act
+    var size = this.widget.getSize();
+
+    //assert
+    assert.equal(size.width, 300);
+    assert.equal(size.height, 300);
+});
+
+QUnit.test("size option changed with initial size. negative width", function(assert) {
+    this.$container.width(200);
+    this.$container.height(200);
+    this.createWidget({
+        size: {
+            width: 500,
+            height: 500
+        }
+    });
+    this.widget.option({
+        size: {
+            width: -100,
+            height: 600
+        }
+    });
+
+    //Act
+    var size = this.widget.getSize();
+
+    //assert
+    assert.equal(size.width, 0);
+    assert.equal(size.height, 0);
+});
+
+QUnit.test("size option changed with initial size. negative height", function(assert) {
+    this.$container.width(200);
+    this.$container.height(200);
+    this.createWidget({
+        size: {
+            width: 500,
+            height: 500
+        }
+    });
+    this.widget.option({
+        size: {
+            width: 600,
+            height: -100
+        }
+    });
+
+    //Act
+    var size = this.widget.getSize();
+
+    //assert
+    assert.equal(size.width, 0);
+    assert.equal(size.height, 0);
+});
+
+QUnit.test("size option changed with container size. negative height", function(assert) {
+    this.$container.width(200);
+    this.$container.height(200);
+    this.createWidget();
+    this.widget.option({
+        size: {
+            width: 600,
+            height: -100
+        }
+    });
+    //Act
+    var size = this.widget.getSize();
+
+    //assert
+    assert.equal(size.width, 0);
+    assert.equal(size.height, 0);
+});
+
 QUnit.module('Redraw on resize', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);

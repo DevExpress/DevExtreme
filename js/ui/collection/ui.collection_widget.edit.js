@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     BaseCollectionWidget = require("./ui.collection_widget.base"),
     errors = require("../widget/ui.errors"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
     PlainEditStrategy = require("./ui.collection_widget.edit.strategy.plain"),
@@ -12,7 +14,12 @@ var $ = require("../../core/renderer"),
     Selection = require("../selection/selection"),
     when = require("../../integration/jquery/deferred").when;
 
-var ITEM_DELETING_DATA_KEY = "dxItemDeleting";
+var ITEM_DELETING_DATA_KEY = "dxItemDeleting",
+    NOT_EXISTING_INDEX = -1;
+
+var indexExists = function(index) {
+    return index !== NOT_EXISTING_INDEX;
+};
 
 var CollectionWidget = BaseCollectionWidget.inherit({
 
@@ -84,7 +91,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @type number
             * @default -1
             */
-            selectedIndex: -1,
+            selectedIndex: NOT_EXISTING_INDEX,
 
             /**
             * @name CollectionWidgetOptions_selectedItem
@@ -265,10 +272,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         keys = keys || this._selection.getSelectedItemKeys();
 
-        $.each(keys, function(_, key) {
+        each(keys, function(_, key) {
             var selectedIndex = that._getIndexByKey(key);
 
-            if(selectedIndex !== -1) {
+            if(indexExists(selectedIndex)) {
                 indices.push(selectedIndex);
             }
         });
@@ -323,7 +330,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 selectedItems = this.option("selectedItems") || [];
                 selectedIndex = this._editStrategy.getIndexByItemData(selectedItems[0]);
 
-                if(this.option("selectionRequired") && selectedIndex === -1) {
+                if(this.option("selectionRequired") && !indexExists(selectedIndex)) {
                     this._syncSelectionOptions("selectedIndex");
                     return;
                 }
@@ -336,7 +343,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 selectedItem = this.option("selectedItem");
                 selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
 
-                if(this.option("selectionRequired") && selectedIndex === -1) {
+                if(this.option("selectionRequired") && !indexExists(selectedIndex)) {
                     this._syncSelectionOptions("selectedIndex");
                     return;
                 }
@@ -348,21 +355,16 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 } else {
                     this._setOptionSilent("selectedItems", []);
                     this._setOptionSilent("selectedItemKeys", []);
-                    this._setOptionSilent("selectedIndex", -1);
+                    this._setOptionSilent("selectedIndex", NOT_EXISTING_INDEX);
                 }
                 break;
             case "selectedItemKeys":
-                if(this.option("selectionRequired")) {
-                    var selectedItemKeys = this.option("selectedItemKeys");
-                    selectedIndex = this._getIndexByKey(selectedItemKeys[0]);
-
-                    if(selectedIndex === -1) {
-                        this._syncSelectionOptions("selectedIndex");
-                        return;
-                    }
-                } else {
-                    this._selection.setSelection(this.option("selectedItemKeys"));
+                var selectedItemKeys = this.option("selectedItemKeys");
+                if(this.option("selectionRequired") && !indexExists(this._getIndexByKey(selectedItemKeys[0]))) {
+                    this._syncSelectionOptions("selectedIndex");
+                    return;
                 }
+                this._selection.setSelection(selectedItemKeys);
                 break;
         }
     },
@@ -532,10 +534,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _removeSelection: function(normalizedIndex) {
         var $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
-        if(normalizedIndex !== -1) {
+        if(indexExists(normalizedIndex)) {
             $itemElement.removeClass(this._selectedItemClass());
             this._setAriaSelected($itemElement, "false");
-            $itemElement.triggerHandler("stateChanged", false);
+            eventsEngine.triggerHandler($itemElement, "stateChanged", false);
         }
     },
 
@@ -547,10 +549,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _addSelection: function(normalizedIndex) {
         var $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
-        if(normalizedIndex !== -1) {
+        if(indexExists(normalizedIndex)) {
             $itemElement.addClass(this._selectedItemClass());
             this._setAriaSelected($itemElement, "true");
-            $itemElement.triggerHandler("stateChanged", true);
+            eventsEngine.triggerHandler($itemElement, "stateChanged", true);
         }
     },
 
@@ -729,7 +731,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(this.option("selectionMode") === "none") return;
 
         var itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
-        if(itemIndex === -1) {
+        if(!indexExists(itemIndex)) {
             return;
         }
 
@@ -756,7 +758,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     */
     unselectItem: function(itemElement) {
         var itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
-        if(itemIndex === -1) {
+        if(!indexExists(itemIndex)) {
             return;
         }
 
@@ -787,7 +789,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             changingOption = this._dataSource ? "dataSource" : "items",
             itemResponseWaitClass = this._itemResponseWaitClass();
 
-        if(index > -1) {
+        if(indexExists(index)) {
             this._waitDeletingPrepare($item).done(function() {
                 $item.addClass(itemResponseWaitClass);
                 var deletedActionArgs = that._extendActionArgs($item);
@@ -841,7 +843,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
             changingOption = this._dataSource ? "dataSource" : "items";
 
-        var canMoveItems = movingIndex > -1 && destinationIndex > -1 && movingIndex !== destinationIndex;
+        var canMoveItems = indexExists(movingIndex) && indexExists(destinationIndex) && movingIndex !== destinationIndex;
         if(canMoveItems) {
             deferred.resolveWith(this);
         } else {

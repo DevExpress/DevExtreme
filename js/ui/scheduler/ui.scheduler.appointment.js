@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     translator = require("../../animation/translator"),
     recurrenceUtils = require("./utils.recurrence"),
     extend = require("../../core/utils/extend").extend,
@@ -174,18 +175,17 @@ var Appointment = DOMComponent.inherit({
         var tooltipLabel = messageLocalization.format("dxScheduler-editorLabelEndDate"),
             tooltipText = [tooltipLabel, ": ", dateLocalization.format(endDate, "monthAndDay"), ", ", dateLocalization.format(endDate, "year")].join("");
 
-        $icon
-            .off(REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME)
-            .on(REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, function() {
-                tooltip.show({
-                    target: $icon,
-                    content: tooltipText
-                });
-            })
-            .off(REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME)
-            .on(REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME, function() {
-                tooltip.hide();
+        eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
+        eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, function() {
+            tooltip.show({
+                target: $icon,
+                content: tooltipText
             });
+        });
+        eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME);
+        eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME, function() {
+            tooltip.hide();
+        });
     },
 
     _getEndDate: function() {

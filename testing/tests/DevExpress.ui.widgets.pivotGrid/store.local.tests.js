@@ -189,7 +189,12 @@ QUnit.test("Async loading when more 10000 items", function(assert) {
         items.push({ name: "test" + i });
     }
 
-    this.store = new LocalStore(items);
+    this.store = new LocalStore({
+        store: items,
+        onProgressChanged: function(progress) {
+            progresses.push(Math.floor(progress * 100));
+        }
+    });
 
     var clock = sinon.useFakeTimers();
 
@@ -211,8 +216,6 @@ QUnit.test("Async loading when more 10000 items", function(assert) {
         assert.equal(result.columns.length, 0);
         assert.equal(result.rows.length, 20000);
         assert.equal(result.values.length, 20001);
-    }).progress(function(progress) {
-        progresses.push(Math.floor(progress * 100));
     });
 
     //assert
@@ -1480,7 +1483,7 @@ QUnit.test("Filter group field. Exclude Type", function(assert) {
         }, {
             index: 2,
             value: 1998
-        }]),
+        }]);
 
         assert.deepEqual(data.values, [
             [[105], [57], [48]],
@@ -1490,6 +1493,26 @@ QUnit.test("Filter group field. Exclude Type", function(assert) {
     });
 });
 
+QUnit.test("Filter dates without group interval", function(assert) {
+    var dataSource = window.orders.slice();
+    dataSource[10] = { OrderDate: null };
+
+    new LocalStore(dataSource).load({
+        rows: [],
+        columns: [
+            {
+                dataField: "OrderDate", dataType: 'date', filterValues: [
+                    new Date(window.orders[0].OrderDate),
+                    null
+                ], filterType: "include" }
+        ],
+        values: [{ summaryType: 'count' }]
+    }).done(function(data) {
+        assert.equal(data.columns.length, 2);
+        assert.equal(data.columns[0].value.valueOf(), new Date(window.orders[0].OrderDate).valueOf());
+        assert.equal(data.columns[1].value, null);
+    });
+});
 
 QUnit.test("complex dataField", function(assert) {
     var dataSource = [

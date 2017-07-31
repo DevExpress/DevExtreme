@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
     Scrollable = require("../scroll_view/ui.scrollable"),
@@ -59,7 +61,7 @@ var DateViewRoller = Scrollable.inherit({
         this.callBase();
 
         //Note: fx animations in 'moveTo' interrupt by '_correctLocation'
-        $.each(this._strategy._scrollers, function(index, scroller) {
+        each(this._strategy._scrollers, function(index, scroller) {
             scroller._correctLocation = noop;
         });
 
@@ -86,11 +88,11 @@ var DateViewRoller = Scrollable.inherit({
 
         var clickAction = this._createActionByOption("onClick");
 
-        this._$container
-            .off(eventName)
-            .on(eventName, function(e) {
-                clickAction({ jQueryEvent: e });
-            });
+
+        eventsEngine.off(this._$container, eventName);
+        eventsEngine.on(this._$container, eventName, function(e) {
+            clickAction({ jQueryEvent: e });
+        });
     },
 
     _wrapAction: function(actionName, callback) {
@@ -109,7 +111,7 @@ var DateViewRoller = Scrollable.inherit({
 
         this._$content.empty();
         // NOTE: rendering ~166+30+12+24+60 <div>s >> 50mc
-        $.each(items, function() {
+        each(items, function() {
             $items = $items.add(
                 $("<div>")
                     .addClass(DATEVIEW_ROLLER_ITEM_CLASS)
@@ -162,8 +164,8 @@ var DateViewRoller = Scrollable.inherit({
         var itemSelector = this._getItemSelector(),
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        this.element().off(eventName, itemSelector);
-        this.element().on(eventName, itemSelector, this._itemClickHandler.bind(this));
+        eventsEngine.off(this.element(), eventName, itemSelector);
+        eventsEngine.on(this.element(), eventName, itemSelector, this._itemClickHandler.bind(this));
     },
 
     _getItemSelector: function() {
@@ -185,7 +187,7 @@ var DateViewRoller = Scrollable.inherit({
     _renderActiveStateItem: function() {
         var selectedIndex = this.option("selectedIndex");
 
-        $.each(this._$items, function(index) {
+        each(this._$items, function(index) {
             $(this).toggleClass(DATEVIEW_ROLLER_ITEM_SELECTED_CLASS, selectedIndex === index);
         });
     },

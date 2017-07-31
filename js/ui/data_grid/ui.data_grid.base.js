@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     logger = require("../../core/utils/console").logger,
     browser = require("../../core/utils/browser"),
@@ -70,7 +71,7 @@ var DataGrid = Widget.inherit({
         var that = this,
             result = that.callBase();
 
-        $.each(gridCore.modules, function() {
+        each(gridCore.modules, function() {
             if(typeUtils.isFunction(this.defaultOptions)) {
                 extend(true, result, this.defaultOptions());
             }

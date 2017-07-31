@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
     inkRipple = require("./widget/utils.ink_ripple"),
@@ -216,11 +217,11 @@ var CheckBox = Editor.inherit({
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
 
         that._clickAction = that._createAction(that._clickHandler);
-        that.element()
-            .off(eventName)
-            .on(eventName, function(e) {
-                that._clickAction({ jQueryEvent: e });
-            });
+
+        eventsEngine.off(that.element(), eventName);
+        eventsEngine.on(that.element(), eventName, function(e) {
+            that._clickAction({ jQueryEvent: e });
+        });
     },
 
     _clickHandler: function(args) {

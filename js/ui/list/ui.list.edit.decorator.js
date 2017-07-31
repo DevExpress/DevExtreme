@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
     Class = require("../../core/class"),
     swipeEvents = require("../../events/swipe"),
@@ -35,10 +36,9 @@ var EditDecorator = Class.inherit({
             }).bind(this)
         };
 
-        config.$itemElement
-            .on(SWIPE_START_EVENT_NAME, swipeConfig, this._itemSwipeStartHandler.bind(this))
-            .on(SWIPE_UPDATE_EVENT_NAME, this._itemSwipeUpdateHandler.bind(this))
-            .on(SWIPE_END_EVENT_NAME, this._itemSwipeEndHandler.bind(this));
+        eventsEngine.on(config.$itemElement, SWIPE_START_EVENT_NAME, swipeConfig, this._itemSwipeStartHandler.bind(this));
+        eventsEngine.on(config.$itemElement, SWIPE_UPDATE_EVENT_NAME, this._itemSwipeUpdateHandler.bind(this));
+        eventsEngine.on(config.$itemElement, SWIPE_END_EVENT_NAME, this._itemSwipeEndHandler.bind(this));
     },
 
     _itemSwipeStartHandler: function(e) {

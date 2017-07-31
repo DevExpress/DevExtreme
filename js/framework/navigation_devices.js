@@ -1,8 +1,9 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("jquery"),
     noop = require("../core/utils/common").noop,
     Class = require("../core/class"),
+    Callbacks = require("../core/utils/callbacks"),
     browserAdapters = require("./browser_adapters"),
     SessionStorage = require("../core/utils/storage").sessionStorage,
     devices = require("../core/devices");
@@ -15,7 +16,7 @@ var HistoryBasedNavigationDevice = Class.inherit({
         options = options || {};
 
         this._browserAdapter = options.browserAdapter || this._createBrowserAdapter(options);
-        this.uriChanged = $.Callbacks();
+        this.uriChanged = Callbacks();
 
         this._browserAdapter.popState.add(this._onPopState.bind(this));
     },
@@ -93,7 +94,7 @@ var StackBasedNavigationDevice = HistoryBasedNavigationDevice.inherit({
     ctor: function(options) {
         this.callBase(options);
 
-        this.backInitiated = $.Callbacks();
+        this.backInitiated = Callbacks();
         this._rootStateHandler = null;
 
         $(window).on("unload", this._saveBrowserState);

@@ -223,7 +223,7 @@ var Fixture = Class.inherit({
             }),
             $editor = editor.element();
 
-        $editor.trigger(hoverEvents.start);
+        $($editor).trigger(hoverEvents.start);
         assert.ok($editor.hasClass("dx-state-hover"), "there is hover class");
     });
 })("Editor");

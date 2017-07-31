@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     translator = require("../../animation/translator"),
     extend = require("../../core/utils/extend").extend,
     Color = require("../../color"),
@@ -553,22 +554,24 @@ var ColorView = Editor.inherit({
     },
 
     _renderEditorWithLabel: function(options) {
-        var $editor = $("<div>"),
+        var $editor = $("<div>");
+        var $label = $("<label>", {
+            "class": options.labelClass,
+            "text": options.labelText + ":",
+            "append": $editor
+        });
 
-            $label = $("<label>", {
-                "class": options.labelClass,
-                "text": options.labelText + ":",
-                "append": $editor
-            }).off(clickEvent.name).on(clickEvent.name, function(e) {
-                e.preventDefault();
-            }),
+        eventsEngine.off($label, clickEvent.name);
+        eventsEngine.on($label, clickEvent.name, function(e) {
+            e.preventDefault();
+        });
 
-            editorType = options.editorType,
+        var editorType = options.editorType;
 
-            editorOptions = {
-                value: options.value,
-                onValueChanged: options.onValueChanged
-            };
+        var editorOptions = {
+            value: options.value,
+            onValueChanged: options.onValueChanged
+        };
 
         if(editorType === NumberBox) {
             editorOptions.min = options.min || 0;

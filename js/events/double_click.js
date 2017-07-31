@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var eventsEngine = require("../events/core/events_engine"),
     domUtils = require("../core/utils/dom"),
     Class = require("../core/class"),
     registerEvent = require("./core/event_registrator"),
@@ -28,7 +28,7 @@ var DblClick = Class.inherit({
 
     add: function() {
         if(this._handlerCount <= 0) {
-            $(document).on(NAMESPACED_CLICK_EVENT, this._clickHandler.bind(this));
+            eventsEngine.on(document, NAMESPACED_CLICK_EVENT, this._clickHandler.bind(this));
         }
         this._handlerCount++;
     },
@@ -53,7 +53,7 @@ var DblClick = Class.inherit({
         this._handlerCount--;
         if(this._handlerCount <= 0) {
             this._forgetLastClick();
-            $(document).off(NAMESPACED_CLICK_EVENT);
+            eventsEngine.off(document, NAMESPACED_CLICK_EVENT);
         }
     }
 

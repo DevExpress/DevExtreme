@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     math = Math,
     titleize = require("../../core/utils/inflector").titleize,
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     translator = require("../../animation/translator"),
     Class = require("../../core/class"),
     Animator = require("./animator"),
@@ -118,7 +120,7 @@ var Scroller = Class.inherit({
         this._dimension = options.direction === HORIZONTAL ? "width" : "height";
         this._scrollProp = options.direction === HORIZONTAL ? "scrollLeft" : "scrollTop";
 
-        $.each(options, (function(optionName, optionValue) {
+        iteratorUtils.each(options, (function(optionName, optionValue) {
             this["_" + optionName] = optionValue;
         }).bind(this));
     },
@@ -153,7 +155,7 @@ var Scroller = Class.inherit({
             return;
         }
 
-        this._$container.triggerHandler({ type: "scroll" });
+        eventsEngine.triggerHandler(this._$container, { type: "scroll" });
     },
 
     _suppressBounce: function() {
@@ -471,12 +473,7 @@ var Scroller = Class.inherit({
     _validateEvent: function(e) {
         var $target = $(e.originalEvent.target);
 
-        if(this._isThumb($target) || this._isScrollbar($target)) {
-            e.preventDefault();
-            return true;
-        }
-
-        return this._isContent($target);
+        return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
     },
 
     _isThumb: function($element) {
@@ -537,7 +534,7 @@ var SimulatedStrategy = Class.inherit({
         this._$element.addClass(SCROLLABLE_SIMULATED_CLASS);
         this._createScrollers();
         if(this.option("useKeyboard")) {
-            this._$container.prop("tabindex", 0);
+            this._$container.prop("tabIndex", 0);
         }
         this._attachKeyboardHandler();
         this._attachCursorHandlers();
@@ -614,7 +611,7 @@ var SimulatedStrategy = Class.inherit({
 
     _eachScroller: function(callback) {
         callback = callback.bind(this);
-        $.each(this._scrollers, function(direction, scroller) {
+        iteratorUtils.each(this._scrollers, function(direction, scroller) {
             callback(scroller, direction);
         });
     },
@@ -676,10 +673,10 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _attachKeyboardHandler: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_KEYBOARD);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_KEYBOARD);
 
         if(!this.option("disabled") && this.option("useKeyboard")) {
-            this._$element.on(eventUtils.addNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("keydown", SCROLLABLE_SIMULATED_KEYBOARD), this._keyDownHandler.bind(this));
         }
     },
 
@@ -792,9 +789,10 @@ var SimulatedStrategy = Class.inherit({
         var scrollerX = this._scrollers[HORIZONTAL],
             scrollerY = this._scrollers[VERTICAL];
 
+        var location = this.location();
         this._scrollOffset = {
-            top: scrollerY && -scrollerY._location,
-            left: scrollerX && -scrollerX._location
+            top: scrollerY && -location.top,
+            left: scrollerX && -location.left
         };
 
         return {
@@ -808,8 +806,8 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _eventHandler: function(eventName) {
-        var args = $.makeArray(arguments).slice(1),
-            deferreds = $.map(this._scrollers, function(scroller) {
+        var args = [].slice.call(arguments).slice(1),
+            deferreds = iteratorUtils.map(this._scrollers, function(scroller) {
                 return scroller["_" + eventName + "Handler"].apply(scroller, args);
             });
         return when.apply($, deferreds).promise();
@@ -827,12 +825,11 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _attachCursorHandlers: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_CURSOR);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_CURSOR);
 
         if(!this.option("disabled") && this._isHoverMode()) {
-            this._$element
-                .on(eventUtils.addNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this))
-                .on(eventUtils.addNamespace("mouseleave", SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("mouseenter", SCROLLABLE_SIMULATED_CURSOR), this._cursorEnterHandler.bind(this));
+            eventsEngine.on(this._$element, eventUtils.addNamespace("mouseleave", SCROLLABLE_SIMULATED_CURSOR), this._cursorLeaveHandler.bind(this));
         }
     },
 
@@ -998,8 +995,8 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _detachEventHandlers: function() {
-        this._$element.off("." + SCROLLABLE_SIMULATED_CURSOR);
-        this._$container.off("." + SCROLLABLE_SIMULATED_KEYBOARD);
+        eventsEngine.off(this._$element, "." + SCROLLABLE_SIMULATED_CURSOR);
+        eventsEngine.off(this._$container, "." + SCROLLABLE_SIMULATED_KEYBOARD);
     }
 
 });

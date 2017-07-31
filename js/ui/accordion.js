@@ -1,10 +1,12 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     clickEvent = require("../events/click"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
+    iteratorUtils = require("../core/utils/iterator"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
@@ -288,9 +290,8 @@ var Accordion = CollectionWidget.inherit({
         var itemSelector = "." + ACCORDION_ITEM_TITLE_CLASS,
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        this._itemContainer()
-            .off(eventName, itemSelector)
-            .on(eventName, itemSelector, this._itemTitleClickHandler.bind(this));
+        eventsEngine.off(this._itemContainer(), eventName, itemSelector);
+        eventsEngine.on(this._itemContainer(), eventName, itemSelector, this._itemTitleClickHandler.bind(this));
     },
 
     _itemTitleClickHandler: function(e) {
@@ -312,7 +313,7 @@ var Accordion = CollectionWidget.inherit({
         var $items = this._itemElements(),
             that = this;
 
-        $.each(addedSelection, function(_, index) {
+        iteratorUtils.each(addedSelection, function(_, index) {
             that._deferredItems[index].resolve();
 
             var $item = $items.eq(index)
@@ -321,7 +322,7 @@ var Accordion = CollectionWidget.inherit({
             that.setAria("hidden", false, $item.find("." + ACCORDION_ITEM_BODY_CLASS));
         });
 
-        $.each(removedSelection, function(_, index) {
+        iteratorUtils.each(removedSelection, function(_, index) {
             var $item = $items.eq(index)
                 .removeClass(ACCORDION_ITEM_OPENED_CLASS);
             that.setAria("hidden", true, $item.find("." + ACCORDION_ITEM_BODY_CLASS));
@@ -343,7 +344,7 @@ var Accordion = CollectionWidget.inherit({
 
         clearTimeout(this._animationTimer);
 
-        return when.apply($, $.map(this._itemElements(), function(item) {
+        return when.apply($, iteratorUtils.map(this._itemElements(), function(item) {
             return that._updateItemHeight($(item), itemHeight, skipAnimation);
         })).done(function() {
             if(deferredAnimate) {
@@ -409,7 +410,7 @@ var Accordion = CollectionWidget.inherit({
         var $titles = this._itemTitles(),
             itemsHeight = 0;
 
-        $.each($titles, function(_, title) {
+        iteratorUtils.each($titles, function(_, title) {
             itemsHeight += $(title).outerHeight();
         });
 

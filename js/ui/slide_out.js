@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     isDefined = require("../core/utils/type").isDefined,
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
+    map = require("../core/utils/iterator").map,
     PlainEditStrategy = require("./collection/ui.collection_widget.edit.strategy.plain"),
     SlideOutView = require("./slide_out_view"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
@@ -218,7 +219,7 @@ var SlideOut = CollectionWidget.inherit({
             var strategy = PlainEditStrategy.inherit({
 
                 _getPlainItems: function() {
-                    return $.map(this.callBase(), function(group) {
+                    return map(this.callBase(), function(group) {
                         return group.items;
                     });
                 }

@@ -1,6 +1,6 @@
 "use strict";
 
-var _Callbacks = require("../../core/renderer").Callbacks;
+var Callbacks = require("../../core/utils/callbacks");
 
 function DataExchanger() {
     this._store = {};
@@ -16,7 +16,7 @@ DataExchanger.prototype = {
 
     _get: function(category, name) {
         var store = this._store[category] || (this._store[category] = {});
-        return store[name] || (store[name] = { callbacks: _Callbacks() });
+        return store[name] || (store[name] = { callbacks: Callbacks() });
     },
 
     set: function(category, name, data) {

@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../../core/renderer"),
-    extend = require("../../../core/utils/extend").extend,
+var extend = require("../../../core/utils/extend").extend,
+    each = require("../../../core/utils/iterator").each,
     noop = require("../../../core/utils/common").noop,
     labelModule = require("./label"),
     _extend = extend,
@@ -171,7 +171,6 @@ module.exports = {
         if(that.hasValue()) {
             that.value = that.initialValue + correction;
             that.minValue = correction;
-            that.translate();
         }
     },
 
@@ -185,7 +184,6 @@ module.exports = {
         if(that.hasValue()) {
             that.value = that.initialValue = 0;
             that.minValue = 0;
-            that.translate();
 
             that._label.setDataField("value", that.value);
         }
@@ -463,7 +461,7 @@ module.exports = {
             points.push([pos, high, pos, low]);
             !highErrorOnly && points.push([pos + edgeLength, low, pos - edgeLength, low]);
 
-            options.rotated && $.each(points, function(_, p) {
+            options.rotated && each(points, function(_, p) {
                 p.reverse();
             });
 
@@ -509,8 +507,6 @@ module.exports = {
             }
             that.value = valuePercent;
             that.minValue = !minValuePercent ? that.minValue : minValuePercent;
-
-            that.translate();
         }
     },
 
@@ -528,41 +524,40 @@ module.exports = {
         return that._options.trackerR;
     },
 
-    _translateErrorBars: function(valueTranslator) {
+    _translateErrorBars: function() {
         var that = this,
             options = that._options,
             rotated = options.rotated,
-            errorBars = options.errorBars;
+            errorBars = options.errorBars,
+            translator = that._getValTranslator();
 
         if(!errorBars) {
             return;
         }
 
-        _isDefined(that.lowError) && (that._lowErrorCoord = valueTranslator.translate(that.lowError));
-        _isDefined(that.highError) && (that._highErrorCoord = valueTranslator.translate(that.highError));
+        _isDefined(that.lowError) && (that._lowErrorCoord = translator.translate(that.lowError));
+        _isDefined(that.highError) && (that._highErrorCoord = translator.translate(that.highError));
         that._errorBarPos = _floor(rotated ? that.vy : that.vx);
         that._baseErrorBarPos = errorBars.type === "stdDeviation" ? that._lowErrorCoord + (that._highErrorCoord - that._lowErrorCoord) / 2 : rotated ? that.vx : that.vy;
     },
 
-    _translate: function(translators) {
+    _translate: function() {
         var that = this,
-            valueTranslator;
+            valTranslator = that._getValTranslator(),
+            argTranslator = that._getArgTranslator();
 
         if(that._options.rotated) {
-            valueTranslator = translators.x;
-            that.vx = that.x = valueTranslator.translate(that.value);
-            that.vy = that.y = translators.y.translate(that.argument);
-            that.minX = valueTranslator.translate(that.minValue);
-            that.defaultX = valueTranslator.translate(CANVAS_POSITION_DEFAULT);
-            that._translateErrorBars(valueTranslator);
+            that.vx = that.x = valTranslator.translate(that.value);
+            that.vy = that.y = argTranslator.translate(that.argument);
+            that.minX = valTranslator.translate(that.minValue);
+            that.defaultX = valTranslator.translate(CANVAS_POSITION_DEFAULT);
         } else {
-            valueTranslator = translators.y;
-            that.vy = that.y = valueTranslator.translate(that.value);
-            that.vx = that.x = translators.x.translate(that.argument);
-            that.minY = valueTranslator.translate(that.minValue);
-            that.defaultY = valueTranslator.translate(CANVAS_POSITION_DEFAULT);
-            that._translateErrorBars(valueTranslator);
+            that.vy = that.y = valTranslator.translate(that.value);
+            that.vx = that.x = argTranslator.translate(that.argument);
+            that.minY = valTranslator.translate(that.minValue);
+            that.defaultY = valTranslator.translate(CANVAS_POSITION_DEFAULT);
         }
+        that._translateErrorBars();
         that._calculateVisibility(that.x, that.y);
     },
 
@@ -672,5 +667,32 @@ module.exports = {
     coordsIn: function(x, y) {
         var trackerRadius = this._storeTrackerR();
         return (x >= this.x - trackerRadius) && (x <= this.x + trackerRadius) && (y >= this.y - trackerRadius) && (y <= this.y + trackerRadius);
-    }
+    },
+
+    getMinValue: function() {
+        var errorBarOptions = this._options.errorBars;
+        if(errorBarOptions) {
+            var displayMode = errorBarOptions.displayMode,
+                lowValue = displayMode === "high" ? this.value : this.lowError,
+                highValue = displayMode === "low" ? this.value : this.highError;
+
+            return lowValue < highValue ? lowValue : highValue;
+        } else {
+            return this.value;
+        }
+    },
+
+    getMaxValue: function() {
+        var errorBarOptions = this._options.errorBars;
+        if(errorBarOptions) {
+            var displayMode = errorBarOptions.displayMode,
+                lowValue = displayMode === "high" ? this.value : this.lowError,
+                highValue = displayMode === "low" ? this.value : this.highError;
+
+            return lowValue > highValue ? lowValue : highValue;
+        } else {
+            return this.value;
+        }
+
+    },
 };

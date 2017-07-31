@@ -1,7 +1,8 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var Callbacks = require("./utils/callbacks"),
     isFunction = require("./utils/type").isFunction,
+    each = require("./utils/iterator").each,
     Class = require("./class");
 
 module.exports = Class.inherit({
@@ -30,7 +31,7 @@ module.exports = Class.inherit({
             addFn;
 
         if(!callbacks) {
-            callbacks = $.Callbacks();
+            callbacks = Callbacks();
             this._events[eventName] = callbacks;
         }
         addFn = callbacks.originalAdd || callbacks.add;
@@ -49,7 +50,7 @@ module.exports = Class.inherit({
     },
 
     dispose: function() {
-        $.each(this._events, function() {
+        each(this._events, function() {
             this.empty();
         });
     }

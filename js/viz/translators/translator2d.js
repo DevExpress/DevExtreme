@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     numericTranslator = require("./numeric_translator"),
     categoryTranslator = require("./category_translator"),
     intervalTranslator = require("./interval_translator"),
@@ -22,7 +22,7 @@ var $ = require("../../core/renderer"),
     addInterval = require("../../core/utils/date").addInterval;
 
 var validateCanvas = function(canvas) {
-    $.each(CANVAS_PROP, function(_, prop) {
+    each(CANVAS_PROP, function(_, prop) {
         canvas[prop] = parseInt(canvas[prop]) || 0;
     });
     return canvas;

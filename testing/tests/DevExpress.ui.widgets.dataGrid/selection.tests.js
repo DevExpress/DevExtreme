@@ -721,6 +721,26 @@ QUnit.test("Deselect selectedRows. Store with key", function(assert) {
     assert.ok(!this.dataController.items()[6].isSelected);
 });
 
+QUnit.test("Deselect all if key is defined", function(assert) {
+    //arrange
+    this.applyOptions({
+        selection: { mode: 'single' },
+        dataSource: { store: { type: 'array', data: this.array, key: 'age' } }
+    });
+
+    this.dataController.optionChanged({ name: 'dataSource' });
+
+
+    this.selectionController.selectRows([16, 18]);
+
+    //act
+    this.selectionController.deselectAll();
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
+    assert.deepEqual(this.selectionController.getSelectedRowsData(), []);
+});
+
 QUnit.test("Deselect selectedRows. Object parameter", function(assert) {
     //arrange
     this.applyOptions({
@@ -855,6 +875,25 @@ QUnit.test("On selection changed argument contents actual parameters (T239237, d
     );
 
     assert.equal(onSelectionChangedCounter, 3, "onSelectionChanged calls three times");
+});
+
+QUnit.test("onSelectionChanged should not be called when loading data and given the selectedRowKeys", function(assert) {
+    //arrange
+    var onSelectionChangedCounter = 0;
+
+    this.applyOptions({
+        onSelectionChanged: function() {
+            onSelectionChangedCounter++;
+        }
+    });
+
+    //act
+    this.options.selectedRowKeys = [{ name: 'Dan', age: 16 }];
+    this.dataController.init();
+    this.clock.tick();
+
+    //act
+    assert.strictEqual(onSelectionChangedCounter, 0, "onSelectionChanged not called");
 });
 
 QUnit.test("clearSelection", function(assert) {
@@ -2206,6 +2245,27 @@ QUnit.test("Select All for multiple selection when selectAllMode is page", funct
 
     //assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 1, 3, 4]);
+    assert.strictEqual(this.selectionController.isSelectAll(), true, "select all is true");
+});
+
+QUnit.test("Select All for multiple selection when selectAllMode is page and data is grouped", function(assert) {
+    this.applyOptions({
+        columns: ["id", { dataField: "value", groupIndex: 0 }],
+        grouping: {
+            autoExpandAll: true
+        },
+        selection: {
+            mode: 'multiple',
+            allowSelectAll: true,
+            selectAllMode: "page"
+        }
+    });
+
+    //act
+    this.selectionController.selectAll();
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 2]);
     assert.strictEqual(this.selectionController.isSelectAll(), true, "select all is true");
 });
 

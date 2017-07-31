@@ -46,7 +46,7 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
                 $th.text(text);
             }
 
-            $th.addClass(HEADER_PANEL_CELL_CLASS).attr("colspan", colspan).width(headerCellWidth);
+            $th.addClass(HEADER_PANEL_CELL_CLASS).attr("colSpan", colspan).width(headerCellWidth);
             $cells.push($th);
 
             this._incrementDate(firstViewDate);

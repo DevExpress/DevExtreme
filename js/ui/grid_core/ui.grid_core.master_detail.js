@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     grep = require("../../core/utils/common").grep,
+    each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined;
 
 var MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
@@ -139,7 +140,7 @@ module.exports = {
 
                         if(options.detailColumnIndex === undefined) {
                             options.detailColumnIndex = -1;
-                            $.each(options.visibleColumns, function(index, column) {
+                            each(options.visibleColumns, function(index, column) {
                                 if(column.command === "expand" && !isDefined(column.groupIndex)) {
                                     options.detailColumnIndex = index;
                                     return false;
@@ -166,7 +167,7 @@ module.exports = {
                             that._expandedItems = grep(that._expandedItems, function(item) { return item.visible; });
                         }
 
-                        $.each(items, function(index, item) {
+                        each(items, function(index, item) {
                             result.push(item);
                             expandIndex = gridCoreUtils.getIndexByKey(item.key, that._expandedItems);
 
@@ -322,7 +323,7 @@ module.exports = {
                             $detailCell
                                 .addClass(CELL_FOCUS_DISABLED_CLASS)
                                 .addClass(MASTER_DETAIL_CELL_CLASS)
-                                .attr("colspan", groupCellOptions.colspan);
+                                .attr("colSpan", groupCellOptions.colspan);
                         } else {
                             this.callBase.apply(this, arguments);
                         }

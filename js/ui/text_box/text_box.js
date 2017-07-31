@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
@@ -64,9 +65,8 @@ var TextBox = TextEditor.inherit({
 
     _renderMaxLengthHandlers: function() {
         if(this._isAndroid()) {
-            this._input()
-                .on(eventUtils.addNamespace("keydown", this.NAME), this._onKeyDownAndroidHandler.bind(this))
-                .on(eventUtils.addNamespace("change", this.NAME), this._onChangeAndroidHandler.bind(this));
+            eventsEngine.on(this._input(), eventUtils.addNamespace("keydown", this.NAME), this._onKeyDownAndroidHandler.bind(this));
+            eventsEngine.on(this._input(), eventUtils.addNamespace("change", this.NAME), this._onChangeAndroidHandler.bind(this));
         }
     },
 

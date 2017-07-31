@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     grep = require("../../core/utils/common").grep,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     DataSourceModule = require("../../data/data_source/data_source"),
     when = require("../../integration/jquery/deferred").when,
     pivotGridUtils = require("./ui.pivot_grid.utils"),
@@ -13,7 +14,7 @@ var $ = require("../../core/renderer"),
 function createGroupingOptions(dimensionOptions) {
     var groupingOptions = [];
 
-    $.each(dimensionOptions, function(index, dimensionOption) {
+    each(dimensionOptions, function(index, dimensionOption) {
         groupingOptions.push({
             selector: dimensionOption.dataField,
             groupInterval: dimensionOption.groupInterval,
@@ -70,7 +71,7 @@ function createFieldFilterExpressions(field, operation) {
         operation = operation || "or";
     }
 
-    $.each(field.filterValues, function(index, filterValue) {
+    each(field.filterValues, function(index, filterValue) {
         var currentExpression = [],
             currentField = field.levels ? field.levels[index] : field;
 
@@ -105,7 +106,7 @@ function createFieldFilterExpressions(field, operation) {
 function createFilterExpressions(fields) {
     var filterExpressions = [];
 
-    $.each(fields, function(_, field) {
+    each(fields, function(_, field) {
         var fieldExpressions = createFieldFilterExpressions(field);
 
         if(!fieldExpressions.length) {
@@ -159,7 +160,7 @@ function createLoadOptions(options, externalFilterExpr) {
         loadOptions.filter = filterExpressions;
     }
 
-    $.each(options.values, function(_, value) {
+    each(options.values, function(_, value) {
         var summaryOption = {
             selector: value.dataField,
             summaryType: value.summaryType || "count"
@@ -177,7 +178,7 @@ function forEachGroup(data, callback, level) {
     data = data || [];
     level = level || 0;
 
-    $.each(data, function(_, group) {
+    each(data, function(_, group) {
         callback(group, level);
 
         if(group.items && group.items.length) {
@@ -199,7 +200,7 @@ function parseResult(data, total, descriptions, result) {
         columnHash = result.columnHash;
 
     if(total && total.summary) {
-        $.each(total.summary, function(index, summary) {
+        each(total.summary, function(index, summary) {
             setValue(result.values, summary, result.grandTotalRowIndex, result.grandTotalColumnIndex, index);
         });
     }
@@ -264,7 +265,7 @@ function parseResult(data, total, descriptions, result) {
         var currentRowIndex = rowItem && rowItem.index || result.grandTotalRowIndex,
             currentColumnIndex = columnItem && columnItem.index || result.grandTotalColumnIndex;
 
-        $.each(item.summary || [], function(i, summary) {
+        each(item.summary || [], function(i, summary) {
             setValue(result.values, summary, currentRowIndex, currentColumnIndex, i);
         });
 
@@ -296,9 +297,9 @@ function getExpandedPathSliceFilter(options, dimensionName, level, firstCollapse
         fields = options.headerName !== dimensionName ? options[dimensionName].slice(startSliceIndex, level) : [],
         paths = dimensionName === "rows" ? options.rowExpandedPaths : options.columnExpandedPaths;
 
-    $.each(fields, function(index, field) {
+    each(fields, function(index, field) {
         var filterValues = [];
-        $.each(paths, function(_, path) {
+        each(paths, function(_, path) {
             path = path.slice(startSliceIndex, level);
             if(index < path.length) {
                 filterValues.push(path[index]);
@@ -354,7 +355,7 @@ function getGrandTotalRequest(options, dimensionName, expandedIndex, expandedLev
 
 function getFirstCollapsedIndex(fields) {
     var firstCollapsedIndex = 0;
-    $.each(fields, function(index, field) {
+    each(fields, function(index, field) {
         if(!field.expanded) {
             firstCollapsedIndex = index;
             return false;
@@ -406,7 +407,7 @@ function getRequestsData(options) {
 }
 
 function prepareFields(fields) {
-    $.each(fields || [], function(_, field) {
+    each(fields || [], function(_, field) {
         var levels = field.levels;
 
         if(levels) {
@@ -465,7 +466,7 @@ module.exports = Class.inherit((function() {
             prepareFields(options.columns);
             prepareFields(options.filters);
 
-            $.each(requestsData, function(_, dataItem) {
+            each(requestsData, function(_, dataItem) {
                 deferreds.push(that._store.load(
                     createLoadOptions(dataItem, that.filter())
                 ));
@@ -474,7 +475,7 @@ module.exports = Class.inherit((function() {
             when.apply(null, deferreds).done(function() {
                 var args = deferreds.length > 1 ? arguments : [arguments];
 
-                $.each(args, function(index, argument) {
+                each(args, function(index, argument) {
                     parseResult(argument[0], argument[1], requestsData[index], result);
                 });
 

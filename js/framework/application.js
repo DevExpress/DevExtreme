@@ -1,11 +1,12 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("jquery"),
     Class = require("../core/class"),
     abstract = Class.abstract,
     Action = require("../core/action"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
+    iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     mergeCommands = require("./utils").utils.mergeCommands,
     createActionExecutors = require("./action_executors").createActionExecutors,
@@ -113,7 +114,7 @@ var Application = Class.inherit({
 
         var generatedIdCount = 0;
 
-        return $.map(commandConfig, function(item) {
+        return iteratorUtils.map(commandConfig, function(item) {
             var command;
             if(item instanceof dxCommand) {
                 command = item;
@@ -128,7 +129,7 @@ var Application = Class.inherit({
     },
 
     _mapNavigationCommands: function(navigationCommands, commandMapping) {
-        var navigationCommandIds = $.map(navigationCommands, function(command) {
+        var navigationCommandIds = iteratorUtils.map(navigationCommands, function(command) {
             return command.option("id");
         });
         commandMapping.mapCommands("global-navigation", navigationCommandIds);
@@ -137,7 +138,7 @@ var Application = Class.inherit({
     _callComponentMethod: function(methodName, args) {
         var tasks = [];
 
-        $.each(this.components, function(index, component) {
+        iteratorUtils.each(this.components, function(index, component) {
             if(component[methodName] && typeUtils.isFunction(component[methodName])) {
                 var result = component[methodName](args);
                 if(result && result.done) {
@@ -249,7 +250,7 @@ var Application = Class.inherit({
     _disposeRemovedViews: function() {
         var that = this,
             args;
-        $.each(that._viewLinksHash, function(key, link) {
+        iteratorUtils.each(that._viewLinksHash, function(key, link) {
             if(!link.linkCount) {
                 args = { viewInfo: link.viewInfo };
                 that._processEvent("viewDisposing", args, args.viewInfo.model);
@@ -268,7 +269,7 @@ var Application = Class.inherit({
     _disposeView: function(viewInfo) {
         var commands = viewInfo.commands || [];
 
-        $.each(commands, function(index, command) {
+        iteratorUtils.each(commands, function(index, command) {
             command._dispose();
         });
     },
@@ -409,7 +410,7 @@ var Application = Class.inherit({
             currentNavigationItemId = viewInfo.model && viewInfo.model.currentNavigationItemId;
 
         if(currentNavigationItemId !== undefined) {
-            $.each(this.navigation, function(index, command) {
+            iteratorUtils.each(this.navigation, function(index, command) {
                 if(command.option("id") === currentNavigationItemId) {
                     selectedCommand = command;
                     return false;
@@ -418,7 +419,7 @@ var Application = Class.inherit({
         }
 
         if(!selectedCommand) {
-            $.each(this.navigation, function(index, command) {
+            iteratorUtils.each(this.navigation, function(index, command) {
                 var commandUri = command.option("onExecute");
                 if(typeUtils.isString(commandUri)) {
                     commandUri = commandUri.replace(/^#+/, "");
@@ -430,7 +431,7 @@ var Application = Class.inherit({
             });
         }
 
-        $.each(this.navigation, function(index, command) {
+        iteratorUtils.each(this.navigation, function(index, command) {
             if(forceUpdate && command === selectedCommand && command.option("highlighted")) {
                 command.fireEvent("optionChanged", [{ name: "highlighted", value: true, previousValue: true }]); //Q587642
             }
@@ -522,7 +523,7 @@ var Application = Class.inherit({
     /*        handleError: function() {
                 // TODO: This is workaround for bug in jQuery.Callbacks (#?????? - need to be registered)
                 this.navigationManager.navigated.empty();
-                this.navigationManager.navigated = $.Callbacks();
+                this.navigationManager.navigated = Callbacks();
                 this.navigationManager.on("navigated", this._onNavigated.bind(this));
             }*/
 }).include(EventsMixin);

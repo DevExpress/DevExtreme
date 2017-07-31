@@ -132,8 +132,8 @@ QUnit.test("Scheduler work space should have a single type class", function(asse
 QUnit.test("Pointer down on workspace cell should focus cell", function(assert) {
     this.createInstance({ currentDate: new Date(2015, 1, 10) });
 
-    var $firstCell = this.instance.element().find(".dx-scheduler-date-table td").eq(0),
-        $otherCell = this.instance.element().find(".dx-scheduler-date-table td").eq(1);
+    var $firstCell = $(this.instance.element()).find(".dx-scheduler-date-table td").eq(0),
+        $otherCell = $(this.instance.element()).find(".dx-scheduler-date-table td").eq(1);
 
     $firstCell.trigger("dxpointerdown");
 

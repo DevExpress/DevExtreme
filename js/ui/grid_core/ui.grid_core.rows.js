@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     stringUtils = require("../../core/utils/string"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
@@ -528,7 +530,7 @@ module.exports = {
                         }
                      );
 
-                    arg.rowElement.on(removeEvent, dispose);
+                    eventsEngine.on(arg.rowElement, removeEvent, dispose);
                 },
 
                 _renderScrollable: function(force) {
@@ -597,7 +599,7 @@ module.exports = {
 
                     switch(changeType) {
                         case "update":
-                            $.each(change.rowIndices, function(index, rowIndex) {
+                            each(change.rowIndices, function(index, rowIndex) {
                                 var $newRowElement = that._getRowElements(newTableElement).eq(index),
                                     changeType = change.changeTypes[index],
                                     item = change.items && change.items[index];
@@ -618,7 +620,7 @@ module.exports = {
                                             break;
                                         case "insert":
                                             if(!$rowsElement.length) {
-                                                $newRowElement.prependTo(tableElement);
+                                                $newRowElement.prependTo(tableElement.children("tbody"));
                                             } else if($rowElement.length) {
                                                 $newRowElement.insertBefore($rowElement);
                                             } else {
@@ -631,7 +633,7 @@ module.exports = {
                                     }
                                 });
                             });
-                            $.each(executors, function() {
+                            each(executors, function() {
                                 this();
                             });
 
@@ -973,11 +975,11 @@ module.exports = {
                                 if(!isFreeSpaceRowVisible && $table) {
                                     freeSpaceRowElements.height(0);
                                 } else {
-                                    freeSpaceRowElements.css("display", isFreeSpaceRowVisible ? "" : "none");
+                                    freeSpaceRowElements.toggle(isFreeSpaceRowVisible);
                                 }
                                 that._updateLastRowBorder(isFreeSpaceRowVisible);
                             } else {
-                                freeSpaceRowElements.css("display", "none");
+                                freeSpaceRowElements.hide();
                                 commonUtils.deferUpdate(function() {
                                     var scrollbarWidth = that.getScrollbarWidth(true),
                                         elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth,
@@ -990,7 +992,7 @@ module.exports = {
                                         commonUtils.deferRender(function() {
                                             freeSpaceRowElements.height(resultHeight);
                                             isFreeSpaceRowVisible = true;
-                                            freeSpaceRowElements.css("display", "");
+                                            freeSpaceRowElements.show();
                                         });
                                     }
                                     commonUtils.deferRender(function() {
@@ -1000,7 +1002,7 @@ module.exports = {
                             }
                         } else {
                             freeSpaceRowElements.height(0);
-                            freeSpaceRowElements.css("display", "");
+                            freeSpaceRowElements.show();
                             that._updateLastRowBorder(true);
                         }
                     }
@@ -1205,7 +1207,7 @@ module.exports = {
                         columnID = column && column.isBand && column.index,
                         $rows = that._getRowElements().not("." + GROUP_ROW_CLASS) || [];
 
-                    $.each($rows, function(rowIndex, row) {
+                    each($rows, function(rowIndex, row) {
                         if(!$(row).hasClass(GROUP_ROW_CLASS)) {
                             for(i = 0; i < visibleColumns.length; i++) {
                                 if(typeUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
@@ -1226,7 +1228,7 @@ module.exports = {
                     if($cells) {
                         groupCellIndex = $cells.filter("." + GROUP_CELL_CLASS).index();
                         if(groupCellIndex >= 0 && $cells.length > groupCellIndex + 1) {
-                            $cells.length = groupCellIndex + 1;
+                            return $cells.slice(0, groupCellIndex + 1);
                         }
                     }
                     return $cells;
@@ -1245,7 +1247,7 @@ module.exports = {
                         tableElement = that._getTableElement();
 
                     if(items.length && tableElement) {
-                        rowElements = tableElement.children("tbody").children(".dx-row:visible, .dx-error-row").not("." + FREE_SPACE_CLASS);
+                        rowElements = tableElement.children("tbody").children(".dx-row, .dx-error-row").filter(":visible").not("." + FREE_SPACE_CLASS);
 
                         for(itemIndex = 0; itemIndex < items.length; itemIndex++) {
                             prevOffsetTop = offsetTop;

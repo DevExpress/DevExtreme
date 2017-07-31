@@ -1,11 +1,13 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../integration/jquery/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     Action = require("../../core/action"),
     Guid = require("../../core/guid"),
     domUtils = require("../../core/utils/dom"),
@@ -60,7 +62,7 @@ var CollectionWidget = Widget.inherit({
     _activeStateUnit: "." + ITEM_CLASS,
 
     _supportedKeys: function() {
-        var click = function(e) {
+        var enter = function(e) {
                 var $itemElement = this.option("focusedElement");
 
                 if(!$itemElement) {
@@ -72,14 +74,18 @@ var CollectionWidget = Widget.inherit({
 
                 this._itemClickHandler(e);
             },
+            space = function(e) {
+                e.preventDefault();
+                enter.call(this, e);
+            },
             move = function(location, e) {
                 e.preventDefault();
                 e.stopPropagation();
                 this._moveFocus(location, e);
             };
         return extend(this.callBase(), {
-            space: click,
-            enter: click,
+            space: space,
+            enter: enter,
             leftArrow: move.bind(this, FOCUS_LEFT),
             rightArrow: move.bind(this, FOCUS_RIGHT),
             upArrow: move.bind(this, FOCUS_UP),
@@ -294,7 +300,7 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        var items = $.map($items, (function(item) {
+        var items = iteratorUtils.map($items, (function(item) {
             var $item = $(item);
             var result = domUtils.getElementOptions(item).dxItem;
             var isTemplateRequired = $item.html().trim() && !result.template;
@@ -709,16 +715,15 @@ var CollectionWidget = Widget.inherit({
             that._itemPointerDownHandler(event);
         });
 
-        this._itemContainer()
-            .off(clickEventNamespace, itemSelector)
-            .off(pointerDownEventNamespace, itemSelector)
-            .on(clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this))
-            .on(pointerDownEventNamespace, itemSelector, function(e) {
-                pointerDownAction.execute({
-                    element: $(e.target),
-                    event: e
-                });
+        eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
+        eventsEngine.off(this._itemContainer(), pointerDownEventNamespace, itemSelector);
+        eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this));
+        eventsEngine.on(this._itemContainer(), pointerDownEventNamespace, itemSelector, function(e) {
+            pointerDownAction.execute({
+                element: $(e.target),
+                event: e
             });
+        });
     },
 
     _itemClickHandler: function(e, args, config) {
@@ -779,8 +784,8 @@ var CollectionWidget = Widget.inherit({
             itemSelector = this._itemSelector(),
             eventName = eventUtils.addNamespace(holdEvent.name, this.NAME);
 
-        $itemContainer.off(eventName, itemSelector);
-        $itemContainer.on(eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
+        eventsEngine.off($itemContainer, eventName, itemSelector);
+        eventsEngine.on($itemContainer, eventName, itemSelector, { timeout: this._getHoldTimeout() }, this._itemHoldHandler.bind(this));
     },
 
     _getHoldTimeout: function() {
@@ -804,8 +809,8 @@ var CollectionWidget = Widget.inherit({
             itemSelector = this._itemSelector(),
             eventName = eventUtils.addNamespace(contextMenuEvent.name, this.NAME);
 
-        $itemContainer.off(eventName, itemSelector);
-        $itemContainer.on(eventName, itemSelector, this._itemContextMenuHandler.bind(this));
+        eventsEngine.off($itemContainer, eventName, itemSelector);
+        eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));
     },
 
     _shouldFireContextMenuEvent: function() {
@@ -831,7 +836,7 @@ var CollectionWidget = Widget.inherit({
 
     _renderItems: function(items) {
         if(items.length) {
-            $.each(items, this._renderItem.bind(this));
+            iteratorUtils.each(items, this._renderItem.bind(this));
         }
 
         this._renderEmptyMessage();
@@ -875,7 +880,7 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        $itemElement.on(clickEvent.name, (function(e) {
+        eventsEngine.on($itemElement, clickEvent.name, (function(e) {
             this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
                 jQueryEvent: e
             });

@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer");
+var $ = require("../../core/renderer"),
+    dataUtils = require("../../core/element_data");
 
 var SchedulerTableCreator = {
 
@@ -38,7 +39,7 @@ var SchedulerTableCreator = {
                     cellDataObject = options.getCellData(td, i, j);
                     dataKey = cellDataObject.key;
                     dataValue = cellDataObject.value;
-                    dataKey && $.data(td, dataKey, dataValue);
+                    dataKey && dataUtils.data(td, dataKey, dataValue);
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
@@ -183,7 +184,7 @@ var SchedulerTableCreator = {
 
                 cells.forEach(function(cell, index) {
                     if(rowspans[index]) {
-                        cell.element.setAttribute("rowspan", rowspans[index]);
+                        cell.element.setAttribute("rowSpan", rowspans[index]);
                     }
                     row.appendChild(cell.element);
                 });
@@ -239,7 +240,7 @@ var SchedulerTableCreator = {
                 var currentRowIndex = j * rowspan,
                     row = rows[currentRowIndex];
 
-                row.prepend(arr[i][j].element.attr("rowspan", rowspan));
+                row.prepend(arr[i][j].element.attr("rowSpan", rowspan));
             }
         }
 
@@ -284,7 +285,7 @@ var SchedulerTableCreator = {
                 colspan = maxCellCount / $cell.length * cellCount;
 
             if(colspan > 1) {
-                $cell.attr("colspan", colspan);
+                $cell.attr("colSpan", colspan);
             }
         }
 

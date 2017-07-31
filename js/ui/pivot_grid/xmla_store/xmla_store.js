@@ -6,6 +6,7 @@ var $ = require("../../../core/renderer"),
     errors = require("../../../data/errors").errors,
     noop = require("../../../core/utils/common").noop,
     typeUtils = require("../../../core/utils/type"),
+    iteratorUtils = require("../../../core/utils/iterator"),
     inArray = require("../../../core/utils/array").inArray,
     pivotGridUtils = require("../ui.pivot_grid.utils"),
     when = require("../../../integration/jquery/deferred").when,
@@ -23,7 +24,7 @@ exports.XmlaStore = Class.inherit((function() {
         mdxAxis = "{0} DIMENSION PROPERTIES PARENT_UNIQUE_NAME,HIERARCHY_UNIQUE_NAME, MEMBER_VALUE ON {1}",
         mdxCrossJoin = "CrossJoin({0})",
         mdxSet = "{{0}}",
-        each = $.each,
+        each = iteratorUtils.each,
 
         MEASURE_DEMENSION_KEY = "DX_MEASURES",
         MD_DIMTYPE_MEASURE = "2";
@@ -314,7 +315,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function prepareDataFields(withArray, valueFields) {
 
-        return $.map(valueFields, function(cell) {
+        return iteratorUtils.map(valueFields, function(cell) {
             if(typeUtils.isString(cell.expression)) {
                 declare(cell.expression, withArray, cell.dataField, "member");
             }
@@ -552,13 +553,13 @@ exports.XmlaStore = Class.inherit((function() {
 
     function getVisibleChildren(item, visibleLevels) {
         var result = [],
-            children = item.children && (item.children.length ? item.children : $.map(item.children.grandTotalHash || [], function(e) {
+            children = item.children && (item.children.length ? item.children : iteratorUtils.map(item.children.grandTotalHash || [], function(e) {
                 return e.children;
             })),
             firstChild = children && children[0];
 
         if(firstChild && (visibleLevels[firstChild.hierarchyName] && (inArray(firstChild.levelName, visibleLevels[firstChild.hierarchyName]) !== -1) || !visibleLevels[firstChild.hierarchyName] || firstChild.level === 0)) {
-            var newChildren = $.map(children, function(child) {
+            var newChildren = iteratorUtils.map(children, function(child) {
                 return child.hierarchyName === firstChild.hierarchyName ? child : null;
             });
             newChildren.grandTotalHash = children.grandTotalHash;

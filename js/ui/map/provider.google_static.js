@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var each = require("../../core/utils/iterator").each,
+    eventsEngine = require("../../events/core/events_engine"),
     Promise = require("../../core/polyfills/promise"),
     Provider = require("./provider"),
     Color = require("../../color"),
@@ -47,7 +48,7 @@ var GoogleStaticProvider = Provider.inherit({
         var that = this;
 
         return this._updateMap().then(function(result) {
-            $.each(options, function(_, options) {
+            each(options, function(_, options) {
                 that._fireMarkerAddedAction({
                     options: options
                 });
@@ -60,7 +61,7 @@ var GoogleStaticProvider = Provider.inherit({
         var that = this;
 
         return this._updateMap().then(function(result) {
-            $.each(options, function(_, options) {
+            each(options, function(_, options) {
                 that._fireMarkerRemovedAction({
                     options: options
                 });
@@ -77,7 +78,7 @@ var GoogleStaticProvider = Provider.inherit({
         var that = this;
 
         return this._updateMap().then(function(result) {
-            $.each(options, function(_, options) {
+            each(options, function(_, options) {
                 that._fireRouteAddedAction({
                     options: options
                 });
@@ -90,7 +91,7 @@ var GoogleStaticProvider = Provider.inherit({
         var that = this;
 
         return this._updateMap().then(function(result) {
-            $.each(options, function(_, options) {
+            each(options, function(_, options) {
                 that._fireRouteRemovedAction({
                     options: options
                 });
@@ -101,7 +102,7 @@ var GoogleStaticProvider = Provider.inherit({
 
     clean: function() {
         this._$container.css("background-image", "none");
-        this._$container.off(this._addEventNamespace(clickEvent.name));
+        eventsEngine.off(this._$container, this._addEventNamespace(clickEvent.name));
 
         return Promise.resolve();
     },
@@ -145,7 +146,7 @@ var GoogleStaticProvider = Provider.inherit({
             markers.push("icon:" + markerIcon);
         }
 
-        $.each(this._option("markers"), function(_, marker) {
+        each(this._option("markers"), function(_, marker) {
             markers.push(that._locationToString(marker.location));
         });
 
@@ -156,12 +157,12 @@ var GoogleStaticProvider = Provider.inherit({
         var that = this,
             routes = [];
 
-        $.each(this._option("routes"), function(_, route) {
+        each(this._option("routes"), function(_, route) {
             var color = new Color(route.color || that._defaultRouteColor()).toHex().replace('#', '0x'),
                 opacity = Math.round((route.opacity || that._defaultRouteOpacity()) * 255).toString(16),
                 width = route.weight || that._defaultRouteWeight(),
                 locations = [];
-            $.each(route.locations, function(_, routePoint) {
+            each(route.locations, function(_, routePoint) {
                 locations.push(that._locationToString(routePoint));
             });
 
@@ -175,11 +176,10 @@ var GoogleStaticProvider = Provider.inherit({
         var that = this,
             eventName = this._addEventNamespace(clickEvent.name);
 
-        this._$container
-            .off(eventName)
-            .on(eventName, function(e) {
-                that._fireClickAction({ jQueryEvent: e });
-            });
+        eventsEngine.off(this._$container, eventName);
+        eventsEngine.on(this._$container, eventName, function(e) {
+            that._fireClickAction({ jQueryEvent: e });
+        });
     }
 
 });

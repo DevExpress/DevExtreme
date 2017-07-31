@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
@@ -37,9 +38,10 @@ var SpinButton = Widget.inherit({
 
         $element
             .addClass(SPIN_BUTTON_CLASS)
-            .addClass(direction)
-            .off(eventName)
-            .on(eventName, this._spinDownHandler.bind(this));
+            .addClass(direction);
+
+        eventsEngine.off($element, eventName);
+        eventsEngine.on($element, eventName, this._spinDownHandler.bind(this));
 
         this._spinIcon = $("<div>").addClass(direction + "-icon").appendTo(this.element());
 
@@ -51,16 +53,15 @@ var SpinButton = Widget.inherit({
 
         this._clearTimer();
 
-        this.element().on(holdEvent.name, (function() {
+        eventsEngine.on(this.element(), holdEvent.name, (function() {
             this._feedBackDeferred = $.Deferred();
             feedbackEvents.lock(this._feedBackDeferred);
             this._spinChangeHandler({ jQueryEvent: e });
             this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { jQueryEvent: e });
         }).bind(this));
 
-        $(document)
-            .on(POINTERUP_EVENT_NAME, this._clearTimer.bind(this))
-            .on(POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
+        eventsEngine.on(document, POINTERUP_EVENT_NAME, this._clearTimer.bind(this));
+        eventsEngine.on(document, POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
 
         this._spinChangeHandler({ jQueryEvent: e });
     },
@@ -71,11 +72,10 @@ var SpinButton = Widget.inherit({
     },
 
     _clearTimer: function() {
-        this.element().off(holdEvent.name);
+        eventsEngine.off(this.element(), holdEvent.name);
 
-        $(document)
-            .off(POINTERUP_EVENT_NAME)
-            .off(POINTERCANCEL_EVENT_NAME);
+        eventsEngine.off(document, POINTERUP_EVENT_NAME);
+        eventsEngine.off(document, POINTERCANCEL_EVENT_NAME);
 
         if(this._feedBackDeferred) {
             this._feedBackDeferred.resolve();

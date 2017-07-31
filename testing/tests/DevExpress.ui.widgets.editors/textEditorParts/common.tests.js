@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    eventsEngine = require("events/core/events_engine"),
     domUtils = require("core/utils/dom"),
     devices = require("core/devices"),
     pointerMock = require("../../../helpers/pointerMock.js"),
@@ -664,17 +665,10 @@ QUnit.testInActiveWindow("Remove .dx-state-focused class after disabled of the e
 QUnit.module("api", moduleConfig);
 
 QUnit.test("focus method", function(assert) {
-    var done = assert.async();
-    var $input = this.input;
-
-    var originalJQueryFocus = $.fn.focus;
-    $.fn.focus = function() {
-        assert.strictEqual(this[0], $input[0]);
-        $.fn.focus = originalJQueryFocus;
-        done();
-    };
+    var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(this.input.get(0), "focus");
 
     this.instance.focus();
+    assert.ok(focusSpy.called);
 });
 
 QUnit.test("blur method", function(assert) {

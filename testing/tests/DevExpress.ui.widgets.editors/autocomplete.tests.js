@@ -199,7 +199,7 @@ QUnit.testInActiveWindow("list showing/hiding", function(assert) {
     keyboard.type("1").keyDown(KEY_DOWN);
     assert.equal($list.is(":hidden"), false, "when select list item, list is visible");
 
-    this.$input.trigger("dxpointerdown");
+    $(this.$input).trigger("dxpointerdown");
     assert.equal($list.is(":hidden"), false, "when click one more at input, list is visible");
 
     keyboard.keyDown(KEY_ENTER);
@@ -214,7 +214,7 @@ QUnit.test("Enter and escape key press prevent default when popup in opened", fu
     this.keyboard.type("i").keyDown(KEY_DOWN);
     this.instance.option("opened", true);
 
-    this.$input.on("keydown", function(e) {
+    $(this.$input).on("keydown", function(e) {
         if(e.isDefaultPrevented()) {
             prevented++;
         }
@@ -254,7 +254,7 @@ QUnit.test("item click sets value", function(assert) {
     $list = this.instance._list._$element;
 
     assert.equal("text", this.instance.option("value"));
-    $list.find("." + LIST_ITEM_CLASS).first().trigger("dxclick");
+    $($list.find("." + LIST_ITEM_CLASS).first()).trigger("dxclick");
 
     assert.equal(this.instance.option("value"), "item 1", "click on list item, and it-s value replace textbox value");
     assert.equal($list.is(":hidden"), true, "when click on list-s item, list is hidden");
@@ -381,7 +381,7 @@ QUnit.test("'change event' is called once", function(assert) {
     assert.equal(instance.option("value"), null);
     this.keyboard.type("tem2");
 
-    this.$input.trigger("change");
+    $(this.$input).trigger("change");
     assert.equal(instance.option("value"), "item2");
 });
 
@@ -540,7 +540,7 @@ QUnit.test("key_up/key_down - prevent default", function(assert) {
     });
     keyboard.type("i");
 
-    this.$input.on("keydown", function(e) {
+    $(this.$input).on("keydown", function(e) {
         assert.ok(e.isDefaultPrevented());
     });
 
@@ -568,7 +568,7 @@ QUnit.test("enter - prevent default", function(assert) {
 
     keyboard.keyDown(KEY_DOWN);
 
-    this.$input.on("keydown", function(e) {
+    $(this.$input).on("keydown", function(e) {
         assert.ok(e.isDefaultPrevented());
     });
 
@@ -666,7 +666,7 @@ QUnit.testInActiveWindow("using custom item template", function(assert) {
     keyboard
         .type("i");
 
-    instance._list.element().find(".dx-list-item").first().trigger("dxclick");
+    $(instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
 
     assert.equal(instance.option("value"), "item 1", "send correct value to input when using custom template");
 });
@@ -734,7 +734,7 @@ QUnit.testInActiveWindow("using multifield datasource", function(assert) {
     keyboard
         .type("i");
 
-    instance._list.element().find(".dx-list-item").first().trigger("dxclick");
+    $(instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
 
     assert.equal(instance.option("value"), "item 1", "send correct value to input when using multifield datasource");
 
@@ -744,7 +744,7 @@ QUnit.testInActiveWindow("using multifield datasource", function(assert) {
     keyboard
         .type("e");
 
-    instance._list.element().find(".dx-list-item").first().trigger("dxclick");
+    $(instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
 
     assert.equal(instance.option("value"), "ed", "send correct value to input when change 'valueExpr' option");
 });
@@ -775,7 +775,7 @@ QUnit.testInActiveWindow("using multifield datasource with template", function(a
     keyboard
         .type("i");
 
-    instance._list.element().find(".dx-list-item").first().trigger("dxclick");
+    $(instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
 
     assert.equal(instance.option("value"), "item 1", "send correct value to input when using multifield datasource");
 });
@@ -1016,7 +1016,7 @@ QUnit.testInActiveWindow("popup should not reopened on Enter key press", functio
     });
 
     this.keyboard.press("enter");
-    this.$input.trigger("change");
+    $(this.$input).trigger("change");
 });
 
 
@@ -1113,7 +1113,7 @@ QUnit.testInActiveWindow("when updating value option, input.val() do not updatin
     assert.equal(this.inputValue(), "i", "input value");
     assert.equal(this.widgetValue(), "i", "input value");
 
-    this.instance._list.element().find(".dx-list-item").first().trigger("dxclick");
+    $(this.instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
 
     this.keyboard.caret(6);
 
@@ -1285,7 +1285,7 @@ QUnit.test("B238021", function(assert) {
         .type("i")
         .keyDown(KEY_TAB);
 
-    $input.trigger("focusout");
+    $($input).trigger("focusout");
     $list = this.instance._list._$element;
 
     assert.ok($list.is(":hidden"), "close menu after input losts focus");
@@ -1351,7 +1351,7 @@ QUnit.test("B251208 - dxAutocomplete: cannot select text by keyboard", function(
     this.$input.prop("selectionStart", 0);
     this.$input.prop("selectionEnd", 2);
 
-    this.$input.trigger("keyup");
+    $(this.$input).trigger("keyup");
 
     assert.equal(this.$input.prop("selectionStart"), 0);
     assert.equal(this.$input.prop("selectionEnd"), 2);
@@ -1413,7 +1413,7 @@ QUnit.test("filter is not reset", function(assert) {
     keyboard.type("C");
     this.clock.tick();
 
-    $input.val("").trigger("keyup");
+    $($input.val("")).trigger("keyup");
     this.clock.tick();
 
     keyboard.type("Z");

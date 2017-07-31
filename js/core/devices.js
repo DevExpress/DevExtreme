@@ -3,8 +3,10 @@
 var $ = require("../core/renderer"),
     extend = require("./utils/extend").extend,
     isPlainObject = require("./utils/type").isPlainObject,
+    each = require("./utils/iterator").each,
     Class = require("./class"),
     errors = require("./errors"),
+    Callbacks = require("./utils/callbacks"),
     resizeCallbacks = require("./utils/window").resizeCallbacks,
     EventsMixin = require("./events_mixin"),
     SessionStorage = require("./utils/storage").sessionStorage,
@@ -193,7 +195,7 @@ var Devices = Class.inherit({
         this._currentDevice = undefined;
         this._currentOrientation = undefined;
 
-        this.changed = $.Callbacks();
+        this.changed = Callbacks();
         this._recalculateOrientation();
         resizeCallbacks.add(this._recalculateOrientation.bind(this));
     },
@@ -394,7 +396,7 @@ var Devices = Class.inherit({
     _fromUA: function(ua) {
         var config;
 
-        $.each(uaParsers, function(platform, parser) {
+        each(uaParsers, function(platform, parser) {
             config = parser(ua);
             return !config;
         });

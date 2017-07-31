@@ -268,14 +268,6 @@
             background-color: transparent;
         }
 
-        .dx-checkbox {
-            &.dx-checkbox-checked {
-                .dx-checkbox-icon {
-                    font-size: @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE;
-                }
-            }
-        }
-
         .dx-texteditor {
             background: ~"@{@{widgetName}-editor-bg}";
 
@@ -308,6 +300,10 @@
 
     .dx-@{widgetName}-checkbox-size {
         line-height: normal;
+
+        &.dx-checkbox-checked .dx-checkbox-icon {
+            font-size: @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE;
+        }
 
         .dx-checkbox-icon {
             height: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
@@ -789,7 +785,7 @@
             margin-left: 1px;
             .dx-button-styling-variant( @button-danger-bg, @button-danger-border-color, @button-danger-color, @button-danger-hover-bg, @button-danger-hover-border-color, @button-danger-focused-bg, @button-danger-focused-border-color, @button-danger-active-bg, @button-danger-active-border-color, @button-danger-color, @button-danger-icon-color );
             > .dx-button-content {
-                padding: @GENERIC_GRID_BASE_CELL_PADDING - 1;
+                padding: @GENERIC_GRID_BASE_CELL_PADDING;
             }
 
 

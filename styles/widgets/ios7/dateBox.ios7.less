@@ -33,6 +33,12 @@
     &.dx-dropdowneditor-field-clickable .dx-dropdowneditor-button {
         display: none;
     }
+
+    &, &:not(.dx-texteditor-empty) {
+        &.dx-auto-width {
+            .invalid-dropdowneditor-input-padding();
+        }
+    }
 }
 
 .dx-datebox-wrapper-calendar {
