@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("../../core/utils/type"),
+var typeUtils = require("../../core/utils/type"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     queryAdapters = require("../query_adapters"),
     odataUtils = require("./utils"),
@@ -13,6 +13,10 @@ var $ = require("../../core/renderer"),
     grep = require("../../core/utils/common").grep;
 
 var DEFAULT_PROTOCOL_VERSION = 2;
+
+var makeArray = function(value) {
+    return typeUtils.type(value) === "string" ? value.split() : value;
+};
 
 var compileCriteria = (function() {
     var protocolVersion,
@@ -103,7 +107,7 @@ var compileCriteria = (function() {
             groupOperator,
             nextGroupOperator;
 
-        $.each(criteria, function(index, criterion) {
+        iteratorUtils.each(criteria, function(index, criterion) {
             if(Array.isArray(criterion)) {
 
                 if(bag.length > 1 && groupOperator !== nextGroupOperator) {
@@ -192,13 +196,13 @@ var createODataQueryAdapter = function(queryOptions) {
                 var hash = {};
 
                 if(_expand) {
-                    $.each($.makeArray(_expand), function() {
+                    iteratorUtils.each(makeArray(_expand), function() {
                         hash[serializePropName(this)] = 1;
                     });
                 }
 
                 if(_select) {
-                    $.each($.makeArray(_select), function() {
+                    iteratorUtils.each(makeArray(_select), function() {
                         var path = this.split(".");
                         if(path.length < 2) {
                             return;
@@ -209,7 +213,7 @@ var createODataQueryAdapter = function(queryOptions) {
                     });
                 }
 
-                return $.map(hash, function(k, v) { return v; }).join();
+                return iteratorUtils.map(hash, function(k, v) { return v; }).join();
             };
 
             var generatorV4 = function() {
@@ -219,7 +223,7 @@ var createODataQueryAdapter = function(queryOptions) {
                             select = [],
                             expand = [];
 
-                        $.each(hash, function(key, value) {
+                        iteratorUtils.each(hash, function(key, value) {
                             if(Array.isArray(value)) {
                                 [].push.apply(select, value);
                             }
@@ -233,7 +237,7 @@ var createODataQueryAdapter = function(queryOptions) {
                             result += "(";
 
                             if(select.length) {
-                                result += "$select=" + $.map(select, serializePropName).join();
+                                result += "$select=" + iteratorUtils.map(select, serializePropName).join();
                             }
 
                             if(expand.length) {
@@ -241,7 +245,7 @@ var createODataQueryAdapter = function(queryOptions) {
                                     result += ";";
                                 }
 
-                                result += "$expand=" + $.map(expand, serializePropName).join();
+                                result += "$expand=" + iteratorUtils.map(expand, serializePropName).join();
                             }
                             result += ")";
                         }
@@ -251,7 +255,7 @@ var createODataQueryAdapter = function(queryOptions) {
 
                     var result = [];
 
-                    $.each(hash, function(key, value) {
+                    iteratorUtils.each(hash, function(key, value) {
                         result.push(key + formatCore(value));
                     });
 
@@ -268,7 +272,7 @@ var createODataQueryAdapter = function(queryOptions) {
                         parseCore(exprParts, result, stepper);
                     };
 
-                    $.each(exprs, function(_, x) {
+                    iteratorUtils.each(exprs, function(_, x) {
                         parseCore(x.split("."), root, stepper);
                     });
                 };
@@ -277,7 +281,7 @@ var createODataQueryAdapter = function(queryOptions) {
 
                 if(_expand || _select) {
                     if(_expand) {
-                        parseTree($.makeArray(_expand), hash, function(node, key, path) {
+                        parseTree(makeArray(_expand), hash, function(node, key, path) {
                             node[key] = node[key] || {};
 
                             if(!path.length) {
@@ -289,7 +293,7 @@ var createODataQueryAdapter = function(queryOptions) {
                     }
 
                     if(_select) {
-                        parseTree(grep($.makeArray(_select), hasDot), hash, function(node, key, path) {
+                        parseTree(grep(makeArray(_select), hasDot), hash, function(node, key, path) {
                             if(!path.length) {
                                 node[key] = node[key] || [];
                                 node[key].push(key);
@@ -423,7 +427,7 @@ var createODataQueryAdapter = function(queryOptions) {
             }
 
             if(!Array.isArray(criterion)) {
-                criterion = $.makeArray(arguments);
+                criterion = [].slice.call(arguments);
             }
 
             if(hasFunction(criterion)) {
@@ -443,7 +447,7 @@ var createODataQueryAdapter = function(queryOptions) {
             }
 
             if(!Array.isArray(expr)) {
-                expr = $.makeArray(arguments);
+                expr = [].slice.call(arguments);
             }
 
             _select = expr;

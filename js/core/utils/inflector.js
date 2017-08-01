@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer");
+var map = require("./iterator").map;
 
 var _normalize = function(text) {
     if(text === undefined || text === null) {
@@ -20,7 +20,7 @@ var _chop = function(text) {
 };
 
 var dasherize = function(text) {
-    return $.map(_chop(text), function(p) { return p.toLowerCase(); }).join("-");
+    return map(_chop(text), function(p) { return p.toLowerCase(); }).join("-");
 };
 
 var underscore = function(text) {
@@ -28,7 +28,7 @@ var underscore = function(text) {
 };
 
 var camelize = function(text, upperFirst) {
-    return $.map(_chop(text), function(p, i) {
+    return map(_chop(text), function(p, i) {
         p = p.toLowerCase();
         if(upperFirst || i > 0) {
             p = _upperCaseFirst(p);
@@ -42,7 +42,7 @@ var humanize = function(text) {
 };
 
 var titleize = function(text) {
-    return $.map(_chop(text), function(p) {
+    return map(_chop(text), function(p) {
         return _upperCaseFirst(p.toLowerCase());
     }).join(" ");
 };

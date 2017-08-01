@@ -1,10 +1,13 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
+    contains = require("../../core/utils/dom").contains,
+    each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     fx = require("../../animation/fx"),
@@ -201,7 +204,7 @@ var ContextMenu = MenuBase.inherit((function() {
         _initActions: function() {
             this._actions = {};
 
-            $.each(ACTIONS, (function(index, action) {
+            each(ACTIONS, (function(index, action) {
                 this._actions[action] = this._createActionByOption(action) || noop;
             }).bind(this));
         },
@@ -432,9 +435,9 @@ var ContextMenu = MenuBase.inherit((function() {
             eventName = eventUtils.addNamespace(showEvent, this.NAME);
 
             if(this._showContextMenuEventHandler) {
-                $(document).off(eventName, target, this._showContextMenuEventHandler);
+                eventsEngine.off(document, eventName, target, this._showContextMenuEventHandler);
             } else {
-                $(target).off(eventName);
+                eventsEngine.off(target, eventName);
             }
         },
 
@@ -472,10 +475,10 @@ var ContextMenu = MenuBase.inherit((function() {
 
             if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
                 that._showContextMenuEventHandler = undefined;
-                $(target).on(eventName, handler);
+                eventsEngine.on(target, eventName, handler);
             } else {
                 that._showContextMenuEventHandler = handler;
-                $(document).on(eventName, target, that._showContextMenuEventHandler);
+                eventsEngine.on(document, eventName, target, that._showContextMenuEventHandler);
             }
         },
 
@@ -617,7 +620,7 @@ var ContextMenu = MenuBase.inherit((function() {
         _isIncludeOverlay: function($activeOverlay, $allOverlays) {
             var isSame = false;
 
-            $.each($allOverlays, function(index, $overlay) {
+            each($allOverlays, function(index, $overlay) {
                 if($activeOverlay.is($overlay) && !isSame) {
                     isSame = true;
                 }
@@ -633,7 +636,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 $context;
 
             if($submenuElements.length > 0) {
-                $.each(shownSubmenus, function(index, $submenu) {
+                each(shownSubmenus, function(index, $submenu) {
                     $context = that._searchActiveItem($submenu.context).parent();
                     if($context.parent().is($clickedItem.parent().parent()) && !$context.is($clickedItem.parent())) {
                         that._hideSubmenu($submenu);
@@ -806,8 +809,8 @@ var ContextMenu = MenuBase.inherit((function() {
             var that = this,
                 shownSubmenus = extend([], that._shownSubmenus);
 
-            $.each(shownSubmenus, function(index, $submenu) {
-                if($curSubmenu.is($submenu) || $curSubmenu[0].contains($submenu[0])) {
+            each(shownSubmenus, function(index, $submenu) {
+                if($curSubmenu.is($submenu) || contains($curSubmenu[0], $submenu[0])) {
                     $submenu.parent().removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
                     that._hideSubmenuCore($submenu);
                 }
@@ -838,7 +841,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
 
-            $.each(shownSubmenus, function(_, $submenu) {
+            each(shownSubmenus, function(_, $submenu) {
                 that._hideSubmenuCore($submenu);
             });
         },

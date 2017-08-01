@@ -792,7 +792,7 @@ QUnit.test("item should be selectable by click on it in the grouped list", funct
             selectionMode: "multiple",
             keyExpr: "text"
         }).dxList("instance"),
-        $items = list.itemElements();
+        $items = $(list.itemElements());
 
     $items.eq(0).trigger("dxclick");
 

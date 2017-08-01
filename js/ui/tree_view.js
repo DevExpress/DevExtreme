@@ -1,12 +1,14 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     messageLocalization = require("../localization/message"),
     clickEvent = require("../events/click"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     registerComponent = require("../core/component_registrator"),
     CheckBox = require("./check_box"),
     HierarchicalCollectionWidget = require("./hierarchical_collection/ui.hierarchical_collection_widget"),
@@ -500,7 +502,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     _removeSelection: function() {
         var that = this;
 
-        $.each(this._dataAdapter.getFullData(), function(_, node) {
+        each(this._dataAdapter.getFullData(), function(_, node) {
             if(!that._hasChildren(node)) {
                 return;
             }
@@ -719,7 +721,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         var that = this,
             keys = node.internalFields.childrenKeys;
 
-        $.each(keys, function(_, key) {
+        each(keys, function(_, key) {
             that.option("items")[that._dataAdapter.getIndexByKey(key)] = 0;
             that._markChildrenItemsToRemove(that._dataAdapter.getNodeByKey(key));
         });
@@ -729,7 +731,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         var that = this,
             counter = 0,
             items = extend(true, [], this.option("items"));
-        $.each(items, function(index, item) {
+        each(items, function(index, item) {
             if(!item) {
                 that.option("items").splice(index - counter, 1);
                 counter++;
@@ -1013,15 +1015,14 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             $itemsContainer = this._itemContainer(),
             itemSelector = this._itemSelector();
 
-        $itemsContainer
-            .off("." + EXPAND_EVENT_NAMESPACE, itemSelector)
-            .on(expandedEventName, itemSelector, function(e) {
-                var $nodeElement = $(e.currentTarget.parentNode);
+        eventsEngine.off($itemsContainer, "." + EXPAND_EVENT_NAMESPACE, itemSelector);
+        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, function(e) {
+            var $nodeElement = $(e.currentTarget.parentNode);
 
-                if(!$nodeElement.hasClass(IS_LEAF)) {
-                    that._toggleExpandedState(e.currentTarget, undefined, e);
-                }
-            });
+            if(!$nodeElement.hasClass(IS_LEAF)) {
+                that._toggleExpandedState(e.currentTarget, undefined, e);
+            }
+        });
     },
 
     _getEventNameByOption: function(name) {
@@ -1030,6 +1031,10 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _getNode: function(identifier) {
+        if(!typeUtils.isDefined(identifier)) {
+            return null;
+        }
+
         if(identifier.internalFields) {
             return identifier;
         }
@@ -1110,14 +1115,13 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _renderToggleItemVisibilityIconClick: function($icon, node) {
-        var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            that = this;
+        var that = this;
+        var eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
 
-        $icon
-            .off(eventName)
-            .on(eventName, function(e) {
-                that._toggleExpandedState(node, undefined, e);
-            });
+        eventsEngine.off($icon, eventName);
+        eventsEngine.on($icon, eventName, function(e) {
+            that._toggleExpandedState(node, undefined, e);
+        });
     },
 
     _updateExpandedItemsUI: function(node, state, e) {
@@ -1388,7 +1392,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     _updateItemsUI: function() {
         var that = this;
 
-        $.each(this._dataAdapter.getData(), function(_, node) {
+        each(this._dataAdapter.getData(), function(_, node) {
             var $node = that._getNodeElement(node),
                 nodeSelection = node.internalFields.selected;
 
@@ -1460,21 +1464,21 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _attachClickEvent: function() {
-        var that = this,
-            clickSelector = "." + this._itemClass(),
-            pointerDownSelector = "." + NODE_CLASS + ", ." + SELECT_ALL_ITEM_CLASS,
-            eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
-            pointerDownEvent = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        var that = this;
+        var clickSelector = "." + that._itemClass();
+        var pointerDownSelector = "." + NODE_CLASS + ", ." + SELECT_ALL_ITEM_CLASS;
+        var eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
+        var pointerDownEvent = eventUtils.addNamespace(pointerEvents.down, that.NAME);
+        var $itemContainer = that._itemContainer();
 
-        that._itemContainer()
-            .off(eventName, clickSelector)
-            .off(pointerDownEvent, pointerDownSelector)
-            .on(eventName, clickSelector, function(e) {
-                that._itemClickHandler(e, $(this));
-            })
-            .on(pointerDownEvent, pointerDownSelector, function(e) {
-                that._itemPointerDownHandler(e);
-            });
+        eventsEngine.off($itemContainer, eventName, clickSelector);
+        eventsEngine.off($itemContainer, pointerDownEvent, pointerDownSelector);
+        eventsEngine.on($itemContainer, eventName, clickSelector, function(e) {
+            that._itemClickHandler(e, $(this));
+        });
+        eventsEngine.on($itemContainer, pointerDownEvent, pointerDownSelector, function(e) {
+            that._itemPointerDownHandler(e);
+        });
     },
 
     _itemClickHandler: function(e, $item) {
@@ -1824,7 +1828,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     collapseAll: function() {
         var that = this;
 
-        $.each(this._dataAdapter.getExpandedNodesKeys(), function(_, key) {
+        each(this._dataAdapter.getExpandedNodesKeys(), function(_, key) {
             that._toggleExpandedState(key, false);
         });
     }

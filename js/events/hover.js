@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var eventsEngine = require("../events/core/events_engine"),
+    dataUtils = require("../core/element_data"),
     Class = require("../core/class"),
     devices = require("../core/devices"),
     registerEvent = require("./core/event_registrator"),
@@ -25,18 +26,17 @@ var Hover = Class.inherit({
     },
 
     setup: function(element) {
-        $.data(element, this._handlerArrayKeyPath, {});
+        dataUtils.data(element, this._handlerArrayKeyPath, {});
     },
 
     add: function(element, handleObj) {
         var that = this,
-            $element = $(element),
             handler = function(e) {
                 that._handler(e);
             };
 
-        $element.on(this._originalEventName, handleObj.selector, handler);
-        $.data(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
+        eventsEngine.on(element, this._originalEventName, handleObj.selector, handler);
+        dataUtils.data(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
     },
 
     _handler: function(e) {
@@ -52,13 +52,13 @@ var Hover = Class.inherit({
     },
 
     remove: function(element, handleObj) {
-        var handler = $.data(element, this._handlerArrayKeyPath)[handleObj.guid];
+        var handler = dataUtils.data(element, this._handlerArrayKeyPath)[handleObj.guid];
 
-        $(element).off(this._originalEventName, handleObj.selector, handler);
+        eventsEngine.off(element, this._originalEventName, handleObj.selector, handler);
     },
 
     teardown: function(element) {
-        $.removeData(element, this._handlerArrayKeyPath);
+        dataUtils.removeData(element, this._handlerArrayKeyPath);
     }
 
 });

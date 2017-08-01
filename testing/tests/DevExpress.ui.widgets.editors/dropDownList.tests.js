@@ -77,7 +77,7 @@ QUnit.test("popup should not focus when we selecting an item", function(assert) 
     assert.expect(1);
 
     this.instance.option("opened", true);
-    var popupContent = this.instance._popup.content(),
+    var popupContent = $(this.instance._popup.content()),
         isDefaultPrevented = false;
 
     popupContent.on("mousedown", function(e) {
@@ -233,6 +233,16 @@ QUnit.test("all items", function(assert) {
 
     this.clock.tick();
     assert.deepEqual($dropDownList.dxDropDownList("option", "items"), items, "rendered all items");
+});
+
+QUnit.test("widget should be openable if dataSource is null", function(assert) {
+    var dropDownList = $("#dropDownList").dxDropDownList({
+        dataSource: [1]
+    }).dxDropDownList("instance");
+
+    dropDownList.option("dataSource", null);
+    dropDownList.open();
+    assert.ok(true, "Widget works correctly");
 });
 
 QUnit.test("itemTemplate accepts template", function(assert) {
@@ -437,7 +447,7 @@ QUnit.test("T321572: dxSelectBox - Use clear button with custom store leads to d
     assert.ok(dataSource.isLastPage(), "last page is loaded");
 
     $(".dx-list-item").last().trigger("dxclick");
-    $element.find(".dx-clear-button-area").trigger("dxclick");
+    $($element.find(".dx-clear-button-area")).trigger("dxclick");
 
     assert.ok(dataSource.isLastPage(), "last page is not changed");
 });
@@ -934,7 +944,7 @@ QUnit.test("onItemClick action", function(assert) {
         assert.strictEqual(e.itemIndex, 1, "itemIndex is correct");
     });
 
-    $listItem.trigger("dxclick");
+    $($listItem).trigger("dxclick");
 });
 
 QUnit.module("render input addons", moduleConfig);

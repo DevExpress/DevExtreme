@@ -1,11 +1,11 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    seriesModule = require("../series/base_series"),
+var seriesModule = require("../series/base_series"),
     seriesFamilyModule = require("../core/series_family"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     vizUtils = require("../core/utils"),
     rangeModule = require("../translators/range"),
     dataValidatorModule = require("../components/data_validator"),
@@ -20,13 +20,13 @@ var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBu
     var families = [],
         types = [];
 
-    $.each(series, function(i, item) {
+    each(series, function(i, item) {
         if(inArray(item.type, types) === -1) {
             types.push(item.type);
         }
     });
 
-    $.each(types, function(_, type) {
+    each(types, function(_, type) {
         var family = new seriesFamilyModule.SeriesFamily({
             type: type,
             equalBarWidth: equalBarWidth,
@@ -48,7 +48,7 @@ var isStickType = function(type) {
         stickType = true;
 
     type = vizUtils.normalizeEnum(type);
-    $.each(nonStickTypes, function(_, item) {
+    each(nonStickTypes, function(_, item) {
         if(type.indexOf(item) !== -1) {
             stickType = false;
             return false;
@@ -61,8 +61,8 @@ var isStickType = function(type) {
 
 // TODO: This is copypaste from the same name method in the advancedChart.js
 function setTemplateFields(data, templateData, series) {
-    $.each(data, function(_, data) {
-        $.each(series.getTemplateFields(), function(_, field) {
+    each(data, function(_, data) {
+        each(series.getTemplateFields(), function(_, field) {
             data[field.templateField] = data[field.originalField];
         });
         templateData.push(data);
@@ -155,7 +155,11 @@ SeriesDataSource.prototype = {
             seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;//B253068
             if(data && data.length > 0) {
                 //TODO
-                newSeries = new seriesModule.Series({ renderer: options.renderer }, seriesTheme);
+                newSeries = new seriesModule.Series({
+                    renderer: options.renderer,
+                    argumentAxis: options.argumentAxis,
+                    valueAxis: options.valueAxis
+                }, seriesTheme);
                 series.push(newSeries);
             }
             if(hasSeriesTemplate) {
@@ -188,14 +192,14 @@ SeriesDataSource.prototype = {
         return series;
     },
 
-    adjustSeriesDimensions: function(translators) {
+    adjustSeriesDimensions: function() {
         if(this._useAggregation) {
-            $.each(this._series, function(_, s) {
-                s.resamplePoints(translators.x);
+            each(this._series, function(_, s) {
+                s.resamplePoints(s.getArgumentAxis().getTranslator().canvasLength);
             });
         }
-        $.each(this._seriesFamilies, function(_, family) {
-            family.adjustSeriesDimensions({ arg: translators.x, val: translators.y });
+        each(this._seriesFamilies, function(_, family) {
+            family.adjustSeriesDimensions();
         });
     },
 
@@ -218,7 +222,7 @@ SeriesDataSource.prototype = {
             minIndent,
             maxIndent;
 
-        $.each(that._series, function(_, series) {
+        each(that._series, function(_, series) {
             rangeData = series.getRangeData();
             valRange.addRange(rangeData.val);
             argRange.addRange(rangeData.arg);

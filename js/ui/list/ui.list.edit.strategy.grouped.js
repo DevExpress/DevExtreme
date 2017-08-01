@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     isNumeric = require("../../core/utils/type").isNumeric,
+    each = require("../../core/utils/iterator").each,
     EditStrategy = require("../collection/ui.collection_widget.edit.strategy.plain");
 
 
@@ -42,10 +43,10 @@ var GroupedEditStrategy = EditStrategy.inherit({
             itemData = itemData.items[0];
         }
 
-        $.each(groups, function(groupIndex, group) {
+        each(groups, function(groupIndex, group) {
             if(!group.items) return false;
 
-            $.each(group.items, function(itemIndex, item) {
+            each(group.items, function(itemIndex, item) {
                 if(item !== itemData) {
                     return true;
                 }
@@ -121,11 +122,11 @@ var GroupedEditStrategy = EditStrategy.inherit({
             index = -1,
             that = this;
 
-        $.each(groups, function(groupIndex, group) {
+        each(groups, function(groupIndex, group) {
             if(!group.items) return;
             var keys = that.getKeysByItems(group.items);
 
-            $.each(keys, function(keyIndex, itemKey) {
+            each(keys, function(keyIndex, itemKey) {
                 if(that._equalKeys(itemKey, key)) {
                     index = {
                         group: groupIndex,
@@ -146,7 +147,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
     getItemsByKeys: function(keys) {
         var result = [];
 
-        $.each(keys, function(_, key) {
+        each(keys, function(_, key) {
             var getItemMeta = function(groups) {
                 var index = this.getIndexByKey(key, groups);
                 var group = index && groups[index.group];
@@ -166,7 +167,7 @@ var GroupedEditStrategy = EditStrategy.inherit({
             var item = itemMeta.item;
 
             var selectedGroup;
-            $.each(result, function(_, item) {
+            each(result, function(_, item) {
                 if(item.key === groupKey) {
                     selectedGroup = item;
                     return false;

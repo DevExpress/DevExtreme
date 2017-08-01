@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     compileGetter = require("../../core/utils/data").compileGetter,
     extend = require("../../core/utils/extend").extend,
     clickEvent = require("../../events/click"),
@@ -30,6 +32,7 @@ var LIST_CLASS = "dx-list",
     LIST_GROUP_COLLAPSED_CLASS = "dx-list-group-collapsed",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
+    SELECT_ALL_SELECTOR = ".dx-list-select-all",
 
     LIST_ITEM_DATA_KEY = "dxListItemData",
     LIST_FEEDBACK_SHOW_TIMEOUT = 70;
@@ -38,7 +41,7 @@ var groupItemsGetter = compileGetter("items");
 
 var ListBase = CollectionWidget.inherit({
 
-    _activeStateUnit: LIST_ITEM_SELECTOR,
+    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_SELECTOR].join(","),
 
     _supportedKeys: function() {
         var that = this;
@@ -727,7 +730,7 @@ var ListBase = CollectionWidget.inherit({
 
     _renderItems: function(items) {
         if(this.option("grouped")) {
-            $.each(items, this._renderGroup.bind(this));
+            each(items, this._renderGroup.bind(this));
             this._attachGroupCollapseEvent();
             this._renderEmptyMessage();
         } else {
@@ -746,9 +749,9 @@ var ListBase = CollectionWidget.inherit({
 
         $element.toggleClass(LIST_COLLAPSIBLE_GROUPS_CLASS, collapsibleGroups);
 
-        $element.off(eventName, selector);
+        eventsEngine.off($element, eventName, selector);
         if(collapsibleGroups) {
-            $element.on(eventName, selector, (function(e) {
+            eventsEngine.on($element, eventName, selector, (function(e) {
                 this._createAction((function(e) {
                     var $group = $(e.jQueryEvent.currentTarget).parent();
                     this._collapseGroupHandler($group);
@@ -843,8 +846,7 @@ var ListBase = CollectionWidget.inherit({
     _attachSwipeEvent: function($itemElement) {
         var endEventName = eventUtils.addNamespace(swipeEvents.end, this.NAME);
 
-        $itemElement
-            .on(endEventName, this._itemSwipeEndHandler.bind(this));
+        eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
     },
 
     _itemSwipeEndHandler: function(e) {
@@ -889,7 +891,7 @@ var ListBase = CollectionWidget.inherit({
             .addClass(LIST_GROUP_BODY_CLASS)
             .appendTo($groupElement);
 
-        $.each(groupItemsGetter(group) || [], (function(index, item) {
+        each(groupItemsGetter(group) || [], (function(index, item) {
             this._renderItem(index, item, $groupBody);
         }).bind(this));
 

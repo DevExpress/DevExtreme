@@ -1,10 +1,12 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     errors = require("./widget/ui.errors"),
     windowUtils = require("../core/utils/window"),
+    iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     registerComponent = require("../core/component_registrator"),
     Box = require("./box"),
@@ -236,7 +238,7 @@ var ResponsiveBox = CollectionWidget.inherit({
 
         this._updateTimer = setTimeout((function() {
             if(this._$root) {
-                this._$root.triggerHandler("dxupdate");
+                eventsEngine.triggerHandler(this._$root, "dxupdate");
             }
         }).bind(this));
     },
@@ -272,11 +274,11 @@ var ResponsiveBox = CollectionWidget.inherit({
 
         this._prepareRowsAndCols();
 
-        $.each(this._rows, (function() {
+        iteratorUtils.each(this._rows, (function() {
             var row = [];
             grid.push(row);
 
-            $.each(this._cols, (function() {
+            iteratorUtils.each(this._cols, (function() {
                 row.push(this._createEmptyCell());
             }).bind(this));
         }).bind(this));
@@ -303,13 +305,13 @@ var ResponsiveBox = CollectionWidget.inherit({
             return (item1.location.row - item2.location.row) || (item1.location.col - item2.location.col);
         });
 
-        $.each(this._screenItems, function(index, item) {
+        iteratorUtils.each(this._screenItems, function(index, item) {
             extend(item.location, { row: index, col: 0, rowspan: 1, colspan: 1 });
         });
     },
 
     _sizesByScreen: function(sizeConfigs) {
-        return $.map(this._filterByScreen(sizeConfigs), (function(sizeConfig) {
+        return iteratorUtils.map(this._filterByScreen(sizeConfigs), (function(sizeConfig) {
             return extend(this._defaultSizeConfig(), sizeConfig);
         }).bind(this));
     },
@@ -357,7 +359,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _spreadItems: function() {
-        $.each(this._screenItems, (function(_, itemInfo) {
+        iteratorUtils.each(this._screenItems, (function(_, itemInfo) {
             var location = itemInfo.location || {};
             var itemCol = location.col;
             var itemRow = location.row;
@@ -369,11 +371,11 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _itemsByScreen: function() {
-        return $.map(this.option("items"), (function(item) {
+        return iteratorUtils.map(this.option("items"), (function(item) {
             var locations = item.location || {};
             locations = typeUtils.isPlainObject(locations) ? [locations] : locations;
 
-            return $.map(this._filterByScreen(locations), function(location) {
+            return iteratorUtils.map(this._filterByScreen(locations), function(location) {
                 return {
                     item: item,
                     location: extend({ rowspan: 1, colspan: 1 }, location)
@@ -430,7 +432,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _linkNodeToItem: function() {
-        $.each(this._itemElements(), function(_, itemNode) {
+        iteratorUtils.each(this._itemElements(), function(_, itemNode) {
             var $item = $(itemNode),
                 item = $item.data(BOX_ITEM_DATA_KEY);
             if(!item.box) {
@@ -635,13 +637,13 @@ var ResponsiveBox = CollectionWidget.inherit({
             return;
         }
 
-        $.each(this._assistantRoots, function(_, item) {
+        iteratorUtils.each(this._assistantRoots, function(_, item) {
             $(item).remove();
         });
     },
 
     _clearItemNodeTemplates: function() {
-        $.each(this.option("items"), function() {
+        iteratorUtils.each(this.option("items"), function() {
             delete this.node;
         });
     },

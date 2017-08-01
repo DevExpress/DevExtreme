@@ -268,14 +268,6 @@
             background-color: transparent;
         }
 
-        .dx-checkbox {
-            &.dx-checkbox-checked {
-                .dx-checkbox-icon {
-                    font-size: @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE;
-                }
-            }
-        }
-
         .dx-texteditor {
             background: ~"@{@{widgetName}-editor-bg}";
 
@@ -308,6 +300,10 @@
 
     .dx-@{widgetName}-checkbox-size {
         line-height: normal;
+
+        &.dx-checkbox-checked .dx-checkbox-icon {
+            font-size: @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE;
+        }
 
         .dx-checkbox-icon {
             height: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;

@@ -28,11 +28,11 @@ QUnit.test("Rect and image are created", function(assert) {
     this.rangeView.update({ color: "red", image: { url: "url" } }, { visible: true, image: { location: "loc" } }, this.canvas);
 
     assert.deepEqual(this.root.clear.lastCall.args, [], "root is cleared");
-    assert.deepEqual(this.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 10, y: 20, width: 200, height: 100 }], "clip rect");
-    assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 201, 100], "rect is created");
+    assert.deepEqual(this.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 10, y: 20, width: 190, height: 100 }], "clip rect");
+    assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 191, 100], "rect is created");
     assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.lastCall.args, [{ "class": "dx-range-selector-background", fill: "red" }], "rect settings");
     assert.deepEqual(this.renderer.rect.lastCall.returnValue.append.lastCall.args, [this.root], "rect is appended");
-    assert.deepEqual(this.renderer.image.lastCall.args, [10, 20, 201, 100, "url", "loc"], "image is created");
+    assert.deepEqual(this.renderer.image.lastCall.args, [10, 20, 191, 100, "url", "loc"], "image is created");
     assert.deepEqual(this.renderer.image.lastCall.returnValue.append.lastCall.args, [this.root], "image is appended");
 });
 
@@ -56,33 +56,42 @@ QUnit.test("Rect and image are not created because of 'visible' option", functio
 });
 
 QUnit.test("Chart view", function(assert) {
-    var series = [{ _extGroups: {}, draw: sinon.spy() }, { _extGroups: {}, draw: sinon.spy() }],
+    var valueAxis = {
+            setBusinessRange: sinon.stub(),
+            updateCanvas: sinon.stub()
+        },
+        series = [{
+            _extGroups: {}, draw: sinon.spy(),
+            getValueAxis: function() {
+                return valueAxis;
+            }
+        },
+        {
+            _extGroups: {},
+            draw: sinon.spy()
+        }],
         seriesDataSource = {
             isShowChart: function() { return true; },
             getSeries: function() { return series; },
             getBoundRange: function() { return { val: "bound-range" }; },
             adjustSeriesDimensions: sinon.spy()
         },
-        translator = { tag: "translator-2" },
-        Translator2D = sinon.stub(translator2DModule, "Translator2D", function() {
-            return translator;
-        }),
-        root = this.root,
-        translators = { x: this.translator, y: translator };
+        root = this.root;
 
-    try {
-        this.rangeView.update({ color: "red", image: { url: "url" } }, { visible: true, image: { location: "loc" } }, this.canvas, false, "animation-enabled", seriesDataSource);
+    this.rangeView.update({ color: "red", image: { url: "url" } }, { visible: true, image: { location: "loc" } }, this.canvas, false, "animation-enabled", seriesDataSource);
 
-        assert.deepEqual(Translator2D.lastCall.args, ["bound-range", { top: 20, height: 120 }], "translator is created");
-        assert.deepEqual(seriesDataSource.adjustSeriesDimensions.lastCall.args, [translators], "series dimensions");
-        $.each(series, function(i, item) {
-            assert.strictEqual(item._extGroups.seriesGroup, root.children[2], "series group - " + i);
-            assert.strictEqual(item._extGroups.labelsGroup, root.children[2], "labels group - " + i);
-            assert.deepEqual(item.draw.lastCall.args, [translators, "animation-enabled"], "series draw - " + i);
-        });
-    } finally {
-        Translator2D.restore();
-    }
+    assert.strictEqual(valueAxis.setBusinessRange.lastCall.args[0], "bound-range");
+    assert.deepEqual(valueAxis.updateCanvas.lastCall.args[0], {
+        top: this.canvas.top,
+        bottom: 0,
+        height: this.canvas.height + this.canvas.top
+    });
+    assert.ok(seriesDataSource.adjustSeriesDimensions.called, "series dimensions");
+    $.each(series, function(i, item) {
+        assert.strictEqual(item._extGroups.seriesGroup, root.children[2], "series group - " + i);
+        assert.strictEqual(item._extGroups.labelsGroup, root.children[2], "labels group - " + i);
+        assert.deepEqual(item.draw.lastCall.args, ["animation-enabled"], "series draw - " + i);
+    });
 });
 
 QUnit.test("Chart view is not created because of seriesDataSource", function(assert) {
@@ -102,7 +111,7 @@ QUnit.test("Nothing is created when mode is compact", function(assert) {
     this.rangeView.update({ color: "red", image: { url: "url" } }, { visible: true, image: { location: "loc" } }, this.canvas, true);
 
     assert.deepEqual(this.root.clear.lastCall.args, [], "root is cleared");
-    assert.deepEqual(this.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 10, y: 20, width: 200, height: 100 }], "clip rect");
+    assert.deepEqual(this.renderer.clipRect.lastCall.returnValue.attr.lastCall.args, [{ x: 10, y: 20, width: 190, height: 100 }], "clip rect");
     assert.strictEqual(this.renderer.stub("rect").lastCall, null);
     assert.strictEqual(this.renderer.stub("image").lastCall, null);
 });

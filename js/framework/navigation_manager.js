@@ -1,9 +1,10 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var $ = require("jquery"),
     Class = require("../core/class"),
     Callbacks = require("../core/utils/callbacks"),
     commonUtils = require("../core/utils/common"),
+    iteratorUtils = require("../core/utils/iterator"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     extend = require("../core/utils/extend").extend,
     navigationDevices = require("./navigation_devices"),
@@ -239,7 +240,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
             stack = this.navigationStacks[stackKey];
         } else {
             stack = stackOrStackKey;
-            stackKey = $.map(this.navigationStacks, function(stack, key) {
+            stackKey = iteratorUtils.map(this.navigationStacks, function(stack, key) {
                 if(stack === stackOrStackKey) {
                     return key;
                 }
@@ -337,7 +338,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
 
     _removeItems: function(items) {
         var that = this;
-        $.each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             that.fireEvent("itemRemoved", [item]);
         });
     },
@@ -383,11 +384,11 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
                 navigationStacks: {},
                 currentStackKey: this.currentStackKey
             };
-            $.each(this.navigationStacks, function(stackKey, stack) {
+            iteratorUtils.each(this.navigationStacks, function(stackKey, stack) {
                 var stackState = {};
                 state.navigationStacks[stackKey] = stackState;
                 stackState.currentIndex = stack.currentIndex;
-                stackState.items = $.map(stack.items, function(item) {
+                stackState.items = iteratorUtils.map(stack.items, function(item) {
                     return {
                         key: item.key,
                         uri: item.uri
@@ -410,11 +411,11 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
                 var that = this,
                     state = JSON.parse(json);
 
-                $.each(state.navigationStacks, function(stackKey, stackState) {
+                iteratorUtils.each(state.navigationStacks, function(stackKey, stackState) {
                     var stack = that._createNavigationStack();
                     that.navigationStacks[stackKey] = stack;
                     stack.currentIndex = stackState.currentIndex;
-                    stack.items = $.map(stackState.items, function(item) {
+                    stack.items = iteratorUtils.map(stackState.items, function(item) {
                         item.stack = stack;
                         return item;
                     });
@@ -456,7 +457,7 @@ var StackBasedNavigationManager = HistoryBasedNavigationManager.inherit({
     itemByKey: function(itemKey) {
         var result;
 
-        $.each(this.navigationStacks, function(stackKey, stack) {
+        iteratorUtils.each(this.navigationStacks, function(stackKey, stack) {
             var item = stack.itemByKey(itemKey);
             if(item) {
                 result = item;

@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     Color = require("../color"),
     isFunction = require("../core/utils/type").isFunction,
+    iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     camelize = require("../core/utils/inflector").camelize,
     when = require("../integration/jquery/deferred").when,
@@ -17,7 +18,7 @@ var $ = require("../core/renderer"),
     _cos = _math.cos,
     _sin = _math.sin,
 
-    _each = $.each,
+    _each = iteratorUtils.each,
     _extend = extend,
     _number = Number,
 
@@ -31,9 +32,7 @@ var $ = require("../core/renderer"),
     DEFAULT_FONT_FAMILY = "sans-serif",
     DEFAULT_TEXT_COLOR = "#000",
 
-    currentTspanY,
     clipPaths,
-    textOffset,
     imageDeferreds,
     patterns,
     filters;
@@ -80,7 +79,7 @@ function arcTo(x1, y1, x2, y2, radius, largeArcFlag, clockwise, context) {
     context.arc(centerX, centerY, radius, startAngle, endAngle, !clockwise);
 }
 
-function getElementOptions(element, isText) {
+function getElementOptions(element) {
     var attr = parseAttributes(element.attributes || {}),
         style = element.style || {},
         options = _extend({}, attr, {
@@ -108,7 +107,6 @@ function getElementOptions(element, isText) {
     }
 
     parseStyles(style, options);
-    isText && aggregateTextPosition(options);
 
     return options;
 }
@@ -234,10 +232,9 @@ function setFontStyle(context, options) {
 
 function drawText(context, options) {
     setFontStyle(context, options);
-    options.text && context.fillText(options.text, options.x, options.y);
+    options.text && context.fillText(options.text, options.x || 0, options.y || 0);
     strokeElement(context, options, true);
     drawTextDecoration(context, options);
-    textOffset = options.x + context.measureText(options.text).width;
 }
 
 function drawTextDecoration(context, options) {
@@ -246,17 +243,10 @@ function drawTextDecoration(context, options) {
     }
 
     var x = options.x,
-        align = options.textAlign,
         textWidth = context.measureText(options.text).width,
         textHeight = parseInt(options.fontSize, 10),
         lineHeight = textHeight * TEXT_DECORATION_LINE_WIDTH_COEFF < 1 ? 1 : textHeight * TEXT_DECORATION_LINE_WIDTH_COEFF,
         y = options.y;
-
-    if(align === "center") {
-        x -= textWidth / 2;
-    } else if(align === "end") {
-        x -= textWidth;
-    }
 
     switch(options.textDecoration) {
         case "line-through":
@@ -293,27 +283,92 @@ function aggregateOpacity(options) {
     }
 }
 
-function aggregateTextPosition(options) {
-    if(options.dy) {
-        options.y = currentTspanY + _number(options.dy);
+function hasTspan(element) {
+    var nodes = element.childNodes;
+    for(var i = 0; i < nodes.length; i++) {
+        if(nodes[i].tagName === "tspan") {
+            return true;
+        }
+    }
+    return false;
+}
+
+function drawTextElement(childNodes, context, options) {
+    var lines = [],
+        line,
+        offset = 0;
+
+    for(var i = 0; i < childNodes.length; i++) {
+        var element = childNodes[i];
+
+        if(element.tagName === undefined) {
+            drawElement(element, context, options);
+        } else if(element.tagName === "tspan" || element.tagName === "text") {
+            var elementOptions = getElementOptions(element),
+                mergedOptions = _extend({}, options, elementOptions);
+
+            if(element.tagName === "tspan" && hasTspan(element)) {
+                drawTextElement(element.childNodes, context, mergedOptions);
+                return;
+            }
+
+            mergedOptions.textAlign = "start";
+            if(!line || elementOptions.x !== undefined) {
+                line = {
+                    elements: [],
+                    options: [],
+                    widths: [],
+                    offsets: []
+                };
+                lines.push(line);
+            }
+
+            if(elementOptions.dy !== undefined) {
+                offset += Number(elementOptions.dy);
+            }
+
+            line.elements.push(element);
+            line.options.push(mergedOptions);
+            line.offsets.push(offset);
+            setFontStyle(context, mergedOptions);
+            line.widths.push(context.measureText(mergedOptions.text).width);
+        }
     }
 
-    if(textOffset && options.x === undefined) {
-        options.x = textOffset;
-    }
+    lines.forEach(function(line) {
+        var commonWidth = line.widths.reduce(function(commonWidth, width) {
+                return commonWidth + width;
+            }, 0),
+            xDiff = 0,
+            currentOffset = 0;
 
-    if(options.y !== undefined) {
-        currentTspanY = options.y;
-    } else {
-        options.y = currentTspanY;
-    }
+        if(options.textAlign === "center") {
+            xDiff = commonWidth / 2;
+        }
+
+        if(options.textAlign === "end") {
+            xDiff = commonWidth;
+        }
+
+        line.options.forEach(function(o, index) {
+            var width = line.widths[index];
+            o.x = o.x - xDiff + currentOffset;
+            o.y += line.offsets[index];
+            currentOffset += width;
+        });
+
+        line.elements.forEach(function(element, index) {
+            drawTextElement(element.childNodes, context, line.options[index]);
+        });
+
+    });
 }
 
 function drawElement(element, context, parentOptions) {
     var tagName = element.tagName,
         isText = tagName === "text" || tagName === "tspan" || tagName === undefined,
         isImage = tagName === "image",
-        options = _extend({}, parentOptions, getElementOptions(element, isText));
+        options = _extend({}, parentOptions, getElementOptions(element));
 
     if(options.visibility === "hidden") {
         return;
@@ -331,8 +386,7 @@ function drawElement(element, context, parentOptions) {
             break;
         case "text":
         case "tspan":
-            textOffset = 0;
-            drawCanvasElements(element.childNodes, context, options);
+            drawTextElement(element.childNodes, context, options);
             break;
         case "image":
             drawImage(context, options);
@@ -487,7 +541,7 @@ function setLineDash(context, options) {
     var matches = options["stroke-dasharray"] && options["stroke-dasharray"].match(/(\d+)/g);
 
     if(matches && matches.length && context.setLineDash) { //IE10 does not have setLineDash
-        matches = $.map(matches, function(item) {
+        matches = iteratorUtils.map(matches, function(item) {
             return _number(item);
         });
         context.setLineDash(matches);
@@ -532,7 +586,7 @@ var parseAttributes = function(attributes) {
     var newAttributes = {},
         attr;
 
-    $.each(attributes, function(index, item) {
+    iteratorUtils.each(attributes, function(index, item) {
         attr = item.textContent;
         if(isFinite(attr)) {
             attr = _number(attr);

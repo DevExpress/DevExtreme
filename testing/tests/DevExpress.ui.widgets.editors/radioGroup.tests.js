@@ -271,7 +271,7 @@ QUnit.test("item checked on start", function(assert) {
     var radioGroup = $radioGroup.dxRadioGroup("instance");
 
     setTimeout(function() {
-        assert.equal(radioGroup.itemElements().filter(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 1, "one item checked");
+        assert.equal($(radioGroup.itemElements()).filter(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 1, "one item checked");
         done();
     });
 });
@@ -288,7 +288,7 @@ QUnit.test("value is changed on item click", function(assert) {
     });
     var radioGroup = $radioGroup.dxRadioGroup("instance");
 
-    radioGroup.itemElements().first().trigger("dxclick");
+    $(radioGroup.itemElements()).first().trigger("dxclick");
 
     assert.equal(value, 1, "value changed");
 });
@@ -303,7 +303,7 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter", funct
         }),
         radioGroup = $radioGroup.dxRadioGroup("instance");
 
-    radioGroup.itemElements().first().trigger("dxclick");
+    $(radioGroup.itemElements()).first().trigger("dxclick");
     assert.ok(jQueryEvent, "jQuery event is defined when click used");
 
     radioGroup.option("value", 2);
@@ -330,7 +330,7 @@ QUnit.test("value should be correct if valueExpr is a string", function(assert) 
         })
         .dxRadioGroup("instance");
 
-    var $secondItem = radioGroup.itemElements().eq(1);
+    var $secondItem = $(radioGroup.itemElements()).eq(1);
 
     assert.equal($secondItem.text(), "two");
 
@@ -338,13 +338,13 @@ QUnit.test("value should be correct if valueExpr is a string", function(assert) 
         return item.number;
     });
 
-    $secondItem = radioGroup.itemElements().eq(1);
+    $secondItem = $(radioGroup.itemElements()).eq(1);
     assert.equal($secondItem.text(), "2");
 
     radioGroup.option("valueExpr", "caption");
     assert.equal(radioGroup.option("value"), 2);
 
-    assert.equal(radioGroup.itemElements().find(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 0, "no items selected");
+    assert.equal($(radioGroup.itemElements()).find(toSelector(RADIO_BUTTON_CHECKED_CLASS)).length, 0, "no items selected");
 });
 
 QUnit.test("value should be correct if valueExpr is a string", function(assert) {
@@ -364,7 +364,7 @@ QUnit.test("value should be correct if valueExpr is a string", function(assert) 
         })
         .dxRadioGroup("instance");
 
-    var $firstItem = radioGroup.itemElements().eq(0);
+    var $firstItem = $(radioGroup.itemElements()).eq(0);
 
     assert.ok($firstItem.hasClass(RADIO_BUTTON_CHECKED_CLASS), "item with zero value rendered correctly");
 });
@@ -467,7 +467,7 @@ QUnit.test("control keys should be prevented", function(assert) {
     });
     var keyboard = keyboardMock($element);
     var isDefaultPrevented = false;
-    $element.on("keydown", function(e) {
+    $($element).on("keydown", function(e) {
         isDefaultPrevented = e.isDefaultPrevented();
     });
 
@@ -508,12 +508,12 @@ QUnit.test("focused-state set up on radio group after focusing on any item", fun
             focusStateEnabled: true
         }),
         radioGroup = $radioGroup.dxRadioGroup("instance"),
-        $firstRButton = radioGroup.itemElements().first();
+        $firstRButton = $(radioGroup.itemElements()).first();
 
     assert.ok(!$radioGroup.hasClass(FOCUSED_CLASS), "radio group is not focused");
 
     $radioGroup.focusin();
-    $firstRButton.trigger("dxpointerdown");
+    $($firstRButton).trigger("dxpointerdown");
 
     assert.ok($radioGroup.hasClass(FOCUSED_CLASS), "radio group was focused after focusing on item");
 });
@@ -526,10 +526,10 @@ QUnit.test("radioGroup item has not dx-state-focused class after radioGroup lose
             focusStateEnabled: true
         }),
         radioGroup = $radioGroup.dxRadioGroup("instance"),
-        $firstRButton = radioGroup.itemElements().first();
+        $firstRButton = $(radioGroup.itemElements()).first();
 
     $radioGroup.focusin();
-    $firstRButton.trigger("dxpointerdown");
+    $($firstRButton).trigger("dxpointerdown");
 
     assert.ok($firstRButton.hasClass(FOCUSED_CLASS), "radioGroup item is focused");
 
@@ -546,7 +546,7 @@ QUnit.test("radioGroup item has not dx-state-focused class after radioGroup lose
             focusStateEnabled: true
         }),
         radioGroup = $radioGroup.dxRadioGroup("instance"),
-        $firstRButton = radioGroup.itemElements().first();
+        $firstRButton = $(radioGroup.itemElements()).first();
 
     assert.ok(!$firstRButton.hasClass(FOCUSED_CLASS));
 

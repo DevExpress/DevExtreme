@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
     BindableTemplate = require("../widget/bindable_template");
 
@@ -115,7 +116,7 @@ var ToolbarBase = CollectionWidget.inherit({
     _renderSections: function() {
         var $container = this._$toolbarItemsContainer,
             that = this;
-        $.each(["before", "center", "after"], function() {
+        each(["before", "center", "after"], function() {
             var sectionClass = "dx-toolbar-" + this,
                 $section = $container.find("." + sectionClass);
 
@@ -194,14 +195,14 @@ var ToolbarBase = CollectionWidget.inherit({
     _renderGroupedItems: function() {
         var that = this;
 
-        $.each(this.option("items"), function(groupIndex, group) {
+        each(this.option("items"), function(groupIndex, group) {
             var groupItems = group.items,
                 $container = $("<div>", { "class": TOOLBAR_GROUP_CLASS }),
                 location = group.location || "center";
 
             if(!groupItems.length) return;
 
-            $.each(groupItems, function(itemIndex, item) {
+            each(groupItems, function(itemIndex, item) {
                 that._renderItem(itemIndex, item, $container, null);
             });
 

@@ -39,8 +39,8 @@ QUnit.test("Appointment width should be decreased if it greater than work space 
         dataSource: [{ startDate: new Date(2015, 4, 10), endDate: new Date(2015, 9, 12) }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
-        $cell = this.instance.element().find(".dx-scheduler-date-table-cell");
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment"),
+        $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell");
 
     assert.roughEqual($appointment.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
 });
@@ -58,9 +58,9 @@ QUnit.test("Appointment width should be decreased if it greater than work space 
         ]
     });
 
-    var $appointment1 = this.instance.element().find(".dx-scheduler-appointment").eq(0),
-        $appointment2 = this.instance.element().find(".dx-scheduler-appointment").eq(1),
-        $cell = this.instance.element().find(".dx-scheduler-date-table-cell");
+    var $appointment1 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
+        $appointment2 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1),
+        $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell");
 
     assert.roughEqual($appointment1.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
     assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
@@ -97,17 +97,17 @@ QUnit.test("Appointment width should be decreased if it greater than work space 
         ]
     });
 
-    var $appointment1 = this.instance.element().find(".dx-scheduler-appointment").eq(0),
-        $appointment2 = this.instance.element().find(".dx-scheduler-appointment").eq(1),
-        $cell = this.instance.element().find(".dx-scheduler-date-table-cell");
+    var $appointment1 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
+        $appointment2 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1),
+        $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell");
 
     assert.roughEqual($appointment1.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
     assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
 
     this.instance.option("rtlEnabled", true);
-    $appointment1 = this.instance.element().find(".dx-scheduler-appointment").eq(0);
-    $appointment2 = this.instance.element().find(".dx-scheduler-appointment").eq(1);
-    $cell = this.instance.element().find(".dx-scheduler-date-table-cell");
+    $appointment1 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+    $appointment2 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1);
+    $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell");
 
     assert.roughEqual($appointment1.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
     assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
@@ -158,8 +158,8 @@ QUnit.test("Max allowed position of appointment should be calculated correctly (
             }
         ]
     });
-    var $cell = this.instance.element().find(".dx-scheduler-date-table-cell"),
-        $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell"),
+        $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     assert.roughEqual($appointment.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
 });
@@ -205,7 +205,7 @@ QUnit.test("Compact parts of long appointments should be located properly (group
             }
         ]
     });
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment"),
         $compactAppts = $appointments.filter('.dx-scheduler-appointment-compact');
 
     assert.equal($appointments.length, 7, "Appointment part quantity is right");
@@ -225,7 +225,7 @@ QUnit.test("Appointment should have a special icon and class if it greater than 
         dataSource: [{ startDate: new Date(2015, 4, 10), endDate: new Date(2015, 5, 7) }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointment.find(".dx-scheduler-appointment-reduced-icon").length, 5, "Appointment has an arrow icon");
     assert.ok($appointment.hasClass("dx-scheduler-appointment-reduced"), "Appointment has right class");
@@ -262,7 +262,7 @@ QUnit.test("Each cloned appointment should have a special icon if it greater tha
         ]
     });
 
-    var $clonedAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(1);
+    var $clonedAppointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1);
 
     assert.equal($clonedAppointment.find(".dx-scheduler-appointment-reduced-icon").length, 1, "Cloned appointment has an arrow icon");
 });
@@ -284,7 +284,7 @@ QUnit.test("Multi-week appointments should be split by several parts", function(
         }]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment"),
         rowHeight = this.instance.getWorkSpace().getWorkArea().find(".dx-scheduler-date-table tr").outerHeight(),
         appointmentHeight = $appointments.outerHeight(),
         appointmentTopOffsetInsideCell = (rowHeight - appointmentHeight) / 2,
@@ -319,7 +319,7 @@ QUnit.test("Multi-week appointments should have a correct left coordinate", func
             endDate: new Date(2015, 1, 25)
         }] });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 100, 1.001, "Left coordinate is OK");
     assert.roughEqual(translator.locate($appointments.eq(1)).left, 1, 1.001, "Left coordinate is OK");
@@ -341,7 +341,7 @@ QUnit.test("Multi-week appointments should have a correct left coordinate, rtl m
         }]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 0, 1.001, "Left coordinate is OK");
     assert.roughEqual(translator.locate($appointments.eq(1)).left, 0, 1.001, "Left coordinate is OK");
@@ -400,7 +400,7 @@ QUnit.test("Multi-week appointments with resources should have a correct left co
 
     mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 400, 1.001, "Left coordinate is OK");
     assert.roughEqual(translator.locate($appointments.eq(1)).left, 400, 1.001, "Left coordinate is OK");
@@ -460,8 +460,8 @@ QUnit.test("Multi-week appointments with resources should have a correct left co
 
     mockWorkSpaceRendering.call(this, this.instance, 100, [700]);
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
-        $dateTable = this.instance.element().find(".dx-scheduler-date-table"),
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment"),
+        $dateTable = $(this.instance.element()).find(".dx-scheduler-date-table"),
         expectedLeft = $dateTable.outerWidth() - $appointments.eq(0).outerWidth() - 400;
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, expectedLeft, 1.001, "Left coordinate is OK");
@@ -487,7 +487,7 @@ QUnit.test("Multi-week appointments should have correct resizable handles", func
         }]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointments.eq(0).data("dxResizable").option("handles"), "left", "Appointment head has a right resizable handles");
     assert.strictEqual($appointments.eq(1).data("dxResizable").option("handles"), "", "Appointment body isn't resizable");
@@ -510,7 +510,7 @@ QUnit.test("Multi-week appointments should have correct resizable handles in rtl
         rtlEnabled: true
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointments.eq(0).data("dxResizable").option("handles"), "right", "Appointment head has a right resizable handles");
     assert.strictEqual($appointments.eq(1).data("dxResizable").option("handles"), "", "Appointment body isn't resizable");
@@ -534,7 +534,7 @@ QUnit.test("Multi-week appointments should have correct CSS classes", function(a
         }]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.ok($appointments.eq(0).hasClass("dx-scheduler-appointment-head"), "Appointment head has a right CSS class");
     assert.ok($appointments.eq(1).hasClass("dx-scheduler-appointment-body"), "Appointment body has a right CSS class");
@@ -566,7 +566,7 @@ QUnit.test("Multi-week appointments should be duplicated depend on resource coun
         groups: ["roomId"]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
     assert.equal($appointments.length, 6, "Appointment count is OK");
 });
 
@@ -595,7 +595,7 @@ QUnit.test("Grouped multi-week appointments should have a correct left offset", 
         groups: ["roomId"]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 50, 2.001);
     assert.roughEqual(translator.locate($appointments.eq(1)).left, 0, 1.001);
@@ -642,7 +642,7 @@ QUnit.test("Grouped multi-week appointments should have a correct left offset in
         roomId: [1, 2]
     }]);
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, cellWidth * 14, 2.001, "The first head is OK");
     assert.roughEqual(translator.locate($appointments.eq(1)).left, cellWidth * 14, 1.001, "The first body is OK");
@@ -680,7 +680,7 @@ QUnit.test("Multi-week grouped appointments should be painted correctly", functi
         groups: ["roomId"]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal(new Color($appointments.eq(0).css("background-color")).toHex(), "#8bb6ff", "Color is OK");
     assert.equal(new Color($appointments.eq(1).css("background-color")).toHex(), "#8bb6ff", "Color is OK");
@@ -710,7 +710,7 @@ QUnit.test("Multi-week appointments should have a correct left offset on day vie
         rtlEnabled: true
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.roughEqual(translator.locate($appointments.eq(0)).left, 0, 2.001);
 });
@@ -744,9 +744,9 @@ QUnit.test("Multi week task dragging on month view", function(assert) {
         recurrenceRule: ""
     };
 
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
     var updatedMultiWeekItem = this.instance.option("dataSource").items()[0];
 
@@ -784,9 +784,9 @@ QUnit.test("Multi week allDay task dragging on month view", function(assert) {
         recurrenceRule: ""
     };
 
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
     var updatedMultiWeekItem = this.instance.option("dataSource").items()[0];
 

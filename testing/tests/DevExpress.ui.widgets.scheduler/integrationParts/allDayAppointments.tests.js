@@ -56,7 +56,7 @@ QUnit.test("AllDay tasks should not be filtered by start day hour", function(ass
         currentView: "week"
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 2, "There are two appointments");
     assert.deepEqual($appointments.eq(0).data("dxItemData"), tasks[0], "The first appointment is OK");
@@ -104,7 +104,7 @@ QUnit.test("AllDay appointments should not be filtered by start & end day hour (
     });
 
     this.instance.option("currentView", "day");
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 1, "There are two appointments");
 });
@@ -124,7 +124,7 @@ QUnit.test("All-day appointment should be resized correctly", function(assert) {
         }]
     });
 
-    var cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+    var cellWidth = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
     var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-right").eq(0)).start();
     pointer.dragStart().drag(cellWidth, 0).dragEnd();
@@ -149,7 +149,7 @@ QUnit.test("All-day appointment endDate should be correct after resize when star
         }]
     });
 
-    var cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+    var cellWidth = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
     var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-right").eq(0)).start();
     pointer.dragStart().drag(cellWidth, 0).dragEnd();
@@ -174,7 +174,7 @@ QUnit.test("All-day appointment startDate should be correct after resize when st
         }]
     });
 
-    var cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+    var cellWidth = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
     var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-left").eq(0)).start();
     pointer.dragStart().drag(-(cellWidth - 10), 0).dragEnd();
@@ -188,7 +188,7 @@ QUnit.test("Task dragging into the allDay container", function(assert) {
     });
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, editing: true });
-    var $element = this.instance.element(),
+    var $element = $(this.instance.element()),
         $appointment = $element.find(".dx-scheduler-appointment").eq(0);
 
     $appointment.trigger(dragEvents.start);
@@ -202,7 +202,7 @@ QUnit.test("Task dragging into the allDay container", function(assert) {
     assert.ok(this.instance.option("dataSource").items()[0].allDay, "New data is correct");
 
     $allDayAppointment.trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
     $allDayAppointment.trigger(dragEvents.end);
 
 
@@ -221,7 +221,7 @@ QUnit.test("Task dragging into the allDay container when allDay-cell is exactly 
     });
 
     this.createInstance({ currentDate: new Date(2015, 2, 4), dataSource: data, currentView: "week", editing: true });
-    var $element = this.instance.element(),
+    var $element = $(this.instance.element()),
         $appointment = $element.find(".dx-scheduler-appointment").eq(0);
 
     $appointment.trigger(dragEvents.start);
@@ -235,7 +235,7 @@ QUnit.test("Task dragging into the allDay container when allDay-cell is exactly 
     assert.ok(this.instance.option("dataSource").items()[0].allDay, "New data is correct");
 
     $allDayAppointment.trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(3).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(3).trigger(dragEvents.enter);
     $allDayAppointment.trigger(dragEvents.end);
 
 
@@ -257,14 +257,14 @@ QUnit.test("End date of appointment should be calculated if it's dragged off fro
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     $appointment.trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
-    var appointmentData = this.instance.element().find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+    var appointmentData = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).data("dxItemData");
 
     assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 8, 0, 0), "Start date is correct");
     assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 8, 0, 30), "End date is correct");
@@ -284,8 +284,8 @@ QUnit.test("boundOffset of allDay appointment should be correct on init", functi
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
-        allDayPanelHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
+        allDayPanelHeight = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
 
     assert.equal($appointment.dxDraggable("instance").option("boundOffset").top, -allDayPanelHeight, "Bound offset is correct");
 });
@@ -303,10 +303,10 @@ QUnit.test("allDayExpanded option of workspace should be updated after dragged i
         editing: true
     });
 
-    var $element = this.instance.element(),
+    var $element = $(this.instance.element()),
         $appointment = $element.find(".dx-scheduler-appointment").eq(0);
 
-    var workspace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+    var workspace = $(this.instance.element()).find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
 
     assert.equal(workspace.option("allDayExpanded"), false);
 
@@ -330,7 +330,7 @@ QUnit.test("Height of appointment should be correct after dragged into the all d
         editing: true
     });
 
-    var $element = this.instance.element(),
+    var $element = $(this.instance.element()),
         $appointment = $element.find(".dx-scheduler-appointment").eq(0);
 
     $appointment.trigger(dragEvents.start);
@@ -338,7 +338,7 @@ QUnit.test("Height of appointment should be correct after dragged into the all d
     $appointment.trigger(dragEvents.end);
     this.clock.tick();
 
-    var $allDayCell = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0),
+    var $allDayCell = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0),
         $allDayAppointment = $element.find(".dx-scheduler-all-day-appointment").eq(0);
 
     assert.equal($allDayAppointment.outerHeight(), $allDayCell.outerHeight(), "Appointment has correct height");
@@ -358,14 +358,14 @@ QUnit.test("allDayExpanded option of workspace should be updated after dragged o
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     $appointment.trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
-    var workspace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+    var workspace = $(this.instance.element()).find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
 
     assert.equal(workspace.option("allDayExpanded"), false);
 });
@@ -381,8 +381,8 @@ QUnit.test("Tail of long appointment should have a right width", function(assert
         firstDayOfWeek: 1
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 2, 1.001, "Task has a right width");
 });
@@ -401,10 +401,10 @@ QUnit.test("All-day appointment should save duration after resize operation", fu
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         appointmentWidth = $appointment.outerWidth();
 
-    this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.start).trigger(dragEvents.end);
 
     assert.roughEqual(this.instance.element().find(".dx-scheduler-appointment").eq(0).outerWidth(), appointmentWidth, 0.1, "Width is OK");
@@ -433,12 +433,12 @@ QUnit.test("Appointment should have right position while dragging, after change 
 
     this.instance.updateAppointment(appointment, newAppointment);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         scrollable = this.instance.getWorkSpace().element().find(".dx-scrollable").dxScrollable("instance"),
-        allDayHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").first().outerHeight(),
+        allDayHeight = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").first().outerHeight(),
         scrollDistance = 400,
         dragDistance = -300,
-        headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
+        headerPanelHeight = $(this.instance.element()).find(".dx-scheduler-header-panel").outerHeight(true);
 
     scrollable.scrollBy(scrollDistance);
 
@@ -469,9 +469,9 @@ QUnit.test("AllDay appointment should have right position while dragging from al
         dataSource: [appointment]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         dragDistance = 300,
-        headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
+        headerPanelHeight = $(this.instance.element()).find(".dx-scheduler-header-panel").outerHeight(true);
 
     var pointer = pointerMock($appointment).start(),
         startPosition = translator.locate($appointment);
@@ -515,9 +515,9 @@ QUnit.test("AllDay appointment width should be decreased if it greater than work
         ]
     });
 
-    var $appointment1 = this.instance.element().find(".dx-scheduler-appointment").eq(0),
-        $appointment2 = this.instance.element().find(".dx-scheduler-appointment").eq(1),
-        $cell = this.instance.element().find(".dx-scheduler-date-table-cell");
+    var $appointment1 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
+        $appointment2 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1),
+        $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell");
 
     assert.roughEqual($appointment1.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
     assert.roughEqual($appointment2.outerWidth(), Math.floor($cell.outerWidth()), 1.001, "Appointment width is OK");
@@ -560,11 +560,11 @@ QUnit.test("All-day appointment inside grouped view should have a right resizabl
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment"),
         area1 = $appointments.eq(0).dxResizable("instance").option("area"),
         area2 = $appointments.eq(1).dxResizable("instance").option("area"),
         area3 = $appointments.eq(2).dxResizable("instance").option("area"),
-        $cells = this.instance.element().find(".dx-scheduler-date-table-cell"),
+        $cells = $(this.instance.element()).find(".dx-scheduler-date-table-cell"),
         halfOfCellWidth = 0.5 * $cells.eq(0).outerWidth();
 
     assert.roughEqual(area1.left, $cells.eq(0).offset().left - halfOfCellWidth, 1.001);
@@ -602,9 +602,9 @@ QUnit.test("All-day appointment inside grouped view should have a right resizabl
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment"),
         area = $appointments.eq(0).dxResizable("instance").option("area"),
-        $cells = this.instance.element().find(".dx-scheduler-date-table-cell"),
+        $cells = $(this.instance.element()).find(".dx-scheduler-date-table-cell"),
         halfOfCellWidth = 0.5 * $cells.eq(0).outerWidth();
 
     assert.roughEqual(area.left, $cells.eq(7).offset().left + halfOfCellWidth, 1.001);
@@ -641,8 +641,8 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
         { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true, ownerId: 2 }
     ]);
 
-    var firstGroupDropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance"),
-        secondGroupDropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").eq(1).dxDropDownMenu("instance");
+    var firstGroupDropDown = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance"),
+        secondGroupDropDown = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").eq(1).dxDropDownMenu("instance");
 
     firstGroupDropDown.open();
     var firstDdAppointments = firstGroupDropDown._list.element().find(".dx-scheduler-dropdown-appointment");
@@ -670,7 +670,7 @@ QUnit.test("If there are not groups, '.dx-scrollable-content' should be a resiza
         }]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment"),
         $area = $appointments.eq(0).dxResizable("instance").option("area");
 
     assert.deepEqual($area.get(0), this.instance.getWorkSpace().element().find(".dx-scrollable-content").get(0), "Area is OK");
@@ -693,8 +693,8 @@ QUnit.test("New allDay appointment should have correct height", function(assert)
     this.instance.showAppointmentPopup(newItem, true);
     $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
 
-    var $addedAppointment = this.instance.element().find(".dx-scheduler-all-day-appointment").eq(0),
-        $allDayCell = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0);
+    var $addedAppointment = $(this.instance.element()).find(".dx-scheduler-all-day-appointment").eq(0),
+        $allDayCell = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0);
 
     assert.equal($addedAppointment.outerHeight(), $allDayCell.outerHeight(), "Appointment has correct height");
 });
@@ -710,7 +710,7 @@ QUnit.test("showAllDayPanel option of workSpace should be updated after adding a
 
     $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
 
-    var workspace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
+    var workspace = $(this.instance.element()).find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
 
     assert.equal(workspace.option("showAllDayPanel"), true, "allDay panel is visible after adding allDay task");
 });
@@ -723,7 +723,7 @@ QUnit.test("all-day-collapsed class of workSpace should be removed after adding 
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-    var $workspace = this.instance.element().find(".dx-scheduler-work-space");
+    var $workspace = $(this.instance.element()).find(".dx-scheduler-work-space");
 
     assert.ok($workspace.hasClass("dx-scheduler-work-space-all-day-collapsed"), "Work space has specific class");
 
@@ -764,8 +764,8 @@ QUnit.test("AllDay appointment should have correct height", function(assert) {
         showAllDayPanel: true
     });
 
-    var appointmentHeight = this.instance.element().find(".dx-scheduler-all-day-appointment").outerHeight(),
-        allDayPanelHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+    var appointmentHeight = $(this.instance.element()).find(".dx-scheduler-all-day-appointment").outerHeight(),
+        allDayPanelHeight = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
 
     assert.equal(appointmentHeight, allDayPanelHeight, "Appointment height is correct on init");
 
@@ -787,7 +787,7 @@ QUnit.test("Multi-day appointment parts should be displayed correctly in allDay 
         showAllDayPanel: true
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment");
+    var $appointments = $(this.instance.element()).find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment");
 
     assert.ok($appointments.length, "Appointment is displayed correctly in right place");
 });
@@ -802,7 +802,7 @@ QUnit.test("AllDay appointment should have correct height after changing view", 
         showAllDayPanel: true
     });
 
-    var allDayPanelHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+    var allDayPanelHeight = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
 
     this.instance.option("currentView", "day");
     this.instance.option("currentView", "week");
@@ -822,7 +822,7 @@ QUnit.test("allDay panel should be expanded when there are long appointments wit
     });
 
     this.instance.updateAppointment(appointment, newAppointment);
-    var $workspace = this.instance.element().find(".dx-scheduler-work-space");
+    var $workspace = $(this.instance.element()).find(".dx-scheduler-work-space");
 
     assert.notOk($workspace.hasClass("dx-scheduler-work-space-all-day-collapsed"), "AllDay panel is expanded");
 });
@@ -847,16 +847,16 @@ QUnit.test("boundOffset of non allDay appointments should be recalculated", func
         }]
     });
 
-    var $allDayPanel = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0),
-        $a = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $allDayPanel = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0),
+        $a = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         $b;
 
     assert.equal($a.dxDraggable("instance").option("boundOffset").top, -$allDayPanel.outerHeight(), "Bound offset is correct");
 
     this.instance.addAppointment(newItem);
 
-    $a = this.instance.element().find(".dx-scheduler-appointment").eq(0);
-    $b = this.instance.element().find(".dx-scheduler-appointment").eq(1);
+    $a = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+    $b = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1);
 
     assert.equal($a.dxDraggable("instance").option("boundOffset").top, -$allDayPanel.outerHeight(), "Bound offset is correct");
     assert.equal($b.dxDraggable("instance").option("boundOffset").top, -$allDayPanel.outerHeight(), "Bound offset is correct");
@@ -916,7 +916,7 @@ QUnit.test("all-day-appointment should have a correct height when the 'showAllDa
         dataSource: [{ startDate: new Date(2015, 1, 9), allDay: true }]
     });
 
-    var appointmentHeight = this.instance.element().find(".dx-scheduler-appointment").first().outerHeight();
+    var appointmentHeight = $(this.instance.element()).find(".dx-scheduler-appointment").first().outerHeight();
     this.instance.option("showAllDayPanel", false);
     this.instance.option("showAllDayPanel", true);
 
@@ -1022,8 +1022,8 @@ QUnit.test("AllDay appointment should be displayed correctly after changing view
     this.instance.option("currentView", "week");
     this.clock.tick(300);
 
-    var allDayPanelHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
-        $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var allDayPanelHeight = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
+        $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     assert.equal($appointment.outerHeight(), allDayPanelHeight, "Appointment height is correct");
 });
@@ -1055,8 +1055,8 @@ QUnit.test("AllDay appointment should be displayed correctly after changing date
     this.instance.option("currentDate", new Date(2015, 2, 5));
     this.clock.tick(300);
 
-    var allDayPanelHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
-        $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var allDayPanelHeight = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
+        $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     assert.roughEqual($appointment.outerHeight(), allDayPanelHeight, 2, "Appointment height is correct");
 });
@@ -1070,7 +1070,7 @@ QUnit.test("Multi-day appointment parts should have allDay class", function(asse
         currentView: "day"
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
 
     assert.ok($appointment.hasClass("dx-scheduler-all-day-appointment"), "Appointment part has allDay class");
 });
@@ -1092,9 +1092,9 @@ QUnit.test("AllDay recurrent appointment should be rendered coorectly after chan
 
     this.instance.option("currentDate", new Date(2015, 4, 31));
 
-    var $appointment = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0),
-        cellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").outerHeight(),
-        cellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").outerWidth();
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0),
+        cellHeight = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").outerHeight(),
+        cellWidth = $(this.instance.element()).find(".dx-scheduler-all-day-table-cell").outerWidth();
 
     assert.equal($appointment.outerWidth(), cellWidth, "Appointment width is OK");
     assert.equal($appointment.outerHeight(), cellHeight, "Appointment height is OK");
@@ -1115,7 +1115,7 @@ QUnit.test("DblClick on appointment should call scheduler.showAppointmentPopup f
 
     var spy = sinon.spy(this.instance, "showAppointmentPopup");
 
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dblclickEvent.name);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dblclickEvent.name);
 
     assert.ok(spy.calledOnce, "Method was called");
 });
@@ -1185,7 +1185,7 @@ QUnit.test("All-day & common appointments should have a right sorting", function
         ]
     });
 
-    var $element = this.instance.element(),
+    var $element = $(this.instance.element()),
         $appointments = $element.find(".dx-scheduler-appointment-compact"),
         $simpleAppointment = $element.find(".dx-scheduler-appointment").last(),
         cellWidth = $element.find(".dx-scheduler-date-table-cell").outerWidth();
@@ -1243,7 +1243,7 @@ QUnit.test("All-day appointments should have a right sorting", function(assert) 
         ]
     });
 
-    var $element = this.instance.element(),
+    var $element = $(this.instance.element()),
         $appointments = $element.find(".dx-scheduler-appointment-compact");
 
     assert.equal($appointments.eq(0).data("dxItemData").text, "Short 1", "Data is right");

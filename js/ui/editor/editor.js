@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    dataUtils = require("../../core/element_data"),
     Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
@@ -37,7 +38,7 @@ var Editor = Widget.inherit({
         var $element = this.element();
 
         if($element) {
-            $.data($element[0], VALIDATION_TARGET, this);
+            dataUtils.data($element[0], VALIDATION_TARGET, this);
         }
     },
 
@@ -258,7 +259,7 @@ var Editor = Widget.inherit({
 
     _dispose: function() {
         var element = this.element()[0];
-        $.data(element, VALIDATION_TARGET, null);
+        dataUtils.data(element, VALIDATION_TARGET, null);
         this.callBase();
     },
 

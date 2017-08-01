@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     errors = require("../widget/ui.errors"),
@@ -53,7 +55,7 @@ var DropDownEditor = TextBox.inherit({
                     ? this._getLastPopupElement()
                     : this._getFirstPopupElement();
 
-                $focusableElement && $focusableElement.focus();
+                $focusableElement && eventsEngine.trigger($focusableElement, "focus");
                 e.preventDefault();
             },
             escape: function(e) {
@@ -334,7 +336,7 @@ var DropDownEditor = TextBox.inherit({
         this.callBase();
 
         if(this.option("fieldTemplate")) {
-            this._input().off("focusin focusout beforeactivate");
+            eventsEngine.off(this._input(), "focusin focusout beforeactivate");
         }
     },
 
@@ -370,14 +372,14 @@ var DropDownEditor = TextBox.inherit({
 
         this._refreshEvents();
         this._refreshValueChangeEvent();
-        isFocused && this._input().focus();
+        isFocused && eventsEngine.trigger(this._input(), "focus");
 
         this._renderFocusState();
     },
 
     _resetFocus: function(isFocused) {
         this._cleanFocusState();
-        isFocused && this._input().focusout();
+        isFocused && eventsEngine.trigger(this._input(), "focusout");
     },
 
 
@@ -441,7 +443,7 @@ var DropDownEditor = TextBox.inherit({
         $button
             .removeClass("dx-button");
 
-        $button.on("mousedown", function(e) {
+        eventsEngine.on($button, "mousedown", function(e) {
             e.preventDefault();
         });
 
@@ -454,10 +456,8 @@ var DropDownEditor = TextBox.inherit({
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             openOnFieldClick = that.option("openOnFieldClick");
 
-        $inputWrapper
-            .off(eventName)
-            .on(eventName, that._getInputClickHandler(openOnFieldClick));
-
+        eventsEngine.off($inputWrapper, eventName);
+        eventsEngine.on($inputWrapper, eventName, that._getInputClickHandler(openOnFieldClick));
         that.element().toggleClass(DROP_DOWN_EDITOR_FIELD_CLICKABLE, openOnFieldClick);
 
         if(openOnFieldClick) {
@@ -490,7 +490,7 @@ var DropDownEditor = TextBox.inherit({
             return false;
         }
 
-        this._input().focus();
+        eventsEngine.trigger(this._input(), "focus");
         return true;
     },
 
@@ -698,13 +698,13 @@ var DropDownEditor = TextBox.inherit({
         if((e.shiftKey && $element.is(this._getFirstPopupElement()))
             || (!e.shiftKey && $element.is(this._getLastPopupElement()))) {
 
-            this._input().focus();
+            eventsEngine.trigger(this._input(), "focus");
             e.preventDefault();
         }
     },
 
     _popupElementEscHandler: function() {
-        this._input().focus();
+        eventsEngine.trigger(this._input(), "focus");
         this.close();
     },
 
@@ -743,7 +743,7 @@ var DropDownEditor = TextBox.inherit({
         if(buttonsLocation !== "default") {
             var position = commonUtils.splitPair(buttonsLocation);
 
-            $.each(resultConfig, function(_, element) {
+            each(resultConfig, function(_, element) {
                 extend(element, {
                     toolbar: position[0],
                     location: position[1]

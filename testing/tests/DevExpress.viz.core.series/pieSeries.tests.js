@@ -7,7 +7,6 @@ var $ = require("jquery"),
     labelModule = require("viz/series/points/label"),
     Series = require("viz/series/base_series").Series;
 
-/* global insertMockFactory, MockTranslator */
 require("../../helpers/chartMocks.js");
 
 require("viz/chart");
@@ -52,6 +51,7 @@ var createSeries = function(options, renderSettings) {
     renderer.stub("g").reset();
     return new Series(renderSettings, options);
 };
+
 var createPoint = function(series, data) {
     var stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
@@ -70,48 +70,31 @@ function resetStub(stub) {
 
 var mockPoints = [createPoint(), createPoint(), createPoint(), createPoint(), createPoint(), createPoint()];
 var environment = {
-        beforeEach: function() {
-            insertMockFactory();
-            this.renderer = new vizMocks.Renderer();
-            this.seriesGroup = this.renderer.g();
-            this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
-            this.translator = new MockTranslator({
-                translateX: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-                translateY: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-                getCanvasVisibleArea: { minX: 0, maxX: 700, minY: 0, maxY: 500 }
-            });
-        },
-        afterEach: function() {
+    beforeEach: function() {
+        this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
+        var mockPointIndex = 0;
+        this.createPoint = sinon.stub(pointModule, "Point", function(series, data) {
+            var stub = mockPoints[mockPointIndex++];
 
-        }
+            stub.argument = data.argument || 1;
+            stub.value = data.value || 1;
+            stub.isVisible.returns(true);
+            stub.series = series;
+            stub.hasValue.returns(true);
+            stub._label.getBoundingRect.returns({ x: 1, y: 2, width: 20, height: 10 });
+            stub._label.isVisible.returns("hidden");
+            stub._label.getLayoutOptions.returns({ position: "outside" });
+            stub.isInVisibleArea.returns(true);
+            resetStub(stub);
+            stub.isSelected.returns(false);
+            resetStub(stub._label);
+            return stub;
+        });
     },
-
-    environmentWithSinonStubPoint = {
-        beforeEach: function() {
-            environment.beforeEach.call(this);
-            var mockPointIndex = 0;
-            this.createPoint = sinon.stub(pointModule, "Point", function(series, data) {
-                var stub = mockPoints[mockPointIndex++];
-
-                stub.argument = data.argument || 1;
-                stub.value = data.value || 1;
-                stub.isVisible.returns(true);
-                stub.series = series;
-                stub.hasValue.returns(true);
-                stub._label.getBoundingRect.returns({ x: 1, y: 2, width: 20, height: 10 });
-                stub._label.isVisible.returns("hidden");
-                stub._label.getLayoutOptions.returns({ position: "outside" });
-                stub.isInVisibleArea.returns(true);
-                resetStub(stub);
-                stub.isSelected.returns(false);
-                resetStub(stub._label);
-                return stub;
-            });
-        },
-        afterEach: function() {
-            pointModule.Point.restore();
-        }
-    };
+    afterEach: function() {
+        pointModule.Point.restore();
+    }
+};
 
 function checkMainSeriesColor(assert, series, i, arg, index) {
     assert.equal(series.getOptions().mainSeriesColor.getCall(i).args[0], arg);
@@ -135,7 +118,7 @@ var checkTwoGroups = function(assert, series) {
 
 (function Pie() {
 
-    QUnit.module("Pie series. Draw", environmentWithSinonStubPoint);
+    QUnit.module("Pie series. Draw", environment);
 
     var checkGroups = checkTwoGroups,
         seriesType = "pie";
@@ -145,9 +128,9 @@ var checkTwoGroups = function(assert, series) {
             type: "doughnut",
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translator, false);
+        series.draw(false);
         //assert
 
         checkGroups(assert, series);
@@ -159,9 +142,9 @@ var checkTwoGroups = function(assert, series) {
             type: "donut",
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translator, false);
+        series.draw(false);
         //assert
 
         checkGroups(assert, series);
@@ -173,9 +156,9 @@ var checkTwoGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translator, false);
+        series.draw(false);
         //assert
 
         checkGroups(assert, series);
@@ -187,10 +170,10 @@ var checkTwoGroups = function(assert, series) {
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         //act
         series.updateData(this.data);
-        series.draw(this.translator, false);
+        series.draw(false);
         series.updateData([]);
         //assert
 
@@ -203,7 +186,7 @@ var checkTwoGroups = function(assert, series) {
         var series = createSeries({
             type: seriesType,
             paintNullPoints: false
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: undefined }]);
 
         //assert
@@ -214,7 +197,7 @@ var checkTwoGroups = function(assert, series) {
         var series = createSeries({
             type: seriesType,
             paintNullPoints: false
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: null }]);
 
         //assert
@@ -225,7 +208,7 @@ var checkTwoGroups = function(assert, series) {
         var series = createSeries({
             type: seriesType,
             paintNullPoints: true
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: null }]);
 
         //assert
@@ -236,7 +219,7 @@ var checkTwoGroups = function(assert, series) {
         var series = createSeries({
             type: seriesType,
             paintNullPoints: true
-        }, { renderer: this.renderer });
+        });
         series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: undefined }]);
 
         //assert
@@ -249,7 +232,7 @@ var checkTwoGroups = function(assert, series) {
             point: { visible: false },
             label: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
 
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
@@ -258,7 +241,7 @@ var checkTwoGroups = function(assert, series) {
             pt.y = pt.value;
         });
         //act
-        series.draw(this.translator, false);
+        series.draw(false);
         //assert
         checkGroups(assert, series);
 
@@ -280,9 +263,10 @@ var checkTwoGroups = function(assert, series) {
             complete,
             points,
             series = createSeries($.extend({ type: seriesType }, options), { renderer: this.renderer, trackerGroup: {} });
+
         series.updateData(this.data.slice(0, 3));
 
-        series.draw(this.translator, true);
+        series.draw(true);
 
         //assert
         function assertAnimationArguments(point, duration, delay, completeShouldBePassed) {
@@ -321,16 +305,15 @@ var checkTwoGroups = function(assert, series) {
 
         var series = createSeries(options, { trackerGroup: {} });
         series.updateData(this.data);
-        series.translators = this.translators;
         series.canvas = { width: 400, height: 400, left: 0, right: 0, top: 0, bottom: 0 };
 
 
-        series.draw(this.renderer, this.seriesGroup);
+        series.draw();
         series.updateData([]);
-        series.draw(this.renderer, this.seriesGroup);
+        series.draw();
         series.updateData(this.data);
         //act
-        series.draw(this.renderer, this.seriesGroup);
+        series.draw();
 
         //assert
         $.each(series.getPoints(), function(i, p) {
@@ -347,13 +330,13 @@ var checkTwoGroups = function(assert, series) {
             series = createSeries($.extend({ type: seriesType }, options), { renderer: this.renderer, trackerGroup: {} });
         series.updateData(this.data);
 
-        series.draw(this.translator, true);
+        series.draw(true);
         $.each(series.getPoints(), function(_, p) {
             p.animate.reset();
             p.draw.reset();
         });
         //Act
-        series.draw(this.translator, true);
+        series.draw(true);
 
         //assert
         $.each(series.getPoints(), function(i, p) {
@@ -387,7 +370,7 @@ var checkTwoGroups = function(assert, series) {
             legendCallback = sinon.spy();
 
         series.updateData(this.data);
-        series.draw(this.translator, false, undefined, legendCallback);
+        series.draw(false, undefined, legendCallback);
 
         assert.equal(legendCallback.callCount, 0);
     });
@@ -406,23 +389,23 @@ var checkTwoGroups = function(assert, series) {
         series.updateData(this.data);
         this.createPoint.returnValues[1].isSelected.returns(true);
         this.createPoint.returnValues[2].isSelected.returns(true);
-        series.draw(this.translator, false, undefined, legendCallback);
+        series.draw(false, undefined, legendCallback);
 
         assert.equal(legendCallback.callCount, 2);
     });
 
     QUnit.module("Pie. Points animation", {
         beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
+            environment.beforeEach.call(this);
 
             this.series = createSeries({
                 type: seriesType,
                 point: { visible: true },
                 label: { visible: false }
-            }, { renderer: this.renderer });
+            });
             this.series.updateData(this.data);
         },
-        afterEach: environmentWithSinonStubPoint.afterEach
+        afterEach: environment.afterEach
     });
 
     QUnit.test("Draw without animation", function(assert) {
@@ -431,7 +414,7 @@ var checkTwoGroups = function(assert, series) {
             pt._label.isVisible.returns(false);
         });
         //act
-        series.draw(this.translator, false);
+        series.draw(false);
         //assert
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -447,7 +430,7 @@ var checkTwoGroups = function(assert, series) {
         $.each(series._points, function(_, pt) {
             pt._label.isVisible.returns(false);
         });
-        series.draw(this.translator, true);
+        series.draw(true);
         //assert
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -467,7 +450,7 @@ var checkTwoGroups = function(assert, series) {
         series._points[0].isVisible.returns(false);
         series._points[2].isVisible.returns(false);
 
-        series.draw(this.translator, true);
+        series.draw(true);
         //assert
         $.each(series._points, function(i, p) {
             assert.ok(p.draw.calledOnce);
@@ -480,15 +463,12 @@ var checkTwoGroups = function(assert, series) {
             } else {
                 assert.ok(!p.setInvisibility.called);
             }
-
         });
-
-
     });
 
     QUnit.module("Pie. Point styles", {
         beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
+            environment.beforeEach.call(this);
             this.data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
             this.options = {
                 type: seriesType,
@@ -519,7 +499,7 @@ var checkTwoGroups = function(assert, series) {
                 }
             };
         },
-        afterEach: environmentWithSinonStubPoint.afterEach
+        afterEach: environment.afterEach
     });
 
     QUnit.test("style in point", function(assert) {
@@ -573,7 +553,7 @@ var checkTwoGroups = function(assert, series) {
         $.each(series._points, function(_, pt) {
             pt._label.isVisible.returns(false);
         });
-        series.draw(this.translator, false);
+        series.draw(false);
 
         assert.strictEqual(series._markersGroup._stored_settings.fill, undefined);
         assert.strictEqual(series._markersGroup._stored_settings.stroke, undefined);
@@ -785,16 +765,9 @@ var checkTwoGroups = function(assert, series) {
         assert.strictEqual(styles.selection.stroke, "arg2", "selection.stroke");
     });
 
-    QUnit.module("Pie. Arrange Points", environment, {
+    QUnit.module("Pie. Arrange Points", {
         beforeEach: function() {
-            this.renderer = new vizMocks.Renderer();
-            this.data = [
-                { arg: 1, val: 100 },
-                { arg: 2, val: 200 },
-                { arg: 3, val: 300 },
-                { arg: 4, val: 400 }
-            ];
-            insertMockFactory();
+            this.data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }];
         }
     });
 
@@ -809,7 +782,7 @@ var checkTwoGroups = function(assert, series) {
             series = createSeries({
                 type: seriesType,
                 label: { visible: false }
-            }, { renderer: this.renderer });
+            });
 
         series.updateData(data);
 
@@ -840,7 +813,7 @@ var checkTwoGroups = function(assert, series) {
             series = createSeries({
                 type: seriesType,
                 label: { visible: false }
-            }, { renderer: this.renderer });
+            });
 
         series.updateData(data);
 
@@ -871,7 +844,7 @@ var checkTwoGroups = function(assert, series) {
             series = createSeries({
                 type: seriesType,
                 label: { visible: false }
-            }, { renderer: this.renderer });
+            });
 
         series.updateData(data);
         series.arrangePoints();
@@ -901,7 +874,7 @@ var checkTwoGroups = function(assert, series) {
             series = createSeries({
                 type: seriesType,
                 label: { visible: false }
-            }, { renderer: this.renderer }),
+            }),
             points;
 
         series.updateData(data);
@@ -935,7 +908,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 0 },
                 { arg: 4, val: 20 },
                 { arg: 5, val: 40 }],
-            series = createSeries({ type: seriesType, minSegmentSize: 2 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 2 });
         var minShownValue = 180 / 358;
         series.updateData(data);
         //act
@@ -965,7 +938,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 0 },
                 { arg: 4, val: 20 },
                 { arg: 5, val: 40 }],
-            series = createSeries({ type: seriesType }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType });
         series.updateData(data);
 
         var points = series.getPoints();
@@ -992,7 +965,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 0 },
                 { arg: 4, val: 20 },
                 { arg: 5, val: 40 }],
-            series = createSeries({ type: seriesType, minSegmentSize: 2 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 2 });
         var minShownValue = 140 / 358;
         series.updateData(data);
         series._points[1].isVisible = function() {
@@ -1023,7 +996,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 0 },
                 { arg: 4, val: 0 },
                 { arg: 5, val: 0 }],
-            series = createSeries({ type: seriesType }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType });
         series.updateData(data);
         series._points[0].isVisible = function() { return false; };
 
@@ -1051,7 +1024,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 0 },
                 { arg: 4, val: 0 },
                 { arg: 5, val: 0 }],
-            series = createSeries({ type: seriesType }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType });
         series.updateData(data);
 
         //act
@@ -1069,7 +1042,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 0 },
                 { arg: 4, val: 0 },
                 { arg: 5, val: 0 }],
-            series = createSeries({ type: seriesType, minSegmentSize: 1 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 1 });
         series.updateData(data);
         //act
         series.arrangePoints(series.getPoints());
@@ -1097,7 +1070,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 0 },
                 { arg: 4, val: 0 },
                 { arg: 5, val: 0 }],
-            series = createSeries({ type: seriesType, minSegmentSize: 1 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 1 });
         series.updateData(data);
         series.arrangePoints();
         //act
@@ -1127,7 +1100,7 @@ var checkTwoGroups = function(assert, series) {
                     { arg: 4, val: 500 },
                     { arg: 5, val: 200 }],
 
-            series = createSeries({ type: seriesType, minSegmentSize: 400 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 400 });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1155,7 +1128,7 @@ var checkTwoGroups = function(assert, series) {
                     { arg: 3, val: 3 },
                     { arg: 4, val: 500 },
                     { arg: 5, val: 200 }],
-            series = createSeries({ type: seriesType, minSegmentSize: 30 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 30 });
 
         var minShownValue = 30 * 1400 / 330;
         series.updateData(data);
@@ -1181,7 +1154,7 @@ var checkTwoGroups = function(assert, series) {
         //arrange
         var data = [{ arg: 1, val: 300 },
                     { arg: 2, val: 4 }],
-            series = createSeries({ type: seriesType, minSegmentSize: 360 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 360 });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1200,7 +1173,7 @@ var checkTwoGroups = function(assert, series) {
         var data = [{ arg: 1, val: 300 },
                     { arg: 2, val: 400 },
                     { arg: 3, val: 3 }],
-            series = createSeries({ type: seriesType, minSegmentSize: 180 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 180 });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1223,7 +1196,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: -20 },
                 { arg: 4, val: 30 },
                 { arg: 5, val: 40 }],
-            series = createSeries({ type: seriesType, argumentField: "arg", valueField: "val", label: {} }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, argumentField: "arg", valueField: "val", label: {} });
         series.updateData(data);
 
         //act
@@ -1247,7 +1220,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("Percents are filled", function(assert) {
         //arrange
         var data = this.data,
-            series = createSeries({ type: seriesType, minSegmentSize: 400 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 400 });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1268,7 +1241,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 3, val: 300 },
                 { arg: 4, val: 400 }
             ],
-            series = createSeries({ type: seriesType, minSegmentSize: 1 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, minSegmentSize: 1 });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1286,7 +1259,7 @@ var checkTwoGroups = function(assert, series) {
         var data = [{ arg: 1, val: 1 },
                 { arg: 2, val: 1 },
                 { arg: 3, val: 1 }],
-            series = createSeries({ type: seriesType }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1301,7 +1274,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("Direction of segments is anticlockwise", function(assert) {
         //arrange
         var data = this.data,
-            series = createSeries({ type: seriesType, segmentsDirection: "anticlockwise" }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, segmentsDirection: "anticlockwise" });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1321,7 +1294,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("startAngle is defined", function(assert) {
         //arrange
         var data = this.data,
-            series = createSeries({ type: seriesType, startAngle: 90 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, startAngle: 90 });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1337,7 +1310,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("startAngle is not defined", function(assert) {
         //arrange
         var data = this.data,
-            series = createSeries({ type: seriesType }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1353,7 +1326,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("startAngle is negative value", function(assert) {
         //arrange
         var data = this.data,
-            series = createSeries({ type: seriesType, startAngle: -90 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, startAngle: -90 });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1369,7 +1342,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("startAngle is more 360", function(assert) {
         //arrange
         var data = this.data,
-            series = createSeries({ type: seriesType, startAngle: 450 }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, startAngle: 450 });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1385,7 +1358,7 @@ var checkTwoGroups = function(assert, series) {
     QUnit.test("startAngle is invalid value", function(assert) {
         //arrange
         var data = this.data,
-            series = createSeries({ type: seriesType, startAngle: "test" }, { renderer: this.renderer });
+            series = createSeries({ type: seriesType, startAngle: "test" });
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1398,15 +1371,7 @@ var checkTwoGroups = function(assert, series) {
         assert.strictEqual(points[3].shiftedAngle, 0);
     });
 
-    QUnit.module("Pie Series. Api", {
-        beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
-            this.data = [{ arg: "arg1", val: "val1", tag: "tag1" }, { arg: "arg2", val: "val2", tag: "tag2" }];
-        },
-        afterEach: function() {
-            pointModule.Point.restore();
-        }
-    });
+    QUnit.module("Pie Series. Api", environment);
 
     QUnit.test("correctPosition", function(assert) {
         var series = createSeries({}),
@@ -1494,7 +1459,7 @@ var checkTwoGroups = function(assert, series) {
 
         series.updateData(this.data);
 
-        series.draw(this.translator, false);
+        series.draw(false);
 
         series._points[0].isVisible.returns(true);
         series._points[1].isVisible.returns(false);
@@ -1510,13 +1475,7 @@ var checkTwoGroups = function(assert, series) {
         assert.strictEqual(series.getColor, noop);
     });
 
-    QUnit.module("draw Labels Without Points", {
-        beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
-            this.data = [{ arg: "arg1", val: "val1" }, { arg: "arg2", val: "val2" }];
-        },
-        afterEach: environmentWithSinonStubPoint.afterEach
-    });
+    QUnit.module("draw Labels Without Points", environment);
 
     QUnit.test("areErrorBarsVisible", function(assert) {
         assert.ok(!createSeries({
@@ -1636,7 +1595,7 @@ var checkTwoGroups = function(assert, series) {
         assert.ok(series.drawLabelsWOPoints());
 
         assert.ok(series.getAllPoints()[0].drawLabel.called);
-        assert.ok(series.getAllPoints()[1].drawLabel.called);
+        assert.ok(series.getAllPoints()[1].drawLabel.calledOnce);
     });
 
     QUnit.test("get points by argument and argumentIndex", function(assert) {
@@ -1785,15 +1744,7 @@ var checkTwoGroups = function(assert, series) {
         assert.strictEqual(series.getAllPoints()[1].resetView.lastCall.args[0], "selection");
     });
 
-    QUnit.module("adjust labels", {
-        beforeEach: function() {
-            environmentWithSinonStubPoint.beforeEach.call(this);
-            this.data = [{ arg: "arg1", val: 10 }, { arg: "arg2", val: 20 }, { arg: "arg3", val: 30 }, { arg: "arg4", val: 40 }];
-        },
-        afterEach: function() {
-            pointModule.Point.restore();
-        }
-    });
+    QUnit.module("adjust labels", environment);
 
     QUnit.test("adjust labels", function(assert) {
         //arrange

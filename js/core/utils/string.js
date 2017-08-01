@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("./type"),
+var typeUtils = require("./type"),
     commonUtils = require("./common");
 
 var encodeHtml = (function() {
@@ -57,7 +56,7 @@ var quadToObject = function(raw) {
 
 var stringFormat = function() {
     var s = arguments[0],
-        values = $.makeArray(arguments).slice(1),
+        values = [].slice.call(arguments).slice(1),
         replaceDollarCount,
         reg,
         value;

@@ -17,16 +17,15 @@ var createPoint = function(series, data, options) {
 
 QUnit.module("Draw point. Bubble", {
     beforeEach: function() {
+        var that = this;
         this.renderer = new vizMocks.Renderer();
 
         this.translators = {
-            x: new MockTranslator({
-                translate: { 1: 11 },
-                getCanvasVisibleArea: { min: 0, max: 600 }
+            arg: new MockTranslator({
+                translate: { 1: 11 }
             }),
-            y: new MockTranslator({
-                translate: { 1: 50, 2: 33, 3: 10, 4: 5 },
-                getCanvasVisibleArea: { min: 0, max: 600 }
+            val: new MockTranslator({
+                translate: { 1: 50, 2: 33, 3: 10, 4: 5 }
             })
         };
         this.group = this.renderer.g();
@@ -44,6 +43,9 @@ QUnit.module("Draw point. Bubble", {
             areLabelsVisible: function() { return false; },
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 600, minY: 0, maxY: 600 }; }
         };
         this.groups = {
             markers: this.group
@@ -55,7 +57,7 @@ QUnit.test("Marker", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
 
     point.correctCoordinates(4);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
@@ -78,12 +80,12 @@ QUnit.test("Update marker", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
 
     point.correctCoordinates(4);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     this.options.styles.normal.fill = "red";
     point.updateOptions(this.options);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point.graphic);
@@ -97,7 +99,7 @@ QUnit.test("Update marker location", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
 
     point.correctCoordinates(4);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     point.x = 10;
@@ -118,7 +120,7 @@ QUnit.test("Marker with animationEnabled", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 2, size: 3 }, this.options);
 
     point.correctCoordinates(4);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups, true);
 
     assert.ok(point.graphic);
@@ -141,7 +143,7 @@ QUnit.test("animate", function(assert) {
         complete = sinon.stub();
 
     point.correctCoordinates(4);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups, true);
 
     point.animate(complete, { translateX: 11, translateY: 33, r: 2 });
@@ -174,7 +176,7 @@ QUnit.test("animate without graphic", function(assert) {
         complete = sinon.spy();
 
     point.correctCoordinates(4);
-    point.translate(this.translators);
+    point.translate();
 
     point.animate(complete);
 
@@ -426,7 +428,10 @@ QUnit.module("Draw Label", {
                 return false;
             },
             getLabelVisibility: function() { return true; },
-            _visibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 }
+            _visibleArea: { minX: 0, maxX: 100, minY: 0, maxY: 210 },
+            getVisibleArea: function() { return this._visibleArea; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
         };
         this.label = sinon.createStubInstance(labelModule.Label);
         this.labelFactory = labelModule.Label = sinon.spy(function() {
@@ -457,7 +462,6 @@ QUnit.test("Value = null", function(assert) {
     this.data.value = null;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 33;
     point.y = 22;
     point.bubbleSize = 20;
@@ -470,7 +474,6 @@ QUnit.test("Value = null", function(assert) {
 QUnit.test("Get graphic bbox", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 33;
     point.y = 22;
     point.bubbleSize = 20;
@@ -487,7 +490,6 @@ QUnit.test("Draw label outside", function(assert) {
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
 
-    point.translators = this.translators;
     point.x = 33;
     point.y = 52;
     point.bubbleSize = 20;
@@ -505,7 +507,6 @@ QUnit.test("Draw label when position is invalid", function(assert) {
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
 
-    point.translators = this.translators;
     point.x = 33;
     point.y = 52;
     point.bubbleSize = 20;
@@ -523,7 +524,6 @@ QUnit.test("Draw label inside", function(assert) {
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
 
-    point.translators = this.translators;
     point.x = 33;
     point.y = 25;
     point.bubbleSize = 20;

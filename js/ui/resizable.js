@@ -1,10 +1,12 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     typeUtils = require("../core/utils/type"),
     translator = require("../animation/translator"),
     fitIntoRange = require("../core/utils/math").fitIntoRange,
@@ -159,7 +161,7 @@ var Resizable = DOMComponent.inherit({
 
         var directions = handles === "all" ? ['top', 'bottom', 'left', 'right'] : handles.split(" ");
 
-        $.each(directions, (function(index, handleName) {
+        each(directions, (function(index, handleName) {
             this._renderHandle(handleName);
         }).bind(this));
 
@@ -191,7 +193,7 @@ var Resizable = DOMComponent.inherit({
         handlers[DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
         handlers[DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
 
-        $handle.on(handlers, {
+        eventsEngine.on($handle, handlers, {
             direction: "both",
             immediate: true
         });

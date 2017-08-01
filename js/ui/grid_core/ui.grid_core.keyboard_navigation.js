@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     core = require("./ui.grid_core.modules"),
     isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     KeyboardProcessor = require("../widget/ui.keyboard_processor"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer");
@@ -66,7 +68,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._testInteractiveElement = $focusedElement;
         ///#ENDDEBUG
 
-        $focusedElement.focus();
+        eventsEngine.trigger($focusedElement, "focus");
     },
 
     _updateFocus: function() {
@@ -87,7 +89,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                             that._focusInteractiveElement.bind(that)($cell);
                         }
                     } else {
-                        $cell.focus();
+                        eventsEngine.trigger($cell, "focus");
                     }
                 });
             }
@@ -111,7 +113,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(!this._editingController.isEditing()) {
                 this._applyTabIndexToElement(data.view.element());
                 data.view.element().find(".dx-row > td[tabIndex]").removeAttr("tabIndex");
-                $cell.focus();
+                eventsEngine.trigger($cell, "focus");
             }
         } else {
             this._resetFocusedCell();
@@ -124,19 +126,19 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         that._focusedViews = [];
 
-        $.each(VIEWS, function(key, viewName) {
+        each(VIEWS, function(key, viewName) {
             var view = that.getView(viewName);
             if(view && view.isVisible()) {
                 that._focusedViews.push(view);
             }
         });
 
-        $.each(that._focusedViews, function(index, view) {
+        each(that._focusedViews, function(index, view) {
             if(view) {
                 view.renderCompleted.add(function() {
                     var $element = view.element();
-                    $element.off(eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-                    $element.on(eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " td", {
+                    eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
+                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " td", {
                         viewIndex: index,
                         view: view
                     }, clickAction);
@@ -284,7 +286,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
         if($focusElement) {
             this._applyTabIndexToElement($focusElement);
-            $focusElement.focus();
+            eventsEngine.trigger($focusElement, "focus");
         }
 
         this.getController("editorFactory").focus($focusElement);
@@ -411,7 +413,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
                     var $rowsView = that.getView("rowsView").element();
                     that._applyTabIndexToElement($rowsView);
-                    $rowsView.focus();
+                    eventsEngine.trigger($rowsView, "focus");
 
                     that._focusedCellPosition.rowIndex = rowIndex;
                     that._focusedCellPosition.columnIndex = columnIndex;
@@ -666,7 +668,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _isLastRow: function(rowIndex) {
         if(this._isVirtualScrolling()) {
-            return rowIndex === this._dataController.totalItemsCount() - 1;
+            return rowIndex >= this._dataController.totalItemsCount() - 1;
         }
         return rowIndex === this.getController("data").items().length - 1;
     },
@@ -846,7 +848,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             that.createAction("onKeyDown");
 
-            $(document).on(eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), that._documentClickHandler);
+            eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), that._documentClickHandler);
         }
     },
 
@@ -887,7 +889,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _getFocusedViewByCondition: function(conditionFunction) {
         var focusView;
 
-        $.each(this._focusedViews, function(index, view) {
+        each(this._focusedViews, function(index, view) {
             if(conditionFunction(view)) {
                 focusView = {
                     viewIndex: index,
@@ -938,7 +940,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._focusedView = null;
         this._focusedViews = null;
         this._keyDownProcessor && this._keyDownProcessor.dispose();
-        $(document).off(eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
+        eventsEngine.off(document, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
     }
 });
 

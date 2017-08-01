@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var eventsEngine = require("../events/core/events_engine"),
     Class = require("../core/class"),
     abstract = Class.abstract,
     errors = require("./errors").errors,
@@ -19,7 +19,7 @@ var LocalStoreBackend = Class.inherit({
         if(!immediate) {
             var saveProxy = this.save.bind(this);
             setInterval(saveProxy, flushInterval);
-            $(window).on("beforeunload", saveProxy);
+            eventsEngine.on(window, "beforeunload", saveProxy);
             if(window.cordova) {
                 document.addEventListener("pause", saveProxy, false);
             }

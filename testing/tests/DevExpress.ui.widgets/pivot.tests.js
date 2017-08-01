@@ -730,7 +730,7 @@ QUnit.test("selected index should not be changed by click on item", function(ass
         }),
         pivot = $pivot.dxPivot("instance");
 
-    pivot.itemElements().eq(1).trigger("dxclick");
+    $(pivot.itemElements()).eq(1).trigger("dxclick");
     assert.equal(pivot.option("selectedIndex"), 0, "selected index not changed");
 });
 

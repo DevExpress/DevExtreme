@@ -1,8 +1,8 @@
 "use strict";
 
 //there are pie, doughnut
-var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
+var noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     scatterSeries = require("./scatter_series"),
     vizUtils = require("../core/utils"),
     extend = require("../../core/utils/extend").extend,
@@ -11,7 +11,7 @@ var $ = require("../../core/renderer"),
     barSeries = require("./bar_series").chart.bar,
 
     _extend = extend,
-    _each = $.each,
+    _each = each,
     _noop = noop,
 
     _map = vizUtils.map,
@@ -35,6 +35,7 @@ exports.pie = _extend({}, barSeries, {
         !point.isVisible() && point.setInvisibility();
         point.isSelected() && legendCallback();
     },
+
     adjustLabels: function() {
         var that = this,
             points = that._points || [],
@@ -77,18 +78,16 @@ exports.pie = _extend({}, barSeries, {
         chartScatterSeries._prepareSeriesToDrawing.call(this);
     },
 
-    drawLabelsWOPoints: function(translators) {
-        var that = this,
-            options = that._options,
-            points = that._points || [];
+    drawLabelsWOPoints: function() {
+        var that = this;
 
-        if(options.label.position === INSIDE) {
+        if(that._options.label.position === INSIDE) {
             return false;
         }
 
         that._labelsGroup.append(that._extGroups.labelsGroup);
-        _each(points, function(_, point) {
-            point.drawLabel(translators);
+        (that._points || []).forEach(function(point) {
+            point.drawLabel();
         });
 
         return true;

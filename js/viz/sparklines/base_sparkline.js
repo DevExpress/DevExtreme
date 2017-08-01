@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var eventsEngine = require("../../events/core/events_engine"),
     isFunction = require("../../core/utils/type").isFunction,
     BaseWidget = require("../core/base_widget"),
     extend = require("../../core/utils/extend").extend,
@@ -49,6 +49,22 @@ function generateCustomizeTooltipCallback(customizeTooltip, fontOptions, rtlEnab
     }
 }
 
+function createAxis(isHorizontal) {
+    var translator = new translator2DModule.Translator2D({}, {}, { isHorizontal: !!isHorizontal });
+
+    return {
+        getTranslator: function() {
+            return translator;
+        },
+        update: function(range, canvas) {
+            translator.update(range, canvas);
+        },
+        getViewport: function() {
+            return undefined;
+        }
+    };
+}
+
 var BaseSparkline = BaseWidget.inherit({
     _setDeprecatedOptions: function() {
         this.callBase();
@@ -70,6 +86,9 @@ var BaseSparkline = BaseWidget.inherit({
         that._tooltipTracker.attr({ "pointer-events": "visible" });
         that._createHtmlElements();
         that._initTooltipEvents();
+
+        that._argumentAxis = createAxis(true);
+        that._valueAxis = createAxis();
     },
 
     _getDefaultSize: function() {
@@ -102,24 +121,20 @@ var BaseSparkline = BaseWidget.inherit({
             that._tooltip.hide();
         }
         that._cleanWidgetElements();
-        that._cleanTranslators();
         that._updateWidgetElements();
         that._drawWidgetElements();
     },
 
     _updateWidgetElements: function() {
         this._updateRange();
-        this._updateTranslator();
+
+        this._argumentAxis.update(this._ranges.arg, this._canvas);
+        this._valueAxis.update(this._ranges.val, this._canvas);
     },
 
     _applySize: function(rect) {
         this._allOptions.size = { width: rect[2] - rect[0], height: rect[3] - rect[1] };
         this._change(["UPDATE"]);
-    },
-
-    _cleanTranslators: function() {
-        this._translatorX = null;
-        this._translatorY = null;
     },
 
     _setupResizeHandler: _noop,
@@ -190,15 +205,6 @@ var BaseSparkline = BaseWidget.inherit({
 
         that._tooltipTracker.off();
         that._disposeCallbacks();
-    },
-
-    _updateTranslator: function() {
-        var that = this,
-            canvas = this._canvas,
-            ranges = this._ranges;
-
-        that._translatorX = new translator2DModule.Translator2D(ranges.arg, canvas, { isHorizontal: true });
-        that._translatorY = new translator2DModule.Translator2D(ranges.val, canvas);
     },
 
     _getTooltip: function() {
@@ -298,7 +304,7 @@ var touchEvents = {
     "touchstart.sparkline-tooltip": touchStartTooltipProcessing
 };
 
-$(document).on({
+eventsEngine.on(document, {
     "pointerdown.sparkline-tooltip": function() {
         isPointerDownCalled = true;
         touchStartDocumentProcessing();

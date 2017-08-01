@@ -1,10 +1,13 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
+    dataUtils = require("../../core/element_data"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     devices = require("../../core/devices"),
@@ -118,7 +121,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         //T138469
         if(browser.mozilla) {
-            $table.on("mousedown", "td", function(e) {
+            eventsEngine.on($table, "mousedown", "td", function(e) {
                 if(e.ctrlKey) {
                     e.preventDefault();
                 }
@@ -126,7 +129,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
 
         if(that.option("cellHintEnabled")) {
-            $table.on("mousemove", ".dx-row > td", this.createAction(function(args) {
+            eventsEngine.on($table, "mousemove", ".dx-row > td", this.createAction(function(args) {
                 var e = args.jQueryEvent,
                     $element = $(e.target),
                     $cell = $(e.currentTarget),
@@ -181,18 +184,18 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             return resultOptions;
         };
 
-        $table.on("mouseover", ".dx-row > td", function(e) {
+        eventsEngine.on($table, "mouseover", ".dx-row > td", function(e) {
             that.executeAction("onCellHoverChanged", getOptions(e));
         });
-        $table.on("mouseout", ".dx-row > td", function(e) {
+        eventsEngine.on($table, "mouseout", ".dx-row > td", function(e) {
             that.executeAction("onCellHoverChanged", getOptions(e));
         });
 
-        $table.on(clickEvent.name, ".dx-row > td", function(e) {
+        eventsEngine.on($table, clickEvent.name, ".dx-row > td", function(e) {
             that.executeAction("onCellClick", getOptions(e));
         });
 
-        $table.on(clickEvent.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
+        eventsEngine.on($table, clickEvent.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
             var jQueryEvent = e.jQueryEvent;
 
             if(!$(jQueryEvent.target).closest("a").length) {
@@ -436,7 +439,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _rowPrepared: function($row, options) {
-        $.data($row.get(0), "options", options);
+        dataUtils.data($row.get(0), "options", options);
 
         options.rowElement = $row;
         this.executeAction("onRowPrepared", options);
@@ -447,7 +450,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(gridCoreUtils.checkChanges(optionNames, ["width", "visibleWidth"])) {
             var visibleColumns = this._columnsController.getVisibleColumns();
-            var widths = $.map(visibleColumns, function(column) { return column.visibleWidth || column.width || "auto"; });
+            var widths = iteratorUtils.map(visibleColumns, function(column) { return column.visibleWidth || column.width || "auto"; });
 
             this.setColumnWidths(widths);
             return;
@@ -531,14 +534,16 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var that = this,
             $scrollContainer;
 
-        $scrollContainer = $("<div/>")
-            .on("scroll", function() {
-                !that._skipScrollChanged && that.scrollChanged.fire({
-                    left: $scrollContainer.scrollLeft()
-                }, that.name);
-                that._skipScrollChanged = false;
-            })
-            .addClass(that.addWidgetPrefix(CONTENT_CLASS))
+        $scrollContainer = $("<div/>");
+
+        eventsEngine.on($scrollContainer, "scroll", function() {
+            !that._skipScrollChanged && that.scrollChanged.fire({
+                left: $scrollContainer.scrollLeft()
+            }, that.name);
+            that._skipScrollChanged = false;
+        });
+
+        $scrollContainer.addClass(that.addWidgetPrefix(CONTENT_CLASS))
             .addClass(that.addWidgetPrefix(SCROLL_CONTAINER_CLASS))
             .append($table)
             .appendTo(that.element());
@@ -559,7 +564,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             clientRect;
 
         if($cellElements) {
-            $.each($cellElements, function(index, item) {
+            iteratorUtils.each($cellElements, function(index, item) {
                 width = item.offsetWidth;
                 if(item.getBoundingClientRect) {
                     clientRect = item.getBoundingClientRect();
@@ -678,7 +683,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $rowElement = $(),
             $tableElements = that.getTableElements();
 
-        $.each($tableElements, function(_, tableElement) {
+        iteratorUtils.each($tableElements, function(_, tableElement) {
             $rowElement = $rowElement.add(that._getRowElements($(tableElement)).eq(rowIndex));
         });
 

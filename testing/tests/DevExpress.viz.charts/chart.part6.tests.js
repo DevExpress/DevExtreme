@@ -2,7 +2,8 @@
 
 var $ = require("jquery"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
-    commons = require("./chartParts/commons.js");
+    commons = require("./chartParts/commons.js"),
+    multiAxesSynchronizer = require("viz/chart_components/multi_axes_synchronizer");
 
 /* global MockSeries, seriesMockData */
 require("../../helpers/chartMocks.js");
@@ -81,7 +82,6 @@ QUnit.test("change dataSource only. render call", function(assert) {
             dataSource: dataSource1
         });
     chart._doRender = function() {
-        clearTimeout(chart._delayedRedraw);
         this._renderCalled = true;
     };
     this.validateData.reset();
@@ -94,6 +94,27 @@ QUnit.test("change dataSource only. render call", function(assert) {
     assert.ok(!("_seriesInitializing" in chart));
     assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
     assert.strictEqual(this.validateData.callCount, 1, "validation");
+});
+
+//T535468
+QUnit.test("change dataSource after zoomArgument with gesture and useAggregation", function(assert) {
+    var stubSeries = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    seriesMockData.series.push(stubSeries, stubSeries1);
+    var dataSource = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }],
+        chartOptions = {
+            useAggregation: true,
+            series: [{ type: "line" }],
+            dataSource: dataSource,
+            argumentAxis: { visible: true }
+        },
+        chart = this.createChart(chartOptions);
+
+    //act
+    chart.zoomArgument(2, 3, true);
+    chart.option(chartOptions);
+
+    assert.ok(true);
 });
 
 QUnit.test("change series options only - populateSeries", function(assert) {
@@ -168,34 +189,6 @@ QUnit.test("change series options only", function(assert) {
     assert.ok(!chart.horizontalAxesDisposed, "Horizontal axes should not be disposed");
     assert.ok(!chart.verticalAxesDisposed, "Vertical axes should not be disposed");
     assert.strictEqual(this.validateData.callCount, 1, "validation");
-});
-
-QUnit.test("change zoomingMode and scrollingMode option only", function(assert) {
-    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1);
-    var dataSource1 = [{ x: 1, y: 1 }, { x: 2, y: 2 }, { x: 3, y: 3 }];
-
-
-    var chart = this.createChart({
-        series: [
-            { name: "First series", type: "line" }
-        ],
-        dataSource: dataSource1,
-        zoomingMode: "all",
-        scrollingMode: "all"
-    });
-    commons.getTrackerStub().stub("update").reset();
-    this.validateData.reset();
-    chart._themeManager.getOptions.withArgs("scrollingMode").returns("none");
-    chart._themeManager.getOptions.withArgs("zoomingMode").returns("none");
-    //Act
-    chart.option({
-        scrollingMode: "none",
-        zoomingMode: "none",
-    });
-    //Assert
-    assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].zoomingMode, "none", "new zoomingMode");
-    assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].scrollingMode, "none", "new scrollingMode");
 });
 
 QUnit.test("change rotated option only", function(assert) {
@@ -327,7 +320,6 @@ QUnit.test("change series options only. render called", function(assert) {
         ]
     });
     chart._doRender = function() {
-        clearTimeout(chart._delayedRedraw);
         this._renderCalled = true;
     };
     $.each(chart.series, function(_, series) {
@@ -354,49 +346,6 @@ QUnit.test("change series options only. render called", function(assert) {
     assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
-QUnit.test("change title option only", function(assert) {
-    //arrange
-    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
-    seriesMockData.series.push(stubSeries1, stubSeries2);
-    var chart = this.createChart({
-        title: {
-            text: "original",
-            subtitle: {}
-        },
-        series: { name: "series1", type: "line" }
-    });
-    chart._doRefresh = function() {
-        clearTimeout(chart._delayedRedraw);
-        this._refreshCalled = true;
-    };
-
-    chart._dataSourceChangedHandler = function() {
-        this._dataSourceChangedHandlerCalled = true;
-    };
-    chart._init = function() {
-        this._InitCalled = true;
-    };
-    $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
-    $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
-    this.validateData.reset();
-    chart.seriesFamilies[0].adjustSeriesValues.reset();
-    //Act
-    chart.option({
-        title: "changed title",
-        subtitle: {}
-    });
-    //assert
-    assert.ok(!chart._dataSourceChangedHandlerCalled, "data source changed");
-    assert.ok(chart._refreshCalled, "refresh");
-    assert.ok(!chart._initCalled, "init");
-    assert.ok(!chart.seriesDisposed, "Series should not be disposed");
-    assert.ok(!chart.seriesFamiliesDisposed, "SeriesFamilies should not be disposed");
-    assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
-    assert.strictEqual(this.validateData.callCount, 0, "validation");
-    assert.ok(!chart.seriesFamilies[0].adjustSeriesValues.called, "SeriesFamilies should not adjust series values");
-});
-
 QUnit.test("change containerBackgroundColor option only", function(assert) {
     var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
     var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
@@ -406,7 +355,6 @@ QUnit.test("change containerBackgroundColor option only", function(assert) {
         series: { name: "series1", type: "line" }
     });
     chart._doRefresh = function() {
-        clearTimeout(chart._delayedRedraw);
         this._refreshCalled = true;
     };
 
@@ -446,7 +394,6 @@ QUnit.test("change title option only. change title settings", function(assert) {
         }
     });
     chart._doRefresh = function() {
-        clearTimeout(chart._delayedRedraw);
         this._refreshCalled = true;
     };
 
@@ -587,7 +534,7 @@ QUnit.test("change valueAxis option", function(assert) {
     });
     //Assert
     assert.equal(chart.series.length, 1, "series length");
-    assert.equal(chart.series[0].axis, "axis1", "series axis");
+    assert.equal(chart.series[0].getValueAxis().name, "axis1", "series axis");
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
     assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
@@ -613,8 +560,7 @@ QUnit.test("change panes option only. no additional panes created", function(ass
         panes: [{ name: "pane1" }]
     });
     //assert
-    assert.ok(!chart.paneAxis["default"]);
-    assert.ok(chart.paneAxis["pane1"]["defaultAxisName0"], true);
+    assert.strictEqual(chart._valueAxes[0].pane, "pane1");
     assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
     assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
     assert.strictEqual(this.validateData.callCount, 1, "validation");
@@ -639,7 +585,6 @@ QUnit.test("change some options check calls", function(assert) {
 
     var renderOpts = [];
     chart._doRender = function(opt) {
-        clearTimeout(chart._delayedRedraw);
         renderOpts.push(opt);
     };
     //Act
@@ -665,7 +610,6 @@ QUnit.test("change some options", function(assert) {
         }]
     });
     chart._doRender = function() {
-        clearTimeout(chart._delayedRedraw);
         this._renderCalled = true;
     };
     this.themeManager.getOptions.withArgs("panes").returns([{ name: "top" }, { name: "bottom" }]);
@@ -711,6 +655,29 @@ QUnit.test("change useAggregation options", function(assert) {
     chart.option({ useAggregation: true });
     //assert
     assert.ok(chart._renderCalled);
+});
+
+QUnit.test("change container options", function(assert) {
+    var chart = this.createChart({});
+    chart._dataSourceChangedHandler = function() {
+        this._dataSourceChangedHandlerCalled = true;
+    };
+    this.themeManager.getOptions.withArgs("size").returns({});
+    //Act
+    this.validateData.reset();
+    this.$container.width(400);
+    this.$container.height(300);
+    //this.themeManager.getOptions.withArgs("size").returns({});
+    //chart.option({
+    //    valueAxis: [{ name: "axis1" }, { name: "axis2" }],
+    //    panes: [{ name: "top" }, { name: "bottom" }]
+    //});
+    chart.render();
+    //assert
+    assert.equal(chart.getSize().width, 400);
+    assert.equal(chart.getSize().height, 300);
+
+    //assert.strictEqual(this.validateData.callCount, 1, "validation");
 });
 
 QUnit.test("change container options. Size was set", function(assert) {
@@ -865,7 +832,6 @@ QUnit.test("animation option changed", function(assert) {
     });
     var chartReRendered = false;
     chart._render = function() {
-        clearTimeout(chart._delayedRedraw);
         chartReRendered = true;
     };
     //assert
@@ -1013,7 +979,6 @@ QUnit.test("SeriesTemplate. render called", function(assert) {
     seriesMockData.series.push(new MockSeries(), new MockSeries(), new MockSeries());
 
     chart._doRender = function() {
-        clearTimeout(chart._delayedRedraw);
         this._renderCalled = true;
     };
     this.themeManager.getOptions.withArgs("seriesTemplate").returns({ nameField: "series", customizeSeries: function(sName) { return { type: "spline-" + sName }; } });
@@ -1101,6 +1066,318 @@ QUnit.test("'done' event is triggered after all '_render' calls when async serie
     });
 
     assert.ok(onDone.lastCall.calledAfter(commons.getTrackerStub().stub("update").lastCall), "correct order");
+});
+
+QUnit.module("Change options - force render, series and axes are not recreated", commons.environment);
+
+QUnit.test("zoomingMode option", function(assert) {
+    var stubSeries1 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1);
+
+    var chart = this.createChart({
+        series: [
+            { type: "line" }
+        ],
+        zoomingMode: "all"
+    });
+    commons.getTrackerStub().stub("update").reset();
+    chart._themeManager.getOptions.withArgs("zoomingMode").returns("none");
+
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+    //Act
+    chart.option({
+        zoomingMode: "none"
+    });
+    //Assert
+    assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].zoomingMode, "none", "new zoomingMode");
+
+    assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("scrollingMode option", function(assert) {
+    var stubSeries1 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1);
+
+    var chart = this.createChart({
+        series: [
+            { type: "line" }
+        ],
+        scrollingMode: "all"
+    });
+    commons.getTrackerStub().stub("update").reset();
+    chart._themeManager.getOptions.withArgs("scrollingMode").returns("none");
+
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+    //Act
+    chart.option({
+        scrollingMode: "none"
+    });
+    //Assert
+    assert.strictEqual(commons.getTrackerStub().stub("update").lastCall.args[0].scrollingMode, "none", "new scrollingMode");
+
+    assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("title option", function(assert) {
+    //arrange
+    var stubSeries1 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1);
+    var chart = this.createChart({
+        title: {
+            text: "original"
+        },
+        series: { type: "line" }
+    });
+    chart._reinit = function() {
+        this._reinitCalled = true;
+    };
+
+    chart._forceRender = function() {
+        this._forceRenderCalled = true;
+    };
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+
+    //Act
+    chart.option({
+        title: "changed title"
+    });
+    //assert
+    assert.equal(chart._reinitCalled, undefined, "reinit");
+    assert.equal(chart._forceRenderCalled, true, "force render");
+
+    assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("adaptiveLayout option", function(assert) {
+    var stubSeries1 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1);
+    var chart = this.createChart({
+        adaptiveLayout: {
+            width: 20,
+            height: 30
+        },
+        series: { type: "line" }
+    });
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+
+    this.themeManager.getOptions.withArgs("adaptiveLayout").returns({ width: "someWidth", height: "someHeight" });
+
+    chart.option("adaptiveLayout", { width: "someWidth", height: "someHeight" });
+
+    assert.deepEqual(this.layoutManager.setOptions.lastCall.args, [{ width: "someWidth", height: "someHeight" }]);
+
+    assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("crosshair option", function(assert) {
+    var stubSeries1 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1);
+    var chart = this.createChart({
+        crosshair: { enabled: false },
+        series: { type: "line" }
+    });
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+
+    this.themeManager.getOptions.withArgs("crosshair").returns({ enabled: true });
+
+    chart.option({ crosshair: { enabled: true } });
+
+    assert.strictEqual(commons.getTrackerStub().update.lastCall.args[0].crosshair, chart._crosshair);
+
+    assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("adjustOnZoom option", function(assert) {
+    var stubSeries1 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1);
+
+    stubSeries1.getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    var chart = this.createChart({
+        useAggregation: true,
+        adjustOnZoom: false,
+        series: [{
+            type: "line"
+        }]
+    });
+
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+    this.themeManager.getOptions.withArgs("adjustOnZoom").returns(true);
+
+    //act
+    chart.option({
+        adjustOnZoom: true
+    });
+
+    //assert
+    assert.strictEqual(stubSeries1.getValueAxis().zoom.callCount, 1);
+    assert.deepEqual(stubSeries1.getValueAxis().zoom.lastCall.args, [10, 15], "zoom args");
+    assert.ok(stubSeries1.getViewport.calledAfter(stubSeries1.resamplePoints));
+
+    assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.module("Change options - recreate series but not axes", commons.environment);
+
+QUnit.test("pointSelectionMode option", function(assert) {
+    var stubSeries1 = new MockSeries({}),
+        stubSeries2 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+
+    var chart = this.createChart({
+        pointSelectionMode: "point-selection-mode",
+        series: [{
+            type: "line"
+        }]
+    });
+
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+    this.themeManager.getOptions.withArgs("pointSelectionMode").returns("new-point-selection-mode");
+
+    //act
+    chart.option({
+        pointSelectionMode: "new-point-selection-mode"
+    });
+
+    //assert
+    assert.equal(commons.getTrackerStub().stub("update").lastCall.args[0].pointSelectionMode, "new-point-selection-mode");
+    assert.equal(chart.getAllSeries()[0].renderSettings.commonSeriesModes.pointSelectionMode, "new-point-selection-mode");
+
+    assert.ok(series !== chart.getAllSeries()[0], "Series should be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("seriesSelectionMode option", function(assert) {
+    var stubSeries1 = new MockSeries({}),
+        stubSeries2 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+
+    var chart = this.createChart({
+        seriesSelectionMode: "series-selection-mode",
+        series: [{
+            type: "line"
+        }]
+    });
+
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+    this.themeManager.getOptions.withArgs("seriesSelectionMode").returns("new-series-selection-mode");
+
+    //act
+    chart.option({
+        seriesSelectionMode: "new-series-selection-mode"
+    });
+
+    //assert
+    assert.equal(commons.getTrackerStub().stub("update").lastCall.args[0].seriesSelectionMode, "new-series-selection-mode");
+    assert.equal(chart.getAllSeries()[0].renderSettings.commonSeriesModes.seriesSelectionMode, "new-series-selection-mode");
+
+    assert.ok(series !== chart.getAllSeries()[0], "Series should be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("useAggregation option", function(assert) {
+    var stubSeries1 = new MockSeries({}),
+        stubSeries2 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+
+    stubSeries2.getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    var chart = this.createChart({
+        useAggregation: false,
+        series: [{
+            type: "line"
+        }]
+    });
+
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+
+    //act
+    chart.option({
+        useAggregation: true
+    });
+
+    //assert
+    assert.equal(stubSeries2.resamplePoints.callCount, 1);
+
+    assert.ok(series !== chart.getAllSeries()[0], "Series should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+});
+
+QUnit.test("synchronizeMultiAxes option", function(assert) {
+    var stubSeries1 = new MockSeries({}),
+        stubSeries2 = new MockSeries({});
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+
+    multiAxesSynchronizer.synchronize = sinon.spy();
+
+    stubSeries2.getViewport.returns({
+        min: 10,
+        max: 15
+    });
+
+    var chart = this.createChart({
+        synchronizeMultiAxes: false,
+        series: [{
+            type: "line"
+        }]
+    });
+
+    this.themeManager.getOptions.withArgs("synchronizeMultiAxes").returns(true);
+
+    var series = chart.getAllSeries()[0],
+        valAxis = chart._valueAxes[0],
+        argAxis = chart._argumentAxes[0];
+
+    //act
+    chart.option({
+        synchronizeMultiAxes: true
+    });
+
+    //assert
+    assert.equal(multiAxesSynchronizer.synchronize.callCount, 1);
+
+    assert.ok(series !== chart.getAllSeries()[0], "Series should not be recreated");
+    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
 });
 
 QUnit.module("Change Strips of axes. Q499381", $.extend({}, commons.environment, {

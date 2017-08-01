@@ -4,6 +4,7 @@ var $ = require("jquery"),
     fx = require("animation/fx");
 
 require("ui/progress_bar");
+require("common.css!");
 
 QUnit.testStart(function() {
     var markup =

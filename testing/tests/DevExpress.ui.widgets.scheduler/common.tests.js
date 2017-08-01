@@ -299,7 +299,7 @@ QUnit.testStart(function() {
             this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
             this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
 
-            var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+            var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
             assert.equal($appointments.length, 3, "All appts are rendered");
         } else {
             assert.ok(true);
@@ -327,7 +327,7 @@ QUnit.testStart(function() {
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 3, 30), endDate: new Date(2015, 1, 9, 4), text: "second" });
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 19), endDate: new Date(2015, 1, 9, 19, 30), text: "third" });
 
-        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
         assert.equal($appointments.length, 3, "All appts are rendered");
     });
 
@@ -358,7 +358,7 @@ QUnit.testStart(function() {
             this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
             this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
 
-            var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+            var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
             assert.equal($appointments.length, 3, "All appts are rendered");
         } else {
             assert.ok(true);
@@ -390,7 +390,7 @@ QUnit.testStart(function() {
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 3, 30), endDate: new Date(2015, 1, 9, 4), text: "second" });
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 19), endDate: new Date(2015, 1, 9, 19, 30), text: "third" });
 
-        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
         assert.equal($appointments.length, 3, "All appts are rendered");
     });
 
@@ -852,7 +852,7 @@ QUnit.testStart(function() {
         var appointments = this.instance.getAppointmentsInstance(),
             focusSpy = sinon.spy(appointments, "focus");
 
-        this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick").trigger("dxclick");
+        $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick").trigger("dxclick");
 
         this.instance.focus();
 
@@ -1419,11 +1419,11 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9)
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").eq(0)),
             initialPosition = translator.locate($appointment);
 
 
-        this.instance.element().find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+        $(this.instance.element().find(".dx-scheduler-date-table-cell").eq(5)).trigger(dragEvents.enter);
 
         pointerMock($appointment)
             .start()
@@ -1431,7 +1431,7 @@ QUnit.testStart(function() {
             .move(initialPosition.left + 10, initialPosition.top + 100)
             .up();
 
-        $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+        $appointment = $(this.instance.element().find(".dx-scheduler-appointment").eq(0));
         assert.deepEqual(translator.locate($appointment), initialPosition, "Appointments position is OK");
     });
 
@@ -1445,7 +1445,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9)
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").eq(0)),
             initialHeight = $appointment.outerHeight(),
             cellHeight = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
@@ -1467,7 +1467,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9)
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").eq(0)),
             initialWidth = $appointment.outerWidth(),
             cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
@@ -1488,7 +1488,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9)
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").eq(0)),
             initialWidth = $appointment.outerWidth(),
             cellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth();
 
@@ -1509,7 +1509,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9)
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").eq(0)),
             initialWidth = $appointment.outerWidth(),
             cellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth();
 
@@ -1530,7 +1530,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9)
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").eq(0)),
             initialLeftPosition = translator.locate($appointment).left,
             cellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
             pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-left").eq(0)).start();
@@ -1551,7 +1551,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9)
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").eq(0)),
             initialTopPosition = translator.locate($appointment).top,
             cellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
             pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-top").eq(0)).start();
@@ -2016,8 +2016,8 @@ QUnit.testStart(function() {
             }
         });
 
-        var $item = this.instance.element().find(".dx-scheduler-appointment").eq(0);
-        $item.trigger("dxclick");
+        var $item = $(this.instance.element().find(".dx-scheduler-appointment").eq(0));
+        $($item).trigger("dxclick");
     });
 
     QUnit.test("Args of onAppointmentClick should contain data about particular appt", function(assert) {
@@ -2046,7 +2046,7 @@ QUnit.testStart(function() {
             }
         });
 
-        this.instance.element().find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+        $(this.instance.element().find(".dx-scheduler-appointment").eq(1)).trigger("dxclick");
     });
 
     QUnit.test("Args of onAppointmentClick/Rendered should contain data about particular grouped appt", function(assert) {
@@ -2104,7 +2104,7 @@ QUnit.testStart(function() {
             }
         });
 
-        this.instance.element().find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+        $(this.instance.element().find(".dx-scheduler-appointment").eq(1)).trigger("dxclick");
     });
 
     QUnit.test("Args of onAppointmentClick should contain data about particular grouped appt on Agenda view", function(assert) {
@@ -2162,7 +2162,7 @@ QUnit.testStart(function() {
             }
         });
 
-        this.instance.element().find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+        $(this.instance.element().find(".dx-scheduler-appointment").eq(1)).trigger("dxclick");
     });
 
     QUnit.test("Cell click option should be passed to scheduler", function(assert) {
@@ -2256,7 +2256,7 @@ QUnit.testStart(function() {
             width: 800,
             dataSource: dataSource,
             onContentReady: function(e) {
-                var $element = e.component.element(),
+                var $element = $(e.component.element()),
                     $header = $element.find(".dx-scheduler-header"),
                     $workSpace = $element.find(".dx-scheduler-work-space"),
                     $appointment = $element.find(".dx-scheduler-appointment"),
@@ -2282,7 +2282,7 @@ QUnit.testStart(function() {
         });
 
         this.instance.option("onContentReady", function(e) {
-            var $element = e.component.element(),
+            var $element = $(e.component.element()),
                 $appointment = $element.find(".dx-scheduler-appointment"),
                 appointmentPosition = translator.locate($appointment);
 
@@ -2312,7 +2312,7 @@ QUnit.testStart(function() {
         });
 
         this.instance.option("onContentReady", function(e) {
-            var $element = e.component.element(),
+            var $element = $(e.component.element()),
                 $appointment = $element.find(".dx-scheduler-appointment"),
                 appointmentPosition = translator.locate($appointment);
 
@@ -2341,7 +2341,7 @@ QUnit.testStart(function() {
         });
 
         this.instance.option("onContentReady", function(e) {
-            var $appointment = e.component.element().find(".dx-scheduler-appointment");
+            var $appointment = $(e.component.element().find(".dx-scheduler-appointment"));
             assert.equal($appointment.length, 0, "Appointment is not rendered");
         });
 
@@ -2596,7 +2596,7 @@ QUnit.testStart(function() {
             endDateExpr: "EndDate"
         });
 
-        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
 
         assert.equal($appointments.length, 1, "There is only one appt");
         assert.deepEqual($appointments.data("dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
@@ -2621,7 +2621,7 @@ QUnit.testStart(function() {
                 endDateExpr: "EndDate"
             });
 
-            var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+            var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
 
             assert.equal($appointments.length, 1, "There is only one appt");
             assert.deepEqual($appointments.data("dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
@@ -2751,7 +2751,7 @@ QUnit.testStart(function() {
             this.instance.option("width", 600);
             this.clock.tick();
 
-            var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+            var $appointment = $(this.instance.element().find(".dx-scheduler-appointment"));
             assert.roughEqual($appointment.position().left, 100, 1.001, "Appointment is rendered correctly");
         }
     });
@@ -2782,7 +2782,7 @@ QUnit.testStart(function() {
             useDropDownViewSwitcher: false
         });
 
-        var $header = this.instance.getHeader().element();
+        var $header = $(this.instance.getHeader().element());
 
         assert.equal($header.find(".dx-tab").eq(0).text(), "Test Day");
         assert.equal($header.find(".dx-tab").eq(1).text(), "Week");
@@ -3049,7 +3049,7 @@ QUnit.testStart(function() {
             currentView: "week"
         });
 
-        this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+        $(this.instance.element().find(".dx-scheduler-appointment").eq(0)).trigger("dxclick");
         this.clock.tick(300);
 
         assert.equal(countCallTemplate1, 0, "count call first template");

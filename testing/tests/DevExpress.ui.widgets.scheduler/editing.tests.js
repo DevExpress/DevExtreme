@@ -40,7 +40,7 @@ QUnit.test("Scheduler should have 'readonly' css class", function(assert) {
 QUnit.test("popup should not be shown  after click on focused cell", function(assert) {
     this.createInstance();
 
-    this.instance.element().find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown").trigger("dxclick");
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown").trigger("dxclick");
 
     assert.notOk($(".dx-scheduler-appointment-popup .dx-overlay-content").length, "Popup is not shown");
 
@@ -49,10 +49,10 @@ QUnit.test("popup should not be shown  after click on focused cell", function(as
 QUnit.test("popup should not be shown after press Enter", function(assert) {
     this.createInstance({ focusStateEnabled: true });
 
-    var $workSpace = this.instance.element().find(".dx-scheduler-work-space"),
+    var $workSpace = $(this.instance.element().find(".dx-scheduler-work-space")),
         keyboard = keyboardMock($workSpace);
 
-    $workSpace.trigger("focusin");
+    $($workSpace).trigger("focusin");
     keyboard.keyDown("enter");
 
     assert.notOk($(".dx-scheduler-appointment-popup .dx-overlay-content").length, "Popup is not shown");
@@ -89,7 +89,7 @@ QUnit.test("Delete button should not be rendered in details tooltip", function(a
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first()),
         itemData = $appointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
@@ -110,7 +110,7 @@ QUnit.test("Edit button should not be contain the 'pencil' icon", function(asser
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first();
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first());
 
     var itemData = $appointment.data("dxItemData");
 
@@ -271,7 +271,7 @@ QUnit.test("showAppointmentPopup method should not be called after click on focu
     });
     var spy = sinon.spy(this.instance, "showAppointmentPopup");
 
-    this.instance.element().find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown");
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown");
 
     assert.notOk(spy.called, "showAppointmentPopup is not called");
 
@@ -310,7 +310,7 @@ QUnit.test("Edit button should not be contain the 'pencil' icon if editing.allow
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first()),
         itemData = $appointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
@@ -337,14 +337,14 @@ QUnit.test("There is no need to check recurring appointment if editing.allowUpda
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first()),
         itemData = $appointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
 
     var $buttons = $(".dx-scheduler-appointment-tooltip-buttons .dx-button");
 
-    $buttons.eq(1).trigger("dxclick");
+    $($buttons.eq(1)).trigger("dxclick");
     assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered instead of recurrence tooltip");
 });
 
@@ -362,7 +362,7 @@ QUnit.test("Delete button should not exist if editing.allowUpdating is false", f
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first()),
         itemData = $appointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);

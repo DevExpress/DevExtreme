@@ -594,6 +594,15 @@ declare module DevExpress.ui {
         /** @docid dxTagBoxOptions_onSelectAllValueChanged */
         onSelectAllValueChanged?: Function;
 
+        /** @docid dxTagBoxOptions_onMultiTagPreparing */
+        onMultiTagPreparing?: Function;
+
+        /** @docid dxTagBoxOptions_maxDisplayedTags */
+        maxDisplayedTags?: number;
+
+        /** @docid dxTagBoxOptions_showMultiTagOnly */
+        showMultiTagOnly?: boolean;
+
         /** @docid dxTagBoxOptions_multiline */
         multiline?: boolean;
 
@@ -1807,6 +1816,9 @@ declare module DevExpress.ui {
         /** @docid dxDropDownBoxOptions_dropDownOptions */
         dropDownOptions?: DevExpress.ui.dxPopupOptions;
 
+        /** @docid dxDropDownBoxOptions_fieldTemplate */
+        fieldTemplate?: any;
+
         /** @docid dxDropDownBoxOptions_valueChangeEvent */
         valueChangeEvent?: string;
     }
@@ -1853,6 +1865,9 @@ declare module DevExpress.ui {
 
         /** @docid dxDateBoxOptions_interval */
         interval?: number;
+
+        /** @docid dxDateBoxOptions_disabledDates */
+        disabledDates?: any;
 
         /** @docid dxDateBoxOptions_maxZoomLevel */
         maxZoomLevel?: string;
@@ -1956,6 +1971,9 @@ declare module DevExpress.ui {
 
         /** @docid dxCalendarOptions_cellTemplate */
         cellTemplate?: any;
+
+        /** @docid dxCalendarOptions_disabledDates */
+        disabledDates?: any;
 
         /** @docid dxCalendarOptions_name */
         name?: string;
@@ -2171,7 +2189,6 @@ declare module DevExpress.ui {
 
         /** @docid_ignore dxAccordionItemTemplate_icon */
         /** @docid_ignore dxAccordionItemTemplate_iconSrc */
-        /** @docid_ignore dxAccordionEvents_ItemTitleClick */
 
         /** @docid dxAccordionMethods_collapseItem */
         collapseItem(index: number): JQueryPromise<dxAccordion>;

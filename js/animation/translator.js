@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var dataUtils = require("../core/element_data"),
     type = require("../core/utils/type").type;
 
 var TRANSLATOR_DATA_KEY = "dxTranslator",
@@ -46,7 +46,7 @@ var isPercentValue = function(value) {
 };
 
 var getTranslate = function($element) {
-    var result = $element.length ? $.data($element.get(0), TRANSLATOR_DATA_KEY) : null;
+    var result = $element.length ? dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY) : null;
 
     if(!result) {
         var transformValue = $element.css("transform") || getTranslateCss({ x: 0, y: 0 }),
@@ -79,13 +79,13 @@ var getTranslate = function($element) {
 
 var cacheTranslate = function($element, translate) {
     if($element.length) {
-        $.data($element.get(0), TRANSLATOR_DATA_KEY, translate);
+        dataUtils.data($element.get(0), TRANSLATOR_DATA_KEY, translate);
     }
 };
 
 var clearCache = function($element) {
     if($element.length) {
-        $.removeData($element.get(0), TRANSLATOR_DATA_KEY);
+        dataUtils.removeData($element.get(0), TRANSLATOR_DATA_KEY);
     }
 };
 

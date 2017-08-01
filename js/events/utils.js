@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     errors = require("../core/errors"),
     extend = require("../core/utils/extend").extend,
+    each = require("../core/utils/iterator").each,
     copyEvent = require("./core/hooks").copy;
 
 var eventSource = (function() {
@@ -17,7 +18,7 @@ var eventSource = (function() {
     return function(e) {
         var result = "other";
 
-        $.each(EVENT_SOURCES_REGEX, function(key) {
+        each(EVENT_SOURCES_REGEX, function(key) {
             if(this.test(e.type)) {
                 result = key;
                 return false;
@@ -137,7 +138,7 @@ var addNamespace = function(eventNames, namespace) {
         return addNamespace(eventNames.split(/\s+/g), namespace);
     }
 
-    $.each(eventNames, function(index, eventName) {
+    each(eventNames, function(index, eventName) {
         eventNames[index] = eventName + "." + namespace;
     });
 

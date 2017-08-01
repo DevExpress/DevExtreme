@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     messageLocalization = require("../../localization/message"),
     when = require("../../integration/jquery/deferred").when;
@@ -107,7 +108,7 @@ var ResizingController = modules.ViewController.inherit({
     _setVisibleWidths: function(visibleColumns, widths) {
         var columnsController = this._columnsController;
         columnsController.beginUpdate();
-        $.each(visibleColumns, function(index, column) {
+        each(visibleColumns, function(index, column) {
             var columnId = column.command ? "command:" + column.command : column.index;
             columnsController.columnOption(columnId, "visibleWidth", widths[index]);
         });
@@ -138,27 +139,27 @@ var ResizingController = modules.ViewController.inherit({
             normalizeWidthsByExpandColumns = function() {
                 var expandColumnWidth;
 
-                $.each(visibleColumns, function(index, column) {
+                each(visibleColumns, function(index, column) {
                     if(column.command === "expand") {
                         expandColumnWidth = resultWidths[index];
                     }
                 });
 
-                $.each(visibleColumns, function(index, column) {
+                each(visibleColumns, function(index, column) {
                     if(column.command === "expand" && expandColumnWidth) {
                         resultWidths[index] = expandColumnWidth;
                     }
                 });
             };
 
-        !needBestFit && $.each(visibleColumns, function(index, column) {
+        !needBestFit && each(visibleColumns, function(index, column) {
             if(column.width === "auto" || column.fixed) {
                 needBestFit = true;
                 return false;
             }
         });
 
-        $.each(visibleColumns, function(index, column) {
+        each(visibleColumns, function(index, column) {
             if(column.minWidth) {
                 hasMinWidth = true;
                 return false;
@@ -176,7 +177,7 @@ var ResizingController = modules.ViewController.inherit({
             if(needBestFit) {
                 resultWidths = that._getBestFitWidths();
 
-                $.each(visibleColumns, function(index, column) {
+                each(visibleColumns, function(index, column) {
                     var columnId = column.command ? "command:" + column.command : column.index;
                     columnsController.columnOption(columnId, "bestFitWidth", resultWidths[index], true);
                 });
@@ -184,7 +185,7 @@ var ResizingController = modules.ViewController.inherit({
                 resultWidths = that._getBestFitWidths();
             }
 
-            $.each(visibleColumns, function(index) {
+            each(visibleColumns, function(index) {
                 if(this.width !== "auto") {
                     if(this.width) {
                         resultWidths[index] = this.width;
@@ -227,7 +228,7 @@ var ResizingController = modules.ViewController.inherit({
             hasWidth = that._hasWidth,
             lastColumnIndex;
 
-        $.each(visibleColumns, function(index) {
+        each(visibleColumns, function(index) {
             var isMinWidthApplied = false,
                 isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH;
 
@@ -257,6 +258,7 @@ var ResizingController = modules.ViewController.inherit({
 
         if(!hasAutoWidth && resultWidths.length) {
             var contentWidth = that._rowsView.contentWidth(),
+                scrollbarWidth = that._rowsView.getScrollbarWidth(),
                 totalWidth = that._getTotalWidth(resultWidths, contentWidth);
 
             if(totalWidth <= contentWidth) {
@@ -268,7 +270,7 @@ var ResizingController = modules.ViewController.inherit({
                     resultWidths[lastColumnIndex] = "auto";
                     isColumnWidthsCorrected = true;
                     if(!hasWidth && !hasPercentWidth) {
-                        that._maxWidth = that.option("showBorders") ? totalWidth + 2 : totalWidth;
+                        that._maxWidth = totalWidth + scrollbarWidth + (that.option("showBorders") ? 2 : 0);
                         $element.css("max-width", that._maxWidth);
                     }
                 }
@@ -288,7 +290,7 @@ var ResizingController = modules.ViewController.inherit({
 
         if(!resultSizes.length) return;
 
-        $.each(visibleColumns, function(index) {
+        each(visibleColumns, function(index) {
             if(this.width || resultSizes[index] === HIDDEN_COLUMNS_WIDTH) {
                 unusedIndexes[index] = true;
                 unusedIndexes.length++;
@@ -434,7 +436,7 @@ var ResizingController = modules.ViewController.inherit({
         if(that.option("scrolling") && (that._hasHeight && rootElementHeight > 0 || maxHeightHappened)) {
             rowsViewHeight = rootElementHeight;
 
-            $.each(that.getViews(), function() {
+            each(that.getViews(), function() {
                 if(this.isVisible() && this.getHeight) {
                     rowsViewHeight -= this.getHeight();
                 }
@@ -469,7 +471,7 @@ var ResizingController = modules.ViewController.inherit({
                     rowsView.setScrollerSpacing(vScrollbarWidth, hScrollbarWidth);
                 });
 
-                $.each(VIEW_NAMES, function(index, viewName) {
+                each(VIEW_NAMES, function(index, viewName) {
                     var view = that.getView(viewName);
                     if(view) {
                         view.resize();
@@ -572,7 +574,7 @@ var GridView = modules.View.inherit({
     _renderViews: function($groupElement) {
         var that = this;
 
-        $.each(VIEW_NAMES, function(index, viewName) {
+        each(VIEW_NAMES, function(index, viewName) {
             var view = that.getView(viewName);
             if(view) {
                 view.render($groupElement);

@@ -1117,7 +1117,7 @@ function getJQueryEvent(options) {
         resizeController2._columnsSeparatorView.render($("#container2"));
 
         //act
-        resizeController1._columnsSeparatorView.element().trigger("dxpointerup");
+        $(resizeController1._columnsSeparatorView.element()).trigger("dxpointerup");
 
         //assert
         assert.ok(isEndResizingCalled);
@@ -3618,7 +3618,6 @@ function getJQueryEvent(options) {
         //arrange
         var testElement = $('#container'),
             controller = this.createDraggingHeaderViewController(),
-            offsetParameters,
             draggingHeader = new TestDraggingHeader(this.component);
 
         controller._rowsView = {};
@@ -3629,10 +3628,6 @@ function getJQueryEvent(options) {
 
         this.component._views.columnsSeparatorView.render(testElement);
         draggingHeader.render(testElement);
-
-        draggingHeader.element().offset = function(parameters) {
-            offsetParameters = parameters;
-        };
 
         draggingHeader.dragHeader({
             columnElement: $('<td/>'),
@@ -3662,13 +3657,14 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(offsetParameters, { left: -10007, top: 54 }, 'offset parameters');
+        var offset = draggingHeader.element().offset();
+        assert.equal(offset.left, -10007, 'offset left');
+        assert.equal(offset.top, 54, 'offset top');
     });
 
     QUnit.test('Move drag header for right side of root container', function(assert) {
         //arrange
         var testElement = $('#container'),
-            offsetParameters,
             controller = this.createDraggingHeaderViewController(),
             draggingHeader = new TestDraggingHeader(this.component);
 
@@ -3680,10 +3676,6 @@ function getJQueryEvent(options) {
 
         this.component._views.columnsSeparatorView.render(testElement);
         draggingHeader.render(testElement);
-
-        draggingHeader.element().offset = function(parameters) {
-            offsetParameters = parameters;
-        };
 
         draggingHeader.dragHeader({
             columnElement: $('<td />'),
@@ -3713,7 +3705,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(offsetParameters, { left: -9002, top: 54 }, 'offset parameters');
+        var offset = draggingHeader.element().offset();
+        assert.equal(offset.left, -9002, 'offset left');
+        assert.equal(offset.top, 54, 'offset top');
     });
 
     //B254315
@@ -4155,9 +4149,9 @@ function getJQueryEvent(options) {
         this.renderViews(testElement);
 
         $draggingHeader = controller._columnHeadersView.element().find("td").first();
-        $draggingHeader.trigger(dragEvents.start);
-        $draggingHeader.trigger(dragEvents.move);
-        $draggingHeader.trigger(dragEvents.end);
+        $($draggingHeader).trigger(dragEvents.start);
+        $($draggingHeader).trigger(dragEvents.move);
+        $($draggingHeader).trigger(dragEvents.end);
 
         assert.equal(controller._draggingHeaderView.callDragCounter, 1, 'drag start');
         assert.equal(controller._draggingHeaderView.callMoveCounter, 1, 'drag');
@@ -4261,14 +4255,14 @@ function getJQueryEvent(options) {
         that.renderViews($("#container2").height(500));
 
         //act
-        controller1._columnHeadersView.element().find("td").first().trigger(dragEvents.move + '.dxDataGridResizingReordering');
+        $(controller1._columnHeadersView.element().find("td").first()).trigger(dragEvents.move + '.dxDataGridResizingReordering');
 
         //assert
         assert.equal(moveHeaderDataSelfArgs.length, 1);
         assert.ok(moveHeaderDataSelfArgs[0] === controller1._draggingHeaderView);
 
         //act
-        controller2._columnHeadersView.element().find("td").first().trigger(dragEvents.move + '.dxDataGridResizingReordering');
+        $(controller2._columnHeadersView.element().find("td").first()).trigger(dragEvents.move + '.dxDataGridResizingReordering');
 
         //assert
         assert.equal(moveHeaderDataSelfArgs.length, 2);
@@ -4526,8 +4520,7 @@ function getJQueryEvent(options) {
 
     QUnit.test('Move drag group panel for left side of root container', function(assert) {
         //arrange
-        var testElement = $('#container'),
-            offsetParameters;
+        var testElement = $('#container');
 
         this.controller._rowsView = {};
         this.controller._rowsView.setRowsOpacity = function() { };
@@ -4535,10 +4528,6 @@ function getJQueryEvent(options) {
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
-
-        this.draggingHeaderView.element().offset = function(parameters) {
-            offsetParameters = parameters;
-        };
 
         this.draggingHeaderView.dragHeader({
             columnElement: $('<div/>'),
@@ -4568,13 +4557,14 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(offsetParameters, { left: -10007, top: 4 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, -10007, 'offset left');
+        assert.equal(offset.top, 4, 'offset top');
     });
 
     QUnit.test('Move drag group panel for right side of root container', function(assert) {
         //arrange
-        var testElement = $('#container'),
-            offsetParameters;
+        var testElement = $('#container');
 
         this.controller._rowsView = {};
         this.controller._rowsView.setRowsOpacity = function() { };
@@ -4582,10 +4572,6 @@ function getJQueryEvent(options) {
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
-
-        this.draggingHeaderView.element().offset = function(parameters) {
-            offsetParameters = parameters;
-        };
 
         this.draggingHeaderView.dragHeader({
             sourceLocation: 'group',
@@ -4615,7 +4601,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(offsetParameters, { left: -9002, top: 4 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, -9002, 'offset left');
+        assert.equal(offset.top, 4, 'offset top');
     });
 
     QUnit.test('Move drag header in empty group panel', function(assert) {
@@ -4687,8 +4675,7 @@ function getJQueryEvent(options) {
     QUnit.test("Dragging is not worked when column is resizing", function(assert) {
 
         //arrange
-        var testElement = $('#container'),
-            offsetParameters;
+        var testElement = $('#container');
 
         this.controller._rowsView = {};
         this.controller._rowsView.setRowsOpacity = function() { };
@@ -4696,10 +4683,6 @@ function getJQueryEvent(options) {
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
-
-        this.draggingHeaderView.element().offset = function(parameters) {
-            offsetParameters = parameters;
-        };
 
         this.draggingHeaderView.dragHeader({
             sourceLocation: 'group',
@@ -4730,7 +4713,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.ok(!offsetParameters, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, 0, 'offset left');
+        assert.equal(offset.top, 0, 'offset top');
     });
 
     QUnit.test('Block separator move in group panel when dragging left', function(assert) {
@@ -5626,8 +5611,7 @@ function getJQueryEvent(options) {
 
     QUnit.test('Move column chooser for down side of root container', function(assert) {
         //arrange
-        var testElement = $('#container'),
-            offsetParameters;
+        var testElement = $('#container');
 
         this.controller._rowsView = {};
         this.controller._rowsView.setRowsOpacity = function() { };
@@ -5635,10 +5619,6 @@ function getJQueryEvent(options) {
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
-
-        this.draggingHeaderView.element().offset = function(parameters) {
-            offsetParameters = parameters;
-        };
 
         this.draggingHeaderView.dragHeader({
             columnElement: $('<div/>'),
@@ -5668,13 +5648,14 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(offsetParameters, { left: -9802, top: -9301 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, -9802, 'offset left');
+        assert.equal(offset.top, -9301, 'offset top');
     });
 
     QUnit.test('Move column chooser for up side of root container', function(assert) {
         //arrange
-        var testElement = $('#container'),
-            offsetParameters;
+        var testElement = $('#container');
 
         this.controller._rowsView = {};
         this.controller._rowsView.setRowsOpacity = function() { };
@@ -5682,10 +5663,6 @@ function getJQueryEvent(options) {
 
         this.draggingHeaderView.render(testElement);
         this.blockSeparatorView.render(testElement);
-
-        this.draggingHeaderView.element().offset = function(parameters) {
-            offsetParameters = parameters;
-        };
 
         this.draggingHeaderView.dragHeader({
             columnElement: $('<div/>'),
@@ -5715,7 +5692,9 @@ function getJQueryEvent(options) {
         });
 
         //assert
-        assert.deepEqual(offsetParameters, { left: -9802, top: -9491 }, 'offset parameters');
+        var offset = this.draggingHeaderView.element().offset();
+        assert.equal(offset.left, -9802, 'offset left');
+        assert.equal(offset.top, -9491, 'offset top');
     });
 
     /* QUnit.test('Block separator move in column chooser when dragging down', function (assert) {

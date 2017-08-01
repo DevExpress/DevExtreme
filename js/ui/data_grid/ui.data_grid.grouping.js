@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     dataSourceAdapter = require("./ui.data_grid.data_source_adapter"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     devices = require("../../core/devices"),
     when = require("../../integration/jquery/deferred").when;
 
@@ -406,7 +407,7 @@ var GroupingHeaderPanelExtender = (function() {
 
             $groupPanel.empty();
 
-            $.each(groupColumns, function(index, groupColumn) {
+            each(groupColumns, function(index, groupColumn) {
                 that._createGroupPanelItem($groupPanel, groupColumn);
             });
         },

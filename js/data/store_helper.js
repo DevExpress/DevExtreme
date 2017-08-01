@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    grep = require("../core/utils/common").grep,
+var grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
+    each = require("../core/utils/iterator").each,
     arrayQuery = require("./array_query"),
     normalizeSortingInfo = require("./utils").normalizeSortingInfo;
 
@@ -22,7 +22,7 @@ function multiLevelGroup(query, groupInfo) {
 
 function arrangeSortingInfo(groupInfo, sortInfo) {
     var filteredGroup = [];
-    $.each(groupInfo, function(_, group) {
+    each(groupInfo, function(_, group) {
         var collision = grep(sortInfo, function(sort) {
             return group.selector === sort.selector;
         });
@@ -58,7 +58,7 @@ function queryByOptions(query, options, isCountQuery) {
             if(group) {
                 sort = arrangeSortingInfo(group, sort);
             }
-            $.each(sort, function(index) {
+            each(sort, function(index) {
                 query = query[index ? "thenBy" : "sortBy"](this.selector, this.desc);
             });
         }

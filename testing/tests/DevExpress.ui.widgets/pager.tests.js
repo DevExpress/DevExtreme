@@ -252,7 +252,7 @@ QUnit.test('Select page after click', function(assert) {
         instance = $pager.data("dxPager"),
         pagesElement;
 
-    instance._pages[4]._$page.trigger("dxclick");
+    $(instance._pages[4]._$page).trigger("dxclick");
 
     pagesElement = getPagesElement(testElement);
     assert.equal(pagesElement.length, 8, 'pages elements count');
@@ -320,7 +320,7 @@ QUnit.test('Change pages count', function(assert) {
         instance = $pager.data("dxPager"),
         pagesElement;
 
-    instance._pages[4]._$page.trigger("dxclick");
+    $(instance._pages[4]._$page).trigger("dxclick");
 
     pagesElement = getPagesElement(testElement);
     assert.equal(instance.selectedPage.value(), '5', 'selected page');
@@ -642,11 +642,11 @@ QUnit.test("Click on navigate buttons", function(assert) {
     };
 
     $button = $(".dx-next-button");
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     assert.equal(currentDirection, "next");
 
     $button = $(".dx-prev-button");
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     assert.equal(currentDirection, "prev");
 });
 
@@ -827,7 +827,7 @@ QUnit.test("Light mode. Change page index after clicked on the pages count eleme
     var editor = $(".dx-page-index").data("dxNumberBox"),
         $pagesCount = $(".dx-pages-count");
 
-    $pagesCount.trigger("dxclick");
+    $($pagesCount).trigger("dxclick");
 
     assert.equal($pagesCount.text(), "110", "pages count");
     assert.equal(editor.option("value"), 110, "value of editor in page index element");
@@ -1057,11 +1057,11 @@ QUnit.test("Light mode. Change page index via the navigation buttons", function(
     var $nextButton = $(".dx-next-button"),
         $prevButton = $(".dx-prev-button");
 
-    $nextButton.trigger("dxclick");
+    $($nextButton).trigger("dxclick");
 
     assert.equal(pageIndex, 2, "next page index");
 
-    $prevButton.trigger("dxclick");
+    $($prevButton).trigger("dxclick");
 
     assert.equal(pageIndex, 1, "prev page index");
 });
@@ -1377,11 +1377,11 @@ QUnit.test("Navigate buttons with rtl", function(assert) {
     };
 
     $button = $(".dx-next-button");
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     assert.equal(currentDirection, "prev");
 
     $button = $(".dx-prev-button");
-    $button.trigger("dxclick");
+    $($button).trigger("dxclick");
     assert.equal(currentDirection, "next");
 });
 

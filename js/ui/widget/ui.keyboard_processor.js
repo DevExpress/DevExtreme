@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     eventUtils = require("../../events/utils");
 
 var KeyboardProcessor = Class.inherit({
@@ -45,13 +47,13 @@ var KeyboardProcessor = Class.inherit({
             this._processFunction = function(e) {
                 _this.process(e);
             };
-            this._element.on(this._keydown, this._processFunction);
+            eventsEngine.on(this._element, this._keydown, this._processFunction);
         }
     },
 
     dispose: function() {
         if(this._element) {
-            this._element.off(this._keydown, this._processFunction);
+            eventsEngine.off(this._element, this._keydown, this._processFunction);
         }
         this._element = undefined;
         this._handler = undefined;
@@ -100,7 +102,7 @@ var KeyboardProcessor = Class.inherit({
         var handlerResult = this._handler && this._handler.call(this._context, args);
 
         if(handlerResult && this._childProcessors) {
-            $.each(this._childProcessors, function(index, childProcessor) {
+            each(this._childProcessors, function(index, childProcessor) {
                 childProcessor.process(e);
             });
         }

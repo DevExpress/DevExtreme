@@ -3,11 +3,13 @@
 var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     DataExpressionMixin = require("./editor/ui.data_expression"),
     commonUtils = require("../core/utils/common"),
+    map = require("../core/utils/iterator").map,
     isDefined = require("../core/utils/type").isDefined,
     selectors = require("./widget/jquery.selectors"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
     when = require("../integration/jquery/deferred").when,
     $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
     registerComponent = require("../core/component_registrator");
@@ -33,7 +35,7 @@ var DropDownBox = DropDownEditor.inherit({
                 var $tabbableElements = this._getTabbableElements(),
                     $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
-                $focusableElement && $focusableElement.focus();
+                $focusableElement && eventsEngine.trigger($focusableElement, "focus");
                 e.preventDefault();
             }
         });
@@ -91,6 +93,16 @@ var DropDownBox = DropDownEditor.inherit({
             dropDownOptions: {},
 
             /**
+             * @name dxDropDownBoxOptions_fieldTemplate
+             * @publicName fieldTemplate
+             * @type template
+             * @default null
+             * @type_function_param1 value:object
+             * @type_function_param2 fieldElement:jQuery
+             * @type_function_return string|Node|jQuery
+             */
+
+            /**
              * @name dxDropDownBoxOptions_maxLength
              * @publicName maxLength
              * @type string|number
@@ -132,7 +144,6 @@ var DropDownBox = DropDownEditor.inherit({
              * @type string
              * @default "change"
              */
-            valueChangeEvent: "change",
 
             valueFormat: function(value) {
                 return Array.isArray(value) ? value.join(", ") : value;
@@ -181,7 +192,7 @@ var DropDownBox = DropDownEditor.inherit({
 
         keys = Array.isArray(keys) ? keys : [keys];
 
-        var itemLoadDeferreds = $.map(keys, (function(key) {
+        var itemLoadDeferreds = map(keys, (function(key) {
             return this._loadItem(key).always((function(item) {
                 var displayValue = this._displayGetter(item);
                 if(isDefined(displayValue)) {
@@ -233,7 +244,7 @@ var DropDownBox = DropDownEditor.inherit({
 
         if(moveBackward || moveForward) {
             this.close();
-            this._input().focus();
+            eventsEngine.trigger(this._input(), "focus");
 
             if(moveBackward) {
                 e.originalEvent.preventDefault();
@@ -277,7 +288,7 @@ var DropDownBox = DropDownEditor.inherit({
     _popupShownHandler: function() {
         this.callBase();
         var $firstElement = this._getTabbableElements().first();
-        $firstElement.focus();
+        eventsEngine.trigger($firstElement, "focus");
     },
 
     _popupOptionChanged: function(args) {
@@ -301,6 +312,8 @@ var DropDownBox = DropDownEditor.inherit({
         }, this);
     },
 
+    _setCollectionWidgetOption: commonUtils.noop,
+
     _optionChanged: function(args) {
         this._dataExpressionOptionChanged(args);
         switch(args.name) {
@@ -316,6 +329,9 @@ var DropDownBox = DropDownEditor.inherit({
                 break;
             case "displayValue":
                 this.option("text", args.value);
+                break;
+            case "displayExpr":
+                this._renderValue();
                 break;
             default:
                 this.callBase(args);

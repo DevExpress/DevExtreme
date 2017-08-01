@@ -1,8 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    swipeEvents = require("../swipe"),
+var swipeEvents = require("../swipe"),
+    eventsEngine = require("../../events/core/events_engine"),
     DOMComponent = require("../../core/dom_component"),
+    each = require("../../core/utils/iterator").each,
     eventUtils = require("../utils"),
     extend = require("../../core/utils/extend").extend,
     publicComponentUtils = require("../../core/utils/public_component");
@@ -51,15 +52,14 @@ var Swipeable = DOMComponent.inherit({
 
         this._createEventData();
 
-        $.each(ACTION_TO_EVENT_MAP, (function(actionName, eventName) {
+        each(ACTION_TO_EVENT_MAP, (function(actionName, eventName) {
             var action = this._createActionByOption(actionName, { context: this });
 
             eventName = eventUtils.addNamespace(eventName, NAME);
 
-            this.element()
-                .on(eventName, this._eventData, function(e) {
-                    return action({ jQueryEvent: e });
-                });
+            eventsEngine.on(this.element(), eventName, this._eventData, function(e) {
+                return action({ jQueryEvent: e });
+            });
         }).bind(this));
     },
 
@@ -73,7 +73,7 @@ var Swipeable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        this.element().off("." + DX_SWIPEABLE);
+        eventsEngine.off(this.element(), "." + DX_SWIPEABLE);
     },
 
     _optionChanged: function(args) {

@@ -1,10 +1,11 @@
 "use strict";
 
-var $ = require("../core/renderer"),
+var dataUtils = require("../core/element_data"),
     Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),
     DOMComponent = require("../core/dom_component"),
     extend = require("../core/utils/extend").extend,
+    map = require("../core/utils/iterator").map,
     ValidationMixin = require("./validation/validation_mixin"),
     ValidationEngine = require("./validation_engine"),
     DefaultAdapter = require("./validation/default_adapter"),
@@ -158,7 +159,7 @@ var Validator = DOMComponent.inherit({
     _initAdapter: function() {
         var that = this,
             element = that.element()[0],
-            dxStandardEditor = $.data(element, "dx-validation-target"),
+            dxStandardEditor = dataUtils.data(element, "dx-validation-target"),
             adapter = that.option("adapter");
         if(!adapter) {
             if(dxStandardEditor) {
@@ -220,7 +221,7 @@ var Validator = DOMComponent.inherit({
             bypass = adapter.bypass && adapter.bypass(),
             value = adapter.getValue(),
             currentError = adapter.getCurrentValidationError && adapter.getCurrentValidationError(),
-            rules = $.map(that.option("validationRules"), function(rule) {
+            rules = map(that.option("validationRules"), function(rule) {
                 rule.validator = that;
                 return rule;
             }),

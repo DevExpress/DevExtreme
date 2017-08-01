@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     array = require("../../core/utils/array"),
     recurrenceUtils = require("./utils.recurrence"),
     dateUtils = require("../../core/utils/date"),
+    each = require("../../core/utils/iterator").each,
     translator = require("../../animation/translator"),
     grep = require("../../core/utils/common").grep,
     typeUtils = require("../../core/utils/type"),
@@ -74,7 +75,7 @@ var subscribes = {
     showAddAppointmentPopup: function(appointmentData) {
         var processedData = {};
 
-        $.each(["startDate", "endDate", "allDay"], (function(_, field) {
+        each(["startDate", "endDate", "allDay"], (function(_, field) {
             if(appointmentData[field] !== undefined) {
                 this.fire("setField", field, processedData, appointmentData[field]);
                 delete appointmentData[field];
@@ -415,7 +416,7 @@ var subscribes = {
             return inArray(resizableInst.option("handles"), ["right left", "left right"]) > -1 && typeUtils.isPlainObject(area);
         });
 
-        $.each(horizontalResizables, (function(_, el) {
+        each(horizontalResizables, (function(_, el) {
             var $el = $(el),
                 position = translator.locate($el),
                 appointmentData = this._appointments._getItemData($el);
@@ -516,7 +517,7 @@ var subscribes = {
 
         var totalResourceCount = 0;
 
-        $.each(this._loadedResources, function(i, resource) {
+        each(this._loadedResources, function(i, resource) {
             if(!i) {
                 totalResourceCount = resource.items.length;
             } else {
@@ -583,7 +584,7 @@ var subscribes = {
         };
 
         for(var i = 0; i < rows.length; i++) {
-            $.each(rows[i], applyOffset);
+            each(rows[i], applyOffset);
         }
     },
 
@@ -690,13 +691,25 @@ var subscribes = {
 
             result = ceilQuantityOfDays * visibleDayDuration;
         } else {
-            var isDifferentDate = !dateUtils.sameDate(startDate, new Date(endDate.getTime() - 1));
-
-            var floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration),
+            var isDifferentDate = !dateUtils.sameDate(startDate, new Date(endDate.getTime() - 1)),
+                floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration),
                 tailDuration;
 
             if(isDifferentDate) {
-                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : dayDuration - visibleDayDuration);
+                var hiddenDayDuration = dayDuration - visibleDayDuration;
+
+                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
+
+                var startDayTime = this.option("startDayHour") * toMs("hour"),
+                    endPartDuration = endDate - dateUtils.trimTime(endDate);
+
+                if(endPartDuration < startDayTime) {
+                    if(floorQuantityOfDays) {
+                        tailDuration -= hiddenDayDuration;
+                    }
+
+                    tailDuration += startDayTime - endPartDuration;
+                }
             } else {
                 tailDuration = appointmentDuration % dayDuration;
             }

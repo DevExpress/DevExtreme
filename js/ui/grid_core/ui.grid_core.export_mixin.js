@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend;
 
 module.exports = {
@@ -24,7 +25,7 @@ module.exports = {
             row = resultItems[rowIndex],
             cellIndex = row.length;
 
-        $.each(resultItems, function(rowIndex) {
+        each(resultItems, function(rowIndex) {
             if(this[cellIndex] && this[cellIndex].rowspan + rowIndex > resultItems.length - 1) {
                 offset = Math.max.apply(this, [this[cellIndex].colspan, offset]);
             }

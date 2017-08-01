@@ -1,10 +1,12 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     stringUtils = require("../../core/utils/string"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     clickEvent = require("../../events/click"),
@@ -154,7 +156,7 @@ var Pager = Widget.inherit({
             selectedPageIndex;
 
         if(that._pages) {
-            $.each(that._pages, function(key, page) {
+            each(that._pages, function(key, page) {
                 if(pageIndex === page.value()) {
                     isPageIndexValid = true;
                 }
@@ -283,7 +285,7 @@ var Pager = Widget.inherit({
             that._pageClickHandler = function(e) {
                 clickPagesIndexAction({ jQueryEvent: e });
             };
-            that._$pagesChooser.on(eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), '.' + PAGER_PAGE_CLASS, that._pageClickHandler);
+            eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), '.' + PAGER_PAGE_CLASS, that._pageClickHandler);
         }
 
         for(var i = 0; i < pagesLength; i++) {
@@ -342,11 +344,13 @@ var Pager = Widget.inherit({
 
         $pageCount = $("<span/>")
             .addClass(PAGER_PAGES_COUNT_CLASS)
-            .text(pageCount)
-            .on(eventUtils.addNamespace(clickEvent.name, that.Name + "PagesCount"), function(e) {
-                clickAction({ jQueryEvent: e });
-            })
-            .appendTo($container);
+            .text(pageCount);
+
+        eventsEngine.on($pageCount, eventUtils.addNamespace(clickEvent.name, that.Name + "PagesCount"), function(e) {
+            clickAction({ jQueryEvent: e });
+        });
+
+        $pageCount.appendTo($container);
 
         that.setAria({
             "role": "button",
@@ -418,7 +422,7 @@ var Pager = Widget.inherit({
         that._testCurrentPageSize = currentPageSize;
         ///#ENDDEBUG
 
-        that._$pagesSizeChooser.on(eventUtils.addNamespace(clickEvent.name, that.Name + "PageSize"), '.' + PAGER_PAGE_SIZE_CLASS, function(e) {
+        eventsEngine.on(that._$pagesSizeChooser, eventUtils.addNamespace(clickEvent.name, that.Name + "PageSize"), '.' + PAGER_PAGE_SIZE_CLASS, function(e) {
             clickPagesSizeAction({ jQueryEvent: e });
         });
 
@@ -510,11 +514,11 @@ var Pager = Widget.inherit({
             $button;
 
         if(that.option("showNavigationButtons") || that.option("lightModeEnabled")) {
-            $button = $("<div>")
-                .addClass(PAGER_NAVIGATE_BUTTON)
-                .on(eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), function(e) {
-                    clickAction({ jQueryEvent: e });
-                });
+            $button = $("<div>").addClass(PAGER_NAVIGATE_BUTTON);
+
+            eventsEngine.on($button, eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), function(e) {
+                clickAction({ jQueryEvent: e });
+            });
 
             that.setAria({
                 "role": "button",
@@ -645,7 +649,7 @@ var Pager = Widget.inherit({
     },
 
     _clean: function() {
-        this._$pagesChooser && this._$pagesChooser.off(eventUtils.addNamespace(clickEvent.name, this.Name + "Pages"), '.' + PAGER_PAGE_CLASS, this._pageClickHandler);
+        this._$pagesChooser && eventsEngine.off(this._$pagesChooser, eventUtils.addNamespace(clickEvent.name, this.Name + "Pages"), '.' + PAGER_PAGE_CLASS, this._pageClickHandler);
 
         this.callBase();
     },

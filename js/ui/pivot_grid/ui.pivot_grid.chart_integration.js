@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     pivotUtils = require("./ui.pivot_grid.utils"),
+    each = require("../../core/utils/iterator").each,
     foreachTree = pivotUtils.foreachTree,
     FORMAT_DICTIONARY = {
         number: "numeric",
@@ -14,7 +15,7 @@ function getFormattedValue(path, fields) {
     var value = [],
         lastFieldIndex = fields.length - 1;
 
-    $.each(path, function(i, item) {
+    each(path, function(i, item) {
         value.push(item.text || pivotUtils.formatValue(item.value, fields[lastFieldIndex - i]));
     });
 
@@ -161,7 +162,7 @@ function createChartDataSource(pivotGridDataSource, mapOptions, axisDictionary) 
     }
 
     function foreachDataField(callback) {
-        $.each(dataFields, function(index, field) {
+        each(dataFields, function(index, field) {
             dataField = field;
             measureIndex = index;
             callback();
@@ -185,7 +186,7 @@ function createValueAxisOptions(dataSource, options) {
     var dataFields = dataSource.getAreaFields("data");
     if(options.putDataFieldsInto !== "args" && options.dataFieldsDisplayMode !== "singleAxis" || dataFields.length === 1) {
         var valueAxisSettings = [];
-        $.each(dataFields, function(_, dataField) {
+        each(dataFields, function(_, dataField) {
             var valueAxisOptions = {
                 name: dataField.caption,
                 title: dataField.caption,
@@ -220,7 +221,7 @@ function createPanesOptions(dataSource, options) {
     var dataFields = dataSource.getAreaFields("data");
 
     if(dataFields.length > 1 && options.dataFieldsDisplayMode === "splitPanes" && options.putDataFieldsInto !== "args") {
-        $.each(dataFields, function(_, dataField) {
+        each(dataFields, function(_, dataField) {
             panes.push({
                 name: dataField.caption
             });

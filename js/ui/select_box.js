@@ -1,10 +1,12 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each,
     errors = require("../core/errors"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
@@ -142,7 +144,7 @@ var SelectBox = DropDownList.inherit({
             * @type template
             * @default null
             * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:object
+            * @type_function_param2 fieldElement:jQuery
             * @type_function_return string|Node|jQuery
             */
             fieldTemplate: null,
@@ -237,14 +239,7 @@ var SelectBox = DropDownList.inherit({
                             h: -16,
                             v: -8
                         }
-                    }
-                }
-            },
-            {
-                device: function() {
-                    return /android5/.test(themes.current());
-                },
-                options: {
+                    },
                     useInkRipple: true
                 }
             }
@@ -358,7 +353,7 @@ var SelectBox = DropDownList.inherit({
     _listContentReadyHandler: function() {
         this.callBase();
 
-        var isPaginate = this._dataSource.paginate();
+        var isPaginate = this._dataSource && this._dataSource.paginate();
 
         if(isPaginate && this._needPopupRepaint()) {
             return;
@@ -384,15 +379,15 @@ var SelectBox = DropDownList.inherit({
     },
 
     _renderInputValue: function() {
-        this._renderInputValueAsync = function() {
-            this._renderTooltip();
-            this._renderInputValueImpl();
-            this._refreshSelected();
-        };
-
-        return this.callBase().always((function() {
+        return this.callBase().always(function() {
             this._renderInputValueAsync();
-        }).bind(this));
+        }.bind(this));
+    },
+
+    _renderInputValueAsync: function() {
+        this._renderTooltip();
+        this._renderInputValueImpl();
+        this._refreshSelected();
     },
 
     _renderInputValueImpl: function() {
@@ -438,7 +433,7 @@ var SelectBox = DropDownList.inherit({
         var items = this._items();
         var selectedItem = this.option("selectedItem");
         var result = -1;
-        $.each(items, (function(index, item) {
+        each(items, (function(index, item) {
             if(this._isValueEquals(item, selectedItem)) {
                 result = index;
                 return false;
@@ -509,7 +504,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _selectionChangeHandler: function(e) {
-        $.each(e.addedItems || [], (function(_, addedItem) {
+        each(e.addedItems || [], (function(_, addedItem) {
             this._setValue(this._valueGetter(addedItem));
         }).bind(this));
     },
@@ -520,6 +515,10 @@ var SelectBox = DropDownList.inherit({
         }
 
         isVisible = arguments.length ? isVisible : !this.option("opened");
+
+        if(!isVisible) {
+            this._restoreInputText();
+        }
 
         if(this._wasSearch() && isVisible) {
             this._wasSearch(false);
@@ -547,10 +546,8 @@ var SelectBox = DropDownList.inherit({
         this._setPopupOption("width");
     },
 
-    _focusOutHandler: function(e) {
-        this.callBase(e);
-
-        if(!this.option("searchEnabled") || this.option("acceptCustomValue")) {
+    _restoreInputText: function() {
+        if(this.option("acceptCustomValue")) {
             return;
         }
 
@@ -566,6 +563,12 @@ var SelectBox = DropDownList.inherit({
             this._updateField(newSelectedItem);
             this._clearFilter();
         }).bind(this));
+    },
+
+    _focusOutHandler: function(e) {
+        this.callBase(e);
+
+        this._restoreInputText();
     },
 
     _clearTextValue: function() {
@@ -691,6 +694,10 @@ var SelectBox = DropDownList.inherit({
     },
 
     _setCustomItem: function(item) {
+        if(this._disposed) {
+            return;
+        }
+
         item = item || null;
         this.option("selectedItem", item);
         this._setValue(this._valueGetter(item));
@@ -702,7 +709,11 @@ var SelectBox = DropDownList.inherit({
 
     _createClearButton: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        return this.callBase().on(eventName, function() { return false; });
+        var $clearButton = this.callBase();
+
+        eventsEngine.on($clearButton, eventName, function() { return false; });
+
+        return $clearButton;
     },
 
     _wasSearch: function(value) {

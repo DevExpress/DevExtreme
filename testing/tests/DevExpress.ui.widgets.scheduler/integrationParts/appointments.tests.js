@@ -130,7 +130,7 @@ QUnit.test("Tasks should have right boundOffset", function(assert) {
         editing: true
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         draggableBounds = $appointment.dxDraggable("instance").option("boundOffset"),
         allDayPanelHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").first().outerHeight();
 
@@ -151,7 +151,7 @@ QUnit.test("Draggable rendering option 'immediate' should be turned off", functi
         editing: true
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         immediate = $appointment.dxDraggable("instance").option("immediate");
 
     assert.notOk(immediate, "immediate option is false");
@@ -171,7 +171,7 @@ QUnit.test("Tasks should have right draggable area", function(assert) {
         editing: true
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         draggableArea = $appointment.dxDraggable("instance").option("area");
 
     assert.equal(draggableArea, this.instance.getWorkSpaceScrollableContainer(), "area is OK");
@@ -451,6 +451,39 @@ QUnit.test("Appointments on Day view should have a right height and position if 
     assert.equal($appointment.outerHeight(), cellHeight, "Appointment has a right height");
 });
 
+QUnit.test("Appointment with resources should have a right height and position if it ends on the next day", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            startDate: new Date(2017, 6, 22, 20),
+            endDate: new Date(2017, 6, 23, 4),
+            text: "Appointment",
+            ownerId: 1
+        }],
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        currentDate: new Date(2017, 6, 22),
+        views: ["day"],
+        currentView: "day",
+        cellDuration: 60
+    });
+
+    var $element = this.instance.element(),
+        $appointment = $element.find(".dx-scheduler-appointment"),
+        cellHeight = $element.find(".dx-scheduler-date-table-cell").first().outerHeight();
+
+    assert.equal($appointment.length, 1, "Only one appt is rendered");
+    assert.equal($appointment.position().top, cellHeight * 20, "Appointment has a right top position");
+    assert.equal($appointment.outerHeight(), cellHeight * 4, "Appointment has a right height");
+});
+
 QUnit.test("The part of the appointment that ends after midnight should be shown on Week view", function(assert) {
     this.createInstance({
         dataSource: [{
@@ -507,7 +540,7 @@ QUnit.test("The part of recurrence appointment after midnight should be shown on
         cellDuration: 60
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointment.length, 1, "Appt part is shown on 2d day");
     assert.equal($appointment.eq(0).position().top, 0, "Appointment has a right top position");
@@ -734,8 +767,8 @@ QUnit.test("Scheduler tasks should have a right dimensions for month view", func
     });
     this.clock.tick();
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
 
     assert.roughEqual($appointment.height(), $cell.outerHeight() * 0.6 / 2, 2, "Task has a right height");
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
@@ -760,7 +793,7 @@ QUnit.test("Recurring appointment icon should be visible on the month view", fun
 
     this.clock.tick();
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
         $recurringIcon = $appointment.find(".dx-scheduler-appointment-recurrence-icon");
 
     assert.ok($recurringIcon.parent().hasClass("dx-scheduler-appointment-content"), "Recurring icon is visible");
@@ -779,8 +812,8 @@ QUnit.test("Scheduler tasks should have a right height when currentView is chang
 
     this.instance.option("currentView", "month");
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
 
     assert.roughEqual($appointment.height(), $cell.outerHeight() * 0.6 / 2, 2, "Task has a right height");
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
@@ -799,7 +832,7 @@ QUnit.test("Two not rival appointments with fractional coordinates should have c
         width: 720
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointment.length, 3, "All appointments are rendered");
     assert.equal(translator.locate($appointment.eq(0)).top, translator.locate($appointment.eq(1)).top, "appointment is rendered in right place");
@@ -859,7 +892,7 @@ QUnit.test("DblClick on appointment should call scheduler.showAppointmentPopup",
     var spy = sinon.stub(this.instance, "showAppointmentPopup");
 
     try {
-        this.instance.element().find(".dx-scheduler-appointment").eq(1).trigger(dblclickEvent.name);
+        $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger(dblclickEvent.name);
 
         assert.ok(spy.calledOnce, "Method was called");
         assert.deepEqual(spy.getCall(0).args[0],
@@ -884,7 +917,7 @@ QUnit.test("DblClick on appointment should not call scheduler.showAppointmentPop
 
     var spy = sinon.spy(this.instance, "showAppointmentPopup");
 
-    this.instance.element().find(".dx-scheduler-appointment").eq(1).trigger(dblclickEvent.name);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger(dblclickEvent.name);
 
     assert.ok(!spy.calledOnce, "Method was not called");
 });
@@ -899,14 +932,14 @@ QUnit.test("DblClick on appointment should not affect the related cell start dat
     sinon.stub(this.instance, "showAppointmentPopup");
 
     try {
-        var $appt = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appt = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
             apptData = $appt.data("dxItemData");
 
         apptData.startDate = new Date(2015, 1, 9, 2);
 
         $appt.trigger(dblclickEvent.name);
 
-        var relatedCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(2).data("dxCellData").startDate;
+        var relatedCellData = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(2).data("dxCellData").startDate;
 
         assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), "Cell start date is OK");
     } finally {
@@ -923,7 +956,7 @@ QUnit.test("Disabled appointment could not be focused", function(assert) {
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: [{ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 3), disabled: true }] });
     this.clock.tick();
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
     $appointment.trigger("focusin");
 
     assert.notOk($appointment.hasClass("dx-state-focused"), "Appointment is not focused");
@@ -950,7 +983,7 @@ QUnit.test("Appointment dates should not be normalized before sending to the det
 
     var spy = sinon.spy(this.instance, "showAppointmentPopup");
 
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
     var $tooltip = $(".dx-scheduler-appointment-tooltip");
     $tooltip.find(".dx-scheduler-appointment-tooltip-buttons").find(".dx-button").eq(1).trigger("dxclick");
@@ -984,7 +1017,7 @@ QUnit.test("Appointment labels should be localized before sending to the details
 
     this.clock.tick();
 
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
     var $tooltip = $(".dx-scheduler-appointment-tooltip");
     $tooltip.find(".dx-scheduler-appointment-tooltip-buttons").find(".dx-button").eq(1).trigger("dxclick");
@@ -1514,7 +1547,7 @@ QUnit.test("Update appointment", function(assert) {
         updatedItem = this.tasks[0];
     this.instance.updateAppointment = spy;
     try {
-        this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+        $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
         this.clock.tick(300);
 
         var $tooltip = $(".dx-scheduler-appointment-tooltip");
@@ -1551,7 +1584,7 @@ QUnit.test("Appointment date correction should be rollback after closing popup, 
 
     var updateAppointment = sinon.spy(this.instance, "updateAppointment");
     try {
-        this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+        $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
         this.clock.tick(300);
 
         var $tooltip = $(".dx-scheduler-appointment-tooltip");
@@ -1589,7 +1622,7 @@ QUnit.test("Appointment date correction should be rollback after closing popup, 
     var updateAppointment = sinon.spy(this.instance, "updateAppointment");
 
     try {
-        this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+        $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
         this.clock.tick(300);
 
         var $tooltip = $(".dx-scheduler-appointment-tooltip");
@@ -1858,7 +1891,7 @@ QUnit.test("Recurrence appointment with custom tz that isn't equal to scheduler 
             dataSource: [appointment]
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(1);
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1);
 
         $appointment.trigger("dxdblclick");
         initialPosition = $appointment.position();
@@ -1898,13 +1931,13 @@ QUnit.test("Recurrence appointment with the same custom timezones should be open
             dataSource: [appointment]
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(1);
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1);
 
         $appointment.trigger("dxdblclick");
         initialPosition = $appointment.position();
 
         $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
-        var updatedPosition = this.instance.element().find(".dx-scheduler-appointment").not(".dx-scheduler-appointment-recurrence").position();
+        var updatedPosition = $(this.instance.element()).find(".dx-scheduler-appointment").not(".dx-scheduler-appointment-recurrence").position();
 
         assert.equal(updatedPosition.top, initialPosition.top, "Top is updated correctly");
         assert.equal(updatedPosition.left, initialPosition.left, "Left is updated correctly");
@@ -2037,8 +2070,8 @@ QUnit.test("Appointment with custom tz that isn't equal to scheduler tz should b
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
-        $cell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(6),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").first(),
+        $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(6),
         initialAppointmentHeight = $appointment.outerHeight();
 
     $appointment.trigger(dragEvents.start);
@@ -2081,8 +2114,8 @@ QUnit.test("Appointment with 'Etc/UTC' tz should be rendered correctly(T394991)"
             }]
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
-            $cell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(6),
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").first(),
+            $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(6),
             initialAppointmentHeight = $appointment.outerHeight();
 
         assert.roughEqual($appointment.position().top, $cell.outerHeight() * 2, 2.001, "Appointment top is OK");
@@ -2133,8 +2166,8 @@ QUnit.test("Recurrence appointment with 'Etc/UTC' tz should be updated correctly
             }]
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
-            $cell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(21),
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").first(),
+            $cell = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(21),
             initialAppointmentHeight = $appointment.outerHeight();
 
         $appointment.trigger(dragEvents.start);
@@ -2177,9 +2210,9 @@ QUnit.test("Task dragging", function(assert) {
         allDay: false
     };
 
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
     var dataSourceItem = this.instance.option("dataSource").items()[0];
 
@@ -2219,9 +2252,9 @@ QUnit.test("Task dragging when custom timeZone is set", function(assert) {
         allDay: false
     };
 
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(2).trigger(dragEvents.enter);
-    this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(2).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
     var dataSourceItem = this.instance.option("dataSource").items()[0];
 
@@ -2264,9 +2297,9 @@ QUnit.test("Task dragging when custom timeZone is set", function(assert) {
                 AllDay: false
             };
 
-            this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-            this.instance.element().find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-            this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+            $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+            $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+            $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
             this.clock.tick();
 
@@ -2295,7 +2328,7 @@ QUnit.test("Appointment should have correct position while vertical dragging", f
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         scrollable = this.instance.getWorkSpace().element().find(".dx-scrollable").dxScrollable("instance"),
         allDayHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").first().outerHeight(),
         scrollDistance = 400,
@@ -2343,7 +2376,7 @@ QUnit.test("Appointment should have correct position while vertical dragging, cr
         crossScrollingEnabled: true
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         dragDistance = -50,
         headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
 
@@ -2390,7 +2423,7 @@ QUnit.test("Appointment should have correct position while horizontal dragging",
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         dragDistance = 150,
         timePanelWidth = this.instance.element().find(".dx-scheduler-time-panel").outerWidth(true);
 
@@ -2426,7 +2459,7 @@ QUnit.test("Appointment should have correct position while horizontal dragging i
         crossScrollingEnabled: true
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         scrollable = this.instance.getWorkSpace().element().find(".dx-scrollable").dxScrollable("instance"),
         scrollDistance = 400,
         dragDistance = 100;
@@ -2456,8 +2489,8 @@ QUnit.test("Appointment should not be updated if it is dropped to the initial ce
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(1).trigger(dragEvents.enter);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(1).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.start);
     $appointment.trigger(dragEvents.end);
 
@@ -2482,9 +2515,9 @@ QUnit.test("Appointment should not be updated if it is dropped to the initial ce
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
     $appointment.trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(8).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(8).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
@@ -2509,8 +2542,8 @@ QUnit.test("Appointment should be updated correctly if it is dropped to the neig
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(9).trigger(dragEvents.enter);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(9).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.start);
     $appointment.trigger(dragEvents.end);
 
@@ -2537,8 +2570,8 @@ QUnit.test("Dropping appointment to the neighbor cell (month view) with predefin
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(16).trigger(dragEvents.enter);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(16).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.start);
     $appointment.trigger(dragEvents.end);
 
@@ -2565,8 +2598,8 @@ QUnit.test("Dropping appointment should keep predefined hours (month view)", fun
         }]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(16).trigger(dragEvents.enter);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(16).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.start);
     $appointment.trigger(dragEvents.end);
 
@@ -2600,11 +2633,11 @@ QUnit.test("Appointment should be returned back if an error occurs during drag (
         }
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
     var initialPosition = $appointment.position();
 
     assert.throws(function() {
-        this.instance.element().find(".dx-scheduler-date-table-cell").eq(16).trigger(dragEvents.enter);
+        $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(16).trigger(dragEvents.enter);
         $appointment.trigger(dragEvents.start);
         $appointment.trigger(dragEvents.end);
     }, function(err) {
@@ -2641,10 +2674,10 @@ QUnit.test("Appointment should be returned back if the 'update' method rejects d
         }
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
     var initialPosition = $appointment.position();
 
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(16).trigger(dragEvents.enter);
+    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(16).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.start);
     $appointment.trigger(dragEvents.end);
 
@@ -3138,7 +3171,7 @@ QUnit.test("Month appointment inside grouped view should have a right resizable 
         crossScrollingEnabled: true
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first(),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").first(),
         initialResizableAreaLeft = $appointment.dxResizable("instance").option("area").left,
         initialResizableAreaRight = $appointment.dxResizable("instance").option("area").right,
         scrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
@@ -3435,7 +3468,7 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
 
     var dropDown = instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
     dropDown.open();
-    dropDown._list.element().find(".dx-list-item").eq(2).trigger("dxclick");
+    $(dropDown._list.element()).find(".dx-list-item").eq(2).trigger("dxclick");
 });
 
 QUnit.test("DropDown appointment should be painted depend on resource color", function(assert) {
@@ -3531,7 +3564,7 @@ QUnit.test("Recurrence appointment should be rendered correctly when currentDate
 
     this.instance.option("currentDate", new Date(2015, 2, 14));
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointment.length, 1, "Appointment is rendered");
 });
@@ -3554,7 +3587,7 @@ QUnit.test("Recurrence appointment should be rendered correctly when currentDate
 
     this.instance.option("currentDate", new Date(2015, 1, 5));
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointment.length, 1, "Appointment is rendered");
 });
@@ -3576,7 +3609,7 @@ QUnit.test("Recurrence appointment should be rendered correctly when currentDate
 
     this.instance.option("currentDate", new Date(2015, 1, 5));
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.roughEqual($appointment.height(), 100, 1.001, "Appointment is rendered correctly");
 });
@@ -3597,7 +3630,7 @@ QUnit.test("Appointments should have correct position, rtl mode, editing=false",
         dataSource: [appointment]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     assert.roughEqual($appointment.position().left, APPOINTMENT_DEFAULT_OFFSET, 2, "Appointment left is correct on init");
 });
@@ -3628,7 +3661,7 @@ QUnit.test("Appointment should be rendered correctly with expressions on init", 
         recurrenceRuleExpr: "RecRule"
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         $recAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(1);
 
     assert.equal($appointment.find(".dx-scheduler-appointment-content div").eq(0).text(), "abc", "Text is correct on init");
@@ -3753,7 +3786,7 @@ QUnit.test("Appointment should be rendered correctly when appointment timeZone w
             dataSource: appointments
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
         assert.equal($appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), dateLocalization.format(new Date(2015, 1, 4, 7, 30), "shorttime"), "Start Date is correct on init");
         assert.equal($appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(), dateLocalization.format(new Date(2015, 1, 4, 8, 30), "shorttime"), "End Date is correct on init");
@@ -3786,7 +3819,7 @@ QUnit.test("Appointment should have correct height, when appointment timeZones w
             startDayHour: 5
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
             cellHeight = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
         assert.roughEqual($appointment.position().top, 0, 2.001, "Appointment top is correct");
@@ -3818,7 +3851,7 @@ QUnit.test("Appointment should be rendered correctly when appointment timezone a
         timeZone: "Asia/Qyzylorda"
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     var deltaTz = getDeltaTz(6, startDate);
 
@@ -3877,7 +3910,7 @@ QUnit.test("Appointment should be rendered correctly if timeZones is changed", f
 
         this.instance.option("timeZone", 4);
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
             cellHeight = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
         assert.roughEqual($appointment.position().top, cellHeight * 2, 2.001, "Appointment top is correct");
@@ -3917,7 +3950,7 @@ QUnit.test("Appointment should be rendered correctly with expressions on optionC
         textExpr: "AppointmentText"
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     assert.equal($appointment.find(".dx-scheduler-appointment-content .dx-scheduler-appointment-title").eq(0).text(), "xyz", "Text is correct on init");
     assert.equal($appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(), dateLocalization.format(startDate, "shorttime"), "Start Date is correct on init");
@@ -3947,7 +3980,7 @@ QUnit.test("Appointment should be rendered correctly with expressions on custom 
         }
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
 
     assert.equal($appointment.find(".custom-title").text(), "abc", "Text is correct on init");
 });
@@ -3966,7 +3999,7 @@ QUnit.test("Appointment should have right position, if it's startDate time less 
         startDayHour: 3
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         $targetCell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(1);
 
     assert.roughEqual($appointment.position().top, $targetCell.position().top, 1.001, "appointment top is correct");
@@ -3986,7 +4019,7 @@ QUnit.test("Appointment should have right position on timeline month view", func
         dataSource: [appointment]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
         $targetCell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(2);
 
     assert.roughEqual($appointment.position().top, $targetCell.position().top, 1.001, "appointment top is correct");
@@ -4007,10 +4040,35 @@ QUnit.test("Appointment should have right width on timeline week view", function
         endDayHour: 10
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
+});
+
+QUnit.test("Multiday appointment should have right width on timelineWeek view when set startDayHour > appointment endDate (T533348)", function(assert) {
+    var appointment = {
+        startDate: new Date(2016, 1, 1, 11, 0),
+        endDate: new Date(2016, 1, 2, 1, 0)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2016, 1, 1),
+        views: ["timelineWeek"],
+        currentView: "timelineWeek",
+        cellDuration: 60,
+        firstDayOfWeek: 1,
+        dataSource: [appointment],
+        startDayHour: 8,
+        endDayHour: 20,
+        height: 200
+    });
+
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+        cellsInAppointment = 9;
+
+    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
 });
 
 QUnit.test("Recurrence appointment part should have right width on timeline week view", function(assert) {
@@ -4028,8 +4086,8 @@ QUnit.test("Recurrence appointment part should have right width on timeline week
         endDayHour: 22
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(1),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(1),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0);
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 4, 1.001, "Task has a right width");
 });
@@ -4049,8 +4107,8 @@ QUnit.test("Multiday appointment should have right width on timeline week view",
         endDayHour: 20
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
         cellsInAppointment = 4;
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
@@ -4072,8 +4130,8 @@ QUnit.test("AllDay appointment should have right width on timeline week view", f
         endDayHour: 22
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
         cellsInAppointment = 36;
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
@@ -4094,8 +4152,8 @@ QUnit.test("AllDay appointment without allDay field should have right width on t
         endDayHour: 22
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
         cellsInAppointment = 12;
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
@@ -4116,9 +4174,34 @@ QUnit.test("Long multiday appointment should have right width on timeline work w
         endDayHour: 20
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
         cellsInAppointment = 28;
+
+    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
+});
+
+QUnit.test("Long multiday appointment should have right width on timeline week view when set startDayHour > appointment endDate (T533348)", function(assert) {
+    var appointment = {
+        startDate: new Date(2016, 1, 1, 11, 0),
+        endDate: new Date(2016, 1, 4, 1, 0)
+    };
+
+    this.createInstance({
+        currentDate: new Date(2016, 1, 1),
+        views: ["timelineWeek"],
+        currentView: "timelineWeek",
+        cellDuration: 60,
+        firstDayOfWeek: 1,
+        dataSource: [appointment],
+        startDayHour: 8,
+        endDayHour: 20,
+        height: 200
+    });
+
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+        cellsInAppointment = 33;
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * cellsInAppointment, 1.001, "Task has a right width");
 });
@@ -4138,8 +4221,8 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
         endDayHour: 20
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(0),
         cellsToAppointment = 10;
 
     assert.roughEqual($appointment.position().left, $cell.outerWidth() * cellsToAppointment, 1.001, "Task has a right width");
@@ -4163,8 +4246,8 @@ QUnit.test("Appointment should have right width in workspace with timezone", fun
         endDate: new Date(2016, 4, 5)
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(9);
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+        $cell = $(this.instance.element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(9);
 
     assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
 });
@@ -4204,7 +4287,7 @@ QUnit.test("Small appointment should have hidden content information but visible
         height: 600
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment-empty"),
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment-empty"),
         $appointmentContent = $appointment.find(".dx-scheduler-appointment-content"),
         $appointmentTitle = $appointmentContent.find(".dx-scheduler-appointment-title"),
         $appointmentDetails = $appointmentContent.find(".dx-scheduler-appointment-content-details"),
@@ -4225,7 +4308,7 @@ QUnit.test("Appointment startDate should be preprocessed before position calcula
         height: 600
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointment.length, 2, "appointment is rendered");
 });

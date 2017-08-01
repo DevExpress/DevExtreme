@@ -1,13 +1,13 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
+    each = require("../../core/utils/iterator").each,
     scatterSeries = require("./scatter_series"),
     areaSeries = require("./area_series").chart.area,
     chartSeries = scatterSeries.chart,
     polarSeries = scatterSeries.polar,
     _extend = extend,
-    _each = $.each,
+    _each = each,
 
     DEFAULT_BAR_POINT_SIZE = 3;
 
@@ -34,9 +34,9 @@ var baseBarSeriesMethods = {
         settings["clip-path"] = null;
     },
 
-    _clearingAnimation: function(translators, drawComplete) {
+    _clearingAnimation: function(drawComplete) {
         var that = this,
-            settings = that._oldGetAffineCoordOptions(translators) || that._getAffineCoordOptions(translators);
+            settings = that._oldGetAffineCoordOptions() || that._getAffineCoordOptions();
 
         that._labelsGroup && that._labelsGroup.animate({ opacity: 0.001 }, { duration: that._defaultDuration, partitionDuration: 0.5 }, function() {
             that._markersGroup.animate(settings, { partitionDuration: 0.5 }, function() {
@@ -56,7 +56,7 @@ var baseBarSeriesMethods = {
             settings = {};
         chartSeries._setGroupsSettings.apply(that, arguments);
         if(animationEnabled && firstDrawing) {
-            settings = this._getAffineCoordOptions(that.translators, true);
+            settings = this._getAffineCoordOptions();
         } else if(!animationEnabled) {
             settings = { scaleX: 1, scaleY: 1, translateX: 0, translateY: 0 };
         }
@@ -86,7 +86,7 @@ var baseBarSeriesMethods = {
 
     _updatePointsVisibility: function() {
         var visibility = this._options.visible;
-        $.each(this._points, function(_, point) {
+        each(this._points, function(_, point) {
             point._options.visible = visibility;
         });
     },
@@ -111,28 +111,28 @@ var baseBarSeriesMethods = {
 
     _getPointSize: function() {
         return DEFAULT_BAR_POINT_SIZE;
-    }
+    },
+
+    getValueRangeInitialValue: areaSeries.getValueRangeInitialValue
 };
 
 exports.chart.bar = _extend({}, chartSeries, baseBarSeriesMethods, {
-    _getAffineCoordOptions: function(translators) {
+    _getAffineCoordOptions: function() {
         var rotated = this._options.rotated,
-            direction = rotated ? "x" : "y",
+            direction = rotated ? "X" : "Y",
             settings = {
                 scaleX: rotated ? 0.001 : 1,
                 scaleY: rotated ? 1 : 0.001
             };
 
-        settings["translate" + direction.toUpperCase()] = translators[direction].translate("canvas_position_default");
+        settings["translate" + direction] = this.getValueAxis().getTranslator().translate("canvas_position_default");
 
         return settings;
     },
 
-    _getRangeData: function() {
-        var rangeData = areaSeries._getRangeData.apply(this, arguments);
-        rangeData.arg.stick = false;
-
-        return rangeData;
+    _processRange: function(range) {
+        areaSeries._processRange.apply(this, arguments);
+        range.arg.stick = false;
     },
 
     _animatePoints: function(firstDrawing, complete, animateFunc) {
@@ -176,6 +176,4 @@ exports.polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
     },
 
     _createLegendState: areaSeries._createLegendState,
-
-    _getRangeData: areaSeries._getRangeData
 });

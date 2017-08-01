@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     grep = require("../../core/utils/common").grep,
     isDefined = require("../../core/utils/type").isDefined,
     objectUtils = require("../../core/utils/object"),
+    iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     query = require("../../data/query"),
@@ -37,7 +38,7 @@ var ResourceManager = Class.inherit({
         var valueGetter = dataCoreUtils.compileGetter(getValueExpr(resource)),
             displayGetter = dataCoreUtils.compileGetter(getDisplayExpr(resource));
 
-        return $.map(data, function(item) {
+        return iteratorUtils.map(data, function(item) {
             var result = {
                 id: valueGetter(item),
                 text: displayGetter(item)
@@ -54,7 +55,7 @@ var ResourceManager = Class.inherit({
     _isMultipleResource: function(resourceField) {
         var result = false;
 
-        $.each(this.getResources(), (function(_, resource) {
+        iteratorUtils.each(this.getResources(), (function(_, resource) {
             var field = this.getField(resource);
             if(field === resourceField) {
                 result = resource.allowMultiple;
@@ -71,7 +72,7 @@ var ResourceManager = Class.inherit({
 
     getDataAccessors: function(field, type) {
         var result = null;
-        $.each(this._dataAccessors[type], function(accessorName, accessors) {
+        iteratorUtils.each(this._dataAccessors[type], function(accessorName, accessors) {
             if(field === accessorName) {
                 result = accessors;
                 return false;
@@ -92,7 +93,7 @@ var ResourceManager = Class.inherit({
             setter: {}
         };
 
-        this._resourceFields = $.map(resources || [], (function(resource) {
+        this._resourceFields = iteratorUtils.map(resources || [], (function(resource) {
             var field = this.getField(resource);
 
             this._dataAccessors.getter[field] = dataCoreUtils.compileGetter(field);
@@ -114,7 +115,7 @@ var ResourceManager = Class.inherit({
         var result = [],
             that = this;
 
-        $.each(this.getResources(), function(i, resource) {
+        iteratorUtils.each(this.getResources(), function(i, resource) {
             var field = that.getField(resource),
                 currentResourceItems = that._getResourceDataByField(field);
 
@@ -139,7 +140,7 @@ var ResourceManager = Class.inherit({
         var that = this,
             result = $.Deferred();
 
-        $.each(this.getResources(), function(_, resource) {
+        iteratorUtils.each(this.getResources(), function(_, resource) {
             var resourceField = that.getField(resource);
             if(resourceField === field) {
                 var dataSource = that._wrapDataSource(resource.dataSource),
@@ -177,8 +178,8 @@ var ResourceManager = Class.inherit({
             wrapOnlyMultipleResources = false;
         }
 
-        $.each(that._resourceFields, function(index, field) {
-            $.each(itemData, function(fieldName, fieldValue) {
+        iteratorUtils.each(that._resourceFields, function(index, field) {
+            iteratorUtils.each(itemData, function(fieldName, fieldValue) {
                 var tmp = {};
                 tmp[fieldName] = fieldValue;
                 var resourceData = that.getDataAccessors(field, "getter")(tmp);
@@ -210,7 +211,7 @@ var ResourceManager = Class.inherit({
             that = this,
             deferreds = [];
 
-        $.each(this.getResourcesByFields(groups), function(i, resource) {
+        iteratorUtils.each(this.getResourcesByFields(groups), function(i, resource) {
             var deferred = $.Deferred(),
                 field = that.getField(resource);
             deferreds.push(deferred);
@@ -300,7 +301,7 @@ var ResourceManager = Class.inherit({
         var resources = this.getResources(),
             result;
 
-        $.each(resources, function(index, resource) {
+        iteratorUtils.each(resources, function(index, resource) {
             if(resource.useColorAsDefault || resource.mainColor) {
                 result = resource;
                 return false;
@@ -404,7 +405,7 @@ var ResourceManager = Class.inherit({
         var tree = this.createResourcesTree(resources),
             result = {};
 
-        $.each(appointments, (function(_, appointment) {
+        iteratorUtils.each(appointments, (function(_, appointment) {
             var appointmentResources = this.getResourcesFromItem(appointment),
                 treeLeaves = this.getResourceTreeLeaves(tree, appointmentResources);
 

@@ -1,9 +1,10 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    registerComponent = require("../core/component_registrator"),
+var registerComponent = require("../core/component_registrator"),
+    eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
+    iteratorUtils = require("../core/utils/iterator"),
     ValidationMixin = require("./validation/validation_mixin"),
     ValidationEngine = require("./validation_engine"),
     CollectionWidget = require("./collection/ui.collection_widget.edit");
@@ -229,7 +230,7 @@ var ValidationSummary = CollectionWidget.inherit({
     _getOrderedItems: function(validators, items) {
         var orderedItems = [];
 
-        $.each(validators, function(_, validator) {
+        iteratorUtils.each(validators, function(_, validator) {
             var firstItem = grep(items, function(item) {
                 if(item.validator === validator) {
                     return true;
@@ -246,7 +247,7 @@ var ValidationSummary = CollectionWidget.inherit({
 
     _groupValidationHandler: function(params) {
         var that = this,
-            items = that._getOrderedItems(params.validators, $.map(params.brokenRules, function(rule) {
+            items = that._getOrderedItems(params.validators, iteratorUtils.map(params.brokenRules, function(rule) {
                 return {
                     text: rule.message,
                     validator: rule.validator
@@ -255,7 +256,7 @@ var ValidationSummary = CollectionWidget.inherit({
 
         that.validators = params.validators;
 
-        $.each(that.validators, function(_, validator) {
+        iteratorUtils.each(that.validators, function(_, validator) {
             if(validator._validationSummary !== this) {
                 var handler = that._itemValidationHandler.bind(that),
                     disposingHandler = function() {
@@ -280,7 +281,7 @@ var ValidationSummary = CollectionWidget.inherit({
             newMessage = itemValidationResult.brokenRule && itemValidationResult.brokenRule.message,
             validator = itemValidationResult.validator;
 
-        $.each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             if(item.validator === validator) {
                 if(isValid) {
                     elementIndex = index;
@@ -334,7 +335,7 @@ var ValidationSummary = CollectionWidget.inherit({
     },
 
     _postprocessRenderItem: function(params) {
-        params.itemElement.on("click", function() {
+        eventsEngine.on(params.itemElement, "click", function() {
             params.itemData.validator && params.itemData.validator.focus && params.itemData.validator.focus();
         });
     },

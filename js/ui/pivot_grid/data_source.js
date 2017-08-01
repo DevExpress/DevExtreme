@@ -7,8 +7,9 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     isDefined = typeUtils.isDefined,
-    each = $.each,
+    each = iteratorUtils.each,
     when = require("../../integration/jquery/deferred").when,
     Class = require("../../core/class"),
     EventsMixin = require("../../core/events_mixin"),
@@ -79,7 +80,7 @@ function createCaption(field) {
 function resetFieldState(field, properties) {
     var initialProperties = field._initProperties || {};
 
-    $.each(properties, function(_, prop) {
+    iteratorUtils.each(properties, function(_, prop) {
         if(initialProperties.hasOwnProperty(prop)) {
             field[prop] = initialProperties[prop];
         }
@@ -93,17 +94,16 @@ function updateCalculatedFieldProperties(field, calculatedProperties) {
     }
 }
 
-function areExpressionsUsed(descriptions) {
-    var expressionsUsed = false;
-
-    each(descriptions.values, function(_, field) {
-        if(field.summaryDisplayMode || field.calculateSummaryValue || field.runningTotal) {
-            expressionsUsed = true;
-            return false;
-        }
+function areExpressionsUsed(dataFields) {
+    return dataFields.some(function(field) {
+        return field.summaryDisplayMode || field.calculateSummaryValue;
     });
+}
 
-    return expressionsUsed;
+function isRunningTotalUsed(dataFields) {
+    return dataFields.some(function(field) {
+        return !!field.runningTotal;
+    });
 }
 
 module.exports = Class.inherit((function() {
@@ -364,7 +364,7 @@ module.exports = Class.inherit((function() {
     }
 
     function getFieldsByGroup(fields, groupingField) {
-        return $.map(fields, function(field) {
+        return iteratorUtils.map(fields, function(field) {
             if(field.groupName === groupingField.groupName && typeUtils.isNumeric(field.groupIndex) && field.visible !== false) {
                 return extend(field, {
                     areaIndex: groupingField.areaIndex,
@@ -475,7 +475,7 @@ module.exports = Class.inherit((function() {
             foreachTree(items, function(items) {
                 var item = items[0],
                     itemPath = createPath(items).join("."),
-                    textPath = $.map(items, function(item) { return item.text; }).reverse().join(".");
+                    textPath = iteratorUtils.map(items, function(item) { return item.text; }).reverse().join(".");
 
                 if(pathValue === itemPath || (item.key && textPath === pathValue)) {
                     index = items[0].index;
@@ -1345,7 +1345,8 @@ module.exports = Class.inherit((function() {
             var that = this,
                 descriptions = that._descriptions,
                 loadedData = that._data,
-                expressionsUsed = areExpressionsUsed(descriptions);
+                dataFields = descriptions.values,
+                expressionsUsed = areExpressionsUsed(dataFields);
 
             when(formatHeaders(descriptions, loadedData), updateCache(loadedData.rows), updateCache(loadedData.columns)).done(function() {
                 if(expressionsUsed) {
@@ -1354,6 +1355,8 @@ module.exports = Class.inherit((function() {
                 }
 
                 that._sort(descriptions, loadedData);
+
+                isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
 
                 that._data = loadedData;
                 when(deferred).done(function() {

@@ -5,6 +5,10 @@
     padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
 }
 
+.dx-dropdowneditor-button-visible.dx-show-clear-button .dx-texteditor-input {
+    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
+}
+
 .dx-dropdowneditor-button {
     width: @DROPDOWNEDITOR_BUTTON_WIDTH;
 }
@@ -15,10 +19,6 @@
         .border-radius-bottom-right(0);
     }
 }
-
-    .dx-dropdowneditor-button-visible.dx-show-clear-button .dx-texteditor-input {
-        padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
-    }
 
 .dx-dropdowneditor-active,
 .dx-state-disabled {
@@ -53,14 +53,34 @@
     &.dx-show-clear-button:not(.dx-texteditor-empty) .dx-texteditor-container:after {
         right: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
     }
+}
 
-    .dx-texteditor-input {
-        padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
+.invalid-dropdowneditor-input-padding() {
+    &.dx-dropdowneditor-button-visible {
+        .dx-texteditor-input {
+            padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
+        }
+
+        &.dx-rtl .dx-texteditor-input {
+            padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
+            padding-right: @TEXTEDITOR_INPUT_PADDING;
+        }
+
+        &.dx-show-clear-button {
+            .dx-texteditor-input {
+                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+            }
+
+            &.dx-rtl .dx-texteditor-input {
+                padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+                padding-right: @TEXTEDITOR_INPUT_PADDING;
+            }
+        }
     }
 }
 
-.dx-invalid.dx-show-clear-button.dx-dropdowneditor-button-visible .dx-texteditor-input {
-    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+.dx-invalid {
+    .invalid-dropdowneditor-input-padding();
 }
 
 .dx-rtl {
@@ -74,20 +94,6 @@
     &.dx-dropdowneditor-button-visible.dx-show-clear-button .dx-texteditor-input {
         padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
         padding-right: @TEXTEDITOR_INPUT_PADDING;
-    }
-
-    &.dx-dropdowneditor-button-visible.dx-invalid {
-        .dx-texteditor-input {
-            padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH;
-            padding-right: @TEXTEDITOR_INPUT_PADDING;
-        }
-
-        &.dx-show-clear-button {
-            .dx-texteditor-input {
-                padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
-                padding-right: @TEXTEDITOR_INPUT_PADDING;
-            }
-        }
     }
 
     &.dx-dropdowneditor .dx-icon-clear {

@@ -6,7 +6,6 @@ var $ = require("jquery"),
     slidersControllerModule = require("viz/range_selector/sliders_controller"),
     seriesDataSourceModule = require("viz/range_selector/series_data_source"),
     _SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
-    translator2DModule = require("viz/translators/translator2d"),
     dataSourceModule = require("data/data_source/data_source"),
     dateLocalization = require("localization/date");
 
@@ -191,7 +190,7 @@ QUnit.test("set range by dataSource for non-stick series", function(assert) {
     assert.strictEqual(options.startValue, 0.5);
     assert.strictEqual(options.endValue, 5.5);
     assert.strictEqual(options.valueType, "numeric");
-    var range = this.translator.update.lastCall.args[0];
+    var range = this.axis.setBusinessRange.lastCall.args[0];
     assert.strictEqual(range.minVisible, 0.5);
     assert.strictEqual(range.maxVisible, 5.5);
 });
@@ -439,7 +438,7 @@ QUnit.test("rangeSelector with scale.valueType and dataSourceField and without c
         dataSourceField: "t"
     });
 
-    assert.equal(this.axis.updateOptions.getCall(0).args[0].valueType, "numeric");
+    assert.equal(this.axis.setBusinessRange.getCall(0).args[0].dataType, "numeric");
 });
 
 QUnit.module("Semidiscrete scale", $.extend({}, commons.environment, {
@@ -601,7 +600,7 @@ QUnit.test("Pass interval info to translator", function(assert) {
         }
     });
 
-    assert.deepEqual(this.translator.update.lastCall.args[2], { isHorizontal: true, interval: 5 });
+    assert.strictEqual(this.axis.updateOptions.lastCall.args[0].semiDiscreteInterval, 5);
 });
 
 QUnit.test("Translator and scale initialized with same range. based on dataSource", function(assert) {
@@ -615,7 +614,7 @@ QUnit.test("Translator and scale initialized with same range. based on dataSourc
     });
 
     var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.translator.update.lastCall.args[0];
+        range = this.axis.setBusinessRange.lastCall.args[0];
 
     assert.strictEqual(range.min, options.startValue);
     assert.strictEqual(range.minVisible, options.startValue);
@@ -634,7 +633,7 @@ QUnit.test("Translator and scale initialized with same range. based on scale sta
     });
 
     var options = this.axis.updateOptions.lastCall.args[0],
-        range = this.translator.update.lastCall.args[0];
+        range = this.axis.setBusinessRange.lastCall.args[0];
 
     assert.strictEqual(range.min, options.startValue);
     assert.strictEqual(range.minVisible, options.startValue);
@@ -1026,14 +1025,22 @@ QUnit.test("If not set - sliderMarker format depends on minorTickInterval", func
 
 QUnit.module("Initialization", commons.environment);
 
-QUnit.test("translator creation", function(assert) {
-    var spy = sinon.spy(translator2DModule, "Translator2D");
+QUnit.test("Update axis canvas", function(assert) {
+    this.createWidget({
+        margin: {
+            top: 20
+        }
+    });
 
-    this.createWidget();
-
-    assert.strictEqual(spy.callCount, 1);
-    assert.deepEqual(spy.lastCall.args, [{}, {}]);
-    assert.deepEqual(this.translator.update.lastCall.args.slice(1), [{ left: 0, width: 299 }, { isHorizontal: true, interval: undefined }]);
+    assert.deepEqual(this.axis.draw.lastCall.args[0], {
+        bottom: 0,
+        height: 24,
+        left: 0,
+        right: 0,
+        top: 20,
+        width: 299
+    }, "canvas passed to draw");
+    assert.deepEqual(this.axis.shift.lastCall.args, [{ left: 0, bottom: 8 }], "shift arguments");
 });
 
 QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", function(assert) {
@@ -1049,7 +1056,7 @@ QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", f
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 15, top: 10, width: 284, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 15, top: 10, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 //T252890
@@ -1062,7 +1069,7 @@ QUnit.test("sliderMarker's placeholderSize width only", function(assert) {
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 60, top: 0, width: 180, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 60, top: 0, width: 240, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("range container canvas with set indents. indents > scale's labels", function(assert) {
@@ -1073,7 +1080,7 @@ QUnit.test("range container canvas with set indents. indents > scale's labels", 
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 275, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 285, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("range container canvas with set indents. indents < scale's labels", function(assert) {
@@ -1084,7 +1091,7 @@ QUnit.test("range container canvas with set indents. indents < scale's labels", 
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 7, top: 0, width: 286, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 7, top: 0, width: 293, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("range container canvas with set indents & sliderMarker.placeholderSize", function(assert) {
@@ -1104,7 +1111,7 @@ QUnit.test("range container canvas with set indents & sliderMarker.placeholderSi
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 20, width: 275, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 20, width: 285, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("range container canvas with set sliderMarker.placeHolderHeight", function(assert) {
@@ -1114,7 +1121,7 @@ QUnit.test("range container canvas with set sliderMarker.placeHolderHeight", fun
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 10, width: 299, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 10, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("range container canvas. set sliderMarker.placeHolderHeight with set placeholderSize.height", function(assert) {
@@ -1127,7 +1134,7 @@ QUnit.test("range container canvas. set sliderMarker.placeHolderHeight with set 
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 10, width: 299, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 10, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("rangeContainer canvas if sliderMarker placeholderSize as number is defined", function(assert) {
@@ -1137,7 +1144,7 @@ QUnit.test("rangeContainer canvas if sliderMarker placeholderSize as number is d
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 10, width: 280, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 10, width: 290, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("rangeContainer canvas for invisible sliderMarker if placeholderSize is defined", function(assert) {
@@ -1148,7 +1155,7 @@ QUnit.test("rangeContainer canvas for invisible sliderMarker if placeholderSize 
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 10, width: 280, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 10, width: 290, height: 24, right: 0, bottom: 0 });
 });
 
 
@@ -1162,7 +1169,7 @@ QUnit.test("rangeContainer canvas if sliderMarker placeholderSize.width as numbe
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 20, top: 10, width: 260, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 20, top: 10, width: 280, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("rangeContainer canvas if sliderMarker not visible and scale label visible", function(assert) {
@@ -1172,7 +1179,7 @@ QUnit.test("rangeContainer canvas if sliderMarker not visible and scale label vi
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("rangeContainer canvas where scale label and sliderMarker not visible", function(assert) {
@@ -1187,7 +1194,7 @@ QUnit.test("rangeContainer canvas where scale label and sliderMarker not visible
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("rangeContainer canvas, it has dataSource and series", function(assert) {
@@ -1232,7 +1239,7 @@ QUnit.test("rangeContainer canvas, it has image", function(assert) {
 QUnit.test("scaleLabelsAreaHeight if scale.placeholderHeight is not defined", function(assert) {
     this.createWidget();
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("scaleLabelsAreaHeight if scale.placeholderHeight is defined", function(assert) {
@@ -1242,7 +1249,7 @@ QUnit.test("scaleLabelsAreaHeight if scale.placeholderHeight is defined", functi
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("scaleLabelsAreaHeight if scale.placeholderHeight is not defined and invisible labels", function(assert) {
@@ -1254,7 +1261,7 @@ QUnit.test("scaleLabelsAreaHeight if scale.placeholderHeight is not defined and 
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("T214998. scale multi-line text label", function(assert) {

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     Slider = require("./slider"),
     SliderHandle = require("./slider/ui.slider_handle"),
     registerComponent = require("../core/component_registrator"),
@@ -32,7 +33,7 @@ var RangeSlider = Slider.inherit({
                 if(that.option("start") === that.option("end")) {
                     that._capturedHandle = capturedHandle;
                     e.target = that._capturedHandle;
-                    that._capturedHandle.focus();
+                    eventsEngine.trigger(that._capturedHandle, "focus");
                 }
             },
 
@@ -258,7 +259,7 @@ var RangeSlider = Slider.inherit({
                 $nextHandle = this._$handleEnd;
             }
 
-            $nextHandle.focus();
+            eventsEngine.trigger($nextHandle, "focus");
 
             if($nextHandle && $nextHandle !== this._capturedHandle) {
                 this._updateSelectedRangePosition((startValue - min) / (max - min), (endValue - min) / (max - min));

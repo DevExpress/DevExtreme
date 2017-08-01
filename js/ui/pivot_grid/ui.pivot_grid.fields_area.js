@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
+    each = require("../../core/utils/iterator").each,
     areaItem = require("./ui.pivot_grid.area_item"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     Popup = require("../popup"),
@@ -127,7 +128,7 @@ exports.FieldsArea = areaItem.AreaItem.inherit({
             return;
         }
 
-        $.each(data, function(index, field) {
+        each(data, function(index, field) {
             if(field.area === area && field.visible !== false) {
                 var td = $("<td>").append(fieldChooserBase.renderField(field, field.area === "row")),
                     indicators = td.find(".dx-column-indicators");

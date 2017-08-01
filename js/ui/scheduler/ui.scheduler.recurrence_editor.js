@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
@@ -9,6 +10,7 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    each = require("../../core/utils/iterator").each,
     Editor = require("../editor/editor"),
     CheckBox = require("../check_box"),
     RadioGroup = require("../radio_group"),
@@ -409,7 +411,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     _repeatByDayValueChangeHandler: function() {
         var byDayRule = "";
 
-        $.each(this._daysOfWeek, function(index, day) {
+        each(this._daysOfWeek, function(index, day) {
             if(day.option("value")) {
                 var dayName = days[index];
 
@@ -826,7 +828,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
 
         var freq = this._recurrenceRule.rules().freq || "DAILY";
 
-        $.each($labels, function(_, $label) {
+        each($labels, function(_, $label) {
             $($label).text(messageLocalization.format("dxScheduler-recurrenceRepeat" + freq.charAt(0).toUpperCase() + freq.substr(1).toLowerCase()));
         });
     },
@@ -859,7 +861,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
 
         var daysByRule = this._daysOfWeekByRules();
 
-        $.each(this._daysOfWeek, function(index, day) {
+        each(this._daysOfWeek, function(index, day) {
             var dayName = days[index];
 
             day.option("value", inArray(dayName, daysByRule) > -1);
@@ -885,7 +887,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     },
 
     toggle: function() {
-        this._switchEditor.element().trigger(clickEvent.name);
+        eventsEngine.trigger(this._switchEditor.element(), clickEvent.name);
     },
 
     setAria: function() {

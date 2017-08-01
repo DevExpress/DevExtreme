@@ -227,7 +227,7 @@ QUnit.test("Selection works correct with custom rootValue", function(assert) {
             showCheckBoxesMode: "normal",
             rootValue: "none"
         }).dxTreeView("instance"),
-        $icon = treeView.element().find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0),
+        $icon = $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0),
         $checkbox,
         nodes;
 

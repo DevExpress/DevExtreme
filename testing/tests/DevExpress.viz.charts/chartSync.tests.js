@@ -499,7 +499,7 @@ var environment = {
         });
 
         assert.ok(chart.series[0].wasDrawn);
-        assert.deepEqual(chart.series[0].drawArguments[3], chart.series[0], "Correct series for legend callback");
+        assert.deepEqual(chart.series[0].drawArguments[2], chart.series[0], "Correct series for legend callback");
     });
 
     QUnit.test("Draw everything on first request", function(assert) {
@@ -831,6 +831,8 @@ var environment = {
             var stub = sinon.createStubInstance(ScrollBar);
             stub.init.returns(stub);
             stub.update.returns(stub);
+            stub.getMargins.returns({ left: 0, top: 0, bottom: 0, right: 0 });
+            stub.estimateMargins.returns({ left: 0, top: 0, bottom: 0, right: 0 });
             return stub;
         });
 
@@ -946,10 +948,14 @@ var environment = {
     QUnit.test("EqualBarWidth updating", function(assert) {
         //arrange
         var chart = this.createChart({
-            equalBarWidth: false,
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" }
-        });
+                equalBarWidth: false,
+                dataSource: [{ arg: 1, val: 1 }],
+                series: { type: "line" }
+            }),
+            series = chart.getAllSeries()[0],
+            valAxis = chart._valueAxes[0],
+            argAxis = chart._argumentAxes[0];
+
         seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
@@ -965,15 +971,22 @@ var environment = {
         });
         //assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.equalBarWidth, true, "series family should be updated");
+
+        assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+        assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+        assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
     });
 
     QUnit.test("MinBubbleSize updating", function(assert) {
         //arrange
         var chart = this.createChart({
-            minBubbleSize: 2,
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" }
-        });
+                minBubbleSize: 2,
+                dataSource: [{ arg: 1, val: 1 }],
+                series: { type: "line" }
+            }),
+            series = chart.getAllSeries()[0],
+            valAxis = chart._valueAxes[0],
+            argAxis = chart._argumentAxes[0];
         seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
@@ -989,15 +1002,22 @@ var environment = {
         });
         //assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.minBubbleSize, 5, "series family should be updated");
+
+        assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+        assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+        assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
     });
 
     QUnit.test("MaxBubbleSize updating", function(assert) {
         //arrange
         var chart = this.createChart({
-            maxBubbleSize: 4,
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" }
-        });
+                maxBubbleSize: 4,
+                dataSource: [{ arg: 1, val: 1 }],
+                series: { type: "line" }
+            }),
+            series = chart.getAllSeries()[0],
+            valAxis = chart._valueAxes[0],
+            argAxis = chart._argumentAxes[0];
         seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
@@ -1013,15 +1033,22 @@ var environment = {
         });
         //assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.maxBubbleSize, 10, "series family should be updated");
+
+        assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+        assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+        assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
     });
 
     QUnit.test("BarWidth updating", function(assert) {
         //arrange
         var chart = this.createChart({
-            barWidth: 7,
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" }
-        });
+                barWidth: 7,
+                dataSource: [{ arg: 1, val: 1 }],
+                series: { type: "line" }
+            }),
+            series = chart.getAllSeries()[0],
+            valAxis = chart._valueAxes[0],
+            argAxis = chart._argumentAxes[0];
         seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
@@ -1037,15 +1064,22 @@ var environment = {
         });
         //assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.barWidth, 11, "series family should be updated");
+
+        assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+        assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+        assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
     });
 
     QUnit.test("NegativesAsZeroes updating", function(assert) {
         //arrange
         var chart = this.createChart({
-            negativesAsZeroes: false,
-            dataSource: [{ arg: 1, val: 1 }],
-            series: { type: "line" }
-        });
+                negativesAsZeroes: false,
+                dataSource: [{ arg: 1, val: 1 }],
+                series: { type: "line" }
+            }),
+            series = chart.getAllSeries()[0],
+            valAxis = chart._valueAxes[0],
+            argAxis = chart._argumentAxes[0];
         seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
         $.each(chart.seriesFamilies, function(_, family) {
             sinon.stub(family, "updateOptions", function(options) {
@@ -1061,6 +1095,10 @@ var environment = {
         });
         //assert
         assert.equal(chart.seriesFamiliesUpdatingOptions.negativesAsZeroes, true, "series family should be updated");
+
+        assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
+        assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
+        assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
     });
 
     var testEverythingWasDrawn = function(assert, chart, options) {
@@ -1074,9 +1112,6 @@ var environment = {
 
         !firstDraw && assert.ok(chart._panesClipRects.base[0].attr.calledOnce, "Pane clip rectangle should be updated");
         firstDraw && assert.ok(!chart._panesClipRects.base[0].attr.calledOnce, "Pane clip rectangle should not be updated");
-
-        assert.ok(chart.layoutManager.applyVerticalAxesLayout.called, "Vertical axis layout");
-        assert.ok(chart.layoutManager.applyHorizontalAxesLayout.called, "Horizontal axis layout");
 
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getHeaderBlockStub(), getTitleStub(), getLegendStub()], "legend and title layouted");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
@@ -1121,8 +1156,6 @@ var environment = {
             assert.ok(chart._renderer.stub("clear").called, "Renderer should be cleared in this particular scenario");
         }
 
-        assert.ok(!chart.layoutManager.applyVerticalAxesLayout.called, "Vertical axis layout not needed");
-        assert.ok(!chart.layoutManager.applyHorizontalAxesLayout.called, "Horizontal axis layout not needed");
         assert.ok(!chart.layoutManager.layoutElements.called, "legend and title layouted");
 
         assert.ok(!chart._argumentAxes[0].wasDrawn, "Horizontal axis should not be drawn");
@@ -1191,9 +1224,6 @@ var environment = {
         assert.equal(chart.businessRanges[0].val.min, 1, "Correct val min");
         assert.equal(chart.businessRanges[0].val.max, 5, "Correct val max");
 
-        assert.ok(chart.layoutManager.applyVerticalAxesLayout.called, "Vertical axis layout");
-        assert.ok(chart.layoutManager.applyHorizontalAxesLayout.called, "Horizontal axis layout");
-
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getHeaderBlockStub(), getTitleStub(), getLegendStub()], "legend and title layouted");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
 
@@ -1261,9 +1291,6 @@ var environment = {
         assert.equal(chart.businessRanges[0].val.min, 1, "Correct val min");
         assert.equal(chart.businessRanges[0].val.max, 5, "Correct val max");
 
-        assert.ok(chart.layoutManager.applyVerticalAxesLayout.called, "Vertical axis layout");
-        assert.ok(chart.layoutManager.applyHorizontalAxesLayout.called, "Horizontal axis layout");
-
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [getHeaderBlockStub(), getTitleStub(), getLegendStub()], "legend and title layouted");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[1], chart.DEBUG_canvas, "legend and title layouted");
 
@@ -1314,8 +1341,6 @@ var environment = {
         assert.equal(chart.businessRanges.length, 1);
 
         assert.ok(!chart._renderer.stub("resize").called, "Canvas should not be recreated");
-        assert.ok(!chart.layoutManager.applyVerticalAxesLayout.called, "Vertical axis layout not needed");
-        assert.ok(!chart.layoutManager.applyHorizontalAxesLayout.called, "Horizontal axis layout not needed");
         assert.deepEqual(chart.layoutManager.layoutElements.lastCall.args[0], [], "legend and title layouted");
         assert.ok(chart._argumentAxes[0].wasDrawn, "Horizontal axis was drawn");
         assert.ok(chart._valueAxes[0].wasDrawn, "Vertical axis was drawn");
@@ -1623,7 +1648,6 @@ var environment = {
         assert.ok(!("_resizeHandlerCallback" in chart), "resize handler callback");
 
         assert.strictEqual(chart.businessRanges, null, "business ranges are null");
-        assert.strictEqual(chart.translators, null, "translators are null");
         assert.strictEqual(chart.seriesDisposed, 3, "series");
         assert.strictEqual(chart.series, null, "series are null");
 
@@ -1635,7 +1659,6 @@ var environment = {
         assert.ok(getTrackerStub().stub("dispose").called, "tracker");
         assert.strictEqual(chart._tracker, null, "tracker is null");
         assert.strictEqual(chart._title, null, "title is null");
-        assert.strictEqual(chart.paneAxis, null, "pane axis is null");
         assert.strictEqual(chart._userOptions, null, "user options");
         assert.strictEqual(chart._crosshair, null, "crosshair is null");
         assert.ok(chart._crosshairDisposed, "_crosshair");
@@ -1692,7 +1715,7 @@ var environment = {
     QUnit.test("event contextmenu on div element", function(assert) {
         var chart = this.createChart();
 
-        chart.element().trigger(new $.Event("contextmenu"));
+        $(chart.element()).trigger(new $.Event("contextmenu"));
 
         assert.ok(chart.element());
         assert.equal(chart.eventType, "contextmenu");
@@ -1701,7 +1724,7 @@ var environment = {
     QUnit.test("event MSHoldVisual on div element", function(assert) {
         var chart = this.createChart();
 
-        chart.element().trigger(new $.Event("MSHoldVisual"));
+        $(chart.element()).trigger(new $.Event("MSHoldVisual"));
 
         assert.ok(chart.element());
         assert.equal(chart.eventType, "MSHoldVisual");
@@ -1723,8 +1746,6 @@ function resetMocksInChart(chart) {
     chart._renderer.stub("resize").reset();
     chart._renderer.stub("clear").reset();
 
-    chart.layoutManager.applyVerticalAxesLayout.reset && chart.layoutManager.applyVerticalAxesLayout.reset();
-    chart.layoutManager.applyHorizontalAxesLayout.reset && chart.layoutManager.applyHorizontalAxesLayout.reset();
     chart.layoutManager.layoutElements.reset && chart.layoutManager.layoutElements.reset();
 
     chart._argumentAxes[0].resetMock();

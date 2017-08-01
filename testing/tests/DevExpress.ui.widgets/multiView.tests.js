@@ -192,7 +192,7 @@ QUnit.test("pointerdown should not affect to parent multiview (T306118)", functi
         $innerMultiView = $outerFirstItem.find("." + MULTIVIEW_CLASS),
         $innerSecondItem = $innerMultiView.dxMultiView("itemElements").get(1);
 
-    $outerItemElements.eq(0).trigger($.Event("dxpointerdown", { target: $innerSecondItem }));
+    $($outerItemElements.eq(0)).trigger($.Event("dxpointerdown", { target: $innerSecondItem }));
 
     assert.equal(outerMultiView.option("focusedElement").get(0), $outerItemElements.get(0), "focusedElement was not changed if event's target is not part of the widget");
 });
@@ -403,7 +403,7 @@ QUnit.test("selected index should not be changed by click on item", function(ass
 
     var multiView = $("#multiView").dxMultiView("instance");
 
-    multiView.itemElements().eq(1).trigger("dxclick");
+    $(multiView.itemElements()).eq(1).trigger("dxclick");
     assert.equal(multiView.option("selectedIndex"), 0, "selected index not changed");
 });
 
@@ -865,7 +865,7 @@ QUnit.test("selected item should have focus after swipe", function(assert) {
             focusStateEnabled: true
         }),
         multiView = $multiView.dxMultiView("instance"),
-        $item1 = multiView.itemElements().eq(1);
+        $item1 = $(multiView.itemElements()).eq(1);
 
     pointerMock($multiView).start().swipeStart().swipe(-0.5).swipeEnd(-1);
     assert.ok($item1.hasClass("dx-state-focused"), "item obtained focus after swipe");

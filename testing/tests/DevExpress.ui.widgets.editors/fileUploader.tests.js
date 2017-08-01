@@ -638,20 +638,18 @@ QUnit.test("value change should be fired when file selected", function(assert) {
 });
 
 QUnit.test("value change should be fired when file selected, uploadMode = useForm", function(assert) {
-    var counter = 0;
-    var $fileUploader = $("#fileuploader").dxFileUploader({
+    var valueChangeHandler = sinon.stub(),
+        $fileUploader = $("#fileuploader").dxFileUploader({
             uploadMode: "useForm",
-            onValueChanged: function(e) {
-                !counter && assert.deepEqual(e.value, [], "value specified correctly");
-                counter++;
-            }
+            onValueChanged: valueChangeHandler
         }),
         fileUploader = $fileUploader.dxFileUploader("instance");
 
-
     simulateFileChoose($fileUploader, fakeFile);
-    assert.equal(counter, 2, "onValueChanged was called twice");
-    assert.deepEqual(fileUploader.option("value"), [fakeFile], "value specified correctly");
+
+    assert.equal(valueChangeHandler.callCount, 1, "onValueChanged was called once");
+    assert.deepEqual(valueChangeHandler.getCall(0).args[0].value, [fakeFile], "value have been correctly passed to the event");
+    assert.deepEqual(fileUploader.option("value"), [fakeFile], "value is correct");
 });
 
 QUnit.test("value should support files at initialization", function(assert) {
@@ -1113,6 +1111,18 @@ QUnit.test("input should be cleared after value reset", function(assert) {
     fileUploader.reset();
 
     assert.equal($input.val(), "", "value was cleared in input");
+});
+
+QUnit.test("input value should not be cleared after the file selection", function(assert) {
+    var $fileUploader = $("#fileuploader").dxFileUploader({
+            extendSelection: true,
+            uploadMode: 'useForm'
+        }),
+        $input = $fileUploader.find("." + FILEUPLOADER_INPUT_CLASS);
+
+    $input.val("fakeFile").trigger("change");
+
+    assert.equal($input.val(), "fakeFile", "value was cleared in input");
 });
 
 

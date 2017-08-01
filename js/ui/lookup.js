@@ -1,9 +1,11 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
+    each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
@@ -717,11 +719,10 @@ var Lookup = DropDownList.inherit({
             this._validatedOpening();
         }).bind(this));
 
-        this._$field = $("<div>")
-            .addClass(LOOKUP_FIELD_CLASS)
-            .on(eventUtils.addNamespace(clickEvent.name, this.NAME), function(e) {
-                fieldClickAction({ jQueryEvent: e });
-            });
+        this._$field = $("<div>").addClass(LOOKUP_FIELD_CLASS);
+        eventsEngine.on(this._$field, eventUtils.addNamespace(clickEvent.name, this.NAME), function(e) {
+            fieldClickAction({ jQueryEvent: e });
+        });
 
         var $arrow = $("<div>").addClass(LOOKUP_ARROW_CLASS);
 
@@ -873,7 +874,7 @@ var Lookup = DropDownList.inherit({
 
         result.maxHeight = function() { return $(window).height(); };
 
-        $.each(["position", "animation", "popupWidth", "popupHeight"], (function(_, optionName) {
+        each(["position", "animation", "popupWidth", "popupHeight"], (function(_, optionName) {
             if(this.option(optionName) !== undefined) {
                 result[this._popupOptionMap(optionName)] = this.option(optionName);
             }
@@ -1113,7 +1114,7 @@ var Lookup = DropDownList.inherit({
         if(this.option("searchEnabled")) {
             this._searchBox.focus();
         } else {
-            this._$list.focus();
+            eventsEngine.trigger(this._$list, "focus");
         }
     },
 
@@ -1253,7 +1254,7 @@ var Lookup = DropDownList.inherit({
     },
 
     focus: function() {
-        this.option("opened") ? this._setFocusPolicy() : this._focusTarget().focus();
+        this.option("opened") ? this._setFocusPolicy() : eventsEngine.trigger(this._focusTarget(), "focus");
     },
 
     field: function() {

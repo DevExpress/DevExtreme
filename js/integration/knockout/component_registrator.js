@@ -167,8 +167,9 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                 optionChangedCallbacks.add(handleOptionChanged);
                 $element
                     .data(CREATED_WITH_KO_DATA_KEY, true)
-                    .data(LOCKS_DATA_KEY, new Locker())
-                    [componentName](ctorOptions);
+                    .data(LOCKS_DATA_KEY, new Locker());
+
+                new componentClass($element, ctorOptions);
 
                 ctorOptions = null;
             };

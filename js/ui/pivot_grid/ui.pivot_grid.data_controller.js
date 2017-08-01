@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     when = require("../../integration/jquery/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    iteratorUtils = require("../../core/utils/iterator"),
     Class = require("../../core/class"),
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
@@ -163,7 +164,7 @@ exports.DataController = Class.inherit((function() {
             if((stringValuesUsed && sortBySummaryPath[0].indexOf("&[") !== -1 && headerItem.key) || !headerItem.key) {
                 path = createPath(items);
             } else {
-                path = $.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
+                path = iteratorUtils.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
             }
 
             if(item.type === GRAND_TOTAL_TYPE) {
@@ -239,7 +240,7 @@ exports.DataController = Class.inherit((function() {
 
                         item.isLast = !item.children || !item.children.length;
                         if(item.isLast) {
-                            $.each(options.sortBySummaryPaths, function(index, sortBySummaryPath) {
+                            iteratorUtils.each(options.sortBySummaryPaths, function(index, sortBySummaryPath) {
                                 if(!typeUtils.isDefined(item.dataIndex)) {
                                     sortBySummaryPath = sortBySummaryPath.slice(0);
                                     sortBySummaryPath.pop();
@@ -434,7 +435,7 @@ exports.DataController = Class.inherit((function() {
     function createSortPaths(headerFields, dataFields) {
         var sortBySummaryPaths = [];
 
-        $.each(headerFields, function(index, headerField) {
+        iteratorUtils.each(headerFields, function(index, headerField) {
             var fieldIndex = pivotGridUtils.findField(dataFields, headerField.sortBySummaryField);
             if(fieldIndex >= 0) {
                 sortBySummaryPaths.push((headerField.sortBySummaryPath || []).concat([fieldIndex]));
@@ -659,7 +660,7 @@ exports.DataController = Class.inherit((function() {
 
     function getHiddenTotals(dataFields) {
         var result = [];
-        $.each(dataFields, function(index, field) {
+        iteratorUtils.each(dataFields, function(index, field) {
             if(field.showTotals === false) {
                 result.push(index);
             }
@@ -681,7 +682,7 @@ exports.DataController = Class.inherit((function() {
 
     function getHiddenGrandTotalsTotals(dataFields, columnFields) {
         var result = [];
-        $.each(dataFields, function(index, field) {
+        iteratorUtils.each(dataFields, function(index, field) {
             if(field.showGrandTotals === false) {
                 result.push(index);
             }
@@ -977,7 +978,9 @@ exports.DataController = Class.inherit((function() {
             when(
                 createHeaderInfo(data.columns, columnFields, dataFieldsForColumns, true, columnOptions),
                 createHeaderInfo(data.rows, rowFields, dataFieldsForRows, false, rowOptions)
-            ).done(function(columnsInfo, rowsInfo) {
+            ).always(function() {
+                dataSource._changeLoadingCount(-1);
+            }).done(function(columnsInfo, rowsInfo) {
                 that._columnsInfo = columnsInfo;
                 that._rowsInfo = rowsInfo;
 
@@ -990,8 +993,6 @@ exports.DataController = Class.inherit((function() {
                     that._columnsScrollController.load();
                     that._lockChanged = false;
                 }
-            }).always(function() {
-                dataSource._changeLoadingCount(-1);
             }).done(function() {
                 that._fireChanged();
                 if(that._stateStoringController.isEnabled() && !that._dataSource.isLoading()) {

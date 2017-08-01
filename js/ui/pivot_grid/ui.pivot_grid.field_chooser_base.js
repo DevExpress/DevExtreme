@@ -1,12 +1,14 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     ArrayStore = require("../../data/array_store"),
     clickEvent = require("../../events/click"),
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     messageLocalization = require("../../localization/message"),
     registerComponent = require("../../core/component_registrator"),
     Widget = require("../widget/ui.widget"),
@@ -16,7 +18,7 @@ var $ = require("../../core/renderer"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     Sortable = require("./ui.sortable"),
     inArray = inArray,
-    each = $.each,
+    each = iteratorUtils.each,
     IE_FIELD_WIDTH_CORRECTION = 1,
     DIV = "<div>",
     HeaderFilterView = headerFilter.HeaderFilterView;
@@ -28,18 +30,18 @@ var processItems = function(groupItems, field) {
 
     if(field.filterValues) {
         each(field.filterValues, function(_, filterValue) {
-            filterValues.push(Array.isArray(filterValue) ? filterValue.join("/") : filterValue);
+            filterValues.push(Array.isArray(filterValue) ? filterValue.join("/") : filterValue && filterValue.valueOf());
         });
     }
 
     pivotGridUtils.foreachTree(groupItems, function(items) {
         var item = items[0],
             path = pivotGridUtils.createPath(items),
-            preparedFilterValueByText = isTree ? $.map(items, function(item) { return item.text; }).reverse().join("/") : item.text,
+            preparedFilterValueByText = isTree ? iteratorUtils.map(items, function(item) { return item.text; }).reverse().join("/") : item.text,
             preparedFilterValue;
 
         item.value = isTree ? path.slice(0) : (item.key || item.value);
-        preparedFilterValue = isTree ? path.join("/") : item.value;
+        preparedFilterValue = isTree ? path.join("/") : item.value && item.value.valueOf();
 
         if(item.children) {
             item.items = item.children;
@@ -183,7 +185,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 if($sourceItem.hasClass("dx-area-box")) {
                     $item = $sourceItem.clone();
                     if(target === "drag") {
-                        $.each($sourceItem, function(index, sourceItem) {
+                        iteratorUtils.each($sourceItem, function(index, sourceItem) {
                             $item.eq(index).css("width", parseInt($(sourceItem).css("width"), 10) + IE_FIELD_WIDTH_CORRECTION);
                         });
                     }
@@ -195,7 +197,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                 }
                 if(target === "drag") {
                     var wrapperContainer = $(DIV);
-                    $.each($item, function(_, item) {
+                    iteratorUtils.each($item, function(_, item) {
                         var wrapper = $("<div>")
                             .addClass("dx-pivotgrid-fields-container")
                             .addClass("dx-widget")
@@ -300,10 +302,10 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             };
 
         if(element) {
-            element.on(clickEvent.name, ".dx-area-field.dx-area-box", func);
+            eventsEngine.on(element, clickEvent.name, ".dx-area-field.dx-area-box", func);
             return;
         }
-        that.element().on(clickEvent.name, ".dx-area-field.dx-area-box", func);
+        eventsEngine.on(that.element(), clickEvent.name, ".dx-area-field.dx-area-box", func);
     },
 
     _initTemplates: noop,

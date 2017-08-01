@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
@@ -60,12 +61,12 @@ var GalleryNavButton = Widget.inherit({
             $element = this.element(),
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        $element
-            .addClass(GALLERY_CLASS + "-nav-button-" + this.option("direction"))
-            .off(eventName)
-            .on(eventName, function(e) {
-                that._createActionByOption("onClick")({ jQueryEvent: e });
-            });
+        $element.addClass(GALLERY_CLASS + "-nav-button-" + this.option("direction"));
+
+        eventsEngine.off($element, eventName);
+        eventsEngine.on($element, eventName, function(e) {
+            that._createActionByOption("onClick")({ jQueryEvent: e });
+        });
     },
 
     _optionChanged: function(args) {
@@ -416,9 +417,8 @@ var Gallery = CollectionWidget.inherit({
     _renderDragHandler: function() {
         var eventName = eventUtils.addNamespace("dragstart", this.NAME);
 
-        this.element()
-            .off(eventName)
-            .on(eventName, "img", function() { return false; });
+        eventsEngine.off(this.element(), eventName);
+        eventsEngine.on(this.element(), eventName, "img", function() { return false; });
     },
 
     _renderWrapper: function() {
@@ -691,11 +691,10 @@ var Gallery = CollectionWidget.inherit({
 
         var indicatorSelectAction = this._createAction(this._indicatorSelectHandler);
 
-        rootElement
-            .off(eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR)
-            .on(eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
-                indicatorSelectAction({ jQueryEvent: e });
-            });
+        eventsEngine.off(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR);
+        eventsEngine.on(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
+            indicatorSelectAction({ jQueryEvent: e });
+        });
     },
 
     _indicatorSelectHandler: function(args) {

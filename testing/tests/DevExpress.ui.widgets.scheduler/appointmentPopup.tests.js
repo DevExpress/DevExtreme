@@ -668,7 +668,7 @@ QUnit.test("Popup should has default close button in current mobile theme", func
 QUnit.test("Clicking on 'Repeat' label should toggle recurrence editor", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
     var popup = this.instance.getAppointmentPopup(),
-        editorLabel = popup.content().find(".dx-scheduler-recurrence-rule-item .dx-field-item-label");
+        editorLabel = $(popup.content()).find(".dx-scheduler-recurrence-rule-item .dx-field-item-label");
 
     editorLabel.trigger("dxclick");
 

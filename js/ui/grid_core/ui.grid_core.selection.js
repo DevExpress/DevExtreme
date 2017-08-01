@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     typeUtils = require("../../core/utils/type"),
+    each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     support = require("../../core/utils/support"),
     clickEvent = require("../../events/click"),
@@ -50,7 +52,7 @@ var processLongTap = function(that, jQueryEvent) {
 exports.SelectionController = gridCore.Controller.inherit((function() {
     var isSeveralRowsSelected = function(that, selectionFilter) {
         var keyIndex = 0,
-            store = that.getController("data").store(),
+            store = that._dataController.store(),
             key = store && store.key(),
             isComplexKey = Array.isArray(key);
 
@@ -78,6 +80,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             var that = this,
                 dataController = that.getController("data"),
                 selectionOptions = that.option("selection") || {};
+
+            that._dataController = dataController;
 
             that._selectionMode = that.option(SELECTION_MODE);
 
@@ -147,7 +151,11 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
             return new Selection(options);
         },
 
-        _fireSelectionChanged: function() {
+        _fireSelectionChanged: function(options) {
+            if(options) {
+                this.executeAction("onSelectionChanged", options);
+            }
+
             var argument = this.option("selection.deferred") ?
                 { selectionFilter: this.option("selectionFilter") } :
                 { selectedRowKeys: this.option("selectedRowKeys") };
@@ -172,9 +180,10 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
         _updateSelectedItems: function(args) {
             var that = this,
+                selectionChangedOptions,
                 isDeferredMode = that.option("selection.deferred"),
                 selectionFilter = that._selection.selectionFilter(),
-                dataController = that.getController("data"),
+                dataController = that._dataController,
                 items = dataController.items();
 
             if(!items) {
@@ -200,24 +209,20 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
             if(isDeferredMode) {
                 that.option("selectionFilter", selectionFilter);
-                that._fireSelectionChanged();
-                that.executeAction("onSelectionChanged", {});
-            } else {
-                if(args.addedItemKeys.length || args.removedItemKeys.length) {
-                    that._selectedItemsInternalChange = true;
-                    that.option("selectedRowKeys", args.selectedItemKeys.slice(0));
-                    that._selectedItemsInternalChange = false;
-
-                    that.executeAction("onSelectionChanged", {
-                        selectedRowsData: args.selectedItems,
-                        selectedRowKeys: args.selectedItemKeys,
-                        currentSelectedRowKeys: args.addedItemKeys,
-                        currentDeselectedRowKeys: args.removedItemKeys
-                    });
-                }
-
-                that._fireSelectionChanged();
+                selectionChangedOptions = {};
+            } else if(args.addedItemKeys.length || args.removedItemKeys.length) {
+                that._selectedItemsInternalChange = true;
+                that.option("selectedRowKeys", args.selectedItemKeys.slice(0));
+                that._selectedItemsInternalChange = false;
+                selectionChangedOptions = {
+                    selectedRowsData: args.selectedItems.slice(0),
+                    selectedRowKeys: args.selectedItemKeys.slice(0),
+                    currentSelectedRowKeys: args.addedItemKeys.slice(0),
+                    currentDeselectedRowKeys: args.removedItemKeys.slice(0)
+                };
             }
+
+            that._fireSelectionChanged(selectionChangedOptions);
         },
 
         getChangedItemIndexes: function(items) {
@@ -227,7 +232,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
 
             for(var i = 0, length = items.length; i < length; i++) {
                 var row = items[i];
-                var isItemSelected = that._selection.isItemSelected(isDeferredSelection ? row.data : row.key);
+                var isItemSelected = that.isRowSelected(isDeferredSelection ? row.data : row.key);
 
                 if(that._selection.isDataItem(row) && row.isSelected !== isItemSelected) {
                     itemIndexes.push(i);
@@ -362,9 +367,14 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_getSelectedRowKeys
+         * @name dxDataGridMethods_getSelectedRowKeys
          * @publicName getSelectedRowKeys()
          * @return array | Promise
+         */
+        /**
+         * @name dxTreeListMethods_getSelectedRowKeys
+         * @publicName getSelectedRowKeys()
+         * @return array
          */
         getSelectedRowKeys: function() {
             return this._selection.getSelectedItemKeys();
@@ -397,14 +407,14 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
          * @return Promise
          */
         selectRowsByIndexes: function(indexes) {
-            var items = this.getController("data").items(),
+            var items = this._dataController.items(),
                 keys = [];
 
             if(!Array.isArray(indexes)) {
                 indexes = Array.prototype.slice.call(arguments, 0);
             }
 
-            $.each(indexes, function() {
+            each(indexes, function() {
                 var item = items[this];
                 if(item && item.rowType === "data") {
                     keys.push(item.key);
@@ -743,11 +753,11 @@ module.exports = {
                 },
 
                 _attachSelectAllCheckBoxClickEvent: function($element) {
-                    $element.on(clickEvent.name, this.createAction(function(e) {
+                    eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
                         var event = e.jQueryEvent;
 
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
-                            $(event.currentTarget).children().trigger(clickEvent.name);
+                            eventsEngine.trigger($(event.currentTarget).children(), clickEvent.name);
                         }
                         event.stopPropagation();
                         event.preventDefault();
@@ -790,7 +800,7 @@ module.exports = {
                         tabIndex: -1,
                         setValue: function(value, e) {
                             if(e && e.jQueryEvent && e.jQueryEvent.type === "keydown") {
-                                container.trigger(clickEvent.name, e);
+                                eventsEngine.trigger(container, clickEvent.name, e);
                             }
                         }
                     }));
@@ -799,7 +809,7 @@ module.exports = {
                 },
 
                 _attachCheckBoxClickEvent: function($element) {
-                    $element.on(clickEvent.name, this.createAction(function(e) {
+                    eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
                         var selectionController = this.getController("selection"),
                             event = e.jQueryEvent,
                             rowIndex = this.getRowIndex($(event.currentTarget).closest("." + ROW_CLASS));
@@ -817,17 +827,17 @@ module.exports = {
 
                     if(change.changeType === "updateSelection") {
                         if(tableElements.length > 0) {
-                            $.each(tableElements, function(_, tableElement) {
-                                $.each(change.itemIndexes || [], function(_, index) {
+                            each(tableElements, function(_, tableElement) {
+                                each(change.itemIndexes || [], function(_, index) {
                                     var $row,
                                         isSelected;
 
                                     //T108078
                                     if(change.items[index]) {
                                         $row = that._getRowElements($(tableElement)).eq(index);
-                                        isSelected = !!change.items[index].isSelected;
+                                        isSelected = change.items[index].isSelected;
                                         $row
-                                            .toggleClass(ROW_SELECTION_CLASS, isSelected)
+                                            .toggleClass(ROW_SELECTION_CLASS, isSelected === undefined ? false : isSelected)
                                             .find("." + SELECT_CHECKBOX_CLASS).dxCheckBox("option", "value", isSelected);
                                         that.setAria("selected", isSelected, $row);
                                     }
@@ -850,13 +860,13 @@ module.exports = {
                     if(selectionMode !== "none") {
                         if(that.option(SHOW_CHECKBOXES_MODE) === "onLongTap" || !support.touch) {
                             //TODO Not working timeout by hold when it is larger than other timeouts by hold
-                            $table.on(eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
+                            eventsEngine.on($table, eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
                                 processLongTap(that.component, e.jQueryEvent);
 
                                 e.jQueryEvent.stopPropagation();
                             }));
                         }
-                        $table.on("mousedown selectstart", that.createAction(function(e) {
+                        eventsEngine.on($table, "mousedown selectstart", that.createAction(function(e) {
                             var event = e.jQueryEvent;
 
                             if(event.shiftKey) {
@@ -918,7 +928,7 @@ module.exports = {
                         selectionController = this.getController("selection"),
                         isCheckBoxesHidden = selectionController.isSelectColumnVisible() && !selectionController.isSelectionWithCheckboxes();
 
-                    $.each(tableElements, function(_, tableElement) {
+                    each(tableElements, function(_, tableElement) {
                         $(tableElement).toggleClass(CHECKBOXES_HIDDEN_CLASS, isCheckBoxesHidden);
                     });
                 }
