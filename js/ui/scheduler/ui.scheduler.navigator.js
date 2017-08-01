@@ -151,7 +151,7 @@ var getConfig = function(step) {
                 getter: "getMonth",
                 getDate: function(date, offset) {
                     var currentDate = date.getDate();
-                    if(currentDate !== 1 && offset > 1) {
+                    if(currentDate !== 1 && Math.abs(offset) !== 1) {
                         date.setMonth(date.getMonth() + 1);
                     }
                     date.setDate(1);

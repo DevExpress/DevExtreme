@@ -443,7 +443,7 @@ QUnit.test("Click on 'previous' button should notify observer, month with interv
     $($nextButton).trigger("dxclick");
     assert.ok(updateSpy.calledOnce, "Observer is notified");
     assert.deepEqual(updateSpy.getCall(0).args[0], "currentDateUpdated", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 1, 25), "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(0).args[1], new Date(2015, 2, 25), "Arguments are OK");
 });
 
 QUnit.test("Calendar popover should be shown on caption click", function(assert) {
