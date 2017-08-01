@@ -613,6 +613,66 @@ QUnit.test("isLoading and loadingChanged", function(assert) {
     d1.resolve([]);
 });
 
+QUnit.test("beginLoading and endLoading", function(assert) {
+    var ds = new DataSource([]),
+        changeCount = 0;
+
+    ds.on("loadingChanged", function() {
+        changeCount++;
+    });
+
+    ds.beginLoading();
+    ds.beginLoading();
+
+    assert.ok(ds.isLoading(), "isLoading");
+    assert.equal(changeCount, 1, "loadingChanged is called once");
+
+    ds.endLoading();
+
+    assert.ok(ds.isLoading(), "isLoading");
+    assert.equal(changeCount, 1, "loadingChanged is called once");
+
+    ds.endLoading();
+
+    assert.ok(!ds.isLoading(), "not isLoading");
+    assert.equal(changeCount, 2, "loadingChanged is called twice");
+});
+
+QUnit.test("beginLoading and endLoading with load", function(assert) {
+    var MyStore = Store.inherit({
+        load: function() {
+            return this.testDeferred.promise();
+        }
+    });
+
+    var store = new MyStore(),
+        ds = new DataSource(store),
+        testDeferred = $.Deferred(),
+        changeCount = 0;
+
+    ds.on("loadingChanged", function() {
+        changeCount++;
+    });
+
+    ds.beginLoading();
+
+    assert.ok(ds.isLoading(), "isLoading");
+    assert.equal(changeCount, 1, "loadingChanged is called once");
+
+    store.testDeferred = testDeferred;
+
+    ds.load().always(function() {
+        assert.ok(ds.isLoading(), "isLoading");
+        assert.equal(changeCount, 1, "loadingChanged is called once");
+        ds.endLoading();
+    });
+
+    testDeferred.resolve([]);
+
+    assert.ok(!ds.isLoading(), "not isLoading");
+    assert.equal(changeCount, 2, "loadingChanged is called twice");
+});
+
 QUnit.test("isLoading is false inside when changed fires", function(assert) {
     var source = new DataSource(TEN_NUMBERS);
 

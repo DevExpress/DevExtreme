@@ -893,10 +893,10 @@ exports.DataController = Class.inherit((function() {
             return this._dataSource.isLoading();
         },
         beginLoading: function() {
-            this._dataSource._changeLoadingCount(1);
+            this._dataSource.beginLoading();
         },
         endLoading: function() {
-            this._dataSource._changeLoadingCount(-1);
+            this._dataSource.endLoading();
         },
         isEmpty: function() {
             var dataFields = this._dataSource.getAreaFields("data"),

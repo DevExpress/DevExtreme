@@ -5625,7 +5625,8 @@ QUnit.module("StateStoring", {
                 },
                 texts: texts
             });
-            sinon.spy(this.dataController._dataSource, "_changeLoadingCount");
+            sinon.spy(this.dataController._dataSource, "beginLoading");
+            sinon.spy(this.dataController._dataSource, "endLoading");
         },
         afterEach: function() {
             moduleConfig.afterEach.call(this);
@@ -5635,15 +5636,15 @@ QUnit.module("StateStoring", {
     QUnit.test("beginLoading", function(assert) {
         this.dataController.beginLoading();
 
-        assert.equal(this.dataController._dataSource._changeLoadingCount.callCount, 1, "changeLoading was called once");
-        assert.equal(this.dataController._dataSource._changeLoadingCount.getCall(0).args[0], 1, "changeLoading args");
+        assert.equal(this.dataController._dataSource.beginLoading.callCount, 1, "beginLoading was called once");
+        assert.equal(this.dataController._dataSource.endLoading.callCount, 0, "endLoading was not called");
     });
 
     QUnit.test("endLoading", function(assert) {
         this.dataController.endLoading();
 
-        assert.equal(this.dataController._dataSource._changeLoadingCount.callCount, 1, "changeLoading was called once");
-        assert.equal(this.dataController._dataSource._changeLoadingCount.getCall(0).args[0], -1, "changeLoading args");
+        assert.equal(this.dataController._dataSource.beginLoading.callCount, 0, "beginLoading was not called");
+        assert.equal(this.dataController._dataSource.endLoading.callCount, 1, "endLoading was called once");
     });
 
 }

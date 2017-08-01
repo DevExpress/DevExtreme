@@ -1102,7 +1102,7 @@ module.exports = Class.inherit((function() {
                 d = $.Deferred();
             options = options || {};
 
-            that._changeLoadingCount(1);
+            that.beginLoading();
 
             d.progress(function(progress) {
                 that._changeLoadingCount(0, progress * 0.8);
@@ -1111,7 +1111,7 @@ module.exports = Class.inherit((function() {
             d.fail(function(e) {
                 that.fireEvent("loadError", [e]);
             }).always(function() {
-                that._changeLoadingCount(-1);
+                that.endLoading();
             });
 
             function loadTask() {
@@ -1253,13 +1253,13 @@ module.exports = Class.inherit((function() {
                 }, state);
 
                 if(!that._descriptions) {
-                    that._changeLoadingCount(1);
+                    that.beginLoading();
                     when(getFields(that)).done(function(fields) {
                         that._fields = setFieldsState(state.fields, fields);
                         that._fieldsPrepared(fields);
                         that.load(state);
                     }).always(function() {
-                        that._changeLoadingCount(-1);
+                        that.endLoading();
                     });
                 } else {
                     that._fields = setFieldsState(state.fields, that._fields);
@@ -1274,6 +1274,14 @@ module.exports = Class.inherit((function() {
                     rowExpandedPaths: getExpandedPaths(that._data, that._descriptions, "rows")
                 };
             }
+        },
+
+        beginLoading: function() {
+            this._changeLoadingCount(1);
+        },
+
+        endLoading: function() {
+            this._changeLoadingCount(-1);
         },
 
         _changeLoadingCount: function(increment, progress) {
@@ -1305,9 +1313,9 @@ module.exports = Class.inherit((function() {
                     options.headerName = headerName;
                 }
 
-                that._changeLoadingCount(1);
+                that.beginLoading();
                 deferred.always(function() {
-                    that._changeLoadingCount(-1);
+                    that.endLoading();
                 });
                 when(store.load(options)).progress(deferred.notify).done(function(data) {
                     if(options.path) {
