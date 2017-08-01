@@ -168,7 +168,9 @@
         },
 
         setTemplateEngine: function() {
-            setTemplateEngine(createTemplateEngine());
+            if(setTemplateEngine) {
+                setTemplateEngine(createTemplateEngine());
+            }
         },
 
         createValidationSummaryItems: function(validationGroup, editorNames) {
