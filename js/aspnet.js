@@ -135,21 +135,25 @@
         return items;
     }
 
+    function createComponent(name, options, id, validatorOptions) {
+        var render = function(_, container) {
+            var selector = "#" + id.replace(/[^\w-]/g, "\\$&"),
+                $component = $(selector, container)[name](options);
+            if($.isPlainObject(validatorOptions)) {
+                $component.dxValidator(validatorOptions);
+            }
+            templateRendered.remove(render);
+        };
+
+        templateRendered.add(render);
+    }
+
     return {
+        createComponent: createComponent,
+
         renderComponent: function(name, options, id, validatorOptions) {
             id = id || ("dx-" + new Guid());
-
-            var render = function(_, container) {
-                var selector = "#" + id.replace(/[^\w-]/g, "\\$&"),
-                    $component = $(selector, container)[name](options);
-                if($.isPlainObject(validatorOptions)) {
-                    $component.dxValidator(validatorOptions);
-                }
-                templateRendered.remove(render);
-            };
-
-            templateRendered.add(render);
-
+            createComponent(name, options, id, validatorOptions);
             return "<div id=\"" + id + "\"></div>";
         },
 
