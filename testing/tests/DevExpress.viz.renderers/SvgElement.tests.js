@@ -610,7 +610,8 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.equal(result, elem);
         assert.ok($.fn.trigger.calledOnce);
         assert.deepEqual($.fn.trigger.firstCall.args, [1, 2, 3, 4]);
-        assert.equal($.fn.trigger.firstCall.thisValue, elem._$element);
+        assert.equal($.fn.trigger.firstCall.thisValue.length, 1);
+        assert.equal($.fn.trigger.firstCall.thisValue.get(0), elem._$element.get(0));
 
         $.fn.trigger = originalF;
     });

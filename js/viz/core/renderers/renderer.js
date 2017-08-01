@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../../core/renderer"),
+    eventsEngine = require("../../../events/core/events_engine"),
     jQuery = require("jquery"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
     doc = document,
@@ -1340,19 +1341,24 @@ SvgElement.prototype = {
         return this;
     },
 
-    //jQuery methods
     on: function() {
-        jQuery.fn.on.apply(this._getJQElement(), arguments);
+        var args = [ this._getJQElement() ];
+        args.push.apply(args, arguments);
+        eventsEngine.on.apply(eventsEngine, args);
         return this;
     },
 
     off: function() {
-        jQuery.fn.off.apply(this._getJQElement(), arguments);
+        var args = [ this._getJQElement() ];
+        args.push.apply(args, arguments);
+        eventsEngine.off.apply(eventsEngine, args);
         return this;
     },
 
     trigger: function() {
-        jQuery.fn.trigger.apply(this._getJQElement(), arguments);
+        var args = [ this._getJQElement() ];
+        args.push.apply(args, arguments);
+        eventsEngine.trigger.apply(eventsEngine, args);
         return this;
     }
 };

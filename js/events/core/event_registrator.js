@@ -1,10 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    each = require("../../core/utils/iterator").each,
-    MemorizedCallbacks = require("../../core/memorized_callbacks");
+var each = require("../../core/utils/iterator").each,
+    callbacks = require("./event_registrator_callbacks");
 
-var callbacks = new MemorizedCallbacks();
 var registerEvent = function(name, eventObject) {
     var strategy = {};
 
@@ -35,11 +33,5 @@ var registerEvent = function(name, eventObject) {
     callbacks.fire(name, strategy);
 };
 registerEvent.callbacks = callbacks;
-
-
-var registerJQueryEvent = function(name, eventObject) {
-    $.event.special[name] = eventObject;
-};
-callbacks.add(registerJQueryEvent);
 
 module.exports = registerEvent;
