@@ -1302,7 +1302,7 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
 
     var focusedElement = this.instance.option("focusedElement").get(0);
     var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(sinon.match(function($element) {
-        return $element.get(0) === focusedElement;
+        return ($element.get && $element.get(0) || $element) === focusedElement;
     }), "focus");
     var appointmentFocusedStub = sinon.stub(this.instance, "notifyObserver").withArgs("appointmentFocused");
 

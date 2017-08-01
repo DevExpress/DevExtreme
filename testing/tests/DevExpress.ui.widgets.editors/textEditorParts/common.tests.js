@@ -667,7 +667,7 @@ QUnit.module("api", moduleConfig);
 QUnit.test("focus method", function(assert) {
     var input = this.input.get(0);
     var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(sinon.match(function($element) {
-        return $element.get(0) === input;
+        return ($element.get && $element.get(0) || $element) === input;
     }), "focus");
 
     this.instance.focus();
