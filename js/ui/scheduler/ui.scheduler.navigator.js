@@ -39,10 +39,10 @@ var getMonthYearFormat = function(date) {
     return dateLocalization.getMonthNames("abbreviated")[date.getMonth()] + " " + dateLocalization.format(date, "year");
 };
 
-var getCaptionFormat = function(short) {
+var getCaptionFormat = function(short, intervalCount) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
-        if(this && this.option("intervalCount") > 1) {
+        if(intervalCount > 1) {
             var lastIntervalDate = new Date(date),
                 defaultViewDuration = this._getConfig().duration;
             lastIntervalDate.setDate(date.getDate() + defaultViewDuration - 1);
@@ -50,7 +50,7 @@ var getCaptionFormat = function(short) {
             var isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth(),
                 useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),
                 firstWeekDateText = dateLocalization.format(date, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : "d"),
-                lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat, true));
+                lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat, this.option("intervalCount")));
 
             return firstWeekDateText + "-" + lastWeekDateText;
         }
