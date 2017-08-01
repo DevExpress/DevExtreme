@@ -270,6 +270,11 @@
             ""
         );
 
+        testTemplate("Evalute expr w/ semicolon",
+            "<% text %>abc",
+            "abc"
+        );
+
         testTemplate("For loop",
             "<% for(var i = 0; i < 5; i++) { %><%= i %><% } %>",
             "01234"
