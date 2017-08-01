@@ -79,7 +79,7 @@
                 acceptText(bag, tmp[1]);
             }
 
-            bag.push("};", "return _.join('')");
+            bag.push("}", "return _.join('')");
 
             return new Function("obj", bag.join(''));
         };
