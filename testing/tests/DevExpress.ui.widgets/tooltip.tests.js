@@ -79,6 +79,18 @@ QUnit.test("tooltip should not prevent closeOnOutsideClick handler of other over
     assert.equal(overlay.option("visible"), false, "dxOverlay should be hiding");
 });
 
+QUnit.test("shading should have pointer-events none", function(assert) {
+    new Tooltip($("#tooltip"), {
+        visible: true,
+        shading: true
+    });
+
+    var $wrapper = $("." + TOOLTIP_WRAPPER_CLASS);
+
+    assert.equal($wrapper.css("pointer-events"), "none", "pointer events is none for shading");
+});
+
+
 QUnit.module("base z-index");
 
 QUnit.test("tooltip should have correct z-index", function(assert) {
