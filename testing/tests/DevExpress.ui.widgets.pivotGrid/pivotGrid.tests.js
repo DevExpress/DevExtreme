@@ -2217,11 +2217,7 @@ QUnit.test("bottom border if horizontal scroll", function(assert) {
     assert.ok(!pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
     assert.ok(pivotGrid._columnsArea.hasScroll(), 'has horizontal scroll');
     assert.ok(parseFloat(pivotGrid.element().find(".dx-area-data-cell").css('border-bottom-width')) > 0, 'data area border bottom width');
-    if(pivotGrid.__scrollBarWidth) {
-        assert.equal(parseFloat(pivotGrid.element().find(".dx-area-row-cell").css('border-bottom-width')), 0, 'row area border bottom width when scrollbar width');
-    } else {
-        assert.ok(parseFloat(pivotGrid.element().find(".dx-area-row-cell").css('border-bottom-width')) > 0, 'row area border bottom width when no scrollbar width');
-    }
+    assert.ok(parseFloat(pivotGrid.element().find(".dx-area-row-cell").css('border-bottom-width')) > 0, 'row area border bottom width when no scrollbar width');
 });
 
 QUnit.test('mergeArraysByMaxValue', function(assert) {
@@ -4750,16 +4746,6 @@ QUnit.test('Update colspans. when new columns count less than headers area have'
 
     assert.strictEqual($lastCells.get(2).colSpan, 2);
     assert.strictEqual($lastCells.get(3).colSpan, 2);
-});
-
-QUnit.test('Add the horizontalScroll css style when pivot grid has a horizontal scrollbar', function(assert) {
-    //arrange
-    var headersArea = createHeadersArea(null, true);
-    headersArea.render($('#pivotArea'), this.data);
-
-    headersArea.processScrollBarSpacing(10);
-
-    assert.ok(headersArea.groupElement().hasClass("dx-horizontal-scroll"));
 });
 
 QUnit.module('Data area');
