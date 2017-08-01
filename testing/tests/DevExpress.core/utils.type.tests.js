@@ -101,4 +101,5 @@ QUnit.test('isPlainObject', function(assert) {
     assert.strictEqual(typeUtils.isPlainObject(1), false, 'number is not plain object');
     assert.strictEqual(typeUtils.isPlainObject('s'), false, 'string is not plain object');
     assert.strictEqual(typeUtils.isPlainObject(new Date()), false, 'date is not plain object');
+    assert.strictEqual(typeUtils.isPlainObject($.Event), false, '$.Event is not plain object');
 });
