@@ -58,7 +58,7 @@
                 bag.push(encode ? encodeHtml(value) : value);
                 bag.push(");");
             } else {
-                bag.push(code);
+                bag.push(code + "\n");
             }
         }
 
