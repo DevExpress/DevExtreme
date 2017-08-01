@@ -318,6 +318,29 @@ require("style-compiler-test-server/known-css-files");
         });
     });
 
+    QUnit.test("themes load Callback", function(assert) {
+        var done = assert.async();
+        var url = ROOT_URL + "testing/helpers/themeMarker.css";
+        var loadCallbackCounter = 0;
+        this.writeToFrame("<link rel=dx-theme data-theme=sampleTheme.sampleColorScheme href='" + url + "' />");
+
+        var loadCallback = function() {
+            loadCallbackCounter++;
+            assert.equal(loadCallbackCounter, 1, "theme is loaded");
+
+            themes.themeLoadedCallback.remove(loadCallback);
+            done();
+        };
+
+        themes.themeLoadedCallback.add(loadCallback);
+        themes.init({
+            context: this.frameDoc(),
+            theme: "sampleTheme.sampleColorScheme"
+        });
+
+        assert.equal(loadCallbackCounter, 0, "theme loading is in progress");
+    });
+
     QUnit.test("current theme name when theme included as simple stylesheet", function(assert) {
         var done = assert.async();
         var url = ROOT_URL + "testing/helpers/themeMarker.css";
