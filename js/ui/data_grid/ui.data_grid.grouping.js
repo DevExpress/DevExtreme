@@ -95,10 +95,9 @@ var GroupingDataSourceAdapterExtender = (function() {
                 dataSource = that._dataSource;
 
             if(dataSource.group()) {
-                //TODO remove access to _changeLoadingCount
-                dataSource._changeLoadingCount(1);
+                dataSource.beginLoading();
                 return that._changeRowExpandCore(path).always(function() {
-                    dataSource._changeLoadingCount(-1);
+                    dataSource.endLoading();
                 });
             }
         },
