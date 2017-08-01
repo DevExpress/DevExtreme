@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    errors = require("../errors"),
+var errors = require("../errors"),
     Class = require("../class"),
     objectUtils = require("./object"),
     typeUtils = require("./type"),
@@ -149,8 +148,7 @@ var compileSetter = function(expr) {
             if(
                 options.merge &&
                 typeUtils.isPlainObject(value) &&
-                (!typeUtils.isDefined(prevTargetValue) || typeUtils.isPlainObject(prevTargetValue)) &&
-                !(value instanceof $.Event) // NOTE: http://bugs.jquery.com/ticket/15090
+                (!typeUtils.isDefined(prevTargetValue) || typeUtils.isPlainObject(prevTargetValue))
             ) {
                 if(!prevTargetValue) {
                     assignPropValue(target, targetPropName, {}, options);

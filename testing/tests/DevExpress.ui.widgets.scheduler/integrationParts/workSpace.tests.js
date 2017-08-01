@@ -1323,3 +1323,21 @@ QUnit.test("ScrollTo of sidebar scrollable shouldn't be called when sidebar scro
     assert.notOk(sideBarScrollToSpy.calledOnce, "sidebar scrollTo was not called");
     assert.ok(dateTableScrollToSpy.calledOnce, "dateTable scrollTo was called");
 });
+
+QUnit.test("intervalCount should be passed to workSpace", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 3, 16),
+        views: [{
+            type: "day",
+            name: "Test Day",
+            intervalCount: 2
+        }],
+        currentView: "day",
+        height: 500
+    });
+
+    var workSpace = this.instance.getWorkSpace();
+
+    assert.equal(workSpace.option("intervalCount"), 2, "option intervalCount was passed");
+});
+

@@ -35,9 +35,26 @@ var getDateMonthFormat = function(short) {
     };
 };
 
+var getMonthYearFormat = function(date) {
+    return dateLocalization.getMonthNames("abbreviated")[date.getMonth()] + " " + dateLocalization.format(date, "year");
+};
+
 var getCaptionFormat = function(short) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
+        if(this && this.option("intervalCount") > 1) {
+            var lastIntervalDate = new Date(date),
+                defaultViewDuration = this._getConfig().duration;
+            lastIntervalDate.setDate(date.getDate() + defaultViewDuration - 1);
+
+            var isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth(),
+                useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),
+                firstWeekDateText = dateLocalization.format(date, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : "d"),
+                lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat, true));
+
+            return firstWeekDateText + "-" + lastWeekDateText;
+        }
+
         return [dateMonthFormat(date), dateLocalization.format(date, "year")].join(" ");
     };
 };
@@ -54,11 +71,12 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
         firstWeekDate.setDate(firstWeekDate.getDate() + (7 - this.option("firstDayOfWeek") + 1));
     }
 
-    var lastWeekDate = new Date(firstWeekDate);
+    var lastWeekDate = new Date(firstWeekDate),
+        intervalCount = this.option("intervalCount");
 
     shift = shift || 6;
 
-    lastWeekDate = new Date(lastWeekDate.setDate(lastWeekDate.getDate() + shift));
+    lastWeekDate = new Date(lastWeekDate.setDate(lastWeekDate.getDate() + (intervalCount > 1 ? 7 * (intervalCount - 1) + shift : shift)));
 
     if(lastWeekDate.getDay() % 6 === 0 && rejectWeekend) {
         lastWeekDate.setDate(lastWeekDate.getDate() + weekendDuration);
@@ -72,6 +90,26 @@ var getWeekCaption = function(date, shift, rejectWeekend) {
     return firstWeekDateText + "-" + lastWeekDateText;
 };
 
+var getMonthCaption = function(date) {
+    if(this.option("intervalCount") > 1) {
+        var firstDate = new Date(date);
+
+        if(firstDate.getDate() !== 1) {
+            firstDate.setMonth(firstDate.getMonth() + 1);
+        }
+        var lastDate = new Date(firstDate);
+        lastDate.setMonth(lastDate.getMonth() + this.option("intervalCount") - 1);
+
+        var isSameYear = firstDate.getYear() === lastDate.getYear(),
+            lastDateText = getMonthYearFormat(lastDate),
+            firstDateText = isSameYear ? dateLocalization.getMonthNames("abbreviated")[firstDate.getMonth()] : getMonthYearFormat(firstDate);
+
+        return firstDateText + "-" + lastDateText;
+    } else {
+        return dateLocalization.format(date, "monthandyear");
+    }
+};
+
 var dateGetter = function(date, offset) {
     return new Date(date[this.setter](date[this.getter]() + offset));
 };
@@ -82,7 +120,7 @@ var getConfig = function(step) {
     switch(step) {
         case "day":
             return {
-                duration: 1,
+                duration: 1 * this.option("intervalCount"),
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,
@@ -90,7 +128,7 @@ var getConfig = function(step) {
             };
         case "week":
             return {
-                duration: 7,
+                duration: 7 * this.option("intervalCount"),
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,
@@ -98,7 +136,7 @@ var getConfig = function(step) {
             };
         case "workWeek":
             return {
-                duration: 7,
+                duration: 7 * this.option("intervalCount"),
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,
@@ -108,11 +146,14 @@ var getConfig = function(step) {
             };
         case "month":
             return {
-                duration: 1,
+                duration: 1 * this.option("intervalCount"),
                 setter: "setMonth",
                 getter: "getMonth",
                 getDate: function(date, offset) {
                     var currentDate = date.getDate();
+                    if(currentDate !== 1 && Math.abs(offset) !== 1) {
+                        date.setMonth(date.getMonth() + 1);
+                    }
                     date.setDate(1);
 
                     date = dateGetter.call(this, date, offset);
@@ -121,9 +162,7 @@ var getConfig = function(step) {
                     date.setDate(currentDate < lastDate ? currentDate : lastDate);
                     return date;
                 },
-                getCaption: function(date) {
-                    return dateLocalization.format(date, "monthandyear");
-                }
+                getCaption: getMonthCaption
             };
         case "agenda":
             agendaDuration = this.invoke("getAgendaDuration");
@@ -156,6 +195,7 @@ var SchedulerNavigator = Widget.inherit({
         return extend(this.callBase(), {
             date: new Date(),
             step: "day",
+            intervalCount: 1,
             min: undefined,
             max: undefined,
             firstDayOfWeek: undefined,
@@ -180,6 +220,7 @@ var SchedulerNavigator = Widget.inherit({
         switch(args.name) {
             case "step":
             case "date":
+            case "intervalCount":
                 this._updateButtonsState();
                 this._renderCaption();
                 this._setCalendarOption("value", this.option("date"));

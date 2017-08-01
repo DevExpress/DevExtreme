@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     errors = require("../../core/errors"),
     inflector = require("../../core/utils/inflector"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
-    registerComponent = require("../../core/component_registrator"),
+    registerComponentCallbacks = require("../../core/component_registrator_callbacks"),
     Widget = require("../../ui/widget/ui.widget"),
     KoTemplate = require("./template"),
     Editor = require("../../ui/editor/editor"),
@@ -222,7 +222,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
     }
 };
 
-registerComponent.callbacks.add(function(name, componentClass) {
+registerComponentCallbacks.add(function(name, componentClass) {
 
     registerComponentKoBinding(name, componentClass);
 

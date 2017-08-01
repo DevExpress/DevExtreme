@@ -19,6 +19,7 @@ var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
 
 /**
  * @name dxDropDownBox
+ * @isEditor
  * @publicName dxDropDownBox
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @module ui/drop_down_box
@@ -271,18 +272,12 @@ var DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled: this.option("focusStateEnabled"),
-            onPositioned: null,
             maxHeight: this._getMaxHeight.bind(this)
         }, this.option("dropDownOptions"));
     },
 
     _getMaxHeight: function() {
-        var $element = this.element(),
-            offset = $element.offset(),
-            windowHeight = $(window).height(),
-            maxHeight = windowHeight - offset.top - $element.outerHeight();
-
-        return maxHeight * 0.9;
+        return $(window).height() * 0.9;
     },
 
     _popupShownHandler: function() {

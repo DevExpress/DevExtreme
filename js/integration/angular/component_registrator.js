@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Config = require("../../core/config"),
-    registerComponent = require("../../core/component_registrator"),
+    registerComponentCallbacks = require("../../core/component_registrator_callbacks"),
     Class = require("../../core/class"),
     Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
@@ -595,7 +595,7 @@ var registerComponentDirective = function(name) {
     }]);
 };
 
-registerComponent.callbacks.add(function(name, componentClass) {
+registerComponentCallbacks.add(function(name, componentClass) {
 
     if(!registeredComponents[name]) {
         registerComponentDirective(name);

@@ -2,11 +2,13 @@
 
 var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
+    dateUtils = require("../../core/utils/date"),
+    dateLocalization = require("../../localization/date"),
     each = require("../../core/utils/iterator").each,
     SchedulerWorkSpace = require("./ui.scheduler.work_space");
 
 var WEEK_CLASS = "dx-scheduler-work-space-week";
-
+var toMs = dateUtils.dateToMilliseconds;
 var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     _getElementClass: function() {
         return WEEK_CLASS;
@@ -17,7 +19,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _getCellCount: function() {
-        return 7;
+        return 7 * this.option("intervalCount");
     },
 
     _getDateByIndex: function(headerIndex) {
@@ -28,6 +30,14 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
 
     _getFormat: function() {
         return this._formatWeekdayAndDay;
+    },
+
+    _getStartViewDate: function() {
+        return dateUtils.getFirstWeekDate(this.option("startDate"), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
+    },
+
+    _getIntervalDuration: function() {
+        return toMs("day") * 7 * this.option("intervalCount");
     },
 
     _getCellsBetween: function($first, $last) {
