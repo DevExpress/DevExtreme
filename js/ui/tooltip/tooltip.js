@@ -69,6 +69,11 @@ var Tooltip = Popover.inherit({
         this.callBase();
     },
 
+    _toggleShading: function(visible) {
+        this.callBase(visible);
+        this._$wrapper.css("pointerEvents", this.option("shading") && visible ? "none" : "auto");
+    },
+
     _renderContent: function() {
         this.callBase();
 
