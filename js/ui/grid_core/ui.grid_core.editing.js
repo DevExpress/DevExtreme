@@ -1075,7 +1075,7 @@ var EditingController = modules.ViewController.inherit((function() {
             if(deferreds.length) {
                 that._saving = true;
 
-                dataSource && dataSource._changeLoadingCount(1);
+                dataSource && dataSource.beginLoading();
 
                 when.apply($, deferreds).done(function() {
                     editData = that._editData.slice(0);
@@ -1100,7 +1100,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 return result.always(function() {
                     that._saving = false;
-                    dataSource && dataSource._changeLoadingCount(-1);
+                    dataSource && dataSource.endLoading();
                 }).promise();
             }
 
