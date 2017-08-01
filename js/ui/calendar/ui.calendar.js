@@ -205,7 +205,7 @@ var Calendar = Editor.inherit({
             */
             /**
             * @name dxCalendarCellTemplate_view
-            * @publicName viewType
+            * @publicName view
             * @type String
             * @acceptValues 'month'|'year'|'decade'|'century'
             */
