@@ -1073,6 +1073,79 @@ QUnit.testStart(function() {
         assert.notEqual(this.instance.element().find(".dx-scheduler-appointment").eq(0).outerHeight(), initialAppointmentHeight, "Appointment was repainted");
     });
 
+    QUnit.test("view.intervalCount is passed to workspace & header & navigator", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            views: [{
+                type: "week",
+                name: "Week",
+                intervalCount: 3
+            }]
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 3, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 3, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
+    });
+
+    QUnit.test("view.startDate is passed to workspace & header & navigator", function(assert) {
+        var date = new Date(2017, 3, 4);
+
+        this.createInstance({
+            currentView: "week",
+            currentDate: new Date(2017, 2, 10),
+            views: [{
+                type: "week",
+                name: "Week",
+                intervalCount: 3,
+                startDate: date
+            }]
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.deepEqual(workSpaceWeek.option("startDate"), date, "workspace has correct startDate");
+        assert.deepEqual(header.option("startDate"), date, "header has correct startDate");
+        assert.equal(navigator.option("date").getMonth(), 1, "navigator has correct date depending on startDate");
+    });
+
+    QUnit.test("currentView option changing should work correctly, when intervalCount & startDate is set", function(assert) {
+        this.createInstance({
+            currentView: "day",
+            currentDate: new Date(2017, 10, 25),
+            views: [{
+                type: "day",
+                name: "day",
+                intervalCount: 3,
+                startDate: new Date(2017, 1, 1)
+            }, {
+                type: "week",
+                name: "Week",
+                intervalCount: 2,
+                startDate: new Date(2017, 10, 1)
+            }]
+        });
+
+        this.instance.option("currentView", "week");
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 2, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 2, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 2, "navigator has correct count");
+
+        assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2017, 10, 1), "workspace has correct startDate");
+        assert.deepEqual(header.option("startDate"), new Date(2017, 10, 1), "header has correct startDate");
+        assert.equal(navigator.option("date").getMonth(), 10, "navigator has correct date");
+    });
+
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
         this.createInstance({
             currentView: "week",

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    treeListCore = require("./ui.tree_list.core"),
     errors = require("../widget/ui.errors"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -15,6 +16,20 @@ var $ = require("../../core/renderer"),
 var DEFAULT_KEY_EXPRESSION = "id";
 
 DataSourceAdapter = DataSourceAdapter.inherit((function() {
+    var getChildKeys = function(that, keys) {
+        var childKeys = [];
+
+        keys.forEach(function(key) {
+            var node = that.getNodeByKey(key);
+
+            node && node.children.forEach(function(child) {
+                childKeys.push(child.key);
+            });
+        });
+
+        return childKeys;
+    };
+
     return {
         _createKeyGetter: function() {
             var keyExpr = this.getKeyExpr();
@@ -234,17 +249,23 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         _handleDataLoading: function(options) {
             var combinedParentIdFilter,
+                parentIdsToLoad,
                 rootValue = this.option("rootValue"),
                 parentIdExpr = this.option("parentIdExpr"),
                 expandedRowKeys = this.option("expandedRowKeys"),
-                filterMode = this.option("filterMode");
+                filterMode = this.option("filterMode"),
+                parentIds = options.storeLoadOptions.parentIds;
+
+            if(parentIds) {
+                options.isCustomLoading = false;
+            }
 
             this.callBase.apply(this, arguments);
 
             if(options.remoteOperations.filtering && !options.isCustomLoading) {
                 if(filterMode === "standard" || !options.storeLoadOptions.filter) {
-                    var parentIds = [rootValue].concat(expandedRowKeys),
-                        parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
+                    parentIds = [rootValue].concat(expandedRowKeys).concat(parentIds || []);
+                    parentIdsToLoad = options.data ? this._getParentIdsToLoad(parentIds) : parentIds;
 
                     if(parentIdsToLoad.length) {
                         options.cachedPagingData = undefined;
@@ -520,6 +541,64 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             if(this._nodeByKey) {
                 return this._nodeByKey[key];
             }
+        },
+
+        getNodeLeafKeys: function(keys, callBack) {
+            var that = this,
+                node,
+                result = [];
+
+            if(!typeUtils.isDefined(keys)) {
+                keys = that._rootNode ? [that._rootNode.key] : [];
+            }
+
+            keys.forEach(function(key) {
+                node = that.getNodeByKey(key);
+
+                node && treeListCore.foreachNodes([node], function(childNode) {
+                    if(!childNode.children.length && (!callBack || callBack(childNode))) {
+                        result.push(childNode.key);
+                    }
+                });
+            });
+
+            return result;
+        },
+
+        loadChildren: function(keys, deep) {
+            var that = this,
+                loadOptions,
+                d = $.Deferred(),
+                remoteOperations = that.remoteOperations();
+
+            if(typeUtils.isDefined(keys)) {
+                keys = Array.isArray(keys) ? keys : [keys];
+            } else {
+                keys = that.getNodeLeafKeys();
+            }
+
+            if(!remoteOperations.filtering || !keys.length) {
+                return d.resolve();
+            }
+
+            loadOptions = that._dataSource._createStoreLoadOptions();
+            loadOptions.parentIds = keys;
+
+            that.load(loadOptions)
+                .done(function() {
+                    if(deep !== false) {
+                        var childKeys = getChildKeys(that, keys);
+
+                        if(childKeys.length) {
+                            that.loadChildren(childKeys, deep).done(d.resolve).fail(d.reject);
+                            return;
+                        }
+                    }
+                    d.resolve();
+                })
+                .fail(d.reject);
+
+            return d.promise();
         }
     };
 })());

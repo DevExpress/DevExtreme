@@ -668,7 +668,7 @@ var Popup = Overlay.inherit({
     _renderResize: function() {
         this.callBase();
 
-        this._$content.dxResizable("option", "onResize", (function() {
+        this._resizable.option("onResize", (function() {
             this._setContentHeight();
 
             this._actions.onResize(arguments);

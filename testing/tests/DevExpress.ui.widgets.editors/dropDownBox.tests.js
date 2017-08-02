@@ -228,6 +228,20 @@ QUnit.test("dropDownBox should update display text after dataSource changed", fu
     assert.equal($input.val(), "item 2, item 3", "input text has been updated");
 });
 
+QUnit.test("dropDownBox should update display text after displayExpr changed", function(assert) {
+    var items = [{ id: 1, name: "item 1", text: "text 1" }],
+        instance = new DropDownBox(this.$element, {
+            items: items,
+            displayExpr: "name",
+            valueExpr: "id",
+            value: 1
+        }),
+        $input = this.$element.find(".dx-texteditor-input");
+
+    instance.option("displayExpr", "text");
+    assert.equal($input.val(), "text 1", "input text has been updated");
+});
+
 QUnit.test("text option should follow the displayValue option", function(assert) {
     var instance = new DropDownBox(this.$element, {});
     instance.option("displayValue", "test");
@@ -293,6 +307,25 @@ QUnit.test("popup should not be draggable by default", function(assert) {
     var popup = this.$element.find(".dx-popup").dxPopup("instance");
 
     assert.strictEqual(popup.option("dragEnabled"), false, "dragging is disabled");
+});
+
+QUnit.test("popup should be flipped when container size is smaller than content size", function(assert) {
+    var $dropDownBox = $("<div>").appendTo("body");
+    try {
+        $dropDownBox.css({ position: "fixed", bottom: 0 });
+        $dropDownBox.dxDropDownBox({
+            opened: true,
+            contentTemplate: function() {
+                return $("<div>").css({ height: "300px", border: "1px solid #000" });
+            }
+        });
+
+        var $popupContent = $(".dx-overlay-content");
+
+        assert.ok($popupContent.hasClass("dx-dropdowneditor-overlay-flipped"), "popup was flipped");
+    } finally {
+        $dropDownBox.remove();
+    }
 });
 
 

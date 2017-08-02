@@ -708,7 +708,7 @@ QUnit.testInActiveWindow("focus policy", function(assert) {
     var $inputR = $(this.instance._colorView._rgbInputs[0].element());
     assert.ok($inputR.hasClass(STATE_FOCUSED_CLASS), "tab set focus to first input in overlay");
 
-    this.instance._colorView.element().triggerHandler("focus");
+    $(this.instance._colorView.element()).triggerHandler("focus");
     assert.ok(this.instance.element().hasClass(STATE_FOCUSED_CLASS), "colorView on focus reset focus to element");
 });
 

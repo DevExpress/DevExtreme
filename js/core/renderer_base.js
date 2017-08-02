@@ -9,9 +9,8 @@ var matches = require("./polyfills/matches");
 
 var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
-    "focusin", "focusout", "click",
     "css",
-    "slideUp", "slideDown", "slideToggle", "focus", "blur", "submit"];
+    "slideUp", "slideDown", "slideToggle"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
@@ -760,12 +759,14 @@ renderer.templates = function() {
     return $.templates.apply(this, arguments);
 };
 renderer.when = $.when;
-renderer.event = $.event;
-renderer.Event = $.Event;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
 renderer.Deferred = $.Deferred;
 
 module.exports = {
-    set: function(strategy) { renderer = strategy; },
-    get: function() { return renderer; }
+    set: function(strategy) {
+        renderer = strategy;
+    },
+    get: function() {
+        return renderer;
+    }
 };

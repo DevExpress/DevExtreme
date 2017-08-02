@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("jquery");
+var isWindow = require("../../core/utils/type").isWindow;
 var eventsEngine;
 var setEngine = function(engine) {
     eventsEngine = engine;
@@ -9,31 +9,49 @@ var setEngine = function(engine) {
 // TODO: implement methods without jquery
 setEngine({
     on: function(element) {
-        $(element).on.apply($(element), Array.prototype.slice.call(arguments, 1));
     },
     one: function(element) {
-        $(element).one.apply($(element), Array.prototype.slice.call(arguments, 1));
     },
     off: function(element) {
-        $(element).off.apply($(element), Array.prototype.slice.call(arguments, 1));
     },
     trigger: function(element) {
-        $(element).trigger.apply($(element), Array.prototype.slice.call(arguments, 1));
     },
     triggerHandler: function(element) {
-        $(element).triggerHandler.apply($(element), Array.prototype.slice.call(arguments, 1));
+    },
+    copy: function() {
     }
 });
 
-var result = {};
+var getHandler = function(methodName) {
+    var result = function(element) {
+        if(!element) {
+            return;
+        }
 
-Object.keys(eventsEngine).forEach(function(methodName) {
-    result[methodName] = function() {
-        eventsEngine[methodName].apply(eventsEngine, arguments);
+        if(element.nodeType || isWindow(element)) {
+            eventsEngine[methodName].apply(eventsEngine, arguments);
+        } else if(element.each) {
+            var itemArgs = Array.prototype.slice.call(arguments, 0);
+
+            element.each(function() {
+                itemArgs[0] = this;
+                result.apply(result, itemArgs);
+            });
+        }
     };
-});
 
-result.set = setEngine;
+    return result;
+};
 
-module.exports = result;
+module.exports = {
+    on: getHandler("on"),
+    one: getHandler("one"),
+    off: getHandler("off"),
+    trigger: getHandler("trigger"),
+    triggerHandler: getHandler("triggerHandler"),
+    copy: function() {
+        return eventsEngine.copy.apply(eventsEngine, arguments);
+    },
+    set: setEngine
+};
 

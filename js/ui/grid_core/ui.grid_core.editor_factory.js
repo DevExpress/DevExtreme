@@ -442,7 +442,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
             $currentTarget.removeClass(DX_HIDDEN);
 
-            $focusedElement && $focusedElement.find(EDITORS_INPUT_SELECTOR).focus();
+            $focusedElement && eventsEngine.trigger($focusedElement.find(EDITORS_INPUT_SELECTOR), "focus");
         },
 
         dispose: function() {

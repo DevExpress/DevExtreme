@@ -159,7 +159,11 @@ var clipboardText = function(event, text) {
 };
 
 var contains = function(container, element) {
-    return container.nodeType === 9 ? container.body.contains(element) : container.contains(element);
+    if(element) {
+        element = element.nodeType === Node.TEXT_NODE ? element.parentNode : element;
+    }
+
+    return container.nodeType === Node.DOCUMENT_NODE ? container.body.contains(element) : container.contains(element);
 };
 
 exports.ready = function(callback) {

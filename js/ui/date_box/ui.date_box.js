@@ -192,6 +192,19 @@ var DateBox = DropDownEditor.inherit({
             interval: 30,
 
             /**
+            * @name dxDateBoxOptions_disabledDates
+            * @publicName disabledDates
+            * @type array|function(data)
+            * @default null
+            * @type_function_param1 data:object
+            * @type_function_param1_field1 component:object
+            * @type_function_param1_field2 date:Date
+            * @type_function_param1_field3 view:string
+            * @type_function_return boolean
+            */
+            disabledDates: null,
+
+            /**
             * @name dxDateBoxOptions_maxZoomLevel
             * @publicName maxZoomLevel
             * @type string
@@ -810,11 +823,15 @@ var DateBox = DropDownEditor.inherit({
             case "placeholder":
                 this._renderPlaceholder();
                 break;
-            case "dateSerializationFormat":
-            case "readOnly":
             case "min":
             case "max":
+                this._validateValue(this.dateOption("value"));
+                this._invalidate();
+                break;
+            case "dateSerializationFormat":
+            case "readOnly":
             case "interval":
+            case "disabledDates":
             case "minZoomLevel":
             case "maxZoomLevel":
                 this._invalidate();
@@ -843,7 +860,7 @@ var DateBox = DropDownEditor.inherit({
                 this._updateSize();
                 break;
             case "value":
-                this._validateValue(dateSerialization.deserializeDate(this.option("value")));
+                this._validateValue(this.dateOption("value"));
                 this.callBase.apply(this, arguments);
                 break;
             case "showDropDownButton":

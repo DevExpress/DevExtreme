@@ -353,7 +353,7 @@ var SelectBox = DropDownList.inherit({
     _listContentReadyHandler: function() {
         this.callBase();
 
-        var isPaginate = this._dataSource.paginate();
+        var isPaginate = this._dataSource && this._dataSource.paginate();
 
         if(isPaginate && this._needPopupRepaint()) {
             return;
@@ -551,11 +551,9 @@ var SelectBox = DropDownList.inherit({
             return;
         }
 
-        if(this.option("searchEnabled")) {
-            if(!this._searchValue() && this.option("allowClearing")) {
-                this._clearTextValue();
-                return;
-            }
+        if(!this._searchValue() && this.option("allowClearing")) {
+            this._clearTextValue();
+            return;
         }
 
         var oldSelectedItem = this.option("selectedItem");

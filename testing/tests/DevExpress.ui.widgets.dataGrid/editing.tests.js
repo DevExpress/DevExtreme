@@ -2602,7 +2602,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing'], {
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
             initViews: true
         });
 
@@ -4198,6 +4198,37 @@ QUnit.test("onEditingStart should not have key if row is inserted and showEditor
     assert.deepEqual(editingStartKeys, [undefined, undefined], "onEditingStart called twice with undefined key");
 });
 
+QUnit.test("onRowUpdating should have oldData parameter if modify column with showEditorAlways true and with validationRules", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $("#container");
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true
+    };
+
+    rowsView.render(testElement);
+
+    that.columnOption(0, { showEditorAlways: true, validationRules: [{ type: "required" }] });
+
+    var onRowUpdatingArgs = [];
+    that.options.onRowUpdating = function(e) {
+        onRowUpdatingArgs.push(e);
+    };
+    that.editingController.optionChanged({ name: "onRowUpdating" });
+
+    //act
+    that.cellValue(0, 0, "Test");
+    that.saveEditData();
+    that.clock.tick();
+
+    //assert
+    assert.equal(onRowUpdatingArgs.length, 1, "onRowUpdating called once");
+    assert.deepEqual(onRowUpdatingArgs[0].oldData, this.array[0], "onEditingStart have oldData parameter");
+});
+
 QUnit.test('Cancel Inserting Row after change page', function(assert) {
     //arrange
     var that = this,
@@ -4964,14 +4995,14 @@ QUnit.testInActiveWindow('Update be called once in cell mode on value change for
     rowsView.render(testElement);
     that.columnsController.init();
 
-    var $checkBox = rowsView.getCellElement(0, 0).find(".dx-checkbox");
+    var $checkBox = $(rowsView.getCellElement(0, 0)).find(".dx-checkbox");
 
     //assert
     assert.strictEqual($checkBox.length, 1, "has checkBox");
 
     //act
     that.editCell(0, 0);
-    $($checkBox.focus()).trigger("dxclick");
+    $checkBox.focus().trigger("dxclick");
 
     updateDeferred.resolve();
     that.clock.tick();
@@ -5098,6 +5129,7 @@ QUnit.test("Add edit data with save array without extend_T256598", function(asse
     //assert
     assert.deepEqual(this.editingController._editData[0], {
         key: 1,
+        isValid: true,
         data: { A: [13] },
         test: "test",
         type: "number"
@@ -5338,6 +5370,48 @@ QUnit.test("Save edit data when update fails in batch edit mode", function(asser
     assert.deepEqual(that.editingController._editData.length, 1, "count of edit data");
     assert.deepEqual(that.editingController._editData[0].data, { name: "Test2" }, "new data");
     assert.deepEqual(that.editingController._editData[0].oldData, that.array[1], "old data");
+});
+
+//T539602
+QUnit.test("loadingChanged should be called before editing oeprations", function(assert) {
+    //arrange
+    var that = this,
+        deferreds = [],
+        rowsView = this.rowsView,
+        loadingChangedArgs = [],
+        $testElement = $('#container');
+
+    that.options.editing.mode = "batch";
+    that.options.dataSource = {
+        load: function() {
+            return that.array;
+        },
+        update: function(key, value) {
+            var d = $.Deferred();
+            deferreds.push(d);
+            return d.promise();
+        }
+    };
+    that.dataController.init();
+    rowsView.render($testElement);
+    that.getDataSource().on("loadingChanged", function(isLoading) {
+        loadingChangedArgs.push(isLoading);
+    });
+
+    //act
+    that.cellValue(0, 0, "Test1");
+    that.saveEditData();
+
+    //assert
+    assert.strictEqual(deferreds.length, 1, "count of deferred updates");
+    assert.deepEqual(loadingChangedArgs, [true], "loading changed args after updating start");
+
+
+    //act
+    deferreds[0].resolve();
+
+    //assert
+    assert.deepEqual(loadingChangedArgs, [true, false], "loading changed args after updating end");
 });
 
 //T533546
@@ -9027,7 +9101,7 @@ QUnit.module('Editing with scrolling', {
         };
 
         this.setupDataGrid = function() {
-            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'validating'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'pager', 'editing', 'editorFactory', 'virtualScrolling', 'validating', 'grouping', 'masterDetail', 'adaptivity'], {
                 initViews: true
             });
         };
@@ -9233,6 +9307,102 @@ QUnit.test("Edit row after the virtual scrolling when there is inserted row", fu
     //assert
     assert.equal(testElement.find("input").length, 1, "has input");
     assert.equal(testElement.find("input").val(), "Item51", "text edit cell");
+});
+
+//T538954
+QUnit.test("Position of the inserted row if masterDetail is used", function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        items;
+
+    this.options.dataSource = generateDataSource(10, 1);
+    this.options.paging.pageSize = 20;
+    this.options.scrolling = { useNative: false };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(150);
+    this.rowsView.resize();
+
+    this.expandRow(this.options.dataSource[0]);
+    this.expandRow(this.options.dataSource[1]);
+    this.expandRow(this.options.dataSource[2]);
+
+    var y = this.rowsView.getRowElement(4).offset().top - this.rowsView.getRowElement(0).offset().top;
+
+    this.rowsView.scrollTo({ y: y });
+
+    //act
+    this.addRow();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 14, "count items");
+    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 4, "insert item");
+});
+
+//T538954
+QUnit.test("Position of the inserted row if top visible row is master detail", function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        items;
+
+    this.options.dataSource = generateDataSource(10, 1);
+    this.options.paging.pageSize = 20;
+    this.options.scrolling = { useNative: false };
+    this.options.masterDetail = {
+        template: function($container) {
+            $container.height(150);
+        }
+    };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(150);
+    this.rowsView.resize();
+
+    this.expandRow(this.options.dataSource[8]);
+
+    this.rowsView.scrollTo({ y: 10000 });
+
+    //act
+    this.addRow();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 12, "count items");
+    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 10, "insert item");
+});
+
+//T538954
+QUnit.test("Position of the inserted row if top visible row is adaptive detail", function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        items;
+
+    testElement.width(150);
+
+    this.options.dataSource = generateDataSource(10, 1);
+    this.options.paging.pageSize = 20;
+    this.options.columnHidingEnabled = true;
+    this.options.scrolling = { useNative: false };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(150);
+    this.rowsView.resize();
+
+    this.expandAdaptiveDetailRow(this.options.dataSource[6]);
+
+    this.rowsView.scrollTo({ y: 10000 });
+
+    //act
+    this.addRow();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 12, "count items");
+    assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 8, "insert item");
 });
 
 //T343567

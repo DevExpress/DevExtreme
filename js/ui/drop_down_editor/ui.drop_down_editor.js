@@ -55,7 +55,7 @@ var DropDownEditor = TextBox.inherit({
                     ? this._getLastPopupElement()
                     : this._getFirstPopupElement();
 
-                $focusableElement && $focusableElement.focus();
+                $focusableElement && eventsEngine.trigger($focusableElement, "focus");
                 e.preventDefault();
             },
             escape: function(e) {
@@ -372,14 +372,14 @@ var DropDownEditor = TextBox.inherit({
 
         this._refreshEvents();
         this._refreshValueChangeEvent();
-        isFocused && this._input().focus();
+        isFocused && eventsEngine.trigger(this._input(), "focus");
 
         this._renderFocusState();
     },
 
     _resetFocus: function(isFocused) {
         this._cleanFocusState();
-        isFocused && this._input().focusout();
+        isFocused && eventsEngine.trigger(this._input(), "focusout");
     },
 
 
@@ -490,7 +490,7 @@ var DropDownEditor = TextBox.inherit({
             return false;
         }
 
-        this._input().focus();
+        eventsEngine.trigger(this._input(), "focus");
         return true;
     },
 
@@ -698,13 +698,13 @@ var DropDownEditor = TextBox.inherit({
         if((e.shiftKey && $element.is(this._getFirstPopupElement()))
             || (!e.shiftKey && $element.is(this._getLastPopupElement()))) {
 
-            this._input().focus();
+            eventsEngine.trigger(this._input(), "focus");
             e.preventDefault();
         }
     },
 
     _popupElementEscHandler: function() {
-        this._input().focus();
+        eventsEngine.trigger(this._input(), "focus");
         this.close();
     },
 

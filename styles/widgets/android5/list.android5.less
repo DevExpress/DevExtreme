@@ -41,7 +41,6 @@
 }
 
 .dx-list-item {
-    position: relative;
     .dx-icons-dark;
 
     &:last-child,
@@ -54,20 +53,10 @@
         .background-size-prop(100%);
     }
 
-    &.dx-state-active {
-        background-color: @ANDROID5_LIST_ITEM_HOVER_BACKGROUND;
-    }
-
-    .dx-inkripple {
-        overflow: hidden;
-    }
-
-    .dx-inkripple-wave {
-        background-color: @ANDROID5_LIST_ITEM_HOVER_BACKGROUND;
-    }
-
     &.dx-state-focused,
-    &.dx-state-hover {
+    &.dx-state-hover,
+    &.dx-state-active,
+    .dx-inkripple-wave {
         background-color: @ANDROID5_LIST_ITEM_HOVER_BACKGROUND;
     }
 
@@ -153,6 +142,14 @@
 .dx-list-select-all-label {
     padding: 0 11px;
     vertical-align: middle;
+}
+
+.dx-list-select-all, .dx-list-item {
+    position: relative;
+
+    .dx-inkripple {
+        overflow: hidden;
+    }
 }
 
 // static delete button

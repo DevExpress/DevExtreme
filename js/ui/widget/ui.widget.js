@@ -932,7 +932,7 @@ var Widget = DOMComponent.inherit({
     * @publicName focus()
     */
     focus: function() {
-        this._focusTarget().focus();
+        eventsEngine.trigger(this._focusTarget(), "focus");
     },
 
     /**

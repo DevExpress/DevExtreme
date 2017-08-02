@@ -101,13 +101,13 @@ var BaseBaseSeries = {
     /**
     * @name baseSeriesObjectFields_name
     * @publicName name
-    * @type string
+    * @type any
     */
     name: null,
     /**
     * @name baseSeriesObjectFields_tag
     * @publicName tag
-    * @type string
+    * @type any
     */
     tag: null,
     /**
@@ -203,7 +203,7 @@ var BasePoint = {
     /**
     * @name basePointObjectFields_tag
     * @publicName tag
-    * @type string
+    * @type any
     */
     tag: null,
     /**

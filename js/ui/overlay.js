@@ -78,7 +78,7 @@ var forceRepaint = function($element) {
 
 
 var getElement = function(value) {
-    return value && $(value instanceof $.Event ? value.target : value);
+    return value && $(value.target || value);
 };
 
 eventsEngine.on(document, pointerEvents.down, function(e) {
@@ -639,7 +639,7 @@ var Overlay = Widget.inherit({
 
                 this._animate(showAnimation, function() {
                     if(that.option("focusStateEnabled")) {
-                        that._focusTarget().focus();
+                        eventsEngine.trigger(that._focusTarget(), "focus");
                     }
 
                     completeShowAnimation.apply(this, arguments);
@@ -845,7 +845,10 @@ var Overlay = Widget.inherit({
 
             e.preventDefault();
 
-            (e.shiftKey ? $lastTabbable : $firstTabbable).focusin().focus();
+            var $focusElement = e.shiftKey ? $lastTabbable : $firstTabbable;
+
+            eventsEngine.trigger($focusElement, "focusin");
+            eventsEngine.trigger($focusElement, "focus");
         }
     },
 
@@ -1070,6 +1073,14 @@ var Overlay = Widget.inherit({
             contentHeight = $content.outerHeight(),
             containerWidth = $container.outerWidth(),
             containerHeight = $container.outerHeight();
+
+        if(this._isWindow($container)) {
+            var fullPageHeight = Math.max($(document).outerHeight(), containerHeight),
+                fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
+
+            containerHeight = fullPageHeight;
+            containerWidth = fullPageWidth;
+        }
 
         return {
             width: containerWidth - contentWidth,

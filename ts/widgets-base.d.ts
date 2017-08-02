@@ -1866,6 +1866,9 @@ declare module DevExpress.ui {
         /** @docid dxDateBoxOptions_interval */
         interval?: number;
 
+        /** @docid dxDateBoxOptions_disabledDates */
+        disabledDates?: any;
+
         /** @docid dxDateBoxOptions_maxZoomLevel */
         maxZoomLevel?: string;
 
@@ -1968,6 +1971,9 @@ declare module DevExpress.ui {
 
         /** @docid dxCalendarOptions_cellTemplate */
         cellTemplate?: any;
+
+        /** @docid dxCalendarOptions_disabledDates */
+        disabledDates?: any;
 
         /** @docid dxCalendarOptions_name */
         name?: string;
@@ -2183,7 +2189,6 @@ declare module DevExpress.ui {
 
         /** @docid_ignore dxAccordionItemTemplate_icon */
         /** @docid_ignore dxAccordionItemTemplate_iconSrc */
-        /** @docid_ignore dxAccordionEvents_ItemTitleClick */
 
         /** @docid dxAccordionMethods_collapseItem */
         collapseItem(index: number): JQueryPromise<dxAccordion>;

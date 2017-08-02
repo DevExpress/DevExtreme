@@ -475,7 +475,7 @@ var offset = function(element) {
     element = $(element).get(0);
     if(isWindow(element)) {
         return null;
-    } else if(element instanceof $.Event) {
+    } else if(element && "pageY" in element && "pageX" in element) {
         return { top: element.pageY, left: element.pageX };
     }
 

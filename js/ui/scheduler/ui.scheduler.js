@@ -213,6 +213,20 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
+                * @name dxSchedulerOptions_views_intervalCount
+                * @publicName intervalCount
+                * @type number
+                * @default 1
+                */
+
+                /**
+                * @name dxSchedulerOptions_views_startDate
+                * @publicName startDate
+                * @type Date|number|string
+                * @default undefined
+                */
+
+                /**
                 * @name dxSchedulerOptions_views_startDayHour
                 * @publicName startDayHour
                 * @extends StartDayHour
@@ -1010,7 +1024,7 @@ var Scheduler = Widget.inherit({
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
                 this._workSpace.option(name, value);
-                this._header.option(name, value);
+                this._header.option(name, this._workSpace.getStartViewDate());
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();
                 this._reloadDataSource();
@@ -1042,12 +1056,15 @@ var Scheduler = Widget.inherit({
                 this._header.option(name, value);
                 break;
             case "currentView":
+                var viewCountConfig = this._getViewCountConfig();
                 this._appointments.option({
                     items: [],
                     allowDrag: this._allowDragging(),
                     allowResize: this._allowResizing(),
                     appointmentDurationInMinutes: this._getCurrentViewOption("cellDuration")
                 });
+                this._header.option("intervalCount", viewCountConfig.intervalCount);
+                this._header.option("startDate", viewCountConfig.startDate || new Date(this.option("currentDate")));
                 this._header.option("min", this._dateOption("min"));
                 this._header.option("max", this._dateOption("max"));
                 this._header.option("currentDate", this._dateOption("currentDate"));
@@ -1684,10 +1701,34 @@ var Scheduler = Widget.inherit({
     _renderWorkSpace: function(groups) {
         var $workSpace = $("<div>").appendTo(this.element());
 
-        this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this.option("currentView")].workSpace, this._workSpaceConfig(groups));
+        var countConfig = this._getViewCountConfig();
+        this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this.option("currentView")].workSpace, this._workSpaceConfig(groups, countConfig));
         this._workSpace.getWorkArea().append(this._appointments.element());
 
         this._recalculateWorkspace();
+
+        this._header && this._header.option("currentDate", this._workSpace.getStartViewDate());
+    },
+
+    _getViewCountConfig: function() {
+        var currentView = this.option("currentView");
+
+        var view = this._getViewByType(currentView),
+            viewCount = view && view.intervalCount || 1,
+            startDate = view && view.startDate || null;
+
+        return {
+            intervalCount: viewCount,
+            startDate: startDate
+        };
+    },
+
+    _getViewByType: function(type) {
+        var views = this.option("views");
+
+        for(var i = 0; i < views.length; i++) {
+            if(views[i].type === type || views[i] === type) return views[i];
+        }
     },
 
     _recalculateWorkspace: function() {
@@ -1697,7 +1738,7 @@ var Scheduler = Widget.inherit({
         this._workSpaceRecalculation.resolve();
     },
 
-    _workSpaceConfig: function(groups) {
+    _workSpaceConfig: function(groups, countConfig) {
         var result,
             currentViewOptions = this._getCurrentViewOptions();
 
@@ -1721,6 +1762,8 @@ var Scheduler = Widget.inherit({
         }, currentViewOptions);
 
         result.observer = this;
+        result.intervalCount = countConfig.intervalCount;
+        result.startDate = countConfig.startDate;
         result.groups = groups;
         result.onCellClick = this._createActionByOption("onCellClick");
         result.min = new Date(this._dateOption("min"));

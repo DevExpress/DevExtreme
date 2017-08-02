@@ -67,7 +67,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         publicMethods: function() {
-            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey"]);
+            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadChildren"]);
         },
 
         changeRowExpand: function(key) {
@@ -173,6 +173,40 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             }
 
             return this._dataSource.getNodeByKey(key);
+        },
+
+        getNodeLeafKeys: function(keys, callBack) {
+            if(!this._dataSource) {
+                return;
+            }
+
+            return this._dataSource.getNodeLeafKeys(keys, callBack);
+        },
+
+        /**
+         * @name dxTreeListMethods_loadChildren
+         * @publicName loadChildren()
+         * @return Promise
+         */
+        /**
+         * @name dxTreeListMethods_loadChildren
+         * @publicName loadChildren(keys)
+         * @param1 keys:array
+         * @return Promise
+         */
+        /**
+         * @name dxTreeListMethods_loadChildren
+         * @publicName loadChildren(keys, deep)
+         * @param1 keys:array
+         * @param2 deep:boolean
+         * @return Promise
+         */
+        loadChildren: function(keys, deep) {
+            if(!this._dataSource) {
+                return;
+            }
+
+            return this._dataSource.loadChildren(keys, deep);
         }
     };
 })());

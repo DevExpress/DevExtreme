@@ -1530,6 +1530,59 @@ QUnit.test("changing 'displayFormat' should update input value", function(assert
     assert.equal($dateBox.find("." + TEXTEDITOR_INPUT_CLASS).val(), "3/10/2015, 12:00 AM", "input value is updated");
 });
 
+QUnit.test("disabledDates correctly displays", function(assert) {
+
+    var instance = $("#dateBox").dxDateBox({
+            type: "date",
+            pickerType: "calendar",
+            value: new Date(2015, 4, 12),
+            disabledDates: [new Date(2015, 4, 13)],
+            opened: true
+        }).dxDateBox("instance"),
+        calendar = getInstanceWidget(instance),
+        $disabledCell = calendar.element().find(".dx-calendar-empty-cell");
+
+    assert.equal($disabledCell.length, 1, "There is one disabled cell");
+    assert.equal($disabledCell.text(), "13", "Correct cell is disabled");
+});
+
+QUnit.test("disabledDates correctly displays after optionChanged", function(assert) {
+    var instance = $("#dateBox").dxDateBox({
+        type: "date",
+        pickerType: "calendar",
+        value: new Date(2015, 4, 12),
+        disabledDates: [new Date(2015, 4, 13)],
+        opened: true
+    }).dxDateBox("instance");
+
+    instance.option("disabledDates", function(e) {
+        if(e.date.getDate() === 14 && e.date.getMonth() === 3) {
+            return true;
+        }
+    });
+
+    var calendar = getInstanceWidget(instance),
+        $disabledCell = calendar.element().find(".dx-calendar-empty-cell");
+
+    assert.equal($disabledCell.length, 1, "There is one disabled cell");
+    assert.equal($disabledCell.text(), "14", "Correct cell is disabled");
+});
+
+QUnit.test("disabledDates argument contains correct component parameter", function(assert) {
+    var stub = sinon.stub();
+
+    $("#dateBox").dxDateBox({
+        type: "date",
+        pickerType: "calendar",
+        value: new Date(2015, 4, 12),
+        disabledDates: stub,
+        opened: true
+    });
+
+    var component = stub.lastCall.args[0].component;
+    assert.equal(component.NAME, "dxDateBox", "Correct component");
+});
+
 
 QUnit.module("datebox w/ calendar", {
     beforeEach: function() {
@@ -1662,9 +1715,9 @@ QUnit.test("When typing a correct date, dateBox must not make a redundant _setIn
 });
 
 QUnit.test("Swiping must not close the calendar", function(assert) {
-    this.fixture.dateBox._input().focus();
+    $(this.fixture.dateBox._input()).focus();
     if(browser.msie && browser.version < 11) {
-        this.fixture.dateBox._input().focus();
+        $(this.fixture.dateBox._input()).focus();
     }
     this.fixture.dateBox.open();
     pointerMock(this.fixture.dateBox._strategy._calendarContainer).start().swipeStart().swipeEnd(1);
@@ -3479,6 +3532,33 @@ QUnit.test("Validation should be correct when year of the value less than 100", 
     var validationError = dateBox.option("validationError").message;
     assert.equal(validationError, "Value is out of range", "validation message is correct");
 });
+
+QUnit.test("dxDateBox should validate value after change 'max' option", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        max: new Date(2015, 6, 14),
+        value: new Date(2015, 6, 12),
+        pickerType: "calendar"
+    }).dxDateBox("instance");
+
+    dateBox.option("value", new Date(2015, 6, 20));
+    dateBox.option("max", new Date(2015, 6, 25));
+
+    assert.ok(dateBox.option("isValid"), "datebox is valid");
+});
+
+QUnit.test("dxDateBox should validate value after change 'min' option", function(assert) {
+    var dateBox = $("#dateBox").dxDateBox({
+        min: new Date(2015, 6, 14),
+        value: new Date(2015, 6, 18),
+        pickerType: "calendar"
+    }).dxDateBox("instance");
+
+    dateBox.option("value", new Date(2015, 6, 10));
+    dateBox.option("min", new Date(2015, 6, 5));
+
+    assert.ok(dateBox.option("isValid"), "datebox is valid");
+});
+
 
 QUnit.module("DateBox number and string value support", {
     beforeEach: function() {

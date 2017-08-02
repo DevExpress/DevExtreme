@@ -1,13 +1,13 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    dataUtilsStrategy = require("../core/element_data").getDataStrategy(),
-    eventsEngine = require("../events/core/events_engine"),
-    cleanData = dataUtilsStrategy.cleanData,
-    specialEvents = $.event.special;
+var $ = require("./renderer");
+var dataUtilsStrategy = require("./element_data").getDataStrategy();
+var eventsEngine = require("../events/core/events_engine");
+var registerEvent = require("../events/core/event_registrator");
+var cleanData = dataUtilsStrategy.cleanData;
 
-var eventName = "dxremove",
-    eventPropName = "dxRemoveEvent";
+var eventName = "dxremove";
+var eventPropName = "dxRemoveEvent";
 
 dataUtilsStrategy.cleanData = function(elements) {
     elements = [].slice.call(elements);
@@ -22,11 +22,11 @@ dataUtilsStrategy.cleanData = function(elements) {
     return cleanData(elements);
 };
 
-specialEvents[eventName] = {
+registerEvent(eventName, {
     noBubble: true,
-    setup: function() {
-        $(this).prop(eventPropName, true);
+    setup: function(element) {
+        $(element).prop(eventPropName, true);
     }
-};
+});
 
 module.exports = eventName;

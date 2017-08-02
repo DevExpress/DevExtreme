@@ -4,6 +4,8 @@ var $ = require("jquery"),
     registerEvent = require("events/core/event_registrator"),
     Class = require("core/class");
 
+require("integration/jquery");
+
 QUnit.testStart(function() {
     var markup =
         '<div id="container">\

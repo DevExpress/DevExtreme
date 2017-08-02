@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var $ = require("jquery"),
     compareVersion = require("../../core/utils/version").compare,
     each = require("../../core/utils/iterator").each,
     isNumeric = require("../../core/utils/type").isNumeric,
-    registerEvent = require("./event_registrator");
+    registerEvent = require("../../events/core/event_registrator");
 
 var touchPropsToHook = ["pageX", "pageY", "screenX", "screenY", "clientX", "clientY"];
 var touchPropHook = function(name, event) {

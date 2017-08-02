@@ -69,7 +69,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _getCellCount: function() {
-        return this._getCellCountInDay();
+        return this._getCellCountInDay() * this.option("intervalCount");
     },
 
     _getTotalCellCount: function() {
