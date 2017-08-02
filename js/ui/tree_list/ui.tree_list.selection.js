@@ -43,7 +43,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     this.callBase.apply(this, arguments);
                 },
 
-                loadChildren: function() {
+                loadDescendants: function() {
                     var that = this,
                         d = that.callBase.apply(that, arguments),
                         selectionController = that.getController("selection"),
