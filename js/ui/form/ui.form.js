@@ -944,7 +944,6 @@ var Form = Widget.inherit({
 
         that._rootLayoutManager = that._renderLayoutManager(items, $content, {
             colCount: that.option("colCount"),
-            width: this.option("width"),
             alignItemLabels: that.option("alignItemLabels"),
             screenByWidth: this.option("screenByWidth"),
             colCountByScreen: this.option("colCountByScreen"),
