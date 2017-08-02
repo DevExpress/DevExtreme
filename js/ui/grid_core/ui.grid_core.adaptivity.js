@@ -163,21 +163,37 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }).length > 0;
     },
 
-    _getAverageColumnsWidth: function(containerWidth, columns) {
+    _getAverageColumnsWidth: function(containerWidth, columns, columnsCanFit) {
         var that = this,
             fixedColumnsWidth = 0,
-            columnsWithoutWidthCount = 0;
+            columnsWithoutFixedWidthCount = 0;
 
         columns.forEach(function(column) {
             if(!that._isColumnHidden(column)) {
-                if(typeUtils.isDefined(column.width)) {
-                    fixedColumnsWidth += column.width;
+                var width = column.width;
+                if(typeUtils.isDefined(width) && !isNaN(parseFloat(width))) {
+                    fixedColumnsWidth += that._isPercentWidth(width) ? that._calculatePercentWidth({
+                        visibleIndex: column.visibleIndex,
+                        columnsCount: columns.length,
+                        columnsCanFit: columnsCanFit,
+                        bestFitWidth: column.bestFitWidth,
+                        columnWidth: width,
+                        containerWidth: containerWidth
+                    }) : parseFloat(width);
                 } else {
-                    columnsWithoutWidthCount++;
+                    columnsWithoutFixedWidthCount++;
                 }
             }
         });
-        return (containerWidth - fixedColumnsWidth) / columnsWithoutWidthCount;
+        return (containerWidth - fixedColumnsWidth) / columnsWithoutFixedWidthCount;
+    },
+
+    _calculatePercentWidth: function(options) {
+        var columnFitted = (options.visibleIndex < options.columnsCount - 1) && options.columnsCanFit,
+            partialWidth = options.containerWidth * parseFloat(options.columnWidth) / 100,
+            resultWidth = options.columnsCanFit && (partialWidth < options.bestFitWidth) ? options.bestFitWidth : partialWidth;
+
+        return columnFitted ? this.component.element().width() * parseFloat(options.columnWidth) / 100 : resultWidth;
     },
 
     _getNotTruncatedColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
@@ -189,18 +205,21 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(widthOption && widthOption !== "auto") {
             if(this._isPercentWidth(widthOption)) {
-                var columnFitted = (column.visibleIndex < columnsCount - 1) && columnsCanFit,
-                    partialWidth = containerWidth * parseFloat(widthOption) / 100,
-                    resultWidth = columnsCanFit && (partialWidth < bestFitWidth) ? bestFitWidth : partialWidth;
-
-                colWidth = columnFitted ? this.component.element().width() * parseFloat(widthOption) / 100 : resultWidth;
+                colWidth = this._calculatePercentWidth({
+                    visibleIndex: column.visibleIndex,
+                    columnsCount: columnsCount,
+                    columnsCanFit: columnsCanFit,
+                    bestFitWidth: bestFitWidth,
+                    columnWidth: widthOption,
+                    containerWidth: containerWidth
+                });
             } else {
                 return widthOption;
             }
         } else {
             var columnAutoWidth = this.option("columnAutoWidth");
 
-            colWidth = columnAutoWidth || !!column.command ? bestFitWidth : this._getAverageColumnsWidth(containerWidth, contentColumns);
+            colWidth = columnAutoWidth || !!column.command ? bestFitWidth : this._getAverageColumnsWidth(containerWidth, contentColumns, columnsCanFit);
         }
 
         var isTruncated = colWidth < bestFitWidth;
