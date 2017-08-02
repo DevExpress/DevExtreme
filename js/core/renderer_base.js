@@ -738,7 +738,6 @@ renderer.templates = function() {
     return $.templates.apply(this, arguments);
 };
 renderer.when = $.when;
-renderer.event = $.event;
 renderer.Deferred = $.Deferred;
 
 module.exports = {

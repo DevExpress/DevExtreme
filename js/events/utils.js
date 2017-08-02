@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    errors = require("../core/errors"),
-    extend = require("../core/utils/extend").extend,
-    each = require("../core/utils/iterator").each,
-    copyEvent = require("./core/events_engine").copy;
+var $ = require("../core/renderer");
+var eventsEngine = require("./core/events_engine");
+var errors = require("../core/errors");
+var extend = require("../core/utils/extend").extend;
+var each = require("../core/utils/iterator").each;
 
 var eventSource = (function() {
     var EVENT_SOURCES_REGEX = {
@@ -92,8 +92,9 @@ var hasTouches = function(e) {
 
 var needSkipEvent = function(e) {
     // TODO: this checking used in swipeable first move handler. is it correct?
-    var $target = $(e.target),
-        touchInInput = $target.is("input, textarea, select");
+    var $target = $(e.target);
+    var touchInInput = $target.is("input, textarea, select");
+
     if($target.is(".dx-skip-gesture-event *, .dx-skip-gesture-event")) {
         return true;
     }
@@ -110,7 +111,7 @@ var needSkipEvent = function(e) {
 
 
 var createEvent = function(originalEvent, args) {
-    var event = copyEvent(originalEvent);
+    var event = eventsEngine.copy(originalEvent);
 
     if(args) {
         extend(event, args);
@@ -121,7 +122,7 @@ var createEvent = function(originalEvent, args) {
 
 var fireEvent = function(props) {
     var event = createEvent(props.originalEvent, props);
-    $.event.trigger(event, null, props.delegateTarget || event.target);
+    eventsEngine.trigger(props.delegateTarget || event.target, event);
     return event;
 };
 

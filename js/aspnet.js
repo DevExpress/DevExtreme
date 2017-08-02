@@ -58,7 +58,7 @@
                 bag.push(encode ? encodeHtml(value) : value);
                 bag.push(");");
             } else {
-                bag.push(code);
+                bag.push(code + "\n");
             }
         }
 
@@ -79,7 +79,7 @@
                 acceptText(bag, tmp[1]);
             }
 
-            bag.push("};", "return _.join('')");
+            bag.push("}", "return _.join('')");
 
             return new Function("obj", bag.join(''));
         };
@@ -168,7 +168,9 @@
         },
 
         setTemplateEngine: function() {
-            setTemplateEngine(createTemplateEngine());
+            if(setTemplateEngine) {
+                setTemplateEngine(createTemplateEngine());
+            }
         },
 
         createValidationSummaryItems: function(validationGroup, editorNames) {
