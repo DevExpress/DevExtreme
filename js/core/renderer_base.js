@@ -4,6 +4,7 @@ var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
+var HTMLParser = require("./utils/htmlParser");
 var matches = require("./polyfills/matches");
 
 var methods = [
@@ -155,6 +156,26 @@ initRender.prototype.toggleClass = function(className, value) {
         rendererStrategy.setClass(this[0], classNames[i], value);
     }
     return this;
+};
+
+initRender.prototype.html = function(value) {
+    if(!arguments.length) {
+        return this[0].innerHTML;
+    }
+
+    this.empty();
+
+    if(typeof value === "string" || typeof value === "number") {
+        try {
+            this[0].innerHTML = value;
+
+            return this;
+        } catch(e) {
+
+        }
+    }
+
+    return this.append(HTMLParser(value));
 };
 
 var appendElements = function(element, nextSibling) {
@@ -354,24 +375,6 @@ initRender.prototype.val = function(value) {
     }
 
     return this.prop("value");
-};
-
-initRender.prototype.html = function(value) {
-    if(!arguments.length) {
-        return this[0].innerHTML;
-    }
-
-    this.empty();
-
-    if(typeof value === "string" || typeof value === "number") {
-        try {
-            this[0].innerHTML = value;
-
-            return this;
-        } catch(e) { }
-    }
-
-    return this.append(value);
 };
 
 initRender.prototype.contents = function() {
