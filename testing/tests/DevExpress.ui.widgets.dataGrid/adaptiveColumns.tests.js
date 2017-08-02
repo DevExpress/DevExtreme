@@ -1415,6 +1415,56 @@ QUnit.test("Calculate correct an average width of column when some columns has n
     assert.equal($(".dx-data-row .dx-command-adaptive.dx-command-adaptive-hidden").length, 2, "command adaptive element");
 });
 
+QUnit.test("Calculate an average width of column when column has width as string", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(800);
+
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", FixedColumn1: "Fixed Column 1", FixedColumn2: "Fixed Column 2" },
+        { firstName: 'Super', lastName: "Star", FixedColumn1: "Fixed Column 1", FixedColumn2: "Fixed Column 2" }
+    ];
+
+    this.columns = [
+        { dataField: 'firstName', index: 0 },
+        { dataField: 'lastName', index: 1, width: "100px" },
+        { dataField: 'FixedColumn1', index: 2 },
+        { dataField: 'FixedColumn2', index: 3, width: 150 }
+    ];
+
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-data-row .dx-command-adaptive.dx-command-adaptive-hidden").length, 2, "command adaptive element should be hidden");
+});
+
+QUnit.test("Calculate correct an average width of column when some columns has percent width", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(700);
+
+    this.items = [
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", FixedColumn1: "Fixed Column 1", FixedColumn2: "Fixed Column 2" },
+        { firstName: 'Super', lastName: "Star", FixedColumn1: "Fixed Column 1", FixedColumn2: "Fixed Column 2" }
+    ];
+
+    this.columns = [
+        { dataField: 'firstName', index: 0, width: "50%" },
+        { dataField: 'lastName', index: 1 },
+        { dataField: 'FixedColumn1', index: 2 },
+        { dataField: 'FixedColumn2', index: 3 }
+    ];
+
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
+});
+
 QUnit.module("API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
