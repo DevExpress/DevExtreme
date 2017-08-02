@@ -4,6 +4,7 @@
 
 var $ = require("jquery"),
     themes = require("ui/themes"),
+    themeLoadedCallback = require("ui/themes_callbacks"),
     viewPortUtils = require("core/utils/view_port"),
     viewPortChanged = viewPortUtils.changeCallback,
     devices = require("core/devices");
@@ -328,11 +329,11 @@ require("style-compiler-test-server/known-css-files");
             loadCallbackCounter++;
             assert.equal(loadCallbackCounter, 1, "theme is loaded");
 
-            themes.themeLoadedCallback.remove(loadCallback);
+            themeLoadedCallback.remove(loadCallback);
             done();
         };
 
-        themes.themeLoadedCallback.add(loadCallback);
+        themeLoadedCallback.add(loadCallback);
         themes.init({
             context: this.frameDoc(),
             theme: "sampleTheme.sampleColorScheme"
