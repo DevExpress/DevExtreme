@@ -125,7 +125,7 @@ var getConfig = function(step) {
                 getter: "getDate",
                 getDate: dateGetter,
                 getCaption: function(date) {
-                    var format = getCaptionFormat(this.option("_useShortDateFormat"), this.option("intervalCount"), this._getConfig().duration);
+                    var format = getCaptionFormat(false, this.option("intervalCount"), this._getConfig().duration);
                     return dateLocalization.format(date, format);
                 }
             };
