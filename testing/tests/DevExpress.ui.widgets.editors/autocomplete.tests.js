@@ -549,7 +549,7 @@ QUnit.test("key_up/key_down - prevent default", function(assert) {
         .keyDown(KEY_UP);
 });
 
-QUnit.test("enter - prevent default", function(assert) {
+QUnit.testInActiveWindow("enter - prevent default", function(assert) {
     assert.expect(1);
 
     if(devices.real().platform !== "generic") {
