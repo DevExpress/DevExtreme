@@ -6632,6 +6632,7 @@ QUnit.test("Show tooltip on focus with set validate in column and edit mode batc
 QUnit.test("Show tooltip on focus for last row with set validate in column and edit mode batch", function(assert) {
     if(device.platform === "win") {
         assert.ok(true);
+        return;
     }
 
     //arrange
