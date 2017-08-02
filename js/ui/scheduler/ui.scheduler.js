@@ -213,6 +213,20 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
+                * @name dxSchedulerOptions_views_intervalCount
+                * @publicName intervalCount
+                * @type number
+                * @default 1
+                */
+
+                /**
+                * @name dxSchedulerOptions_views_startDate
+                * @publicName startDate
+                * @type Date|number|string
+                * @default undefined
+                */
+
+                /**
                 * @name dxSchedulerOptions_views_startDayHour
                 * @publicName startDayHour
                 * @extends StartDayHour
