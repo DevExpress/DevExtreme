@@ -39,18 +39,18 @@ var getMonthYearFormat = function(date) {
     return dateLocalization.getMonthNames("abbreviated")[date.getMonth()] + " " + dateLocalization.format(date, "year");
 };
 
-var getCaptionFormat = function(short) {
+var getCaptionFormat = function(short, intervalCount, duration) {
     var dateMonthFormat = getDateMonthFormat(short);
     return function(date) {
-        if(this && this.option("intervalCount") > 1) {
+        if(intervalCount > 1) {
             var lastIntervalDate = new Date(date),
-                defaultViewDuration = this._getConfig().duration;
+                defaultViewDuration = duration;
             lastIntervalDate.setDate(date.getDate() + defaultViewDuration - 1);
 
             var isDifferentMonthDates = date.getMonth() !== lastIntervalDate.getMonth(),
-                useShortFormat = isDifferentMonthDates || this.option("_useShortDateFormat"),
+                useShortFormat = isDifferentMonthDates || short,
                 firstWeekDateText = dateLocalization.format(date, isDifferentMonthDates ? getDateMonthFormat(useShortFormat) : "d"),
-                lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat, true));
+                lastWeekDateText = dateLocalization.format(lastIntervalDate, getCaptionFormat(useShortFormat));
 
             return firstWeekDateText + "-" + lastWeekDateText;
         }
@@ -124,7 +124,10 @@ var getConfig = function(step) {
                 setter: "setDate",
                 getter: "getDate",
                 getDate: dateGetter,
-                getCaption: getCaptionFormat()
+                getCaption: function(date) {
+                    var format = getCaptionFormat(this.option("_useShortDateFormat"), this.option("intervalCount"), this._getConfig().duration);
+                    return dateLocalization.format(date, format);
+                }
             };
         case "week":
             return {
