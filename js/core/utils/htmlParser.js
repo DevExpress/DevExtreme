@@ -3,15 +3,7 @@
 var isTagName = (/<([a-z][^\/\0>\x20\t\r\n\f]+)/i);
 
 var $ = require("../renderer");
-
-//var merge = require("./array").merge;
-var merge = function(array1, array2) {
-    for(var i = 0; i < array2.length; i++) {
-        array1[array1.length] = array2[i];
-    }
-
-    return array1;
-};
+var merge = require("./array").merge;
 
 var tagWrappers = {
     default: {
