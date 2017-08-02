@@ -400,6 +400,7 @@
                     timestamp,
                     timezones,
                     titleize,
+                    tfoot,
                     tmp,
                     tmpl,
                     toolbars,
