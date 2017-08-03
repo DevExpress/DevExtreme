@@ -282,15 +282,13 @@ initRender.prototype.replaceWith = function(element) {
 };
 
 var cleanData = function(node, cleanSelf) {
-    if(!node) {
+    if(!(node instanceof Element)) {
         return;
     }
 
-    if(node instanceof Element) {
-        var childNodes = node.getElementsByTagName("*");
+    var childNodes = node.getElementsByTagName("*");
 
-        dataUtils.cleanData(childNodes);
-    }
+    dataUtils.cleanData(childNodes);
 
     if(cleanSelf) {
         dataUtils.cleanData([node]);
