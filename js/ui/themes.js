@@ -24,7 +24,7 @@ var context,
 var THEME_MARKER_PREFIX = "dx.";
 
 function readThemeMarker() {
-    var element = $("<div></div>", context).addClass("dx-theme-marker").appendTo(context.documentElement),
+    var element = $("<div>", context).addClass("dx-theme-marker").appendTo(context.documentElement),
         result;
 
     try {

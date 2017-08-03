@@ -17,7 +17,7 @@ registerDecorator(
     EditDecorator.inherit({
 
         _init: function() {
-            var $menu = $("<div/>").addClass(CONTEXTMENU_CLASS);
+            var $menu = $("<div>").addClass(CONTEXTMENU_CLASS);
             this._list.element().append($menu);
 
             this._menu = this._renderOverlay($menu);

@@ -188,7 +188,7 @@ var Transition = MarkupComponent.inherit({
         this.callBase();
         var element = this.element();
         setupTransitionElement(element, this.option("type") || this.option("animation"), this.option("name"), "absolute");
-        element.wrapInner("<div/>");
+        element.wrapInner("<div>");
         setupTransitionInnerElement(element.children());
 
         // deprecated since 15.1

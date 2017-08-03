@@ -317,7 +317,7 @@ module.exports = {
                                 if(content.nodeType !== 3) return;
 
                                 var highlightSearchTextInTextNode = function($content, searchText) {
-                                    var $searchTextSpan = $("<span />").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
+                                    var $searchTextSpan = $("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
                                         text = $content.text(),
                                         index = normalizeString(text).indexOf(normalizeString(searchText));
 
@@ -336,7 +336,7 @@ module.exports = {
 
                                 if(isEquals) {
                                     if(normalizeString($(content).text()) === normalizeString(searchText)) {
-                                        $(this).replaceWith($("<span />").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
+                                        $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
                                     }
                                 } else {
                                     highlightSearchTextInTextNode($(content), searchText);

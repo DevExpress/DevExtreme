@@ -118,7 +118,7 @@ var createMarkupFromString = function(str) {
         return $(str);
     }
 
-    var tempElement = $("<div />");
+    var tempElement = $("<div>");
 
     // otherwise WinJS browser strips HTML comments required for KO
     window.WinJS.Utilities.setInnerHTMLUnsafe(tempElement.get(0), str);

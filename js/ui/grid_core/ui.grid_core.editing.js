@@ -88,7 +88,7 @@ var isRowEditMode = function(that) {
 var EditingController = modules.ViewController.inherit((function() {
     var getDefaultEditorTemplate = function(that) {
         return function(container, options) {
-            var $editor = $("<div/>").appendTo(container);
+            var $editor = $("<div>").appendTo(container);
 
             that.getController("editorFactory").createEditor($editor, extend({}, options.column, {
                 value: options.value,

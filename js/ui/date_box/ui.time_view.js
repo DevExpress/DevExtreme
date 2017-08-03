@@ -133,7 +133,7 @@ var TimeView = Editor.inherit({
                 ratio: 0,
                 shrink: 0,
                 baseSize: "auto",
-                template: $("<div>", { "class": TIMEVIEW_TIME_SEPARATOR_CLASS }).text(dateLocalization.getTimeSeparator())
+                template: $("<div>").addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(dateLocalization.getTimeSeparator())
             }, {
                 ratio: 0,
                 shrink: 0,
