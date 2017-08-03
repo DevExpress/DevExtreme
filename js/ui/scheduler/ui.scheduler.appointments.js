@@ -745,14 +745,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 that._skipDraggableRestriction(e);
 
                 that.notifyObserver("hideAppointmentTooltip");
-                that.notifyObserver("getDragEventTargetElements", {
-                    callback: function(result) {
-                        if(result) {
-                            e.targetElements = result;
-                        }
-                    }
-                });
-
+                e.targetElements = null;
                 $fixedContainer.append($appointment);
 
                 that._$currentAppointment = $(args.element);

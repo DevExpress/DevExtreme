@@ -485,37 +485,6 @@ QUnit.test("Scheduler appointment should not be draggable if allowDrag is false"
     assert.notOk($appointment.data("dxDraggable"), "Appointment is not dxDraggable");
 });
 
-QUnit.test("Drag event targets should be corrected on dragStart", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9)
-        },
-        settings: [{}]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item]
-    });
-
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.notifyObserver = updateSpy;
-
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    pointer.dragStart();
-
-    assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(1).args[0], "getDragEventTargetElements", "Correct method of observer is called");
-
-    pointer.dragEnd();
-});
-
-
 QUnit.test("Drag event should not contain maxBottomOffset & maxRightOffset", function(assert) {
     var item = {
         itemData: {
