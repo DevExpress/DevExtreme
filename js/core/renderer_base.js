@@ -275,6 +275,8 @@ initRender.prototype.wrapInner = function(wrapper) {
 };
 
 initRender.prototype.replaceWith = function(element) {
+    if(!(element && element[0])) return;
+
     element.insertBefore(this);
     this.remove();
 
