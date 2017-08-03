@@ -317,9 +317,17 @@ gridCore.registerModule("search", {
                 _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
+                    //T103538
                     if(this.option("rowTemplate")) {
-                        //T103538
-                        this._highlightSearchText(this._getTableElement());
+                        if(this.option("templatesRenderAsynchronously")) {
+                            clearTimeout(this._highlightTimer);
+
+                            this._highlightTimer = setTimeout(function() {
+                                this._highlightSearchText(this._getTableElement());
+                            }.bind(this));
+                        } else {
+                            this._highlightSearchText(this._getTableElement());
+                        }
                     }
                 },
 
@@ -334,6 +342,11 @@ gridCore.registerModule("search", {
                     }
 
                     that.callBase($cell, parameters);
+                },
+
+                dispose: function() {
+                    clearTimeout(this._highlightTimer);                    
+                    this.callBase();
                 }
             }
         }
