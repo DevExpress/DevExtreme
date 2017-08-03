@@ -206,7 +206,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                 return;
             }
 
-            return this._dataSource.loadDescendants(keys, !childrenOnly);
+            return this._dataSource.loadDescendants(keys, childrenOnly);
         }
     };
 })());
