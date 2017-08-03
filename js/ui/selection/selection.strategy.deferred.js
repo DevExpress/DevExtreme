@@ -117,10 +117,6 @@ module.exports = SelectionStrategy.inherit({
         }
     },
 
-    _hasSameFilter: function(selectionFilter, currentFilter) {
-        return this._findSubFilter(selectionFilter, currentFilter) >= 0;
-    },
-
     _findSubFilter: function(selectionFilter, filter) {
         if(!selectionFilter) return -1;
         var filterString = JSON.stringify(filter);
@@ -137,7 +133,7 @@ module.exports = SelectionStrategy.inherit({
 
     _isLastSubFilter: function(selectionFilter, filter) {
         if(selectionFilter && filter) {
-            return this._findSubFilter(selectionFilter, filter) === selectionFilter.length - 1;
+            return this._findSubFilter(selectionFilter, filter) === selectionFilter.length - 1 || this._findSubFilter([selectionFilter], filter) === 0;
         }
         return false;
     },
@@ -168,11 +164,9 @@ module.exports = SelectionStrategy.inherit({
         selectionFilter = that._denormalizeFilter(selectionFilter);
 
         if(selectionFilter && selectionFilter.length) {
-            if(that._hasSameFilter(selectionFilter, currentFilter)) {
-                return;
-            }
+            that._removeSameFilter(selectionFilter, filter, isDeselect, true);
 
-            if(that._removeInvertedFilter(selectionFilter, isDeselect, filter)) {
+            if(that._removeSameFilter(selectionFilter, filter, !isDeselect, !isUnique)) {
                 needAddFilter = !isUnique;
             }
 
@@ -197,8 +191,8 @@ module.exports = SelectionStrategy.inherit({
         return filter;
     },
 
-    _removeInvertedFilter: function(selectionFilter, isDeselect, filter) {
-        filter = isDeselect ? filter : ["!", filter];
+    _removeSameFilter: function(selectionFilter, filter, inverted, forceRemove) {
+        filter = inverted ? ["!", filter] : filter;
 
         var filterIndex = this._findSubFilter(selectionFilter, filter);
 
@@ -207,7 +201,9 @@ module.exports = SelectionStrategy.inherit({
             return true;
         }
 
-        if(filterIndex >= 0) {
+        var isLastItem = filterIndex === selectionFilter.length - 1;
+
+        if(filterIndex >= 0 && (forceRemove || isLastItem)) {
             if(filterIndex > 0) {
                 selectionFilter.splice(filterIndex - 1, 2);
             } else {
