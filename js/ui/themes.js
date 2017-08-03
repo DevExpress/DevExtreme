@@ -6,9 +6,9 @@ var $ = require("../core/renderer"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
+    themeLoadedCallback = require("./themes_callbacks"),
     viewPort = viewPortUtils.value,
-    viewPortChanged = viewPortUtils.changeCallback,
-    holdReady = $.holdReady || $.fn.holdReady;
+    viewPortChanged = viewPortUtils.changeCallback;
 
 var DX_LINK_SELECTOR = "link[rel=dx-theme]",
     THEME_ATTR = "data-theme",
@@ -194,6 +194,11 @@ function current(options) {
         currentThemeData = knownThemes[currentThemeName];
     }
 
+    var fireLoadedCallback = function() {
+        loadCallback && loadCallback.apply(this, arguments);
+        themeLoadedCallback.fire();
+    };
+
     if(currentThemeData) {
         // NOTE:
         // 1. <link> element re-creation leads to incorrect CSS rules priority in Internet Explorer (T246821).
@@ -201,8 +206,9 @@ function current(options) {
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr("href", knownThemes[currentThemeName].url);
-        if(loadCallback) {
-            waitForThemeLoad(currentThemeName, loadCallback);
+
+        if(loadCallback || themeLoadedCallback.has()) {
+            waitForThemeLoad(currentThemeName, fireLoadedCallback);
         } else {
             if(pendingThemeName) {
                 pendingThemeName = currentThemeName;
@@ -210,9 +216,7 @@ function current(options) {
         }
     } else {
         if(isAutoInit) {
-            if(loadCallback) {
-                loadCallback();
-            }
+            fireLoadedCallback();
         } else {
             throw errors.Error("E0021", currentThemeName);
         }
@@ -289,13 +293,7 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
-holdReady(true);
-init({
-    _autoInit: true,
-    loadCallback: function() {
-        holdReady(false);
-    }
-});
+init({ _autoInit: true });
 
 domUtils.ready(function() {
     if($(DX_LINK_SELECTOR, context).length) {
@@ -343,3 +341,4 @@ exports.resetTheme = function() {
     currentThemeName = null;
     pendingThemeName = null;
 };
+
