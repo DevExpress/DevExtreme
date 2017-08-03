@@ -274,18 +274,23 @@ initRender.prototype.wrapInner = function(wrapper) {
 };
 
 initRender.prototype.replaceWith = function(element) {
-    this.$element.replaceWith(element.$element || element);
-    return this;
+    if(!(element && element[0])) return;
+
+    element.insertBefore(this);
+    this.remove();
+
+    return element;
 };
 
 var cleanData = function(node, cleanSelf) {
-    if(!node) {
+    if(!(node instanceof Element)) {
         return;
     }
 
     var childNodes = node.getElementsByTagName("*");
 
     dataUtils.cleanData(childNodes);
+
     if(cleanSelf) {
         dataUtils.cleanData([node]);
     }
