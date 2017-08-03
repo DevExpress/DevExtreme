@@ -345,7 +345,7 @@ gridCore.registerModule("search", {
                 },
 
                 dispose: function() {
-                    clearTimeout(this._highlightTimer);                    
+                    clearTimeout(this._highlightTimer);
                     this.callBase();
                 }
             }
