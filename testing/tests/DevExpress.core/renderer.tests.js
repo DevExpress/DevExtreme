@@ -87,3 +87,9 @@ QUnit.test("Insert td tag", function(assert) {
         renderer(tr).html("<td></td>").html(),
         "<td></td>");
 });
+
+QUnit.test("Insert thead tag", function(assert) {
+    assert.equal(
+        renderer("<div>").html("<thead></thead>").html(),
+        "<thead></thead>");
+});

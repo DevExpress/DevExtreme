@@ -4,7 +4,7 @@ var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
-var parseHTML = require("./utils/html_parser");
+var htmlParser = require("./utils/html_parser");
 var matches = require("./polyfills/matches");
 
 var methods = [
@@ -164,17 +164,15 @@ initRender.prototype.html = function(value) {
 
     this.empty();
 
-    if(typeof value === "string" || typeof value === "number") {
+    if(typeof value === "string" && !htmlParser.isTablePart(value) || typeof value === "number") {
         try {
             this[0].innerHTML = value;
 
             return this;
-        } catch(e) {
-
-        }
+        } catch(e) { }
     }
 
-    return this.append(parseHTML(value));
+    return this.append(htmlParser.parseHTML(value));
 };
 
 var appendElements = function(element, nextSibling) {

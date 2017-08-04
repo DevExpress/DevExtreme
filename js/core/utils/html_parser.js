@@ -63,9 +63,12 @@ var parseHTML = function(html, context) {
         container = container.lastChild;
     }
 
-    var nodes = merge([], container.childNodes);
-
-    return nodes;
+    return merge([], container.childNodes);
 };
 
-module.exports = parseHTML;
+var isTablePart = function(html) {
+    return isTagName.exec(html)[1] in tagWrappers;
+};
+
+exports.parseHTML = parseHTML;
+exports.isTablePart = isTablePart;
