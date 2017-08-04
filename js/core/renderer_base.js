@@ -4,7 +4,7 @@ var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
-var parseHTML = require("./utils/HTMLParser");
+var parseHTML = require("./utils/html_parser");
 var matches = require("./polyfills/matches");
 
 var methods = [
