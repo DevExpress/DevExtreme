@@ -362,9 +362,14 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_getSelectedRowKeys
+         * @name dxDataGridMethods_getSelectedRowKeys
          * @publicName getSelectedRowKeys()
          * @return array | Promise
+         */
+        /**
+         * @name dxTreeListMethods_getSelectedRowKeys
+         * @publicName getSelectedRowKeys()
+         * @return array
          */
         getSelectedRowKeys: function() {
             return this._selection.getSelectedItemKeys();
