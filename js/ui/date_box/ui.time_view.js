@@ -220,7 +220,7 @@ var TimeView = Editor.inherit({
                 time.setHours(newHours);
                 this.option("value", time);
             }).bind(this),
-            value: this._getValue().getHours() > 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM
+            value: this._getValue().getHours() >= 12 ? TIMEVIEW_FORMAT12_PM : TIMEVIEW_FORMAT12_AM
         }));
 
         this._format12.setAria("label", "type");
