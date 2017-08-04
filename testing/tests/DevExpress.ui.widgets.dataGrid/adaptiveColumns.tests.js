@@ -1465,6 +1465,26 @@ QUnit.test("Calculate correct an average width of column when some columns has p
     assert.equal($(".dx-data-row .dx-datagrid-adaptive-more").length, 2, "command adaptive element");
 });
 
+QUnit.test("Apply a hidden css class on cell prepared event of rows view", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.editingController.editRow(0);
+    this.editingController.cancelEditData();
+
+    //assert
+    var col = $(".dx-datagrid-rowsview table").eq(0).find("col").get(1),
+        $cells = $(".dx-datagrid-rowsview table td");
+
+    assert.ok(checkAdaptiveWidth(col.style.width));
+    assert.ok($cells.eq(1).hasClass("dx-datagrid-hidden-column"));
+});
+
 QUnit.module("API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
