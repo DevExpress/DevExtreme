@@ -5,6 +5,7 @@
     @GENERIC_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0px;
     @GENERIC_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
     @GENERIC_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
+    @GENERIC_TIMEVIEW_FORMAT12_WIDTH: 70px;
 }
 .dx-size-compact() {
     @GENERIC_TIMEVIEW_CLOCK_MIN_SIZE: 161px;
@@ -13,6 +14,7 @@
     @GENERIC_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 16px;
     @GENERIC_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
     @GENERIC_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
+    @GENERIC_TIMEVIEW_FORMAT12_WIDTH: 55px;
 }
 
 
@@ -37,6 +39,18 @@
 .dx-timeview-minutearrow {
     background-image: @timeview-minutearrow-bg;
     background-size: 5px 79px - @GENERIC_TIMEVIEW_ARROW_HEIGHT_REDUCE / 2;
+}
+
+.dx-timeview-format12 {
+    width: @GENERIC_TIMEVIEW_FORMAT12_WIDTH;
+
+    margin-left: @GENERIC_TIMEVIEW_TIME_SEPARATOR_MARGIN;
+    margin-right: auto;
+
+    &.dx-rtl, .dx-rtl & {
+        margin-left: auto;
+        margin-right: @GENERIC_TIMEVIEW_TIME_SEPARATOR_MARGIN;
+    }
 }
 
 .dx-timeview-time-separator {
