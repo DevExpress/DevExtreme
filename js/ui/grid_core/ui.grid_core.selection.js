@@ -717,7 +717,7 @@ module.exports = {
                         groupElement,
                         selectionController = that.getController("selection");
 
-                    groupElement = $("<div />")
+                    groupElement = $("<div>")
                         .appendTo($container)
                         .addClass(SELECT_CHECKBOX_CLASS);
 
@@ -789,7 +789,7 @@ module.exports = {
                 },
 
                 _renderSelectCheckBox: function(container, value, column) {
-                    var groupElement = $("<div />")
+                    var groupElement = $("<div>")
                             .addClass(SELECT_CHECKBOX_CLASS)
                             .appendTo(container);
 

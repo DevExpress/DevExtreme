@@ -139,6 +139,12 @@
                 $("#qunit-fixture").html(
                     '<div id="button"></div>\
                     \
+                    <script id="templateWithCreateComponent" type="text/html">\
+                    <div id="templateContent">\
+                        <div id="inner-button"></div>\
+                        <% DevExpress.aspnet.createComponent("dxButton", { text: "text" }, "inner-button"); %>\
+                    </div>\
+                    </script>\
                     <script id="simpleTemplate" type="text/html">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton") %>\
@@ -191,6 +197,11 @@
 
                 return $("#templateContent").children();
             }
+
+            QUnit.test("Create component", function(assert) {
+                var $result = renderTemplate("#templateWithCreateComponent");
+                assert.ok($result.is(".dx-button"));
+            });
 
             QUnit.test("Component element rendering", function(assert) {
                 var $result = renderTemplate("#simpleTemplate");

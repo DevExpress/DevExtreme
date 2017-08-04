@@ -1792,7 +1792,7 @@ QUnit.test("Checking the 'hasChildren' property of the node when it specified", 
     assert.notOk(this.dataController.items()[2].node.hasChildren, "third item hasn't children");
 });
 
-QUnit.test("loadChildren", function(assert) {
+QUnit.test("loadDescendants", function(assert) {
     //arrange
     var loadingArgs = [];
 
@@ -1809,7 +1809,7 @@ QUnit.test("loadChildren", function(assert) {
     });
 
     //act
-    this.loadChildren();
+    this.loadDescendants();
 
     //assert
     assert.strictEqual(loadingArgs.length, 4, "count of load");
@@ -1819,7 +1819,7 @@ QUnit.test("loadChildren", function(assert) {
     assert.deepEqual(loadingArgs[3].parentIds, [7], "parentIds argument of the fourth load");
 });
 
-QUnit.test("loadChildren with key", function(assert) {
+QUnit.test("loadDescendants with key", function(assert) {
     //arrange
     var loadingArgs = [];
 
@@ -1836,7 +1836,7 @@ QUnit.test("loadChildren with key", function(assert) {
     });
 
     //act
-    this.loadChildren(2);
+    this.loadDescendants(2);
 
     //assert
     assert.strictEqual(loadingArgs.length, 3, "count of load");
@@ -1845,7 +1845,7 @@ QUnit.test("loadChildren with key", function(assert) {
     assert.deepEqual(loadingArgs[2].parentIds, [6], "parentIds argument of the third load");
 });
 
-QUnit.test("loadChildren with several keys", function(assert) {
+QUnit.test("loadDescendants with several keys", function(assert) {
     //arrange
     var loadingArgs = [];
 
@@ -1862,7 +1862,7 @@ QUnit.test("loadChildren with several keys", function(assert) {
     });
 
     //act
-    this.loadChildren([1, 2]);
+    this.loadDescendants([1, 2]);
 
     //assert
     assert.strictEqual(loadingArgs.length, 4, "count of load");
@@ -1872,7 +1872,7 @@ QUnit.test("loadChildren with several keys", function(assert) {
     assert.deepEqual(loadingArgs[3].parentIds, [7], "parentIds argument of the fourth load");
 });
 
-QUnit.test("loadChildren without deep pass", function(assert) {
+QUnit.test("loadDescendants without deep pass", function(assert) {
     //arrange
     var loadingArgs = [];
 
@@ -1889,7 +1889,7 @@ QUnit.test("loadChildren without deep pass", function(assert) {
     });
 
     //act
-    this.loadChildren(2, false);
+    this.loadDescendants(2, true);
 
     //assert
     assert.strictEqual(loadingArgs.length, 2, "count of load");
@@ -1897,7 +1897,7 @@ QUnit.test("loadChildren without deep pass", function(assert) {
     assert.deepEqual(loadingArgs[1].parentIds, [2], "parentIds argument of the second load");
 });
 
-QUnit.test("loadChildren - the load should not called when expanding row", function(assert) {
+QUnit.test("loadDescendants - the load should not called when expanding row", function(assert) {
     //arrange
     var loadingArgs = [];
 
@@ -1914,7 +1914,7 @@ QUnit.test("loadChildren - the load should not called when expanding row", funct
         }
     });
 
-    this.loadChildren(2);
+    this.loadDescendants(2);
 
     //assert
     assert.strictEqual(loadingArgs.length, 3, "count of load");
@@ -1926,7 +1926,7 @@ QUnit.test("loadChildren - the load should not called when expanding row", funct
     assert.strictEqual(loadingArgs.length, 3, "count of load");
 });
 
-QUnit.test("loadChildren without args - the load should not called when expanding row", function(assert) {
+QUnit.test("loadDescendants without args - the load should not called when expanding row", function(assert) {
     //arrange
     var loadingArgs = [];
 
@@ -1943,7 +1943,7 @@ QUnit.test("loadChildren without args - the load should not called when expandin
         }
     });
 
-    this.loadChildren();
+    this.loadDescendants();
 
     //assert
     assert.strictEqual(loadingArgs.length, 4, "count of load");

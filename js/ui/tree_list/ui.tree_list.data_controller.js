@@ -67,7 +67,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         publicMethods: function() {
-            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadChildren"]);
+            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadDescendants"]);
         },
 
         changeRowExpand: function(key) {
@@ -184,29 +184,29 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_loadChildren
-         * @publicName loadChildren()
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants()
          * @return Promise
          */
         /**
-         * @name dxTreeListMethods_loadChildren
-         * @publicName loadChildren(keys)
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants(keys)
          * @param1 keys:array
          * @return Promise
          */
         /**
-         * @name dxTreeListMethods_loadChildren
-         * @publicName loadChildren(keys, deep)
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants(keys, childrenOnly)
          * @param1 keys:array
-         * @param2 deep:boolean
+         * @param2 childrenOnly:boolean
          * @return Promise
          */
-        loadChildren: function(keys, deep) {
+        loadDescendants: function(keys, childrenOnly) {
             if(!this._dataSource) {
                 return;
             }
 
-            return this._dataSource.loadChildren(keys, deep);
+            return this._dataSource.loadDescendants(keys, childrenOnly);
         }
     };
 })());

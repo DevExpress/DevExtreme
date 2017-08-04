@@ -490,7 +490,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
             scrollable = that.getScrollable();
             if(!$content.length && scrollable) {
-                $content = $("<div/>").addClass(contentClass);
+                $content = $("<div>").addClass(contentClass);
 
                 eventsEngine.on($content, "scroll", function(e) {
                     scrollTop = $(e.target).scrollTop();

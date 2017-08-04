@@ -19,10 +19,10 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
     _init: function() {
         this.callBase.apply(this, arguments);
 
-        var $buttonContainer = $("<div >").addClass(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS),
-            $buttonWrapper = $("<div />").addClass(SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS),
-            $buttonInnerWrapper = $("<div />").addClass(SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS),
-            $button = $("<div />").addClass(SWITCHABLE_DELETE_BUTTON_CLASS);
+        var $buttonContainer = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_CONTAINER_CLASS),
+            $buttonWrapper = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_WRAPPER_CLASS),
+            $buttonInnerWrapper = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_INNER_WRAPPER_CLASS),
+            $button = $("<div>").addClass(SWITCHABLE_DELETE_BUTTON_CLASS);
 
         this._list._createComponent($button, Button, {
             text: messageLocalization.format("dxListEditDecorator-delete"),
@@ -114,7 +114,7 @@ registerDecorator(
             var $itemElement = config.$itemElement,
                 $container = config.$container;
 
-            var $toggle = $("<div />").addClass(TOGGLE_DELETE_SWITCH_CLASS);
+            var $toggle = $("<div>").addClass(TOGGLE_DELETE_SWITCH_CLASS);
             this._list._createComponent($toggle, Button, {
                 icon: "toggle-delete",
                 onClick: (function(e) {

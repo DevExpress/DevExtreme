@@ -16,7 +16,7 @@ var initMobileViewport = function(options) {
 
     var metaSelector = "meta[name=viewport]";
     if(!$(metaSelector).length) {
-        $("<meta />").attr("name", "viewport").appendTo("head");
+        $("<meta>").attr("name", "viewport").appendTo("head");
     }
 
     var metaVerbs = ["width=device-width"],

@@ -7129,7 +7129,7 @@ QUnit.test("Show tooltip on focus when one row with set validate in column and e
 });
 
 //T470216
-QUnit.test("Tooltip should be positioned by left side when the drop-down editor is shown", function(assert) {
+QUnit.testInActiveWindow("Tooltip should be positioned by left side when the drop-down editor is shown", function(assert) {
     //arrange
     var that = this,
         tooltipInstance,

@@ -2389,14 +2389,14 @@ declare module DevExpress.ui {
         /** @docid dxTreeListMethods_addRow#addRow(parentId) */
         addRow(parentId: any): void;
 
-        /** @docid dxTreeListMethods_loadChildren#loadChildren() */
-        loadChildren(): JQueryPromise<void>;
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants() */
+        loadDescendants(): JQueryPromise<void>;
 
-        /** @docid dxTreeListMethods_loadChildren#loadChildren(keys) */
-        loadChildren(keys: any): JQueryPromise<void>;
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants(keys) */
+        loadDescendants(keys: any): JQueryPromise<void>;
 
-        /** @docid dxTreeListMethods_loadChildren#loadChildren(keys, deep) */
-        loadChildren(keys: any, deep: boolean): JQueryPromise<void>;
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants(keys, childrenOnly) */
+        loadDescendants(keys: any, childrenOnly: boolean): JQueryPromise<void>;
     }
 
     /** @docid dxdataGrid */

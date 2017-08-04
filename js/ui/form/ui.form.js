@@ -656,7 +656,7 @@ var Form = Widget.inherit({
     },
 
     _createHiddenElement: function(rootLayoutManager) {
-        this._$hiddenElement = $("<div/>")
+        this._$hiddenElement = $("<div>")
             .addClass(WIDGET_CLASS)
             .addClass(HIDDEN_LABEL_CLASS)
             .appendTo(document.body);
@@ -859,7 +859,7 @@ var Form = Widget.inherit({
         }
 
         if(this.option("showValidationSummary")) {
-            $("<div/>").addClass(FORM_VALIDATION_SUMMARY).dxValidationSummary({
+            $("<div>").addClass(FORM_VALIDATION_SUMMARY).dxValidationSummary({
                 validationGroup: this._getValidationGroup()
             }).appendTo(this._getContent());
         }
@@ -944,7 +944,6 @@ var Form = Widget.inherit({
 
         that._rootLayoutManager = that._renderLayoutManager(items, $content, {
             colCount: that.option("colCount"),
-            width: this.option("width"),
             alignItemLabels: that.option("alignItemLabels"),
             screenByWidth: this.option("screenByWidth"),
             colCountByScreen: this.option("colCountByScreen"),
@@ -959,7 +958,7 @@ var Form = Widget.inherit({
 
     _itemTabbedTemplate: function(item, e, $container) {
         var that = this,
-            $tabPanel = $("<div/>").appendTo($container),
+            $tabPanel = $("<div>").appendTo($container),
             tabPanelOptions = extend({}, item.tabPanelOptions, {
                 dataSource: item.tabs,
                 onItemRendered: function(args) {
@@ -1000,7 +999,7 @@ var Form = Widget.inherit({
     },
 
     _itemGroupTemplate: function(item, e, $container) {
-        var $group = $("<div/>")
+        var $group = $("<div>")
                 .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, typeUtils.isDefined(item.caption) && item.caption.length)
                 .addClass(FORM_GROUP_CLASS)
                 .appendTo($container),
@@ -1009,13 +1008,13 @@ var Form = Widget.inherit({
             layoutManager;
 
         if(item.caption) {
-            $("<span/>")
+            $("<span>")
                 .addClass(FORM_GROUP_CAPTION_CLASS)
                 .text(item.caption)
                 .appendTo($group);
         }
 
-        $groupContent = $("<div/>")
+        $groupContent = $("<div>")
             .addClass(FORM_GROUP_CONTENT_CLASS)
             .appendTo($group);
 
@@ -1045,7 +1044,7 @@ var Form = Widget.inherit({
     },
 
     _renderLayoutManager: function(items, $rootElement, options) {
-        var $element = $("<div />"),
+        var $element = $("<div>"),
             that = this,
             instance,
             config = that._getLayoutManagerConfig(items, options),

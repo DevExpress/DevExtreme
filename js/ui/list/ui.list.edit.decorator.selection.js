@@ -48,7 +48,7 @@ registerDecorator(
             var $itemElement = config.$itemElement,
                 $container = config.$container;
 
-            var $control = $("<div />").addClass(this._controlClass);
+            var $control = $("<div>").addClass(this._controlClass);
             new this._controlWidget($control, extend(this._commonOptions(), {
                 value: this._isSelected($itemElement),
                 focusStateEnabled: false,

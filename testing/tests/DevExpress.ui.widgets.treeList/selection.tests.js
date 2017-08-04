@@ -610,7 +610,7 @@ QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
     assert.deepEqual(this.getSelectedRowKeys(true), [2, 3, 5], "leaves");
 });
 
-QUnit.test("Selection state of rows should be updated on loadChildren", function(assert) {
+QUnit.test("Selection state of rows should be updated on loadDescendants", function(assert) {
    //arrange
     var clock = sinon.useFakeTimers(),
         $testElement = $('#treeList');
@@ -633,7 +633,7 @@ QUnit.test("Selection state of rows should be updated on loadChildren", function
     assert.deepEqual(this.getSelectedRowKeys(true), [], "leaves");
 
     //act
-    this.loadChildren();
+    this.loadDescendants();
     clock.tick();
 
     //assert

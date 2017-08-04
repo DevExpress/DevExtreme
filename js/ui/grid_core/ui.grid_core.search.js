@@ -317,7 +317,7 @@ module.exports = {
                                 if(content.nodeType !== 3) return;
 
                                 var highlightSearchTextInTextNode = function($content, searchText) {
-                                    var $searchTextSpan = $("<span />").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
+                                    var $searchTextSpan = $("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
                                         text = $content.text(),
                                         index = normalizeString(text).indexOf(normalizeString(searchText));
 
@@ -336,7 +336,7 @@ module.exports = {
 
                                 if(isEquals) {
                                     if(normalizeString($(content).text()) === normalizeString(searchText)) {
-                                        $(this).replaceWith($("<span />").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
+                                        $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
                                     }
                                 } else {
                                     highlightSearchTextInTextNode($(content), searchText);
@@ -349,9 +349,17 @@ module.exports = {
                 _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
+                    //T103538
                     if(this.option("rowTemplate")) {
-                        //T103538
-                        this._highlightSearchText(this._getTableElement());
+                        if(this.option("templatesRenderAsynchronously")) {
+                            clearTimeout(this._highlightTimer);
+
+                            this._highlightTimer = setTimeout(function() {
+                                this._highlightSearchText(this._getTableElement());
+                            }.bind(this));
+                        } else {
+                            this._highlightSearchText(this._getTableElement());
+                        }
                     }
                 },
 
@@ -366,6 +374,11 @@ module.exports = {
                     }
 
                     that.callBase($cell, parameters);
+                },
+
+                dispose: function() {
+                    clearTimeout(this._highlightTimer);
+                    this.callBase();
                 }
             }
         }

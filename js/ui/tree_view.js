@@ -658,7 +658,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _createTreeViewLoadIndicator: function() {
-        this._treeViewLoadIndicator = $("<div>", { "class": LOAD_INDICATOR_CLASS });
+        this._treeViewLoadIndicator = $("<div>").addClass(LOAD_INDICATOR_CLASS);
         this._createComponent(this._treeViewLoadIndicator, LoadIndicator, {});
         return this._treeViewLoadIndicator;
     },
@@ -674,7 +674,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         if(isLoading && !this._dataSource.isLoaded()) {
             this.option("items", []);
 
-            var $wrapper = $("<div>", { "class": LOAD_INDICATOR_WRAPPER_CLASS });
+            var $wrapper = $("<div>").addClass(LOAD_INDICATOR_WRAPPER_CLASS);
 
             this._createTreeViewLoadIndicator().appendTo($wrapper);
 
@@ -1093,7 +1093,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        this._createComponent($("<div>", { "class": NODE_LOAD_INDICATOR_CLASS }), LoadIndicator, {}).element().appendTo($node);
+        this._createComponent($("<div>").addClass(NODE_LOAD_INDICATOR_CLASS), LoadIndicator, {}).element().appendTo($node);
         $icon.hide();
     },
 

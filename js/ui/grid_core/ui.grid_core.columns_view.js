@@ -93,7 +93,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     },
 
     _createRow: function() {
-        return $("<tr />")
+        return $("<tr>")
             .addClass(ROW_CLASS)
             .attr("role", "row");
     },
@@ -104,7 +104,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _createTable: function(columns) {
         var that = this,
-            $table = $("<table />")
+            $table = $("<table>")
                 .addClass(that.addWidgetPrefix(TABLE_CLASS))
                 .addClass(that.addWidgetPrefix(TABLE_FIXED_CLASS))
                 .attr("role", that._getTableRoleName());
@@ -113,11 +113,11 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             $table.append(that._createColGroup(columns));
             if(devices.real().ios) {
                 //T198380
-                $table.append("<thead><tr></tr></thead>");
+                $table.append($("<thead>").append("<tr>"));
             }
         }
 
-        $table.append("<tbody />");
+        $table.append("<tbody>");
 
         //T138469
         if(browser.mozilla) {
@@ -218,7 +218,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
     _createColGroup: function(columns) {
         var i, j,
-            colgroupElement = $("<colgroup />"),
+            colgroupElement = $("<colgroup>"),
             colspan;
 
         for(i = 0; i < columns.length; i++) {
@@ -238,7 +238,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             width = HIDDEN_COLUMNS_WIDTH;
         }
 
-        return $("<col />").width(width);
+        return $("<col>").width(width);
     },
 
     renderDelayedTemplates: function() {
@@ -534,7 +534,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var that = this,
             $scrollContainer;
 
-        $scrollContainer = $("<div/>");
+        $scrollContainer = $("<div>");
 
         eventsEngine.on($scrollContainer, "scroll", function() {
             !that._skipScrollChanged && that.scrollChanged.fire({

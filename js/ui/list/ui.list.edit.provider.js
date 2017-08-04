@@ -168,10 +168,10 @@ var EditProvider = Class.inherit({
     },
 
     _collectDecoratorsMarkup: function(method, config, containerClass) {
-        var $collector = $("<div />");
+        var $collector = $("<div>");
 
         each(this._decorators, function() {
-            var $container = $("<div />").addClass(containerClass);
+            var $container = $("<div>").addClass(containerClass);
             this[method](extend({
                 $container: $container
             }, config));

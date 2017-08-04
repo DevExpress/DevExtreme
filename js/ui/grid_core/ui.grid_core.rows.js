@@ -538,7 +538,7 @@ module.exports = {
                         $element = that.element();
 
                     if(!$element.children().length) {
-                        $element.append("<div />");
+                        $element.append("<div>");
                     }
                     if((force || !that._loadPanel)) {
                         that._renderLoadPanel($element, $element.parent(), that._dataController.isLocalStore());
