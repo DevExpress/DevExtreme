@@ -247,7 +247,7 @@ var View = ModuleItem.inherit({
         this._requireReady = false;
 
         if(!$element) {
-            $element = this._$element = $("<div />").appendTo($parent);
+            $element = this._$element = $("<div>").appendTo($parent);
             this._$parent = $parent;
         }
 

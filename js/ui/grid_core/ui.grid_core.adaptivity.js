@@ -641,7 +641,7 @@ module.exports = {
 
                     if(column.command === ADAPTIVE_COLUMN_NAME && options.rowType !== "groupFooter") {
                         return function(container) {
-                            var $adaptiveColumnButton = $("<span/>").addClass(that.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
+                            var $adaptiveColumnButton = $("<span>").addClass(that.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
                             eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), that.createAction(function() {
                                 that._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
                             }));

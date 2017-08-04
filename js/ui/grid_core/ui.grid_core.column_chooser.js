@@ -62,7 +62,7 @@ var ColumnChooserController = modules.ViewController.inherit({
 
         if(columnChooserEnabled) {
             if(!$showColumnChooserButton.length) {
-                $columnChooserButton = $("<div />")
+                $columnChooserButton = $("<div>")
                     .addClass(columnChooserButtonClass)
                     .appendTo($element);
 

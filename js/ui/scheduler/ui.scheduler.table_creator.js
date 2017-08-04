@@ -302,7 +302,7 @@ var SchedulerTableCreator = {
 
         for(var i = 0; i < repeatCount; i++) {
             for(var j = 0; j < itemCount; j++) {
-                var $container = $("<div/>"),
+                var $container = $("<div>"),
                     cell = {};
 
                 if(cellTemplate && cellTemplate.render) {
@@ -319,7 +319,7 @@ var SchedulerTableCreator = {
                     cell.template = cellTemplate.render.bind(cellTemplate, templateOptions);
                 } else {
                     $container.text(items[j].text);
-                    $container = $("<div/>").append($container);
+                    $container = $("<div>").append($container);
                 }
 
                 $container.addClass(cssClasses.groupHeaderContentClass);

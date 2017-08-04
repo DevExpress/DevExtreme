@@ -311,7 +311,7 @@ var LayoutManager = Widget.inherit({
 
         if(that._items && that._items.length) {
             var colCount = that._getColCount(),
-                $container = $("<div />").appendTo(that.element()),
+                $container = $("<div>").appendTo(that.element()),
                 layoutItems;
 
             that._prepareItemsWithMerging(colCount);
@@ -369,7 +369,7 @@ var LayoutManager = Widget.inherit({
                 }
                 var itemRenderedCountInPreviousRows = e.location.row * colCount,
                     item = that._items[e.location.col + itemRenderedCountInPreviousRows],
-                    $fieldItem = $("<div/>")
+                    $fieldItem = $("<div>")
                         .addClass(item.cssClass)
                         .appendTo($itemElement);
 
@@ -500,7 +500,7 @@ var LayoutManager = Widget.inherit({
             id = that.getItemID(name),
             isRequired = typeUtils.isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules),
             labelOptions = that._getLabelOptions(item, id, isRequired),
-            $editor = $("<div/>"),
+            $editor = $("<div>"),
             helpID = item.helpText ? ("dx-" + new Guid()) : null,
             $label;
 
@@ -603,14 +603,14 @@ var LayoutManager = Widget.inherit({
     _renderLabel: function(options) {
         if(typeUtils.isDefined(options.text) && options.text.length > 0) {
             var labelClasses = FIELD_ITEM_LABEL_CLASS + " " + FIELD_ITEM_LABEL_LOCATION_CLASS + options.location,
-                $label = $("<label />")
+                $label = $("<label>")
                     .addClass(labelClasses)
                     .attr("for", options.id),
-                $labelContent = $("<span/>")
+                $labelContent = $("<span>")
                     .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
                     .appendTo($label);
 
-            $("<span />")
+            $("<span>")
                 .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
                 .text(options.text)
                 .appendTo($labelContent);
@@ -635,7 +635,7 @@ var LayoutManager = Widget.inherit({
             var markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS,
                 markText = isRequiredMark ? requiredMarksConfig.requiredMark : requiredMarksConfig.optionalMark;
 
-            $mark = $("<span />")
+            $mark = $("<span>")
                 .addClass(markClass)
                 .html("&nbsp" + markText);
         }
@@ -756,7 +756,7 @@ var LayoutManager = Widget.inherit({
                 container: $container
             });
         } else {
-            var $editor = $("<div/>").appendTo($container);
+            var $editor = $("<div>").appendTo($container);
 
             try {
                 editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);

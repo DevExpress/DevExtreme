@@ -23,11 +23,11 @@ var ErrorHandlingController = modules.ViewController.inherit({
         var that = this,
             $errorRow,
             $closeButton,
-            $errorMessage = $("<div/>").addClass(ERROR_MESSAGE_CLASS).text(message);
+            $errorMessage = $("<div>").addClass(ERROR_MESSAGE_CLASS).text(message);
 
         if($tableElements) {
-            $errorRow = $("<tr />").addClass(ERROR_ROW_CLASS);
-            $closeButton = $("<div/>").addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
+            $errorRow = $("<tr>").addClass(ERROR_ROW_CLASS);
+            $closeButton = $("<div>").addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
             eventsEngine.on($closeButton, clickEvent.name, that.createAction(function(args) {
                 var e = args.jQueryEvent,
@@ -41,7 +41,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
                 });
             }));
 
-            $("<td/>")
+            $("<td>")
                 .attr({
                     "colSpan": that.getController("columns").getVisibleColumns().length,
                     "role": "presentation"

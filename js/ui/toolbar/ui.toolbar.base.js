@@ -197,7 +197,7 @@ var ToolbarBase = CollectionWidget.inherit({
 
         each(this.option("items"), function(groupIndex, group) {
             var groupItems = group.items,
-                $container = $("<div>", { "class": TOOLBAR_GROUP_CLASS }),
+                $container = $("<div>").addClass(TOOLBAR_GROUP_CLASS),
                 location = group.location || "center";
 
             if(!groupItems.length) return;

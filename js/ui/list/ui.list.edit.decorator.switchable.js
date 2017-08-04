@@ -25,9 +25,9 @@ var LIST_EDIT_DECORATOR = "dxListEditDecorator",
 var SwitchableEditDecorator = EditDecorator.inherit({
 
     _init: function() {
-        this._$topShield = $("<div />").addClass(SWITCHABLE_DELETE_TOP_SHIELD_CLASS);
-        this._$bottomShield = $("<div />").addClass(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS);
-        this._$itemContentShield = $("<div />").addClass(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS);
+        this._$topShield = $("<div>").addClass(SWITCHABLE_DELETE_TOP_SHIELD_CLASS);
+        this._$bottomShield = $("<div>").addClass(SWITCHABLE_DELETE_BOTTOM_SHIELD_CLASS);
+        this._$itemContentShield = $("<div>").addClass(SWITCHABLE_DELETE_ITEM_CONTENT_SHIELD_CLASS);
 
         eventsEngine.on(this._$topShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
         eventsEngine.on(this._$bottomShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));

@@ -17,7 +17,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
     },
 
     _getButtonContainer: function() {
-        return $("<div />").addClass(this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS));
+        return $("<div>").addClass(this.addWidgetPrefix(TOOLBAR_BUTTON_CLASS));
     },
 
     _getToolbarButtonClass: function(specificClass) {
@@ -54,7 +54,7 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
     _renderCore: function() {
         if(!this._toolbar) {
             this.element().addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
-            this._toolbar = this._createComponent($("<div />").appendTo(this.element()), Toolbar, this._toolbarOptions);
+            this._toolbar = this._createComponent($("<div>").appendTo(this.element()), Toolbar, this._toolbarOptions);
         } else {
             this._toolbar.option(this._toolbarOptions);
         }

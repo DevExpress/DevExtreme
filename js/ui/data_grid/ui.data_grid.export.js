@@ -790,7 +790,7 @@ dataGridCore.registerModule("export", {
                     var that = this,
                         texts = that.option("export.texts"),
                         renderFakeButton = function(data, $container, iconName) {
-                            var $icon = $("<div />").addClass("dx-icon dx-icon-" + iconName),
+                            var $icon = $("<div>").addClass("dx-icon dx-icon-" + iconName),
                                 $text = $("<span class='dx-button-text'/>").text(data.text),
                                 $content = $("<div class='dx-button-content' />").append($icon).append($text),
                                 $button = $("<div class='dx-button dx-button-has-text dx-button-has-icon dx-datagrid-toolbar-button'>").append($content),

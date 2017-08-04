@@ -282,10 +282,8 @@ var ColorView = Editor.inherit({
 
     _renderColorPickerContainer: function() {
         var $parent = this.element();
-        this._$colorPickerContainer = $("<div>", {
-            "class": COLOR_VIEW_CONTAINER_CLASS,
-            "appendTo": $parent
-        });
+        this._$colorPickerContainer = $("<div>").addClass(COLOR_VIEW_CONTAINER_CLASS)
+            .appendTo($parent);
 
         this._renderHtmlRows();
         this._renderPalette();
@@ -309,7 +307,7 @@ var ColorView = Editor.inherit({
             var rows = [],
                 i;
             for(i = 0; i < delta; i++) {
-                rows.push($("<div>", { "class": COLOR_VIEW_ROW_CLASS }));
+                rows.push($("<div>").addClass(COLOR_VIEW_ROW_CLASS));
             }
 
             if(renderedRowsCount) {
@@ -323,23 +321,21 @@ var ColorView = Editor.inherit({
     },
 
     _renderHtmlCellInsideRow: function(index, $rowParent, additionalClass) {
-        return $("<div>", {
-            "class": COLOR_VIEW_CELL_CLASS,
-            "addClass": additionalClass,
-            "appendTo": $rowParent.find("." + COLOR_VIEW_ROW_CLASS).eq(index)
-        });
+        return $("<div>")
+            .addClass(COLOR_VIEW_CELL_CLASS)
+            .addClass(additionalClass)
+            .appendTo($rowParent.find("." + COLOR_VIEW_ROW_CLASS).eq(index));
     },
 
     _renderPalette: function() {
         var $paletteCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer, COLOR_VIEW_PALETTE_CELL_CLASS),
-            $paletteGradientWhite = $("<div>", { "class": [COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_WHITE_CLASS].join(" ") }),
-            $paletteGradientBlack = $("<div>", { "class": [COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_BLACK_CLASS].join(" ") });
+            $paletteGradientWhite = $("<div>").addClass([COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_WHITE_CLASS].join(" ")),
+            $paletteGradientBlack = $("<div>").addClass([COLOR_VIEW_PALETTE_GRADIENT_CLASS, COLOR_VIEW_PALETTE_GRADIENT_BLACK_CLASS].join(" "));
 
-        this._$palette = $("<div>", {
-            "class": COLOR_VIEW_PALETTE_CLASS,
-            "css": { "backgroundColor": this._currentColor.getPureColor().toHex() },
-            "appendTo": $paletteCell
-        });
+        this._$palette = $("<div>")
+            .addClass(COLOR_VIEW_PALETTE_CLASS)
+            .css("backgroundColor", this._currentColor.getPureColor().toHex())
+            .appendTo($paletteCell);
 
         this._paletteHeight = this._$palette.height();
         this._paletteWidth = this._$palette.width();
@@ -349,10 +345,10 @@ var ColorView = Editor.inherit({
     },
 
     _renderPaletteHandle: function() {
-        this._createComponent(this._$paletteHandle = $("<div>", {
-            "class": COLOR_VIEW_PALETTE_HANDLE_CLASS,
-            "appendTo": this._$palette
-        }), Draggable, {
+        this._$paletteHandle = $("<div>")
+            .addClass(COLOR_VIEW_PALETTE_HANDLE_CLASS)
+            .appendTo(this._$palette);
+        this._createComponent(this._$paletteHandle, Draggable, {
             area: this._$palette,
             allowMoveByClick: true,
             boundOffset: (function() {
@@ -403,15 +399,13 @@ var ColorView = Editor.inherit({
     _renderHueScale: function() {
         var $hueScaleCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer, COLOR_VIEW_HUE_SCALE_CELL_CLASS);
 
-        this._$hueScaleWrapper = $("<div>", {
-            "class": COLOR_VIEW_HUE_SCALE_WRAPPER_CLASS,
-            "appendTo": $hueScaleCell
-        });
+        this._$hueScaleWrapper = $("<div>")
+            .addClass(COLOR_VIEW_HUE_SCALE_WRAPPER_CLASS)
+            .appendTo($hueScaleCell);
 
-        this._$hueScale = $("<div>", {
-            "class": COLOR_VIEW_HUE_SCALE_CLASS,
-            "appendTo": this._$hueScaleWrapper
-        });
+        this._$hueScale = $("<div>")
+            .addClass(COLOR_VIEW_HUE_SCALE_CLASS)
+            .appendTo(this._$hueScaleWrapper);
 
         this._hueScaleHeight = this._$hueScale.height();
         this._hueScaleWrapperHeight = this._$hueScaleWrapper.outerHeight();
@@ -420,10 +414,10 @@ var ColorView = Editor.inherit({
     },
 
     _renderHueScaleHandle: function() {
-        this._createComponent(this._$hueScaleHandle = $("<div>", {
-            "class": COLOR_VIEW_HUE_SCALE_HANDLE_CLASS,
-            "appendTo": this._$hueScaleWrapper
-        }), Draggable, {
+        this._$hueScaleHandle = $("<div>")
+            .addClass(COLOR_VIEW_HUE_SCALE_HANDLE_CLASS)
+            .appendTo(this._$hueScaleWrapper);
+        this._createComponent(this._$hueScaleHandle, Draggable, {
             area: this._$hueScaleWrapper,
             allowMoveByClick: true,
             direction: "vertical",
@@ -473,10 +467,9 @@ var ColorView = Editor.inherit({
 
     _renderControlsContainer: function() {
         var $controlsContainerCell = this._renderHtmlCellInsideRow(0, this._$colorPickerContainer);
-        this._$controlsContainer = $("<div>", {
-            "class": COLOR_VIEW_CONTROLS_CONTAINER_CLASS,
-            "appendTo": $controlsContainerCell
-        });
+        this._$controlsContainer = $("<div>")
+            .addClass(COLOR_VIEW_CONTROLS_CONTAINER_CLASS)
+            .appendTo($controlsContainerCell);
     },
 
     _renderControls: function() {
@@ -486,17 +479,16 @@ var ColorView = Editor.inherit({
     },
 
     _renderColorsPreview: function() {
-        var $colorsPreviewContainer = $("<div>", {
-                "class": COLOR_VIEW_COLOR_PREVIEW_CONTAINER_CLASS,
-                "appendTo": this._$controlsContainer
-            }),
-            $colorsPreviewContainerInner = $("<div>", {
-                "class": COLOR_VIEW_COLOR_PREVIEW_CONTAINER_INNER_CLASS,
-                "appendTo": $colorsPreviewContainer
-            });
+        var $colorsPreviewContainer = $("<div>")
+            .addClass(COLOR_VIEW_COLOR_PREVIEW_CONTAINER_CLASS)
+            .appendTo(this._$controlsContainer);
 
-        this._$currentColor = $("<div>", { "class": [COLOR_VIEW_COLOR_PREVIEW, COLOR_VIEW_COLOR_PREVIEW_COLOR_CURRENT].join(" ") });
-        this._$newColor = $("<div>", { "class": [COLOR_VIEW_COLOR_PREVIEW, COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW].join(" ") });
+        var $colorsPreviewContainerInner = $("<div>")
+            .addClass(COLOR_VIEW_COLOR_PREVIEW_CONTAINER_INNER_CLASS)
+            .appendTo($colorsPreviewContainer);
+
+        this._$currentColor = $("<div>").addClass([COLOR_VIEW_COLOR_PREVIEW, COLOR_VIEW_COLOR_PREVIEW_COLOR_CURRENT].join(" "));
+        this._$newColor = $("<div>").addClass([COLOR_VIEW_COLOR_PREVIEW, COLOR_VIEW_COLOR_PREVIEW_COLOR_NEW].join(" "));
 
         this._makeTransparentBackground(this._$currentColor, this._currentColor);
         this._makeTransparentBackground(this._$newColor, this._currentColor);
@@ -555,11 +547,10 @@ var ColorView = Editor.inherit({
 
     _renderEditorWithLabel: function(options) {
         var $editor = $("<div>");
-        var $label = $("<label>", {
-            "class": options.labelClass,
-            "text": options.labelText + ":",
-            "append": $editor
-        });
+        var $label = $("<label>")
+            .addClass(options.labelClass)
+            .text(options.labelText + ":")
+            .append($editor);
 
         eventsEngine.off($label, clickEvent.name);
         eventsEngine.on($label, clickEvent.name, function(e) {
@@ -611,19 +602,15 @@ var ColorView = Editor.inherit({
 
     _renderAlphaChannelScale: function() {
         var $alphaChannelScaleCell = this._renderHtmlCellInsideRow(1, this._$colorPickerContainer, COLOR_VIEW_ALPHA_CHANNEL_CELL_CLASS),
-            $alphaChannelBorder = $("<div>", {
-                "class": COLOR_VIEW_ALPHA_CHANNEL_BORDER_CLASS,
-                "appendTo": $alphaChannelScaleCell
-            }),
-            $alphaChannelScaleWrapper = $("<div>", {
-                "class": COLOR_VIEW_ALPHA_CHANNEL_SCALE_WRAPPER_CLASS,
-                "appendTo": $alphaChannelBorder
-            });
+            $alphaChannelBorder = $("<div>")
+                .addClass(COLOR_VIEW_ALPHA_CHANNEL_BORDER_CLASS)
+                .appendTo($alphaChannelScaleCell),
+            $alphaChannelScaleWrapper = $("<div>")
+                .addClass(COLOR_VIEW_ALPHA_CHANNEL_SCALE_WRAPPER_CLASS)
+                .appendTo($alphaChannelBorder);
 
-        this._$alphaChannelScale = $("<div>", {
-            "class": COLOR_VIEW_ALPHA_CHANNEL_SCALE_CLASS,
-            "appendTo": $alphaChannelScaleWrapper
-        });
+        this._$alphaChannelScale = $("<div>").addClass(COLOR_VIEW_ALPHA_CHANNEL_SCALE_CLASS)
+            .appendTo($alphaChannelScaleWrapper);
 
         this._makeCSSLinearGradient(this._$alphaChannelScale);
 
@@ -686,10 +673,10 @@ var ColorView = Editor.inherit({
     },
 
     _renderAlphaChannelHandle: function($parent) {
-        this._createComponent(this._$alphaChannelHandle = $("<div>", {
-            "class": COLOR_VIEW_ALPHA_CHANNEL_HANDLE_CLASS,
-            "appendTo": $parent
-        }), Draggable, {
+        this._$alphaChannelHandle = $("<div>")
+            .addClass(COLOR_VIEW_ALPHA_CHANNEL_HANDLE_CLASS)
+            .appendTo($parent);
+        this._createComponent(this._$alphaChannelHandle, Draggable, {
             area: $parent,
             allowMoveByClick: true,
             direction: "horizontal",
