@@ -2416,10 +2416,10 @@ QUnit.test("Appointment should have correct position while dragging from group",
         ],
         width: 800
     });
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment")).eq(0);
 
     $appointment.trigger(dragEvents.start);
-    this.instance.element().find(".dx-scheduler-date-table-cell").eq(7).trigger(dragEvents.enter);
+    $(this.instance.element().find(".dx-scheduler-date-table-cell")).eq(7).trigger(dragEvents.enter);
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
