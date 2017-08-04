@@ -52,7 +52,8 @@ var parseHTML = function(html, context) {
     var fragment = document.createDocumentFragment();
     var container = fragment.appendChild(document.createElement("div"));
 
-    var firstRootTag = (isTagName.exec(html) || [ "", "" ])[1].toLowerCase();
+    var tags = isTagName.exec(html);
+    var firstRootTag = tags && tags[1].toLowerCase();
     var tagWrapper = tagWrappers[firstRootTag] || tagWrappers.default;
 
     container.innerHTML = tagWrapper.startTags + html + tagWrapper.endTags;
@@ -67,7 +68,8 @@ var parseHTML = function(html, context) {
 };
 
 var isTablePart = function(html) {
-    return isTagName.exec(html)[1] in tagWrappers;
+    var tags = isTagName.exec(html);
+    return tags && tags[1] in tagWrappers;
 };
 
 exports.parseHTML = parseHTML;
