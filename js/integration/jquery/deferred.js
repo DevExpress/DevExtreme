@@ -1,6 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
+var $ = require("jquery"),
     typeUtils = require("../../core/utils/type"),
     compareVersion = require("../../core/utils/version").compare;
 

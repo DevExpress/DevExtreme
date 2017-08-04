@@ -784,43 +784,36 @@ var TagBox = SelectBox.inherit({
         return $tag;
     },
 
-    _renderTags: function() {
-        this._cleanTags();
+    _loadTagData: function() {
+        var values = this._getValue(),
+            tagData = $.Deferred(),
+            items = [];
 
-        var $input = this._input(),
-            values = this._getValue(),
-            items = [],
-            itemLoadDeferreds = iteratorUtils.map(values, (function(value) {
-                return this._loadItem(value).always((function(item) {
-                    var valueIndex = values.indexOf(value);
+        this._selectedItems = [];
 
-                    if(isDefined(item)) {
-                        this._selectedItems.push(item);
-                        items.splice(valueIndex, 0, item);
-                    } else {
-                        items.splice(valueIndex, 0, value);
-                    }
-                }).bind(this));
-            }).bind(this));
+        var itemLoadDeferreds = iteratorUtils.map(values, (function(value) {
+            return this._loadItem(value).always((function(item) {
+                var valueIndex = values.indexOf(value);
 
-        when.apply($, itemLoadDeferreds).always((function() {
-            this._renderInputAddons();
-
-            this.option("selectedItems", this._selectedItems.slice());
-
-            var $multiTag = this._multiTagRequired() && this._renderMultiTag($input),
-                showMultiTagOnly = this.option("showMultiTagOnly"),
-                maxDisplayedTags = this.option("maxDisplayedTags");
-
-            items.forEach(function(item, index) {
-                if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - maxDisplayedTags >= -1)) {
-                    return false;
+                if(isDefined(item)) {
+                    this._selectedItems.push(item);
+                    items.splice(valueIndex, 0, item);
+                } else {
+                    items.splice(valueIndex, 0, value);
                 }
-                this._renderTag(item, $multiTag || $input);
-            }.bind(this));
+            }).bind(this));
+        }).bind(this));
 
-            this._scrollContainer("end");
-            this._refreshTagElements();
+        when.apply($, itemLoadDeferreds)
+            .done(function() { tagData.resolve(items); })
+            .fail(function() { tagData.reject(items); });
+
+        return tagData.promise();
+    },
+
+    _renderTags: function() {
+        this._loadTagData().always((function(items) {
+            this._renderTagsCore(items);
         }).bind(this));
 
         this._renderEmptyState();
@@ -828,6 +821,27 @@ var TagBox = SelectBox.inherit({
         if(!this._preserveFocusedTag) {
             this._clearTagFocus();
         }
+    },
+
+    _renderTagsCore: function(items) {
+        this._renderInputAddons();
+
+        this.option("selectedItems", this._selectedItems.slice());
+        this._tagElements().remove();
+
+        var $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input()),
+            showMultiTagOnly = this.option("showMultiTagOnly"),
+            maxDisplayedTags = this.option("maxDisplayedTags");
+
+        items.forEach(function(item, index) {
+            if(($multiTag && showMultiTagOnly) || ($multiTag && !showMultiTagOnly && index - maxDisplayedTags >= -1)) {
+                return false;
+            }
+            this._renderTag(item, $multiTag || this._input());
+        }.bind(this));
+
+        this._scrollContainer("end");
+        this._refreshTagElements();
     },
 
     _renderEmptyState: function() {
@@ -838,11 +852,6 @@ var TagBox = SelectBox.inherit({
 
     _renderDisplayText: function() {
         this._renderInputSize();
-    },
-
-    _cleanTags: function() {
-        this._tagElements().remove();
-        this._selectedItems = [];
     },
 
     _refreshTagElements: function() {

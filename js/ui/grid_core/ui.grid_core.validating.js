@@ -174,7 +174,10 @@ var ValidatingController = modules.Controller.inherit((function() {
                         if(!options.isValid) {
                             var $focus = $container.find(":focus");
                             editingController.showHighlighting($container, true);
-                            if(!$focus.is(":focus")) eventsEngine.trigger($focus.focus(), pointerEvents.down);
+                            if(!$focus.is(":focus")) {
+                                eventsEngine.trigger($focus, "focus");
+                                eventsEngine.trigger($focus, pointerEvents.down);
+                            }
                         }
                         $container.toggleClass(that.addWidgetPrefix(INVALIDATE_CLASS), !options.isValid);
                     }
@@ -199,7 +202,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 }
 
                 if(showEditorAlways) {
-                    editIndex = editingController._addEditData({ key: parameters.key });
+                    editIndex = editingController._addEditData({ key: parameters.key, oldData: parameters.data });
                 }
             }
 
@@ -570,7 +573,7 @@ module.exports = {
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
-                    new Overlay($("<div/>")
+                    new Overlay($("<div>")
                         .addClass(INVALID_MESSAGE_CLASS)
                         .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
                         .text(message)

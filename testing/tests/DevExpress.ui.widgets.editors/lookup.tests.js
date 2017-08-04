@@ -2667,7 +2667,7 @@ QUnit.testInActiveWindow("lookup-list keyboard navigation should work after focu
         }),
         instance = $element.dxLookup("instance");
 
-    instance._$list.focus();
+    $(instance._$list).focus();
     assert.ok(instance._$list.find(".dx-list-item").eq(0).hasClass(FOCUSED_CLASS), "list-item is focused after focusing on list");
 
     var keyboard = keyboardMock(instance._$list);
@@ -2843,7 +2843,7 @@ QUnit.test("T320459 - the 'space' key press on editor should prevent default beh
             items: [1, 2, 3],
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $input = lookup.field(),
+        $input = $(lookup.field()),
         keyboard = keyboardMock($input),
         event;
 

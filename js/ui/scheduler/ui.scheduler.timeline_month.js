@@ -17,8 +17,19 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
     },
 
     _getCellCount: function() {
-        var currentDate = this.option("currentDate");
-        return new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        var currentDate = this.option("currentDate"),
+            cellCount = 0;
+        if(this._isWorkSpaceWithCount()) {
+            var intervalCount = this.option("intervalCount");
+
+            for(var i = 1; i <= intervalCount; i++) {
+                cellCount += new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 0).getDate();
+            }
+        } else {
+            cellCount = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        }
+
+        return cellCount;
     },
 
     _setFirstViewDate: function() {

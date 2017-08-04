@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     Callbacks = require("../../core/utils/callbacks"),
     grep = require("../../core/utils/common").grep,
@@ -246,7 +247,7 @@ var View = ModuleItem.inherit({
         this._requireReady = false;
 
         if(!$element) {
-            $element = this._$element = $("<div />").appendTo($parent);
+            $element = this._$element = $("<div>").appendTo($parent);
             this._$parent = $parent;
         }
 
@@ -268,7 +269,7 @@ var View = ModuleItem.inherit({
     },
 
     focus: function() {
-        this.element().focus();
+        eventsEngine.trigger(this.element(), "focus");
     }
 });
 

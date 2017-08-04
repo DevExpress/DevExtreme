@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
+    eventUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
     MIN_SCROLL_BAR_SIZE = 2,
     translator2DModule = require("../translators/translator2d"),
@@ -50,23 +51,31 @@ ScrollBar.prototype = {
             scrollChangeHandler = function(e) {
                 var dX = (startPosX - e.pageX) * that._scale,
                     dY = (startPosY - e.pageY) * that._scale;
-                eventsEngine.trigger($scroll, new $.Event("dxc-scroll-move", extend(e, {
+
+                eventUtils.fireEvent({
                     type: "dxc-scroll-move",
+                    originalEvent: e,
+                    target: $scroll.get(0),
                     pointers: [{
                         pageX: startPosX + dX,
                         pageY: startPosY + dY
                     }]
-                })));
+                });
             };
         eventsEngine.on($scroll, pointerEvents.down, function(e) {
             startPosX = e.pageX;
             startPosY = e.pageY;
-            eventsEngine.trigger($scroll, new $.Event("dxc-scroll-start", {
+
+            eventUtils.fireEvent({
+                type: "dxc-scroll-start",
+                originalEvent: e,
+                target: $scroll.get(0),
                 pointers: [{
                     pageX: startPosX,
                     pageY: startPosY
                 }]
-            }));
+            });
+
             eventsEngine.on(document, pointerEvents.move, scrollChangeHandler);
         });
 

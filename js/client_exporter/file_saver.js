@@ -2,6 +2,7 @@
 
 /* global Windows */
 var $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     errors = require("../ui/widget/ui.errors"),
     browser = require("../core/utils/browser"),
     typeUtils = require("../core/utils/type"),
@@ -53,30 +54,24 @@ exports.fileSaver = {
         return exportLinkElement;
     },
 
-    _formDownloader: function(proxyUrl, fileName, contentType, data, callback) {
+    _formDownloader: function(proxyUrl, fileName, contentType, data) {
         var formAttributes = { method: "post", action: proxyUrl, enctype: "multipart/form-data" },
             exportForm = $("<form>").css({ "display": "none" }).attr(formAttributes);
-
-        ///#DEBUG
-        if(typeUtils.isDefined(callback)) {
-            exportForm.submit(callback);
-        }
-        ///#ENDDEBUG
 
         exportForm.append("<input type=\"hidden\" name=\"fileName\" value=\"" + fileName + "\" />");
         exportForm.append("<input type=\"hidden\" name=\"contentType\" value=\"" + contentType + "\" />");
         exportForm.append("<input type=\"hidden\" name=\"data\" value=\"" + data + "\" />");
         exportForm.appendTo("body");
-        exportForm.submit();
+        eventsEngine.trigger(exportForm, "submit");
 
-        if(exportForm.submit()) exportForm.remove();
+        if(eventsEngine.trigger(exportForm, "submit")) exportForm.remove();
         ///#DEBUG
         return exportForm;
         ///#ENDDEBUG
     },
 
-    _saveByProxy: function(proxyUrl, fileName, format, data, callback) {
-        return this._formDownloader(proxyUrl, fileName, MIME_TYPES[format], data, callback);
+    _saveByProxy: function(proxyUrl, fileName, format, data) {
+        return this._formDownloader(proxyUrl, fileName, MIME_TYPES[format], data);
     },
 
     _winJSBlobSave: function(blob, fileName, format) {

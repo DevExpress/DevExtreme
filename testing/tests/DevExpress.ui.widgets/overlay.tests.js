@@ -2353,7 +2353,7 @@ QUnit.test("overlay can be dragged out of target if viewport and container is no
 
         var $container = $(window),
             viewWidth = $container.outerWidth(),
-            viewHeight = $container.outerHeight(),
+            viewHeight = Math.max($(document).outerHeight(), $container.outerHeight()),
             position = $overlayContent.position();
 
         var startEvent = pointer.start().dragStart().lastEvent();
@@ -2377,7 +2377,7 @@ QUnit.test("overlay should have correct resizable area if viewport and container
                 visible: true
             }),
             overlay = $overlay.dxOverlay("instance"),
-            resizable = overlay.content().dxResizable("instance");
+            resizable = $(overlay.content()).dxResizable("instance");
 
         assert.ok($.isWindow(resizable.option("area").get(0)), "window is the area of the resizable");
     } finally {

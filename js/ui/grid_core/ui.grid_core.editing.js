@@ -88,7 +88,7 @@ var isRowEditMode = function(that) {
 var EditingController = modules.ViewController.inherit((function() {
     var getDefaultEditorTemplate = function(that) {
         return function(container, options) {
-            var $editor = $("<div/>").appendTo(container);
+            var $editor = $("<div>").appendTo(container);
 
             that.getController("editorFactory").createEditor($editor, extend({}, options.column, {
                 value: options.value,
@@ -184,6 +184,9 @@ var EditingController = modules.ViewController.inherit((function() {
 
                     if(editData.type === DATA_EDIT_DATA_INSERT_TYPE) {
                         editData.key.rowIndex += args.items.length;
+                        editData.key.dataRowIndex += args.items.filter(function(item) {
+                            return item.rowType === "data";
+                        }).length;
                     }
                 });
             }
@@ -327,6 +330,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         return editData.key.pageIndex === beginPageIndex;
                     case "refresh":
                         editData.key.rowIndex = 0;
+                        editData.key.dataRowIndex = 0;
                         editData.key.pageIndex = 0;
                         break;
                     default:
@@ -362,7 +366,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 item = that._generateNewItem(key);
 
                 if(editData[i].type === DATA_EDIT_DATA_INSERT_TYPE && that._needInsertItem(editData[i], changeType, items, item)) {
-                    items.splice(key.rowIndex, 0, item);
+                    items.splice(key.dataRowIndex, 0, item);
                 }
             }
 
@@ -421,8 +425,19 @@ var EditingController = modules.ViewController.inherit((function() {
             return this.addRow();
         },
 
-        _initNewRow: function(options) {
+        _initNewRow: function(options, insertKey) {
             this.executeAction("onInitNewRow", options);
+
+            var rows = this._dataController.items(),
+                row = rows[insertKey.rowIndex];
+
+            if(row && (!row.isEditing && row.rowType === "detail" || row.rowType === "detailAdaptive")) {
+                insertKey.rowIndex++;
+            }
+
+            insertKey.dataRowIndex = rows.filter(function(row, index) {
+                return index < insertKey.rowIndex && row.rowType === "data";
+            }).length;
         },
 
         _getInsertIndex: function() {
@@ -610,7 +625,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
                 that._editPopup.on("hidden", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
-                    e.component.content().find(FOCUSABLE_ELEMENT_SELECTOR).first().focus();
+                    eventsEngine.trigger(e.component.content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
                 });
             }
 
@@ -759,7 +774,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     beforeFocusCallback();
                 }
 
-                $cell && $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first().focus();
+                $cell && eventsEngine.trigger($cell.find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
                 that._beforeFocusCallback = null;
             }
 
@@ -1037,6 +1052,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 results = [],
                 deferreds = [],
                 dataController = that._dataController,
+                dataSource = dataController.dataSource(),
                 editMode = getEditMode(that),
                 result = $.Deferred();
 
@@ -1058,6 +1074,8 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(deferreds.length) {
                 that._saving = true;
+
+                dataSource && dataSource.beginLoading();
 
                 when.apply($, deferreds).done(function() {
                     editData = that._editData.slice(0);
@@ -1082,6 +1100,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 return result.always(function() {
                     that._saving = false;
+                    dataSource && dataSource.endLoading();
                 }).promise();
             }
 

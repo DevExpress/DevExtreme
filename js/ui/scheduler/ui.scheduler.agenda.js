@@ -349,8 +349,8 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                 } else {
                     if(cellDateNumber && cellDayName) {
                         $td.append([
-                            $("<span />").addClass(AGENDA_DATE_CLASS).text(cellDateNumber),
-                            $("<span />").addClass(AGENDA_WEEK_DAY_CLASS).text(cellDayName)
+                            $("<span>").addClass(AGENDA_DATE_CLASS).text(cellDateNumber),
+                            $("<span>").addClass(AGENDA_WEEK_DAY_CLASS).text(cellDayName)
                         ]);
                     }
                 }

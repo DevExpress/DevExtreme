@@ -9,6 +9,7 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
     when = require("../integration/jquery/deferred").when,
     $ = require("../core/renderer"),
+    eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,
     extend = require("../core/utils/extend").extend,
     registerComponent = require("../core/component_registrator");
@@ -18,6 +19,7 @@ var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
 
 /**
  * @name dxDropDownBox
+ * @isEditor
  * @publicName dxDropDownBox
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @module ui/drop_down_box
@@ -34,7 +36,7 @@ var DropDownBox = DropDownEditor.inherit({
                 var $tabbableElements = this._getTabbableElements(),
                     $focusableElement = e.shiftKey ? $tabbableElements.last() : $tabbableElements.first();
 
-                $focusableElement && $focusableElement.focus();
+                $focusableElement && eventsEngine.trigger($focusableElement, "focus");
                 e.preventDefault();
             }
         });
@@ -243,7 +245,7 @@ var DropDownBox = DropDownEditor.inherit({
 
         if(moveBackward || moveForward) {
             this.close();
-            this._input().focus();
+            eventsEngine.trigger(this._input(), "focus");
 
             if(moveBackward) {
                 e.originalEvent.preventDefault();
@@ -270,24 +272,18 @@ var DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled: this.option("focusStateEnabled"),
-            onPositioned: null,
             maxHeight: this._getMaxHeight.bind(this)
         }, this.option("dropDownOptions"));
     },
 
     _getMaxHeight: function() {
-        var $element = this.element(),
-            offset = $element.offset(),
-            windowHeight = $(window).height(),
-            maxHeight = windowHeight - offset.top - $element.outerHeight();
-
-        return maxHeight * 0.9;
+        return $(window).height() * 0.9;
     },
 
     _popupShownHandler: function() {
         this.callBase();
         var $firstElement = this._getTabbableElements().first();
-        $firstElement.focus();
+        eventsEngine.trigger($firstElement, "focus");
     },
 
     _popupOptionChanged: function(args) {

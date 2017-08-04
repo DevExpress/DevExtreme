@@ -67,7 +67,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         publicMethods: function() {
-            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey"]);
+            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadDescendants"]);
         },
 
         changeRowExpand: function(key) {
@@ -173,6 +173,40 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             }
 
             return this._dataSource.getNodeByKey(key);
+        },
+
+        getNodeLeafKeys: function(keys, callBack) {
+            if(!this._dataSource) {
+                return;
+            }
+
+            return this._dataSource.getNodeLeafKeys(keys, callBack);
+        },
+
+        /**
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants()
+         * @return Promise
+         */
+        /**
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants(keys)
+         * @param1 keys:array
+         * @return Promise
+         */
+        /**
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants(keys, childrenOnly)
+         * @param1 keys:array
+         * @param2 childrenOnly:boolean
+         * @return Promise
+         */
+        loadDescendants: function(keys, childrenOnly) {
+            if(!this._dataSource) {
+                return;
+            }
+
+            return this._dataSource.loadDescendants(keys, childrenOnly);
         }
     };
 })());

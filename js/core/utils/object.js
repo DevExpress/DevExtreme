@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("./type"),
+var typeUtils = require("./type"),
     variableWrapper = require("./variable_wrapper");
 
 var clone = (function() {
@@ -62,7 +61,7 @@ var deepExtendArraySafe = function(target, changes, extendComplexObject, assignB
             continue;
         }
 
-        if(typeUtils.isPlainObject(newValue) && !(newValue instanceof $.Event)) { // NOTE: http://bugs.jquery.com/ticket/15090
+        if(typeUtils.isPlainObject(newValue)) {
             var goDeeper = extendComplexObject ? typeUtils.isObject(prevValue) : typeUtils.isPlainObject(prevValue);
             newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference);
         }

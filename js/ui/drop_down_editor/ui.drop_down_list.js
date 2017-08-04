@@ -45,7 +45,7 @@ var DropDownList = DropDownEditor.inherit({
                     var $focusedItem = this._list.option("focusedElement");
                     $focusedItem && this._setSelectedElement($focusedItem);
                 } else {
-                    this._focusTarget().focusout();
+                    eventsEngine.trigger(this._focusTarget(), "focusout");
                 }
 
                 parent.tab.apply(this, arguments);
@@ -536,7 +536,7 @@ var DropDownList = DropDownEditor.inherit({
     _renderList: function() {
         this._listId = "dx-" + new Guid()._value;
 
-        var $list = this._$list = $("<div>", { id: this._listId })
+        var $list = this._$list = $("<div>").attr("id", this._listId)
             .appendTo(this._popup.content());
 
         this._list = this._createComponent($list, List, this._listConfig());
@@ -782,6 +782,10 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _needPopupRepaint: function() {
+        if(!this._dataSource) {
+            return false;
+        }
+
         var currentPageIndex = this._dataSource.pageIndex(),
             needRepaint = typeUtils.isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
 

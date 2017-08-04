@@ -646,6 +646,14 @@ var DataSource = Class.inherit({
         return this._loadingCount > 0;
     },
 
+    beginLoading: function() {
+        this._changeLoadingCount(1);
+    },
+
+    endLoading: function() {
+        this._changeLoadingCount(-1);
+    },
+
     _createLoadQueue: function() {
         return queue.create();
     },
@@ -665,10 +673,10 @@ var DataSource = Class.inherit({
     _scheduleLoadCallbacks: function(deferred) {
         var that = this;
 
-        that._changeLoadingCount(1);
+        that.beginLoading();
 
         deferred.always(function() {
-            that._changeLoadingCount(-1);
+            that.endLoading();
         });
     },
 

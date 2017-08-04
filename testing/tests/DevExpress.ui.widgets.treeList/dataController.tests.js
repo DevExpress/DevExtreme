@@ -1792,6 +1792,168 @@ QUnit.test("Checking the 'hasChildren' property of the node when it specified", 
     assert.notOk(this.dataController.items()[2].node.hasChildren, "third item hasn't children");
 });
 
+QUnit.test("loadDescendants", function(assert) {
+    //arrange
+    var loadingArgs = [];
+
+    this.setupTreeList({
+        dataSource: {
+            store: {
+                type: "array",
+                data: this.items,
+                onLoading: function(e) {
+                    loadingArgs.push(e);
+                }
+            }
+        }
+    });
+
+    //act
+    this.loadDescendants();
+
+    //assert
+    assert.strictEqual(loadingArgs.length, 4, "count of load");
+    assert.deepEqual(loadingArgs[0].parentIds, [0], "parentIds argument of the first load");
+    assert.deepEqual(loadingArgs[1].parentIds, [1, 2, 3], "parentIds argument of the second load");
+    assert.deepEqual(loadingArgs[2].parentIds, [4, 5, 6], "parentIds argument of the third load");
+    assert.deepEqual(loadingArgs[3].parentIds, [7], "parentIds argument of the fourth load");
+});
+
+QUnit.test("loadDescendants with key", function(assert) {
+    //arrange
+    var loadingArgs = [];
+
+    this.setupTreeList({
+        dataSource: {
+            store: {
+                type: "array",
+                data: this.items,
+                onLoading: function(e) {
+                    loadingArgs.push(e);
+                }
+            }
+        }
+    });
+
+    //act
+    this.loadDescendants(2);
+
+    //assert
+    assert.strictEqual(loadingArgs.length, 3, "count of load");
+    assert.deepEqual(loadingArgs[0].parentIds, [0], "parentIds argument of the first load");
+    assert.deepEqual(loadingArgs[1].parentIds, [2], "parentIds argument of the second load");
+    assert.deepEqual(loadingArgs[2].parentIds, [6], "parentIds argument of the third load");
+});
+
+QUnit.test("loadDescendants with several keys", function(assert) {
+    //arrange
+    var loadingArgs = [];
+
+    this.setupTreeList({
+        dataSource: {
+            store: {
+                type: "array",
+                data: this.items,
+                onLoading: function(e) {
+                    loadingArgs.push(e);
+                }
+            }
+        }
+    });
+
+    //act
+    this.loadDescendants([1, 2]);
+
+    //assert
+    assert.strictEqual(loadingArgs.length, 4, "count of load");
+    assert.deepEqual(loadingArgs[0].parentIds, [0], "parentIds argument of the first load");
+    assert.deepEqual(loadingArgs[1].parentIds, [1, 2], "parentIds argument of the second load");
+    assert.deepEqual(loadingArgs[2].parentIds, [4, 5, 6], "parentIds argument of the third load");
+    assert.deepEqual(loadingArgs[3].parentIds, [7], "parentIds argument of the fourth load");
+});
+
+QUnit.test("loadDescendants without deep pass", function(assert) {
+    //arrange
+    var loadingArgs = [];
+
+    this.setupTreeList({
+        dataSource: {
+            store: {
+                type: "array",
+                data: this.items,
+                onLoading: function(e) {
+                    loadingArgs.push(e);
+                }
+            }
+        }
+    });
+
+    //act
+    this.loadDescendants(2, true);
+
+    //assert
+    assert.strictEqual(loadingArgs.length, 2, "count of load");
+    assert.deepEqual(loadingArgs[0].parentIds, [0], "parentIds argument of the first load");
+    assert.deepEqual(loadingArgs[1].parentIds, [2], "parentIds argument of the second load");
+});
+
+QUnit.test("loadDescendants - the load should not called when expanding row", function(assert) {
+    //arrange
+    var loadingArgs = [];
+
+    this.setupTreeList({
+        expandedRowKeys: [0],
+        dataSource: {
+            store: {
+                type: "array",
+                data: this.items,
+                onLoading: function(e) {
+                    loadingArgs.push(e);
+                }
+            }
+        }
+    });
+
+    this.loadDescendants(2);
+
+    //assert
+    assert.strictEqual(loadingArgs.length, 3, "count of load");
+
+    //act
+    this.expandRow(2);
+
+    //assert
+    assert.strictEqual(loadingArgs.length, 3, "count of load");
+});
+
+QUnit.test("loadDescendants without args - the load should not called when expanding row", function(assert) {
+    //arrange
+    var loadingArgs = [];
+
+    this.setupTreeList({
+        expandedRowKeys: [0],
+        dataSource: {
+            store: {
+                type: "array",
+                data: this.items,
+                onLoading: function(e) {
+                    loadingArgs.push(e);
+                }
+            }
+        }
+    });
+
+    this.loadDescendants();
+
+    //assert
+    assert.strictEqual(loadingArgs.length, 4, "count of load");
+
+    //act
+    this.expandRow(2);
+
+    //assert
+    assert.strictEqual(loadingArgs.length, 4, "count of load");
+});
 
 QUnit.module("Load data on demand", { beforeEach: function() {
     this.setupTreeList = function(options) {

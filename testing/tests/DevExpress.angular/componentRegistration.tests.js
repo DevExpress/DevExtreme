@@ -2636,3 +2636,38 @@ QUnit.test("No watchers on disposing", function(assert) {
     assert.equal(scope.$$watchers.length, 1);// NOTE: One uncleared watcher created for dxDigestCallbacks service
     assert.ok(!!instance);
 });
+
+
+QUnit.test("Component shouldn't watch digest callback after dispose", function(assert) {
+    var beginCounter = 0,
+        endCounter = 0;
+
+    var TestComponent = DOMComponent.inherit({
+        beginUpdate: function(args) {
+            beginCounter++;
+            this.callBase.apply(this, arguments);
+        },
+        endUpdate: function() {
+            endCounter++;
+            this.callBase.apply(this, arguments);
+        }
+    });
+
+    registerComponent("dxTestWidget", TestComponent);
+
+    var $markup = $("<div></div>")
+            .attr("dx-test-widget", "{}")
+            .appendTo(this.$container);
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    var scope = $markup.scope();
+    $markup.remove();
+
+    beginCounter = 0;
+    endCounter = 0;
+    scope.$apply(function() {});
+
+    assert.equal(beginCounter, 0);
+    assert.equal(endCounter, 0);
+});

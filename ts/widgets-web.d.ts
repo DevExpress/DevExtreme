@@ -290,6 +290,12 @@ declare module DevExpress.ui {
         /** @docid dxSchedulerOptions_views_name */
         name?: string;
 
+        /** @docid dxSchedulerOptions_views_intervalCount */
+        intervalCount?: number;
+
+        /** @docid dxSchedulerOptions_views_startDate */
+        startDate?: any;
+
         /** @docid dxSchedulerOptions_views_firstDayOfWeek */
         firstDayOfWeek?: number;
 
@@ -1402,6 +1408,8 @@ declare module DevExpress.ui {
     }
 
     export interface dxTreeListSelection extends GridBaseSelection {
+        /** @docid dxTreeListOptions_selection_recursive */
+        recursive?: boolean;
     }
 
     export interface dxDataGridOptions extends GridBaseOptions {
@@ -2296,9 +2304,6 @@ declare module DevExpress.ui {
         /** @docid GridBaseMethods_clearSelection */
         clearSelection(): void;
 
-        /** @docid GridBaseMethods_getSelectedRowKeys */
-        getSelectedRowKeys(): any;
-
         /** @docid GridBaseMethods_startSelectionWithCheckboxes */
         startSelectionWithCheckboxes(): boolean;
 
@@ -2366,6 +2371,12 @@ declare module DevExpress.ui {
         /** @docid dxTreeListMethods_collapseRow */
         collapseRow(key: any): void;
 
+        /** @docid dxTreeListMethods_getSelectedRowKeys#getSelectedRowKeys() */
+        getSelectedRowKeys(): Array<any>;
+
+        /** @docid dxTreeListMethods_getSelectedRowKeys#getSelectedRowKeys(leavesOnly) */
+        getSelectedRowKeys(leavesOnly: boolean): Array<any>;
+
         /** @docid dxTreeListMethods_getSelectedRowsData */
         getSelectedRowsData(): Array<any>;
 
@@ -2377,6 +2388,15 @@ declare module DevExpress.ui {
 
         /** @docid dxTreeListMethods_addRow#addRow(parentId) */
         addRow(parentId: any): void;
+
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants() */
+        loadDescendants(): JQueryPromise<void>;
+
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants(keys) */
+        loadDescendants(keys: any): JQueryPromise<void>;
+
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants(keys, childrenOnly) */
+        loadDescendants(keys: any, childrenOnly: boolean): JQueryPromise<void>;
     }
 
     /** @docid dxdataGrid */
@@ -2453,6 +2473,9 @@ declare module DevExpress.ui {
 
         /** @docid dxDataGridMethods_getSelectedRowsData */
         getSelectedRowsData(): any;
+
+        /** @docid dxDataGridMethods_getSelectedRowKeys */
+        getSelectedRowKeys(): any;
 
         /** @docid dxDataGridMethods_addRow */
         addRow(): void;

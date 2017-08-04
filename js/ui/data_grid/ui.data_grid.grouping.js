@@ -96,10 +96,9 @@ var GroupingDataSourceAdapterExtender = (function() {
                 dataSource = that._dataSource;
 
             if(dataSource.group()) {
-                //TODO remove access to _changeLoadingCount
-                dataSource._changeLoadingCount(1);
+                dataSource.beginLoading();
                 return that._changeRowExpandCore(path).always(function() {
-                    dataSource._changeLoadingCount(-1);
+                    dataSource.endLoading();
                 });
             }
         },
@@ -413,7 +412,7 @@ var GroupingHeaderPanelExtender = (function() {
         },
 
         _createGroupPanelItem: function($rootElement, groupColumn) {
-            return $("<div />")
+            return $("<div>")
                 .addClass(groupColumn.cssClass)
                 .addClass(DATAGRID_GROUP_PANEL_ITEM_CLASS)
                 .data("columnData", groupColumn)
@@ -442,7 +441,7 @@ var GroupingHeaderPanelExtender = (function() {
             that._renderGroupPanelItems($groupPanel, groupColumns);
 
             if(groupPanelOptions.allowColumnDragging && !groupColumns.length) {
-                $("<div />")
+                $("<div>")
                     .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
                     .text(groupPanelOptions.emptyPanelText)
                     .appendTo($groupPanel);

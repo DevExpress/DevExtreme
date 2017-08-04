@@ -23,11 +23,11 @@ var getImageContainer = function(source) {
         ICON_CLASS = "dx-icon";
     switch(imageType) {
         case "image":
-            return $("<img>", { src: source }).addClass(ICON_CLASS);
+            return $("<img>").attr("src", source).addClass(ICON_CLASS);
         case "fontIcon":
-            return $("<i>", { "class": ICON_CLASS + " " + source });
+            return $("<i>").addClass(ICON_CLASS + " " + source);
         case "dxIcon":
-            return $("<i>", { "class": ICON_CLASS + " " + ICON_CLASS + "-" + source });
+            return $("<i>").addClass(ICON_CLASS + " " + ICON_CLASS + "-" + source);
         default:
             return null;
     }
