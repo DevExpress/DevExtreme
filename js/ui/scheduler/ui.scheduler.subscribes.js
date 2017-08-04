@@ -251,10 +251,6 @@ var subscribes = {
         options.callback(this.getWorkSpaceScrollableContainer());
     },
 
-    getDragEventTargetElements: function(options) {
-        options.callback(this.element);
-    },
-
     getAppointmentGeometry: function(settings) {
         return this.getLayoutManager().getRenderingStrategyInstance().getAppointmentGeometry(settings);
     },
