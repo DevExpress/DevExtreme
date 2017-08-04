@@ -46,9 +46,9 @@ function readThemeMarker() {
 // FYI
 // http://stackoverflow.com/q/2635814
 // http://stackoverflow.com/a/3078636
+var timerId;
 function waitForThemeLoad(themeName, callback) {
-    var timerId,
-        waitStartTime;
+    var waitStartTime;
 
     pendingThemeName = themeName;
 
@@ -71,6 +71,7 @@ function waitForThemeLoad(themeName, callback) {
 
             if(isLoaded || isTimeout) {
                 clearInterval(timerId);
+                timerId = null;
                 handleLoaded();
             }
         }, 10);
@@ -207,7 +208,7 @@ function current(options) {
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr("href", knownThemes[currentThemeName].url);
 
-        if(loadCallback || themeLoadedCallback.has()) {
+        if(loadCallback || (themeLoadedCallback.has() && !timerId)) {
             waitForThemeLoad(currentThemeName, fireLoadedCallback);
         } else {
             if(pendingThemeName) {
