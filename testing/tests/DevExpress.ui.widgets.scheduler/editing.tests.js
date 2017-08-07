@@ -237,6 +237,49 @@ QUnit.test("Details appointment view shouldn't be readOnly when adding new appoi
     assert.notOk(detailsAppointmentView.option("readOnly"), "ReadOnly option is correct");
 });
 
+QUnit.test("Details appointment form should be readOnly after adding new appointment if editing.allowUpdating=false", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 5, 14),
+        editing: {
+            allowUpdating: false
+        },
+        dataSource: []
+    });
+
+    var a = { text: "a", startDate: new Date(2015, 5, 14, 0), endDate: new Date(2015, 5, 14, 0, 30) };
+
+    this.instance.showAppointmentPopup(a, true);
+    this.instance.hideAppointmentPopup();
+
+    this.instance.showAppointmentPopup(a);
+
+    var detailsAppointmentView = this.instance.getAppointmentDetailsForm();
+
+    assert.ok(detailsAppointmentView.option("readOnly"), "ReadOnly option is correct");
+    this.instance.hideAppointmentPopup();
+});
+
+QUnit.test("Details form of new appointment shouldn't be readOnly after try to change existing appointment if editing.allowUpdating=false", function(assert) {
+    var first = { text: "first", startDate: new Date(2015, 5, 14, 0), endDate: new Date(2015, 5, 14, 0, 30) },
+        second = { text: "second", startDate: new Date(2015, 5, 14, 1), endDate: new Date(2015, 5, 14, 1, 30) };
+
+    this.createInstance({
+        currentDate: new Date(2015, 5, 14),
+        editing: {
+            allowUpdating: false
+        },
+        dataSource: [first]
+    });
+    this.instance.showAppointmentPopup(first);
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(second, true);
+
+    var detailsAppointmentView = this.instance.getAppointmentDetailsForm();
+
+    assert.notOk(detailsAppointmentView.option("readOnly"), "ReadOnly option is correct");
+    this.instance.hideAppointmentPopup();
+});
+
 QUnit.module("Editing option: complex object", {
     beforeEach: function() {
         this.createInstance = function(options) {
