@@ -91,5 +91,20 @@ var getHeight = function(element, include) {
     return getSize(params);
 };
 
+var getBorderAdjustment = function(element, name) {
+    _styles = window.getComputedStyle(element);
+
+    if(_styles.boxSizing === "border-box") {
+        return 0;
+    }
+
+    if(name === "width") {
+        return getSizeByStyles(["borderLeftWidth", "borderRightWidth"]);
+    } else {
+        return getSizeByStyles(["borderTopWidth", "borderBottomWidth"]);
+    }
+};
+
 exports.getWidth = getWidth;
 exports.getHeight = getHeight;
+exports.getBorderAdjustment = getBorderAdjustment;

@@ -11,7 +11,7 @@ var testStyles = [
     "width: auto; height: auto;"
 ];
 
-QUnit.module("base", {
+QUnit.module("get width and height", {
     beforeEach: function() {
         this.$parent = $("<div style='width: 100px; height: 110px'></div>").appendTo("#qunit-fixture");
         this.$element = $("<div/>");
@@ -225,4 +225,32 @@ QUnit.test("element is not in a DOM", function(assert) {
         assert.equal(sizeUtils.getWidth(this.$freeElement[0]), expected[i].width);
         assert.equal(sizeUtils.getHeight(this.$freeElement[0]), expected[i].height);
     }
+});
+
+
+QUnit.module("getBorderAdjustment", {
+    beforeEach: function() {
+        this.$parent = $("<div style='width: 100px; height: 110px'></div>").appendTo("#qunit-fixture");
+        this.$element = $("<div/>");
+        this.$parent.append(this.$element);
+    },
+
+    afterEach: function() {
+    }
+});
+
+QUnit.test("element in parent with fixed size", function(assert) {
+    this.$element.attr("style", "width: 40px; height: 50px; border: 1px solid black;");
+    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "width"), 2);
+    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "heigth"), 2);
+
+    this.$element.attr("style", "width: 40px; height: 50px; border-left: 2px solid black; border-top: 3px solid black;");
+    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "width"), 2);
+    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "heigth"), 3);
+});
+
+QUnit.test("element with box-sizing = border-box", function(assert) {
+    this.$element.attr("style", "width: 40px; height: 50px; border: 1px solid black; box-sizing: border-box;");
+    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "width"), 0);
+    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "heigth"), 0);
 });

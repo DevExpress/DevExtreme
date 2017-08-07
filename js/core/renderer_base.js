@@ -193,12 +193,15 @@ initRender.prototype.toggleClass = function(className, value) {
             return this;
         }
 
-        if(isOuter) {
-            return this.$element[funcName](value);
-        }
+        var resultValue = typeUtils.isFunction(value) ? value() : value;
 
         for(var i = 0; i < this.length; i++) {
-            rendererStrategy.setStyle(this[i], funcName, value + (typeUtils.isNumeric(value) ? "px" : ""));
+            if(typeUtils.isNumeric(resultValue) && isOuter) {
+                resultValue -= sizeUtils.getBorderAdjustment(this[i], name.toLowerCase());
+            }
+            resultValue += typeUtils.isNumeric(resultValue) ? "px" : "";
+
+            rendererStrategy.setStyle(this[i], name.toLowerCase(), resultValue);
         }
 
         return this;
