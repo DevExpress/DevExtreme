@@ -31,7 +31,9 @@ var TAGBOX_CLASS = "dx-tagbox",
     TAGBOX_TAG_CONTENT_CLASS = "dx-tag-content",
     TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template",
     TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template",
-    NATIVE_CLICK_CLASS = "dx-native-click";
+    NATIVE_CLICK_CLASS = "dx-native-click",
+
+    TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container";
 
 var TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -533,7 +535,7 @@ var TagBox = SelectBox.inherit({
         var eventName = eventUtils.addNamespace(clickEvent.name, "dxTagBoxTagRemove");
 
         this.element()
-            .find(".dx-texteditor-container")
+            .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .off(eventName)
             .on(eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
                 tagRemoveAction({ jQueryEvent: e });
@@ -662,11 +664,12 @@ var TagBox = SelectBox.inherit({
 
     _renderMultiSelect: function() {
         this._$tagsContainer = this.element()
-            .find(".dx-texteditor-container")
+            .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
+        this._clearFilter();
         this._renderTags();
         this._popup && this._popup.refreshPosition();
     },
