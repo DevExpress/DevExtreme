@@ -165,11 +165,9 @@ initRender.prototype.html = function(value) {
     this.empty();
 
     if(typeof value === "string" && !htmlParser.isTablePart(value) || typeof value === "number") {
-        try {
-            this[0].innerHTML = value;
+        this[0].innerHTML = value;
 
-            return this;
-        } catch(e) { }
+        return this;
     }
 
     return this.append(htmlParser.parseHTML(value));
