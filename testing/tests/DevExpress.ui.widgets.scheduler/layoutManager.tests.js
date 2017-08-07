@@ -10,6 +10,7 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     SchedulerLayoutManager = require("ui/scheduler/ui.scheduler.appointments.layout_manager"),
     BaseAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.base"),
+    VerticalAppointmentStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.vertical"),
     HorizontalAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal"),
     HorizontalMonthLineAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month_line"),
     Color = require("color");
@@ -65,6 +66,24 @@ QUnit.test("Scheduler should have a right rendering strategy for timeline views"
 
     this.instance.option("currentView", "timelineMonth");
     assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, "Strategy is OK");
+});
+
+QUnit.test("Scheduler should have a right rendering strategy for views with config", function(assert) {
+    this.createInstance({
+        views: [ {
+            name: "MonthView",
+            type: "month"
+        }, {
+            name: "WeekView",
+            type: "week"
+        }],
+        currentView: "WeekView"
+    });
+
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, "Strategy is OK");
+
+    this.instance.option("currentView", "MonthView");
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, "Strategy is OK");
 });
 
 QUnit.module("Appointments", moduleOptions);
