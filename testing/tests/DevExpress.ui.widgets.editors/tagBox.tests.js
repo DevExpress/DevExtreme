@@ -3108,6 +3108,7 @@ QUnit.test("the search should be cleared after pressing the 'OK' button", functi
     $(".dx-button.dx-popup-done").trigger("dxclick");
 
     assert.equal($input.val(), "", "the search is cleared");
+    assert.notOk(this.instance._dataSource.searchValue(), "The search value is cleared");
 });
 
 
