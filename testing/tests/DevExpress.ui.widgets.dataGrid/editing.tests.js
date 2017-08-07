@@ -5372,6 +5372,48 @@ QUnit.test("Save edit data when update fails in batch edit mode", function(asser
     assert.deepEqual(that.editingController._editData[0].oldData, that.array[1], "old data");
 });
 
+//T539602
+QUnit.test("loadingChanged should be called before editing oeprations", function(assert) {
+    //arrange
+    var that = this,
+        deferreds = [],
+        rowsView = this.rowsView,
+        loadingChangedArgs = [],
+        $testElement = $('#container');
+
+    that.options.editing.mode = "batch";
+    that.options.dataSource = {
+        load: function() {
+            return that.array;
+        },
+        update: function(key, value) {
+            var d = $.Deferred();
+            deferreds.push(d);
+            return d.promise();
+        }
+    };
+    that.dataController.init();
+    rowsView.render($testElement);
+    that.getDataSource().on("loadingChanged", function(isLoading) {
+        loadingChangedArgs.push(isLoading);
+    });
+
+    //act
+    that.cellValue(0, 0, "Test1");
+    that.saveEditData();
+
+    //assert
+    assert.strictEqual(deferreds.length, 1, "count of deferred updates");
+    assert.deepEqual(loadingChangedArgs, [true], "loading changed args after updating start");
+
+
+    //act
+    deferreds[0].resolve();
+
+    //assert
+    assert.deepEqual(loadingChangedArgs, [true, false], "loading changed args after updating end");
+});
+
 //T533546
 QUnit.testInActiveWindow("The lookup column should keep focus after changing value when it has 'setCellValue' option", function(assert) {
    //arrange
@@ -7087,7 +7129,7 @@ QUnit.test("Show tooltip on focus when one row with set validate in column and e
 });
 
 //T470216
-QUnit.test("Tooltip should be positioned by left side when the drop-down editor is shown", function(assert) {
+QUnit.testInActiveWindow("Tooltip should be positioned by left side when the drop-down editor is shown", function(assert) {
     //arrange
     var that = this,
         tooltipInstance,

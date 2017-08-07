@@ -213,7 +213,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         if(this._displayGetterExpr()) {
             this._originalItemTemplate = this._defaultTemplates["item"];
             this._defaultTemplates["item"] = new FunctionTemplate((function(options) {
-                return $('<div/>').text(this._displayGetter(options.model)).html();
+                return $('<div>').text(this._displayGetter(options.model)).html();
             }).bind(this));
         } else if(this._originalItemTemplate) {
             this._defaultTemplates["item"] = this._originalItemTemplate;

@@ -14,7 +14,7 @@ var createTooltip = function(options) {
     var content = options.content;
     delete options.content;
 
-    var $tooltip = $("<div />")
+    var $tooltip = $("<div>")
         .html(content)
         .appendTo(viewPortUtils.value());
 

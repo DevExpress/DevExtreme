@@ -425,7 +425,7 @@ var Gallery = CollectionWidget.inherit({
         if(this._$wrapper) {
             return;
         }
-        this._$wrapper = $("<div />")
+        this._$wrapper = $("<div>")
             .addClass(GALLERY_WRAPPER_CLASS)
             .appendTo(this.element());
     },

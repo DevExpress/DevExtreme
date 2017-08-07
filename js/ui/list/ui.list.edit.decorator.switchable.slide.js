@@ -44,10 +44,10 @@ registerDecorator(
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            this._$buttonsContainer = $("<div/>").addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS);
+            this._$buttonsContainer = $("<div>").addClass(SLIDE_MENU_BUTTONS_CONTAINER_CLASS);
             eventsEngine.on(this._$buttonsContainer, ACTIVE_EVENT_NAME, noop);
 
-            this._$buttons = $("<div/>")
+            this._$buttons = $("<div>")
                 .addClass(SLIDE_MENU_BUTTONS_CLASS)
                 .appendTo(this._$buttonsContainer);
 
@@ -70,7 +70,7 @@ registerDecorator(
                     this._fireAction(menuItem);
                 }).bind(this));
             } else {
-                var $menu = $("<div />").addClass(SLIDE_MENU_CLASS);
+                var $menu = $("<div>").addClass(SLIDE_MENU_CLASS);
                 this._menu = this._list._createComponent($menu, ActionSheet, {
                     showTitle: false,
                     items: menuItems,
@@ -90,7 +90,7 @@ registerDecorator(
         },
 
         _renderMenuButton: function(text, action) {
-            var $menuButton = $("<div/>")
+            var $menuButton = $("<div>")
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_MENU_CLASS)
                 .text(text);
@@ -106,7 +106,7 @@ registerDecorator(
                 return;
             }
 
-            var $deleteButton = $("<div/>")
+            var $deleteButton = $("<div>")
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_DELETE_CLASS)
                 .text(messageLocalization.format("dxListEditDecorator-delete"));
@@ -132,7 +132,7 @@ registerDecorator(
             $itemElement
                 .addClass(SLIDE_MENU_WRAPPER_CLASS);
 
-            var $slideMenuContent = $("<div/>")
+            var $slideMenuContent = $("<div>")
                 .addClass(SLIDE_MENU_CONTENT_CLASS);
 
             $itemElement.wrapInner($slideMenuContent);

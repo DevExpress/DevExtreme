@@ -33,7 +33,7 @@ var Command = DOMComponent.inherit({
     ctor: function(element, options) {
         if(isPlainObject(element)) {
             options = element;
-            element = $("<div />");
+            element = $("<div>");
         }
         this.callBase(element, options);
     },

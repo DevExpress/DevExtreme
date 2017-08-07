@@ -1509,7 +1509,7 @@ var PivotGrid = Widget.inherit({
 
             dataHeaderContainer = $(TD).addClass("dx-data-header");
 
-            filterHeaderContainer = $("<td colspan='2'>").addClass("dx-filter-header");
+            filterHeaderContainer = $("<td>").attr("colspan", "2").addClass("dx-filter-header");
             columnHeaderContainer = $(TD).addClass("dx-column-header");
             rowHeaderContainer = $(TD).addClass(DESCRIPTION_AREA_CELL_CLASS);
 

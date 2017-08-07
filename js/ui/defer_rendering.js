@@ -233,10 +233,10 @@ var DeferRendering = Widget.inherit({
     },
 
     _showLoadIndicator: function($container) {
-        this._$loadIndicator = new LoadIndicator($('<div/>'), { visible: true }).element()
+        this._$loadIndicator = new LoadIndicator($('<div>'), { visible: true }).element()
             .addClass(DEFER_DEFER_RENDERING_LOAD_INDICATOR);
 
-        $("<div/>")
+        $("<div>")
             .addClass(LOADINDICATOR_CONTAINER_CLASS)
             .addClass(DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS)
             .append(this._$loadIndicator)

@@ -37,6 +37,21 @@ QUnit.test("Call all of the Callbacks with the argument", function(assert) {
     assert.ok(callBack2, "callBack1");
 });
 
+QUnit.test("Fired method", function(assert) {
+    //arrange
+    this.Callbacks.add(function(param) {});
+
+    //assert
+    assert.ok(!this.Callbacks.fired(), "Callback not fired at start");
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.ok(this.Callbacks.fired(), "Callback fired");
+});
+
+
 QUnit.test("Call all Callbacks in a list with the given context", function(assert) {
     //arrange
     var context = {},

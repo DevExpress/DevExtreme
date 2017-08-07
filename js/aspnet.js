@@ -58,7 +58,7 @@
                 bag.push(encode ? encodeHtml(value) : value);
                 bag.push(");");
             } else {
-                bag.push(code);
+                bag.push(code + "\n");
             }
         }
 
@@ -79,7 +79,7 @@
                 acceptText(bag, tmp[1]);
             }
 
-            bag.push("};", "return _.join('')");
+            bag.push("}", "return _.join('')");
 
             return new Function("obj", bag.join(''));
         };
@@ -137,21 +137,25 @@
         return items;
     }
 
+    function createComponent(name, options, id, validatorOptions) {
+        var render = function(_, container) {
+            var selector = "#" + id.replace(/[^\w-]/g, "\\$&"),
+                $component = $(selector, container)[name](options);
+            if($.isPlainObject(validatorOptions)) {
+                $component.dxValidator(validatorOptions);
+            }
+            templateRendered.remove(render);
+        };
+
+        templateRendered.add(render);
+    }
+
     return {
+        createComponent: createComponent,
+
         renderComponent: function(name, options, id, validatorOptions) {
             id = id || ("dx-" + new Guid());
-
-            var render = function(_, container) {
-                var selector = "#" + id.replace(/[^\w-]/g, "\\$&"),
-                    $component = $(selector, container)[name](options);
-                if($.isPlainObject(validatorOptions)) {
-                    $component.dxValidator(validatorOptions);
-                }
-                templateRendered.remove(render);
-            };
-
-            templateRendered.add(render);
-
+            createComponent(name, options, id, validatorOptions);
             return "<div id=\"" + id + "\"></div>";
         },
 
@@ -168,7 +172,9 @@
         },
 
         setTemplateEngine: function() {
-            setTemplateEngine(createTemplateEngine());
+            if(setTemplateEngine) {
+                setTemplateEngine(createTemplateEngine());
+            }
         },
 
         createValidationSummaryItems: function(validationGroup, editorNames) {

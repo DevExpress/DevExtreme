@@ -565,7 +565,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             return result;
         },
 
-        loadChildren: function(keys, deep) {
+        loadDescendants: function(keys, childrenOnly) {
             var that = this,
                 loadOptions,
                 d = $.Deferred(),
@@ -586,11 +586,11 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
             that.load(loadOptions)
                 .done(function() {
-                    if(deep !== false) {
+                    if(!childrenOnly) {
                         var childKeys = getChildKeys(that, keys);
 
                         if(childKeys.length) {
-                            that.loadChildren(childKeys, deep).done(d.resolve).fail(d.reject);
+                            that.loadDescendants(childKeys, childrenOnly).done(d.resolve).fail(d.reject);
                             return;
                         }
                     }

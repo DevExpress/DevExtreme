@@ -420,7 +420,7 @@ var Map = Widget.inherit({
     },
 
     _initContainer: function() {
-        this._$container = $("<div />")
+        this._$container = $("<div>")
             .addClass(MAP_CONTAINER_CLASS);
 
         this.element().append(this._$container);
@@ -461,7 +461,7 @@ var Map = Widget.inherit({
             DevExpress = window.DevExpress;
 
         if(DevExpress && DevExpress.designMode || this.option("disabled")) {
-            $shield = $("<div/>").addClass(MAP_SHIELD_CLASS);
+            $shield = $("<div>").addClass(MAP_SHIELD_CLASS);
             this.element().append($shield);
         } else {
             $shield = this.element().find("." + MAP_SHIELD_CLASS);

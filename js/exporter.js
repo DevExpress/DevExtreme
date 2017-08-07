@@ -38,7 +38,7 @@ var Exporter = DOMComponent.inherit({
             svgArray = [];
 
         $(that.getSourceContainer()).find("svg").each(function(i) {
-            svgArray[i] = normalizeHtml($(this).clone().wrap("<div></div>").parent().html());
+            svgArray[i] = normalizeHtml($(this).clone().wrap("<div>").parent().html());
         });
 
         return JSON.stringify(svgArray);
@@ -95,7 +95,7 @@ var Exporter = DOMComponent.inherit({
         var that = this,
             fileName = that.option('fileName'),
             exportItems = that._createExportItems(that.option('exportFormat')),
-            container = $('<div />'),
+            container = $('<div>'),
             rootItems = [{
                 name: 'export',
                 icon: ICON_TO,
@@ -144,7 +144,7 @@ var Exporter = DOMComponent.inherit({
             }),
             svgElements = this._getSvgElements();
 
-        this._appendTextArea("exportContent", $sourceContainer.clone().wrap("<div></div>").parent().html(), form);
+        this._appendTextArea("exportContent", $sourceContainer.clone().wrap("<div>").parent().html(), form);
         this._appendTextArea("svgElements", svgElements, form);
         this._appendTextArea("fileName", fileName, form);
         this._appendTextArea("format", format.toLowerCase(), form);

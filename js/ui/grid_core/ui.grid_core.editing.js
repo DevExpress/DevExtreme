@@ -88,7 +88,7 @@ var isRowEditMode = function(that) {
 var EditingController = modules.ViewController.inherit((function() {
     var getDefaultEditorTemplate = function(that) {
         return function(container, options) {
-            var $editor = $("<div/>").appendTo(container);
+            var $editor = $("<div>").appendTo(container);
 
             that.getController("editorFactory").createEditor($editor, extend({}, options.column, {
                 value: options.value,
@@ -1052,6 +1052,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 results = [],
                 deferreds = [],
                 dataController = that._dataController,
+                dataSource = dataController.dataSource(),
                 editMode = getEditMode(that),
                 result = $.Deferred();
 
@@ -1073,6 +1074,8 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(deferreds.length) {
                 that._saving = true;
+
+                dataSource && dataSource.beginLoading();
 
                 when.apply($, deferreds).done(function() {
                     editData = that._editData.slice(0);
@@ -1097,6 +1100,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
                 return result.always(function() {
                     that._saving = false;
+                    dataSource && dataSource.endLoading();
                 }).promise();
             }
 

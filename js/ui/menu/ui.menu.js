@@ -355,7 +355,7 @@ var Menu = MenuBase.inherit({
     },
 
     _renderHamburgerButton: function() {
-        this._hamburger = new Button($("<div>", { "class": DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS }), {
+        this._hamburger = new Button($("<div>").addClass(DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), {
             icon: 'menu',
             activeStateEnabled: false,
             onClick: this._toggleTreeView.bind(this)
@@ -477,7 +477,7 @@ var Menu = MenuBase.inherit({
     _initAdaptivity: function() {
         if(!this._isAdaptivityEnabled()) return;
 
-        this._$adaptiveContainer = $("<div>", { "class": DX_ADAPTIVE_MODE_CLASS });
+        this._$adaptiveContainer = $("<div>").addClass(DX_ADAPTIVE_MODE_CLASS);
 
         var $hamburger = this._renderHamburgerButton();
 

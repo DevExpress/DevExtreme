@@ -3226,6 +3226,68 @@ QUnit.testStart(function() {
         }
     });
 
+    QUnit.test("Grouped Workspace work week view should contain right count of headers with view option intervalCount", function(assert) {
+        var instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek({
+            currentDate: new Date(2017, 5, 26),
+            firstDayOfWeek: 1,
+            intervalCount: 2,
+            groups: [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }],
+            width: 1500
+        }).dxSchedulerWorkSpaceWorkWeek("instance");
+
+        var currentDate = instance.option("currentDate"),
+            $element = instance.element(),
+            $headerCells = $element.find(".dx-scheduler-header-panel-cell"),
+            date;
+
+        assert.equal($headerCells.length, 20, "Date table has 15 header cells");
+        for(var i = 0; i < 5; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 7; i < 12; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i - 2).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 14; i < 19; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i - 14);
+            assert.equal($headerCells.eq(i - 4).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 21; i < 26; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i - 14);
+            assert.equal($headerCells.eq(i - 6).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+    });
+
+    QUnit.test("Grouped WorkSpace WorkWeek view cells have right cellData with view option intervalCount", function(assert) {
+        this.instance.option("hoursInterval", 1);
+        this.instance.option("firstDayOfWeek", 1);
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 6, 4));
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(5).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(10).data("dxCellData"),
+            lastCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(15).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 3, 1), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 10, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 10, 1), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 3, 1), "cell has right endtDate");
+
+        assert.deepEqual(lastCellData.startDate, new Date(2017, 6, 10, 0), "cell has right startDate");
+        assert.deepEqual(lastCellData.endDate, new Date(2017, 6, 10, 1), "cell has right endtDate");
+    });
+
 })("Work Space Work Week with intervalCount");
 
 (function() {

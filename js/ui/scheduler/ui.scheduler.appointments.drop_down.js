@@ -78,8 +78,8 @@ var dropDownAppointments = Class.inherit({
     },
 
     _createButtonTemplate: function(appointmentCount) {
-        return $("<div />").html(
-            [$("<span />").text(appointmentCount), $("<span />").text("...")]
+        return $("<div>").html(
+            [$("<span>").text(appointmentCount), $("<span>").text("...")]
         ).addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
     },
 
@@ -152,7 +152,7 @@ var dropDownAppointments = Class.inherit({
             }
         });
 
-        $infoBlock = $("<div />").addClass(DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS);
+        $infoBlock = $("<div>").addClass(DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS);
         $title = $("<div>").addClass(DROPDOWN_APPOINTMENT_TITLE_CLASS).text(text);
         $date = $("<div>").addClass(DROPDOWN_APPOINTMENT_DATE_CLASS).text(dateString);
 
@@ -183,7 +183,7 @@ var dropDownAppointments = Class.inherit({
             allowUpdating = editing.allowUpdating;
         }
 
-        var $container = $("<div />").addClass(DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS),
+        var $container = $("<div>").addClass(DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS),
             $removeButton = $("<div>").addClass(DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS),
             $editButton = $("<div>").addClass(DROPDOWN_APPOINTMENT_EDIT_BUTTON_CLASS);
 

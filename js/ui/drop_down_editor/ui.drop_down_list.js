@@ -536,7 +536,7 @@ var DropDownList = DropDownEditor.inherit({
     _renderList: function() {
         this._listId = "dx-" + new Guid()._value;
 
-        var $list = this._$list = $("<div>", { id: this._listId })
+        var $list = this._$list = $("<div>").attr("id", this._listId)
             .appendTo(this._popup.content());
 
         this._list = this._createComponent($list, List, this._listConfig());

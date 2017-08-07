@@ -13,19 +13,19 @@ var TREELIST_TEXT_CONTENT = "dx-treelist-text-content",
 
 exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
     var createCellContent = function($container) {
-        return $("<div />")
+        return $("<div>")
             .addClass(TREELIST_TEXT_CONTENT)
             .appendTo($container);
     };
 
     var createIcon = function(hasIcon, isExpanded) {
-        var $iconElement = $("<div/>").addClass(TREELIST_EMPTY_SPACE);
+        var $iconElement = $("<div>").addClass(TREELIST_EMPTY_SPACE);
 
         if(hasIcon) {
             $iconElement
                 .toggleClass(TREELIST_EXPANDED_CLASS, isExpanded)
                 .toggleClass(TREELIST_COLLAPSED_CLASS, !isExpanded)
-                .append($("<span/>"));
+                .append($("<span>"));
         }
 
         return $iconElement;
@@ -34,7 +34,7 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
     return {
         _renderExpandIcon: function($container, options) {
             var level = options.row.level,
-                $iconContainer = $("<div/>")
+                $iconContainer = $("<div>")
                     .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
                     .appendTo($container);
 

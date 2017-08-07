@@ -485,37 +485,6 @@ QUnit.test("Scheduler appointment should not be draggable if allowDrag is false"
     assert.notOk($appointment.data("dxDraggable"), "Appointment is not dxDraggable");
 });
 
-QUnit.test("Drag event targets should be corrected on dragStart", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9)
-        },
-        settings: [{}]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item]
-    });
-
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.notifyObserver = updateSpy;
-
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    pointer.dragStart();
-
-    assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(1).args[0], "getDragEventTargetElements", "Correct method of observer is called");
-
-    pointer.dragEnd();
-});
-
-
 QUnit.test("Drag event should not contain maxBottomOffset & maxRightOffset", function(assert) {
     var item = {
         itemData: {
@@ -623,9 +592,9 @@ QUnit.test("Appointment coordinates should be corrected during drag", function(a
     pointer.dragStart().drag(0, 60);
 
     assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(2).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(2).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(2).args[1].allDay, true, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(1).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(1).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(1).args[1].allDay, true, "Arguments are OK");
 
     pointer.dragEnd();
 });
@@ -656,10 +625,10 @@ QUnit.test("Appointment coordinates should be corrected on dragend", function(as
     pointer.dragStart().drag(0, 60).dragEnd();
 
     assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(3).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(3).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(3).args[1].allDay, true, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(3).args[1].isFixedContainer, true, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(2).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(2).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(2).args[1].allDay, true, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(2).args[1].isFixedContainer, true, "Arguments are OK");
 
     pointer.dragEnd();
 });
@@ -689,9 +658,9 @@ QUnit.test("Start & end date of appointment should be changed when drag is finis
     pointer.dragStart().drag(0, 60).dragEnd();
 
     assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(4).args[0], "updateAppointmentAfterDrag", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(4).args[1].data, item.itemData, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(4).args[1].$appointment.get(0), $appointment.get(0), "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(3).args[0], "updateAppointmentAfterDrag", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(3).args[1].data, item.itemData, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(3).args[1].$appointment.get(0), $appointment.get(0), "Arguments are OK");
 });
 
 QUnit.test("Appointment tooltip should be hidden when drag is started", function(assert) {
@@ -1302,7 +1271,7 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
 
     var focusedElement = this.instance.option("focusedElement").get(0);
     var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(sinon.match(function($element) {
-        return $element.get(0) === focusedElement;
+        return ($element.get && $element.get(0) || $element) === focusedElement;
     }), "focus");
     var appointmentFocusedStub = sinon.stub(this.instance, "notifyObserver").withArgs("appointmentFocused");
 

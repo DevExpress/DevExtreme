@@ -573,7 +573,7 @@ module.exports = {
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
-                    new Overlay($("<div/>")
+                    new Overlay($("<div>")
                         .addClass(INVALID_MESSAGE_CLASS)
                         .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
                         .text(message)
