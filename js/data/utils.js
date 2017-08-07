@@ -4,6 +4,8 @@ var $ = require("../core/renderer"),
     isFunction = require("../core/utils/common").isFunction,
     toComparable = require("../core/utils/data").toComparable;
 
+var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
+
 var normalizeBinaryCriterion = function(crit) {
     return [
         crit[0],
@@ -54,8 +56,14 @@ var errorMessageFromXhr = (function() {
         return result;
     };
 
+    // T542570, https://stackoverflow.com/a/18170879
+    var unloading;
+    window.addEventListener("beforeunload", function() { unloading = true; });
 
     return function(xhr, textStatus) {
+        if(unloading) {
+            return XHR_ERROR_UNLOAD;
+        }
         if(xhr.status < 400) {
             return explainTextStatus(textStatus);
         }
@@ -214,6 +222,8 @@ var isUnaryOperation = function(crit) {
 * @publicName Utils
 */
 var utils = {
+    XHR_ERROR_UNLOAD: XHR_ERROR_UNLOAD,
+
     normalizeBinaryCriterion: normalizeBinaryCriterion,
     normalizeSortingInfo: normalizeSortingInfo,
     errorMessageFromXhr: errorMessageFromXhr,
