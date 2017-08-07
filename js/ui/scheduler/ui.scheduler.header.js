@@ -56,15 +56,19 @@ var SchedulerHeader = Widget.inherit({
 
         switch(args.name) {
             case "views":
-                var currentView = this.option("currentView");
+                this._processViews();
+                this._processCurrentView();
+
                 this._viewSwitcher.option({
                     items: value,
-                    selectedItem: currentView
+                    selectedItem: this._currentView
                 });
                 break;
             case "currentView":
-                this._viewSwitcher.option("selectedItem", value);
-                this._navigator.option("step", STEP_MAP[value]);
+                this._processCurrentView();
+
+                this._viewSwitcher.option("selectedItem", this._currentView || value);
+                this._navigator.option("step", STEP_MAP[this._getCurrentViewType()]);
                 this._changeViewSwitcherLabelText();
                 break;
             case "currentDate":
@@ -99,6 +103,9 @@ var SchedulerHeader = Widget.inherit({
     _render: function() {
         this.callBase();
 
+        this._processViews();
+        this._processCurrentView();
+
         this._renderNavigator();
         this._renderViewSwitcher();
     },
@@ -109,7 +116,7 @@ var SchedulerHeader = Widget.inherit({
             max: this.option("max"),
             intervalCount: this.option("intervalCount"),
             date: this.option("currentDate"),
-            step: STEP_MAP[this.option("currentView")],
+            step: STEP_MAP[this._getCurrentViewType()],
             firstDayOfWeek: this.option("firstDayOfWeek"),
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled"),
@@ -120,8 +127,6 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _renderViewSwitcher: function() {
-        this._validateViews();
-
         var $viewSwitcher = $("<div>").addClass(VIEW_SWITCHER_CLASS).appendTo(this.element());
 
         if(!this.option("useDropDownViewSwitcher")) {
@@ -131,16 +136,38 @@ var SchedulerHeader = Widget.inherit({
         }
     },
 
-    _validateViews: function() {
+    _processViews: function() {
         var views = this.option("views");
 
         each(views, function(_, view) {
-            var viewName = typeUtils.isObject(view) && view.type ? view.type : view;
+            var isViewIsObject = typeUtils.isObject(view),
+                viewType = isViewIsObject && view.type ? view.type : view;
 
-            if(inArray(viewName, VIEWS) === -1) {
-                errors.log("W0008", viewName);
+            if(inArray(viewType, VIEWS) === -1) {
+                errors.log("W0008", viewType);
             }
         });
+    },
+
+    _processCurrentView: function() {
+        var views = this.option("views"),
+            currentView = this.option("currentView"),
+            that = this;
+
+        this._currentView = currentView;
+
+        each(views, function(_, view) {
+            var isViewIsObject = typeUtils.isObject(view),
+                viewName = isViewIsObject ? view.name || view.type : view;
+
+            if(currentView === viewName) {
+                that._currentView = view;
+            }
+        });
+    },
+
+    _getCurrentViewType: function() {
+        return this._currentView.type || this._currentView;
     },
 
     _renderViewSwitcherTabs: function($element) {
@@ -156,7 +183,7 @@ var SchedulerHeader = Widget.inherit({
                     .addClass("dx-tab-text")
                     .text(that._getItemText(item));
             },
-            selectedItem: this.option("currentView"),
+            selectedItem: this._currentView,
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled")
         });
