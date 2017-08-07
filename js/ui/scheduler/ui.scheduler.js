@@ -1871,6 +1871,7 @@ var Scheduler = Widget.inherit({
                 endDateExpr = this.option("endDateExpr");
 
             this._appointmentForm.option("formData", formData);
+            this._appointmentForm.option("readOnly", this._editAppointmentData ? !this._editing.allowUpdating : false);
 
             var startDateFormItem = this._appointmentForm.itemOption(startDateExpr),
                 endDateFormItem = this._appointmentForm.itemOption(endDateExpr);
