@@ -1046,6 +1046,7 @@ var Scheduler = Widget.inherit({
                 this._updateOption("workSpace", name, new Date(value));
                 break;
             case "views":
+                this._processCurrentView();
                 if(!!this._getCurrentViewOptions()) {
                     this.repaint();
                 } else {
@@ -1056,6 +1057,8 @@ var Scheduler = Widget.inherit({
                 this._header.option(name, value);
                 break;
             case "currentView":
+                this._processCurrentView();
+
                 var viewCountConfig = this._getViewCountConfig();
                 this._appointments.option({
                     items: [],
@@ -1069,7 +1072,7 @@ var Scheduler = Widget.inherit({
                 this._header.option("max", this._dateOption("max"));
                 this._header.option("currentDate", this._dateOption("currentDate"));
                 this._header.option("firstDayOfWeek", this._getCurrentViewOption("firstDayOfWeek"));
-                this._header.option(name, value);
+                this._header.option("currentView", this._currentView);
                 this._loadResources().done((function(resources) {
                     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
                     this._refreshWorkSpace(resources);
@@ -1396,6 +1399,7 @@ var Scheduler = Widget.inherit({
         }, combinedDataAccessors);
 
         this._initActions();
+        this._processCurrentView();
 
         this._dropDownAppointments = new DropDownAppointments();
         this._subscribes = subscribes;
@@ -1645,7 +1649,7 @@ var Scheduler = Widget.inherit({
 
         result = extend({
             firstDayOfWeek: this.option("firstDayOfWeek"),
-            currentView: this.option("currentView"),
+            currentView: this._currentView,
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled"),
             width: this.option("width"),
@@ -1690,8 +1694,29 @@ var Scheduler = Widget.inherit({
         return this._getCurrentViewOption("cellDuration");
     },
 
+    _processCurrentView: function() {
+        var views = this.option("views"),
+            currentView = this.option("currentView"),
+            that = this;
+
+        this._currentView = currentView;
+
+        each(views, function(_, view) {
+            var isViewIsObject = typeUtils.isObject(view),
+                viewName = isViewIsObject ? view.name || view.type : view;
+
+            if(currentView === viewName) {
+                that._currentView = view;
+            }
+        });
+    },
+
+    _getCurrentViewType: function() {
+        return this._currentView.type || this._currentView;
+    },
+
     _getAppointmentsRenderingStrategy: function() {
-        return VIEWS_CONFIG[this.option("currentView")].renderingStrategy;
+        return VIEWS_CONFIG[this._getCurrentViewType()].renderingStrategy;
     },
 
     _getDayDuration: function() {
@@ -1702,7 +1727,7 @@ var Scheduler = Widget.inherit({
         var $workSpace = $("<div>").appendTo(this.element());
 
         var countConfig = this._getViewCountConfig();
-        this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this.option("currentView")].workSpace, this._workSpaceConfig(groups, countConfig));
+        this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this._getCurrentViewType()].workSpace, this._workSpaceConfig(groups, countConfig));
         this._workSpace.getWorkArea().append(this._appointments.element());
 
         this._recalculateWorkspace();

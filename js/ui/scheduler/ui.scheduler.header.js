@@ -57,17 +57,14 @@ var SchedulerHeader = Widget.inherit({
         switch(args.name) {
             case "views":
                 this._processViews();
-                this._processCurrentView();
 
                 this._viewSwitcher.option({
                     items: value,
-                    selectedItem: this._currentView
+                    selectedItem: this.option("currentView")
                 });
                 break;
             case "currentView":
-                this._processCurrentView();
-
-                this._viewSwitcher.option("selectedItem", this._currentView || value);
+                this._viewSwitcher.option("selectedItem", this.option("currentView"));
                 this._navigator.option("step", STEP_MAP[this._getCurrentViewType()]);
                 this._changeViewSwitcherLabelText();
                 break;
@@ -104,8 +101,6 @@ var SchedulerHeader = Widget.inherit({
         this.callBase();
 
         this._processViews();
-        this._processCurrentView();
-
         this._renderNavigator();
         this._renderViewSwitcher();
     },
@@ -149,25 +144,9 @@ var SchedulerHeader = Widget.inherit({
         });
     },
 
-    _processCurrentView: function() {
-        var views = this.option("views"),
-            currentView = this.option("currentView"),
-            that = this;
-
-        this._currentView = currentView;
-
-        each(views, function(_, view) {
-            var isViewIsObject = typeUtils.isObject(view),
-                viewName = isViewIsObject ? view.name || view.type : view;
-
-            if(currentView === viewName) {
-                that._currentView = view;
-            }
-        });
-    },
-
     _getCurrentViewType: function() {
-        return this._currentView.type || this._currentView;
+        var currentView = this.option("currentView");
+        return currentView.type || currentView;
     },
 
     _renderViewSwitcherTabs: function($element) {
@@ -183,7 +162,7 @@ var SchedulerHeader = Widget.inherit({
                     .addClass("dx-tab-text")
                     .text(that._getItemText(item));
             },
-            selectedItem: this._currentView,
+            selectedItem: this.option("currentView"),
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled")
         });
