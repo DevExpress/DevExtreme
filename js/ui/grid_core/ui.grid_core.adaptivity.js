@@ -327,9 +327,15 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _addCssClassToColumn: function(cssClassName, visibleIndex) {
-        var i,
-            view,
-            viewName,
+        var that = this;
+        COLUMN_VIEWS.forEach(function(viewName) {
+            var view = that.getView(viewName);
+            view && that._addCssClassToViewColumn(view, cssClassName, visibleIndex);
+        });
+    },
+
+    _addCssClassToViewColumn: function(view, cssClassName, visibleIndex) {
+        var viewName = view.name,
             rowsCount,
             rowIndex,
             $cellElement,
@@ -337,22 +343,26 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             column = this._columnsController.getVisibleColumns()[visibleIndex],
             editFormRowIndex = this._editingController && this._editingController.getEditFormRowIndex();
 
-        for(i = 0; i < COLUMN_VIEWS.length; i++) {
-            viewName = COLUMN_VIEWS[i];
-            view = this.getView(viewName);
-            if(view && view.isVisible() && column) {
-                rowsCount = view.getRowsCount();
-                for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-                    if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
-                        currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
-                        if(currentVisibleIndex >= 0) {
-                            $cellElement = view.getCellElements(rowIndex).eq(currentVisibleIndex);
-                            this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
-                        }
+        if(view && view.isVisible() && column) {
+            rowsCount = view.getRowsCount();
+            for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
+                if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
+                    currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
+                    if(currentVisibleIndex >= 0) {
+                        $cellElement = view.getCellElements(rowIndex).eq(currentVisibleIndex);
+                        this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
                     }
                 }
             }
         }
+    },
+
+    applyStylesForHiddenColumns: function(view) {
+        var that = this;
+        this._hiddenColumns.forEach(function(column) {
+            var visibleIndex = that._columnsController.getVisibleIndex(column.index);
+            that._addCssClassToViewColumn(view, that.addWidgetPrefix(HIDDEN_COLUMN_CLASS), visibleIndex);
+        });
     },
 
     isFormEditMode: function() {
@@ -673,6 +683,11 @@ module.exports = {
                     } else {
                         return this.callBase($element);
                     }
+                },
+
+                _cellPrepared: function() {
+                    this.callBase.apply(this, arguments);
+                    this._adaptiveColumnsController.applyStylesForHiddenColumns(this);
                 },
 
                 getCellElement: function(rowIndex, columnIdentifier) {
