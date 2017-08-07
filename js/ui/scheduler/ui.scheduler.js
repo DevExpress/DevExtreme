@@ -2244,9 +2244,12 @@ var Scheduler = Widget.inherit({
         this.fire("setField", "endDate", updatedData, endDate);
 
         var groups = cellData.groups;
+
+        var resourcesSetter = this._resourcesManager._dataAccessors.setter;
+
         for(var name in groups) {
             if(groups.hasOwnProperty(name)) {
-                updatedData[name] = groups[name];
+                resourcesSetter[name](target, groups[name]);
             }
         }
 
