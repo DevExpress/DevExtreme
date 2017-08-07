@@ -217,7 +217,9 @@ var sendRequest = function(protocolVersion, request, options) {
             extra;
 
         if(error) {
-            d.reject(error);
+            if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
+                d.reject(error);
+            }
         } else if(options.countOnly) {
 
             if(isFinite(tuple.count)) {
