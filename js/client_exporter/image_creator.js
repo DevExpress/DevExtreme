@@ -308,7 +308,7 @@ function drawTextElement(childNodes, context, options) {
 
             if(element.tagName === "tspan" && hasTspan(element)) {
                 drawTextElement(element.childNodes, context, mergedOptions);
-                return;
+                continue;
             }
 
             mergedOptions.textAlign = "start";
