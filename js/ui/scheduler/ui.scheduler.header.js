@@ -56,7 +56,7 @@ var SchedulerHeader = Widget.inherit({
 
         switch(args.name) {
             case "views":
-                this._processViews();
+                this._validateViews();
 
                 this._viewSwitcher.option({
                     items: value,
@@ -100,7 +100,6 @@ var SchedulerHeader = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._processViews();
         this._renderNavigator();
         this._renderViewSwitcher();
     },
@@ -122,6 +121,8 @@ var SchedulerHeader = Widget.inherit({
     },
 
     _renderViewSwitcher: function() {
+        this._validateViews();
+
         var $viewSwitcher = $("<div>").addClass(VIEW_SWITCHER_CLASS).appendTo(this.element());
 
         if(!this.option("useDropDownViewSwitcher")) {
@@ -131,7 +132,7 @@ var SchedulerHeader = Widget.inherit({
         }
     },
 
-    _processViews: function() {
+    _validateViews: function() {
         var views = this.option("views");
 
         each(views, function(_, view) {
