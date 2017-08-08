@@ -1914,6 +1914,7 @@ var Scheduler = Widget.inherit({
                 endDateExpr = this.option("endDateExpr");
 
             this._appointmentForm.option("formData", formData);
+            this._appointmentForm.option("readOnly", this._editAppointmentData ? !this._editing.allowUpdating : false);
 
             var startDateFormItem = this._appointmentForm.itemOption(startDateExpr),
                 endDateFormItem = this._appointmentForm.itemOption(endDateExpr);
@@ -2244,9 +2245,12 @@ var Scheduler = Widget.inherit({
         this.fire("setField", "endDate", updatedData, endDate);
 
         var groups = cellData.groups;
+
+        var resourcesSetter = this._resourcesManager._dataAccessors.setter;
+
         for(var name in groups) {
             if(groups.hasOwnProperty(name)) {
-                updatedData[name] = groups[name];
+                resourcesSetter[name](target, groups[name]);
             }
         }
 
