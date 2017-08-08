@@ -33,8 +33,8 @@ QUnit.test("element in parent with fixed size", function(assert) {
 
     for(var i = 0; i < testStyles.length; i++) {
         this.$element.attr("style", testStyles[i]);
-        assert.equal(sizeUtils.getWidth(this.$element[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$element[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), expected[i].height);
     }
 });
 
@@ -61,8 +61,8 @@ QUnit.test("invisible element in parent with fixed size", function(assert) {
 
     testParams.forEach(function(params) {
         that.$element.attr("style", params.style);
-        assert.equal(sizeUtils.getWidth(that.$element[0]), params.width);
-        assert.equal(sizeUtils.getHeight(that.$element[0]), params.height);
+        assert.equal(sizeUtils.getSize(that.$element[0], "width", {}), params.width);
+        assert.equal(sizeUtils.getSize(that.$element[0], "height", {}), params.height);
     });
 });
 
@@ -79,12 +79,12 @@ QUnit.test("element with padding, marging, border without params", function(asse
 
     for(i = 0; i < testStyles.length; i++) {
         this.$element.attr("style", testStyles[i] + " padding: 10px;");
-        assert.equal(sizeUtils.getWidth(this.$element[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$element[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), expected[i].height);
 
         this.$element.attr("style", testStyles[i] + " margin: 10px;");
-        assert.equal(sizeUtils.getWidth(this.$element[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$element[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), expected[i].height);
     }
 
     expected = [
@@ -97,31 +97,28 @@ QUnit.test("element with padding, marging, border without params", function(asse
 
     for(i = 0; i < testStyles.length; i++) {
         this.$element.attr("style", testStyles[i] + " border: 2px solid black;");
-        assert.equal(sizeUtils.getWidth(this.$element[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$element[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), expected[i].height);
     }
 });
 
 QUnit.test("element with padding, marging, border with params", function(assert) {
     this.$element.attr("style", "width: 40px; height: 50px; padding: 5px; margin: 10px; border: 2px solid black;");
 
-    assert.equal(sizeUtils.getWidth(this.$element[0]), 40);
-    assert.equal(sizeUtils.getHeight(this.$element[0]), 50);
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), 40);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), 50);
 
-    assert.equal(sizeUtils.getWidth(this.$element[0], { paddings: true }), 50);
-    assert.equal(sizeUtils.getHeight(this.$element[0], { paddings: true }), 60);
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", { paddings: true }), 50);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", { paddings: true }), 60);
 
-    assert.equal(sizeUtils.getWidth(this.$element[0], { margins: true }), 40);
-    assert.equal(sizeUtils.getHeight(this.$element[0], { margins: true }), 50);
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", { borders: true }), 44);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", { borders: true }), 54);
 
-    assert.equal(sizeUtils.getWidth(this.$element[0], { borders: true }), 44);
-    assert.equal(sizeUtils.getHeight(this.$element[0], { borders: true }), 54);
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", { borders: true, margins: true }), 64);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", { borders: true, margins: true }), 74);
 
-    assert.equal(sizeUtils.getWidth(this.$element[0], { borders: true, margins: true }), 64);
-    assert.equal(sizeUtils.getHeight(this.$element[0], { borders: true, margins: true }), 74);
-
-    assert.equal(sizeUtils.getWidth(this.$element[0], { paddings: true, borders: true, margins: true }), 74);
-    assert.equal(sizeUtils.getHeight(this.$element[0], { paddings: true, borders: true, margins: true }), 84);
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", { paddings: true, borders: true, margins: true }), 74);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", { paddings: true, borders: true, margins: true }), 84);
 });
 
 QUnit.test("element with box-sizing = border-box", function(assert) {
@@ -137,8 +134,8 @@ QUnit.test("element with box-sizing = border-box", function(assert) {
 
     for(i = 0; i < testStyles.length; i++) {
         this.$element.attr("style", testStyles[i] + " box-sizing: border-box;");
-        assert.equal(sizeUtils.getWidth(this.$element[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$element[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), expected[i].height);
     }
 
     expected = [
@@ -151,8 +148,8 @@ QUnit.test("element with box-sizing = border-box", function(assert) {
 
     for(i = 0; i < testStyles.length; i++) {
         this.$element.attr("style", testStyles[i] + " margin: 10px; box-sizing: border-box;");
-        assert.equal(sizeUtils.getWidth(this.$element[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$element[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), expected[i].height);
     }
 
     expected = [
@@ -165,8 +162,8 @@ QUnit.test("element with box-sizing = border-box", function(assert) {
 
     for(i = 0; i < testStyles.length; i++) {
         this.$element.attr("style", testStyles[i] + " padding: 10px; box-sizing: border-box;");
-        assert.equal(sizeUtils.getWidth(this.$element[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$element[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), expected[i].height);
     }
 
     expected = [
@@ -179,26 +176,26 @@ QUnit.test("element with box-sizing = border-box", function(assert) {
 
     for(i = 0; i < testStyles.length; i++) {
         this.$element.attr("style", testStyles[i] + " border: 2px solid black; box-sizing: border-box;");
-        assert.equal(sizeUtils.getWidth(this.$element[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$element[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), expected[i].height);
     }
 });
 
 QUnit.test("element with box-sizing = border-box and parent is invisible", function(assert) {
     this.$parent.attr("style", "width: 100px; height: 110px; display: none;");
     this.$element.attr("style", "width: 100%; height: 100%; box-sizing: border-box;");
-    assert.equal(sizeUtils.getWidth(this.$element[0]), 100);
-    assert.equal(sizeUtils.getHeight(this.$element[0]), 100);
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), 100);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), 100);
 
     this.$parent.attr("style", "width: 100px; height: 110px; display: none;");
     this.$element.attr("style", "width: 100%; height: 100%; padding: 10px; box-sizing: border-box;");
-    assert.equal(sizeUtils.getWidth(this.$element[0]), 100);
-    assert.equal(sizeUtils.getHeight(this.$element[0]), 100);
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), 100);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), 100);
 
     this.$parent.attr("style", "width: 100px; height: 110px; display: none;");
     this.$element.attr("style", "width: 40px; height: 50px; padding: 10px; box-sizing: border-box;");
-    assert.equal(sizeUtils.getWidth(this.$element[0]), 20);
-    assert.equal(sizeUtils.getHeight(this.$element[0]), 30);
+    assert.equal(sizeUtils.getSize(this.$element[0], "width", {}), 20);
+    assert.equal(sizeUtils.getSize(this.$element[0], "height", {}), 30);
 });
 
 QUnit.test("element is not in a DOM", function(assert) {
@@ -214,16 +211,16 @@ QUnit.test("element is not in a DOM", function(assert) {
 
     for(var i = 0; i < testStyles.length; i++) {
         this.$freeElement.attr("style", testStyles[i]);
-        assert.equal(sizeUtils.getWidth(this.$freeElement[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$freeElement[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$freeElement[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$freeElement[0], "height", {}), expected[i].height);
 
         this.$freeElement.attr("style", testStyles[i] + " display: none;");
-        assert.equal(sizeUtils.getWidth(this.$freeElement[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$freeElement[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$freeElement[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$freeElement[0], "height", {}), expected[i].height);
 
         this.$freeElement.attr("style", testStyles[i] + " box-sizing: border-box;");
-        assert.equal(sizeUtils.getWidth(this.$freeElement[0]), expected[i].width);
-        assert.equal(sizeUtils.getHeight(this.$freeElement[0]), expected[i].height);
+        assert.equal(sizeUtils.getSize(this.$freeElement[0], "width", {}), expected[i].width);
+        assert.equal(sizeUtils.getSize(this.$freeElement[0], "height", {}), expected[i].height);
     }
 });
 

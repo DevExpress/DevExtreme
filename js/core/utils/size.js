@@ -1,49 +1,40 @@
 "use strict";
 
-var _styles;
-
-var getSizeByStyles = function(styles) {
+var getSizeByStyles = function(elementStyles, styles) {
     var result = 0;
 
     styles.forEach(function(style) {
-        result += (parseFloat(_styles[style]) || 0);
+        result += (parseFloat(elementStyles[style]) || 0);
     });
 
     return result;
 };
 
-var getAdditionalParams = function(params) {
-    var result = 0;
+var getElementBoxParams = function(name, elementStyles) {
+    var beforeName = name === "width" ? "Left" : "Top";
+    var afterName = name === "width" ? "Right" : "Bottom";
 
-    if(params.include.paddings) {
-        result += params.padding;
-    }
-
-    if(params.include.borders) {
-        result += params.border;
-
-        if(params.include.margins) {
-            result += params.margin;
-        }
-    }
-
-    return result;
+    return {
+        padding: getSizeByStyles(elementStyles, ["padding" + beforeName, "padding" + afterName]),
+        border: getSizeByStyles(elementStyles, ["border" + beforeName + "Width", "border" + afterName + "Width"]),
+        margin: getSizeByStyles(elementStyles, ["margin" + beforeName, "margin" + afterName]),
+    };
 };
 
-var getBoxSizingOffset = function(params) {
-    var result = 0;
-    var size = _styles[params.name];
+var getBoxSizingOffset = function(name, elementStyles, boxParams) {
+    var size = elementStyles[name];
 
-    if(_styles.boxSizing === "border-box" && size.length && size[size.length - 1] !== "%") {
-        result -= params.padding + params.border;
+    if(elementStyles.boxSizing === "border-box" && size.length && size[size.length - 1] !== "%") {
+        return boxParams.border + boxParams.padding;
     }
 
-    return result;
+    return 0;
 };
 
-var getSize = function(params) {
-    var element = params.element;
-    var name = params.name;
+var getSize = function(element, name, include) {
+    var elementStyles = window.getComputedStyle(element);
+
+    var boxParams = getElementBoxParams(name, elementStyles);
 
     var clientRect = element.getClientRects().length;
     var boundingClientRect = element.getBoundingClientRect()[name];
@@ -51,60 +42,37 @@ var getSize = function(params) {
     var result = clientRect ? boundingClientRect : 0;
 
     if(result <= 0) {
-        result = parseFloat(_styles[name] || element.style[name]) || 0;
+        result = parseFloat(elementStyles[name] || element.style[name]) || 0;
 
-        result += getBoxSizingOffset(params);
+        result -= getBoxSizingOffset(name, elementStyles, boxParams);
     } else {
-        result -= params.padding + params.border;
+        result -= boxParams.padding + boxParams.border;
     }
 
-    return result + getAdditionalParams(params);
-};
+    if(include.paddings) {
+        result += boxParams.padding;
+    }
+    if(include.borders) {
+        result += boxParams.border;
+    }
+    if(include.margins) {
+        result += boxParams.margin;
+    }
 
-var getWidth = function(element, include) {
-    _styles = window.getComputedStyle(element);
-
-    var params = {
-        element: element,
-        name: "width",
-        include: include || {},
-        padding: getSizeByStyles(["paddingLeft", "paddingRight"]),
-        border: getSizeByStyles(["borderLeftWidth", "borderRightWidth"]),
-        margin: getSizeByStyles(["marginLeft", "marginRight"])
-    };
-
-    return getSize(params);
-};
-
-var getHeight = function(element, include) {
-    _styles = window.getComputedStyle(element);
-
-    var params = {
-        element: element,
-        name: "height",
-        include: include || {},
-        padding: getSizeByStyles(["paddingTop", "paddingBottom"]),
-        border: getSizeByStyles(["borderTopWidth", "borderBottomWidth"]),
-        margin: getSizeByStyles(["marginTop", "marginBottom"])
-    };
-
-    return getSize(params);
+    return result;
 };
 
 var getBorderAdjustment = function(element, name) {
-    _styles = window.getComputedStyle(element);
+    var elementStyles = window.getComputedStyle(element);
 
-    if(_styles.boxSizing === "border-box") {
+    if(elementStyles.boxSizing === "border-box") {
         return 0;
     }
 
-    if(name === "width") {
-        return getSizeByStyles(["borderLeftWidth", "borderRightWidth"]);
-    } else {
-        return getSizeByStyles(["borderTopWidth", "borderBottomWidth"]);
-    }
+    return name === "width" ?
+        getSizeByStyles(elementStyles, ["borderLeftWidth", "borderRightWidth"]) :
+        getSizeByStyles(elementStyles, ["borderTopWidth", "borderBottomWidth"]);
 };
 
-exports.getWidth = getWidth;
-exports.getHeight = getHeight;
+exports.getSize = getSize;
 exports.getBorderAdjustment = getBorderAdjustment;

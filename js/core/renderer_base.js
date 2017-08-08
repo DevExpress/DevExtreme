@@ -186,7 +186,13 @@ initRender.prototype.toggleClass = function(className, value) {
         }
 
         if(arguments.length === 0 || typeof value === "boolean") {
-            return sizeUtils["get" + name](element, { paddings: isInner || isOuter, borders: isOuter, margins: value });
+            var include = {
+                paddings: isInner || isOuter,
+                borders: isOuter,
+                margins: value
+            };
+
+            return sizeUtils.getSize(element, name.toLowerCase(), include);
         }
 
         if(value === undefined || value === null) {
