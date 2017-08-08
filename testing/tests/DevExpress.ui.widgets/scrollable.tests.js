@@ -4,6 +4,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     noop = require("core/utils/common").noop,
     support = require("core/utils/support"),
+    scrollUtils = require("core/utils/scroll"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
     domUtils = require("core/utils/dom"),
@@ -3953,15 +3954,15 @@ QUnit.module("default value nativeScrollable", {
         this.originalRealDevice = devices.real();
         this.originalCurrentDevice = devices.current();
 
-        this.originalSupportNativeScrolling = support.nativeScrolling;
-        support.nativeScrolling = true;
+        this.originalSupportNativeScrolling = scrollUtils.nativeScrolling;
+        scrollUtils.nativeScrolling = true;
     },
     afterEach: function() {
         moduleConfig.afterEach.call(this);
         devices.real(this.originalRealDevice);
         devices.current(this.originalCurrentDevice);
 
-        support.nativeScrolling = this.originalSupportNativeScrolling;
+        scrollUtils.nativeScrolling = this.originalSupportNativeScrolling;
     }
 });
 
@@ -3994,15 +3995,15 @@ QUnit.module("default value simulatedScrollable", {
         this.originalRealDevice = devices.real();
         this.originalCurrentDevice = devices.current();
 
-        this.originalSupportNativeScrolling = support.nativeScrolling;
-        support.nativeScrolling = false;
+        this.originalSupportNativeScrolling = scrollUtils.nativeScrolling;
+        scrollUtils.nativeScrolling = false;
     },
     afterEach: function() {
         moduleConfig.afterEach.call(this);
         devices.real(this.originalRealDevice);
         devices.current(this.originalCurrentDevice);
 
-        support.nativeScrolling = this.originalSupportNativeScrolling;
+        scrollUtils.nativeScrolling = this.originalSupportNativeScrolling;
     }
 });
 
