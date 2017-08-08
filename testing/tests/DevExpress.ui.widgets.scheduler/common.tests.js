@@ -1115,6 +1115,31 @@ QUnit.testStart(function() {
         assert.equal(navigator.option("date").getMonth(), 1, "navigator has correct date depending on startDate");
     });
 
+    QUnit.test("currentView option should be passed to header correctly", function(assert) {
+        this.createInstance({
+            currentView: "Week1",
+            currentDate: new Date(2017, 10, 25),
+            views: [{
+                type: "day",
+                name: "day1"
+            }, {
+                type: "week",
+                name: "Week1"
+            }]
+        });
+
+        var header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.deepEqual(header.option("currentView"), { type: "week", name: "Week1" }, "header has correct currentView");
+        assert.equal(navigator.option("step"), "week", "navigator has correct currentView");
+
+        this.instance.option("currentView", "day1");
+
+        assert.deepEqual(header.option("currentView"), { type: "day", name: "day1" }, "header has correct currentView");
+        assert.equal(navigator.option("step"), "day", "navigator has correct currentView");
+    });
+
     QUnit.test("currentView option changing should work correctly, when intervalCount & startDate is set", function(assert) {
         this.createInstance({
             currentView: "day",
