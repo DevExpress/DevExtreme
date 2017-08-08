@@ -1732,7 +1732,7 @@ var Scheduler = Widget.inherit({
 
         this._recalculateWorkspace();
 
-        this._header && this._header.option("currentDate", this._workSpace.getStartViewDate());
+        countConfig.startDate && this._header && this._header.option("currentDate", this._workSpace.getStartViewDate());
     },
 
     _getViewCountConfig: function() {
