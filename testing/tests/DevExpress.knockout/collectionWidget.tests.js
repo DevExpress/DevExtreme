@@ -45,6 +45,12 @@ QUnit.testStart(function() {
             </div>\
         </div>\
         \
+        <div id="container-with-ko-template-and-item-index" data-bind="dxTestComponent: { items: items }">\
+            <div data-options="dxTemplate : { name: \'item\' } ">\
+                $index: <span data-bind="text: $index"></span>\
+            </div>\
+        </div>\
+        \
         <div id="container-with-nested-container" data-bind="dxTestComponent: { dataSource: [{}] }">\
             <div data-options="dxTemplate : { name: \'item\' } ">\
                 <div data-bind="dxTestComponent: { dataSource: [], noDataText: \'No Data\' }"></div>\
@@ -239,6 +245,30 @@ QUnit.test("render items with multiple templates, ko scenario", function(assert)
         $items.each(function(index) {
             assert.equal($.trim($(this).text()), testSet[index]);
         });
+    } finally {
+        delete ko.bindingHandlers["dxTestComponent"];
+        delete $.fn["dxTestComponent"];
+    }
+});
+
+QUnit.test("$index is available in markup (T542335)", function(assert) {
+    try {
+        var $element = $("#container-with-ko-template-and-item-index");
+
+        registerComponent("dxTestComponent", TestComponent);
+
+        ko.applyBindings({
+            items: [
+                { text: "text1" },
+                { text: "text2" }
+            ]
+        }, $element.get(0));
+
+        var $items = $element.find(".item");
+
+        assert.equal($.trim($items.eq(0).text()), "$index: 0");
+        assert.equal($.trim($items.eq(1).text()), "$index: 1");
+
     } finally {
         delete ko.bindingHandlers["dxTestComponent"];
         delete $.fn["dxTestComponent"];

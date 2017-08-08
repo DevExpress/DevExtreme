@@ -249,7 +249,7 @@ var ComponentBuilder = Class.inherit({
         return function(options) {
             var $resultMarkup = $(template).clone(),
                 dataIsScope = options.model && options.model.constructor === that._scope.$root.constructor,
-                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options.model));
+                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options));
 
             if(scopeItemsPath) {
                 that._synchronizeScopes(templateScope, scopeItemsPath, options.index);
@@ -298,11 +298,15 @@ var ComponentBuilder = Class.inherit({
         }
     },
 
-    _createScopeWithData: function(data) {
+    _createScopeWithData: function(options) {
         var newScope = this._scope.$new();
 
         if(this._itemAlias) {
-            newScope[this._itemAlias] = data;
+            newScope[this._itemAlias] = options.model;
+        }
+
+        if(typeUtils.isDefined(options.index)) {
+            newScope.$index = options.index;
         }
 
         return newScope;
