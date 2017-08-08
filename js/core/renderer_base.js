@@ -4,11 +4,12 @@ var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
+var htmlParser = require("./utils/html_parser");
 var matches = require("./polyfills/matches");
 
 var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
-    "html", "css",
+    "css",
     "slideUp", "slideDown", "slideToggle"];
 
 var renderer = function(selector, context) {
@@ -154,6 +155,22 @@ initRender.prototype.toggleClass = function(className, value) {
         rendererStrategy.setClass(this[0], classNames[i], value);
     }
     return this;
+};
+
+initRender.prototype.html = function(value) {
+    if(!arguments.length) {
+        return this[0].innerHTML;
+    }
+
+    this.empty();
+
+    if(typeof value === "string" && !htmlParser.isTablePart(value) || typeof value === "number") {
+        this[0].innerHTML = value;
+
+        return this;
+    }
+
+    return this.append(htmlParser.parseHTML(value));
 };
 
 var appendElements = function(element, nextSibling) {
