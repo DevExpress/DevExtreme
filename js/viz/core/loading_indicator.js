@@ -31,14 +31,14 @@ LoadingIndicator.prototype = {
             },
             complete: function() {
                 group.linkRemove();
-                root.css({ "pointer-events": "" });
+                root.css({ "pointerEvents": "" });
                 eventTrigger(LOADING_INDICATOR_READY);
             }
         }, {
             opacity: 0.85,
             start: function() {
                 group.linkAppend();
-                root.css({ "pointer-events": "none" });
+                root.css({ "pointerEvents": "none" });
                 notify(true);
             },
             complete: function() {

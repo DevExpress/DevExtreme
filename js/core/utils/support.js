@@ -1,8 +1,6 @@
 "use strict";
 
-var inflector = require("./inflector"),
-    inArray = require("./array").inArray,
-    devices = require("../devices");
+var inflector = require("./inflector");
 
 var camelize = inflector.camelize;
 
@@ -12,7 +10,8 @@ var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
         "Webkit": "-webkit-",
         "Moz": "-moz-",
         "O": "-o-",
-        "ms": "-ms-"
+        "ms": "-ms-",
+        "Ms": "-ms-"
     },
     styles = document.createElement("dx").style;
 
@@ -68,16 +67,6 @@ var supportProp = function(prop) {
     return !!styleProp(prop);
 };
 
-var isNativeScrollingSupported = function() {
-    var realDevice = devices.real(),
-        realPlatform = realDevice.platform,
-        realVersion = realDevice.version,
-        isObsoleteAndroid = (realVersion && realVersion[0] < 4 && realPlatform === "android"),
-        isNativeScrollDevice = !isObsoleteAndroid && inArray(realPlatform, ["ios", "android", "win"]) > -1 || realDevice.mac;
-
-    return isNativeScrollDevice;
-};
-
 var inputType = function(type) {
     if(type === "text") {
         return true;
@@ -103,7 +92,6 @@ exports.touch = touchEvents || pointerEvents && touchPointersPresent;
 exports.transition = supportProp("transition");
 exports.transitionEndEventName = transitionEndEventNames[styleProp("transition")];
 exports.animation = supportProp("animation");
-exports.nativeScrolling = isNativeScrollingSupported();
 
 exports.styleProp = styleProp;
 exports.stylePropPrefix = stylePropPrefix;

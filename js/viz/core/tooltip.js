@@ -37,7 +37,7 @@ function Tooltip(params) {
     that._eventTrigger = params.eventTrigger;
 
     that._wrapper = $("<div>")
-        .css({ position: "absolute", overflow: "visible", height: "1px", "pointer-events": "none" })  // T265557, T447623
+        .css({ position: "absolute", overflow: "visible", height: "1px", "pointerEvents": "none" })  // T265557, T447623
         .addClass(params.cssClass);
 
     that._renderer = renderer = new rendererModule.Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
@@ -91,7 +91,7 @@ Tooltip.prototype = {
         }
         that._textFontStyles = vizUtils.patchFontOptions(options.font);
         that._textFontStyles.color = options.font.color;
-        that._wrapper.css({ "z-index": options.zIndex });
+        that._wrapper.css({ "zIndex": options.zIndex });
 
         that._customizeTooltip = typeUtils.isFunction(options.customizeTooltip) ? options.customizeTooltip : null;
         return that;

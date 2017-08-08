@@ -705,7 +705,7 @@ var Overlay = Widget.inherit({
 
             this._animate(hideAnimation,
                 function() {
-                    that._$content.css("pointer-events", "");
+                    that._$content.css("pointerEvents", "");
                     that._renderVisibility(false);
 
                     completeHideAnimation.apply(this, arguments);
@@ -715,7 +715,7 @@ var Overlay = Widget.inherit({
                 },
 
                 function() {
-                    that._$content.css("pointer-events", "none");
+                    that._$content.css("pointerEvents", "none");
                     startHideAnimation.apply(this, arguments);
                 }
             );

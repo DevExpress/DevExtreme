@@ -1221,7 +1221,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
                 $nodeContainer.addClass(OPENED_NODE_CONTAINER_CLASS);
             },
             complete: (function() {
-                $nodeContainer.css("max-height", "none");
+                $nodeContainer.css("maxHeight", "none");
                 $nodeContainer.toggleClass(OPENED_NODE_CONTAINER_CLASS, state);
                 this.setAria("expanded", state, $node);
                 this._scrollableContainer.update();

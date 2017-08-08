@@ -307,7 +307,7 @@ var Pager = Widget.inherit({
     },
 
     _calculateLightPagesWidth: function($pageIndex, pageCount) {
-        return Number($pageIndex.css("min-width").replace("px", "")) + 10 * pageCount.toString().length;
+        return Number($pageIndex.css("minWidth").replace("px", "")) + 10 * pageCount.toString().length;
     },
 
     _renderLightPages: function() {
@@ -444,7 +444,7 @@ var Pager = Widget.inherit({
     },
 
     _calculateLightPageSizesWidth: function(pageSizes) {
-        return Number(this._$pagesSizeChooser.css("min-width").replace("px", "")) + 10 * Math.max.apply(Math, pageSizes).toString().length;
+        return Number(this._$pagesSizeChooser.css("minWidth").replace("px", "")) + 10 * Math.max.apply(Math, pageSizes).toString().length;
     },
 
     _renderLightPageSizes: function() {

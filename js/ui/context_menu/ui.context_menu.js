@@ -507,10 +507,10 @@ var ContextMenu = MenuBase.inherit((function() {
             }
 
             if(this.option("width")) {
-                return $itemsContainer.css("min-width", this.option("width"));
+                return $itemsContainer.css("minWidth", this.option("width"));
             }
             if(this.option("height")) {
-                return $itemsContainer.css("min-height", this.option("height"));
+                return $itemsContainer.css("minHeight", this.option("height"));
             }
 
             return $itemsContainer;

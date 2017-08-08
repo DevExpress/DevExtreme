@@ -571,11 +571,11 @@ var subscribes = {
         var $appts = this.getAppointmentsInstance()._itemElements(),
             total = 0;
 
-        $appts.css("margin-bottom", innerRowOffset);
+        $appts.css("marginBottom", innerRowOffset);
 
         var applyOffset = function(_, count) {
             var index = count + total - 1;
-            $appts.eq(index).css("margin-bottom", outerRowOffset);
+            $appts.eq(index).css("marginBottom", outerRowOffset);
             total += count;
         };
 

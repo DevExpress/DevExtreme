@@ -161,7 +161,7 @@ var ToolbarBase = CollectionWidget.inherit({
             labelPaddings = $label.outerWidth() - $label.width(),
             labelMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection - labelPaddings, 0);
 
-        $label.css("max-width", labelMaxWidth);
+        $label.css("maxWidth", labelMaxWidth);
     },
 
     _alignCenterSection: function(beforeRect, afterRect) {
