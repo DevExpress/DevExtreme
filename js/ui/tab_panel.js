@@ -201,7 +201,7 @@ var TabPanel = MultiView.inherit({
         this._createTitleActions();
         this._renderLayout();
 
-        this.callBase.apply(this, arguments);
+        this.callBase();
     },
 
     _initTemplates: function() {
@@ -249,24 +249,26 @@ var TabPanel = MultiView.inherit({
     },
 
     _renderLayout: function() {
-        if(!this._tabs) {
-            var $element = this.element();
-
-            this._$tabContainer = $("<div>")
-                .addClass(TABPANEL_TABS_CLASS)
-                .appendTo($element);
-
-            var $tabs = $("<div>").appendTo(this._$tabContainer);
-
-            this._tabs = this._createComponent($tabs, Tabs, this._tabConfig());
-
-            this._$container = $("<div>")
-                .addClass(TABPANEL_CONTAINER_CLASS)
-                .appendTo($element);
-            this._$container.append(this._$wrapper);
-
-            this._updateLayout();
+        if(this._tabs) {
+            return;
         }
+
+        var $element = this.element();
+
+        this._$tabContainer = $("<div>")
+            .addClass(TABPANEL_TABS_CLASS)
+            .appendTo($element);
+
+        var $tabs = $("<div>").appendTo(this._$tabContainer);
+
+        this._tabs = this._createComponent($tabs, Tabs, this._tabConfig());
+
+        this._$container = $("<div>")
+            .addClass(TABPANEL_CONTAINER_CLASS)
+            .appendTo($element);
+        this._$container.append(this._$wrapper);
+
+        this._updateLayout();
     },
 
     _updateLayout: function() {
