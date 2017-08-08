@@ -154,22 +154,28 @@ QUnit.test("View switcher should be rendered correctly when views contains objec
 });
 
 QUnit.test("currentView option should be passed correctly to the navigator", function(assert) {
-    var instance = $("#scheduler-header").dxSchedulerHeader({
-        views: [{
+    var views = [
+        {
             type: "month"
         }, {
             type: "day",
             name: "TestDay"
-        }],
-        currentView: "month"
+        }];
+
+    var instance = $("#scheduler-header").dxSchedulerHeader({
+        views: views,
+        currentView: views[0],
+        useDropDownViewSwitcher: false
     }).dxSchedulerHeader("instance");
 
-    instance.option("currentView", { type: "day", name: "TestDay" });
+    instance.option("currentView", views[1]);
 
     var $element = instance.element(),
-        navigator = $element.find(".dx-scheduler-navigator").dxSchedulerNavigator("instance");
+        navigator = $element.find(".dx-scheduler-navigator").dxSchedulerNavigator("instance"),
+        switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher").dxTabs("instance");
 
     assert.equal(navigator.option("step"), "day", "currentView is passed correctly");
+    assert.deepEqual(switcher.option("selectedItem"), { type: "day", name: "TestDay" }, "currentView is passed correctly");
 });
 
 QUnit.test("Views option should be passed to viewSwitcher, useDropDownViewSwitcher = true", function(assert) {
@@ -277,7 +283,7 @@ QUnit.test("'currentViewUpdated' observer should be notified after selection of 
     $($item).trigger("dxclick");
     var args = stub.getCall(0).args;
     assert.ok(stub.calledOnce, "Observer is notified");
-    assert.equal(args[1], "day", "Arguments are OK");
+    assert.equal(args[1], "TestDay", "Arguments are OK");
 });
 
 QUnit.test("'currentViewUpdated' observer should be notified after click on dxDropDownMenu item", function(assert) {

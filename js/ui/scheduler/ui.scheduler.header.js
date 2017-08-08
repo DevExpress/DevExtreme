@@ -64,9 +64,11 @@ var SchedulerHeader = Widget.inherit({
                 });
                 break;
             case "currentView":
-                this._viewSwitcher.option("selectedItem", value);
-                this._navigator.option("step", STEP_MAP[this._getCurrentViewType()]);
-                this._changeViewSwitcherLabelText();
+                if(value) {
+                    this._viewSwitcher.option("selectedItem", value);
+                    this._navigator.option("step", STEP_MAP[this._getCurrentViewType()]);
+                    this._changeViewSwitcherLabelText();
+                }
                 break;
             case "currentDate":
             case "startDate":
@@ -223,7 +225,7 @@ var SchedulerHeader = Widget.inherit({
     _updateCurrentView: function(e) {
         var selectedItem = e.itemData || e.component.option("selectedItem");
 
-        var viewName = typeUtils.isObject(selectedItem) ? selectedItem.type : selectedItem;
+        var viewName = typeUtils.isObject(selectedItem) ? selectedItem.name || selectedItem.type : selectedItem;
 
         this.notifyObserver("currentViewUpdated", viewName);
     },
