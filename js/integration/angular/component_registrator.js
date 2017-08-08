@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
     Class = require("../../core/class"),
-    type = require("../../core/utils/common").type,
+    commonUtils = require("../../core/utils/common"),
     inArray = require("../../core/utils/array").inArray,
     Locker = require("../../core/utils/locker"),
     Widget = require("../../ui/widget/ui.widget"),
@@ -93,7 +93,7 @@ var ComponentBuilder = Class.inherit({
 
         if(options.bindingOptions) {
             $.each(options.bindingOptions, function(key, value) {
-                if(type(value) === 'string') {
+                if(commonUtils.type(value) === 'string') {
                     that._ngOptions.bindingOptions[key] = { dataPath: value };
                 }
             });
@@ -303,7 +303,7 @@ var ComponentBuilder = Class.inherit({
             newScope[this._itemAlias] = options.model;
         }
 
-        if(typeUtils.isDefined(options.index)) {
+        if(commonUtils.isDefined(options.index)) {
             newScope.$index = options.index;
         }
 

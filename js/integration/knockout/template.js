@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     ko = require("knockout"),
-    typeUtils = require("../../core/utils/type"),
+    commonUtils = require("../../core/utils/common"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     domUtils = require("../../core/utils/dom");
 
@@ -49,7 +49,7 @@ var KoTemplate = TemplateBase.inherit({
             model = this._prepareDataForContainer(model, options.container);
         }
 
-        if(typeUtils.isDefined(options.index)) {
+        if(commonUtils.isDefined(options.index)) {
             model.$index = options.index;
         }
 
