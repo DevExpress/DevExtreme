@@ -64,7 +64,7 @@ var SchedulerHeader = Widget.inherit({
                 });
                 break;
             case "currentView":
-                this._viewSwitcher.option("selectedItem", this.option("currentView"));
+                this._viewSwitcher.option("selectedItem", value);
                 this._navigator.option("step", STEP_MAP[this._getCurrentViewType()]);
                 this._changeViewSwitcherLabelText();
                 break;
