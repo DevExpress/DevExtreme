@@ -75,6 +75,10 @@ var isWindow = function(object) {
     return object != null && object === object.window;
 };
 
+var isDomNode = function(node) {
+    return node instanceof Element;
+};
+
 exports.isBoolean = isBoolean;
 exports.isExponential = isExponential;
 exports.isDate = isDate;
@@ -87,4 +91,5 @@ exports.isEmptyObject = isEmptyObject;
 exports.isPlainObject = isPlainObject;
 exports.isPrimitive = isPrimitive;
 exports.isWindow = isWindow;
+exports.isDomNode = isDomNode;
 exports.type = type;
