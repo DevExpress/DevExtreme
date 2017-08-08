@@ -56,6 +56,10 @@ var isWindow = function(object) {
     return object != null && object === object.window;
 };
 
+var isDomNode = function(node) {
+    return node instanceof Element;
+};
+
 var ensureDefined = function(value, defaultValue) {
     return isDefined(value) ? value : defaultValue;
 };
@@ -375,6 +379,7 @@ exports.isFunction = isFunction;
 exports.isPrimitive = isPrimitive;
 exports.isExponential = isExponential;
 exports.isWindow = isWindow;
+exports.isDomNode = isDomNode;
 
 exports.ensureDefined = ensureDefined;
 
