@@ -272,6 +272,10 @@ exports.DataController = Class.inherit((function() {
 
             if(childrenStack[depth + 1]) {
                 node.children = childrenStack[depth + 1];
+                //T541266
+                for(var i = depth + 1; i < childrenStack.length; i++) {
+                    childrenStack[i] = undefined;
+                }
                 childrenStack.length = depth + 1;
             }
 
