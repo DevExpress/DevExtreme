@@ -111,11 +111,11 @@ var DateViewRoller = Scrollable.inherit({
 
         this._$content.empty();
         // NOTE: rendering ~166+30+12+24+60 <div>s >> 50mc
-        each(items, function() {
+        items.forEach(function(item) {
             $items = $items.add(
                 $("<div>")
                     .addClass(DATEVIEW_ROLLER_ITEM_CLASS)
-                    .append(this)
+                    .append(item)
             );
         });
 
