@@ -296,6 +296,10 @@ QUnit.test("Timeline should have the right 'dx-group-column-count' attr depend o
 
     assert.equal($element.attr("dx-group-column-count"), "2", "Attr is OK");
     assert.notOk($element.attr("dx-group-row-count"), "row-count attr is not applied");
+
+    this.instance.option("groups", []);
+
+    assert.notOk($element.attr("dx-group-column-count"), "column-count attr is not applied");
 });
 
 QUnit.test("the 'getCoordinatesByDate' method should return right coordinates", function(assert) {
