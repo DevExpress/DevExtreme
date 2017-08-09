@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
     Class = require("../../core/class"),
-    type = require("../../core/utils/common").type,
+    commonUtils = require("../../core/utils/common"),
     inArray = require("../../core/utils/array").inArray,
     Locker = require("../../core/utils/locker"),
     Widget = require("../../ui/widget/ui.widget"),
@@ -93,7 +93,7 @@ var ComponentBuilder = Class.inherit({
 
         if(options.bindingOptions) {
             $.each(options.bindingOptions, function(key, value) {
-                if(type(value) === 'string') {
+                if(commonUtils.type(value) === 'string') {
                     that._ngOptions.bindingOptions[key] = { dataPath: value };
                 }
             });
@@ -247,7 +247,7 @@ var ComponentBuilder = Class.inherit({
         return function(options) {
             var $resultMarkup = $(template).clone(),
                 dataIsScope = options.model && options.model.constructor === that._scope.$root.constructor,
-                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options.model));
+                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options));
 
             if(scopeItemsPath) {
                 that._synchronizeScopes(templateScope, scopeItemsPath, options.index);
@@ -296,11 +296,15 @@ var ComponentBuilder = Class.inherit({
         }
     },
 
-    _createScopeWithData: function(data) {
+    _createScopeWithData: function(options) {
         var newScope = this._scope.$new();
 
         if(this._itemAlias) {
-            newScope[this._itemAlias] = data;
+            newScope[this._itemAlias] = options.model;
+        }
+
+        if(commonUtils.isDefined(options.index)) {
+            newScope.$index = options.index;
         }
 
         return newScope;

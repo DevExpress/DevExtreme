@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     ko = require("knockout"),
+    commonUtils = require("../../core/utils/common"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     domUtils = require("../../core/utils/dom");
 
@@ -46,6 +47,10 @@ var KoTemplate = TemplateBase.inherit({
 
         if(options.container) {
             model = this._prepareDataForContainer(model, options.container);
+        }
+
+        if(commonUtils.isDefined(options.index)) {
+            model.$index = options.index;
         }
 
         var $placeholder = $("<div>").appendTo(options.container);

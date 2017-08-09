@@ -2002,6 +2002,27 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
     assert.equal(scope.collection[0].name, "widget text");
 });
 
+QUnit.test("$index is available in markup (T542335)", function(assert) {
+    var controller = function($scope) {
+            $scope.items = [
+                { text: "text1" },
+                { text: "text2" }
+            ];
+        },
+        $markup = initMarkup($(
+            "<div dx-test-collection-container=\"{ bindingOptions: { items: 'items' } }\" dx-item-alias=\"item\">" +
+            "   <div data-options='dxTemplate: { name: \"item\" }'>" +
+            "       <div dx-test-widget=\"{ bindingOptions: { text: '$index' } }\" class=\"test-widget\"></div>" +
+            "   </div>" +
+            "</div>"
+        ), controller);
+
+    var $items = $markup.find(".test-widget");
+
+    assert.equal($items.eq(0).dxTestWidget("option", "text"), "0");
+    assert.equal($items.eq(1).dxTestWidget("option", "text"), "1");
+});
+
 QUnit.test("$id in item model not caused exception", function(assert) {
     var controller = function($scope) {
             $scope.collection = [
