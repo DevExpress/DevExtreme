@@ -428,6 +428,8 @@ var dxChart = AdvancedChart.inherit({
             valueAxes = that._valueAxes,
             valueAxisOptions = that.option("valueAxis") || {},
             valueAxesOptions = _isArray(valueAxisOptions) ? valueAxisOptions : [valueAxisOptions],
+            rotated = that._isRotated(),
+            crosshairMargins = that._getCrosshairMargins(),
             axisOptions,
             axis;
 
@@ -443,7 +445,11 @@ var dxChart = AdvancedChart.inherit({
                     priority: valueAxes.length
                 };
             }
-            axis = that._createAxis("valueAxis", axisOptions, { pane: paneName, name: axisName }, that._isRotated());
+            axis = that._createAxis("valueAxis", axisOptions, {
+                pane: paneName,
+                name: axisName,
+                crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
+            }, rotated);
 
             valueAxes.push(axis);
         }
