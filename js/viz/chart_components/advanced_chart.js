@@ -19,17 +19,6 @@ var $ = require("../../core/renderer"),
     vizUtils = require("../core/utils"),
     _map = vizUtils.map;
 
-function getCrosshairMargins(crosshairOptions) {
-    crosshairOptions = crosshairOptions || {};
-    var crosshairEnabled = crosshairOptions.enabled,
-        margins = crosshairModule.getMargins();
-
-    return {
-        x: crosshairEnabled && crosshairOptions.horizontalLine.visible ? margins.x : 0,
-        y: crosshairEnabled && crosshairOptions.verticalLine.visible ? margins.y : 0
-    };
-}
-
 function prepareAxis(axisOptions) {
     return _isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
 }
@@ -56,6 +45,17 @@ var AdvancedChart = BaseChart.inherit({
         this._populateAxes();
     },
 
+    _getCrosshairMargins: function() {
+        var crosshairOptions = this._getCrosshairOptions() || {},
+            crosshairEnabled = crosshairOptions.enabled,
+            margins = crosshairModule.getMargins();
+
+        return {
+            x: crosshairEnabled && crosshairOptions.horizontalLine.visible ? margins.x : 0,
+            y: crosshairEnabled && crosshairOptions.verticalLine.visible ? margins.y : 0
+        };
+    },
+
     _populateAxes: function() {
         var that = this,
             valueAxes = [],
@@ -69,7 +69,7 @@ var AdvancedChart = BaseChart.inherit({
             axisNames = [],
             valueAxesCounter = 0,
             paneWithNonVirtualAxis,
-            crosshairMargins = getCrosshairMargins(that._getCrosshairOptions());
+            crosshairMargins = that._getCrosshairMargins();
 
         function getNextAxisName() {
             return DEFAULT_AXIS_NAME + valueAxesCounter++;
