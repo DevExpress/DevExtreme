@@ -802,6 +802,38 @@ QUnit.test("incorrect work of mergeDates function if previous value not valid (Q
     assert.deepEqual(this.instance.option("value"), date);
 });
 
+QUnit.test("mergeDates must merge seconds when type is 'time'", function(assert) {
+    this.instance.option({
+        type: "time",
+        value: new Date(2000, 6, 31, 1, 1, 1),
+        pickerType: "list",
+        displayFormat: "longTime"
+    });
+
+    this.$input()
+        .val("1:1:16")
+        .trigger("change");
+
+    var date = new Date(2000, 6, 31, 1, 1, 16);
+    assert.deepEqual(this.instance.option("value"), date);
+});
+
+QUnit.test("mergeDates must merge milliseconds when type is 'time'", function(assert) {
+    this.instance.option({
+        type: "time",
+        value: new Date(1),
+        pickerType: "list",
+        displayFormat: "millisecond"
+    });
+
+    this.$input()
+        .val("16")
+        .trigger("change");
+
+    var date = new Date(16);
+    assert.deepEqual(this.instance.option("value"), date);
+});
+
 
 QUnit.module("dateView integration", {
     beforeEach: function() {
