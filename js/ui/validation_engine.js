@@ -21,10 +21,14 @@ var BaseRuleValidator = Class.inherit({
         var valueArray = Array.isArray(value) ? value : [value],
             result = true;
 
-        valueArray.every(function(itemValue) {
-            result = this._validate(itemValue, rule);
-            return result;
-        }, this);
+        if(valueArray.length) {
+            valueArray.every(function(itemValue) {
+                result = this._validate(itemValue, rule);
+                return result;
+            }, this);
+        } else {
+            result = this._validate(valueArray, rule);
+        }
 
         return result;
     }
