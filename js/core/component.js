@@ -640,7 +640,17 @@ var Component = Class.inherit({
                 that.endUpdate();
             }
         };
-    })()
+    })(),
+
+    _getOptionValue: function(option) {
+        var value = this.option(option);
+
+        if(isFunction(value)) {
+            return value();
+        }
+
+        return value;
+    }
 }).include(EventsMixin);
 
 module.exports = Component;
