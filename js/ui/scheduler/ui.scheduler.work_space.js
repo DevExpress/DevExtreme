@@ -29,6 +29,8 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
 
+    WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
+
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
     TIME_PANEL_ROW_CLASS = "dx-scheduler-time-panel-row",
@@ -869,8 +871,12 @@ var SchedulerWorkSpace = Widget.inherit({
         });
     },
 
+    _detachGroupCountAttr: function() {
+        this.element().removeAttr(WORKSPACE_GROUPED_ATTR);
+    },
+
     _attachGroupCountAttr: function(groupRowCount) {
-        this.element().attr("dx-group-row-count", groupRowCount);
+        this.element().attr(WORKSPACE_GROUPED_ATTR, groupRowCount);
     },
 
     headerPanelOffsetRecalculate: function() {

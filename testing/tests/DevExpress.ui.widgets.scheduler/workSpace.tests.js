@@ -246,6 +246,10 @@ QUnit.testStart(function() {
 
         assert.ok(this.instance.element().hasClass("dx-scheduler-work-space-grouped"), "'grouped' class is applied");
         assert.equal(this.instance.element().attr("dx-group-row-count"), 1, "'dx-group-row-count' is right");
+
+        this.instance.option("groups", []);
+        assert.ok(!this.instance.element().hasClass("dx-scheduler-work-space-grouped"), "'grouped' class is not applied");
+        assert.notOk(this.instance.element().attr("dx-group-row-count"), "'dx-group-row-count' isn't applied");
     });
 
     QUnit.test("Work space should not have 'grouped' class & group row count attr if groups exist but empty(T381796)", function(assert) {
