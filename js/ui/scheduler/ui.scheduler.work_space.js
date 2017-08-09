@@ -804,6 +804,8 @@ var SchedulerWorkSpace = Widget.inherit({
             this._attachGroupCountAttr(groupRows.elements.length);
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
+        } else {
+            this._detachGroupCountAttr();
         }
 
         return cellTemplates;
