@@ -174,17 +174,12 @@ initRender.prototype.html = function(value) {
 };
 
 var appendElements = function(element, nextSibling) {
-    if(!this[0]) return;
+    if(!this[0] || !element) return;
 
-    if(typeUtils.type(element) === "string") {
-        var html = element.trim();
-        if(html[0] === "<" && html[html.length - 1] === ">") {
-            element = renderer(element);
-        } else {
-            element = renderer("<div>").html(element).contents();
-        }
-    } else {
-        element = renderer(element);
+    if(typeof element === "string") {
+        element = htmlParser.parseHTML(element);
+    } else if(element.nodeType) {
+        element = [element];
     }
 
     for(var i = 0; i < element.length; i++) {
