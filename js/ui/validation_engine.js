@@ -28,7 +28,6 @@ var BaseRuleValidator = Class.inherit({
             }, this);
         } else {
             result = this._validate(valueArray, rule);
-            return result;
         }
 
         return result;
