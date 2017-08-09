@@ -642,8 +642,8 @@ var Component = Class.inherit({
         };
     })(),
 
-    _getOptionValue: function(option) {
-        var value = this.option(option);
+    _getOptionValue: function(name) {
+        var value = this.option(name);
 
         if(isFunction(value)) {
             return value();

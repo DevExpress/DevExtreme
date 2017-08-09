@@ -521,7 +521,7 @@ QUnit.test("The part of the appointment that ends after midnight should have rig
 
     var $element = this.instance.element(),
         $appointment = $element.find(".dx-scheduler-appointment").eq(1),
-        cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight();
+        cellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
     assert.equal($appointment.outerHeight(), cellHeight, "appt part has right height");
 });
@@ -565,7 +565,7 @@ QUnit.test("The part of recurrence appointment after midnight should have right 
 
     var $element = this.instance.element(),
         $appointment = $element.find(".dx-scheduler-appointment").eq(0),
-        cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight();
+        cellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
     assert.equal($appointment.outerHeight(), cellHeight * 3, "appt part has right height");
 });
@@ -631,7 +631,7 @@ QUnit.test("Appts should be filtered correctly if there is a custom tz and start
 
     var $element = this.instance.element(),
         $appt = $element.find(".dx-scheduler-appointment"),
-        cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight(),
+        cellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight(),
         apptPosition = translator.locate($appt.eq(0)),
         clientTzOffset = new Date("2015-05-27T23:00:00+01:00").getTimezoneOffset() / 60;
 
@@ -736,7 +736,7 @@ QUnit.test("Appointments should have correctly height with a custom timezone(T38
 
         var $element = this.instance.element(),
             $appts = this.instance.element().find(".dx-scheduler-appointment"),
-            cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight();
+            cellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
         assert.roughEqual($appts.eq(0).outerHeight(), cellHeight / 2, 2.001, "Appts top is OK");
         assert.roughEqual($appts.eq(1).outerHeight(), cellHeight * 4, 2.001, "Appts top is OK");
@@ -870,7 +870,7 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
 
     var $commonAppointments = this.instance.element().find(".dx-scheduler-scrollable-appointments .dx-scheduler-appointment"),
         $allDayAppts = this.instance.element().find(".dx-scheduler-all-day-appointment"),
-        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");

@@ -404,7 +404,7 @@ QUnit.test("Ensure cell min height is equal to cell height(T389468)", function(a
 
     try {
         this.instance.option("currentDate", new Date(2010, 10, 10));
-        var height = this.instance.element().find(".dx-scheduler-group-header-content").outerHeight(),
+        var height = this.instance.element().find(".dx-scheduler-group-header-content").eq(0).outerHeight(),
             expectedHeight = this.instance.element().find(".dx-scheduler-date-table-cell").first().outerHeight() - 1;
 
         assert.roughEqual(height, expectedHeight, 2.001, "Group cell height is OK");

@@ -164,6 +164,10 @@ initRender.prototype.toggleClass = function(className, value) {
     var isInner = methodName.indexOf("inner") === 0;
 
     initRender.prototype[methodName] = function(value) {
+        if(this.length > 1) {
+            return repeatMethod.call(this, methodName, arguments);
+        }
+
         var element = this[0];
 
         if(!element) {
@@ -200,14 +204,12 @@ initRender.prototype.toggleClass = function(className, value) {
             return this;
         }
 
-        for(var i = 0; i < this.length; i++) {
-            if(typeUtils.isNumeric(value) && isOuter) {
-                value -= sizeUtils.getBorderAdjustment(this[i], propName);
-            }
-            value += typeUtils.isNumeric(value) ? "px" : "";
-
-            rendererStrategy.setStyle(this[i], propName, value);
+        if(typeUtils.isNumeric(value) && isOuter) {
+            value -= sizeUtils.getBorderAdjustment(element, propName);
         }
+        value += typeUtils.isNumeric(value) ? "px" : "";
+
+        rendererStrategy.setStyle(element, propName, value);
 
         return this;
     };
