@@ -157,12 +157,13 @@ initRender.prototype.toggleClass = function(className, value) {
     return this;
 };
 
-["width", "height", "outerWidth", "outerHeight", "innerWidth", "innerHeight"].forEach(function(funcName) {
-    var name = funcName.toLowerCase().indexOf("width") >= 0 ? "Width" : "Height";
-    var isOuter = funcName.indexOf("outer") === 0;
-    var isInner = funcName.indexOf("inner") === 0;
+["width", "height", "outerWidth", "outerHeight", "innerWidth", "innerHeight"].forEach(function(methodName) {
+    var partialName = methodName.toLowerCase().indexOf("width") >= 0 ? "Width" : "Height";
+    var propName = partialName.toLowerCase();
+    var isOuter = methodName.indexOf("outer") === 0;
+    var isInner = methodName.indexOf("inner") === 0;
 
-    initRender.prototype[funcName] = function(value) {
+    initRender.prototype[methodName] = function(value) {
         var element = this[0];
 
         if(!element) {
@@ -170,18 +171,18 @@ initRender.prototype.toggleClass = function(className, value) {
         }
 
         if(typeUtils.isWindow(element)) {
-            return isOuter ? element["inner" + name] : element.document.documentElement["client" + name];
+            return isOuter ? element["inner" + partialName] : element.document.documentElement["client" + partialName];
         }
 
         if(element.nodeType === Node.DOCUMENT_NODE) {
             var documentElement = element.documentElement;
 
             return Math.max(
-                element.body["scroll" + name],
-                element.body["offset" + name],
-                documentElement["scroll" + name],
-                documentElement["offset" + name],
-                documentElement["client" + name]
+                element.body["scroll" + partialName],
+                element.body["offset" + partialName],
+                documentElement["scroll" + partialName],
+                documentElement["offset" + partialName],
+                documentElement["client" + partialName]
             );
         }
 
@@ -192,7 +193,7 @@ initRender.prototype.toggleClass = function(className, value) {
                 margins: value
             };
 
-            return sizeUtils.getSize(element, name.toLowerCase(), include);
+            return sizeUtils.getSize(element, propName, include);
         }
 
         if(value === undefined || value === null) {
@@ -203,11 +204,11 @@ initRender.prototype.toggleClass = function(className, value) {
 
         for(var i = 0; i < this.length; i++) {
             if(typeUtils.isNumeric(resultValue) && isOuter) {
-                resultValue -= sizeUtils.getBorderAdjustment(this[i], name.toLowerCase());
+                resultValue -= sizeUtils.getBorderAdjustment(this[i], propName);
             }
             resultValue += typeUtils.isNumeric(resultValue) ? "px" : "";
 
-            rendererStrategy.setStyle(this[i], name.toLowerCase(), resultValue);
+            rendererStrategy.setStyle(this[i], propName, resultValue);
         }
 
         return this;
