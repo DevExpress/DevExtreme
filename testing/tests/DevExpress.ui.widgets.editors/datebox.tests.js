@@ -810,7 +810,7 @@ QUnit.test("mergeDates must merge seconds when type is 'time'", function(assert)
         displayFormat: "longTime"
     });
 
-    this.$input()
+    $(this.$input())
         .val("1:1:16")
         .trigger("change");
 
@@ -826,7 +826,7 @@ QUnit.test("mergeDates must merge milliseconds when type is 'time'", function(as
         displayFormat: "millisecond"
     });
 
-    this.$input()
+    $(this.$input())
         .val("16")
         .trigger("change");
 
