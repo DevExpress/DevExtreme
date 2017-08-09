@@ -9,7 +9,9 @@ var $ = require("../../core/renderer"),
     tableCreator = require("./ui.scheduler.table_creator");
 
 var TIMELINE_CLASS = "dx-scheduler-timeline",
-    GROUP_TABLE_CLASS = "dx-scheduler-group-table";
+    GROUP_TABLE_CLASS = "dx-scheduler-group-table",
+
+    TIMELINE_GROUPED_ATTR = "dx-group-column-count";
 
 var HORIZONTAL = "horizontal",
     DATE_TABLE_CELL_HEIGHT = 75,
@@ -231,8 +233,12 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return (dateTable.outerHeight() / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
     },
 
+    _detachGroupCountAttr: function() {
+        this.element().removeAttr(TIMELINE_GROUPED_ATTR);
+    },
+
     _attachGroupCountAttr: function() {
-        this.element().attr("dx-group-column-count", this.option("groups").length);
+        this.element().attr(TIMELINE_GROUPED_ATTR, this.option("groups").length);
     },
 
     _getCellCoordinatesByIndex: function(index) {

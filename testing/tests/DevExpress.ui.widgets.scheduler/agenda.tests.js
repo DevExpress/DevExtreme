@@ -418,6 +418,10 @@ QUnit.test("Agenda should have the right 'dx-group-column-count' attr depend on 
 
     assert.equal($element.attr("dx-group-column-count"), "2", "Attr is OK");
     assert.notOk($element.attr("dx-group-row-count"), "row-count attr is not applied");
+
+    this.instance.option("groups", []);
+
+    assert.notOk($element.attr("dx-group-column-count"), "column-count attr is not applied");
 });
 
 QUnit.test("Agenda should not create scrollable elements, if crossSCrollingEnabled=true ", function(assert) {
