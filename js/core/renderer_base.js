@@ -9,8 +9,7 @@ var matches = require("./polyfills/matches");
 
 var methods = [
     "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
-    "css",
-    "slideUp", "slideDown", "slideToggle"];
+    "css"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
