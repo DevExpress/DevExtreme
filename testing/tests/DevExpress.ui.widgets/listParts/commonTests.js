@@ -603,7 +603,7 @@ QUnit.test("scrollView should be updated after group collapsed", function(assert
 
         instance.collapseGroup(0);
 
-        this.clock.tick(50);
+        this.clock.tick();
 
         var $groups = $element.find("." + LIST_GROUP_CLASS);
         assert.equal($groups.length, 2, "second group was loaded");
