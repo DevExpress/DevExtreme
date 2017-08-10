@@ -88,9 +88,10 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     },
 
     _customizeAppointmentGeometry: function(coordinates) {
+        var appointmentCountPerCell = this.instance._currentView.appointmentCountPerCell || 2;
         var maxHeight = this._defaultHeight || this.getAppointmentMinSize(),
             index = coordinates.index,
-            height = MONTH_APPOINTMENT_HEIGHT_RATIO * maxHeight / 2,
+            height = MONTH_APPOINTMENT_HEIGHT_RATIO * maxHeight / appointmentCountPerCell,
             top = (1 - MONTH_APPOINTMENT_HEIGHT_RATIO) * maxHeight + coordinates.top + (index * height),
             width = coordinates.width,
             left = coordinates.left,
@@ -101,7 +102,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
             compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
             top = coordinates.top + compactAppointmentDefaultOffset;
-            left = coordinates.left + (index - 2) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
+            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
             height = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
 

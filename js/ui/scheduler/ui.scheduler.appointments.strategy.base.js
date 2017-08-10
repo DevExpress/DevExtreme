@@ -394,9 +394,10 @@ var BaseRenderingStrategy = Class.inherit({
     _checkLongCompactAppointment: noop,
 
     _splitLongCompactAppointment: function(item, result) {
-        var compactCount = 0;
+        var compactCount = 0,
+            appointmentCountPerCell = this.instance._currentView.appointmentCountPerCell - 1 || 1;
 
-        if(item.index > 1) {
+        if(item.index > appointmentCountPerCell) {
             item.isCompact = true;
             compactCount = this._getCompactAppointmentParts(item.width);
             for(var k = 1; k < compactCount; k++) {
