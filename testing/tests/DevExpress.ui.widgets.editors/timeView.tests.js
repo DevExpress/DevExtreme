@@ -17,6 +17,9 @@ var TIMEVIEW_CLASS = "dx-timeview",
     TIMEVIEW_HOURARROW_CLASS = "dx-timeview-hourarrow",
     TIMEVIEW_MINUTEARROW_CLASS = "dx-timeview-minutearrow",
     TIMEVIEW_TIME_SEPARATOR_CLASS = "dx-timeview-time-separator",
+    TIMEVIEW_FORMAT12_CLASS = "dx-timeview-format12",
+    TIMEVIEW_FORMAT12_AM = -1,
+    TIMEVIEW_FORMAT12_PM = 1,
 
     BOX_CLASS = "dx-box",
     NUMBERBOX_CLASS = "dx-numberbox";
@@ -323,6 +326,98 @@ QUnit.test("disabled state should be passed to numberboxes", function(assert) {
     instance.option("disabled", false);
     assert.equal(hourNumberBox.option("disabled"), false, "hour numberbox disabled");
     assert.equal(minuteNumberBox.option("disabled"), false, "minute numberbox disabled");
+});
+
+QUnit.module("12 hours format");
+
+QUnit.test("format field should be rendered when use24HourFormat option is enabled", function(assert) {
+    var $element = $("#timeView").dxTimeView({
+            use24HourFormat: false
+        }),
+        instance = $element.dxTimeView("instance");
+
+    assert.equal($element.find("." + TIMEVIEW_FORMAT12_CLASS).length, 1, "input was rendered");
+
+    instance.option("use24HourFormat", true);
+    assert.equal($element.find("." + TIMEVIEW_FORMAT12_CLASS).length, 0, "input was removed");
+});
+
+QUnit.test("day time should be changed after setting a new value", function(assert) {
+    var $element = $("#timeView").dxTimeView({
+            use24HourFormat: false,
+            value: new Date(2011, 0, 1, 10, 0, 0, 0)
+        }),
+        formatField = $element.find("." + TIMEVIEW_FORMAT12_CLASS).dxSelectBox("instance"),
+        instance = $element.dxTimeView("instance");
+
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_AM, "am is selected");
+
+    instance.option("value", new Date(2011, 0, 1, 12, 1, 0, 0));
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_PM, "pm is selected");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 1, 0, 0), "hours is correct");
+});
+
+QUnit.test("hours view should be changed after format changing", function(assert) {
+    var $element = $("#timeView").dxTimeView({
+            use24HourFormat: false,
+            value: new Date(2011, 0, 1, 15, 0, 0, 0)
+        }),
+        formatField = $element.find("." + TIMEVIEW_FORMAT12_CLASS).dxSelectBox("instance"),
+        instance = $element.dxTimeView("instance");
+
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_PM, "pm is selected");
+
+    formatField.option("value", TIMEVIEW_FORMAT12_AM);
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 3, 0, 0, 0), "time has been changed");
+});
+
+QUnit.test("boundary hours should have correct day time value", function(assert) {
+    var $element = $("#timeView").dxTimeView({
+            use24HourFormat: false,
+            value: new Date(2011, 0, 1, 12, 0, 0, 0)
+        }),
+        formatField = $element.find("." + TIMEVIEW_FORMAT12_CLASS).dxSelectBox("instance"),
+        instance = $element.dxTimeView("instance");
+
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_PM, "pm is selected");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 0, 0, 0), "time is correct");
+
+    instance.option("value", new Date(2011, 0, 1, 0, 0, 0, 0));
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_AM, "am is selected");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 0, 0, 0, 0), "time is correct");
+});
+
+QUnit.test("boundary hours should change correctly after day time changing", function(assert) {
+    var $element = $("#timeView").dxTimeView({
+            use24HourFormat: false,
+            value: new Date(2011, 0, 1, 0, 0, 0, 0)
+        }),
+        formatField = $element.find("." + TIMEVIEW_FORMAT12_CLASS).dxSelectBox("instance"),
+        instance = $element.dxTimeView("instance");
+
+    formatField.option("value", TIMEVIEW_FORMAT12_PM);
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 0, 0, 0), "time is correct");
+
+    formatField.option("value", TIMEVIEW_FORMAT12_AM);
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 0, 0, 0, 0), 0, "time is correct");
+});
+
+QUnit.test("day time should be changed when clock moves back through the boundary", function(assert) {
+    var $element = $("#timeView").dxTimeView({
+            use24HourFormat: false,
+            value: new Date(2011, 0, 1, 12, 0, 10, 0)
+        }),
+        formatField = $element.find("." + TIMEVIEW_FORMAT12_CLASS).dxSelectBox("instance"),
+        hourNumberBox = $element.find("." + NUMBERBOX_CLASS).eq(0).dxNumberBox("instance"),
+        instance = $element.dxTimeView("instance");
+
+    hourNumberBox.option("value", 11);
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_AM, "am is selected");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 11, 0, 10, 0), "time is correct");
+
+    hourNumberBox.option("value", 12);
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_PM, "pm is selected");
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 0, 10, 0), "time is correct");
 });
 
 
