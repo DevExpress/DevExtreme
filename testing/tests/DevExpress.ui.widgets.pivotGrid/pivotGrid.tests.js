@@ -2943,7 +2943,7 @@ QUnit.test('No size reservation for scrolling when changed size to no scroll', f
         return pivotGridOptions;
     };
 
-    var pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1005, height: 250 }), assert);
+    var pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1050, height: 250 }), assert);
 
     this.clock.tick();
 
@@ -2964,7 +2964,7 @@ QUnit.test('No size reservation for scrolling when changed size to no scroll', f
 
     var table = pivotGrid.element().find("table").first();
 
-    assert.strictEqual(table.width(), 1005, "table width");
+    assert.strictEqual(table.width(), 1050, "table width");
 });
 
 QUnit.test('B253995 - dxPivotGrid height is wrong when rows area has text wrapped to another line', function(assert) {

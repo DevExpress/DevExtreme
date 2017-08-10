@@ -3,6 +3,7 @@
 /* global currentTest */
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     version = require("core/version"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
     registerComponent = require("core/component_registrator"),
@@ -598,8 +599,8 @@ QUnit.test('no options', function(assert) {
 
 QUnit.test('no options and container has no sizes', function(assert) {
     try {
-        sinon.stub($.fn, 'width').returns(0);
-        sinon.stub($.fn, 'height').returns(0);
+        sinon.stub(renderer.fn, 'width').returns(0);
+        sinon.stub(renderer.fn, 'height').returns(0);
         this.onGetDefaultSize = function() {
             return { width: 400, height: 300, left: 10, top: 20, right: 30, bottom: 40 };
         };
@@ -610,8 +611,8 @@ QUnit.test('no options and container has no sizes', function(assert) {
             left: 10, top: 20, right: 30, bottom: 40
         }, 'canvas');
     } finally {
-        $.fn.width.restore();
-        $.fn.height.restore();
+        renderer.fn.width.restore();
+        renderer.fn.height.restore();
     }
 });
 
