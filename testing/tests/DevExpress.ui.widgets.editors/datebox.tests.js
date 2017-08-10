@@ -1530,23 +1530,6 @@ QUnit.test("changing 'displayFormat' should update input value", function(assert
     assert.equal($dateBox.find("." + TEXTEDITOR_INPUT_CLASS).val(), "3/10/2015, 12:00 AM", "input value is updated");
 });
 
-QUnit.test("displayFormat should affect on timeView", function(assert) {
-    var $dateBox = $("#dateBox").dxDateBox({
-            value: new Date('03/10/2015'),
-            displayFormat: 'shortdateshorttime',
-            opened: true,
-            type: 'datetime'
-        }),
-        dateBox = $dateBox.dxDateBox("instance"),
-        $content = $(dateBox._popup.content()),
-        timeView = $content.find("." + TIMEVIEW_CLASS).dxTimeView("instance");
-
-    assert.notOk(timeView.option("use24HourFormat"), "using 12 hour format");
-
-    dateBox.option("displayFormat", "hour");
-    assert.ok(timeView.option("use24HourFormat"), "using 24 hour format");
-});
-
 QUnit.test("disabledDates correctly displays", function(assert) {
 
     var instance = $("#dateBox").dxDateBox({

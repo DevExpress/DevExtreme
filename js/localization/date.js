@@ -613,19 +613,6 @@ var dateLocalization = dependencyInjector({
         return ":";
     },
 
-    is24HourFormat: function(format) {
-        var amTime = new Date(2017, 0, 20, 11, 0, 0, 0),
-            pmTime = new Date(2017, 0, 20, 23, 0, 0, 0),
-            amTimeFormatted = this.format(amTime, format),
-            pmTimeFormatted = this.format(pmTime, format);
-
-        for(var i = 0; i < amTimeFormatted.length; i++) {
-            if(amTimeFormatted[i] !== pmTimeFormatted[i]) {
-                return !isNaN(parseInt(amTimeFormatted[i]));
-            }
-        }
-    },
-
     format: function(date, format) {
         if(!date) {
             return;
