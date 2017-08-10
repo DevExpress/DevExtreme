@@ -466,7 +466,7 @@ var Slider = TrackBar.inherit({
         this.callBase();
         if(this._$bar) {
             var barMarginWidth = this._$bar.outerWidth(true) - this._$bar.outerWidth();
-            this._$bar.width(this.option("width") - barMarginWidth);
+            this._$bar.width(this._getOptionValue("width") - barMarginWidth);
         }
     },
 

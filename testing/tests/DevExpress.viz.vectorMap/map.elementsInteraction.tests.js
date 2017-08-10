@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     commons = require("./vectorMapParts/commons.js"),
     mapLayerModule = require("viz/vector_map/map_layer"),
     projectionModule = require("viz/vector_map/projection.main"),
@@ -147,8 +148,8 @@ var environmentForSize = $.extend({}, commons.environment, {
     },
 
     setContainerSize: function(width, height) {
-        $.fn.width = commons.returnValue(width);
-        $.fn.height = commons.returnValue(height);
+        renderer.fn.width = commons.returnValue(width);
+        renderer.fn.height = commons.returnValue(height);
     },
 
     checkSizes: function(assert, expected) {

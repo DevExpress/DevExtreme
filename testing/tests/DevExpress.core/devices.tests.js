@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     devices = require("core/devices"),
     fromUA = $.proxy(devices._fromUA, devices),
     viewPort = require("core/utils/view_port"),
@@ -514,20 +515,20 @@ QUnit.module("orientation", {
 
         that.currentWidth = 100;
         that.currentHeight = 200;
-        that.originalWidth = $.fn.width;
-        that.originalHeight = $.fn.height;
+        that.originalWidth = renderer.fn.width;
+        that.originalHeight = renderer.fn.height;
 
-        // NOTE: using $.height() and $.width() for correct window size detecting on WP8
-        $.fn.width = function() {
+        // NOTE: using renderer.height() and renderer.width() for correct window size detecting on WP8
+        renderer.fn.width = function() {
             return that.currentWidth;
         };
-        $.fn.height = function() {
+        renderer.fn.height = function() {
             return that.currentHeight;
         };
     },
     afterEach: function() {
-        $.fn.width = this.originalWidth;
-        $.fn.height = this.originalHeight;
+        renderer.fn.width = this.originalWidth;
+        renderer.fn.height = this.originalHeight;
     }
 });
 

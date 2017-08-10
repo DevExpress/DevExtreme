@@ -1236,8 +1236,8 @@ var Overlay = Widget.inherit({
         });
 
         this._$content
-            .outerWidth(this.option("width"))
-            .outerHeight(this.option("height"));
+            .outerWidth(this._getOptionValue("width"))
+            .outerHeight(this._getOptionValue("height"));
     },
 
     _renderPosition: function() {

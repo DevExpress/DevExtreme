@@ -4,11 +4,11 @@ var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
+var sizeUtils = require("./utils/size");
 var htmlParser = require("./utils/html_parser");
 var matches = require("./polyfills/matches");
 
 var methods = [
-    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
     "css",
     "slideUp", "slideDown", "slideToggle"];
 
@@ -156,6 +156,64 @@ initRender.prototype.toggleClass = function(className, value) {
     }
     return this;
 };
+
+["width", "height", "outerWidth", "outerHeight", "innerWidth", "innerHeight"].forEach(function(methodName) {
+    var partialName = methodName.toLowerCase().indexOf("width") >= 0 ? "Width" : "Height";
+    var propName = partialName.toLowerCase();
+    var isOuter = methodName.indexOf("outer") === 0;
+    var isInner = methodName.indexOf("inner") === 0;
+
+    initRender.prototype[methodName] = function(value) {
+        if(this.length > 1) {
+            return repeatMethod.call(this, methodName, arguments);
+        }
+
+        var element = this[0];
+
+        if(!element) {
+            return;
+        }
+
+        if(typeUtils.isWindow(element)) {
+            return isOuter ? element["inner" + partialName] : element.document.documentElement["client" + partialName];
+        }
+
+        if(element.nodeType === Node.DOCUMENT_NODE) {
+            var documentElement = element.documentElement;
+
+            return Math.max(
+                element.body["scroll" + partialName],
+                element.body["offset" + partialName],
+                documentElement["scroll" + partialName],
+                documentElement["offset" + partialName],
+                documentElement["client" + partialName]
+            );
+        }
+
+        if(arguments.length === 0 || typeof value === "boolean") {
+            var include = {
+                paddings: isInner || isOuter,
+                borders: isOuter,
+                margins: value
+            };
+
+            return sizeUtils.getSize(element, propName, include);
+        }
+
+        if(value === undefined || value === null) {
+            return this;
+        }
+
+        if(typeUtils.isNumeric(value) && isOuter) {
+            value -= sizeUtils.getBorderAdjustment(element, propName);
+        }
+        value += typeUtils.isNumeric(value) ? "px" : "";
+
+        rendererStrategy.setStyle(element, propName, value);
+
+        return this;
+    };
+});
 
 initRender.prototype.html = function(value) {
     if(!arguments.length) {
