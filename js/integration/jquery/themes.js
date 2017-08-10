@@ -4,17 +4,9 @@ var jQuery = require("jquery"),
     holdReady = jQuery.holdReady || jQuery.fn.holdReady,
     callback = require("../../ui/themes_callback");
 
-holdReady(true);
-
-if(callback.fired()) {
-    holdReady(false);
-} else {
+if(!callback.fired()) {
+    holdReady(true);
     callback.add(function() {
         holdReady(false);
     });
 }
-
-
-
-
-
