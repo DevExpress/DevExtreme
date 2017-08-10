@@ -11,6 +11,7 @@ if(jQuery) {
     }
 
     require("./jquery/renderer");
+    require("./jquery/themes");
     require("./jquery/events");
     require("./jquery/easing");
     require("./jquery/element_data");

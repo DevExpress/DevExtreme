@@ -6,9 +6,9 @@ var $ = require("../core/renderer"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
+    themeReadyCallback = require("./themes_callback"),
     viewPort = viewPortUtils.value,
-    viewPortChanged = viewPortUtils.changeCallback,
-    holdReady = $.holdReady || $.fn.holdReady;
+    viewPortChanged = viewPortUtils.changeCallback;
 
 var DX_LINK_SELECTOR = "link[rel=dx-theme]",
     THEME_ATTR = "data-theme",
@@ -289,11 +289,10 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
-holdReady(true);
 init({
     _autoInit: true,
     loadCallback: function() {
-        holdReady(false);
+        themeReadyCallback.fire();
     }
 });
 
