@@ -420,6 +420,20 @@ QUnit.test("day time should be changed when clock moves back through the boundar
     assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 0, 10, 0), "time is correct");
 });
 
+QUnit.test("timeView should parse new date on optionChanged correctly when 12 hour format is used", function(assert) {
+    var $element = $("#timeView").dxTimeView({
+            use24HourFormat: false,
+            value: null
+        }),
+        formatField = $element.find("." + TIMEVIEW_FORMAT12_CLASS).dxSelectBox("instance"),
+        instance = $element.dxTimeView("instance");
+
+    instance.option("value", new Date(2015, 3, 21, 15, 15, 34));
+
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_PM, "pm is selected");
+    assert.equal(instance.option("value").toString(), new Date(2015, 3, 21, 15, 15, 34), "time is correct");
+});
+
 
 QUnit.module("format rendering");
 

@@ -2446,7 +2446,7 @@ QUnit.test("time value should be updated after select date", function(assert) {
 
     $(".dx-popup-done.dx-button").eq(0).trigger("dxclick");
 
-    assert.equal(dateBox.option("value").toString(), (new Date(2014, 2, 1, 0, 16)).toString(), "dateBox value is set");
+    assert.equal(dateBox.option("value").toString(), (new Date(2014, 2, 1, 12, 16)).toString(), "dateBox value is set");
 });
 
 QUnit.test("buttons are rendered after 'type' option was changed", function(assert) {
