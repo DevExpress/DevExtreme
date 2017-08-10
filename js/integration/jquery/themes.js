@@ -6,8 +6,15 @@ var jQuery = require("jquery"),
 
 holdReady(true);
 
-callback.add(function() {
+if(callback.fired()) {
     holdReady(false);
-});
+} else {
+    callback.add(function() {
+        holdReady(false);
+    });
+}
+
+
+
 
 

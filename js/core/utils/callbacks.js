@@ -8,6 +8,7 @@ var Callback = function(options) {
     this._list = [];
     this._queue = [];
     this._firing = false;
+    this._fired = false;
     this._firingIndexes = [];
 };
 
@@ -93,12 +94,17 @@ Callback.prototype.fireWith = function(context, args) {
     }
 
     this._firing = false;
+    this._fired = true;
 
     return this;
 };
 
 Callback.prototype.fire = function() {
     this.fireWith(this, arguments);
+};
+
+Callback.prototype.fired = function() {
+    return this._fired;
 };
 
 var Callbacks = function(options) {
