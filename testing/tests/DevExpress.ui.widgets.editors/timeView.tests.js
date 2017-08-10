@@ -420,6 +420,20 @@ QUnit.test("day time should be changed when clock moves back through the boundar
     assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 12, 0, 10, 0), "time is correct");
 });
 
+QUnit.test("timeView should not change value specified via api", function(assert) {
+    var $element = $("#timeView").dxTimeView({
+            use24HourFormat: false,
+            value: null
+        }),
+        formatField = $element.find("." + TIMEVIEW_FORMAT12_CLASS).dxSelectBox("instance"),
+        instance = $element.dxTimeView("instance");
+
+    instance.option("value", new Date(2011, 0, 1, 10, 5, 0, 0));
+
+    assert.equal(instance.option("value").toString(), new Date(2011, 0, 1, 10, 5, 0, 0), "value has not been changed");
+    assert.equal(formatField.option("value"), TIMEVIEW_FORMAT12_AM, "am is selected");
+});
+
 
 QUnit.module("format rendering");
 

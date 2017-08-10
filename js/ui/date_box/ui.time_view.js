@@ -268,8 +268,18 @@ var TimeView = Editor.inherit({
     },
 
     _updateField: function() {
-        this._hourBox && this._hourBox.option("value", this._normalizeHours(this._getValue().getHours()));
-        this._minuteBox && this._minuteBox.option("value", this._getValue().getMinutes());
+        if(this._hourBox) {
+            this._hourBox._valueChangeActionSuppressed = true;
+            this._hourBox.option("value", this._normalizeHours(this._getValue().getHours()));
+            this._hourBox._valueChangeActionSuppressed = false;
+        }
+
+        if(this._minuteBox) {
+            this._minuteBox._valueChangeActionSuppressed = true;
+            this._minuteBox.option("value", this._getValue().getMinutes());
+            this._minuteBox._valueChangeActionSuppressed = false;
+        }
+
         this._refreshFormat12();
     },
 
