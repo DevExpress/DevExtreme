@@ -3,7 +3,6 @@
 var $ = require("../../core/renderer"),
     CalendarStrategy = require("./ui.date_box.strategy.calendar"),
     TimeView = require("./ui.time_view"),
-    dateLocalization = require("../../localization/date"),
     extend = require("../../core/utils/extend").extend,
     Box = require("../box");
 
@@ -26,17 +25,12 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
         return displayFormat || "shortdateshorttime";
     },
 
-    _is24HourFormat: function() {
-        return dateLocalization.is24HourFormat(this.getDisplayFormat(this.dateBox.option("displayFormat")));
-    },
-
     _renderWidget: function() {
         this.callBase();
 
         this._timeView = this.dateBox._createComponent($("<div>"), TimeView, {
             value: this.dateBoxValue(),
             _showClock: !this._isShrinkView(),
-            use24HourFormat: this._is24HourFormat(),
             onValueChanged: this._valueChangedHandler.bind(this)
         });
     },
@@ -76,9 +70,8 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
         this.callBase();
 
-        if(this._timeView) {
-            date && this._timeView.option("value", date);
-            this._timeView.option("use24HourFormat", this._is24HourFormat());
+        if(this._timeView && date) {
+            this._timeView.option("value", date);
         }
     },
 
