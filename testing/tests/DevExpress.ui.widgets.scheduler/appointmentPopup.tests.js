@@ -586,6 +586,20 @@ QUnit.test("Validate works always before done click", function(assert) {
     assert.ok(validation.calledOnce);
 });
 
+QUnit.test("Done button shouldn't be disabled at second appointment form opening", function(assert) {
+    var task = { startDate: new Date(2017, 1, 1), endDate: new Date(2017, 1, 1, 0, 10), text: "caption" };
+    this.instance.option({
+        dataSource: [task]
+    });
+
+    this.instance.showAppointmentPopup(task);
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+    this.instance.showAppointmentPopup(task);
+    var doneButton = $(".dx-scheduler-appointment-popup .dx-popup-done.dx-button").dxButton("instance");
+
+    assert.equal(doneButton.option("disabled"), false, "done button is not disabled");
+});
+
 QUnit.test("startDateBox & endDateBox should have required validation rules", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption" });
 

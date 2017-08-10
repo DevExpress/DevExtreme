@@ -4458,3 +4458,30 @@ QUnit.test("Exception should not be thrown on second details view opening if for
         assert.ok(false, "Exception: " + e);
     }
 });
+
+QUnit.test("Scheduler should add only one appointment at multiple 'done' button clicks on appointment form", function(assert) {
+    var a = { text: "a", startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 15) };
+    this.createInstance({
+        dataSource: [],
+        currentDate: new Date(2017, 7, 9),
+        currentView: "week",
+        views: ["week"],
+        onAppointmentAdding: function(e) {
+            var d = $.Deferred();
+
+            window.setTimeout(function() {
+                d.resolve();
+            }, 300);
+
+            e.cancel = d.promise();
+        }
+    });
+
+    this.instance.showAppointmentPopup(a, true);
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick").trigger("dxclick");
+    this.clock.tick(300);
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 1, "right appointment quantity");
+});
