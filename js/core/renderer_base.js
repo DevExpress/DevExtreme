@@ -814,6 +814,7 @@ renderer.templates = function() {
 };
 renderer.when = $.when;
 renderer.Deferred = $.Deferred;
+renderer.holdReady = $.holdReady || $.fn.holdReady;
 
 module.exports = {
     set: function(strategy) {
