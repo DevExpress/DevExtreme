@@ -1962,6 +1962,10 @@ var Scheduler = Widget.inherit({
     _doneButtonClickHandler: function(args) {
         args.cancel = true;
 
+        var toolbarItems = args.component.option("toolbarItems");
+        toolbarItems[0].options = { disabled: true };
+        args.component.option("toolbarItems", toolbarItems);
+
         this._saveChanges();
         var startDate = this.fire("getField", "startDate", this._appointmentForm.option("formData"));
         this._workSpace.updateScrollPosition(startDate);
@@ -2337,17 +2341,18 @@ var Scheduler = Widget.inherit({
     _showAppointmentPopup: function(appointmentData, showButtons, processTimeZone) {
         if(!this._popup) {
             this._createPopup(appointmentData, processTimeZone);
-            var toolbarItems = [],
-                showCloseButton = true;
-            if(!commonUtils.isDefined(showButtons) || showButtons) {
-                toolbarItems = this._getPopupToolbarItems();
-                showCloseButton = this._popup.initialOption("showCloseButton");
-            }
-            this._popup.option({
-                toolbarItems: toolbarItems,
-                showCloseButton: showCloseButton
-            });
         }
+
+        var toolbarItems = [],
+            showCloseButton = true;
+        if(!commonUtils.isDefined(showButtons) || showButtons) {
+            toolbarItems = this._getPopupToolbarItems();
+            showCloseButton = this._popup.initialOption("showCloseButton");
+        }
+        this._popup.option({
+            toolbarItems: toolbarItems,
+            showCloseButton: showCloseButton
+        });
 
         this._initDynamicPopupTemplate(appointmentData, processTimeZone);
         this._popup.option(this._popupConfig(appointmentData));
