@@ -806,12 +806,6 @@ initRender.prototype.removeData = function(key) {
     return this;
 };
 
-renderer.tmpl = function() {
-    return $.tmpl.apply(this, arguments);
-};
-renderer.templates = function() {
-    return $.templates.apply(this, arguments);
-};
 renderer.when = $.when;
 renderer.Deferred = $.Deferred;
 renderer.holdReady = $.holdReady || $.fn.holdReady;
