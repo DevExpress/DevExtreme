@@ -583,85 +583,95 @@ QUnit.test("group should be expanded by the expandGroup method", function(assert
 });
 
 QUnit.test("scrollView should be updated after group collapsed", function(assert) {
-    List.mockScrollView(this.originalScrollView);
+    try {
+        List.mockScrollView(this.originalScrollView);
+        fx.off = true;
 
-    var $element = this.element.dxList({
-            autoPagingEnabled: true,
-            dataSource: {
-                store: [{ key: "a", items: ["0", "1", "2", "3", "4"] }, { key: "b", items: ["0", "1", "2", "3", "4"] }],
-                pageSize: 1
-            },
-            height: 60,
-            grouped: true,
-            collapsibleGroups: true,
-            disabled: true,
-            pageLoadMode: "scrollBottom"
-        }),
-        instance = $element.dxList("instance");
+        var $element = this.element.dxList({
+                autoPagingEnabled: true,
+                dataSource: {
+                    store: [{ key: "a", items: ["0", "1", "2", "3", "4"] }, { key: "b", items: ["0", "1", "2", "3", "4"] }],
+                    pageSize: 1
+                },
+                height: 60,
+                grouped: true,
+                collapsibleGroups: true,
+                disabled: true,
+                pageLoadMode: "scrollBottom"
+            }),
+            instance = $element.dxList("instance");
 
-    instance.collapseGroup(0);
+        instance.collapseGroup(0);
 
-    this.clock.tick(1000);
+        this.clock.tick(50);
 
-    var $groups = $element.find("." + LIST_GROUP_CLASS);
-    assert.equal($groups.length, 2, "second group was loaded");
+        var $groups = $element.find("." + LIST_GROUP_CLASS);
+        assert.equal($groups.length, 2, "second group was loaded");
+    } finally {
+        fx.off = false;
+    }
 });
 
 QUnit.test("scrollView should update its position after a group has been collapsed", function(assert) {
-    List.mockScrollView(this.originalScrollView);
+    try {
+        List.mockScrollView(this.originalScrollView);
+        fx.off = true;
 
-    var $element = this.element.dxList({
-            pageLoadMode: "scrollBottom",
-            height: 130,
-            scrollingEnabled: true,
-            useNativeScrolling: false,
-            dataSource: {
-                load: function(options) {
-                    var d = $.Deferred(),
-                        items = [{
-                            key: 'first',
-                            items: [{ a: 0 }, { a: 1 }, { a: 2 }]
-                        },
-                        {
-                            key: 'second',
-                            items: [{ a: 3 }, { a: 4 }, { a: 5 }]
-                        },
-                        {
-                            key: 'third',
-                            items: [{ a: 6 }, { a: 7 }, { a: 8 }]
-                        }];
-                    setTimeout(function() {
-                        d.resolve(items.slice(options.skip, options.skip + options.take));
-                    }, 50);
-                    return d.promise();
+        var $element = this.element.dxList({
+                pageLoadMode: "scrollBottom",
+                height: 130,
+                scrollingEnabled: true,
+                useNativeScrolling: false,
+                dataSource: {
+                    load: function(options) {
+                        var d = $.Deferred(),
+                            items = [{
+                                key: 'first',
+                                items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+                            },
+                            {
+                                key: 'second',
+                                items: [{ a: 3 }, { a: 4 }, { a: 5 }]
+                            },
+                            {
+                                key: 'third',
+                                items: [{ a: 6 }, { a: 7 }, { a: 8 }]
+                            }];
+                        setTimeout(function() {
+                            d.resolve(items.slice(options.skip, options.skip + options.take));
+                        }, 50);
+                        return d.promise();
+                    },
+                    group: "key",
+                    pageSize: 1,
                 },
-                group: "key",
-                pageSize: 1,
-            },
-            grouped: true,
-            collapsibleGroups: true,
-            groupTemplate: function(data) {
-                return $("<div>").text(data.key);
-            },
-            itemTemplate: function(data) {
-                return $("<div>").text(data.a);
-            }
-        }),
-        instance = $element.dxList("instance"),
-        releaseSpy = sinon.spy(instance._scrollView, "release");
+                grouped: true,
+                collapsibleGroups: true,
+                groupTemplate: function(data) {
+                    return $("<div>").text(data.key);
+                },
+                itemTemplate: function(data) {
+                    return $("<div>").text(data.a);
+                }
+            }),
+            instance = $element.dxList("instance"),
+            releaseSpy = sinon.spy(instance._scrollView, "release");
 
-    this.clock.tick(50);
+        this.clock.tick(50);
 
-    instance.scrollTo(200);
-    this.clock.tick(50);
+        instance.scrollTo(200);
+        this.clock.tick(50);
 
-    instance.scrollTo(200);
-    this.clock.tick(50);
+        instance.scrollTo(200);
+        this.clock.tick(50);
 
-    instance.collapseGroup(2);
-    this.clock.tick(1000);
+        instance.collapseGroup(2);
+        this.clock.tick(50);
 
-    assert.ok(releaseSpy.lastCall.args[0], "The last call of 'release' hides load indicator");
+        assert.ok(releaseSpy.lastCall.args[0], "The last call of 'release' hides load indicator");
+    } finally {
+        fx.off = false;
+    }
 });
 
 
