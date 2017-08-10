@@ -395,7 +395,7 @@ var BaseRenderingStrategy = Class.inherit({
 
     _splitLongCompactAppointment: function(item, result) {
         var compactCount = 0,
-            appointmentCountPerCell = this.instance._currentView.appointmentCountPerCell - 1 || 1;
+            appointmentCountPerCell = this.instance.getOverlappingMode() - 1 || 1;
 
         if(item.index > appointmentCountPerCell) {
             item.isCompact = true;

@@ -1897,6 +1897,10 @@ var Scheduler = Widget.inherit({
         return this._header;
     },
 
+    getOverlappingMode: function() {
+        return this._currentView.appointmentCountPerCell;
+    },
+
     _createPopup: function(appointmentData, processTimeZone) {
         this._$popup = $("<div>")
                 .addClass(APPOINTMENT_POPUP_CLASS)

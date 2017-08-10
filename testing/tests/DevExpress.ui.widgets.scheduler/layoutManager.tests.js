@@ -1580,3 +1580,34 @@ QUnit.testInActiveWindow("Apps should be focused in back order while press shift
     assert.deepEqual($appointments.get(0), apptInstance.option("focusedElement").get(0), "app 1 in focus");
 });
 
+QUnit.module("Appointment overlapping", moduleOptions);
+
+QUnit.test("Full-size appointment count depends on appointmentCountPerCell option", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "month",
+            views: [{
+                type: "month",
+                appointmentCountPerCell: 3
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment")),
+        tableCellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+    for(var i = 0; i < 2; i++) {
+        var appointmentWidth = $appointment.eq(i).outerWidth();
+
+        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
+    }
+
+    assert.equal($appointment.eq(3).outerWidth(), 15, "last appointment is compact");
+});
