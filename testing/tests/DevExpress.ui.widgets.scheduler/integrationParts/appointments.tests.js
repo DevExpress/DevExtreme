@@ -3608,6 +3608,29 @@ QUnit.test("Recurrence appointment should be rendered correctly when currentDate
     assert.equal($appointment.length, 1, "Appointment is rendered");
 });
 
+QUnit.test("Recurrence long appointment should be rendered correctly when currentDate was changed: month view", function(assert) {
+    var appointment = {
+        text: "Website Re-Design Plan",
+        priorityId: 2,
+        startDate: new Date(2015, 4, 25, 9, 0),
+        endDate: new Date(2015, 4, 26, 11, 30),
+        recurrenceRule: "FREQ=DAILY;INTERVAL=5"
+    };
+
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        dataSource: [appointment],
+        views: ["month"],
+        currentView: "month"
+    });
+
+    this.instance.option("currentDate", new Date(2015, 5, 25));
+
+    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointment.length, 10, "Appointments were rendered");
+});
+
 QUnit.test("Recurrence appointment should be rendered correctly when currentDate was changed: all-day", function(assert) {
     var appointment = {
         startDate: new Date(2015, 1, 4, 0),
