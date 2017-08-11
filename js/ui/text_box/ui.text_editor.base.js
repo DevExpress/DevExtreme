@@ -302,7 +302,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _buttonsContainer: function() {
-        return this._inputWrapper().find("." + TEXTEDITOR_BUTTONS_CONTAINER_CLASS).eq(0);
+        return this._$buttonContainer;
     },
 
     _isControlKey: function(key) {
@@ -326,9 +326,11 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderInput: function() {
+        this._$buttonContainer = $("<div>").addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
+
         $("<div>").addClass(TEXTEDITOR_CONTAINER_CLASS)
             .append(this._createInput())
-            .append($("<div>").addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS))
+            .append(this._$buttonContainer)
             .appendTo(this.element());
     },
 
@@ -633,6 +635,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _dispose: function() {
+        this._$buttonContainer = null;
         this._enterKeyAction = undefined;
         this.callBase();
     },
