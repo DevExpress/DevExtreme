@@ -415,7 +415,7 @@ var BaseRenderingStrategy = Class.inherit({
             viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
             text = this.instance.fire("getField", "text", appointment);
 
-        if((startDate && viewStartDate > startDate) || !startDate) {
+        if((startDate && viewStartDate.getTime() > startDate.getTime()) || !startDate) {
             startDate = viewStartDate;
         }
         if(isNaN(startDate.getTime())) {
@@ -435,12 +435,13 @@ var BaseRenderingStrategy = Class.inherit({
             this.instance.fire("setField", "endDate", appointment, endDate);
         }
 
-        if(viewStartDate >= endDate) {
+        if(viewStartDate.getTime() >= endDate.getTime()) {
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
-            endDate = new Date(viewStartDate.getTime() + fullDuration);
 
-            if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate < viewStartDate) {
+            endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()) + fullDuration);
+
+            if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate.getTime() < viewStartDate.getTime()) {
                 var headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartStartDate.getTime(),
                     tailDuration = fullDuration - headDuration || fullDuration;
 
