@@ -38,7 +38,7 @@ var getElementEventData = function(element, eventName) {
         elementData[eventName] = [];
     }
 
-    var result = {
+    return {
         addHandler: function(handler, selector, data) {
             var wrappedHandler = function(e) {
                 // TODO: refactor
@@ -117,7 +117,7 @@ var getElementEventData = function(element, eventName) {
                 removeByEventName(eventName);
             } else {
                 for(var name in elementData) {
-                    result.removeHandler(name);
+                    removeByEventName(name);
                 }
             }
         },
@@ -138,8 +138,6 @@ var getElementEventData = function(element, eventName) {
             }
         }
     };
-
-    return result;
 };
 
 var normalizeArguments = function(callback) {
