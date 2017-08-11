@@ -190,7 +190,9 @@ function forEachGroup(data, callback, level) {
 function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
     valuesArray[rowIndex] = valuesArray[rowIndex] || [];
     valuesArray[rowIndex][columnIndex] = valuesArray[rowIndex][columnIndex] || [];
-    valuesArray[rowIndex][columnIndex][dataIndex] = value;
+    if(!isDefined(valuesArray[rowIndex][columnIndex][dataIndex])) {
+        valuesArray[rowIndex][columnIndex][dataIndex] = value;
+    }
 }
 
 function parseResult(data, total, descriptions, result) {
