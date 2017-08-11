@@ -487,12 +487,13 @@ module.exports = {
                     }
                 },
 
-                updateFieldValue: function() {
+                updateFieldValue: function(e) {
                     var that = this;
 
                     that.callBase.apply(that, arguments);
 
-                    if(that.getEditMode() === EDIT_MODE_ROW) {
+                    if(that.getEditMode() === EDIT_MODE_ROW ||
+                        (that.getEditMode() === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
                         var currentValidator = that.getController("validating").getValidator();
                         currentValidator && currentValidator.validate();
                     }
