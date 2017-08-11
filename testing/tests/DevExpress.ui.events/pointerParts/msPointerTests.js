@@ -5,7 +5,6 @@ var $ = require("jquery"),
     registerEvent = require("events/core/event_registrator"),
     support = require("core/utils/support"),
     nativePointerMock = require("../../../helpers/nativePointerMock.js"),
-    $eventSpecial = $.event.special,
     onlyMSPointerSupport = !window.PointerEvent && window.MSPointerEvent,
     POINTER_DOWN_EVENT_NAME = onlyMSPointerSupport ? "MSPointerDown" : "pointerdown",
     POINTER_UP_EVENT_NAME = onlyMSPointerSupport ? "MSPointerUp" : "pointerup",
@@ -15,13 +14,19 @@ var $ = require("jquery"),
     POINTER_ENTER_EVENT_NAME = onlyMSPointerSupport ? "mouseenter" : "pointerenter",
     POINTER_LEAVE_EVENT_NAME = onlyMSPointerSupport ? "mouseleave" : "pointerleave";
 
+var registerEventCallbacks = require("events/core/event_registrator_callbacks");
+var special = {};
+registerEventCallbacks.add(function(name, eventObject) {
+    special[name] = eventObject;
+});
+
 QUnit.module("mspointer events", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         $.each(MsPointerStrategy.map, function(pointerEvent, originalEvents) {
-            if($eventSpecial[pointerEvent]) {
-                $eventSpecial[pointerEvent].dispose();
+            if(special[pointerEvent]) {
+                special[pointerEvent].dispose();
             }
             registerEvent(pointerEvent, new MsPointerStrategy(pointerEvent, originalEvents));
         });

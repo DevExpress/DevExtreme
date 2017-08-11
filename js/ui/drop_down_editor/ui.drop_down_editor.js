@@ -536,12 +536,11 @@ var DropDownEditor = TextBox.inherit({
     _renderPopup: function() {
         this._popup = this._createComponent(this._$popup, Popup, this._popupConfig());
 
-        this._popup.on({
-            "showing": this._popupShowingHandler.bind(this),
-            "shown": this._popupShownHandler.bind(this),
-            "hiding": this._popupHidingHandler.bind(this),
-            "hidden": this._popupHiddenHandler.bind(this)
-        });
+
+        this._popup.on("showing", this._popupShowingHandler.bind(this));
+        this._popup.on("shown", this._popupShownHandler.bind(this));
+        this._popup.on("hiding", this._popupHidingHandler.bind(this));
+        this._popup.on("hidden", this._popupHiddenHandler.bind(this));
 
         this._popup.option("onContentReady", this._contentReadyHandler.bind(this));
         this._contentReadyHandler();

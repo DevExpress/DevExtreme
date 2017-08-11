@@ -6,12 +6,10 @@ var useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 var hooks = require("./hooks");
 var registerEventCallbacks = require("../../events/core/event_registrator_callbacks");
 
-// TODO: Fix condition after nojquery strategy will be implemented
-if(true || useJQueryRenderer) {
-    var registerJQueryEvent = function(name, eventObject) {
+if(useJQueryRenderer) {
+    registerEventCallbacks.add(function(name, eventObject) {
         $.event.special[name] = eventObject;
-    };
-    registerEventCallbacks.add(registerJQueryEvent);
+    });
 
     eventsEngine.set({
         on: function(element) {
@@ -29,6 +27,7 @@ if(true || useJQueryRenderer) {
         triggerHandler: function(element) {
             $(element).triggerHandler.apply($(element), Array.prototype.slice.call(arguments, 1));
         },
-        copy: hooks.copy
+        copy: hooks.copy,
+        Event: $.Event
     });
 }

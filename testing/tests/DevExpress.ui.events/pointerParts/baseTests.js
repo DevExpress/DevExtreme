@@ -1,11 +1,16 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    BaseStrategy = require("events/pointer/base"),
-    registerEvent = require("events/core/event_registrator"),
-    $eventSpecial = $.event.special;
+var $ = require("jquery");
+var noop = require("core/utils/common").noop;
+var BaseStrategy = require("events/pointer/base");
+var registerEvent = require("events/core/event_registrator");
 
+// TODO: Discuss with Ziborov and extract to the helper
+var registerEventCallbacks = require("events/core/event_registrator_callbacks");
+var special = {};
+registerEventCallbacks.add(function(name, eventObject) {
+    special[name] = eventObject;
+});
 
 var TestEventMap = {
     "dxpointerdown": "testdown",
@@ -20,8 +25,8 @@ QUnit.module("base events", {
         this.clock = sinon.useFakeTimers();
 
         $.each(TestEventMap, function(pointerEvent, originalEvents) {
-            if($eventSpecial[pointerEvent]) {
-                $eventSpecial[pointerEvent].dispose();
+            if(special[pointerEvent]) {
+                special[pointerEvent].dispose();
             }
             registerEvent(pointerEvent, new BaseStrategy(pointerEvent, originalEvents));
         });
@@ -121,14 +126,16 @@ QUnit.test("empty original event should not unsubscribe the whole namespace", fu
     var element = document.getElementById("element"),
         $element = $(element);
 
-    $element.on("any.dxPointerEvents", noop);
-    var events = $.extend({}, $._data(element).events);
+    var handlerSpy = sinon.spy();
+    $element.on("any.dxPointerEvents", handlerSpy);
 
     var strategy = new BaseStrategy("other", "");
     strategy.noBubble = true;
     strategy.teardown($element);
 
-    assert.deepEqual($._data(element).events, events, "handlers for '.dxPointerEvents' remain");
+    $element.trigger("any.dxPointerEvents");
+
+    assert.ok(handlerSpy.calledOnce, "handlers for '.dxPointerEvents' remain");
 });
 
 QUnit.test("event is triggered one time after refresh", function(assert) {

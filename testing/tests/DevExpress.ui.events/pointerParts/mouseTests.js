@@ -3,17 +3,21 @@
 var $ = require("jquery"),
     MouseStrategy = require("events/pointer/mouse"),
     registerEvent = require("events/core/event_registrator"),
-    nativePointerMock = require("../../../helpers/nativePointerMock.js"),
-    $eventSpecial = $.event.special;
+    nativePointerMock = require("../../../helpers/nativePointerMock.js");
 
+var registerEventCallbacks = require("events/core/event_registrator_callbacks");
+var special = {};
+registerEventCallbacks.add(function(name, eventObject) {
+    special[name] = eventObject;
+});
 
 QUnit.module("mouse events", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         $.each(MouseStrategy.map, function(pointerEvent, originalEvents) {
-            if($eventSpecial[pointerEvent]) {
-                $eventSpecial[pointerEvent].dispose();
+            if(special[pointerEvent]) {
+                special[pointerEvent].dispose();
             }
             registerEvent(pointerEvent, new MouseStrategy(pointerEvent, originalEvents));
         });
