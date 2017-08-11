@@ -221,6 +221,21 @@ QUnit.test("Base strategy", function(assert) {
     ]);
 });
 
+QUnit.test("Fired method", function(assert) {
+    //arrange
+
+    this.Callbacks.add(function() {});
+
+    //assert
+    assert.notOk(this.Callbacks.fired(), "Callback not fired yet");
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.ok(this.Callbacks.fired(), "Callback fired");
+});
+
 QUnit.module("Flags", {
     afterEach: function() {
         this.Callbacks.empty();
@@ -403,3 +418,4 @@ QUnit.test("Unique", function(assert) {
     //assert
     assert.equal(fireCount, 1);
 });
+

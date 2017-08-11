@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    fx = require("animation/fx"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     List = require("ui/list"),
@@ -430,11 +431,8 @@ QUnit.test("group body should be not collapsed by click on header in disabled st
 });
 
 QUnit.test("group collapsing is animated", function(assert) {
-    var origSlideToggle = $.fn.slideToggle;
-
     try {
-        var slideToggleSpy = sinon.spy();
-        $.fn.slideToggle = slideToggleSpy;
+        var animateSpy = sinon.spy(fx, "animate");
 
         var $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
@@ -446,25 +444,33 @@ QUnit.test("group collapsing is animated", function(assert) {
             $groupHeader = $group.find("." + LIST_GROUP_HEADER_CLASS),
             $groupBody = $group.find("." + LIST_GROUP_BODY_CLASS);
 
+        var groupBodyHeight = $groupBody.height();
+
         $groupHeader.trigger("dxclick");
-        assert.ok(slideToggleSpy.calledOnce, "slideToggle is executed");
-        assert.equal(slideToggleSpy.thisValues[0].get(0), $groupBody.get(0), "slideToggle ran on correct element");
+
+        var args = animateSpy.getCall(0).args;
+
+        assert.ok(animateSpy.calledOnce, "fx.animate is executed");
+        assert.equal(args[0].get(0), $groupBody.get(0), "fx.animate ran on correct element");
+        assert.equal(args[1].type, "custom", "fx.animate ran with correct animation type");
+        assert.equal(args[1].from.height, groupBodyHeight, "fx.animate ran with correct start height");
+        assert.equal(args[1].to.height, 0, "fx.animate ran with correct end height");
     } finally {
-        $.fn.slideToggle = origSlideToggle;
+        fx.animate.restore();
     }
 });
 
 QUnit.test("group collapsing should update scroller position after animation", function(assert) {
-    var origSlideToggle = $.fn.slideToggle;
+    var origAnimate = fx.animate;
 
     try {
-        var slideToggleDeferred = $.Deferred(),
-            slideToggleSpy = sinon.spy(function(options) {
-                slideToggleDeferred.done(function() {
-                    options.complete();
-                });
+        var animationDeferred = $.Deferred();
+
+        fx.animate = sinon.spy(function(_, options) {
+            animationDeferred.done(function() {
+                options.complete();
             });
-        $.fn.slideToggle = slideToggleSpy;
+        });
 
         var $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
@@ -480,24 +486,24 @@ QUnit.test("group collapsing should update scroller position after animation", f
 
         $groupHeader.trigger("dxclick");
         assert.ok(!updateDimensionsSpy.called, "updateDimensions is not executed");
-        slideToggleDeferred.resolve();
+        animationDeferred.resolve();
         assert.ok(updateDimensionsSpy.calledOnce, "updateDimensions is executed");
     } finally {
-        $.fn.slideToggle = origSlideToggle;
+        fx.animate = origAnimate;
     }
 });
 
 QUnit.test("group should be collapsed by the collapseGroup method", function(assert) {
-    var origSlideUp = $.fn.slideUp;
+    var origAnimate = fx.animate;
 
     try {
-        var slideUpDeferred = $.Deferred(),
-            slideUpSpy = sinon.spy(function(options) {
-                slideUpDeferred.done(function() {
-                    options.complete();
-                });
+        var AnimationDeferred = $.Deferred();
+
+        fx.animate = sinon.spy(function(_, options) {
+            AnimationDeferred.done(function() {
+                options.complete();
             });
-        $.fn.slideUp = slideUpSpy;
+        });
 
         var $element = this.element.dxList({
                 items: [{ key: "a", items: ["0"] }, { key: "b", items: ["0"] }],
@@ -507,31 +513,34 @@ QUnit.test("group should be collapsed by the collapseGroup method", function(ass
             }),
             instance = $element.dxList("instance");
 
-        instance.collapseGroup(1).done(function() {
-            var $group = $element.find("." + LIST_GROUP_CLASS).eq(1);
-            assert.ok($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is present");
+        var $group = $element.find("." + LIST_GROUP_CLASS);
+        var $groupBody = $group.find("." + LIST_GROUP_BODY_CLASS);
+        var groupBodyHeight = $groupBody.height();
 
-            assert.ok(slideUpSpy.calledOnce, "slideUp used");
+        instance.collapseGroup(1).done(function() {
+            assert.ok($group.eq(1).hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is present");
+
+            var args = fx.animate.getCall(0).args;
+
+            assert.ok(fx.animate.calledOnce, "fx.animate used");
+            assert.equal(args[1].type, "custom", "fx.animate ran with correct animation type");
+            assert.equal(args[1].from.height, groupBodyHeight, "fx.animate ran with correct start height");
+            assert.equal(args[1].to.height, 0, "fx.animate ran with correct end height");
+
             assert.equal(this, instance, "resolved on list");
         });
 
-        slideUpDeferred.resolve();
+        AnimationDeferred.resolve();
     } finally {
-        $.fn.slideUp = origSlideUp;
+        fx.animate = origAnimate;
     }
 });
 
 QUnit.test("group should be expanded by the expandGroup method", function(assert) {
-    var origSlideDown = $.fn.slideDown;
+    var origAnimate = fx.animate;
 
     try {
-        var slideDownDeferred = $.Deferred(),
-            slideDownSpy = sinon.spy(function(options) {
-                slideDownDeferred.done(function() {
-                    options.complete();
-                });
-            });
-        $.fn.slideDown = slideDownSpy;
+        var AnimationDeferred = $.Deferred();
 
         var $element = this.element.dxList({
                 items: [{ key: "a", items: ["0"] }, { key: "b", items: ["0"] }],
@@ -541,24 +550,42 @@ QUnit.test("group should be expanded by the expandGroup method", function(assert
             }),
             instance = $element.dxList("instance");
 
-        instance.expandGroup(1).done(function() {
-            var $group = $element.find("." + LIST_GROUP_CLASS).eq(1);
-            assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
+        var $group = $element.find("." + LIST_GROUP_CLASS);
+        var $groupBody = $group.find("." + LIST_GROUP_BODY_CLASS);
+        var groupBodyHeight = $groupBody.height();
 
-            assert.ok(slideDownSpy.calledOnce, "slideDown used");
+        instance.collapseGroup(1);
+        this.clock.tick(1000);
+
+        fx.animate = sinon.spy(function(_, options) {
+            AnimationDeferred.done(function() {
+                options.complete();
+            });
+        });
+
+        instance.expandGroup(1).done(function() {
+            assert.ok(!$group.eq(1).hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
+
+            var args = fx.animate.getCall(0).args;
+
+            assert.ok(fx.animate.calledOnce, "fx.animate used");
+            assert.equal(args[1].type, "custom", "fx.animate ran with correct animation type");
+            assert.equal(args[1].from.height, 0, "fx.animate ran with correct start height");
+            assert.equal(args[1].to.height, groupBodyHeight, "fx.animate ran with correct end height");
+
             assert.equal(this, instance, "resolved on list");
         });
 
-        slideDownDeferred.resolve();
+        AnimationDeferred.resolve();
     } finally {
-        $.fn.slideDown = origSlideDown;
+        fx.animate = origAnimate;
     }
 });
 
 QUnit.test("scrollView should be updated after group collapsed", function(assert) {
     try {
         List.mockScrollView(this.originalScrollView);
-        $.fx.off = true;
+        fx.off = true;
 
         var $element = this.element.dxList({
                 autoPagingEnabled: true,
@@ -581,14 +608,14 @@ QUnit.test("scrollView should be updated after group collapsed", function(assert
         var $groups = $element.find("." + LIST_GROUP_CLASS);
         assert.equal($groups.length, 2, "second group was loaded");
     } finally {
-        $.fx.off = false;
+        fx.off = false;
     }
 });
 
 QUnit.test("scrollView should update its position after a group has been collapsed", function(assert) {
     try {
         List.mockScrollView(this.originalScrollView);
-        $.fx.off = true;
+        fx.off = true;
 
         var $element = this.element.dxList({
                 pageLoadMode: "scrollBottom",
@@ -643,7 +670,7 @@ QUnit.test("scrollView should update its position after a group has been collaps
 
         assert.ok(releaseSpy.lastCall.args[0], "The last call of 'release' hides load indicator");
     } finally {
-        $.fx.off = false;
+        fx.off = false;
     }
 });
 

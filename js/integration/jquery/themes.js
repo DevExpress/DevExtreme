@@ -2,15 +2,11 @@
 
 var jQuery = require("jquery"),
     holdReady = jQuery.holdReady || jQuery.fn.holdReady,
-    themeLoadedCallback = require("../../ui/themes_callbacks");
+    callback = require("../../ui/themes_callback");
 
-if(!themeLoadedCallback.fired()) {
+if(!callback.fired()) {
     holdReady(true);
-
-    var themeLoadedHandler = function() {
+    callback.add(function() {
         holdReady(false);
-        themeLoadedCallback.remove(themeLoadedHandler);
-    };
-
-    themeLoadedCallback.add(themeLoadedHandler);
+    });
 }

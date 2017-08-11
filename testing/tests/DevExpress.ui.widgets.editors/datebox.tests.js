@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     noop = require("core/utils/common").noop,
     browser = require("core/utils/browser"),
     support = require("core/utils/support"),
@@ -1530,6 +1531,23 @@ QUnit.test("changing 'displayFormat' should update input value", function(assert
     assert.equal($dateBox.find("." + TEXTEDITOR_INPUT_CLASS).val(), "3/10/2015, 12:00 AM", "input value is updated");
 });
 
+QUnit.test("displayFormat should affect on timeView", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            value: new Date('03/10/2015'),
+            displayFormat: 'shortdateshorttime',
+            opened: true,
+            type: 'datetime'
+        }),
+        dateBox = $dateBox.dxDateBox("instance"),
+        $content = $(dateBox._popup.content()),
+        timeView = $content.find("." + TIMEVIEW_CLASS).dxTimeView("instance");
+
+    assert.notOk(timeView.option("use24HourFormat"), "using 12 hour format");
+
+    dateBox.option("displayFormat", "hour");
+    assert.ok(timeView.option("use24HourFormat"), "using 24 hour format");
+});
+
 QUnit.test("disabledDates correctly displays", function(assert) {
 
     var instance = $("#dateBox").dxDateBox({
@@ -2299,10 +2317,10 @@ QUnit.module("datebox with time component", {
 });
 
 QUnit.test("date box should contain calendar and time view inside box in large screen", function(assert) {
-    var originalWidthFunction = $.prototype.width;
+    var originalWidthFunction = renderer.fn.width;
 
     try {
-        sinon.stub($.prototype, 'width').returns(600);
+        sinon.stub(renderer.fn, 'width').returns(600);
 
         var $element = $("#dateBox").dxDateBox({
                 type: "datetime",
@@ -2320,15 +2338,15 @@ QUnit.test("date box should contain calendar and time view inside box in large s
         assert.ok(box.itemElements().eq(1).find("." + TIMEVIEW_CLASS).length, "timeview rendered");
         assert.equal($clock.length, 1, "clock was rendered");
     } finally {
-        $.prototype.width = originalWidthFunction;
+        renderer.fn.width = originalWidthFunction;
     }
 });
 
 QUnit.test("date box should contain calendar and time view inside box in small screen", function(assert) {
-    var originalWidthFunction = $.prototype.width;
+    var originalWidthFunction = renderer.fn.width;
 
     try {
-        sinon.stub($.prototype, 'width').returns(300);
+        sinon.stub(renderer.fn, 'width').returns(300);
 
         var $element = $("#dateBox").dxDateBox({
                 type: "datetime",
@@ -2346,7 +2364,7 @@ QUnit.test("date box should contain calendar and time view inside box in small s
         assert.ok(box.itemElements().eq(0).find("." + TIMEVIEW_CLASS).length, "timeview rendered");
         assert.equal($clock.length, 0, "clock was not rendered");
     } finally {
-        $.prototype.width = originalWidthFunction;
+        renderer.fn.width = originalWidthFunction;
     }
 });
 
@@ -2354,7 +2372,7 @@ QUnit.test("date box wrapper adaptivity class depends on the screen size", funct
     var LARGE_SCREEN_SIZE = 2000,
         SMALL_SCREEN_SIZE = 300;
 
-    var stub = sinon.stub($.prototype, 'width').returns(LARGE_SCREEN_SIZE);
+    var stub = sinon.stub(renderer.fn, 'width').returns(LARGE_SCREEN_SIZE);
 
     try {
         var instance = $("#dateBox").dxDateBox({
@@ -2369,7 +2387,7 @@ QUnit.test("date box wrapper adaptivity class depends on the screen size", funct
         instance.close();
 
         stub.restore();
-        stub = sinon.stub($.prototype, 'width').returns(SMALL_SCREEN_SIZE);
+        stub = sinon.stub(renderer.fn, 'width').returns(SMALL_SCREEN_SIZE);
 
         instance.open();
         assert.ok(instance._popup._wrapper().hasClass(DATEBOX_ADAPTIVITY_MODE_CLASS), "there is the adaptivity class for the small screen");

@@ -296,6 +296,10 @@ QUnit.test("Timeline should have the right 'dx-group-column-count' attr depend o
 
     assert.equal($element.attr("dx-group-column-count"), "2", "Attr is OK");
     assert.notOk($element.attr("dx-group-row-count"), "row-count attr is not applied");
+
+    this.instance.option("groups", []);
+
+    assert.notOk($element.attr("dx-group-column-count"), "column-count attr is not applied");
 });
 
 QUnit.test("the 'getCoordinatesByDate' method should return right coordinates", function(assert) {
@@ -404,7 +408,7 @@ QUnit.test("Ensure cell min height is equal to cell height(T389468)", function(a
 
     try {
         this.instance.option("currentDate", new Date(2010, 10, 10));
-        var height = this.instance.element().find(".dx-scheduler-group-header-content").outerHeight(),
+        var height = this.instance.element().find(".dx-scheduler-group-header-content").eq(0).outerHeight(),
             expectedHeight = this.instance.element().find(".dx-scheduler-date-table-cell").first().outerHeight() - 1;
 
         assert.roughEqual(height, expectedHeight, 2.001, "Group cell height is OK");

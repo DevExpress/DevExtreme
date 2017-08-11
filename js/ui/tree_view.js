@@ -1048,7 +1048,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             return null;
         }
 
-        if(itemElement.nodeType) {
+        if(typeUtils.isDomNode(itemElement)) {
             return this._getNodeByElement(itemElement);
         }
 

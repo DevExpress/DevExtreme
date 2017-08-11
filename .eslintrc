@@ -95,6 +95,7 @@
                     eol,        // end of line
                     etag,       // HTTP header
                     eula,       // EULA
+                    jsrender,   // JsRender template engine
                     hsl,        // HSL color
                     hsv,        // HSV color
                     iana,       // IANA (time-zone database)
@@ -400,6 +401,7 @@
                     timestamp,
                     timezones,
                     titleize,
+                    tfoot,
                     tmp,
                     tmpl,
                     toolbars,

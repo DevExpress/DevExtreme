@@ -51,20 +51,29 @@ var SchedulerHeader = Widget.inherit({
         });
     },
 
+    _setOptionsByReference: function() {
+        this.callBase();
+
+        extend(this._optionsByReference, {
+            currentView: true
+        });
+    },
+
     _optionChanged: function(args) {
         var value = args.value;
 
         switch(args.name) {
             case "views":
-                var currentView = this.option("currentView");
+                this._validateViews();
+
                 this._viewSwitcher.option({
                     items: value,
-                    selectedItem: currentView
+                    selectedItem: this.option("currentView")
                 });
                 break;
             case "currentView":
                 this._viewSwitcher.option("selectedItem", value);
-                this._navigator.option("step", STEP_MAP[value]);
+                this._navigator.option("step", STEP_MAP[this._getCurrentViewType()]);
                 this._changeViewSwitcherLabelText();
                 break;
             case "currentDate":
@@ -109,7 +118,7 @@ var SchedulerHeader = Widget.inherit({
             max: this.option("max"),
             intervalCount: this.option("intervalCount"),
             date: this.option("currentDate"),
-            step: STEP_MAP[this.option("currentView")],
+            step: STEP_MAP[this._getCurrentViewType()],
             firstDayOfWeek: this.option("firstDayOfWeek"),
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled"),
@@ -135,12 +144,18 @@ var SchedulerHeader = Widget.inherit({
         var views = this.option("views");
 
         each(views, function(_, view) {
-            var viewName = typeUtils.isObject(view) && view.type ? view.type : view;
+            var isViewIsObject = typeUtils.isObject(view),
+                viewType = isViewIsObject && view.type ? view.type : view;
 
-            if(inArray(viewName, VIEWS) === -1) {
-                errors.log("W0008", viewName);
+            if(inArray(viewType, VIEWS) === -1) {
+                errors.log("W0008", viewType);
             }
         });
+    },
+
+    _getCurrentViewType: function() {
+        var currentView = this.option("currentView");
+        return currentView.type || currentView;
     },
 
     _renderViewSwitcherTabs: function($element) {
@@ -216,7 +231,7 @@ var SchedulerHeader = Widget.inherit({
     _updateCurrentView: function(e) {
         var selectedItem = e.itemData || e.component.option("selectedItem");
 
-        var viewName = typeUtils.isObject(selectedItem) ? selectedItem.type : selectedItem;
+        var viewName = typeUtils.isObject(selectedItem) ? selectedItem.name || selectedItem.type : selectedItem;
 
         this.notifyObserver("currentViewUpdated", viewName);
     },
