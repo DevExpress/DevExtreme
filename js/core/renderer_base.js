@@ -4,7 +4,7 @@ var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
-var supportUtils = require("./utils/support");
+var styleUtils = require("./utils/style");
 var matches = require("./polyfills/matches");
 
 var methods = [
@@ -183,6 +183,18 @@ var appendElements = function(element, nextSibling) {
     }
 };
 
+var pxExceptions = {
+    "columnCount": true,
+    "fillOpacity": true,
+    "flexGrow": true,
+    "flexShrink": true,
+    "fontWeight": true,
+    "lineHeight": true,
+    "opacity": true,
+    "zIndex": true,
+    "zoom": true
+};
+
 var cssHooks = {};
 ["height", "minHeight", "maxHeight", "width", "maxWidth", "minWidth", "flexBasis"].forEach(function(funcName) {
     cssHooks[funcName] = function(element, value) {
@@ -199,26 +211,29 @@ var cssHooks = {};
 });
 
 initRender.prototype.css = function(name, value) {
-    var prefix = "";
-    if(typeof name === "string" && arguments.length === 1) {
-        var result = null;
+    var prefix = styleUtils.stylePropPrefix(name);
+    name = prefix ? prefix + name : name;
 
-        prefix = supportUtils.stylePropPrefix(name);
-        name = prefix ? prefix + name : name;
+    if(typeUtils.type(name) === "string") {
+        if(arguments.length === 1) {
+            var result = null;
 
-        result = this[0] ? (window.getComputedStyle(this[0])[name] || this[0].style[name]) : undefined;
-        return typeUtils.isNumeric(result) ? result.toString() : result;
-    } else if(typeof name === "string" && arguments.length === 2) {
-        prefix = supportUtils.stylePropPrefix(name);
-        name = prefix ? prefix + name : name;
-
-        if(!this[0] || !this[0].style) return this;
-
-        for(var i = 0; i < this.length; i++) {
-            if(cssHooks[name]) {
-                cssHooks[name](this[i], value);
+            if(name === "height" || name === "width") {
+                name = name === "height" ? "outerHeight" : "outerWidth";
+                result = this[0] ? this[name]() : undefined;
             } else {
-                this[i].style[name] = value;
+                result = this[0] ? (window.getComputedStyle(this[0])[name] || this[0].style[name]) : undefined;
+            }
+            return typeUtils.isNumeric(result) ? result.toString() : result;
+        } else if(arguments.length === 2) {
+            if(!this[0] || !this[0].style) return this;
+            for(var i = 0; i < this.length; i++) {
+                if(!pxExceptions[name] && typeUtils.isNumeric(value)) {
+                    value = typeUtils.isFunction(value) ? value() : value;
+                    this[i].style[name] = value + "px";
+                } else {
+                    this[i].style[name] = value;
+                }
             }
         }
     } else if(typeUtils.isPlainObject(name)) {

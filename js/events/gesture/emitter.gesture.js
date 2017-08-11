@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
-    support = require("../../core/utils/support"),
+    styleUtils = require("../../core/utils/style"),
     browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
     mathUtils = require("../../core/utils/math"),
@@ -27,7 +27,7 @@ var isMouseWheelEvent = function(e) {
 };
 
 var supportPointerEvents = function() {
-    var cssSupport = support.styleProp("pointer-events");
+    var cssSupport = styleUtils.styleProp("pointer-events");
     var msieLess11 = browser.msie && parseInt(browser.version, 10) < 11;
 
     return cssSupport && !msieLess11;

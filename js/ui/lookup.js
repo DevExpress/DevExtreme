@@ -2,7 +2,7 @@
 
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
-    support = require("../core/utils/scroll"),
+    support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     each = require("../core/utils/iterator").each,

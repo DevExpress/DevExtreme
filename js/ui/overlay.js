@@ -792,8 +792,8 @@ var Overlay = Widget.inherit({
                 overlayStack.push(this);
             }
 
-            this._$wrapper.css("z-index", this._zIndex);
-            this._$content.css("z-index", this._zIndex);
+            this._$wrapper.css("zIndex", this._zIndex);
+            this._$content.css("zIndex", this._zIndex);
         } else if(index !== -1) {
             overlayStack.splice(index, 1);
         }

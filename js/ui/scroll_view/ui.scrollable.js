@@ -3,7 +3,6 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     support = require("../../core/utils/support"),
-    scrollUtils = require("../../core/utils/scroll"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -34,7 +33,7 @@ var beforeActivateExists = document["onbeforeactivate"] !== undefined;
 var deviceDependentOptions = function() {
     return [{
         device: function() {
-            return !scrollUtils.nativeScrolling;
+            return !support.nativeScrolling;
         },
         options: {
             /**
@@ -199,7 +198,7 @@ var Scrollable = DOMComponent.inherit({
         return this.callBase().concat(deviceDependentOptions(), [
             {
                 device: function() {
-                    return scrollUtils.nativeScrolling && devices.real().platform === "android";
+                    return support.nativeScrolling && devices.real().platform === "android";
                 },
                 options: {
                     useSimulatedScrollbar: true

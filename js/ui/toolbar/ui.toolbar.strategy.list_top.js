@@ -18,8 +18,8 @@ var ListTopStrategy = ListStrategy.inherit({
     },
 
     _setItemsContainerZIndex: function(e) {
-        var overlayZIndex = e.component.content().css("z-index");
-        this._toolbar._$toolbarItemsContainer.css("z-index", overlayZIndex + 1);
+        var overlayZIndex = e.component.content().css("zIndex");
+        this._toolbar._$toolbarItemsContainer.css("zIndex", overlayZIndex + 1);
     },
 
     _renderMenuPosition: function(offset, animate) {
