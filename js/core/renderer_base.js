@@ -251,17 +251,16 @@ var appendElements = function(element, nextSibling) {
     }
 };
 
-var pxExceptions = {
-    "columnCount": true,
-    "fillOpacity": true,
-    "flexGrow": true,
-    "flexShrink": true,
-    "fontWeight": true,
-    "lineHeight": true,
-    "opacity": true,
-    "zIndex": true,
-    "zoom": true
-};
+var pxExceptions = [
+    "fillOpacity",
+    "columnCount",
+    "flexGrow",
+    "flexShrink",
+    "fontWeight",
+    "lineHeight",
+    "opacity",
+    "zIndex",
+    "zoom"];
 
 var cssHooks = {};
 ["height", "minHeight", "maxHeight", "width", "maxWidth", "minWidth", "flexBasis"].forEach(function(funcName) {
@@ -283,26 +282,29 @@ initRender.prototype.css = function(name, value) {
     name = prefix ? prefix + name : name;
 
     if(typeUtils.type(name) === "string") {
-        if(arguments.length === 1) {
+        if(arguments.length === 2) {
+            //if(value < 0) value = 0;
+            if(!this[0] || !this[0].style) return this;
+            for(var i = 0; i < this.length; i++) {
+                if(typeUtils.isFunction(value)) {
+                    value = value();
+                } else if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
+                    value += "px";
+                }
+
+                this[i].style[name] = value;
+            }
+        } else {
             var result = null;
 
             if(name === "height" || name === "width") {
                 name = name === "height" ? "outerHeight" : "outerWidth";
-                result = this[0] ? this[name]() : undefined;
+                result = this[0] ? this[name]() + "px" : undefined;
             } else {
                 result = this[0] ? (window.getComputedStyle(this[0])[name] || this[0].style[name]) : undefined;
             }
-            return typeUtils.isNumeric(result) ? result.toString() : result;
-        } else if(arguments.length === 2) {
-            if(!this[0] || !this[0].style) return this;
-            for(var i = 0; i < this.length; i++) {
-                if(!pxExceptions[name] && typeUtils.isNumeric(value)) {
-                    value = typeUtils.isFunction(value) ? value() : value;
-                    this[i].style[name] = value + "px";
-                } else {
-                    this[i].style[name] = value;
-                }
-            }
+            return result;
+            //return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     } else if(typeUtils.isPlainObject(name)) {
         for(var key in name) {
