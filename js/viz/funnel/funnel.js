@@ -63,6 +63,12 @@ var dxFunnel = require("../core/base_widget").inherit({
     _applySize: function(rect) {
         this._rect = rect.slice();
         this._change(["TILING"]);
+        return this._rect;
+    },
+
+
+    _getAlignmentRect: function() {
+        return this._rect;
     },
 
     _change_TILING: function() {

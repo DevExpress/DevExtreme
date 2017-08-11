@@ -838,7 +838,8 @@ extend(legendPrototype, {
         return {
             horizontalAlignment: this._options.horizontalAlignment,
             verticalAlignment: this._options.verticalAlignment,
-            side: pos.cutSide
+            side: pos.cutSide,
+            priority: 1
         };
     },
 

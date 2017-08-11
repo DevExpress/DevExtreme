@@ -485,7 +485,7 @@ QUnit.test("layoutOptions - without text", function(assert) {
 
 QUnit.test("layoutOptions", function(assert) {
     this.title.update(this.options);
-    assert.deepEqual(this.title.layoutOptions(), { horizontalAlignment: "center", verticalAlignment: "top" });
+    assert.deepEqual(this.title.layoutOptions(), { horizontalAlignment: "center", verticalAlignment: "top", priority: 0 });
 });
 
 QUnit.test("measure", function(assert) {

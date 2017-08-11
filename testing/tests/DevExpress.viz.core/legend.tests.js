@@ -1663,6 +1663,7 @@ QUnit.test("layoutOptions", function(assert) {
     assert.equal(options.horizontalAlignment, "right");
     assert.equal(options.verticalAlignment, "top");
     assert.equal(options.side, "horizontal");
+    assert.equal(options.priority, 1);
 });
 
 QUnit.test("measure", function(assert) {

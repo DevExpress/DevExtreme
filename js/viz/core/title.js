@@ -227,7 +227,8 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     layoutOptions: function() {
         return this._boundingRect && {
             horizontalAlignment: this._boundingRect.horizontalAlignment,
-            verticalAlignment: this._boundingRect.verticalAlignment
+            verticalAlignment: this._boundingRect.verticalAlignment,
+            priority: 0
         };
     },
 
