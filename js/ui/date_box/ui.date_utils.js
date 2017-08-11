@@ -67,7 +67,7 @@ var dateUtils = {
             getStandardPattern: function() {
                 return "HH:mm";
             },
-            components: ["hours", "minutes"]
+            components: ["hours", "minutes", "seconds", "milliseconds"]
         },
         "datetime": {
             getStandardPattern: function() {
