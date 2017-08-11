@@ -8,9 +8,7 @@ var sizeUtils = require("./utils/size");
 var htmlParser = require("./utils/html_parser");
 var matches = require("./polyfills/matches");
 
-var methods = [
-    "css",
-    "slideUp", "slideDown", "slideToggle"];
+var methods = ["css"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);

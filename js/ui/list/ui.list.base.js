@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     compileGetter = require("../../core/utils/data").compileGetter,
     extend = require("../../core/utils/extend").extend,
+    fx = require("../../animation/fx"),
     clickEvent = require("../../events/click"),
     swipeEvents = require("../../events/swipe"),
     support = require("../../core/utils/support"),
@@ -768,20 +769,18 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _collapseGroupHandler: function($group, toggle) {
-        var deferred = $.Deferred(),
+        var deferred = $.Deferred();
+        var $groupBody = $group.children("." + LIST_GROUP_BODY_CLASS);
 
-            $groupBody = $group.children("." + LIST_GROUP_BODY_CLASS);
+        var startHeight = $groupBody.outerHeight();
+        var endHeight = startHeight === 0 ? $groupBody.height("auto").outerHeight() : 0;
 
         $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);
 
-        var slideMethod = "slideToggle";
-        if(toggle === true) {
-            slideMethod = "slideUp";
-        }
-        if(toggle === false) {
-            slideMethod = "slideDown";
-        }
-        $groupBody[slideMethod]({
+        fx.animate($groupBody, {
+            type: "custom",
+            from: { height: startHeight },
+            to: { height: endHeight },
             duration: 200,
             complete: (function() {
                 this.updateDimensions();
