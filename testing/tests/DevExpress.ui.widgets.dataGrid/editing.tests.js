@@ -8742,6 +8742,44 @@ QUnit.test("Cell edit mode - The validation should not work for column with 'sho
     assert.notOk($cellElement.hasClass("dx-datagrid-invalid"), "first cell is valid");
 });
 
+QUnit.testInActiveWindow("Batch edit mode - Validation message should be shown when column has showEditorAlways", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container'),
+        inputElement;
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{
+                type: "required"
+            }],
+            showEditorAlways: true
+        }]
+    });
+
+    //act
+
+    that.editCell(0, 0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement
+        .val("")
+        .trigger('change');
+
+    this.clock.tick();
+
+    //assert
+    var cells = rowsView.element().find('tbody > tr').first().find("td");
+    assert.ok(cells.eq(0).hasClass("dx-datagrid-invalid"), "validation border should be shown");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
