@@ -163,6 +163,23 @@ gridCore.registerModule("stateStoring", {
         stateStoring: stateStoringCore.StateStoringController
     },
     extenders: {
+        views: {
+            rowsView: {
+                init: function() {
+                    var that = this;
+                    var dataController = that.getController("data");
+
+                    that.callBase();
+
+                    dataController.stateLoaded.add(function() {
+                        if(dataController.isLoaded()) {
+                            that.setLoading(false);
+                            that.renderNoDataText();
+                        }
+                    });
+                }
+            }
+        },
         controllers: {
             stateStoring: {
                 init: function() {
@@ -198,8 +215,10 @@ gridCore.registerModule("stateStoring", {
                     return stateStoringController.isEnabled() && !stateStoringController.isLoaded() ? [] : visibleColumns;
                 }
             },
-
             data: {
+                callbackNames: function() {
+                    return this.callBase().concat(["stateLoaded"]);
+                },
                 _refreshDataSource: function() {
                     var that = this,
                         callBase = that.callBase,
@@ -212,6 +231,7 @@ gridCore.registerModule("stateStoring", {
                             stateStoringController.load().always(function() {
                                 that._restoreStateTimeoutID = null;
                                 callBase.call(that);
+                                that.stateLoaded.fire();
                             });
                         });
                     } else if(!that.isStateLoading()) {

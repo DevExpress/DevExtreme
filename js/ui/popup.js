@@ -479,11 +479,16 @@ var Popup = Overlay.inherit({
             toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
+            var toolbarOptions = {
+                items: data,
+                rtlEnabled: this.option("rtlEnabled")
+            };
+
             this._getTemplate("dx-polymorph-widget").render({
                 container: $container,
                 model: {
                     widget: "dxToolbarBase",
-                    options: { items: data }
+                    options: toolbarOptions
                 }
             });
             var $toolbar = $container.children("div");

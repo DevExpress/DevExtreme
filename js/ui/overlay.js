@@ -1407,6 +1407,11 @@ var Overlay = Widget.inherit({
             case "animation":
             case "propagateOutsideClick":
                 break;
+            case "rtlEnabled":
+                this._contentAlreadyRendered = false;
+                this.option("visible", false);
+                this.callBase(args);
+                break;
             default:
                 this.callBase(args);
         }
