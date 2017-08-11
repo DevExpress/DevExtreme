@@ -88,7 +88,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     },
 
     _customizeAppointmentGeometry: function(coordinates) {
-        var appointmentCountPerCell = this.instance.getOverlappingMode() || 2;
+        var appointmentCountPerCell = this.instance.fire("getOverlappingMode") || 2;
         var maxHeight = this._defaultHeight || this.getAppointmentMinSize(),
             index = coordinates.index,
             height = MONTH_APPOINTMENT_HEIGHT_RATIO * maxHeight / appointmentCountPerCell,

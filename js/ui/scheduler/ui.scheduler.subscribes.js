@@ -567,6 +567,10 @@ var subscribes = {
         return this.getEndViewDate();
     },
 
+    getOverlappingMode: function() {
+        return this.getOverlappingMode();
+    },
+
     agendaIsReady: function(rows, innerRowOffset, outerRowOffset) {
         var $appts = this.getAppointmentsInstance()._itemElements(),
             total = 0;
