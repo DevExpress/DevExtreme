@@ -302,7 +302,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _buttonsContainer: function() {
-        return this._inputWrapper().find("." + TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
+        return this._inputWrapper().find("." + TEXTEDITOR_BUTTONS_CONTAINER_CLASS).eq(0);
     },
 
     _isControlKey: function(key) {
