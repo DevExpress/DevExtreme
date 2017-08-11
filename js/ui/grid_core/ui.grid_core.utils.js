@@ -202,6 +202,10 @@ module.exports = (function() {
             var that = this;
             $element = $element || this.element();
 
+            if(!$element) {
+                return;
+            }
+
             var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
                 noDataElement = $element.find("." + noDataClass).last(),
                 isVisible = this._dataController.isEmpty(),
