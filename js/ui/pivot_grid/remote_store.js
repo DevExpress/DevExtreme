@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     DataSourceModule = require("../../data/data_source/data_source"),
     when = require("../../integration/jquery/deferred").when,
     pivotGridUtils = require("./ui.pivot_grid.utils"),
+    isDefined = commonUtils.isDefined,
     getFiltersByPath = pivotGridUtils.getFiltersByPath;
 
 function createGroupingOptions(dimensionOptions) {
@@ -49,7 +50,7 @@ function getFilterExpressionForFilterValue(field, filterValue) {
         isExcludedFilterType = field.filterType === "exclude",
         expression = [selector, isExcludedFilterType ? "<>" : "=", filterValue];
 
-    if(commonUtils.isDefined(field.groupInterval)) {
+    if(isDefined(field.groupInterval)) {
         if(typeof field.groupInterval === "string" && field.groupInterval.toLowerCase() === "quarter") {
             expression = getIntervalFilterExpression(selector, 3, (filterValue - 1) * 3 + 1, isExcludedFilterType);
         } else if(typeof field.groupInterval === "number" && field.dataType !== "date") {
@@ -188,7 +189,9 @@ function forEachGroup(data, callback, level) {
 function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
     valuesArray[rowIndex] = valuesArray[rowIndex] || [];
     valuesArray[rowIndex][columnIndex] = valuesArray[rowIndex][columnIndex] || [];
-    valuesArray[rowIndex][columnIndex][dataIndex] = value;
+    if(!isDefined(valuesArray[rowIndex][columnIndex][dataIndex])) {
+        valuesArray[rowIndex][columnIndex][dataIndex] = value;
+    }
 }
 
 function parseResult(data, total, descriptions, result) {
