@@ -712,8 +712,6 @@ module.exports = {
                     return this.option("noDataText");
                 },
 
-                _renderNoDataText: gridCoreUtils.renderNoDataText,
-
                 _rowClick: function(e) {
                     var item = this._dataController.items()[e.rowIndex] || {};
                     this.executeAction("onRowClick", extend({
@@ -917,6 +915,8 @@ module.exports = {
 
                     return parameters;
                 },
+
+                renderNoDataText: gridCoreUtils.renderNoDataText,
 
                 getCellOptions: function(rowIndex, columnIdentifier) {
                     var rowOptions = this._dataController.items()[rowIndex],
@@ -1133,7 +1133,7 @@ module.exports = {
                     that._updateRowHeight();
                     commonUtils.deferRender(function() {
                         that._renderScrollable();
-                        that._renderNoDataText();
+                        that.renderNoDataText();
                         that.updateFreeSpaceRowHeight();
                     });
                     that._updateScrollable();
@@ -1306,7 +1306,7 @@ module.exports = {
                             args.handled = true;
                             break;
                         case "noDataText":
-                            that._renderNoDataText();
+                            that.renderNoDataText();
                             args.handled = true;
                             break;
                     }
