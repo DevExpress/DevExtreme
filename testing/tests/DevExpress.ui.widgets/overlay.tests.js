@@ -251,14 +251,16 @@ QUnit.test("RTL markup - rtlEnabled by default", function(assert) {
 QUnit.module("option", moduleConfig);
 
 QUnit.test("RTL markup - rtlEnabled by option", function(assert) {
-    var overlay = $("#overlay").dxOverlay().dxOverlay("instance"),
-        $content = overlay.content();
+    var overlay = $("#overlay").dxOverlay({ deferRendering: false }).dxOverlay("instance"),
+        $content = overlay.content(),
+        contentRenderSpy = sinon.spy(overlay, "_renderContentImpl");
 
     overlay.option("rtlEnabled", true);
     assert.ok($content.hasClass("dx-rtl"));
 
     overlay.option("rtlEnabled", false);
     assert.ok(!$content.hasClass("dx-rtl"));
+    assert.equal(contentRenderSpy.callCount, 2, "must invalidate content when RTL changed");
 });
 
 QUnit.test("disabled", function(assert) {
