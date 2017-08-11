@@ -93,3 +93,33 @@ QUnit.test("Insert thead tag", function(assert) {
         renderer("<div>").html("<thead></thead>").html(),
         "<thead></thead>");
 });
+
+QUnit.module("CSS method");
+
+QUnit.test("Get value", function(assert) {
+    var element = renderer("<div>");
+
+    document.body.appendChild(element[0]);
+
+    element[0].style.width = "5px";
+    element[0].style.boxSizing = "border-box";
+    element[0].style.border = "1px solid red";
+    element[0].style.padding = "1px";
+    element[0].style.margin = "100px";
+    element[0].style.color = "red";
+
+    assert.equal(element.css("width"), "5px");
+    assert.equal(element.css("color"), "rgb(255, 0, 0)");
+});
+
+QUnit.test("Set value", function(assert) {
+    var element = renderer("<div>");
+
+    document.body.appendChild(element[0]);
+
+    element.css("width", 5);
+    element.css("color", "red");
+
+    assert.equal(window.getComputedStyle(element[0])["width"], "5px");
+    assert.equal(window.getComputedStyle(element[0])["color"], "rgb(255, 0, 0)");
+});
