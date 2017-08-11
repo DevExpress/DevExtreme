@@ -8769,10 +8769,11 @@ QUnit.testInActiveWindow("Batch edit mode - Validation message should be shown w
     that.editCell(0, 0);
 
     inputElement = getInputElements(testElement).first();
-    inputElement.focus();
+    inputElement
+        .val("")
+        .trigger('change');
+
     this.clock.tick();
-    inputElement.val("");
-    inputElement.trigger('change');
 
     //assert
     var cells = rowsView.element().find('tbody > tr').first().find("td");
