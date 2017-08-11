@@ -1407,6 +1407,7 @@ var Overlay = Widget.inherit({
                 break;
             case "rtlEnabled":
                 this._contentAlreadyRendered = false;
+                this.option("visible", false);
                 this.callBase(args);
                 break;
             default:
