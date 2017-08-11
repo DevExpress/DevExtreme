@@ -9,8 +9,6 @@ var sizeUtils = require("./utils/size");
 var htmlParser = require("./utils/html_parser");
 var matches = require("./polyfills/matches");
 
-var methods = ["css"];
-
 var renderer = function(selector, context) {
     return new initRender(selector, context);
 };
@@ -46,17 +44,6 @@ var setAttributeValue = function(element, attrName, value) {
         rendererStrategy.removeAttribute(element, attrName);
     }
 };
-
-methods.forEach(function(method) {
-    var methodName = method;
-    initRender.prototype[method] = function() {
-        var result = this.$element[methodName].apply(this.$element, arguments);
-        if(result === this.$element) {
-            return this;
-        }
-        return result;
-    };
-});
 
 initRender.prototype.show = function() {
     return this.toggle(true);
@@ -260,22 +247,15 @@ var pxExceptions = [
     "lineHeight",
     "opacity",
     "zIndex",
-    "zoom"];
+    "zoom"
+];
 
-var cssHooks = {};
-["height", "minHeight", "maxHeight", "width", "maxWidth", "minWidth", "flexBasis"].forEach(function(funcName) {
-    cssHooks[funcName] = function(element, value) {
-        value = typeUtils.isFunction(value) ? value() : value;
-        if(value < 0) value = 0;
-        element.style[funcName] = value + (typeUtils.isNumeric(value) ? "px" : "");
-    };
-});
+var positiveDimensions = ["height", "minHeight", "maxHeight", "width", "maxWidth", "minWidth", "flexBasis"];
 
-["marginLeft", "marginTop", "marginRight", "marginBottom", "top", "left", "right", "bottom", "paddingTop", "paddingRight", "paddingLeft", "paddingBottom"].forEach(function(funcName) {
-    cssHooks[funcName] = function(element, value) {
-        element.style[funcName] = value + (typeUtils.isNumeric(value) ? "px" : "");
-    };
-});
+var heightWidthAliases = {
+    width: "outerWidth",
+    height: "outerHeight"
+};
 
 initRender.prototype.css = function(name, value) {
     var prefix = styleUtils.stylePropPrefix(name);
@@ -283,28 +263,34 @@ initRender.prototype.css = function(name, value) {
 
     if(typeUtils.type(name) === "string") {
         if(arguments.length === 2) {
-            //if(value < 0) value = 0;
             if(!this[0] || !this[0].style) return this;
+
             for(var i = 0; i < this.length; i++) {
                 if(typeUtils.isFunction(value)) {
                     value = value();
-                } else if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
+                }
+                if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
+                    if(positiveDimensions.indexOf(name) !== -1 && value < 0) {
+                        value = 0;
+                    }
                     value += "px";
                 }
 
                 this[i].style[name] = value;
             }
         } else {
-            var result = null;
+            var result;
 
-            if(name === "height" || name === "width") {
-                name = name === "height" ? "outerHeight" : "outerWidth";
-                result = this[0] ? this[name]() + "px" : undefined;
+            if(!this[0]) return result;
+
+            if(heightWidthAliases[name]) {
+                name = heightWidthAliases[name];
+                result = this[name]() + "px";
             } else {
-                result = this[0] ? (window.getComputedStyle(this[0])[name] || this[0].style[name]) : undefined;
+                result = window.getComputedStyle(this[0])[name] || this[0].style[name];
             }
-            return result;
-            //return typeUtils.isNumeric(result) ? result.toString() : result;
+
+            return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     } else if(typeUtils.isPlainObject(name)) {
         for(var key in name) {

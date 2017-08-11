@@ -167,7 +167,7 @@ QUnit.test("List creation", function(assert) {
         "font-size": 16,
         "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
         fill: "#707070",
-        "pointerEvents": "none",
+        "pointer-events": "none",
         "font-weight": 200,
         cursor: "pointer"
     }, "JPEG text style");
@@ -187,7 +187,7 @@ QUnit.test("List creation", function(assert) {
         "font-size": 16,
         "font-family": "'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
         fill: "#707070",
-        "pointerEvents": "none",
+        "pointer-events": "none",
         "font-weight": 200,
         cursor: "pointer"
     }, "PNG text style");

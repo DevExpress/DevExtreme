@@ -56,7 +56,7 @@ QUnit.test("Show", function(assert) {
     this.loadingIndicator.show();
 
     assert.deepEqual(this.group.linkAppend.lastCall.args, [], "group is appended to container");
-    assert.deepEqual(this.renderer.root.css.lastCall.args, [{ "pointer-events": "none" }], "renderer root style");
+    assert.deepEqual(this.renderer.root.css.lastCall.args, [{ "pointerEvents": "none" }], "renderer root style");
     this.checkAnimation(assert, 0.85);
     assert.deepEqual(this.notify.lastCall.args, [true], "notification");
     assert.strictEqual(this.eventTrigger.lastCall, null, "no event");
@@ -77,7 +77,7 @@ QUnit.test("Hide", function(assert) {
     assert.strictEqual(this.eventTrigger.lastCall, null, "no event");
     this.rect.animate.lastCall.args[1].complete();
     assert.deepEqual(this.group.linkRemove.lastCall.args, [], "group is removed from container");
-    assert.deepEqual(this.renderer.root.css.lastCall.args, [{ "pointer-events": "" }], "renderer root style");
+    assert.deepEqual(this.renderer.root.css.lastCall.args, [{ "pointerEvents": "" }], "renderer root style");
     assert.deepEqual(this.eventTrigger.lastCall.args, ["loadingIndicatorReady"], "event");
 });
 

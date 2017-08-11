@@ -108,8 +108,14 @@ QUnit.test("Get value", function(assert) {
     element[0].style.margin = "100px";
     element[0].style.color = "red";
 
-    assert.equal(element.css("width"), "5px");
-    assert.equal(element.css("color"), "rgb(255, 0, 0)");
+    assert.equal(element.css("width"), "5px", "Get width");
+    assert.equal(element.css("color"), "rgb(255, 0, 0)", "Get color");
+    assert.equal(element.css("position"), "static", "Get position");
+    assert.equal(element.css("borderLeftWidth"), "1px", "Get border");
+
+    element = renderer("fake_element");
+    assert.equal(element.css("width"), undefined, "Return undefined if element is empty");
+
 });
 
 QUnit.test("Set value", function(assert) {
@@ -119,7 +125,37 @@ QUnit.test("Set value", function(assert) {
 
     element.css("width", 5);
     element.css("color", "red");
+    element.css("height", function() { return "25em"; });
 
-    assert.equal(window.getComputedStyle(element[0])["width"], "5px");
-    assert.equal(window.getComputedStyle(element[0])["color"], "rgb(255, 0, 0)");
+    assert.equal(window.getComputedStyle(element[0])["width"], "5px", "Set width");
+    assert.equal(window.getComputedStyle(element[0])["color"], "rgb(255, 0, 0)", "Set color");
+    assert.equal(element[0].style["height"], "25em", "Set height with function returning string");
+
+    element.css("height", "auto");
+    assert.equal(element[0].style["height"], "auto", "Set height with string");
+
+    element.css("height", function() { return 25; });
+    assert.equal(element[0].style["height"], "25px", "Set height with function returning number");
+
+    element.css({
+        position: "fixed",
+        zIndex: 2,
+        margin: "2px"
+    });
+
+    assert.equal(window.getComputedStyle(element[0])["position"], "fixed", "Set position with object of css values");
+    assert.equal(window.getComputedStyle(element[0])["zIndex"], "2", "Set zIndex with object of css values");
+    var margin = window.getComputedStyle(element[0])["margin"] || window.getComputedStyle(element[0])["marginBottom"];//IE sets marginTop, marginBottom ... instead of margin
+    assert.equal(margin, "2px", "Set margin with object of css values");
+
+    element.css("width", -100);
+    assert.equal(window.getComputedStyle(element[0])["width"], "0px", "Set negative width with number");
+
+    element.css("width", "-100px");
+    assert.equal(element[0].style["width"], "0px", "Set negative width with string 1");
+    assert.equal(window.getComputedStyle(element[0])["width"], "0px", "Set negative width with string 2");
+
+    element = renderer("fake_element");
+    var returnValue = element.css("height", "25px");
+    assert.equal(returnValue, element, "Return element itself for empty element");
 });
