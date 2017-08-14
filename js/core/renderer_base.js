@@ -255,40 +255,47 @@ var heightWidthAliases = {
     height: "outerHeight"
 };
 
+var getCss = function(name) {
+    var result;
+
+    if(!this[0]) return result;
+
+    if(heightWidthAliases[name]) {
+        name = heightWidthAliases[name];
+        result = this[name]() + "px";
+    } else {
+        result = window.getComputedStyle(this[0])[name] || this[0].style[name];
+    }
+
+    return typeUtils.isNumeric(result) ? result.toString() : result;
+};
+
+var setCss = function(name, value) {
+    if(!this[0] || !this[0].style) return this;
+
+    for(var i = 0; i < this.length; i++) {
+        if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
+            value += "px";
+        }
+
+        this[i].style[name] = value;
+    }
+
+};
+
 initRender.prototype.css = function(name, value) {
     var prefix = styleUtils.stylePropPrefix(name);
     name = prefix ? prefix + name : name;
 
-    if(typeUtils.isPlainObject(name)) {
+    if(typeUtils.isString(name)) {
+        if(arguments.length === 2) {
+            setCss.apply(this, [name, value]);
+        } else {
+            return getCss.apply(this, [name]);
+        }
+    } else if(typeUtils.isPlainObject(name)) {
         for(var key in name) {
             this.css(key, name[key]);
-        }
-    } else if(typeUtils.isString(name)) {
-        if(arguments.length === 2) {
-            if(!this[0] || !this[0].style) return this;
-
-            for(var i = 0; i < this.length; i++) {
-                value = typeUtils.isFunction(value) ? value() : value;
-
-                if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
-                    value += "px";
-                }
-
-                this[i].style[name] = value;
-            }
-        } else {
-            var result;
-
-            if(!this[0]) return result;
-
-            if(heightWidthAliases[name]) {
-                name = heightWidthAliases[name];
-                result = this[name]() + "px";
-            } else {
-                result = window.getComputedStyle(this[0])[name] || this[0].style[name];
-            }
-
-            return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     }
 

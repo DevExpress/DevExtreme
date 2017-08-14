@@ -125,17 +125,13 @@ QUnit.test("Set value", function(assert) {
 
     element.css("width", 5);
     element.css("color", "red");
-    element.css("height", function() { return "25em"; });
 
     assert.equal(window.getComputedStyle(element[0])["width"], "5px", "Set width");
     assert.equal(window.getComputedStyle(element[0])["color"], "rgb(255, 0, 0)", "Set color");
-    assert.equal(element[0].style["height"], "25em", "Set height with function returning string");
 
     element.css("height", "auto");
     assert.equal(element[0].style["height"], "auto", "Set height with string");
 
-    element.css("height", function() { return 25; });
-    assert.equal(element[0].style["height"], "25px", "Set height with function returning number");
 
     element.css({
         position: "fixed",

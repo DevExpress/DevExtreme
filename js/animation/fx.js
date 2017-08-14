@@ -846,7 +846,7 @@ var setupPosition = function($element, config) {
 var setProps = function($element, props) {
     iteratorUtils.each(props, function(key, value) {
         try {
-            $element.css(key, value);
+            $element.css(key, typeUtils.isFunction(value) ? value() : value);
         } catch(e) { }
     });
 };

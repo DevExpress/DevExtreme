@@ -53,6 +53,8 @@ exports.transitionEndEventName = transitionEndEventNames[styleUtils.styleProp("t
 exports.animation = supportProp("animation");
 exports.nativeScrolling = isNativeScrollingSupported();
 
+exports.styleProp = styleUtils.styleProp;
+exports.stylePropPrefix = styleUtils.stylePropPrefix;
 exports.supportProp = supportProp;
 
 exports.hasKo = !!window.ko;
