@@ -88,9 +88,9 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     },
 
     _customizeAppointmentGeometry: function(coordinates) {
-        var appointmentCountPerCell = this._getAppointmentCountPerCell() || 2;
+        var appointmentCountPerCell = this._getAppointmentCountPerCell() || coordinates.count;
 
-        var ratio = appointmentCountPerCell > 4 ? 0.8 : MONTH_APPOINTMENT_HEIGHT_RATIO;
+        var ratio = appointmentCountPerCell > 4 ? 0.7 : MONTH_APPOINTMENT_HEIGHT_RATIO;
         var maxHeight = this._defaultHeight || this.getAppointmentMinSize(),
             index = coordinates.index,
             height = ratio * maxHeight / appointmentCountPerCell,
