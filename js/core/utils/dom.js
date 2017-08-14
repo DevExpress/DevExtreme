@@ -4,7 +4,8 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
     inArray = require("./array").inArray,
-    isDefined = require("./type").isDefined;
+    isDefined = require("./type").isDefined,
+    htmlParser = require("../../core/utils/html_parser");
 
 var resetActiveElement = function() {
     var activeElement = document.activeElement;
@@ -115,7 +116,7 @@ var createComponents = function(elements, componentTypes) {
 
 var createMarkupFromString = function(str) {
     if(!window.WinJS) {
-        return $(str);
+        return $(htmlParser.parseHTML(str));
     }
 
     var tempElement = $("<div>");
