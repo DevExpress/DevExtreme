@@ -1159,28 +1159,28 @@ QUnit.test("'getHeaderHeight' should return correct value", function(assert) {
     assert.equal(headerHeight, 56, "Header height is OK");
 });
 
-QUnit.test("'getOverlappingMode' should return correct value in accordance with view configuration", function(assert) {
+QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with view configuration", function(assert) {
     this.createInstance({
         views: [{
             name: "DAY",
             type: "day",
-            appointmentCountPerCell: 5
+            maxAppointmentsPerCell: 5
         }, {
             name: "WEEK",
             type: "week",
-            appointmentCountPerCell: 2
+            getMaxAppointmentsPerCell: "none"
         }],
         currentView: "DAY",
         dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
     });
 
-    var overlappingMode = this.instance.fire("getOverlappingMode");
+    var countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
 
-    assert.equal(overlappingMode, 5, "overlappingMode is OK");
+    assert.equal(countPerCell, 5, "overlappingMode is OK");
 
     this.instance.option("currentView", "WEEK");
 
-    overlappingMode = this.instance.fire("getOverlappingMode");
+    countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
 
-    assert.equal(overlappingMode, 2, "overlappingMode is OK");
+    assert.equal(countPerCell, 2, "overlappingMode is OK");
 });

@@ -567,8 +567,8 @@ var subscribes = {
         return this.getEndViewDate();
     },
 
-    getOverlappingMode: function() {
-        return this.getOverlappingMode();
+    getMaxAppointmentsPerCell: function() {
+        return this.getMaxAppointmentsPerCell();
     },
 
     agendaIsReady: function(rows, innerRowOffset, outerRowOffset) {

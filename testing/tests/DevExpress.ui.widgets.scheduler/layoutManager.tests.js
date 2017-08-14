@@ -1594,7 +1594,7 @@ QUnit.test("Full-size appointment count depends on appointmentCountPerCell optio
             currentView: "month",
             views: [{
                 type: "month",
-                appointmentCountPerCell: 3
+                maxAppointmentsPerCell: 3
             }],
             height: 500,
             dataSource: items
@@ -1624,7 +1624,7 @@ QUnit.test("Full-size appointment count depends on appointmentCountPerCell optio
             currentView: "month",
             views: [{
                 type: "month",
-                appointmentCountPerCell: 'auto'
+                maxAppointmentsPerCell: 'auto'
             }],
             height: 200,
             dataSource: items
@@ -1662,7 +1662,7 @@ QUnit.test("Full-size appointment count depends on appointmentCountPerCell optio
             currentView: "month",
             views: [{
                 type: "month",
-                appointmentCountPerCell: 'none'
+                maxAppointmentsPerCell: 'none'
             }],
             height: 200,
             dataSource: items
