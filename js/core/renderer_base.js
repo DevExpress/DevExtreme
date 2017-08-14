@@ -259,14 +259,17 @@ initRender.prototype.css = function(name, value) {
     var prefix = styleUtils.stylePropPrefix(name);
     name = prefix ? prefix + name : name;
 
-    if(typeUtils.type(name) === "string") {
+    if(typeUtils.isPlainObject(name)) {
+        for(var key in name) {
+            this.css(key, name[key]);
+        }
+    } else if(typeUtils.isString(name)) {
         if(arguments.length === 2) {
             if(!this[0] || !this[0].style) return this;
 
             for(var i = 0; i < this.length; i++) {
-                if(typeUtils.isFunction(value)) {
-                    value = value();
-                }
+                value = typeUtils.isFunction(value) ? value() : value;
+
                 if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
                     value += "px";
                 }
@@ -286,10 +289,6 @@ initRender.prototype.css = function(name, value) {
             }
 
             return typeUtils.isNumeric(result) ? result.toString() : result;
-        }
-    } else if(typeUtils.isPlainObject(name)) {
-        for(var key in name) {
-            this.css(key, name[key]);
         }
     }
 
