@@ -379,7 +379,3 @@ var result = {
     },
 };
 module.exports = result;
-
-if(window.DevExpress) {
-    window.DevExpress.eventsEngine = result;
-}

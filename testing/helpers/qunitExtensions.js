@@ -188,49 +188,6 @@
 
 }();
 
-(function patchJQueryEventMethods() {
-    if(!QUnit.urlParams["nojquery"]) {
-        return;
-    }
-
-    var methods = ["on", "one", "off", "trigger", "triggerHandler"];
-    var originalJQueryMethods = {};
-    var originalEvent;
-
-    QUnit.testStart(function() {
-        methods.forEach(function(methodName) {
-            originalJQueryMethods[methodName] = jQuery[methodName];
-            var object = {};
-            object[methodName] = function(events, selector, data) {
-                if(methodName === "on" && typeof events === "object") {
-                    for(var eventName in events) {
-                        object[methodName].call(this, eventName, selector, data, events[eventName]);
-                    }
-                    return this;
-                }
-                var args = [this];
-                args.push.apply(args, arguments);
-                window.DevExpress.eventsEngine[methodName].apply(this, args);
-                return this;
-            };
-            jQuery.fn.extend(object);
-        });
-        originalEvent = jQuery.Event;
-        jQuery.Event = function() {
-            return window.DevExpress.eventsEngine.Event.apply(this, arguments);
-        };
-    });
-
-    QUnit.testDone(function() {
-        methods.forEach(function(methodName) {
-            var object = {};
-            object[methodName] = originalJQueryMethods[methodName];
-            jQuery.fn.extend(object);
-        });
-        jQuery.Event = originalEvent;
-    });
-})();
-
 (function clearQUnitFixtureByJQuery() {
     var isMsEdge = "CollectGarbage" in window && !("ActiveXObject" in window);
 
