@@ -4123,7 +4123,7 @@ QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first tim
     assert.equal(tagBox.option("selectedItems").length, 1, "selectedItems was changed correctly");
 });
 
-QUnit.test("Searching should work correctly in grouped tagBox (T516798)", function(assert) {
+QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T516798)", function(assert) {
     if(devices.real().platform !== "generic") {
         assert.ok(true, "test does not actual for mobile devices");
         return;
