@@ -740,9 +740,10 @@ var SelectBox = DropDownList.inherit({
 
     _valueSubstituted: function() {
         var input = this._input().get(0),
+            isAllSelected = input.selectionStart === 0 && input.selectionEnd === this._searchValue().length,
             inputHasSelection = input.selectionStart !== input.selectionEnd;
 
-        return this._wasSearch() && inputHasSelection;
+        return this._wasSearch() && inputHasSelection && !isAllSelected;
     },
 
     _shouldSubstitutionBeRendered: function() {
