@@ -172,7 +172,7 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _resetActiveElement: function() {
-        if(devices.real().platform === "ios" && $(":focus", this.getElement()).length) {
+        if(devices.real().platform === "ios" && this.getElement().find(":focus").length) {
             domUtils.resetActiveElement();
         }
     },

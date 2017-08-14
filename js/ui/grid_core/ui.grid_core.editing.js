@@ -441,9 +441,13 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _getInsertIndex: function() {
-            return this._editData.filter(function(editItem) {
-                return editItem.type === DATA_EDIT_DATA_INSERT_TYPE;
-            }).length + 1;
+            var maxInsertIndex = 0;
+            this._editData.forEach(function(editItem) {
+                if(editItem.type === DATA_EDIT_DATA_INSERT_TYPE && editItem.key[INSERT_INDEX] > maxInsertIndex) {
+                    maxInsertIndex = editItem.key[INSERT_INDEX];
+                }
+            });
+            return maxInsertIndex + 1;
         },
 
         /**

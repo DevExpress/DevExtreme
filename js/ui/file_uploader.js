@@ -23,8 +23,6 @@ var FILEUPLOADER_CLASS = "dx-fileuploader",
     FILEUPLOADER_SHOW_FILE_LIST_CLASS = "dx-fileuploader-show-file-list",
     FILEUPLOADER_DRAGOVER_CLASS = "dx-fileuploader-dragover",
 
-    FILEUPLOADER_FILEINPUT_TAG = "<input type='file'>",
-
     FILEUPLOADER_WRAPPER_CLASS = "dx-fileuploader-wrapper",
     FILEUPLOADER_CONTAINER_CLASS = "dx-fileuploader-container",
     FILEUPLOADER_CONTENT_CLASS = "dx-fileuploader-content",
@@ -47,6 +45,11 @@ var FILEUPLOADER_CLASS = "dx-fileuploader",
     FILEUPLOADER_UPLOAD_BUTTON_CLASS = "dx-fileuploader-upload-button",
 
     FILEUPLOADER_AFTER_LOAD_DELAY = 400;
+
+
+var renderFileUploaderInput = function() {
+    return $("<input>").attr("type", "file");
+};
 
 var isFormDataSupported = function() {
     return !!window.FormData;
@@ -422,7 +425,7 @@ var FileUploader = Editor.inherit({
         this._isCustomClickEvent = false;
 
         if(!this._$fileInput) {
-            this._$fileInput = $(FILEUPLOADER_FILEINPUT_TAG);
+            this._$fileInput = renderFileUploaderInput();
 
             eventsEngine.on(this._$fileInput, "change", this._inputChangeHandler.bind(this));
             eventsEngine.on(this._$fileInput, "click", (function(e) {
@@ -1359,11 +1362,13 @@ var FileUploader = Editor.inherit({
 
 ///#DEBUG
 FileUploader.__internals = {
-    changeFileInputTag: function(tag) {
-        FILEUPLOADER_FILEINPUT_TAG = tag;
+    changeFileInputRenderer: function(renderer) {
+        renderFileUploaderInput = renderer;
     },
     resetFileInputTag: function() {
-        FILEUPLOADER_FILEINPUT_TAG = "<input type='file'>";
+        renderFileUploaderInput = function() {
+            return $("<input>").attr("type", "file");
+        };
     }
 };
 ///#ENDDEBUG

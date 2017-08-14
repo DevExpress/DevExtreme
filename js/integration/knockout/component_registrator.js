@@ -98,7 +98,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                                         errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
                                     }
 
-                                    var markup = $("<div data-bind=\"" + widgetName + ": options\">").get(0);
+                                    var markup = $("<div>").attr("data-bind", widgetName + ": options").get(0);
                                     options.container.append(markup);
                                     ko.applyBindings(options.model, markup);
                                 }

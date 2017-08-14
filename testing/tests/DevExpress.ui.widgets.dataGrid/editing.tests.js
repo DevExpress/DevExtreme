@@ -5461,6 +5461,38 @@ QUnit.testInActiveWindow("The lookup column should keep focus after changing val
     assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
 });
 
+QUnit.test("Batch mode - Correct insert row index for a new row when a previous new row is deleted_T541129", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowAdding: true,
+        allowUpdating: true,
+        allowDeleting: true,
+        mode: 'batch',
+        texts: {
+            addRow: "Add New Item",
+            saveGridChanges: "Save changes",
+            cancelGridChanges: "Cancel changes"
+        }
+    };
+
+    rowsView.render(testElement);
+
+    //act
+    this.addRow();
+    this.addRow();
+    this.deleteRow(1);
+    this.addRow();
+
+    //assert
+    var items = this.dataController.items();
+    assert.ok(items[0].inserted, "first row is inserted");
+    assert.ok(items[1].inserted, "second row is inserted");
+});
+
 if(device.ios || device.android) {
     //T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {
@@ -8843,6 +8875,44 @@ QUnit.test("Cell edit mode - The validation should not work for column with 'sho
     //assert
     $cellElement = $(rowsView.element().find('tbody > tr.dx-row-inserted').first().children().first());
     assert.notOk($cellElement.hasClass("dx-datagrid-invalid"), "first cell is valid");
+});
+
+QUnit.testInActiveWindow("Batch edit mode - Validation message should be shown when column has showEditorAlways", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container'),
+        inputElement;
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{
+                type: "required"
+            }],
+            showEditorAlways: true
+        }]
+    });
+
+    //act
+
+    that.editCell(0, 0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement
+        .val("")
+        .trigger('change');
+
+    this.clock.tick();
+
+    //assert
+    var cells = rowsView.element().find('tbody > tr').first().find("td");
+    assert.ok(cells.eq(0).hasClass("dx-datagrid-invalid"), "validation border should be shown");
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
