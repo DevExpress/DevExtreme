@@ -1657,6 +1657,35 @@ QUnit.test("After draw. horizontalAlignment = \"center\"", function(assert) {
     });
 });
 
+QUnit.test("layoutOptions", function(assert) {
+    var options = this.createSimpleLegend().layoutOptions();
+
+    assert.equal(options.horizontalAlignment, "right");
+    assert.equal(options.verticalAlignment, "top");
+    assert.equal(options.side, "horizontal");
+});
+
+QUnit.test("measure", function(assert) {
+    assert.deepEqual(this.createSimpleLegend().measure(100, 200), [36, 26]);
+});
+
+QUnit.test("move", function(assert) {
+    this.createAndDrawLegend().move([10, 15]);
+
+    assert.deepEqual(this.renderer.g.returnValues[0].attr.args[0][0], { translateX: 17, translateY: 20 });
+});
+
+QUnit.test("free space", function(assert) {
+    var legend = this.createSimpleLegend();
+    legend.measure(100, 200);
+
+    legend.freeSpace();
+
+    assert.ok(this.renderer.g.returnValues[0].dispose.calledOnce);
+    assert.ok(this.options._incidentOccurred.calledOnce);
+    assert.ok(this.options._incidentOccurred.calledWith("W2104"));
+});
+
 QUnit.module('Legend Options', environment);
 
 QUnit.test('Default center for not-set align', function(assert) {

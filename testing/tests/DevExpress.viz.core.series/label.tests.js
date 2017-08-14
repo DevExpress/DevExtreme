@@ -35,7 +35,7 @@ var environment = {
         return label;
     },
     createAndDrawLabel: function() {
-        return this.createLabel()._draw();
+        return this.createLabel().draw();
     },
     getConnectorElement: function() {
         return this.renderer.path.returnValues[0];
@@ -53,7 +53,7 @@ var environment = {
         } else {
             this.renderer.bBoxTemplate = BBox;
         }
-        label._draw();
+        label.draw();
         label.setFigureToDrawConnector(figure);
         return label;
     }
@@ -572,6 +572,43 @@ QUnit.test("Drawn connector to label with odd side", function(assert) {
     assert.deepEqual(label._connector._stored_settings.points, [218, 70, 218, 35]);
 });
 
+QUnit.test("Use external connector strategy", function(assert) {
+    this.options.background.fill = "none";
+
+    var prepareLabelPointsThisArg,
+        label = new labelModule.Label({
+            renderer: this.renderer,
+            point: this.point,
+            labelsGroup: this.group,
+            strategy: {
+                isLabelInside: function(labelPoint, figure) {
+                    return false;
+                },
+                getFigureCenter: function() {
+                    return [0, 0];
+                },
+                prepareLabelPoints: function(points) {
+                    prepareLabelPointsThisArg = this;
+                    return points;
+                },
+
+                findFigurePoint: function(figure, labelPoint) {
+                    return [10, 10];
+                }
+            }
+        });
+    label.setOptions(this.options);
+    label.setData(this.data.formatObject);
+
+    label.draw();
+
+    label.setFigureToDrawConnector({ x: 100, y: 100, width: 0, height: 0 });
+    label.shift(100, 50);
+
+    assert.deepEqual(this.getConnectorElement()._stored_settings.points, [10, 10, 100, 55]);
+    assert.equal(prepareLabelPointsThisArg, label);
+});
+
 QUnit.module("Set options", $.extend({}, environment, {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
@@ -922,6 +959,25 @@ QUnit.test("getBoundingRect after shift", function(assert) {
     }, "equal bbox");
 });
 
+QUnit.test("getBackgroundPadding", function(assert) {
+    var label = this.createLabel();
+
+    label.show();
+
+    assert.equal(label.getBackgroundPadding(), 16);
+});
+
+QUnit.test("getBackgroundPadding. No background", function(assert) {
+    this.options.background = {
+        fill: "none"
+    };
+    var label = this.createLabel();
+
+    label.show();
+
+    assert.equal(label.getBackgroundPadding(), 0);
+});
+
 QUnit.test("getBoundingRect after double shift", function(assert) {
     var label = this.createLabel(),
         innerGroup,
@@ -973,6 +1029,21 @@ QUnit.test("fit", function(assert) {
         background = this.renderer.rect.getCall(0).returnValue;
 
     assert.equal(text.applyEllipsis.args[0], 15, "Max width param");
+    assert.strictEqual(background.attr.called, true, "New background rect");
+});
+
+QUnit.test("resetEllipsis", function(assert) {
+    this.options.background = { fill: "red" };
+
+    var label = this.createAndDrawLabel();
+
+    label.shift(-7, -2);
+    label.resetEllipsis(15);
+
+    var text = this.renderer.text.getCall(0).returnValue,
+        background = this.renderer.rect.getCall(0).returnValue;
+
+    assert.strictEqual(text.restoreText.called, true, "text is restored");
     assert.strictEqual(background.attr.called, true, "New background rect");
 });
 

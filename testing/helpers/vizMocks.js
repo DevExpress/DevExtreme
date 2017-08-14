@@ -111,6 +111,9 @@
             $(this.element).trigger.apply($(this.element), arguments);
             return this;
         },
+        restoreText: function() {
+
+        }
     }, {
         $constructor: function() {
             this.children = [];

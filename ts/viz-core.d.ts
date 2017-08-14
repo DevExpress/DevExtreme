@@ -11,304 +11,323 @@ declare module DevExpress.viz.core {
     export interface Border {
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_label_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_point_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_color
-          * @docid basechartoptions_legend_border_color
-          * @docid dxvectormapoptions_legends_border_color
-          * @docid BaseWidgetOptions_tooltip_border_color
-          * @docid dxchartoptions_commonpanesettings_border_color
-          * @docid dxchartoptions_crosshair_horizontalline_color
-          * @docid dxchartoptions_crosshair_verticalline_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_color
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_border_color
+        * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_color
+        * @docid dxChartSeriesTypes_CommonSeries_label_border_color
+        * @docid dxChartSeriesTypes_CommonSeries_point_border_color
+        * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_color
+        * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_color
+        * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_color
+        * @docid basechartoptions_legend_border_color
+        * @docid dxvectormapoptions_legends_border_color
+        * @docid BaseWidgetOptions_tooltip_border_color
+        * @docid dxchartoptions_commonpanesettings_border_color
+        * @docid dxchartoptions_crosshair_horizontalline_color
+        * @docid dxchartoptions_crosshair_verticalline_color
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_color
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_color
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_color
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_color
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_color
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_color
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_color
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_color
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_color
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_color
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_color
+        * @docid dxfunneloptions_label_border_color
+        * @docid dxfunneloptions_legend_border_color
+        */
         color?: string;
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_label_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_point_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_visible
-          * @docid basechartoptions_legend_border_visible
-          * @docid dxvectormapoptions_legends_border_visible
-          * @docid BaseWidgetOptions_tooltip_border_visible
-          * @docid dxchartoptions_commonpanesettings_border_visible
-          * @docid dxchartoptions_crosshair_horizontalline_visible
-          * @docid dxchartoptions_crosshair_verticalline_visible
-          * @docid dxChartSeriesTypes_stepareaseries_selectionstyle_border_visible
-          * @docid dxChartSeriesTypes_stepareaseries_hoverstyle_border_visible
-          * @docid dxChartSeriesTypes_stepareaseries_border_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_visible
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_border_visible
+        * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_visible
+        * @docid dxChartSeriesTypes_CommonSeries_label_border_visible
+        * @docid dxChartSeriesTypes_CommonSeries_point_border_visible
+        * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_visible
+        * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_visible
+        * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_visible
+        * @docid basechartoptions_legend_border_visible
+        * @docid dxvectormapoptions_legends_border_visible
+        * @docid BaseWidgetOptions_tooltip_border_visible
+        * @docid dxchartoptions_commonpanesettings_border_visible
+        * @docid dxchartoptions_crosshair_horizontalline_visible
+        * @docid dxchartoptions_crosshair_verticalline_visible
+        * @docid dxChartSeriesTypes_stepareaseries_selectionstyle_border_visible
+        * @docid dxChartSeriesTypes_stepareaseries_hoverstyle_border_visible
+        * @docid dxChartSeriesTypes_stepareaseries_border_visible
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_visible
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_visible
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_visible
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_visible
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_visible
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_visible
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_visible
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_visible
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_visible
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_visible
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_visible
+        * @docid dxfunneloptions_label_border_visible
+        * @docid dxfunneloptions_legend_border_visible
+        */
         visible?: boolean;
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_label_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_point_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_width
-          * @docid basechartoptions_legend_border_width
-          * @docid dxvectormapoptions_legends_border_width
-          * @docid BaseWidgetOptions_tooltip_border_width
-          * @docid dxchartoptions_commonpanesettings_border_width
-          * @docid dxchartoptions_crosshair_horizontalline_width
-          * @docid dxchartoptions_crosshair_verticalline_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_width
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_border_width
+        * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_width
+        * @docid dxChartSeriesTypes_CommonSeries_label_border_width
+        * @docid dxChartSeriesTypes_CommonSeries_point_border_width
+        * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_width
+        * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_width
+        * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_width
+        * @docid basechartoptions_legend_border_width
+        * @docid dxvectormapoptions_legends_border_width
+        * @docid BaseWidgetOptions_tooltip_border_width
+        * @docid dxchartoptions_commonpanesettings_border_width
+        * @docid dxchartoptions_crosshair_horizontalline_width
+        * @docid dxchartoptions_crosshair_verticalline_width
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_width
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_width
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_width
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_width
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_width
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_width
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_width
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_width
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_width
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_width
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_width
+        * @docid dxfunneloptions_label_border_width
+        * @docid dxfunneloptions_legend_border_width
+        */
         width?: number;
     }
 
     export interface DashedBorder extends Border {
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_border_dashstyle
-          * @docid dxChartSeriesTypes_CommonSeries_label_border_dashstyle
-          * @docid basechartoptions_legend_border_dashstyle
-          * @docid dxvectormapoptions_legends_border_dashstyle
-          * @docid BaseWidgetOptions_tooltip_border_dashstyle
-          * @docid dxchartoptions_commonpanesettings_border_dashstyle
-          * @docid dxchartoptions_crosshair_horizontalline_dashstyle
-          * @docid dxchartoptions_crosshair_verticalline_dashstyle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_dashstyle
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_dashstyle
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_dashstyle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_dashstyle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_dashstyle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_dashstyle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_dashstyle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_dashstyle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_dashstyle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_dashstyle
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_border_dashstyle
+        * @docid dxChartSeriesTypes_CommonSeries_label_border_dashstyle
+        * @docid basechartoptions_legend_border_dashstyle
+        * @docid dxvectormapoptions_legends_border_dashstyle
+        * @docid BaseWidgetOptions_tooltip_border_dashstyle
+        * @docid dxchartoptions_commonpanesettings_border_dashstyle
+        * @docid dxchartoptions_crosshair_horizontalline_dashstyle
+        * @docid dxchartoptions_crosshair_verticalline_dashstyle
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_dashstyle
+        * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_dashstyle
+        * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_dashstyle
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_dashstyle
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_dashstyle
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_dashstyle
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_dashstyle
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_dashstyle
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_dashstyle
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_dashstyle
+        * @docid dxfunneloptions_label_border_dashstyle
+        * @docid dxfunneloptions_legend_border_dashstyle
+        */
         dashStyle?: string;
     }
 
     export interface DashedBorderWithOpacity extends DashedBorder {
         /**
-          * @docid basechartoptions_legend_border_opacity
-          * @docid dxvectormapoptions_legends_border_opacity
-          * @docid dxchartoptions_commonpanesettings_border_opacity
-          * @docid BaseWidgetOptions_tooltip_border_opacity
-          * @docid dxchartoptions_crosshair_horizontalline_opacity
-          * @docid dxchartoptions_crosshair_verticalline_opacity
-          */
+        * @docid basechartoptions_legend_border_opacity
+        * @docid dxvectormapoptions_legends_border_opacity
+        * @docid dxchartoptions_commonpanesettings_border_opacity
+        * @docid BaseWidgetOptions_tooltip_border_opacity
+        * @docid dxchartoptions_crosshair_horizontalline_opacity
+        * @docid dxchartoptions_crosshair_verticalline_opacity
+        * @docid dxfunneloptions_legend_border_opacity
+        */
         opacity?: number;
     }
 
     export interface Font {
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_font_color
-          * @docid BaseWidgetOptions_loadingindicator_font_color
-          * @docid basechartoptions_legend_font_color
-          * @docid dxvectormapoptions_legends_font_color
-          * @docid BaseWidgetOptions_title_font_color
-          * @docid BaseWidgetOptions_title_subtitle_font_color
-          * @docid BaseWidgetOptions_tooltip_font_color
-          * @docid basegaugeoptions_scale_label_font_color
-          * @docid basegaugeoptions_subtitle_font_color
-          * @docid commonIndicatoroptions_text_font_color
-          * @docid linearTextCloudoptions_text_font_color
-          * @docid circularTextCloudoptions_text_font_color
-          * @docid dxbargaugeoptions_label_font_color
-          * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_color
-          * @docid dxchartoptions_commonaxissettings_label_font_color
-          * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_color
-          * @docid dxchartoptions_commonaxissettings_title_font_color
-          * @docid dxchartoptions_crosshair_label_font_color
-          * @docid dxchartoptions_crosshair_horizontalline_label_font_color
-          * @docid dxchartoptions_crosshair_verticalline_label_font_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_color
-          * @docid dxrangeselectoroptions_scale_label_font_color
-          * @docid dxrangeselectoroptions_slidermarker_font_color
-          * @docid dxvectormapoptions_areaSettings_label_font_color
-          * @docid dxvectormapoptions_markerSettings_label_font_color
-          * @docid dxvectormapoptions_layers_label_font_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_color
-          * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_color
-          * @docid dxpolarchartoptions_commonaxissettings_label_font_color
-          * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_color
-          * @docid dxtreemapoptions_tile_label_font_color
-          * @docid dxtreemapoptions_group_label_font_color
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_label_font_color
+        * @docid BaseWidgetOptions_loadingindicator_font_color
+        * @docid basechartoptions_legend_font_color
+        * @docid dxvectormapoptions_legends_font_color
+        * @docid BaseWidgetOptions_title_font_color
+        * @docid BaseWidgetOptions_title_subtitle_font_color
+        * @docid BaseWidgetOptions_tooltip_font_color
+        * @docid basegaugeoptions_scale_label_font_color
+        * @docid basegaugeoptions_subtitle_font_color
+        * @docid commonIndicatoroptions_text_font_color
+        * @docid linearTextCloudoptions_text_font_color
+        * @docid circularTextCloudoptions_text_font_color
+        * @docid dxbargaugeoptions_label_font_color
+        * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_color
+        * @docid dxchartoptions_commonaxissettings_label_font_color
+        * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_color
+        * @docid dxchartoptions_commonaxissettings_title_font_color
+        * @docid dxchartoptions_crosshair_label_font_color
+        * @docid dxchartoptions_crosshair_horizontalline_label_font_color
+        * @docid dxchartoptions_crosshair_verticalline_label_font_color
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_color
+        * @docid dxrangeselectoroptions_scale_label_font_color
+        * @docid dxrangeselectoroptions_slidermarker_font_color
+        * @docid dxvectormapoptions_areaSettings_label_font_color
+        * @docid dxvectormapoptions_markerSettings_label_font_color
+        * @docid dxvectormapoptions_layers_label_font_color
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_color
+        * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_color
+        * @docid dxpolarchartoptions_commonaxissettings_label_font_color
+        * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_color
+        * @docid dxtreemapoptions_tile_label_font_color
+        * @docid dxtreemapoptions_group_label_font_color
+        * @docid dxfunneloptions_label_font_color
+        * @docid dxfunneloptions_legend_font_color
+        */
         color?: string;
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_font_family
-          * @docid BaseWidgetOptions_loadingindicator_font_family
-          * @docid basechartoptions_legend_font_family
-          * @docid dxvectormapoptions_legends_font_family
-          * @docid BaseWidgetOptions_title_font_family
-          * @docid BaseWidgetOptions_title_subtitle_font_family
-          * @docid BaseWidgetOptions_tooltip_font_family
-          * @docid basegaugeoptions_scale_label_font_family
-          * @docid basegaugeoptions_subtitle_font_family
-          * @docid commonIndicatoroptions_text_font_family
-          * @docid dxbargaugeoptions_label_font_family
-          * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_family
-          * @docid dxchartoptions_commonaxissettings_label_font_family
-          * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_family
-          * @docid dxchartoptions_commonaxissettings_title_font_family
-          * @docid dxchartoptions_crosshair_label_font_family
-          * @docid dxchartoptions_crosshair_horizontalline_label_font_family
-          * @docid dxchartoptions_crosshair_verticalline_label_font_family
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_family
-          * @docid dxrangeselectoroptions_scale_label_font_family
-          * @docid dxrangeselectoroptions_slidermarker_font_family
-          * @docid dxvectormapoptions_areaSettings_label_font_family
-          * @docid dxvectormapoptions_markerSettings_label_font_family
-          * @docid dxvectormapoptions_layers_label_font_family
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_family
-          * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_family
-          * @docid dxpolarchartoptions_commonaxissettings_label_font_family
-          * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_family
-          * @docid dxtreemapoptions_tile_label_font_family
-          * @docid dxtreemapoptions_group_label_font_family
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_label_font_family
+        * @docid BaseWidgetOptions_loadingindicator_font_family
+        * @docid basechartoptions_legend_font_family
+        * @docid dxvectormapoptions_legends_font_family
+        * @docid BaseWidgetOptions_title_font_family
+        * @docid BaseWidgetOptions_title_subtitle_font_family
+        * @docid BaseWidgetOptions_tooltip_font_family
+        * @docid basegaugeoptions_scale_label_font_family
+        * @docid basegaugeoptions_subtitle_font_family
+        * @docid commonIndicatoroptions_text_font_family
+        * @docid dxbargaugeoptions_label_font_family
+        * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_family
+        * @docid dxchartoptions_commonaxissettings_label_font_family
+        * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_family
+        * @docid dxchartoptions_commonaxissettings_title_font_family
+        * @docid dxchartoptions_crosshair_label_font_family
+        * @docid dxchartoptions_crosshair_horizontalline_label_font_family
+        * @docid dxchartoptions_crosshair_verticalline_label_font_family
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_family
+        * @docid dxrangeselectoroptions_scale_label_font_family
+        * @docid dxrangeselectoroptions_slidermarker_font_family
+        * @docid dxvectormapoptions_areaSettings_label_font_family
+        * @docid dxvectormapoptions_markerSettings_label_font_family
+        * @docid dxvectormapoptions_layers_label_font_family
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_family
+        * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_family
+        * @docid dxpolarchartoptions_commonaxissettings_label_font_family
+        * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_family
+        * @docid dxtreemapoptions_tile_label_font_family
+        * @docid dxtreemapoptions_group_label_font_family
+        * @docid dxfunneloptions_label_font_font_family
+        * @docid dxfunneloptions_legend_font_family
+        */
         family?: string;
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_font_opacity
-          * @docid BaseWidgetOptions_loadingindicator_font_opacity
-          * @docid basechartoptions_legend_font_opacity
-          * @docid dxvectormapoptions_legends_font_opacity
-          * @docid BaseWidgetOptions_title_font_opacity
-          * @docid BaseWidgetOptions_title_subtitle_font_opacity
-          * @docid BaseWidgetOptions_tooltip_font_opacity
-          * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_opacity
-          * @docid dxchartoptions_commonaxissettings_label_font_opacity
-          * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_opacity
-          * @docid dxchartoptions_commonaxissettings_title_font_opacity
-          * @docid dxchartoptions_crosshair_label_font_opacity
-          * @docid dxchartoptions_crosshair_horizontalline_label_font_opacity
-          * @docid dxchartoptions_crosshair_verticalline_label_font_opacity
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_opacity
-          * @docid commonIndicatoroptions_text_font_opacity
-          * @docid dxbargaugeoptions_label_font_opacity
-          * @docid basegaugeoptions_subtitle_font_opacity
-          * @docid basegaugeoptions_scale_label_font_opacity
-          * @docid dxrangeselectoroptions_scale_label_font_opacity
-          * @docid dxrangeselectoroptions_slidermarker_font_opacity
-          * @docid dxvectormapoptions_areaSettings_label_font_opacity
-          * @docid dxvectormapoptions_markerSettings_label_font_opacity
-          * @docid dxvectormapoptions_layers_label_font_opacity
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_opacity
-          * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_opacity
-          * @docid dxpolarchartoptions_commonaxissettings_label_font_opacity
-          * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_opacity
-          * @docid dxtreemapoptions_tile_label_font_opacity
-          * @docid dxtreemapoptions_group_label_font_opacity
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_label_font_opacity
+        * @docid BaseWidgetOptions_loadingindicator_font_opacity
+        * @docid basechartoptions_legend_font_opacity
+        * @docid dxvectormapoptions_legends_font_opacity
+        * @docid BaseWidgetOptions_title_font_opacity
+        * @docid BaseWidgetOptions_title_subtitle_font_opacity
+        * @docid BaseWidgetOptions_tooltip_font_opacity
+        * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_opacity
+        * @docid dxchartoptions_commonaxissettings_label_font_opacity
+        * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_opacity
+        * @docid dxchartoptions_commonaxissettings_title_font_opacity
+        * @docid dxchartoptions_crosshair_label_font_opacity
+        * @docid dxchartoptions_crosshair_horizontalline_label_font_opacity
+        * @docid dxchartoptions_crosshair_verticalline_label_font_opacity
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_opacity
+        * @docid commonIndicatoroptions_text_font_opacity
+        * @docid dxbargaugeoptions_label_font_opacity
+        * @docid basegaugeoptions_subtitle_font_opacity
+        * @docid basegaugeoptions_scale_label_font_opacity
+        * @docid dxrangeselectoroptions_scale_label_font_opacity
+        * @docid dxrangeselectoroptions_slidermarker_font_opacity
+        * @docid dxvectormapoptions_areaSettings_label_font_opacity
+        * @docid dxvectormapoptions_markerSettings_label_font_opacity
+        * @docid dxvectormapoptions_layers_label_font_opacity
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_opacity
+        * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_opacity
+        * @docid dxpolarchartoptions_commonaxissettings_label_font_opacity
+        * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_opacity
+        * @docid dxtreemapoptions_tile_label_font_opacity
+        * @docid dxtreemapoptions_group_label_font_opacity
+        * @docid dxfunneloptions_label_font_opacity
+        * @docid dxfunneloptions_legend_font_opacity
+        */
         opacity?: number;
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_font_size
-          * @docid BaseWidgetOptions_loadingindicator_font_size
-          * @docid basechartoptions_legend_font_size
-          * @docid dxvectormapoptions_legends_font_size
-          * @docid BaseWidgetOptions_title_font_size
-          * @docid BaseWidgetOptions_title_subtitle_font_size
-          * @docid BaseWidgetOptions_tooltip_font_size
-          * @docid basegaugeoptions_scale_label_font_size
-          * @docid basegaugeoptions_subtitle_font_size
-          * @docid commonIndicatoroptions_text_font_size
-          * @docid circularTextCloudoptions_text_font_size
-          * @docid linearTextCloudoptions_text_font_size
-          * @docid dxbargaugeoptions_label_font_size
-          * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_size
-          * @docid dxchartoptions_commonaxissettings_label_font_size
-          * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_size
-          * @docid dxchartoptions_commonaxissettings_title_font_size
-          * @docid dxchartoptions_crosshair_label_font_size
-          * @docid dxchartoptions_crosshair_horizontalline_label_font_size
-          * @docid dxchartoptions_crosshair_verticalline_label_font_size
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_size
-          * @docid dxrangeselectoroptions_scale_label_font_size
-          * @docid dxrangeselectoroptions_slidermarker_font_size
-          * @docid dxvectormapoptions_areaSettings_label_font_size
-          * @docid dxvectormapoptions_markerSettings_label_font_size
-          * @docid dxvectormapoptions_layers_label_font_size
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_size
-          * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_size
-          * @docid dxpolarchartoptions_commonaxissettings_label_font_size
-          * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_size
-          * @docid dxtreemapoptions_tile_label_font_size
-          * @docid dxtreemapoptions_group_label_font_size
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_label_font_size
+        * @docid BaseWidgetOptions_loadingindicator_font_size
+        * @docid basechartoptions_legend_font_size
+        * @docid dxvectormapoptions_legends_font_size
+        * @docid BaseWidgetOptions_title_font_size
+        * @docid BaseWidgetOptions_title_subtitle_font_size
+        * @docid BaseWidgetOptions_tooltip_font_size
+        * @docid basegaugeoptions_scale_label_font_size
+        * @docid basegaugeoptions_subtitle_font_size
+        * @docid commonIndicatoroptions_text_font_size
+        * @docid circularTextCloudoptions_text_font_size
+        * @docid linearTextCloudoptions_text_font_size
+        * @docid dxbargaugeoptions_label_font_size
+        * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_size
+        * @docid dxchartoptions_commonaxissettings_label_font_size
+        * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_size
+        * @docid dxchartoptions_commonaxissettings_title_font_size
+        * @docid dxchartoptions_crosshair_label_font_size
+        * @docid dxchartoptions_crosshair_horizontalline_label_font_size
+        * @docid dxchartoptions_crosshair_verticalline_label_font_size
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_size
+        * @docid dxrangeselectoroptions_scale_label_font_size
+        * @docid dxrangeselectoroptions_slidermarker_font_size
+        * @docid dxvectormapoptions_areaSettings_label_font_size
+        * @docid dxvectormapoptions_markerSettings_label_font_size
+        * @docid dxvectormapoptions_layers_label_font_size
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_size
+        * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_size
+        * @docid dxpolarchartoptions_commonaxissettings_label_font_size
+        * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_size
+        * @docid dxtreemapoptions_tile_label_font_size
+        * @docid dxtreemapoptions_group_label_font_size
+        * @docid dxfunneloptions_label_font_size
+        * @docid dxfunneloptions_legend_font_size
+        */
         size?: any;
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_font_weight
-          * @docid BaseWidgetOptions_loadingindicator_font_weight
-          * @docid basechartoptions_legend_font_weight
-          * @docid dxvectormapoptions_legends_font_weight
-          * @docid BaseWidgetOptions_title_font_weight
-          * @docid BaseWidgetOptions_title_subtitle_font_weight
-          * @docid BaseWidgetOptions_tooltip_font_weight
-          * @docid basegaugeoptions_scale_label_font_weight
-          * @docid basegaugeoptions_subtitle_font_weight
-          * @docid commonIndicatoroptions_text_font_weight
-          * @docid dxbargaugeoptions_label_font_weight
-          * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_weight
-          * @docid dxchartoptions_commonaxissettings_label_font_weight
-          * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_weight
-          * @docid dxchartoptions_commonaxissettings_title_font_weight
-          * @docid dxchartoptions_crosshair_label_font_weight
-          * @docid dxchartoptions_crosshair_horizontalline_label_font_weight
-          * @docid dxchartoptions_crosshair_verticalline_label_font_weight
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_weight
-          * @docid dxrangeselectoroptions_scale_label_font_weight
-          * @docid dxrangeselectoroptions_slidermarker_font_weight
-          * @docid dxvectormapoptions_areaSettings_label_font_weight
-          * @docid dxvectormapoptions_markerSettings_label_font_weight
-          * @docid dxvectormapoptions_layers_label_font_weight
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_weight
-          * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_weight
-          * @docid dxpolarchartoptions_commonaxissettings_label_font_weight
-          * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_weight
-          * @docid dxtreemapoptions_tile_label_font_weight
-          * @docid dxtreemapoptions_group_label_font_weight
-          */
+        * @docid dxChartSeriesTypes_CommonSeries_label_font_weight
+        * @docid BaseWidgetOptions_loadingindicator_font_weight
+        * @docid basechartoptions_legend_font_weight
+        * @docid dxvectormapoptions_legends_font_weight
+        * @docid BaseWidgetOptions_title_font_weight
+        * @docid BaseWidgetOptions_title_subtitle_font_weight
+        * @docid BaseWidgetOptions_tooltip_font_weight
+        * @docid basegaugeoptions_scale_label_font_weight
+        * @docid basegaugeoptions_subtitle_font_weight
+        * @docid commonIndicatoroptions_text_font_weight
+        * @docid dxbargaugeoptions_label_font_weight
+        * @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font_weight
+        * @docid dxchartoptions_commonaxissettings_label_font_weight
+        * @docid dxchartoptions_commonaxissettings_stripstyle_label_font_weight
+        * @docid dxchartoptions_commonaxissettings_title_font_weight
+        * @docid dxchartoptions_crosshair_label_font_weight
+        * @docid dxchartoptions_crosshair_horizontalline_label_font_weight
+        * @docid dxchartoptions_crosshair_verticalline_label_font_weight
+        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font_weight
+        * @docid dxrangeselectoroptions_scale_label_font_weight
+        * @docid dxrangeselectoroptions_slidermarker_font_weight
+        * @docid dxvectormapoptions_areaSettings_label_font_weight
+        * @docid dxvectormapoptions_markerSettings_label_font_weight
+        * @docid dxvectormapoptions_layers_label_font_weight
+        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font_weight
+        * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font_weight
+        * @docid dxpolarchartoptions_commonaxissettings_label_font_weight
+        * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_weight
+        * @docid dxtreemapoptions_tile_label_font_weight
+        * @docid dxtreemapoptions_group_label_font_weight
+        * @docid dxfunneloptions_label_font_weight
+        * @docid dxfunneloptions_legend_font_weight
+        */
         weight?: number;
     }
 
@@ -359,35 +378,39 @@ declare module DevExpress.viz.core {
 
     export interface Margins {
         /**
-          * @docid BaseWidgetOptions_margin_bottom
-          * @docid basechartoptions_legend_margin_bottom
-          * @docid BaseWidgetOptions_title_margin_bottom
-          * @docid dxvectormapoptions_legends_margin_bottom
-          */
+        * @docid BaseWidgetOptions_margin_bottom
+        * @docid basechartoptions_legend_margin_bottom
+        * @docid BaseWidgetOptions_title_margin_bottom
+        * @docid dxvectormapoptions_legends_margin_bottom
+        * @docid dxfunneloptions_legend_margin_bottom
+        */
         bottom?: number;
 
         /**
-          * @docid BaseWidgetOptions_margin_left
-          * @docid basechartoptions_legend_margin_left
-          * @docid BaseWidgetOptions_title_margin_left
-          * @docid dxvectormapoptions_legends_margin_left
-          */
+        * @docid BaseWidgetOptions_margin_left
+        * @docid basechartoptions_legend_margin_left
+        * @docid BaseWidgetOptions_title_margin_left
+        * @docid dxvectormapoptions_legends_margin_left
+        * @docid dxfunneloptions_legend_margin_left
+        */
         left?: number;
 
         /**
-          * @docid BaseWidgetOptions_margin_right
-          * @docid basechartoptions_legend_margin_right
-          * @docid BaseWidgetOptions_title_margin_right
-          * @docid dxvectormapoptions_legends_margin_right
-          */
+        * @docid BaseWidgetOptions_margin_right
+        * @docid basechartoptions_legend_margin_right
+        * @docid BaseWidgetOptions_title_margin_right
+        * @docid dxvectormapoptions_legends_margin_right
+        * @docid dxfunneloptions_legend_margin_right
+        */
         right?: number;
 
         /**
-          * @docid BaseWidgetOptions_margin_top
-          * @docid basechartoptions_legend_margin_top
-          * @docid BaseWidgetOptions_title_margin_top
-          * @docid dxvectormapoptions_legends_margin_top
-          */
+        * @docid BaseWidgetOptions_margin_top
+        * @docid basechartoptions_legend_margin_top
+        * @docid BaseWidgetOptions_title_margin_top
+        * @docid dxvectormapoptions_legends_margin_top
+        * @docid dxfunneloptions_legend_margin_top
+        */
         top?: number;
     }
 
@@ -504,6 +527,7 @@ declare module DevExpress.viz.core {
           * @docid basesparklineoptions_tooltip_customizetooltip
           * @docid dxvectormapoptions_tooltip_customizetooltip
           * @docid dxtreemapoptions_tooltip_customizetooltip
+          * @docid dxfunneloptions_tooltip_customizetooltip
           */
         customizeTooltip?: (arg: Object) => { color?: string; text?: string };
 
@@ -587,113 +611,131 @@ declare module DevExpress.viz.core {
 
     export interface LegendBorder extends viz.core.DashedBorderWithOpacity {
         /**
-          * @docid basechartoptions_legend_border_cornerradius
-          * @docid dxvectormapoptions_legends_border_cornerradius
-          */
+        * @docid basechartoptions_legend_border_cornerradius
+        * @docid dxvectormapoptions_legends_border_cornerradius
+        * @docid dxfunneloptions_legend_border_cornerradius
+        */
         cornerRadius?: number;
     }
 
     export interface BaseLegend {
         /**
-          * @docid basechartoptions_legend_backgroundcolor
-          * @docid dxvectormapoptions_legends_backgroundcolor
-          */
+        * @docid basechartoptions_legend_backgroundcolor
+        * @docid dxvectormapoptions_legends_backgroundcolor
+        * @docid dxfunneloptions_legend_backgroundcolor
+        */
         backgroundColor?: string;
 
         /**
-          * @docid basechartoptions_legend_border
-          * @docid dxvectormapoptions_legends_border
-          */
+        * @docid basechartoptions_legend_border
+        * @docid dxvectormapoptions_legends_border
+        * @docid dxfunneloptions_legend_border
+        */
         border?: viz.core.LegendBorder;
 
         /**
-          * @docid basechartoptions_legend_columncount
-          * @docid dxvectormapoptions_legends_columncount
-          */
+        * @docid basechartoptions_legend_columncount
+        * @docid dxvectormapoptions_legends_columncount
+        * @docid dxfunneloptions_legend_columncount
+        */
         columnCount?: number;
 
         /**
-          * @docid basechartoptions_legend_columnitemspacing
-          * @docid dxvectormapoptions_legends_columnitemspacing
-          */
+        * @docid basechartoptions_legend_columnitemspacing
+        * @docid dxvectormapoptions_legends_columnitemspacing
+        * @docid dxfunneloptions_legend_columnitemspacing
+        */
         columnItemSpacing?: number;
 
         /**
-          * @docid basechartoptions_legend_font
-          * @docid dxvectormapoptions_legends_font
-          */
+        * @docid basechartoptions_legend_font
+        * @docid dxvectormapoptions_legends_font
+        * @docid dxfunneloptions_legend_font
+        */
         font?: viz.core.Font;
 
         /**
-          * @docid basechartoptions_legend_horizontalalignment
-          * @docid dxvectormapoptions_legends_horizontalalignment
-          */
+        * @docid basechartoptions_legend_horizontalalignment
+        * @docid dxvectormapoptions_legends_horizontalalignment
+        * @docid dxfunneloptions_legend_horizontalalignment
+        */
         horizontalAlignment?: string;
 
         /**
-          * @docid basechartoptions_legend_itemsalignment
-          * @docid dxvectormapoptions_legends_itemsalignment
-          */
+        * @docid basechartoptions_legend_itemsalignment
+        * @docid dxvectormapoptions_legends_itemsalignment
+        * @docid dxfunneloptions_legend_itemsalignment
+        */
         itemsAlignment?: string;
 
         /**
-          * @docid basechartoptions_legend_itemtextposition
-          * @docid dxvectormapoptions_legends_itemtextposition
-          */
+        * @docid basechartoptions_legend_itemtextposition
+        * @docid dxvectormapoptions_legends_itemtextposition
+        * @docid dxfunneloptions_legend_itemtextposition
+        */
         itemTextPosition?: string;
 
         /**
-          * @docid basechartoptions_legend_margin
-          * @docid dxvectormapoptions_legends_margin
-          */
+        * @docid basechartoptions_legend_margin
+        * @docid dxvectormapoptions_legends_margin
+        * @docid dxfunneloptions_legend_margin
+        */
         margin?: viz.core.Margins;
 
         /**
-          * @docid basechartoptions_legend_markersize
-          * @docid dxvectormapoptions_legends_markerSize
-          */
+        * @docid basechartoptions_legend_markersize
+        * @docid dxvectormapoptions_legends_markerSize
+        * @docid dxfunneloptions_legend_markerSize
+        */
         markerSize?: number;
 
         /**
-          * @docid basechartoptions_legend_orientation
-          * @docid dxvectormapoptions_legends_orientation
-          */
+        * @docid basechartoptions_legend_orientation
+        * @docid dxvectormapoptions_legends_orientation
+        * @docid dxfunneloptions_legend_orientation
+        */
         orientation?: string;
 
         /**
-          * @docid basechartoptions_legend_paddingleftright
-          * @docid dxvectormapoptions_legends_paddingleftright
-          */
+        * @docid basechartoptions_legend_paddingleftright
+        * @docid dxvectormapoptions_legends_paddingleftright
+        * @docid dxfunneloptions_legend_paddingleftright
+        */
         paddingLeftRight?: number;
 
         /**
-          * @docid basechartoptions_legend_paddingtopbottom
-          * @docid dxvectormapoptions_legends_paddingtopbottom
-          */
+        * @docid basechartoptions_legend_paddingtopbottom
+        * @docid dxvectormapoptions_legends_paddingtopbottom
+        * @docid dxfunneloptions_legend_paddingtopbottom
+        */
         paddingTopBottom?: number;
 
         /**
-          * @docid basechartoptions_legend_rowcount
-          * @docid dxvectormapoptions_legends_rowcount
-          */
+        * @docid basechartoptions_legend_rowcount
+        * @docid dxvectormapoptions_legends_rowcount
+        * @docid dxfunneloptions_legend_rowcount
+        */
         rowCount?: number;
 
         /**
-          * @docid basechartoptions_legend_rowitemspacing
-          * @docid dxvectormapoptions_legends_rowitemspacing
-          */
+        * @docid basechartoptions_legend_rowitemspacing
+        * @docid dxvectormapoptions_legends_rowitemspacing
+        * @docid dxfunneloptions_legend_rowitemspacing
+        */
         rowItemSpacing?: number;
 
         /**
-          * @docid basechartoptions_legend_verticalalignment
-          * @docid dxvectormapoptions_legends_verticalalignment
-          */
+        * @docid basechartoptions_legend_verticalalignment
+        * @docid dxvectormapoptions_legends_verticalalignment
+        * @docid dxfunneloptions_legend_verticalalignment
+        */
         verticalAlignment?: string;
 
         /**
-          * @docid basechartoptions_legend_visible
-          * @docid dxvectormapoptions_legends_visible
-          */
+        * @docid basechartoptions_legend_visible
+        * @docid dxvectormapoptions_legends_visible
+        * @docid dxfunneloptions_legend_visible
+        */
         visible?: boolean;
     }
 

@@ -3,6 +3,7 @@
 var common = require("./common"),
     Node = require("./node"),
 
+    empty = require("../core/helpers").empty,
     _getTilingAlgorithm = require("./tiling").getAlgorithm,
     _getColorizer = require("./colorizing").getColorizer,
     _patchFontOptions = require("../core/utils").patchFontOptions,
@@ -237,7 +238,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._change(["NODES_RESET"]);
     },
 
-    _onNodesCreated: common.empty,
+    _onNodesCreated: empty,
 
     _processDataSourceItems: function(items) {
         return { items: items, isPlain: false };
@@ -394,7 +395,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._onTilingPerformed();
     },
 
-    _onTilingPerformed: common.empty,
+    _onTilingPerformed: empty,
 
     _performLabelsLayout: function() {
         this._processNodes(null, processLabelsLayout);

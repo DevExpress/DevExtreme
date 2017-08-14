@@ -61,13 +61,52 @@ function addChange(settings) {
     buildTotalChanges(proto);
 }
 
+function empty() { }
+
+function createChainExecutor() {
+    var chain = [];
+
+    executeChain.add = function(item) { chain.push(item); };
+    return executeChain;
+
+    function executeChain() {
+        var i,
+            ii = chain.length;
+        for(i = 0; i < ii; ++i) {
+            chain[i].apply(this, arguments);
+        }
+    }
+}
+
+function expand(target, name, expander) {
+    var current = target[name];
+    if(current.add) {
+        current.add(expander);
+    } else if(current === empty) {
+        current = expander;
+    } else {
+        current = createChainExecutor();
+        current.add(target[name]);
+        current.add(expander);
+    }
+    target[name] = current;
+}
+
 function addPlugin(plugin) {
-    this.prototype._plugins.push(plugin);
+    var proto = this.prototype;
+    proto._plugins.push(plugin);
     if(plugin.members) {
         _extend(this.prototype, plugin.members);
     }
     if(plugin.customize) {
         plugin.customize(this);
+    }
+
+    if(plugin.extenders) {
+        Object.keys(plugin.extenders).forEach(function(key) {
+            var func = plugin.extenders[key];
+            expand(proto, key, func);
+        }, this);
     }
 }
 
@@ -106,3 +145,6 @@ exports.replaceInherit = function(widget) {
 exports.changes = function() {
     return new Flags();
 };
+
+exports.expand = expand;
+exports.empty = empty;

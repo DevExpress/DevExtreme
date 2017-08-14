@@ -262,7 +262,7 @@ _extend(exports.ExportMenu.prototype, {
     },
 
     probeDraw: function() {
-        this._hiddenDueToLayout = false;
+        this._fillSpace();
         this.show();
     },
 
@@ -278,16 +278,14 @@ _extend(exports.ExportMenu.prototype, {
 
         layoutOptions = this.getLayoutOptions();
         if(layoutOptions.width > width || layoutOptions.height > height) {
-            this._incidentOccurred("W2107");
-            this._hiddenDueToLayout = true;
-            this.hide();
+            this.freeSpace();
         }
 
         return this;
     },
 
     show: function() {
-        !this._hiddenDueToLayout && this._group.linkAppend();
+        this._group.linkAppend();
     },
 
     hide: function() {
@@ -330,11 +328,23 @@ _extend(exports.ExportMenu.prototype, {
     },
 
     measure: function() {
+        this._fillSpace();
         return [BUTTON_SIZE + SHADOW_OFFSET, BUTTON_SIZE];
     },
 
     move: function(rect) {
         this._group.attr({ translateX: Math.round(rect[0]), translateY: Math.round(rect[1]) });
+    },
+
+    _fillSpace: function() {
+        this._hiddenDueToLayout = false;
+        this._group.attr({ visibility: null });
+    },
+
+    freeSpace: function() {
+        this._incidentOccurred("W2107");
+        this._hiddenDueToLayout = true;
+        this._group.attr({ visibility: "hidden" });
     },
     // BaseWidget_layout_implementation
 
