@@ -14,16 +14,6 @@ var renderer = function(selector, context) {
 };
 
 var initRender = function(selector, context) {
-    var $element;
-    Object.defineProperty(this, "$element", {
-        get: function() {
-            if(!$element) {
-                $element = $(this.toArray());
-            }
-            return $element;
-        }
-    });
-
     if(!selector) {
         this.length = 0;
         return this;
