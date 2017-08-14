@@ -1,12 +1,13 @@
 "use strict";
 
 module.exports = {
-    createElement: function(tagName, text) {
+    createElement: function(tagName, text, context) {
+        context = context || document;
         if(tagName === "#text") {
-            return document.createTextNode(text);
+            return context.createTextNode(text);
         }
 
-        return document.createElement(typeof tagName === "string" ? tagName : "div");
+        return context.createElement(typeof tagName === "string" ? tagName : "div");
     },
 
     removeElement: function(element) {

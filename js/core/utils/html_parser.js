@@ -1,7 +1,6 @@
 "use strict";
 
 var merge = require("./array").merge;
-var rendererStrategy = require("../native_renderer_strategy");
 
 var isTagName = (/<([a-z][^\/\0>\x20\t\r\n\f]+)/i);
 
@@ -36,15 +35,7 @@ var tagWrappers = {
 tagWrappers.tbody = tagWrappers.colgroup = tagWrappers.caption = tagWrappers.tfoot = tagWrappers.thead;
 tagWrappers.th = tagWrappers.td;
 
-var removeScriptTags = function(fragment) {
-    var searchResult = fragment.querySelectorAll("script");
-
-    for(var i = 0; i < searchResult.length; i++) {
-        rendererStrategy.removeElement(searchResult[i]);
-    }
-};
-
-var parseHTML = function(html, context) {
+var parseHTML = function(html) {
     if(typeof html !== "string") {
         return null;
     }
@@ -57,8 +48,6 @@ var parseHTML = function(html, context) {
     var tagWrapper = tagWrappers[firstRootTag] || tagWrappers.default;
 
     container.innerHTML = tagWrapper.startTags + html + tagWrapper.endTags;
-
-    removeScriptTags(fragment);
 
     for(var i = 0; i < tagWrapper.tagsCount; i++) {
         container = container.lastChild;

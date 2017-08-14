@@ -208,7 +208,7 @@ var TimeView = Editor.inherit({
     },
 
     _createFormat12Box: function() {
-        this._format12 = this._createComponent($("<div>", { class: TIMEVIEW_FORMAT12_CLASS }), SelectBox, extend({
+        this._format12 = this._createComponent($("<div>").addClass(TIMEVIEW_FORMAT12_CLASS), SelectBox, extend({
             items: [{ value: TIMEVIEW_FORMAT12_AM, text: "AM" }, { value: TIMEVIEW_FORMAT12_PM, text: "PM" }],
             valueExpr: "value",
             displayExpr: "text",

@@ -659,7 +659,7 @@ var Form = Widget.inherit({
         this._$hiddenElement = $("<div>")
             .addClass(WIDGET_CLASS)
             .addClass(HIDDEN_LABEL_CLASS)
-            .appendTo(document.body);
+            .appendTo("body");
 
         var $hiddenLabel = rootLayoutManager._renderLabel({
             text: " ",

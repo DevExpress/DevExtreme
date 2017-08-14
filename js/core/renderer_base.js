@@ -15,16 +15,47 @@ var renderer = function(selector, context) {
 };
 
 var initRender = function(selector, context) {
-    if(selector instanceof initRender) {
-        this.$element = selector.$element;
-    } else {
-        this.$element = new $.fn.init(selector, context);
+    var $element;
+    Object.defineProperty(this, "$element", {
+        get: function() {
+            if(!$element) {
+                $element = $(this.toArray());
+            }
+            return $element;
+        }
+    });
+
+    if(!selector) {
+        this.length = 0;
+        return this;
     }
 
-    this.length = 0;
-    for(var i = 0; i < this.$element.length; i++) {
-        [].push.call(this, this.$element[i]);
+    if(typeof selector === "string") {
+        context = context || document;
+        if(selector === "body") {
+            this[0] = context.body;
+            this.length = 1;
+            return this;
+        }
+
+        if(selector[0] === "<") {
+            this[0] = rendererStrategy.createElement(selector.slice(1, -1), undefined, context);
+            this.length = 1;
+            return this;
+        }
+
+        [].push.apply(this, context.querySelectorAll(selector));
+        return this;
+    } else if(selector.nodeType) {
+        this[0] = selector;
+        this.length = 1;
+        return this;
+    } else if(selector instanceof HTMLCollection || selector instanceof NodeList || Array.isArray(selector)) {
+        [].push.apply(this, selector);
+        return this;
     }
+
+    return renderer(selector.toArray ? selector.toArray() : [selector]);
 };
 
 renderer.fn = { jquery: $.fn.jquery };
@@ -806,7 +837,6 @@ initRender.prototype.removeData = function(key) {
 
 renderer.when = $.when;
 renderer.Deferred = $.Deferred;
-renderer.holdReady = $.holdReady || $.fn.holdReady;
 
 module.exports = {
     set: function(strategy) {
