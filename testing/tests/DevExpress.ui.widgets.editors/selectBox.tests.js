@@ -1913,6 +1913,29 @@ QUnit.test("Filter should be cleared if the 'onCustomItemCreating' deferred is r
     assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
 });
 
+QUnit.test("filter should be cleared if all text was removed using backspace", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            opened: true,
+            items: [1, 2, 3]
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("456");
+    this.clock.tick(TIME_TO_WAIT);
+    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "filter is applied");
+
+    $input.get(0).setSelectionRange(0, 3);
+    keyboard.caret({ start: 0, end: 3 });
+    keyboard.press("backspace");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($input.val(), "", "value was cleared");
+    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+});
+
 QUnit.test("Custom value should be selected in list if items were modified on custom item creation", function(assert) {
     var items = [1, 2, 3],
         $selectBox = $("#selectBox").dxSelectBox({
