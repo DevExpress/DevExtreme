@@ -1168,7 +1168,7 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
         }, {
             name: "WEEK",
             type: "week",
-            getMaxAppointmentsPerCell: "none"
+            maxAppointmentsPerCell: "none"
         }],
         currentView: "DAY",
         dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
@@ -1182,5 +1182,5 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
 
     countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
 
-    assert.equal(countPerCell, 2, "overlappingMode is OK");
+    assert.equal(countPerCell, "none", "overlappingMode is OK");
 });
