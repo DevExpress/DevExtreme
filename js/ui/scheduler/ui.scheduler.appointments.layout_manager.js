@@ -116,7 +116,7 @@ var AppointmentLayoutManager = Class.inherit({
                         var currentItemSettings = currentItem.settings[k],
                             itemSettings = item.settings[k];
 
-                        if(!isAgenda) {
+                        if(!isAgenda && itemSettings) {
                             itemSettings.sortedIndex = currentItemSettings.sortedIndex;
                         }
 
