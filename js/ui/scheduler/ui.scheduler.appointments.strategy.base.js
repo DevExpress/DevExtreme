@@ -4,7 +4,8 @@ var noop = require("../../core/utils/common").noop,
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../widget/ui.errors"),
-    dateUtils = require("../../core/utils/date");
+    dateUtils = require("../../core/utils/date"),
+    isNumeric = require("../../core/utils/type").isNumeric;
 
 var abstract = Class.abstract;
 
@@ -394,10 +395,10 @@ var BaseRenderingStrategy = Class.inherit({
     _checkLongCompactAppointment: noop,
 
     _splitLongCompactAppointment: function(item, result) {
-        var compactCount = 0,
-            appointmentCountPerCell = this.instance.fire("getOverlappingMode") - 1 || 1;
+        var appointmentCountPerCell = this._getAppointmentCountPerCell();
+        var compactCount = 0;
 
-        if(item.index > appointmentCountPerCell) {
+        if(appointmentCountPerCell && item.index > appointmentCountPerCell - 1) {
             item.isCompact = true;
             compactCount = this._getCompactAppointmentParts(item.width);
             for(var k = 1; k < compactCount; k++) {
@@ -411,6 +412,31 @@ var BaseRenderingStrategy = Class.inherit({
         return result;
     },
 
+    _getAppointmentCountPerCell: function() {
+        var overlappingMode = this.instance.fire("getOverlappingMode"),
+            appointmentCountPerCell;
+
+        if(!overlappingMode) {
+            appointmentCountPerCell = 2;
+        }
+        if(isNumeric(overlappingMode)) {
+            appointmentCountPerCell = overlappingMode;
+        }
+        if(overlappingMode === "auto") {
+            appointmentCountPerCell = this._calculateDynamicAppointmentCountPerCell();
+        }
+        if(overlappingMode === "none") {
+            appointmentCountPerCell = undefined;
+        }
+
+        return appointmentCountPerCell;
+    },
+
+    _calculateDynamicAppointmentCountPerCell: function() {
+        var cellHeight = this.instance.fire("getCellHeight");
+
+        return Math.floor((cellHeight - 20) / 20) || 2;
+    },
     _startDate: function(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,
             viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
