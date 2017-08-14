@@ -122,17 +122,24 @@ var getElementEventData = function(element, eventName) {
             }
         },
         iterateHandlers: function(callback) {
+            var forceStop = false;
             elementData[eventName].forEach(function(eventData) {
+                if(forceStop) {
+                    return;
+                }
                 if(!namespace || eventData.namespace === namespace) {
                     var wrappedHandler = eventData.wrappedHandler;
-                    callback(wrappedHandler, eventData.handler);
+                    forceStop = callback(wrappedHandler, eventData.handler) === false;
                 }
             });
             if(namespace && elementData[""]) {
                 elementData[""].forEach(function(eventData) {
+                    if(forceStop) {
+                        return;
+                    }
                     if(eventData.namespace === namespace) {
                         var wrappedHandler = eventData.wrappedHandler;
-                        callback(wrappedHandler, eventData.handler);
+                        forceStop = callback(wrappedHandler, eventData.handler) === false;
                     }
                 });
             }
@@ -222,9 +229,8 @@ setEngine({
         if(!src.target) {
             src.target = element;
         }
-        if(!src.currentTarget) {
-            src.currentTarget = element;
-        }
+        src.currentTarget = element;
+
         if(!src.delegateTarget) {
             src.delegateTarget = element;
         }
@@ -233,6 +239,7 @@ setEngine({
 
         elementDataByEvent.iterateHandlers(function(wrappedHandler) {
             wrappedHandler(event);
+            return !event.isImmediatePropagationStopped();
         });
 
         if(noBubble || special[type] && special[type].noBubble || event.isPropagationStopped()) {
@@ -282,6 +289,7 @@ setEngine({
         }
 
         var propagationStopped = false;
+        var immediatePropagationStopped = false;
         var defaultPrevented = false;
 
         var result = extend({}, src);
@@ -293,6 +301,7 @@ setEngine({
         extend(result, config || {});
 
         if(!src.isDXEvent) {
+            // TODO: Refactor
             extend(result, {
                 isDXEvent: true,
                 isPropagationStopped: function() {
@@ -301,6 +310,14 @@ setEngine({
                 stopPropagation: function() {
                     propagationStopped = true;
                     result.originalEvent && result.originalEvent.stopPropagation();
+                },
+                isImmediatePropagationStopped: function() {
+                    return !!(immediatePropagationStopped || result.originalEvent && (result.originalEvent.isImmediatePropagationStopped && result.originalEvent.isImmediatePropagationStopped()));
+                },
+                stopImmediatePropagation: function() {
+                    this.stopPropagation();
+                    immediatePropagationStopped = true;
+                    result.originalEvent && result.originalEvent.stopImmediatePropagation();
                 },
                 isDefaultPrevented: function() {
                     return !!(defaultPrevented || result.originalEvent && (result.originalEvent.isDefaultPrevented && result.originalEvent.isDefaultPrevented() || result.originalEvent.defaultPrevented));
