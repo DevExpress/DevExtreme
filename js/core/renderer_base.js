@@ -250,8 +250,6 @@ var pxExceptions = [
     "zoom"
 ];
 
-var positiveDimensions = ["height", "minHeight", "maxHeight", "width", "maxWidth", "minWidth", "flexBasis"];
-
 var heightWidthAliases = {
     width: "outerWidth",
     height: "outerHeight"
@@ -270,9 +268,6 @@ initRender.prototype.css = function(name, value) {
                     value = value();
                 }
                 if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
-                    if(positiveDimensions.indexOf(name) !== -1 && value < 0) {
-                        value = 0;
-                    }
                     value += "px";
                 }
 

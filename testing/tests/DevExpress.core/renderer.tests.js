@@ -148,13 +148,6 @@ QUnit.test("Set value", function(assert) {
     var margin = window.getComputedStyle(element[0])["margin"] || window.getComputedStyle(element[0])["marginBottom"];//IE sets marginTop, marginBottom ... instead of margin
     assert.equal(margin, "2px", "Set margin with object of css values");
 
-    element.css("width", -100);
-    assert.equal(window.getComputedStyle(element[0])["width"], "0px", "Set negative width with number");
-
-    element.css("width", "-100px");
-    assert.equal(element[0].style["width"], "0px", "Set negative width with string 1");
-    assert.equal(window.getComputedStyle(element[0])["width"], "0px", "Set negative width with string 2");
-
     element = renderer("fake_element");
     var returnValue = element.css("height", "25px");
     assert.equal(returnValue, element, "Return element itself for empty element");

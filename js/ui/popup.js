@@ -696,9 +696,7 @@ var Popup = Overlay.inherit({
             contentHeight -= this._$bottom.get(0).getBoundingClientRect().height || 0;
         }
 
-        this._$popupContent.css({
-            "height": contentHeight
-        });
+        this._$popupContent.css("height", contentHeight < 0 ? 0 : contentHeight);
     },
 
     _disallowUpdateContentHeight: function() {
