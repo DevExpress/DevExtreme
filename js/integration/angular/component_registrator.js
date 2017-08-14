@@ -465,7 +465,7 @@ var ComponentBuilder = Class.inherit({
                             errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
                         }
 
-                        var markup = $("<div " + inflector.dasherize(widgetName) + "=\"options\">").get(0);
+                        var markup = $("<div>").attr(inflector.dasherize(widgetName), "options").get(0);
 
                         var newScope = this._scope.$new();
                         newScope.options = options.model.options;
