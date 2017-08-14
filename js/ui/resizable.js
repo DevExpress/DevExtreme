@@ -188,15 +188,20 @@ var Resizable = DOMComponent.inherit({
             return;
         }
 
-        var handlers = {};
-        handlers[DRAGSTART_START_EVENT_NAME] = this._dragStartHandler.bind(this);
-        handlers[DRAGSTART_EVENT_NAME] = this._dragHandler.bind(this);
-        handlers[DRAGSTART_END_EVENT_NAME] = this._dragEndHandler.bind(this);
-
-        eventsEngine.on($handle, handlers, {
+        eventsEngine.on($handle, DRAGSTART_START_EVENT_NAME, {
             direction: "both",
             immediate: true
-        });
+        }, this._dragStartHandler.bind(this));
+
+        eventsEngine.on($handle, DRAGSTART_EVENT_NAME, {
+            direction: "both",
+            immediate: true
+        }, this._dragHandler.bind(this));
+
+        eventsEngine.on($handle, DRAGSTART_END_EVENT_NAME, {
+            direction: "both",
+            immediate: true
+        }, this._dragEndHandler.bind(this));
     },
 
     _dragStartHandler: function(e) {

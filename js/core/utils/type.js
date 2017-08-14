@@ -57,7 +57,7 @@ var isEmptyObject = function(object) {
 };
 
 var isPlainObject = function(object) {
-    if(!object || Object.prototype.toString.call(object) !== "[object Object]") {
+    if(!object || Object.prototype.toString.call(object) !== "[object Object]" || object.isDXEvent) { // TODO: Think better
         return false;
     }
     var proto = Object.getPrototypeOf(object),

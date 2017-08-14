@@ -327,6 +327,34 @@ setEngine({
                     result.originalEvent && result.originalEvent.preventDefault();
                 }
             });
+
+            // TODO: refactor
+            var getOriginal = function(event) {
+                return event.originalEvent && getOriginal(event.originalEvent) || event;
+            };
+
+            ["pageX", "pageY"].forEach(function(propName) {
+                if(!(propName in result)) {
+                    Object.defineProperty(result, propName, {
+                        enumerable: true,
+                        configurable: true,
+
+                        get: function() {
+                            return this.originalEvent && getOriginal(this.originalEvent)[propName];
+                        },
+
+                        set: function(value) {
+                            Object.defineProperty(this, propName, {
+                                enumerable: true,
+                                configurable: true,
+                                writable: true,
+                                value: value
+                            });
+                        }
+                    });
+                }
+            });
+
         }
         result.guid = ++guid;
 
