@@ -77,10 +77,10 @@ function getShrink(alignment, size) {
     return (alignment > 0 ? -1 : +1) * size;
 }
 
-function processForward(item, rect) {
+function processForward(item, rect, minSize) {
     var side = item.side,
         size = item.element.measure([rect[2] - rect[0], rect[3] - rect[1]]),
-        isValid = size[side] < rect[2 + side] - rect[side];
+        isValid = size[side] < rect[2 + side] - rect[side] - minSize[side];
 
     if(isValid) {
         rect[item.primary + side] += getShrink(item.primary, size[side]);
@@ -121,7 +121,7 @@ Layout.prototype = {
     // "createTargets" part depends on options of a target while the following cycle depends on container size - those areas do not intersect.
     // When any of options are changed targets have to be recreated and cycle has to be executed. But when container size is changed there is no
     // need to recreate targets - only cycle has to be executed.
-    forward: function(targetRect) {
+    forward: function(targetRect, minSize) {
         var rect = targetRect.slice(),
             targets = createTargets(this._targets),
             i,
@@ -129,8 +129,10 @@ Layout.prototype = {
             cache = [];
 
         for(i = 0; i < ii; ++i) {
-            if(processForward(targets[i], rect)) {
+            if(processForward(targets[i], rect, minSize)) {
                 cache.push(targets[i]);
+            } else {
+                targets[i].element.freeSpace();
             }
         }
         this._cache = cache.reverse();
@@ -264,6 +266,11 @@ PairElement.prototype.move = function(targetRect) {
     rect[secondarySide] = secondary[0];
     rect[2 + secondarySide] = secondary[1];
     second.element.move(rect);
+};
+
+PairElement.prototype.freeSpace = function() {
+    this._first.element.freeSpace();
+    this._second.element.freeSpace();
 };
 
 module.exports = Layout;

@@ -513,6 +513,14 @@ QUnit.test("move - not enough size", function(assert) {
     assert.strictEqual(spy.callCount, 1, "drawn");
 });
 
+QUnit.test("freeSpace", function(assert) {
+    this.title.update(this.options);
+    this.title.measure([400, 300]);
+    this.title.freeSpace();
+
+    this.rendererElementsIsDispose(assert);
+});
+
 QUnit.module("Size changing notification", environment);
 
 QUnit.test("initial, no text", function(assert) {

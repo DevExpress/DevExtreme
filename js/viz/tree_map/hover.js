@@ -2,7 +2,7 @@
 
 var proto = require("./tree_map.base").prototype,
     nodeProto = require("./node").prototype,
-
+    expand = require("../core/helpers").expand,
     common = require("./common"),
 
     _parseScalar = require("../core/utils").parseScalar,
@@ -15,7 +15,7 @@ require("./states");
 
 proto._eventsMap.onHoverChanged = { name: "hoverChanged" };
 
-common.expand(proto._handlers, "calculateAdditionalStates", function(states, options) {
+expand(proto._handlers, "calculateAdditionalStates", function(states, options) {
     states[1] = options.hoverStyle ? _buildRectAppearance(options.hoverStyle) : {};
 });
 
@@ -36,7 +36,7 @@ require("./tree_map.base").addChange({
 nodeProto.statesMap[1] = 1;
 nodeProto.additionalStates.push(1);
 
-common.expand(proto, "_extendProxyType", function(proto) {
+expand(proto, "_extendProxyType", function(proto) {
     var that = this;
 
     proto.setHover = function() {
@@ -47,11 +47,11 @@ common.expand(proto, "_extendProxyType", function(proto) {
     };
 });
 
-common.expand(proto, "_onNodesCreated", function() {
+expand(proto, "_onNodesCreated", function() {
     this._hoverIndex = -1;
 });
 
-common.expand(proto, "_changeGroupSettings", function() {
+expand(proto, "_changeGroupSettings", function() {
     var that = this;
     that._groupHoverEnabled = _parseScalar(that._getOption("group").hoverEnabled, true);
     if(!that._groupHoverEnabled) {
