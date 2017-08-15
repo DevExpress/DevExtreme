@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("jquery"), // TODO: Get rid of jQuery after deferred utility extracting
-    config = require("../config"),
-    when = require("../utils/deferred").when,
-    Deferred = require("../utils/deferred").Deferred,
+var config = require("../config"),
+    deferredUtils = require("../utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     each = require("./iterator").each,
     typeUtils = require("./type");
 
@@ -62,7 +62,7 @@ var deferExecute = function(name, func, deferred) {
 
         if(!result) {
             if(delayedDeferreds.length > currentDelayedCount) {
-                result = when.apply($, delayedDeferreds.slice(currentDelayedCount));
+                result = when.apply(this, delayedDeferreds.slice(currentDelayedCount));
             } else if(deferred) {
                 deferred.resolve();
             }
