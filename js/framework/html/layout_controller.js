@@ -10,7 +10,9 @@ var $ = require("jquery"),
     EventsMixin = require("../../core/events_mixin"),
     errors = require("../errors"),
     domUtils = require("../../core/utils/dom"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     HIDDEN_BAG_ID = "__hidden-bag",
     TRANSITION_SELECTOR = ".dx-transition",
     CONTENT_SELECTOR = ".dx-content",
@@ -68,7 +70,7 @@ var DefaultLayoutController = Class.inherit({
         var $rootElement = this.element();
         this._showElements($rootElement);
         this._attachRefreshViewRequiredHandler();
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
 
     deactivate: function() {
@@ -77,7 +79,7 @@ var DefaultLayoutController = Class.inherit({
         this._releaseVisibleViews();
         this._hideElements(this.element());
         this._detachRefreshViewRequiredHandler();
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
 
     enable: function() {
@@ -89,7 +91,7 @@ var DefaultLayoutController = Class.inherit({
 
         this._showViewFired = false;
 
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
 
     disable: function() {
@@ -279,7 +281,7 @@ var DefaultLayoutController = Class.inherit({
 
         if(previousViewTemplateId && previousViewTemplateId === viewInfo.currentViewTemplateId && viewInfo === previousViewInfo) {
             that.fireEvent("viewShowing", [viewInfo, direction]);
-            result = $.Deferred().resolve().promise();
+            result = new Deferred().resolve().promise();
         } else {
             that._ensureViewRendered(viewInfo);
             that.fireEvent("viewShowing", [viewInfo, direction]);
@@ -374,7 +376,7 @@ var DefaultLayoutController = Class.inherit({
             result = this._renderCommands($markup, commandsToRender);
             delete viewInfo.commandsToRenderMap[renderStage];
         } else {
-            result = $.Deferred().resolve().promise();
+            result = new Deferred().resolve().promise();
         }
 
         return result;
@@ -510,7 +512,7 @@ var DefaultLayoutController = Class.inherit({
             animationModifier.delay = 0;
         }
 
-        var d = $.Deferred();
+        var d = new Deferred();
         that._doTransition(previousViewInfo, viewInfo, animationModifier).done(function() {
             that._changeView(viewInfo, previousViewTemplateId).done(function(result) {
                 d.resolve(result);
@@ -524,7 +526,7 @@ var DefaultLayoutController = Class.inherit({
     },
 
     _getReadyForRenderDeferredItems: function(viewInfo) {
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
 
     _changeView: function(viewInfo, previousViewTemplateId) {
@@ -544,7 +546,7 @@ var DefaultLayoutController = Class.inherit({
 
         this._subscribeToDeferredItems(viewInfo);
 
-        var d = $.Deferred();
+        var d = new Deferred();
         this._getReadyForRenderDeferredItems(viewInfo).done(function() {
             that._applyViewCommands(viewInfo).done(function() {
                 that._renderDeferredItems(viewInfo.renderResult.$markup).done(function() {
@@ -583,7 +585,7 @@ var DefaultLayoutController = Class.inherit({
 
     _renderDeferredItems: function($items) {
         var that = this,
-            result = $.Deferred();
+            result = new Deferred();
 
         var $pendingItem = $items
             .find(PENDING_RENDERING_MANUAL_SELECTOR)

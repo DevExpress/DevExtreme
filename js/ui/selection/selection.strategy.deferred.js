@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("../../core/utils/type"),
+var typeUtils = require("../../core/utils/type"),
     SelectionStrategy = require("./selection.strategy"),
     errors = require("../widget/ui.errors"),
-    dataQuery = require("../../data/query");
+    dataQuery = require("../../data/query"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 module.exports = SelectionStrategy.inherit({
 
@@ -13,7 +13,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     getSelectedItemKeys: function() {
-        var d = $.Deferred(),
+        var d = new Deferred(),
             that = this,
             key = this.options.key(),
             select = typeUtils.isString(key) ? [key] : key;
@@ -55,7 +55,7 @@ module.exports = SelectionStrategy.inherit({
 
         this.onSelectionChanged();
 
-        return $.Deferred().resolve();
+        return new Deferred().resolve();
     },
 
     setSelectedItems: function(keys) {

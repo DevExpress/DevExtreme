@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
+    Deferred = require("../core/utils/deferred").Deferred,
     errors = require("../core/errors"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
@@ -402,7 +403,7 @@ var SelectBox = DropDownList.inherit({
 
     _setNextValue: function(step) {
         var dataSourceIsLoaded = this._dataSource.isLoaded()
-            ? $.Deferred().resolve()
+            ? new Deferred().resolve()
             : this._dataSource.load();
 
         dataSourceIsLoaded.done((function() {
@@ -636,7 +637,7 @@ var SelectBox = DropDownList.inherit({
 
     _loadItem: function(value) {
         var that = this,
-            deferred = $.Deferred();
+            deferred = new Deferred();
 
         this.callBase(value)
             .done(function(item) {

@@ -1,11 +1,12 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+var commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     getKeyHash = commonUtils.getKeyHash,
     dataQuery = require("../../data/query"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     errors = require("../widget/ui.errors"),
     SelectionStrategy = require("./selection.strategy");
 
@@ -189,7 +190,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _loadSelectedItemsCore: function(keys, isDeselect, isSelectAll) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             key = this.options.key;
 
         if(!keys.length && !isSelectAll) {
@@ -252,7 +253,7 @@ module.exports = SelectionStrategy.inherit({
 
     _loadSelectedItems: function(keys, isDeselect, isSelectAll) {
         var that = this,
-            deferred = $.Deferred();
+            deferred = new Deferred();
 
         when(that._lastLoadDeferred).always(function() {
             that._loadSelectedItemsCore(keys, isDeselect, isSelectAll)

@@ -21,7 +21,9 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     Form = require("../form"),
     holdEvent = require("../../events/hold"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var EDIT_FORM_CLASS = "edit-form",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
@@ -911,7 +913,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 isDataSaved = true;
 
             function executeEditingAction(actionName, params, func) {
-                var deferred = $.Deferred();
+                var deferred = new Deferred();
 
                 that.executeAction(actionName, params);
 
@@ -969,7 +971,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
 
                 if(deferred) {
-                    doneDeferred = $.Deferred();
+                    doneDeferred = new Deferred();
                     deferred
                         .always(function(data) {
                             isDataSaved = data !== "cancel";
@@ -1058,7 +1060,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 dataController = that._dataController,
                 dataSource = dataController.dataSource(),
                 editMode = getEditMode(that),
-                result = $.Deferred();
+                result = new Deferred();
 
             var resetEditIndices = function(that) {
                 if(editMode !== EDIT_MODE_CELL) {

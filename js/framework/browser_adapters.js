@@ -3,7 +3,8 @@
 var $ = require("jquery"),
     Class = require("../core/class"),
     Callbacks = require("../core/utils/callbacks"),
-    queue = require("../core/utils/queue");
+    queue = require("../core/utils/queue"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var ROOT_PAGE_URL = "__root__",
     BUGGY_ANDROID_BUFFER_PAGE_URL = "__buffer__";
@@ -73,7 +74,7 @@ var DefaultBrowserAdapter = Class.inherit({
 
     _addTask: function(task) {
         var that = this,
-            d = $.Deferred();
+            d = new Deferred();
 
         this._tasks.add(function() {
             that._currentTask = d;
@@ -111,7 +112,7 @@ var OldBrowserAdapter = DefaultBrowserAdapter.inherit({
             });
         }
 
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
 
     pushState: function(uri) {
@@ -126,7 +127,7 @@ var OldBrowserAdapter = DefaultBrowserAdapter.inherit({
             });
         }
 
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
 
     createRootPage: function() {
@@ -170,7 +171,7 @@ var HistorylessBrowserAdapter = DefaultBrowserAdapter.inherit({
     replaceState: function(uri) {
         this._currentHash = this._normalizeUri(uri);
 
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
 
     pushState: function(uri) {

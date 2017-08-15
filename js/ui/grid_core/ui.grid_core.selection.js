@@ -11,7 +11,8 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     eventUtils = require("../../events/utils"),
     holdEvent = require("../../events/hold"),
-    Selection = require("../selection/selection");
+    Selection = require("../selection/selection"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var EDITOR_CELL_CLASS = "dx-editor-cell",
     ROW_CLASS = "dx-row",
@@ -103,7 +104,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     return dataController.dataSource() && dataController.dataSource().select();
                 },
                 load: function(options) {
-                    return dataController.dataSource() && dataController.dataSource().load(options) || $.Deferred().resolve([]);
+                    return dataController.dataSource() && dataController.dataSource().load(options) || new Deferred().resolve([]);
                 },
                 plainItems: function() {
                     return dataController.items();
@@ -359,7 +360,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                 return this.selectedItemKeys(selectedRowKeys);
             }
 
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         },
 
         selectedItemKeys: function(value, preserve, isDeselect, isSelectAll) {
@@ -651,7 +652,7 @@ module.exports = {
 
                 refresh: function() {
                     var that = this,
-                        d = $.Deferred();
+                        d = new Deferred();
 
                     this.callBase.apply(this, arguments).done(function() {
                         that.getController("selection").refresh().done(d.resolve).fail(d.reject);

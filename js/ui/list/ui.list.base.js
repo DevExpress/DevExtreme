@@ -21,7 +21,8 @@ var $ = require("../../core/renderer"),
     ScrollView = require("../scroll_view"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    BindableTemplate = require("../widget/bindable_template");
+    BindableTemplate = require("../widget/bindable_template"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -769,7 +770,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _collapseGroupHandler: function($group, toggle) {
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
         var $groupBody = $group.children("." + LIST_GROUP_BODY_CLASS);
 
         var startHeight = $groupBody.outerHeight();
@@ -1067,7 +1068,7 @@ var ListBase = CollectionWidget.inherit({
     * @return Promise
     */
     expandGroup: function(groupIndex) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             $group = this._itemContainer().find("." + LIST_GROUP_CLASS).eq(groupIndex);
 
         this._collapseGroupHandler($group, false).done((function() {
@@ -1084,7 +1085,7 @@ var ListBase = CollectionWidget.inherit({
     * @return Promise
     */
     collapseGroup: function(groupIndex) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             $group = this._itemContainer().find("." + LIST_GROUP_CLASS).eq(groupIndex);
 
         this._collapseGroupHandler($group, true).done((function() {
@@ -1101,7 +1102,7 @@ var ListBase = CollectionWidget.inherit({
     */
     updateDimensions: function() {
         var that = this,
-            deferred = $.Deferred();
+            deferred = new Deferred();
 
         if(that._scrollView) {
             that._scrollView.update().done(function() {

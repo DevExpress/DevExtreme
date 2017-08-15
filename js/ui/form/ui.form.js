@@ -19,7 +19,8 @@ var $ = require("../../core/renderer"),
     ValidationEngine = require("../validation_engine"),
     LayoutManager = require("./ui.form.layout_manager"),
     TabPanel = require("../tab_panel"),
-    Scrollable = require("../scroll_view/ui.scrollable");
+    Scrollable = require("../scroll_view/ui.scrollable"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 require("../validation_summary");
 require("../validation_group");
@@ -1588,7 +1589,7 @@ var Form = Widget.inherit({
      */
     updateDimensions: function() {
         var that = this,
-            deferred = $.Deferred();
+            deferred = new Deferred();
 
         if(that._scrollable) {
             that._scrollable.update().done(function() {

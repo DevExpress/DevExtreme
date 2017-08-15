@@ -1,11 +1,12 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    VERSION = require("../core/version"),
+var VERSION = require("../core/version"),
     imageCreator = require("./image_creator").imageCreator,
     isFunction = require("../core/utils/type").isFunction,
     extend = require("../core/utils/extend").extend,
-    when = require("../integration/jquery/deferred").when,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
 
     mainPageTemplate = "%PDF-1.3\r\n2 0 obj\r\n<</ProcSet[/PDF/ImageB/ImageC/ImageI]/XObject<</I0 5 0 R>>>>\r\nendobj\r\n4 0 obj\r\n<</Type/Pages/Kids[1 0 R]/Count 1>>\r\nendobj\r\n7 0 obj\r\n<</OpenAction[1 0 R /FitH null]/Type/Catalog/Pages 4 0 R/PageLayout/OneColumn>>\r\nendobj\r\n1 0 obj\r\n<</Type/Page/Resources 2 0 R/MediaBox[0 0 _width_ _height_]/Contents 3 0 R/Parent 4 0 R>>\r\nendobj\r\n",
     contentTemplate = "3 0 obj\r\n<</Length 52>>stream\r\n0.20 w\n0 G\nq _width_ 0 0 _height_ 0.00 0.00 cm /I0 Do Q\r\nendstream\r\nendobj\r\n",
@@ -67,7 +68,7 @@ var getBase64 = function(binaryData) {
 
 exports.getData = function(data, options, callback) {
     var imageData = imageCreator.getImageData(data, extend({}, options, { format: "jpeg" })),
-        blob = $.Deferred();
+        blob = new Deferred();
 
     blob.done(callback);
 

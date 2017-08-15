@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
+var eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     headerFilterCore = require("./ui.grid_core.header_filter_core"),
@@ -17,7 +16,8 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
     dateLocalization = require("../../localization/date"),
-    isWrapped = require("../../core/utils/variable_wrapper").isWrapped;
+    isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var DATE_INTERVAL_FORMATS = {
     'month': function(value) {
@@ -203,7 +203,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                     filter: filter,
                     group: group,
                     load: function(options) {
-                        var d = $.Deferred();
+                        var d = new Deferred();
                         //TODO remove in 16.1
                         options.dataField = column.dataField || column.name;
 

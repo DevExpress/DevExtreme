@@ -7,7 +7,9 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     isDefined = require("../core/utils/type").isDefined,
     selectors = require("./widget/jquery.selectors"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
-    when = require("../integration/jquery/deferred").when,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,
@@ -217,7 +219,7 @@ var DropDownBox = DropDownEditor.inherit({
         }).bind(this))[0];
 
         return selectedItem !== undefined
-            ? $.Deferred().resolve(selectedItem).promise()
+            ? new Deferred().resolve(selectedItem).promise()
             : this._loadValue(value);
     },
 

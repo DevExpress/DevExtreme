@@ -11,7 +11,8 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     dateLocalization = require("../../localization/date"),
-    SchedulerTimezones = require("./ui.scheduler.timezones");
+    SchedulerTimezones = require("./ui.scheduler.timezones"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var toMs = dateUtils.dateToMilliseconds;
 
@@ -185,7 +186,7 @@ var subscribes = {
     getAppointmentColor: function(options) {
         var resourcesManager = this._resourcesManager,
             resourceForPainting = resourcesManager.getResourceForPainting(this._getCurrentViewOption("groups")),
-            response = $.Deferred().resolve().promise();
+            response = new Deferred().resolve().promise();
 
         if(resourceForPainting) {
             var field = resourcesManager.getField(resourceForPainting),
@@ -537,7 +538,7 @@ var subscribes = {
     getAgendaRows: function(options) {
         var renderingStrategy = this._layoutManager.getRenderingStrategyInstance(),
             calculateRows = renderingStrategy.calculateRows.bind(renderingStrategy),
-            d = $.Deferred();
+            d = new Deferred();
 
         function rowsCalculated(appointments) {
             var result = calculateRows(appointments, options.agendaDuration, options.currentDate);

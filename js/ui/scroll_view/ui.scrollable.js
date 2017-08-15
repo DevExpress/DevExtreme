@@ -15,7 +15,7 @@ var $ = require("../../core/renderer"),
     scrollEvents = require("./ui.events.emitter.gesture.scroll"),
     simulatedStrategy = require("./ui.scrollable.simulated"),
     NativeStrategy = require("./ui.scrollable.native"),
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 var SCROLLABLE = "dxScrollable",
     SCROLLABLE_STRATEGY = "dxScrollableStrategy",

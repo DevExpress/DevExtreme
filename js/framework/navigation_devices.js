@@ -6,7 +6,8 @@ var $ = require("jquery"),
     Callbacks = require("../core/utils/callbacks"),
     browserAdapters = require("./browser_adapters"),
     SessionStorage = require("../core/utils/storage").sessionStorage,
-    devices = require("../core/devices");
+    devices = require("../core/devices"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var SESSION_KEY = "dxPhoneJSApplication";
 
@@ -33,7 +34,7 @@ var HistoryBasedNavigationDevice = Class.inherit({
         } else if(uri !== this.getUri()) {
             return this._browserAdapter.pushState(uri);
         } else {
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         }
     },
 
@@ -110,7 +111,7 @@ var StackBasedNavigationDevice = HistoryBasedNavigationDevice.inherit({
                 }
             });
         } else {
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         }
     },
 
@@ -131,7 +132,7 @@ var StackBasedNavigationDevice = HistoryBasedNavigationDevice.inherit({
             sessionStorage = SessionStorage();
 
         if(!sessionStorage || sessionStorage.getItem(SESSION_KEY)) {
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         }
 
         sessionStorage.removeItem(SESSION_KEY);

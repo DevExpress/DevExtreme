@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    isDefined = require("../../core/utils/type").isDefined,
+var isDefined = require("../../core/utils/type").isDefined,
     map = require("../../core/utils/iterator").map,
     odataUtils = require("./utils"),
     proxyUrlFormatter = require("../proxy_url_formatter"),
@@ -9,7 +8,9 @@ var $ = require("../../core/renderer"),
     query = require("../query"),
     Store = require("../abstract_store"),
     mixins = require("./mixins"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 require("./query_adapter");
 
@@ -228,7 +229,7 @@ var ODataStore = Store.inherit({
         this._requireKey();
 
         var that = this,
-            d = $.Deferred();
+            d = new Deferred();
 
         when(this._sendRequest(this._url, "POST", null, values))
             .done(function(serverResponse) {
@@ -240,7 +241,7 @@ var ODataStore = Store.inherit({
     },
 
     _updateImpl: function(key, values) {
-        var d = $.Deferred();
+        var d = new Deferred();
 
         when(
             this._sendRequest(this._byKeyUrl(key), this._updateMethod, null, values)
@@ -254,7 +255,7 @@ var ODataStore = Store.inherit({
     },
 
     _removeImpl: function(key) {
-        var d = $.Deferred();
+        var d = new Deferred();
 
         when(
             this._sendRequest(this._byKeyUrl(key), "DELETE")

@@ -6,7 +6,9 @@ var $ = require("../core/renderer"),
     iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     camelize = require("../core/utils/inflector").camelize,
-    when = require("../integration/jquery/deferred").when,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
 
     _math = Math,
     PI = _math.PI,
@@ -135,7 +137,7 @@ function drawRect(context, options) {
 }
 
 function drawImage(context, options) {
-    var d = $.Deferred(),
+    var d = new Deferred(),
         image = new Image();
 
     image.onload = function() {
@@ -635,7 +637,7 @@ function resolveString(string, canvas, mimeType) {
 exports.imageCreator = {
     getImageData: function(markup, options) {
         var mimeType = "image/" + options.format,
-            string = $.Deferred(),
+            string = new Deferred(),
             width = options.width,
             height = options.height,
             backgroundColor = options.backgroundColor;
@@ -653,7 +655,7 @@ exports.imageCreator = {
         var that = this,
             imageData = exports.imageCreator.getImageData(markup, options),
             mimeType = "image/" + options.format,
-            data = $.Deferred();
+            data = new Deferred();
 
         when(imageData).done(function(binaryData) {
             imageData = isFunction(window.Blob) ?

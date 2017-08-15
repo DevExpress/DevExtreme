@@ -1,8 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Callbacks = require("../../core/utils/callbacks"),
-    when = require("../../integration/jquery/deferred").when,
+var Callbacks = require("../../core/utils/callbacks"),
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
@@ -178,7 +179,7 @@ exports.DataController = Class.inherit((function() {
             var cellDescriptionsCount = cellDescriptions.length,
                 viewHeaderItems = createViewHeaderItems(headerItems, headerDescriptions),
                 dataFields = options.dataFields,
-                d = $.Deferred();
+                d = new Deferred();
 
             when(viewHeaderItems).done(function(viewHeaderItems) {
                 options.notifyProgress(0.5);
@@ -288,7 +289,7 @@ exports.DataController = Class.inherit((function() {
         function createViewHeaderItems(headerItems, headerDescriptions) {
             var headerDescriptionsCount = (headerDescriptions && headerDescriptions.length) || 0,
                 childrenStack = [],
-                d = $.Deferred(),
+                d = new Deferred(),
                 headerItem;
 
             when(foreachTreeAsync(headerItems, function(items, index) {
@@ -424,7 +425,7 @@ exports.DataController = Class.inherit((function() {
         return function(headerItems, headerDescriptions, cellDescriptions, isHorizontal, options) {
             var info = [],
                 depthSize = getHeaderItemsDepth(headerItems) || 1,
-                d = $.Deferred();
+                d = new Deferred();
 
             getViewHeaderItems(headerItems, headerDescriptions, cellDescriptions, depthSize, options).done(function(viewHeaderItems) {
                 fillHeaderInfo(info, viewHeaderItems, depthSize, isHorizontal, options.layout === "tree");

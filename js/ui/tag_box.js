@@ -16,7 +16,9 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     caret = require("./text_box/utils.caret"),
     browser = require("../core/utils/browser"),
-    when = require("../integration/jquery/deferred").when,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     pointerEvents = require("../events/pointer"),
     BindableTemplate = require("./widget/bindable_template");
 
@@ -643,7 +645,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _loadInputValue: function() {
-        return $.when();
+        return when();
     },
 
     _clearTextValue: function() {
@@ -790,7 +792,7 @@ var TagBox = SelectBox.inherit({
 
     _loadTagData: function() {
         var values = this._getValue(),
-            tagData = $.Deferred(),
+            tagData = new Deferred(),
             items = [];
 
         this._selectedItems = [];
@@ -887,7 +889,7 @@ var TagBox = SelectBox.inherit({
 
         if($tag) {
             if(!$tag.hasClass(TAGBOX_CUSTOM_TAG_CLASS)) {
-                return $.Deferred().resolve();
+                return new Deferred().resolve();
             }
 
             $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);

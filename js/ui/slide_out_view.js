@@ -11,7 +11,8 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     Widget = require("./widget/ui.widget"),
     Swipeable = require("../events/gesture/swipeable"),
-    EmptyTemplate = require("./widget/empty_template");
+    EmptyTemplate = require("./widget/empty_template"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var SLIDEOUTVIEW_CLASS = "dx-slideoutview",
     SLIDEOUTVIEW_WRAPPER_CLASS = "dx-slideoutview-wrapper",
@@ -425,7 +426,7 @@ var SlideOutView = Widget.inherit({
     toggleMenuVisibility: function(showing) {
         showing = showing === undefined ? !this.option("menuVisible") : showing;
 
-        this._deferredAnimate = $.Deferred();
+        this._deferredAnimate = new Deferred();
         this.option("menuVisible", showing);
 
         return this._deferredAnimate.promise();

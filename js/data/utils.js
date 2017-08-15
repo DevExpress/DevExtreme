@@ -1,9 +1,9 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    isFunction = require("../core/utils/type").isFunction,
+var isFunction = require("../core/utils/type").isFunction,
     map = require("../core/utils/iterator").map,
-    toComparable = require("../core/utils/data").toComparable;
+    toComparable = require("../core/utils/data").toComparable,
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
@@ -104,7 +104,7 @@ var processRequestResultLock = (function() {
 
     var obtain = function() {
         if(lockCount === 0) {
-            lockDeferred = $.Deferred();
+            lockDeferred = new Deferred();
         }
         lockCount++;
     };
@@ -117,7 +117,7 @@ var processRequestResultLock = (function() {
     };
 
     var promise = function() {
-        var deferred = lockCount === 0 ? $.Deferred().resolve() : lockDeferred;
+        var deferred = lockCount === 0 ? new Deferred().resolve() : lockDeferred;
         return deferred.promise();
     };
 

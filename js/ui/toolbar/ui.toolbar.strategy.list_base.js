@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
+    Deferred = require("../../core/utils/deferred").Deferred,
     ToolbarStrategy = require("./ui.toolbar.strategy"),
     translator = require("../../animation/translator"),
     hideTopOverlayCallback = require("../../mobile/hide_top_overlay").hideCallback,
@@ -118,7 +119,7 @@ var ListStrategy = ToolbarStrategy.inherit({
         }
 
         translator.move(element, { top: pos });
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
 
     _animateMenuToggling: function($element, position, isShowAnimation) {
