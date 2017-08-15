@@ -11,6 +11,7 @@ var abstract = Class.abstract;
 
 var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
+    APPOINTMENT_DEFAULT_HEIGHT = 20,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 
 var BaseRenderingStrategy = Class.inherit({
@@ -435,7 +436,7 @@ var BaseRenderingStrategy = Class.inherit({
     _calculateDynamicAppointmentCountPerCell: function() {
         var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - 20) / 20) || 2;
+        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_HEIGHT) / APPOINTMENT_DEFAULT_HEIGHT) || 2;
     },
     _startDate: function(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,

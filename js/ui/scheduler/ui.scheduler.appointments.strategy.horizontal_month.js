@@ -4,7 +4,9 @@ var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
     HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line");
 
-var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
+var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
+    MONTH_APPOINTMENT_MIN_OFFSET = 21,
+    MONTH_APPOINTMENT_MAX_OFFSET = 30;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
 
@@ -94,8 +96,12 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
 
         if(!appointmentCountPerCell) {
             appointmentCountPerCell = coordinates.count;
-            ratio = (maxHeight - 21) / maxHeight;
+            ratio = (maxHeight - MONTH_APPOINTMENT_MIN_OFFSET) / maxHeight;
         }
+        if(this.instance.fire("getMaxAppointmentsPerCell") === "auto") {
+            ratio = (maxHeight - MONTH_APPOINTMENT_MAX_OFFSET) / maxHeight;
+        }
+
         var index = coordinates.index,
             height = ratio * maxHeight / appointmentCountPerCell,
             top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
