@@ -98,20 +98,7 @@ declare module DevExpress.viz.funnel {
                 /** @docid dxfunneloptions_item_hoverstyle_border */
                 border?: viz.core.Border;
                 /** @docid dxfunneloptions_item_hoverstyle_hatching */
-                hatching?: {
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_direction */
-                    direction?: string;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_opacity */
-                    opacity?: number;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_step */
-                    step?: number;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_width */
-                    width?: number;
-                };
+                hatching?: viz.core.Hatching;
             };
 
             /** @docid dxfunneloptions_item_selectionstyle */
@@ -120,19 +107,7 @@ declare module DevExpress.viz.funnel {
                 border?: viz.core.Border;
 
                 /** @docid dxfunneloptions_item_selectionstyle_hatching */
-                hatching?: {
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_opacity */
-                    opacity?: number;
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_step */
-                    step?: number;
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_width */
-                    width?: number;
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_direction */
-                    direction?: string;
-                };
+                hatching?: viz.core.Hatching;
             };
         };
 
