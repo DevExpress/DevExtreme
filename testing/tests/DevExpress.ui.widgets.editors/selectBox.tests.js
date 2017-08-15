@@ -3694,7 +3694,7 @@ QUnit.test("value should be restored after the focusout when selection was not c
     keyboard.keyDown(KEY_DOWN);
     assert.equal($input.val(), "second", "value has been changed");
 
-    $input.blur();
+    $input.trigger("blur");
     assert.equal($input.val(), "first", "value has been restored");
 });
 

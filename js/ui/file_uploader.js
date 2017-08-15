@@ -430,7 +430,9 @@ var FileUploader = Editor.inherit({
             eventsEngine.on(this._$fileInput, "change", this._inputChangeHandler.bind(this));
             eventsEngine.on(this._$fileInput, "click", (function(e) {
                 e.stopPropagation();
-                return this.option("useNativeInputClick") || this._isCustomClickEvent;
+                if(!this.option("useNativeInputClick") && !this._isCustomClickEvent) {
+                    e.preventDefault();
+                }
             }).bind(this));
         }
 
