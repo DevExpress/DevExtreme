@@ -351,6 +351,8 @@ declare module DevExpress.viz.core {
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_direction
           * @docid dxChartSeriesTypes_candlestickseries_hoverstyle_hatching_direction
           * @docid dxChartSeriesTypes_candlestickseries_selectionstyle_hatching_direction
+          * @docid dxfunneloptions_item_hoverstyle_hatching_direction
+          * @docid dxfunneloptions_item_selectionstyle_hatching_direction
           */
         direction?: string;
 
@@ -361,6 +363,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_opacity
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_opacity
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_opacity
+          * @docid dxfunneloptions_item_hoverstyle_hatching_opacity
+          * @docid dxfunneloptions_item_selectionstyle_hatching_opacity
           */
         opacity?: number;
 
@@ -371,6 +375,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_step
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_step
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_step
+          * @docid dxfunneloptions_item_hoverstyle_hatching_step
+          * @docid dxfunneloptions_item_selectionstyle_hatching_step
           */
         step?: number;
 
@@ -381,6 +387,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_width
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_width
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_width
+          * @docid dxfunneloptions_item_hoverstyle_hatching_width
+          * @docid dxfunneloptions_item_selectionstyle_hatching_width
           */
         width?: number;
     }

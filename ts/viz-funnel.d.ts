@@ -12,7 +12,6 @@ declare module DevExpress.viz.funnel {
         customizeText?: (itemsInfo: { item: funnelItem; text: string; }) => string;
     }
 
-
     /** @docid dxfunnelitem */
     export interface funnelItem {
 
@@ -48,12 +47,12 @@ declare module DevExpress.viz.funnel {
         /** @docid dxfunneloptions_adaptivelayout */
         adaptiveLayout?: {
             /** @docid dxfunneloptions_adaptivelayout_width */
-            width?: number,
+            width?: number;
             /** @docid dxfunneloptions_adaptivelayout_height */
-            height?: number,
+            height?: number;
             /** @docid dxfunneloptions_adaptivelayout_keeplabels */
-            keepLabels?: boolean
-        },
+            keepLabels?: boolean;
+        };
 
         /** @docid dxfunneloptions_valuefield */
         valueField?: string;
@@ -74,68 +73,43 @@ declare module DevExpress.viz.funnel {
         palette?: any;
 
         /** @docid dxfunneloptions_algorithm */
-        algorithm?: string,
+        algorithm?: string;
 
         /** @docid dxfunneloptions_neckheight */
-        neckHeight?: number,
+        neckHeight?: number;
 
         /** @docid dxfunneloptions_neckwidth */
-        neckWidth?: number,
+        neckWidth?: number;
 
         /** @docid dxfunneloptions_inverted */
-        inverted?: boolean,
+        inverted?: boolean;
 
         /** @docid dxfunneloptions_sortdata */
-        sortData?: boolean,
+        sortData?: boolean;
 
         /** @docid dxfunneloptions_item */
         item?: {
 
             /** @docid dxfunneloptions_item_border */
-            border: viz.core.Border,
+            border: viz.core.Border;
 
             /** @docid dxfunneloptions_item_hoverstyle */
             hoverStyle?: {
                 /** @docid dxfunneloptions_item_hoverstyle_border */
-                border?: viz.core.Border,
+                border?: viz.core.Border;
                 /** @docid dxfunneloptions_item_hoverstyle_hatching */
-                hatching?: {
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_direction */
-                    direction?: string;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_opacity */
-                    opacity?: number;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_step */
-                    step?: number;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_width */
-                    width?: number;
-                }
-            },
+                hatching?: viz.core.Hatching;
+            };
 
             /** @docid dxfunneloptions_item_selectionstyle */
             selectionStyle?: {
                 /** @docid dxfunneloptions_item_selectionstyle_border */
-                border?: viz.core.Border,
+                border?: viz.core.Border;
 
                 /** @docid dxfunneloptions_item_selectionstyle_hatching */
-                hatching?: {
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_opacity */
-                    opacity?: number,
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_step */
-                    step?: number,
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_width */
-                    width?: number,
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_direction */
-                    direction?: string
-                }
-            }
-        }
+                hatching?: viz.core.Hatching;
+            };
+        };
 
         /** @docid dxfunneloptions_label */
         label?: {
@@ -180,7 +154,7 @@ declare module DevExpress.viz.funnel {
 
             /** @docid dxfunneloptions_label_format */
             format?: any;
-        },
+        };
         /** @docid dxfunneloptions_legend */
         legend?: Legend;
 
