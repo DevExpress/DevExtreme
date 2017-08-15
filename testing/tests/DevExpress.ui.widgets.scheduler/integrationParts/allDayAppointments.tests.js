@@ -344,6 +344,49 @@ QUnit.test("Height of appointment should be correct after dragged into the all d
     assert.equal($allDayAppointment.outerHeight(), $allDayCell.outerHeight(), "Appointment has correct height");
 });
 
+QUnit.test("Height of allDay appointment should be correct, 3 appts in cell", function(assert) {
+    var data = new DataSource({
+        store: [
+            {
+                text: "Task 1",
+                allDay: true,
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            },
+            {
+                text: "Task 2",
+                allDay: true,
+                startDate: new Date(2015, 1, 9, 11, 0),
+                endDate: new Date(2015, 1, 9, 12, 0)
+            },
+            {
+                text: "Task 3",
+                allDay: true,
+                startDate: new Date(2015, 1, 9, 1, 0),
+                endDate: new Date(2015, 1, 9, 2, 0)
+            }
+        ]
+    });
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        dataSource: data,
+        currentView: "week",
+        editing: true
+    });
+
+    var $element = $(this.instance.element()),
+        $appointments = $element.find(".dx-scheduler-appointment"),
+        firstPosition = translator.locate($appointments.eq(0));
+
+    assert.roughEqual($appointments.eq(0).outerHeight(), 25, 1.5, "Appointment has correct height");
+    assert.roughEqual($appointments.eq(1).outerHeight(), 25, 1.5, "Appointment has correct height");
+    assert.roughEqual(firstPosition.top, 30, 1.5, "Appointment has correct top");
+
+    assert.equal($appointments.eq(2).outerWidth(), 15, "Compact appointment has correct width");
+    assert.equal($appointments.eq(2).outerHeight(), 15, "Compact appointment has correct height");
+});
+
 QUnit.test("allDayExpanded option of workspace should be updated after dragged off from the all day container", function(assert) {
     this.createInstance({
         showAllDayPanel: true,

@@ -145,34 +145,50 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
-        var maxHeight = this._allDayHeight || this.getAppointmentMinSize(),
-            index = coordinates.index,
-            count = coordinates.count,
-            height = maxHeight / (count > 3 ? 3 : count),
-            width = coordinates.width,
-            top = coordinates.top + (index * height),
-            left = coordinates.left,
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize(),
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
+        var appointmentCountPerCell = coordinates.count === 1 ? coordinates.count : this._getAppointmentCountPerCell();
+        var ratio = this.instance.fire("getMaxAppointmentsPerCell") || coordinates.count >= 3 ? 0.6 : 1;
+        var maxHeight = this._allDayHeight || this.getAppointmentMinSize();
 
-        //NOTE: Reduce cohesion
-        if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
-            coordinates.skipResizing = true;
+        //none
+        if(!appointmentCountPerCell) {
+            appointmentCountPerCell = coordinates.count;
+            ratio = (maxHeight - 5) / maxHeight;
         }
-        if(count > 2) {
-            if(coordinates.isCompact) {
-                top = coordinates.top + compactAppointmentDefaultOffset;
-                left = coordinates.left + (index - 2) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-                height = compactAppointmentDefaultSize;
-                width = compactAppointmentDefaultSize;
-                this._markAppointmentAsVirtual(coordinates, true);
-            } else {
-                top += height;
-            }
+        //auto
+        if(this.instance.fire("getMaxAppointmentsPerCell") === "auto") {
+            ratio = (maxHeight - 5 / maxHeight);
         }
-        return { height: height, width: width, top: top, left: left };
+
+        var index = coordinates.index,
+            height = this.instance.fire("getMaxAppointmentsPerCell") ? ratio * maxHeight / appointmentCountPerCell : maxHeight / (coordinates.count > 3 ? 3 : coordinates.count),
+            top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
+            width = coordinates.width,
+            left = coordinates.left,
+            compactAppointmentDefaultSize,
+            compactAppointmentDefaultOffset;
+
+        if(coordinates.isCompact) {
+            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
+            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
+            top = coordinates.top + compactAppointmentDefaultOffset;
+            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
+            height = compactAppointmentDefaultSize;
+            width = compactAppointmentDefaultSize;
+
+            this._markAppointmentAsVirtual(coordinates);
+        }
+
+        return {
+            height: height,
+            width: width,
+            top: top,
+            left: left
+        };
     },
 
+    _defaultAppointmentCountPerCell: function() {
+        return 2;
+    },
     _getSimpleAppointmentGeometry: function(coordinates) {
         var width = this._getAppointmentMaxWidth() / coordinates.count,
             height = coordinates.height,

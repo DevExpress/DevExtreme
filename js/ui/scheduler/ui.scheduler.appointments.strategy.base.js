@@ -412,13 +412,15 @@ var BaseRenderingStrategy = Class.inherit({
         }
         return result;
     },
-
+    _defaultAppointmentCountPerCell: function() {
+        return 2;
+    },
     _getAppointmentCountPerCell: function() {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
             appointmentCountPerCell;
 
         if(!overlappingMode) {
-            appointmentCountPerCell = 2;
+            appointmentCountPerCell = this._defaultAppointmentCountPerCell();
         }
         if(isNumeric(overlappingMode)) {
             appointmentCountPerCell = overlappingMode;
