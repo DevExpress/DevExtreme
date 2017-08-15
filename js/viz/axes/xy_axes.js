@@ -644,7 +644,7 @@ module.exports = {
 
         _estimateLabelFormat: function(canvas) {
             this.updateCanvas(canvas);
-            this._updateTickManager();
+            this._updateTickManager(false);
             this._tickManager.getTicks();
             this._correctLabelFormat();
         },
