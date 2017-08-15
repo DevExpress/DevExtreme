@@ -18,9 +18,7 @@ var $ = require("jquery"),
     feedbackEvents = require("../../events/core/emitter.feedback"),
     TransitionExecutorModule = require("../../animation/transition_executor/transition_executor"),
     animationPresetsModule = require("../../animation/presets/presets"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+    when = require("../../core/utils/deferred").when;
 
 require("./layout_controller");
 require("../../ui/themes");
@@ -417,7 +415,7 @@ var HtmlApplication = Application.inherit({
 
     _showViewImpl: function(viewInfo, direction) {
         var that = this,
-            deferred = new Deferred(),
+            deferred = $.Deferred(),
             result = deferred.promise(),
             layoutController = viewInfo.layoutController;
 
@@ -526,10 +524,10 @@ var HtmlApplication = Application.inherit({
             previousLayoutController = that._activeLayoutController();
 
         if(previousLayoutController === layoutController) {
-            return new Deferred().resolve().promise();
+            return $.Deferred().resolve().promise();
         }
 
-        var d = new Deferred();
+        var d = $.Deferred();
         layoutController
             .ensureActive(targetNode)
             .done(function(result) {
@@ -547,14 +545,14 @@ var HtmlApplication = Application.inherit({
             controllerToDeactivate = that._activeLayoutControllersStack.pop();
 
         if(!controllerToDeactivate) {
-            return new Deferred().resolve().promise();
+            return $.Deferred().resolve().promise();
         }
 
         if(layoutController.isOverlay) {
             that._activeLayoutControllersStack.push(controllerToDeactivate);
             tasks.push(controllerToDeactivate.disable());
         } else {
-            var transitionDeferred = new Deferred(),
+            var transitionDeferred = $.Deferred(),
                 skipAnimation = false;
 
             //NOTE: It's needed to prevent creating a closure. Can't be declared in a loop because of JSHint check.
@@ -567,7 +565,7 @@ var HtmlApplication = Application.inherit({
             };
 
             while(controllerToDeactivate && controllerToDeactivate !== layoutController) {
-                var d = new Deferred();
+                var d = $.Deferred();
 
                 if(controllerToDeactivate.isOverlay) {
                     skipAnimation = true;

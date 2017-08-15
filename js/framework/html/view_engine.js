@@ -9,9 +9,7 @@ var $ = require("jquery"),
     inArray = require("../../core/utils/array").inArray,
     errors = require("../errors"),
     domUtils = require("../../core/utils/dom"),
-    deferredUtils = require("../../core/utils/deferred"),
-    when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred,
+    when = require("../../core/utils/deferred").when,
     ajax = require("../../core/utils/ajax"),
     _VIEW_ROLE = "dxView",
     _LAYOUT_ROLE = "dxLayout",
@@ -152,7 +150,7 @@ var ViewEngine = Class.inherit({
     _loadTemplatesFromURL: function(url) {
         var that = this,
             winPhonePrefix = this._getWinPhonePrefix(),
-            deferred = new Deferred();
+            deferred = $.Deferred();
 
         url = winPhonePrefix + url;
 
@@ -350,7 +348,7 @@ var ViewEngine = Class.inherit({
                 that._putTemplatesToCache();
             });
         } else {
-            return new Deferred().resolve().promise();
+            return $.Deferred().resolve().promise();
         }
     },
 
@@ -380,7 +378,7 @@ var ViewEngine = Class.inherit({
             result = this._loadTemplatesFromURL(source);
         } else {
             this._loadTemplatesFromMarkupCore(source);
-            result = new Deferred().resolve().promise();
+            result = $.Deferred().resolve().promise();
         }
 
         return result.done(this._processTemplates.bind(this));
