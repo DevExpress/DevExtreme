@@ -2,16 +2,48 @@
 /// <reference path="core.d.ts" />
 /// <reference path="viz-core.d.ts" />
 
-
-export interface Legend extends core.BaseLegend {
-    /** @docid dxfunneloptions_legend_customizehint */
-    customizeHint?: (itemsInfo: { item: funnelItem; text: string; }) => string;
-
-    /** @docid dxfunneloptions_legend_customizetext */
-    customizeText?: (itemsInfo: { item: funnelItem; text: string; }) => string;
-}
-
 declare module DevExpress.viz.funnel {
+
+    export interface Legend extends viz.core.BaseLegend {
+        /** @docid dxfunneloptions_legend_customizehint */
+        customizeHint?: (itemsInfo: { item: funnelItem; text: string; }) => string;
+
+        /** @docid dxfunneloptions_legend_customizetext */
+        customizeText?: (itemsInfo: { item: funnelItem; text: string; }) => string;
+    }
+
+
+    /** @docid dxfunnelitem */
+    export interface funnelItem {
+
+    /** @docid dxfunnelitemfields_data */
+        data?: Object;
+
+        /** @docid dxfunnelitemfields_id */
+        id?: number;
+
+        /** @docid dxfunnelitemfields_percent */
+        percent?: number;
+
+        /** @docid dxfunnelitemmethods_select */
+        select(state: boolean): void;
+
+        /** @docid dxfunnelitemmethods_hover */
+        hover(state: boolean): void;
+
+        /** @docid dxfunnelitemmethods_getcolor */
+        getColor(): string;
+
+        /** @docid dxfunnelitemmethods_ishovered */
+        isHovered(): boolean;
+
+        /** @docid dxfunnelitemmethods_isselected */
+        isSelected(): boolean;
+
+        /** @docid dxfunnelitemmethods_showtooltip */
+        showTooltip(): void;
+    }
+
     export interface dxFunnelOptions extends viz.core.BaseWidgetOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
         /** @docid dxfunneloptions_adaptivelayout */
         adaptiveLayout?: {
@@ -156,7 +188,7 @@ declare module DevExpress.viz.funnel {
         onItemClick?: any;
 
         /** @docid  dxfunneloptions_onLegendClick */
-        onItemClick?: any;
+        onLegendClick?: any;
 
         /** @docid  dxfunneloptions_onHoverChanged */
         onHoverChanged?: any;
@@ -167,37 +199,6 @@ declare module DevExpress.viz.funnel {
         /** @docid dxfunneloptions_tooltip */
         tooltip?: viz.core.Tooltip;
     }
-}
-
-/** @docid dxfunnelitem */
-export interface funnelItem {
-
-/** @docid dxfunnelitemfields_data */
-    data?: Object;
-
-    /** @docid dxfunnelitemfields_id */
-    id?: number;
-
-    /** @docid dxfunnelitemfields_percent */
-    percent?: number;
-
-    /** @docid dxfunnelitemmethods_select */
-    select(state: boolean): void;
-
-    /** @docid dxfunnelitemmethods_hover */
-    hover(state: boolean): void;
-
-    /** @docid dxfunnelitemmethods_getcolor */
-    getColor(): string;
-
-    /** @docid dxfunnelitemmethods_ishovered */
-    isHovered(): boolean;
-
-    /** @docid dxfunnelitemmethods_isselected */
-    isSelected(): boolean;
-
-     /** @docid dxfunnelitemmethods_showtooltip */
-    showTooltip(): void;
 }
 
 declare module DevExpress.viz {
@@ -215,6 +216,9 @@ declare module DevExpress.viz {
         /** @docid dxfunnelmethods_hidetooltip */
         hideTooltip(): void;
 
+        showLoadingIndicator(): void;
+
+        hideLoadingIndicator(): void;
     }
 }
 
