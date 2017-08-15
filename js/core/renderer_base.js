@@ -271,26 +271,6 @@ var pxExceptions = [
     "zoom"
 ];
 
-var heightWidthAliases = {
-    width: "outerWidth",
-    height: "outerHeight"
-};
-
-var getCss = function(name) {
-    var result;
-
-    if(!this[0]) return result;
-
-    if(heightWidthAliases[name]) {
-        name = heightWidthAliases[name];
-        result = this[name]() + "px";
-    } else {
-        result = window.getComputedStyle(this[0])[name] || this[0].style[name];
-    }
-
-    return typeUtils.isNumeric(result) ? result.toString() : result;
-};
-
 var setCss = function(name, value) {
     if(!this[0] || !this[0].style) return this;
 
@@ -310,13 +290,18 @@ initRender.prototype.css = function(name, value) {
 
     if(typeUtils.isString(name)) {
         if(arguments.length === 2) {
-            setCss.apply(this, [name, value]);
+            setCss.call(this, name, value);
         } else {
-            return getCss.apply(this, [name]);
+            var result;
+
+            if(!this[0]) return result;
+
+            result = window.getComputedStyle(this[0])[name] || this[0].style[name];
+            return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     } else if(typeUtils.isPlainObject(name)) {
         for(var key in name) {
-            this.css(key, name[key]);
+            setCss.call(this, key, name[key]);
         }
     }
 

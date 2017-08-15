@@ -207,7 +207,7 @@ var subscribes = {
     },
 
     getHeaderHeight: function() {
-        return this._header._$element && parseInt(this._header._$element.css("height"), 10);
+        return this._header._$element && parseInt(this._header._$element.outerHeight(), 10);
     },
 
     getResourcesFromItem: function(options) {
