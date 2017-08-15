@@ -2737,7 +2737,7 @@ QUnit.test("Estimate margins does not include labels if stub data", function(ass
     assert.ok(!customizeText.called, 0);
 });
 
-QUnit.test("Create ticks for labels format estimation", function(assert) {
+QUnit.test("estimateMargins - creates ticks for labels format estimation", function(assert) {
     var that = this;
 
     this.range.min = new Date(2017, 1, 2, 10);
@@ -2758,6 +2758,30 @@ QUnit.test("Create ticks for labels format estimation", function(assert) {
     assert.strictEqual(this.tickManager.update.lastCall.args[1].screenDelta, 890, "screenDelta");
     assert.strictEqual(this.tickManager.getTicks.callCount, 1);
     assert.deepEqual(this.renderer.text.getCall(0).args, ["4:00 PM", 0, 0], "cteate text args");
+});
+
+QUnit.test("estimateMargins after axis drawing - creates new ticks", function(assert) {
+    var that = this;
+
+    this.range.min = new Date(2017, 1, 2, 10);
+    this.range.max = new Date(2017, 1, 2, 16);
+    this.createTickManager.restore();
+    this.tickManager.getTicks.returns([1, 2, 3]);
+    this.tickManager.getMinorTicks.returns([1.5, 2.5]);
+    this.createTickManager = sinon.stub(tickManagerModule, "TickManager", function() { return that.tickManager; });
+
+    var axis = this.createSimpleAxis({
+        isHorizontal: true,
+        label: {
+            visible: true
+        }
+    });
+    axis.draw(this.canvas);
+
+    axis.estimateMargins(this.canvas);
+
+    assert.strictEqual(this.tickManager.update.lastCall.args[1].customTicks, null, "customTicks");
+    assert.strictEqual(this.tickManager.update.lastCall.args[1].customMinorTicks, null, "customMinorTicks");
 });
 
 QUnit.module("Coors In", $.extend({}, environment2DTranslator, {

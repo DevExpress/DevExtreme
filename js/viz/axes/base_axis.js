@@ -330,10 +330,12 @@ Axis.prototype = {
         };
     },
 
-    _updateTickManager: function() {
+    _updateTickManager: function(keepTicks) {
         var that = this,
             options = extend(true, that._getMarginsOptions(), that._getTicksOptions(), that._getLabelOptions());
-        this._tickManager.update(that._getTickManagerTypes(), that._getTickManagerData(), options);
+
+        !keepTicks && (that._majorTicks = that._minorTicks = null);
+        that._tickManager.update(that._getTickManagerTypes(), that._getTickManagerData(), options);
     },
 
     _correctLabelFormat: function() {
@@ -1097,7 +1099,7 @@ Axis.prototype = {
         this._majorTicks = (ticks.majorTicks || []).map(createMajorTick(this, this._renderer));
         this._minorTicks = (ticks.minorTicks || []).map(createMinorTick(this, this._renderer));
 
-        this._updateTickManager();
+        this._updateTickManager(true);
     },
 
     createTicks: function(canvas) {
@@ -1112,9 +1114,7 @@ Axis.prototype = {
         }
 
         that.updateCanvas(canvas);
-
-        that._majorTicks = that._minorTicks = null;
-        that._updateTickManager();
+        that._updateTickManager(false);
 
         that._majorTicks = tickManager.getTicks().map(createMajorTick(this, renderer));
         that._minorTicks = tickManager.getMinorTicks().map(createMinorTick(this, renderer));
