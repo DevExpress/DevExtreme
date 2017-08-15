@@ -44,14 +44,14 @@ var getElementEventData = function(element, eventName) {
                 // TODO: refactor
                 if(selector) {
                     if(matches(e.target, selector)) {
-                        handler(eventsEngine.Event(e, { currentTarget: e.target, data: data }), extraParameters);
+                        handler(extend(e, { currentTarget: e.target, data: data }), extraParameters);
                         return;
                     }
                     var target = e.target;
                     while(target !== element) {
                         target = target.parentNode;
                         if(matches(target, selector)) {
-                            handler(eventsEngine.Event(e, { currentTarget: target, data: data }), extraParameters);
+                            handler(eventsEngine.Event(e, { currentTarget: target, data: data }), extraParameters); // TODO: Should we create new event here?
                             return;
                         }
                     }
