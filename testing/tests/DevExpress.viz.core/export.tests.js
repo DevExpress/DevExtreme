@@ -1039,6 +1039,18 @@ QUnit.test("Menu is hidden if there is no enough space", function(assert) {
     assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
 });
 
+QUnit.test("freeSpace", function(assert) {
+    //arrange
+    var exportMenu = this.createExportMenu();
+    exportMenu.draw(100, 200, { width: 30, height: 30 });
+
+    //act
+    exportMenu.freeSpace();
+
+    //assert
+    assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
+});
+
 QUnit.test("Return empty layout options if was hidden due to small container", function(assert) {
     //arrange
     var exportMenu = this.createExportMenu();
@@ -1062,20 +1074,17 @@ QUnit.test("Send warning message if was hidden due to small container", function
     assert.ok(this.incidentOccurred.calledWith("W2107"));
 });
 
-QUnit.test("Menu is hidden first time and appended if container gets bigger", function(assert) {
+QUnit.test("Menu is hidden first time and shown if container gets bigger", function(assert) {
     //arrange
     var exportMenu = this.createExportMenu();
     exportMenu.draw(10, 20, { width: 30, height: 30 });
-    this.renderer.g.getCall(0).returnValue.linkRemove.reset();
-    this.renderer.g.getCall(0).returnValue.linkAppend.reset();
 
     //act
     exportMenu.probeDraw(100, 60, { width: 30, height: 30 });
     exportMenu.draw(100, 60, { width: 30, height: 30 });
 
     //assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 1);
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 0);
+    assert.equal(this.renderer.g.getCall(0).returnValue._stored_settings.visibility, null);
 });
 
 QUnit.test("Return real layout options if container gets bigger", function(assert) {
@@ -1103,17 +1112,4 @@ QUnit.test("Return real layout options if container gets bigger", function(asser
         },
         verticalAlignment: "top"
     });
-});
-
-QUnit.test("Show method does not show menu if it was hidden due to small container", function(assert) {
-    //arrange
-    var exportMenu = this.createExportMenu();
-    exportMenu.draw(10, 20, { width: 30, height: 30 });
-    this.renderer.g.getCall(0).returnValue.linkAppend.reset();
-
-    //act
-    exportMenu.show();
-
-    //assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.linkAppend.callCount, 0);
 });

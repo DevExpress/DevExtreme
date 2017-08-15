@@ -1457,6 +1457,97 @@ registerTheme({
                 alignment: RIGHT
             }
         }
+    },
+    funnel: {
+        sortData: true,
+        valueField: "val",
+        colorField: "color",
+        argumentField: "arg",
+        hoverEnabled: true,
+        selectionMode: "single",
+        item: {
+            border: {
+                visible: false,
+                width: 2,
+                color: WHITE
+            },
+            hoverStyle: {
+                hatching: {
+                    opacity: 0.75,
+                    step: 6,
+                    width: 2,
+                    direction: RIGHT
+                },
+                border: {
+                    visible: false,
+                    width: 2,
+                    color: WHITE
+                }
+            },
+            selectionStyle: {
+                hatching: {
+                    opacity: 0.5,
+                    step: 6,
+                    width: 2,
+                    direction: RIGHT
+                },
+                border: {
+                    visible: false,
+                    width: 2,
+                    color: WHITE
+                }
+            }
+        },
+        title: {
+            margin: 10
+        },
+        adaptiveLayout: {
+            width: 80,
+            height: 80,
+            keepLabels: true
+        },
+        legend: {
+            visible: false
+        },
+        _rtl: {
+            legend: {
+                itemTextPosition: LEFT
+            }
+        },
+        tooltip: {
+            customizeTooltip: function(info) {
+                return { text: info.item.data.argument + " " + info.valueText };
+            }
+        },
+        inverted: false,
+        algorithm: "dynamicSlope",
+        neckWidth: 0,
+        neckHeight: 0,
+        label: {
+            visible: true,
+            horizontalAlignment: RIGHT,
+            horizontalOffset: 0,
+            verticalOffset: 0,
+            showForZeroValues: true,
+            customizeText: function(info) {
+                return info.item.data.argument + " " + info.valueText;
+            },
+            position: "columns",
+            font: {
+                color: WHITE
+            },
+            border: {
+                visible: false,
+                width: 1,
+                color: LIGHT_GREY,
+                dashStyle: SOLID
+            },
+            connector: {
+                visible: true,
+                width: 1,
+                opacity: 0.5
+            }
+        }
     }
 });
 
@@ -1644,6 +1735,23 @@ registerTheme({
     },
     bullet: {
         targetColor: TARGET_COLOR
+    },
+    funnel: {
+        item: {
+            border: {
+                color: "#494949"
+            },
+            hoverStyle: {
+                border: {
+                    color: "#494949"
+                }
+            },
+            selectionStyle: {
+                border: {
+                    color: "#494949"
+                }
+            }
+        }
     }
 }, "generic.light");
 
@@ -1908,6 +2016,13 @@ registerTheme({
     },
     polar: {
         commonSeriesSettings: {
+        }
+    },
+    funnel: {
+        label: {
+            connector: {
+                opacity: 1
+            }
         }
     }
 }, "generic.light");

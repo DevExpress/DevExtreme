@@ -154,6 +154,7 @@ function Label(renderSettings) {
     this._renderer = renderSettings.renderer;
     this._container = renderSettings.labelsGroup;
     this._point = renderSettings.point;
+    this._strategy = renderSettings.strategy;
 }
 
 Label.prototype = {
@@ -178,7 +179,7 @@ Label.prototype = {
     show: function() {
         var that = this;
         if(that._point.hasValue()) {
-            that._draw();
+            that.draw();
             that._point.correctLabelPosition(that);
         }
     },
@@ -219,7 +220,7 @@ Label.prototype = {
         that._data = that._options = that._textContent = that._visible = that._insideGroup = that._text = that._background = that._connector = that._figure = null;
     },
 
-    _draw: function() {
+    draw: function() {
         var that = this,
             renderer = that._renderer,
             container = that._container,
@@ -280,10 +281,17 @@ Label.prototype = {
         that._bBox = bBox;
     },
 
+    getBackgroundPadding: function() {
+        if(this._background) {
+            return 2 * LABEL_BACKGROUND_PADDING_X;
+        }
+        return 0;
+    },
+
     _getConnectorPoints: function() {
         var that = this,
             figure = that._figure,
-            strategy = selectStrategy(figure),
+            strategy = that._strategy || selectStrategy(figure),
             bBox = that.getBoundingRect(),
             labelPoint,
             figurePoint,
@@ -293,7 +301,7 @@ Label.prototype = {
         if(!strategy.isLabelInside(bBox, figure, that._options.position !== "inside")) {
             xc = bBox.x + bBox.width / 2;
             yc = bBox.y + bBox.height / 2;
-            points = strategy.prepareLabelPoints([
+            points = strategy.prepareLabelPoints.call(this, [
                     [xc, yc - that._textSize[1] / 2],
                     [xc + that._textSize[0] / 2, yc],
                     [xc, yc + that._textSize[1] / 2],
@@ -313,6 +321,12 @@ Label.prototype = {
         this._text && this._text.applyEllipsis(maxWidth);
         this._updateBackground(this._text.getBBox());
     },
+
+    resetEllipsis: function() {
+        this._text && this._text.restoreText();
+        this._updateBackground(this._text.getBBox());
+    },
+
     setTrackerData: function(point) {
         this._text.data({ "chart-data-point": point });
         this._background && this._background.data({ "chart-data-point": point });

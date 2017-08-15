@@ -237,7 +237,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._change(["NODES_RESET"]);
     },
 
-    _onNodesCreated: common.empty,
+    _onNodesCreated: _noop,
 
     _processDataSourceItems: function(items) {
         return { items: items, isPlain: false };
@@ -394,7 +394,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._onTilingPerformed();
     },
 
-    _onTilingPerformed: common.empty,
+    _onTilingPerformed: _noop,
 
     _performLabelsLayout: function() {
         this._processNodes(null, processLabelsLayout);
