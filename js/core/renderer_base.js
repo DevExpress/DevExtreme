@@ -274,6 +274,7 @@ var pxExceptions = [
 var setCss = function(name, value) {
     if(!this[0] || !this[0].style) return this;
 
+    name = styleUtils.styleProp(name);
     for(var i = 0; i < this.length; i++) {
         if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
             value += "px";
@@ -285,18 +286,15 @@ var setCss = function(name, value) {
 };
 
 initRender.prototype.css = function(name, value) {
-    var prefix = styleUtils.stylePropPrefix(name);
-    name = prefix ? prefix + name : name;
-
     if(typeUtils.isString(name)) {
         if(arguments.length === 2) {
             setCss.call(this, name, value);
         } else {
-            var result;
+            name = styleUtils.styleProp(name);
 
             if(!this[0]) return result;
 
-            result = window.getComputedStyle(this[0])[name] || this[0].style[name];
+            var result = window.getComputedStyle(this[0])[name] || this[0].style[name];
             return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     } else if(typeUtils.isPlainObject(name)) {
