@@ -39,16 +39,16 @@ var dxFunnel = {
     * @name dxfunneloptions_valuefield
     * @publicName valueField
     * @type string
-    * @default 'value'
+    * @default 'val'
     */
-    valueField: "value",
+    valueField: "val",
     /**
     * @name dxfunneloptions_argumentfield
     * @publicName argumentField
     * @type string
-    * @default 'argument'
+    * @default 'arg'
     */
-    argumentField: "argument",
+    argumentField: "arg",
     /**
     * @name dxfunneloptions_colorfield
     * @publicName colorField
@@ -126,12 +126,19 @@ var dxFunnel = {
         */
         border: {
             /**
+            * @name dxfunneloptions_item_border_visible
+            * @publicName visible
+            * @type boolean
+            * @default false
+            */
+            visible: false,
+            /**
             * @name dxfunneloptions_item_border_width
             * @publicName width
             * @type number
-            * @default 0
+            * @default 2
             */
-            width: 0,
+            width: 2,
             /**
             * @name dxfunneloptions_item_border_color
             * @publicName color
@@ -153,12 +160,19 @@ var dxFunnel = {
             */
             border: {
                 /**
+                * @name dxfunneloptions_item_hoverstyle_border_visible
+                * @publicName visible
+                * @type boolean
+                * @default false
+                */
+                visible: false,
+                /**
                 * @name dxfunneloptions_item_hoverstyle_border_width
                 * @publicName width
                 * @type number
-                * @default 0
+                * @default 2
                 */
-                width: 0,
+                width: 2,
                 /**
                 * @name dxfunneloptions_item_hoverstyle_border_color
                 * @publicName color
@@ -218,12 +232,19 @@ var dxFunnel = {
             */
             border: {
                 /**
+                * @name dxfunneloptions_item_selectionstyle_border_visible
+                * @publicName visible
+                * @type boolean
+                * @default false
+                */
+                visible: false,
+                /**
                 * @name dxfunneloptions_item_selectionstyle_border_width
                 * @publicName width
                 * @type number
-                * @default 0
+                * @default 2
                 */
-                width: 0,
+                width: 2,
                 /**
                 * @name dxfunneloptions_item_selectionstyle_border_color
                 * @publicName color

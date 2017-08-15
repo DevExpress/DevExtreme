@@ -1036,7 +1036,7 @@ QUnit.test("Menu is hidden if there is no enough space", function(assert) {
     exportMenu.draw(10, 20, { width: 30, height: 30 });
 
     //assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.attr.lastCall.args[0].visibility, "hidden");
+    assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
 });
 
 QUnit.test("freeSpace", function(assert) {
@@ -1048,7 +1048,7 @@ QUnit.test("freeSpace", function(assert) {
     exportMenu.freeSpace();
 
     //assert
-    assert.equal(this.renderer.g.getCall(0).returnValue.attr.lastCall.args[0].visibility, "hidden");
+    assert.equal(this.renderer.g.getCall(0).returnValue.linkRemove.callCount, 1);
 });
 
 QUnit.test("Return empty layout options if was hidden due to small container", function(assert) {

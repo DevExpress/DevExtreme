@@ -15,7 +15,7 @@ handlers.calculateState = function(options) {
     return states;
 };
 
-handlers.calculateAdditionalStates = require("../core/helpers").empty;
+handlers.calculateAdditionalStates = require("../../core/utils/common").noop;
 
 nodeProto.code = 0;
 

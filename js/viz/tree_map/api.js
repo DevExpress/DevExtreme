@@ -157,7 +157,7 @@ function updateValue(node, value) {
     }
 }
 
-proto._extendProxyType = require("../core/helpers").empty;
+proto._extendProxyType = require("../../core/utils/common").noop;
 
 var _resetNodes = proto._resetNodes;
 proto._resetNodes = function() {

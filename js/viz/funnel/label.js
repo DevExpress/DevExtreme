@@ -26,10 +26,7 @@ function isOutsidePosition(pos) {
 }
 
 function correctYForInverted(y, bBox, inverted) {
-    if(inverted) {
-        return y - bBox.height;
-    }
-    return y;
+    return inverted ? y - bBox.height : y;
 }
 
 function getOutsideRightLabelPosition(item, bBox, options, inverted) {

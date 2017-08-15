@@ -58,8 +58,7 @@ var dxFunnel = require("../core/base_widget").inherit({
         onSelectionChanged: { name: "selectionChanged" }
     },
 
-    _disposeCore: function() {
-    },
+    _disposeCore: noop,
 
     _applySize: function(rect) {
         this._rect = rect.slice();
@@ -163,22 +162,22 @@ var dxFunnel = require("../core/base_widget").inherit({
             valueField = that._getOption("valueField", true),
             argumentField = that._getOption("argumentField", true),
             colorField = that._getOption("colorField", true),
-            items = data.map(function(item) {
-                return {
-                    value: Number(item[valueField]),
-                    color: item[colorField],
-                    argument: item[argumentField]
-                };
-            }).filter(function(item) {
-                return item.value >= 0;
-            });
-
-        var sortingMethod = function(a, b) {
-            return b.value - a.value;
-        };
+            items = data.reduce(function(prev, item) {
+                var value = Number(item[valueField]);
+                if(value >= 0) {
+                    prev.push({
+                        value: value,
+                        color: item[colorField],
+                        argument: item[argumentField]
+                    });
+                }
+                return prev;
+            }, []);
 
         if(that._getOption("sortData", true)) {
-            return items.sort(sortingMethod);
+            items.sort(function(a, b) {
+                return b.value - a.value;
+            });
         }
 
         return items;
@@ -195,13 +194,12 @@ var dxFunnel = require("../core/base_widget").inherit({
         that._items = algorithm.getFigures(percents, that._getOption("neckWidth", true), that._getOption("neckHeight", true))
             .map(function(figure, index) {
                 var curData = data[index],
-                    color = curData.color || palette.getNextColor(),
                     node = new Item(that, {
                         figure: figure,
                         data: curData,
                         percent: percents[index],
                         id: index,
-                        color: color,
+                        color: curData.color || palette.getNextColor(),
                         itemOptions: itemOptions
                     });
 

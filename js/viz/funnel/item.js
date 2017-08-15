@@ -7,7 +7,7 @@ function parseStyles(color, style) {
         fill: color,
         hatching: style.hatching,
         stroke: style.border.color,
-        "stroke-width": style.border.width
+        "stroke-width": style.border.visible ? style.border.width : 0
     };
 }
 

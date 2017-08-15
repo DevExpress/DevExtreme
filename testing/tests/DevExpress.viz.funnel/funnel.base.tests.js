@@ -225,7 +225,7 @@ QUnit.test("Update styles of items", function(assert) {
         dataSource: [{ value: 1 }, { value: 1 }]
     });
 
-    funnel.option({ item: { border: { width: 3, color: "red" } } });
+    funnel.option({ item: { border: { visible: true, width: 3, color: "red" } } });
 
     var items = this.items();
 
@@ -399,6 +399,7 @@ QUnit.test("Normal style", function(assert) {
         dataSource: [{ value: 10, argument: "One", color: "#123123" }, { value: 5, argument: "Two", color: "#234234" }],
         item: {
             border: {
+                visible: true,
                 color: "#ffffff",
                 width: 2
             }
@@ -415,16 +416,40 @@ QUnit.test("Normal style", function(assert) {
     assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
 });
 
+QUnit.test("Normal style, border is not visible", function(assert) {
+    createFunnel({
+        dataSource: [{ value: 10, argument: "One", color: "#123123" }, { value: 5, argument: "Two", color: "#234234" }],
+        item: {
+            border: {
+                visible: false,
+                color: "#ffffff",
+                width: 2
+            }
+        }
+    });
+    var items = this.items();
+
+    assert.equal(items[0].smartAttr.lastCall.args[0].fill, "#123123");
+    assert.deepEqual(items[0].smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.deepEqual(items[0].smartAttr.lastCall.args[0]["stroke-width"], 0);
+
+    assert.equal(items[1].smartAttr.lastCall.args[0].fill, "#234234");
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
+});
+
 QUnit.test("Hover style", function(assert) {
     var funnel = createFunnel({
         dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
         item: {
             border: {
+                visible: true,
                 color: "#ffffff",
                 width: 2
             },
             hoverStyle: {
                 border: {
+                    visible: true,
                     color: "#123123",
                     width: 3
                 },
@@ -455,11 +480,13 @@ QUnit.test("Clear hover of item", function(assert) {
             dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
             item: {
                 border: {
+                    visible: true,
                     color: "#ffffff",
                     width: 2
                 },
                 hoverStyle: {
                     border: {
+                        visible: true,
                         color: "#123123",
                         width: 3
                     },
@@ -530,11 +557,13 @@ QUnit.test("Selection", function(assert) {
         dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
         item: {
             border: {
+                visible: true,
                 color: "#ffffff",
                 width: 2
             },
             selectionStyle: {
                 border: {
+                    visible: true,
                     color: "#123123",
                     width: 3
                 }
@@ -629,11 +658,13 @@ QUnit.test("Clear selection", function(assert) {
         dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
         item: {
             border: {
+                visible: true,
                 color: "#ffffff",
                 width: 2
             },
             selectionStyle: {
                 border: {
+                    visible: true,
                     color: "#123123",
                     width: 3
                 }
@@ -656,11 +687,13 @@ QUnit.test("Clear selection of all elements", function(assert) {
         dataSource: [{ value: 10, argument: "One", color: "#987987" }, { value: 5, argument: "Two", color: "#234234" }],
         item: {
             border: {
+                visible: true,
                 color: "#ffffff",
                 width: 2
             },
             selectionStyle: {
                 border: {
+                    visible: true,
                     color: "#123123",
                     width: 3
                 }

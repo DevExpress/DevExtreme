@@ -882,8 +882,7 @@ exports.plugin = {
         _applyTilesAppearance: function() {
             var that = this;
             this._items.forEach(function(item) {
-                var state = item.getState();
-                that._applyLegendItemStyle(item.id, state);
+                that._applyLegendItemStyle(item.id, item.getState());
             });
         },
         _buildNodes: function() {
@@ -907,15 +906,13 @@ exports.plugin = {
         },
 
         _createLegendItems: function() {
-            var items = this.getAllItems();
-            if(this._legend.update(items, this._getOption("legend"))) {
+            if(this._legend.update(this.getAllItems(), this._getOption("legend"))) {
                 this._requestChange(["LAYOUT"]);
             }
         }
     },
     dispose: function() {
         this._legend.dispose();
-        this._legend = null;
     },
     customize: function(constructor) {
         constructor.prototype._proxyData.push(function(x, y) {

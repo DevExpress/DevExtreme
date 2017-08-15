@@ -1460,14 +1460,15 @@ registerTheme({
     },
     funnel: {
         sortData: true,
-        valueField: "value",
+        valueField: "val",
         colorField: "color",
-        argumentField: "argument",
+        argumentField: "arg",
         hoverEnabled: true,
         selectionMode: "single",
         item: {
             border: {
-                width: 0,
+                visible: false,
+                width: 2,
                 color: WHITE
             },
             hoverStyle: {
@@ -1478,7 +1479,8 @@ registerTheme({
                     direction: RIGHT
                 },
                 border: {
-                    width: 0,
+                    visible: false,
+                    width: 2,
                     color: WHITE
                 }
             },
@@ -1490,7 +1492,8 @@ registerTheme({
                     direction: RIGHT
                 },
                 border: {
-                    width: 0,
+                    visible: false,
+                    width: 2,
                     color: WHITE
                 }
             }

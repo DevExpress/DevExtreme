@@ -338,13 +338,13 @@ _extend(exports.ExportMenu.prototype, {
 
     _fillSpace: function() {
         this._hiddenDueToLayout = false;
-        this._group.attr({ visibility: null });
+        this.show();
     },
 
     freeSpace: function() {
         this._incidentOccurred("W2107");
         this._hiddenDueToLayout = true;
-        this._group.attr({ visibility: "hidden" });
+        this.hide();
     },
     // BaseWidget_layout_implementation
 

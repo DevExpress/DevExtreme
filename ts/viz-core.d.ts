@@ -37,6 +37,9 @@ declare module DevExpress.viz.core {
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_color
         * @docid dxfunneloptions_label_border_color
         * @docid dxfunneloptions_legend_border_color
+        * @docid dxfunneloptions_item_border_color
+        * @docid dxfunneloptions_item_hoverstyle_border_color
+        * @docid dxfunneloptions_item_selectionstyle_border_color
         */
         color?: string;
 
@@ -70,6 +73,9 @@ declare module DevExpress.viz.core {
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_visible
         * @docid dxfunneloptions_label_border_visible
         * @docid dxfunneloptions_legend_border_visible
+        * @docid dxfunneloptions_item_border_visible
+        * @docid dxfunneloptions_item_hoverstyle_border_visible
+        * @docid dxfunneloptions_item_selectionstyle_border_visible
         */
         visible?: boolean;
 
@@ -100,6 +106,9 @@ declare module DevExpress.viz.core {
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_width
         * @docid dxfunneloptions_label_border_width
         * @docid dxfunneloptions_legend_border_width
+        * @docid dxfunneloptions_item_border_width
+        * @docid dxfunneloptions_item_hoverstyle_border_width
+        * @docid dxfunneloptions_item_selectionstyle_border_width
         */
         width?: number;
     }

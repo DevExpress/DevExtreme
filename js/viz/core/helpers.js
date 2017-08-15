@@ -61,8 +61,6 @@ function addChange(settings) {
     buildTotalChanges(proto);
 }
 
-function empty() { }
-
 function createChainExecutor() {
     var chain = [];
 
@@ -82,8 +80,6 @@ function expand(target, name, expander) {
     var current = target[name];
     if(current.add) {
         current.add(expander);
-    } else if(current === empty) {
-        current = expander;
     } else {
         current = createChainExecutor();
         current.add(target[name]);
@@ -147,4 +143,3 @@ exports.changes = function() {
 };
 
 exports.expand = expand;
-exports.empty = empty;

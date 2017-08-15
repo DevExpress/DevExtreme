@@ -60,25 +60,12 @@ declare module DevExpress.viz.funnel {
         item?: {
 
             /** @docid dxfunneloptions_item_border */
-            border: {
+            border: viz.core.Border,
 
-                /** @docid dxfunneloptions_item_border_width */
-                width?: number;
-
-                /** @docid dxfunneloptions_item_border_color */
-                color: string;
-            },
             /** @docid dxfunneloptions_item_hoverstyle */
             hoverStyle?: {
-
                 /** @docid dxfunneloptions_item_hoverstyle_border */
-                border?: {
-
-                    /** @docid dxfunneloptions_item_hoverstyle_border_width */
-                    width?: number;
-                    /** @docid dxfunneloptions_item_hoverstyle_border_color */
-                    color?: string;
-                },
+                border?: viz.core.Border,
                 /** @docid dxfunneloptions_item_hoverstyle_hatching */
                 hatching?: {
 
@@ -99,20 +86,19 @@ declare module DevExpress.viz.funnel {
             /** @docid dxfunneloptions_item_selectionstyle */
             selectionStyle?: {
                 /** @docid dxfunneloptions_item_selectionstyle_border */
-                border?: {
-                    /** @docid dxfunneloptions_item_selectionstyle_border_width */
-                    width?: number,
-                    /** @docid dxfunneloptions_item_selectionstyle_border_color */
-                    color?: string
-                },
+                border?: viz.core.Border,
+
                 /** @docid dxfunneloptions_item_selectionstyle_hatching */
                 hatching?: {
                     /** @docid dxfunneloptions_item_selectionstyle_hatching_opacity */
                     opacity?: number,
+
                     /** @docid dxfunneloptions_item_selectionstyle_hatching_step */
                     step?: number,
+
                     /** @docid dxfunneloptions_item_selectionstyle_hatching_width */
                     width?: number,
+
                     /** @docid dxfunneloptions_item_selectionstyle_hatching_direction */
                     direction?: string
                 }
