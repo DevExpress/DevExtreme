@@ -3,14 +3,15 @@
 (function(factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
+            require("ui/validator");
+            require("ui/validation_summary");
+
             module.exports = factory(
                 require("jquery"),
                 require("ui/set_template_engine"),
                 require("aspnet"),
                 require("ui/text_box"),
-                require("ui/button"),
-                require("ui/validator"),
-                require("ui/validation_summary")
+                require("ui/button")
             );
         });
     } else {
