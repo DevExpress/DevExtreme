@@ -292,7 +292,7 @@ initRender.prototype.css = function(name, value) {
         } else {
             name = styleUtils.styleProp(name);
 
-            if(!this[0]) return result;
+            if(!this[0]) return;
 
             var result = window.getComputedStyle(this[0])[name] || this[0].style[name];
             return typeUtils.isNumeric(result) ? result.toString() : result;
