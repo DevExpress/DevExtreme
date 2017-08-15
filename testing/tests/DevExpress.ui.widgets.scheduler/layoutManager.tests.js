@@ -1609,7 +1609,15 @@ QUnit.test("Full-size appointment count depends on appointmentCountPerCell optio
         assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
     }
 
-    assert.equal($appointment.eq(3).outerWidth(), 15, "last appointment is compact");
+    var $dropDownMenu = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+        groupedAppointments = dropDownMenu.option("items"),
+        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+
+    assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
+
+    assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on appointmentCountPerCell option, 'auto' mode", function(assert) {
@@ -1632,12 +1640,15 @@ QUnit.test("Full-size appointment count depends on appointmentCountPerCell optio
     );
 
     var $appointment = $(this.instance.element().find(".dx-scheduler-appointment")),
-        tableCellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+        tableCellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
+        $dropDownMenu = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
 
     assert.roughEqual($appointment.eq(0).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
     assert.roughEqual($appointment.eq(1).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
-    assert.equal($appointment.eq(2).outerWidth(), 15, "third appointment is compact");
-    assert.equal($appointment.eq(3).outerWidth(), 15, "last appointment is compact");
+    assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
+    assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
 
     this.instance.option("height", 900);
     $appointment = $(this.instance.element().find(".dx-scheduler-appointment"));

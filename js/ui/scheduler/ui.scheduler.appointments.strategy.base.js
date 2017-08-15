@@ -500,12 +500,17 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getMaxNeighborAppointmentCount: function() {
-        var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentDefaultOffset();
-        return Math.floor(this.getCompactAppointmentGroupMaxWidth() / outerAppointmentWidth);
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+        if(!overlappingMode) {
+            var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentDefaultOffset();
+            return Math.floor(this.getCompactAppointmentGroupMaxWidth() / outerAppointmentWidth);
+        } else {
+            return 0;
+        }
     },
 
     _markAppointmentAsVirtual: function(coordinates, isAllDay) {
-        var countFullWidthAppointmentInCell = 2;
+        var countFullWidthAppointmentInCell = this._getAppointmentCountPerCell();
         if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
             coordinates.virtual = {
                 top: coordinates.top,
