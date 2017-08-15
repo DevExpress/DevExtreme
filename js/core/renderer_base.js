@@ -272,7 +272,7 @@ var pxExceptions = [
 ];
 
 var setCss = function(name, value) {
-    if(!this[0] || !this[0].style) return this;
+    if(!this[0] || !this[0].style) return;
 
     name = styleUtils.styleProp(name);
     for(var i = 0; i < this.length; i++) {
@@ -290,9 +290,9 @@ initRender.prototype.css = function(name, value) {
         if(arguments.length === 2) {
             setCss.call(this, name, value);
         } else {
-            name = styleUtils.styleProp(name);
-
             if(!this[0]) return;
+
+            name = styleUtils.styleProp(name);
 
             var result = window.getComputedStyle(this[0])[name] || this[0].style[name];
             return typeUtils.isNumeric(result) ? result.toString() : result;
