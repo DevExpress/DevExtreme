@@ -169,7 +169,7 @@ var normalizeArguments = function(callback) {
             data = undefined;
         }
 
-        if(eventName && eventName.indexOf(" ") > -1) {
+        if(typeof eventName === "string" && eventName.indexOf(" ") > -1) {
             eventName.split(" ").forEach(function(eventName) {
                 callback(element, eventName, selector, data, handler);
             });
@@ -182,6 +182,14 @@ var normalizeArguments = function(callback) {
 
 setEngine({
     on: normalizeArguments(function(element, eventName, selector, data, handler) {
+        // TODO: get rid of this
+        if(typeof eventName === "object") {
+            for(var name in eventName) {
+                eventsEngine.on.call(this, element, name, selector, data, eventName[name]);
+            }
+            return;
+        }
+
         var elementDataByEvent = getElementEventData(element, eventName);
         elementDataByEvent.addHandler(handler, selector, data);
     }),
@@ -196,6 +204,14 @@ setEngine({
     }),
 
     off: function(element, eventName, selector, handler) {
+        // TODO: get rid of this
+        if(typeof eventName === "object") {
+            for(var name in eventName) {
+                eventsEngine.off.call(this, element, name, selector, eventName[name]);
+            }
+            return;
+        }
+
         if(typeof selector === "function") {
             handler = selector;
             selector = undefined;
