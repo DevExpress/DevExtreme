@@ -40,23 +40,27 @@ var getElementEventData = function(element, eventName) {
 
     return {
         addHandler: function(handler, selector, data) {
-            var wrappedHandler = function(e) {
+            var wrappedHandler = function(e, extraParameters) {
                 // TODO: refactor
                 if(selector) {
                     if(matches(e.target, selector)) {
-                        handler(eventsEngine.Event(e, { currentTarget: e.target }));
+                        handler(eventsEngine.Event(e, { currentTarget: e.target, data: data }), extraParameters);
                         return;
                     }
                     var target = e.target;
                     while(target !== element) {
                         target = target.parentNode;
                         if(matches(target, selector)) {
-                            handler(eventsEngine.Event(e, { currentTarget: target }));
+                            handler(eventsEngine.Event(e, { currentTarget: target, data: data }), extraParameters);
                             return;
                         }
                     }
                 } else {
-                    handler(e.isDXEvent ? e : eventsEngine.Event(e));
+                    if(!e.isDXEvent) {
+                        e = eventsEngine.Event(e);
+                    }
+                    e.data = data;
+                    handler(e, extraParameters);
                 }
             };
 
@@ -97,7 +101,7 @@ var getElementEventData = function(element, eventName) {
                     || selector && eventData.selector !== selector;
 
                     if(!skip) {
-                        element.removeEventListener(eventName, eventData.handler); // TODO: Fix several subscriptions problem
+                        element.removeEventListener(eventName, eventData.wrappedHandler); // TODO: Fix several subscriptions problem
                         special[eventName] && special[eventName].remove && special[eventName].remove.call(element, {
                             type: eventName,
                             selector: selector,
@@ -209,7 +213,7 @@ setEngine({
         elementDataByEvent.removeHandler(handler, selector);
     },
 
-    trigger: function(element, src, noBubble) {
+    trigger: function(element, src, noBubble, extraParameters) {
         if(typeof src === "string") {
             src = {
                 type: src
@@ -238,7 +242,7 @@ setEngine({
         var event = src.isDXEvent ? src : eventsEngine.Event(src);
 
         elementDataByEvent.iterateHandlers(function(wrappedHandler) {
-            wrappedHandler(event);
+            wrappedHandler(event, extraParameters);
             return !event.isImmediatePropagationStopped();
         });
 
@@ -253,8 +257,8 @@ setEngine({
         }
     },
 
-    triggerHandler: function(element, src) {
-        eventsEngine.trigger(element, src, true);
+    triggerHandler: function(element, src, extraParameters) {
+        eventsEngine.trigger(element, src, true, extraParameters);// TODO: refacotr
     },
 
     copy: function(event) {

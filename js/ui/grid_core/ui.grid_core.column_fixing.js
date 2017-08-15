@@ -505,7 +505,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                         scrollable.scrollTo({ y: scrollTop - e.delta });
 
                         if(scrollable.scrollTop() > 0 && (scrollable.scrollTop() + scrollable.clientHeight()) < (scrollable.scrollHeight() + that.getScrollbarWidth())) {
-                            return false;
+                            e.stopPropagation();
                         }
                     }
                 });
