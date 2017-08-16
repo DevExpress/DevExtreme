@@ -661,7 +661,7 @@ var FileUploader = Editor.inherit({
         var fileSizeWidth = $fileSize.width();
         $fileSize.text(prevFileSize);
 
-        this._$filesContainer.find("." + FILEUPLOADER_FILE_NAME_CLASS).css("max-width", filesContainerWidth - buttonsWidth - fileSizeWidth);
+        this._$filesContainer.find("." + FILEUPLOADER_FILE_NAME_CLASS).css("maxWidth", filesContainerWidth - buttonsWidth - fileSizeWidth);
     },
 
     _renderFileButtons: function(file, $container) {

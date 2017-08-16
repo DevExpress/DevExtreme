@@ -303,7 +303,7 @@ var SlideOutView = Widget.inherit({
     _getMenuWidth: function() {
         if(!this._menuWidth) {
             var maxMenuWidth = this.element().width() - this.option("contentOffset");
-            this.menuContent().css("max-width", maxMenuWidth);
+            this.menuContent().css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
             var currentMenuWidth = this.menuContent().width();
 
             this._menuWidth = Math.min(currentMenuWidth, maxMenuWidth);

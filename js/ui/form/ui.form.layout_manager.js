@@ -19,7 +19,7 @@ var $ = require("../../core/renderer"),
     normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
     errors = require("../widget/ui.errors"),
     messageLocalization = require("../../localization/message"),
-    support = require("../../core/utils/support"),
+    styleUtils = require("../../core/utils/style"),
     inflector = require("../../core/utils/inflector"),
     Widget = require("../widget/ui.widget"),
     Validator = require("../validator"),
@@ -298,7 +298,7 @@ var LayoutManager = Widget.inherit({
     },
 
     _hasBrowserFlex: function() {
-        return support.styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
+        return styleUtils.styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
     },
 
     _renderContentImpl: function() {

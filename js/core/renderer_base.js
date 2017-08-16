@@ -4,27 +4,16 @@ var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
+var styleUtils = require("./utils/style");
 var sizeUtils = require("./utils/size");
 var htmlParser = require("./utils/html_parser");
 var matches = require("./polyfills/matches");
-
-var methods = ["css"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
 };
 
 var initRender = function(selector, context) {
-    var $element;
-    Object.defineProperty(this, "$element", {
-        get: function() {
-            if(!$element) {
-                $element = $(this.toArray());
-            }
-            return $element;
-        }
-    });
-
     if(!selector) {
         this.length = 0;
         return this;
@@ -76,17 +65,6 @@ var setAttributeValue = function(element, attrName, value) {
         rendererStrategy.removeAttribute(element, attrName);
     }
 };
-
-methods.forEach(function(method) {
-    var methodName = method;
-    initRender.prototype[method] = function() {
-        var result = this.$element[methodName].apply(this.$element, arguments);
-        if(result === this.$element) {
-            return this;
-        }
-        return result;
-    };
-});
 
 initRender.prototype.show = function() {
     return this.toggle(true);
@@ -279,6 +257,53 @@ var appendElements = function(element, nextSibling) {
         }
         rendererStrategy.insertElement(container, item.nodeType ? item : item[0], nextSibling);
     }
+};
+
+var pxExceptions = [
+    "fillOpacity",
+    "columnCount",
+    "flexGrow",
+    "flexShrink",
+    "fontWeight",
+    "lineHeight",
+    "opacity",
+    "zIndex",
+    "zoom"
+];
+
+var setCss = function(name, value) {
+    if(!this[0] || !this[0].style) return;
+
+    name = styleUtils.styleProp(name);
+    for(var i = 0; i < this.length; i++) {
+        if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
+            value += "px";
+        }
+
+        this[i].style[name] = value;
+    }
+
+};
+
+initRender.prototype.css = function(name, value) {
+    if(typeUtils.isString(name)) {
+        if(arguments.length === 2) {
+            setCss.call(this, name, value);
+        } else {
+            if(!this[0]) return;
+
+            name = styleUtils.styleProp(name);
+
+            var result = window.getComputedStyle(this[0])[name] || this[0].style[name];
+            return typeUtils.isNumeric(result) ? result.toString() : result;
+        }
+    } else if(typeUtils.isPlainObject(name)) {
+        for(var key in name) {
+            setCss.call(this, key, name[key]);
+        }
+    }
+
+    return this;
 };
 
 initRender.prototype.prepend = function(element) {

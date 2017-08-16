@@ -4,6 +4,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     noop = require("core/utils/common").noop,
     support = require("core/utils/support"),
+    styleUtils = require("core/utils/style"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
     domUtils = require("core/utils/dom"),
@@ -4431,7 +4432,7 @@ QUnit.test("scroll should save position on dxhiding when scroll is hidden", func
 });
 
 
-if(support.styleProp("touchAction")) {
+if(styleUtils.styleProp("touchAction")) {
     QUnit.module("nested scrolling in IE/Edge");
 
     QUnit.test("touch-action none should be present on not stretched list", function(assert) {

@@ -131,7 +131,7 @@ function createMenuItem(renderer, options, settings) {
     rect.attr(attr.rect).
         css({
             cursor: "pointer",
-            "pointer-events": "all"
+            "pointerEvents": "all"
         }).
         data(itemData);
 

@@ -2,8 +2,8 @@
 
 var $ = require("jquery"),
     translator = require("animation/translator"),
-    support = require("core/utils/support"),
-    transformStyle = support.styleProp("transform");
+    styleUtils = require("core/utils/style"),
+    transformStyle = styleUtils.styleProp("transform");
 
 QUnit.module("translator", {
     beforeEach: function() {

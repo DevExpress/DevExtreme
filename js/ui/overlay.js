@@ -705,7 +705,7 @@ var Overlay = Widget.inherit({
 
             this._animate(hideAnimation,
                 function() {
-                    that._$content.css("pointer-events", "");
+                    that._$content.css("pointerEvents", "");
                     that._renderVisibility(false);
 
                     completeHideAnimation.apply(this, arguments);
@@ -715,7 +715,7 @@ var Overlay = Widget.inherit({
                 },
 
                 function() {
-                    that._$content.css("pointer-events", "none");
+                    that._$content.css("pointerEvents", "none");
                     startHideAnimation.apply(this, arguments);
                 }
             );
@@ -792,8 +792,8 @@ var Overlay = Widget.inherit({
                 overlayStack.push(this);
             }
 
-            this._$wrapper.css("z-index", this._zIndex);
-            this._$content.css("z-index", this._zIndex);
+            this._$wrapper.css("zIndex", this._zIndex);
+            this._$content.css("zIndex", this._zIndex);
         } else if(index !== -1) {
             overlayStack.splice(index, 1);
         }
@@ -1229,10 +1229,10 @@ var Overlay = Widget.inherit({
 
     _renderDimensions: function() {
         this._$content.css({
-            minWidth: this.option("minWidth"),
-            maxWidth: this.option("maxWidth"),
-            minHeight: this.option("minHeight"),
-            maxHeight: this.option("maxHeight")
+            minWidth: this._getOptionValue("minWidth"),
+            maxWidth: this._getOptionValue("maxWidth"),
+            minHeight: this._getOptionValue("minHeight"),
+            maxHeight: this._getOptionValue("maxHeight")
         });
 
         this._$content

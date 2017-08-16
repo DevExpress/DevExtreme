@@ -139,8 +139,8 @@ var Appointment = DOMComponent.inherit({
         });
 
         $element.css({
-            width: geometry.width,
-            height: geometry.height
+            width: geometry.width < 0 ? 0 : geometry.width,
+            height: geometry.height < 0 ? 0 : geometry.height
         });
     },
 
