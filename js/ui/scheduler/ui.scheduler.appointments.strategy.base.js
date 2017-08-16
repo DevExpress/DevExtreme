@@ -428,7 +428,7 @@ var BaseRenderingStrategy = Class.inherit({
         if(overlappingMode === "auto") {
             appointmentCountPerCell = this._calculateDynamicAppointmentCountPerCell();
         }
-        if(overlappingMode === "none") {
+        if(overlappingMode === "unlimited") {
             appointmentCountPerCell = undefined;
         }
 

@@ -1691,7 +1691,7 @@ QUnit.test("Full-size appointment should have correct height, 'auto' mode", func
 
 });
 
-QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'none' mode", function(assert) {
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'unlimited' mode", function(assert) {
     var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
         { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
@@ -1705,7 +1705,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "month",
             views: [{
                 type: "month",
-                maxAppointmentsPerCell: 'none'
+                maxAppointmentsPerCell: 'unlimited'
             }],
             height: 200,
             dataSource: items
@@ -1765,7 +1765,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
 });
 
-QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Week view, 'none' mode", function(assert) {
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Week view, 'unlimited' mode", function(assert) {
     var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
         { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
         { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0), allDay: true },
@@ -1778,7 +1778,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
             currentView: "week",
             views: [{
                 type: "week",
-                maxAppointmentsPerCell: 'none'
+                maxAppointmentsPerCell: 'unlimited'
             }],
             height: 500,
             dataSource: items

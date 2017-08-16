@@ -149,7 +149,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         var ratio = this.instance.fire("getMaxAppointmentsPerCell") || coordinates.count >= 3 ? 0.6 : 1;
         var maxHeight = this._allDayHeight || this.getAppointmentMinSize();
 
-        //none
+        //unlimited
         if(!appointmentCountPerCell) {
             appointmentCountPerCell = coordinates.count;
             ratio = (maxHeight - 5) / maxHeight;
