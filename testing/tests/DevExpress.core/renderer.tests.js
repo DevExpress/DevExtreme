@@ -102,7 +102,6 @@ QUnit.test("Get value", function(assert) {
     document.body.appendChild(element[0]);
 
     element[0].style.width = "5px";
-    element[0].style.boxSizing = "border-box";
     element[0].style.border = "1px solid red";
     element[0].style.padding = "1px";
     element[0].style.margin = "100px";
