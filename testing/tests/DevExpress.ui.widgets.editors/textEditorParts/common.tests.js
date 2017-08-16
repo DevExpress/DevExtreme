@@ -31,6 +31,10 @@ var moduleConfig = {
         this.input = this.element.find("." + INPUT_CLASS);
         this.instance = this.element.data("dxTextEditor");
         this.keyboard = keyboardMock(this.input);
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 };
 
@@ -965,6 +969,8 @@ QUnit.test("TextEditor with mask option should firing the 'onChange' event", fun
     caretWorkaround($input);
 
     $input.triggerHandler("focus");
+    this.clock.tick();
+
     keyboard.type("123").press("enter");
     assert.equal(handler.callCount, 1, "'change' event is fired on enter after value change");
 

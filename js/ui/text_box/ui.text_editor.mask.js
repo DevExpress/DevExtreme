@@ -320,7 +320,10 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _maskFocusHandler: function() {
         this._direction(FORWARD_DIRECTION);
-        this._adjustCaret();
+        var caret = this._getAdjustedCaret();
+        this._caretTimeout = setTimeout(function() {
+            this._caret({ start: caret, end: caret });
+        }.bind(this), 0);
     },
 
     _maskKeyDownHandler: function() {
@@ -532,8 +535,13 @@ var TextEditorMask = TextEditorBase.inherit({
         return !currentCaret || currentCaret !== this._caret().start;
     },
 
-    _adjustCaret: function(char) {
+    _getAdjustedCaret: function(char) {
         var caret = this._maskRulesChain.adjustedCaret(this._caret().start, this._isForwardDirection(), char);
+        return caret;
+    },
+
+    _adjustCaret: function(char) {
+        var caret = this._getAdjustedCaret(char);
         this._caret({ start: caret, end: caret });
     },
 
@@ -596,6 +604,7 @@ var TextEditorMask = TextEditorBase.inherit({
     _dispose: function() {
         clearTimeout(this._inputHandlerTimer);
         clearTimeout(this._backspaceHandlerTimeout);
+        clearTimeout(this._caretTimeout);
         this.callBase();
     },
 

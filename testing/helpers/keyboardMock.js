@@ -413,7 +413,7 @@ var browser;
             },
 
             focus: function() {
-                this.triggerEvent("focus");
+                !$element.is(":focus") && this.triggerEvent("focus");
                 return this;
             },
 
@@ -483,9 +483,10 @@ var browser;
             },
 
             type: function(string) {
+                this.focus();
+
                 for(var i = 0; i < string.length; i++) {
                     var char = string.charAt(i);
-                    this.focus();
                     this.keyDown(char);
 
                     if(!this.event.isDefaultPrevented()) {
