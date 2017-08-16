@@ -698,6 +698,33 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
     assert.equal(secondDdAppointments.length, 3, "There are 3 drop down appts in 2d group");
 });
 
+QUnit.test("dropDown appointment should have correct container & position", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        views: ["week"],
+        currentView: "week"
+    });
+
+    this.instance.option("dataSource", [
+        { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '4', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '5', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '6', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '7', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '8', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '9', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '10', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
+    ]);
+
+    var $dropDown = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").eq(0);
+
+    assert.equal($dropDown.parent().get(0), $(this.instance.element()).find(".dx-scheduler-all-day-appointments").get(0), "Container is OK");
+    assert.roughEqual(translator.locate($dropDown).left, 228, 1.001, "Appointment position is OK");
+    assert.roughEqual(translator.locate($dropDown).top, 0, 1.001, "Appointment position is OK");
+});
+
 QUnit.test("If there are not groups, '.dx-scrollable-content' should be a resizable area for all-day appointment", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),

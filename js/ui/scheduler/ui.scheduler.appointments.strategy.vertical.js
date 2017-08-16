@@ -175,7 +175,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             height = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
 
-            this._markAppointmentAsVirtual(coordinates);
+            this._markAppointmentAsVirtual(coordinates, true);
         }
 
         return {
