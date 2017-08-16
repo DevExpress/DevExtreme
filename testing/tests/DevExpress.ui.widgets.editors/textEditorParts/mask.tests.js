@@ -665,6 +665,22 @@ QUnit.testInActiveWindow("Editor with mask isn't focused after render", function
     assert.notOk($textEditor.hasClass("dx-state-focused"), "editor isn't focused");
 });
 
+QUnit.testInActiveWindow("caret should be in start position on first editor focusing", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+        mask: "XX",
+        focusStateEnabled: true
+    });
+
+    var $input = $textEditor.find(".dx-texteditor-input");
+    var keyboard = keyboardMock($input, true);
+
+    keyboard.caret(1);
+    this.clock.tick();
+
+    assert.equal(keyboard.caret().start, 0, "caret is at the start");
+    assert.equal(keyboard.caret().end, 0, "caret is at the start");
+});
+
 
 QUnit.module("value", moduleConfig);
 
