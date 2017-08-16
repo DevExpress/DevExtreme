@@ -252,7 +252,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _clearDropDownItems: function() {
         this._virtualAppointments = {};
 
-        var $items = this.element().find(".dx-scheduler-dropdown-appointments");
+        var $items = this._itemContainer().find(".dx-scheduler-dropdown-appointments");
         if(!$items.length) {
             return;
         }
