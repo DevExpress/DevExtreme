@@ -224,7 +224,7 @@ declare module DevExpress.viz.core {
         * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_family
         * @docid dxtreemapoptions_tile_label_font_family
         * @docid dxtreemapoptions_group_label_font_family
-        * @docid dxfunneloptions_label_font_font_family
+        * @docid dxfunneloptions_label_font_family
         * @docid dxfunneloptions_legend_font_family
         */
         family?: string;
@@ -702,7 +702,7 @@ declare module DevExpress.viz.core {
         /**
         * @docid basechartoptions_legend_markersize
         * @docid dxvectormapoptions_legends_markerSize
-        * @docid dxfunneloptions_legend_markerSize
+        * @docid dxfunneloptions_legend_markersize
         */
         markerSize?: number;
 

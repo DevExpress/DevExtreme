@@ -753,8 +753,8 @@ var dxFunnel = {
         */
         customizeTooltip: undefined
     },
-     /**
-    * @name dxfunneloptions_onItemclick
+    /**
+    * @name dxfunneloptions_onitemclick
     * @publicName onItemClick
     * @type function|string
     * @type_function_param1 e:object
@@ -766,8 +766,8 @@ var dxFunnel = {
     * @action
     */
     onItemClick: function() { },
-     /**
-    * @name dxfunneloptions_onLegendClick
+    /**
+    * @name dxfunneloptions_onlegendclick
     * @publicName onLegendClick
     * @type function|string
     * @type_function_param1 e:object
@@ -780,9 +780,9 @@ var dxFunnel = {
     */
     onLegendClick: function() { },
     /**
-    * @name dxfunneloptions_onHoverChanged
+    * @name dxfunneloptions_onhoverchanged
     * @publicName onHoverChanged
-    * @type function|string
+    * @type function
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
@@ -792,9 +792,9 @@ var dxFunnel = {
     */
     onHoverChanged: function() { },
     /**
-    * @name dxfunneloptions_onSelectionChanged
+    * @name dxfunneloptions_onselectionchanged
     * @publicName onSelectionChanged
-    * @type function|string
+    * @type function
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
@@ -803,7 +803,6 @@ var dxFunnel = {
     * @action
     */
     onSelectionChanged: function() { },
-
     /**
     * @name dxfunnelmethods_clearselection
     * @publicName clearSelection()
@@ -815,7 +814,6 @@ var dxFunnel = {
     * @return array
     */
     getAllItems: function () { },
-
     /**
     * @name dxfunnelmethods_hidetooltip
     * @publicName hideTooltip()
