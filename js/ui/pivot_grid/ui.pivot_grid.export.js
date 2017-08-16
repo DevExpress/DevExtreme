@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -10,7 +9,9 @@ var $ = require("../../core/renderer"),
     excelExporter = clientExporter.excel,
     DEFAULT_DATA_TYPE = "string",
     exportMixin = require("../grid_core/ui.grid_core.export_mixin"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     COLUMN_HEADER_STYLE_ID = 0,
     ROW_HEADER_STYLE_ID = 1,
     DATA_STYLE_OFFSET = 2,
@@ -79,7 +80,7 @@ exports.ExportMixin = extend({}, exportMixin, {
     getDataProvider: function() {
         var that = this,
             dataController = this._dataController,
-            items = $.Deferred();
+            items = new Deferred();
 
         dataController.beginLoading();
         setTimeout(function() {

@@ -7,7 +7,8 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
     feedbackEvents = require("../../events/core/emitter.feedback"),
-    holdEvent = require("../../events/hold");
+    holdEvent = require("../../events/hold"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var SPIN_CLASS = "dx-numberbox-spin",
     SPIN_BUTTON_CLASS = "dx-numberbox-spin-button",
@@ -54,7 +55,7 @@ var SpinButton = Widget.inherit({
         this._clearTimer();
 
         eventsEngine.on(this.element(), holdEvent.name, (function() {
-            this._feedBackDeferred = $.Deferred();
+            this._feedBackDeferred = new Deferred();
             feedbackEvents.lock(this._feedBackDeferred);
             this._spinChangeHandler({ jQueryEvent: e });
             this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { jQueryEvent: e });

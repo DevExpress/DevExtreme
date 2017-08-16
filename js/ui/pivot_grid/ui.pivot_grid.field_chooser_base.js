@@ -17,6 +17,7 @@ var $ = require("../../core/renderer"),
     sortingMixin = require("../grid_core/ui.grid_core.sorting_mixin"),
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     Sortable = require("./ui.sortable"),
+    Deferred = require("../../core/utils/deferred").Deferred,
     inArray = inArray,
     each = iteratorUtils.each,
     IE_FIELD_WIDTH_CORRECTION = 1,
@@ -271,7 +272,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                                 if(userData.store) {
                                     return userData.store.load(options);
                                 } else {
-                                    var d = $.Deferred();
+                                    var d = new Deferred();
                                     dataSource.getFieldValues(mainGroupField.index).done(function(data) {
                                         userData.store = new ArrayStore(data);
                                         userData.store.load(options).done(d.resolve).fail(d.reject);

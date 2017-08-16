@@ -9,7 +9,8 @@ var $ = require("../core/renderer"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     Popup = require("./popup"),
     Popover = require("./popover"),
-    BindableTemplate = require("./widget/bindable_template");
+    BindableTemplate = require("./widget/bindable_template"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var ACTION_SHEET_CLASS = "dx-actionsheet",
     ACTION_SHEET_CONTAINER_CLASS = "dx-actionsheet-container",
@@ -470,7 +471,7 @@ var ActionSheet = CollectionWidget.inherit({
     */
     toggle: function(showing) {
         var that = this,
-            d = $.Deferred();
+            d = new Deferred();
 
         that._popup.toggle(showing).done(function() {
             that.option("visible", showing);

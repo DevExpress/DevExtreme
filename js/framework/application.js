@@ -21,7 +21,7 @@ var $ = require("jquery"),
     sessionStorage = require("../core/utils/storage").sessionStorage,
     dataUtils = require("../data/utils"),
     errors = require("./errors"),
-    when = require("../integration/jquery/deferred").when,
+    when = require("../core/utils/deferred").when,
     BACK_COMMAND_TITLE,
     INIT_IN_PROGRESS = "InProgress",
     INIT_COMPLETE = "Inited";

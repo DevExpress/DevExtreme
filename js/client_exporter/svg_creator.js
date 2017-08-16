@@ -5,7 +5,9 @@ var $ = require("../core/renderer"),
     isFunction = require("../core/utils/type").isFunction,
     each = require("../core/utils/iterator").each,
     getSvgMarkup = require("../core/utils/svg").getSvgMarkup,
-    when = require("../integration/jquery/deferred").when;
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 
 exports.svgCreator = {
@@ -27,7 +29,7 @@ exports.svgCreator = {
         var that = this;
 
         each(that._imageArray, function(src) {
-            var deferred = new $.Deferred();
+            var deferred = new Deferred();
 
             that._imageDeferreds.push(deferred);
             that._getBinaryFile(src, function(response) {
@@ -78,7 +80,7 @@ exports.svgCreator = {
         var markup,
             that = this,
             xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>',
-            blob = $.Deferred(),
+            blob = new Deferred(),
             parser = new DOMParser(),
             elem = parser.parseFromString(data, "image/svg+xml"),
             svgElem = elem.childNodes[0],

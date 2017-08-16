@@ -27,7 +27,9 @@ var $ = require("../../core/renderer"),
     chartIntegrationMixin = require("./ui.pivot_grid.chart_integration"),
     Popup = require("../popup"),
     ContextMenu = require("../context_menu"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
 
     DATA_AREA_CELL_CLASS = "dx-area-data-cell",
     ROW_AREA_CELL_CLASS = "dx-area-row-cell",
@@ -1690,7 +1692,7 @@ var PivotGrid = Widget.inherit({
             rowFieldsHeader = that._rowFields,
             columnsAreaRowCount,
             needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option("rowHeaderLayout") !== "tree",
-            d = $.Deferred();
+            d = new Deferred();
 
         ///#DEBUG
         that.__scrollBarUseNative = scrollBarInfo.scrollBarUseNative;

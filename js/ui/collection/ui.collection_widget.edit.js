@@ -12,7 +12,9 @@ var $ = require("../../core/renderer"),
     compileGetter = require("../../core/utils/data").compileGetter,
     DataSource = require("../../data/data_source/data_source").DataSource,
     Selection = require("../selection/selection"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var ITEM_DELETING_DATA_KEY = "dxItemDeleting",
     NOT_EXISTING_INDEX = -1;
@@ -248,7 +250,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     options.userData = that._dataSource._userData;
                 }
                 var store = that._dataSource && that._dataSource.store();
-                return store ? store.load(options) : $.Deferred().resolve([]);
+                return store ? store.load(options) : new Deferred().resolve([]);
             },
             dataFields: function() {
                 return that._dataSource && that._dataSource.select();
@@ -613,12 +615,12 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
     _waitDeletingPrepare: function($itemElement) {
         if($itemElement.data(ITEM_DELETING_DATA_KEY)) {
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         }
 
         $itemElement.data(ITEM_DELETING_DATA_KEY, true);
 
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             deletingActionArgs = { cancel: false },
             deletePromise = this._itemEventHandler($itemElement, "onItemDeleting", deletingActionArgs, { excludeValidators: ["disabled", "readOnly"] });
 
@@ -644,10 +646,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
     _deleteItemFromDS: function($item) {
         if(!this._dataSource) {
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         }
 
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             disabledState = this.option("disabled"),
             dataStore = this._dataSource.store();
 
@@ -677,7 +679,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _tryRefreshLastPage: function() {
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
 
         if(this._isLastPage() || this.option("grouped")) {
             deferred.resolve();
@@ -783,7 +785,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     deleteItem: function(itemElement) {
         var that = this,
 
-            deferred = $.Deferred(),
+            deferred = new Deferred(),
             $item = this._editStrategy.getItemElement(itemElement),
             index = this._editStrategy.getNormalizedIndex(itemElement),
             changingOption = this._dataSource ? "dataSource" : "items",
@@ -831,7 +833,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     * @hidden
     */
     reorderItem: function(itemElement, toItemElement) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
 
             that = this,
             strategy = this._editStrategy,

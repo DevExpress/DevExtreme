@@ -860,9 +860,6 @@ initRender.prototype.removeData = function(key) {
     return this;
 };
 
-renderer.when = $.when;
-renderer.Deferred = $.Deferred;
-
 module.exports = {
     set: function(strategy) {
         renderer = strategy;

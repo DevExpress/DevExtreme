@@ -1,14 +1,15 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     errorsModule = require("../errors"),
     ODataStore = require("./store"),
     mixins = require("./mixins"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 require("./query_adapter");
 
@@ -107,7 +108,7 @@ var ODataContext = Class.inherit({
         params = params || {};
         httpMethod = (httpMethod || "POST").toLowerCase();
 
-        var d = $.Deferred(),
+        var d = new Deferred(),
             url = this._url + "/" + encodeURIComponent(operationName),
             payload;
 

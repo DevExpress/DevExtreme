@@ -18,7 +18,10 @@ var $ = require("../core/renderer"),
     fx = require("../animation/fx"),
     Scrollable = require("./scroll_view/ui.scrollable"),
     LoadIndicator = require("./load_indicator"),
-    deferredUtils = require("../integration/jquery/deferred");
+    fromPromise = require("../integration/jquery/deferred").fromPromise,
+    deferredUtils = require("../core/utils/deferred"),
+    Deferred = deferredUtils.Deferred,
+    when = deferredUtils.when;
 
 var WIDGET_CLASS = "dx-treeview",
     NODE_CONTAINER_CLASS = "dx-treeview-node-container",
@@ -472,7 +475,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
 
     _fireSelectionChanged: function() {
         var selectionChangePromise = this._selectionChangePromise;
-        deferredUtils.when(selectionChangePromise).done((function() {
+        when(selectionChangePromise).done((function() {
             this._createActionByOption("onSelectionChanged", {
                 excludeValidators: ["disabled", "readOnly"]
             })();
@@ -613,14 +616,14 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         var invocationResult = this.option("createChildren").call(this, parentNode);
 
         if(Array.isArray(invocationResult)) {
-            return $.Deferred().resolve(invocationResult).promise();
+            return new Deferred().resolve(invocationResult).promise();
         }
 
         if(invocationResult && typeUtils.isFunction(invocationResult.then)) {
-            return deferredUtils.fromPromise(invocationResult);
+            return fromPromise(invocationResult);
         }
 
-        return $.Deferred().resolve([]).promise();
+        return new Deferred().resolve([]).promise();
     },
 
     _combineFilter: function() {
@@ -965,7 +968,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _loadSublevel: function(node) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             that = this,
             childrenNodes = that._getChildNodes(node);
 
@@ -1181,7 +1184,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         }
 
         if(!that._isVirtualMode()) {
-            return $.Deferred().resolve([]).promise();
+            return new Deferred().resolve([]).promise();
         }
 
         that._filter.internal = [that.option("parentIdExpr"), node.internalFields.key];
@@ -1690,7 +1693,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     */
     updateDimensions: function() {
         var that = this,
-            deferred = $.Deferred();
+            deferred = new Deferred();
 
         if(that._scrollableContainer) {
             that._scrollableContainer.update().done(function() {

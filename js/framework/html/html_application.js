@@ -18,7 +18,7 @@ var $ = require("jquery"),
     feedbackEvents = require("../../events/core/emitter.feedback"),
     TransitionExecutorModule = require("../../animation/transition_executor/transition_executor"),
     animationPresetsModule = require("../../animation/presets/presets"),
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 require("./layout_controller");
 require("../../ui/themes");

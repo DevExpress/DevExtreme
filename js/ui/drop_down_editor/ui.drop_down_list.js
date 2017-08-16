@@ -16,7 +16,8 @@ var $ = require("../../core/renderer"),
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
     themes = require("../themes"),
-    ChildDefaultTemplate = require("../widget/child_default_template");
+    ChildDefaultTemplate = require("../widget/child_default_template"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var LIST_ITEM_SELECTOR = ".dx-list-item",
     LIST_ITEM_DATA_KEY = "dxListItemData",
@@ -401,7 +402,7 @@ var DropDownList = DropDownEditor.inherit({
         }).bind(this))[0];
 
         return selectedItem !== undefined
-            ? $.Deferred().resolve(selectedItem).promise()
+            ? new Deferred().resolve(selectedItem).promise()
             : this._loadValue(value);
     },
 

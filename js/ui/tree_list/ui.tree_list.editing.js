@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     errors = require("../widget/ui.errors"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    Deferred = require("../../core/utils/deferred").Deferred,
     messageLocalization = require("../../localization/message"),
     treeListCore = require("./ui.tree_list.core"),
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
@@ -92,7 +93,7 @@ var EditingController = editingModule.controllers.editing.inherit((function() {
                 dataController = this.getController("data");
 
             if(key !== undefined && !dataController.isRowExpanded(key)) {
-                var d = $.Deferred();
+                var d = new Deferred();
                 dataController.expandRow(key).done(function() {
                     setTimeout(function() {
                         callBase.call(that, key);

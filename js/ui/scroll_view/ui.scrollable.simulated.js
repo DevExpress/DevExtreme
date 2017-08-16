@@ -13,7 +13,9 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     commonUtils = require("../../core/utils/common"),
     Scrollbar = require("./ui.scrollbar"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var realDevice = devices.real;
 var isSluggishPlatform = (realDevice.platform === "win" || realDevice.platform === "android");
@@ -261,7 +263,7 @@ var Scroller = Class.inherit({
     },
 
     _initHandler: function(e) {
-        this._stopDeferred = $.Deferred();
+        this._stopDeferred = new Deferred();
         this._stopScrolling();
         this._prepareThumbScrolling(e);
         return this._stopDeferred.promise();
@@ -342,7 +344,7 @@ var Scroller = Class.inherit({
     },
 
     _endHandler: function(velocity) {
-        this._completeDeferred = $.Deferred();
+        this._completeDeferred = new Deferred();
         this._velocity = velocity[this._axis];
         this._inertiaHandler();
         this._resetThumbScrolling();

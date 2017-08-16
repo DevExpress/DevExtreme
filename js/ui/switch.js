@@ -13,7 +13,8 @@ var $ = require("../core/renderer"),
     fx = require("../animation/fx"),
     messageLocalization = require("../localization/message"),
     clickEvent = require("../events/click"),
-    Swipeable = require("../events/gesture/swipeable");
+    Swipeable = require("../events/gesture/swipeable"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var SWITCH_CLASS = "dx-switch",
     SWITCH_WRAPPER_CLASS = SWITCH_CLASS + "-wrapper",
@@ -376,7 +377,7 @@ var Switch = Editor.inherit({
         e.jQueryEvent.maxRightOffset = state ? maxOnOffset : maxOffOffset;
         this._swiping = true;
 
-        this._feedbackDeferred = $.Deferred();
+        this._feedbackDeferred = new Deferred();
         feedbackEvents.lock(this._feedbackDeferred);
         this._toggleActiveState(this.element(), this.option("activeStateEnabled"));
     },

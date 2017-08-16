@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     Promise = require("../core/polyfills/promise"),
-    deferredUtils = require("../integration/jquery/deferred"),
+    fromPromise = require("../integration/jquery/deferred").fromPromise,
     registerComponent = require("../core/component_registrator"),
     errors = require("./widget/ui.errors"),
     devices = require("../core/devices"),
@@ -678,7 +678,7 @@ var Map = Widget.inherit({
     },
 
     _partialArrayOptionChange: function(optionName, optionValue, addingValues, removingValues) {
-        return deferredUtils.fromPromise(new Promise(function(resolve) {
+        return fromPromise(new Promise(function(resolve) {
             this._optionChangeBag = {
                 resolve: resolve,
                 added: addingValues,

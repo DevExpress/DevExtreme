@@ -9,7 +9,8 @@ var $ = require("../../core/renderer"),
     FunctionTemplate = require("../widget/function_template"),
     DataHelperMixin = require("../../data_helper"),
     DataSourceModule = require("../../data/data_source/data_source"),
-    ArrayStore = require("../../data/array_store");
+    ArrayStore = require("../../data/array_store"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 /**
 * @name DataExpressionMixin
@@ -111,7 +112,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     },
 
     _loadValue: function(value) {
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
         value = this._unwrappedValue(value);
 
         if(!typeUtils.isDefined(value)) {

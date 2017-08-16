@@ -15,7 +15,8 @@ var $ = require("../core/renderer"),
     errors = require("./widget/ui.errors"),
     messageLocalization = require("../localization/message"),
     Popup = require("./popup"),
-    config = require("../core/config");
+    config = require("../core/config"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var DEFAULT_BUTTON = {
     text: "OK",
@@ -99,7 +100,7 @@ exports.title = "";
  * @export custom
  */
 exports.custom = function(options) {
-    var deferred = $.Deferred();
+    var deferred = new Deferred();
 
     var defaultOptions = new FakeDialogComponent().option();
 

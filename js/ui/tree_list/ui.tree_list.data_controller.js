@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
+    Deferred = require("../../core/utils/deferred").Deferred,
     treeListCore = require("./ui.tree_list.core"),
     dataSourceAdapterProvider = require("./ui.tree_list.data_source_adapter"),
     dataControllerModule = require("../grid_core/ui.grid_core.data_controller");
@@ -87,7 +87,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                 }
             }
 
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
 
         /**
@@ -109,7 +109,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             if(!this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
 
         /**
@@ -121,7 +121,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             if(this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
 
         /**

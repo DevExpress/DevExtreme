@@ -5,7 +5,8 @@ var $ = require("../../core/renderer"),
     translator = require("../../animation/translator"),
     eventUtils = require("../../events/utils"),
     NativeStrategy = require("./ui.scrollable.native"),
-    LoadIndicator = require("../load_indicator");
+    LoadIndicator = require("../load_indicator"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var SCROLLVIEW_PULLDOWN_DOWN_LOADING_CLASS = "dx-scrollview-pull-down-loading",
     SCROLLVIEW_PULLDOWN_INDICATOR_CLASS = "dx-scrollview-pull-down-indicator",
@@ -222,7 +223,7 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     release: function() {
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
 
         this._updateDimensions();
         clearTimeout(this._releaseTimeout);

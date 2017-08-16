@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    when = require("../../integration/jquery/deferred").when,
+    when = require("../../core/utils/deferred").when,
     fx = require("../../animation/fx"),
     swipeEvents = require("../../events/swipe"),
     translator = require("../../animation/translator"),

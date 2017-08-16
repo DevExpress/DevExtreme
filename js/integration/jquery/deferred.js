@@ -1,8 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
-    typeUtils = require("../../core/utils/type"),
-    compareVersion = require("../../core/utils/version").compare;
+    typeUtils = require("../../core/utils/type");
 
 exports.fromPromise = function(promise, context) {
     var isDeferred = promise && typeUtils.isFunction(promise.done) && typeUtils.isFunction(promise.fail);
@@ -19,14 +18,3 @@ exports.fromPromise = function(promise, context) {
     return d;
 };
 
-exports.when = compareVersion($.fn.jquery, [3]) < 0
-    ? $.when
-    : function(singleArg) {
-        if(arguments.length === 0) {
-            return $.Deferred().resolve();
-        } else if(arguments.length === 1) {
-            return singleArg && singleArg.then ? singleArg : $.Deferred().resolve(singleArg);
-        } else {
-            return $.when.apply($, arguments);
-        }
-    };

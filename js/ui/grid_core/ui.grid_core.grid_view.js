@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     messageLocalization = require("../../localization/message"),
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 var TABLE_CLASS = "table",
     BORDERS_CLASS = "borders",

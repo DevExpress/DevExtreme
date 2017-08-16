@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    toComparable = require("../../core/utils/data").toComparable,
+var toComparable = require("../../core/utils/data").toComparable,
     dataUtils = require("../../data/utils"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
@@ -12,10 +11,12 @@ var $ = require("../../core/renderer"),
     createGroupFilter = groupingCore.createGroupFilter,
     createOffsetFilter = groupingCore.createOffsetFilter,
     dataQuery = require("../../data/query"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var loadTotalCount = function(dataSource, options) {
-    var d = $.Deferred(),
+    var d = new Deferred(),
         loadOptions = extend({ skip: 0, take: 1, requireTotalCount: true }, options);
 
     dataSource.load(loadOptions).done(function(data, extra) {
@@ -338,7 +339,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                 groupCountQuery;
 
             if(groupInfo && !groupInfo.isExpanded) {
-                groupCountQuery = $.Deferred().resolve(groupInfo.count);
+                groupCountQuery = new Deferred().resolve(groupInfo.count);
             } else {
                 groupCountQuery = loadTotalCount(dataSource, {
                     filter: createGroupFilter(path, {

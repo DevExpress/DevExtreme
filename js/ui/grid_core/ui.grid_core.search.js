@@ -6,7 +6,8 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     gridCoreUtils = require("./ui.grid_core.utils"),
     messageLocalization = require("../../localization/message"),
-    dataQuery = require("../../data/query");
+    dataQuery = require("../../data/query"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var SEARCH_PANEL_CLASS = "search-panel",
     SEARCH_TEXT_CLASS = "search-text",
@@ -156,7 +157,7 @@ module.exports = {
                             result;
 
                         if(searchText && hasLookup) {
-                            result = $.Deferred();
+                            result = new Deferred();
                             columnsController.refresh(true).always(function() {
                                 callBase.apply(that, arguments).then(result.resolve, result.reject);
                             });

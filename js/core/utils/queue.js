@@ -1,7 +1,7 @@
 "use strict";
 
 var errors = require("../errors"),
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 function createQueue(discardPendingTasks) {
     var _tasks = [],
