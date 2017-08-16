@@ -12,34 +12,34 @@ declare module DevExpress.viz.funnel {
         customizeText?: (itemsInfo: { item: funnelItem; text: string; }) => string;
     }
 
-    /** @docid dxfunnelitem */
+    /** @docid dxfunnelItem */
     export interface funnelItem {
 
-    /** @docid dxfunnelitemfields_data */
-        data?: Object;
+    /** @docid dxfunnelItemfields_data */
+        data: Object;
 
-        /** @docid dxfunnelitemfields_id */
-        id?: number;
+        /** @docid dxfunnelItemfields_id */
+        id: number;
 
-        /** @docid dxfunnelitemfields_percent */
-        percent?: number;
+        /** @docid dxfunnelItemfields_percent */
+        percent: number;
 
-        /** @docid dxfunnelitemmethods_select */
+        /** @docid dxfunnelItemmethods_select */
         select(state: boolean): void;
 
-        /** @docid dxfunnelitemmethods_hover */
+        /** @docid dxfunnelItemmethods_hover */
         hover(state: boolean): void;
 
-        /** @docid dxfunnelitemmethods_getcolor */
+        /** @docid dxfunnelItemmethods_getcolor */
         getColor(): string;
 
-        /** @docid dxfunnelitemmethods_ishovered */
+        /** @docid dxfunnelItemmethods_ishovered */
         isHovered(): boolean;
 
-        /** @docid dxfunnelitemmethods_isselected */
+        /** @docid dxfunnelItemmethods_isselected */
         isSelected(): boolean;
 
-        /** @docid dxfunnelitemmethods_showtooltip */
+        /** @docid dxfunnelItemmethods_showtooltip */
         showTooltip(): void;
     }
 
@@ -91,18 +91,20 @@ declare module DevExpress.viz.funnel {
         item?: {
 
             /** @docid dxfunneloptions_item_border */
-            border: viz.core.Border;
+            border?: viz.core.Border;
 
             /** @docid dxfunneloptions_item_hoverstyle */
             hoverStyle?: {
                 /** @docid dxfunneloptions_item_hoverstyle_border */
                 border?: viz.core.Border;
+
                 /** @docid dxfunneloptions_item_hoverstyle_hatching */
                 hatching?: viz.core.Hatching;
             };
 
             /** @docid dxfunneloptions_item_selectionstyle */
             selectionStyle?: {
+
                 /** @docid dxfunneloptions_item_selectionstyle_border */
                 border?: viz.core.Border;
 
@@ -135,6 +137,9 @@ declare module DevExpress.viz.funnel {
 
                 /** @docid dxfunneloptions_label_connector_width */
                 width?: number;
+
+                /** @docid dxfunneloptions_label_connector_opacity */
+                opacity?: number;
             };
 
             /** @docid dxfunneloptions_label_backgroundcolor */
@@ -158,17 +163,25 @@ declare module DevExpress.viz.funnel {
         /** @docid dxfunneloptions_legend */
         legend?: Legend;
 
-        /** @docid  dxfunneloptions_onItemClick */
+        /** @docid  dxfunneloptions_onitemclick */
         onItemClick?: any;
 
-        /** @docid  dxfunneloptions_onLegendClick */
+        /** @docid  dxfunneloptions_onlegendclick */
         onLegendClick?: any;
 
-        /** @docid  dxfunneloptions_onHoverChanged */
-        onHoverChanged?: any;
+        /** @docid  dxfunneloptions_onhoverchanged */
+        onHoverChanged?: (e: {
+            component: dxFunnel;
+            element: Element;
+            node: funnelItem;
+        }) => void;
 
-        /** @docid  dxfunneloptions_selectionChanged */
-        onSelectionChanged?: any;
+        /** @docid  dxfunneloptions_onselectionchanged */
+        onSelectionChanged?: (e: {
+            component: dxFunnel;
+            element: Element;
+            node: funnelItem;
+        }) => void;
 
         /** @docid dxfunneloptions_tooltip */
         tooltip?: viz.core.Tooltip;
