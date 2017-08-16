@@ -1743,11 +1743,15 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     );
 
     var $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment")),
-        tableCellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth();
-    for(var i = 0; i < 2; i++) {
-        var appointmentWidth = $appointment.eq(i).outerWidth();
+        tableCellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
+        tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+
+    for(var i = 0; i < 3; i++) {
+        var appointmentWidth = $appointment.eq(i).outerWidth(),
+            appointmentHeight = $appointment.eq(i).outerHeight();
 
         assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
+        assert.roughEqual(appointmentHeight, (tableCellHeight - 30) / 3, 1.5, "appointment is full-size");
     }
 
     var $dropDownMenu = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
@@ -1759,4 +1763,37 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
 
     assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
     assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
+});
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Week view, 'none' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0), allDay: true },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true },
+        { text: "Task 5", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 'none'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment")),
+        tableCellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
+        tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+
+    for(var i = 0; i < 5; i++) {
+        var appointmentWidth = $appointment.eq(i).outerWidth(),
+            appointmentHeight = $appointment.eq(i).outerHeight();
+
+        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
+        assert.roughEqual(appointmentHeight, (tableCellHeight - 10) / 5, 1.5, "appointment is full-size");
+    }
 });
