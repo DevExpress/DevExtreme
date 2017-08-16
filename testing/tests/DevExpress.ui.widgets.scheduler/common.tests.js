@@ -1092,6 +1092,29 @@ QUnit.testStart(function() {
         assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
     });
 
+    QUnit.test("view.intervalCount is passed to workspace & header & navigator, currentView is set by view.name", function(assert) {
+        this.createInstance({
+            currentView: "WEEK1",
+            views: [{
+                type: "day",
+                name: "DAY1",
+                intervalCount: 5
+            }, {
+                type: "week",
+                name: "WEEK1",
+                intervalCount: 3
+            }]
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 3, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 3, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
+    });
+
     QUnit.test("view.startDate is passed to workspace & header & navigator", function(assert) {
         var date = new Date(2017, 3, 4);
 

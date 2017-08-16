@@ -1645,7 +1645,8 @@ var Scheduler = Widget.inherit({
 
     _headerConfig: function() {
         var result,
-            currentViewOptions = this._getCurrentViewOptions();
+            currentViewOptions = this._getCurrentViewOptions(),
+            countConfig = this._getViewCountConfig();
 
         result = extend({
             firstDayOfWeek: this.option("firstDayOfWeek"),
@@ -1658,6 +1659,7 @@ var Scheduler = Widget.inherit({
         }, currentViewOptions);
 
         result.observer = this;
+        result.intervalCount = countConfig.intervalCount;
         result.views = this.option("views");
         result.min = new Date(this._dateOption("min"));
         result.max = new Date(this._dateOption("max"));
@@ -1752,7 +1754,7 @@ var Scheduler = Widget.inherit({
         var views = this.option("views");
 
         for(var i = 0; i < views.length; i++) {
-            if(views[i].type === type || views[i] === type) return views[i];
+            if(views[i].type === type || views[i].name === type || views[i] === type) return views[i];
         }
     },
 
