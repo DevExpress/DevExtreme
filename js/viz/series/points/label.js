@@ -253,7 +253,7 @@ Label.prototype = {
                 disposeItem(that, "_connector");
             }
 
-            that._text.attr({ text: text });
+            that._text.attr({ text: text, align: options.textAlign });
             that._updateBackground(that._text.getBBox());
             that._setVisibility("visible", true);
         } else {
