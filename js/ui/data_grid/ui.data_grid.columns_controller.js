@@ -2463,7 +2463,7 @@ gridCore.registerModule("columns", {
              * @type_function_param1 options:object
              * @type_function_param1_field1 data:object
              * @type_function_param1_field2 key:any
-             * @return array|DataSource configuration
+             * @type_function_return array|DataSource configuration
              * @default undefined
              */
             /**
