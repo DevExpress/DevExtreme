@@ -191,15 +191,15 @@ function createTargets(targets) {
 }
 
 function processWeakItems(collection) {
-    var weakItem = collection.find(function(item) {
+    var weakItem = collection.filter(function(item) {
             return item.weak === true;
-        }),
+        })[0],
         headerItem;
 
     if(weakItem) {
-        headerItem = collection.find(function(item) {
+        headerItem = collection.filter(function(item) {
             return weakItem.primary === item.primary && item.side === weakItem.side && item !== weakItem;
-        });
+        })[0];
     }
 
     if(weakItem && headerItem) {
