@@ -162,7 +162,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
         //auto
         if(overlappingMode === "auto") {
-            ratio = (maxHeight - 15) / maxHeight;
+            ratio = (maxHeight - 20) / maxHeight;
         }
 
         var index = coordinates.index,
