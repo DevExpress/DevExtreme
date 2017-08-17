@@ -43,9 +43,14 @@ var getElementEventData = function(element, eventName) {
             var wrappedHandler = function(e, extraParameters) {
                 // TODO: refactor
                 var result; // TODO: get rid of checking if result equals false
+                var handlerArgs;
                 if(selector) {
                     if(matches(e.target, selector)) {
-                        result = handler(extend(e, { currentTarget: e.target, data: data }), extraParameters);
+                        handlerArgs = [extend(e, { currentTarget: e.target, data: data })];
+                        if(extraParameters) {
+                            handlerArgs.push(extraParameters);
+                        }
+                        result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
                         if(result === false) {
                             e.preventDefault();
                             e.stopPropagation();
@@ -57,8 +62,12 @@ var getElementEventData = function(element, eventName) {
                     while(target.parentNode && target !== element) {
                         target = target.parentNode;
                         if(matches(target, selector)) {
-                            newEvent = eventsEngine.Event(e, { currentTarget: target, data: data });
-                            result = handler(newEvent, extraParameters); // TODO: Should we create new event here?
+                            newEvent = eventsEngine.Event(e, { currentTarget: target, data: data }); // TODO: Should we create new event here?
+                            handlerArgs = [newEvent];
+                            if(extraParameters) {
+                                handlerArgs.push(extraParameters);
+                            }
+                            result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
                             if(result === false) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -71,7 +80,11 @@ var getElementEventData = function(element, eventName) {
                         e = eventsEngine.Event(e);
                     }
                     e.data = data;
-                    result = handler(e, extraParameters);
+                    handlerArgs = [e];
+                    if(extraParameters) {
+                        handlerArgs.push(extraParameters);
+                    }
+                    result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
                     if(result === false) {
                         e.preventDefault();
                         e.stopPropagation();
