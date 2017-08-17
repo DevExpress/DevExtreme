@@ -327,6 +327,8 @@ module.exports = DOMComponent.inherit({
         return [0, 0];
     },
 
+    _getAlignmentRect: noop,
+
     _setContentSize: function() {
         var canvas = this._canvas,
             layout = this._layout,
@@ -335,7 +337,7 @@ module.exports = DOMComponent.inherit({
 
         rect = layout.forward(rect, this._getMinSize());
         nextRect = this._applySize(rect) || rect;
-        layout.backward(nextRect);
+        layout.backward(nextRect, this._getAlignmentRect() || nextRect);
     },
 
     ///#DEBUG

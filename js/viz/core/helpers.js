@@ -69,10 +69,13 @@ function createChainExecutor() {
 
     function executeChain() {
         var i,
-            ii = chain.length;
+            ii = chain.length,
+            result;
         for(i = 0; i < ii; ++i) {
-            chain[i].apply(this, arguments);
+            result = chain[i].apply(this, arguments);
         }
+
+        return result;
     }
 }
 
