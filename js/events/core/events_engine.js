@@ -43,14 +43,20 @@ var getElementEventData = function(element, eventName) {
             var wrappedHandler = function(e, extraParameters) {
                 // TODO: refactor
                 var result; // TODO: get rid of checking if result equals false
-                var handlerArgs;
+                var callHandler = function(e) {
+                    var handlerArgs = [e];
+                    if(extraParameters === undefined) {
+                        handlerArgs.push(extraParameters);
+                    }
+                    return handler.apply(handlerArgs[0].currentTarget, handlerArgs);
+                };
+
+                if(e instanceof Event) {
+                    e = eventsEngine.Event(e);
+                }
                 if(selector) {
                     if(matches(e.target, selector)) {
-                        handlerArgs = [extend(e, { currentTarget: e.target, data: data })];
-                        if(extraParameters) {
-                            handlerArgs.push(extraParameters);
-                        }
-                        result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
+                        result = callHandler(extend(e, { currentTarget: e.target, data: data }));
                         if(result === false) {
                             e.preventDefault();
                             e.stopPropagation();
@@ -63,11 +69,7 @@ var getElementEventData = function(element, eventName) {
                         target = target.parentNode;
                         if(matches(target, selector)) {
                             newEvent = eventsEngine.Event(e, { currentTarget: target, data: data }); // TODO: Should we create new event here?
-                            handlerArgs = [newEvent];
-                            if(extraParameters) {
-                                handlerArgs.push(extraParameters);
-                            }
-                            result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
+                            result = callHandler(newEvent);
                             if(result === false) {
                                 e.preventDefault();
                                 e.stopPropagation();
@@ -80,11 +82,7 @@ var getElementEventData = function(element, eventName) {
                         e = eventsEngine.Event(e);
                     }
                     e.data = data;
-                    handlerArgs = [e];
-                    if(extraParameters) {
-                        handlerArgs.push(extraParameters);
-                    }
-                    result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
+                    result = callHandler(e);
                     if(result === false) {
                         e.preventDefault();
                         e.stopPropagation();
