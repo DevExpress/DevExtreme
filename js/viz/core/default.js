@@ -1478,11 +1478,7 @@ registerTheme({
                     width: 2,
                     direction: RIGHT
                 },
-                border: {
-                    visible: false,
-                    width: 2,
-                    color: WHITE
-                }
+                border: { }
             },
             selectionStyle: {
                 hatching: {
@@ -1491,11 +1487,7 @@ registerTheme({
                     width: 2,
                     direction: RIGHT
                 },
-                border: {
-                    visible: false,
-                    width: 2,
-                    color: WHITE
-                }
+                border: { }
             }
         },
         title: {
@@ -1741,16 +1733,6 @@ registerTheme({
         item: {
             border: {
                 color: "#494949"
-            },
-            hoverStyle: {
-                border: {
-                    color: "#494949"
-                }
-            },
-            selectionStyle: {
-                border: {
-                    color: "#494949"
-                }
             }
         }
     }

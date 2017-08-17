@@ -163,23 +163,23 @@ var dxFunnel = {
                 * @name dxfunneloptions_item_hoverstyle_border_visible
                 * @publicName visible
                 * @type boolean
-                * @default false
+                * @default undefined
                 */
-                visible: false,
+                visible: undefined,
                 /**
                 * @name dxfunneloptions_item_hoverstyle_border_width
                 * @publicName width
                 * @type number
-                * @default 2
+                * @default undefined
                 */
-                width: 2,
+                width: undefined,
                 /**
                 * @name dxfunneloptions_item_hoverstyle_border_color
                 * @publicName color
                 * @type string
-                * @default #ffffff
+                * @default undefined
                 */
-                color: "#ffffff"
+                color: undefined
             },
             /**
             * @name dxfunneloptions_item_hoverstyle_hatching
@@ -235,23 +235,23 @@ var dxFunnel = {
                 * @name dxfunneloptions_item_selectionstyle_border_visible
                 * @publicName visible
                 * @type boolean
-                * @default false
+                * @default undefined
                 */
-                visible: false,
+                visible: undefined,
                 /**
                 * @name dxfunneloptions_item_selectionstyle_border_width
                 * @publicName width
                 * @type number
-                * @default 2
+                * @default undefined
                 */
-                width: 2,
+                width: undefined,
                 /**
                 * @name dxfunneloptions_item_selectionstyle_border_color
                 * @publicName color
                 * @type string
-                * @default #ffffff
+                * @default undefined
                 */
-                color: "#ffffff"
+                color: undefined
             },
             /**
             * @name dxfunneloptions_item_selectionstyle_hatching

@@ -509,6 +509,52 @@ QUnit.test("Clear hover of item", function(assert) {
     assert.ok(!items[1].smartAttr.lastCall.args[0].hatching);
 });
 
+QUnit.test("Inherit border from normal style if hoverStyle.border option is not set", function(assert) {
+    var funnel = createFunnel({
+            dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+            item: {
+                border: {
+                    visible: true,
+                    color: "#ffffff",
+                    width: 2
+                }
+            }
+        }),
+        item = funnel.getAllItems()[1];
+
+    item.hover(true);
+
+    var items = this.items();
+
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
+});
+
+QUnit.test("Border for hoverStyle can be disabled", function(assert) {
+    var funnel = createFunnel({
+            dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+            item: {
+                border: {
+                    visible: true,
+                    color: "#ffffff",
+                    width: 2
+                },
+                hoverStyle: {
+                    border: {
+                        visible: false
+                    }
+                }
+            }
+        }),
+        item = funnel.getAllItems()[1];
+
+    item.hover(true);
+
+    var items = this.items();
+
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
+});
+
 QUnit.test("hover changed event", function(assert) {
     var hoverChanged = sinon.spy(),
         funnel = createFunnel({
@@ -583,6 +629,48 @@ QUnit.test("Selection", function(assert) {
         width: 2,
         direction: "right"
     });
+});
+
+QUnit.test("Inherit border for selection style if selection.border option is not set", function(assert) {
+    var funnel = createFunnel({
+        dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+        item: {
+            border: {
+                visible: true,
+                color: "#ffffff",
+                width: 2
+            }
+        }
+    });
+
+    funnel.getAllItems()[1].select(true);
+    var items = this.items();
+
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
+});
+
+QUnit.test("Border for selection style can be disabled", function(assert) {
+    var funnel = createFunnel({
+        dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+        item: {
+            border: {
+                visible: true,
+                color: "#ffffff",
+                width: 2
+            },
+            selectionStyle: {
+                border: {
+                    visible: false
+                }
+            }
+        }
+    });
+
+    funnel.getAllItems()[1].select(true);
+    var items = this.items();
+
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
 });
 
 QUnit.test("Single selection", function(assert) {
