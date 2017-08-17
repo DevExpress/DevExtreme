@@ -54,7 +54,7 @@ var getElementEventData = function(element, eventName) {
                     }
                     var target = e.target;
                     var newEvent;
-                    while(target !== element) {
+                    while(target.parentNode && target !== element) {
                         target = target.parentNode;
                         if(matches(target, selector)) {
                             newEvent = eventsEngine.Event(e, { currentTarget: target, data: data });
