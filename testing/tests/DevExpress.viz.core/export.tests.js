@@ -249,7 +249,7 @@ QUnit.test("List creation, without formats", function(assert) {
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0].height, 30, "List rect");
     assert.deepEqual(this.renderer.rect.getCall(2).returnValue.css.getCall(0).args[0], {
         cursor: "pointer",
-        "pointerEvents": "all"
+        "pointer-events": "all"
     }, "List rect style");
 
     assert.equal(this.renderer.path.callCount, 2, "Paths count");
@@ -533,7 +533,7 @@ QUnit.test("Set options", function(assert) {
     }, "List rect attributes");
 
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.css.getCall(0).args[0], {
-        "pointerEvents": "all",
+        "pointer-events": "all",
         cursor: "pointer"
     }, "List rect style");
 
