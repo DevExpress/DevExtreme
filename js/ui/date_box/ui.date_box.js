@@ -653,12 +653,12 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        var text = this.option("text");
-
-        var date = this._getParsedDate(text),
+        var text = this.option("text"),
+            parsedDate = this._getParsedDate(text),
             value = this.dateOption("value"),
             type = this.option("type"),
-            newValue = uiDateUtils.mergeDates(value, date, type);
+            newValue = uiDateUtils.mergeDates(value, parsedDate, type),
+            date = parsedDate && type === "time" ? newValue : parsedDate;
 
         if(this._validateValue(date)) {
             var displayedText = this._getDisplayedText(newValue);
