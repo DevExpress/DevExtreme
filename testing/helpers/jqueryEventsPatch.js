@@ -15,6 +15,7 @@ QUnit.testStart(function() {
     jQuery.Event = function() {
         return eventsEngine.Event.apply(this, arguments);
     };
+    jQuery.Event.prototype = eventsEngine.Event.prototype;
 
     ["on", "one", "off", "trigger", "triggerHandler"].forEach(function(methodName) {
         originalJQueryMethods[methodName] = jQuery[methodName];

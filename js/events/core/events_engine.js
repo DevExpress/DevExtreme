@@ -42,16 +42,27 @@ var getElementEventData = function(element, eventName) {
         addHandler: function(handler, selector, data) {
             var wrappedHandler = function(e, extraParameters) {
                 // TODO: refactor
+                var result; // TODO: get rid of checking if result equals false
                 if(selector) {
                     if(matches(e.target, selector)) {
-                        handler(extend(e, { currentTarget: e.target, data: data }), extraParameters);
+                        result = handler(extend(e, { currentTarget: e.target, data: data }), extraParameters);
+                        if(result === false) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                        }
                         return;
                     }
                     var target = e.target;
+                    var newEvent;
                     while(target !== element) {
                         target = target.parentNode;
                         if(matches(target, selector)) {
-                            handler(eventsEngine.Event(e, { currentTarget: target, data: data }), extraParameters); // TODO: Should we create new event here?
+                            newEvent = eventsEngine.Event(e, { currentTarget: target, data: data });
+                            result = handler(newEvent, extraParameters); // TODO: Should we create new event here?
+                            if(result === false) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                            }
                             return;
                         }
                     }
@@ -60,7 +71,11 @@ var getElementEventData = function(element, eventName) {
                         e = eventsEngine.Event(e);
                     }
                     e.data = data;
-                    handler(e, extraParameters);
+                    result = handler(e, extraParameters);
+                    if(result === false) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
                 }
             };
 
@@ -269,7 +284,7 @@ setEngine({
         var parent = element.parentNode;
 
         if(parent) {
-            eventsEngine.trigger(parent, extend({}, event, { currentTarget: parent }));
+            eventsEngine.trigger(parent, extend(event, { currentTarget: parent }));
         }
     },
 
@@ -302,6 +317,13 @@ setEngine({
         return result;
     },
     Event: function(src, config) {
+        if(!(this instanceof eventsEngine.Event)) {
+            return new eventsEngine.Event(src, config);
+        }
+
+        if(!src) {
+            src = {};
+        }
         if(typeof src === "string") {
             src = {
                 type: src
@@ -312,7 +334,7 @@ setEngine({
         var immediatePropagationStopped = false;
         var defaultPrevented = false;
 
-        var result = extend({}, src);
+        var result = extend(this, src);
 
         if(src.isDXEvent || src instanceof Event) {
             result.originalEvent = src;
@@ -377,8 +399,6 @@ setEngine({
 
         }
         result.guid = ++guid;
-
-        return result;
     }
 });
 
@@ -426,4 +446,5 @@ var result = {
         return eventsEngine.Event.apply(eventsEngine, arguments);
     },
 };
+result.Event.prototype = eventsEngine.Event.prototype;
 module.exports = result;
