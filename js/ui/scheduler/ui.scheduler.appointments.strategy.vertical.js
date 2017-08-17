@@ -144,7 +144,13 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return result;
     },
 
+    _calculateDynamicAppointmentCountPerCell: function() {
+        return 3;
+    },
+
     _getAllDayAppointmentGeometry: function(coordinates) {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+
         var appointmentCountPerCell = coordinates.count === 1 ? coordinates.count : this._getAppointmentCountPerCell();
         var ratio = this.instance.fire("getMaxAppointmentsPerCell") || coordinates.count >= 3 ? 0.6 : 1;
         var maxHeight = this._allDayHeight || this.getAppointmentMinSize();
@@ -155,12 +161,12 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             ratio = (maxHeight - 5) / maxHeight;
         }
         //auto
-        if(this.instance.fire("getMaxAppointmentsPerCell") === "auto") {
-            ratio = (maxHeight - 5 / maxHeight);
+        if(overlappingMode === "auto") {
+            ratio = (maxHeight - 15) / maxHeight;
         }
 
         var index = coordinates.index,
-            height = this.instance.fire("getMaxAppointmentsPerCell") ? ratio * maxHeight / appointmentCountPerCell : maxHeight / (coordinates.count > 3 ? 3 : coordinates.count),
+            height = overlappingMode ? ratio * maxHeight / appointmentCountPerCell : maxHeight / (coordinates.count > 3 ? 3 : coordinates.count),
             top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
             width = coordinates.width,
             left = coordinates.left,
