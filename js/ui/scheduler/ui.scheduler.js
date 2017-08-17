@@ -1234,31 +1234,38 @@ var Scheduler = Widget.inherit({
     },
 
     _bringEditingModeToAppointments: function(editing) {
-        var currentView = this.option("currentView");
         var editingConfig = {
             allowDelete: editing.allowUpdating && editing.allowDeleting
         };
 
-        if(currentView !== "agenda") {
+        if(!this._isAgenda()) {
             editingConfig.allowDrag = editing.allowDragging;
             editingConfig.allowResize = editing.allowResizing;
-            editingConfig.allowAllDayResize = editing.allowResizing && currentView !== "day";
+            editingConfig.allowAllDayResize = editing.allowResizing && this._supportAllDayResizing();
         }
 
         this._appointments.option(editingConfig);
         this._dropDownAppointments.repaintExisting(this.element());
     },
 
+    _isAgenda: function() {
+        return this._getAppointmentsRenderingStrategy() === "agenda";
+    },
+
     _allowDragging: function() {
-        return this._editing.allowDragging && this.option("currentView") !== "agenda";
+        return this._editing.allowDragging && !this._isAgenda();
     },
 
     _allowResizing: function() {
-        return this._editing.allowResizing && this.option("currentView") !== "agenda";
+        return this._editing.allowResizing && !this._isAgenda();
     },
 
     _allowAllDayResizing: function() {
-        return this._editing.allowResizing && this.option("currentView") !== "day";
+        return this._editing.allowResizing && this._supportAllDayResizing();
+    },
+
+    _supportAllDayResizing: function() {
+        return this._getCurrentViewType() !== "day" || this._currentView.intervalCount > 1;
     },
 
     _isAllDayExpanded: function(items) {
@@ -1331,7 +1338,7 @@ var Scheduler = Widget.inherit({
 
         this._toggleSmallClass();
 
-        if(this.option("currentView") !== "agenda" && filteredItems && this._isVisible()) {
+        if(!this._isAgenda() && filteredItems && this._isVisible()) {
             this._workSpace._cleanAllowedPositions();
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(filteredItems));
 
@@ -1450,12 +1457,11 @@ var Scheduler = Widget.inherit({
 
     _dataSourceChangedHandler: function(result) {
         this._workSpaceRecalculation.done((function() {
-            var isAgenda = this._getAppointmentsRenderingStrategy() === "agenda",
-                appointmentsToRepaint = result;
+            var appointmentsToRepaint = result;
             this._filteredItems = this.fire("prerenderFilter");
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
 
-            if(isAgenda) {
+            if(this._isAgenda()) {
                 this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option("currentDate"), true);
             }
 
@@ -1468,7 +1474,7 @@ var Scheduler = Widget.inherit({
             } else {
                 this._appointments.option("items", []);
             }
-            if(isAgenda) {
+            if(this._isAgenda()) {
                 this._workSpace._renderView();
                     // TODO: remove rows calculation from this callback
                 this._dataSourceLoadedCallback.fireWith(this, [result]);
@@ -2582,8 +2588,7 @@ var Scheduler = Widget.inherit({
                 getGroups,
                 setResourceCallback;
 
-            if(this.option("currentView") === "agenda") {
-
+            if(this._isAgenda()) {
                 getGroups = function() {
                     var apptSettings = this.getLayoutManager()._positionMap[appointmentIndex];
                     return workSpace._getCellGroups(apptSettings[0].groupIndex);

@@ -75,6 +75,28 @@ QUnit.test("Appointments should not be resizable/draggable if current view is ag
     }
 });
 
+QUnit.test("Appointments should not be resizable/draggable if current view is agenda and view is object", function(assert) {
+    this.createInstance({
+        views: ["day", { type: "agenda", name: "My Agenda" }],
+        currentView: "My Agenda"
+    });
+
+    var currentDevice = devices.current(),
+        isMobile = currentDevice.phone || currentDevice.tablet;
+
+    var appointments = this.instance.getAppointmentsInstance();
+
+    assert.notOk(appointments.option("allowResize"), "Appointment is not resizable");
+    assert.notOk(appointments.option("allowDrag"), "Appointment is not draggable");
+
+    this.instance.option("currentView", "day");
+
+    if(!isMobile) {
+        assert.ok(appointments.option("allowResize"), "Appointment is resizable");
+        assert.ok(appointments.option("allowDrag"), "Appointment is draggable");
+    }
+});
+
 QUnit.test("Agenda should contain a right appointment quantity", function(assert) {
     this.createInstance({
         views: ["agenda"],
@@ -1374,4 +1396,24 @@ QUnit.test("Agenda should contain a right appointment quantity after dataSource 
     dataSource.load();
     this.clock.tick(100);
     assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 1, "Appointment count is OK");
+});
+
+QUnit.test("Appointments should be rendered correctly if agenda view is set as object", function(assert) {
+    this.createInstance({
+        views: [{ type: "day", name: "My day" }, { type: "agenda", name: "My agenda" }],
+        currentView: "My agenda",
+        currentDate: new Date(2016, 1, 24),
+        startDayHour: 8,
+        endDayHour: 20,
+        startDateExpr: "Start",
+        dataSource: [
+            { Start: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 27, 10), text: "a" }
+        ]
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 4, "appointments are OK");
+    assert.equal($appointments.first().position().top, 0, "appointment position is OK");
+    assert.equal($appointments.last().position().top, 240, "appointment position is OK");
 });
