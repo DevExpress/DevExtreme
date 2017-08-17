@@ -195,6 +195,7 @@ var Scheduler = Widget.inherit({
                 * @publicName views
                 * @type Array
                 * @default ['day', 'week']
+                * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
                 */
             views: ["day", "week"],
 
@@ -305,6 +306,7 @@ var Scheduler = Widget.inherit({
                 * @publicName currentView
                 * @type string
                 * @default "day"
+                * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
                 */
             currentView: "day", //TODO: should we calculate currentView if views array contains only one item, for example 'month'?
                 /**
