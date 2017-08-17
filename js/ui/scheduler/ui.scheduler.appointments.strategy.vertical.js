@@ -151,7 +151,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _getAllDayAppointmentGeometry: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
 
-        var appointmentCountPerCell = coordinates.count === 1 ? coordinates.count : this._getAppointmentCountPerCell();
+        var appointmentCountPerCell = overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountPerCell();
         var ratio = this.instance.fire("getMaxAppointmentsPerCell") || coordinates.count >= 3 ? 0.6 : 1;
         var maxHeight = this._allDayHeight || this.getAppointmentMinSize();
 

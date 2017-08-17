@@ -1775,9 +1775,9 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     this.createInstance(
         {
             currentDate: new Date(2015, 2, 4),
-            currentView: "week",
+            currentView: "day",
             views: [{
-                type: "week",
+                type: "day",
                 maxAppointmentsPerCell: 'auto'
             }],
             height: 500,
@@ -1806,6 +1806,35 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
 
     assert.equal(groupedAppointments.length, 2, "DropDown menu has correct items");
     assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
+});
+
+QUnit.test("Appointment should have an unchangeable height, Day view, 'auto' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "day",
+            views: [{
+                type: "day",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment")),
+        tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
+        appointmentHeight = (tableCellHeight - 20) / 3;
+
+    assert.roughEqual($appointment.eq(0).outerHeight(), appointmentHeight, 1.5, "appointment has a correct height");
+
+    this.instance.addAppointment({ text: "Task 2", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true });
+    $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment"));
+
+    assert.roughEqual($appointment.eq(0).outerHeight(), appointmentHeight, 1.5, "appointment has a correct height");
+    assert.roughEqual($appointment.eq(1).outerHeight(), appointmentHeight, 1.5, "appointment has a correct height");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Week view, 'unlimited' mode", function(assert) {
