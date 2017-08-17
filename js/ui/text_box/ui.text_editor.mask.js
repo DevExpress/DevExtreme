@@ -103,7 +103,16 @@ var TextEditorMask = TextEditorBase.inherit({
                 * @type boolean
                 * @default false
                 */
-            useMaskedValue: false
+            useMaskedValue: false,
+
+            /**
+             * @name dxTextEditorOptions_showMaskMode
+             * @publicName showMaskMode
+             * @type string
+             * @default "always"
+             * @acceptValues 'always'|'onFocus'|'never'
+             */
+            showMaskMode: "always"
         });
     },
 
@@ -286,11 +295,27 @@ var TextEditorMask = TextEditorBase.inherit({
         this._caret(caret);
     },
 
+    _shouldShowMask: function() {
+        var showMaskMode = this.option("showMaskMode"),
+            value = this._convertToValue().replace(/\s+$/, "");
+
+        if(showMaskMode === "always") return true;
+        if(showMaskMode === "never") return !!(value.replace(/\s+/g, ""));
+        if(showMaskMode === "onFocus") return this._input().is(":focus");
+    },
+
+    _showMaskPlaceholder: function() {
+        if(this._shouldShowMask()) {
+            var text = this._maskRulesChain.text();
+            this.option("text", text);
+        }
+    },
+
     _renderValue: function() {
         if(this._maskRulesChain) {
             var text = this._maskRulesChain.text();
 
-            this.option("text", text);
+            this._showMaskPlaceholder();
 
             if(this._$hiddenElement) {
                 var value = this._maskRulesChain.value(),
@@ -309,16 +334,12 @@ var TextEditorMask = TextEditorBase.inherit({
         }
 
         this._saveValueChangeEvent(e);
-        var value = this._isMaskedValueMode()
-                ? (this._textValue || "")
-                    .replace(new RegExp("[" + this.option("maskChar") + "]", "g"), " ")
-                    .replace(/\s+$/, "")
-                : (this._value || "").replace(/\s+$/, "");
 
-        this.option("value", value);
+        this.option("value", this._convertToValue().replace(/\s+$/, ""));
     },
 
     _maskFocusHandler: function() {
+        this._showMaskPlaceholder();
         this._direction(FORWARD_DIRECTION);
         var caret = this._getAdjustedCaret();
         this._caretTimeout = setTimeout(function() {
@@ -478,7 +499,14 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _convertToValue: function(text) {
-        return text.replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
+        if(this._isMaskedValueMode()) {
+            text = (text || this._textValue || "")
+                .replace(new RegExp(this.option("maskChar"), "g"), EMPTY_CHAR);
+        } else {
+            text = text || this._value || "";
+        }
+
+        return text;
     },
 
     _maskKeyHandler: function(e, tryHandleKeyCallback) {
@@ -656,6 +684,10 @@ var TextEditorMask = TextEditorBase.inherit({
                 this.callBase(args);
                 break;
             case "maskInvalidMessage":
+                break;
+            case "showMaskMode":
+                this.option("text", "");
+                this._renderValue();
                 break;
             default:
                 this.callBase(args);

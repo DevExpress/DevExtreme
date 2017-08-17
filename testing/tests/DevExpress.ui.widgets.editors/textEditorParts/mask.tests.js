@@ -616,6 +616,82 @@ QUnit.test("all selected chars should be deleted on del key", function(assert) {
     assert.equal(keyboard.caret().start, 1, "caret position set to start");
 });
 
+QUnit.module("showMaskMode", moduleConfig);
+
+QUnit.test("show mask always", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "XX",
+            showMaskMode: "always",
+            maskRules: {
+                "X": "x"
+            }
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input");
+
+    assert.equal(textEditor.option("text"), "__", "editor is empty");
+
+    $input.focus();
+    assert.equal(textEditor.option("text"), "__", "editor is not empty");
+});
+
+QUnit.test("show mask on focus only", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "XX",
+            showMaskMode: "onFocus",
+            maskRules: {
+                "X": "x"
+            }
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input");
+
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+
+    $input.focus();
+    assert.equal(textEditor.option("text"), "__", "editor is not empty");
+});
+
+QUnit.test("never show mask", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "XX",
+            showMaskMode: "never",
+            maskRules: {
+                "X": "x"
+            }
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input");
+
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+
+    $input.focus();
+    assert.equal(textEditor.option("text"), "", "editor is not empty");
+});
+
+QUnit.test("change mask visibility", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "XX",
+            showMaskMode: "never",
+            maskRules: {
+                "X": "x"
+            }
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input");
+
+    assert.equal(textEditor.option("text"), "", "placeholder is hidden");
+
+    textEditor.option("showMaskMode", "always");
+    assert.equal(textEditor.option("text"), "__", "placeholder is visible");
+
+    textEditor.option("showMaskMode", "onFocus");
+    assert.equal(textEditor.option("text"), "", "placeholder is hidden");
+
+    $input.focus();
+    assert.equal(textEditor.option("text"), "__", "placeholder is visible");
+});
+
 
 QUnit.module("focusing", moduleConfig);
 
@@ -1241,7 +1317,7 @@ QUnit.test("mask should support drag with spaces", function(assert) {
 
     this.clock.tick();
 
-    assert.equal($input.val(), "(x__y)", "mask is corrected");
+    assert.equal($input.val(), "(xy__)", "mask is corrected");
 });
 
 

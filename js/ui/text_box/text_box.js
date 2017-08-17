@@ -45,6 +45,7 @@ var TextBox = TextEditor.inherit({
             * @default null
             */
             maxLength: null
+
         });
     },
 
