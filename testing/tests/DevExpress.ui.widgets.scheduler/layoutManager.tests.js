@@ -1870,3 +1870,24 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     }
 });
 
+QUnit.test("One full-size appointment should have a correct height, Week view, 'unlimited' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 'unlimited'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+
+    assert.roughEqual($(this.instance.element().find(".dx-scheduler-all-day-appointment")).eq(0).outerHeight(), tableCellHeight, 1.5, "appointment height is correct");
+});
+
