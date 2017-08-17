@@ -644,12 +644,21 @@ QUnit.test("show mask on focus only", function(assert) {
             }
         }),
         textEditor = $textEditor.dxTextEditor("instance"),
-        $input = $textEditor.find(".dx-texteditor-input");
+        $input = $textEditor.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input, true);
 
     assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
 
     $input.focus();
     assert.equal(textEditor.option("text"), "__", "editor is not empty");
+    assert.equal($input.val(), "__", "input is empty");
+    assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, "caret position is on the start");
+
+    $input.blur();
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
+
 });
 
 QUnit.test("never show mask", function(assert) {
