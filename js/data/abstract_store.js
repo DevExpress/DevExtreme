@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    Class = require("../core/class"),
+var Class = require("../core/class"),
     abstract = Class.abstract,
     EventsMixin = require("../core/events_mixin"),
     each = require("../core/utils/iterator").each,
@@ -10,6 +9,7 @@ var $ = require("../core/renderer"),
     compileGetter = require("../core/utils/data").compileGetter,
     storeHelper = require("./store_helper"),
     queryByOptions = storeHelper.queryByOptions,
+    Deferred = require("../core/utils/deferred").Deferred,
 
     storeImpl = {};
 
@@ -217,7 +217,7 @@ var Store = Class.inherit({
     },
 
     _withLock: function(task) {
-        var result = $.Deferred();
+        var result = new Deferred();
 
         task.done(function() {
             var that = this,

@@ -1,13 +1,13 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     ajax = require("../../core/utils/ajax"),
     Guid = require("../../core/guid"),
     isDefined = typeUtils.isDefined,
+    Deferred = require("../../core/utils/deferred").Deferred,
 
     errors = require("../errors").errors,
     dataUtils = require("../utils");
@@ -202,7 +202,7 @@ var ajaxOptionsForRequest = function(protocolVersion, request, options) {
 };
 
 var sendRequest = function(protocolVersion, request, options) {
-    var d = $.Deferred();
+    var d = new Deferred();
     var ajaxOptions = ajaxOptionsForRequest(protocolVersion, request, options);
 
     ajax.sendRequest(ajaxOptions).always(function(obj, textStatus) {

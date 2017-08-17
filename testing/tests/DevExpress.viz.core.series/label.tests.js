@@ -146,6 +146,7 @@ QUnit.module("Draw Label", $.extend({}, environment, {
             rotationAngle: 30,
             horizontalOffset: 0,
             verticalOffset: 0,
+            textAlign: "left",
             visible: true,
             background: {
                 fill: "none"
@@ -190,7 +191,7 @@ QUnit.test("Draw label", function(assert) {
 
     assert.deepEqual(this.renderer.text.lastCall.args, ["", 0, 0], "text args");
 
-    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.firstCall.args, [{ text: "15" }], "text attr");
+    assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.firstCall.args, [{ text: "15", align: "left" }], "text attr");
 });
 
 QUnit.test("Draw label with zero point size", function(assert) {

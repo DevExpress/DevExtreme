@@ -20,7 +20,8 @@ var $ = require("../../core/renderer"),
     dateLocalization = require("../../localization/date"),
     messageLocalization = require("../../localization/message"),
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    Draggable = require("../draggable");
+    Draggable = require("../draggable"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
     APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment",
@@ -252,7 +253,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _clearDropDownItems: function() {
         this._virtualAppointments = {};
 
-        var $items = this.element().find(".dx-scheduler-dropdown-appointments");
+        var $items = this._itemContainer().find(".dx-scheduler-dropdown-appointments");
         if(!$items.length) {
             return;
         }
@@ -685,7 +686,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _paintAppointment: function($appointment, groupIndex) {
-        var res = $.Deferred();
+        var res = new Deferred();
         this.notifyObserver("getAppointmentColor", {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,

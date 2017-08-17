@@ -12,7 +12,7 @@ var $ = require("jquery"),
     errors = require("./errors"),
     hardwareBackButton = require("../mobile/process_hardware_back_button").processCallback,
     hideTopOverlay = require("../mobile/hide_top_overlay"),
-    when = require("../integration/jquery/deferred").when;
+    when = require("../core/utils/deferred").when;
 
 var NAVIGATION_TARGETS = {
         current: "current",

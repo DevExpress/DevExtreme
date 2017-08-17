@@ -112,6 +112,7 @@ QUnit.test("Create labels with styles", function(assert) {
             background: {
                 dashStyle: "solid"
             },
+            textAlign: "left",
             position: "outside",
             horizontalOffset: 0,
             verticalOffset: 0,
@@ -148,6 +149,7 @@ QUnit.test("Create labels with styles", function(assert) {
     assert.deepEqual(options.visible, true, "visible");
     assert.deepEqual(options.showForZeroValues, false, "showForZeroValues");
     assert.deepEqual(options.customizeText({ valueText: "value", item: { data: { argument: "argument" } } }), "argument value", "customizeText");
+    assert.deepEqual(options.textAlign, "left", "textAlign");
 });
 
 QUnit.test("Do not create labels if label.visible set to false", function(assert) {

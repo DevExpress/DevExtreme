@@ -43,7 +43,9 @@ var $ = require("../../core/renderer"),
     loading = require("./ui.loading"),
     AppointmentForm = require("./ui.scheduler.appointment_form"),
     Popup = require("../popup"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     EmptyTemplate = require("../widget/empty_template"),
     BindableTemplate = require("../widget/bindable_template");
 
@@ -1294,7 +1296,7 @@ var Scheduler = Widget.inherit({
 
     _loadResources: function() {
         var groups = this._getCurrentViewOption("groups"),
-            result = $.Deferred();
+            result = new Deferred();
 
         this._resourcesManager.loadResources(groups).done((function(resources) {
             this._loadedResources = resources;
@@ -1757,7 +1759,7 @@ var Scheduler = Widget.inherit({
     },
 
     _recalculateWorkspace: function() {
-        this._workSpaceRecalculation = $.Deferred();
+        this._workSpaceRecalculation = new Deferred();
 
         domUtils.triggerResizeEvent(this._workSpace.element());
         this._workSpaceRecalculation.resolve();

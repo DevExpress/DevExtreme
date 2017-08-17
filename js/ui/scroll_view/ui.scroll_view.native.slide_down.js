@@ -1,8 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Callbacks = require("../../core/utils/callbacks"),
-    NativeStrategy = require("./ui.scrollable.native");
+var Callbacks = require("../../core/utils/callbacks"),
+    NativeStrategy = require("./ui.scrollable.native"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var STATE_RELEASED = 0,
     STATE_READY = 1,
@@ -98,7 +98,7 @@ var SlideDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     release: function() {
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
 
         this._state = STATE_RELEASED;
         this.releaseCallbacks.fire();

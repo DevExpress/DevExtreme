@@ -1,13 +1,16 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    deferredUtils = require("../integration/jquery/deferred"),
+    fromPromise = require("../integration/jquery/deferred").fromPromise,
     dataUtils = require("./utils"),
     isFunction = require("../core/utils/type").isFunction,
     errors = require("./errors").errors,
     Store = require("./abstract_store"),
     arrayQuery = require("./array_query"),
-    queryByOptions = require("./store_helper").queryByOptions;
+    queryByOptions = require("./store_helper").queryByOptions,
+    deferredUtils = require("../core/utils/deferred"),
+    Deferred = deferredUtils.Deferred,
+    when = deferredUtils.when;
 
 var TOTAL_COUNT = "totalCount",
     LOAD = "load",
@@ -21,7 +24,7 @@ function isPromise(obj) {
 }
 
 function trivialPromise(value) {
-    return $.Deferred().resolve(value).promise();
+    return new Deferred().resolve(value).promise();
 }
 
 function ensureRequiredFuncOption(name, obj) {
@@ -78,7 +81,7 @@ function invokeUserLoad(store, options) {
         }
     }
 
-    return deferredUtils.fromPromise(userResult);
+    return fromPromise(userResult);
 }
 
 function invokeUserTotalCountFunc(store, options) {
@@ -99,7 +102,7 @@ function invokeUserTotalCountFunc(store, options) {
         userResult = trivialPromise(userResult);
     }
 
-    return deferredUtils.fromPromise(userResult);
+    return fromPromise(userResult);
 }
 
 function invokeUserByKeyFunc(store, key, extraOptions) {
@@ -113,7 +116,7 @@ function invokeUserByKeyFunc(store, key, extraOptions) {
         userResult = trivialPromise(userResult);
     }
 
-    return deferredUtils.fromPromise(userResult);
+    return fromPromise(userResult);
 }
 
 function runRawLoad(pendingDeferred, store, userFuncOptions, continuation) {
@@ -170,7 +173,7 @@ function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
             }
         }
 
-        $.when.apply($, waitList)
+        when.apply($, waitList)
             .done(function() {
                 if(countOnly) {
                     pendingDeferred.resolve(totalCount);
@@ -324,7 +327,7 @@ var CustomStore = Store.inherit({
     },
 
     _totalCountImpl: function(options) {
-        var d = $.Deferred();
+        var d = new Deferred();
 
         if(this._loadMode === "raw" && !this._totalCountFunc) {
             runRawLoadWithQuery(d, this, options, true);
@@ -339,7 +342,7 @@ var CustomStore = Store.inherit({
     },
 
     _loadImpl: function(options) {
-        var d = $.Deferred();
+        var d = new Deferred();
 
         if(this._loadMode === "raw") {
             runRawLoadWithQuery(d, this, options, false);
@@ -354,7 +357,7 @@ var CustomStore = Store.inherit({
     },
 
     _byKeyImpl: function(key, extraOptions) {
-        var d = $.Deferred();
+        var d = new Deferred();
 
         if(this._byKeyViaLoad()) {
             this._requireKey();
@@ -375,7 +378,7 @@ var CustomStore = Store.inherit({
     _insertImpl: function(values) {
         var userFunc = this._insertFunc,
             userResult,
-            d = $.Deferred();
+            d = new Deferred();
 
         ensureRequiredFuncOption(INSERT, userFunc);
         userResult = userFunc.apply(this, [values]); // should return key only
@@ -384,7 +387,7 @@ var CustomStore = Store.inherit({
             userResult = trivialPromise(userResult);
         }
 
-        deferredUtils.fromPromise(userResult)
+        fromPromise(userResult)
             .done(function(newKey) { d.resolve(values, newKey); })
             .fail(createUserFuncFailureHandler(d));
 
@@ -394,7 +397,7 @@ var CustomStore = Store.inherit({
     _updateImpl: function(key, values) {
         var userFunc = this._updateFunc,
             userResult,
-            d = $.Deferred();
+            d = new Deferred();
 
         ensureRequiredFuncOption(UPDATE, userFunc);
         userResult = userFunc.apply(this, [key, values]);
@@ -403,7 +406,7 @@ var CustomStore = Store.inherit({
             userResult = trivialPromise();
         }
 
-        deferredUtils.fromPromise(userResult)
+        fromPromise(userResult)
             .done(function() { d.resolve(key, values); })
             .fail(createUserFuncFailureHandler(d));
 
@@ -413,7 +416,7 @@ var CustomStore = Store.inherit({
     _removeImpl: function(key) {
         var userFunc = this._removeFunc,
             userResult,
-            d = $.Deferred();
+            d = new Deferred();
 
         ensureRequiredFuncOption(REMOVE, userFunc);
         userResult = userFunc.apply(this, [key]);
@@ -422,7 +425,7 @@ var CustomStore = Store.inherit({
             userResult = trivialPromise();
         }
 
-        deferredUtils.fromPromise(userResult)
+        fromPromise(userResult)
             .done(function() { d.resolve(key); })
             .fail(createUserFuncFailureHandler(d));
 

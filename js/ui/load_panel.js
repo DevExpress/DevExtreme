@@ -6,7 +6,8 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     LoadIndicator = require("./load_indicator"),
-    Overlay = require("./overlay");
+    Overlay = require("./overlay"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var LOADPANEL_CLASS = "dx-loadpanel",
     LOADPANEL_WRAPPER_CLASS = "dx-loadpanel-wrapper",
@@ -228,7 +229,7 @@ var LoadPanel = Overlay.inherit({
             return this.callBase();
         }
 
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
         var callBase = this.callBase.bind(this);
 
         this._clearShowTimeout();

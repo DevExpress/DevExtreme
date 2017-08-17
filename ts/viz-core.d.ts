@@ -224,7 +224,7 @@ declare module DevExpress.viz.core {
         * @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font_family
         * @docid dxtreemapoptions_tile_label_font_family
         * @docid dxtreemapoptions_group_label_font_family
-        * @docid dxfunneloptions_label_font_font_family
+        * @docid dxfunneloptions_label_font_family
         * @docid dxfunneloptions_legend_font_family
         */
         family?: string;
@@ -351,6 +351,8 @@ declare module DevExpress.viz.core {
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_direction
           * @docid dxChartSeriesTypes_candlestickseries_hoverstyle_hatching_direction
           * @docid dxChartSeriesTypes_candlestickseries_selectionstyle_hatching_direction
+          * @docid dxfunneloptions_item_hoverstyle_hatching_direction
+          * @docid dxfunneloptions_item_selectionstyle_hatching_direction
           */
         direction?: string;
 
@@ -361,6 +363,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_opacity
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_opacity
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_opacity
+          * @docid dxfunneloptions_item_hoverstyle_hatching_opacity
+          * @docid dxfunneloptions_item_selectionstyle_hatching_opacity
           */
         opacity?: number;
 
@@ -371,6 +375,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_step
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_step
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_step
+          * @docid dxfunneloptions_item_hoverstyle_hatching_step
+          * @docid dxfunneloptions_item_selectionstyle_hatching_step
           */
         step?: number;
 
@@ -381,6 +387,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_width
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_width
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_width
+          * @docid dxfunneloptions_item_hoverstyle_hatching_width
+          * @docid dxfunneloptions_item_selectionstyle_hatching_width
           */
         width?: number;
     }
@@ -694,7 +702,7 @@ declare module DevExpress.viz.core {
         /**
         * @docid basechartoptions_legend_markersize
         * @docid dxvectormapoptions_legends_markerSize
-        * @docid dxfunneloptions_legend_markerSize
+        * @docid dxfunneloptions_legend_markersize
         */
         markerSize?: number;
 

@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../renderer");
 var jQuery = require("jquery");
+var Deferred = require("./deferred").Deferred;
 
 var isStatusSuccess = function(status) {
     return 200 <= status && status < 300;
@@ -13,7 +13,7 @@ var sendRequest = function(options) {
     }
 
     var xhr = new XMLHttpRequest();
-    var d = $.Deferred();
+    var d = new Deferred();
     var result = d.promise();
 
     xhr.open(options.method || "GET", options.url, true);

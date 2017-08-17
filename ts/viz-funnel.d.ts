@@ -12,35 +12,34 @@ declare module DevExpress.viz.funnel {
         customizeText?: (itemsInfo: { item: funnelItem; text: string; }) => string;
     }
 
-
-    /** @docid dxfunnelitem */
+    /** @docid dxfunnelItem */
     export interface funnelItem {
 
-    /** @docid dxfunnelitemfields_data */
-        data?: Object;
+    /** @docid dxfunnelItemfields_data */
+        data: Object;
 
-        /** @docid dxfunnelitemfields_id */
-        id?: number;
+        /** @docid dxfunnelItemfields_id */
+        id: number;
 
-        /** @docid dxfunnelitemfields_percent */
-        percent?: number;
+        /** @docid dxfunnelItemfields_percent */
+        percent: number;
 
-        /** @docid dxfunnelitemmethods_select */
+        /** @docid dxfunnelItemmethods_select */
         select(state: boolean): void;
 
-        /** @docid dxfunnelitemmethods_hover */
+        /** @docid dxfunnelItemmethods_hover */
         hover(state: boolean): void;
 
-        /** @docid dxfunnelitemmethods_getcolor */
+        /** @docid dxfunnelItemmethods_getcolor */
         getColor(): string;
 
-        /** @docid dxfunnelitemmethods_ishovered */
+        /** @docid dxfunnelItemmethods_ishovered */
         isHovered(): boolean;
 
-        /** @docid dxfunnelitemmethods_isselected */
+        /** @docid dxfunnelItemmethods_isselected */
         isSelected(): boolean;
 
-        /** @docid dxfunnelitemmethods_showtooltip */
+        /** @docid dxfunnelItemmethods_showtooltip */
         showTooltip(): void;
     }
 
@@ -48,12 +47,12 @@ declare module DevExpress.viz.funnel {
         /** @docid dxfunneloptions_adaptivelayout */
         adaptiveLayout?: {
             /** @docid dxfunneloptions_adaptivelayout_width */
-            width?: number,
+            width?: number;
             /** @docid dxfunneloptions_adaptivelayout_height */
-            height?: number,
+            height?: number;
             /** @docid dxfunneloptions_adaptivelayout_keeplabels */
-            keepLabels?: boolean
-        },
+            keepLabels?: boolean;
+        };
 
         /** @docid dxfunneloptions_valuefield */
         valueField?: string;
@@ -74,68 +73,45 @@ declare module DevExpress.viz.funnel {
         palette?: any;
 
         /** @docid dxfunneloptions_algorithm */
-        algorithm?: string,
+        algorithm?: string;
 
         /** @docid dxfunneloptions_neckheight */
-        neckHeight?: number,
+        neckHeight?: number;
 
         /** @docid dxfunneloptions_neckwidth */
-        neckWidth?: number,
+        neckWidth?: number;
 
         /** @docid dxfunneloptions_inverted */
-        inverted?: boolean,
+        inverted?: boolean;
 
         /** @docid dxfunneloptions_sortdata */
-        sortData?: boolean,
+        sortData?: boolean;
 
         /** @docid dxfunneloptions_item */
         item?: {
 
             /** @docid dxfunneloptions_item_border */
-            border: viz.core.Border,
+            border?: viz.core.Border;
 
             /** @docid dxfunneloptions_item_hoverstyle */
             hoverStyle?: {
                 /** @docid dxfunneloptions_item_hoverstyle_border */
-                border?: viz.core.Border,
+                border?: viz.core.Border;
+
                 /** @docid dxfunneloptions_item_hoverstyle_hatching */
-                hatching?: {
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_direction */
-                    direction?: string;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_opacity */
-                    opacity?: number;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_step */
-                    step?: number;
-
-                    /** @docid dxfunneloptions_item_hoverstyle_hatching_width */
-                    width?: number;
-                }
-            },
+                hatching?: viz.core.Hatching;
+            };
 
             /** @docid dxfunneloptions_item_selectionstyle */
             selectionStyle?: {
+
                 /** @docid dxfunneloptions_item_selectionstyle_border */
-                border?: viz.core.Border,
+                border?: viz.core.Border;
 
                 /** @docid dxfunneloptions_item_selectionstyle_hatching */
-                hatching?: {
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_opacity */
-                    opacity?: number,
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_step */
-                    step?: number,
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_width */
-                    width?: number,
-
-                    /** @docid dxfunneloptions_item_selectionstyle_hatching_direction */
-                    direction?: string
-                }
-            }
-        }
+                hatching?: viz.core.Hatching;
+            };
+        };
 
         /** @docid dxfunneloptions_label */
         label?: {
@@ -161,6 +137,9 @@ declare module DevExpress.viz.funnel {
 
                 /** @docid dxfunneloptions_label_connector_width */
                 width?: number;
+
+                /** @docid dxfunneloptions_label_connector_opacity */
+                opacity?: number;
             };
 
             /** @docid dxfunneloptions_label_backgroundcolor */
@@ -180,21 +159,29 @@ declare module DevExpress.viz.funnel {
 
             /** @docid dxfunneloptions_label_format */
             format?: any;
-        },
+        };
         /** @docid dxfunneloptions_legend */
         legend?: Legend;
 
-        /** @docid  dxfunneloptions_onItemClick */
+        /** @docid  dxfunneloptions_onitemclick */
         onItemClick?: any;
 
-        /** @docid  dxfunneloptions_onLegendClick */
+        /** @docid  dxfunneloptions_onlegendclick */
         onLegendClick?: any;
 
-        /** @docid  dxfunneloptions_onHoverChanged */
-        onHoverChanged?: any;
+        /** @docid  dxfunneloptions_onhoverchanged */
+        onHoverChanged?: (e: {
+            component: dxFunnel;
+            element: Element;
+            node: funnelItem;
+        }) => void;
 
-        /** @docid  dxfunneloptions_selectionChanged */
-        onSelectionChanged?: any;
+        /** @docid  dxfunneloptions_onselectionchanged */
+        onSelectionChanged?: (e: {
+            component: dxFunnel;
+            element: Element;
+            node: funnelItem;
+        }) => void;
 
         /** @docid dxfunneloptions_tooltip */
         tooltip?: viz.core.Tooltip;

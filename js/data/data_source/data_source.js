@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     commonUtils = require("../../core/utils/common"),
     iteratorUtils = require("../../core/utils/iterator"),
@@ -15,7 +14,9 @@ var $ = require("../../core/renderer"),
     errors = require("../errors").errors,
     array = require("../../core/utils/array"),
     queue = require("../../core/utils/queue"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
 
     __isString = typeUtils.isString,
     __isNumber = typeUtils.isNumeric,
@@ -703,7 +704,7 @@ var DataSource = Class.inherit({
     loadSingle: function(propName, propValue) {
         var that = this;
 
-        var d = $.Deferred(),
+        var d = new Deferred(),
             key = this.key(),
             store = this._store,
             options = this._createStoreLoadOptions(),
@@ -761,7 +762,7 @@ var DataSource = Class.inherit({
     */
     load: function() {
         var that = this,
-            d = $.Deferred(),
+            d = new Deferred(),
             loadOperation;
 
         function loadTask() {
@@ -941,7 +942,7 @@ var DataSource = Class.inherit({
         }
 
         if(loadOptions.data) {
-            return $.Deferred().resolve(loadOptions.data).done(handleSuccess);
+            return new Deferred().resolve(loadOptions.data).done(handleSuccess);
         }
 
         return this.store().load(loadOptions.storeLoadOptions)

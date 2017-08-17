@@ -342,7 +342,7 @@ var TextEditorBase = Editor.inherit({
         $input.attr("autocomplete", "off")
             .attr(customAttributes)
             .addClass(TEXTEDITOR_INPUT_CLASS)
-            .css("min-height", this.option("height") ? "0" : "");
+            .css("minHeight", this.option("height") ? "0" : "");
     },
 
     _renderValue: function() {

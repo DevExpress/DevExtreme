@@ -14,7 +14,9 @@ var $ = require("../../core/renderer"),
     Button = require("../button"),
     List = require("../list"),
     ContextMenu = require("../context_menu"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var DATAGRID_EXPORT_MENU_CLASS = "dx-datagrid-export-menu",
     DATAGRID_EXPORT_BUTTON_CLASS = "dx-datagrid-export-button",
@@ -450,7 +452,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
     _getAllItems: function(data) {
         var that = this,
-            d = $.Deferred(),
+            d = new Deferred(),
             dataController = this.getController("data"),
             footerItems = dataController.footerItems(),
             totalItem = footerItems.length && footerItems[0],

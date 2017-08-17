@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    DataSourceModule = require("../../data/data_source/data_source"),
+var DataSourceModule = require("../../data/data_source/data_source"),
     Store = require("../../data/abstract_store"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -10,7 +9,9 @@ var $ = require("../../core/renderer"),
     iteratorUtils = require("../../core/utils/iterator"),
     isDefined = typeUtils.isDefined,
     each = iteratorUtils.each,
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     Class = require("../../core/class"),
     EventsMixin = require("../../core/events_mixin"),
     inflector = require("../../core/utils/inflector"),
@@ -142,7 +143,7 @@ module.exports = Class.inherit((function() {
             emptyIndex = getHeaderItemsLastIndex(headerItems, grandTotalIndex) + 1,
             index,
             applyingItemIndexesToCurrent = [],
-            d = $.Deferred();
+            d = new Deferred();
 
         for(index = 0; index < applyingHeaderItemsCount; index++) {
             applyingItemIndexesToCurrent[index] = emptyIndex++;
@@ -159,7 +160,7 @@ module.exports = Class.inherit((function() {
     };
 
     var updateHeaderItems = function(headerItems, newHeaderItems) {
-        var d = $.Deferred();
+        var d = new Deferred();
 
         var applyingItemIndexesToCurrent = [];
 
@@ -451,7 +452,7 @@ module.exports = Class.inherit((function() {
     }
 
     function getFields(that) {
-        var result = $.Deferred(),
+        var result = new Deferred(),
             store = that._store,
             storeFields = store && store.getFields(that._fields),
             mergedFields;
@@ -566,7 +567,7 @@ module.exports = Class.inherit((function() {
     }
 
     function updateCache(headerItems) {
-        var d = $.Deferred();
+        var d = new Deferred();
         var cacheByPath = {};
 
         when(foreachTreeAsync(headerItems, function(items) {
@@ -1062,7 +1063,7 @@ module.exports = Class.inherit((function() {
                 store = this.store(),
                 loadFields = [],
                 loadOptions = { columns: loadFields, rows: [], values: this.getAreaFields("data"), filters: [] },
-                d = $.Deferred();
+                d = new Deferred();
 
             if(field && store) {
                 each(field.levels || [field], function() {
@@ -1112,7 +1113,7 @@ module.exports = Class.inherit((function() {
         */
         load: function(options) {
             var that = this,
-                d = $.Deferred();
+                d = new Deferred();
             options = options || {};
 
             that.beginLoading();

@@ -224,7 +224,7 @@ QUnit.test("Set options. ZIndex", function(assert) {
     //assert
     assert.equal(tooltip, result);
     assert.deepEqual(tooltip._options, this.options, "whole options");
-    assert.deepEqual(tooltip._wrapper.css.lastCall.args[0], { "z-index": 1000 }, "zIndex");
+    assert.deepEqual(tooltip._wrapper.css.lastCall.args[0], { "zIndex": 1000 }, "zIndex");
 });
 
 QUnit.test("Set options. Container is incorrect", function(assert) {

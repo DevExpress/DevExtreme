@@ -274,8 +274,8 @@ var TabPanel = MultiView.inherit({
     _updateLayout: function() {
         var tabsHeight = this._$tabContainer.outerHeight();
         this._$container.css({
-            "margin-top": -tabsHeight,
-            "padding-top": tabsHeight
+            "marginTop": -tabsHeight,
+            "paddingTop": tabsHeight
         });
     },
 

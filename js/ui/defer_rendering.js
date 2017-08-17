@@ -9,7 +9,8 @@ var $ = require("../core/renderer"),
     domUtils = require("../core/utils/dom"),
     TransitionExecutorModule = require("../animation/transition_executor/transition_executor"),
     Widget = require("./widget/ui.widget"),
-    LoadIndicator = require("./load_indicator");
+    LoadIndicator = require("./load_indicator"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var WIDGET_CLASS = "dx-widget",
     DEFER_RENDERING_CLASS = "dx-deferrendering",
@@ -139,7 +140,7 @@ var DeferRendering = Widget.inherit({
     _renderDeferredContent: function() {
         var that = this,
             $element = this.element(),
-            result = $.Deferred();
+            result = new Deferred();
 
         $element.removeClass(PENDING_RENDERING_MANUAL_CLASS);
         $element.addClass(PENDING_RENDERING_ACTIVE_CLASS);
@@ -189,7 +190,7 @@ var DeferRendering = Widget.inherit({
             }
             animatePromise = that.transitionExecutor.start();
         } else {
-            animatePromise = $.Deferred().resolve().promise();
+            animatePromise = new Deferred().resolve().promise();
         }
 
         return animatePromise;

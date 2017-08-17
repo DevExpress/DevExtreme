@@ -15,7 +15,8 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     eventUtils = require("../../events/utils"),
     Overlay = require("../overlay"),
-    MenuBase = require("./ui.menu_base");
+    MenuBase = require("./ui.menu_base"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var DX_MENU_CLASS = "dx-menu",
     DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item",
@@ -507,10 +508,10 @@ var ContextMenu = MenuBase.inherit((function() {
             }
 
             if(this.option("width")) {
-                return $itemsContainer.css("min-width", this.option("width"));
+                return $itemsContainer.css("minWidth", this.option("width"));
             }
             if(this.option("height")) {
-                return $itemsContainer.css("min-height", this.option("height"));
+                return $itemsContainer.css("minHeight", this.option("height"));
             }
 
             return $itemsContainer;
@@ -890,7 +891,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _show: function(jQEvent) {
             var args = { jQEvent: jQEvent },
-                promise = $.Deferred().reject().promise();
+                promise = new Deferred().reject().promise();
 
             this._actions.onShowing(args);
 
@@ -970,7 +971,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             this.setAria("owns", undefined);
 
-            return promise || $.Deferred().reject().promise();
+            return promise || new Deferred().reject().promise();
         },
 
         /**

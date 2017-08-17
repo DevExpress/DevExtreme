@@ -1,14 +1,15 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Callbacks = require("../../core/utils/callbacks"),
+var Callbacks = require("../../core/utils/callbacks"),
     gridCore = require("../data_grid/ui.data_grid.core"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     ArrayStore = require("../../data/array_store"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 module.exports = gridCore.Controller.inherit((function() {
     function cloneItems(items, groupCount) {
@@ -355,7 +356,7 @@ module.exports = gridCore.Controller.inherit((function() {
         },
         loadFromStore: function(loadOptions) {
             var dataSource = this._dataSource,
-                d = $.Deferred();
+                d = new Deferred();
 
             if(!dataSource) return;
 
@@ -375,7 +376,7 @@ module.exports = gridCore.Controller.inherit((function() {
                 loadResult,
                 dataSourceLoadOptions,
                 dataSource = that._dataSource,
-                d = $.Deferred();
+                d = new Deferred();
 
             if(options) {
                 store = dataSource.store();

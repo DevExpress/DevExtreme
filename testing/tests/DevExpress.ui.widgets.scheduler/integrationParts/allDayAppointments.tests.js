@@ -655,6 +655,35 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
     assert.equal(secondDdAppointments.length, 3, "There are 3 drop down appts in 2d group");
 });
 
+QUnit.test("DropDown appointment should be removed correctly when needed", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        views: ["week"],
+        currentView: "week"
+    });
+
+    var items = [
+        { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '4', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '5', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '6', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '7', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '8', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
+    ];
+
+    this.instance.option("dataSource", items);
+
+    var $dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments");
+    assert.equal($dropDown.length, 1, "Dropdown appointment was rendered");
+
+    this.instance.deleteAppointment(items[7]);
+
+    $dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments");
+    assert.equal($dropDown.length, 0, "Dropdown appointment was removed");
+});
+
 QUnit.test("If there are not groups, '.dx-scrollable-content' should be a resizable area for all-day appointment", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),

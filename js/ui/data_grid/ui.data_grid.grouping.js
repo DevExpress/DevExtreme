@@ -9,7 +9,9 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     devices = require("../../core/devices"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
@@ -289,7 +291,7 @@ var GroupingDataControllerExtender = (function() {
 
             if(!dataSource) return;
 
-            d = $.Deferred();
+            d = new Deferred();
             when(dataSource.changeRowExpand(key)).done(function() {
                 that.load().done(d.resolve).fail(d.reject);
             }).fail(d.reject);
@@ -316,7 +318,7 @@ var GroupingDataControllerExtender = (function() {
             if(!this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
         /**
          * @name dxDataGridMethods_collapseRow
@@ -327,7 +329,7 @@ var GroupingDataControllerExtender = (function() {
             if(this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
         optionChanged: function(args) {
             if(args.name === "grouping"/* autoExpandAll */) {

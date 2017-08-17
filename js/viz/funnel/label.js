@@ -123,6 +123,7 @@ function getLabelOptions(labelOptions, defaultColor) {
 
     return {
         format: opt.format,
+        textAlign: opt.textAlign,
         customizeText: opt.customizeText,
         attributes: { font: labelFont },
         visible: labelFont.size !== 0 ? opt.visible : false,

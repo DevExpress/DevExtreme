@@ -16,7 +16,8 @@ var $ = require("../../core/renderer"),
     inkRipple = require("../widget/utils.ink_ripple"),
     clickEvent = require("../../events/click"),
     Swipeable = require("../../events/gesture/swipeable"),
-    themes = require("../themes");
+    themes = require("../themes"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var SLIDER_CLASS = "dx-slider",
     SLIDER_WRAPPER_CLASS = "dx-slider-wrapper",
@@ -507,7 +508,7 @@ var Slider = TrackBar.inherit({
             this._createAction(this._startHandler.bind(this))({ jQueryEvent: e.jQueryEvent });
         }
 
-        this._feedbackDeferred = $.Deferred();
+        this._feedbackDeferred = new Deferred();
         feedbackEvents.lock(this._feedbackDeferred);
         this._toggleActiveState(this._activeHandle(), this.option("activeStateEnabled"));
 

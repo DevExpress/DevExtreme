@@ -1,11 +1,11 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    Class = require("../core/class"),
+var Class = require("../core/class"),
     typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),
     compileGetter = require("../core/utils/data").compileGetter,
     toComparable = require("../core/utils/data").toComparable,
+    Deferred = require("../core/utils/deferred").Deferred,
     errorsModule = require("./errors"),
     dataUtils = require("./utils");
 
@@ -486,7 +486,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
     };
 
     var aggregateCore = function(aggregator) {
-        var d = $.Deferred().fail(handleError),
+        var d = new Deferred().fail(handleError),
             seed,
             step = aggregator.step,
             finalize = aggregator.finalize;
@@ -548,7 +548,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
         },
 
         enumerate: function() {
-            var d = $.Deferred().fail(handleError);
+            var d = new Deferred().fail(handleError);
 
             try {
                 d.resolve(iter.toArray());
@@ -595,7 +595,7 @@ var arrayQueryImpl = function(iter, queryOptions) {
 
         count: function() {
             if(iter.countable()) {
-                var d = $.Deferred().fail(handleError);
+                var d = new Deferred().fail(handleError);
 
                 try {
                     d.resolve(iter.count());

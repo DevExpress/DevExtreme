@@ -24,7 +24,9 @@ var $ = require("../../core/renderer"),
     numberLocalization = require("../../localization/number"),
     dateLocalization = require("../../localization/date"),
     messageLocalization = require("../../localization/message"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     DataSourceModule = require("../../data/data_source/data_source"),
     normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
 
@@ -481,7 +483,7 @@ module.exports = {
              * @type_function_param1 options:object
              * @type_function_param1_field1 data:object
              * @type_function_param1_field2 key:any
-             * @return array|DataSource configuration
+             * @type_function_return array|DataSource configuration
              * @default undefined
              */
             /**
@@ -1378,7 +1380,7 @@ module.exports = {
                     } else if(isDataSourceLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSource)) {
                         updateColumnChanges(that, "columns");
                         fireColumnsChanged(that);
-                        return $.Deferred().reject().promise();
+                        return new Deferred().reject().promise();
                     }
                 },
                 reset: function() {
