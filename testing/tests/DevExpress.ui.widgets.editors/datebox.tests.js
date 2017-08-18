@@ -2950,9 +2950,9 @@ QUnit.test("validator correctly check value with 'time' format", function(assert
     var $dateBox = $("#dateBox").dxDateBox({
             type: "time",
             pickerType: "list",
-            min: new Date("2015-01-01T07:00Z"),
-            max: new Date("2015-01-01T16:00Z"),
-            value: new Date("2015-01-01T12:00Z"),
+            min: new Date(2015, 1, 1, 6, 0),
+            max: new Date(2015, 1, 1, 16, 0),
+            value: new Date(2015, 1, 1, 12, 0),
             opened: true
         }),
         dateBox = $dateBox.dxDateBox("instance"),
