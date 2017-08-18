@@ -16,8 +16,8 @@ dxFunnel.addPlugin(labels.plugin);
 exports.labelEnvironment = $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
-        this.itemGroupNumber = 0;
-        this.labelGroupNumber = 1;
+        this.itemGroupNumber = 1;
+        this.labelGroupNumber = 2;
         this.renderer.bBoxTemplate = { x: 0, y: 0, width: 0, height: 0 };
         this.renderer.bBoxTemplate = { width: 100 };
 
