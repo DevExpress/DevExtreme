@@ -196,6 +196,38 @@ var BaseRenderingStrategy = Class.inherit({
         };
     },
 
+    _getDefaultRatio: function() {
+        return 0;
+    },
+    _getOffsets: function() {
+        return {
+            unlimited: 0,
+            auto: 0
+        };
+    },
+    _calculateGeometryConfig: function(coordinates) {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            offsets = this._getOffsets();
+
+        var appointmentCountPerCell = this._getAppointmentCountPerCell();
+        var ratio = this._getDefaultRatio();
+        var maxHeight = this._defaultHeight || this.getAppointmentMinSize();
+
+        if(!appointmentCountPerCell) {
+            appointmentCountPerCell = coordinates.count;
+            ratio = (maxHeight - offsets.unlimited) / maxHeight;
+        }
+        if(overlappingMode === "auto") {
+            ratio = (maxHeight - offsets.auto) / maxHeight;
+        }
+
+        return {
+            ratio: ratio,
+            appointmentCountPerCell: appointmentCountPerCell,
+            maxHeight: maxHeight
+        };
+    },
+
     _needVerifyItemSize: function() {
         return false;
     },

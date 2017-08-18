@@ -381,7 +381,7 @@ QUnit.test("Height of allDay appointment should be correct, 3 appts in cell", fu
 
     assert.roughEqual($appointments.eq(0).outerHeight(), 25, 1.5, "Appointment has correct height");
     assert.roughEqual($appointments.eq(1).outerHeight(), 25, 1.5, "Appointment has correct height");
-    assert.roughEqual(firstPosition.top, 30, 1.5, "Appointment has correct top");
+    assert.roughEqual(firstPosition.top, 25, 1.5, "Appointment has correct top");
 
     assert.equal($appointments.eq(2).outerWidth(), 15, "Compact appointment has correct width");
     assert.equal($appointments.eq(2).outerHeight(), 15, "Compact appointment has correct height");

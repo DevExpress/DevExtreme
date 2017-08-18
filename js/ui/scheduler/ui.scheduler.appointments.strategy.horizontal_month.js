@@ -90,21 +90,20 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     },
 
     _customizeAppointmentGeometry: function(coordinates) {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+        var config = this._calculateGeometryConfig(coordinates);
 
-        var appointmentCountPerCell = this._getAppointmentCountPerCell();
-        var ratio = MONTH_APPOINTMENT_HEIGHT_RATIO;
-        var maxHeight = this._defaultHeight || this.getAppointmentMinSize();
+        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.maxHeight);
+    },
 
-        if(!appointmentCountPerCell) {
-            appointmentCountPerCell = coordinates.count;
-            ratio = (maxHeight - MONTH_APPOINTMENT_MIN_OFFSET) / maxHeight;
-        }
-        if(overlappingMode === "auto") {
-            ratio = (maxHeight - MONTH_APPOINTMENT_MAX_OFFSET) / maxHeight;
-        }
+    _getDefaultRatio: function() {
+        return MONTH_APPOINTMENT_HEIGHT_RATIO;
+    },
 
-        return this._customizeCoordinates(coordinates, ratio, appointmentCountPerCell, maxHeight);
+    _getOffsets: function() {
+        return {
+            unlimited: MONTH_APPOINTMENT_MIN_OFFSET,
+            auto: MONTH_APPOINTMENT_MAX_OFFSET
+        };
     },
 
     createTaskPositionMap: function(items) {
