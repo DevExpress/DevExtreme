@@ -296,18 +296,18 @@ var TextEditorMask = TextEditorBase.inherit({
         this._caret(caret);
     },
 
-    _isValueNotEmpty: function() {
+    _isValueEmpty: function() {
         var value = this._convertToValue().replace(/\s+$/, "");
 
-        return !!(value.replace(/\s+/g, ""));
+        return !(value.replace(/\s+/g, ""));
     },
 
     _shouldShowMask: function() {
         var showMaskMode = this.option("showMaskMode");
 
         if(showMaskMode === "always") return true;
-        if(showMaskMode === "never") return this._isValueNotEmpty();
-        if(showMaskMode === "onFocus") return this._input().is(":focus") || this._isValueNotEmpty();
+        if(showMaskMode === "never") return !this._isValueEmpty();
+        if(showMaskMode === "onFocus") return this._input().is(":focus") || !this._isValueEmpty();
     },
 
     _showMaskPlaceholder: function() {
@@ -358,7 +358,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _maskBlurHandler: function() {
-        if(this.option("showMaskMode") === "onFocus" && !this._isValueNotEmpty()) {
+        if(this.option("showMaskMode") === "onFocus" && this._isValueEmpty()) {
             this.option("text", "");
             this._renderDisplayText("");
         }
