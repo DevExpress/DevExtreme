@@ -2,7 +2,6 @@
 
 var $ = require("../../../core/renderer"),
     eventsEngine = require("../../../events/core/events_engine"),
-    jQuery = require("jquery"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
     doc = document,
     animation = require("./animation"),
@@ -1064,7 +1063,7 @@ SvgElement.prototype = {
     constructor: SvgElement,
 
     _getJQElement: function() {
-        return (this._$element || (this._$element = jQuery(this.element)));
+        return (this._$element || (this._$element = $(this.element)));
     },
 
     _addFixIRICallback: function() {
