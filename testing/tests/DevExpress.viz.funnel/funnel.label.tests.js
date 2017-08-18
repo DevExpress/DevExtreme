@@ -173,6 +173,24 @@ QUnit.test("Reserve space for labels if position columns", function(assert) {
     assert.deepEqual(items[0].attr.firstCall.args[0].points, [0, 0, 665, 600]);
 });
 
+QUnit.test("Use columns position if position value is not accepted", function(assert) {
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }],
+        valueField: "value",
+        label: {
+            visible: true,
+            horizontalOffset: 15,
+            position: "not accepted value",
+            verticalOffset: 30
+        }
+    });
+
+    var items = this.items();
+    assert.equal(items.length, 1);
+    assert.deepEqual(items[0].attr.firstCall.args[0].points, [0, 0, 665, 600]);
+});
+
 QUnit.test("Do not reserve space for labels if position inside", function(assert) {
     createFunnel({
         algorithm: "stub",
