@@ -1,14 +1,20 @@
 "use strict";
 
 var states = ["normal", "hover", "selection", "selection"],
-    format = require("../../format_helper").format;
+    format = require("../../format_helper").format,
+    isDefined = require("../../core/utils/type").isDefined;
 
-function parseStyles(color, style) {
+function parseStyles(color, style, baseStyle) {
+    var border = style.border,
+        baseBorder = baseStyle.border,
+        borderVisible = isDefined(border.visible) ? border.visible : baseBorder.visible,
+        borderWidth = isDefined(border.width) ? border.width : baseBorder.width;
+
     return {
         fill: color,
         hatching: style.hatching,
-        stroke: style.border.color,
-        "stroke-width": style.border.visible ? style.border.width : 0
+        stroke: border.color || baseBorder.color,
+        "stroke-width": borderVisible ? borderWidth : 0
     };
 }
 
@@ -25,9 +31,9 @@ function Item(widget, options) {
     this.color = options.color;
 
     this.states = {
-        normal: parseStyles(options.color, options.itemOptions),
-        hover: parseStyles(options.color, options.itemOptions.hoverStyle),
-        selection: parseStyles(options.color, options.itemOptions.selectionStyle)
+        normal: parseStyles(options.color, options.itemOptions, options.itemOptions),
+        hover: parseStyles(options.color, options.itemOptions.hoverStyle, options.itemOptions),
+        selection: parseStyles(options.color, options.itemOptions.selectionStyle, options.itemOptions)
     };
 }
 
