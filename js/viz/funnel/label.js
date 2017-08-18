@@ -162,7 +162,7 @@ exports.plugin = {
     extenders: {
         _initCore: function() {
             this._labelsGroup = this._renderer.g().attr({
-                className: "labels"
+                className: this._rootClassPrefix + "-labels"
             }).append(this._renderer.root);
             this._labels = [];
         },
