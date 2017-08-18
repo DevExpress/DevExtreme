@@ -652,7 +652,7 @@ QUnit.test("show mask on focus only", function(assert) {
 
     $input.focus();
     assert.equal(textEditor.option("text"), "__", "editor is not empty");
-    assert.equal($input.val(), "__", "input is empty");
+    assert.equal($input.val(), "__", "input is not empty");
     assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, "caret position is on the start");
 
     $input.blur();

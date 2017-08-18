@@ -182,6 +182,7 @@ var TextEditorMask = TextEditorBase.inherit({
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace("focus", MASK_EVENT_NAMESPACE), this._maskFocusHandler.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("blur", MASK_EVENT_NAMESPACE), this._maskBlurHandler.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("keydown", MASK_EVENT_NAMESPACE), this._maskKeyDownHandler.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("keypress", MASK_EVENT_NAMESPACE), this._maskKeyPressHandler.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("input", MASK_EVENT_NAMESPACE), this._maskInputHandler.bind(this));
@@ -295,19 +296,28 @@ var TextEditorMask = TextEditorBase.inherit({
         this._caret(caret);
     },
 
+    _isValueNotEmpty: function() {
+        var value = this._convertToValue().replace(/\s+$/, "");
+
+        return !!(value.replace(/\s+/g, ""));
+    },
+
     _shouldShowMask: function() {
-        var showMaskMode = this.option("showMaskMode"),
-            value = this._convertToValue().replace(/\s+$/, "");
+        var showMaskMode = this.option("showMaskMode");
 
         if(showMaskMode === "always") return true;
-        if(showMaskMode === "never") return !!(value.replace(/\s+/g, ""));
-        if(showMaskMode === "onFocus") return this._input().is(":focus");
+        if(showMaskMode === "never") return this._isValueNotEmpty();
+        if(showMaskMode === "onFocus") return this._input().is(":focus") || this._isValueNotEmpty();
     },
 
     _showMaskPlaceholder: function() {
         if(this._shouldShowMask()) {
             var text = this._maskRulesChain.text();
             this.option("text", text);
+            this._renderDisplayText(text);
+            if(this.option("showMaskMode") === "onFocus") {
+                caret(this._input(), { start: 0, end: 0 });
+            }
         }
     },
 
@@ -345,6 +355,13 @@ var TextEditorMask = TextEditorBase.inherit({
         this._caretTimeout = setTimeout(function() {
             this._caret({ start: caret, end: caret });
         }.bind(this), 0);
+    },
+
+    _maskBlurHandler: function() {
+        if(this.option("showMaskMode") === "onFocus" && !this._isValueNotEmpty()) {
+            this.option("text", "");
+            this._renderDisplayText("");
+        }
     },
 
     _maskKeyDownHandler: function() {
