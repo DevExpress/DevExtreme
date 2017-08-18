@@ -90,6 +90,8 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     },
 
     _customizeAppointmentGeometry: function(coordinates) {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+
         var appointmentCountPerCell = this._getAppointmentCountPerCell();
         var ratio = MONTH_APPOINTMENT_HEIGHT_RATIO;
         var maxHeight = this._defaultHeight || this.getAppointmentMinSize();
@@ -98,35 +100,11 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             appointmentCountPerCell = coordinates.count;
             ratio = (maxHeight - MONTH_APPOINTMENT_MIN_OFFSET) / maxHeight;
         }
-        if(this.instance.fire("getMaxAppointmentsPerCell") === "auto") {
+        if(overlappingMode === "auto") {
             ratio = (maxHeight - MONTH_APPOINTMENT_MAX_OFFSET) / maxHeight;
         }
 
-        var index = coordinates.index,
-            height = ratio * maxHeight / appointmentCountPerCell,
-            top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
-            width = coordinates.width,
-            left = coordinates.left,
-            compactAppointmentDefaultSize,
-            compactAppointmentDefaultOffset;
-
-        if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
-            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-            height = compactAppointmentDefaultSize;
-            width = compactAppointmentDefaultSize;
-
-            this._markAppointmentAsVirtual(coordinates);
-        }
-
-        return {
-            height: height,
-            width: width,
-            top: top,
-            left: left
-        };
+        return this._customizeCoordinates(coordinates, ratio, appointmentCountPerCell, maxHeight);
     },
 
     createTaskPositionMap: function(items) {

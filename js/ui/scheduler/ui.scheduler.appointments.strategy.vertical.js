@@ -165,31 +165,12 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             ratio = (maxHeight - 20) / maxHeight;
         }
 
-        var index = coordinates.index,
-            height = overlappingMode ? ratio * maxHeight / appointmentCountPerCell : maxHeight / (coordinates.count > 3 ? 3 : coordinates.count),
-            top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
-            width = coordinates.width,
-            left = coordinates.left,
-            compactAppointmentDefaultSize,
-            compactAppointmentDefaultOffset;
-
-        if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
-            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-            height = compactAppointmentDefaultSize;
-            width = compactAppointmentDefaultSize;
-
-            this._markAppointmentAsVirtual(coordinates, true);
+        //NOTE: Reduce cohesion
+        if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
+            coordinates.skipResizing = true;
         }
 
-        return {
-            height: height,
-            width: width,
-            top: top,
-            left: left
-        };
+        return this._customizeCoordinates(coordinates, ratio, appointmentCountPerCell, maxHeight, true);
     },
 
     _defaultAppointmentCountPerCell: function() {

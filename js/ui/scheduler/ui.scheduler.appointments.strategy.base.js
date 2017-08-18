@@ -168,6 +168,34 @@ var BaseRenderingStrategy = Class.inherit({
         return coordinates;
     },
 
+    _customizeCoordinates: function(coordinates, ratio, appointmentCountPerCell, maxHeight, isAllDay) {
+        var index = coordinates.index,
+            height = ratio * maxHeight / appointmentCountPerCell,
+            top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
+            width = coordinates.width,
+            left = coordinates.left,
+            compactAppointmentDefaultSize,
+            compactAppointmentDefaultOffset;
+
+        if(coordinates.isCompact) {
+            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
+            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
+            top = coordinates.top + compactAppointmentDefaultOffset;
+            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
+            height = compactAppointmentDefaultSize;
+            width = compactAppointmentDefaultSize;
+
+            this._markAppointmentAsVirtual(coordinates, isAllDay);
+        }
+
+        return {
+            height: height,
+            width: width,
+            top: top,
+            left: left
+        };
+    },
+
     _needVerifyItemSize: function() {
         return false;
     },
