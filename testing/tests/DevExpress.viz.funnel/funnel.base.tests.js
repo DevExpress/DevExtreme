@@ -891,10 +891,12 @@ QUnit.test("Creation", function(assert) {
         }),
         legendCtorArgs = legendModule.Legend.lastCall.args[0],
         item = funnel.getAllItems()[0],
-        formatObject = legendCtorArgs.getFormatObject(item);
+        formatObject = legendCtorArgs.getFormatObject(item),
+        legendGroup = this.renderer.g.getCall(0).returnValue;
 
+    assert.equal(legendGroup.attr.lastCall.args[0].className, "dxf-legend");
     assert.equal(legendCtorArgs.renderer, this.renderer);
-    assert.equal(legendCtorArgs.group, this.renderer.root);
+    assert.equal(legendCtorArgs.group, legendGroup);
     assert.equal(legendCtorArgs.textField, "text");
     assert.equal(formatObject.item.data.argument, "One");
     assert.equal(formatObject.item.data.value, 5);

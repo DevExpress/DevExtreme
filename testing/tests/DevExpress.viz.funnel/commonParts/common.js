@@ -41,7 +41,7 @@ var environment = {
         stubAlgorithm.normalizeValues.returns([]);
         stubAlgorithm.getFigures.returns([]);
 
-        this.itemGroupNumber = 0;
+        this.itemGroupNumber = 1;
 
         sinon.stub(rendererModule, "Renderer", function() {
             return that.renderer;
