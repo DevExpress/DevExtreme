@@ -215,7 +215,7 @@ var BaseRenderingStrategy = Class.inherit({
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
             offsets = this._getOffsets();
 
-        var appointmentCountPerCell = this._getAppointmentCount();
+        var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
         var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
         var maxHeight = this._getMaxHeight();
 

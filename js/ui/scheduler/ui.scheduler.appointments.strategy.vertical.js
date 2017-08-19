@@ -149,31 +149,18 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
-            offsets = this._getOffsets();
+        var config = this._calculateGeometryConfig(coordinates);
 
-        var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
-        var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
-        var maxHeight = this._allDayHeight || this.getAppointmentMinSize();
+        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.maxHeight, true);
+    },
 
-        //unlimited
-        if(!appointmentCountPerCell) {
-            appointmentCountPerCell = coordinates.count;
-            ratio = (maxHeight - offsets.unlimited) / maxHeight;
-        }
-        //auto
-        if(overlappingMode === "auto") {
-            ratio = (maxHeight - offsets.auto) / maxHeight;
-        }
-
-        //NOTE: Reduce cohesion
+    _calculateGeometryConfig: function(coordinates) {
         if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
             coordinates.skipResizing = true;
         }
 
-        return this._customizeCoordinates(coordinates, ratio, appointmentCountPerCell, maxHeight, true);
+        return this.callBase(coordinates);
     },
-
     _getAppointmentCount: function(overlappingMode, coordinates) {
         return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountByOption();
     },
