@@ -149,20 +149,21 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            offsets = this._getOffsets();
 
-        var appointmentCountPerCell = overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountPerCell();
-        var ratio = (this.instance.fire("getMaxAppointmentsPerCell") && appointmentCountPerCell !== 1) || coordinates.count >= 3 ? 0.65 : 1;
+        var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
+        var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
         var maxHeight = this._allDayHeight || this.getAppointmentMinSize();
 
         //unlimited
         if(!appointmentCountPerCell) {
             appointmentCountPerCell = coordinates.count;
-            ratio = (maxHeight - 5) / maxHeight;
+            ratio = (maxHeight - offsets.unlimited) / maxHeight;
         }
         //auto
         if(overlappingMode === "auto") {
-            ratio = (maxHeight - 20) / maxHeight;
+            ratio = (maxHeight - offsets.auto) / maxHeight;
         }
 
         //NOTE: Reduce cohesion
@@ -171,6 +172,25 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         return this._customizeCoordinates(coordinates, ratio, appointmentCountPerCell, maxHeight, true);
+    },
+
+    _getAppointmentCount: function(overlappingMode, coordinates) {
+        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountByOption();
+    },
+
+    _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
+        return (this.instance.fire("getMaxAppointmentsPerCell") && appointmentCountPerCell !== 1) || coordinates.count >= 3 ? 0.65 : 1;
+    },
+
+    _getOffsets: function() {
+        return {
+            unlimited: 5,
+            auto: 20
+        };
+    },
+
+    _getMaxHeight: function() {
+        return this._allDayHeight || this.getAppointmentMinSize();
     },
 
     _defaultAppointmentCountPerCell: function() {

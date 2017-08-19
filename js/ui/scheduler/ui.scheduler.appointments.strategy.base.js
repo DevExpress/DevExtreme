@@ -205,13 +205,19 @@ var BaseRenderingStrategy = Class.inherit({
             auto: 0
         };
     },
+
+    _getMaxHeight: function() {
+        return this._defaultHeight || this.getAppointmentMinSize();
+    },
+
+
     _calculateGeometryConfig: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
             offsets = this._getOffsets();
 
-        var appointmentCountPerCell = this._getAppointmentCountPerCell();
-        var ratio = this._getDefaultRatio();
-        var maxHeight = this._defaultHeight || this.getAppointmentMinSize();
+        var appointmentCountPerCell = this._getAppointmentCount();
+        var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
+        var maxHeight = this._getMaxHeight();
 
         if(!appointmentCountPerCell) {
             appointmentCountPerCell = coordinates.count;
@@ -226,6 +232,10 @@ var BaseRenderingStrategy = Class.inherit({
             appointmentCountPerCell: appointmentCountPerCell,
             maxHeight: maxHeight
         };
+    },
+
+    _getAppointmentCount: function() {
+        return this._getAppointmentCountByOption();
     },
 
     _needVerifyItemSize: function() {
@@ -456,7 +466,7 @@ var BaseRenderingStrategy = Class.inherit({
     _checkLongCompactAppointment: noop,
 
     _splitLongCompactAppointment: function(item, result) {
-        var appointmentCountPerCell = this._getAppointmentCountPerCell();
+        var appointmentCountPerCell = this._getAppointmentCountByOption();
         var compactCount = 0;
 
         if(appointmentCountPerCell && item.index > appointmentCountPerCell - 1) {
@@ -475,7 +485,7 @@ var BaseRenderingStrategy = Class.inherit({
     _defaultAppointmentCountPerCell: function() {
         return 2;
     },
-    _getAppointmentCountPerCell: function() {
+    _getAppointmentCountByOption: function() {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
             appointmentCountPerCell;
 
@@ -573,7 +583,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _markAppointmentAsVirtual: function(coordinates, isAllDay) {
-        var countFullWidthAppointmentInCell = this._getAppointmentCountPerCell();
+        var countFullWidthAppointmentInCell = this._getAppointmentCountByOption();
         if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
             coordinates.virtual = {
                 top: coordinates.top,
