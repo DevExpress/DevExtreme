@@ -72,22 +72,6 @@ QUnit.module("Render content delimiters", {
     }
 });
 
-QUnit.test("Don't render content delimiter", function(assert) {
-    var options = { _hideDelimiter: true, showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
-        menu = createMenuInWindow(options),
-        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
-        submenu,
-        delimiter;
-
-    assert.ok(menu);
-    assert.ok(!rootMenuItem.children("." + DX_CONTEXT_MENU_CLASS).length);
-    $(rootMenuItem).trigger("dxclick");
-    submenu = getSubMenuInstance(rootMenuItem);
-    assert.ok(submenu._overlay.option("visible"));
-    delimiter = submenu.$contentDelimiter;
-    assert.ok(!delimiter);
-});
-
 QUnit.test("Render horizontal content delimiter", function(assert) {
     var options = { showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
         menu = createMenuInWindow(options),
@@ -722,6 +706,67 @@ QUnit.test("Don't hide submenu when cancel is true", function(assert) {
     $(document).trigger("dxpointerdown"); // it needs to trigger closeOnOutsideClick
     assert.ok(submenu._overlay.option("visible"));
     assert.equal(i, 1, "event triggered");
+});
+
+QUnit.test("Fire submenu events for all levels", function(assert) {
+    var counter = {
+            showing: 0,
+            shown: 0,
+            hiding: 0,
+            hidden: 0
+        },
+        options = {
+            showFirstSubmenuMode: "onClick",
+            showSubmenuMode: "onClick",
+            items: [{
+                text: "rootItem",
+                items: [{
+                    text: "item1",
+                    items: [{ text: "item1-1" }]
+                }, {
+                    text: "item2",
+                    items: [{ text: "item2-1" }],
+                }]
+            }],
+            onSubmenuShowing: function(args) {
+                counter.showing++;
+            },
+            onSubmenuShown: function(args) {
+                counter.shown++;
+            },
+            onSubmenuHiding: function(args) {
+                counter.hiding++;
+            },
+            onSubmenuHidden: function(args) {
+                counter.hidden++;
+            }
+        },
+        menu = createMenu(options),
+        $rootItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
+
+    //show submenu
+    $($rootItem).trigger("dxclick");
+    assert.equal(counter.showing, 1);
+    assert.equal(counter.shown, 1);
+    assert.equal(counter.hiding, 0);
+    assert.equal(counter.hidden, 0);
+
+    var submenu = getSubMenuInstance($rootItem),
+        $submenuItems = submenu.itemElements();
+
+    //show second level first time
+    $($submenuItems.eq(0)).trigger("dxclick");
+    assert.equal(counter.showing, 2);
+    assert.equal(counter.shown, 2);
+    assert.equal(counter.hiding, 0);
+    assert.equal(counter.hidden, 0);
+
+    //show second level second time
+    $($submenuItems.eq(1)).trigger("dxclick");
+    assert.equal(counter.showing, 3);
+    assert.equal(counter.shown, 3);
+    assert.equal(counter.hiding, 1);
+    assert.equal(counter.hidden, 1);
 });
 
 QUnit.test("Do not show contextmenu on hover with pressed mouse button", function(assert) {

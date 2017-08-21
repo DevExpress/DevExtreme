@@ -355,13 +355,14 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _expandSubmenuHandler: function($items, location) {
             var $curItem = this._getActiveItem(true),
-                node = this._dataAdapter.getNodeByItem(this._getItemData($curItem)),
+                itemData = this._getItemData($curItem),
+                node = this._dataAdapter.getNodeByItem(itemData),
                 isItemHasSubmenu = this._hasSubmenu(node),
                 $submenu = $curItem.children("." + DX_SUBMENU_CLASS);
 
             if(isItemHasSubmenu && !$curItem.hasClass(DX_STATE_DISABLED_CLASS)) {
                 if(!$submenu.length || $submenu.css("visibility") === "hidden") {
-                    this._showSubmenu($curItem);
+                    this._showSubmenu($curItem, itemData);
                 }
 
                 return this._nextItem(this._getItemsByLocation(location));
@@ -645,8 +646,8 @@ var ContextMenu = MenuBase.inherit((function() {
             }
         },
 
-        _showSubmenu: function($item) {
-            var node = this._dataAdapter.getNodeByItem(this._getItemData($item));
+        _showSubmenu: function($item, itemData) {
+            var node = this._dataAdapter.getNodeByItem(itemData || this._getItemData($item));
 
             this._hideSubmenusOnSameLevel($item);
 
@@ -800,7 +801,7 @@ var ContextMenu = MenuBase.inherit((function() {
                         this._hideAllShownSubmenus();
                     }
                 }
-                this._showSubmenu($itemElement);
+                this._showSubmenu($itemElement, itemData);
             }
 
         },
