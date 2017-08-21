@@ -672,7 +672,6 @@ var ContextMenu = MenuBase.inherit((function() {
                     .parent("." + DX_MENU_ITEM_WRAPPER_CLASS).siblings()
                     .find("." + DX_MENU_ITEM_EXPANDED_CLASS);
 
-
             if($expandedItems.length) {
                 $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
                 this._hideSubmenu($expandedItems.find("." + DX_SUBMENU_CLASS));

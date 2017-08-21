@@ -79,6 +79,18 @@ var Submenu = ContextMenu.inherit({
         });
     },
 
+    _hideAllShownSubmenus: function($rootItem) {
+        this._actions.onHiding({
+            rootItem: $rootItem,
+            submenu: this
+        });
+        this.callBase($rootItem);
+        this._actions.onHidden({
+            rootItem: $rootItem,
+            submenu: this
+        });
+    },
+
     _hideSubmenu: function($rootItem) {
         this._actions.onHiding({
             rootItem: $rootItem,
