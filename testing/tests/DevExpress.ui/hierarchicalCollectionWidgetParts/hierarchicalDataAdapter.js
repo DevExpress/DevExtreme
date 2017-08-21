@@ -12,6 +12,7 @@ var moduleConfig = {
         this.treeDataWithoutKeys = $.extend(true, [], assets.treeDataWithoutKeys);
         this.treeDataWithKeys = $.extend(true, [], assets.treeDataWithKeys);
         this.plainData = $.extend(true, [], assets.simplePlainData);
+        this.randomData = $.extend(true, [], assets.simplePlainData).reverse();
         this.treeNodes = $.extend(true, [], assets.treeNodes);
         this.treeNodesWithoutKeys = $.extend(true, [], assets.treeNodesWithoutKeys);
 
@@ -633,6 +634,23 @@ QUnit.test("public node should depend on original node", function(assert) {
 QUnit.module("selection", moduleConfig);
 
 QUnit.test("set recursive selection", function(assert) {
+    this.randomData[1].selected = true;
+    this.randomData[2].selected = true;
+    this.randomData[3].selected = true;
+
+    var dataAdapter = initDataAdapter({
+            items: this.randomData,
+            recursiveSelection: true,
+            dataType: "plain"
+        }),
+        nodes = dataAdapter.getTreeNodes();
+
+    assert.strictEqual(nodes[1].selected, undefined, "item 1 is in undetermined state");
+    assert.ok(nodes[1].items[1].selected, "item 11 was selected");
+    assert.ok(nodes[0].items[0].selected, "item 21 was selected");
+});
+
+QUnit.test("set recursive selection with random data", function(assert) {
     this.plainData[3].selected = true;
     this.plainData[4].selected = true;
     this.plainData[5].selected = true;
