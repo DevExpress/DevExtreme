@@ -1556,7 +1556,7 @@ declare module DevExpress.ui {
         /** @docid dxDataGridOptions_sortByGroupSummaryInfo */
         sortByGroupSummaryInfo?: Array<{
             /** @docid dxDataGridOptions_sortByGroupSummaryInfo_summaryItem */
-            summaryItem?: string;
+            summaryItem?: any;
 
             /** @docid dxDataGridOptions_sortByGroupSummaryInfo_groupColumn */
             groupColumn?: string;
