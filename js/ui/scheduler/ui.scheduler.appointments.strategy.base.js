@@ -168,80 +168,6 @@ var BaseRenderingStrategy = Class.inherit({
         return coordinates;
     },
 
-    _customizeCoordinates: function(coordinates, ratio, appointmentCountPerCell, maxHeight, isAllDay) {
-        var index = coordinates.index,
-            height = ratio * maxHeight / appointmentCountPerCell,
-            top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
-            width = coordinates.width,
-            left = coordinates.left,
-            compactAppointmentDefaultSize,
-            compactAppointmentDefaultOffset;
-
-        if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
-            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-            height = compactAppointmentDefaultSize;
-            width = compactAppointmentDefaultSize;
-
-            this._markAppointmentAsVirtual(coordinates, isAllDay);
-        }
-
-        return {
-            height: height,
-            width: width,
-            top: top,
-            left: left
-        };
-    },
-
-    _getDefaultRatio: function() {
-        return 0;
-    },
-    _getOffsets: function() {
-        return {
-            unlimited: 0,
-            auto: 0
-        };
-    },
-
-    _getMaxHeight: function() {
-        return this._defaultHeight || this.getAppointmentMinSize();
-    },
-
-
-    _calculateGeometryConfig: function(coordinates) {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
-            offsets = this._getOffsets();
-
-        var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
-        var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
-        var maxHeight = this._getMaxHeight();
-
-        if(!appointmentCountPerCell) {
-            appointmentCountPerCell = coordinates.count;
-            ratio = (maxHeight - offsets.unlimited) / maxHeight;
-        }
-        if(overlappingMode === "auto") {
-            ratio = (maxHeight - offsets.auto) / maxHeight;
-        }
-
-        return {
-            ratio: ratio,
-            appointmentCountPerCell: appointmentCountPerCell,
-            maxHeight: maxHeight
-        };
-    },
-
-    _getAppointmentCount: function() {
-        return this._getAppointmentCountByOption();
-    },
-
-    _needVerifyItemSize: function() {
-        return false;
-    },
-
     _isRtl: function() {
         return this.instance.option("rtlEnabled");
     },
@@ -482,34 +408,7 @@ var BaseRenderingStrategy = Class.inherit({
         }
         return result;
     },
-    _defaultAppointmentCountPerCell: function() {
-        return 2;
-    },
-    _getAppointmentCountByOption: function() {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
-            appointmentCountPerCell;
 
-        if(!overlappingMode) {
-            appointmentCountPerCell = this._defaultAppointmentCountPerCell();
-        }
-        if(isNumeric(overlappingMode)) {
-            appointmentCountPerCell = overlappingMode;
-        }
-        if(overlappingMode === "auto") {
-            appointmentCountPerCell = this._calculateDynamicAppointmentCountPerCell();
-        }
-        if(overlappingMode === "unlimited") {
-            appointmentCountPerCell = undefined;
-        }
-
-        return appointmentCountPerCell;
-    },
-
-    _calculateDynamicAppointmentCountPerCell: function() {
-        var cellHeight = this.instance.fire("getCellHeight");
-
-        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_HEIGHT) / APPOINTMENT_DEFAULT_HEIGHT) || 2;
-    },
     _startDate: function(appointment, skipNormalize, position) {
         var startDate = position && position.startDate,
             viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
@@ -611,7 +510,96 @@ var BaseRenderingStrategy = Class.inherit({
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     },
 
-    getAppointmentDataCalculator: noop
+    getAppointmentDataCalculator: noop,
+
+    _customizeCoordinates: function(coordinates, ratio, appointmentCountPerCell, maxHeight, isAllDay) {
+        var index = coordinates.index,
+            height = ratio * maxHeight / appointmentCountPerCell,
+            top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
+            width = coordinates.width,
+            left = coordinates.left,
+            compactAppointmentDefaultSize,
+            compactAppointmentDefaultOffset;
+
+        if(coordinates.isCompact) {
+            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
+            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
+            top = coordinates.top + compactAppointmentDefaultOffset;
+            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
+            height = compactAppointmentDefaultSize;
+            width = compactAppointmentDefaultSize;
+
+            this._markAppointmentAsVirtual(coordinates, isAllDay);
+        }
+
+        return {
+            height: height,
+            width: width,
+            top: top,
+            left: left
+        };
+    },
+
+    _calculateGeometryConfig: function(coordinates) {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            offsets = this._getOffsets();
+
+        var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
+        var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
+        var maxHeight = this._getMaxHeight();
+
+        if(!appointmentCountPerCell) {
+            appointmentCountPerCell = coordinates.count;
+            ratio = (maxHeight - offsets.unlimited) / maxHeight;
+        }
+        if(overlappingMode === "auto") {
+            ratio = (maxHeight - offsets.auto) / maxHeight;
+        }
+
+        return {
+            ratio: ratio,
+            appointmentCountPerCell: appointmentCountPerCell,
+            maxHeight: maxHeight
+        };
+    },
+
+    _getAppointmentCount: noop,
+
+    _getDefaultRatio: noop,
+
+    _getOffsets: noop,
+
+    _getMaxHeight: noop,
+
+    _needVerifyItemSize: function() {
+        return false;
+    },
+
+    _getAppointmentCountByOption: function() {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            appointmentCountPerCell;
+
+        if(!overlappingMode) {
+            appointmentCountPerCell = 2;
+        }
+        if(isNumeric(overlappingMode)) {
+            appointmentCountPerCell = overlappingMode;
+        }
+        if(overlappingMode === "auto") {
+            appointmentCountPerCell = this._calculateDynamicAppointmentCountPerCell();
+        }
+        if(overlappingMode === "unlimited") {
+            appointmentCountPerCell = undefined;
+        }
+
+        return appointmentCountPerCell;
+    },
+
+    _getDynamicAppointmentCountPerCell: function() {
+        var cellHeight = this.instance.fire("getCellHeight");
+
+        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_HEIGHT) / APPOINTMENT_DEFAULT_HEIGHT) || 1;
+    }
 });
 
 module.exports = BaseRenderingStrategy;

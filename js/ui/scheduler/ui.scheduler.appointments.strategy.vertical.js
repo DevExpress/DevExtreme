@@ -144,45 +144,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return result;
     },
 
-    _calculateDynamicAppointmentCountPerCell: function() {
-        return 3;
-    },
-
-    _getAllDayAppointmentGeometry: function(coordinates) {
-        var config = this._calculateGeometryConfig(coordinates);
-
-        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.maxHeight, true);
-    },
-
-    _calculateGeometryConfig: function(coordinates) {
-        if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
-            coordinates.skipResizing = true;
-        }
-
-        return this.callBase(coordinates);
-    },
-    _getAppointmentCount: function(overlappingMode, coordinates) {
-        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountByOption();
-    },
-
-    _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
-        return (this.instance.fire("getMaxAppointmentsPerCell") && appointmentCountPerCell !== 1) || coordinates.count >= 3 ? 0.65 : 1;
-    },
-
-    _getOffsets: function() {
-        return {
-            unlimited: 5,
-            auto: 20
-        };
-    },
-
-    _getMaxHeight: function() {
-        return this._allDayHeight || this.getAppointmentMinSize();
-    },
-
-    _defaultAppointmentCountPerCell: function() {
-        return 2;
-    },
     _getSimpleAppointmentGeometry: function(coordinates) {
         var width = this._getAppointmentMaxWidth() / coordinates.count,
             height = coordinates.height,
@@ -248,9 +209,44 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             result = allDayCondition ? allDayCondition : this._rowCondition(a, b);
 
         return this._fixUnstableSorting(result, a, b);
+    },
+
+    _getDynamicAppointmentCountPerCell: function() {
+        return 3;
+    },
+
+    _getAllDayAppointmentGeometry: function(coordinates) {
+        var config = this._calculateGeometryConfig(coordinates);
+
+        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.maxHeight, true);
+    },
+
+    _calculateGeometryConfig: function(coordinates) {
+        if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
+            coordinates.skipResizing = true;
+        }
+
+        return this.callBase(coordinates);
+    },
+
+    _getAppointmentCount: function(overlappingMode, coordinates) {
+        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountByOption();
+    },
+
+    _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
+        return (this.instance.fire("getMaxAppointmentsPerCell") && appointmentCountPerCell !== 1) || coordinates.count >= 3 ? 0.65 : 1;
+    },
+
+    _getOffsets: function() {
+        return {
+            unlimited: 5,
+            auto: 20
+        };
+    },
+
+    _getMaxHeight: function() {
+        return this._allDayHeight || this.getAppointmentMinSize();
     }
-
-
 });
 
 module.exports = VerticalRenderingStrategy;

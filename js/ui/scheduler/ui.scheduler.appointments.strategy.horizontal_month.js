@@ -89,10 +89,26 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return result;
     },
 
+    _getMaxHeight: function() {
+        return this._defaultHeight || this.getAppointmentMinSize();
+    },
+
+    createTaskPositionMap: function(items) {
+        return this.callBase(items, true);
+    },
+
+    _getSortedPositions: function(map) {
+        return this.callBase(map, true);
+    },
+
     _customizeAppointmentGeometry: function(coordinates) {
         var config = this._calculateGeometryConfig(coordinates);
 
         return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.maxHeight);
+    },
+
+    _getAppointmentCount: function() {
+        return this._getAppointmentCountByOption();
     },
 
     _getDefaultRatio: function() {
@@ -105,14 +121,6 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             auto: MONTH_APPOINTMENT_MAX_OFFSET
         };
     },
-
-    createTaskPositionMap: function(items) {
-        return this.callBase(items, true);
-    },
-
-    _getSortedPositions: function(map) {
-        return this.callBase(map, true);
-    }
 });
 
 module.exports = HorizontalMonthRenderingStrategy;
