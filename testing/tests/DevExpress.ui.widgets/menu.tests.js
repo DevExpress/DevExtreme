@@ -709,12 +709,10 @@ QUnit.test("Don't hide submenu when cancel is true", function(assert) {
 });
 
 QUnit.test("Fire submenu events for all levels", function(assert) {
-    var counter = {
-            showing: 0,
-            shown: 0,
-            hiding: 0,
-            hidden: 0
-        },
+    var handlerShowing = sinon.spy(),
+        handlerShown = sinon.spy(),
+        handlerHiding = sinon.spy(),
+        handlerHidden = sinon.spy(),
         options = {
             showFirstSubmenuMode: "onClick",
             showSubmenuMode: "onClick",
@@ -728,45 +726,37 @@ QUnit.test("Fire submenu events for all levels", function(assert) {
                     items: [{ text: "item2-1" }],
                 }]
             }],
-            onSubmenuShowing: function(args) {
-                counter.showing++;
-            },
-            onSubmenuShown: function(args) {
-                counter.shown++;
-            },
-            onSubmenuHiding: function(args) {
-                counter.hiding++;
-            },
-            onSubmenuHidden: function(args) {
-                counter.hidden++;
-            }
+            onSubmenuShowing: handlerShowing,
+            onSubmenuShown: handlerShown,
+            onSubmenuHiding: handlerHiding,
+            onSubmenuHidden: handlerHidden
         },
         menu = createMenu(options),
         $rootItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
 
     //show submenu
     $($rootItem).trigger("dxclick");
-    assert.equal(counter.showing, 1);
-    assert.equal(counter.shown, 1);
-    assert.equal(counter.hiding, 0);
-    assert.equal(counter.hidden, 0);
+    assert.equal(handlerShowing.callCount, 1);
+    assert.equal(handlerShown.callCount, 1);
+    assert.equal(handlerHiding.callCount, 0);
+    assert.equal(handlerHidden.callCount, 0);
 
     var submenu = getSubMenuInstance($rootItem),
         $submenuItems = submenu.itemElements();
 
     //show second level first time
     $($submenuItems.eq(0)).trigger("dxclick");
-    assert.equal(counter.showing, 2);
-    assert.equal(counter.shown, 2);
-    assert.equal(counter.hiding, 0);
-    assert.equal(counter.hidden, 0);
+    assert.equal(handlerShowing.callCount, 2);
+    assert.equal(handlerShown.callCount, 2);
+    assert.equal(handlerHiding.callCount, 0);
+    assert.equal(handlerHidden.callCount, 0);
 
     //show second level second time
     $($submenuItems.eq(1)).trigger("dxclick");
-    assert.equal(counter.showing, 3);
-    assert.equal(counter.shown, 3);
-    assert.equal(counter.hiding, 1);
-    assert.equal(counter.hidden, 1);
+    assert.equal(handlerShowing.callCount, 3);
+    assert.equal(handlerShown.callCount, 3);
+    assert.equal(handlerHiding.callCount, 1);
+    assert.equal(handlerHidden.callCount, 1);
 });
 
 QUnit.test("Do not show contextmenu on hover with pressed mouse button", function(assert) {
