@@ -212,6 +212,34 @@ QUnit.test("palette", function(assert) {
     paletteModule.Palette.restore();
 });
 
+QUnit.test("Funnel fires drawn event", function(assert) {
+    var drawn = sinon.spy();
+    createFunnel({
+        dataSource: [{ value: 1 }],
+        onDrawn: drawn
+    });
+
+    assert.equal(drawn.callCount, 1);
+});
+
+QUnit.test("Funnel fires once drawn event if asynchronus dataSource ", function(assert) {
+    var drawn = sinon.spy(),
+        d = $.Deferred();
+
+    createFunnel({
+        dataSource: {
+            load: function() {
+                return d;
+            }
+        },
+        onDrawn: drawn
+    });
+
+    d.resolve([{ value: 1 }]);
+
+    assert.equal(drawn.callCount, 2);
+});
+
 QUnit.module("Update options", environment);
 
 QUnit.test("Update styles of items", function(assert) {
@@ -473,6 +501,20 @@ QUnit.test("Hover style", function(assert) {
         step: 6,
         width: 2
     });
+});
+
+QUnit.test("Funnel does not fire drawn event on hover", function(assert) {
+    var drawn = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10, argument: "One" }],
+            onDrawn: drawn
+        });
+
+    drawn.reset();
+
+    funnel.getAllItems()[0].hover(true);
+
+    assert.equal(drawn.callCount, 0);
 });
 
 QUnit.test("Clear hover of item", function(assert) {

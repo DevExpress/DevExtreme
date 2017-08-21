@@ -96,13 +96,18 @@ var dxFunnel = require("../core/base_widget").inherit({
         this._requestChange(["TILES"]);
     },
 
-    _customChangesOrder: ["NODES_CREATE", "LAYOUT", "TILING", "TILES"],
+    _customChangesOrder: ["NODES_CREATE", "LAYOUT", "TILING", "TILES", "DRAWN"],
 
     _dataSourceChangedHandler: function() {
         this._requestChange(["NODES_CREATE"]);
     },
 
+    _change_DRAWN: function() {
+        this._drawn();
+    },
+
     _change_DATA_SOURCE: function() {
+        this._change(["DRAWN"]);
         this._updateDataSource();
     },
 
@@ -219,7 +224,7 @@ var dxFunnel = require("../core/base_widget").inherit({
         }
 
         that._renderer.initHatching();
-        that._change(["TILING"]);
+        that._change(["TILING", "DRAWN"]);
     },
 
     _showTooltip: noop,
