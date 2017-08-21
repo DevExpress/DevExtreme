@@ -8,6 +8,16 @@ var isStatusSuccess = function(status) {
     return 200 <= status && status < 300;
 };
 
+var paramsConvert = function(params) {
+    var result = [];
+
+    for(var name in params) {
+        result.push(name + "=" + params[name]);
+    }
+
+    return result.join("&");
+};
+
 var sendRequest = function(options) {
     if(!options.responseType && !options.upload) {
         return jQuery.ajax(options);
@@ -16,6 +26,8 @@ var sendRequest = function(options) {
     var d = new Deferred();
     var result = d.promise();
     var contentType = options.contentType || "application/x-www-form-urlencoded; charset=UTF-8";
+    var params = options.data;
+    var method = options.method || "GET";
 
     var dataType = options.dataType || "*";
     var accepts = {
@@ -31,8 +43,17 @@ var sendRequest = function(options) {
         accepts[dataType] + (dataType !== "*" ? ", */*; q=0.01" : "") :
         accepts["*"];
 
+    if(params && typeof params !== "string") {
+        params = paramsConvert(params);
+    }
+
+    if(method.toUpperCase() === "GET" && params) {
+        options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + params;
+        params = null;
+    }
+
     xhr.open(
-        options.method || "GET",
+        method,
         options.url,
         options.async,
         options.username,
@@ -80,7 +101,7 @@ var sendRequest = function(options) {
         options.beforeSend(xhr);
     }
 
-    xhr.send(options.data);
+    xhr.send(params);
 
     result.abort = function() {
         xhr.abort();
