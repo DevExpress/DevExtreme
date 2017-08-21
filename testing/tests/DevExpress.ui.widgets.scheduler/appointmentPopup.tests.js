@@ -586,6 +586,35 @@ QUnit.test("Validate works always before done click", function(assert) {
     assert.ok(validation.calledOnce);
 });
 
+QUnit.test("Done button shouldn't be disabled if validation fail", function(assert) {
+    var data = new DataSource({
+        store: this.tasks
+    });
+
+    this.instance.option({ dataSource: data });
+    this.instance.option({
+        onAppointmentFormCreated: function(data) {
+            var form = data.form;
+
+            form.option("items", [{
+                name: "description",
+                dataField: "description",
+                editorType: "dxTextArea",
+                validationRules: [{
+                    type: "required",
+                    message: "Login is required"
+                }]
+            }]);
+        }
+    });
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption" });
+
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+
+    var doneButton = $(".dx-scheduler-appointment-popup .dx-popup-done.dx-button").dxButton("instance");
+    assert.equal(doneButton.option("disabled"), false, "done button is not disabled");
+});
+
 QUnit.test("Done button shouldn't be disabled at second appointment form opening", function(assert) {
     var task = { startDate: new Date(2017, 1, 1), endDate: new Date(2017, 1, 1, 0, 10), text: "caption" };
     this.instance.option({
