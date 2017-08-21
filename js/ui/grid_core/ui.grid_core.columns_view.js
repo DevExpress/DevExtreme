@@ -261,7 +261,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             templateID,
             renderingTemplate;
 
-        if(template && template.render && !template.jquery) {
+        if(template && template.render && !typeUtils.isRenderer(template)) {
             renderingTemplate = {
                 allowRenderToDetachedContainer: template.allowRenderToDetachedContainer,
                 render: function(options) {
@@ -272,7 +272,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             renderingTemplate = {
                 render: function(options) {
                     var renderedTemplate = template(options.container, options.model);
-                    if(renderedTemplate && (renderedTemplate.jquery || renderedTemplate.nodeType)) {
+                    if(renderedTemplate && (renderedTemplate.nodeType || typeUtils.isRenderer(renderedTemplate))) {
                         options.container.append(renderedTemplate);
                     }
                 }

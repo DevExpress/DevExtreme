@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("jquery"),
-    typeUtils = require("core/utils/type");
+    typeUtils = require("core/utils/type"),
+    renderer = require("core/renderer");
 
 QUnit.module('Type checking');
 
@@ -102,4 +103,13 @@ QUnit.test('isPlainObject', function(assert) {
     assert.strictEqual(typeUtils.isPlainObject('s'), false, 'string is not plain object');
     assert.strictEqual(typeUtils.isPlainObject(new Date()), false, 'date is not plain object');
     assert.strictEqual(typeUtils.isPlainObject($.Event), false, '$.Event is not plain object');
+});
+
+QUnit.test('isRenderer', function(assert) {
+    assert.strictEqual(typeUtils.isRenderer($("body")), true, "jQuery is renderer");
+    assert.strictEqual(typeUtils.isRenderer(renderer("body")), true, "renderer is renderer");
+    assert.strictEqual(typeUtils.isRenderer(document.getElementsByTagName("body")), false, "HTMLCollection is not renderer");
+    assert.strictEqual(typeUtils.isRenderer(document.getElementsByTagName("body")[0]), false, "HTMLElement is not renderer");
+    assert.strictEqual(typeUtils.isRenderer(document), false, "document is not renderer");
+    assert.strictEqual(typeUtils.isRenderer({}), false, "Object is not renderer");
 });

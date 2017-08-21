@@ -474,7 +474,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             contextMenuAction = that._createAction(contextMenuAction);
 
-            if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
+            if(typeUtils.isRenderer(target) || target.nodeType || typeUtils.isWindow(target)) {
                 that._showContextMenuEventHandler = undefined;
                 eventsEngine.on(target, eventName, handler);
             } else {
