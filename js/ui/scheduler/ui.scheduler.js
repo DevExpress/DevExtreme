@@ -1962,21 +1962,20 @@ var Scheduler = Widget.inherit({
     _doneButtonClickHandler: function(args) {
         args.cancel = true;
 
-        var toolbarItems = args.component.option("toolbarItems");
-        toolbarItems[0].options = { disabled: true };
-        args.component.option("toolbarItems", toolbarItems);
+        this._saveChanges(true);
 
-        this._saveChanges();
         var startDate = this.fire("getField", "startDate", this._appointmentForm.option("formData"));
         this._workSpace.updateScrollPosition(startDate);
     },
 
-    _saveChanges: function() {
+    _saveChanges: function(disableButton) {
         var validation = this._appointmentForm.validate();
 
         if(validation && !validation.isValid) {
             return false;
         }
+
+        disableButton && this._disableDoneButton();
 
         var formData = this._appointmentForm.option("formData"),
             oldData = this._editAppointmentData,
@@ -2019,6 +2018,12 @@ var Scheduler = Widget.inherit({
         }
 
         return true;
+    },
+
+    _disableDoneButton: function() {
+        var toolbarItems = this._popup.option("toolbarItems");
+        toolbarItems[0].options = { disabled: true };
+        this._popup.option("toolbarItems", toolbarItems);
     },
 
     _checkRecurringAppointment: function(targetAppointment, singleAppointment, exceptionDate, callback, isDeleted, isPopupEditing) {
