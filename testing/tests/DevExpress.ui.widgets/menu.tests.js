@@ -709,10 +709,10 @@ QUnit.test("Don't hide submenu when cancel is true", function(assert) {
 });
 
 QUnit.test("Fire submenu events for all levels", function(assert) {
-    var handlerShowing = sinon.spy(),
-        handlerShown = sinon.spy(),
-        handlerHiding = sinon.spy(),
-        handlerHidden = sinon.spy(),
+    var handlerShowing = sinon.stub(),
+        handlerShown = sinon.stub(),
+        handlerHiding = sinon.stub(),
+        handlerHidden = sinon.stub(),
         options = {
             showFirstSubmenuMode: "onClick",
             showSubmenuMode: "onClick",
