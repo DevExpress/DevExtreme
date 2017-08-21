@@ -7,7 +7,20 @@ var $ = require("jquery"),
     stubAlgorithm = common.stubAlgorithm,
     rendererModule = require("viz/core/renderers/renderer"),
     legendModule = require("viz/components/legend"),
-    paletteModule = require("viz/palette");
+    paletteModule = require("viz/palette"),
+    themeModule = require("viz/themes");
+
+themeModule.registerTheme({
+    name: "test-theme",
+    funnel: {
+        item: {
+            border: {
+                visible: true,
+                color: "green"
+            }
+        }
+    } }, "generic.light");
+
 
 QUnit.module("Initialization", environment);
 
@@ -403,6 +416,18 @@ QUnit.test("SortData option", function(assert) {
 
     assert.equal(items[0].data.value, 1);
     assert.equal(items[1].data.value, 10);
+});
+
+QUnit.test("Recreate items if theme changed", function(assert) {
+    var funnel = createFunnel({
+        dataSource: [{ value: 1 }]
+    });
+
+    funnel.option({
+        theme: "test-theme"
+    });
+
+    assert.equal(this.items()[0].smartAttr.lastCall.args[0].stroke, "green");
 });
 
 QUnit.module("Items", environment);
