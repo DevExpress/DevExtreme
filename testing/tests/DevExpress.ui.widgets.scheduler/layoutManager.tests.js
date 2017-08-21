@@ -1634,7 +1634,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
                 type: "month",
                 maxAppointmentsPerCell: 'auto'
             }],
-            height: 200,
+            height: 500,
             dataSource: items
         }
     );
