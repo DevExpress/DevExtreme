@@ -636,7 +636,7 @@ module.exports = {
                     parent = columnParentByIndex[columnIndex];
 
                 while(parent) {
-                    result.push(parent);
+                    result.unshift(parent);
                     columnIndex = parent.index;
                     parent = columnParentByIndex[columnIndex];
                 }
