@@ -203,6 +203,9 @@ declare module DevExpress.viz {
         /** @docid dxfunnelmethods_hidetooltip */
         hideTooltip(): void;
 
+        /** @docid dxfunnelmethods_getdatasource */
+        getDataSource(): DevExpress.data.DataSource;
+
         showLoadingIndicator(): void;
 
         hideLoadingIndicator(): void;
