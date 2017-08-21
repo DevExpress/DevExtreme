@@ -818,5 +818,11 @@ var dxFunnel = {
     * @name dxfunnelmethods_hidetooltip
     * @publicName hideTooltip()
     */
-    hideTooltip: function() { }
+    hideTooltip: function() { },
+    /**
+    * @name dxfunnelmethods_getdatasource
+    * @publicName getDataSource()
+    * @return DataSource
+    */
+    getDataSource: function() { }
 };
