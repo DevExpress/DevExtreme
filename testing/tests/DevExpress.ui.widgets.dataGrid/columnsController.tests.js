@@ -7657,3 +7657,41 @@ QUnit.test("Set band column with dataField via customizeColumns", function(asser
     assert.ok(visibleColumns[1].allowSorting, "allowSorting of the second column");
     assert.ok(visibleColumns[1].allowGrouping, "allowGrouping of the second column");
 });
+
+//T546870
+QUnit.test("Band columns of the third level should be added in an correct order", function(assert) {
+    //arrange, act
+    this.applyOptions({
+        columns: [{
+            caption: "1",
+            columns: [{
+                caption: "11",
+                columns: ["111", "112"]
+            }, {
+                caption: "12",
+                columns: ["121", "122"]
+            }]
+        }, {
+            caption: "2",
+            columns: [{
+                caption: "21",
+                columns: ["211", "212"]
+            }, {
+                caption: "22",
+                columns: ["221", "222"]
+            }]
+        }]
+    });
+
+    var visibleColumns = this.columnsController.getVisibleColumns(2);
+
+    //assert
+    assert.strictEqual(visibleColumns[0].caption, "111", "caption of the first column");
+    assert.strictEqual(visibleColumns[1].caption, "112", "caption of the second column");
+    assert.strictEqual(visibleColumns[2].caption, "121", "caption of the third column");
+    assert.strictEqual(visibleColumns[3].caption, "122", "caption of the fourth column");
+    assert.strictEqual(visibleColumns[4].caption, "211", "caption of the fifth column");
+    assert.strictEqual(visibleColumns[5].caption, "212", "caption of the sixth column");
+    assert.strictEqual(visibleColumns[6].caption, "221", "caption of the seventh column");
+    assert.strictEqual(visibleColumns[7].caption, "222", "caption of the eighth column");
+});
