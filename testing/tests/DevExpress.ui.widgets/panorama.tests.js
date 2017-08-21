@@ -93,7 +93,7 @@ var mockFxAnimateTitle = function(animations, type, output) {
     animations[type] = function($element, end, action) {
         var itemIndex = $("#panorama")
                 .find(toSelector(PANORAMA_TITLE_CLASS) + ", " + toSelector(PANORAMA_GHOST_TITLE_CLASS))
-                .index($element);
+                .index($element.get(0));
         output[itemIndex] = {
             $element: $element,
             type: type,
@@ -113,7 +113,7 @@ var mockFxAnimateItem = function(animations, type, output) {
     animations[type] = function($element, end, action) {
         var itemIndex = $("#panorama")
                 .find(toSelector(PANORAMA_ITEM_CLASS) + ", " + toSelector(PANORAMA_GHOST_ITEM_CLASS))
-                .index($element);
+                .index($element.get(0));
         output[itemIndex] = {
             $element: $element,
             type: type,

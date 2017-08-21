@@ -4,7 +4,9 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
     inArray = require("./array").inArray,
-    isDefined = require("./type").isDefined,
+    typeUtils = require("./type"),
+    isDefined = typeUtils.isDefined,
+    isRenderer = typeUtils.isRenderer,
     htmlParser = require("../../core/utils/html_parser");
 
 var resetActiveElement = function() {
@@ -129,7 +131,7 @@ var createMarkupFromString = function(str) {
 
 
 var normalizeTemplateElement = function(element) {
-    var $element = isDefined(element) && (element.nodeType || element.jquery)
+    var $element = isDefined(element) && (element.nodeType || isRenderer(element))
         ? $(element)
         : $("<div>").html(element).contents();
 
