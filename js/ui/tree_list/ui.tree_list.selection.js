@@ -6,7 +6,8 @@ var $ = require("../../core/renderer"),
     selectionModule = require("../grid_core/ui.grid_core.selection"),
     extend = require("../../core/utils/extend").extend;
 
-var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all";
+var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all",
+    SELECT_CHECKBOX_CLASS = "dx-select-checkbox";
 
 var originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
 
@@ -111,8 +112,11 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 renderSelectAll: function($cell, options) {
                     $cell.addClass(TREELIST_SELECT_ALL_CLASS);
 
-                    var $checkbox = this._renderSelectAllCheckBox($cell);
-                    this._attachSelectAllCheckBoxClickEvent($checkbox);
+                    this._renderSelectAllCheckBox($cell);
+                },
+
+                _isSortableElement: function($target) {
+                    return this.callBase($target) && !$target.closest("." + SELECT_CHECKBOX_CLASS).length;
                 }
             },
 

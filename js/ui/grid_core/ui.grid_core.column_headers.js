@@ -284,6 +284,10 @@ module.exports = {
                     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(":not(." + VISIBILITY_HIDDEN_CLASS + ")");
                 },
 
+                _isSortableElement: function() {
+                    return true;
+                },
+
                 getHeadersRowHeight: function() {
                     var $tableElement = this._getTableElement(),
                         $headerRows = $tableElement && $tableElement.find("." + HEADER_ROW_CLASS);
