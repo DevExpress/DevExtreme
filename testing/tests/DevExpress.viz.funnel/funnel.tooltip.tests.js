@@ -44,13 +44,15 @@ QUnit.module("Tooltip", tooltipEnvironment);
 
 QUnit.test("Show tooltip", function(assert) {
     var widget = createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }]
-    });
+            algorithm: "stub",
+            dataSource: [{ value: 1 }]
+        }),
+        testItem = widget.getAllItems()[0];
 
-    widget.getAllItems()[0].showTooltip();
+    testItem.showTooltip();
 
-    assert.deepEqual(this.tooltip.show.lastCall.args, [{ value: 1, valueText: "formatted", item: widget.getAllItems()[0] }, { x: 0, y: 0, offset: 0 }], "show");
+    assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 1, valueText: "formatted", item: testItem }, "show arg0");
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 }, "show arg1");
     assert.deepEqual(this.tooltip.move.lastCall.args, [440, 330, 0], "move");
     assert.equal(this.tooltip.formatValue.args[0][0], 1);
 });
@@ -85,17 +87,19 @@ QUnit.test("Only move tooltip if it shown on item", function(assert) {
 QUnit.test("Show tooltip on different items", function(assert) {
     common.stubAlgorithm.getFigures.returns([[1], [1]]);
     var widget = createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 2 }]
-    });
+            algorithm: "stub",
+            dataSource: [{ value: 1 }, { value: 2 }]
+        }),
+        testItem = widget.getAllItems()[1];
 
     widget.getAllItems()[0].showTooltip();
 
     this.tooltip.show.reset();
 
-    widget.getAllItems()[1].showTooltip([100, 100]);
+    testItem.showTooltip([100, 100]);
 
-    assert.deepEqual(this.tooltip.show.lastCall.args, [{ value: 1, valueText: "formatted", item: widget.getAllItems()[1] }, { x: 0, y: 0, offset: 0 }], "show");
+    assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 1, valueText: "formatted", item: testItem }, "show arg0");
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 }, "show arg1");
     assert.deepEqual(this.tooltip.move.lastCall.args, [100, 100, 0], "move");
 });
 
