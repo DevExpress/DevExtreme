@@ -145,27 +145,6 @@ module.exports = {
                         return gridCoreUtils.combineFilters([filter, searchFilter]);
                     },
 
-                    _loadDataSource: function() {
-                        var that = this,
-                            callBase = that.callBase,
-                            searchText = that.option("searchPanel.text"),
-                            columnsController = that._columnsController,
-                            columns = columnsController.getColumns(),
-                            hasLookup = columns.filter(function(column) { return !!column.lookup; }).length,
-                            result;
-
-                        if(searchText && hasLookup) {
-                            result = $.Deferred();
-                            columnsController.refresh(true).always(function() {
-                                callBase.apply(that, arguments).then(result.resolve, result.reject);
-                            });
-                        } else {
-                            result = callBase.apply(that, arguments);
-                        }
-
-                        return result;
-                    },
-
                     /**
                      * @name GridBaseMethods_searchByText
                      * @publicName searchByText(text)

@@ -495,8 +495,18 @@ module.exports = {
                     }
                 },
                 _loadDataSource: function() {
-                    var dataSource = this._dataSource;
-                    return dataSource ? dataSource.load() : $.Deferred().resolve().promise();
+                    var dataSource = this._dataSource,
+                        result = $.Deferred();
+
+                    when(this._columnsController.refresh(true)).always(function() {
+                        if(dataSource) {
+                            dataSource.load().done(result.resolve).fail(result.reject);
+                        } else {
+                            result.resolve();
+                        }
+                    });
+
+                    return result.promise();
                 },
                 _processItems: function(items, changeType) {
                     var that = this,
