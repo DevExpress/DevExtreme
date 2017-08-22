@@ -1263,6 +1263,29 @@ QUnit.test('Select all is not work when allowSelectAll is false', function(asser
     assert.strictEqual(checkBox.dxCheckBox('instance').option('visible'), false, 'checkbox is not visible');
 });
 
+//T546876
+QUnit.test("onCellClick event should be fired after clicking on 'Select All' checkbox", function(assert) {
+    //arrange
+    var checkBox,
+        cellClickEventFired,
+        testElement = $('#container');
+
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    this.options.selection = { allowSelectAll: true };
+    this.options.onCellClick = function() {
+        cellClickEventFired = true;
+    };
+    this.columnHeadersView.init();
+    this.columnHeadersView.render(testElement);
+
+    //act
+    checkBox = testElement.find('.dx-checkbox');
+    checkBox.trigger("dxclick");
+
+    //assert
+    assert.ok(cellClickEventFired, "onCellClick event is fired");
+});
+
 QUnit.test('Unselect all is completed', function(assert) {
     //arrange
     var testElement = $('#container');
