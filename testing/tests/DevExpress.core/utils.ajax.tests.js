@@ -218,3 +218,121 @@ QUnit.test("jsonp", function(assert) {
     assert.deepEqual(result, 1);
 
 });
+
+QUnit.test("send data with request", function(assert) {
+    this.clock.tick(123456789);
+    ajax.sendRequest({
+        url: "/some-url",
+        data: { top: 20, skip: 5, filter: "%any value%" }
+    });
+
+    ajax.sendRequest({
+        method: "post",
+        url: "/some-url",
+        data: { top: 20, skip: 5, filter: "%any value%" }
+    });
+
+    ajax.sendRequest({
+        url: "/some-url?top=20",
+        data: { skip: 5, filter: "%any value%" }
+    });
+
+    ajax.sendRequest({
+        url: "/some-url",
+        dataType: "jsonp",
+        data: { skip: 5, filter: "%any value%" }
+    });
+
+    ajax.sendRequest({
+        url: "/some-url",
+        dataType: "jsonp",
+        jsonp: "callback",
+        data: { skip: 5, filter: "%any value%" }
+    });
+
+    ajax.sendRequest({
+        url: "/some-url",
+        jsonp: "callback",
+        data: { skip: 5, filter: "%any value%" }
+    });
+
+    ajax.sendRequest({
+        method: "put",
+        url: "/some-url",
+        data: { top: 20, skip: 5, filter: "%any value%" }
+    });
+
+    assert.equal(this.requests.length, 7);
+    assert.equal(this.requests[0].url, "/some-url?top=20&skip=5&filter=%25any%20value%25");
+    assert.equal(this.requests[0].requestBody, null);
+    assert.equal(this.requests[1].url, "/some-url");
+    assert.equal(this.requests[1].requestBody, "top=20&skip=5&filter=%25any%20value%25");
+    assert.equal(this.requests[2].url, "/some-url?top=20&skip=5&filter=%25any%20value%25");
+    assert.equal(this.requests[3].url, "/some-url?skip=5&filter=%25any%20value%25&%24format=json&%24callback=callback123456789&_=123456789");
+    assert.equal(this.requests[4].url, "/some-url?skip=5&filter=%25any%20value%25&%24format=json&%24callback=callback&_=123456789");
+    assert.equal(this.requests[5].url, "/some-url?skip=5&filter=%25any%20value%25&%24format=json&%24callback=callback&_=123456789");
+    assert.equal(this.requests[6].url, "/some-url");
+    assert.equal(this.requests[6].requestBody, "top=20&skip=5&filter=%25any%20value%25");
+    assert.equal(this.requests[6].method, "put");
+});
+
+QUnit.test("headers for different dataTypes", function(assert) {
+    var dataTypes = [
+            { type: "", header: "*/*" },
+            { type: "someType", header: "*/*" },
+            { type: undefined, header: "*/*" },
+            { type: null, header: "*/*" },
+            { type: "*", header: "*/*" },
+            { type: "text", header: "text/plain, */*; q=0.01" },
+            { type: "html", header: "text/html, */*; q=0.01" },
+            { type: "json", header: "application/json, text/javascript, */*; q=0.01" },
+            { type: "xml", header: "application/xml, text/xml, */*; q=0.01" },
+            { type: "jsonp", header: "*/*" }];
+
+    for(var i in dataTypes) {
+        ajax.sendRequest({
+            url: "/some-url",
+            dataType: dataTypes[i].type
+        });
+    }
+
+    assert.equal(this.requests.length, dataTypes.length);
+
+    for(var index in dataTypes) {
+        assert.equal(this.requests[index].requestHeaders["Accept"], dataTypes[index].header);
+    }
+
+});
+
+QUnit.test("post process of data with different dataType", function(assert) {
+    var result = [],
+        dataTypes = [
+            { type: "json", response: "{ 'value': 1234 }", result: undefined },
+            { type: "json", response: '{ "value": 1234 }', result: { "value": 1234 } },
+            { type: "script", response: "var variable = 10;", result: undefined },
+            { type: "text", response: "text text", result: "text text" }],
+        error;
+    var setResult = function(data) {
+        result[i] = data;
+    };
+
+    var setError = function(e) {
+        error = e;
+    };
+
+    for(var i in dataTypes) {
+        ajax.sendRequest({
+            url: "/json-url",
+            dataType: dataTypes[i].type
+        }).done(setResult).fail(setError);
+
+        this.requests[i].respond(200, { "Content-Type": "application/json" }, dataTypes[i].response);
+        assert.deepEqual(result[i], dataTypes[i].result);
+    }
+
+    assert.equal(this.requests.length, 4);
+    /* global variable */
+    assert.equal(variable, 10);
+    assert.equal(error.message, "Unexpected token ' in JSON at position 2");
+
+});
