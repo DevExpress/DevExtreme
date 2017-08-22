@@ -1748,7 +1748,7 @@ var Scheduler = Widget.inherit({
     _getViewCountConfig: function() {
         var currentView = this.option("currentView");
 
-        var view = this._getViewByType(currentView),
+        var view = this._getViewByName(currentView),
             viewCount = view && view.intervalCount || 1,
             startDate = view && view.startDate || null;
 
@@ -1758,11 +1758,11 @@ var Scheduler = Widget.inherit({
         };
     },
 
-    _getViewByType: function(type) {
+    _getViewByName: function(name) {
         var views = this.option("views");
 
         for(var i = 0; i < views.length; i++) {
-            if(views[i].type === type || views[i].name === type || views[i] === type) return views[i];
+            if(views[i].name === name || views[i].type === name || views[i] === name) return views[i];
         }
     },
 

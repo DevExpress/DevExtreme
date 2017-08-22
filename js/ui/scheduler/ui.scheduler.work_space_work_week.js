@@ -54,7 +54,7 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
         this.callBase();
     },
 
-    _getWeekendCounter: function(days) {
+    _getWeekendsCount: function(days) {
         return Math.floor(days / 7);
     },
 

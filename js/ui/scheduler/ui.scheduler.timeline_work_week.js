@@ -38,7 +38,7 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
         }
     },
 
-    _getWeekendCounter: function(days) {
+    _getWeekendsCount: function(days) {
         return Math.floor(days / 7);
     },
 
