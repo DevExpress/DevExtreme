@@ -237,6 +237,10 @@ exports.plugin = {
                 var item = that._items[index],
                     bBox,
                     pos;
+                if(!options.showForZeroValues && item.data.value === 0) {
+                    label.hide();
+                    return;
+                }
 
                 if(isOutsidePosition(options.position)) {
                     that._correctLabelWidth(label, item.coords, options);
