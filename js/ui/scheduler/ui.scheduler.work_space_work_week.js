@@ -55,7 +55,7 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
     },
 
     _getWeekendCounter: function(days) {
-        return Math.floor(days / 5);
+        return Math.floor(days / 7);
     },
 
     _setFirstViewDate: function() {
