@@ -1380,6 +1380,53 @@ QUnit.test("Set remoteOperations option to true", function(assert) {
     assert.deepEqual(this.dataController.dataSource().remoteOperations(), { filtering: true, sorting: true, paging: true, grouping: true, summary: true }, "remote operations set correct");
 });
 
+//T541798
+QUnit.test("Apply sorting by the lookup column with calculateSortValue when the first load", function(assert) {
+    //arrange
+    var items,
+        array = [
+            { State: 1 },
+            { State: 2 },
+            { State: 3 }
+        ];
+
+    this.applyOptions({
+        dataSource: array,
+        columns: [{
+            dataField: "State",
+            sortOrder: "asc",
+            lookup: {
+                valueExpr: "id",
+                displayExpr: "name",
+                dataSource: [{
+                    id: 1,
+                    name: "Wyoming"
+                }, {
+                    id: 2,
+                    name: "California"
+                }, {
+                    id: 3,
+                    name: "Arkansas"
+                }]
+            },
+            calculateSortValue: function(data) {
+                var value = this.calculateCellValue(data);
+                return this.lookup.calculateCellValue(value);
+            }
+        }]
+    });
+
+    //act
+    this.dataController._refreshDataSource();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 3, "count item");
+    assert.deepEqual(items[0].data, { State: 3 });
+    assert.deepEqual(items[1].data, { State: 2 });
+    assert.deepEqual(items[2].data, { State: 1 });
+});
+
 QUnit.module("No dataSource", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("getters", function(assert) {
