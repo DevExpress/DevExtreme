@@ -4,7 +4,9 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("../../core/utils/date");
 
-var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25;
+var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
+    ALLDAY_APPOINTMENT_MIN_OFFSET = 5,
+    ALLDAY_APPOINTMENT_MAX_OFFSET = 20;
 
 var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     getDeltaTime: function(args, initialSize, appointment) {
@@ -239,8 +241,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     _getOffsets: function() {
         return {
-            unlimited: 5,
-            auto: 20
+            unlimited: ALLDAY_APPOINTMENT_MIN_OFFSET,
+            auto: ALLDAY_APPOINTMENT_MAX_OFFSET
         };
     },
 
