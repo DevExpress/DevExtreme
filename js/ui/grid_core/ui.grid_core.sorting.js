@@ -32,7 +32,7 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
                     editingMode = that.option("editing.mode"),
                     isCellEditing = editingController && editingController.isEditing() && (editingMode === "batch" || editingMode === "cell");
 
-                if(isCellEditing) {
+                if(isCellEditing || !that._isSortableElement($(event.target))) {
                     return;
                 }
 
