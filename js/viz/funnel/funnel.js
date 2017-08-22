@@ -77,15 +77,16 @@ var dxFunnel = require("../core/base_widget").inherit({
     _change_TILING: function() {
         var that = this,
             items = that._items,
-            rect = that._rect;
+            rect = that._rect,
+            convertCoord = function(coord, index) {
+                var offset = index % 2;
+                return rect[0 + offset] + (rect[2 + offset] - rect[0 + offset]) * coord;
+            };
 
         this._group.clear();
 
         items.forEach(function(item, index) {
-            var coords = item.figure.map(function(c, index) {
-                    var offset = index % 2;
-                    return rect[0 + offset] + (rect[2 + offset] - rect[0 + offset]) * c;
-                }),
+            var coords = item.figure.map(convertCoord),
                 element = that._renderer.path([], "area")
                     .attr({
                         points: coords
@@ -140,7 +141,7 @@ var dxFunnel = require("../core/base_widget").inherit({
         });
     },
 
-    _getProxyData: function(x, y) {
+    _hitTestTargets: function(x, y) {
         var that = this,
             data;
 

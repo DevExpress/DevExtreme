@@ -3,6 +3,7 @@
 var labelModule = require("../series/points/label"),
     _normalizeEnum = require("../core/utils").normalizeEnum,
     extend = require("../../core/utils/extend").extend,
+    noop = require("../../core/utils/common").noop,
     OUTSIDE_POSITION = "outside",
     INSIDE_POSITION = "inside",
     OUTSIDE_LABEL_INDENT = 5,
@@ -70,7 +71,6 @@ function getColumnLabelLeftPosition(labelRect, rect, textAlignment) {
         };
     };
 }
-
 
 function getConnectorStrategy(options, inverted) {
     var isLeftPos = options.horizontalAlignment === "left",
@@ -153,12 +153,8 @@ function correctLabelPosition(pos, bBox, rect) {
 
 exports.plugin = {
     name: "lables",
-    init: function() {
-
-    },
-    dispose: function() {
-
-    },
+    init: noop,
+    dispose: noop,
     extenders: {
         _initCore: function() {
             this._labelsGroup = this._renderer.g().attr({
@@ -255,7 +251,6 @@ exports.plugin = {
         }
     },
     members: {
-
         _correctLabelWidth: function(label, item, options) {
             var isLeftPos = options.horizontalAlignment === "left",
                 minX = isLeftPos ? this._labelRect[0] : item[2],
@@ -303,7 +298,6 @@ exports.plugin = {
         }
     },
     customize: function(constructor) {
-
         constructor.prototype._proxyData.push(function(x, y) {
             var that = this,
                 data;
