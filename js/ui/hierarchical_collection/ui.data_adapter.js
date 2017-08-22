@@ -126,7 +126,7 @@ var DataAdapter = Class.inherit({
     _setParentSelection: function() {
         var that = this;
 
-        $.each(this._dataStructure, function(_, node) {
+        each(this._dataStructure, function(_, node) {
             var parent = that.options.dataConverter.getParentNode(node);
 
             if(parent && node.internalFields.parentKey !== that.options.rootValue) {
