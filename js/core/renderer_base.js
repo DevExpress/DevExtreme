@@ -1,6 +1,5 @@
 "use strict";
 
-var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
@@ -47,7 +46,7 @@ var initRender = function(selector, context) {
     return renderer(selector.toArray ? selector.toArray() : [selector]);
 };
 
-renderer.fn = { jquery: $.fn.jquery };
+renderer.fn = { dxRenderer: true };
 initRender.prototype = renderer.fn;
 
 var repeatMethod = function(methodName, args) {

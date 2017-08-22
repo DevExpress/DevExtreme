@@ -79,6 +79,10 @@ var isDomNode = function(node) {
     return node instanceof Element;
 };
 
+var isRenderer = function(object) {
+    return !!(object.jquery || object.dxRenderer);
+};
+
 exports.isBoolean = isBoolean;
 exports.isExponential = isExponential;
 exports.isDate = isDate;
@@ -92,4 +96,5 @@ exports.isPlainObject = isPlainObject;
 exports.isPrimitive = isPrimitive;
 exports.isWindow = isWindow;
 exports.isDomNode = isDomNode;
+exports.isRenderer = isRenderer;
 exports.type = type;

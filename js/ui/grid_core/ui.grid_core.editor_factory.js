@@ -15,7 +15,6 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     pointerEvents = require("../../events/pointer"),
     normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
-    compareVersion = require("../../core/utils/version").compare,
     addNamespace = eventUtils.addNamespace;
 
 require("../text_box");
@@ -357,7 +356,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                             .outerHeight($element.outerHeight() + 1);
 
                         focusOverlayPosition = {
-                            precise: compareVersion($.fn.jquery, [3]) >= 0,
+                            precise: true,
                             my: align,
                             at: align,
                             of: $element,

@@ -838,7 +838,8 @@ extend(legendPrototype, {
         return {
             horizontalAlignment: this._options.horizontalAlignment,
             verticalAlignment: this._options.verticalAlignment,
-            side: pos.cutSide
+            side: pos.cutSide,
+            priority: 1
         };
     },
 
@@ -863,10 +864,16 @@ extend(legendPrototype, {
 exports.plugin = {
     name: "legend",
     init: function() {
-        var that = this;
+        var that = this,
+            group = this._renderer.g()
+                .attr({
+                    className: this._rootClassPrefix + "-legend"
+                })
+                .append(that._renderer.root);
+
         that._legend = new exports.Legend({
             renderer: that._renderer,
-            group: that._renderer.root,
+            group: group,
             textField: "text",
             getFormatObject: function(item) {
                 return {

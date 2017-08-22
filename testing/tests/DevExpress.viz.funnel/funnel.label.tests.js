@@ -3,59 +3,9 @@
 var $ = require("jquery"),
     common = require("./commonParts/common.js"),
     labelModule = require("viz/series/points/label"),
-    vizMocks = require("../../helpers/vizMocks.js"),
     createFunnel = common.createFunnel,
-    environment = common.environment,
     stubAlgorithm = common.stubAlgorithm,
-    Label = labelModule.Label,
-    stubLabel = vizMocks.stubClass(Label),
-    labels = require("viz/funnel/label");
-
-var dxFunnel = require("viz/funnel/funnel");
-dxFunnel.addPlugin(labels.plugin);
-
-var labelEnvironment = $.extend({}, environment, {
-    beforeEach: function() {
-        environment.beforeEach.call(this);
-        this.itemGroupNumber = 0;
-        this.labelGroupNumber = 1;
-        this.renderer.bBoxTemplate = { x: 0, y: 0, width: 0, height: 0 };
-        this.renderer.bBoxTemplate = { width: 100 };
-
-        stubAlgorithm.getFigures.returns([[0, 0, 1, 1]]);
-
-        var labelBoxes = [
-            {
-                height: 10,
-                width: 100
-            }, {
-                height: 10,
-                width: 45
-            }
-            ],
-            labelBoxesIndex = 0;
-
-        sinon.stub(labelModule, "Label", function() {
-            var stub = new stubLabel();
-            stub.stub("getBoundingRect").returns(labelBoxes[(labelBoxesIndex++) % labelBoxes.length]);
-            stub.stub("getBackgroundPadding").returns(5);
-            return stub;
-        });
-
-        $("#test-container").css({
-            width: 800,
-            height: 600
-        });
-    },
-    afterEach: function() {
-        environment.afterEach.call(this);
-        labelModule.Label.restore();
-    },
-
-    labelGroup: function() {
-        return this.renderer.g.getCall(this.labelGroupNumber).returnValue;
-    }
-});
+    labelEnvironment = require("./commonParts/label.js").labelEnvironment;
 
 QUnit.module("Initialization", labelEnvironment);
 
@@ -64,7 +14,7 @@ QUnit.test("Create label group on initialization", function(assert) {
 
     var labelsGroup = this.labelGroup();
     assert.equal(labelsGroup.append.lastCall.args[0], this.renderer.root);
-    assert.equal(labelsGroup.attr.lastCall.args[0].className, "labels");
+    assert.equal(labelsGroup.attr.lastCall.args[0].className, "dxf-labels");
 });
 
 QUnit.test("Create labels", function(assert) {
@@ -214,6 +164,24 @@ QUnit.test("Reserve space for labels if position columns", function(assert) {
             visible: true,
             position: "columns",
             horizontalOffset: 15,
+            verticalOffset: 30
+        }
+    });
+
+    var items = this.items();
+    assert.equal(items.length, 1);
+    assert.deepEqual(items[0].attr.firstCall.args[0].points, [0, 0, 665, 600]);
+});
+
+QUnit.test("Use columns position if position value is not accepted", function(assert) {
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }],
+        valueField: "value",
+        label: {
+            visible: true,
+            horizontalOffset: 15,
+            position: "not accepted value",
             verticalOffset: 30
         }
     });

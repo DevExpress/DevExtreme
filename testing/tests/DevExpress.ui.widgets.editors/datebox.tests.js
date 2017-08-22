@@ -2946,6 +2946,27 @@ QUnit.test("min/max settings should be work if value option is undefined", funct
     assert.equal($listItems.last().text(), "7:30 PM", "max value is right");
 });
 
+QUnit.test("validator correctly check value with 'time' format", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            type: "time",
+            pickerType: "list",
+            min: new Date(2015, 1, 1, 6, 0),
+            max: new Date(2015, 1, 1, 16, 0),
+            value: new Date(2015, 1, 1, 12, 0),
+            opened: true
+        }),
+        dateBox = $dateBox.dxDateBox("instance"),
+        $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
+
+    $input.val("11:30 AM").change();
+
+    var value = dateBox.option("value");
+    assert.equal($input.val(), "11:30 AM", "Correct input value");
+    assert.equal(value.getHours(), 11, "Correct hours");
+    assert.equal(value.getMinutes(), 30, "Correct minutes");
+    assert.equal(dateBox.option("isValid"), true, "Editor should be marked as valid");
+});
+
 
 QUnit.module("native datebox", {
     beforeEach: function() {

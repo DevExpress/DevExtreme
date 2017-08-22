@@ -3,26 +3,25 @@
 (function(factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
+            require("ui/validator");
+            require("ui/validation_summary");
+            require("ui/text_box");
+            require("ui/button");
+
             module.exports = factory(
                 require("jquery"),
                 require("ui/set_template_engine"),
-                require("aspnet"),
-                require("ui/text_box"),
-                require("ui/button"),
-                require("ui/validator"),
-                require("ui/validation_summary")
+                require("aspnet")
             );
         });
     } else {
         factory(
             window.jQuery,
             DevExpress.ui.setTemplateEngine,
-            DevExpress.aspnet,
-            DevExpress.ui.dxTextBox,
-            DevExpress.ui.dxButton
+            DevExpress.aspnet
         );
     }
-}(function($, setTemplateEngine, aspnet, dxTextBox, dxButton) {
+}(function($, setTemplateEngine, aspnet) {
 
     QUnit.module(
         "Client Validation",

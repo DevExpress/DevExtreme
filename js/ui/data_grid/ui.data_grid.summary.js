@@ -528,7 +528,7 @@ gridCore.registerModule("summary", {
             /**
              * @name dxDataGridOptions_sortByGroupSummaryInfo_summaryItem
              * @publicName summaryItem
-             * @type string
+             * @type string|number
              * @default undefined
              */
             /**

@@ -4,7 +4,8 @@ var tiling = require("./tiling"),
     dynamicSlope = require("./tiling.funnel"),
     dynamicHeight = require("./tiling.pyramid"),
     noop = require("../../core/utils/common").noop,
-    Item = require("./item");
+    Item = require("./item"),
+    NODES_CREATE_CHANGE = "NODES_CREATE";
 
 tiling.addAlgorithm("dynamicslope", dynamicSlope, true);
 tiling.addAlgorithm("dynamicheight", dynamicHeight);
@@ -24,17 +25,19 @@ var dxFunnel = require("../core/base_widget").inherit({
 
     _optionChangesMap: {
         dataSource: "DATA_SOURCE",
-        neckWidth: "NODES_CREATE",
-        neckHeight: "NODES_CREATE",
-        inverted: "NODES_CREATE",
-        algorithm: "NODES_CREATE",
-        item: "NODES_CREATE",
-        valueField: "NODES_CREATE",
-        argumentField: "NODES_CREATE",
-        colorField: "NODES_CREATE",
-        palette: "NODES_CREATE",
-        sortData: "NODES_CREATE"
+        neckWidth: NODES_CREATE_CHANGE,
+        neckHeight: NODES_CREATE_CHANGE,
+        inverted: NODES_CREATE_CHANGE,
+        algorithm: NODES_CREATE_CHANGE,
+        item: NODES_CREATE_CHANGE,
+        valueField: NODES_CREATE_CHANGE,
+        argumentField: NODES_CREATE_CHANGE,
+        colorField: NODES_CREATE_CHANGE,
+        palette: NODES_CREATE_CHANGE,
+        sortData: NODES_CREATE_CHANGE
     },
+
+    _themeDependentChanges: [NODES_CREATE_CHANGE],
 
     _getDefaultSize: function() {
         return { width: 400, height: 400 };
@@ -63,6 +66,12 @@ var dxFunnel = require("../core/base_widget").inherit({
     _applySize: function(rect) {
         this._rect = rect.slice();
         this._change(["TILING"]);
+        return this._rect;
+    },
+
+
+    _getAlignmentRect: function() {
+        return this._rect;
     },
 
     _change_TILING: function() {
@@ -90,13 +99,18 @@ var dxFunnel = require("../core/base_widget").inherit({
         this._requestChange(["TILES"]);
     },
 
-    _customChangesOrder: ["NODES_CREATE", "LAYOUT", "TILING", "TILES"],
+    _customChangesOrder: [NODES_CREATE_CHANGE, "LAYOUT", "TILING", "TILES", "DRAWN"],
 
     _dataSourceChangedHandler: function() {
-        this._requestChange(["NODES_CREATE"]);
+        this._requestChange([NODES_CREATE_CHANGE]);
+    },
+
+    _change_DRAWN: function() {
+        this._drawn();
     },
 
     _change_DATA_SOURCE: function() {
+        this._change(["DRAWN"]);
         this._updateDataSource();
     },
 
@@ -213,7 +227,7 @@ var dxFunnel = require("../core/base_widget").inherit({
         }
 
         that._renderer.initHatching();
-        that._change(["TILING"]);
+        that._change(["TILING", "DRAWN"]);
     },
 
     _showTooltip: noop,

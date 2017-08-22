@@ -7,7 +7,20 @@ var $ = require("jquery"),
     stubAlgorithm = common.stubAlgorithm,
     rendererModule = require("viz/core/renderers/renderer"),
     legendModule = require("viz/components/legend"),
-    paletteModule = require("viz/palette");
+    paletteModule = require("viz/palette"),
+    themeModule = require("viz/themes");
+
+themeModule.registerTheme({
+    name: "test-theme",
+    funnel: {
+        item: {
+            border: {
+                visible: true,
+                color: "green"
+            }
+        }
+    } }, "generic.light");
+
 
 QUnit.module("Initialization", environment);
 
@@ -212,6 +225,34 @@ QUnit.test("palette", function(assert) {
     paletteModule.Palette.restore();
 });
 
+QUnit.test("Funnel fires drawn event", function(assert) {
+    var drawn = sinon.spy();
+    createFunnel({
+        dataSource: [{ value: 1 }],
+        onDrawn: drawn
+    });
+
+    assert.equal(drawn.callCount, 1);
+});
+
+QUnit.test("Funnel fires once drawn event if asynchronus dataSource ", function(assert) {
+    var drawn = sinon.spy(),
+        d = $.Deferred();
+
+    createFunnel({
+        dataSource: {
+            load: function() {
+                return d;
+            }
+        },
+        onDrawn: drawn
+    });
+
+    d.resolve([{ value: 1 }]);
+
+    assert.equal(drawn.callCount, 2);
+});
+
 QUnit.module("Update options", environment);
 
 QUnit.test("Update styles of items", function(assert) {
@@ -377,6 +418,18 @@ QUnit.test("SortData option", function(assert) {
     assert.equal(items[1].data.value, 10);
 });
 
+QUnit.test("Recreate items if theme changed", function(assert) {
+    var funnel = createFunnel({
+        dataSource: [{ value: 1 }]
+    });
+
+    funnel.option({
+        theme: "test-theme"
+    });
+
+    assert.equal(this.items()[0].smartAttr.lastCall.args[0].stroke, "green");
+});
+
 QUnit.module("Items", environment);
 
 QUnit.test("Creation", function(assert) {
@@ -475,6 +528,20 @@ QUnit.test("Hover style", function(assert) {
     });
 });
 
+QUnit.test("Funnel does not fire drawn event on hover", function(assert) {
+    var drawn = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10, argument: "One" }],
+            onDrawn: drawn
+        });
+
+    drawn.reset();
+
+    funnel.getAllItems()[0].hover(true);
+
+    assert.equal(drawn.callCount, 0);
+});
+
 QUnit.test("Clear hover of item", function(assert) {
     var funnel = createFunnel({
             dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
@@ -507,6 +574,52 @@ QUnit.test("Clear hover of item", function(assert) {
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
     assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
     assert.ok(!items[1].smartAttr.lastCall.args[0].hatching);
+});
+
+QUnit.test("Inherit border from normal style if hoverStyle.border option is not set", function(assert) {
+    var funnel = createFunnel({
+            dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+            item: {
+                border: {
+                    visible: true,
+                    color: "#ffffff",
+                    width: 2
+                }
+            }
+        }),
+        item = funnel.getAllItems()[1];
+
+    item.hover(true);
+
+    var items = this.items();
+
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
+});
+
+QUnit.test("Border for hoverStyle can be disabled", function(assert) {
+    var funnel = createFunnel({
+            dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+            item: {
+                border: {
+                    visible: true,
+                    color: "#ffffff",
+                    width: 2
+                },
+                hoverStyle: {
+                    border: {
+                        visible: false
+                    }
+                }
+            }
+        }),
+        item = funnel.getAllItems()[1];
+
+    item.hover(true);
+
+    var items = this.items();
+
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
 });
 
 QUnit.test("hover changed event", function(assert) {
@@ -583,6 +696,48 @@ QUnit.test("Selection", function(assert) {
         width: 2,
         direction: "right"
     });
+});
+
+QUnit.test("Inherit border for selection style if selection.border option is not set", function(assert) {
+    var funnel = createFunnel({
+        dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+        item: {
+            border: {
+                visible: true,
+                color: "#ffffff",
+                width: 2
+            }
+        }
+    });
+
+    funnel.getAllItems()[1].select(true);
+    var items = this.items();
+
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0].stroke, "#ffffff");
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 2);
+});
+
+QUnit.test("Border for selection style can be disabled", function(assert) {
+    var funnel = createFunnel({
+        dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+        item: {
+            border: {
+                visible: true,
+                color: "#ffffff",
+                width: 2
+            },
+            selectionStyle: {
+                border: {
+                    visible: false
+                }
+            }
+        }
+    });
+
+    funnel.getAllItems()[1].select(true);
+    var items = this.items();
+
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0]["stroke-width"], 0);
 });
 
 QUnit.test("Single selection", function(assert) {
@@ -803,10 +958,12 @@ QUnit.test("Creation", function(assert) {
         }),
         legendCtorArgs = legendModule.Legend.lastCall.args[0],
         item = funnel.getAllItems()[0],
-        formatObject = legendCtorArgs.getFormatObject(item);
+        formatObject = legendCtorArgs.getFormatObject(item),
+        legendGroup = this.renderer.g.getCall(0).returnValue;
 
+    assert.equal(legendGroup.attr.lastCall.args[0].className, "dxf-legend");
     assert.equal(legendCtorArgs.renderer, this.renderer);
-    assert.equal(legendCtorArgs.group, this.renderer.root);
+    assert.equal(legendCtorArgs.group, legendGroup);
     assert.equal(legendCtorArgs.textField, "text");
     assert.equal(formatObject.item.data.argument, "One");
     assert.equal(formatObject.item.data.value, 5);

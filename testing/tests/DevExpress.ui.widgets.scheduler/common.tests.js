@@ -1021,6 +1021,18 @@ QUnit.testStart(function() {
         assert.ok(this.instance.getAppointmentsInstance().option("allowAllDayResize"));
     });
 
+    QUnit.test("allowAllDayResize option should depend on intervalCount", function(assert) {
+        this.createInstance({
+            views: [{ type: "week", name: "WEEK" }, { type: "day", name: "DAY" }, { type: "day", name: "DAY1", intervalCount: 3 } ],
+            currentView: "DAY"
+        });
+
+        assert.notOk(this.instance.getAppointmentsInstance().option("allowAllDayResize"));
+
+        this.instance.option("currentView", "DAY1");
+        assert.ok(this.instance.getAppointmentsInstance().option("allowAllDayResize"));
+    });
+
     QUnit.test("showAllDayPanel option value = true on init", function(assert) {
         this.createInstance();
 

@@ -356,7 +356,8 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _expandSubmenuHandler: function($items, location) {
             var $curItem = this._getActiveItem(true),
-                node = this._dataAdapter.getNodeByItem(this._getItemData($curItem)),
+                itemData = this._getItemData($curItem),
+                node = this._dataAdapter.getNodeByItem(itemData),
                 isItemHasSubmenu = this._hasSubmenu(node),
                 $submenu = $curItem.children("." + DX_SUBMENU_CLASS);
 
@@ -474,7 +475,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             contextMenuAction = that._createAction(contextMenuAction);
 
-            if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
+            if(typeUtils.isRenderer(target) || target.nodeType || typeUtils.isWindow(target)) {
                 that._showContextMenuEventHandler = undefined;
                 eventsEngine.on(target, eventName, handler);
             } else {
@@ -671,7 +672,6 @@ var ContextMenu = MenuBase.inherit((function() {
             var $expandedItems = $item
                     .parent("." + DX_MENU_ITEM_WRAPPER_CLASS).siblings()
                     .find("." + DX_MENU_ITEM_EXPANDED_CLASS);
-
 
             if($expandedItems.length) {
                 $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);

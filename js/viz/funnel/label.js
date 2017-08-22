@@ -4,7 +4,7 @@ var labelModule = require("../series/points/label"),
     _normalizeEnum = require("../core/utils").normalizeEnum,
     extend = require("../../core/utils/extend").extend,
     OUTSIDE_POSITION = "outside",
-    COLUMNS_POSITION = "columns",
+    INSIDE_POSITION = "inside",
     OUTSIDE_LABEL_INDENT = 5,
     COLUMNS_LABEL_INDENT = 20,
     CONNECTOR_INDENT = 4,
@@ -14,15 +14,15 @@ function getLabelIndent(pos) {
     pos = _normalizeEnum(pos);
     if(pos === OUTSIDE_POSITION) {
         return OUTSIDE_LABEL_INDENT;
-    } else if(pos === COLUMNS_POSITION) {
-        return COLUMNS_LABEL_INDENT;
+    } else if(pos === INSIDE_POSITION) {
+        return 0;
     }
-    return 0;
+    return COLUMNS_LABEL_INDENT;
 }
 
 function isOutsidePosition(pos) {
     pos = _normalizeEnum(pos);
-    return pos === OUTSIDE_POSITION || pos === COLUMNS_POSITION;
+    return pos === OUTSIDE_POSITION || pos !== INSIDE_POSITION;
 }
 
 function correctYForInverted(y, bBox, inverted) {
@@ -162,7 +162,7 @@ exports.plugin = {
     extenders: {
         _initCore: function() {
             this._labelsGroup = this._renderer.g().attr({
-                className: "labels"
+                className: this._rootClassPrefix + "-labels"
             }).append(this._renderer.root);
             this._labels = [];
         },
@@ -225,12 +225,12 @@ exports.plugin = {
                 textAlignment;
 
             if(isOutsidePosition(options.position)) {
-                getCoords = options.horizontalAlignment === "left" ? getOutsideLeftLabelPosition : getOutsideRightLabelPosition;
-            }
-
-            if(_normalizeEnum(options.position) === COLUMNS_POSITION) {
-                textAlignment = this._getOption("rtlEnabled", true) ? "right" : "left";
-                getCoords = options.horizontalAlignment === "left" ? getColumnLabelLeftPosition(this._labelRect, this._rect, textAlignment) : getColumnLabelRightPosition(this._labelRect, this._rect, textAlignment);
+                if(_normalizeEnum(options.position) === OUTSIDE_POSITION) {
+                    getCoords = options.horizontalAlignment === "left" ? getOutsideLeftLabelPosition : getOutsideRightLabelPosition;
+                } else {
+                    textAlignment = this._getOption("rtlEnabled", true) ? "right" : "left";
+                    getCoords = options.horizontalAlignment === "left" ? getColumnLabelLeftPosition(this._labelRect, this._rect, textAlignment) : getColumnLabelRightPosition(this._labelRect, this._rect, textAlignment);
+                }
             }
 
             that._labels.forEach(function(label, index) {
