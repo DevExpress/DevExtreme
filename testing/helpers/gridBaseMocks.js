@@ -537,6 +537,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
 
                 return firstDataColumnIndex;
+            },
+
+            refresh: function() {
+                return $.Deferred().resolve();
             }
         };
     };
