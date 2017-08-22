@@ -51,7 +51,7 @@ exports.plugin = {
                     value: item.data.value,
                     valueText: tooltip.formatValue(item.data.value),
                     item: item
-                }, { x: 0, y: 0, offset: 0 });
+                }, { x: 0, y: 0, offset: 0 }, { item: item });
                 if(state) {
                     that._moveTooltip(item, coords);
                 } else {
