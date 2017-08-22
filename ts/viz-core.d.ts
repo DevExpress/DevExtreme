@@ -505,7 +505,13 @@ declare module DevExpress.viz.core {
           * @docid dxvectormapoptions_tooltip_customizetooltip
           * @docid dxtreemapoptions_tooltip_customizetooltip
           */
-        customizeTooltip?: (arg: Object) => { color?: string; text?: string };
+        customizeTooltip?: (arg: Object) => {
+            color?: string;
+            text?: string;
+            html?: string;
+            fontColor?: string;
+            borderColor?: string;
+        };
 
         /**
           * @docid BaseWidgetOptions_tooltip_enabled
