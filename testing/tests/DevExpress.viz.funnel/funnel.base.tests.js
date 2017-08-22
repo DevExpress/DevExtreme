@@ -124,6 +124,19 @@ QUnit.test("Use colors from dataSource", function(assert) {
     assert.equal(items[1].smartAttr.lastCall.args[0].fill, "red");
 });
 
+QUnit.test("Correct values if each value is zero", function(assert) {
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 0 }, { value: 0 }]
+    });
+
+    var values = stubAlgorithm.normalizeValues.lastCall.args[0].map(function(item) {
+        return item.value;
+    });
+
+    assert.deepEqual(values, [1, 1]);
+});
+
 QUnit.module("Drawing", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);

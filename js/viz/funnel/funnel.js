@@ -176,17 +176,26 @@ var dxFunnel = require("../core/base_widget").inherit({
             valueField = that._getOption("valueField", true),
             argumentField = that._getOption("argumentField", true),
             colorField = that._getOption("colorField", true),
-            items = data.reduce(function(prev, item) {
+            processedData = data.reduce(function(d, item) {
                 var value = Number(item[valueField]);
                 if(value >= 0) {
-                    prev.push({
+                    d[0].push({
                         value: value,
                         color: item[colorField],
                         argument: item[argumentField]
                     });
+                    d[1] += value;
                 }
-                return prev;
-            }, []);
+                return d;
+            }, [[], 0]),
+            items = processedData[0];
+
+        if(!processedData[1]) {
+            items = items.map(function(item) {
+                item.value += 1;
+                return item;
+            });
+        }
 
         if(that._getOption("sortData", true)) {
             items.sort(function(a, b) {
