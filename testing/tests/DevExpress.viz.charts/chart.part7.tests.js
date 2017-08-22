@@ -1333,7 +1333,6 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                         series: series,
                         getLabels: sinon.stub().returns([label]),
                         argument: seriesOptions && seriesOptions.argument || label.getBoundingRect().x,
-                        originalValue: label.getBoundingRect().value
                     };
                 });
             };
@@ -1343,6 +1342,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 labels = [];
             $.each(bBoxes, function(_, BBox) {
                 var label = new commons.LabelCtor();
+                label.getData.returns({ value: BBox.value });
                 label.getBoundingRect.returns(BBox);
                 label.isVisible = sinon.spy(function() {
                     return !this.hide.called;
@@ -1377,7 +1377,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         this.checkLabelPosition(assert, this.labels[1], [5, 10]);
     });
 
-    QUnit.test("Two non overlapping labels", function(assert) {
+    QUnit.test("Two non overlapping labels in height, labels should not be shift and hide", function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 10, width: 10, height: 10 }, { x: 5, y: 30, width: 10, height: 10 }]);
 
         this.createChart({
@@ -1386,7 +1386,68 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
+        assert.ok(!this.labels[0].hide.called);
         assert.ok(!this.labels[1].shift.called);
+        assert.ok(!this.labels[1].hide.called);
+    });
+
+    //T545134
+    QUnit.test("Two non overlapping labels in width, labels should not be shift and hide", function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 10, width: 10, height: 10 }, { x: 20, y: 15, width: 10, height: 10 }], { argument: "argument" });
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }]
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(!this.labels[0].hide.called);
+        assert.ok(!this.labels[1].shift.called);
+        assert.ok(!this.labels[1].hide.called);
+    });
+
+    //T545134
+    QUnit.test("Two non overlapping labels in width, labels should not be shift and hide, rotated", function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 10, width: 10, height: 10 }, { x: 5, y: 25, width: 10, height: 10 }], { argument: "argument" });
+
+        this.createChart({
+            rotated: true,
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }]
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(!this.labels[0].hide.called);
+        assert.ok(!this.labels[1].shift.called);
+        assert.ok(!this.labels[1].hide.called);
+    });
+
+    QUnit.test("First label to the right of the second label, second label should be shifted", function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 20, y: 10, width: 10, height: 10 }, { x: 14, y: 15, width: 10, height: 10 }], { argument: "argument" });
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }]
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(!this.labels[0].hide.called);
+        assert.ok(this.labels[1].shift.called);
+        assert.ok(!this.labels[1].hide.called);
+    });
+
+    QUnit.test("First label to the left of the second label, second label should be shifted", function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 14, y: 10, width: 10, height: 10 }, { x: 20, y: 15, width: 10, height: 10 }], { argument: "argument" });
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }]
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(!this.labels[0].hide.called);
+        assert.ok(this.labels[1].shift.called);
+        assert.ok(!this.labels[1].hide.called);
     });
 
     QUnit.test("Three overlapping labels. start", function(assert) {
@@ -1719,7 +1780,6 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                     getLabels: sinon.stub().returns([labels[0], labels[1]]),
                     argument: labels[0].getBoundingRect().x,
                     originalMinValue: labels[0].getBoundingRect().value,
-                    originalValue: labels[1].getBoundingRect().value
                 };
             });
             seriesMockData.series.push(series);
@@ -1728,6 +1788,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         createStubLabels: function(bBoxes) {
             return $.map(bBoxes, function(bBox) {
                 var label = new commons.LabelCtor();
+                label.getData.returns({ value: bBox.value });
                 label.getBoundingRect.returns(bBox);
                 label.isVisible = sinon.spy(function() {
                     return !bBox.hidden && !this.hide.called;
