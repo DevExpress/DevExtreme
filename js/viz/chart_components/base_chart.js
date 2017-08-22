@@ -60,57 +60,60 @@ var $ = require("../../core/renderer"),
         "scrollingMode"
     ];
 
-function checkHeightLabelsInCanvas(points, canvas, isRotated) {
-    var commonLabelSize = 0,
-        canvasSize = canvas.end - canvas.start,
-        labels,
-        label,
-        allLabelsAreInvisible;
+function checkHeightRollingStock(rollingStocks, stubCanvas) {
+    var canvasSize = stubCanvas.end - stubCanvas.start,
+        size = 0;
+    rollingStocks.forEach(function(rollingStock) {
+        size += rollingStock.getBoundingRect().width;
+    });
 
-    for(var i = 0; i < points.length; i++) {
-        labels = points[i].getLabels();
-
-        allLabelsAreInvisible = true;
-
-        for(var j = 0; j < labels.length; j++) {
-            label = labels[j];
-
-            if(label.isVisible()) {
-                commonLabelSize += label.getBoundingRect()[isRotated ? "width" : "height"];
-                allLabelsAreInvisible = false;
-            }
-        }
-
-        if(allLabelsAreInvisible) {
-            points[i] = null;
-        }
-    }
-    if(canvasSize > 0) {
-        while(commonLabelSize > canvasSize) {
-            commonLabelSize -= killSmallValues(points, isRotated);
-        }
+    while(canvasSize < size) {
+        size -= findAndKillSmallValue(rollingStocks);
     }
 }
 
-function killSmallValues(points, isRotated) {
-    var smallestValuePoint = { originalValue: Infinity },
-        bBox = 0,
-        indexOfPoint;
-    _each(points, function(index, point) {
-        if(point && smallestValuePoint.originalValue >= point.originalValue) {
-            smallestValuePoint = point;
-            indexOfPoint = index;
-        }
+function findAndKillSmallValue(rollingStocks) {
+    var smallestObject,
+        width;
+
+    smallestObject = rollingStocks.reduce(function(prev, rollingStock, index) {
+        if(!rollingStock) return prev;
+        var value = rollingStock.getLabels()[0].getData().value;
+        return value < prev.value ? {
+            value: value,
+            rollingStock: rollingStock,
+            index: index
+        } : prev;
+    }, {
+        rollingStock: undefined,
+        value: Infinity,
+        index: undefined
     });
-    if(indexOfPoint !== null) {
-        points[indexOfPoint].getLabels().forEach(function(label) {
-            bBox += label.getBoundingRect()[isRotated ? "width" : "height"];
-            label.hide();
-        });
-        points[indexOfPoint] = null;
-        return bBox;
+
+    smallestObject.rollingStock.getLabels()[0].hide();
+    width = smallestObject.rollingStock.getBoundingRect().width;
+    rollingStocks[smallestObject.index] = null;
+
+    return width;
+}
+
+function checkStackOverlap(rollingStocks) {
+    var i,
+        j,
+        iLength,
+        jLength,
+        overlap = false;
+
+    for(i = 0, iLength = rollingStocks.length - 1; i < iLength; i++) {
+        for(j = 0, jLength = rollingStocks.length; j < jLength; j++) {
+            if(i !== j && checkStacksOverlapping(rollingStocks[i], rollingStocks[j], true)) {
+                overlap = true;
+                break;
+            }
+        }
+        if(overlap) break;
     }
-    return 0;
+    return overlap;
 }
 
 function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction) {
@@ -120,8 +123,6 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
             end: isRotated ? canvas.width - canvas.right : canvas.height - canvas.bottom
         },
         hasStackedSeries = false;
-
-    checkHeightLabelsInCanvas(points, stubCanvas, isRotated);
 
     points.forEach(function(p) {
         if(!p) return;
@@ -139,34 +140,38 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     }
 
     if(!checkStackOverlap(rollingStocks)) return;
+    checkHeightRollingStock(rollingStocks, stubCanvas);
+
+    prepareOverlapStacks(rollingStocks);
 
     rollingStocks.reverse();
     moveRollingStock(rollingStocks, stubCanvas);
 }
 
-function overlapRollingStock(firstRolling, secondRolling) {
+function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
     if(!firstRolling || !secondRolling) return;
-    return firstRolling.getBoundingRect().end > secondRolling.getBoundingRect().start;
+    var firstRect = firstRolling.getBoundingRect(),
+        secondRect = secondRolling.getBoundingRect(),
+        oppositeOverlapping = inTwoSides ? ((firstRect.oppositeStart <= secondRect.oppositeStart && firstRect.oppositeEnd > secondRect.oppositeStart) ||
+            (secondRect.oppositeStart <= firstRect.oppositeStart && secondRect.oppositeEnd > firstRect.oppositeStart)) : true;
+    return firstRect.end > secondRect.start && oppositeOverlapping;
 }
 
-function checkStackOverlap(rollingStocks) {
+function prepareOverlapStacks(rollingStocks) {
     var i,
         currentRollingStock,
-        overlap,
         root;
 
     for(i = 0; i < rollingStocks.length - 1; i++) {
         currentRollingStock = root || rollingStocks[i];
-        if(overlapRollingStock(currentRollingStock, rollingStocks[i + 1])) {
+        if(checkStacksOverlapping(currentRollingStock, rollingStocks[i + 1])) {
             currentRollingStock.toChain(rollingStocks[i + 1]);
             rollingStocks[i + 1] = null;
             root = currentRollingStock;
-            overlap = true;
         } else {
             root = null;
         }
     }
-    return overlap;
 }
 
 function moveRollingStock(rollingStocks, canvas) {
@@ -207,15 +212,21 @@ function rollingStocksIsOut(rollingStock, canvas) {
 }
 
 function RollingStock(label, isRotated, shiftFunction) {
-    var bBox = label.getBoundingRect();
+    var bBox = label.getBoundingRect(),
+        x = bBox.x,
+        y = bBox.y,
+        endX = bBox.x + bBox.width,
+        endY = bBox.y + bBox.height;
 
     this.labels = [label];
     this.shiftFunction = shiftFunction;
 
     this._bBox = {
-        start: isRotated ? bBox.x : bBox.y,
+        start: isRotated ? x : y,
         width: isRotated ? bBox.width : bBox.height,
-        end: isRotated ? bBox.x + bBox.width : bBox.y + bBox.height
+        end: isRotated ? endX : endY,
+        oppositeStart: isRotated ? y : x,
+        oppositeEnd: isRotated ? endY : endX
     };
     this._initialPosition = isRotated ? bBox.x : bBox.y;
 
@@ -248,6 +259,9 @@ RollingStock.prototype = {
         if(this._bBox.end > canvas.end) {
             this.shift(this._bBox.end - canvas.end);
         }
+    },
+    getLabels: function() {
+        return this.labels;
     },
     getInitialPosition: function() {
         return this._initialPosition;
