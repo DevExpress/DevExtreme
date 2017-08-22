@@ -114,7 +114,7 @@ var sendRequest = function(options) {
     xhr.open(
         method,
         options.url,
-        options.async,
+        options.async || true,
         options.username,
         options.password);
 
