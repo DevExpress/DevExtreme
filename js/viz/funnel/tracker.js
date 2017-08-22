@@ -19,7 +19,7 @@ exports.plugin = {
                     x = Math.floor(e.pageX - rootOffset.left),
                     y = Math.floor(e.pageY - rootOffset.top);
 
-                return that._getProxyData(x, y);
+                return that._hitTestTargets(x, y);
             };
 
         that._tracker = new Tracker({

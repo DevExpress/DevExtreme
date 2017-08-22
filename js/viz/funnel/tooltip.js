@@ -1,5 +1,7 @@
 "use strict";
 
+var noop = require("../../core/utils/common").noop;
+
 function getCoords(figureCoords, renderer) {
     var offset = renderer.getRootOffset();
 
@@ -8,12 +10,8 @@ function getCoords(figureCoords, renderer) {
 
 exports.plugin = {
     name: "funnel-tooltip",
-    init: function() {
-
-    },
-    dispose: function() {
-
-    },
+    init: noop,
+    dispose: noop,
 
     extenders: {
         _buildNodes: function() {
