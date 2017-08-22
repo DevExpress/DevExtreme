@@ -250,7 +250,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(visibleColumnCount > columnIndex && isValidGroupSpaceColumn()) {
                 var isExpandColumn = column.command === "expand";
 
-                return (column && !column.command && (!isEditingCurrentRow || column.allowEditing)) || isExpandColumn;
+                return (column && !column.command && (!isEditingCurrentRow || column.allowEditing)) || !isEditingCurrentRow && isExpandColumn;
             }
         }
     },
