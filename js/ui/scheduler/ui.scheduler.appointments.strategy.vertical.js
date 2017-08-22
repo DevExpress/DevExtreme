@@ -232,7 +232,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentCount: function(overlappingMode, coordinates) {
-        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountByOption();
+        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountPerCell();
     },
 
     _getDefaultRatio: function(coordinates, appointmentCountPerCell) {

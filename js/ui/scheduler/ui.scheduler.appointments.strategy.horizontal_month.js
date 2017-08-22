@@ -108,7 +108,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     },
 
     _getAppointmentCount: function() {
-        return this._getAppointmentCountByOption();
+        return this._getAppointmentCountPerCell();
     },
 
     _getDefaultRatio: function() {
