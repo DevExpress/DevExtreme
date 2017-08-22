@@ -45,7 +45,7 @@ var getElementEventData = function(element, eventName) {
                 var result; // TODO: get rid of checking if result equals false
                 var callHandler = function(e) {
                     var handlerArgs = [e];
-                    if(extraParameters === undefined) {
+                    if(extraParameters !== undefined) {
                         handlerArgs.push(extraParameters);
                     }
                     return handler.apply(handlerArgs[0].currentTarget, handlerArgs);

@@ -7403,8 +7403,7 @@ QUnit.testInActiveWindow("Cell editor invalid value don't miss focus on saveEdit
     this.editRow(0);
     that.clock.tick();
     var $input = $(rowsView.element().find(".dx-data-row").first().find("td").eq(2).find(".dx-texteditor-input"));
-
-    $input.focus();
+    $input.get(0).focus();
     that.clock.tick();
 
     //assert
@@ -7416,7 +7415,8 @@ QUnit.testInActiveWindow("Cell editor invalid value don't miss focus on saveEdit
     $($input).trigger("change");
 
     $input = $(rowsView.element().find(".dx-data-row").first().find("td").eq(2).find(".dx-texteditor-input"));
-    $input.focus();
+    $input.get(0).blur();
+    $input.get(0).focus();
 
     that.saveEditData();
     that.clock.tick();
