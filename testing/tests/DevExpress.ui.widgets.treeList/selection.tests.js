@@ -42,7 +42,7 @@ var setupModule = function() {
     };
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ["data", "columns", "rows", "selection", "editorFactory", "columnHeaders", "filterRow"], {
+        setupTreeListModules(that, ["data", "columns", "rows", "selection", "editorFactory", "columnHeaders", "filterRow", "sorting"], {
             initViews: true
         });
     };
@@ -239,6 +239,32 @@ QUnit.test("Click on selectAll checkbox should works correctly", function(assert
     //assert
     assert.equal($checkbox.dxCheckBox("instance").option("value"), true, "SelectAll checkbox value is OK");
     assert.deepEqual(this.option("selectedRowKeys"), [1], "Right rows are selected");
+});
+
+QUnit.test("Click on selectAll checkbox should works correctly when sorting is enabled", function(assert) {
+   //arrange
+    var $testElement = $('#treeList'),
+        clock = sinon.useFakeTimers();
+
+    this.options.showColumnHeaders = true;
+    this.options.sorting = {
+        mode: "single"
+    };
+    this.options.columns[0].allowSorting = true;
+    this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always', allowSelectAll: true };
+    this.setupTreeList();
+    this.columnHeadersView.render($testElement);
+    this.rowsView.render($testElement);
+
+    //act
+    var $checkbox = $('.dx-header-row').find('.dx-checkbox');
+    $checkbox.trigger("dxclick");
+    clock.tick();
+
+    //assert
+    assert.equal($checkbox.dxCheckBox("instance").option("value"), true, "SelectAll checkbox value is OK");
+    assert.equal($testElement.find("tbody > tr > td").first().find(".dx-sort-up, .dx-sort-down").length, 0, "sort not applied");
+    clock.restore();
 });
 
 QUnit.test("Click on selectAll checkbox should check row checkboxes", function(assert) {
