@@ -582,13 +582,13 @@ function layoutTextNode(node, params) {
     var rect = node.rect,
         hOffset = params.hOffset,
         effectiveWidth = rect[2] - rect[0] - params.paddingLeftRight,
-        fitByHeight = params.height + params.paddingTopBottom < rect[3] - rect[1],
-        fitByWidth = node.textWidth < effectiveWidth;
+        fitByHeight = params.height + params.paddingTopBottom <= rect[3] - rect[1],
+        fitByWidth = node.textWidth <= effectiveWidth;
 
     if(params.resolveLabelOverflow === "ellipsis" && fitByHeight) {
         node.text.applyEllipsis(effectiveWidth);
         if(!fitByWidth) {
-            fitByWidth = node.text.getBBox().width < effectiveWidth;
+            fitByWidth = node.text.getBBox().width <= effectiveWidth;
         }
     }
 
