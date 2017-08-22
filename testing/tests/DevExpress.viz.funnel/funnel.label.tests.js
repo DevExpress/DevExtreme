@@ -118,6 +118,24 @@ QUnit.test("Do not create labels if label.visible set to false", function(assert
     assert.equal(labelModule.Label.callCount, 0, "no one label is created");
 });
 
+QUnit.test("Hide labels for zero values id showForZeroValues is set to false", function(assert) {
+    stubAlgorithm.getFigures.returns([[0], [0]]);
+    stubAlgorithm.normalizeValues.returns([1, 1]);
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }, { value: 0 }],
+        valueField: "value",
+        label: {
+            visible: true,
+            showForZeroValues: false
+        }
+    });
+
+    assert.equal(labelModule.Label.callCount, 2);
+    assert.ok(!labelModule.Label.getCall(0).returnValue.stub("hide").called);
+    assert.ok(labelModule.Label.getCall(1).returnValue.stub("hide").called);
+});
+
 QUnit.test("Reserve space for labels if position outside", function(assert) {
     createFunnel({
         algorithm: "stub",
