@@ -651,6 +651,7 @@ QUnit.test("show mask on focus only", function(assert) {
     assert.equal($input.val(), "", "input is empty");
 
     $input.focus();
+    this.clock.tick();
     assert.equal(textEditor.option("text"), "__", "editor is not empty");
     assert.equal($input.val(), "__", "input is not empty");
     assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, "caret position is on the start");
@@ -661,27 +662,10 @@ QUnit.test("show mask on focus only", function(assert) {
 
 });
 
-QUnit.test("never show mask", function(assert) {
-    var $textEditor = $("#texteditor").dxTextEditor({
-            mask: "XX",
-            showMaskMode: "never",
-            maskRules: {
-                "X": "x"
-            }
-        }),
-        textEditor = $textEditor.dxTextEditor("instance"),
-        $input = $textEditor.find(".dx-texteditor-input");
-
-    assert.equal(textEditor.option("text"), "", "editor is empty");
-
-    $input.focus();
-    assert.equal(textEditor.option("text"), "", "editor is not empty");
-});
-
 QUnit.test("change mask visibility", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
             mask: "XX",
-            showMaskMode: "never",
+            showMaskMode: "always",
             maskRules: {
                 "X": "x"
             }
@@ -689,9 +673,6 @@ QUnit.test("change mask visibility", function(assert) {
         textEditor = $textEditor.dxTextEditor("instance"),
         $input = $textEditor.find(".dx-texteditor-input");
 
-    assert.equal(textEditor.option("text"), "", "placeholder is hidden");
-
-    textEditor.option("showMaskMode", "always");
     assert.equal(textEditor.option("text"), "__", "placeholder is visible");
 
     textEditor.option("showMaskMode", "onFocus");
@@ -724,7 +705,7 @@ QUnit.testInActiveWindow("cursor should be set after fixed mask letters", functi
 
 QUnit.testInActiveWindow("selection should consider fixed mask letters", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
-        mask: "X))",
+        mask: ")X))",
         maskRules: {
             "X": "x"
         }
@@ -752,7 +733,7 @@ QUnit.testInActiveWindow("Editor with mask isn't focused after render", function
 
 QUnit.testInActiveWindow("caret should be in start position on first editor focusing", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
-        mask: "XX",
+        mask: "00",
         focusStateEnabled: true
     });
 
@@ -764,6 +745,24 @@ QUnit.testInActiveWindow("caret should be in start position on first editor focu
 
     assert.equal(keyboard.caret().start, 0, "caret is at the start");
     assert.equal(keyboard.caret().end, 0, "caret is at the start");
+});
+
+QUnit.testInActiveWindow("caret should be at the last symbol when input is incomplete", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+        mask: "00",
+        focusStateEnabled: true
+    });
+
+    var $input = $textEditor.find(".dx-texteditor-input");
+    var keyboard = keyboardMock($input, true);
+
+    keyboard.type("1");
+    $input.blur();
+    $input.focus();
+    this.clock.tick();
+
+    assert.equal(keyboard.caret().start, 1, "caret is at the last symbol");
+    assert.equal(keyboard.caret().end, 1, "caret is at the last symbol");
 });
 
 
@@ -1308,7 +1307,7 @@ QUnit.test("mask should support drag", function(assert) {
 
     this.clock.tick();
 
-    assert.equal($input.val(), "(x_)", "mask is corrected");
+    assert.equal($input.val(), "(x_)", "mask is correct");
 });
 
 QUnit.test("mask should support drag with spaces", function(assert) {
