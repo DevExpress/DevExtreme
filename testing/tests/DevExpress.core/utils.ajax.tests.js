@@ -134,9 +134,8 @@ QUnit.test("upload fail", function(assert) {
 QUnit.test("Set request header", function(assert) {
     ajax.sendRequest({
         url: "/some-url",
-        headers: { "Content-Type": "text/html" },
-        method: "GET",
-        upload: { } // TODO: remove after sendRequest will work without jquery
+        headers: { "Content-Type": "text/html", "Accept": "application/xml" },
+        method: "GET"
     });
 
     assert.equal(this.requests.length, 1);
@@ -146,6 +145,25 @@ QUnit.test("Set request header", function(assert) {
     assert.equal(xhr.method, "GET");
     assert.equal(xhr.url, "/some-url");
     assert.equal(xhr.requestHeaders["Content-Type"], "text/html");
+    assert.equal(xhr.requestHeaders["Accept"], "application/xml");
+});
+
+QUnit.test("Set request header and content-type", function(assert) {
+    ajax.sendRequest({
+        url: "/some-url",
+        contentType: "multipart/form-data",
+        headers: { "Content-Type": "text/html" },
+        method: "GET"
+    });
+
+    assert.equal(this.requests.length, 1);
+
+    var xhr = this.requests[0];
+
+    assert.equal(xhr.method, "GET");
+    assert.equal(xhr.url, "/some-url");
+    assert.equal(xhr.requestHeaders["Content-Type"], "multipart/form-data,text/html");
+    assert.equal(xhr.requestHeaders["Accept"], "*/*");
 });
 
 QUnit.test("abort request", function(assert) {
@@ -153,8 +171,7 @@ QUnit.test("abort request", function(assert) {
 
     var request = ajax.sendRequest({
         url: "/heavy-url",
-        method: "GET",
-        upload: { } // TODO: remove after sendRequest will work without jquery
+        method: "GET"
     });
 
     request.fail(failCallback);
@@ -169,8 +186,7 @@ QUnit.test("beforeSend called properly with an xhr object as an argument", funct
     var request = ajax.sendRequest({
         url: "/some-url",
         method: "GET",
-        beforeSend: beforeSendCallback,
-        upload: { } // TODO: remove after sendRequest will work without jquery
+        beforeSend: beforeSendCallback
     });
 
     assert.equal(this.requests.length, 1);
@@ -181,4 +197,24 @@ QUnit.test("beforeSend called properly with an xhr object as an argument", funct
     assert.strictEqual(beforeSendCallback.getCall(0).args[0], xhr);
 
     request.abort();
+});
+
+QUnit.test("jsonp", function(assert) {
+    var result;
+
+    ajax.sendRequest({
+        url: "/json-url",
+        dataType: "jsonp",
+        jsonp: "callback1"
+    }).done(function(data) {
+        result = data;
+    });
+
+    assert.equal(this.requests.length, 1);
+
+    var xhr = this.requests[0];
+    xhr.respond(200, { "Content-Type": "application/json" }, "callback1(1)");
+
+    assert.deepEqual(result, 1);
+
 });
