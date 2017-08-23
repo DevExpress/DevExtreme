@@ -265,8 +265,23 @@ setEngine({
         var type = src.type || src.originalEvent && src.originalEvent.type;
 
         // TODO: Consider other native events
+        if(type === "click") {
+            // TODO: native click for checkboxes
+            if(element === document.activeElement) {
+                element.blur();
+            }
+            element.focus && element.focus();
+        }
         if(type === "focus") {
-            element.focus();
+            // TODO: Change grid editing tests and get rid of this
+            if(element === document.activeElement) {
+                element.blur && element.blur();
+            }
+            element.focus && element.focus();
+            return;
+        }
+        if(type === "blur") {
+            element.blur && element.blur();
             return;
         }
 

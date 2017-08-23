@@ -7980,6 +7980,8 @@ QUnit.testInActiveWindow("Save a valid value for an invalid cell when focus in o
         $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
     };
     this.editCell(0, 1);
+    // TODO: Investigate if we can uncomment the line below
+    //getInputElements($cells).first().trigger("dxclick");
     this.clock.tick();
 
     //assert
