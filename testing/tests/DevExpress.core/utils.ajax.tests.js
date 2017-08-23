@@ -146,6 +146,7 @@ QUnit.test("Set request header", function(assert) {
     assert.equal(xhr.url, "/some-url");
     assert.equal(xhr.requestHeaders["Content-Type"], "text/html");
     assert.equal(xhr.requestHeaders["Accept"], "application/xml");
+    assert.equal(xhr.requestHeaders["X-Requested-With"], "XMLHttpRequest");
 });
 
 QUnit.test("Set request header and content-type", function(assert) {
@@ -162,8 +163,39 @@ QUnit.test("Set request header and content-type", function(assert) {
 
     assert.equal(xhr.method, "GET");
     assert.equal(xhr.url, "/some-url");
-    assert.equal(xhr.requestHeaders["Content-Type"], "multipart/form-data,text/html");
+    assert.equal(xhr.requestHeaders["Content-Type"], "text/html");
     assert.equal(xhr.requestHeaders["Accept"], "*/*");
+});
+
+QUnit.test("Default Content-Type", function(assert) {
+    ajax.sendRequest({
+        url: "/some-url"
+    });
+    ajax.sendRequest({
+        url: "/some-url",
+        data: { q: 1 }
+    });
+    ajax.sendRequest({
+        url: "/some-url",
+        data: { q: 1 },
+        method: "post"
+    });
+
+    assert.equal(this.requests.length, 3);
+
+    var xhr1 = this.requests[0],
+        xhr2 = this.requests[1],
+        xhr3 = this.requests[2];
+
+    assert.equal(xhr1.method, "GET");
+    assert.equal(xhr1.url, "/some-url");
+    assert.equal(xhr1.requestHeaders["Content-Type"], undefined);
+    assert.equal(xhr1.requestHeaders["Accept"], "*/*");
+
+    assert.equal(xhr2.requestHeaders["Content-Type"], undefined);
+
+    assert.equal(xhr3.method, "POST");
+    assert.equal(xhr3.requestHeaders["Content-Type"], "application/x-www-form-urlencoded;charset=utf-8");
 });
 
 QUnit.test("abort request", function(assert) {
@@ -199,13 +231,16 @@ QUnit.test("beforeSend called properly with an xhr object as an argument", funct
     request.abort();
 });
 
-QUnit.test("jsonp", function(assert) {
+QUnit.test("jsonp request", function(assert) {
+
     var result;
+    this.clock.tick(123456789);
 
     ajax.sendRequest({
         url: "/json-url",
         dataType: "jsonp",
-        jsonp: "callback1"
+        jsonp: "callback1",
+        jsonpCallback: "callbackName"
     }).done(function(data) {
         result = data;
     });
@@ -213,70 +248,97 @@ QUnit.test("jsonp", function(assert) {
     assert.equal(this.requests.length, 1);
 
     var xhr = this.requests[0];
-    xhr.respond(200, { "Content-Type": "application/json" }, "callback1(1)");
+    xhr.respond(200, { "Content-Type": "application/json" }, "callbackName(1)");
+    assert.equal(xhr.url, "/json-url?callback1=callbackName&_=123456789");
 
-    assert.deepEqual(result, 1);
+    assert.equal(result, 1);
 
 });
 
-QUnit.test("send data with request", function(assert) {
+QUnit.test("Send data with request", function(assert) {
     this.clock.tick(123456789);
-    ajax.sendRequest({
-        url: "/some-url",
-        data: { top: 20, skip: 5, filter: "%any value%" }
+
+    sinon.stub(Math, "random", function() {
+        return 0.5555555555;
     });
 
-    ajax.sendRequest({
-        method: "post",
-        url: "/some-url",
-        data: { top: 20, skip: 5, filter: "%any value%" }
-    });
+    var testData = [
+        {
+            // sendRequest options
 
-    ajax.sendRequest({
-        url: "/some-url?top=20",
-        data: { skip: 5, filter: "%any value%" }
-    });
+            // xhr object parameters
+            url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
+        },
+        {
+            // sendRequest options
+            method: "post",
+            // xhr object parameters
+            url: "/some-url", requestBody: "top=20&skip=5&filter=%25any+value%25"
+        },
+        {
+            // sendRequest options
+            optionUrl: "/some-url?filter=eq(20)",
+            // xhr object parameters
+            url: "/some-url?filter=eq(20)&top=20&skip=5&filter=%25any%20value%25", requestBody: null
+        },
+        {
+            // sendRequest options
+            dataType: "jsonp",
+            // xhr object parameters
+            url: "/some-url?top=20&skip=5&filter=%25any%20value%25&callback=callback123456789_05555555555&_=123456789", requestBody: null
+        },
+        {
+            // sendRequest options
+            dataType: "jsonp", jsonpCallback: "callback",
+            // xhr object parameters
+            url: "/some-url?top=20&skip=5&filter=%25any%20value%25&callback=callback&_=123456789", requestBody: null
+        },
+        {
+            // sendRequest options
+            jsonp: "callback1", jsonpCallback: "callbackName",
+            // xhr object parameters
+            url: "/some-url?top=20&skip=5&filter=%25any%20value%25&callback1=callbackName&_=123456789", requestBody: null
+        },
+        {
+            // sendRequest options
+            method: "put",
+            // xhr object parameters
+            url: "/some-url", requestBody: "top=20&skip=5&filter=%25any+value%25"
+        },
+        {
+            // sendRequest options
+            method: "post", contentType: "text/html",
+            // xhr object parameters
+            url: "/some-url", requestBody: "top=20&skip=5&filter=%25any%20value%25"
+        },
+        {
+            // sendRequest options
+            contentType: "application/x-www-form-urlencoded",
+            // xhr object parameters
+            url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
+        }
+    ];
 
-    ajax.sendRequest({
-        url: "/some-url",
-        dataType: "jsonp",
-        data: { skip: 5, filter: "%any value%" }
-    });
+    for(var i in testData) {
+        ajax.sendRequest({
+            url: testData[i].optionUrl || "/some-url",
+            data: { top: 20, skip: 5, filter: "%any value%" },
+            jsonp: testData[i].jsonp,
+            jsonpCallback: testData[i].jsonpCallback,
+            method: testData[i].method,
+            dataType: testData[i].dataType,
+            contentType: testData[i].contentType
+        });
 
-    ajax.sendRequest({
-        url: "/some-url",
-        dataType: "jsonp",
-        jsonp: "callback",
-        data: { skip: 5, filter: "%any value%" }
-    });
+        assert.equal(this.requests[i].url, testData[i].url, "url for element " + i + " from test data");
+        assert.equal(this.requests[i].requestBody, testData[i].requestBody, "requestBody for element " + i + " from test data");
+    }
 
-    ajax.sendRequest({
-        url: "/some-url",
-        jsonp: "callback",
-        data: { skip: 5, filter: "%any value%" }
-    });
-
-    ajax.sendRequest({
-        method: "put",
-        url: "/some-url",
-        data: { top: 20, skip: 5, filter: "%any value%" }
-    });
-
-    assert.equal(this.requests.length, 7);
-    assert.equal(this.requests[0].url, "/some-url?top=20&skip=5&filter=%25any%20value%25");
-    assert.equal(this.requests[0].requestBody, null);
-    assert.equal(this.requests[1].url, "/some-url");
-    assert.equal(this.requests[1].requestBody, "top=20&skip=5&filter=%25any%20value%25");
-    assert.equal(this.requests[2].url, "/some-url?top=20&skip=5&filter=%25any%20value%25");
-    assert.equal(this.requests[3].url, "/some-url?skip=5&filter=%25any%20value%25&%24format=json&%24callback=callback123456789&_=123456789");
-    assert.equal(this.requests[4].url, "/some-url?skip=5&filter=%25any%20value%25&%24format=json&%24callback=callback&_=123456789");
-    assert.equal(this.requests[5].url, "/some-url?skip=5&filter=%25any%20value%25&%24format=json&%24callback=callback&_=123456789");
-    assert.equal(this.requests[6].url, "/some-url");
-    assert.equal(this.requests[6].requestBody, "top=20&skip=5&filter=%25any%20value%25");
-    assert.equal(this.requests[6].method, "put");
+    assert.equal(this.requests.length, 9, "Number of requests");
+    assert.equal(this.requests[6].method, "PUT", "Check method name");
 });
 
-QUnit.test("headers for different dataTypes", function(assert) {
+QUnit.test("Headers for different dataTypes", function(assert) {
     var dataTypes = [
             { type: "", header: "*/*" },
             { type: "someType", header: "*/*" },
@@ -287,7 +349,8 @@ QUnit.test("headers for different dataTypes", function(assert) {
             { type: "html", header: "text/html, */*; q=0.01" },
             { type: "json", header: "application/json, text/javascript, */*; q=0.01" },
             { type: "xml", header: "application/xml, text/xml, */*; q=0.01" },
-            { type: "jsonp", header: "*/*" }];
+            { type: "script", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" },
+            { type: "jsonp", header: "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript, */*; q=0.01" }];
 
     for(var i in dataTypes) {
         ajax.sendRequest({
@@ -309,7 +372,7 @@ QUnit.test("post process of data with different dataType", function(assert) {
         dataTypes = [
             { type: "json", response: "{ 'value': 1234 }", result: undefined },
             { type: "json", response: '{ "value": 1234 }', result: { "value": 1234 } },
-            { type: "script", response: "var variable = 10;", result: undefined },
+            { type: "script", response: "var variable = 10;", result: "var variable = 10;" },
             { type: "text", response: "text text", result: "text text" }],
         error;
     var setResult = function(data) {

@@ -3,7 +3,6 @@
 //var jQuery = require("jquery");
 var Deferred = require("./deferred").Deferred;
 var extendFromObject = require("./extend").extendFromObject;
-var isEmpty = require("./string").isEmpty;
 
 var isStatusSuccess = function(status) {
     return 200 <= status && status < 300;
@@ -31,12 +30,15 @@ var getAcceptHeader = function(options, headers) {
     }
 
     var dataType = options.dataType || "*",
+        scriptAccept = "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript",
         accepts = {
             "*": "*/*",
             text: "text/plain",
             html: "text/html",
             xml: "application/xml, text/xml",
-            json: "application/json, text/javascript"
+            json: "application/json, text/javascript",
+            jsonp: scriptAccept,
+            script: scriptAccept
         };
     extendFromObject(accepts, options.accepts);
 
@@ -45,85 +47,93 @@ var getAcceptHeader = function(options, headers) {
             accepts["*"];
 };
 
-var getContentTypeHeader = function(options, headers) {
-    var contentTypes = [options.contentType, headers["Content-Type"]],
-        realTypes = [];
-
-    for(var i in contentTypes) {
-        var type = contentTypes[i];
-        if(!isEmpty(type)) realTypes.push(type);
+var getContentTypeHeader = function(options, headers, method) {
+    var defaultContentType;
+    if(options.data && method !== "GET") {
+        defaultContentType = "application/x-www-form-urlencoded;charset=utf-8";
     }
 
-    if(!realTypes.length) {
-        return "application/x-www-form-urlencoded; charset=UTF-8";
-    }
-
-    return realTypes.join();
+    return headers["Content-Type"] ||
+           options.contentType ||
+           defaultContentType;
 };
 
-var processData = function(deferred, xhr, dataType) {
-    var data = (xhr.responseType || "text") !== "text" || typeof xhr.responseText !== "string" ? xhr.response : xhr.responseText;
+var postProcess = function(deferred, xhr, dataType) {
+
+    var data = xhr.responseType && xhr.responseType !== "text" || typeof xhr.responseText !== "string"
+                ? xhr.response
+                : xhr.responseText;
+
     if(dataType === "json") {
         try {
             deferred.resolve(JSON.parse(data));
-        } catch(e) { // TODO - test this and resolve with normal error
+        } catch(e) {
             deferred.reject(e);
         }
     } else if(dataType === "script") {
         evalScript(data);
-        deferred.resolve();
+        deferred.resolve(data);
     } else {
         deferred.resolve(data);
     }
 };
 
 var sendRequest = function(options) {
-    // if(!options.responseType && !options.upload) {
-    //     return jQuery.ajax(options);
-    // }
-    var xhr = new XMLHttpRequest();
-    var d = new Deferred();
-    var result = d.promise();
 
-    var headers = options.headers || {};
-    var params = options.data;
-    var method = options.method || "GET";
-    var useJsonp = options.dataType === "jsonp" || options.jsonp;
+    //return jQuery.ajax(options);
+
+    var xhr = new XMLHttpRequest(),
+        d = new Deferred(),
+        result = d.promise(),
+
+        headers = options.headers || {},
+        params = options.data,
+        method = (options.method || "GET").toUpperCase(),
+        useJsonp = options.dataType === "jsonp" || options.jsonp,
+        contentType = getContentTypeHeader(options, headers, method);
 
     if(useJsonp) {
-        var timestamp = Date.now();
-        var callbackName = options.jsonp || "callback" + timestamp;
+        var timestamp = Date.now(),
+            callbackName = options.jsonpCallback || "callback" + timestamp + "_" + Math.random().toString().replace(/\D/g, ""),
+            callbackParameter = options.jsonp || "callback";
+
         params = params || {};
-        params["$format"] = "json";
-        params["$callback"] = callbackName;
+        params[callbackParameter] = callbackName;
         params["_"] = timestamp;
+
         window[callbackName] = function(data) {
             d.resolve(data);
         };
     }
 
-    if(params && typeof params !== "string" && !options.upload) {
-        params = paramsConvert(params);
-    }
+    if(params) {
+        if(typeof params !== "string" && !options.upload) {
+            params = paramsConvert(params);
+        }
 
-    if(method.toUpperCase() === "GET" && params) {
-        options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + params;
-        params = null;
+        if(method === "GET") {
+            options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + params;
+            params = null;
+        } else if(contentType && contentType.indexOf("application/x-www-form-urlencoded") > -1) {
+            params = params.replace(/%20/g, "+");
+        }
     }
 
     xhr.open(
         method,
         options.url,
-        options.async || true,
+        options.async,
         options.username,
         options.password);
 
-    xhr.timeout = options.timeout || 0;
+    if(options.async) {
+        xhr.timeout = options.timeout || 0;
+    }
 
     xhr["onreadystatechange"] = function(e) {
         if(xhr.readyState === 4) {
             if(isStatusSuccess(xhr.status)) {
-                useJsonp ? evalScript(xhr.responseText) : processData(d, xhr, options.dataType);
+                useJsonp ? evalScript(xhr.responseText) : postProcess(d, xhr, options.dataType);
             } else {
                 d.reject(xhr);
             }
@@ -146,8 +156,9 @@ var sendRequest = function(options) {
         xhr.responseType = options.responseType;
     }
 
-    headers["Content-Type"] = getContentTypeHeader(options, headers);
+    headers["Content-Type"] = contentType;
     headers["Accept"] = getAcceptHeader(options, headers);
+    headers["X-Requested-With"] = "XMLHttpRequest";
 
     for(var name in headers) {
         if(headers.hasOwnProperty(name)) {
