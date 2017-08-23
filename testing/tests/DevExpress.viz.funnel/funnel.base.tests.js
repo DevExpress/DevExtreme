@@ -136,6 +136,46 @@ QUnit.test("Correct values if each value is zero", function(assert) {
     assert.deepEqual(values, [1, 1]);
 });
 
+QUnit.test("Data source with invalid value fields and items are not created, warning is fired", function(assert) {
+    var spy = sinon.stub();
+    createFunnel({
+        algorithm: "stub",
+        valueField: "val1",
+        dataSource: [{ val: 2 }, { val: 3 }],
+        onIncidentOccurred: spy
+    });
+
+    assert.ok(spy.called);
+    assert.equal(spy.getCall(0).args[0].target.id, "W2302");
+    assert.equal(spy.getCall(0).args[0].target.text, "Inconsistent dataSource");
+    assert.equal(spy.getCall(0).args[0].target.type, "warning");
+    assert.equal(spy.getCall(0).args[0].target.widget, "dxFunnel");
+});
+
+QUnit.test("Empty data source, warning shouldn't fire", function(assert) {
+    var spy = sinon.stub();
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [],
+        onIncidentOccurred: spy
+    });
+
+    assert.ok(!spy.called);
+});
+
+QUnit.test("Data source with negative values", function(assert) {
+    var spy = sinon.stub();
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: -2 }, { value: -3 }],
+        onIncidentOccurred: spy
+    });
+
+    assert.ok(spy.called);
+    assert.equal(spy.getCall(0).args[0].target.id, "W2302");
+    assert.equal(spy.getCall(0).args[0].target.text, "Inconsistent dataSource");
+});
+
 QUnit.module("Drawing", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
