@@ -648,7 +648,6 @@ QUnit.test("hover changed event", function(assert) {
     assert.strictEqual(hoverChanged.lastCall.args[0].item, item);
 });
 
-
 QUnit.test("hover changed event after hover second item", function(assert) {
     var hoverChanged = sinon.spy(),
         funnel = createFunnel({
@@ -663,6 +662,33 @@ QUnit.test("hover changed event after hover second item", function(assert) {
     funnel.getAllItems()[1].hover(true);
 
     assert.equal(hoverChanged.callCount, 2);
+});
+
+QUnit.test("Hover item two times, hover changed event should fire only one time", function(assert) {
+    var hoverChanged = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+            onHoverChanged: hoverChanged
+        }),
+        item = funnel.getAllItems()[0];
+
+    item.hover(true);
+    item.hover(true);
+
+    assert.equal(hoverChanged.callCount, 1);
+});
+
+QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fire", function(assert) {
+    var hoverChanged = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+            onHoverChanged: hoverChanged
+        }),
+        item = funnel.getAllItems()[0];
+
+    item.hover(false);
+
+    assert.equal(hoverChanged.callCount, 0);
 });
 
 QUnit.test("disable hover", function(assert) {
@@ -818,6 +844,33 @@ QUnit.test("selection changed event in single mode fire only for selected elemen
     funnel.getAllItems()[1].select(true);
 
     assert.equal(spy.callCount, 2);
+});
+
+QUnit.test("Select item two times, selection changed event should fire only one time", function(assert) {
+    var selectChanged = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+            onSelectionChanged: selectChanged
+        }),
+        item = funnel.getAllItems()[0];
+
+    item.select(true);
+    item.select(true);
+
+    assert.equal(selectChanged.callCount, 1);
+});
+
+QUnit.test("Unselect item if it is not selected, selection changed event shouldn't fire", function(assert) {
+    var selectChanged = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+            onSelectionChanged: selectChanged
+        }),
+        item = funnel.getAllItems()[0];
+
+    item.select(false);
+
+    assert.equal(selectChanged.callCount, 0);
 });
 
 QUnit.test("Clear selection", function(assert) {
