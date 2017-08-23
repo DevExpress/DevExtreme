@@ -785,7 +785,7 @@ var ListBase = CollectionWidget.inherit({
             duration: 200,
             complete: (function() {
                 this.updateDimensions();
-                this._updateLoadingState(!this._scrollViewIsFull());
+                this._updateLoadingState();
                 deferred.resolve();
             }).bind(this)
         });
