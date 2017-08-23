@@ -395,40 +395,18 @@ module.exports = SelectionStrategy.inherit({
         return keyIndex;
     },
 
-    _needRemoveItemKey: function(keys, key) {
-        var hashIndices = this.options.keyHashIndices;
-
-        if(!hashIndices) {
-            return keys.indexOf(key) < 0;
-        }
-
-        var hash = this._getKeyHash(key);
-
-        for(var i = 0; i < keys.length; i++) {
-            var keyHash = this._getKeyHash(keys[i]);
-
-            if(this.equalKeys(hash, keyHash)) {
-                return false;
-            }
-        }
-        return true;
-    },
-
     _updateAddedItemKeys: function(keys, items) {
         for(var i = 0; i < keys.length; i++) {
-            if(this._indexOfSelectedItemKey(keys[i]) < 0) {
+            if(!this.isItemKeySelected(keys[i])) {
                 this.options.addedItemKeys.push(keys[i]);
                 this.options.addedItems.push(items[i]);
             }
         }
     },
 
-    _updateRemovedItemKeys: function(keys) {
-        var oldSelectedKeys = this.options.selectedItemKeys,
-            oldSelectedItems = this.options.selectedItems;
-
+    _updateRemovedItemKeys: function(keys, oldSelectedKeys, oldSelectedItems) {
         for(var i = 0; i < oldSelectedKeys.length; i++) {
-            if(this._needRemoveItemKey(keys, oldSelectedKeys[i])) {
+            if(!this.isItemKeySelected(oldSelectedKeys[i])) {
                 this.options.removedItemKeys.push(oldSelectedKeys[i]);
                 this.options.removedItems.push(oldSelectedItems[i]);
             }
@@ -440,8 +418,10 @@ module.exports = SelectionStrategy.inherit({
     },
 
     setSelectedItems: function(keys, items) {
-        this._updateRemovedItemKeys(keys, items);
         this._updateAddedItemKeys(keys, items);
+
+        var oldSelectedKeys = this.options.selectedItemKeys,
+            oldSelectedItems = this.options.selectedItems;
 
         if(!this.options.equalByReference) {
             this._initSelectedItemKeyHash();
@@ -450,6 +430,8 @@ module.exports = SelectionStrategy.inherit({
 
         this._setOption("selectedItemKeys", keys);
         this._setOption("selectedItems", items);
+
+        this._updateRemovedItemKeys(keys, oldSelectedKeys, oldSelectedItems);
     },
 
     isItemDataSelected: function(itemData) {

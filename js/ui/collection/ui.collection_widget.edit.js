@@ -227,7 +227,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             onSelectionChanged: function(args) {
                 if(args.addedItemKeys.length || args.removedItemKeys.length) {
                     that.option("selectedItems", that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-                    that._updateSelectedItems(args.addedItems, args.removedItems);
+                    that._updateSelectedItems(args);
                 }
             },
             filter: function() {
@@ -274,6 +274,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         keys = keys || this._selection.getSelectedItemKeys();
 
+        that._editStrategy.beginCache();
+
         each(keys, function(_, key) {
             var selectedIndex = that._getIndexByKey(key);
 
@@ -281,6 +283,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 indices.push(selectedIndex);
             }
         });
+
+        that._editStrategy.endCache();
 
         return indices;
     },
@@ -488,33 +492,39 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
     },
 
-    _updateSelectedItems: function(addedItems, removedItems) {
-        var that = this;
+    _updateSelectedItems: function(args) {
+        var that = this,
+            addedItemKeys = args.addedItemKeys,
+            removedItemKeys = args.removedItemKeys;
 
-        if(that._rendered && (addedItems.length || removedItems.length)) {
+        if(that._rendered && (addedItemKeys.length || removedItemKeys.length)) {
             var selectionChangePromise = that._selectionChangePromise;
             if(!that._rendering) {
                 var addedSelection = [],
                     normalizedIndex, i,
                     removedSelection = [];
 
-                for(i = 0; i < addedItems.length; i++) {
-                    normalizedIndex = that._getIndexByItemData(addedItems[i]);
+                that._editStrategy.beginCache();
+
+                for(i = 0; i < addedItemKeys.length; i++) {
+                    normalizedIndex = that._getIndexByKey(addedItemKeys[i]);
                     addedSelection.push(normalizedIndex);
                     that._addSelection(normalizedIndex);
                 }
 
-                for(i = 0; i < removedItems.length; i++) {
-                    normalizedIndex = that._getIndexByItemData(removedItems[i]);
+                for(i = 0; i < removedItemKeys.length; i++) {
+                    normalizedIndex = that._getIndexByKey(removedItemKeys[i]);
                     removedSelection.push(normalizedIndex);
                     that._removeSelection(normalizedIndex);
                 }
+
+                that._editStrategy.endCache();
 
                 that._updateSelection(addedSelection, removedSelection);
             }
 
             when(selectionChangePromise).done(function() {
-                that._fireSelectionChangeEvent(addedItems, removedItems);
+                that._fireSelectionChangeEvent(args.addedItems, args.removedItems);
             });
         }
     },
