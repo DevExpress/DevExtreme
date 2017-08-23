@@ -11,16 +11,22 @@ var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     Label = labelModule.Label,
     stubLabel = vizMocks.stubClass(Label),
-    labels = require("viz/funnel/label");
+    labels = require("viz/funnel/label"),
+    legendModule = require("viz/components/legend"),
+    Legend = legendModule.Legend,
+    stubLegend = vizMocks.stubClass(Legend);
 
 var dxFunnel = require("viz/funnel/funnel");
 dxFunnel.addPlugin(trackerModule.plugin);
 dxFunnel.addPlugin(labels.plugin);
+dxFunnel.addPlugin(legendModule.plugin);
 
 var trackerEnvironment = $.extend({}, environment, {
     beforeEach: function() {
+        var that = this;
         common.environment.beforeEach.apply(this, arguments);
         this.renderer.root.element = $("<div>").appendTo("#test-container")[0];
+        this.legend = new stubLegend();
         sinon.stub(labelModule, "Label", function() {
             var stub = new stubLabel();
             stub.stub("getBoundingRect").returns({
@@ -29,11 +35,17 @@ var trackerEnvironment = $.extend({}, environment, {
             });
             return stub;
         });
+
+        sinon.stub(legendModule, "Legend", function() {
+            return that.legend;
+        });
+        this.itemGroupNumber = 1;
     },
 
     afterEach: function() {
         environment.afterEach.call(this);
         labelModule.Label.restore();
+        legendModule.Legend.restore();
     },
 
     trigger: function(name, data, options) {
