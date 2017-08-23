@@ -93,12 +93,14 @@ var AppointmentLayoutManager = Class.inherit({
         var isAgenda = this.renderingStrategy === "agenda",
             updatedAppointment = this.instance.getUpdatedAppointment(),
             result = [],
-            itemFound;
+            itemFound,
+            coordinatesChanged;
 
         result = this._markDeletedAppointments(renderedItems, appointments);
 
         $.each(appointments, (function(_, currentItem) {
             itemFound = false;
+            coordinatesChanged = false,
             currentItem.needRepaint = false;
 
             $.each(renderedItems, (function(_, item) {
@@ -110,23 +112,33 @@ var AppointmentLayoutManager = Class.inherit({
                         item.needRepaint = true;
                     }
 
-                    var settingsLength = currentItem.settings.length;
+                    var currentItemSettingsLength = currentItem.settings.length,
+                        itemSettingsLength = item.settings.length;
 
-                    for(var k = 0; k < settingsLength; k++) {
-                        var currentItemSettings = currentItem.settings[k],
-                            itemSettings = item.settings[k];
+                    if(currentItemSettingsLength === itemSettingsLength) {
+                        for(var k = 0; k < currentItemSettingsLength; k++) {
+                            var currentItemSettings = currentItem.settings[k],
+                                itemSettings = item.settings[k];
 
-                        if(!isAgenda && itemSettings) {
-                            itemSettings.sortedIndex = currentItemSettings.sortedIndex;
+                            if(!isAgenda && itemSettings) {
+                                itemSettings.sortedIndex = currentItemSettings.sortedIndex;
+                            }
+
+                            if(!commonUtils.equalByValue(currentItemSettings, itemSettings)) {
+
+                                coordinatesChanged = true;
+                                break;
+                            }
                         }
+                    } else {
+                        coordinatesChanged = true;
+                    }
 
-                        if(!commonUtils.equalByValue(currentItemSettings, itemSettings)) {
-                            item.settings = currentItem.settings;
-                            item.needRepaint = true;
-                            item.needRemove = false;
-                            isAgenda && result.push(item);
-                            break;
-                        }
+                    if(coordinatesChanged) {
+                        item.settings = currentItem.settings;
+                        item.needRepaint = true;
+                        item.needRemove = false;
+                        isAgenda && result.push(item);
                     }
                 }
 
