@@ -265,10 +265,10 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_pageLoadMode
             * @publicName pageLoadMode
             * @type string
-            * @default "scrollBottom"
+            * @default "nextButton"
             * @acceptValues 'scrollBottom'|'nextButton'
             */
-            pageLoadMode: "scrollBottom",
+            pageLoadMode: "nextButton",
 
             /**
             * @name dxListOptions_nextButtonText
