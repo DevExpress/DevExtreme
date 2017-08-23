@@ -674,6 +674,68 @@ QUnit.test("scrollView should update its position after a group has been collaps
     }
 });
 
+QUnit.test("more button shouldn't disappear after group collapsed with array store", function(assert) {
+    try {
+        List.mockScrollView(this.originalScrollView);
+        fx.off = true;
+        var $element = this.element.dxList({
+                dataSource: {
+                    store: [
+                        { key: "a", items: ["0", "1", "2"] },
+                        { key: "b", items: ["0", "1", "2"] },
+                        { key: "c", items: ["0", "1", "2"] },
+                        { key: "d", items: ["0", "1", "2"] }],
+                    paginate: true,
+                    pageSize: 3
+                },
+                height: 500,
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        instance.collapseGroup(1);
+
+        this.clock.tick();
+        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("more button shouldn't disappear after group collapsed with custom store", function(assert) {
+    try {
+        List.mockScrollView(this.originalScrollView);
+        fx.off = true;
+        var data = [
+                { key: "a", items: ["0", "1", "2"] },
+                { key: "b", items: ["0", "1", "2"] },
+                { key: "c", items: ["0", "1", "2"] },
+                { key: "d", items: ["0", "1", "2"] }],
+            $element = this.element.dxList({
+                dataSource: {
+                    load: function() {
+                        return data;
+                    },
+                    paginate: true,
+                    pageSize: 3
+                },
+                height: 400,
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        instance.collapseGroup(1);
+
+        this.clock.tick();
+        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+    } finally {
+        fx.off = false;
+    }
+});
+
+
 
 QUnit.module("next button", moduleSetup);
 

@@ -642,7 +642,7 @@ var ListBase = CollectionWidget.inherit({
 
         if(stopLoading || this._scrollViewIsFull()) {
             this._scrollView.release(hideLoadIndicator);
-            this._toggleNextButton(this._shouldRenderNextButton() && !isDataLoaded);
+            this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
         } else {
             this._infiniteDataLoading();
@@ -785,7 +785,7 @@ var ListBase = CollectionWidget.inherit({
             duration: 200,
             complete: (function() {
                 this.updateDimensions();
-                this._updateLoadingState();
+                this._updateLoadingState(!this._scrollViewIsFull());
                 deferred.resolve();
             }).bind(this)
         });
