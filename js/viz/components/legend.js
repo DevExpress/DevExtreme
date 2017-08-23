@@ -867,7 +867,7 @@ exports.plugin = {
         var that = this,
             group = this._renderer.g()
                 .attr({
-                    className: this._rootClassPrefix + "-legend"
+                    class: this._rootClassPrefix + "-legend"
                 })
                 .append(that._renderer.root);
 

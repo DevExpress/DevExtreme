@@ -14,7 +14,7 @@ QUnit.test("Create label group on initialization", function(assert) {
 
     var labelsGroup = this.labelGroup();
     assert.equal(labelsGroup.append.lastCall.args[0], this.renderer.root);
-    assert.equal(labelsGroup.attr.lastCall.args[0].className, "dxf-labels");
+    assert.equal(labelsGroup.attr.lastCall.args[0].class, "dxf-labels");
 });
 
 QUnit.test("Create labels", function(assert) {
