@@ -103,19 +103,6 @@ QUnit.test("Show tooltip on different items", function(assert) {
     assert.deepEqual(this.tooltip.move.lastCall.args, [100, 100, 0], "move");
 });
 
-QUnit.test("Show tooltip. disabled", function(assert) {
-    var widget = createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }]
-    });
-
-    this.tooltip.isEnabled.returns(false);
-
-    widget.getAllItems()[0].showTooltip();
-
-    assert.ok(!this.tooltip.show.called);
-});
-
 QUnit.test("Hide tooltip", function(assert) {
     var widget = createFunnel({
         algorithm: "stub",
