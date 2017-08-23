@@ -167,7 +167,7 @@ module.exports = SelectionStrategy.inherit({
             that._removeSameFilter(selectionFilter, filter, isDeselect, true);
 
             if(that._removeSameFilter(selectionFilter, filter, !isDeselect, !isUnique)) {
-                needAddFilter = !isUnique;
+                needAddFilter = selectionFilter.length && !isUnique;
             }
 
             if(needAddFilter) {
