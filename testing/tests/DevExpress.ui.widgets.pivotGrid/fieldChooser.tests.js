@@ -796,6 +796,10 @@ QUnit.test("Change filter values second time", function(assert) {
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
 
+    this.dataSource.field = function(id, options) {
+        $.extend(dataSourceOptions.columnFields[id], options);
+    };
+
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
 
