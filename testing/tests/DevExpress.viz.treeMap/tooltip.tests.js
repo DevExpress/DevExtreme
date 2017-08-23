@@ -40,18 +40,6 @@ QUnit.test("Show tooltip / coords", function(assert) {
     assert.deepEqual(this.tooltip.move.lastCall.args, [20, 10, 0], "move");
 });
 
-QUnit.test("Show tooltip / disabled", function(assert) {
-    var root = common.createWidget({
-        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
-    }).getRootNode();
-    this.tooltip.isEnabled.returns(false);
-
-    root.getChild(1).showTooltip();
-
-    assert.deepEqual(this.tooltip.show.callCount, 0, "show");
-    assert.deepEqual(this.tooltip.stub("move").callCount, 0, "move");
-});
-
 QUnit.test("Show tooltip / disabled by customization", function(assert) {
     var root = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]

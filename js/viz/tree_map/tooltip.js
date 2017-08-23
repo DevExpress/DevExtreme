@@ -34,23 +34,20 @@ function getCoords(rect, renderer) {
 proto._showTooltip = function(index, coords) {
     var that = this,
         tooltip = that._tooltip,
-        node,
-        state;
-
-    if(tooltip.isEnabled()) {
-        node = that._nodes[index];
+        node = that._nodes[index],
         state = that._tooltipIndex === index || tooltip.show({
             value: node.value,
             valueText: tooltip.formatValue(node.value),
             node: node.proxy
         }, { x: 0, y: 0, offset: 0 }, { node: node.proxy });
-        if(state) {
-            that._moveTooltip(node, coords);
-        } else {
-            tooltip.hide();
-        }
-        that._tooltipIndex = state ? index : -1;
+
+    if(state) {
+        that._moveTooltip(node, coords);
+    } else {
+        tooltip.hide();
     }
+    that._tooltipIndex = state ? index : -1;
+
 };
 
 proto._moveTooltip = function(node, coords) {

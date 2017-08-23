@@ -59,7 +59,7 @@ Tracker.prototype = {
 
         function moveHandler(e) {
             processHover(e, parameters);
-            processTooltip(e, parameters);
+            parameters.widget._getOption("tooltip").enabled && processTooltip(e, parameters);
         }
     },
 

@@ -291,7 +291,10 @@ QUnit.module("Tooltip", $.extend({}, environment, {
 
 QUnit.test("Tooltip is shown on hover", function(assert) {
     var root = common.createWidget({
-        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        tooltip: {
+            enabled: true
+        }
     }).getRootNode();
 
     this.trigger(pointerEvents.move, 2, { pageX: 300, pageY: 200 });
@@ -300,9 +303,25 @@ QUnit.test("Tooltip is shown on hover", function(assert) {
     assert.deepEqual(this.tooltip.move.lastCall.args, [300, 200, 0], "move");
 });
 
+QUnit.test("Tooltip is not shown on hover if tooltip disabled", function(assert) {
+    common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        tooltip: {
+            enabled: false
+        }
+    }).getRootNode();
+
+    this.trigger(pointerEvents.move, 2, { pageX: 300, pageY: 200 });
+
+    assert.ok(!this.tooltip.show.called);
+});
+
 QUnit.test("Tooltip is shown on touch", function(assert) {
     var root = common.createWidget({
-        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        tooltip: {
+            enabled: true
+        }
     }).getRootNode();
 
     this.trigger(pointerEvents.down, 2, { pageX: 300, pageY: 200 });
@@ -313,7 +332,10 @@ QUnit.test("Tooltip is shown on touch", function(assert) {
 
 QUnit.test("Hovering same element several times does not cause several tooltip shows", function(assert) {
     var root = common.createWidget({
-        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        tooltip: {
+            enabled: true
+        }
     }).getRootNode();
     root.getChild(1).showTooltip();
     this.tooltip.show.reset();
@@ -329,7 +351,10 @@ QUnit.test("Hovering same element several times does not cause several tooltip s
 
 QUnit.test("Hovering unknown element hides tooltip", function(assert) {
     var root = common.createWidget({
-        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        tooltip: {
+            enabled: true
+        }
     }).getRootNode();
     root.getChild(1).showTooltip();
 
@@ -351,7 +376,10 @@ QUnit.test("Show tooltip with 'interactWithGroup' option", function(assert) {
                 value: 3
             }]
         }],
-        interactWithGroup: true
+        interactWithGroup: true,
+        tooltip: {
+            enabled: true
+        }
     }).getRootNode();
 
     this.trigger(pointerEvents.move, 3);

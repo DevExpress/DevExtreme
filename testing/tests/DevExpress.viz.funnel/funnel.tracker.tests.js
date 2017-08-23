@@ -182,7 +182,10 @@ QUnit.module("Tooltip", trackerEnvironment);
 
 QUnit.test("Show tooltip on hovered item", function(assert) {
     var widget = createFunnel({
-        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
+        tooltip: {
+            enabled: true
+        }
     });
 
     sinon.spy(widget.getAllItems()[2], "showTooltip");
@@ -198,6 +201,9 @@ QUnit.test("Show tooltip on hovered inside label item", function(assert) {
         label: {
             visible: true,
             position: "inside"
+        },
+        tooltip: {
+            enabled: true
         }
     });
 
@@ -224,6 +230,9 @@ QUnit.test("Do not show tooltip on hovered outside label item", function(assert)
         label: {
             visible: true,
             position: "columns"
+        },
+        tooltip: {
+            enabled: true
         }
     });
 
