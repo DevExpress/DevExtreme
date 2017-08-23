@@ -1339,6 +1339,24 @@ QUnit.test("select and deselect several items", function(assert) {
     assert.strictEqual(selection.isItemSelected(this.data[2]), false, "item 2 should not be selected");
 });
 
+QUnit.test("deselectAll after selectAll when filter by key values is defined", function(assert) {
+    var selection = this.createDeferredSelection(this.data);
+
+    //act
+    this.dataSource.filter([["id", "=", 1], "or", ["id", "=", 2]]);
+    selection.selectAll();
+    selection.deselectAll();
+
+    //assert
+    assert.deepEqual(selection.selectionFilter(), [], "selection filter");
+    assert.strictEqual(selection.getSelectAllState(), false, "select all is false");
+    var selectedItems;
+    selection.getSelectedItems().done(function(items) {
+        selectedItems = items;
+    });
+    assert.deepEqual(selectedItems, [], "no selected items");
+});
+
 QUnit.test("getSelectedItems returns deferred", function(assert) {
     var selectedItems,
         selection = this.createDeferredSelection(this.data, {
