@@ -757,9 +757,7 @@ var ListBase = CollectionWidget.inherit({
                 this._createAction((function(e) {
                     var $group = $(e.jQueryEvent.currentTarget).parent();
                     this._collapseGroupHandler($group);
-                    if(this.option("focusStateEnabled")) {
-                        this.option("focusedElement", $group.find("." + LIST_ITEM_CLASS).eq(0));
-                    }
+                    this.option("focusedElement", $group.find("." + LIST_ITEM_CLASS).eq(0));
                 }).bind(this), {
                     validatingTargetName: "element"
                 })({

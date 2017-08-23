@@ -596,8 +596,8 @@ var DropDownList = DropDownEditor.inherit({
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
             _keyboardProcessor: this._childKeyboardProcessor,
-            hoverStateEnabled: this.option("hoverStateEnabled"),
-            focusStateEnabled: this.option("focusStateEnabled")
+            hoverStateEnabled: this._isDesktopDevice() ? this.option("hoverStateEnabled") : false,
+            focusStateEnabled: this._isDesktopDevice() ? this.option("focusStateEnabled") : false
         };
 
         return options;

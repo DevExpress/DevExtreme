@@ -89,25 +89,36 @@ QUnit.test("popup should not focus when we selecting an item", function(assert) 
     assert.ok(isDefaultPrevented === devices.real().generic, "input save focus on overlay pointerdown by preventing blur");
 });
 
-QUnit.test("hover and focus states should correctly pass from the editor to the inner list", function(assert) {
-    this.instance.option({
-        opened: true,
-        hoverStateEnabled: true,
-        focusStateEnabled: true
-    });
+QUnit.test("hover and focus states for list should be initially disabled on mobile devices only", function(assert) {
+    this.instance.option("opened", true);
 
     var list = $(".dx-list").dxList("instance");
 
-    assert.ok(list.option("hoverStateEnabled"), "hover state should be enabled");
-    assert.ok(list.option("focusStateEnabled"), "focus state should be enabled");
+    if(devices.real().deviceType === "desktop") {
+        assert.ok(list.option("hoverStateEnabled"), "hover state should be enabled on desktop");
+        assert.ok(list.option("focusStateEnabled"), "focus state should be enabled on desktop");
+    } else {
+        assert.notOk(list.option("hoverStateEnabled"), "hover state should be disabled on mobiles");
+        assert.notOk(list.option("focusStateEnabled"), "focus state should be disabled on mobiles");
+    }
+});
 
-    this.instance.option({
-        hoverStateEnabled: false,
-        focusStateEnabled: false
-    });
+QUnit.test("changing hover and focus states for list should be enabled on desktop only", function(assert) {
+    this.instance.option("opened", true);
 
-    assert.notOk(list.option("hoverStateEnabled"), "hover state should be disabled");
-    assert.notOk(list.option("focusStateEnabled"), "focus state should be disabled");
+    var list = $(".dx-list").dxList("instance");
+
+    this.instance.option({ hoverStateEnabled: false, focusStateEnabled: false });
+
+    if(devices.real().deviceType === "desktop") {
+        assert.notOk(list.option("hoverStateEnabled"), "hover state should be changed to disabled on desktop");
+        assert.notOk(list.option("focusStateEnabled"), "focus state should be changed to disabled on desktop");
+    } else {
+        this.instance.option({ hoverStateEnabled: true, focusStateEnabled: true });
+
+        assert.notOk(list.option("hoverStateEnabled"), "hover state should not be changed on mobiles");
+        assert.notOk(list.option("focusStateEnabled"), "focus state should not be changed on mobiles");
+    }
 });
 
 

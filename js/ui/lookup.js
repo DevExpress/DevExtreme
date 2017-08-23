@@ -848,7 +848,7 @@ var Lookup = DropDownList.inherit({
 
     _popupHidingHandler: function() {
         this.callBase();
-        this.option("focusStateEnabled") && this.focus();
+        this.focus();
     },
 
     _preventFocusOnPopup: commonUtils.noop,
@@ -1107,10 +1107,6 @@ var Lookup = DropDownList.inherit({
     },
 
     _setFocusPolicy: function() {
-        if(!this.option("focusStateEnabled")) {
-            return;
-        }
-
         if(this.option("searchEnabled")) {
             this._searchBox.focus();
         } else {
