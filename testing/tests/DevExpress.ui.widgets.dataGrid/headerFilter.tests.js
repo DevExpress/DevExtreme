@@ -15,6 +15,7 @@ require("generic_light.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
+    ArrayStore = require("data/array_store"),
     noop = require("core/utils/common").noop,
     ODataStore = require("data/odata/store"),
     devices = require("core/devices"),
@@ -3193,4 +3194,49 @@ QUnit.test("Header filter should consider the 'trueText' and 'falseText' column 
     assert.strictEqual($itemElements.eq(0).text(), "(Blanks)", "text of the first item");
     assert.strictEqual($itemElements.eq(1).text(), "No", "text of the second item");
     assert.strictEqual($itemElements.eq(2).text(), "Yes", "text of the third item");
+});
+
+//T544400
+QUnit.test("Updating selection state should be correct when headerFilter.dataSource as ArrayStore", function(assert) {
+    //arrange
+    var that = this,
+        $listItems,
+        $popupContent,
+        $cancelButton,
+        $testElement = $("#container");
+
+    that.options.dataSource = that.items;
+    that.options.columns[0] = {
+        dataField: "Test1",
+        allowHeaderFiltering: true,
+        headerFilter: {
+            dataSource: new ArrayStore([
+                { value: "value1", text: "Value1" },
+                { value: "value2", text: "Value2" }
+            ])
+        }
+    };
+    that.setupDataGrid();
+    that.columnHeadersView.render($testElement);
+    that.headerFilterView.render($testElement);
+
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $listItems = $popupContent.find(".dx-list-item");
+    $listItems.first().trigger("dxclick");
+
+    //assert
+    assert.ok($listItems.first().find(".dx-checkbox-checked").length, "checkbox checked");
+
+    //act
+    $cancelButton = $popupContent.parent().find(".dx-button").last();
+    $cancelButton.trigger("dxclick");
+
+    that.headerFilterController.showHeaderFilterMenu(0);
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $listItems = $popupContent.find(".dx-list-item");
+
+    //assert
+    assert.notOk($listItems.first().find(".dx-checkbox-checked").length, "checkbox unchecked");
 });
