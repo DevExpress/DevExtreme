@@ -45,7 +45,7 @@ QUnit.test("Creation", function(assert) {
         formatObject = legendCtorArgs.getFormatObject(item),
         legendGroup = this.renderer.g.getCall(0).returnValue;
 
-    assert.equal(legendGroup.attr.lastCall.args[0].className, "dxf-legend");
+    assert.equal(legendGroup.attr.lastCall.args[0].class, "dxf-legend");
     assert.equal(legendCtorArgs.renderer, this.renderer);
     assert.equal(legendCtorArgs.group, legendGroup);
     assert.equal(legendCtorArgs.textField, "text");
