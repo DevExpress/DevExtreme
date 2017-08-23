@@ -3,6 +3,7 @@
 //var jQuery = require("jquery");
 var Deferred = require("./deferred").Deferred;
 var extendFromObject = require("./extend").extendFromObject;
+var isDefined = require("./type").isDefined;
 
 var isStatusSuccess = function(status) {
     return 200 <= status && status < 300;
@@ -29,6 +30,11 @@ var getAcceptHeader = function(options, headers) {
         return headers["Accept"];
     }
 
+    // contentType: "application/json;odata=verbose",
+    //     accepts: {
+    //         json: ["application/json;odata=verbose", "text/plain"].join()
+    //     }
+
     var dataType = options.dataType || "*",
         scriptAccept = "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript",
         accepts = {
@@ -40,7 +46,7 @@ var getAcceptHeader = function(options, headers) {
             jsonp: scriptAccept,
             script: scriptAccept
         };
-    extendFromObject(accepts, options.accepts);
+    extendFromObject(accepts, options.accepts, true);
 
     return accepts[dataType] ?
             accepts[dataType] + (dataType !== "*" ? ", */*; q=0.01" : "") :
@@ -66,15 +72,15 @@ var postProcess = function(deferred, xhr, dataType) {
 
     if(dataType === "json") {
         try {
-            deferred.resolve(JSON.parse(data));
+            deferred.resolve(JSON.parse(data), "success");
         } catch(e) {
-            deferred.reject(e);
+            deferred.reject(e, "error");
         }
     } else if(dataType === "script") {
         evalScript(data);
-        deferred.resolve(data);
+        deferred.resolve(data, "success");
     } else {
-        deferred.resolve(data);
+        deferred.resolve(data, "success");
     }
 };
 
@@ -89,12 +95,14 @@ var sendRequest = function(options) {
         headers = options.headers || {},
         params = options.data,
         method = (options.method || "GET").toUpperCase(),
+        async = isDefined(options.async) ? options.async : true,
         useJsonp = options.dataType === "jsonp" || options.jsonp,
         contentType = getContentTypeHeader(options, headers, method);
 
     if(useJsonp) {
         var timestamp = Date.now(),
-            callbackName = options.jsonpCallback || "callback" + timestamp + "_" + Math.random().toString().replace(/\D/g, ""),
+            random = Math.random().toString().replace(/\D/g, ""),
+            callbackName = options.jsonpCallback || "callback" + timestamp + "_" + random,
             callbackParameter = options.jsonp || "callback";
 
         params = params || {};
@@ -102,12 +110,12 @@ var sendRequest = function(options) {
         params["_"] = timestamp;
 
         window[callbackName] = function(data) {
-            d.resolve(data);
+            d.resolve(data, "success");
         };
     }
 
-    if(params) {
-        if(typeof params !== "string" && !options.upload) {
+    if(params && !options.upload) {
+        if(typeof params !== "string") {
             params = paramsConvert(params);
         }
 
@@ -122,11 +130,11 @@ var sendRequest = function(options) {
     xhr.open(
         method,
         options.url,
-        options.async,
+        async,
         options.username,
         options.password);
 
-    if(options.async) {
+    if(async) {
         xhr.timeout = options.timeout || 0;
     }
 
@@ -135,7 +143,7 @@ var sendRequest = function(options) {
             if(isStatusSuccess(xhr.status)) {
                 useJsonp ? evalScript(xhr.responseText) : postProcess(d, xhr, options.dataType);
             } else {
-                d.reject(xhr);
+                d.reject(xhr, "error");
             }
         }
     };
@@ -161,7 +169,7 @@ var sendRequest = function(options) {
     headers["X-Requested-With"] = "XMLHttpRequest";
 
     for(var name in headers) {
-        if(headers.hasOwnProperty(name)) {
+        if(headers.hasOwnProperty(name) && isDefined(headers[name])) {
             xhr.setRequestHeader(name, headers[name]);
         }
     }

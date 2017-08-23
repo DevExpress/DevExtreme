@@ -367,6 +367,22 @@ QUnit.test("Headers for different dataTypes", function(assert) {
 
 });
 
+QUnit.test("OData accept header", function(assert) {
+    ajax.sendRequest({
+        url: "/some-url",
+        dataType: "json",
+        contentType: "application/json;odata=verbose",
+        accepts: {
+            json: ["application/json;odata=verbose", "text/plain"].join()
+        }
+    });
+
+    assert.equal(this.requests.length, 1);
+
+    assert.equal(this.requests[0].requestHeaders["Accept"], "application/json;odata=verbose,text/plain, */*; q=0.01");
+
+});
+
 QUnit.test("post process of data with different dataType", function(assert) {
     var result = [],
         dataTypes = [
@@ -398,4 +414,25 @@ QUnit.test("post process of data with different dataType", function(assert) {
     assert.equal(variable, 10);
     assert.equal(error.message, "Unexpected token ' in JSON at position 2");
 
+});
+
+QUnit.test("sync request", function(assert) {
+    ajax.sendRequest({
+        url: "/json-url",
+        async: false,
+        timeout: 1000 //is not valid for sync request
+    });
+
+    assert.equal(this.requests.length, 1);
+    assert.equal(this.requests[0].async, false);
+});
+
+QUnit.test("xhrFields", function(assert) {
+    ajax.sendRequest({
+        url: "/json-url",
+        xhrFields: { withCredentials: true }
+    });
+
+    assert.equal(this.requests.length, 1);
+    assert.equal(this.requests[0].withCredentials, true);
 });
