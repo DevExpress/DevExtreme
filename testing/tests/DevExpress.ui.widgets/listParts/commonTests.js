@@ -650,7 +650,7 @@ QUnit.test("scrollView should update its position after a group has been collaps
 QUnit.test("more button shouldn't disappear after group collapsed with array store", function(assert) {
     try {
         List.mockScrollView(this.originalScrollView);
-        fx.off = true;
+        $.fx.off = true;
         var $element = this.element.dxList({
                 dataSource: {
                     store: [
@@ -672,14 +672,14 @@ QUnit.test("more button shouldn't disappear after group collapsed with array sto
         this.clock.tick();
         assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
     } finally {
-        fx.off = false;
+        $.fx.off = false;
     }
 });
 
 QUnit.test("more button shouldn't disappear after group collapsed with custom store", function(assert) {
     try {
         List.mockScrollView(this.originalScrollView);
-        fx.off = true;
+        $.fx.off = true;
         var data = [
                 { key: "a", items: ["0", "1", "2"] },
                 { key: "b", items: ["0", "1", "2"] },
@@ -704,7 +704,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with custom st
         this.clock.tick();
         assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
     } finally {
-        fx.off = false;
+        $.fx.off = false;
     }
 });
 
