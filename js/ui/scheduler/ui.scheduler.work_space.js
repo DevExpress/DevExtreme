@@ -727,7 +727,7 @@ var SchedulerWorkSpace = Widget.inherit({
         if(!this.option("startDate")) {
             return this.option("currentDate");
         } else {
-            var startDate = this._getStartViewDate(),
+            var startDate = dateUtils.trimTime(this._getStartViewDate()),
                 currentDate = this.option("currentDate"),
                 diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
                 endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
