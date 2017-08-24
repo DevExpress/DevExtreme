@@ -36,6 +36,24 @@ var evalScript = function(code) {
     document.head.appendChild(script).parentNode.removeChild(script);
 };
 
+var evalScriptForCrossDomain = function(options, dataType, d) {
+    var script = document.createElement("script");
+    script.src = options.url;
+    document.head.appendChild(script);
+
+    window.addEventListener("load", function(e) {
+        if(dataType !== "jsonp") {
+            d.resolve(null, SUCCESS);
+        }
+        script.parentNode.removeChild(script);
+    });
+
+    window.addEventListener("error", function(e) {
+        d.reject(null, ERROR);
+        script.parentNode.removeChild(script);
+    });
+};
+
 var getAcceptHeader = function(options, headers) {
     if(headers["Accept"]) {
         return headers["Accept"];
@@ -180,22 +198,7 @@ var sendRequest = function(options) {
     }
 
     if(isCrossDomain(options.url) && (dataType === "jsonp" || dataType === "script")) {
-        var script = document.createElement("script");
-        script.src = options.url;
-        document.head.appendChild(script);
-
-        window.addEventListener("load", function(e) {
-            if(dataType !== "jsonp") {
-                d.resolve(null, SUCCESS);
-            }
-            script.parentNode.removeChild(script);
-        });
-
-        window.addEventListener("error", function(e) {
-            d.reject(null, ERROR);
-            script.parentNode.removeChild(script);
-        });
-
+        evalScriptForCrossDomain(options, dataType, d);
         return result;
     }
 
