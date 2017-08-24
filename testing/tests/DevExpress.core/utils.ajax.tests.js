@@ -390,13 +390,15 @@ QUnit.test("post process of data with different dataType", function(assert) {
             { type: "json", response: '{ "value": 1234 }', result: { "value": 1234 } },
             { type: "script", response: "var variable = 10;", result: "var variable = 10;" },
             { type: "text", response: "text text", result: "text text" }],
-        error;
+        error,
+        status;
     var setResult = function(data) {
         result[i] = data;
     };
 
-    var setError = function(e) {
+    var setError = function(xhr, statusText, e) {
         error = e;
+        status = statusText;
     };
 
     for(var i in dataTypes) {
@@ -413,6 +415,7 @@ QUnit.test("post process of data with different dataType", function(assert) {
     /* global variable */
     assert.equal(variable, 10);
     assert.equal(error.message, "Unexpected token ' in JSON at position 2");
+    assert.equal(status, "parsererror");
 
 });
 
@@ -436,3 +439,65 @@ QUnit.test("xhrFields", function(assert) {
     assert.equal(this.requests.length, 1);
     assert.equal(this.requests[0].withCredentials, true);
 });
+
+QUnit.test("Cross domain", function(assert) {
+
+    var testData = [
+        { url: "http://example.com:80", crossDomain: true },
+        { url: "http://example.com:80x", crossDomain: true },
+        { url: "./", crossDomain: false },
+        { url: "/some-url", crossDomain: false },
+        { url: location.origin + "/some-url", crossDomain: false },
+    ];
+
+    for(var i in testData) {
+        ajax.sendRequest({
+            url: testData[i].url
+        });
+
+        assert.equal(this.requests[i].requestHeaders["X-Requested-With"] !== "XMLHttpRequest", testData[i].crossDomain);
+    }
+});
+
+QUnit.test("nocontent status check", function(assert) {
+
+    var status;
+
+    ajax.sendRequest({
+        url: "/json-url"
+    }).done(function(data, statusText) {
+        status = statusText;
+    });
+
+    this.requests[0].respond(204, { "Content-Type": "application/json" }, "");
+    assert.equal(status, "nocontent");
+});
+
+
+QUnit.module("sendRequest async tests");
+
+QUnit.test("Handle timeout", function(assert) {
+
+    var done = assert.async();
+
+    ajax.sendRequest({
+        url: "https://js.devexpress.com",
+        timeout: 1
+    }).fail(function(xhr, statusText) {
+        assert.equal(statusText, "timeout");
+        done();
+    });
+});
+
+QUnit.test("Handle error", function(assert) {
+
+    var done = assert.async();
+
+    ajax.sendRequest({
+        url: "https://devexpress.noresolve/"
+    }).fail(function(xhr, statusText) {
+        assert.equal(statusText, "error");
+        done();
+    });
+});
+
