@@ -1862,6 +1862,43 @@ QUnit.test("The 'onCustomItemCreating' option with Deferred", function(assert) {
     assert.equal($input.val(), "display " + customValue, "displayed value is changed");
 });
 
+QUnit.test("The 'onCustomItemCreating' option with Promise", function(assert) {
+    assert.expect(4);
+
+    var resolve,
+        promise = new Promise(function(onResolve) {
+            resolve = onResolve;
+        }),
+        $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            displayExpr: "display",
+            valueExpr: "value",
+            onCustomItemCreating: function() { return promise; }
+        }),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input),
+        customValue = "Custom value";
+
+    keyboard
+        .type(customValue)
+        .change();
+
+    assert.equal($selectBox.dxSelectBox("option", "value"), null, "value is not changed until deferred is resolved");
+    assert.equal($input.val(), customValue, "input value is not changed until deferred is resolved");
+
+    promise.then(function() {
+        assert.equal($selectBox.dxSelectBox("option", "value"), "value " + customValue, "value is changed");
+        assert.equal($input.val(), "display " + customValue, "displayed value is changed");
+    });
+
+    resolve({
+        display: "display " + customValue,
+        value: "value " + customValue
+    });
+
+    return promise;
+});
+
 QUnit.test("Value should be reset if the 'onCustomItemCreating' deferred is rejected", function(assert) {
     var deferred = $.Deferred(),
         $selectBox = $("#selectBox").dxSelectBox({
