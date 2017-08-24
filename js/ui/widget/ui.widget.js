@@ -509,12 +509,12 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderFocusState: function() {
-        if(!this.option("focusStateEnabled") || this.option("disabled")) {
+        if(this.option("disabled")) {
             return;
         }
 
-        this._renderFocusTarget();
         this._attachFocusEvents();
+        this._renderFocusTarget();
         this._attachKeyboardEvents();
         this._renderAccessKey();
     },
@@ -634,7 +634,7 @@ var Widget = DOMComponent.inherit({
 
     _toggleFocusClass: function(isFocused, $element) {
         var $focusTarget = $element && $element.length ? $element : this._focusTarget();
-        $focusTarget.toggleClass(FOCUSED_STATE_CLASS, isFocused);
+        $focusTarget.toggleClass(FOCUSED_STATE_CLASS, this.option("focusStateEnabled") && isFocused);
     },
 
     _hasFocusClass: function(element) {
