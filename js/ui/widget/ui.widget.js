@@ -509,13 +509,14 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderFocusState: function() {
+        this._attachKeyboardEvents();
+
         if(!this.option("focusStateEnabled") || this.option("disabled")) {
             return;
         }
 
         this._renderFocusTarget();
         this._attachFocusEvents();
-        this._attachKeyboardEvents();
         this._renderAccessKey();
     },
 
@@ -643,12 +644,16 @@ var Widget = DOMComponent.inherit({
     },
 
     _attachKeyboardEvents: function() {
-        var processor = this.option("_keyboardProcessor") || new KeyboardProcessor({
-            element: this._keyboardEventBindingTarget(),
-            focusTarget: this._focusTarget()
-        });
+        var processor = this.option("_keyboardProcessor");
 
-        this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
+        if(!processor && this.option("focusStateEnabled")) {
+            processor = new KeyboardProcessor({
+                element: this._keyboardEventBindingTarget(),
+                focusTarget: this._focusTarget()
+            });
+        }
+
+        this._keyboardProcessor = processor && processor.reinitialize(this._keyboardHandler, this);
     },
 
     _keyboardHandler: function(options) {
