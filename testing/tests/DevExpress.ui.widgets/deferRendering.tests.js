@@ -561,3 +561,35 @@ QUnit.test("stops on dispose (T315643)", function(assert) {
     assert.equal(stopLog.length, 1, "T315643");
     assert.equal(stopLog[0][0], true, "T370098");
 });
+
+QUnit.test("should support Promise/A+ standard", function(assert) {
+    var resolve;
+    var promise = new Promise(function(onResolve) {
+        resolve = onResolve;
+    });
+
+    var options = {
+            renderWhen: promise,
+            onShown: function() {
+                assert.ok(!$test.find(".item").is(".dx-invisible-while-pending-rendering"));
+                assert.equal($test.find(".dx-pending-rendering").length, 0);
+                assert.equal($test.find(".dx-pending-rendering-manual").length, 0);
+            }
+        },
+        $test = $("#renderWhen");
+
+    $test
+        .find(".defer-rendering")
+        .dxDeferRendering(options)
+        .dxDeferRendering("instance");
+
+    assert.ok(!$test.find(".item").is(":visible"));
+    assert.ok($test.find(".item").is(".dx-invisible-while-pending-rendering"));
+    assert.equal($test.find(".dx-pending-rendering").length, 1);
+    assert.ok(!$test.find(".dx-pending-rendering").is(".dx-invisible-while-pending-rendering"));
+    assert.ok(!$test.find(".dx-pending-rendering").is(".dx-pending-rendering-manual"));
+
+    resolve();
+
+    return promise;
+});
