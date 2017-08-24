@@ -248,7 +248,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                         parentNode = that._dataController.getNodeByKey(parentNodeKeys[parentNodeKeys.length - 1]);
                         childKeys = that._getSelectedChildKeys(parentNode, keysToIgnore);
-                        extend(args.selectedRowKeys, childKeys);
+                        args.selectedRowKeys = args.selectedRowKeys.concat(childKeys);
                     }
                 },
 

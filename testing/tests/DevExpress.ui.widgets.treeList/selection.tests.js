@@ -819,3 +819,36 @@ QUnit.test("Changing recursive option at runtime - Deselecting row when all rows
     //assert
     assert.deepEqual(this.option("selectedRowKeys"), [4], "selectedRowKeys");
 });
+
+QUnit.test("Deselecting child node when all nodes are selected", function(assert) {
+    //arrange
+    var items,
+        $testElement = $('#treeList');
+
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+            { id: 5, parentId: 3, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
+            { id: 6, parentId: 3, field1: 'test6', field2: 6, field3: new Date(2002, 1, 6) }
+    ];
+
+    this.options.expandedRowKeys = [3];
+    this.options.selectedRowKeys = [1, 2, 3];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.deselectRows(4);
+
+    //assert
+    items = this.dataController.items();
+    assert.deepEqual(this.option("selectedRowKeys"), [1, 2, 5, 6], "selected row keys");
+    assert.ok(items[0].isSelected, "first item is selected");
+    assert.ok(items[1].isSelected, "second item is selected");
+    assert.notOk(items[2].isSelected, "third item isn't selected");
+    assert.notOk(items[3].isSelected, "fourth item isn't selected");
+    assert.ok(items[4].isSelected, "fifth item is selected");
+    assert.ok(items[5].isSelected, "sixth item is selected");
+});
