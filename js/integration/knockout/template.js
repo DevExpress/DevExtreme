@@ -21,33 +21,24 @@ var KoTemplate = TemplateBase.inherit({
     },
 
     _prepareDataForContainer: function(data, container) {
-        var result = data,
-            containerElement,
-            containerContext;
+        if(container && container.length) {
+            var containerElement = container.get(0);
+            var containerContext = ko.contextFor(containerElement);
 
-        if(container.length) {
-            containerElement = container.get(0);
             data = data !== undefined ? data : ko.dataFor(containerElement) || {};
-            containerContext = ko.contextFor(containerElement);
 
             if(containerContext) {
-                result = (data === containerContext.$data)
+                return (data === containerContext.$data)
                     ? containerContext
                     : containerContext.createChildContext(data);
-            } else {
-                result = data;
             }
         }
 
-        return result;
+        return new ko.bindingContext(data);
     },
 
     _renderCore: function(options) {
-        var model = options.model;
-
-        if(options.container) {
-            model = this._prepareDataForContainer(model, options.container);
-        }
+        var model = this._prepareDataForContainer(options.model, options.container);
 
         if(commonUtils.isDefined(options.index)) {
             model.$index = options.index;
