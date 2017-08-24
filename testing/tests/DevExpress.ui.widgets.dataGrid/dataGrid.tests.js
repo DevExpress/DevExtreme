@@ -8160,3 +8160,38 @@ QUnit.test("Second call all of the callbacks during the first", function(assert)
     assert.ok(callBack2, "called the callback2");
     assert.ok(callBack3, "called the callback3");
 });
+
+//T544647
+QUnit.test("Sync strategy with one inner fire in first callback", function(assert) {
+    //arrange
+    var that = this,
+        callOrder = [];
+
+    that.callBacks.add(function(param) {
+        callOrder.push({ callback: 1, params: param });
+        if(callOrder.length === 1) {
+            that.callBacks.fire(2);
+        }
+    });
+
+    that.callBacks.add(function(param) {
+        callOrder.push({ callback: 2, params: param });
+    });
+
+    that.callBacks.add(function(param) {
+        callOrder.push({ callback: 3, params: param });
+    });
+
+    //act
+    that.callBacks.fire(1);
+
+    //assert
+    assert.deepEqual(callOrder, [
+        { callback: 1, params: 1 },
+        { callback: 1, params: 2 },
+        { callback: 2, params: 2 },
+        { callback: 3, params: 2 },
+        { callback: 2, params: 1 },
+        { callback: 3, params: 1 }
+    ]);
+});
