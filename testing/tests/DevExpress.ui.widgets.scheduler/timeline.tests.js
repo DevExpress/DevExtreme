@@ -1179,10 +1179,11 @@ QUnit.test("'getCoordinatesByDate' should return right coordinates with view opt
 
     var $element = this.instance.element();
 
-    var coords = this.instance.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false);
+    var coords = this.instance.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false),
+        targetCellPosition = $element.find(".dx-scheduler-date-table tbody td").eq(200).position();
 
-    assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(200).position().top, "Cell coordinates are right");
-    assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(200).position().left, "Cell coordinates are right");
+    assert.equal(coords.top, targetCellPosition.top, "Cell coordinates are right");
+    assert.equal(coords.left, targetCellPosition.left, "Cell coordinates are right");
 });
 
 QUnit.test("TimelineWorkWeek view cells have right cellData with view option intervalCount=2", function(assert) {

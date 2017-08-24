@@ -1118,7 +1118,7 @@ QUnit.testStart(function() {
             }]
         });
 
-        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        var workSpaceWeek = this.instance.getWorkSpace(),
             header = this.instance.getHeader(),
             navigator = header._navigator;
 
