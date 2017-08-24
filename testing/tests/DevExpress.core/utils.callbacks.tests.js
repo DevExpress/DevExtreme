@@ -281,6 +281,43 @@ QUnit.test("Sync strategy with one inner fire", function(assert) {
     ]);
 });
 
+//T544647
+QUnit.test("Sync strategy with one inner fire in first callback", function(assert) {
+    //arrange
+    var that = this,
+        callOrder = [];
+
+    this.Callbacks = Callbacks({ syncStrategy: true });
+
+    that.Callbacks.add(function(param) {
+        callOrder.push({ callback: 1, params: param });
+        if(callOrder.length === 1) {
+            that.Callbacks.fire(2);
+        }
+    });
+
+    that.Callbacks.add(function(param) {
+        callOrder.push({ callback: 2, params: param });
+    });
+
+    that.Callbacks.add(function(param) {
+        callOrder.push({ callback: 3, params: param });
+    });
+
+    //act
+    that.Callbacks.fire(1);
+
+    //assert
+    assert.deepEqual(callOrder, [
+        { callback: 1, params: 1 },
+        { callback: 1, params: 2 },
+        { callback: 2, params: 2 },
+        { callback: 3, params: 2 },
+        { callback: 2, params: 1 },
+        { callback: 3, params: 1 }
+    ]);
+});
+
 QUnit.test("Sync strategy with two inner fires", function(assert) {
     //arrange
     var that = this,
