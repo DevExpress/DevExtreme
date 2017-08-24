@@ -364,7 +364,7 @@ var TextEditorMask = TextEditorBase.inherit({
             this._caret({ start: caret.start, end: caret.start });
 
             this._maskKeyHandler(e, function() {
-                this._handleKey(char.charCodeAt());
+                this._handleKey(char && char.charCodeAt());
                 return true;
             });
         }).bind(this));
