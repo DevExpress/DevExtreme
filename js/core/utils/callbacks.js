@@ -26,7 +26,7 @@ Callback.prototype._fireCore = function(context, args) {
         }
     }
 
-    firingIndexes.unshift(step);
+    firingIndexes.pop();
 };
 
 
