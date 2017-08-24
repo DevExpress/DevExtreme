@@ -1401,6 +1401,32 @@ QUnit.testStart(function() {
         assert.ok(dataSource.items().length === 0, "Insert operation is canceled");
     });
 
+    QUnit.test("Appointment should not be added to the data source if 'cancel' flag is defined as Promise", function(assert) {
+        var promise = new Promise(function(resolve) {
+            setTimeout(function() {
+                resolve(true);
+            }, 200);
+        });
+        var dataSource = new DataSource({
+            store: []
+        });
+        this.createInstance({
+            onAppointmentAdding: function(args) {
+                args.cancel = promise;
+            },
+            dataSource: dataSource
+        });
+
+        this.instance.addAppointment({ startDate: new Date(), text: "Appointment 1" });
+        this.clock.tick(200);
+
+        promise.then(function() {
+            assert.ok(dataSource.items().length === 0, "Insert operation is canceled");
+        });
+
+        return promise;
+    });
+
     QUnit.test("onAppointmentAdded", function(assert) {
         var addedSpy = sinon.spy(noop);
 
