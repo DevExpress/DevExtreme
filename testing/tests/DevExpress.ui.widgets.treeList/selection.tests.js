@@ -585,17 +585,51 @@ QUnit.test("Deselect All", function(assert) {
     assert.notOk(items[3].isSelected, "fourth item isn't selected");
 });
 
-QUnit.test("Checking arguments of the 'onSelectionChanged' event", function(assert) {
+QUnit.test("Checking arguments of the 'onSelectionChanged' event when select row", function(assert) {
    //arrange
     var selectionChangedArgs = [],
-        $testElement = $('#treeList');
-
-    this.options.dataSource = [
+        $testElement = $('#treeList'),
+        items = [
             { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
             { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
             { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
             { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
-    ];
+        ];
+
+    this.options.dataSource = items;
+    this.options.expandedRowKeys = [1];
+    this.options.selectedRowKeys = [2];
+    this.options.onSelectionChanged = function(e) {
+        selectionChangedArgs.push(e);
+    };
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    assert.deepEqual(this.option("selectedRowKeys"), [2], "selected row keys");
+
+    //act
+    this.selectRows(1);
+
+    //assert
+    assert.strictEqual(selectionChangedArgs.length, 1, "count call 'onSelectionChanged' event");
+    assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [1], "selected row keys");
+    assert.deepEqual(selectionChangedArgs[0].selectedRowsData, [items[0]], "selected rows data");
+    assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [1], "current selected row keys");
+    assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [], "current deselected row keys");
+});
+
+QUnit.test("Checking arguments of the 'onSelectionChanged' event when deselect row", function(assert) {
+   //arrange
+    var selectionChangedArgs = [],
+        $testElement = $('#treeList'),
+        items = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+        ];
+
+    this.options.dataSource = items;
     this.options.expandedRowKeys = [1];
     this.options.selectedRowKeys = [1];
     this.options.onSelectionChanged = function(e) {
@@ -607,13 +641,54 @@ QUnit.test("Checking arguments of the 'onSelectionChanged' event", function(asse
     assert.deepEqual(this.option("selectedRowKeys"), [1], "selected row keys");
 
     //act
-    this.deselectRows([2]);
+    this.deselectRows(2);
 
     //assert
     assert.strictEqual(selectionChangedArgs.length, 1, "count call 'onSelectionChanged' event");
     assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [3, 4], "selected row keys");
-    assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [3, 4], "current selected row keys");
-    assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [2, 1], "current deselected row keys");
+    assert.deepEqual(selectionChangedArgs[0].selectedRowsData, [items[2], items[3]], "selected rows data");
+    assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [], "current selected row keys");
+    assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [2], "current deselected row keys");
+});
+
+QUnit.test("Checking arguments of the 'onSelectionChanged' event when select/deselect all rows", function(assert) {
+   //arrange
+    var selectionChangedArgs = [],
+        $testElement = $('#treeList'),
+        items = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+        ];
+
+    this.options.dataSource = items;
+    this.options.expandedRowKeys = [1];
+    this.options.onSelectionChanged = function(e) {
+        selectionChangedArgs.push(e);
+    };
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectAll();
+
+    //assert
+    assert.strictEqual(selectionChangedArgs.length, 1, "count call 'onSelectionChanged' event");
+    assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [1], "selected row keys");
+    assert.deepEqual(selectionChangedArgs[0].selectedRowsData, [items[0]], "selected rows data");
+    assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [1], "current selected row keys");
+    assert.deepEqual(selectionChangedArgs[0].currentDeselectedRowKeys, [], "current deselected row keys");
+
+    //act
+    this.deselectAll();
+
+    //assert
+    assert.strictEqual(selectionChangedArgs.length, 2, "count call 'onSelectionChanged' event");
+    assert.deepEqual(selectionChangedArgs[1].selectedRowKeys, [], "selected row keys");
+    assert.deepEqual(selectionChangedArgs[1].selectedRowsData, [], "selected rows data");
+    assert.deepEqual(selectionChangedArgs[1].currentSelectedRowKeys, [], "current selected row keys");
+    assert.deepEqual(selectionChangedArgs[1].currentDeselectedRowKeys, [1], "current deselected row keys");
 });
 
 QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
