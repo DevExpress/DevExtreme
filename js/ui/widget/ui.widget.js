@@ -646,14 +646,16 @@ var Widget = DOMComponent.inherit({
     _attachKeyboardEvents: function() {
         var processor = this.option("_keyboardProcessor");
 
-        if(!processor && this.option("focusStateEnabled")) {
-            processor = new KeyboardProcessor({
+        if(processor) {
+            this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
+        } else if(this.option("focusStateEnabled")) {
+            this._keyboardProcessor = new KeyboardProcessor({
                 element: this._keyboardEventBindingTarget(),
-                focusTarget: this._focusTarget()
+                handler: this._keyboardHandler,
+                focusTarget: this._focusTarget(),
+                context: this
             });
         }
-
-        this._keyboardProcessor = processor && processor.reinitialize(this._keyboardHandler, this);
     },
 
     _keyboardHandler: function(options) {
