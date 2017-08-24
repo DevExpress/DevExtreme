@@ -661,6 +661,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with array sto
                     paginate: true,
                     pageSize: 3
                 },
+                pageLoadMode: "nextButton",
                 height: 500,
                 grouped: true,
                 collapsibleGroups: true
@@ -693,6 +694,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with custom st
                     paginate: true,
                     pageSize: 3
                 },
+                pageLoadMode: "nextButton",
                 height: 400,
                 grouped: true,
                 collapsibleGroups: true
