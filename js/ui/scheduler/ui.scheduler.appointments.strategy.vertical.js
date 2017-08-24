@@ -6,7 +6,8 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
     ALLDAY_APPOINTMENT_MIN_OFFSET = 5,
-    ALLDAY_APPOINTMENT_MAX_OFFSET = 20;
+    ALLDAY_APPOINTMENT_MAX_OFFSET = 20,
+    APPOINTMENT_COUNT_PER_CELL = 3;
 
 var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     getDeltaTime: function(args, initialSize, appointment) {
@@ -214,7 +215,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getDynamicAppointmentCountPerCell: function() {
-        return 3;
+        return APPOINTMENT_COUNT_PER_CELL;
     },
 
     _getAllDayAppointmentGeometry: function(coordinates) {
@@ -232,11 +233,11 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentCount: function(overlappingMode, coordinates) {
-        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getAppointmentCountPerCell();
+        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getMaxAppointmentCountPerCell();
     },
 
     _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
-        return (this.instance.fire("getMaxAppointmentsPerCell") && appointmentCountPerCell !== 1) || coordinates.count >= 3 ? 0.65 : 1;
+        return (this.instance.fire("getMaxAppointmentsPerCell") && appointmentCountPerCell !== 1) || coordinates.count >= APPOINTMENT_COUNT_PER_CELL ? 0.65 : 1;
     },
 
     _getOffsets: function() {

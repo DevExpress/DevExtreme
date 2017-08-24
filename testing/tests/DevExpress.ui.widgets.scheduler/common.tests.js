@@ -1106,7 +1106,7 @@ QUnit.testStart(function() {
             }]
         });
 
-        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        var workSpaceWeek = this.instance.getWorkSpace(),
             header = this.instance.getHeader(),
             navigator = header._navigator;
 
@@ -3233,11 +3233,11 @@ QUnit.testStart(function() {
             }]
         });
 
-        var $workSpace = $(this.instance.element().find(".dx-scheduler-work-space"));
+        var $workSpace = this.instance.getWorkSpace().element();
         assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has correct class");
 
         this.instance.option("currentView", "day");
-        $workSpace = $(this.instance.element().find(".dx-scheduler-work-space"));
+        $workSpace = this.instance.getWorkSpace().element();
         assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
 })("View with configuration");

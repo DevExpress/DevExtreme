@@ -392,7 +392,7 @@ var BaseRenderingStrategy = Class.inherit({
     _checkLongCompactAppointment: noop,
 
     _splitLongCompactAppointment: function(item, result) {
-        var appointmentCountPerCell = this._getAppointmentCountPerCell();
+        var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
         var compactCount = 0;
 
         if(appointmentCountPerCell && item.index > appointmentCountPerCell - 1) {
@@ -482,7 +482,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _markAppointmentAsVirtual: function(coordinates, isAllDay) {
-        var countFullWidthAppointmentInCell = this._getAppointmentCountPerCell();
+        var countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCell();
         if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
             coordinates.virtual = {
                 top: coordinates.top,
@@ -575,7 +575,7 @@ var BaseRenderingStrategy = Class.inherit({
         return false;
     },
 
-    _getAppointmentCountPerCell: function() {
+    _getMaxAppointmentCountPerCell: function() {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
             appointmentCountPerCell;
 
