@@ -28,6 +28,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
 
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
+    WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
 
     WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
 
@@ -422,6 +423,8 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._toggleHorizontalScrollClass();
         this._toggleWorkSpaceCountClass();
+        this._toggleWorkSpaceOverlappingClass();
+
         this.element()
             .addClass(COMPONENT_CLASS)
             .addClass(this._getElementClass());
@@ -443,6 +446,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _isWorkSpaceWithCount: function() {
         return this.option("intervalCount") > 1;
+    },
+
+    _toggleWorkSpaceOverlappingClass: function() {
+        this.element().toggleClass(WORKSPACE_WITH_OVERLAPPING_CLASS, this._isWorkSpaceWithOverlapping());
+    },
+
+    _isWorkSpaceWithOverlapping: function() {
+        return this.invoke("getMaxAppointmentsPerCell") !== undefined;
     },
 
     _getTimePanelClass: function() {

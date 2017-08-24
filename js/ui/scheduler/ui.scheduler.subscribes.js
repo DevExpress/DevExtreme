@@ -568,6 +568,10 @@ var subscribes = {
         return this.getEndViewDate();
     },
 
+    getMaxAppointmentsPerCell: function() {
+        return this.getMaxAppointmentsPerCell();
+    },
+
     agendaIsReady: function(rows, innerRowOffset, outerRowOffset) {
         var $appts = this.getAppointmentsInstance()._itemElements(),
             total = 0;
