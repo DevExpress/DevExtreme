@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    fromPromise = require("../integration/jquery/deferred").fromPromise,
     dataUtils = require("./utils"),
     isFunction = require("../core/utils/type").isFunction,
     errors = require("./errors").errors,
@@ -10,7 +9,8 @@ var $ = require("../core/renderer"),
     queryByOptions = require("./store_helper").queryByOptions,
     deferredUtils = require("../core/utils/deferred"),
     Deferred = deferredUtils.Deferred,
-    when = deferredUtils.when;
+    when = deferredUtils.when,
+    fromPromise = deferredUtils.fromPromise;
 
 var TOTAL_COUNT = "totalCount",
     LOAD = "load",
