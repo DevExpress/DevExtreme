@@ -2,6 +2,7 @@
 
 var ajax = require("core/utils/ajax");
 var browser = require("core/utils/browser");
+require("integration/jquery/ajax");
 
 QUnit.module("sendRequest", {
     beforeEach: function() {
@@ -11,7 +12,7 @@ QUnit.module("sendRequest", {
         this.xhr.onCreate = function(xhr) {
             requests.push(xhr);
         };
-        this.clock = sinon.useFakeTimers();
+        this.clock = sinon.useFakeTimers(123456789);
     },
     afterEach: function() {
         this.xhr.restore();
@@ -214,16 +215,20 @@ QUnit.test("abort request", function(assert) {
 });
 
 QUnit.test("beforeSend called properly with an xhr object as an argument", function(assert) {
-    var beforeSendCallback = sinon.spy();
+    var beforeSendCallback = sinon.spy(),
+        xhr;
     var request = ajax.sendRequest({
         url: "/some-url",
         method: "GET",
         beforeSend: beforeSendCallback
+    }).done(function(data, status, jqXhr) {
+        xhr = jqXhr;
     });
 
+    this.requests[0].respond(200, { "Content-Type": "text/html" }, "data");
     assert.equal(this.requests.length, 1);
 
-    var xhr = this.requests[0];
+    xhr = xhr || this.requests[0]; // jquery || no-jquery
 
     assert.equal(beforeSendCallback.callCount, 1);
     assert.strictEqual(beforeSendCallback.getCall(0).args[0], xhr);
@@ -234,7 +239,6 @@ QUnit.test("beforeSend called properly with an xhr object as an argument", funct
 QUnit.test("jsonp request", function(assert) {
 
     var result;
-    this.clock.tick(123456789);
 
     ajax.sendRequest({
         url: "/json-url",
@@ -256,7 +260,6 @@ QUnit.test("jsonp request", function(assert) {
 });
 
 QUnit.test("Send data with request", function(assert) {
-    this.clock.tick(123456789);
 
     sinon.stub(Math, "random", function() {
         return 0.5555555555;
@@ -297,7 +300,7 @@ QUnit.test("Send data with request", function(assert) {
             // sendRequest options
             jsonp: "callback1", jsonpCallback: "callbackName",
             // xhr object parameters
-            url: "/some-url?top=20&skip=5&filter=%25any%20value%25&callback1=callbackName&_=123456789", requestBody: null
+            url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
         },
         {
             // sendRequest options

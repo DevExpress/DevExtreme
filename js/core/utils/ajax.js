@@ -1,9 +1,9 @@
 "use strict";
 
-//var jQuery = require("jquery");
 var Deferred = require("./deferred").Deferred;
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
+var ajaxStrategy;
 
 var SUCCESS = "success",
     ERROR = "error",
@@ -131,7 +131,9 @@ var setHttpTimeout = function(timeout, xhr, deferred) {
 
 var sendRequest = function(options) {
 
-    //return jQuery.ajax(options);
+    if(ajaxStrategy && !options.responseType && !options.upload) {
+        return ajaxStrategy(options);
+    }
 
     var xhr = new XMLHttpRequest(),
         d = new Deferred(),
@@ -142,7 +144,7 @@ var sendRequest = function(options) {
         method = (options.method || "GET").toUpperCase(),
         async = isDefined(options.async) ? options.async : true,
         dataType = options.dataType,
-        useJsonp = dataType === "jsonp" || options.jsonp,
+        useJsonp = dataType === "jsonp",
         contentType = getContentTypeHeader(options, headers, method),
         timeout = options.timeout || 0,
         timeoutId;
@@ -265,4 +267,9 @@ var sendRequest = function(options) {
     return result;
 };
 
+var setAjaxStrategy = function(strategy) {
+    ajaxStrategy = strategy;
+};
+
+exports.setAjaxStrategy = setAjaxStrategy;
 exports.sendRequest = sendRequest;
