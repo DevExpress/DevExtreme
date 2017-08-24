@@ -3230,4 +3230,26 @@ QUnit.testStart(function() {
 
         assert.ok(result, "Appointment takes all day");
     });
+
+    QUnit.test("Workspace should have an specific class if view.maxAppointmentsPerCell is set", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            views: [{
+                type: "week",
+                name: "Week",
+                maxAppointmentsPerCell: 3
+            },
+            {
+                type: "day",
+                name: "day"
+            }]
+        });
+
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has correct class");
+
+        this.instance.option("currentView", "day");
+        $workSpace = this.instance.getWorkSpace().element();
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
+    });
 })("View with configuration");

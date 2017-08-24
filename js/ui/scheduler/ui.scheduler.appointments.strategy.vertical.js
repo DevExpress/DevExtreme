@@ -4,7 +4,10 @@ var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.bas
     extend = require("../../core/utils/extend").extend,
     dateUtils = require("../../core/utils/date");
 
-var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25;
+var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
+    ALLDAY_APPOINTMENT_MIN_OFFSET = 5,
+    ALLDAY_APPOINTMENT_MAX_OFFSET = 20,
+    APPOINTMENT_COUNT_PER_CELL = 3;
 
 var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     getDeltaTime: function(args, initialSize, appointment) {
@@ -144,35 +147,6 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return result;
     },
 
-    _getAllDayAppointmentGeometry: function(coordinates) {
-        var maxHeight = this._allDayHeight || this.getAppointmentMinSize(),
-            index = coordinates.index,
-            count = coordinates.count,
-            height = maxHeight / (count > 3 ? 3 : count),
-            width = coordinates.width,
-            top = coordinates.top + (index * height),
-            left = coordinates.left,
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize(),
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-
-        //NOTE: Reduce cohesion
-        if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
-            coordinates.skipResizing = true;
-        }
-        if(count > 2) {
-            if(coordinates.isCompact) {
-                top = coordinates.top + compactAppointmentDefaultOffset;
-                left = coordinates.left + (index - 2) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-                height = compactAppointmentDefaultSize;
-                width = compactAppointmentDefaultSize;
-                this._markAppointmentAsVirtual(coordinates, true);
-            } else {
-                top += height;
-            }
-        }
-        return { height: height, width: width, top: top, left: left };
-    },
-
     _getSimpleAppointmentGeometry: function(coordinates) {
         var width = this._getAppointmentMaxWidth() / coordinates.count,
             height = coordinates.height,
@@ -238,9 +212,44 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             result = allDayCondition ? allDayCondition : this._rowCondition(a, b);
 
         return this._fixUnstableSorting(result, a, b);
+    },
+
+    _getDynamicAppointmentCountPerCell: function() {
+        return APPOINTMENT_COUNT_PER_CELL;
+    },
+
+    _getAllDayAppointmentGeometry: function(coordinates) {
+        var config = this._calculateGeometryConfig(coordinates);
+
+        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.maxHeight, true);
+    },
+
+    _calculateGeometryConfig: function(coordinates) {
+        if(!this.instance._allowResizing() || !this.instance._allowAllDayResizing()) {
+            coordinates.skipResizing = true;
+        }
+
+        return this.callBase(coordinates);
+    },
+
+    _getAppointmentCount: function(overlappingMode, coordinates) {
+        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getMaxAppointmentCountPerCell();
+    },
+
+    _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
+        return (this.instance.fire("getMaxAppointmentsPerCell") && appointmentCountPerCell !== 1) || coordinates.count >= APPOINTMENT_COUNT_PER_CELL ? 0.65 : 1;
+    },
+
+    _getOffsets: function() {
+        return {
+            unlimited: ALLDAY_APPOINTMENT_MIN_OFFSET,
+            auto: ALLDAY_APPOINTMENT_MAX_OFFSET
+        };
+    },
+
+    _getMaxHeight: function() {
+        return this._allDayHeight || this.getAppointmentMinSize();
     }
-
-
 });
 
 module.exports = VerticalRenderingStrategy;

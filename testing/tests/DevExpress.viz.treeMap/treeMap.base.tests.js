@@ -987,6 +987,19 @@ QUnit.test("resolveLabelOverflow changed for tile labels", function(assert) {
     assert.equal(this.renderer.text.lastCall.returnValue.applyEllipsis.args[0][0], 25);
 });
 
+QUnit.test("Do not hide label if it width is equal to allowed width", function(assert) {
+    this.renderer.bBoxTemplate = { x: 0, y: 0, width: 25, height: 5 };
+    common.createWidget({
+        size: {
+            width: 30
+        },
+        dataSource: [{ name: "Label", value: 10 }],
+        resolveLabelOverflow: 'ellipsis'
+    });
+
+    assert.strictEqual(this.renderer.text.lastCall.returnValue.attr.lastCall.args[0].visibility, "visible");
+});
+
 QUnit.test("resolveLabelOverflow changed for group labels", function(assert) {
     this.renderer.bBoxTemplate = { x: 0, y: 0, width: 10, height: 5 };
     var widget = common.createWidget({
@@ -1137,7 +1150,7 @@ QUnit.test("texts positions correcting after font options changing", function(as
     });
 
     this.renderer.text.firstCall.returnValue.getBBox = function() {
-        return { height: 30, width: 10, x: 5, y: 10 };
+        return { height: 396, width: 10, x: 5, y: 10 };
     };
 
     widget.option({ tile: { label: { font: { size: 30 } } } });

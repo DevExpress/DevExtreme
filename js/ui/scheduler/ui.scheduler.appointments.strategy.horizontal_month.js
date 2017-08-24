@@ -4,7 +4,9 @@ var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
     HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line");
 
-var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
+var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
+    MONTH_APPOINTMENT_MIN_OFFSET = 21,
+    MONTH_APPOINTMENT_MAX_OFFSET = 30;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
 
@@ -87,33 +89,8 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
         return result;
     },
 
-    _customizeAppointmentGeometry: function(coordinates) {
-        var maxHeight = this._defaultHeight || this.getAppointmentMinSize(),
-            index = coordinates.index,
-            height = MONTH_APPOINTMENT_HEIGHT_RATIO * maxHeight / 2,
-            top = (1 - MONTH_APPOINTMENT_HEIGHT_RATIO) * maxHeight + coordinates.top + (index * height),
-            width = coordinates.width,
-            left = coordinates.left,
-            compactAppointmentDefaultSize,
-            compactAppointmentDefaultOffset;
-
-        if(coordinates.isCompact) {
-            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
-            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
-            top = coordinates.top + compactAppointmentDefaultOffset;
-            left = coordinates.left + (index - 2) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-            height = compactAppointmentDefaultSize;
-            width = compactAppointmentDefaultSize;
-
-            this._markAppointmentAsVirtual(coordinates);
-        }
-
-        return {
-            height: height,
-            width: width,
-            top: top,
-            left: left
-        };
+    _getMaxHeight: function() {
+        return this._defaultHeight || this.getAppointmentMinSize();
     },
 
     createTaskPositionMap: function(items) {
@@ -122,7 +99,28 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
 
     _getSortedPositions: function(map) {
         return this.callBase(map, true);
-    }
+    },
+
+    _customizeAppointmentGeometry: function(coordinates) {
+        var config = this._calculateGeometryConfig(coordinates);
+
+        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.maxHeight);
+    },
+
+    _getAppointmentCount: function() {
+        return this._getMaxAppointmentCountPerCell();
+    },
+
+    _getDefaultRatio: function() {
+        return MONTH_APPOINTMENT_HEIGHT_RATIO;
+    },
+
+    _getOffsets: function() {
+        return {
+            unlimited: MONTH_APPOINTMENT_MIN_OFFSET,
+            auto: MONTH_APPOINTMENT_MAX_OFFSET
+        };
+    },
 });
 
 module.exports = HorizontalMonthRenderingStrategy;

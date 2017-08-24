@@ -1520,7 +1520,7 @@ registerTheme({
             horizontalAlignment: RIGHT,
             horizontalOffset: 0,
             verticalOffset: 0,
-            showForZeroValues: true,
+            showForZeroValues: false,
             customizeText: function(info) {
                 return info.item.data.argument + " " + info.valueText;
             },

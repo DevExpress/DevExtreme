@@ -47,7 +47,7 @@ Item.prototype = {
     },
 
     hover: function(state) {
-        if(!this.widget._getOption("hoverEnabled", true)) {
+        if(!this.widget._getOption("hoverEnabled", true) || state === this.isHovered()) {
             return;
         }
 
@@ -69,7 +69,7 @@ Item.prototype = {
 
     select: function(state) {
         var mode = this.widget._getOption("selectionMode", true);
-        if(mode === "none") {
+        if(mode === "none" || state === this.isSelected()) {
             return;
         }
         this.widget._suspend();

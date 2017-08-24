@@ -18,7 +18,6 @@ var $ = require("../core/renderer"),
     fx = require("../animation/fx"),
     Scrollable = require("./scroll_view/ui.scrollable"),
     LoadIndicator = require("./load_indicator"),
-    fromPromise = require("../integration/jquery/deferred").fromPromise,
     deferredUtils = require("../core/utils/deferred"),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when;
@@ -620,7 +619,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         }
 
         if(invocationResult && typeUtils.isFunction(invocationResult.then)) {
-            return fromPromise(invocationResult);
+            return deferredUtils.fromPromise(invocationResult);
         }
 
         return new Deferred().resolve([]).promise();

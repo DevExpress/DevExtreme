@@ -124,17 +124,18 @@ var DataAdapter = Class.inherit({
     },
 
     _setParentSelection: function() {
-        var length = this._dataStructure.length;
+        var that = this;
 
-        for(var i = length - 1; i >= 0; i--) {
-            var node = this._dataStructure[i],
-                parent = this.options.dataConverter.getParentNode(node);
+        each(this._dataStructure, function(_, node) {
+            var parent = that.options.dataConverter.getParentNode(node);
 
-            if(parent && node.internalFields.parentKey !== this.options.rootValue) {
-                var newParentState = this._calculateSelectedState(parent);
-                this._setFieldState(parent, SELECTED, newParentState);
+            if(parent && node.internalFields.parentKey !== that.options.rootValue) {
+                that._iterateParents(node, function(parent) {
+                    var newParentState = that._calculateSelectedState(parent);
+                    that._setFieldState(parent, SELECTED, newParentState);
+                });
             }
-        }
+        });
     },
 
     _setParentExpansion: function() {

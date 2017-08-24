@@ -77,15 +77,16 @@ var dxFunnel = require("../core/base_widget").inherit({
     _change_TILING: function() {
         var that = this,
             items = that._items,
-            rect = that._rect;
+            rect = that._rect,
+            convertCoord = function(coord, index) {
+                var offset = index % 2;
+                return rect[0 + offset] + (rect[2 + offset] - rect[0 + offset]) * coord;
+            };
 
         this._group.clear();
 
         items.forEach(function(item, index) {
-            var coords = item.figure.map(function(c, index) {
-                    var offset = index % 2;
-                    return rect[0 + offset] + (rect[2 + offset] - rect[0 + offset]) * c;
-                }),
+            var coords = item.figure.map(convertCoord),
                 element = that._renderer.path([], "area")
                     .attr({
                         points: coords
@@ -140,7 +141,7 @@ var dxFunnel = require("../core/base_widget").inherit({
         });
     },
 
-    _getProxyData: function(x, y) {
+    _hitTestTargets: function(x, y) {
         var that = this,
             data;
 
@@ -176,17 +177,30 @@ var dxFunnel = require("../core/base_widget").inherit({
             valueField = that._getOption("valueField", true),
             argumentField = that._getOption("argumentField", true),
             colorField = that._getOption("colorField", true),
-            items = data.reduce(function(prev, item) {
+            processedData = data.reduce(function(d, item) {
                 var value = Number(item[valueField]);
                 if(value >= 0) {
-                    prev.push({
+                    d[0].push({
                         value: value,
                         color: item[colorField],
                         argument: item[argumentField]
                     });
+                    d[1] += value;
                 }
-                return prev;
-            }, []);
+                return d;
+            }, [[], 0]),
+            items = processedData[0];
+
+        if(!processedData[1]) {
+            items = items.map(function(item) {
+                item.value += 1;
+                return item;
+            });
+        }
+
+        if(data.length > 0 && items.length === 0) {
+            that._incidentOccurred("W2302");
+        }
 
         if(that._getOption("sortData", true)) {
             items.sort(function(a, b) {
