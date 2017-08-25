@@ -904,11 +904,9 @@ module.exports = {
             function shiftGroup(side, group) {
                 var attr = {},
                     shift = margins[side] + axesSpacing;
-                attr[isHorizontal ? "translateY" : "translateX"] = (side === "left" || side === "top" ? -1 : 1) * shift;
-                if(margins[side]) {
-                    (group[side] || group).attr(attr);
-                    return shift;
-                }
+                attr[isHorizontal ? "translateY" : "translateX"] = margins[side] ? (side === "left" || side === "top" ? -1 : 1) * shift : 0;
+                (group[side] || group).attr(attr);
+                return shift;
             }
 
             that._axisShift = shiftGroup(options.position, that._axisGroup);
