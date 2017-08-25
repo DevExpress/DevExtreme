@@ -351,6 +351,9 @@ var TextEditorMask = TextEditorBase.inherit({
 
         var inputValue = this._input().val();
         var caret = this._caret();
+        if(!caret.end) {
+            return;
+        }
         caret.start = caret.end - 1;
         var oldValue = inputValue.substring(0, caret.start) + inputValue.substring(caret.end);
         var char = inputValue[caret.start];
