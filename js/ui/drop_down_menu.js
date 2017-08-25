@@ -448,7 +448,7 @@ var DropDownMenu = Widget.inherit({
     _attachKeyboardEvents: function() {
         this.callBase.apply(this, arguments);
 
-        this._listProcessor = this._keyboardProcessor.attachChildProcessor();
+        this._listProcessor = this._keyboardProcessor && this._keyboardProcessor.attachChildProcessor();
         if(this._list) {
             this._list.option("_keyboardProcessor", this._listProcessor);
         }
