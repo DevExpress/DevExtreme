@@ -75,7 +75,7 @@ var evalCrossDomainScript = function(url) {
     });
 };
 
-var getAcceptHeader = function(options, headers) {
+var getAcceptHeader = function(options) {
 
     var dataType = options.dataType || "*",
         scriptAccept = "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript",
@@ -107,8 +107,8 @@ var getContentTypeHeader = function(options) {
 
 var getDataFromResponse = function(xhr) {
     return xhr.responseType && xhr.responseType !== "text" || typeof xhr.responseText !== "string"
-                ? xhr.response
-                : xhr.responseText;
+            ? xhr.response
+            : xhr.responseText;
 };
 
 var postProcess = function(deferred, xhr, dataType) {
@@ -181,11 +181,10 @@ var getRequestOptions = function(options, headers) {
 
     var params = options.data,
         timestamp = Date.now(),
-        noCache = options.dataType === "jsonp" || options.dataType === "script",
         url = options.url;
 
     if(params && !options.upload) {
-        if(noCache) {
+        if(options.noCache) {
             params["_"] = timestamp;
         }
 
@@ -238,8 +237,13 @@ var sendRequest = function(options) {
         timeoutId;
 
     options.crossDomain = isCrossDomain(options.url);
+    options.noCache = dataType === "jsonp" || dataType === "script";
 
-    var callbackName = getJsonpOptions(options);
+    var callbackName = getJsonpOptions(options),
+        headers = getRequestHeaders(options),
+        requestOptions = getRequestOptions(options, headers),
+        url = requestOptions.url,
+        parameters = requestOptions.parameters;
 
     if(callbackName) {
         window[callbackName] = function(data) {
@@ -247,21 +251,15 @@ var sendRequest = function(options) {
         };
     }
 
-    var headers = getRequestHeaders(options);
+    if(options.crossDomain && options.noCache) {
 
-    var requestOptions = getRequestOptions(options, headers),
-        url = requestOptions.url,
-        parameters = requestOptions.parameters;
-
-    if(options.crossDomain && (dataType === "jsonp" || dataType === "script")) {
-
-        var reject = function() { d.reject(null, ERROR); };
-
-        var resolve = function() {
-            if(dataType !== "jsonp") {
+        var reject = function() {
+                d.reject(null, ERROR);
+            },
+            resolve = function() {
+                if(dataType === "jsonp") return;
                 d.resolve(null, SUCCESS);
-            }
-        };
+            };
 
         evalCrossDomainScript(url).then(resolve, reject);
         return result;
