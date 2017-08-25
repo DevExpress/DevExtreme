@@ -92,11 +92,9 @@ var AppointmentLayoutManager = Class.inherit({
     markRepaintedAppointments: function(appointments, renderedItems) {
         var isAgenda = this.renderingStrategy === "agenda",
             updatedAppointment = this.instance.getUpdatedAppointment(),
-            result = [],
+            result = this._markDeletedAppointments(renderedItems, appointments),
             itemFound,
             coordinatesChanged;
-
-        result = this._markDeletedAppointments(renderedItems, appointments);
 
         each(appointments, (function(_, currentItem) {
             itemFound = false;
@@ -111,28 +109,7 @@ var AppointmentLayoutManager = Class.inherit({
                     if(updatedAppointment && commonUtils.equalByValue(item.itemData, updatedAppointment)) {
                         item.needRepaint = true;
                     }
-
-                    var currentItemSettingsLength = currentItem.settings.length,
-                        itemSettingsLength = item.settings.length;
-
-                    if(currentItemSettingsLength === itemSettingsLength) {
-                        for(var k = 0; k < currentItemSettingsLength; k++) {
-                            var currentItemSettings = currentItem.settings[k],
-                                itemSettings = item.settings[k];
-
-                            if(!isAgenda && itemSettings) {
-                                itemSettings.sortedIndex = currentItemSettings.sortedIndex;
-                            }
-
-                            if(!commonUtils.equalByValue(currentItemSettings, itemSettings)) {
-
-                                coordinatesChanged = true;
-                                break;
-                            }
-                        }
-                    } else {
-                        coordinatesChanged = true;
-                    }
+                    coordinatesChanged = this._compareSettings(currentItem, item, isAgenda);
 
                     if(coordinatesChanged) {
                         item.settings = currentItem.settings;
@@ -153,6 +130,33 @@ var AppointmentLayoutManager = Class.inherit({
 
         }).bind(this));
         return isAgenda && result.length ? result : renderedItems;
+    },
+
+    _compareSettings: function(currentItem, item, isAgenda) {
+        var currentItemSettingsLength = currentItem.settings.length,
+            itemSettingsLength = item.settings.length,
+            result = false;
+
+        if(currentItemSettingsLength === itemSettingsLength) {
+            for(var k = 0; k < currentItemSettingsLength; k++) {
+                var currentItemSettings = currentItem.settings[k],
+                    itemSettings = item.settings[k];
+
+                if(!isAgenda && itemSettings) {
+                    itemSettings.sortedIndex = currentItemSettings.sortedIndex;
+                }
+
+                if(!commonUtils.equalByValue(currentItemSettings, itemSettings)) {
+
+                    result = true;
+                    break;
+                }
+            }
+        } else {
+            result = true;
+        }
+
+        return result;
     },
 
     getRenderingStrategyInstance: function() {
