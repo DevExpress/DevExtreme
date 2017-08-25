@@ -1,9 +1,9 @@
 'use strict';
 
 var jquery = require("jquery"),
-    ajaxUtils = require("../../core/utils/ajax"),
+    ajaxStrategy = require("../../core/ajax_strategy"),
     useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 
 if(useJQueryRenderer) {
-    ajaxUtils.setAjaxStrategy(jquery.ajax);
+    ajaxStrategy.set(jquery.ajax);
 }

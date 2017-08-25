@@ -4,7 +4,7 @@ var Deferred = require("./deferred").Deferred;
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
 var Promise = require("../polyfills/promise");
-var ajaxStrategy;
+var ajaxStrategy = require("../ajax_strategy").get();
 
 var SUCCESS = "success",
     ERROR = "error",
@@ -167,7 +167,7 @@ var setHttpTimeout = function(timeout, xhr, deferred) {
 var getJsonpOptions = function(options) {
     if(options.dataType === "jsonp") {
         var random = Math.random().toString().replace(/\D/g, ""),
-            callbackName = options.jsonpCallback || "callback" + Date.now() + "_" + random,
+            callbackName = options.jsonpCallback || "dxCallback" + Date.now() + "_" + random,
             callbackParameter = options.jsonp || "callback";
 
         options.data = options.data || {};
@@ -180,14 +180,14 @@ var getJsonpOptions = function(options) {
 var getRequestOptions = function(options, headers) {
 
     var params = options.data,
-        timestamp = Date.now(),
         url = options.url;
 
-    if(params && !options.upload) {
-        if(options.noCache) {
-            params["_"] = timestamp;
-        }
+    if(options.noCache) {
+        params = params || {};
+        params["_"] = Date.now();
+    }
 
+    if(params && !options.upload) {
         if(typeof params !== "string") {
             params = paramsConvert(params);
         }
@@ -327,9 +327,4 @@ var sendRequest = function(options) {
     return result;
 };
 
-var setAjaxStrategy = function(strategy) {
-    ajaxStrategy = strategy;
-};
-
-exports.setAjaxStrategy = setAjaxStrategy;
 exports.sendRequest = sendRequest;
