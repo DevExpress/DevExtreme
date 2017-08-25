@@ -369,7 +369,7 @@ var subscribes = {
         if(this.appointmentTakesAllDay(appointment)) {
             updatedStartDate = dateUtils.normalizeDate(startDate, firstViewDate);
         } else {
-            if(startDate.getTime() < firstViewDate.getTime()) {
+            if(startDate < firstViewDate) {
                 startDate = firstViewDate;
             }
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));

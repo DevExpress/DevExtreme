@@ -415,7 +415,7 @@ var BaseRenderingStrategy = Class.inherit({
             viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
             text = this.instance.fire("getField", "text", appointment);
 
-        if((startDate && viewStartDate.getTime() > startDate.getTime()) || !startDate) {
+        if((startDate && viewStartDate > startDate) || !startDate) {
             startDate = viewStartDate;
         }
         if(isNaN(startDate.getTime())) {
