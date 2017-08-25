@@ -688,6 +688,7 @@ var Widget = DOMComponent.inherit({
 
         if(this._keyboardProcessor) {
             this._keyboardProcessor.dispose();
+            delete this._keyboardProcessor;
         }
     },
 
