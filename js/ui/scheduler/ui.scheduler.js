@@ -2429,7 +2429,7 @@ var Scheduler = Widget.inherit({
     },
 
     _processActionResult: function(actionOptions, callback) {
-        when(actionOptions.cancel).done(callback.bind(this));
+        deferredUtils.fromPromise(when(actionOptions.cancel)).done(callback.bind(this));
     },
 
     _expandAllDayPanel: function(appointment) {
