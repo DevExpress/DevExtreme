@@ -424,6 +424,15 @@ QUnit.test("OData accept header", function(assert) {
 
 });
 
+QUnit.test("empty url", function(assert) {
+    ajax.sendRequest({
+        url: ""
+    });
+
+    assert.equal(this.requests.length, 1);
+    assert.ok(this.requests[0]["url"].indexOf("localhost") !== -1);
+});
+
 QUnit.test("Post process of data with different dataType (same domain)", function(assert) {
     var result = [],
         dataTypes = [
