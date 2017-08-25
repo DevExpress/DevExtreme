@@ -641,7 +641,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
                 shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
 
-            when(deletingActionArgs.cancel)
+            deferredUtils.fromPromise(when(deletingActionArgs.cancel))
                 .always(function() {
                     $itemElement.data(ITEM_DELETING_DATA_KEY, false);
                 })
