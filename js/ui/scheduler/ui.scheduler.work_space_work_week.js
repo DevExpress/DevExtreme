@@ -54,6 +54,10 @@ var SchedulerWorkSpaceWorkWeek = SchedulerWorkSpaceWeek.inherit({
         this.callBase();
     },
 
+    _getWeekendsCount: function(days) {
+        return 2 * Math.floor(days / 7);
+    },
+
     _setFirstViewDate: function() {
         this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
 

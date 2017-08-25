@@ -738,7 +738,7 @@ var SchedulerWorkSpace = Widget.inherit({
         if(!this.option("startDate")) {
             return this.option("currentDate");
         } else {
-            var startDate = this._getStartViewDate(),
+            var startDate = dateUtils.trimTime(this._getStartViewDate()),
                 currentDate = this.option("currentDate"),
                 diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
                 endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
@@ -1392,14 +1392,22 @@ var SchedulerWorkSpace = Widget.inherit({
             firstViewDate = this.getStartViewDate(),
             timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate),
             fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset,
-            days = Math.floor((fullInterval + startDayTime) / DAY_MS),
-            result = days * DAY_MS;
+            days = this._getDaysOfInterval(fullInterval, startDayTime),
+            result = (days - this._getWeekendsCount(days)) * DAY_MS;
 
         if(!allDay) {
-            result = fullInterval - days * this._getHiddenInterval();
+            result = fullInterval - (days + this._getWeekendsCount(days)) * this._getHiddenInterval();
         }
 
         return result;
+    },
+
+    _getWeekendsCount: function() {
+        return 0;
+    },
+
+    _getDaysOfInterval: function(fullInterval, startDayTime) {
+        return Math.floor((fullInterval + startDayTime) / DAY_MS);
     },
 
     _getGroupIndexes: function(appointmentResources) {
