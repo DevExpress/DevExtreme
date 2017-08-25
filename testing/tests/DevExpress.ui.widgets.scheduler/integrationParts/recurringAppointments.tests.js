@@ -908,3 +908,32 @@ QUnit.test("Recurring appt should be rendered correctly after changing of repeat
 
     assert.equal(appointments.length, 4, "appt was rendered correctly");
 });
+
+QUnit.test("Recurring appt should be rendered correctly after setting recurrenceException", function(assert) {
+    var task = {
+            text: "Stand-up meeting",
+            startDate: new Date(2015, 4, 4, 9, 0),
+            endDate: new Date(2015, 4, 4, 9, 15),
+            recurrenceRule: "FREQ=DAILY;COUNT=3"
+        },
+        newTask = {
+            text: "Stand-up meeting",
+            startDate: new Date(2015, 4, 4, 9, 0),
+            endDate: new Date(2015, 4, 4, 9, 15),
+            recurrenceRule: "FREQ=DAILY;COUNT=3",
+            recurrenceException: "20150506T090000"
+        };
+
+    this.createInstance({
+        dataSource: [task],
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2015, 4, 25),
+        recurrenceEditMode: "single"
+    });
+
+    this.instance.updateAppointment(task, newTask);
+    var appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal(appointments.length, 2, "appt was rendered correctly");
+});
