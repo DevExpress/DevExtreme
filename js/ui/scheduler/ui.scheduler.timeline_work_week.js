@@ -39,7 +39,7 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
     },
 
     _getWeekendsCount: function(days) {
-        return Math.floor(days / 7);
+        return 2 * Math.floor(days / 7);
     },
 
     _setFirstViewDate: function() {

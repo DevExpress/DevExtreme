@@ -288,7 +288,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             fullDays = Math.floor(fullInterval / (toMs("day"))),
             tailDuration = fullInterval - (fullDays * toMs("day")),
             tailDelta = 0,
-            cellCount = this._getCellCountInDay() * (fullDays - 2 * this._getWeekendsCount(fullDays)),
+            cellCount = this._getCellCountInDay() * (fullDays - this._getWeekendsCount(fullDays)),
             gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime(),
             result = cellCount * this.option("hoursInterval") * toMs("hour");
 
