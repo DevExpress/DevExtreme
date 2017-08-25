@@ -116,7 +116,10 @@ var Editor = Widget.inherit({
         }
 
         this.callBase();
-        this._attachChildKeyboardEvents();
+
+        if(this._keyboardProcessor) {
+            this._attachChildKeyboardEvents();
+        }
     },
 
     _attachChildKeyboardEvents: commonUtils.noop,
