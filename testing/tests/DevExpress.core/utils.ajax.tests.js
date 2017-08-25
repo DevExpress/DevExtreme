@@ -236,7 +236,7 @@ QUnit.test("beforeSend called properly with an xhr object as an argument", funct
     request.abort();
 });
 
-QUnit.test("jsonp request", function(assert) {
+QUnit.test("Jsonp request (same domain)", function(assert) {
 
     var result;
 
@@ -341,7 +341,7 @@ QUnit.test("Send data with request", function(assert) {
     assert.equal(this.requests[6].method, "PUT", "Check method name");
 });
 
-QUnit.test("Headers for different dataTypes", function(assert) {
+QUnit.test("Accept headers for different dataTypes", function(assert) {
     var dataTypes = [
             { type: "", header: "*/*" },
             { type: "someType", header: "*/*" },
@@ -386,13 +386,14 @@ QUnit.test("OData accept header", function(assert) {
 
 });
 
-QUnit.test("post process of data with different dataType", function(assert) {
+QUnit.test("Post process of data with different dataType (same domain)", function(assert) {
     var result = [],
         dataTypes = [
             { type: "json", response: "{ 'value': 1234 }", result: undefined },
             { type: "json", response: '{ "value": 1234 }', result: { "value": 1234 } },
             { type: "script", response: "var variable = 10;", result: "var variable = 10;" },
-            { type: "text", response: "text text", result: "text text" }],
+            { type: "text", response: "text text", result: "text text" }
+        ],
         error,
         status;
     var setResult = function(data) {
@@ -422,7 +423,7 @@ QUnit.test("post process of data with different dataType", function(assert) {
 
 });
 
-QUnit.test("sync request", function(assert) {
+QUnit.test("Synchronous request", function(assert) {
     ajax.sendRequest({
         url: "/json-url",
         async: false,
@@ -443,7 +444,7 @@ QUnit.test("xhrFields", function(assert) {
     assert.equal(this.requests[0].withCredentials, true);
 });
 
-QUnit.test("Cross domain", function(assert) {
+QUnit.test("Cross domain headers", function(assert) {
 
     var testData = [
         { url: "http://example.com:80", crossDomain: true },
@@ -501,6 +502,35 @@ QUnit.test("Handle error", function(assert) {
     }).fail(function(xhr, statusText) {
         assert.equal(statusText, "error");
         done();
+    });
+});
+
+QUnit.test("Script request (cross domain)", function(assert) {
+
+    var wrongRemoteUrl = "http://somefakedomain.com/json-url",
+        fail = assert.async(),
+
+        appendChild = sinon.spy(document.head, "appendChild"),
+        removeChild = sinon.spy(document.head, "removeChild"),
+        createElement = sinon.spy(document, "createElement");
+
+    ajax.sendRequest({
+        url: wrongRemoteUrl,
+        dataType: "script"
+    }).fail(function(data, statusText) {
+        assert.equal(statusText, "error");
+
+        assert.ok(createElement.calledWith("script"));
+        assert.equal(appendChild.callCount, 1);
+        assert.equal(removeChild.callCount, 1);
+
+        var addedScript = appendChild.firstCall.args[0];
+
+        assert.equal(addedScript.src, "http://somefakedomain.com/json-url");
+
+        appendChild.restore();
+        createElement.restore();
+        fail();
     });
 });
 

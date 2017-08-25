@@ -3,6 +3,7 @@
 var Deferred = require("./deferred").Deferred;
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
+var Promise = require("../polyfills/promise");
 var ajaxStrategy;
 
 var SUCCESS = "success",
@@ -30,34 +31,51 @@ var paramsConvert = function(params) {
     return result.join("&");
 };
 
-var evalScript = function(code) {
+var createScript = function(options) {
     var script = document.createElement("script");
-    script.text = code;
-    document.head.appendChild(script).parentNode.removeChild(script);
+    for(var name in options) {
+        script[name] = options[name];
+    }
+    return script;
 };
 
-var evalScriptForCrossDomain = function(options, dataType, d) {
-    var script = document.createElement("script");
-    script.src = options.url;
-    document.head.appendChild(script);
+var removeScript = function(scriptNode) {
+    scriptNode.parentNode.removeChild(scriptNode);
+};
 
-    window.addEventListener("load", function(e) {
-        if(dataType !== "jsonp") {
-            d.resolve(null, SUCCESS);
+var appendToHead = function(element) {
+    return document.head.appendChild(element);
+};
+
+var evalScript = function(code) {
+    var script = createScript({ text: code });
+    appendToHead(script);
+    removeScript(script);
+};
+
+var evalCrossDomainScript = function(url) {
+    var script = createScript({ src: url });
+
+    return new Promise(function(resolve, reject) {
+        var events = {
+            "load": resolve,
+            "error": reject
+        };
+
+        var loadHandler = function(e) {
+            events[e.type]();
+            removeScript(script);
+        };
+
+        for(var event in events) {
+            script.addEventListener(event, loadHandler);
         }
-        script.parentNode.removeChild(script);
-    });
 
-    window.addEventListener("error", function(e) {
-        d.reject(null, ERROR);
-        script.parentNode.removeChild(script);
+        appendToHead(script);
     });
 };
 
 var getAcceptHeader = function(options, headers) {
-    if(headers["Accept"]) {
-        return headers["Accept"];
-    }
 
     var dataType = options.dataType || "*",
         scriptAccept = "text/javascript, application/javascript, application/ecmascript, application/x-ecmascript",
@@ -77,14 +95,13 @@ var getAcceptHeader = function(options, headers) {
             accepts["*"];
 };
 
-var getContentTypeHeader = function(options, headers, method) {
+var getContentTypeHeader = function(options) {
     var defaultContentType;
-    if(options.data && method !== "GET") {
+    if(options.data && getMethod(options) !== "GET") {
         defaultContentType = "application/x-www-form-urlencoded;charset=utf-8";
     }
 
-    return headers["Content-Type"] ||
-           options.contentType ||
+    return options.contentType ||
            defaultContentType;
 };
 
@@ -147,6 +164,65 @@ var setHttpTimeout = function(timeout, xhr, deferred) {
     }, timeout);
 };
 
+var getJsonpOptions = function(options) {
+    if(options.dataType === "jsonp") {
+        var random = Math.random().toString().replace(/\D/g, ""),
+            callbackName = options.jsonpCallback || "callback" + Date.now() + "_" + random,
+            callbackParameter = options.jsonp || "callback";
+
+        options.data = options.data || {};
+        options.data[callbackParameter] = callbackName;
+
+        return callbackName;
+    }
+};
+
+var getRequestOptions = function(options, headers) {
+
+    var params = options.data,
+        timestamp = Date.now(),
+        noCache = options.dataType === "jsonp" || options.dataType === "script",
+        url = options.url;
+
+    if(params && !options.upload) {
+        if(noCache) {
+            params["_"] = timestamp;
+        }
+
+        if(typeof params !== "string") {
+            params = paramsConvert(params);
+        }
+
+        if(getMethod(options) === "GET") {
+            url += (url.indexOf("?") > -1 ? "&" : "?") + params;
+            params = null;
+        } else if(headers["Content-Type"] && headers["Content-Type"].indexOf("application/x-www-form-urlencoded") > -1) {
+            params = params.replace(/%20/g, "+");
+        }
+    }
+
+    return {
+        url: url,
+        parameters: params
+    };
+};
+
+var getMethod = function(options) {
+    return (options.method || "GET").toUpperCase();
+};
+
+var getRequestHeaders = function(options) {
+    var headers = options.headers || {};
+
+    headers["Content-Type"] = headers["Content-Type"] || getContentTypeHeader(options);
+    headers["Accept"] = headers["Accept"] || getAcceptHeader(options);
+
+    if(!options.crossDomain && !headers["X-Requested-With"]) {
+        headers["X-Requested-With"] = "XMLHttpRequest";
+    }
+    return headers;
+};
+
 var sendRequest = function(options) {
 
     if(ajaxStrategy && !options.responseType && !options.upload) {
@@ -156,55 +232,44 @@ var sendRequest = function(options) {
     var xhr = new XMLHttpRequest(),
         d = new Deferred(),
         result = d.promise(),
-
-        headers = options.headers || {},
-        params = options.data,
-        method = (options.method || "GET").toUpperCase(),
         async = isDefined(options.async) ? options.async : true,
         dataType = options.dataType,
-        useJsonp = dataType === "jsonp",
-        contentType = getContentTypeHeader(options, headers, method),
         timeout = options.timeout || 0,
         timeoutId;
 
-    if(useJsonp) {
-        var timestamp = Date.now(),
-            random = Math.random().toString().replace(/\D/g, ""),
-            callbackName = options.jsonpCallback || "callback" + timestamp + "_" + random,
-            callbackParameter = options.jsonp || "callback";
+    options.crossDomain = isCrossDomain(options.url);
 
-        params = params || {};
-        params[callbackParameter] = callbackName;
-        params["_"] = timestamp;
+    var callbackName = getJsonpOptions(options);
 
-        dataType = "jsonp";
-
+    if(callbackName) {
         window[callbackName] = function(data) {
             d.resolve(data, SUCCESS);
         };
     }
 
-    if(params && !options.upload) {
-        if(typeof params !== "string") {
-            params = paramsConvert(params);
-        }
+    var headers = getRequestHeaders(options);
 
-        if(method === "GET") {
-            options.url += (options.url.indexOf("?") > -1 ? "&" : "?") + params;
-            params = null;
-        } else if(contentType && contentType.indexOf("application/x-www-form-urlencoded") > -1) {
-            params = params.replace(/%20/g, "+");
-        }
-    }
+    var requestOptions = getRequestOptions(options, headers),
+        url = requestOptions.url,
+        parameters = requestOptions.parameters;
 
-    if(isCrossDomain(options.url) && (dataType === "jsonp" || dataType === "script")) {
-        evalScriptForCrossDomain(options, dataType, d);
+    if(options.crossDomain && (dataType === "jsonp" || dataType === "script")) {
+
+        var reject = function() { d.reject(null, ERROR); };
+
+        var resolve = function() {
+            if(dataType !== "jsonp") {
+                d.resolve(null, SUCCESS);
+            }
+        };
+
+        evalCrossDomainScript(url).then(resolve, reject);
         return result;
     }
 
     xhr.open(
-        method,
-        options.url,
+        getMethod(options),
+        url,
         async,
         options.username,
         options.password);
@@ -245,12 +310,6 @@ var sendRequest = function(options) {
         xhr.responseType = options.responseType;
     }
 
-    headers["Content-Type"] = contentType;
-    headers["Accept"] = getAcceptHeader(options, headers);
-    if(!isCrossDomain(options.url) && !headers["X-Requested-With"]) {
-        headers["X-Requested-With"] = "XMLHttpRequest";
-    }
-
     for(var name in headers) {
         if(headers.hasOwnProperty(name) && isDefined(headers[name])) {
             xhr.setRequestHeader(name, headers[name]);
@@ -261,7 +320,7 @@ var sendRequest = function(options) {
         options.beforeSend(xhr);
     }
 
-    xhr.send(params);
+    xhr.send(parameters);
 
     result.abort = function() {
         xhr.abort();
