@@ -207,13 +207,13 @@ var DropDownMenu = Widget.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: [{ platform: "ios" }],
+                device: { platform: "ios" },
                 options: {
                     usePopover: true
                 }
             },
             {
-                device: [{ platform: "generic" }],
+                device: { platform: "generic" },
                 options: {
                     popupPosition: { offset: { v: 4 } }
                 }
@@ -227,7 +227,7 @@ var DropDownMenu = Widget.inherit({
                 }
             },
             {
-                device: [{ platform: "android" }],
+                device: { platform: "android" },
 
                 options: {
                     popupPosition: {
