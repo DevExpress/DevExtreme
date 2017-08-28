@@ -10,6 +10,7 @@ var $ = require("../core/renderer"),
     TransitionExecutorModule = require("../animation/transition_executor/transition_executor"),
     Widget = require("./widget/ui.widget"),
     LoadIndicator = require("./load_indicator"),
+    isPromise = require("../core/utils/type").isPromise,
     deferredUtils = require("../core/utils/deferred"),
     Deferred = deferredUtils.Deferred;
 
@@ -114,7 +115,7 @@ var DeferRendering = Widget.inherit({
             return that._renderDeferredContent();
         };
 
-        if(renderWhen && renderWhen.then) {
+        if(isPromise(renderWhen)) {
             deferredUtils.fromPromise(renderWhen).done(doRender);
         } else {
             $element.data("dx-render-delegate", doRender);
