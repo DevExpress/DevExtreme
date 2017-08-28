@@ -38,6 +38,10 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
         }
     },
 
+    _getWeekendsCount: function(days) {
+        return 2 * Math.floor(days / 7);
+    },
+
     _setFirstViewDate: function() {
         this._firstViewDate = dateUtils.getFirstWeekDate(this.option("currentDate"), this._firstDayOfWeek());
 

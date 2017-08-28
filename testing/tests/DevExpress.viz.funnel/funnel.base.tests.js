@@ -6,7 +6,6 @@ var $ = require("jquery"),
     environment = common.environment,
     stubAlgorithm = common.stubAlgorithm,
     rendererModule = require("viz/core/renderers/renderer"),
-    legendModule = require("viz/components/legend"),
     paletteModule = require("viz/palette"),
     themeModule = require("viz/themes");
 
@@ -122,6 +121,59 @@ QUnit.test("Use colors from dataSource", function(assert) {
 
     assert.equal(items[0].smartAttr.lastCall.args[0].fill, "green");
     assert.equal(items[1].smartAttr.lastCall.args[0].fill, "red");
+});
+
+QUnit.test("Correct values if each value is zero", function(assert) {
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 0 }, { value: 0 }]
+    });
+
+    var values = stubAlgorithm.normalizeValues.lastCall.args[0].map(function(item) {
+        return item.value;
+    });
+
+    assert.deepEqual(values, [1, 1]);
+});
+
+QUnit.test("Data source with invalid value fields and items are not created, warning is fired", function(assert) {
+    var spy = sinon.stub();
+    createFunnel({
+        algorithm: "stub",
+        valueField: "val1",
+        dataSource: [{ val: 2 }, { val: 3 }],
+        onIncidentOccurred: spy
+    });
+
+    assert.ok(spy.called);
+    assert.equal(spy.getCall(0).args[0].target.id, "W2302");
+    assert.equal(spy.getCall(0).args[0].target.text, "Inconsistent dataSource");
+    assert.equal(spy.getCall(0).args[0].target.type, "warning");
+    assert.equal(spy.getCall(0).args[0].target.widget, "dxFunnel");
+});
+
+QUnit.test("Empty data source, warning shouldn't fire", function(assert) {
+    var spy = sinon.stub();
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [],
+        onIncidentOccurred: spy
+    });
+
+    assert.ok(!spy.called);
+});
+
+QUnit.test("Data source with negative values", function(assert) {
+    var spy = sinon.stub();
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: -2 }, { value: -3 }],
+        onIncidentOccurred: spy
+    });
+
+    assert.ok(spy.called);
+    assert.equal(spy.getCall(0).args[0].target.id, "W2302");
+    assert.equal(spy.getCall(0).args[0].target.text, "Inconsistent dataSource");
 });
 
 QUnit.module("Drawing", $.extend({}, environment, {
@@ -636,7 +688,6 @@ QUnit.test("hover changed event", function(assert) {
     assert.strictEqual(hoverChanged.lastCall.args[0].item, item);
 });
 
-
 QUnit.test("hover changed event after hover second item", function(assert) {
     var hoverChanged = sinon.spy(),
         funnel = createFunnel({
@@ -651,6 +702,33 @@ QUnit.test("hover changed event after hover second item", function(assert) {
     funnel.getAllItems()[1].hover(true);
 
     assert.equal(hoverChanged.callCount, 2);
+});
+
+QUnit.test("Hover item two times, hover changed event should fire only one time", function(assert) {
+    var hoverChanged = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+            onHoverChanged: hoverChanged
+        }),
+        item = funnel.getAllItems()[0];
+
+    item.hover(true);
+    item.hover(true);
+
+    assert.equal(hoverChanged.callCount, 1);
+});
+
+QUnit.test("Unhover item if it is not hovered, hover changed event shouldn't fire", function(assert) {
+    var hoverChanged = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+            onHoverChanged: hoverChanged
+        }),
+        item = funnel.getAllItems()[0];
+
+    item.hover(false);
+
+    assert.equal(hoverChanged.callCount, 0);
 });
 
 QUnit.test("disable hover", function(assert) {
@@ -808,6 +886,33 @@ QUnit.test("selection changed event in single mode fire only for selected elemen
     assert.equal(spy.callCount, 2);
 });
 
+QUnit.test("Select item two times, selection changed event should fire only one time", function(assert) {
+    var selectChanged = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+            onSelectionChanged: selectChanged
+        }),
+        item = funnel.getAllItems()[0];
+
+    item.select(true);
+    item.select(true);
+
+    assert.equal(selectChanged.callCount, 1);
+});
+
+QUnit.test("Unselect item if it is not selected, selection changed event shouldn't fire", function(assert) {
+    var selectChanged = sinon.spy(),
+        funnel = createFunnel({
+            dataSource: [{ value: 10 }, { value: 5 }, { value: 5 }],
+            onSelectionChanged: selectChanged
+        }),
+        item = funnel.getAllItems()[0];
+
+    item.select(false);
+
+    assert.equal(selectChanged.callCount, 0);
+});
+
 QUnit.test("Clear selection", function(assert) {
     var funnel = createFunnel({
         dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
@@ -947,252 +1052,5 @@ QUnit.test("isSelected method after hover and select", function(assert) {
     items[1].select(true);
 
     assert.ok(items[1].isSelected());
-});
-
-QUnit.module("Legend", environment);
-
-QUnit.test("Creation", function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: "One", color: "orange" }],
-            legend: { visible: true }
-        }),
-        legendCtorArgs = legendModule.Legend.lastCall.args[0],
-        item = funnel.getAllItems()[0],
-        formatObject = legendCtorArgs.getFormatObject(item),
-        legendGroup = this.renderer.g.getCall(0).returnValue;
-
-    assert.equal(legendGroup.attr.lastCall.args[0].className, "dxf-legend");
-    assert.equal(legendCtorArgs.renderer, this.renderer);
-    assert.equal(legendCtorArgs.group, legendGroup);
-    assert.equal(legendCtorArgs.textField, "text");
-    assert.equal(formatObject.item.data.argument, "One");
-    assert.equal(formatObject.item.data.value, 5);
-    assert.equal(formatObject.item.id, 0);
-    assert.equal(formatObject.item.color, "orange");
-    assert.equal(formatObject.item.percent, 1);
-});
-
-QUnit.test("Update", function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: "One" }, { value: 10, argument: "Two" }],
-            legend: { visible: true }
-        }),
-        items = funnel.getAllItems(),
-        lastCallUpdate = this.legend.update.lastCall.args[0];
-
-    for(var i = 0; i < items.length; i++) {
-        assert.equal(lastCallUpdate[i].data.argument, items[i].data.argument);
-        assert.deepEqual(lastCallUpdate[i].states, items[i].states);
-        assert.equal(lastCallUpdate[i].id, items[i].id);
-    }
-});
-
-QUnit.test("Legend options", function(assert) {
-    createFunnel({
-        dataSource: [{ value: 5, argument: "One" }, { value: 10, argument: "Two" }],
-        legend: { visible: true, horizontalAlignment: "center", verticalAlignment: "bottom" }
-    });
-
-    assert.equal(this.legend.update.lastCall.args[1].horizontalAlignment, "center");
-    assert.equal(this.legend.update.lastCall.args[1].verticalAlignment, "bottom");
-});
-
-QUnit.test("Hover legend", function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: "One" }, { value: 10, argument: "Two" }],
-            legend: { visible: true }
-        }),
-        items = funnel.getAllItems();
-
-    items[1].hover(true);
-
-    assert.equal(this.legend.applyHover.lastCall.args[0], 1);
-});
-
-QUnit.test("Selection legend", function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: "One" }, { value: 10, argument: "Two" }],
-            legend: { visible: true }
-        }),
-        items = funnel.getAllItems();
-
-    items[1].select(true);
-
-    assert.equal(this.legend.applySelected.lastCall.args[0], 1);
-});
-
-QUnit.test("Hover and unhover legend", function(assert) {
-    var funnel = createFunnel({
-            dataSource: [{ value: 5, argument: "One" }, { value: 10, argument: "Two" }],
-            legend: { visible: true }
-        }),
-        items = funnel.getAllItems();
-
-    items[1].hover(true);
-    items[1].hover(false);
-
-    assert.equal(this.legend.resetItem.lastCall.args[0], 1);
-});
-
-QUnit.test("Update items", function(assert) {
-    var funnel = createFunnel({
-        dataSource: [{ value: 5, argument: "One" }, { value: 10, argument: "Two" }],
-        legend: { visible: true }
-    });
-
-    funnel.option({ dataSource: [{ value: 1, argument: "One" }, { value: 4, argument: "Two" }] });
-
-    var items = funnel.getAllItems(),
-        lastCallUpdate = this.legend.update.lastCall.args[0];
-
-    for(var i = 0; i < items.length; i++) {
-        assert.deepEqual(lastCallUpdate[i].data.value, items[i].data.value);
-    }
-});
-
-QUnit.test("Reserve space for legend", function(assert) {
-    this.legend.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top",
-        side: "horizontal"
-    });
-
-    $("#test-container").css({
-        width: 800,
-        height: 600
-    });
-
-    stubAlgorithm.getFigures.returns([[0, 0, 1, 1]]);
-
-    createFunnel({
-        algorithm: "stub",
-        dataSource: [{ value: 1 }],
-        legend: {
-            visible: true
-        }
-    });
-
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 700, 600]);
-});
-
-QUnit.module("Adaptive Layout", $.extend({}, environment, {
-    beforeEach: function() {
-        environment.beforeEach.call(this);
-        $("#test-container").css({
-            width: 800,
-            height: 600
-        });
-
-        stubAlgorithm.getFigures.returns([[0, 0, 1, 1]]);
-    },
-
-    afterEach: function() {
-        environment.afterEach.call(this);
-    }
-}));
-
-QUnit.test("hide legend. horizontal alignment", function(assert) {
-    this.legend.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top",
-        side: "horizontal"
-    });
-
-    createFunnel({
-        algorithm: "stub",
-        adaptiveLayout: {
-            width: 701,
-            height: 100
-        },
-        dataSource: [{ value: 1 }],
-        legend: {
-            visible: true
-        }
-    });
-
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 800, 600]);
-    assert.ok(this.legend.freeSpace.called);
-});
-
-QUnit.test("hide legend. vertical alignment", function(assert) {
-    this.legend.stub("layoutOptions").returns({
-        horizontalAlignment: "center",
-        verticalAlignment: "bottom",
-        side: "vertical"
-    });
-
-    createFunnel({
-        algorithm: "stub",
-        adaptiveLayout: {
-            height: 500
-        },
-        dataSource: [{ value: 1 }],
-        legend: {
-            visible: true
-        }
-    });
-
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 800, 600]);
-    assert.ok(this.legend.freeSpace.called);
-});
-
-QUnit.test("hide title", function(assert) {
-    this.title.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top"
-    });
-
-    createFunnel({
-        algorithm: "stub",
-        adaptiveLayout: {
-            height: 500
-        },
-        dataSource: [{ value: 1 }]
-    });
-
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 800, 600]);
-    assert.ok(this.title.freeSpace.called);
-});
-
-QUnit.test("hide export menu", function(assert) {
-    this.export.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top"
-    });
-
-    createFunnel({
-        algorithm: "stub",
-        adaptiveLayout: {
-            height: 500
-        },
-        dataSource: [{ value: 1 }]
-    });
-
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 800, 600]);
-    assert.ok(this.export.freeSpace.called);
-});
-
-QUnit.test("hide pair elements: title and export", function(assert) {
-    this.title.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top"
-    });
-    this.export.stub("layoutOptions").returns({
-        horizontalAlignment: "right",
-        verticalAlignment: "top",
-        weak: true
-    });
-
-    createFunnel({
-        algorithm: "stub",
-        adaptiveLayout: {
-            height: 500
-        },
-        dataSource: [{ value: 1 }]
-    });
-
-    assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 800, 600]);
-    assert.ok(this.export.freeSpace.called);
-    assert.ok(this.title.freeSpace.called);
 });
 

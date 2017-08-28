@@ -367,7 +367,7 @@ var subscribes = {
         if(this.appointmentTakesAllDay(appointment)) {
             updatedStartDate = dateUtils.normalizeDate(startDate, firstViewDate);
         } else {
-            if(startDate.getTime() < firstViewDate.getTime()) {
+            if(startDate < firstViewDate) {
                 startDate = firstViewDate;
             }
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
@@ -566,6 +566,10 @@ var subscribes = {
 
     getEndViewDate: function() {
         return this.getEndViewDate();
+    },
+
+    getMaxAppointmentsPerCell: function() {
+        return this.getMaxAppointmentsPerCell();
     },
 
     agendaIsReady: function(rows, innerRowOffset, outerRowOffset) {

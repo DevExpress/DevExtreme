@@ -4,12 +4,14 @@ var noop = require("../../core/utils/common").noop,
     Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     errors = require("../widget/ui.errors"),
-    dateUtils = require("../../core/utils/date");
+    dateUtils = require("../../core/utils/date"),
+    isNumeric = require("../../core/utils/type").isNumeric;
 
 var abstract = Class.abstract;
 
 var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
+    APPOINTMENT_DEFAULT_HEIGHT = 20,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 
 var BaseRenderingStrategy = Class.inherit({
@@ -164,10 +166,6 @@ var BaseRenderingStrategy = Class.inherit({
         });
 
         return coordinates;
-    },
-
-    _needVerifyItemSize: function() {
-        return false;
     },
 
     _isRtl: function() {
@@ -394,9 +392,10 @@ var BaseRenderingStrategy = Class.inherit({
     _checkLongCompactAppointment: noop,
 
     _splitLongCompactAppointment: function(item, result) {
+        var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
         var compactCount = 0;
 
-        if(item.index > 1) {
+        if(appointmentCountPerCell && item.index > appointmentCountPerCell - 1) {
             item.isCompact = true;
             compactCount = this._getCompactAppointmentParts(item.width);
             for(var k = 1; k < compactCount; k++) {
@@ -415,7 +414,7 @@ var BaseRenderingStrategy = Class.inherit({
             viewStartDate = this.instance._getStartDate(appointment, skipNormalize),
             text = this.instance.fire("getField", "text", appointment);
 
-        if((startDate && viewStartDate.getTime() > startDate.getTime()) || !startDate) {
+        if((startDate && viewStartDate > startDate) || !startDate) {
             startDate = viewStartDate;
         }
         if(isNaN(startDate.getTime())) {
@@ -474,12 +473,17 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getMaxNeighborAppointmentCount: function() {
-        var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentDefaultOffset();
-        return Math.floor(this.getCompactAppointmentGroupMaxWidth() / outerAppointmentWidth);
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell");
+        if(!overlappingMode) {
+            var outerAppointmentWidth = this.getCompactAppointmentDefaultSize() + this.getCompactAppointmentDefaultOffset();
+            return Math.floor(this.getCompactAppointmentGroupMaxWidth() / outerAppointmentWidth);
+        } else {
+            return 0;
+        }
     },
 
     _markAppointmentAsVirtual: function(coordinates, isAllDay) {
-        var countFullWidthAppointmentInCell = 2;
+        var countFullWidthAppointmentInCell = this._getMaxAppointmentCountPerCell();
         if((coordinates.count - countFullWidthAppointmentInCell) > this._getMaxNeighborAppointmentCount()) {
             coordinates.virtual = {
                 top: coordinates.top,
@@ -507,7 +511,96 @@ var BaseRenderingStrategy = Class.inherit({
         return COMPACT_APPOINTMENT_DEFAULT_OFFSET;
     },
 
-    getAppointmentDataCalculator: noop
+    getAppointmentDataCalculator: noop,
+
+    _customizeCoordinates: function(coordinates, ratio, appointmentCountPerCell, maxHeight, isAllDay) {
+        var index = coordinates.index,
+            height = ratio * maxHeight / appointmentCountPerCell,
+            top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
+            width = coordinates.width,
+            left = coordinates.left,
+            compactAppointmentDefaultSize,
+            compactAppointmentDefaultOffset;
+
+        if(coordinates.isCompact) {
+            compactAppointmentDefaultSize = this.getCompactAppointmentDefaultSize();
+            compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
+            top = coordinates.top + compactAppointmentDefaultOffset;
+            left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
+            height = compactAppointmentDefaultSize;
+            width = compactAppointmentDefaultSize;
+
+            this._markAppointmentAsVirtual(coordinates, isAllDay);
+        }
+
+        return {
+            height: height,
+            width: width,
+            top: top,
+            left: left
+        };
+    },
+
+    _calculateGeometryConfig: function(coordinates) {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            offsets = this._getOffsets();
+
+        var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
+        var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
+        var maxHeight = this._getMaxHeight();
+
+        if(!appointmentCountPerCell) {
+            appointmentCountPerCell = coordinates.count;
+            ratio = (maxHeight - offsets.unlimited) / maxHeight;
+        }
+        if(overlappingMode === "auto") {
+            ratio = (maxHeight - offsets.auto) / maxHeight;
+        }
+
+        return {
+            ratio: ratio,
+            appointmentCountPerCell: appointmentCountPerCell,
+            maxHeight: maxHeight
+        };
+    },
+
+    _getAppointmentCount: noop,
+
+    _getDefaultRatio: noop,
+
+    _getOffsets: noop,
+
+    _getMaxHeight: noop,
+
+    _needVerifyItemSize: function() {
+        return false;
+    },
+
+    _getMaxAppointmentCountPerCell: function() {
+        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+            appointmentCountPerCell;
+
+        if(!overlappingMode) {
+            appointmentCountPerCell = 2;
+        }
+        if(isNumeric(overlappingMode)) {
+            appointmentCountPerCell = overlappingMode;
+        }
+        if(overlappingMode === "auto") {
+            appointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
+        }
+        if(overlappingMode === "unlimited") {
+            appointmentCountPerCell = undefined;
+        }
+
+        return appointmentCountPerCell;
+    },
+
+    _getDynamicAppointmentCountPerCell: function() {
+        var cellHeight = this.instance.fire("getCellHeight");
+
+        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_HEIGHT) / APPOINTMENT_DEFAULT_HEIGHT) || 1;
+    }
 });
 
 module.exports = BaseRenderingStrategy;

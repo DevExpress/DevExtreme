@@ -642,7 +642,7 @@ var ListBase = CollectionWidget.inherit({
 
         if(stopLoading || this._scrollViewIsFull()) {
             this._scrollView.release(hideLoadIndicator);
-            this._toggleNextButton(this._shouldRenderNextButton() && !isDataLoaded);
+            this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
         } else {
             this._infiniteDataLoading();

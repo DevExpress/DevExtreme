@@ -1,5 +1,7 @@
 "use strict";
 
+var noop = require("../../core/utils/common").noop;
+
 function getCoords(figureCoords, renderer) {
     var offset = renderer.getRootOffset();
 
@@ -8,12 +10,8 @@ function getCoords(figureCoords, renderer) {
 
 exports.plugin = {
     name: "funnel-tooltip",
-    init: function() {
-
-    },
-    dispose: function() {
-
-    },
+    init: noop,
+    dispose: noop,
 
     extenders: {
         _buildNodes: function() {
@@ -44,25 +42,20 @@ exports.plugin = {
         _showTooltip: function(index, coords) {
             var that = this,
                 tooltip = that._tooltip,
-                item,
-                state;
-
-            if(tooltip.isEnabled()) {
-                item = that._items[index];
+                item = that._items[index],
                 state = that._tooltipIndex === index || tooltip.show({
                     value: item.data.value,
                     valueText: tooltip.formatValue(item.data.value),
                     item: item
-                }, { x: 0, y: 0, offset: 0 });
-                if(state) {
-                    that._moveTooltip(item, coords);
-                } else {
-                    tooltip.hide();
-                }
-                that._tooltipIndex = state ? index : -1;
-            }
-        }
+                }, { x: 0, y: 0, offset: 0 }, { item: item });
 
+            if(state) {
+                that._moveTooltip(item, coords);
+            } else {
+                tooltip.hide();
+            }
+            that._tooltipIndex = state ? index : -1;
+        }
     },
     customize: function(constructor) {
         constructor.addPlugin(require("../core/tooltip").plugin);

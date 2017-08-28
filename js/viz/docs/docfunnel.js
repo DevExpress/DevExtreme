@@ -458,9 +458,9 @@ var dxFunnel = {
         * @name dxfunneloptions_label_showforzerovalues
         * @publicName showForZeroValues
         * @type boolean
-        * @default true
+        * @default false
         */
-        showForZeroValues: true,
+        showForZeroValues: false,
         /**
         * @name dxfunneloptions_label_customizetext
         * @publicName customizeText

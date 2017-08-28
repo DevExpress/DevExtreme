@@ -36,6 +36,14 @@ var EditStrategy = Class.inherit({
         }
     },
 
+    beginCache: function() {
+        this._cache = {};
+    },
+
+    endCache: function() {
+        this._cache = null;
+    },
+
     getIndexByKey: abstract,
 
     getNormalizedIndex: function(value) {

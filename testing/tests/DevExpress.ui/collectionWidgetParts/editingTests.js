@@ -1377,6 +1377,31 @@ var runTests = function() {
         assert.equal($item.length, 0, "item removed");
     });
 
+    QUnit.test("'cancel' flag in onItemDeleting option should support Promise/A+ standart", function(assert) {
+        var resolve;
+        var promise = new Promise(function(onResolve) {
+            resolve = onResolve;
+        });
+
+        var instance = new TestComponent($("#cmp"), {
+            dataSource: [0],
+            onItemDeleting: function(e) {
+                e.cancel = promise;
+            }
+        });
+
+        var $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        promise.then(function() {
+            $item = instance.itemElements().eq(0);
+            assert.equal($item.length, 0, "item removed");
+        });
+
+        resolve();
+        return promise;
+    });
+
 
     QUnit.module("deleting with confirmation");
 

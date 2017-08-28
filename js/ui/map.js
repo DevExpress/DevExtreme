@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     Promise = require("../core/polyfills/promise"),
-    fromPromise = require("../integration/jquery/deferred").fromPromise,
+    fromPromise = require("../core/utils/deferred").fromPromise,
     registerComponent = require("../core/component_registrator"),
     errors = require("./widget/ui.errors"),
     devices = require("../core/devices"),

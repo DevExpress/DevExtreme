@@ -30,7 +30,6 @@ function updateSelectAllState($listContainer, filterValues) {
 }
 
 exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch, isExcludeFilter) {
-
     if(filterValuesMatch ^ isExcludeFilter) {
         item.selected = true;
 
@@ -42,7 +41,7 @@ exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch,
                 }
             }
         }
-    } else if(isExcludeFilter) {
+    } else if(isExcludeFilter || item.selected) {
         item.selected = false;
         resetChildrenItemSelection(item.items);
     }

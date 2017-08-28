@@ -760,7 +760,6 @@ module.exports = {
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
                             eventsEngine.trigger($(event.currentTarget).children(), clickEvent.name);
                         }
-                        event.stopPropagation();
                         event.preventDefault();
                     }));
                 }
