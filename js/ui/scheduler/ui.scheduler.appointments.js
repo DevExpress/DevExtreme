@@ -1051,7 +1051,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             startDate.setDate(startDate.getDate() + 1);
         }
 
-        while(appointmentIsLong && startDate.getTime() < endDate.getTime() - 1 && startDate.getTime() < maxAllowedDate.getTime()) {
+        while(appointmentIsLong && startDate.getTime() < endDate.getTime() - 1 && startDate < maxAllowedDate) {
             var currentStartDate = new Date(startDate),
                 currentEndDate = new Date(startDate);
 
