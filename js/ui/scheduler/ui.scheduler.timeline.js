@@ -394,7 +394,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         var trimmedDate = dateUtils.trimTime(new Date(date)),
             isUpdateNeeded = false;
 
-        if(trimmedDate.getTime() < bounds.left.date.getTime() || trimmedDate.getTime() > bounds.right.date.getTime()) {
+        if(trimmedDate < bounds.left.date || trimmedDate > bounds.right.date) {
             isUpdateNeeded = true;
         }
 
