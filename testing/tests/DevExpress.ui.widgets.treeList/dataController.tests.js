@@ -1150,6 +1150,31 @@ QUnit.test("Expand first row when there is sorting", function(assert) {
     assert.equal(items[4].data.name, "Name 6", "item 4 name value");
 });
 
+//T547036
+QUnit.test("Change sort order after collapse expanded row", function(assert) {
+    //arrange
+    this.setupTreeList({
+        dataSource: this.items,
+        columns: [{ dataField: "name", sortOrder: "asc" }, { dataField: "age" }]
+    });
+
+    //act
+    this.expandRow(1);
+    this.collapseRow(1);
+    this.columnOption("name", "sortOrder", "desc");
+    this.expandRow(1);
+
+    //assert
+
+    var items = this.dataController.items();
+    assert.equal(items.length, 5, "count items");
+    assert.equal(items[0].data.name, "Name 3", "item 0 name value");
+    assert.equal(items[1].data.name, "Name 6", "item 1 name value");
+    assert.equal(items[2].data.name, "Name 5", "item 2 name value");
+    assert.equal(items[3].data.name, "Name 2", "item 3 name value");
+    assert.equal(items[4].data.name, "Name 1", "item 4 name value");
+});
+
 QUnit.test("Initial load when autoExpandAll", function(assert) {
     //arrange, act
     var loadingArgs = [];
