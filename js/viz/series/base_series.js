@@ -225,6 +225,10 @@ Series.prototype = {
         return this._points;
     },
 
+    getPointsInViewPort: function() {
+        return rangeCalculator.getPointsInViewPort(this);
+    },
+
     _createPoint: function(data, pointsArray, index) {
         data.index = index;
         var that = this,
@@ -505,12 +509,16 @@ Series.prototype = {
             errorBars: that._errorBarGroup
         };
 
-        _each(points, function(i, p) {
+        points.forEach(function(p, i) {
             p.translate();
-            if(p.hasValue()) {
+
+            if(p.hasValue() && p.hasCoords()) {
                 that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing: firstDrawing });
                 segment.push(p);
             } else {
+                if(!p.hasCoords()) {
+                    p.setInvisibility();
+                }
                 if(segment.length) {
                     that._drawSegment(segment, animationEnabled, segmentCount++);
                     segment = [];

@@ -84,6 +84,11 @@ registerTheme({
             border: {
                 color: "#494949"
             }
+        },
+        commonAxisSettings: {
+            breakStyle: {
+                color: "#818181"
+            }
         }
     },
     gauge: {
@@ -120,6 +125,9 @@ registerTheme({
             minorTick: {
                 color: WHITE,
                 opacity: 0.1
+            },
+            breakStyle: {
+                color: "#818181"
             }
         },
         selectedRangeColor: RANGE_COLOR,

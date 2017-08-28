@@ -60,6 +60,8 @@ module.exports = _extend({}, barPoint, {
         }
     },
 
+    hasCoords: rangeSymbolPointMethods.hasCoords,
+
     _updateData: rangeSymbolPointMethods._updateData,
 
     _getLabelPosition: rangeSymbolPointMethods._getLabelPosition,

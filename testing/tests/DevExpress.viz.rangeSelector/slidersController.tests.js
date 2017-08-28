@@ -522,6 +522,26 @@ QUnit.test("data-like string values", function(assert) {
     this.check(assert, [1170, 1659], [new Date("02/01/2010"), new Date("05/01/2010")]);
 });
 
+QUnit.test("Start value in the scale break", function(assert) {
+    this.translator.update({
+        minVisible: 10,
+        maxVisible: 30,
+        min: 10,
+        max: 30,
+        breaks: [{
+            from: 12,
+            to: 17,
+            cumulativeWidth: 0
+        }]
+    }, { left: 1000, width: 3000 }, { isHorizontal: true, breaksSize: 0 });
+
+    this.update();
+
+    this.setRange(15, 25);
+
+    this.check(assert, [1000, 2333], [10, 25]);
+});
+
 QUnit.module("Clouds processing", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);

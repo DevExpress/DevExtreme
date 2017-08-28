@@ -413,6 +413,10 @@ module.exports = _extend({}, symbolPoint, {
         that.width = rotated ? _abs(that.x - that.minX) : 0;
     },
 
+    hasCoords: function() {
+        return symbolPoint.hasCoords.call(this) && !(this.minX === null || this.minY === null);
+    },
+
     _updateData: function(data) {
         var that = this;
         symbolPoint._updateData.call(that, data);

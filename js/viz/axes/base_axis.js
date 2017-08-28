@@ -2,6 +2,7 @@
 
 var vizUtils = require("../core/utils"),
     typeUtils = require("../../core/utils/type"),
+    dateUtils = require("../../core/utils/date"),
     formatHelper = require("../../format_helper"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
@@ -14,6 +15,8 @@ var vizUtils = require("../core/utils"),
     tick = require("./tick").tick,
     _format = require("./smart_formatter").smartFormatter,
     convertTicksToValues = constants.convertTicksToValues,
+
+    generateDateBreaks = require("./datetime_breaks").generateDateBreaks,
 
     isDefined = typeUtils.isDefined,
     isFunction = typeUtils.isFunction,
@@ -39,6 +42,8 @@ var vizUtils = require("../core/utils"),
     DEFAULT_AXIS_DIVISION_FACTOR = 50,
     DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15,
 
+    RANGE_RATIO = 0.3,
+
     Axis;
 
 function getTickGenerator(options, incidentOccurred) {
@@ -60,6 +65,123 @@ function getTickGenerator(options, incidentOccurred) {
         showCalculatedTicks: options.tick.showCalculatedTicks, //DEPRECATED IN 15_2
         showMinorCalculatedTicks: options.minorTick.showCalculatedTicks //DEPRECATED IN 15_2
     });
+}
+
+function sortingBreaks(breaks) {
+    return breaks.sort(function(a, b) { return a.from - b.from; });
+}
+
+function filterBreaks(breaks, viewport, breakStyle) {
+    var minVisible = viewport.minVisible,
+        maxVisible = viewport.maxVisible,
+        breakSize = breakStyle ? breakStyle.width : 0;
+
+    return breaks.reduce(function(result, currentBreak) {
+        var from = currentBreak.from,
+            to = currentBreak.to,
+            lastResult = result[result.length - 1],
+            newBreak;
+
+        if(!isDefined(from) || !isDefined(to)) {
+            return result;
+        }
+        if(from > to) {
+            to = [from, from = to][0];
+        }
+        if(result.length && from < lastResult.to) {
+            if(to > lastResult.to) {
+                lastResult.to = to > maxVisible ? maxVisible : to;
+                if(lastResult.gapSize) {
+                    lastResult.gapSize = undefined;
+                    lastResult.cumulativeWidth += breakSize;
+                }
+            }
+        } else {
+            if(((from >= minVisible && from < maxVisible) || (to <= maxVisible && to > minVisible)) && to - from < maxVisible - minVisible) {
+                from = from >= minVisible ? from : minVisible;
+                to = to <= maxVisible ? to : maxVisible;
+                newBreak = {
+                    from: from,
+                    to: to,
+                    cumulativeWidth: (lastResult ? lastResult.cumulativeWidth : 0) + breakSize
+                };
+                if(currentBreak.gapSize) {
+                    newBreak.gapSize = dateUtils.convertMillisecondsToDateUnits(to - from);
+                    newBreak.cumulativeWidth = lastResult ? lastResult.cumulativeWidth : 0;
+                }
+                result.push(newBreak);
+            }
+        }
+        return result;
+    }, []);
+}
+
+function getScaleBreaks(axisOptions, viewport, series, isArgumentAxis) {
+    var breaks = (axisOptions.breaks || []).map(function(b) {
+        return {
+            from: b[0],
+            to: b[1]
+        };
+    });
+    if(axisOptions.type !== "discrete" && axisOptions.dataType === "datetime" && axisOptions.workdaysOnly) {
+        breaks = breaks.concat(generateDateBreaks(viewport.minVisible,
+            viewport.maxVisible,
+            axisOptions.workweek,
+            axisOptions.singleWorkdays,
+            axisOptions.holidays));
+    }
+    if(!isArgumentAxis && axisOptions.type !== "discrete" && axisOptions.dataType !== "datetime"
+        && axisOptions.autoBreaksEnabled && axisOptions.maxAutoBreakCount !== 0) {
+        breaks = breaks.concat(generateAutoBreaks(axisOptions, series, viewport));
+    }
+    return filterBreaks(sortingBreaks(breaks), viewport, axisOptions.breakStyle);
+}
+
+function generateAutoBreaks(options, series, viewport) {
+    var ranges = [],
+        length,
+        breaks = [],
+        i,
+        getRange = options.type === "logarithmic" ?
+            function(min, max) { return vizUtils.getLog(max / min, options.logarithmBase); } :
+            function(min, max) { return max - min; },
+        visibleRange = getRange(viewport.minVisible, viewport.maxVisible),
+        maxAutoBreakCount,
+        points = series.reduce(function(points, s) {
+            points = points.concat(s.getPointsInViewPort());
+            return points;
+        }, []).sort(function(a, b) {
+            return b - a;
+        }),
+        minDiff = RANGE_RATIO * visibleRange;
+
+    for(i = 1, length = points.length; i < length; i++) {
+        ranges.push({ start: points[i], end: points[i - 1], length: getRange(points[i], points[i - 1]) });
+    }
+
+    ranges.sort(function(a, b) {
+        return b.length - a.length;
+    });
+
+    maxAutoBreakCount = isDefined(options.maxAutoBreakCount) ? Math.min(options.maxAutoBreakCount, ranges.length) : ranges.length;
+    for(i = 0; i < maxAutoBreakCount; i++) {
+        if(ranges[i].length >= minDiff) {
+            if(visibleRange <= ranges[i].length) {
+                break;
+            }
+            visibleRange -= ranges[i].length;
+            breaks.push({ from: ranges[i].start, to: ranges[i].end });
+            minDiff = RANGE_RATIO * visibleRange;
+        } else {
+            break;
+        }
+    }
+
+    breaks.sort(function(a, b) {
+        return a.from - b.from;
+    });
+
+    return breaks;
 }
 
 function createMajorTick(axis, renderer, skippedCategory) {
@@ -200,6 +322,7 @@ Axis = exports.Axis = function(renderSettings) {
     that._stripsGroup = renderSettings.stripsGroup;
     that._labelAxesGroup = renderSettings.labelAxesGroup;
     that._constantLinesGroup = renderSettings.constantLinesGroup;
+    that._scaleBreaksGroup = renderSettings.scaleBreaksGroup;
     that._axesContainerGroup = renderSettings.axesContainerGroup;
     that._gridContainerGroup = renderSettings.gridGroup;
     that._axisCssPrefix = renderSettings.widgetClass + "-" + (renderSettings.axisClass ? renderSettings.axisClass + "-" : "");
@@ -801,6 +924,9 @@ Axis.prototype = {
         that._axisGroup = that._axisTitleGroup = null;
         that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = null;
 
+        that._scaleBreaksGroup = null;
+        that._scaleBreakPattern && that._scaleBreakPattern.dispose();
+
         that._renderer = that._options = that._textOptions = that._textFontStyles = null;
         that._translator = null;
         that._majorTicks = that._minorTicks = null;
@@ -925,7 +1051,7 @@ Axis.prototype = {
         }
     },
 
-    setBusinessRange: function(range) {
+    setBusinessRange: function(range, isMultipleAxes) {
         var validateBusinessRange = function(range, min, max) {
             function validate(valueSelector, baseValueSelector, optionValue) {
                 range[valueSelector] = isDefined(optionValue) ? optionValue :
@@ -939,7 +1065,14 @@ Axis.prototype = {
 
         this._seriesData = new rangeModule.Range(validateBusinessRange(range, this._options.min, this._options.max));
 
+        this._breaks = !isMultipleAxes ? getScaleBreaks(this._options, this._seriesData, this._series, this.isArgumentAxis) : [];
+        this._disableBreaks = isMultipleAxes;
+
         this._translator.updateBusinessRange(this._seriesData);
+    },
+
+    setGroupSeries: function(series) {
+        this._series = series;
     },
 
     getLabelsPosition: function() {
@@ -958,12 +1091,11 @@ Axis.prototype = {
         return isDefined(value) ? this.formatLabel(value, extend(true, {}, labelOptions, options), undefined, point) : null;
     },
 
-    _getBoundaryTicks: function(majors) {
+    _getBoundaryTicks: function(majors, viewPort) {
         var that = this,
             tickValues = majors.map(valueOf),
             options = that._options,
             customBounds = options.customBoundTicks,
-            viewPort = that._getViewportRange(),
             min = viewPort.minVisible,
             max = viewPort.maxVisible,
             addMinMax = options.showCustomBoundaryTicks ? that._boundaryTicksVisibility : {},
@@ -1024,12 +1156,11 @@ Axis.prototype = {
         this._minorTicks = (ticks.minorTicks || []).map(createMinorTick(this, this._renderer));
     },
 
-    _getTicks: function() {
+    _getTicks: function(viewPort) {
         var that = this,
             options = that._options,
             customTicks = options.customTicks,
-            customMinorTicks = options.customMinorTicks,
-            viewPort = that._getViewportRange();
+            customMinorTicks = options.customMinorTicks;
 
         return getTickGenerator(options, that._incidentOccurred)(
             {
@@ -1045,17 +1176,16 @@ Axis.prototype = {
                 minors: customMinorTicks
             },
             options.minorTickInterval,
-            options.minorTickCount
+            options.minorTickCount,
+            that._breaks
         );
     },
 
-    _createTicksAndLabelFormat: function(canvas) {
+    _createTicksAndLabelFormat: function(range) {
         var options = this._options,
             ticks;
 
-        this.updateCanvas(canvas);
-
-        ticks = this._getTicks();
+        ticks = this._getTicks(range);
 
         if(options.type === constants.discrete && options.dataType === "datetime" && !this._hasLabelFormat && ticks.ticks.length) {
             options.label.format = formatHelper.getDateFormatByTicks(ticks.ticks);
@@ -1069,16 +1199,20 @@ Axis.prototype = {
             renderer = that._renderer,
             options = that._options,
             ticks,
-            boundaryTicks;
+            boundaryTicks,
+            range;
 
         if(!canvas) {
             return;
         }
         that._majorTicks = that._minorTicks = null;
 
-        ticks = that._createTicksAndLabelFormat(canvas);
+        that.updateCanvas(canvas);
+        range = that._getViewportRange();
 
-        boundaryTicks = that._getBoundaryTicks(ticks.ticks);
+        ticks = that._createTicksAndLabelFormat(range);
+
+        boundaryTicks = that._getBoundaryTicks(ticks.ticks, range);
         if(options.showCustomBoundaryTicks && boundaryTicks.length) {
             that._boundaryTicks = [boundaryTicks[0]].map(createBoundaryTick(that, renderer, true));
             if(boundaryTicks.length > 1) {
@@ -1097,15 +1231,15 @@ Axis.prototype = {
 
         that._majorTicks = ticks.ticks.map(createMajorTick(that, renderer, that._getSkippedCategory(ticks.ticks)));
         that._minorTicks = minors.map(createMinorTick(that, renderer));
+        that._correctedBreaks = ticks.breaks;
 
         that.correctTicksOnDeprecated();
 
-        that.reinitTranslator();
+        that.reinitTranslator(range);
     },
 
-    reinitTranslator: function() {
+    reinitTranslator: function(range) {
         var that = this,
-            range = that._getViewportRange(),
             minVisible = range.minVisible,
             maxVisible = range.maxVisible,
             interval = range.interval,
@@ -1133,6 +1267,8 @@ Axis.prototype = {
                 interval: interval
             });
         }
+
+        range.breaks = that._correctedBreaks;
         that._translator.updateBusinessRange(range);
     },
 
@@ -1163,19 +1299,22 @@ Axis.prototype = {
     },
 
     _applyMargins: function(range) {
-        var options = this._options,
-            margins = isDefined(this._marginOptions) ? this._marginOptions : {},
+        var that = this,
+            options = that._options,
+            margins = isDefined(that._marginOptions) ? that._marginOptions : {},
             marginSize = margins.size,
             marginValue = 0,
             type = options.type,
             valueMarginsEnabled = options.valueMarginsEnabled && type !== constants.discrete,
             minValueMargin = options.minValueMargin,
             maxValueMargin = options.maxValueMargin,
-            add = getAddFunction(range, !this.isArgumentAxis),
+            add = getAddFunction(range, !that.isArgumentAxis),
             minVisible = range.minVisible,
             maxVisible = range.maxVisible,
             interval = range.interval,
-            maxMinDistance = this.calculateInterval(maxVisible, minVisible),
+            maxMinDistance = that.calculateInterval(maxVisible, minVisible) - (that._breaks || []).reduce(function(sum, b) {
+                return sum += that.calculateInterval(b.to, b.from);
+            }, 0),
             isArgumentAxis = this.isArgumentAxis;
 
         function addMargin(value, margin, marginOption) {
@@ -1195,11 +1334,12 @@ Axis.prototype = {
 
             if(!isDefined(minValueMargin) || !isDefined(maxValueMargin)) {
                 if(isArgumentAxis && margins.checkInterval) {
-                    interval = this._calculateRangeInterval(maxMinDistance, range.interval);
+                    interval = that._calculateRangeInterval(maxMinDistance, range.interval);
                     marginValue = interval / 2;
                 }
+
                 if(marginSize) {
-                    marginValue = _max(marginValue, maxMinDistance / ((this._getScreenDelta() / marginSize) - 1) / 2);
+                    marginValue = _max(marginValue, maxMinDistance / ((that._getScreenDelta() / marginSize) - 1) / 2);
                 }
 
                 minVisible = addMargin(minVisible, -marginValue, minValueMargin);
@@ -1292,7 +1432,7 @@ Axis.prototype = {
         var that = this;
 
         that.updateCanvas(canvas);
-        that.reinitTranslator();
+        that.reinitTranslator(this._getViewportRange());
 
         var canvasStartEnd = that._getCanvasStartEnd();
 
@@ -1330,6 +1470,7 @@ Axis.prototype = {
 
         updateGridsPosition(that._majorTicks);
         updateGridsPosition(that._minorTicks);
+        that.drawScaleBreaks();
     },
 
     applyClipRects: function(elementsClipID, canvasClipID) {
@@ -1381,6 +1522,12 @@ Axis.prototype = {
         }
 
         that._zoomArgs = { min: min, max: max };
+
+        this._breaks = !this._disableBreaks ? getScaleBreaks(this._options, {
+            minVisible: min,
+            maxVisible: max
+        }, this._series, this.isArgumentAxis) : [];
+
         return that._zoomArgs;
     },
 
@@ -1488,7 +1635,8 @@ Axis.prototype = {
         if(that._majorTicks) {
             ticks = convertTicksToValues(that._majorTicks);
         } else {
-            ticks = that._createTicksAndLabelFormat(canvas);
+            this.updateCanvas(canvas);
+            ticks = that._createTicksAndLabelFormat(this._getViewportRange());
             tickInterval = ticks.tickInterval;
             ticks = ticks.ticks;
         }
@@ -1647,11 +1795,37 @@ Axis.prototype = {
     },
 
     _getTranslatorOptions: function() {
+        var options = this._options;
         return {
             isHorizontal: this._isHorizontal,
-            interval: this._options.semiDiscreteInterval,
-            stick: this._getStick()
+            interval: options.semiDiscreteInterval,
+            stick: this._getStick(),
+            breaksSize: options.breakStyle ? options.breakStyle.width : 0
         };
+    },
+
+    _getCanvasStartEnd: function() {
+        var isHorizontal = this._isHorizontal,
+            canvas = this._canvas,
+            invert = this._translator.getBusinessRange().invert,
+            coords = isHorizontal ? [canvas.left, canvas.width - canvas.right] : [canvas.height - canvas.bottom, canvas.top];
+
+        invert && coords.reverse();
+
+        return {
+            start: coords[0],
+            end: coords[1]
+        };
+    },
+
+    _getScreenDelta: function() {
+        var that = this,
+            canvas = that._getCanvasStartEnd(),
+            breaks = that._breaks,
+            breaksLength = breaks ? breaks.length : 0,
+            screenDelta = _math.abs(canvas.start - canvas.end);
+
+        return screenDelta - (breaksLength ? breaks[breaksLength - 1].cumulativeWidth : 0);
     },
 
     _adjustTitle: _noop,
@@ -1663,6 +1837,8 @@ Axis.prototype = {
     setSpiderTicks: _noop,
 
     _checkBoundedLabelsOverlapping: _noop,
+
+    drawScaleBreaks: _noop,
 
     ///#DEBUG
     _getTickMarkPoints: _noop,

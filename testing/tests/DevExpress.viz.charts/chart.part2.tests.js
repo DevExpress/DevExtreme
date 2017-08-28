@@ -29,6 +29,17 @@ QUnit.test("Pass rotation info to Business range (rotated = false)", function(as
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].rotated, false);
 });
 
+QUnit.test("setBusinessRange with multiple axes and panes", function(assert) {
+    var chart = this.createChart({
+        valueAxis: [{ pane: "pane0" }, { pane: "pane1" }, { pane: "pane1" }],
+        panes: [{ name: "pane0" }, { name: "pane1" }]
+    });
+
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[1], false);
+    assert.equal(chart._valueAxes[1].setBusinessRange.lastCall.args[1], true);
+    assert.equal(chart._valueAxes[2].setBusinessRange.lastCall.args[1], true);
+});
+
 QUnit.test("Calculate business range for continuous without indent", function(assert) {
     seriesMockData.series.push(new MockSeries({
         range: {

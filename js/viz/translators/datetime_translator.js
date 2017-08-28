@@ -5,10 +5,7 @@ var numericTranslator = require("./numeric_translator");
 module.exports = {
     translate: numericTranslator.translate,
 
-    untranslate: function() {
-        var result = numericTranslator.untranslate.apply(this, arguments);
-        return result === null ? result : new Date(result);
-    },
+    untranslate: numericTranslator.untranslate,
 
     _getValue: numericTranslator._getValue,
     getInterval: numericTranslator.getInterval,
@@ -29,7 +26,8 @@ module.exports = {
     to: numericTranslator.to,
 
     from: function(position) {
-        return new Date(numericTranslator.from.call(this, position));
+        var result = numericTranslator.from.call(this, position);
+        return result === null ? result : new Date(result);
     },
 
     _add: require("../../core/utils/date").addDateInterval,

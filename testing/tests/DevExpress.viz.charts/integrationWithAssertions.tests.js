@@ -650,6 +650,7 @@ var VALIDATE_GROUPS = [
     "dxc-series-group",
     "dxc-labels-group",
     "dxc-crosshair-cursor",
+    "dxc-scale-breaks",
     //"dxc-title",
     "dxc-legend"
 ];

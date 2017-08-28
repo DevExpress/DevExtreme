@@ -608,6 +608,7 @@ registerTheme({
         commonAxisSettings: {
             multipleAxesSpacing: 5,
             forceUserTickInterval: false,
+            breakStyle: { width: 5, color: "#ababab", line: "waved" },
             label: {
                 displayMode: "standard",
                 overlappingBehavior: "hide",
@@ -666,12 +667,16 @@ registerTheme({
             },
             constantLines: []
         },
-        argumentAxis: {},
+        argumentAxis: {
+            workweek: [1, 2, 3, 4, 5]
+        },
         valueAxis: {
             endOnTick: true,
             grid: {
                 visible: true
-            }
+            },
+            autoBreaksEnabled: false,
+            maxAutoBreakCount: undefined
         },
         commonPaneSettings: {
             backgroundColor: NONE,
@@ -1034,7 +1039,9 @@ registerTheme({
                 textTopIndent: 11,
                 label: {}
             },
-            logarithmBase: 10
+            logarithmBase: 10,
+            workweek: [1, 2, 3, 4, 5],
+            breakStyle: { width: 5, color: "#ababab", line: "waved" }
         },
         selectedRangeColor: "#606060",
         sliderMarker: {

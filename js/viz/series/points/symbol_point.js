@@ -166,6 +166,10 @@ module.exports = {
         }
     },
 
+    hasCoords: function() {
+        return this.x !== null && this.y !== null;
+    },
+
     correctValue: function(correction) {
         var that = this;
         if(that.hasValue()) {

@@ -80,6 +80,7 @@ var environmentWithSinonStubPoint = {
             stub.angle = -data.argument;
             stub.radius = data.value;
             stub.hasValue.returns(true);
+            stub.hasCoords.returns(true);
             stub.isInVisibleArea.returns(true);
             stub.draw.reset();
             stub.animate.reset();
@@ -1213,6 +1214,7 @@ function setDiscreteType(series) {
                 var stub = sinon.createStubInstance(originalPoint);
                 stub.argument = 1;
                 stub.hasValue.returns(true);
+                stub.hasCoords.returns(true);
                 stub.isInVisibleArea.returns(true);
                 return stub;
             });
@@ -1662,6 +1664,36 @@ function setDiscreteType(series) {
         checkElementPoints(assert, animatePoints, this.points, false, "element on animating after update");
 
         checkGroups(assert, series);
+    });
+
+    QUnit.test("Draw data when point does not have coords", function(assert) {
+        var series = this.createSeries({
+                type: seriesType,
+                point: { visible: false }
+            }),
+            testPoint;
+
+        series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 44 }]);
+        $.each(series._points, function(i, pt) {
+            pt.x = pt.argument;
+            pt.y = pt.value;
+        });
+
+        testPoint = series.getAllPoints()[2];
+
+        testPoint.hasCoords = function() {
+            return false;
+        };
+
+        sinon.spy(testPoint, "draw");
+        //act
+        series.draw(true);
+        //assert
+        assert.equal(this.renderer.stub("path").callCount, 2);
+        checkElementPoints(assert, this.renderer.stub("path").getCall(0).args[0], [[1, 10], [2, 10], [2, 20]], true, "first line element");
+        checkElementPoints(assert, this.renderer.stub("path").getCall(1).args[0], [[4, 44]], true, "second line element");
+        assert.ok(!testPoint.draw.called);
+        assert.ok(testPoint.setInvisibility.called);
     });
 
     QUnit.module("Step line. Update animation", {

@@ -90,6 +90,7 @@ function createAxisStubs() {
         updateSize: sinon.spy(function(arg) { this.updateSize_test_arg = $.extend({}, arg); }),
         shift: sinon.spy(function(arg) { this.shift_test_arg = $.extend({}, arg); }),
         hideTitle: sinon.spy(),
+        drawScaleBreaks: sinon.spy(),
         hideOuterElements: sinon.spy()
     };
 
@@ -1393,6 +1394,7 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
     argAxisStub.updateSize.reset();
     argAxisStub.shift.reset();
     argAxisStub.createTicks.reset();
+    argAxisStub.drawScaleBreaks.reset();
 
     var valAxisStub = this.axisStub.getCall(1).returnValue;
 
@@ -1402,6 +1404,7 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
     valAxisStub.updateSize.reset();
     valAxisStub.shift.reset();
     valAxisStub.createTicks.reset();
+    valAxisStub.drawScaleBreaks.reset();
 
     scrollBar.updateSize.reset();
 
@@ -1443,6 +1446,8 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
 
     assert.equal(argAxisStub.shift.called, false);
     assert.equal(valAxisStub.shift.called, false);
+
+    assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
 });
 
 QUnit.module("Axes synchronization", environment);

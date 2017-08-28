@@ -332,7 +332,6 @@ QUnit.test("Point is out of boundaries on the left", function(assert) {
     assert.strictEqual(point.minY, 300, "minY");
     assert.strictEqual(point.height, 50, "height");
     assert.strictEqual(point.x, 0, "x");
-    assert.strictEqual(point.minX, 0, "minX");
     assert.strictEqual(point.width, 50, "width");
 
     assert.equal(point.vx, 25, "crosshair x Coord");
@@ -350,7 +349,6 @@ QUnit.test("Point is partially out of boundaries on the left and bottom", functi
     assert.strictEqual(point.minY, 300, "minY");
     assert.strictEqual(point.height, 75, "height");
     assert.strictEqual(point.x, 100, "x");
-    assert.strictEqual(point.minX, 100, "minX");
     assert.strictEqual(point.width, 30, "width");
 });
 
@@ -365,7 +363,6 @@ QUnit.test("Point is partially out of boundaries at the top and bottom", functio
     assert.strictEqual(point.minY, 300, "minY");
     assert.strictEqual(point.height, 100, "height");
     assert.strictEqual(point.x, 200, "x");
-    assert.strictEqual(point.minX, 200, "minX");
     assert.strictEqual(point.width, 50, "width");
 });
 
@@ -380,7 +377,6 @@ QUnit.test("Point is partially out of boundaries at the bottom", function(assert
     assert.strictEqual(point.minY, 300, "minY");
     assert.strictEqual(point.height, 50, "height");
     assert.strictEqual(point.x, 300, "x");
-    assert.strictEqual(point.minX, 300, "minX");
     assert.strictEqual(point.width, 50, "width");
 });
 
@@ -395,7 +391,6 @@ QUnit.test("Point is partially out of boundaries at the top", function(assert) {
     assert.strictEqual(point.minY, 300, "minY");
     assert.strictEqual(point.height, 100, "height");
     assert.strictEqual(point.x, 400, "x");
-    assert.strictEqual(point.minX, 400, "minX");
     assert.strictEqual(point.width, 50, "width");
 });
 
@@ -410,7 +405,6 @@ QUnit.test("Point is partially out of boundaries on the right", function(assert)
     assert.strictEqual(point.minY, 300, "minY");
     assert.strictEqual(point.height, 75, "height");
     assert.strictEqual(point.x, 480, "x");
-    assert.strictEqual(point.minX, 480, "minX");
     assert.strictEqual(point.width, 20, "width");
 });
 
@@ -425,20 +419,22 @@ QUnit.test("Point is out of boundaries on the right", function(assert) {
     assert.strictEqual(point.minY, 300, "minY");
     assert.strictEqual(point.height, 75, "height");
     assert.strictEqual(point.x, 600, "x");
-    assert.strictEqual(point.minX, 600, "minX");
     assert.strictEqual(point.width, 50, "width");
 });
 
-QUnit.test("Point's value is translated to null", function(assert) {
-    var point = createPoint(this.series, { argument: 4, value: 0.1 }, this.opt);
+QUnit.test("hasCoords returns false if point doesn't have x", function(assert) {
+    this.continuousTranslators.arg = new MockTranslator({
+        translate: { 6: null },
+        getCanvasVisibleArea: { min: 30, max: 300 }
+    });
+    this.series.getVisibleArea = function() { return { minX: 0, maxX: 300, minY: 100, maxY: 500 }; };
+
+    var point = createPoint(this.series, { argument: 6, value: 5 }, this.opt);
 
     point.width = 50;
     point.translate();
 
-    assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
-    assert.strictEqual(point.y, 300, "y");
-    assert.strictEqual(point.minY, 300, "minY");
-    assert.strictEqual(point.height, 0, "height");
+    assert.ok(!point.hasCoords());
 });
 
 QUnit.module("Point coordinates translation with correction on canvas visible area. Rotated.", {
@@ -487,7 +483,6 @@ QUnit.test("Point is out of boundaries on the left", function(assert) {
 
     assert.strictEqual(point.inVisibleArea, false, "inVisibleArea");
     assert.strictEqual(point.y, 0, "y");
-    assert.strictEqual(point.minY, 0, "minY");
     assert.strictEqual(point.height, 50, "height");
     assert.strictEqual(point.x, 250, "x");
     assert.strictEqual(point.minX, 300, "minX");
@@ -505,7 +500,6 @@ QUnit.test("Point is partially out of boundaries on the left and bottom", functi
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 100, "y");
-    assert.strictEqual(point.minY, 100, "minY");
     assert.strictEqual(point.height, 30, "height");
     assert.strictEqual(point.x, 225, "x");
     assert.strictEqual(point.minX, 300, "minX");
@@ -520,7 +514,6 @@ QUnit.test("Point is partially out of boundaries at the top and bottom", functio
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 200, "y");
-    assert.strictEqual(point.minY, 200, "minY");
     assert.strictEqual(point.height, 50, "height");
     assert.strictEqual(point.x, 200, "x");
     assert.strictEqual(point.minX, 300, "minX");
@@ -535,7 +528,6 @@ QUnit.test("Point is partially out of boundaries at the bottom", function(assert
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 300, "y");
-    assert.strictEqual(point.minY, 300, "minY");
     assert.strictEqual(point.height, 50, "height");
     assert.strictEqual(point.x, 250, "x");
     assert.strictEqual(point.minX, 300, "minX");
@@ -550,7 +542,6 @@ QUnit.test("Point is partially out of boundaries at the top", function(assert) {
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 400, "y");
-    assert.strictEqual(point.minY, 400, "minY");
     assert.strictEqual(point.height, 50, "height");
     assert.strictEqual(point.x, 200, "x");
     assert.strictEqual(point.minX, 300, "minX");
@@ -565,7 +556,6 @@ QUnit.test("Point is partially out of boundaries on the right", function(assert)
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 480, "y");
-    assert.strictEqual(point.minY, 480, "minY");
     assert.strictEqual(point.height, 20, "height");
     assert.strictEqual(point.x, 225, "x");
     assert.strictEqual(point.minX, 300, "minX");
@@ -580,23 +570,10 @@ QUnit.test("Point is out of boundaries on the right", function(assert) {
 
     assert.strictEqual(point.inVisibleArea, false, "inVisibleArea");
     assert.strictEqual(point.y, 600, "y");
-    assert.strictEqual(point.minY, 600, "minY");
     assert.strictEqual(point.height, 50, "height");
     assert.strictEqual(point.x, 225, "x");
     assert.strictEqual(point.minX, 300, "minX");
     assert.strictEqual(point.width, 75, "width");
-});
-
-QUnit.test("Point's value is translated to null", function(assert) {
-    var point = createPoint(this.series, { argument: 4, value: 0.1 }, this.opt);
-
-    point.height = 50;
-    point.translate();
-
-    assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
-    assert.strictEqual(point.x, 300, "x");
-    assert.strictEqual(point.minX, 300, "minX");
-    assert.strictEqual(point.width, 0, "width");
 });
 
 QUnit.module("Point coordinates correction", {
@@ -616,7 +593,6 @@ QUnit.module("Point coordinates correction", {
         this.point.rotated = false;
         this.point.x = 50;
         this.point.y = 100;
-        this.point.minX = 50;
         this.point.minY = 300;
         this.point.height = 200;
         this.point.width = 0;
@@ -634,7 +610,6 @@ QUnit.test("Negative offset", function(assert) {
     assert.equal(this.point.width, 20, "width");
     assert.equal(this.point.x, 50, "x");
     assert.equal(this.point.xCorrection, -20, "xCorrection");
-    assert.equal(this.point.minX, 50, "minX");
 
     assert.equal(this.point.y, 100, "y");
     assert.equal(this.point.height, 200, "height");
@@ -651,7 +626,6 @@ QUnit.test("Zero offset", function(assert) {
     assert.equal(this.point.width, 50, "width");
     assert.equal(this.point.x, 50, "x");
     assert.equal(this.point.xCorrection, -25, "xCorrection");
-    assert.equal(this.point.minX, 50, "minX");
 
     assert.equal(this.point.y, 100, "y");
     assert.equal(this.point.height, 200, "height");
@@ -668,7 +642,6 @@ QUnit.test("Positive offset", function(assert) {
     assert.equal(this.point.width, 10, "width");
     assert.equal(this.point.x, 50, "x");
     assert.equal(this.point.xCorrection, 5, "xCorrection");
-    assert.equal(this.point.minX, 50, "minX");
 
     assert.equal(this.point.y, 100, "y");
     assert.equal(this.point.height, 200, "height");
@@ -748,7 +721,6 @@ QUnit.test("Not integer offset", function(assert) {
     assert.equal(this.point.width, 10, "width");
     assert.equal(this.point.x, 50, "x");
     assert.equal(this.point.xCorrection, 5, "xCorrection");
-    assert.equal(this.point.minX, 50, "minX");
 
     assert.equal(this.point.y, 100, "y");
     assert.equal(this.point.height, 200, "height");

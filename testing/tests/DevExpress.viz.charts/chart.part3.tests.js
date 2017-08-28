@@ -562,6 +562,27 @@ QUnit.test("Create Vertical Continuous Axis, Horizontal Continuous axis (rotated
     assertCommonAxesProperties(assert, valueAxis, {});
 });
 
+QUnit.test("Creation axes, container color and group of the scale breaks should be passed to axes", function(assert) {
+    //Arrange
+    var stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    seriesMockData.series.push(stubSeries);
+
+    //act
+    var chart = this.createChart({
+        series: {
+            type: "line"
+        },
+        containerBackgroundColor: "color"
+    });
+
+    assert.ok(chart._argumentAxes[0]._scaleBreaksGroup);
+    assert.ok(chart._valueAxes[0]._scaleBreaksGroup);
+    assert.equal(chart._argumentAxes[0].getOptions().containerColor, "color");
+    assert.equal(chart._valueAxes[0].getOptions().containerColor, "color");
+});
+
 QUnit.test("Panes - named Horizontal Category Axis, named Vertical Continuous axis", function(assert) {
     //Arrange
     var stubSeries = new MockSeries({

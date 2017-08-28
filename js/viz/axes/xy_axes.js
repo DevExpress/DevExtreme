@@ -17,7 +17,8 @@ var formatHelper = require("../../format_helper"),
     BOTTOM = constants.bottom,
     LEFT = constants.left,
     RIGHT = constants.right,
-    CENTER = constants.center;
+    CENTER = constants.center,
+    SCALE_BREAK_OFFSET = 3;
 
 function prepareDatesDifferences(datesDifferences, tickInterval) {
     var dateUnitInterval,
@@ -193,25 +194,6 @@ module.exports = {
 
         _getTranslatedCoord: function(value, offset) {
             return this._translator.translate(value, offset);
-        },
-
-        _getCanvasStartEnd: function() {
-            var isHorizontal = this._isHorizontal,
-                canvas = this._canvas,
-                invert = this._translator.getBusinessRange().invert,
-                coords = isHorizontal ? [canvas.left, canvas.width - canvas.right] : [canvas.height - canvas.bottom, canvas.top];
-
-            invert && coords.reverse();
-
-            return {
-                start: coords[0],
-                end: coords[1]
-            };
-        },
-
-        _getScreenDelta: function() {
-            var canvas = this._getCanvasStartEnd();
-            return _math.abs(canvas.start - canvas.end);
         },
 
         _initAxisPositions: function() {
@@ -644,8 +626,10 @@ module.exports = {
         },
 
         estimateMargins: function(canvas) {
+            this.updateCanvas(canvas);
             var that = this,
-                ticksData = this._createTicksAndLabelFormat(canvas),
+                range = that._getViewportRange(),
+                ticksData = this._createTicksAndLabelFormat(range),
                 ticks = ticksData.ticks,
                 tickInterval = ticksData.tickInterval,
                 options = this._options,
@@ -654,8 +638,7 @@ module.exports = {
                     return options.label.position === "outside" && options.label.visible;
                 }),
                 rootElement = that._renderer.root,
-                businessRange = that._translator.getBusinessRange(),
-                labelIsVisible = options.label.visible && !businessRange.stubData && ticks.length,
+                labelIsVisible = options.label.visible && !range.stubData && ticks.length,
                 labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks),
                 labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
                     .css(that._textFontStyles)
@@ -895,6 +878,63 @@ module.exports = {
             }
 
             return skippedCategory;
+        },
+
+        _drawBreak: function(br, scaleBreakPattern, positionFrom, positionTo, length) {
+            var that = this,
+                translatedEnd = that._getTranslatedCoord(br.to),
+                breakStart = Math.min(translatedEnd, !that._translator.isInverted() ? translatedEnd - length : translatedEnd + length),
+                rect;
+
+            if(that._isHorizontal) {
+                rect = that._renderer.rect(breakStart, positionFrom, scaleBreakPattern.size, positionTo - positionFrom);
+            } else {
+                rect = that._renderer.rect(positionFrom, breakStart, positionTo - positionFrom, scaleBreakPattern.size);
+            }
+            rect.attr({ fill: scaleBreakPattern.id }).append(that._scaleBreaksGroup);
+        },
+
+        drawScaleBreaks: function(canvas) {
+            var that = this,
+                options = that._options,
+                breakStyle = options.breakStyle,
+                position = options.position,
+                positionFrom,
+                positionTo,
+                breaks = that._translator.getBusinessRange().breaks || [],
+                scaleBreakPattern;
+
+            if(!(breaks && breaks.length)) {
+                return;
+            }
+
+            if(canvas) {
+                positionFrom = canvas.start;
+                positionTo = canvas.end;
+            } else {
+                positionFrom = that._orthogonalPositions.start - (options.visible && (position === "left" || position === "top") ? SCALE_BREAK_OFFSET : 0);
+                positionTo = that._orthogonalPositions.end + (options.visible && (position === "right" || position === "bottom") ? SCALE_BREAK_OFFSET : 0);
+            }
+
+            if(that._scaleBreakPattern) {
+                that._scaleBreakPattern.dispose();
+            }
+            that._scaleBreakPattern = scaleBreakPattern = that._renderer.linePattern({
+                color: that._options.containerColor,
+                borderColor: breakStyle.color,
+                size: breakStyle.width,
+                canvasLength: positionTo - positionFrom,
+                isHorizontal: that._isHorizontal,
+                isWaved: breakStyle.line.toLowerCase() !== "straight"
+            });
+
+            that._scaleBreaksGroup.clear();
+
+            breaks.forEach(function(br) {
+                if(!br.gapSize) {
+                    that._drawBreak(br, scaleBreakPattern, positionFrom, positionTo, breakStyle.width / 2 + scaleBreakPattern.size / 2);
+                }
+            });
         },
 
         _getSpiderCategoryOption: noop,

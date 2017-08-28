@@ -69,3 +69,9 @@ var chartPointObject = {
     */
     getBoundingRect: function() { }
 };
+
+/**
+* @name ScaleBreak
+* @publicName ScaleBreak
+* @type Array<Date, string>| Array<number>
+*/

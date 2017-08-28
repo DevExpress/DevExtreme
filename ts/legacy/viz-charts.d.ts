@@ -258,6 +258,7 @@ declare module DevExpress.viz.charts {
         endValue?: any;
     }
 
+    /** @docid_ignore ScaleBreak */
 
     // Series
 
@@ -1562,6 +1563,12 @@ declare module DevExpress.viz.charts {
         /** @docid dxchartoptions_commonaxissettings_placeholdersize */
         placeholderSize?: number;
 
+        /** @docid dxchartoptions_commonaxissettings_breaks */
+        breaks?: Array<Array<any>>;
+
+        /** @docid dxchartoptions_commonaxissettings_breakStyle */
+        breakStyle?: viz.core.BreakStyle,
+
         /** @docid dxchartoptions_commonaxissettings_stripstyle */
         stripStyle?: {
 
@@ -1785,6 +1792,11 @@ declare module DevExpress.viz.charts {
           */
         pane?: string;
 
+        /** @docid dxchartoptions_valueaxis_autobreaksenabled */
+        autoBreaksEnabled?: boolean;
+
+        /** @docid dxchartoptions_valueaxis_maxautobreakcount */
+        maxAutoBreakCount?: number;
         /**
         * @docid dxchartoptions_argumentaxis_strips
         * @docid dxchartoptions_valueaxis_strips
@@ -1879,7 +1891,20 @@ declare module DevExpress.viz.charts {
         hoverMode?: string;
     }
 
-    export interface ChartArgumentAxis extends ChartAxis, ArgumentAxis { }
+    export interface ChartArgumentAxis extends ChartAxis, ArgumentAxis {
+        /** @docid dxchartoptions_argumentaxis_workdaysonly */
+        workdaysOnly?: boolean;
+
+        /** @docid dxchartoptions_argumentaxis_workweek */
+        workweek?: Array<number>;
+
+        /** @docid dxchartoptions_argumentaxis_holidays */
+        holidays?: any;
+
+        /** @docid dxchartoptions_argumentaxis_singleworkdays */
+        singleWorkdays?: any;
+    }
+
     export interface PolarArgumentAxis extends PolarAxis, ArgumentAxis {
         /** @docid dxpolarchartoptions_argumentaxis_startangle */
         startAngle?: number;

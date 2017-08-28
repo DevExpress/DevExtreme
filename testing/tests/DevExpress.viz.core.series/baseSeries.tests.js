@@ -170,6 +170,7 @@ var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
+    stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
     return stub;
 };
@@ -185,6 +186,7 @@ var environmentWithSinonStubPoint = {
             stub.value = data.value || 11;
             stub.fullState = 0;
             stub.hasValue.returns(true);
+            stub.hasCoords.returns(true);
             stub.isInVisibleArea.returns(true);
             stub.draw.reset();
             stub.update.reset();

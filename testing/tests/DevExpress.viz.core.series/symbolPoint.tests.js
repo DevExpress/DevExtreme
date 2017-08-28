@@ -954,6 +954,36 @@ QUnit.test("TriangleDown", function(assert) {
     assert.deepEqual(point.graphic.data.lastCall.args, [{ 'chart-data-point': point }]);
 });
 
+QUnit.test("hasCoords returns true if point has x and y", function(assert) {
+    var point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
+
+    point.translate();
+
+    assert.ok(point.hasCoords());
+});
+
+QUnit.test("hasCoords returns false if point doesn't have y", function(assert) {
+    this.translators.val = new MockTranslator({
+        translate: { 1: null }
+    });
+    var point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
+
+    point.translate();
+
+    assert.ok(!point.hasCoords());
+});
+
+QUnit.test("hasCoords returns false if point doesn't have x", function(assert) {
+    this.translators.arg = new MockTranslator({
+        translate: { 1: null }
+    });
+    var point = createPoint(this.series, { argument: 1, value: 1 }, this.options);
+
+    point.translate();
+
+    assert.ok(!point.hasCoords());
+});
+
 QUnit.test("TriangleUp", function(assert) {
     this.options.symbol = "triangleUp";
     var point = createPoint(this.series, { argument: 1, value: 1 }, this.options);

@@ -310,6 +310,7 @@ var AdvancedChart = BaseChart.inherit({
         that._axesGroup.linkAppend();
         that._constantLinesGroup.linkAppend();
         that._labelAxesGroup.linkAppend();
+        that._scaleBreaksGroup.linkAppend();
     },
 
     _populateBusinessRange: function() {
@@ -320,13 +321,19 @@ var AdvancedChart = BaseChart.inherit({
             argRange = new rangeModule.Range({ rotated: !!rotated }),
             argumentMarginOptions = {},
             bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions("maxBubbleSize"), that._isRotated()),
-            groupsData = that._groupsData;
+            groupsData = that._groupsData,
+            countAxesPerPane;
 
         that.businessRanges = null;
 
         _each(argAxes, function(_, axis) {
             argRange.addRange(axis.getRangeData());
         });
+
+        countAxesPerPane = that._valueAxes.reduce(function(prev, axis) {
+            prev[axis.pane] = (prev[axis.pane] || 0) + 1;
+            return prev;
+        }, {});
 
         that._valueAxes.forEach(function(valueAxis) {
             var groupRange = new rangeModule.Range({
@@ -360,7 +367,8 @@ var AdvancedChart = BaseChart.inherit({
                 groupRange.correctValueZeroLevel();
             }
 
-            valueAxis.setBusinessRange(groupRange);
+            valueAxis.setGroupSeries(groupSeries);
+            valueAxis.setBusinessRange(groupRange, countAxesPerPane[valueAxis.pane] > 1);
             valueAxis.setMarginOptions(marginOptions);
 
             businessRanges.push({ val: groupRange, arg: argRange });
@@ -447,6 +455,7 @@ var AdvancedChart = BaseChart.inherit({
                 stripsGroup: that._stripsGroup,
                 labelAxesGroup: that._labelAxesGroup,
                 constantLinesGroup: that._constantLinesGroup,
+                scaleBreaksGroup: that._scaleBreaksGroup,
                 axesContainerGroup: that._axesGroup,
                 gridGroup: that._gridGroup,
                 isArgumentAxis: typeSelector === "argumentAxis"

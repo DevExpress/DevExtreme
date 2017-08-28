@@ -55,6 +55,15 @@ QUnit.test("deprecated options", function(assert) {
     assert.strictEqual(options.minorTick.visible, "show-minor-ticks", "minorTick.visible");
 });
 
+QUnit.test("Pass containerBackgroundColor to scale", function(assert) {
+    this.createWidget({
+        containerBackgroundColor: "red"
+    });
+
+    var options = this.axis.updateOptions.lastCall.args[0];
+    assert.deepEqual(options.containerColor, "red");
+});
+
 QUnit.test("default selected range", function(assert) {
     this.createWidget({
         scale: {

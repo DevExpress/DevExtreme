@@ -163,5 +163,50 @@ module.exports = {
             });
         }
         return range;
+    },
+
+    getPointsInViewPort: function(series) {
+        var argumentViewPortFilter = getViewPortFilter(series.getArgumentAxis().getViewport() || {}),
+            valueViewPort = series.getValueAxis().getViewport() || {},
+            valueViewPortFilter = getViewPortFilter(valueViewPort),
+            points = series.getPoints(),
+            addValue = function(values, point) {
+                var minValue = point.getMinValue(),
+                    maxValue = point.getMaxValue();
+                if(valueViewPortFilter(minValue)) {
+                    values.push(minValue);
+                }
+                if(maxValue !== minValue && valueViewPortFilter(maxValue)) {
+                    values.push(maxValue);
+                }
+            },
+            checkPointInViewport = function(prev, point, index) {
+                if(argumentViewPortFilter(point.argument)) {
+                    addValue(prev, point);
+                } else {
+                    var prevPoint = points[index - 1],
+                        nextPoint = points[index + 1];
+
+                    if(nextPoint && argumentViewPortFilter(nextPoint.argument)) {
+                        addValue(prev, point);
+                    }
+
+                    if(prevPoint && argumentViewPortFilter(prevPoint.argument)) {
+                        addValue(prev, point);
+                    }
+
+                }
+                return prev;
+            },
+            values = points.reduce(checkPointInViewport, []);
+
+        if(valueViewPort.min) {
+            values.push(valueViewPort.min);
+        }
+        if(valueViewPort.max) {
+            values.push(valueViewPort.max);
+        }
+
+        return values;
     }
 };
