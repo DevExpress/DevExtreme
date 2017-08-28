@@ -180,7 +180,7 @@ var getJsonpOptions = function(options) {
 var getRequestOptions = function(options, headers) {
 
     var params = options.data,
-        url = ((options.url || location.href) + "");
+        url = options.url || location.href;
 
     if(options.noCache) {
         params = params || {};

@@ -430,7 +430,7 @@ QUnit.test("empty url", function(assert) {
     });
 
     assert.equal(this.requests.length, 1);
-    assert.ok(this.requests[0]["url"].indexOf("localhost") !== -1);
+    assert.equal(this.requests[0].url, location.href);
 });
 
 QUnit.test("Post process of data with different dataType (same domain)", function(assert) {
