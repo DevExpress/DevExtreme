@@ -1,7 +1,9 @@
 "use strict";
 
 var registerEventCallbacks = require("./event_registrator_callbacks");
-var isWindow = require("../../core/utils/type").isWindow;
+var typeUtils = require("../../core/utils/type");
+var isWindow = typeUtils.isWindow;
+var isFunction = typeUtils.isFunction;
 var extend = require("../../core/utils/extend").extend;
 var matches = require("../../core/polyfills/matches");
 var dataUtilsStrategy = require("../../core/element_data").getDataStrategy();
@@ -18,7 +20,7 @@ var WeakMap = require("../../core/polyfills/weak_map");
 var elementDataMap = new WeakMap();
 
 var guid = 0;
-
+var skipEvent;
 var getElementEventData = function(element, eventName) {
     var elementData = elementDataMap.get(element);
 
@@ -41,6 +43,9 @@ var getElementEventData = function(element, eventName) {
     return {
         addHandler: function(handler, selector, data) {
             var wrappedHandler = function(e, extraParameters) {
+                if(e.type === skipEvent) {
+                    return;
+                }
                 // TODO: refactor
                 var result; // TODO: get rid of checking if result equals false
                 var callHandler = function(e) {
@@ -264,25 +269,11 @@ setEngine({
 
         var type = src.type || src.originalEvent && src.originalEvent.type;
 
-        // TODO: Consider other native events
-        if(type === "click") {
-            // TODO: native click for checkboxes
-            if(element === document.activeElement) {
-                element.blur();
-            }
-            element.focus && element.focus();
-        }
-        if(type === "focus") {
-            // TODO: Change grid editing tests and get rid of this
-            if(element === document.activeElement) {
-                element.blur && element.blur();
-            }
-            element.focus && element.focus();
-            return;
-        }
-        if(type === "blur") {
+        // TODO: Change grid editing tests and get rid of this
+        if((src.type === "focus" || src.type === "focusin") && isFunction(element.focus) && element === document.activeElement) {
+            skipEvent = "blur";
             element.blur && element.blur();
-            return;
+            skipEvent = undefined;
         }
 
         var elementDataByEvent = getElementEventData(element, type);
@@ -303,14 +294,40 @@ setEngine({
             return !event.isImmediatePropagationStopped();
         });
 
-        if(noBubble || special[type] && special[type].noBubble || event.isPropagationStopped()) {
-            return;
+        noBubble = noBubble || special[type] && special[type].noBubble || event.isPropagationStopped();
+        if(!noBubble) {
+            var parents = [];
+            var getParents = function(element) {
+                var parent = element.parentNode;
+                if(parent) {
+                    parents.push(parent);
+                    getParents(parent);
+                }
+            };
+            getParents(element);
+
+            var i = 0;
+
+            while(parents[i] && !event.isPropagationStopped()) {
+                eventsEngine.trigger(parents[i], extend(event, { currentTarget: parents[i] }), true);
+                i++;
+            }
         }
 
-        var parent = element.parentNode;
-
-        if(parent) {
-            eventsEngine.trigger(parent, extend(event, { currentTarget: parent }));
+        // TODO: Consider other native events
+        // TODO: native click for checkboxes and links
+        if((src.type === "focus" || src.type === "focusin") && isFunction(element.focus)) {
+            skipEvent = src.type;
+            element.focus();
+            skipEvent = undefined;
+        } else if((src.type === "blur" || src.type === "focusout") && isFunction(element.blur)) {
+            skipEvent = src.type;
+            element.blur && element.blur();
+            skipEvent = undefined;
+        } else if(isFunction(element[src.type])) {
+            skipEvent = src.type;
+            element[src.type]();
+            skipEvent = undefined;
         }
     },
 

@@ -10224,15 +10224,15 @@ QUnit.testInActiveWindow("Focus editor after click on a label", function(assert)
     this.editRow(0);
     $labels = testElement.find(".dx-datagrid-edit-form label");
 
-    $labels.eq(0).click();
+    $labels.eq(0).trigger("click");
     assert.ok(testElement.find("input[id*='name']").parent().parent().hasClass("dx-state-focused"), "input with 'name' id");
-    $labels.eq(1).click();
+    $labels.eq(1).trigger("click");
     assert.ok(testElement.find("input[id*='age']").parent().parent().hasClass("dx-state-focused"), "input with 'age' id");
-    $labels.eq(2).click();
+    $labels.eq(2).trigger("click");
     assert.ok(testElement.find("input[id*='lastName']").parent().parent().hasClass("dx-state-focused"), "input with 'lastName' id");
-    $labels.eq(3).click();
+    $labels.eq(3).trigger("click");
     assert.ok(testElement.find("input[id*='phone']").parent().parent().hasClass("dx-state-focused"), "input with 'phone' id");
-    $labels.eq(4).click();
+    $labels.eq(4).trigger("click");
     assert.ok(testElement.find("input[id*='room']").parent().parent().hasClass("dx-state-focused"), "input with 'room' id");
 });
 

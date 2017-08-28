@@ -4,11 +4,11 @@
 <head>
     <title>DevExtreme jQuery Example</title>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+    <!-- <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
 
     <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
-    <script type="text/javascript" src="../vendor/jquery/jquery-3.1.0.js"></script>
+    <script type="text/javascript" src="../vendor/jquery/jquery-3.1.0.js"></script> -->
 
     <!--<script type="text/javascript" src="../vendor/cldr/cldr.js"></script>
     <script type="text/javascript" src="../vendor/cldr/cldr/event.js"></script>
@@ -20,19 +20,29 @@
     <script type="text/javascript" src="../vendor/globalize/globalize/message.js"></script>
     <script type="text/javascript" src="../vendor/globalize/globalize/number.js"></script>-->
 
-    <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script>
+    <!-- <script type="text/javascript" src="../artifacts/js/dx.all.debug.js"></script> -->
 </head>
 
 <body>
     <div id="button"></div>
-
+    <input id="target" type="text"><label id="label" for="target">Ipsum</label>
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
-        });
+        document.getElementById("target").addEventListener("focusin", function(e) {
+            console.log(e);
+        }, true);
+        /*setTimeout(function() {
+            document.getElementById("target").focus();
+        }, 1000);
+        */
+        setTimeout(function() {
+            document.getElementById("label").click();
+        }, 1000);
+        // $(function() {
+        //     $("#button").dxButton({
+        //         text: 'Click me!',
+        //         onClick: function() { alert("clicked"); }
+        //     });
+        // });
     </script>
 </body>
 </html>

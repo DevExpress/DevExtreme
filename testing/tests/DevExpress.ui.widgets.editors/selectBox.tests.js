@@ -1279,9 +1279,9 @@ QUnit.testInActiveWindow("it should be possible to clear the value via keyboard 
         element = $element.dxSelectBox("instance"),
         $input = $element.find(".dx-texteditor-input");
 
-    $input.focusin();
+    $input.trigger("focusin");
     $input.val("");
-    $input.blur();
+    $input.trigger("blur");
 
     assert.equal(element.option("value"), null, "value was changed");
     assert.equal($input.val(), "", "input text has been cleared");
@@ -3691,6 +3691,7 @@ QUnit.test("value should be restored after the focusout when selection was not c
         $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
         keyboard = keyboardMock($input);
 
+    $input.get(0).focus();
     keyboard.keyDown(KEY_DOWN);
     assert.equal($input.val(), "second", "value has been changed");
 

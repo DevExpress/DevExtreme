@@ -413,7 +413,7 @@ var browser;
             },
 
             focus: function() {
-                this.triggerEvent("focus");
+                $element[0].focus && $element[0].focus();
                 return this;
             },
 
