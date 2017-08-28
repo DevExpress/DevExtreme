@@ -532,7 +532,7 @@ QUnit.test("Handle timeout", function(assert) {
     var done = assert.async();
 
     ajax.sendRequest({
-        url: "https://js.devexpress.com",
+        url: "http://js.devexpress.com",
         timeout: 1
     }).fail(function(xhr, statusText) {
         assert.equal(statusText, "timeout");
@@ -545,7 +545,7 @@ QUnit.test("Handle error", function(assert) {
     var done = assert.async();
 
     ajax.sendRequest({
-        url: "https://devexpress.noresolve/"
+        url: "http://devexpress.noresolve/"
     }).fail(function(xhr, statusText) {
         assert.equal(statusText, "error");
         done();
