@@ -1293,9 +1293,11 @@ module.exports = {
                         case "columns":
                             args.handled = true;
                             if(args.name === args.fullName) {
-                                this._columnsUserState = null;
-                                this._ignoreColumnOptionNames = null;
-                                this.init();
+                                if(!commonUtils.equalByValue(args.previousValue, args.value)) {
+                                    this._columnsUserState = null;
+                                    this._ignoreColumnOptionNames = null;
+                                    this.init();
+                                }
                             } else {
                                 this._columnOptionChanged(args);
                             }

@@ -1091,3 +1091,38 @@ QUnit.test("Show NoData message when dataSource is empty and state is loaded", f
     //assert
     assert.equal($(".dx-datagrid-nodata").length, 1, "NoData message should be shown");
 });
+
+//T547048
+QUnit.test("State should be updated correctly when reinit of the columns", function(assert) {
+    //arrange
+    var columns = ["id"];
+
+    this.setupDataGridModules({
+        columns: columns,
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return { columns: [{ index: 0, dataField: 'id', visible: true, filterValues: [2, 3] }] };
+            },
+            customSave: function() {
+            }
+        },
+        headerFilter: {
+            visible: true
+        },
+        loadingTimeout: null,
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        }
+    });
+
+    //assert
+    assert.deepEqual(this.getVisibleColumns()[0].filterValues, [2, 3], "filter values");
+
+    //act
+    this.columnsController.optionChanged({ name: "columns", fullName: "columns", previousValue: columns, value: columns });
+
+    //assert
+    assert.deepEqual(this.getVisibleColumns()[0].filterValues, [2, 3], "filter values after reinit");
+});
