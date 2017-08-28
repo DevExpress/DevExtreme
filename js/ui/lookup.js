@@ -716,7 +716,7 @@ var Lookup = DropDownList.inherit({
 
     _renderInput: function() {
         var fieldClickAction = this._createAction((function() {
-            this._validatedOpening();
+            this._toggleOpenState();
         }).bind(this));
 
         this._$field = $("<div>").addClass(LOOKUP_FIELD_CLASS);
