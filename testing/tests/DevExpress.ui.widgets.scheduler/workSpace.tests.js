@@ -3403,8 +3403,8 @@ QUnit.testStart(function() {
 
         assert.equal($firstDayOfMonthCells.length, 3, "view has right special cells count");
 
-        assert.equal($firstDayOfMonthCells.first().text().toLowerCase(), "thu 1", "Cell has a right text");
-        assert.equal($firstDayOfMonthCells.last().text().toLowerCase(), "tue 1", "Cell has a right text");
+        assert.equal($firstDayOfMonthCells.first().text(), "Jun 1", "Cell has a right text");
+        assert.equal($firstDayOfMonthCells.last().text(), "Aug 1", "Cell has a right text");
     });
 
     QUnit.test("Get date range", function(assert) {
