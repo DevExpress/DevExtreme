@@ -215,6 +215,13 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
+                * @name dxSchedulerOptions_views_maxAppointmentsPerCell
+                * @publicName maxAppointmentsPerCell
+                * @type number|string
+                * @default undefined
+                */
+
+                /**
                 * @name dxSchedulerOptions_views_intervalCount
                 * @publicName intervalCount
                 * @type number
