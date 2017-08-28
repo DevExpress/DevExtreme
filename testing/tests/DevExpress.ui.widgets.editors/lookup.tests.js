@@ -164,6 +164,22 @@ QUnit.test("show popup on click", function(assert) {
     assert.equal(popup.option("visible"), false);
 });
 
+QUnit.test("hide popup on click on editor", function(assert) {
+    var instance = this.instance;
+
+    instance.option({
+        dataSource: [1, 2, 3]
+    });
+
+    this.togglePopup();
+
+    var popup = this.popup,
+        $field = this.$field;
+
+    $field.trigger("dxclick");
+    assert.ok(!popup.option("visible"), "popup hides on click");
+});
+
 QUnit.test("selecting item on click", function(assert) {
     this.instance.option({
         dataSource: [1, 2, 3]
