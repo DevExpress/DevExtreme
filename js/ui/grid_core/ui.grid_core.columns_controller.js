@@ -1572,7 +1572,7 @@ module.exports = {
                     }
 
                     expandColumns = $.map(expandColumns, function(column) {
-                        return extend({}, column, { visibleWidth: null }, expandColumn, { index: column.index });
+                        return extend({}, column, { visibleWidth: null, minWidth: null }, expandColumn, { index: column.index });
                     });
 
                     return expandColumns;
