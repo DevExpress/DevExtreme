@@ -2906,7 +2906,7 @@ QUnit.test("Remove the inserted row with edit mode batch and hidden column", fun
 
     rowsView.render(testElement);
 
-    that.columnsController.optionChanged({ name: 'columns', fullName: 'columns' });
+    that.columnsController.optionChanged({ name: 'columns', fullName: 'columns', value: [] });
     that.dataController.optionChanged({ name: 'columns', fullName: 'columns' });
 
     that.columnOption(2, { visible: false });
@@ -4426,7 +4426,7 @@ QUnit.test('Edit Cell when the width of the columns in percent', function(assert
             { dataField: 'age', width: '40%' }
     ];
 
-    that.columnsController.optionChanged({ name: 'columns', fullName: 'columns' });
+    that.columnsController.optionChanged({ name: 'columns', fullName: 'columns', value: [] });
     that.dataController.optionChanged({ name: 'columns', fullName: 'columns' });
 
     //act
@@ -4486,8 +4486,8 @@ QUnit.test('Column currency format after editing', function(assert) {
 
     rowsView.render(testElement);
 
-    that.columnsController.optionChanged({ name: 'columns', fullName: 'columns' });
-    that.dataController.optionChanged({ name: 'columns', fullName: 'columns' });
+    that.columnsController.optionChanged({ name: 'columns', fullName: 'columns', value: [] });
+    that.dataController.optionChanged({ name: 'columns', fullName: 'columns', value: [] });
 
     //assert
     assert.equal(testElement.find('td').first().next().text(), "$15.000", "cell text before editing");

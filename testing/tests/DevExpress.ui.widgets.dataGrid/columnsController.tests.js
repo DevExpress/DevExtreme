@@ -3121,7 +3121,7 @@ QUnit.test("columns state should be reset after columns option change", function
     this.columnsController.columnOption('field1', 'visible', false);
 
     //act
-    this.columnsController.optionChanged({ name: "columns", fullName: "columns" });
+    this.columnsController.optionChanged({ name: "columns", fullName: "columns", value: [] });
 
     //assert
     assert.strictEqual(this.columnsController.getVisibleColumns().length, 2, "columns state is reset");
