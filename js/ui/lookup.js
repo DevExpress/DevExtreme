@@ -831,7 +831,6 @@ var Lookup = DropDownList.inherit({
             fullScreen: false,
             shading: false,
             closeOnTargetScroll: true,
-            closeOnOutsideClick: true,
             width: this._isInitialOptionValue("popupWidth") ? (function() { return this.element().outerWidth(); }).bind(this) : this._popupConfig().width
         }));
 

@@ -2115,6 +2115,21 @@ QUnit.test("shading should present", function(assert) {
     assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
 });
 
+QUnit.test("popup should not be hidden after outsideClick", function(assert) {
+    var $lookup = $("#lookupOptions"),
+
+        instance = $lookup.dxLookup({
+            dataSource: [1, 2, 3]
+        }).dxLookup("instance");
+
+    openPopupWithList(instance);
+
+    var $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
+
+    $(document).trigger("dxpointerdown");
+    assert.equal($overlay.is(":visible"), true, "overlay is not hidden");
+});
+
 QUnit.test("lookup popup should be hidden after click outside was present", function(assert) {
     var $lookup = $("#lookupOptions"),
 
