@@ -1230,6 +1230,24 @@ QUnit.test("minWidth should be assigned to all columns from columnMinWidth optio
     assert.strictEqual(visibleColumns[2].minWidth, 30);
 });
 
+//T544189
+QUnit.test("minWidth should not be assigned to expand column from columnMinWidth option", function(assert) {
+    this.applyOptions({
+        columnMinWidth: 20,
+        columns: ['TestField1', 'TestField2', { dataField: 'TestField3', groupIndex: 0 }]
+    });
+
+    //act
+    var visibleColumns = this.columnsController.getVisibleColumns();
+
+    //assert
+    assert.strictEqual(visibleColumns.length, 3);
+    assert.strictEqual(visibleColumns[0].command, "expand");
+    assert.strictEqual(visibleColumns[0].minWidth, null);
+    assert.strictEqual(visibleColumns[1].minWidth, 20);
+    assert.strictEqual(visibleColumns[2].minWidth, 20);
+});
+
 QUnit.module("initialization from dataSource", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Initialize from array store", function(assert) {
