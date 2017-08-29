@@ -603,12 +603,13 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _updateHiddenElement: function() {
+        this._removeHiddenElement();
+
         if(this.option("mask")) {
             this._input().removeAttr("name");
             this._renderHiddenElement();
-        } else {
-            this._removeHiddenElement();
         }
+
         this._setSubmitElementName(this.option("name"));
     },
 
