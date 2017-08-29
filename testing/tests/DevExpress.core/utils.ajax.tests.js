@@ -491,14 +491,12 @@ QUnit.test("xhrFields", function(assert) {
     assert.equal(this.requests[0].withCredentials, true);
 });
 
-QUnit.test("Cross domain headers", function(assert) {
+QUnit.test("X-Requested-With headers (no cors)", function(assert) {
 
     var testData = [
-        { url: "http://example.com:80", crossDomain: true },
-        { url: "http://example.com:80x", crossDomain: true },
         { url: "./", crossDomain: false },
         { url: "/some-url", crossDomain: false },
-        { url: location.origin + "/some-url", crossDomain: false },
+        { url: location.origin + "/some-url", crossDomain: false }
     ];
 
     for(var i in testData) {
@@ -506,7 +504,23 @@ QUnit.test("Cross domain headers", function(assert) {
             url: testData[i].url
         });
 
-        assert.equal(this.requests[i].requestHeaders["X-Requested-With"] !== "XMLHttpRequest", testData[i].crossDomain);
+        assert.equal(this.requests[i].requestHeaders["X-Requested-With"], "XMLHttpRequest");
+    }
+});
+
+QUnit.test("X-Requested-With headers (cors)", function(assert) {
+
+    var testData = [
+        { url: "http://example.com:80", crossDomain: true },
+        { url: "http://example.com:80x", crossDomain: true }
+    ];
+
+    for(var i in testData) {
+        ajax.sendRequest({
+            url: testData[i].url
+        });
+        //jQuery checks cors support on start and doesn't create xhr object on $.ajax call
+        assert.notOk(this.requests[i] && this.requests[i].requestHeaders["X-Requested-With"]);
     }
 });
 
@@ -524,21 +538,24 @@ QUnit.test("nocontent status check", function(assert) {
     assert.equal(status, "nocontent");
 });
 
-
-QUnit.module("sendRequest async tests");
-
 QUnit.test("Handle timeout", function(assert) {
 
-    var done = assert.async();
+    var status;
 
     ajax.sendRequest({
-        url: "http://js.devexpress.com",
+        url: "",
         timeout: 1
+    }).done(function(data, statusText) {
+        status = statusText;
     }).fail(function(xhr, statusText) {
-        assert.equal(statusText, "timeout");
-        done();
+        status = statusText;
     });
+    this.clock.tick(20);
+
+    assert.equal(status, "timeout");
 });
+
+QUnit.module("sendRequest async tests");
 
 QUnit.test("Handle error", function(assert) {
 

@@ -157,7 +157,7 @@ var isCrossDomain = function(url) {
     return crossDomain;
 };
 
-var setHttpTimeout = function(timeout, xhr, deferred) {
+var setHttpTimeout = function(timeout, xhr) {
     return timeout && setTimeout(function() {
         xhr.customStatus = TIMEOUT;
         xhr.abort();
@@ -238,6 +238,11 @@ var sendRequest = function(options) {
 
     options.crossDomain = isCrossDomain(options.url);
     options.noCache = dataType === "jsonp" || dataType === "script";
+
+    if(options.crossDomain && !("withCredentials" in xhr)) {
+        d.reject(null, ERROR);
+        return result;
+    }
 
     var callbackName = getJsonpOptions(options),
         headers = getRequestHeaders(options),
