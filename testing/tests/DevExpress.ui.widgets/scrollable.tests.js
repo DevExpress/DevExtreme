@@ -540,7 +540,7 @@ QUnit.test("inertia calc distance", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.top), Math.round(distance), "distance was calculated correctly");
         }
     });
 
@@ -568,7 +568,7 @@ QUnit.test("no inertia when gesture end is deferred", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(moveDistance), "no inertia");
+            assert.equal(Math.round(location.top), Math.round(moveDistance), "no inertia");
         }
     });
 
@@ -619,7 +619,7 @@ QUnit.test("stop inertia on click", function(assert) {
             useNative: false,
             onStop: function() {
                 var location = getScrollOffset($scrollable);
-                assert.notEqual(location.top, Math.round(distance), "scroll was stopped");
+                assert.notEqual(Math.round(location.top), Math.round(distance), "scroll was stopped");
             }
         }),
         mouse = pointerMock($scrollable.find("." + SCROLLABLE_CONTENT_CLASS)).start();
@@ -849,7 +849,7 @@ QUnit.test("inertia calc distance out of bounds", function(assert) {
 
         onBounce: function() {
             var location = getScrollOffset($scrollable);
-            assert.ok(location.top < Math.round(distance), "distance was calculated wrong");
+            assert.ok(Math.round(location.top) < Math.round(distance), "distance was calculated wrong");
         },
 
         onEnd: function() {
@@ -1104,7 +1104,7 @@ QUnit.test("horizontal inertia calc distance", function(assert) {
         direction: "horizontal",
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.left, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.left), Math.round(distance), "distance was calculated correctly");
         }
     });
 
@@ -1804,7 +1804,7 @@ QUnit.test("update", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.top), Math.round(distance), "distance was calculated correctly");
         }
     });
 
