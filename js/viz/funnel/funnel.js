@@ -198,6 +198,10 @@ var dxFunnel = require("../core/base_widget").inherit({
             });
         }
 
+        if(data.length > 0 && items.length === 0) {
+            that._incidentOccurred("W2302");
+        }
+
         if(that._getOption("sortData", true)) {
             items.sort(function(a, b) {
                 return b.value - a.value;

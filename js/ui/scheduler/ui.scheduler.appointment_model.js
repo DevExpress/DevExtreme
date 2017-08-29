@@ -254,7 +254,7 @@ var AppointmentModel = Class.inherit({
             }
 
             if(result && useRecurrence && !recurrenceRule) {
-                if(comparableEndDate.getTime() < min.getTime() && !isAllDay) {
+                if(comparableEndDate < min && !isAllDay) {
                     result = false;
                 }
             }

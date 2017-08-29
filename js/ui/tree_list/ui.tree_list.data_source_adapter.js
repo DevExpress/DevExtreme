@@ -224,11 +224,14 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
             this._isReload = this._isReload || isReload || operationTypes.reload;
 
-            if((isReload || operationTypes.filtering) && !options.isCustomLoading) {
-                this._hasItemsMap = {};
-
-                if((options.storeLoadOptions.filter || (operationTypes.filtering && this.option("autoExpandAll"))) && this.option("expandNodesOnFiltering")) {
-                    expandVisibleNodes = true;
+            if(!options.isCustomLoading) {
+                if(!options.cachedStoreData) {
+                    this._hasItemsMap = {};
+                }
+                if(this.option("expandNodesOnFiltering") && (isReload || operationTypes.filtering)) {
+                    if(options.storeLoadOptions.filter || (operationTypes.filtering && this.option("autoExpandAll"))) {
+                        expandVisibleNodes = true;
+                    }
                 }
             }
 

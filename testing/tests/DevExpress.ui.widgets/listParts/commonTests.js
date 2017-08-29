@@ -8,6 +8,7 @@ var $ = require("jquery"),
     List = require("ui/list"),
     executeAsyncMock = require("../../../helpers/executeAsyncMock.js"),
     pointerMock = require("../../../helpers/pointerMock.js"),
+    KeyboardProcessor = require("ui/widget/ui.keyboard_processor"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     registerComponent = require("core/component_registrator"),
     DOMComponent = require("core/dom_component"),
@@ -688,6 +689,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with array sto
                     paginate: true,
                     pageSize: 3
                 },
+                pageLoadMode: "nextButton",
                 height: 500,
                 grouped: true,
                 collapsibleGroups: true
@@ -720,6 +722,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with custom st
                     paginate: true,
                     pageSize: 3
                 },
+                pageLoadMode: "nextButton",
                 height: 400,
                 grouped: true,
                 collapsibleGroups: true
@@ -2385,6 +2388,21 @@ QUnit.test("list scroll to hidden focused item after press pageUp", function(ass
 
     assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, "list scrolled to previous focusedItem");
     assert.ok($items.eq(1).hasClass("dx-state-focused"), "focused item change to last visible item on new page");
+});
+
+QUnit.test("list should attach keyboard events even if focusStateEnabled is false when this option was passed from outer widget", function(assert) {
+    var handler = sinon.stub(),
+        $element = $("#list"),
+        instance = $element.dxList({
+            focusStateEnabled: false,
+            _keyboardProcessor: new KeyboardProcessor({ element: $element }),
+            items: [1, 2, 3]
+        }).dxList("instance");
+
+    instance.registerKeyHandler("enter", handler);
+    $element.trigger($.Event("keydown", { which: 13 }));
+
+    assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
 });
 
 

@@ -290,6 +290,9 @@ declare module DevExpress.ui {
         /** @docid dxSchedulerOptions_views_name */
         name?: string;
 
+        /** @docid dxSchedulerOptions_views_maxAppointmentsPerCell */
+        maxAppointmentsPerCell?: any;
+
         /** @docid dxSchedulerOptions_views_intervalCount */
         intervalCount?: number;
 

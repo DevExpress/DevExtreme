@@ -100,12 +100,15 @@ var customUserTemplate = {
 
         return text.split('$');
     },
-    render: function(template, data) {
+    render: function(template, data, index) {
         var i;
         var result = template.slice(0);
         for(i = 0; i < template.length; i++) {
             if(template[i] in data) {
                 result[i] = data[template[i]];
+            }
+            if(template[i] === "@index") {
+                result[i] = index;
             }
         }
         return result.join('');
@@ -138,6 +141,19 @@ QUnit.test("custom user template engine for script template", function(assert) {
     //assert
     assert.equal(container.children("b").length, 1);
     assert.equal(container.text().replace('\r\n', ''), 'Text: 123');
+});
+
+QUnit.test("custom user template engine has access to item index", function(assert) {
+    setTemplateEngine(customUserTemplate);
+
+    var template = new Template($("<div>$text$, ($@index$)</div>"));
+    var container = $('<div>');
+
+    //act
+    template.render({ model: { text: 123 }, container: container, index: 1 });
+
+    //assert
+    assert.equal(container.children().text(), '123, (1)');
 });
 
 QUnit.test("removing div template from document on creation", function(assert) {

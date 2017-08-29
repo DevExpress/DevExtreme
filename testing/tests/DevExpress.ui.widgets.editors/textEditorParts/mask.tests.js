@@ -993,6 +993,27 @@ QUnit.test("mask should be displayed instead of empty string after clear button 
     assert.equal($input.val(), "___", "input has mask as value");
 });
 
+QUnit.test("clear button click should not lead to error when value is empty", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "999",
+            showClearButton: true
+        });
+
+        $textEditor
+            .find(".dx-clear-button-area")
+            .trigger("dxclick");
+
+        clock.tick();
+
+        assert.expect(0);
+    } finally {
+        clock.restore();
+    }
+});
+
 
 QUnit.module("paste", {
     beforeEach: function() {

@@ -117,5 +117,10 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @name Errors and Warnings_w2301
     * @publicName W2301
     */
-    W2301: "Invalid value range"
+    W2301: "Invalid value range",
+    /**
+     * @name Errors and Warnings_W2302
+     * @publicName W2302
+     */
+    W2302: "Inconsistent dataSource"
 });

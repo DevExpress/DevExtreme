@@ -1104,6 +1104,29 @@ QUnit.testStart(function() {
         assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
     });
 
+    QUnit.test("view.intervalCount is passed to workspace & header & navigator, currentView is set by view.name", function(assert) {
+        this.createInstance({
+            currentView: "WEEK1",
+            views: [{
+                type: "day",
+                name: "DAY1",
+                intervalCount: 5
+            }, {
+                type: "week",
+                name: "WEEK1",
+                intervalCount: 3
+            }]
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace(),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 3, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 3, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
+    });
+
     QUnit.test("view.startDate is passed to workspace & header & navigator", function(assert) {
         var date = new Date(2017, 3, 4);
 
@@ -1399,6 +1422,32 @@ QUnit.testStart(function() {
         this.clock.tick(200);
 
         assert.ok(dataSource.items().length === 0, "Insert operation is canceled");
+    });
+
+    QUnit.test("Appointment should not be added to the data source if 'cancel' flag is defined as Promise", function(assert) {
+        var promise = new Promise(function(resolve) {
+            setTimeout(function() {
+                resolve(true);
+            }, 200);
+        });
+        var dataSource = new DataSource({
+            store: []
+        });
+        this.createInstance({
+            onAppointmentAdding: function(args) {
+                args.cancel = promise;
+            },
+            dataSource: dataSource
+        });
+
+        this.instance.addAppointment({ startDate: new Date(), text: "Appointment 1" });
+        this.clock.tick(200);
+
+        promise.then(function() {
+            assert.ok(dataSource.items().length === 0, "Insert operation is canceled");
+        });
+
+        return promise;
     });
 
     QUnit.test("onAppointmentAdded", function(assert) {
@@ -3206,5 +3255,27 @@ QUnit.testStart(function() {
         });
 
         assert.ok(result, "Appointment takes all day");
+    });
+
+    QUnit.test("Workspace should have an specific class if view.maxAppointmentsPerCell is set", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            views: [{
+                type: "week",
+                name: "Week",
+                maxAppointmentsPerCell: 3
+            },
+            {
+                type: "day",
+                name: "day"
+            }]
+        });
+
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has correct class");
+
+        this.instance.option("currentView", "day");
+        $workSpace = this.instance.getWorkSpace().element();
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
 })("View with configuration");
