@@ -40,7 +40,13 @@ QUnit.test("serialization/deserialization", function(assert) {
             value: new Date(Date.UTC(2015, 7, 16)),
             serializedValue: "2015-08-16T00:00:00Z",
             format: "yyyy-MM-ddTHH:mm:ssZ"
-        }, {
+        },
+        {
+            value: new Date(Date.UTC(2015, 7, 16, 12, 13, 14, 345)),
+            serializedValue: "2015-08-16T12:13:14.345Z",
+            format: "yyyy-MM-ddTHH:mm:ss.SSSZ"
+        },
+        {
             value: new Date(0, 0, 0, 13, 20),
             serializedValue: "13:20"
         }, {
@@ -50,6 +56,11 @@ QUnit.test("serialization/deserialization", function(assert) {
             value: new Date(2015, 7, 16, 15, 45, 30),
             serializedValue: "20150816T154530",
             format: "yyyyMMddTHHmmss"
+        },
+        {
+            value: new Date(2015, 7, 16, 15, 45, 30, 345),
+            serializedValue: "20150816T154530.345",
+            format: "yyyyMMddTHHmmss.SSS"
         }
     ];
 
@@ -62,7 +73,7 @@ QUnit.test("serialization/deserialization", function(assert) {
         var parsedDate = dateSerialization.deserializeDate(data.serializedValue);
 
         assert.equal(serializedDate, data.serializedValue, data.format);
-        assert.equal(parsedDate.toString(), data.value.toString(), data.format);
+        assert.equal(parsedDate.getTime(), data.value.getTime(), data.format);
     });
 });
 
