@@ -154,13 +154,14 @@ var parseISO8601String = function(text) {
 
     var hour = timePart(parts[6]) - timeZoneHour,
         minute = timePart(parts[8]) - timeZoneMinute,
-        second = timePart(parts[10]);
+        second = timePart(parts[10]),
+        millisecond = timePart(parts[11]);
 
     if(!!parts[12]) {
-        return new Date(Date.UTC(year, month, day, hour, minute, second));
+        return new Date(Date.UTC(year, month, day, hour, minute, second, millisecond));
     }
 
-    return new Date(year, month, day, hour, minute, second);
+    return new Date(year, month, day, hour, minute, second, millisecond);
 };
 
 var getIso8601Format = function(text, useUtc) {
