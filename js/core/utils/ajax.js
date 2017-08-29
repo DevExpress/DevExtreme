@@ -239,11 +239,6 @@ var sendRequest = function(options) {
     options.crossDomain = isCrossDomain(options.url);
     options.noCache = dataType === "jsonp" || dataType === "script";
 
-    if(options.crossDomain && !("withCredentials" in xhr)) {
-        d.reject(null, ERROR);
-        return result;
-    }
-
     var callbackName = getJsonpOptions(options),
         headers = getRequestHeaders(options),
         requestOptions = getRequestOptions(options, headers),
@@ -267,6 +262,11 @@ var sendRequest = function(options) {
             };
 
         evalCrossDomainScript(url).then(resolve, reject);
+        return result;
+    }
+
+    if(options.crossDomain && !("withCredentials" in xhr)) {
+        d.reject(null, ERROR);
         return result;
     }
 
