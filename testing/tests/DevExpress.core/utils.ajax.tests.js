@@ -571,7 +571,7 @@ QUnit.test("Handle error", function(assert) {
 
 QUnit.test("Script request (cross domain)", function(assert) {
 
-    var wrongRemoteUrl = "http://somefakedomain.com/json-url",
+    var wrongRemoteUrl = "http://somefakedomain1221.com/json-url",
         fail = assert.async(),
 
         appendChild = sinon.spy(document.head, "appendChild"),
@@ -590,7 +590,7 @@ QUnit.test("Script request (cross domain)", function(assert) {
 
         var addedScript = appendChild.firstCall.args[0];
 
-        assert.ok(addedScript.src.indexOf("http://somefakedomain.com/json-url?_=") === 0, "url: " + addedScript.src);
+        assert.ok(addedScript.src.indexOf("http://somefakedomain1221.com/json-url?_=") === 0, "url: " + addedScript.src);
 
         appendChild.restore();
         createElement.restore();

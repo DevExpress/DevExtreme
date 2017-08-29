@@ -254,7 +254,7 @@ var sendRequest = function(options) {
     if(options.crossDomain && options.noCache) {
 
         var reject = function() {
-                d.reject(null, ERROR);
+                d.reject(xhr, ERROR);
             },
             resolve = function() {
                 if(dataType === "jsonp") return;
@@ -266,7 +266,7 @@ var sendRequest = function(options) {
     }
 
     if(options.crossDomain && !("withCredentials" in xhr)) {
-        d.reject(null, ERROR);
+        d.reject(xhr, ERROR);
         return result;
     }
 
