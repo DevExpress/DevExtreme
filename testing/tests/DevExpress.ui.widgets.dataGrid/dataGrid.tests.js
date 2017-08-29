@@ -5887,7 +5887,7 @@ QUnit.test("round scroll position for columnHeadersView", function(assert) {
     scrollable.scrollTo(100.7);
 
     //assert
-    assert.equal(scrollable.scrollLeft(), 101);
+    assert.equal(Math.round(scrollable.scrollLeft()), 101);
 
     var $headersScrollable = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
     assert.equal($headersScrollable.scrollLeft(), 101);

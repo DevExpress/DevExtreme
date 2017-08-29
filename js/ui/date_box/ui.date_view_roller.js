@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
     eventUtils = require("../../events/utils"),
@@ -57,11 +56,6 @@ var DateViewRoller = Scrollable.inherit({
 
     _render: function() {
         this.callBase();
-
-        //Note: fx animations in 'moveTo' interrupt by '_correctLocation'
-        $.each(this._strategy._scrollers, function(index, scroller) {
-            scroller._correctLocation = noop;
-        });
 
         this.element().addClass(DATEVIEW_ROLLER_CLASS);
 

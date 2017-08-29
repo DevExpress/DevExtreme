@@ -217,17 +217,11 @@ var Scroller = Class.inherit({
     _scrollComplete: function() {
         if(this._inBounds()) {
             this._hideScrollbar();
-            this._correctLocation();
             if(this._completeDeferred) {
                 this._completeDeferred.resolve();
             }
         }
         this._scrollToBounds();
-    },
-
-    _correctLocation: function() {
-        this._location = math.round(this._location);
-        this._move();
     },
 
     _scrollToBounds: function() {
