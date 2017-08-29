@@ -219,6 +219,7 @@ var Scheduler = Widget.inherit({
                 * @publicName maxAppointmentsPerCell
                 * @type number|string
                 * @default undefined
+                * @acceptValues 'auto'|'unlimited'
                 */
 
                 /**
