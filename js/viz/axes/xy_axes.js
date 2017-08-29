@@ -903,8 +903,10 @@ module.exports = {
 
             function shiftGroup(side, group) {
                 var attr = {},
-                    shift = margins[side] + axesSpacing;
-                attr[isHorizontal ? "translateY" : "translateX"] = margins[side] ? (side === "left" || side === "top" ? -1 : 1) * shift : 0;
+                    shift = margins[side] ? margins[side] + axesSpacing : 0;
+
+                attr[isHorizontal ? "translateY" : "translateX"] = (side === "left" || side === "top" ? -1 : 1) * shift;
+
                 (group[side] || group).attr(attr);
                 return shift;
             }
