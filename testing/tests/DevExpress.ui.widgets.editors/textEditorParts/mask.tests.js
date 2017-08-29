@@ -1637,6 +1637,19 @@ QUnit.test("Remove a hidden input if mask is changed to undefined", function(ass
     assert.equal($visibleInput.attr("name"), "number", "Visible input name is restored");
 });
 
+QUnit.test("Replace hidden input if mask is changed to another value", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+        name: "number",
+        mask: "00-00-00"
+    });
+
+    $textEditor.dxTextEditor("instance").option("mask", "0-0-0");
+
+    var $hiddenInput = $textEditor.find("input[type=hidden]");
+
+    assert.equal($hiddenInput.length, 1, "Hidden value is replaced");
+});
+
 QUnit.test("A hidden input should have a correct value if useMaskedValue is true", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: "00-00-00",
