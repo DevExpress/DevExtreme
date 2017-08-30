@@ -19,6 +19,7 @@ var tooltipEnvironment = $.extend({}, environment, {
         environment.beforeEach.apply(this, arguments);
 
         common.stubAlgorithm.getFigures.returns([[0, 0, 1, 0, 0, 1, 1, 1]]);
+        common.stubAlgorithm.normalizeValues.returns([0.2, 0.5, 0.3]);
 
         $("#test-container").css({
             width: 800,
@@ -49,9 +50,17 @@ QUnit.test("Show tooltip", function(assert) {
         }),
         testItem = widget.getAllItems()[0];
 
+    this.tooltip.stub("formatValue").withArgs(0.2, "percent").returns("percent-formatted");
+
     testItem.showTooltip();
 
-    assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 1, valueText: "formatted", item: testItem }, "show arg0");
+    assert.deepEqual(this.tooltip.show.lastCall.args[0], {
+        value: 1,
+        valueText: "formatted",
+        percent: 0.2,
+        percentText: "percent-formatted",
+        item: testItem
+    }, "show arg0");
     assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 }, "show arg1");
     assert.deepEqual(this.tooltip.move.lastCall.args, [440, 330, 0], "move");
     assert.equal(this.tooltip.formatValue.args[0][0], 1);
@@ -94,11 +103,19 @@ QUnit.test("Show tooltip on different items", function(assert) {
 
     widget.getAllItems()[0].showTooltip();
 
+    this.tooltip.stub("formatValue").withArgs(0.5, "percent").returns("percent-formatted");
+
     this.tooltip.show.reset();
 
     testItem.showTooltip([100, 100]);
 
-    assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 1, valueText: "formatted", item: testItem }, "show arg0");
+    assert.deepEqual(this.tooltip.show.lastCall.args[0], {
+        value: 1,
+        valueText: "formatted",
+        percentText: "percent-formatted",
+        percent: 0.5,
+        item: testItem
+    }, "show arg0");
     assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 }, "show arg1");
     assert.deepEqual(this.tooltip.move.lastCall.args, [100, 100, 0], "move");
 });

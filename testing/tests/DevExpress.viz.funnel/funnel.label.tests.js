@@ -40,6 +40,7 @@ QUnit.test("Create labels", function(assert) {
     assert.ok(label.draw.calledOnce);
 
     assert.equal(label.setData.lastCall.args[0].value, 5, "value");
+    assert.equal(label.setData.lastCall.args[0].percent, 1, "percent");
     assert.deepEqual(label.setData.lastCall.args[0].item.data, {
         argument: "Two",
         value: 5,
