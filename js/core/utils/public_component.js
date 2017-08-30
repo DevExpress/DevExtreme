@@ -53,13 +53,5 @@ exports.getInstanceByElement = function($element, componentClass) {
 };
 
 exports.removeDataFromElement = function($element) {
-    var data = dataUtils.data($element.get(0));
-
-    if(!data[COMPONENT_NAMES_DATA_KEY]) return;
-
-    data[COMPONENT_NAMES_DATA_KEY].forEach(function(componentName) {
-        data[componentName] = undefined;
-    });
-
-    data[COMPONENT_NAMES_DATA_KEY] = undefined;
+    dataUtils.cleanDataRecursive($element.get(0), true);
 };
