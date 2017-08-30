@@ -62,6 +62,17 @@ QUnit.test("init with options", function(assert) {
     assert.equal(input.prop("tabindex"), 3);
 });
 
+QUnit.test("init with focusStateEnabled = false", function(assert) {
+    var element = $("#texteditor").dxTextEditor({
+        focusStateEnabled: false,
+        tabIndex: 3
+    });
+
+    var input = element.find("." + INPUT_CLASS);
+
+    assert.equal(input.prop("tabindex"), -1);
+});
+
 QUnit.test("repaint() should not drop any elements without any widget option changing", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
         showClearButton: true,
@@ -438,6 +449,14 @@ QUnit.test("disabled", function(assert) {
 
     this.instance.option("disabled", false);
     assert.ok(!this.input.prop("disabled"));
+});
+
+QUnit.test("focusStateEnabled", function(assert) {
+    this.instance.option("focusStateEnabled", false);
+    assert.equal(this.input.prop("tabIndex"), -1);
+
+    this.instance.option("focusStateEnabled", true);
+    assert.ok(!this.input.prop("tabIndex"));
 });
 
 QUnit.test("spellcheck", function(assert) {
