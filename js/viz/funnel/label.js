@@ -102,7 +102,7 @@ function getConnectorStrategy(options, inverted) {
     };
 }
 
-function getLabelOptions(labelOptions, defaultColor) {
+function getLabelOptions(labelOptions, defaultColor, defaultTextAlignment) {
     var opt = labelOptions || {},
         labelFont = extend({}, opt.font) || {},
         labelBorder = opt.border || {},
@@ -123,7 +123,7 @@ function getLabelOptions(labelOptions, defaultColor) {
 
     return {
         format: opt.format,
-        textAlign: opt.textAlign,
+        textAlignment: opt.textAlignment || (isOutsidePosition(opt.position) ? defaultTextAlignment : "center"),
         customizeText: opt.customizeText,
         attributes: { font: labelFont },
         visible: labelFont.size !== 0 ? opt.visible : false,
@@ -224,7 +224,7 @@ exports.plugin = {
                 if(_normalizeEnum(options.position) === OUTSIDE_POSITION) {
                     getCoords = options.horizontalAlignment === "left" ? getOutsideLeftLabelPosition : getOutsideRightLabelPosition;
                 } else {
-                    textAlignment = this._getOption("rtlEnabled", true) ? "right" : "left";
+                    textAlignment = this._defaultLabelTextAlignment();
                     getCoords = options.horizontalAlignment === "left" ? getColumnLabelLeftPosition(this._labelRect, this._rect, textAlignment) : getColumnLabelRightPosition(this._labelRect, this._rect, textAlignment);
                 }
             }
@@ -251,6 +251,10 @@ exports.plugin = {
         }
     },
     members: {
+        _defaultLabelTextAlignment: function() {
+            return this._getOption("rtlEnabled", true) ? "right" : "left";
+        },
+
         _correctLabelWidth: function(label, item, options) {
             var isLeftPos = options.horizontalAlignment === "left",
                 minX = isLeftPos ? this._labelRect[0] : item[2],
@@ -280,7 +284,7 @@ exports.plugin = {
                     strategy: connectorStrategy
                 });
 
-                label.setOptions(getLabelOptions(labelOptions, item.color));
+                label.setOptions(getLabelOptions(labelOptions, item.color, that._defaultLabelTextAlignment()));
 
                 label.setData({
                     item: item,
