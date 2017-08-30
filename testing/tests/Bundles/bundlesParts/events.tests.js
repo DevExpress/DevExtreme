@@ -1,6 +1,13 @@
 "use strict";
 
 var $ = require("jquery");
+var registerEventCallbacks = require("events/core/event_registrator_callbacks");
+
+var special = {};
+registerEventCallbacks.add(function(name, eventObject) {
+    special[name] = eventObject;
+});
+
 
 QUnit.test("events", function(assert) {
 
@@ -31,7 +38,7 @@ QUnit.test("events", function(assert) {
 
         "dxtransform"
     ], function(_, namespace) {
-        assert.ok($.event.special[namespace], namespace + " event present");
+        assert.ok(special[namespace], namespace + " event present");
     });
 
 });
