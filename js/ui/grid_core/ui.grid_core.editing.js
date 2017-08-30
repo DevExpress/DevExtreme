@@ -924,7 +924,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     };
                 }
 
-                when(params.cancel).done(function(cancel) {
+                when(deferredUtils.fromPromise(params.cancel)).done(function(cancel) {
                     if(cancel) {
                         deferred.resolve("cancel");
                     } else {

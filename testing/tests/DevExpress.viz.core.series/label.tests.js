@@ -146,7 +146,7 @@ QUnit.module("Draw Label", $.extend({}, environment, {
             rotationAngle: 30,
             horizontalOffset: 0,
             verticalOffset: 0,
-            textAlign: "left",
+            textAlignment: "left",
             visible: true,
             background: {
                 fill: "none"

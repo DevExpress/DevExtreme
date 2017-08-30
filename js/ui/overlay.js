@@ -33,7 +33,6 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
-
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
@@ -565,7 +564,16 @@ var Overlay = Widget.inherit({
 
     _isTopOverlay: function() {
         var overlayStack = this._overlayStack();
-        return overlayStack[overlayStack.length - 1] === this;
+
+        for(var i = overlayStack.length - 1; i >= 0; i--) {
+            var $tabbableElements = overlayStack[i]._findTabbableElements();
+
+            if($tabbableElements.length) {
+                return overlayStack[i] === this;
+            }
+        }
+
+        return false;
     },
 
     _overlayStack: function() {
@@ -825,13 +833,17 @@ var Overlay = Widget.inherit({
         }
     },
 
+    _findTabbableElements: function() {
+        return this._$wrapper
+            .find("*").filter(selectors.tabbable);
+    },
+
     _tabKeyHandler: function(e) {
         if(e.keyCode !== TAB_KEY || !this._isTopOverlay()) {
             return;
         }
 
-        var tabbableElements = this._$wrapper
-                .find("*").filter(selectors.tabbable),
+        var tabbableElements = this._findTabbableElements(),
 
             $firstTabbable = tabbableElements.first(),
             $lastTabbable = tabbableElements.last(),

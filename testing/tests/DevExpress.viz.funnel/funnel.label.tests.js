@@ -63,7 +63,7 @@ QUnit.test("Create labels with styles", function(assert) {
             background: {
                 dashStyle: "solid"
             },
-            textAlign: "left",
+            textAlignment: "center",
             position: "outside",
             horizontalOffset: 0,
             verticalOffset: 0,
@@ -100,7 +100,59 @@ QUnit.test("Create labels with styles", function(assert) {
     assert.deepEqual(options.visible, true, "visible");
     assert.deepEqual(options.showForZeroValues, false, "showForZeroValues");
     assert.deepEqual(options.customizeText({ valueText: "value", item: { data: { argument: "argument" } } }), "argument value", "customizeText");
-    assert.deepEqual(options.textAlign, "left", "textAlign");
+    assert.deepEqual(options.textAlignment, "center", "textAlign");
+});
+
+QUnit.test("Default label alignment for inside labels is center", function(assert) {
+    stubAlgorithm.getFigures.returns([[0]]);
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 2 }],
+        valueField: "value",
+        label: {
+            visible: true,
+            position: "inside"
+        }
+    });
+
+    var options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
+
+    assert.deepEqual(options.textAlignment, "center", "text alignment");
+});
+
+QUnit.test("Default label alignment for outside labels is left", function(assert) {
+    stubAlgorithm.getFigures.returns([[0]]);
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 2 }],
+        valueField: "value",
+        label: {
+            visible: true,
+            position: "columns"
+        }
+    });
+
+    var options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
+
+    assert.deepEqual(options.textAlignment, "left", "text alignment");
+});
+
+QUnit.test("Default label alignment for outside labels is right if rtl enabled", function(assert) {
+    stubAlgorithm.getFigures.returns([[0]]);
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 2 }],
+        valueField: "value",
+        rtlEnabled: true,
+        label: {
+            visible: true,
+            position: "columns"
+        }
+    });
+
+    var options = labelModule.Label.getCall(0).returnValue.setOptions.lastCall.args[0];
+
+    assert.deepEqual(options.textAlignment, "right", "text alignment");
 });
 
 QUnit.test("Do not create labels if label.visible set to false", function(assert) {
