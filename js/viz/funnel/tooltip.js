@@ -46,6 +46,8 @@ exports.plugin = {
                 state = that._tooltipIndex === index || tooltip.show({
                     value: item.data.value,
                     valueText: tooltip.formatValue(item.data.value),
+                    percentText: tooltip.formatValue(item.percent, "percent"),
+                    percent: item.percent,
                     item: item
                 }, { x: 0, y: 0, offset: 0 }, { item: item });
 

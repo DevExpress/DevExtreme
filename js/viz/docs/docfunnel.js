@@ -469,6 +469,8 @@ var dxFunnel = {
         * @type_function_param1_field1 item:dxfunnelItem
         * @type_function_param1_field2 valueText:string
         * @type_function_param1_field3 value:Number
+        * @type_function_param1_field4 percent:Number
+        * @type_function_param1_field5 percentText:string
         * @type_function_return string
         * @notUsedInTheme
         */
@@ -749,6 +751,8 @@ var dxFunnel = {
         * @type_function_param1_field1 value:Number
         * @type_function_param1_field2 valueText:string
         * @type_function_param1_field3 item:dxfunnelItem
+        * @type_function_param1_field4 percent:Number
+        * @type_function_param1_field5 percentText:string
         * @type_function_return object
         */
         customizeTooltip: undefined

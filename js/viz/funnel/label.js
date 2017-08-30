@@ -284,7 +284,8 @@ exports.plugin = {
 
                 label.setData({
                     item: item,
-                    value: item.data.value
+                    value: item.data.value,
+                    percent: item.percent
                 });
 
                 label.draw();
