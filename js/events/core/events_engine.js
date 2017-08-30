@@ -187,11 +187,10 @@ var normalizeArguments = function(callback) {
         if(!handler) {
             handler = data;
             data = undefined;
-
-            if(typeof selector !== "string") {
-                data = selector;
-                selector = undefined;
-            }
+        }
+        if(typeof selector !== "string") {
+            data = selector;
+            selector = undefined;
         }
 
         if(!handler) {
