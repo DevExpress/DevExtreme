@@ -34,7 +34,12 @@ var KoTemplate = TemplateBase.inherit({
             }
         }
 
-        return new ko.bindingContext(data);
+        // workaround for https://github.com/knockout/knockout/pull/651
+        var parentNode = $("<div>")[0];
+        ko.applyBindingsToNode(parentNode);
+        var parentContext = ko.contextFor(parentNode);
+
+        return parentContext.createChildContext(data);
     },
 
     _renderCore: function(options) {
