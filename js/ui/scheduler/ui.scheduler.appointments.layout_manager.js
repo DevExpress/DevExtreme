@@ -107,7 +107,7 @@ var AppointmentLayoutManager = Class.inherit({
                     item.needRepaint = false;
                     itemFound = true;
 
-                    if((updatedAppointment && commonUtils.equalByValue(item.itemData, updatedAppointment))) {
+                    if(updatedAppointment && commonUtils.equalByValue(item.itemData, updatedAppointment)) {
                         item.needRepaint = true;
                         if(isAgenda) {
                             repaintAll = true;
