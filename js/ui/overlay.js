@@ -33,8 +33,6 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
-    OVERLAY_HAS_TABBABLE_CLASS = "dx-overlay-has-tabbable",
-
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
@@ -568,9 +566,9 @@ var Overlay = Widget.inherit({
         var overlayStack = this._overlayStack();
 
         for(var i = overlayStack.length - 1; i >= 0; i--) {
-            var $overlay = overlayStack[i].element();
+            var $tabbableElements = overlayStack[i]._findTabbableElements();
 
-            if($overlay.hasClass(OVERLAY_HAS_TABBABLE_CLASS)) {
+            if($tabbableElements.length) {
                 return overlayStack[i] === this;
             }
         }
@@ -835,12 +833,17 @@ var Overlay = Widget.inherit({
         }
     },
 
+    _findTabbableElements: function() {
+        return this._$wrapper
+            .find("*").filter(selectors.tabbable);
+    },
+
     _tabKeyHandler: function(e) {
         if(e.keyCode !== TAB_KEY || !this._isTopOverlay()) {
             return;
         }
 
-        var tabbableElements = this._tabbableElements,
+        var tabbableElements = this._findTabbableElements(),
 
             $firstTabbable = tabbableElements.first(),
             $lastTabbable = tabbableElements.last(),
@@ -980,13 +983,6 @@ var Overlay = Widget.inherit({
         this._renderDrag();
         this._renderResize();
         this._renderScrollTerminator();
-    },
-
-    _refreshHasTabbable: function() {
-        this._tabbableElements = this._$wrapper
-                .find("*").filter(selectors.tabbable);
-
-        this.element().toggleClass(OVERLAY_HAS_TABBABLE_CLASS, !!this._tabbableElements.length);
     },
 
     _renderDrag: function() {
@@ -1166,7 +1162,6 @@ var Overlay = Widget.inherit({
         this._attachWrapperToContainer();
 
         this._$content.appendTo(this._$wrapper);
-        this._refreshHasTabbable();
     },
 
     _attachWrapperToContainer: function() {
