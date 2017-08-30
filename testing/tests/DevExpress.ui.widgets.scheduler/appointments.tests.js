@@ -890,8 +890,7 @@ QUnit.test("Split appointment by day should consider startDayHour & endDayHour",
         { settings: { startDate: new Date(2016, 1, 28, 8), endDate: new Date(2016, 1, 28, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
         { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
         { settings: { startDate: new Date(2016, 2, 1, 8), endDate: new Date(2016, 2, 1, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { settings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { settings: { startDate: new Date(2016, 2, 3, 8), endDate: new Date(2016, 2, 3, 2) }, startDate: appt2.startDate, endDate: appt2.endDate }
+        { settings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate }
     ], "Parts are OK");
 
     assert.deepEqual(parts3, [
