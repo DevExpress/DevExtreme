@@ -155,7 +155,13 @@ declare module DevExpress.viz.funnel {
             showForZeroValues?: boolean;
 
             /** @docid dxfunneloptions_label_customizetext */
-            customizeText?: (itemsInfo: { valueText: string; item: funnelItem; }) => string;
+            customizeText?: (itemsInfo: {
+                valueText: string;
+                value: number;
+                percent: number;
+                percentText: string;
+                item: funnelItem;
+            }) => string;
 
             /** @docid dxfunneloptions_label_format */
             format?: any;

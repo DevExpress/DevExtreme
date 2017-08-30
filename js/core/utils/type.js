@@ -83,6 +83,14 @@ var isRenderer = function(object) {
     return !!(object.jquery || object.dxRenderer);
 };
 
+var isPromise = function(object) {
+    return object && isFunction(object.then);
+};
+
+var isDeferred = function(object) {
+    return object && isFunction(object.done) && isFunction(object.fail);
+};
+
 exports.isBoolean = isBoolean;
 exports.isExponential = isExponential;
 exports.isDate = isDate;
@@ -97,4 +105,6 @@ exports.isPrimitive = isPrimitive;
 exports.isWindow = isWindow;
 exports.isDomNode = isDomNode;
 exports.isRenderer = isRenderer;
+exports.isPromise = isPromise;
+exports.isDeferred = isDeferred;
 exports.type = type;

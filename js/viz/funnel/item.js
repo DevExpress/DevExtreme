@@ -1,7 +1,6 @@
 "use strict";
 
 var states = ["normal", "hover", "selection", "selection"],
-    format = require("../../format_helper").format,
     isDefined = require("../../core/utils/type").isDefined;
 
 function parseStyles(color, style, baseStyle) {
@@ -25,7 +24,6 @@ function Item(widget, options) {
     this.figure = options.figure;
     this.data = options.data;
     this.percent = options.percent;
-    this.percentText = format(this.percent, "percent");
 
     this.id = options.id;
     this.color = options.color;

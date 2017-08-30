@@ -219,6 +219,7 @@ var Scheduler = Widget.inherit({
                 * @publicName maxAppointmentsPerCell
                 * @type number|string
                 * @default undefined
+                * @acceptValues 'auto'|'unlimited'
                 */
 
                 /**
@@ -2436,7 +2437,7 @@ var Scheduler = Widget.inherit({
     },
 
     _processActionResult: function(actionOptions, callback) {
-        deferredUtils.fromPromise(when(actionOptions.cancel)).done(callback.bind(this));
+        when(deferredUtils.fromPromise(actionOptions.cancel)).done(callback.bind(this));
     },
 
     _expandAllDayPanel: function(appointment) {

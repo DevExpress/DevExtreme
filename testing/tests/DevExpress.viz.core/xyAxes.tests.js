@@ -2831,6 +2831,15 @@ QUnit.test("All margins are zero", function(assert) {
     });
 });
 
+QUnit.test("getLabelsPosition returns correct value after empty shift", function(assert) {
+    this.options.multipleAxesSpacing = 5;
+    var axis = this.createDrawnAxis();
+
+    axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
+
+    assert.equal(axis.getLabelsPosition(), 10);
+});
+
 QUnit.test("Vertical axis position is left", function(assert) {
     this.options.isHorizontal = false;
     this.options.position = "left";

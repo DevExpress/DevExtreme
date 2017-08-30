@@ -3,11 +3,14 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
-    isDefined = require("../core/utils/type").isDefined,
+    typeUtils = require("../core/utils/type"),
+    isDefined = typeUtils.isDefined,
+    isPromise = typeUtils.isPromise,
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
-    Deferred = require("../core/utils/deferred").Deferred,
+    deferredUtils = require("../core/utils/deferred"),
+    Deferred = deferredUtils.Deferred,
     errors = require("../core/errors"),
     inkRipple = require("./widget/utils.ink_ripple"),
     messageLocalization = require("../localization/message"),
@@ -677,16 +680,15 @@ var SelectBox = DropDownList.inherit({
         var searchValue = this._searchValue(),
             item = this._customItemCreatingAction({
                 text: searchValue
-            }),
-            isDeferred = item && item.promise && item.done && item.fail;
+            });
 
         if(item === undefined) {
             this._renderValue();
             throw errors.Error("E0121");
         }
 
-        if(isDeferred) {
-            item
+        if(isPromise(item)) {
+            deferredUtils.fromPromise(item)
                 .done(this._setCustomItem.bind(this))
                 .fail(this._setCustomItem.bind(this, null));
         } else {

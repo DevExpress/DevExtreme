@@ -64,6 +64,22 @@ $.each({
     });
 });
 
+$.each(TestEventMap, function(pointerEvent, originalEvent) {
+    QUnit.test("'" + pointerEvent + "' event should be prevented if original event was prevented", function(assert) {
+        var $element = $("#element");
+
+        $element.on(originalEvent, function(e) {
+            e.preventDefault();
+        });
+
+        $element.on(pointerEvent, function(e) {
+            assert.strictEqual(e.isDefaultPrevented(), true, "'" + pointerEvent + "' event was prevented");
+        });
+
+        $element.trigger(originalEvent);
+    });
+});
+
 QUnit.test("event trigger order", function(assert) {
     var LOG = [],
         log = function(e) {
