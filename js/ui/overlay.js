@@ -33,6 +33,7 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
+    OVERLAY_HAS_TABBABLE_CLASS = "dx-overlay-has-tabbable",
 
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
@@ -565,7 +566,16 @@ var Overlay = Widget.inherit({
 
     _isTopOverlay: function() {
         var overlayStack = this._overlayStack();
-        return overlayStack[overlayStack.length - 1] === this;
+
+        for(var i = overlayStack.length - 1; i >= 0; i--) {
+            var $overlay = overlayStack[i].element();
+
+            if($overlay.hasClass(OVERLAY_HAS_TABBABLE_CLASS)) {
+                return overlayStack[i] === this;
+            }
+        }
+
+        return false;
     },
 
     _overlayStack: function() {
@@ -830,8 +840,7 @@ var Overlay = Widget.inherit({
             return;
         }
 
-        var tabbableElements = this._$wrapper
-                .find("*").filter(selectors.tabbable),
+        var tabbableElements = this._tabbableElements,
 
             $firstTabbable = tabbableElements.first(),
             $lastTabbable = tabbableElements.last(),
@@ -971,6 +980,13 @@ var Overlay = Widget.inherit({
         this._renderDrag();
         this._renderResize();
         this._renderScrollTerminator();
+    },
+
+    _refreshHasTabbable: function() {
+        this._tabbableElements = this._$wrapper
+                .find("*").filter(selectors.tabbable);
+
+        this.element().toggleClass(OVERLAY_HAS_TABBABLE_CLASS, !!this._tabbableElements.length);
     },
 
     _renderDrag: function() {
@@ -1150,6 +1166,7 @@ var Overlay = Widget.inherit({
         this._attachWrapperToContainer();
 
         this._$content.appendTo(this._$wrapper);
+        this._refreshHasTabbable();
     },
 
     _attachWrapperToContainer: function() {

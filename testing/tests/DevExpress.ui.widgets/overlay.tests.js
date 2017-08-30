@@ -2746,6 +2746,39 @@ QUnit.test("elements under overlay with shader have not to get focus by tab", fu
     assert.equal(document.activeElement, $firstTabbable.get(0), "first item focused on press tab on last item (does not go under overlay)");
 });
 
+QUnit.test("overlay should have has-tabbable class if it has tabbable elements in content", function(assert) {
+    var overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+        visible: true,
+        shading: true,
+        contentTemplate: function() {
+            return $("<input>").attr("type", "text");
+        }
+    });
+
+    assert.ok(overlay.element().hasClass("dx-overlay-has-tabbable"), "overlay has tabbable class");
+});
+
+QUnit.test("elements under overlay with shader have not to get focus by tab when top overlay has no tabbable elements", function(assert) {
+    var overlay1 = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+            shading: true,
+            contentTemplate: $("#focusableTemplate")
+        }),
+        overlay2 = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+            shading: false,
+            contentTemplate: function() { return "test"; }
+        }),
+        $content = $(overlay1.content());
+
+    overlay1.show();
+    overlay2.show();
+
+    var $firstTabbable = $content.find(".firstTabbable");
+
+    $content.find(".lastTabbable").focus();
+    $(document).trigger(this.tabEvent);
+    assert.equal(document.activeElement, $firstTabbable.get(0), "first item focused on press tab on last item (does not go under overlay)");
+});
+
 QUnit.test("elements under overlay with shader have not to get focus by tab after another overlay is hide", function(assert) {
     var overlay = new Overlay($("<div>").appendTo("#qunit-fixture"), {
             visible: true,
