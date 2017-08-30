@@ -230,6 +230,7 @@ var DOMComponent = Component.inherit({
     _dispose: function() {
         this.callBase();
         this._clean();
+        publicComponentUtils.removeDataFromElement(this._$element);
         this._detachWindowResizeCallback();
     },
 
@@ -360,6 +361,14 @@ var DOMComponent = Component.inherit({
     */
     element: function() {
         return this._$element;
+    },
+
+    /**
+    * @name domcomponentmethods_dispose
+    * @publicName dispose()
+    */
+    dispose: function() {
+        this._dispose();
     }
 
 });

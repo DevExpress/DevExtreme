@@ -825,3 +825,20 @@ QUnit.test("changing class via 'elementAttr' option should preserve component sp
 
     assert.ok($element.hasClass(specialClass), "the new class is also present");
 });
+
+QUnit.test("dispose method", function(assert) {
+    var element = $("#component").TestComponent(),
+        instance = element.data("TestComponent");
+
+    assert.deepEqual(element.data("dxComponents"), ["TestComponent"]);
+
+    instance.dispose();
+
+    assert.notOk(element.data("TestComponent"));
+    assert.notOk(element.data("dxComponents"));
+
+    element = $("#component").TestComponent();
+
+    assert.ok(element.data("TestComponent") instanceof this.TestComponent);
+    assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
+});
