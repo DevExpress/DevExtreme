@@ -223,6 +223,15 @@ module.exports = {
              * @type_function_return any
              */
             /**
+             * @name GridBaseOptions_columns_sortingMethod
+             * @publicName sortingMethod
+             * @type function(value1, value2)
+             * @type_function_param1 value1:any
+             * @type_function_param2 value2:any
+             * @type_function_return number
+             * @default undefined
+             */
+            /**
              * @name dxDataGridOptions_columns_showWhenGrouped
              * @publicName showWhenGrouped
              * @type boolean
@@ -1905,10 +1914,16 @@ module.exports = {
                     iteratorUtils.each(sortColumns, function() {
                         var sortOrder = this && this.sortOrder;
                         if(isSortOrderValid(sortOrder)) {
-                            sort.push({
+                            var sortItem = {
                                 selector: this.calculateSortValue || this.displayField || this.calculateDisplayValue || (useLocalSelector && this.selector) || this.dataField || this.calculateCellValue,
                                 desc: (this.sortOrder === "desc")
-                            });
+                            };
+
+                            if(this.sortingMethod) {
+                                sortItem.compare = this.sortingMethod.bind(this);
+                            }
+
+                            sort.push(sortItem);
                         }
                     });
                     return sort.length > 0 ? sort : null;
@@ -1919,11 +1934,17 @@ module.exports = {
                     iteratorUtils.each(this.getGroupColumns(), function() {
                         var selector = this.calculateGroupValue || this.displayField || this.calculateDisplayValue || (useLocalSelector && this.selector) || this.dataField || this.calculateCellValue;
                         if(selector) {
-                            group.push({
+                            var groupItem = {
                                 selector: selector,
                                 desc: (this.sortOrder === "desc"),
                                 isExpanded: !!this.autoExpandGroup
-                            });
+                            };
+
+                            if(this.sortingMethod) {
+                                groupItem.compare = this.sortingMethod.bind(this);
+                            }
+
+                            group.push(groupItem);
                         }
                     });
                     return group.length > 0 ? group : null;
