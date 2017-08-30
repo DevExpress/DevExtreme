@@ -109,6 +109,27 @@ QUnit.test("sorting, short syntax", function(assert) {
         });
 });
 
+QUnit.test("sorting, using sortingMethod", function(assert) {
+    var done = assert.async();
+    var namesByOrder = ["C", "A", "B"];
+
+    new ArrayStore([
+        { name: "A" },
+        { name: "B" },
+        { name: "C" },
+    ])
+        .load({ sort: {
+            getter: "name",
+            compare: function(value1, value2) {
+                return namesByOrder.indexOf(value1) - namesByOrder.indexOf(value2);
+            }
+        } })
+        .done(function(data) {
+            assert.deepEqual(data.map(function(item) { return item.name; }), namesByOrder);
+            done();
+        });
+});
+
 QUnit.test("sorting, multi-level, mixed syntax", function(assert) {
     var done = assert.async();
 
