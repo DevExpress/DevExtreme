@@ -72,7 +72,7 @@ var getElementEventData = function(element, eventName) {
                     var newEvent;
                     while(target.parentNode && target !== element) {
                         target = target.parentNode;
-                        if(matches(target, selector)) {
+                        if(target.nodeName !== "#document" && matches(target, selector)) {
                             newEvent = eventsEngine.Event(e, { currentTarget: target, data: data }); // TODO: Should we create new event here?
                             result = callHandler(newEvent);
                             if(result === false) {
