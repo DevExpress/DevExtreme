@@ -94,7 +94,8 @@ var AppointmentLayoutManager = Class.inherit({
             updatedAppointment = this.instance.getUpdatedAppointment(),
             result = this._markDeletedAppointments(renderedItems, appointments),
             itemFound,
-            coordinatesChanged;
+            coordinatesChanged,
+            repaintAll = false;
 
         $.each(appointments, (function(_, currentItem) {
             itemFound = false;
@@ -106,16 +107,22 @@ var AppointmentLayoutManager = Class.inherit({
                     item.needRepaint = false;
                     itemFound = true;
 
-                    if(updatedAppointment && commonUtils.equalByValue(item.itemData, updatedAppointment)) {
+                    if((updatedAppointment && commonUtils.equalByValue(item.itemData, updatedAppointment))) {
                         item.needRepaint = true;
+                        if(isAgenda) {
+                            repaintAll = true;
+                        }
                     }
                     coordinatesChanged = this._compareSettings(currentItem, item, isAgenda);
 
-                    if(coordinatesChanged) {
+                    if(coordinatesChanged || repaintAll) {
                         item.settings = currentItem.settings;
                         item.needRepaint = true;
                         item.needRemove = false;
-                        isAgenda && result.push(item);
+                        if(isAgenda) {
+                            result.push(item);
+                            repaintAll = true;
+                        }
                     }
                 }
 
@@ -129,6 +136,7 @@ var AppointmentLayoutManager = Class.inherit({
             }
 
         }).bind(this));
+
         return isAgenda && result.length ? result : renderedItems;
     },
 
