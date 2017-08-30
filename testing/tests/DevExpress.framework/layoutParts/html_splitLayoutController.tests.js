@@ -49,6 +49,10 @@
 }(this, function($, ko, Router, domUtils, HtmlApplication, ViewEngine, CommandManager, dxCommand, fx, MemoryKeyValueStorage,
     frameworkMocks, htmlFrameworkMocks, createLayoutController, emptyLayoutControllerModule, SimpleLayoutControllerModule, splitLayoutControllerModule) {
 
+    if(QUnit.urlParams["nojquery"]) {
+        return;
+    }
+
     includeLayout("Empty");
     includeLayout("Simple");
     includeLayout("Split");

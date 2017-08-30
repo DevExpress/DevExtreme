@@ -5,6 +5,10 @@ var $ = require("jquery"),
 
 require("integration/jquery/easing");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.module("easing");
 
 QUnit.test("css transition timing func parsing", function(assert) {

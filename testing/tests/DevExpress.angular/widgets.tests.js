@@ -29,6 +29,10 @@ require("ui/tabs");
 require("ui/text_box");
 require("ui/toolbar");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 fx.off = true;
 var ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);

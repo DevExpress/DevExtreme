@@ -4,6 +4,10 @@ var $ = require("jquery"),
     Router = require("framework/router"),
     JSON_URI_PREFIX = require("framework/router").Route.__internals.JSON_URI_PREFIX;
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 var singleRoute = function() {
     var routes = new Router();
     routes.register.apply(routes, arguments);
