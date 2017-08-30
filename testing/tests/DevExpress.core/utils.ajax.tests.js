@@ -168,6 +168,24 @@ QUnit.test("Set request header and content-type", function(assert) {
     assert.equal(xhr.requestHeaders["Accept"], "*/*");
 });
 
+QUnit.test("Set request header for upload", function(assert) {
+
+    ajax.sendRequest({
+        url: "/some-url",
+        method: "POST",
+        upload: {}
+    });
+
+    assert.equal(this.requests.length, 1);
+
+    var xhr = this.requests[0];
+
+    assert.equal(xhr.method, "POST");
+    assert.equal(xhr.url, "/some-url");
+    assert.equal(xhr.requestHeaders["Content-Type"], "text/plain;charset=utf-8");
+    assert.equal(xhr.requestHeaders["Accept"], "*/*");
+});
+
 QUnit.test("Default Content-Type", function(assert) {
     ajax.sendRequest({
         url: "/some-url"

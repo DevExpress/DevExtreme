@@ -97,7 +97,7 @@ var getAcceptHeader = function(options) {
 
 var getContentTypeHeader = function(options) {
     var defaultContentType;
-    if(options.data && getMethod(options) !== "GET") {
+    if(options.data && !options.upload && getMethod(options) !== "GET") {
         defaultContentType = "application/x-www-form-urlencoded;charset=utf-8";
     }
 
