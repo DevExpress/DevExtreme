@@ -4,7 +4,7 @@ var Deferred = require("./deferred").Deferred;
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
 var Promise = require("../polyfills/promise");
-var ajaxStrategy = require("../ajax_strategy").get();
+var ajaxStrategy;
 
 var SUCCESS = "success",
     ERROR = "error",
@@ -333,3 +333,6 @@ var sendRequest = function(options) {
 };
 
 exports.sendRequest = sendRequest;
+exports.setStrategy = function(s) {
+    ajaxStrategy = s;
+};
