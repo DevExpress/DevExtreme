@@ -51,7 +51,3 @@ exports.getInstanceByElement = function($element, componentClass) {
 
     return dataUtils.data($element.get(0), name);
 };
-
-exports.removeDataFromElement = function($element) {
-    dataUtils.cleanDataRecursive($element.get(0), true);
-};
