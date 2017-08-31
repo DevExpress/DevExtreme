@@ -762,7 +762,7 @@ QUnit.test("update sorting on columnsChanged (changeType == 'sorting'). Refresh 
     assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
 });
 
-QUnit.test("update sorting on columnsChanged when sortingMethod defined(changeType == 'sorting'). Refresh current page", function(assert) {
+QUnit.test("sorting when calculateSortValue is defined", function(assert) {
     var array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
@@ -776,6 +776,37 @@ QUnit.test("update sorting on columnsChanged when sortingMethod defined(changeTy
         columns: [{
             dataField: "name", calculateSortValue: function(data) {
                 return $.inArray(data.name, ['Dan', 'Bob', 'Alex']);
+            }
+        }, "age"],
+        sorting: { mode: 'single' }
+    });
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+
+    //act
+    this.columnsController.changeSortOrder(0, 'asc');
+
+    assert.equal(this.dataController.pageIndex(), 0);
+    assert.equal(this.dataController.items().length, 2);
+    assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
+});
+
+QUnit.test("sorting when sortingMethod is defined", function(assert) {
+    var array = [
+        { name: 'Alex', age: 30 },
+        { name: 'Dan', age: 25 },
+        { name: 'Bob', age: 20 }
+    ];
+
+    var order = ['Dan', 'Bob', 'Alex'];
+    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+
+    this.applyOptions({
+        commonColumnSettings: { allowSorting: true },
+        columns: [{
+            dataField: "name", sortingMethod: function(x, y) {
+                return order.indexOf(x) - order.indexOf(y);
             }
         }, "age"],
         sorting: { mode: 'single' }

@@ -21,10 +21,14 @@ var normalizeSortingInfo = function(info) {
     }
 
     return map(info, function(i) {
-        return {
+        var result = {
             selector: (isFunction(i) || typeof i === "string") ? i : (i.getter || i.field || i.selector),
             desc: !!(i.desc || String(i.dir).charAt(0).toLowerCase() === "d")
         };
+        if(i.compare) {
+            result.compare = i.compare;
+        }
+        return result;
     });
 };
 

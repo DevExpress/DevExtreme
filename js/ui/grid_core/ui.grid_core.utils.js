@@ -471,13 +471,23 @@ module.exports = (function() {
                 return result;
             }
 
-            return remoteGrouping ? [{ selector: dataField, isExpanded: false }] : function(data) {
-                var result = column.calculateCellValue(data);
-                if(result === undefined || result === "") {
-                    result = null;
+            if(remoteGrouping) {
+                result = [{ selector: dataField, isExpanded: false }];
+            } else {
+                result = function(data) {
+                    var result = column.calculateCellValue(data);
+                    if(result === undefined || result === "") {
+                        result = null;
+                    }
+                    return result;
+                };
+
+                if(column.sortingMethod) {
+                    result = [{ selector: result, compare: column.sortingMethod.bind(column) }];
                 }
-                return result;
-            };
+            }
+
+            return result;
         },
 
         getGroupInterval: function(column) {

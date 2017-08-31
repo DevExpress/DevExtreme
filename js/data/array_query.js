@@ -95,18 +95,49 @@ var MapIterator = WrappedIterator.inherit({
     }
 });
 
+var defaultCompare = function(xValue, yValue) {
+    xValue = toComparable(xValue);
+    yValue = toComparable(yValue);
+
+    if(xValue === null && yValue !== null) {
+        return -1;
+    }
+
+    if(xValue !== null && yValue === null) {
+        return 1;
+    }
+
+    if(xValue === undefined && yValue !== undefined) {
+        return 1;
+    }
+
+    if(xValue !== undefined && yValue === undefined) {
+        return -1;
+    }
+
+    if(xValue < yValue) {
+        return -1;
+    }
+
+    if(xValue > yValue) {
+        return 1;
+    }
+
+    return 0;
+};
+
 var SortIterator = Iterator.inherit({
 
-    ctor: function(iter, getter, desc) {
+    ctor: function(iter, getter, desc, compare) {
         if(!(iter instanceof MapIterator)) {
             iter = new MapIterator(iter, this._wrap);
         }
         this.iter = iter;
-        this.rules = [{ getter: getter, desc: desc }];
+        this.rules = [{ getter: getter, desc: desc, compare: compare }];
     },
 
-    thenBy: function(getter, desc) {
-        var result = new SortIterator(this.sortedIter || this.iter, getter, desc);
+    thenBy: function(getter, desc, compare) {
+        var result = new SortIterator(this.sortedIter || this.iter, getter, desc, compare);
         if(!this.sortedIter) {
             result.rules = this.rules.concat(result.rules);
         }
@@ -177,32 +208,13 @@ var SortIterator = Iterator.inherit({
 
         for(var i = 0, rulesCount = this.rules.length; i < rulesCount; i++) {
             var rule = this.rules[i],
-                xValue = toComparable(rule.getter(x)),
-                yValue = toComparable(rule.getter(y)),
-                factor = rule.desc ? -1 : 1;
+                xValue = rule.getter(x),
+                yValue = rule.getter(y),
+                compare = rule.compare || defaultCompare,
+                compareResult = compare(xValue, yValue);
 
-            if(xValue === null && yValue !== null) {
-                return -factor;
-            }
-
-            if(xValue !== null && yValue === null) {
-                return factor;
-            }
-
-            if(xValue === undefined && yValue !== undefined) {
-                return factor;
-            }
-
-            if(xValue !== undefined && yValue === undefined) {
-                return -factor;
-            }
-
-            if(xValue < yValue) {
-                return -factor;
-            }
-
-            if(xValue > yValue) {
-                return factor;
+            if(compareResult) {
+                return rule.desc ? -compareResult : compareResult;
             }
         }
 
@@ -559,13 +571,13 @@ var arrayQueryImpl = function(iter, queryOptions) {
             return d.promise();
         },
 
-        sortBy: function(getter, desc) {
-            return chainQuery(new SortIterator(iter, getter, desc));
+        sortBy: function(getter, desc, compare) {
+            return chainQuery(new SortIterator(iter, getter, desc, compare));
         },
 
-        thenBy: function(getter, desc) {
+        thenBy: function(getter, desc, compare) {
             if(iter instanceof SortIterator) {
-                return chainQuery(iter.thenBy(getter, desc));
+                return chainQuery(iter.thenBy(getter, desc, compare));
             }
 
             throw errorsModule.errors.Error("E4004");
