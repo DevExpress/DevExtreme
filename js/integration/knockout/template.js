@@ -6,6 +6,16 @@ var $ = require("../../core/renderer"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     domUtils = require("../../core/utils/dom");
 
+var getParentContext = (function() {
+    var parentNode = $("<div>")[0];
+    ko.applyBindingsToNode(parentNode);
+    var parentContext = ko.contextFor(parentNode);
+
+    return function() {
+        return parentContext;
+    };
+})();
+
 var KoTemplate = TemplateBase.inherit({
 
     ctor: function(element) {
@@ -34,7 +44,8 @@ var KoTemplate = TemplateBase.inherit({
             }
         }
 
-        return new ko.bindingContext(data);
+        // workaround for https://github.com/knockout/knockout/pull/651
+        return getParentContext().createChildContext(data);
     },
 
     _renderCore: function(options) {
