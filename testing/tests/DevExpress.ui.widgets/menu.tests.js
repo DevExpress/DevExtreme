@@ -1587,10 +1587,7 @@ QUnit.test("right key in submenu can move focus to next item of main menu (horiz
 
     visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
 
-    $(visibleSubmenu._itemContainer())
-        .trigger(rightKeyKeydown)
-        .trigger(rightKeyKeydown)
-        .trigger(rightKeyKeydown);
+    $(visibleSubmenu._itemContainer()).trigger(rightKeyKeydown);
 
     //assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
@@ -1640,8 +1637,6 @@ QUnit.test("RTL: left key in submenu can move focus to next item of main menu (h
     visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
 
     $(visibleSubmenu._itemContainer())
-        .trigger(leftKeyKeydown)
-        .trigger(leftKeyKeydown)
         .trigger(leftKeyKeydown);
 
     //assert
