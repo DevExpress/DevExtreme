@@ -59,7 +59,7 @@ function queryByOptions(query, options, isCountQuery) {
                 sort = arrangeSortingInfo(group, sort);
             }
             each(sort, function(index) {
-                query = query[index ? "thenBy" : "sortBy"](this.selector, this.desc);
+                query = query[index ? "thenBy" : "sortBy"](this.selector, this.desc, this.compare);
             });
         }
 
