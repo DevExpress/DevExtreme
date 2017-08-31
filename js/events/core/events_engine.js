@@ -60,7 +60,7 @@ var getElementEventData = function(element, eventName) {
                     e = eventsEngine.Event(e);
                 }
                 if(selector) {
-                    if(matches(e.target, selector)) {
+                    if(!isWindow(e.target) && e.target.nodeName !== "#document" && matches(e.target, selector)) {
                         result = callHandler(extend(e, { currentTarget: e.target, data: data }));
                         if(result === false) {
                             e.preventDefault();
@@ -259,7 +259,7 @@ setEngine({
         elementDataByEvent.removeHandler(handler, selector);
     },
 
-    trigger: function(element, src, noBubble, extraParameters) {
+    trigger: function(element, src, extraParameters, noBubble) {
         if(typeof src === "string") {
             src = {
                 type: src
@@ -269,7 +269,7 @@ setEngine({
         var type = src.type || src.originalEvent && src.originalEvent.type;
 
         // TODO: Change grid editing tests and get rid of this
-        if((src.type === "focus" || src.type === "focusin") && isFunction(element.focus) && element === document.activeElement) {
+        if(element.nodeType && (src.type === "focus" || src.type === "focusin") && isFunction(element.focus) && element === document.activeElement) {
             skipEvent = "blur";
             element.blur && element.blur();
             skipEvent = undefined;
@@ -308,30 +308,32 @@ setEngine({
             var i = 0;
 
             while(parents[i] && !event.isPropagationStopped()) {
-                eventsEngine.trigger(parents[i], extend(event, { currentTarget: parents[i] }), true);
+                eventsEngine.trigger(parents[i], extend(event, { currentTarget: parents[i] }), extraParameters, true);
                 i++;
             }
         }
 
         // TODO: Consider other native events
         // TODO: native click for checkboxes and links
-        if((src.type === "focus" || src.type === "focusin") && isFunction(element.focus)) {
-            skipEvent = src.type;
-            element.focus();
-            skipEvent = undefined;
-        } else if((src.type === "blur" || src.type === "focusout") && isFunction(element.blur)) {
-            skipEvent = src.type;
-            element.blur && element.blur();
-            skipEvent = undefined;
-        } else if(isFunction(element[src.type])) {
-            skipEvent = src.type;
-            element[src.type]();
-            skipEvent = undefined;
+        if(element.nodeType) {
+            if((src.type === "focus" || src.type === "focusin") && isFunction(element.focus)) {
+                skipEvent = src.type;
+                element.focus();
+                skipEvent = undefined;
+            } else if((src.type === "blur" || src.type === "focusout") && isFunction(element.blur)) {
+                skipEvent = src.type;
+                element.blur && element.blur();
+                skipEvent = undefined;
+            } else if(isFunction(element[src.type])) {
+                skipEvent = src.type;
+                element[src.type]();
+                skipEvent = undefined;
+            }
         }
     },
 
     triggerHandler: function(element, src, extraParameters) {
-        eventsEngine.trigger(element, src, true, extraParameters);// TODO: refacotr
+        eventsEngine.trigger(element, src, extraParameters, true);// TODO: refacotr
     },
 
     copy: function(event) {
@@ -382,8 +384,6 @@ setEngine({
             result.originalEvent = src;
             result.currentTarget = undefined;
         }
-        extend(result, config || {});
-
         if(!src.isDXEvent) {
             // TODO: Refactor
             extend(result, {
@@ -440,6 +440,9 @@ setEngine({
             });
 
         }
+
+        extend(result, config || {});
+
         result.guid = ++guid;
     }
 });
