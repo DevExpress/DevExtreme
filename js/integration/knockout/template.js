@@ -11,10 +11,12 @@ var getParentContext = (function() {
     ko.applyBindingsToNode(parentNode);
     var parentContext = ko.contextFor(parentNode);
 
-    return function() {
+    getParentContext = function() {
         return parentContext;
     };
-})();
+
+    return parentContext;
+});
 
 var KoTemplate = TemplateBase.inherit({
 
