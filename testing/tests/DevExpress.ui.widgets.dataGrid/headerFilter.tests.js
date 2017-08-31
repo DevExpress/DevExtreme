@@ -3093,6 +3093,34 @@ QUnit.test("Proxy customQueryParams load parameter during headerFilter operation
     assert.deepEqual(loadOptions.customQueryParams, { param: "test" }, "custom query param");
 });
 
+QUnit.test("dataSource group parameter should contains compare option if column has sortingMethod callback", function(assert) {
+    //arrange
+    var that = this,
+        column;
+
+    var context;
+    that.options.columns[0].sortingMethod = function(x, y) {
+        context = this;
+        return x - y;
+    };
+
+    that.options.dataSource = [];
+
+    that.setupDataGrid();
+
+    column = that.columnsController.getVisibleColumns()[0];
+
+    //act
+    var dataSource = that.headerFilterController.getDataSource(column);
+    that.clock.tick();
+
+    //assert
+    assert.equal(dataSource.group.length, 1, "one group parameter");
+    assert.equal(dataSource.group[0].selector({ Test1: 5 }), 5, "group selector");
+    assert.equal(dataSource.group[0].compare(10, 1), 9, "group compare");
+    assert.equal(context.dataField, "Test1", "compare context");
+});
+
 //T349706
 QUnit.test("Not apply filter when selected all items", function(assert) {
     //arrange
