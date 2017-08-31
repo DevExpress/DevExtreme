@@ -49,22 +49,21 @@ var Draggable = DOMComponent.inherit({
         }
 
         var $element = this.element().css("position", "absolute"),
-            eventHandlers = {},
             allowMoveByClick = this.option("allowMoveByClick");
 
-        eventHandlers[DRAGSTART_EVENT_NAME] = this._dragStartHandler.bind(this);
-        eventHandlers[DRAG_EVENT_NAME] = this._dragHandler.bind(this);
-        eventHandlers[DRAGEND_EVENT_NAME] = this._dragEndHandler.bind(this);
-
-        if(allowMoveByClick) {
-            eventHandlers[POINTERDOWN_EVENT_NAME] = this._pointerDownHandler.bind(this);
-            $element = this._getArea();
-        }
-
-        eventsEngine.on($element, eventHandlers, {
+        var eventData = {
             direction: this.option("direction"),
             immediate: this.option("immediate")
-        });
+        };
+
+        if(allowMoveByClick) {
+            $element = this._getArea();
+            eventsEngine.on($element, POINTERDOWN_EVENT_NAME, eventData, this._pointerDownHandler.bind(this));
+        }
+
+        eventsEngine.on($element, DRAGSTART_EVENT_NAME, eventData, this._dragStartHandler.bind(this));
+        eventsEngine.on($element, DRAG_EVENT_NAME, eventData, this._dragHandler.bind(this));
+        eventsEngine.on($element, DRAGEND_EVENT_NAME, eventData, this._dragEndHandler.bind(this));
     },
 
     _detachEventHandlers: function() {
