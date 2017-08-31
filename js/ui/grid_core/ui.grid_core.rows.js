@@ -668,22 +668,23 @@ module.exports = {
                     return itemsCount > 0 && !this._rowHeight;
                 },
 
+                _getRowsHeight: function($tableElement) {
+                    var $rowElements = $tableElement.children("tbody").children().not("." + FREE_SPACE_CLASS);
+
+                    return $rowElements.toArray().reduce(function(sum, row) {
+                        return sum + row.offsetHeight;
+                    }, 0);
+                },
+
                 _updateRowHeight: function() {
                     var that = this,
-                        tableElement = that._getTableElement(),
-                        tableHeight,
-                        freeSpaceRowHeight,
-                        itemsCount = that._dataController.items().length,
-                        $freeSpaceRowElement;
+                        rowsHeight,
+                        $tableElement = that._getTableElement(),
+                        itemsCount = that._dataController.items().length;
 
-                    if(tableElement && that._needUpdateRowHeight(itemsCount)) {
-                        tableHeight = tableElement.outerHeight();
-                        $freeSpaceRowElement = that._getFreeSpaceRowElements().first();
-                        if($freeSpaceRowElement && $freeSpaceRowElement.is(":visible")) {
-                            freeSpaceRowHeight = parseFloat($freeSpaceRowElement[0].style.height) || 0;
-                            tableHeight -= freeSpaceRowHeight;
-                        }
-                        that._rowHeight = tableHeight / itemsCount;
+                    if($tableElement && that._needUpdateRowHeight(itemsCount)) {
+                        rowsHeight = that._getRowsHeight($tableElement);
+                        that._rowHeight = rowsHeight / itemsCount;
                     }
                 },
 
@@ -955,6 +956,7 @@ module.exports = {
 
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
+                        itemCount = that._dataController.items().length,
                         contentElement = that._findContentElement(),
                         freeSpaceRowElements = that._getFreeSpaceRowElements($table),
                         freeSpaceRowCount,
@@ -963,9 +965,9 @@ module.exports = {
                     if(freeSpaceRowElements && contentElement) {
                         var isFreeSpaceRowVisible = false;
 
-                        if(that._dataController.items().length > 0) {
+                        if(itemCount > 0) {
                             if(!that._hasHeight) {
-                                freeSpaceRowCount = that._dataController.pageSize() - that._dataController.items().length;
+                                freeSpaceRowCount = that._dataController.pageSize() - itemCount;
                                 scrollingMode = that.option("scrolling.mode");
 
                                 if(freeSpaceRowCount > 0 && that._dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
@@ -985,8 +987,8 @@ module.exports = {
                                         elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth,
                                         contentHeight = contentElement.outerHeight(),
                                         showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0,
-                                        contentTableHeight = contentElement.children().first().outerHeight(),
-                                        resultHeight = elementHeightWithoutScrollbar - contentTableHeight;
+                                        rowsHeight = that._getRowsHeight(contentElement.children().first()),
+                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight;
 
                                     if(showFreeSpaceRow) {
                                         commonUtils.deferRender(function() {

@@ -7109,6 +7109,36 @@ QUnit.test("Show searchPanel via option method", function(assert) {
     assert.ok($headerPanelElement.find(".dx-datagrid-search-panel").length, "has searchPanel");
 });
 
+//T548906
+QUnit.test("Change page index when virtual scrolling is enabled", function(assert) {
+    //arrange
+    var generateDataSource = function(count) {
+            var result = [],
+                i;
+
+            for(i = 0; i < count; ++i) {
+                result.push({ firstName: "test name" + i, lastName: "test lastName" + i, room: 100 + i, cash: 101 + i * 10 });
+            }
+
+            return result;
+        },
+        dataGrid = createDataGrid({
+            height: 800,
+            loadingTimeout: undefined,
+            dataSource: generateDataSource(100),
+            scrolling: {
+                mode: "virtual",
+                timeout: 0
+            }
+        });
+
+    //act
+    dataGrid.pageIndex(3);
+
+    //assert
+    assert.equal(dataGrid.pageIndex(), 3, "page index");
+});
+
 
 QUnit.module("templates");
 
