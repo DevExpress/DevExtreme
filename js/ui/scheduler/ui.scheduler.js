@@ -1721,10 +1721,12 @@ var Scheduler = Widget.inherit({
 
         each(views, function(_, view) {
             var isViewIsObject = typeUtils.isObject(view),
-                viewName = isViewIsObject ? view.name || view.type : view;
+                viewName = isViewIsObject ? view.name : view,
+                viewType = view.type;
 
-            if(currentView === viewName) {
+            if(currentView === viewName || currentView === viewType) {
                 that._currentView = view;
+                return false;
             }
         });
     },
