@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     domUtils = require("../../core/utils/dom");
 
-var getParentContext = (function() {
+var getParentContext = function() {
     var parentNode = $("<div>")[0];
     ko.applyBindingsToNode(parentNode);
     var parentContext = ko.contextFor(parentNode);
@@ -16,7 +16,7 @@ var getParentContext = (function() {
     };
 
     return parentContext;
-});
+};
 
 var KoTemplate = TemplateBase.inherit({
 
