@@ -12,7 +12,7 @@ namespace StyleCompiler
     {
 
         [Route("known-css-files")]
-        public string KnownCssFiles()
+        public void KnownCssFiles()
         {
             var paths = from distributionName in LessRegistry.CssDistributions.Keys
                         from item in LessAggregation.EnumerateAllItems(Utils.GetStylesPath(), distributionName)
@@ -20,7 +20,11 @@ namespace StyleCompiler
 
             Response.ContentType = "text/javascript";
 
-            return "window.knownCssFiles = " + JsonConvert.SerializeObject(paths);
+            using (var writer = new StreamWriter(Response.Body))
+            {
+                writer.Write("window.knownCssFiles = ");
+                writer.Write(JsonConvert.SerializeObject(paths));
+            }
         }
 
         [Route("less-handler")]

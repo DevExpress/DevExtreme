@@ -31,5 +31,6 @@ script:
     -e CONSTEL=$CONSTEL
     -e NUGET_PACKAGES=/devextreme/dotnet_packages
     -v $TRAVIS_BUILD_DIR:/devextreme
-    docker.io/devexpress/devextreme-build:17_2
+    docker.io/devexpress/devextreme-build:2017-08-31
     ./docker-ci.sh
+# TODO re-tag image to 17_2
