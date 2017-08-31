@@ -11,6 +11,7 @@ var $ = require("../core/renderer"),
     typeUtils = require("./utils/type"),
     inArray = require("./utils/array").inArray,
     publicComponentUtils = require("./utils/public_component"),
+    dataUtils = require("./element_data"),
     Component = require("./component"),
     abstract = Component.abstract;
 
@@ -230,7 +231,7 @@ var DOMComponent = Component.inherit({
     _dispose: function() {
         this.callBase();
         this._clean();
-        publicComponentUtils.removeDataFromElement(this._$element);
+        dataUtils.cleanDataRecursive(this.element().get(0), true);
         this._detachWindowResizeCallback();
     },
 
