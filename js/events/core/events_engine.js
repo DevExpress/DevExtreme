@@ -27,7 +27,7 @@ var getElementEventData = function(element, eventName) {
     eventName = eventName || "";
 
     var eventNameParts = eventName.split(".");
-    var namespace = eventNameParts[1];
+    var namespaces = eventNameParts.slice(1);
     eventName = eventNameParts[0];
 
     if(!elementData) {
@@ -53,6 +53,9 @@ var getElementEventData = function(element, eventName) {
                     if(extraParameters !== undefined) {
                         handlerArgs.push(extraParameters);
                     }
+
+                    special[eventName] && special[eventName].handle && special[eventName].handle.call(element, e, data);
+
                     return handler.apply(handlerArgs[0].currentTarget, handlerArgs);
                 };
 
@@ -100,13 +103,13 @@ var getElementEventData = function(element, eventName) {
                 handler: handler,
                 wrappedHandler: wrappedHandler,
                 selector: selector,
-                namespace: namespace,
+                namespaces: namespaces,
                 guid: handlerId
             });
 
             // First handler for this event name
             if(elementData[eventName].length === 1) {
-                special[eventName] && special[eventName].setup && special[eventName].setup.call(element, data);
+                special[eventName] && special[eventName].setup && special[eventName].setup.call(element, data, namespaces, handler);
             }
             // TODO: Add single event listener for all namespaces
             // TODO: Add event listeners only if setup returned true (Or not?)
@@ -116,7 +119,9 @@ var getElementEventData = function(element, eventName) {
                 selector: selector,
                 type: eventName,
                 data: data,
-                guid: handlerId
+                guid: handlerId,
+                namespace: namespaces.join("."),
+                handler: handler
             };
             special[eventName] && special[eventName].add && special[eventName].add.call(element, handleObject);
         },
@@ -125,14 +130,16 @@ var getElementEventData = function(element, eventName) {
                 if(!elementData[eventName].length) {
                     return;
                 }
+                var removedHandler;
 
                 elementData[eventName] = elementData[eventName].filter(function(eventData) {
-                    var skip = namespace && eventData.namespace !== namespace
+                    var skip = namespaces.length && eventData.namespaces.indexOf(namespaces[0]) < 0// TODO: improve
                     || handler && eventData.handler !== handler
                     || selector && eventData.selector !== selector;
 
                     if(!skip) {
                         element.removeEventListener(eventName, eventData.wrappedHandler); // TODO: Fix several subscriptions problem
+                        removedHandler = eventData.handler;
                         special[eventName] && special[eventName].remove && special[eventName].remove.call(element, {
                             type: eventName,
                             selector: selector,
@@ -144,7 +151,7 @@ var getElementEventData = function(element, eventName) {
                 });
 
                 if(!elementData[eventName].length) {
-                    special[eventName] && special[eventName].teardown && special[eventName].teardown.call(element, [""], handler);
+                    special[eventName] && special[eventName].teardown && special[eventName].teardown.call(element, namespaces, removedHandler);
                 }
             };
 
@@ -162,17 +169,17 @@ var getElementEventData = function(element, eventName) {
                 if(forceStop) {
                     return;
                 }
-                if(!namespace || eventData.namespace === namespace) {
+                if(!namespaces.length || eventData.namespaces.indexOf(namespaces[0]) > -1) { // TODO: improve
                     var wrappedHandler = eventData.wrappedHandler;
                     forceStop = callback(wrappedHandler, eventData.handler) === false;
                 }
             });
-            if(namespace && elementData[""]) {
+            if(namespaces.length && elementData[""]) {
                 elementData[""].forEach(function(eventData) {
                     if(forceStop) {
                         return;
                     }
-                    if(eventData.namespace === namespace) {
+                    if(eventData.namespaces.indexOf(namespaces[0]) > -1) { // TODO: improve
                         var wrappedHandler = eventData.wrappedHandler;
                         forceStop = callback(wrappedHandler, eventData.handler) === false;
                     }
@@ -288,6 +295,8 @@ setEngine({
 
         var event = src.isDXEvent ? src : eventsEngine.Event(src);
 
+        // TODO: Fix checking internal 'trigger' calls by 'noBubble' flag
+        !noBubble && special[type] && special[type].trigger && special[type].trigger.call(element, event, extraParameters);
         elementDataByEvent.iterateHandlers(function(wrappedHandler) {
             wrappedHandler(event, extraParameters);
             return !event.isImmediatePropagationStopped();
@@ -316,6 +325,7 @@ setEngine({
         // TODO: Consider other native events
         // TODO: native click for checkboxes and links
         if(element.nodeType) {
+            special[type] && special[type]._default && special[type]._default.call(element, event, extraParameters);
             if((src.type === "focus" || src.type === "focusin") && isFunction(element.focus)) {
                 skipEvent = src.type;
                 element.focus();
