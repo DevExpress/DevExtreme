@@ -5881,7 +5881,7 @@ QUnit.test("round scroll position for columnHeadersView", function(assert) {
     scrollable.scrollTo(100.7);
 
     //assert
-    assert.equal(scrollable.scrollLeft(), 101);
+    assert.equal(Math.round(scrollable.scrollLeft()), 101);
 
     var $headersScrollable = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
     assert.equal($headersScrollable.scrollLeft(), 101);
@@ -7107,6 +7107,36 @@ QUnit.test("Show searchPanel via option method", function(assert) {
     $headerPanelElement = $($(dataGrid.element()).find(".dx-datagrid-header-panel"));
     assert.ok($headerPanelElement.length, "has headerPanel");
     assert.ok($headerPanelElement.find(".dx-datagrid-search-panel").length, "has searchPanel");
+});
+
+//T548906
+QUnit.test("Change page index when virtual scrolling is enabled", function(assert) {
+    //arrange
+    var generateDataSource = function(count) {
+            var result = [],
+                i;
+
+            for(i = 0; i < count; ++i) {
+                result.push({ firstName: "test name" + i, lastName: "test lastName" + i, room: 100 + i, cash: 101 + i * 10 });
+            }
+
+            return result;
+        },
+        dataGrid = createDataGrid({
+            height: 800,
+            loadingTimeout: undefined,
+            dataSource: generateDataSource(100),
+            scrolling: {
+                mode: "virtual",
+                timeout: 0
+            }
+        });
+
+    //act
+    dataGrid.pageIndex(3);
+
+    //assert
+    assert.equal(dataGrid.pageIndex(), 3, "page index");
 });
 
 

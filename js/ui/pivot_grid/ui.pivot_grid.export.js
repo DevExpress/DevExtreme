@@ -142,13 +142,19 @@ exports.DataProvider = Class.inherit({
                 { alignment: options.rtlEnabled ? "right" : "left", dataType: "string" }
             ];
 
-            dataFields.forEach(function(dataField) {
-                that._styles.push(extend({}, dataItemStyle, {
-                    format: dataField.format,
-                    precision: dataField.precision,
-                    dataType: getCellDataType(dataField)
-                }));
-            });
+            if(dataFields.length) {
+                dataFields.forEach(function(dataField) {
+                    that._styles.push(extend({}, dataItemStyle, {
+                        format: dataField.format,
+                        precision: dataField.precision,
+                        dataType: getCellDataType(dataField)
+                    }));
+                });
+            } else {
+                that._styles.push(dataItemStyle);
+            }
+
+
 
             each(columns, function(columnIndex, column) {
                 column.width = DEFAUL_COLUMN_WIDTH;
@@ -213,14 +219,14 @@ exports.DataProvider = Class.inherit({
             rowHeaderSize = items[0][0].colspan,
             item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
+        if(cellIndex === 0 && rowIndex === 0) {
+            return COLUMN_HEADER_STYLE_ID;
+        } else if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
             return COLUMN_HEADER_STYLE_ID;
         } else if(rowIndex >= columnHeaderSize && cellIndex < rowHeaderSize) {
             return ROW_HEADER_STYLE_ID;
-        } else {
-            return DATA_STYLE_OFFSET + (item.dataIndex || 0);
         }
 
-        return item.styleId;
+        return DATA_STYLE_OFFSET + (item.dataIndex || 0);
     }
 });

@@ -1104,6 +1104,9 @@ declare module DevExpress.ui {
         /** @docid GridBaseOptions_columns_calculateSortValue */
         calculateSortValue?: any;
 
+        /** @docid GridBaseOptions_columns_sortingMethod */
+        sortingMethod?: (value1: any, value2: any) => number;
+
         /** @docid GridBaseOptions_columns_customizeText */
         customizeText?: (cellInfo: { value: any; valueText: string; target: string; groupInterval: any }) => string;
 

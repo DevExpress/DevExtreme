@@ -16,4 +16,5 @@ if(jQuery) {
     require("./jquery/easing");
     require("./jquery/element_data");
     require("./jquery/component_registrator");
+    require("./jquery/ajax");
 }

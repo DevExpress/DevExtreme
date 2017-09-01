@@ -1061,7 +1061,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this._applyEndDateToObj(currentEndDate, appointmentSettings);
             appointmentData.settings = appointmentSettings;
             result.push(appointmentData);
+
             startDate.setDate(startDate.getDate() + 1);
+            startDate.setHours(startDayHour);
         }
 
         return result;

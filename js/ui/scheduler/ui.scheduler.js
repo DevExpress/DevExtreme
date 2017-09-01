@@ -1034,7 +1034,7 @@ var Scheduler = Widget.inherit({
                 value = this._dateOption(name);
                 value = dateUtils.trimTime(new Date(value));
                 this._workSpace.option(name, value);
-                this._header.option(name, this._workSpace.getStartViewDate());
+                this._header.option(name, this._workSpace._getViewStartByOptions());
                 this._appointments.option("items", []);
                 this._filterAppointmentsByDate();
                 this._reloadDataSource();
@@ -1721,10 +1721,12 @@ var Scheduler = Widget.inherit({
 
         each(views, function(_, view) {
             var isViewIsObject = typeUtils.isObject(view),
-                viewName = isViewIsObject ? view.name || view.type : view;
+                viewName = isViewIsObject ? view.name : view,
+                viewType = view.type;
 
-            if(currentView === viewName) {
+            if(currentView === viewName || currentView === viewType) {
                 that._currentView = view;
+                return false;
             }
         });
     },
