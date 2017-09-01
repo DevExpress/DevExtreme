@@ -97,7 +97,44 @@ QUnit.test("Click on the 'next' button should update currentDate correctly, when
     assert.deepEqual(this.instance.option("currentDate"), new Date(2017, 8, 28), "New date is correct");
 });
 
-QUnit.test("Click on the 'next' and 'previous' button should update currentDate correctly, currentDate = startDate, month view", function(assert) {
+QUnit.test("Multiple click on the 'next' button should update currentDate correctly when intervalCount, month view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 8, 1),
+        currentView: "month",
+        views: [{
+            type: "month",
+            intervalCount: 2
+        }] });
+    var $element = this.instance.element(),
+        $caption = $element.find(".dx-scheduler-navigator-caption");
+
+    $($element.find(".dx-scheduler-navigator-next")).trigger("dxclick").trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("currentDate"), new Date(2018, 0, 1), "New date is correct");
+    assert.equal($caption.text(), "Jan-Feb 2018", "Caption is correct");
+});
+
+QUnit.test("Multiple click on the 'next' and 'previous' button should update currentDate correctly, month view", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2017, 4, 1),
+        currentView: "month",
+        views: ["month"] });
+
+    var $nextButton = $(this.instance.element().find(".dx-scheduler-navigator-next")),
+        $previousButton = $(this.instance.element().find(".dx-scheduler-navigator-previous"));
+
+    $nextButton.trigger("dxclick");
+    $nextButton.trigger("dxclick");
+
+    assert.equal(this.instance.option("currentDate").getMonth(), 6, "New date is correct");
+
+    $previousButton.trigger("dxclick");
+    $previousButton.trigger("dxclick");
+
+    assert.equal(this.instance.option("currentDate").getMonth(), 4, "New date is correct");
+});
+
+QUnit.test("Multiple click on the 'next' and 'previous' button should update currentDate correctly when intervalCount, currentDate = startDate, month view", function(assert) {
     this.createInstance({
         currentDate: new Date(2017, 11, 11),
         currentView: "month",
