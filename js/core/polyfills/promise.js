@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    deferredUtils = require("../../core/utils/deferred"),
+var deferredUtils = require("../../core/utils/deferred"),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
     Promise = window.Promise;
@@ -24,7 +23,7 @@ if(!Promise) {
     };
 
     Promise.all = function(promises) {
-        return when.apply($, promises).then(function() {
+        return when.apply(this, promises).then(function() {
             return [].slice.call(arguments);
         });
     };

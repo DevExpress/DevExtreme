@@ -1,8 +1,6 @@
 "use strict";
 
 var rendererBase = require("./renderer_base");
-require("../integration/jquery/renderer");
-require("../integration/jquery/component_registrator");
-require("../integration/jquery/events");
+require("../integration/jquery");
 
 module.exports = rendererBase.get();
