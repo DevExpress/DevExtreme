@@ -118,7 +118,8 @@ QUnit.test("Multiple click on the 'next' and 'previous' button should update cur
     this.createInstance({
         currentDate: new Date(2017, 4, 1),
         currentView: "month",
-        views: ["month"] });
+        views: ["month"]
+    });
 
     var $nextButton = $(this.instance.element().find(".dx-scheduler-navigator-next")),
         $previousButton = $(this.instance.element().find(".dx-scheduler-navigator-previous"));
