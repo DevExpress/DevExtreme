@@ -314,7 +314,9 @@ var TextEditorMask = TextEditorBase.inherit({
         if(this._shouldShowMask()) {
             var text = this._maskRulesChain.text();
             this.option("text", text);
-            this._renderDisplayText(text);
+            if(this.option("showMaskMode") === "onFocus") {
+                this._renderDisplayText(text);
+            }
         }
     },
 
