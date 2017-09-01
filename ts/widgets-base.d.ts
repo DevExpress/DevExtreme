@@ -1025,6 +1025,7 @@ declare module DevExpress.ui {
         /** @docid_ignore dxNumberBoxOptions_maskRules */
         /** @docid_ignore dxNumberBoxOptions_maskInvalidMessage */
         /** @docid_ignore dxNumberBoxOptions_useMaskedValue */
+        /** @docid_ignore dxNumberBoxOptions_showMaskMode */
         /** @docid_ignore dxNumberBoxOptions_spellcheck */
 
         /** @docid dxNumberBoxOptions_max */
