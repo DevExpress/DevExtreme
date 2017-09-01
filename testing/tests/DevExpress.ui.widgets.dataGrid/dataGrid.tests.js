@@ -2301,8 +2301,8 @@ QUnit.test("min-height from styles when showBorders true", function(assert) {
     dataGrid.updateDimensions();
 
     //assert
-    assert.equal($dataGrid.height(), firstRenderHeight, "height is not changed");
-    assert.equal($dataGrid.height(), 200, "height is equal min-height");
+    assert.roughEqual($dataGrid.height(), firstRenderHeight, 1.01, "height is not changed");
+    assert.roughEqual($dataGrid.height(), 200, 1.01, "height is equal min-height");
 
     clock.restore();
 });
@@ -5029,7 +5029,7 @@ QUnit.test("Height rows view = height content", function(assert) {
     //assert
     rowsViewElement = $dataGrid.find(".dx-datagrid-rowsview");
     assert.equal(rowsViewElement.find(".dx-datagrid-content").length, 1, "has content");
-    var heightDiff = Math.round(rowsViewElement.height()) - rowsViewElement.find(".dx-datagrid-content")[0].offsetHeight;
+    var heightDiff = Math.round(rowsViewElement.height()) - rowsViewElement.find("tbody")[0].offsetHeight;
     assert.ok(heightDiff === 0 || heightDiff === 1/* chrome */, "height rows view = height content");
 });
 
