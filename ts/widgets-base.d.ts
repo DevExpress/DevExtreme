@@ -2660,7 +2660,7 @@ declare module DevExpress.ui {
         itemOption(field: string): any;
 
         /** @docid dxFormMethods_getEditor */
-        getEditor(field: string): Object;
+        getEditor(field: string): any;
 
         /** @docid dxFormMethods_updateDimensions */
         updateDimensions(): JQueryPromise<void>;
