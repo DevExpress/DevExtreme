@@ -238,7 +238,6 @@ var Scrollable = DOMComponent.inherit({
     _visibilityChanged: function(visible) {
         if(visible) {
             this.update();
-            this._toggleRTLDirection(this.option("rtlEnabled"));
             this._savedScrollOffset && this.scrollTo(this._savedScrollOffset);
             delete this._savedScrollOffset;
         } else {
@@ -284,14 +283,17 @@ var Scrollable = DOMComponent.inherit({
         this._renderDisabledState();
         this._createActions();
         this.update();
+
         this.callBase();
+
+        this._toggleRTLDirection(this.option("rtlEnabled"));
     },
 
     _toggleRTLDirection: function(rtl) {
         var that = this;
 
         this.callBase(rtl);
-
+        this._updateBounds();
         if(rtl && this.option("direction") !== VERTICAL) {
             commonUtils.deferUpdate(function() {
                 var left = that.scrollWidth() - that.clientWidth();
@@ -300,6 +302,10 @@ var Scrollable = DOMComponent.inherit({
                 });
             });
         }
+    },
+
+    _updateBounds: function() {
+        this._strategy._updateBounds();
     },
 
     _attachEventHandlers: function() {
