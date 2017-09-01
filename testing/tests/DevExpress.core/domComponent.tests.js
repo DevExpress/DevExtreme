@@ -830,7 +830,10 @@ QUnit.test("dispose method", function(assert) {
     var element = $("#component").TestComponent(),
         instance = element.data("TestComponent");
 
+    instance.option("opt1", "notDefault");
+
     assert.deepEqual(element.data("dxComponents"), ["TestComponent"]);
+    assert.equal(instance.option("opt1"), "notDefault");
 
     instance.dispose();
 
@@ -838,6 +841,9 @@ QUnit.test("dispose method", function(assert) {
     assert.notOk(element.data("dxComponents"));
 
     element = $("#component").TestComponent();
+    instance = element.data("TestComponent");
+
+    assert.notEqual(instance.option("opt1"), "notDefault");
 
     assert.ok(element.data("TestComponent") instanceof this.TestComponent);
     assert.ok(element.TestComponent("instance") instanceof this.TestComponent);

@@ -231,7 +231,6 @@ var DOMComponent = Component.inherit({
     _dispose: function() {
         this.callBase();
         this._clean();
-        dataUtils.cleanDataRecursive(this.element().get(0), true);
         this._detachWindowResizeCallback();
     },
 
@@ -369,7 +368,7 @@ var DOMComponent = Component.inherit({
     * @publicName dispose()
     */
     dispose: function() {
-        this._dispose();
+        dataUtils.cleanDataRecursive(this.element().get(0), true);
     }
 
 });
