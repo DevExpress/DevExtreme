@@ -369,6 +369,7 @@ var DOMComponent = Component.inherit({
     */
     dispose: function() {
         dataUtils.cleanDataRecursive(this.element().get(0), true);
+        this.element().get(0).textContent = "";
     }
 
 });
