@@ -810,7 +810,14 @@ module.exports = {
 
                         if(rowIndex >= 0) {
                             selectionController.startSelectionWithCheckboxes();
-                            selectionController.changeItemSelection(rowIndex, { shift: event.shiftKey });
+
+                            var isSelectionChanged = selectionController.changeItemSelection(rowIndex, { shift: event.shiftKey });
+                            if(!isSelectionChanged) {
+                                this.getController("data").updateItems({
+                                    changeType: "updateSelection",
+                                    itemIndexes: [rowIndex]
+                                });
+                            }
                         }
                     }));
                 },
