@@ -1882,7 +1882,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_editing_popup
                  * @publicName popup
-                 * @type Popup options
+                 * @type dxPopupOptions
                  */
                 popup: {}
             }
