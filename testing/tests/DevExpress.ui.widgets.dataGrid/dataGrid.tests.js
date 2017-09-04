@@ -5809,6 +5809,38 @@ QUnit.test("loading count after refresh when scrolling mode virtual", function(a
     assert.equal(contentReadyCount, 1, "contentReady is called once");
 });
 
+//T551304
+QUnit.test("row should rendered after editing if scrolling mode is virtual", function(assert) {
+    //arrange, act
+
+    var array = [];
+    for(var i = 0; i < 4; i++) {
+        array.push({ id: i, text: "text " + i });
+    }
+
+    var dataGrid = createDataGrid({
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2
+        },
+        dataSource: array
+    });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.cellValue(2, 1, 666);
+    dataGrid.saveEditData();
+    this.clock.tick();
+
+    //assert
+    assert.equal(dataGrid.getVisibleRows().length, 4, "visible row count");
+    assert.equal(dataGrid.cellValue(2, 1), 666, "value is changed");
+    assert.equal(dataGrid.hasEditData(), false, "no unsaved data");
+});
+
 QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled and column has values on second page only", function(assert) {
     //arrange, act
 
