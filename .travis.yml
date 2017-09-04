@@ -18,6 +18,7 @@ env:
 cache:
   directories:
     - node_modules
+    - dotnet_packages
 
 script:
 
