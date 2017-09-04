@@ -18,7 +18,6 @@ env:
 cache:
   directories:
     - node_modules
-    - dotnet_packages
 
 script:
 
@@ -29,7 +28,6 @@ script:
     docker run -t
     -e TARGET=$TARGET
     -e CONSTEL=$CONSTEL
-    -e NUGET_PACKAGES=/devextreme/dotnet_packages
     -v $TRAVIS_BUILD_DIR:/devextreme
     docker.io/devexpress/devextreme-build:17_2
     ./docker-ci.sh
