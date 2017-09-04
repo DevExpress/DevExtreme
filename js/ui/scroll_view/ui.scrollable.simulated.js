@@ -904,7 +904,7 @@ var SimulatedStrategy = Class.inherit({
         };
     },
 
-    _updateBounds: function() {
+    updateBounds: function() {
         this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
 

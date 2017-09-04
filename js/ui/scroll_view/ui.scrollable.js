@@ -306,7 +306,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _updateBounds: function() {
-        this._strategy._updateBounds();
+        this._strategy.updateBounds();
     },
 
     _attachEventHandlers: function() {
