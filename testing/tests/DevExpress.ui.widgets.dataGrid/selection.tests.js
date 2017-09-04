@@ -3464,6 +3464,27 @@ QUnit.test("Click on selected selection checkbox with shift key", function(asser
 });
 
 //T550013
+QUnit.test("Click on selected selection checkbox with shift key to select range", function(assert) {
+    var testElement = $('#container');
+
+    this.options.selection.showCheckBoxesMode = 'onClick';
+    this.setup();
+    this.columnHeadersView.render(testElement);
+    this.rowsView.render(testElement);
+
+    //act
+    var $checkboxes = testElement.find(".dx-data-row .dx-select-checkbox");
+    $checkboxes.eq(1).trigger("dxclick");
+    $checkboxes.eq(0).trigger("dxclick");
+    $checkboxes.eq(1).trigger($.Event("dxclick", { shiftKey: true }));
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys().length, 2, "two items are selected");
+    assert.strictEqual($checkboxes.eq(0).dxCheckBox("instance").option("value"), true, "checkbox 0 is checked");
+    assert.strictEqual($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "checkbox 1 is checked");
+});
+
+//T550013
 QUnit.test("Click on unselected selection checkbox with shift key", function(assert) {
     var testElement = $('#container');
 
