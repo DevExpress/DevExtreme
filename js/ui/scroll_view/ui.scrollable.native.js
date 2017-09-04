@@ -55,7 +55,7 @@ var NativeStrategy = Class.inherit({
         }
     },
 
-    _updateBounds: noop,
+    updateBounds: noop,
 
     _renderPushBackOffset: function() {
         var pushBackValue = this.option("pushBackValue");
