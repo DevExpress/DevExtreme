@@ -5410,7 +5410,7 @@ QUnit.test("loadingChanged should be called before editing oeprations", function
     deferreds[0].resolve();
 
     //assert
-    assert.deepEqual(loadingChangedArgs, [true, false], "loading changed args after updating end");
+    assert.deepEqual(loadingChangedArgs, [true, false, true, false], "loading changed args after updating end");
 });
 
 //T533546
