@@ -31,15 +31,15 @@ function OperationManager() {
 }
 
 OperationManager.prototype.constructor = OperationManager;
-OperationManager.prototype.add = function addOperation(deferred) {
+OperationManager.prototype.add = function(deferred) {
     this._counter += 1;
     this._deferreds[this._counter] = deferred;
     return this._counter;
 };
-OperationManager.prototype.remove = function removeOperation(operationId) {
+OperationManager.prototype.remove = function(operationId) {
     return delete this._deferreds[operationId];
 };
-OperationManager.prototype.cancel = function cancelOperation(operationId) {
+OperationManager.prototype.cancel = function(operationId) {
     if(operationId in this._deferreds) {
         this._deferreds[operationId].reject(CANCELED_TOKEN);
         return true;
@@ -47,7 +47,7 @@ OperationManager.prototype.cancel = function cancelOperation(operationId) {
 
     return false;
 };
-OperationManager.prototype.cancelAll = function rejectAllOperation() {
+OperationManager.prototype.cancelAll = function() {
     while(this._counter > -1) {
         this.cancel(this._counter);
         this._counter--;
