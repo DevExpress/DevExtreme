@@ -904,6 +904,10 @@ var SimulatedStrategy = Class.inherit({
         };
     },
 
+    updateBounds: function() {
+        this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
+    },
+
     scrollBy: function(distance) {
         var verticalScroller = this._scrollers[VERTICAL],
             horizontalScroller = this._scrollers[HORIZONTAL];
