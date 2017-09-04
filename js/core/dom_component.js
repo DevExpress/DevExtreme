@@ -373,6 +373,13 @@ var DOMComponent = Component.inherit({
         });
     },
 
+    _removeClasses: function(element) {
+        var classes = element.className.split(" ").filter(function(cssClass) {
+            return cssClass.lastIndexOf("dx-", 0) !== 0;
+        });
+        element.className = classes.join(" ");
+    },
+
     endUpdate: function() {
         var requireRender = !this._initializing && !this._initialized;
 
@@ -403,11 +410,11 @@ var DOMComponent = Component.inherit({
     */
     dispose: function() {
         var element = this.element().get(0);
-        dataUtils.cleanDataRecursive(element, true);
 
+        dataUtils.cleanDataRecursive(element, true);
         element.textContent = "";
         this._removeAttributes(element);
-
+        this._removeClasses(element);
     }
 
 });

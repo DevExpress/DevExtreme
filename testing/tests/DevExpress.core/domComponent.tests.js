@@ -830,15 +830,24 @@ QUnit.test("Dispose: component can be recreated after dispose", function(assert)
     var element = $("#component").TestComponent(),
         instance = element.data("TestComponent");
 
+    element.addClass("dx-some-class1");
+    element.addClass("some-class1");
+
     instance.option("opt1", "notDefault");
 
     assert.deepEqual(element.data("dxComponents"), ["TestComponent"]);
     assert.equal(instance.option("opt1"), "notDefault");
 
+    assert.ok(element.hasClass("dx-some-class1"));
+    assert.ok(element.hasClass("some-class1"));
+
     instance.dispose();
 
     assert.notOk(element.data("TestComponent"));
     assert.notOk(element.data("dxComponents"));
+    assert.notOk(element.hasClass("dx-some-class1"));
+
+    assert.ok(element.hasClass("some-class1"));
 
     element = $("#component").TestComponent();
     instance = element.data("TestComponent");
