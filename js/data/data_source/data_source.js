@@ -337,6 +337,7 @@ var DataSource = Class.inherit({
                 }
             });
 
+        this._operationManager = new OperationManager();
         this._init();
     },
 
@@ -351,8 +352,6 @@ var DataSource = Class.inherit({
         }
 
         this._isLastPage = !this._paginate;
-
-        this._operationManager = new OperationManager();
     },
 
     /**
