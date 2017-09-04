@@ -53,14 +53,14 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_layers_dataSource
         * @publicName dataSource
-        * @type object|DataSource|DataSource configuration|string
+        * @type object|DataSource|DataSourceOptions|string
         * @extends CommonVizDataSource
         */
         dataSource: undefined,
         /**
         * @name dxvectormapoptions_layers_data
         * @publicName data
-        * @type object|DataSource|DataSource configuration
+        * @type object|DataSource|DataSourceOptions
         * @deprecated dxvectormapoptions_layers_dataSource
         * @notUsedInTheme
         */

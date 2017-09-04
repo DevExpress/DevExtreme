@@ -34,7 +34,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
             /**
             * @name DataExpressionMixinOptions_dataSource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSource configuration
+            * @type string|array|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
