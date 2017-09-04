@@ -47,8 +47,12 @@ OperationManager.prototype.cancel = function cancelOperation(operationId) {
 
     return false;
 };
-
-var operationManager = new OperationManager();
+OperationManager.prototype.cancelAll = function rejectAllOperation() {
+    while(this._counter > -1) {
+        this.cancel(this._counter);
+        this._counter--;
+    }
+};
 
 function isPending(deferred) {
     return deferred.state() === "pending";
@@ -347,6 +351,8 @@ var DataSource = Class.inherit({
         }
 
         this._isLastPage = !this._paginate;
+
+        this._operationManager = new OperationManager();
     },
 
     /**
@@ -361,6 +367,8 @@ var DataSource = Class.inherit({
         if(this._delayedLoadTask) {
             this._delayedLoadTask.abort();
         }
+
+        this._operationManager.cancelAll();
 
         this._disposed = true;
     },
@@ -800,12 +808,12 @@ var DataSource = Class.inherit({
     },
 
     _createLoadOperation: function(deferred) {
-        var id = operationManager.add(deferred),
+        var id = this._operationManager.add(deferred),
             options = this._createStoreLoadOptions();
 
         deferred.always(function() {
-            operationManager.remove(id);
-        });
+            this._operationManager.remove(id);
+        }.bind(this));
 
         return {
             operationId: id,
@@ -834,7 +842,7 @@ var DataSource = Class.inherit({
      * @return boolean
      */
     cancel: function(operationId) {
-        return operationManager.cancel(operationId);
+        return this._operationManager.cancel(operationId);
     },
 
     _addSearchOptions: function(storeLoadOptions) {
