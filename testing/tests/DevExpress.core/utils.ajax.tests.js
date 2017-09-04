@@ -1,7 +1,9 @@
 "use strict";
 
+var $ = require("jquery");
 var ajax = require("core/utils/ajax");
 var browser = require("core/utils/browser");
+var compareVersion = require("core/utils/version").compare;
 require("integration/jquery/ajax");
 
 QUnit.module("sendRequest", {
@@ -333,50 +335,51 @@ QUnit.test("Send data with request (jsonp)", function(assert) {
 
 QUnit.test("Send data with request (cached resources)", function(assert) {
 
-    var testData = [
-        {
-            // sendRequest options
+    var jqVersion = compareVersion($.fn.jquery, [3], 1),
+        testData = [
+            {
+                // sendRequest options
 
-            // xhr object parameters
-            url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
-        },
-        {
-            // sendRequest options
-            method: "post",
-            // xhr object parameters
-            url: "/some-url", requestBody: "top=20&skip=5&filter=%25any+value%25"
-        },
-        {
-            // sendRequest options
-            optionUrl: "/some-url?filter=eq(20)",
-            // xhr object parameters
-            url: "/some-url?filter=eq(20)&top=20&skip=5&filter=%25any%20value%25", requestBody: null
-        },
-        {
-            // sendRequest options
-            jsonp: "callback1", jsonpCallback: "callbackName",
-            // xhr object parameters
-            url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
-        },
-        {
-            // sendRequest options
-            method: "put",
-            // xhr object parameters
-            url: "/some-url", requestBody: "top=20&skip=5&filter=%25any+value%25"
-        },
-        {
-            // sendRequest options
-            method: "post", contentType: "text/html",
-            // xhr object parameters
-            url: "/some-url", requestBody: "top=20&skip=5&filter=%25any%20value%25"
-        },
-        {
-            // sendRequest options
-            contentType: "application/x-www-form-urlencoded",
-            // xhr object parameters
-            url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
-        }
-    ];
+                // xhr object parameters
+                url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
+            },
+            {
+                // sendRequest options
+                method: "post",
+                // xhr object parameters
+                url: "/some-url", requestBody: "top=20&skip=5&filter=%25any+value%25"
+            },
+            {
+                // sendRequest options
+                optionUrl: "/some-url?filter=eq(20)",
+                // xhr object parameters
+                url: "/some-url?filter=eq(20)&top=20&skip=5&filter=%25any%20value%25", requestBody: null
+            },
+            {
+                // sendRequest options
+                jsonp: "callback1", jsonpCallback: "callbackName",
+                // xhr object parameters
+                url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
+            },
+            {
+                // sendRequest options
+                method: "put",
+                // xhr object parameters
+                url: "/some-url", requestBody: "top=20&skip=5&filter=%25any+value%25"
+            },
+            {
+                // sendRequest options
+                method: "post", contentType: "text/html",
+                // xhr object parameters
+                url: "/some-url", requestBody: "top=20&skip=5&filter=%25any%20value%25"
+            },
+            {
+                // sendRequest options
+                contentType: "application/x-www-form-urlencoded",
+                // xhr object parameters
+                url: "/some-url?top=20&skip=5&filter=%25any%20value%25", requestBody: null
+            }
+        ];
 
     for(var i in testData) {
         ajax.sendRequest({
@@ -388,9 +391,16 @@ QUnit.test("Send data with request (cached resources)", function(assert) {
             dataType: testData[i].dataType,
             contentType: testData[i].contentType
         });
+        //https://github.com/jquery/jquery/issues/2658
+        if(jqVersion < 0) {
+            var requestBody = testData[i].requestBody ? testData[i].requestBody.replace("%20", "+") : testData[i].requestBody;
 
-        assert.equal(this.requests[i].url, testData[i].url, "url for element " + i + " from test data");
-        assert.equal(this.requests[i].requestBody, testData[i].requestBody, "requestBody for element " + i + " from test data");
+            assert.equal(this.requests[i].url, testData[i].url.replace("%20", "+"), "url for element " + i + " from test data");
+            assert.equal(this.requests[i].requestBody, requestBody, "requestBody for element " + i + " from test data");
+        } else {
+            assert.equal(this.requests[i].url, testData[i].url, "url for element " + i + " from test data");
+            assert.equal(this.requests[i].requestBody, testData[i].requestBody, "requestBody for element " + i + " from test data");
+        }
     }
 
     assert.equal(this.requests.length, 7, "Number of requests");
@@ -588,6 +598,12 @@ QUnit.test("Handle error", function(assert) {
 });
 
 QUnit.test("Script request (cross domain)", function(assert) {
+    var jqVersion = compareVersion($.fn.jquery, [2], 1);
+
+    if(jqVersion < 0) {
+        assert.expect(0);
+        return;
+    }
 
     var wrongRemoteUrl = "http://somefakedomain1221.com/json-url",
         fail = assert.async(),
