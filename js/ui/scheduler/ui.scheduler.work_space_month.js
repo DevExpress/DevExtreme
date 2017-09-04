@@ -138,9 +138,14 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         var date = this._getDate(rowIndex, cellIndex);
 
         if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {
-            return this._formatWeekdayAndDay(date);
+            return this._formatMonthAndDay(date);
         }
         return dateLocalization.format(date, "dd");
+    },
+
+    _formatMonthAndDay: function(date) {
+        var monthName = dateLocalization.getMonthNames("abbreviated")[date.getMonth()];
+        return [monthName, dateLocalization.format(date, "day")].join(" ");
     },
 
     _getDate: function(week, day) {

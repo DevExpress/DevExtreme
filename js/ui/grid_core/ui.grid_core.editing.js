@@ -924,7 +924,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     };
                 }
 
-                when(params.cancel).done(function(cancel) {
+                when(deferredUtils.fromPromise(params.cancel)).done(function(cancel) {
                     if(cancel) {
                         deferred.resolve("cancel");
                     } else {
@@ -1093,6 +1093,8 @@ var EditingController = modules.ViewController.inherit((function() {
                             that._editPopup.hide();
                         }
 
+                        dataSource && dataSource.endLoading();
+
                         when(dataController.refresh()).always(function() {
                             that._fireSaveEditDataEvents(editData);
                             that._afterSaveEditData();
@@ -1100,13 +1102,16 @@ var EditingController = modules.ViewController.inherit((function() {
                             result.resolve();
                         });
                     } else {
+                        dataSource && dataSource.endLoading();
                         result.resolve();
                     }
-                }).fail(result.resolve);
+                }).fail(function() {
+                    dataSource && dataSource.endLoading();
+                    result.resolve();
+                });
 
                 return result.always(function() {
                     that._saving = false;
-                    dataSource && dataSource.endLoading();
                 }).promise();
             }
 

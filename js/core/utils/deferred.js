@@ -9,18 +9,19 @@ var Deferred = jQuery.Deferred;
 module.exports.Deferred = Deferred;
 
 module.exports.fromPromise = function(promise, context) {
-    var isDeferred = promise && typeUtils.isFunction(promise.done) && typeUtils.isFunction(promise.fail);
-    if(isDeferred) {
+    if(typeUtils.isDeferred(promise)) {
         return promise;
+    } else if(typeUtils.isPromise(promise)) {
+        var d = new Deferred();
+        promise.then(function() {
+            d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
+        }, function() {
+            d.rejectWith.apply(d, [context].concat([[].slice.call(arguments)]));
+        });
+        return d;
     }
 
-    var d = new Deferred();
-    promise.then(function() {
-        d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
-    }, function() {
-        d.rejectWith.apply(d, [context].concat([[].slice.call(arguments)]));
-    });
-    return d;
+    return new Deferred().resolveWith(context, [promise]);
 };
 
 module.exports.when = compareVersion(jQuery.fn.jquery, [3]) < 0

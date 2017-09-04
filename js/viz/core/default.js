@@ -1525,7 +1525,6 @@ registerTheme({
                 return info.item.data.argument + " " + info.valueText;
             },
             position: "columns",
-            textAlign: "center",
             font: {
                 color: WHITE
             },

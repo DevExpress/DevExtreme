@@ -1264,6 +1264,24 @@ QUnit.test("format of the column with dataType is 'datetime'", function(assert) 
     assert.strictEqual(column.format, "shortDateShortTime");
 });
 
+//T544189
+QUnit.test("minWidth should not be assigned to expand column from columnMinWidth option", function(assert) {
+    this.applyOptions({
+        columnMinWidth: 20,
+        columns: ['TestField1', 'TestField2', { dataField: 'TestField3', groupIndex: 0 }]
+    });
+
+    //act
+    var visibleColumns = this.columnsController.getVisibleColumns();
+
+    //assert
+    assert.strictEqual(visibleColumns.length, 3);
+    assert.strictEqual(visibleColumns[0].command, "expand");
+    assert.strictEqual(visibleColumns[0].minWidth, null);
+    assert.strictEqual(visibleColumns[1].minWidth, 20);
+    assert.strictEqual(visibleColumns[2].minWidth, 20);
+});
+
 QUnit.module("initialization from dataSource", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Initialize from array store", function(assert) {
@@ -5357,6 +5375,23 @@ QUnit.test("getSortDataSourceParameters. Column with calculateCellValue", functi
     assert.deepEqual(sortParameters[1], { selector: 'field1', desc: false });
 });
 
+QUnit.test("getSortDataSourceParameters. Column with sortingMethod", function(assert) {
+    var sortingMethodContext;
+    var sortingMethod = function(x, y) {
+        sortingMethodContext = this;
+        return x - y;
+    };
+    this.applyOptions({
+        columns: [{ dataField: 'field1', sortOrder: 'asc', sortIndex: 0, sortingMethod: sortingMethod }]
+    });
+    var sortParameters = this.columnsController.getSortDataSourceParameters();
+
+    assert.equal(sortParameters.length, 1);
+    assert.ok(sortParameters[0].compare);
+    assert.equal(sortParameters[0].compare(3, 1), 2);
+    assert.equal(sortingMethodContext.dataField, "field1");
+});
+
 QUnit.test("getSortDataSourceParameters. Column with calculateSortValue", function(assert) {
     var context;
     var calculateSortValue = function() { context = this; return 'test'; };
@@ -5491,6 +5526,20 @@ QUnit.test("getGroupDataSourceParameters. Several group columns when calculateGr
     assert.equal(context.dataField, "field2");
     assert.ok(!groupParameters[0].desc);
     assert.deepEqual(groupParameters[1], { selector: 'field1', desc: false, isExpanded: false });
+});
+
+QUnit.test("getGroupDataSourceParameters. Several group columns when sortingMethod is defined", function(assert) {
+    var context;
+    var calculateGroupValue = function(x, y) { context = this; return x - y; };
+    this.applyOptions({
+        columns: [{ dataField: 'field1', groupIndex: 1 }, { dataField: 'field2', groupIndex: 0, autoExpandGroup: true, sortingMethod: calculateGroupValue }]
+    });
+
+    var groupParameters = this.columnsController.getGroupDataSourceParameters();
+
+    assert.equal(groupParameters[0].compare(100, 1), 99);
+    assert.equal(context.dataField, "field2");
+    assert.ok(!groupParameters[1].compare);
 });
 
 //T420668

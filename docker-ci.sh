@@ -3,7 +3,6 @@
 # Run inside https://hub.docker.com/r/devexpress/devextreme-build/
 
 export DEVEXTREME_DOCKER_CI=true
-export NUGET_PACKAGES=$PWD/dotnet_packages
 
 function run_lint {
     npm i eslint eslint-plugin-spellcheck jshint

@@ -3843,6 +3843,67 @@ QUnit.test("Update cell when edit mode batch and cancel in onRowUpdating is defe
     assert.deepEqual(that.dataController.store().update.lastCall.args, [ that.array[0], { name: "Test1", room: 666 } ], "update args");
 });
 
+QUnit.test("Update cell when edit mode batch and cancel in onRowUpdating is Promise and resolved", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = that.rowsView,
+        testElement = $("#container");
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true,
+        texts: {
+            saveRowChanges: "Save"
+        }
+    };
+
+    sinon.spy(that.dataController.store(), "update");
+
+    var resolve,
+        cancelPromise = new Promise(function(onResolve) {
+            resolve = onResolve;
+        });
+
+    that.options.onRowUpdating = function(params) {
+
+        cancelPromise.then(function() {
+            params.newData.room = 666;
+        });
+
+        params.cancel = cancelPromise;
+    };
+
+    rowsView.render(testElement);
+    that.editingController.optionChanged({ name: "onRowUpdating" });
+
+    //act
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    //assert
+    assert.equal(testElement.find("input").length, 1, "count input");
+
+    //act
+    testElement.find("input").first().val("Test1");
+    testElement.find("input").first().trigger("change");
+
+    //$(document).trigger("dxclick"); // Save
+    //that.clock.tick();
+    that.saveEditData();
+
+    //assert
+    assert.ok(!that.dataController.store().update.called, "update is not called");
+    cancelPromise.then(function() {
+        assert.equal(that.dataController.store().update.callCount, 1, "update called one time");
+        assert.deepEqual(that.dataController.store().update.lastCall.args, [ that.array[0], { name: "Test1", room: 666 } ], "update args");
+    });
+
+    //act
+    resolve();
+
+    return cancelPromise;
+});
+
 QUnit.test("Update cell when edit mode batch and cancel in onRowUpdating is deferred and resolved with true", function(assert) {
     //arrange
     var that = this,
@@ -5411,7 +5472,7 @@ QUnit.test("loadingChanged should be called before editing oeprations", function
     deferreds[0].resolve();
 
     //assert
-    assert.deepEqual(loadingChangedArgs, [true, false], "loading changed args after updating end");
+    assert.deepEqual(loadingChangedArgs, [true, false, true, false], "loading changed args after updating end");
 });
 
 //T533546

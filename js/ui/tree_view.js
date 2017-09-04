@@ -1708,7 +1708,17 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     /**
     * @name dxTreeViewMethods_selectItem
     * @publicName selectItem(itemElement)
-    * @param1 itemElement:Node|itemData|key
+    * @param1 itemElement:Node
+    */
+    /**
+    * @name dxTreeViewMethods_selectItem
+    * @publicName selectItem(itemData)
+    * @param1 itemData:Object
+    */
+    /**
+    * @name dxTreeViewMethods_selectItem
+    * @publicName selectItem(key)
+    * @param1 key:any
     */
     selectItem: function(itemElement) {
         this._updateItemSelection(true, itemElement);
@@ -1717,7 +1727,17 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     /**
     * @name dxTreeViewMethods_unselectItem
     * @publicName unselectItem(itemElement)
-    * @param1 itemElement:Node|itemData|key
+    * @param1 itemElement:Node
+    */
+    /**
+    * @name dxTreeViewMethods_unselectItem
+    * @publicName unselectItem(itemData)
+    * @param1 itemData:Object
+    */
+    /**
+    * @name dxTreeViewMethods_unselectItem
+    * @publicName unselectItem(key)
+    * @param1 key:any
     */
     unselectItem: function(itemElement) {
         this._updateItemSelection(false, itemElement);
@@ -1726,7 +1746,17 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     /**
     * @name dxTreeViewMethods_expandItem
     * @publicName expandItem(itemElement)
-    * @param1 itemElement:Node|itemData|key
+    * @param1 itemElement:Node
+    */
+    /**
+    * @name dxTreeViewMethods_expandItem
+    * @publicName expandItem(itemData)
+    * @param1 itemData:Object
+    */
+    /**
+    * @name dxTreeViewMethods_expandItem
+    * @publicName expandItem(key)
+    * @param1 key:any
     */
     expandItem: function(itemElement) {
         this._toggleExpandedState(itemElement, true);
@@ -1735,7 +1765,17 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     /**
     * @name dxTreeViewMethods_collapseItem
     * @publicName collapseItem(itemElement)
-    * @param1 itemElement:Node|itemData|key
+    * @param1 itemElement:Node
+    */
+    /**
+    * @name dxTreeViewMethods_collapseItem
+    * @publicName collapseItem(itemData)
+    * @param1 itemData:Object
+    */
+    /**
+    * @name dxTreeViewMethods_collapseItem
+    * @publicName collapseItem(key)
+    * @param1 key:any
     */
     collapseItem: function(itemElement) {
         this._toggleExpandedState(itemElement, false);

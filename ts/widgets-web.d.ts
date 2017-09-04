@@ -735,17 +735,41 @@ declare module DevExpress.ui {
         /** @docid dxTreeViewMethods_updateDimensions */
         updateDimensions(): JQueryPromise<void>;
 
-        /** @docid dxTreeViewMethods_selectItem */
-        selectItem(itemElement: any): void;
+        /** @docid dxTreeViewMethods_selectItem#selectItem(itemElement) */
+        selectItem(itemElement: Node): void;
 
-        /** @docid dxTreeViewMethods_unselectItem */
-        unselectItem(itemElement: any): void;
+        /** @docid dxTreeViewMethods_selectItem#selectItem(itemData) */
+        selectItem(itemData: Object): void;
 
-        /** @docid dxTreeViewMethods_expandItem */
-        expandItem(itemElement: any): void;
+        /** @docid dxTreeViewMethods_selectItem#selectItem(key) */
+        selectItem(key: any): void;
 
-        /** @docid dxTreeViewMethods_collapseItem */
-        collapseItem(itemElement: any): void;
+        /** @docid dxTreeViewMethods_unselectItem#unselectItem(itemElement) */
+        unselectItem(itemElement: Node): void;
+
+        /** @docid dxTreeViewMethods_unselectItem#unselectItem(itemData) */
+        unselectItem(itemData: Object): void;
+
+        /** @docid dxTreeViewMethods_unselectItem#unselectItem(key) */
+        unselectItem(key: any): void;
+
+        /** @docid dxTreeViewMethods_expandItem#expandItem(itemElement) */
+        expandItem(itemElement: Node): void;
+
+        /** @docid dxTreeViewMethods_expandItem#expandItem(itemData) */
+        expandItem(itemData: Object): void;
+
+        /** @docid dxTreeViewMethods_expandItem#expandItem(key) */
+        expandItem(key: any): void;
+
+        /** @docid dxTreeViewMethods_collapseItem#collapseItem(itemElement) */
+        collapseItem(itemElement: Node): void;
+
+        /** @docid dxTreeViewMethods_collapseItem#collapseItem(itemData) */
+        collapseItem(itemData: Object): void;
+
+        /** @docid dxTreeViewMethods_collapseItem#collapseItem(key) */
+        collapseItem(key: any): void;
 
         /** @docid dxTreeViewMethods_getNodes */
         getNodes(): Array<Object>;
@@ -1103,6 +1127,9 @@ declare module DevExpress.ui {
 
         /** @docid GridBaseOptions_columns_calculateSortValue */
         calculateSortValue?: any;
+
+        /** @docid GridBaseOptions_columns_sortingMethod */
+        sortingMethod?: (value1: any, value2: any) => number;
 
         /** @docid GridBaseOptions_columns_customizeText */
         customizeText?: (cellInfo: { value: any; valueText: string; target: string; groupInterval: any }) => string;

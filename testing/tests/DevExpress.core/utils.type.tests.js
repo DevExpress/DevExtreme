@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
+    Deferred = require("core/utils/deferred").Deferred,
     renderer = require("core/renderer");
 
 QUnit.module('Type checking');
@@ -112,4 +113,16 @@ QUnit.test('isRenderer', function(assert) {
     assert.strictEqual(typeUtils.isRenderer(document.getElementsByTagName("body")[0]), false, "HTMLElement is not renderer");
     assert.strictEqual(typeUtils.isRenderer(document), false, "document is not renderer");
     assert.strictEqual(typeUtils.isRenderer({}), false, "Object is not renderer");
+});
+
+QUnit.test('isDeferred', function(assert) {
+    assert.strictEqual(typeUtils.isDeferred(new Deferred()), true, "Deferred");
+    assert.strictEqual(typeUtils.isDeferred({ done: function() {} }), false, "Deferred should have fail method");
+    assert.strictEqual(typeUtils.isDeferred({ fail: function() {} }), false, "Deferred should have done method");
+});
+
+QUnit.test('isPromise', function(assert) {
+    assert.strictEqual(typeUtils.isPromise(Promise.resolve()), true, "native Promise");
+    assert.strictEqual(typeUtils.isPromise({ then: function() {} }), true, "thenable is Promise");
+    assert.strictEqual(typeUtils.isPromise({ then: 1 }), false, "object with property 'then' isn't Promise");
 });

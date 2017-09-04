@@ -1145,7 +1145,7 @@ var Form = Widget.inherit({
                             that._isDataUpdating = false;
                         }
 
-                        if(args.name === "readOnly") {
+                        if(args.name === "readOnly" || args.name === "disabled") {
                             layoutManager.option(optionFullName, args.value);
                         }
                     });
@@ -1576,7 +1576,7 @@ var Form = Widget.inherit({
      * @name dxFormMethods_getEditor
      * @publicName getEditor(field)
      * @param1 field:string
-     * @return object
+     * @return any
      */
     getEditor: function(field) {
         return this._editorInstancesByField[field];

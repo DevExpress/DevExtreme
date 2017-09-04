@@ -89,3 +89,15 @@ QUnit.test("converted deferred should be rejected sync when source rejected", fu
         assert.equal(this, context);
     });
 });
+
+QUnit.test("converted primitive should be resolved sync", function(assert) {
+    assert.expect(2);
+
+    var promiseResult = {};
+    var context = {};
+
+    deferredUtils.fromPromise(promiseResult, context).done(function(result) {
+        assert.equal(result, promiseResult);
+        assert.equal(this, context);
+    });
+});

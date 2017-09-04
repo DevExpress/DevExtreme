@@ -2,6 +2,8 @@
 
 /* global $ */
 
+var RealXMLHttpRequest = window.XMLHttpRequest;
+
 window.XMLHttpRequestMock = function() {
     var xhrList = [];
     var LOAD_TIMEOUT = this.LOAD_TIMEOUT = 500;
@@ -41,6 +43,9 @@ window.XMLHttpRequestMock = function() {
         this.uploaded = false;
         this.uploadAborted = false;
         this.uploadFailed = false;
+        if("withCredentials" in (new RealXMLHttpRequest())) {
+            this.withCredentials = false;
+        }
 
         this._timeout = null;
 

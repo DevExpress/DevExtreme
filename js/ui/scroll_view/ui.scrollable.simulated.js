@@ -221,17 +221,11 @@ var Scroller = Class.inherit({
     _scrollComplete: function() {
         if(this._inBounds()) {
             this._hideScrollbar();
-            this._correctLocation();
             if(this._completeDeferred) {
                 this._completeDeferred.resolve();
             }
         }
         this._scrollToBounds();
-    },
-
-    _correctLocation: function() {
-        this._location = math.round(this._location);
-        this._move();
     },
 
     _scrollToBounds: function() {
@@ -908,6 +902,10 @@ var SimulatedStrategy = Class.inherit({
             vertical: verticalScroller && (verticalScroller._minOffset < 0 || bounceEnabled),
             horizontal: horizontalScroller && (horizontalScroller._minOffset < 0 || bounceEnabled)
         };
+    },
+
+    updateBounds: function() {
+        this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
 
     scrollBy: function(distance) {

@@ -1567,6 +1567,7 @@ QUnit.test("displayFormat should affect on timeView", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
             value: new Date('03/10/2015'),
             displayFormat: 'shortdateshorttime',
+            pickerType: 'calendar',
             opened: true,
             type: 'datetime'
         }),

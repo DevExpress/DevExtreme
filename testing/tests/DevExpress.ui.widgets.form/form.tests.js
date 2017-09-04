@@ -304,7 +304,7 @@ QUnit.test("Render form with colspan", function(assert) {
     assert.ok(fieldWidths.ID > fieldWidths.FirstName, "field with colspan 2 is wider than field without colspan");
 });
 
-QUnit.test("Read only change in inner components on option change", function(assert) {
+QUnit.test("'readOnly' is changed in inner components on optionChanged", function(assert) {
     //arrange, act
     var $formContainer = $("#form").dxForm({
         items: [
@@ -315,12 +315,32 @@ QUnit.test("Read only change in inner components on option change", function(ass
         ]
     });
 
-    assert.ok(!$formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor isn't read only");
+    assert.notOk($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor isn't read only");
 
     $formContainer.dxForm("instance").option("readOnly", true);
 
     //assert
     assert.ok($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
+});
+
+QUnit.test("'disable' is changed in inner components on optionChanged", function(assert) {
+    //arrange, act
+    var $formContainer = $("#form").dxForm({
+        items: [
+            {
+                dataField: "name",
+                editorType: "dxTextBox"
+            }
+        ],
+        disabled: true
+    });
+
+    assert.ok($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-disabled"), "editor is disabled");
+
+    $formContainer.dxForm("instance").option("disabled", false);
+
+    //assert
+    assert.notOk($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-disabled"), "editor isn't disabled");
 });
 
 QUnit.test("Customize item event", function(assert) {
