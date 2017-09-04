@@ -238,6 +238,7 @@ var Scrollable = DOMComponent.inherit({
     _visibilityChanged: function(visible) {
         if(visible) {
             this.update();
+            this._toggleRTLDirection(this.option("rtlEnabled"));
             this._savedScrollOffset && this.scrollTo(this._savedScrollOffset);
             delete this._savedScrollOffset;
         } else {
