@@ -826,7 +826,7 @@ QUnit.test("changing class via 'elementAttr' option should preserve component sp
     assert.ok($element.hasClass(specialClass), "the new class is also present");
 });
 
-QUnit.test("dispose method", function(assert) {
+QUnit.test("Dispose: component can be recreated after dispose", function(assert) {
     var element = $("#component").TestComponent(),
         instance = element.data("TestComponent");
 
@@ -847,4 +847,47 @@ QUnit.test("dispose method", function(assert) {
 
     assert.ok(element.data("TestComponent") instanceof this.TestComponent);
     assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
+});
+
+QUnit.test("Dispose: aria attributes deleted", function(assert) {
+    var element = $("#component").TestComponent(),
+        instance = element.data("TestComponent"),
+        attributes = [
+            //setAria
+            "role",
+            "aria-multiselectable",
+            "aria-hidden",
+            "aria-autocomplete",
+            "aria-label",
+            "aria-selected",
+            "aria-activedescendant",
+            "aria-checked",
+            "aria-owns",
+            "aria-haspopup",
+            "aria-expanded",
+            "aria-invalid",
+            "aria-readonly",
+            "aria-describedby",
+            "aria-required",
+            "aria-sort",
+            "aria-valuenow",
+            "aria-valuemin",
+            "aria-valuemax",
+            "aria-pressed",
+            "aria-controls",
+            "aria-multiline",
+            "aria-level",
+            "aria-disabled"
+        ];
+
+    attributes.forEach(function(attribute) {
+        element.attr(attribute, "some value");
+    });
+
+    instance.dispose();
+
+    attributes.forEach(function(attribute) {
+        assert.equal(element.attr(attribute), undefined);
+    });
+
 });

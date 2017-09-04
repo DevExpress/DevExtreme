@@ -339,6 +339,40 @@ var DOMComponent = Component.inherit({
         }
     },
 
+    _removeAttributes: function(element) {
+        var attributes = [
+            //setAria
+            "role",
+            "aria-multiselectable",
+            "aria-hidden",
+            "aria-autocomplete",
+            "aria-label",
+            "aria-selected",
+            "aria-activedescendant",
+            "aria-checked",
+            "aria-owns",
+            "aria-haspopup",
+            "aria-expanded",
+            "aria-invalid",
+            "aria-readonly",
+            "aria-describedby",
+            "aria-required",
+            "aria-sort",
+            "aria-valuenow",
+            "aria-valuemin",
+            "aria-valuemax",
+            "aria-pressed",
+            "aria-controls",
+            "aria-multiline",
+            "aria-level",
+            "aria-disabled"
+        ];
+
+        attributes.forEach(function(attribute) {
+            element.removeAttribute(attribute);
+        });
+    },
+
     endUpdate: function() {
         var requireRender = !this._initializing && !this._initialized;
 
@@ -368,7 +402,12 @@ var DOMComponent = Component.inherit({
     * @publicName dispose()
     */
     dispose: function() {
-        dataUtils.cleanDataRecursive(this.element().get(0), true);
+        var element = this.element().get(0);
+        dataUtils.cleanDataRecursive(element, true);
+
+        element.textContent = "";
+        this._removeAttributes(element);
+
     }
 
 });
