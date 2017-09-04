@@ -339,6 +339,14 @@ var DOMComponent = Component.inherit({
         }
     },
 
+    _removeClasses: function() {
+        var element = this._$element.get(0);
+        var classes = element.className.split(" ").filter(function(cssClass) {
+            return cssClass.lastIndexOf("dx-", 0) !== 0;
+        });
+        element.className = classes.join(" ");
+    },
+
     endUpdate: function() {
         var requireRender = !this._initializing && !this._initialized;
 
@@ -368,6 +376,7 @@ var DOMComponent = Component.inherit({
     * @publicName dispose()
     */
     dispose: function() {
+        this._removeClasses();
         dataUtils.cleanDataRecursive(this.element().get(0), true);
     }
 
