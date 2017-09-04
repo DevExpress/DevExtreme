@@ -747,7 +747,7 @@ QUnit.testInActiveWindow("caret should be in start position on first editor focu
     assert.equal(keyboard.caret().end, 0, "caret is at the start");
 });
 
-QUnit.testInActiveWindow("caret SHOULD be at the last symbol when input is incomplete", function(assert) {
+QUnit.testInActiveWindow("caret should be at the last symbol when input is incomplete", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: "00",
         focusStateEnabled: true
