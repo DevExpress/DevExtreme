@@ -503,7 +503,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormTabbedItemOptions_tabPanelOptions
              * @publicName tabPanelOptions
-             * @type TabPanel options
+             * @type dxTabPanelOptions
              * @default undefined
              */
             /**
