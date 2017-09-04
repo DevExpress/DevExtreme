@@ -715,7 +715,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationmethods_loadTemplates
     * @publicName loadTemplates(source)
-    * @param1 source:string|jQuery object
+    * @param1 source:string|jQuery
     * @return Promise
     */
     loadTemplates: function(source) {
