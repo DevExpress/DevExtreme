@@ -243,6 +243,13 @@ var DropDownEditor = TextBox.inherit({
             * @hidden
             * @extend_doc
             */
+
+            /**
+             * @name dxDropDownEditorOptions_showMaskMode
+             * @publicName showMaskMode
+             * @hidden
+             * @extend_doc
+             */
         });
     },
 

@@ -104,6 +104,13 @@ var TextArea = TextBox.inherit({
             * @hidden
             * @extend_doc
             */
+
+            /**
+             * @name dxTextAreaOptions_showMaskMode
+             * @publicName showMaskMode
+             * @hidden
+             * @extend_doc
+             */
         });
     },
 
