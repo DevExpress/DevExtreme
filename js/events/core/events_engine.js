@@ -47,41 +47,43 @@ var getElementEventData = function(element, eventName) {
                     return;
                 }
                 // TODO: refactor
-                var result; // TODO: get rid of checking if result equals false
+
                 var callHandler = function(e) {
                     var handlerArgs = [e];
+                    var result; // TODO: get rid of checking if result equals false
+
                     if(extraParameters !== undefined) {
                         handlerArgs.push(extraParameters);
                     }
 
                     special[eventName] && special[eventName].handle && special[eventName].handle.call(element, e, data);
 
-                    return handler.apply(handlerArgs[0].currentTarget, handlerArgs);
+                    result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
+
+                    if(result === false) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                    }
                 };
 
                 if(e instanceof Event) {
                     e = eventsEngine.Event(e);
                 }
+
                 if(selector) {
                     if(!isWindow(e.target) && e.target.nodeName !== "#document" && matches(e.target, selector)) {
-                        result = callHandler(extend(e, { currentTarget: e.target, data: data }));
-                        if(result === false) {
-                            e.preventDefault();
-                            e.stopPropagation();
-                        }
+                        callHandler(extend(e, { currentTarget: e.target, data: data }));
                         return;
                     }
+
                     var target = e.target;
                     var newEvent;
+
                     while(target.parentNode && target !== element) {
                         target = target.parentNode;
                         if(target.nodeName !== "#document" && matches(target, selector)) {
                             newEvent = eventsEngine.Event(e, { currentTarget: target, data: data }); // TODO: Should we create new event here?
-                            result = callHandler(newEvent);
-                            if(result === false) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }
+                            callHandler(newEvent);
                             return;
                         }
                     }
@@ -90,11 +92,7 @@ var getElementEventData = function(element, eventName) {
                         e = eventsEngine.Event(e);
                     }
                     e.data = data;
-                    result = callHandler(e);
-                    if(result === false) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
+                    callHandler(e);
                 }
             };
 
