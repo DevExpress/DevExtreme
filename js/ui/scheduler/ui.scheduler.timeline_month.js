@@ -15,6 +15,12 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
         this._updateScrollable();
     },
 
+    _updateScrollable: function() {
+        this._dateTableScrollable.update();
+        this._headerScrollable.update();
+        this._sidebarScrollable.update();
+    },
+
     _getElementClass: function() {
         return TIMELINE_CLASS;
     },
