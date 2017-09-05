@@ -9,7 +9,8 @@ var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     publicComponentUtils = require("core/utils/public_component"),
     nameSpace = {},
-    coreConfig = require("core/config");
+    coreConfig = require("core/config"),
+    eventsEngine = require("events/core/events_engine");
 
 QUnit.testStart(function() {
     var markup = '<div id="component"></div>' + '<div id="anotherComponent"></div>';
@@ -939,5 +940,29 @@ QUnit.test("Dispose: attributes deleted", function(assert) {
     assert.equal(element.attr("data-dx-content-placeholder-name"), undefined);
     assert.equal(element.attr("style"), undefined);
     assert.equal(element.attr("tabindex"), undefined);
+
+});
+
+QUnit.test("Dispose: events are cleaned", function(assert) {
+    var SomeComponent = DOMComponent.inherit({
+        _render: function() {
+            var p = document.createElement("p");
+            p.textContent = "Some text";
+            this.element()[0].appendChild(p);
+            this.callBase();
+        }
+    });
+
+    var element = $("#component"),
+        instance = new SomeComponent(element),
+        off = sinon.spy(eventsEngine, "off");
+
+    instance.dispose();
+
+    assert.equal(off.callCount, 2);
+    assert.deepEqual(off.getCall(0).args[0][0].localName, "p");
+    assert.deepEqual(off.getCall(1).args[0][0].localName, "div");
+
+    off.restore();
 
 });
