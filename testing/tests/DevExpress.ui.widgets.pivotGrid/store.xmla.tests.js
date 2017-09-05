@@ -15,6 +15,7 @@ var $ = require("jquery"),
     errors = require("data/errors").errors,
     ajax = require("core/utils/ajax"),
     languageId = require("localization/language_codes").getLanguageId(),
+    browser = require("core/utils/browser"),
     testEnvironment = {
         beforeEach: function() {
             this.store = new Store(this.dataSource);
@@ -119,7 +120,10 @@ var $ = require("jquery"),
         }
     };
 
-$.support["cors"] = true;
+if(browser.msie && parseInt(browser.version) < 10) {
+    QUnit.skip("[cors is not supported in IE9 XMLHttpRequest]");
+    return;
+}
 
 function findItems(data, field, value) {
     var result = [];

@@ -400,6 +400,9 @@ declare module DevExpress.ui {
         /** @docid dxTextEditorOptions_useMaskedValue */
         useMaskedValue?: boolean;
 
+        /** @docid dxTextEditorOptions_showMaskMode */
+        showMaskMode?: string;
+
         /** @docid dxTextEditorOptions_name */
         name?: string;
     }
@@ -437,6 +440,7 @@ declare module DevExpress.ui {
         /** @docid_ignore dxTextAreaOptions_maskChar */
         /** @docid_ignore dxTextAreaOptions_maskRules */
         /** @docid_ignore dxTextAreaOptions_maskInvalidMessage */
+        /** @docid_ignore dxTextAreaOptions_showMaskMode */
         /** @docid_ignore dxTextAreaOptions_useMaskedValue */
 
         /** @docid dxTextAreaOptions_spellcheck */
@@ -1021,6 +1025,7 @@ declare module DevExpress.ui {
         /** @docid_ignore dxNumberBoxOptions_maskRules */
         /** @docid_ignore dxNumberBoxOptions_maskInvalidMessage */
         /** @docid_ignore dxNumberBoxOptions_useMaskedValue */
+        /** @docid_ignore dxNumberBoxOptions_showMaskMode */
         /** @docid_ignore dxNumberBoxOptions_spellcheck */
 
         /** @docid dxNumberBoxOptions_max */
@@ -1745,6 +1750,7 @@ declare module DevExpress.ui {
         /** @docid_ignore dxDropDownEditorOptions_maskRules */
         /** @docid_ignore dxDropDownEditorOptions_maskInvalidMessage */
         /** @docid_ignore dxDropDownEditorOptions_useMaskedValue */
+        /** @docid_ignore dxDropDownEditorOptions_showMaskMode */
         /** @docid_ignore dxDropDownEditorOptions_mode */
 
         /** @docid dxDropDownEditorOptions_value */
@@ -2677,7 +2683,7 @@ declare module DevExpress.ui {
         itemOption(field: string): any;
 
         /** @docid dxFormMethods_getEditor */
-        getEditor(field: string): Object;
+        getEditor(field: string): any;
 
         /** @docid dxFormMethods_updateDimensions */
         updateDimensions(): JQueryPromise<void>;

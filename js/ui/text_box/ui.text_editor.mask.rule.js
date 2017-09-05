@@ -43,6 +43,11 @@ var BaseMaskRule = Class.inherit({
     reset: noop,
     clear: noop,
 
+    first: function(index) {
+        index = index || 0;
+        return this.next().first(index + 1);
+    },
+
     isAccepted: function() {
         return false;
     },
@@ -72,6 +77,10 @@ var EmptyMaskRule = BaseMaskRule.inherit({
 
     value: function() {
         return "";
+    },
+
+    first: function() {
+        return 0;
     },
 
     rawValue: function() {
@@ -149,6 +158,12 @@ var MaskRule = BaseMaskRule.inherit({
             return !!this._isAccepted;
         }
         this._isAccepted = !!value;
+    },
+
+    first: function(index) {
+        return this._value === EMPTY_CHAR
+            ? index || 0
+            : this.callBase(index);
     },
 
     _isAllowed: function(char, args) {
@@ -242,6 +257,11 @@ var StubMaskRule = MaskRule.inherit({
 
     _isValid: function(char) {
         return char === this.maskChar;
+    },
+
+    first: function(index) {
+        index = index || 0;
+        return this.next().first(index + 1);
     },
 
     _adjustedForward: function(caret, index, char) {

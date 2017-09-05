@@ -12,7 +12,8 @@ var $ = require("jquery"),
     RemoteStore = require("ui/pivot_grid/remote_store"),
     pivotGridUtils = require("ui/pivot_grid/ui.pivot_grid.utils"),
     setFieldProperty = pivotGridUtils.setFieldProperty,
-    executeAsyncMock = require("../../helpers/executeAsyncMock.js");
+    executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
+    browser = require("core/utils/browser");
 
 require("../../../testing/content/orders.js");
 require("bundles/dx.web");
@@ -3886,11 +3887,13 @@ QUnit.test("header formatting when expanding", function(assert) {
     });
 });
 
-$.support["cors"] = true;
-
 if(window.INTRANET) {
 
     QUnit.test("XMLA store integration", function(assert) {
+        if(browser.msie && parseInt(browser.version) < 10) {
+            assert.expect(0);
+            return;
+        }
         var done = assert.async(),
             dataSource = createDataSource({
                 descriptions: {
@@ -3933,6 +3936,10 @@ if(window.INTRANET) {
     });
 
     QUnit.test("XMLA store. Sorting data", function(assert) {
+        if(browser.msie && parseInt(browser.version) < 10) {
+            assert.expect(0);
+            return;
+        }
         var done = assert.async(),
             dataSource = createDataSource({
                 descriptions: {

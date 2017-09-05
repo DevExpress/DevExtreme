@@ -698,11 +698,14 @@ QUnit.test("Resource data should be loaded correctly is data source is config ob
 });
 
 QUnit.test("Resource data should be loaded correctly is data source is string", function(assert) {
-    var ajaxStub = sinon.stub($, "ajax", function() {
-        return $.Deferred().resolve({
-            id: 1
-        }).promise();
-    });
+
+    var json = { id: 1 },
+        xhr = sinon.useFakeXMLHttpRequest(),
+        requests = [];
+
+    xhr.onCreate = function(x) {
+        requests.push(x);
+    };
 
     this.createInstance([
         {
@@ -717,9 +720,11 @@ QUnit.test("Resource data should be loaded correctly is data source is string", 
             id: 1
         }, "Resource data is right");
 
-        ajaxStub.restore();
+        xhr.restore();
         done();
     });
+
+    requests[0].respond(200, { "Content-Type": "application/json" }, JSON.stringify(json));
 
 });
 

@@ -5653,7 +5653,7 @@ QUnit.test('Render rows at end when infinite scrolling', function(assert) {
 
     assert.equal(options.viewportSize, Math.round(90 / lastRowHeight));
     assert.ok(rowHeight > 0);
-    assert.ok(rowHeight > lastRowHeight, 'row height updated after append'); //T129182
+    assert.ok(rowHeight >= lastRowHeight, 'row height after append'); //T129182
 
     assert.equal($bottomLoadPanel.length, 1, 'bottom load panel exists');
     assert.equal(content.length, 1);
@@ -5746,8 +5746,7 @@ QUnit.test('rowHeight/viewportSize calculation during Render rows with viewport'
     var content = testElement.find('.dx-scrollable-content').children();
 
     assert.equal(options.viewportSize, 2);
-
-    assert.ok(content.children().height() - rowHeight * 3 <= 1);
+    assert.ok((content.find("tbody")[0].offsetHeight - rowHeight * 3) <= 1);
 });
 
 QUnit.test('Update rowsView on changed', function(assert) {

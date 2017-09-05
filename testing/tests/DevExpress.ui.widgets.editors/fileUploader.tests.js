@@ -932,7 +932,7 @@ QUnit.test("progressBar should reflect file upload progress", function(assert) {
 });
 
 QUnit.test("request should use url from the 'uploadUrl' option", function(assert) {
-    var uploadUrl = "http://blablabla.com",
+    var uploadUrl = location.href,
         $element = $("#fileuploader").dxFileUploader({
             uploadUrl: uploadUrl,
             uploadMode: "instantly"

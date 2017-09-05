@@ -146,6 +146,13 @@ var NumberBox = TextEditor.inherit({
             */
 
             /**
+            * @name dxNumberBoxOptions_showMaskMode
+            * @publicName showMaskMode
+            * @hidden
+            * @extend_doc
+            */
+
+            /**
             * @name dxNumberBoxOptions_spellcheck
             * @publicName spellcheck
             * @hidden
