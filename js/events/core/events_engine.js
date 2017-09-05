@@ -20,7 +20,7 @@ var WeakMap = require("../../core/polyfills/weak_map");
 var elementDataMap = new WeakMap();
 
 var guid = 0;
-var skipEvent;
+var skipEvents = [];
 var getElementEventData = function(element, eventName) {
     var elementData = elementDataMap.get(element);
 
@@ -43,7 +43,7 @@ var getElementEventData = function(element, eventName) {
     return {
         addHandler: function(handler, selector, data) {
             var wrappedHandler = function(e, extraParameters) {
-                if(e.type === skipEvent) {
+                if(skipEvents.indexOf(e.type) > -1) {
                     return;
                 }
                 // TODO: refactor
@@ -276,10 +276,10 @@ setEngine({
         var type = src.type || src.originalEvent && src.originalEvent.type;
 
         // TODO: Change grid editing tests and get rid of this
-        if(element.nodeType && (src.type === "focus" || src.type === "focusin") && isFunction(element.focus) && element === document.activeElement) {
-            skipEvent = "blur";
+        if(!noBubble && element.nodeType && (src.type === "focus" || src.type === "focusin") && isFunction(element.focus) && element === document.activeElement) {
+            skipEvents = [ "blur", "focusout" ];
             element.blur && element.blur();
-            skipEvent = undefined;
+            skipEvents = [];
         }
 
         var elementDataByEvent = getElementEventData(element, type);
@@ -324,20 +324,20 @@ setEngine({
 
         // TODO: Consider other native events
         // TODO: native click for checkboxes and links
-        if(element.nodeType) {
+        if(element.nodeType && !noBubble) {
             special[type] && special[type]._default && special[type]._default.call(element, event, extraParameters);
             if((src.type === "focus" || src.type === "focusin") && isFunction(element.focus)) {
-                skipEvent = src.type;
+                skipEvents = [src.type];
                 element.focus();
-                skipEvent = undefined;
+                skipEvents = [];
             } else if((src.type === "blur" || src.type === "focusout") && isFunction(element.blur)) {
-                skipEvent = src.type;
+                skipEvents = [src.type];
                 element.blur && element.blur();
-                skipEvent = undefined;
+                skipEvents = [];
             } else if(isFunction(element[src.type])) {
-                skipEvent = src.type;
+                skipEvents = [src.type];
                 element[src.type]();
-                skipEvent = undefined;
+                skipEvents = [];
             }
         }
     },
