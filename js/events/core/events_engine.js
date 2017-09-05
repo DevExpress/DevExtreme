@@ -53,7 +53,6 @@ var getElementEventData = function(element, eventName) {
 
                 var callHandler = function(e) {
                     var handlerArgs = [e];
-                    var result; // TODO: get rid of checking if result equals false
 
                     if(extraParameters !== undefined) {
                         handlerArgs.push(extraParameters);
@@ -61,8 +60,9 @@ var getElementEventData = function(element, eventName) {
 
                     special[eventName] && special[eventName].handle && special[eventName].handle.call(element, e, data);
 
-                    result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
+                    var result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
 
+                    // TODO: get rid of checking if result equals false
                     if(result === false) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -72,29 +72,20 @@ var getElementEventData = function(element, eventName) {
                 if(e instanceof Event) {
                     e = eventsEngine.Event(e);
                 }
+                e.data = data;
 
                 if(selector) {
-                    if(matchesSafe(e.target, selector)) {
-                        callHandler(extend(e, { currentTarget: e.target, data: data }));
-                        return;
-                    }
+                    var currentTarget = e.target;
 
-                    var target = e.target;
-                    var newEvent;
-
-                    while(target.parentNode && target !== element) {
-                        target = target.parentNode;
-                        if(matchesSafe(target, selector)) {
-                            newEvent = eventsEngine.Event(e, { currentTarget: target, data: data }); // TODO: Should we create new event here?
-                            callHandler(newEvent);
+                    while(currentTarget && currentTarget !== element) {
+                        if(matchesSafe(currentTarget, selector)) {
+                            e.currentTarget = currentTarget;
+                            callHandler(e);
                             return;
                         }
+                        currentTarget = currentTarget.parentNode;
                     }
                 } else {
-                    if(!e.isDXEvent) {
-                        e = eventsEngine.Event(e);
-                    }
-                    e.data = data;
                     callHandler(e);
                 }
             };
