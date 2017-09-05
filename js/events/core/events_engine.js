@@ -279,14 +279,7 @@ setEngine({
 
         special[type] && special[type].trigger && special[type].trigger.call(element, event, extraParameters);
 
-        //eventsEngine.triggerHandler(element, event, extraParameters);
-        var elementDataByEvent = getElementEventData(element, event.type);
-
-        elementDataByEvent.iterateHandlers(function(wrappedHandler) {
-            wrappedHandler(event, extraParameters);
-            return !event.isImmediatePropagationStopped();
-        });
-        //
+        eventsEngine.triggerHandler(element, event, extraParameters);
 
         var noBubble = special[type] && special[type].noBubble || event.isPropagationStopped();
 
