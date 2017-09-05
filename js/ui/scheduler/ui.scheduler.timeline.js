@@ -131,6 +131,11 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return this.option("crossScrollingEnabled") ? config : extend(config, timelineConfig);
     },
 
+    _updateScrollable: function() {
+        this._dateTableScrollable.update();
+        this._headerScrollable.update();
+        this._sidebarScrollable.update();
+    },
     _renderTimePanel: noop,
     _renderAllDayPanel: noop,
     _getTableAllDay: function() {
