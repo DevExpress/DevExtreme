@@ -89,7 +89,7 @@ var getElementEventData = function(element, eventName) {
                 }
             };
 
-            elementData[eventName].push({
+            var handleObject = {
                 handler: handler,
                 wrappedHandler: wrappedHandler,
                 selector: selector,
@@ -98,7 +98,9 @@ var getElementEventData = function(element, eventName) {
                 namespace: namespaces.join("."),
                 namespaces: namespaces,
                 guid: ++guid
-            });
+            };
+
+            elementData[eventName].push(handleObject);
 
             // First handler for this event name
             if(elementData[eventName].length === 1) {
@@ -107,7 +109,7 @@ var getElementEventData = function(element, eventName) {
             // TODO: Add single event listener for all namespaces
             // TODO: Add event listeners only if setup returned true (Or not?)
             element.addEventListener(eventName, wrappedHandler);
-            special[eventName] && special[eventName].add && special[eventName].add.call(element, elementData);
+            special[eventName] && special[eventName].add && special[eventName].add.call(element, handleObject);
         },
         removeHandler: function(handler, selector) {
             var removeByEventName = function(eventName) {
