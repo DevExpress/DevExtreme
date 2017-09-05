@@ -869,7 +869,7 @@ QUnit.test("Dispose: dx classes are removed", function(assert) {
     assert.ok(element.hasClass("some-class-3"));
 });
 
-QUnit.test("Dispose: aria attributes deleted", function(assert) {
+QUnit.test("Dispose: attributes deleted", function(assert) {
     var element = $("#component").TestComponent(),
         instance = element.data("TestComponent"),
         attributes = [
@@ -901,13 +901,20 @@ QUnit.test("Dispose: aria attributes deleted", function(assert) {
         ];
 
     attributes.forEach(function(attribute) {
-        element.attr(attribute, "some value");
+        element.attr(attribute, "value");
     });
+
+    element.attr("data-dx-content-placeholder-name", "value");
+    element.attr("style", "width: 10px");
+    element.attr("tabindex", 0);
 
     instance.dispose();
 
     attributes.forEach(function(attribute) {
         assert.equal(element.attr(attribute), undefined);
     });
+    assert.equal(element.attr("data-dx-content-placeholder-name"), undefined);
+    assert.equal(element.attr("style"), undefined);
+    assert.equal(element.attr("tabindex"), undefined);
 
 });

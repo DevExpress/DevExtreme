@@ -340,35 +340,21 @@ var DOMComponent = Component.inherit({
     },
 
     _removeAttributes: function(element) {
-        var attributes = [
-            //setAria
-            "role",
-            "aria-multiselectable",
-            "aria-hidden",
-            "aria-autocomplete",
-            "aria-label",
-            "aria-selected",
-            "aria-activedescendant",
-            "aria-checked",
-            "aria-owns",
-            "aria-haspopup",
-            "aria-expanded",
-            "aria-invalid",
-            "aria-readonly",
-            "aria-describedby",
-            "aria-required",
-            "aria-sort",
-            "aria-valuenow",
-            "aria-valuemin",
-            "aria-valuemax",
-            "aria-pressed",
-            "aria-controls",
-            "aria-multiline",
-            "aria-level",
-            "aria-disabled"
-        ];
+        var removeAttributes = [];
 
-        attributes.forEach(function(attribute) {
+        for(var i = 0; i < element.attributes.length; i++) {
+            var attributeName = element.attributes[i].name;
+
+            if(attributeName.lastIndexOf("aria-") === 0 ||
+                attributeName.indexOf("dx-") !== -1 ||
+                attributeName === "role" ||
+                attributeName === "style" ||
+                attributeName === "tabindex") {
+                removeAttributes.push(attributeName);
+            }
+        }
+
+        removeAttributes.forEach(function(attribute) {
             element.removeAttribute(attribute);
         });
     },
