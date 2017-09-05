@@ -129,7 +129,9 @@ var ODataContext = Class.inherit({
                 }
                 d.resolve(r);
             })
-            .fail([this._errorHandler, errorsModule._errorHandler, d.reject]);
+            .fail(this._errorHandler)
+            .fail(errorsModule._errorHandler)
+            .fail(d.reject);
 
         return d.promise();
     },
