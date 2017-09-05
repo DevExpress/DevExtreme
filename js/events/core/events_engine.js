@@ -147,25 +147,19 @@ var getElementEventData = function(element, eventName) {
         },
         iterateHandlers: function(callback) {
             var forceStop = false;
-            elementData[eventName].forEach(function(eventData) {
+            var handleCallback = function(eventData) {
                 if(forceStop) {
                     return;
                 }
+
                 if(!namespaces.length || eventData.namespaces.indexOf(namespaces[0]) > -1) { // TODO: improve
-                    var wrappedHandler = eventData.wrappedHandler;
-                    forceStop = callback(wrappedHandler, eventData.handler) === false;
+                    forceStop = callback(eventData.wrappedHandler, eventData.handler) === false;
                 }
-            });
+            };
+
+            elementData[eventName].forEach(handleCallback);
             if(namespaces.length && elementData[""]) {
-                elementData[""].forEach(function(eventData) {
-                    if(forceStop) {
-                        return;
-                    }
-                    if(eventData.namespaces.indexOf(namespaces[0]) > -1) { // TODO: improve
-                        var wrappedHandler = eventData.wrappedHandler;
-                        forceStop = callback(wrappedHandler, eventData.handler) === false;
-                    }
-                });
+                elementData[""].forEach(handleCallback);
             }
         }
     };
