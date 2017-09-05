@@ -2,6 +2,8 @@
 
 # Run inside https://hub.docker.com/r/devexpress/devextreme-build/
 
+trap "echo 'Interrupted!' && exit 1" TERM INT
+
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
 
