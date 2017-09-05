@@ -68,7 +68,7 @@ var Deferred = function() {
         return args ? extend(args, that._promise) : that._promise;
     };
 
-    this._promise.promise(this, this._promise.promise());
+    this._promise.promise(this);
 };
 
 deferredConfig.forEach(function(config) {
