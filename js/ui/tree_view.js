@@ -1820,7 +1820,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
          /**
          * @name dxTreeViewNode_parent
          * @publicName parent
-         * @type dxtreeviewnode
+         * @type dxTreeViewNode
          */
 
          /**

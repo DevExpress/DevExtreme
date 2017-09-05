@@ -1873,7 +1873,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_editing_form
                  * @publicName form
-                 * @type Form options
+                 * @type dxFormOptions
                  */
                 form: {
                     colCount: 2

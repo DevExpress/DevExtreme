@@ -551,7 +551,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_formItem
              * @publicName formItem
-             * @type Form Simple Item
+             * @type dxFormSimpleItem
              */
             regenerateColumnsByVisibleItems: false,
             /**
