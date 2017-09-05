@@ -49,7 +49,6 @@ var getElementEventData = function(element, eventName) {
                 if(skipEvents.indexOf(e.type) > -1) {
                     return;
                 }
-                // TODO: refactor
 
                 var callHandler = function(e) {
                     var handlerArgs = [e];
@@ -90,13 +89,15 @@ var getElementEventData = function(element, eventName) {
                 }
             };
 
-            var handlerId = ++guid;
             elementData[eventName].push({
                 handler: handler,
                 wrappedHandler: wrappedHandler,
                 selector: selector,
+                type: eventName,
+                data: data,
+                namespace: namespaces.join("."),
                 namespaces: namespaces,
-                guid: handlerId
+                guid: ++guid
             });
 
             // First handler for this event name
@@ -106,16 +107,7 @@ var getElementEventData = function(element, eventName) {
             // TODO: Add single event listener for all namespaces
             // TODO: Add event listeners only if setup returned true (Or not?)
             element.addEventListener(eventName, wrappedHandler);
-            // TODO: Maybe replace it with eventData object
-            var handleObject = {
-                selector: selector,
-                type: eventName,
-                data: data,
-                guid: handlerId,
-                namespace: namespaces.join("."),
-                handler: handler
-            };
-            special[eventName] && special[eventName].add && special[eventName].add.call(element, handleObject);
+            special[eventName] && special[eventName].add && special[eventName].add.call(element, elementData);
         },
         removeHandler: function(handler, selector) {
             var removeByEventName = function(eventName) {
@@ -132,11 +124,7 @@ var getElementEventData = function(element, eventName) {
                     if(!skip) {
                         element.removeEventListener(eventName, eventData.wrappedHandler); // TODO: Fix several subscriptions problem
                         removedHandler = eventData.handler;
-                        special[eventName] && special[eventName].remove && special[eventName].remove.call(element, {
-                            type: eventName,
-                            selector: selector,
-                            guid: eventData.guid
-                        });
+                        special[eventName] && special[eventName].remove && special[eventName].remove.call(element, eventData);
                     }
 
                     return skip;
