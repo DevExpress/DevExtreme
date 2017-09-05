@@ -1,12 +1,15 @@
 "use strict";
 
 var registerEventCallbacks = require("./event_registrator_callbacks");
+var dataUtilsStrategy = require("../../core/element_data").getDataStrategy();
 var typeUtils = require("../../core/utils/type");
 var isWindow = typeUtils.isWindow;
 var isFunction = typeUtils.isFunction;
 var extend = require("../../core/utils/extend").extend;
 var matches = require("../../core/polyfills/matches");
-var dataUtilsStrategy = require("../../core/element_data").getDataStrategy();
+var matchesSafe = function(target, selector) {
+    return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
+};
 var eventsEngine;
 var setEngine = function(engine) {
     eventsEngine = engine;
@@ -71,7 +74,7 @@ var getElementEventData = function(element, eventName) {
                 }
 
                 if(selector) {
-                    if(!isWindow(e.target) && e.target.nodeName !== "#document" && matches(e.target, selector)) {
+                    if(matchesSafe(e.target, selector)) {
                         callHandler(extend(e, { currentTarget: e.target, data: data }));
                         return;
                     }
@@ -81,7 +84,7 @@ var getElementEventData = function(element, eventName) {
 
                     while(target.parentNode && target !== element) {
                         target = target.parentNode;
-                        if(target.nodeName !== "#document" && matches(target, selector)) {
+                        if(matchesSafe(target, selector)) {
                             newEvent = eventsEngine.Event(e, { currentTarget: target, data: data }); // TODO: Should we create new event here?
                             callHandler(newEvent);
                             return;
