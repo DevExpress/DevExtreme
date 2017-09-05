@@ -849,6 +849,29 @@ QUnit.test("Dispose: component can be recreated after dispose", function(assert)
     assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
 });
 
+QUnit.test("Dispose: content of container is cleaned", function(assert) {
+    var SomeComponent = DOMComponent.inherit({
+        _render: function() {
+            var p = document.createElement("p");
+            p.textContent = "Some text";
+            this.element()[0].appendChild(p);
+            this.callBase();
+        }
+    });
+
+    var element = $("#component"),
+        instance = new SomeComponent(element);
+
+    assert.equal(element[0].textContent, "Some text");
+    assert.equal(element[0].childElementCount, 1);
+
+    instance.dispose();
+
+    assert.equal(element[0].textContent, "");
+    assert.equal(element[0].childElementCount, 0);
+
+});
+
 QUnit.test("Dispose: dx classes are removed", function(assert) {
     var element = $("#component").TestComponent(),
         instance = element.data("TestComponent");
