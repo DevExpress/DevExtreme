@@ -727,7 +727,7 @@ QUnit.test("customizeStoreLoadOptions cache", function(assert) {
     });
 });
 
-QUnit.test("load promise should be rejected if dispose during load (T541870)", function(assert) {
+QUnit.test("load promise should be rejected if DataSource is disposed while loading data (T541870)", function(assert) {
     var d = $.Deferred();
     var source = new DataSource({
         load: function() {
