@@ -199,6 +199,30 @@ var normalizeArguments = function(callback) {
     };
 };
 
+var normalizeEventSource = function(src, element) {
+    if(typeof src === "string") {
+        src = {
+            type: src
+        };
+    }
+
+    if(!src.target) {
+        src.target = element;
+    }
+
+    src.currentTarget = element;
+
+    if(!src.delegateTarget) {
+        src.delegateTarget = element;
+    }
+
+    if(!src.type && src.originalEvent) {
+        src.type = src.originalEvent.type;
+    }
+
+    return src.isDXEvent ? src : eventsEngine.Event(src);
+};
+
 setEngine({
     on: normalizeArguments(function(element, eventName, selector, data, handler) {
         // TODO: get rid of this
@@ -248,43 +272,30 @@ setEngine({
         elementDataByEvent.removeHandler(handler, selector);
     },
 
-    trigger: function(element, src, extraParameters, noBubble) {
-        if(typeof src === "string") {
-            src = {
-                type: src
-            };
-        }
-
-        var type = src.type || src.originalEvent && src.originalEvent.type;
+    trigger: function(element, src, extraParameters) {
+        var event = normalizeEventSource(src, element);
+        var type = event.type;
 
         // TODO: Change grid editing tests and get rid of this
-        if(!noBubble && element.nodeType && (src.type === "focus" || src.type === "focusin") && isFunction(element.focus) && element === document.activeElement) {
+        if(element.nodeType && (event.type === "focus" || event.type === "focusin") && isFunction(element.focus) && element === document.activeElement) {
             skipEvents = [ "blur", "focusout" ];
             element.blur && element.blur();
             skipEvents = [];
         }
 
-        var elementDataByEvent = getElementEventData(element, type);
+        special[type] && special[type].trigger && special[type].trigger.call(element, event, extraParameters);
 
-        if(!src.target) {
-            src.target = element;
-        }
-        src.currentTarget = element;
+        //eventsEngine.triggerHandler(element, event, extraParameters);
+        var elementDataByEvent = getElementEventData(element, event.type);
 
-        if(!src.delegateTarget) {
-            src.delegateTarget = element;
-        }
-
-        var event = src.isDXEvent ? src : eventsEngine.Event(src);
-
-        // TODO: Fix checking internal 'trigger' calls by 'noBubble' flag
-        !noBubble && special[type] && special[type].trigger && special[type].trigger.call(element, event, extraParameters);
         elementDataByEvent.iterateHandlers(function(wrappedHandler) {
             wrappedHandler(event, extraParameters);
             return !event.isImmediatePropagationStopped();
         });
+        //
 
-        noBubble = noBubble || special[type] && special[type].noBubble || event.isPropagationStopped();
+        var noBubble = special[type] && special[type].noBubble || event.isPropagationStopped();
+
         if(!noBubble) {
             var parents = [];
             var getParents = function(element) {
@@ -299,33 +310,41 @@ setEngine({
             var i = 0;
 
             while(parents[i] && !event.isPropagationStopped()) {
-                eventsEngine.trigger(parents[i], extend(event, { currentTarget: parents[i] }), extraParameters, true);
+                eventsEngine.triggerHandler(parents[i], extend(event, { currentTarget: parents[i] }), extraParameters);
                 i++;
             }
         }
 
         // TODO: Consider other native events
         // TODO: native click for checkboxes and links
-        if(element.nodeType && !noBubble) {
+        if(element.nodeType) {
             special[type] && special[type]._default && special[type]._default.call(element, event, extraParameters);
-            if((src.type === "focus" || src.type === "focusin") && isFunction(element.focus)) {
-                skipEvents = [src.type];
+            if((event.type === "focus" || event.type === "focusin") && isFunction(element.focus)) {
+                skipEvents = [event.type];
                 element.focus();
                 skipEvents = [];
-            } else if((src.type === "blur" || src.type === "focusout") && isFunction(element.blur)) {
-                skipEvents = [src.type];
+            } else if((event.type === "blur" || event.type === "focusout") && isFunction(element.blur)) {
+                skipEvents = [event.type];
                 element.blur && element.blur();
                 skipEvents = [];
-            } else if(isFunction(element[src.type])) {
-                skipEvents = [src.type];
-                element[src.type]();
+            } else if(isFunction(element[event.type])) {
+                skipEvents = [event.type];
+                element[event.type]();
                 skipEvents = [];
             }
         }
     },
 
     triggerHandler: function(element, src, extraParameters) {
-        eventsEngine.trigger(element, src, extraParameters, true);// TODO: refacotr
+        var event = normalizeEventSource(src, element);
+        var elementDataByEvent = getElementEventData(element, event.type);
+
+        elementDataByEvent.iterateHandlers(function(wrappedHandler) {
+            wrappedHandler(event, extraParameters);
+            return !event.isImmediatePropagationStopped();
+        });
+
+
     },
 
     copy: function(event) {
