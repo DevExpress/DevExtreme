@@ -982,6 +982,23 @@ QUnit.test("Cells should have right date", function(assert) {
     assert.deepEqual($cells.eq(25).data("dxCellData").startDate, new Date(2016, 3, 26, 8), "Date is OK");
 });
 
+QUnit.test("Scrollables should be updated after currentDate changing", function(assert) {
+    this.instance.option({
+        currentDate: new Date(2017, 1, 15)
+    });
+
+    var scrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+        updateSpy = sinon.spy(scrollable, "update");
+
+    try {
+        this.instance.option("currentDate", new Date(2017, 2, 15));
+
+        assert.ok(updateSpy.calledOnce, "update was called");
+    } finally {
+        scrollable.update.restore();
+    }
+});
+
 QUnit.module("Timeline Keyboard Navigation", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineMonth({
