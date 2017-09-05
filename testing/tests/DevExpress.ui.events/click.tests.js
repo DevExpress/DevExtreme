@@ -58,14 +58,19 @@ QUnit.test("event triggers", function(assert) {
 });
 
 QUnit.test("event args", function(assert) {
+    var fields = ["altKey", "button", "cancelable", "clientX", "clientY",
+        "ctrlKey", "currentTarget", "data", "delegateTarget",
+        "isDefaultPrevented", "metaKey", "originalEvent",
+        "pageX", "pageY", "relatedTarget", "screenX", "screenY", "shiftKey",
+        "target", "timeStamp", "type", "view", "which"];
+
+
+    if(!QUnit.urlParams["nojquery"]) {
+        fields = fields.concat(["bubbles", "buttons", "eventPhase", "handleObj", "offsetX", "offsetY", "toElement"]);
+    }
+
     var element = this.element.on("dxclick", function(e) {
-        $.each([
-            "altKey", "bubbles", "button", "buttons", "cancelable", "clientX", "clientY",
-            "ctrlKey", "currentTarget", "data", "delegateTarget", "eventPhase", "handleObj",
-            "isDefaultPrevented", "metaKey", "offsetX", "offsetY", "originalEvent",
-            "pageX", "pageY", "relatedTarget", "screenX", "screenY", "shiftKey",
-            "target", "timeStamp", "toElement", "type", "view", "which"
-        ], function() {
+        $.each(fields, function() {
             assert.ok(this in e, this);
         });
     });
