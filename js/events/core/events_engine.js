@@ -8,6 +8,7 @@ var isWindow = typeUtils.isWindow;
 var isFunction = typeUtils.isFunction;
 var matches = require("../../core/polyfills/matches");
 var WeakMap = require("../../core/polyfills/weak_map");
+var touchProps = require("../../integration/jquery/touch_props");
 
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
@@ -339,21 +340,10 @@ var eventsEngine = {
     },
 
     copy: function(event) {
-        // TODO: Extract module form jquery/hooks
-        var touchPropsToHook = ["pageX", "pageY", "screenX", "screenY", "clientX", "clientY"];
-        var touchPropHook = function(name, event) {
-            if(event[name] || !event.touches) {
-                return event[name];
-            }
 
-            var touches = event.touches.length ? event.touches : event.changedTouches;
-            if(!touches.length) {
-                return;
-            }
-
-            return touches[0][name];
-        };
-        var result = eventsEngine.Event(event, event);
+        var touchPropsToHook = touchProps.touchPropsToHook,
+            touchPropHook = touchProps.touchPropHook,
+            result = eventsEngine.Event(event, event);
 
         // TODO: optimize by Object.defineProperty
         touchPropsToHook.forEach(function(name) {

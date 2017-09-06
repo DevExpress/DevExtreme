@@ -4,21 +4,11 @@ var $ = require("jquery"),
     compareVersion = require("../../core/utils/version").compare,
     each = require("../../core/utils/iterator").each,
     isNumeric = require("../../core/utils/type").isNumeric,
-    registerEvent = require("../../events/core/event_registrator");
+    registerEvent = require("../../events/core/event_registrator"),
+    touchProps = require("./touch_props"),
 
-var touchPropsToHook = ["pageX", "pageY", "screenX", "screenY", "clientX", "clientY"];
-var touchPropHook = function(name, event) {
-    if(event[name] || !event.touches) {
-        return event[name];
-    }
-
-    var touches = event.touches.length ? event.touches : event.changedTouches;
-    if(!touches.length) {
-        return;
-    }
-
-    return touches[0][name];
-};
+    touchPropsToHook = touchProps.touchPropsToHook,
+    touchPropHook = touchProps.touchPropHook;
 
 if(compareVersion($.fn.jquery, [3]) < 0) {
     var POINTER_TYPE_MAP = {
