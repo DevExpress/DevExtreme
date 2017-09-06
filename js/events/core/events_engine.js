@@ -64,7 +64,7 @@ var getElementEventData = function(element, eventName) {
 
                 special.callMethod(eventName, "handle", element, [ e, data ]);
 
-                var result = handler.apply(e.currentTarget, arguments);
+                var result = handler.apply(e.currentTarget, handlerArgs);
 
                 if(result === false) {
                     e.preventDefault();
