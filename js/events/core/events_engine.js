@@ -363,35 +363,36 @@ var eventsEngine = {
         if(!src) {
             src = {};
         }
+
         if(typeof src === "string") {
             src = {
                 type: src
             };
         }
 
+        var result = extend(this, src);
+
         var propagationStopped = false;
         var immediatePropagationStopped = false;
         var defaultPrevented = false;
-
-        var result = extend(this, src);
 
         if(src.isDXEvent || src instanceof Event) {
             result.originalEvent = src;
             result.currentTarget = undefined;
         }
+
         if(!src.isDXEvent) {
-            // TODO: Refactor
             extend(result, {
                 isDXEvent: true,
                 isPropagationStopped: function() {
-                    return !!(propagationStopped || result.originalEvent && (result.originalEvent.isPropagationStopped && result.originalEvent.isPropagationStopped() || result.originalEvent.propagationStopped));
+                    return !!(propagationStopped || result.originalEvent && result.originalEvent.propagationStopped);
                 },
                 stopPropagation: function() {
                     propagationStopped = true;
                     result.originalEvent && result.originalEvent.stopPropagation();
                 },
                 isImmediatePropagationStopped: function() {
-                    return !!(immediatePropagationStopped || result.originalEvent && (result.originalEvent.isImmediatePropagationStopped && result.originalEvent.isImmediatePropagationStopped()));
+                    return immediatePropagationStopped;
                 },
                 stopImmediatePropagation: function() {
                     this.stopPropagation();
@@ -399,7 +400,7 @@ var eventsEngine = {
                     result.originalEvent && result.originalEvent.stopImmediatePropagation();
                 },
                 isDefaultPrevented: function() {
-                    return !!(defaultPrevented || result.originalEvent && (result.originalEvent.isDefaultPrevented && result.originalEvent.isDefaultPrevented() || result.originalEvent.defaultPrevented));
+                    return !!(defaultPrevented || result.originalEvent && result.originalEvent.defaultPrevented);
                 },
                 preventDefault: function() {
                     defaultPrevented = true;
