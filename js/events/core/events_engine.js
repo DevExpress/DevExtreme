@@ -478,11 +478,17 @@ var result = {
     off: getHandler("off"),
     trigger: getHandler("trigger"),
     triggerHandler: getHandler("triggerHandler"),
-    copy: eventsEngine.copy,
-    Event: eventsEngine.Event,
+    copy: function() {
+        return eventsEngine.copy.apply(eventsEngine, arguments);
+    },
+    Event: function() {
+        return eventsEngine.Event.apply(eventsEngine, arguments);
+    },
     set: function(engine) {
         eventsEngine = engine;
     }
 };
+
+result.Event.prototype = eventsEngine.Event.prototype;
 
 module.exports = result;
