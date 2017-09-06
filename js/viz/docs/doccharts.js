@@ -2286,7 +2286,7 @@ var dxPieChart = {
         * @publicName customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return dxPolarChartOptions_series
+        * @type_function_return dxPieChartOptions_series
         */
         customizeSeries: function() { }
     },
