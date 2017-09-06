@@ -521,6 +521,8 @@ var SelectBox = DropDownList.inherit({
             this._wasSearch(false);
 
             if(this.option("showDataBeforeSearch") || this.option("minSearchLength") === 0) {
+                if(this._searchTimer) return;
+
                 var searchValue = this._dataSource.searchValue();
                 searchValue && this._wasSearch(true);
                 this._filterDataSource(searchValue || null);
