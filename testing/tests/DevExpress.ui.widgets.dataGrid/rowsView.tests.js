@@ -5745,8 +5745,7 @@ QUnit.test('rowHeight/viewportSize calculation during Render rows with viewport'
     var content = testElement.find('.dx-scrollable-content').children();
 
     assert.equal(options.viewportSize, 2);
-
-    assert.ok(content.children().height() - rowHeight * 3 <= 1);
+    assert.ok((content.find("tbody")[0].offsetHeight - rowHeight * 3) <= 1);
 });
 
 QUnit.test('Update rowsView on changed', function(assert) {

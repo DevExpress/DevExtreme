@@ -82,6 +82,9 @@ QUnit.testStart(function() {
             <div class="content1" style="height: 100px; width: 100px;"></div>\
             <div class="content2"></div>\
         </div>\
+        <div id="scrollableVary" style="height: auto">\
+            <div class="content3" style="height: 100px; width: 100px;"></div>\
+        </div>\
         <div id="scrollableNeighbour"></div>\
         <div id="scrollable1" style="height: 100px;">\
             <div id="scrollable2" style="height: 50px;">\
@@ -137,6 +140,21 @@ QUnit.test("rtlEnabled scrolls to very right position", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         direction: "horizontal",
         rtlEnabled: true,
+        useNative: false
+    });
+
+    var scrollable = $scrollable.dxScrollable("instance");
+    var veryRightPosition = scrollable.content().width() - $scrollable.width();
+
+    assert.equal(scrollable.scrollLeft(), veryRightPosition, "scrolled to very right position");
+});
+
+QUnit.test("rtlEnabled scrolls to very right position after changing the size of the scrollable (T544872)", function(assert) {
+    var $scrollable = $("#scrollableVary").dxScrollable({
+        direction: "horizontal",
+        rtlEnabled: true,
+        width: 50,
+        height: 50,
         useNative: false
     });
 

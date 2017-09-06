@@ -2301,8 +2301,8 @@ QUnit.test("min-height from styles when showBorders true", function(assert) {
     dataGrid.updateDimensions();
 
     //assert
-    assert.equal($dataGrid.height(), firstRenderHeight, "height is not changed");
-    assert.equal($dataGrid.height(), 200, "height is equal min-height");
+    assert.roughEqual($dataGrid.height(), firstRenderHeight, 1.01, "height is not changed");
+    assert.roughEqual($dataGrid.height(), 200, 1.01, "height is equal min-height");
 
     clock.restore();
 });
@@ -5029,7 +5029,7 @@ QUnit.test("Height rows view = height content", function(assert) {
     //assert
     rowsViewElement = $dataGrid.find(".dx-datagrid-rowsview");
     assert.equal(rowsViewElement.find(".dx-datagrid-content").length, 1, "has content");
-    var heightDiff = Math.round(rowsViewElement.height()) - rowsViewElement.find(".dx-datagrid-content")[0].offsetHeight;
+    var heightDiff = Math.round(rowsViewElement.height()) - rowsViewElement.find("tbody")[0].offsetHeight;
     assert.ok(heightDiff === 0 || heightDiff === 1/* chrome */, "height rows view = height content");
 });
 
@@ -5813,6 +5813,38 @@ QUnit.test("loading count after refresh when scrolling mode virtual", function(a
     //assert
     assert.equal(loadingCount, 2, "virtual scrolling load 2 pages");
     assert.equal(contentReadyCount, 1, "contentReady is called once");
+});
+
+//T551304
+QUnit.test("row should rendered after editing if scrolling mode is virtual", function(assert) {
+    //arrange, act
+
+    var array = [];
+    for(var i = 0; i < 4; i++) {
+        array.push({ id: i, text: "text " + i });
+    }
+
+    var dataGrid = createDataGrid({
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2
+        },
+        dataSource: array
+    });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.cellValue(2, 1, 666);
+    dataGrid.saveEditData();
+    this.clock.tick();
+
+    //assert
+    assert.equal(dataGrid.getVisibleRows().length, 4, "visible row count");
+    assert.equal(dataGrid.cellValue(2, 1), 666, "value is changed");
+    assert.equal(dataGrid.hasEditData(), false, "no unsaved data");
 });
 
 QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled and column has values on second page only", function(assert) {
