@@ -516,7 +516,7 @@ var dxVectorMap = {
         * @name dxvectormapoptions_areaSettings_customize
         * @publicName customize
         * @type function(area)
-        * @type_function_param1 area:Area object
+        * @type_function_param1 area:areaObjects
         * @type_function_return Area configuration
         * @deprecated dxvectormapoptions_layers_customize
         * @notUsedInTheme
@@ -818,7 +818,7 @@ var dxVectorMap = {
         * @name dxvectormapoptions_markerSettings_customize
         * @publicName customize
         * @type function(marker)
-        * @type_function_param1 marker:Marker object
+        * @type_function_param1 marker:markerObjects
         * @type_function_return Marker configuration
         * @deprecated dxvectormapoptions_layers_customize
         * @notUsedInTheme
@@ -893,7 +893,7 @@ var dxVectorMap = {
         * @name dxvectormapoptions_tooltip_customizetooltip
         * @publicName customizeTooltip
         * @type function(info)
-        * @type_function_param1 info:Area object|Marker object
+        * @type_function_param1 info:areaObjects|markerObjects
         * @type_function_return object
         * @default undefined
         * @notUsedInTheme
@@ -1366,8 +1366,8 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
-    * @type_function_param1_field4 target:Area object
+    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field4 target:areaObjects
     * @notUsedInTheme
     * @deprecated
     * @action
@@ -1380,7 +1380,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Area object
+    * @type_function_param1_field3 target:areaObjects
     * @notUsedInTheme
     * @deprecated
     * @action

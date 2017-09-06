@@ -158,7 +158,7 @@ var Form = Widget.inherit({
              * @name dxFormOptions_customizeItem
              * @publicName customizeItem
              * @type function
-             * @type_function_param1 item:Form item
+             * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem
              */
             customizeItem: null,
             /**

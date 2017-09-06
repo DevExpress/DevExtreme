@@ -739,7 +739,7 @@ var PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions_stateStoring_customLoad
                  * @publicName customLoad
                  * @type function()
-                 * @type_function_return deferred object
+                 * @type_function_return Promise
                  */
                 customLoad: null,
 
