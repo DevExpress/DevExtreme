@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
+    ready = require("../core/utils/ready"),
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
     viewPort = viewPortUtils.value,
@@ -296,7 +297,7 @@ init({
     }
 });
 
-domUtils.ready(function() {
+ready(function() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error("E0022");
     }
