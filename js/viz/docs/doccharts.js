@@ -4081,7 +4081,7 @@ var BaseChart = {
     * @publicName customizePoint
     * @type function(pointInfo)
     * @type_function_param1 pointInfo:object
-    * @type_function_return basePointObject
+    * @type_function_return dxChartSeriesTypes_CommonSeries_point
     */
     customizePoint: undefined,
     /**
@@ -4089,7 +4089,7 @@ var BaseChart = {
     * @publicName customizeLabel
     * @type function(pointInfo)
     * @type_function_param1 pointInfo:object
-    * @type_function_return baseLabelObject
+    * @type_function_return dxChartSeriesTypes_CommonSeries_label
     */
     customizeLabel: undefined,
     /**
