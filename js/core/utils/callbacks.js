@@ -1,7 +1,6 @@
 "use strict";
 
-var isFunction = require("../../core/utils/type").isFunction,
-    inArray = require("./array").inArray;
+var isFunction = require("../../core/utils/type").isFunction;
 
 var Callback = function(options) {
     this._options = options || {};
@@ -40,7 +39,7 @@ Callback.prototype.add = function(fn) {
 Callback.prototype.remove = function(fn) {
     var list = this._list,
         firingIndexes = this._firingIndexes,
-        index = inArray(fn, list);
+        index = list.indexOf(fn);
 
     if(index > -1) {
         list.splice(index, 1);
@@ -60,7 +59,7 @@ Callback.prototype.remove = function(fn) {
 Callback.prototype.has = function(fn) {
     var list = this._list;
 
-    return fn ? inArray(fn, list) > -1 : !!list.length;
+    return fn ? list.indexOf(fn) > -1 : !!list.length;
 };
 
 Callback.prototype.empty = function(fn) {

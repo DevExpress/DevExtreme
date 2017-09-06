@@ -328,7 +328,7 @@ var Store = Class.inherit({
     _removeImpl: abstract,
 
     _addFailHandlers: function(deferred) {
-        return deferred.fail(this._errorHandler, errorsModule._errorHandler);
+        return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
     }
 }).include(EventsMixin);
 

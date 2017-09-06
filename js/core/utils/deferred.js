@@ -3,15 +3,100 @@
 var jQuery = require("jquery");
 var compareVersion = require("../utils/version").compare;
 var typeUtils = require("../utils/type");
+var isPromise = typeUtils.isPromise;
+var isDeferred = typeUtils.isDeferred;
+var extend = require("../utils/extend").extend;
+var Callbacks = require("../utils/callbacks");
 
-var Deferred = jQuery.Deferred;
+var deferredConfig = [{
+    method: "resolve",
+    handler: "done",
+    state: "resolved"
+}, {
+    method: "reject",
+    handler: "fail",
+    state: "rejected"
+}, {
+    method: "notify",
+    handler: "progress"
+}];
 
-module.exports.Deferred = Deferred;
+var Deferred = function() {
+    var that = this;
+    this._state = "pending";
+    this._promise = {};
+
+    deferredConfig.forEach(function(config) {
+        var methodName = config.method;
+        this[methodName + "Callbacks"] = new Callbacks();
+
+        this[methodName] = function() {
+            return this[methodName + "With"](this._promise, arguments);
+        }.bind(this);
+
+        this._promise[config.handler] = function(handler) {
+            if(!handler) return this;
+
+            var callbacks = that[methodName + "Callbacks"];
+            if(callbacks.fired()) {
+                handler.apply(that[methodName + "Context"], that[methodName + "Args"]);
+            } else {
+                callbacks.add(function(context, args) {
+                    handler.apply(context, args);
+                }.bind(this));
+            }
+            return this;
+        };
+    }.bind(this));
+
+
+    this._promise.always = function(handler) {
+        return this.done(handler).fail(handler);
+    };
+
+    this._promise.then = function(resolve, reject) {
+        var result = new Deferred();
+        this.done(resolve).fail(reject);
+        return result.promise();
+    };
+
+    this._promise.state = function() {
+        return that._state;
+    };
+
+    this._promise.promise = function(args) {
+        return args ? extend(args, that._promise) : that._promise;
+    };
+
+    this._promise.promise(this);
+};
+
+deferredConfig.forEach(function(config) {
+    var methodName = config.method;
+    var state = config.state;
+
+    Deferred.prototype[methodName + "With"] = function(context, args) {
+        var callbacks = this[methodName + "Callbacks"];
+
+        if(this.state() === "pending") {
+            this[methodName + "Args"] = args;
+            this[methodName + "Context"] = context;
+            if(state) this._state = state;
+            callbacks.fire(context, args);
+        }
+
+        return this;
+    };
+});
+
+module.exports.Deferred = function() {
+    return new Deferred();
+};
 
 module.exports.fromPromise = function(promise, context) {
-    if(typeUtils.isDeferred(promise)) {
+    if(isDeferred(promise)) {
         return promise;
-    } else if(typeUtils.isPromise(promise)) {
+    } else if(isPromise(promise)) {
         var d = new Deferred();
         promise.then(function() {
             d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
@@ -35,3 +120,8 @@ module.exports.when = compareVersion(jQuery.fn.jquery, [3]) < 0
             return jQuery.when.apply(jQuery, arguments);
         }
     };
+
+
+module.exports.setStrategy = function(value) {
+    Deferred = value;
+};
