@@ -921,15 +921,15 @@ QUnit.test("Dispose: attributes deleted", function(assert) {
             "aria-controls",
             "aria-multiline",
             "aria-level",
-            "aria-disabled"
+            "aria-disabled",
+            "data-dx-content-placeholder-name",
+            "style"
         ];
 
     attributes.forEach(function(attribute) {
         element.attr(attribute, "value");
     });
 
-    element.attr("data-dx-content-placeholder-name", "value");
-    element.attr("style", "width: 10px");
     element.attr("tabindex", 0);
 
     instance.dispose();
