@@ -17,7 +17,6 @@ dataUtilsStrategy.cleanData = function(elements) {
             $element[0][eventPropName] = null;
             eventsEngine.triggerHandler($element, eventName);
         }
-        eventsEngine.off($element);
     }
 
     return cleanData(elements);
