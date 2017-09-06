@@ -345,7 +345,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_field
     * @publicName field(area)
     * @param1 area:string
-    * @return PivotGridField
+    * @return PivotGridDataSourceOptions_fields
     */
 
     field: function(area) {
@@ -379,7 +379,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     /**
    * @name dxPivotGridSummaryCell_slice
    * @publicName slice(field, value)
-   * @param1 field:PivotGridField
+   * @param1 field:PivotGridDataSourceOptions_fields
    * @param2 value:number|string
    * @return dxPivotGridSummaryCell
    */
@@ -442,13 +442,13 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     /**
    * @name dxPivotGridSummaryCell_value
    * @publicName value(field)
-   * @param1 field:PivotGridField
+   * @param1 field:PivotGridDataSourceOptions_fields
    * @return any
    */
     /**
   * @name dxPivotGridSummaryCell_value
   * @publicName value(field, isCalculatedValue)
-  * @param1 field:PivotGridField
+  * @param1 field:PivotGridDataSourceOptions_fields
   * @param2 isCalculatedValue:boolean
   * @return any
   */
