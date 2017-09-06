@@ -15,11 +15,23 @@ var matchesSafe = function(target, selector) {
 var elementDataMap = new WeakMap();
 var guid = 0;
 var skipEvents = [];
-var special = {};
 
-registerEventCallbacks.add(function(name, eventObject) {
-    special[name] = eventObject;
-});
+var special = (function() {
+    var specialData = {};
+
+    registerEventCallbacks.add(function(eventName, eventObject) {
+        specialData[eventName] = eventObject;
+    });
+
+    return {
+        getField: function(eventName, field) {
+            return specialData[eventName] && specialData[eventName][field];
+        },
+        callMethod: function(eventName, methodName, context, args) {
+            return specialData[eventName] && specialData[eventName][methodName] && specialData[eventName][methodName].apply(context, args);
+        }
+    };
+}());
 
 var getElementEventData = function(element, eventName) {
     var elementData = elementDataMap.get(element);
@@ -54,7 +66,7 @@ var getElementEventData = function(element, eventName) {
                         handlerArgs.push(extraParameters);
                     }
 
-                    special[eventName] && special[eventName].handle && special[eventName].handle.call(element, e, data);
+                    special.callMethod(eventName, "handle", element, [ e, data ]);
 
                     var result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
 
@@ -101,13 +113,15 @@ var getElementEventData = function(element, eventName) {
 
             // First handler for this event name
             if(elementData[eventName].length === 1) {
-                special[eventName] && special[eventName].setup && special[eventName].setup.call(element, data, namespaces, handler);
+                special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
             }
             // TODO: Add single event listener for all namespaces
             // TODO: Add event listeners only if setup returned true (Or not?)
             element.addEventListener(eventName, wrappedHandler);
-            special[eventName] && special[eventName].add && special[eventName].add.call(element, handleObject);
+
+            special.callMethod(eventName, "add", element, [ handleObject ]);
         },
+
         removeHandler: function(handler, selector) {
             var removeByEventName = function(eventName) {
                 if(!elementData[eventName].length) {
@@ -123,14 +137,14 @@ var getElementEventData = function(element, eventName) {
                     if(!skip) {
                         element.removeEventListener(eventName, eventData.wrappedHandler); // TODO: Fix several subscriptions problem
                         removedHandler = eventData.handler;
-                        special[eventName] && special[eventName].remove && special[eventName].remove.call(element, eventData);
+                        special.callMethod(eventName, "remove", element, [ eventData ]);
                     }
 
                     return skip;
                 });
 
                 if(!elementData[eventName].length) {
-                    special[eventName] && special[eventName].teardown && special[eventName].teardown.call(element, namespaces, removedHandler);
+                    special.callMethod(eventName, "teardown", element, [ namespaces, removedHandler ]);
                 }
             };
 
@@ -142,6 +156,7 @@ var getElementEventData = function(element, eventName) {
                 }
             }
         },
+
         iterateHandlers: function(callback) {
             var forceStop = false;
             var handleCallback = function(eventData) {
@@ -265,20 +280,19 @@ var eventsEngine = {
 
     trigger: function(element, src, extraParameters) {
         var event = normalizeEventSource(src, element);
-        var type = event.type;
+        var eventName = event.type;
 
         // TODO: Change grid editing tests and get rid of this
-        if(element.nodeType && (event.type === "focus" || event.type === "focusin") && isFunction(element.focus) && element === document.activeElement) {
+        if(element.nodeType && (eventName === "focus" || eventName === "focusin") && isFunction(element.focus) && element === document.activeElement) {
             skipEvents = [ "blur", "focusout" ];
             element.blur && element.blur();
             skipEvents = [];
         }
 
-        special[type] && special[type].trigger && special[type].trigger.call(element, event, extraParameters);
-
+        special.callMethod(eventName, "trigger", element, [ event, extraParameters ]);
         eventsEngine.triggerHandler(element, event, extraParameters);
 
-        var noBubble = special[type] && special[type].noBubble || event.isPropagationStopped();
+        var noBubble = special.getField(eventName, "noBubble") || event.isPropagationStopped();
 
         if(!noBubble) {
             var parents = [];
@@ -302,18 +316,18 @@ var eventsEngine = {
         // TODO: Consider other native events
         // TODO: native click for checkboxes and links
         if(element.nodeType) {
-            special[type] && special[type]._default && special[type]._default.call(element, event, extraParameters);
-            if((event.type === "focus" || event.type === "focusin") && isFunction(element.focus)) {
-                skipEvents = [event.type];
+            special.callMethod(eventName, "_default", element, [ event, extraParameters ]);
+            if((eventName === "focus" || eventName === "focusin") && isFunction(element.focus)) {
+                skipEvents = [eventName];
                 element.focus();
                 skipEvents = [];
-            } else if((event.type === "blur" || event.type === "focusout") && isFunction(element.blur)) {
-                skipEvents = [event.type];
+            } else if((eventName === "blur" || eventName === "focusout") && isFunction(element.blur)) {
+                skipEvents = [eventName];
                 element.blur && element.blur();
                 skipEvents = [];
-            } else if(isFunction(element[event.type])) {
-                skipEvents = [event.type];
-                element[event.type]();
+            } else if(isFunction(element[eventName])) {
+                skipEvents = [eventName];
+                element[eventName]();
                 skipEvents = [];
             }
         }
