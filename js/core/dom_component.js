@@ -345,7 +345,7 @@ var DOMComponent = Component.inherit({
         for(var i = 0; i < element.attributes.length; i++) {
             var attributeName = element.attributes[i].name;
 
-            if(attributeName.lastIndexOf("aria-") === 0 ||
+            if(attributeName.indexOf("aria-") === 0 ||
                 attributeName.indexOf("dx-") !== -1 ||
                 attributeName === "role" ||
                 attributeName === "style" ||
