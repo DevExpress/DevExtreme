@@ -71,7 +71,6 @@ var getElementEventData = function(element, eventName) {
 
                     var result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
 
-                    // TODO: get rid of checking if result equals false
                     if(result === false) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -178,7 +177,7 @@ var getElementEventData = function(element, eventName) {
     };
 };
 
-var normalizeArguments = function(callback) {
+var normalizeOnArguments = function(callback) {
     return function(element, eventName, selector, data, handler) {
         if(!handler) {
             handler = data;
@@ -195,56 +194,106 @@ var normalizeArguments = function(callback) {
             data = undefined;
         }
 
-        if(typeof eventName === "string" && eventName.indexOf(" ") > -1) {
-            eventName.split(" ").forEach(function(eventName) {
-                callback(element, eventName, selector, data, handler);
-            });
-            return;
-        }
-
         callback(element, eventName, selector, data, handler);
     };
 };
 
-var normalizeEventSource = function(src, element) {
-    if(typeof src === "string") {
-        src = {
-            type: src
-        };
-    }
+var normalizeOffArguments = function(callback) {
+    return function(element, eventName, selector, handler) {
+        if(typeof selector === "function") {
+            handler = selector;
+            selector = undefined;
+        }
 
-    if(!src.target) {
-        src.target = element;
-    }
+        callback(element, eventName, selector, handler);
+    };
+};
 
-    src.currentTarget = element;
+var normalizeTriggerArguments = function(callback) {
+    return function(element, src, extraParameters) {
+        if(typeof src === "string") {
+            src = {
+                type: src
+            };
+        }
 
-    if(!src.delegateTarget) {
-        src.delegateTarget = element;
-    }
+        if(!src.target) {
+            src.target = element;
+        }
 
-    if(!src.type && src.originalEvent) {
-        src.type = src.originalEvent.type;
-    }
+        src.currentTarget = element;
 
-    return src.isDXEvent ? src : eventsEngine.Event(src);
+        if(!src.delegateTarget) {
+            src.delegateTarget = element;
+        }
+
+        if(!src.type && src.originalEvent) {
+            src.type = src.originalEvent.type;
+        }
+
+        callback(element, src.isDXEvent ? src : eventsEngine.Event(src), extraParameters);
+    };
+};
+
+var normalizeEventArguments = function(callback) {
+    return function(src, config) {
+        if(!(this instanceof eventsEngine.Event)) {
+            return new eventsEngine.Event(src, config);
+        }
+
+        if(!src) {
+            src = {};
+        }
+
+        if(typeof src === "string") {
+            src = {
+                type: src
+            };
+        }
+
+        if(!config) {
+            config = {};
+        }
+
+        callback.call(this, src, config);
+    };
+};
+
+var iterate = function(callback) {
+    var iterateEventNames = function(element, eventName) {
+        if(eventName && eventName.indexOf(" ") > -1) {
+            var args = Array.prototype.slice.call(arguments, 0);
+            eventName.split(" ").forEach(function(eventName) {
+                args[1] = eventName;
+                callback.apply(this, args);
+            });
+        } else {
+            callback.apply(this, arguments);
+        }
+    };
+
+    return function(element, eventName) {
+        if(typeof eventName === "object") {
+            var args = Array.prototype.slice.call(arguments, 0);
+
+            for(var name in eventName) {
+                args[1] = name;
+                args[args.length - 1] = eventName[name];
+                iterateEventNames.apply(this, args);
+            }
+        } else {
+            iterateEventNames.apply(this, arguments);
+        }
+    };
 };
 
 var eventsEngine = {
-    on: normalizeArguments(function(element, eventName, selector, data, handler) {
-        // TODO: get rid of this
-        if(typeof eventName === "object") {
-            for(var name in eventName) {
-                eventsEngine.on.call(this, element, name, selector, data, eventName[name]);
-            }
-            return;
-        }
-
+    on: normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
         var elementDataByEvent = getElementEventData(element, eventName);
         elementDataByEvent.addHandler(handler, selector, data);
-    }),
+    })),
 
-    one: normalizeArguments(function(element, eventName, selector, data, handler) {
+    one: normalizeOnArguments(function(element, eventName, selector, data, handler) {
         var oneTimeHandler = function() {
             eventsEngine.off(element, eventName, selector, oneTimeHandler);
             handler.apply(this, arguments);
@@ -253,34 +302,12 @@ var eventsEngine = {
         eventsEngine.on(element, eventName, selector, data, oneTimeHandler);
     }),
 
-    off: function(element, eventName, selector, handler) {
-        // TODO: get rid of this
-        if(typeof eventName === "object") {
-            for(var name in eventName) {
-                eventsEngine.off.call(this, element, name, selector, eventName[name]);
-            }
-            return;
-        }
-
-        if(typeof selector === "function") {
-            handler = selector;
-            selector = undefined;
-        }
-
-        if(eventName && eventName.indexOf(" ") > -1) {
-            eventName.split(" ").forEach(function(eventName) {
-                eventsEngine.off(element, eventName, selector, handler);
-            });
-            return;
-        }
-
+    off: normalizeOffArguments(iterate(function(element, eventName, selector, handler) {
         var elementDataByEvent = getElementEventData(element, eventName);
-
         elementDataByEvent.removeHandler(handler, selector);
-    },
+    })),
 
-    trigger: function(element, src, extraParameters) {
-        var event = normalizeEventSource(src, element);
+    trigger: normalizeTriggerArguments(function(element, event, extraParameters) {
         var eventName = event.type;
 
         special.callMethod(eventName, "trigger", element, [ event, extraParameters ]);
@@ -325,19 +352,16 @@ var eventsEngine = {
                 skipEvent = undefined;
             }
         }
-    },
+    }),
 
-    triggerHandler: function(element, src, extraParameters) {
-        var event = normalizeEventSource(src, element);
+    triggerHandler: normalizeTriggerArguments(function(element, event, extraParameters) {
         var elementDataByEvent = getElementEventData(element, event.type);
 
         elementDataByEvent.iterateHandlers(function(wrappedHandler) {
             wrappedHandler(event, extraParameters);
             return !event.isImmediatePropagationStopped();
         });
-
-
-    },
+    }),
 
     copy: function(event) {
 
@@ -352,41 +376,29 @@ var eventsEngine = {
 
         return result;
     },
-    Event: function(src, config) {
-        if(!(this instanceof eventsEngine.Event)) {
-            return new eventsEngine.Event(src, config);
-        }
 
-        if(!src) {
-            src = {};
-        }
-
-        if(typeof src === "string") {
-            src = {
-                type: src
-            };
-        }
-
-        var result = extend(this, src);
-
+    Event: normalizeEventArguments(function(src, config) {
+        var that = this;
         var propagationStopped = false;
         var immediatePropagationStopped = false;
         var defaultPrevented = false;
 
+        extend(that, src);
+
         if(src.isDXEvent || src instanceof Event) {
-            result.originalEvent = src;
-            result.currentTarget = undefined;
+            that.originalEvent = src;
+            that.currentTarget = undefined;
         }
 
         if(!src.isDXEvent) {
-            extend(result, {
+            extend(that, {
                 isDXEvent: true,
                 isPropagationStopped: function() {
-                    return !!(propagationStopped || result.originalEvent && result.originalEvent.propagationStopped);
+                    return !!(propagationStopped || that.originalEvent && that.originalEvent.propagationStopped);
                 },
                 stopPropagation: function() {
                     propagationStopped = true;
-                    result.originalEvent && result.originalEvent.stopPropagation();
+                    that.originalEvent && that.originalEvent.stopPropagation();
                 },
                 isImmediatePropagationStopped: function() {
                     return immediatePropagationStopped;
@@ -394,14 +406,14 @@ var eventsEngine = {
                 stopImmediatePropagation: function() {
                     this.stopPropagation();
                     immediatePropagationStopped = true;
-                    result.originalEvent && result.originalEvent.stopImmediatePropagation();
+                    that.originalEvent && that.originalEvent.stopImmediatePropagation();
                 },
                 isDefaultPrevented: function() {
-                    return !!(defaultPrevented || result.originalEvent && result.originalEvent.defaultPrevented);
+                    return !!(defaultPrevented || that.originalEvent && that.originalEvent.defaultPrevented);
                 },
                 preventDefault: function() {
                     defaultPrevented = true;
-                    result.originalEvent && result.originalEvent.preventDefault();
+                    that.originalEvent && that.originalEvent.preventDefault();
                 }
             });
 
@@ -411,8 +423,8 @@ var eventsEngine = {
             };
 
             ["pageX", "pageY"].forEach(function(propName) {
-                if(!(propName in result)) {
-                    Object.defineProperty(result, propName, {
+                if(!(propName in that)) {
+                    Object.defineProperty(that, propName, {
                         enumerable: true,
                         configurable: true,
 
@@ -434,10 +446,10 @@ var eventsEngine = {
 
         }
 
-        extend(result, config || {});
+        extend(that, config);
 
-        result.guid = ++guid;
-    }
+        that.guid = ++guid;
+    })
 };
 
 var cleanData = dataUtilsStrategy.cleanData;
