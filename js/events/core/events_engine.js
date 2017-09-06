@@ -2,28 +2,25 @@
 
 var registerEventCallbacks = require("./event_registrator_callbacks");
 var dataUtilsStrategy = require("../../core/element_data").getDataStrategy();
+var extend = require("../../core/utils/extend").extend;
 var typeUtils = require("../../core/utils/type");
 var isWindow = typeUtils.isWindow;
 var isFunction = typeUtils.isFunction;
-var extend = require("../../core/utils/extend").extend;
 var matches = require("../../core/polyfills/matches");
+var WeakMap = require("../../core/polyfills/weak_map");
+
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
 };
-var eventsEngine;
-var setEngine = function(engine) {
-    eventsEngine = engine;
-};
+var elementDataMap = new WeakMap();
+var guid = 0;
+var skipEvents = [];
 var special = {};
+
 registerEventCallbacks.add(function(name, eventObject) {
     special[name] = eventObject;
 });
 
-var WeakMap = require("../../core/polyfills/weak_map");
-var elementDataMap = new WeakMap();
-
-var guid = 0;
-var skipEvents = [];
 var getElementEventData = function(element, eventName) {
     var elementData = elementDataMap.get(element);
 
@@ -217,7 +214,7 @@ var normalizeEventSource = function(src, element) {
     return src.isDXEvent ? src : eventsEngine.Event(src);
 };
 
-setEngine({
+var eventsEngine = {
     on: normalizeArguments(function(element, eventName, selector, data, handler) {
         // TODO: get rid of this
         if(typeof eventName === "object") {
@@ -443,7 +440,7 @@ setEngine({
 
         result.guid = ++guid;
     }
-});
+};
 
 var cleanData = dataUtilsStrategy.cleanData;
 dataUtilsStrategy.cleanData = function(nodes) {
@@ -481,13 +478,11 @@ var result = {
     off: getHandler("off"),
     trigger: getHandler("trigger"),
     triggerHandler: getHandler("triggerHandler"),
-    copy: function() {
-        return eventsEngine.copy.apply(eventsEngine, arguments);
-    },
-    set: setEngine,
-    Event: function() {
-        return eventsEngine.Event.apply(eventsEngine, arguments);
-    },
+    copy: eventsEngine.copy,
+    Event: eventsEngine.Event,
+    set: function(engine) {
+        eventsEngine = engine;
+    }
 };
-result.Event.prototype = eventsEngine.Event.prototype;
+
 module.exports = result;
