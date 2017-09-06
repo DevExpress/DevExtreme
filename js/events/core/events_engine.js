@@ -55,27 +55,27 @@ var getElementEventData = function(element, eventName) {
 
     return {
         addHandler: function(handler, selector, data) {
+            var callHandler = function(e, extraParameters) {
+                var handlerArgs = [e];
+
+                if(extraParameters !== undefined) {
+                    handlerArgs.push(extraParameters);
+                }
+
+                special.callMethod(eventName, "handle", element, [ e, data ]);
+
+                var result = handler.apply(e.currentTarget, arguments);
+
+                if(result === false) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }
+            };
+
             var wrappedHandler = function(e, extraParameters) {
                 if(skipEvent && e.type === skipEvent) {
                     return;
                 }
-
-                var callHandler = function(e) {
-                    var handlerArgs = [e];
-
-                    if(extraParameters !== undefined) {
-                        handlerArgs.push(extraParameters);
-                    }
-
-                    special.callMethod(eventName, "handle", element, [ e, data ]);
-
-                    var result = handler.apply(handlerArgs[0].currentTarget, handlerArgs);
-
-                    if(result === false) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
-                };
 
                 if(e instanceof Event) {
                     e = eventsEngine.Event(e);
@@ -88,13 +88,13 @@ var getElementEventData = function(element, eventName) {
                     while(currentTarget && currentTarget !== element) {
                         if(matchesSafe(currentTarget, selector)) {
                             e.currentTarget = currentTarget;
-                            callHandler(e);
+                            callHandler(e, extraParameters);
                             return;
                         }
                         currentTarget = currentTarget.parentNode;
                     }
                 } else {
-                    callHandler(e);
+                    callHandler(e, extraParameters);
                 }
             };
 
