@@ -14,7 +14,7 @@ var matchesSafe = function(target, selector) {
 };
 var elementDataMap = new WeakMap();
 var guid = 0;
-var skipEvents = [];
+var skipEvent;
 
 var special = (function() {
     var specialData = {};
@@ -55,7 +55,7 @@ var getElementEventData = function(element, eventName) {
     return {
         addHandler: function(handler, selector, data) {
             var wrappedHandler = function(e, extraParameters) {
-                if(skipEvents.indexOf(e.type) > -1) {
+                if(skipEvent && e.type === skipEvent) {
                     return;
                 }
 
@@ -282,13 +282,6 @@ var eventsEngine = {
         var event = normalizeEventSource(src, element);
         var eventName = event.type;
 
-        // TODO: Change grid editing tests and get rid of this
-        if(element.nodeType && (eventName === "focus" || eventName === "focusin") && isFunction(element.focus) && element === document.activeElement) {
-            skipEvents = [ "blur", "focusout" ];
-            element.blur && element.blur();
-            skipEvents = [];
-        }
-
         special.callMethod(eventName, "trigger", element, [ event, extraParameters ]);
         eventsEngine.triggerHandler(element, event, extraParameters);
 
@@ -318,17 +311,17 @@ var eventsEngine = {
         if(element.nodeType) {
             special.callMethod(eventName, "_default", element, [ event, extraParameters ]);
             if((eventName === "focus" || eventName === "focusin") && isFunction(element.focus)) {
-                skipEvents = [eventName];
+                skipEvent = eventName;
                 element.focus();
-                skipEvents = [];
+                skipEvent = undefined;
             } else if((eventName === "blur" || eventName === "focusout") && isFunction(element.blur)) {
-                skipEvents = [eventName];
+                skipEvent = eventName;
                 element.blur && element.blur();
-                skipEvents = [];
+                skipEvent = undefined;
             } else if(isFunction(element[eventName])) {
-                skipEvents = [eventName];
+                skipEvent = eventName;
                 element[eventName]();
-                skipEvents = [];
+                skipEvent = undefined;
             }
         }
     },
