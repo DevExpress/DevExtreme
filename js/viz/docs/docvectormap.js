@@ -517,7 +517,7 @@ var dxVectorMap = {
         * @publicName customize
         * @type function(area)
         * @type_function_param1 area:areaObjects
-        * @type_function_return Area configuration
+        * @type_function_return dxVectorMapOptions_areaSettings
         * @deprecated dxvectormapoptions_layers_customize
         * @notUsedInTheme
         */
@@ -819,7 +819,7 @@ var dxVectorMap = {
         * @publicName customize
         * @type function(marker)
         * @type_function_param1 marker:markerObjects
-        * @type_function_return Marker configuration
+        * @type_function_return dxVectorMapOptions_markerSettings
         * @deprecated dxvectormapoptions_layers_customize
         * @notUsedInTheme
         */
