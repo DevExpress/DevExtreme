@@ -1039,6 +1039,27 @@ QUnit.testStart(function() {
         assert.equal(this.instance.option("showAllDayPanel"), true, "showAllDayPanel option value is right on init");
     });
 
+    QUnit.test("showDateTimeIndicator option value = true on init", function(assert) {
+        this.createInstance();
+
+        assert.equal(this.instance.option("showDateTimeIndicator"), true, "showDateTimeIndicator option value is right on init");
+    });
+
+    QUnit.test("showDateTimeIndicator option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            showDateTimeIndicator: false
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+
+        assert.equal(workSpaceWeek.option("showDateTimeIndicator"), false, "workspace has correct showDateTimeIndicator");
+
+        this.instance.option("showDateTimeIndicator", true);
+
+        assert.equal(workSpaceWeek.option("showDateTimeIndicator"), true, "workspace has correct showDateTimeIndicator");
+    });
+
     QUnit.test("appointments should be repainted after scheduler dimensions changing", function(assert) {
         var data = [{
             id: 1, text: "abc", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 10, 30)
