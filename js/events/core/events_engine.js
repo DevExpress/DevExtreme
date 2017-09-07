@@ -129,7 +129,7 @@ var getElementEventData = function(element, eventName) {
                 var removedHandler;
 
                 elementData[eventName] = elementData[eventName].filter(function(eventData) {
-                    var skip = namespaces.length && eventData.namespaces.indexOf(namespaces[0]) < 0// TODO: improve
+                    var skip = namespaces.length && !isSubset(eventData.namespaces, namespaces)
                     || handler && eventData.handler !== handler
                     || selector && eventData.selector !== selector;
 
@@ -163,7 +163,7 @@ var getElementEventData = function(element, eventName) {
                     return;
                 }
 
-                if(!namespaces.length || eventData.namespaces.indexOf(namespaces[0]) > -1) { // TODO: improve
+                if(!namespaces.length || isSubset(eventData.namespaces, namespaces)) {
                     forceStop = callback(eventData.wrappedHandler, eventData.handler) === false;
                 }
             };
@@ -174,6 +174,13 @@ var getElementEventData = function(element, eventName) {
             }
         }
     };
+};
+
+var isSubset = function(original, checked) {
+    for(var i = 0; i < checked.length; i++) {
+        if(original.indexOf(checked[i]) < 0) return false;
+    }
+    return true;
 };
 
 var normalizeOnArguments = function(callback) {
