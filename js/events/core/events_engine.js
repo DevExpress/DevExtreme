@@ -238,7 +238,7 @@ var normalizeTriggerArguments = function(callback) {
             src.type = src.originalEvent.type;
         }
 
-        callback(element, src.isDXEvent ? src : eventsEngine.Event(src), extraParameters);
+        callback(element, (src instanceof eventsEngine.Event) ? src : eventsEngine.Event(src), extraParameters);
     };
 };
 
@@ -388,14 +388,13 @@ var eventsEngine = {
 
         extend(that, src);
 
-        if(src.isDXEvent || src instanceof Event) {
+        if(src instanceof eventsEngine.Event || src instanceof Event) {
             that.originalEvent = src;
             that.currentTarget = undefined;
         }
 
-        if(!src.isDXEvent) {
+        if(!(src instanceof eventsEngine.Event)) {
             extend(that, {
-                isDXEvent: true,
                 isPropagationStopped: function() {
                     return !!(propagationStopped || that.originalEvent && that.originalEvent.propagationStopped);
                 },
