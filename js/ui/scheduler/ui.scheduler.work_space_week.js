@@ -87,6 +87,19 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         return $cells;
     },
 
+    _getDateTimeIndicatorHeight: function() {
+        var today = new Date(),
+            cellHeight = this.getCellHeight(),
+            date = new Date(this._firstViewDate);
+
+        date.setDate(today.getDate());
+
+        var duration = today.getTime() - date.getTime(),
+            cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellHeight;
+    },
+
     _getRightCell: function(isMultiSelection) {
         if(!isMultiSelection) {
             return this.callBase(isMultiSelection);
