@@ -939,7 +939,7 @@ var BaseChart = BaseWidget.inherit({
         scrollBar: "SCROLL_BAR"
     },
 
-    _customChangesOrder: ["ANIMATION", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT", "REFRESH_SERIES_FAMILIES",
+    _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT",
         "FORCE_RENDER", "AXES_AND_PANES", "ROTATED", "REFRESH_SERIES_REINIT", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT"],
 
     _change_ANIMATION: function() {
