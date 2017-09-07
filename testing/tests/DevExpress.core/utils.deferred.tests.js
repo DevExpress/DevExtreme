@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("jquery"),
-    isFunction = require("core/utils/type").isFunction,
+var isFunction = require("core/utils/type").isFunction,
     deferredUtils = require("core/utils/deferred"),
     Deferred = deferredUtils.Deferred;
 
@@ -24,14 +23,46 @@ QUnit.test("when should be resolved synchronously", function(assert) {
     });
 
     deferredUtils.when(d1, d2).done(function(result) {
-        assert.deepEqual($.makeArray(arguments), [1, 2], "correct args");
+        assert.deepEqual([].slice.call(arguments), [1, [2, 3]], "correct args");
         log.push(3);
     });
 
     d1.resolve(1);
-    d2.resolve(2);
+    d2.resolve(2, 3);
 
     assert.deepEqual(log, [1, 2, 3], "resolved synchronous");
+});
+
+QUnit.test("when should have correct context in done handler", function(assert) {
+    var d1 = new Deferred();
+    var d2 = new Deferred();
+
+    deferredUtils.when(d1, d2).done(function(result) {
+        assert.equal(this.length, 2, "correct contexts length");
+        assert.equal(this[0], d1.promise(), "correct context");
+        assert.equal(this[1], d2.promise(), "correct context");
+    });
+
+    d1.resolve();
+    d2.resolve();
+});
+
+QUnit.test("when should be rejected if one of deferred was rejected", function(assert) {
+    var failHandlerCount = 0;
+
+    var d1 = new Deferred();
+    var d2 = new Deferred();
+
+    deferredUtils.when(d1, d2).fail(function(result) {
+        assert.deepEqual(result, 1, "correct args");
+        failHandlerCount++;
+    });
+
+    d1.reject(1);
+    assert.deepEqual(failHandlerCount, 1, "rejected synchronous");
+
+    d2.reject(2);
+    assert.deepEqual(failHandlerCount, 1, "rejected only once");
 });
 
 
