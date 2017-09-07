@@ -751,15 +751,30 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var $container = this._dateTableScrollable.content(),
-            $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-clock");
+            indicatorHeight = this._getDateTimeIndicatorHeight();
 
-        this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
+        if(indicatorHeight > 0) {
+            var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-clock");
 
-        var today = new Date();
-        $content.append($("<span>").text(dateLocalization.format(today, "shorttime")));
+            this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
+            this._$indicator.height(this._getDateTimeIndicatorHeight());
+            var today = new Date();
+            $content.append($("<span>").text(dateLocalization.format(today, "shorttime")));
 
-        this._$indicator.append($content);
-        $container.append(this._$indicator);
+            $content.css("top", indicatorHeight - 10);
+
+            this._$indicator.append($content);
+            $container.append(this._$indicator);
+        }
+    },
+
+    _getDateTimeIndicatorHeight: function() {
+        var today = new Date(),
+            cellHeight = this.getCellHeight(),
+            duration = today.getTime() - this._firstViewDate.getTime(),
+            cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellHeight;
     },
 
     _setFirstViewDate: function() {
