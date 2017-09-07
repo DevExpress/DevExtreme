@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     domUtils = require("../../core/utils/dom"),
     isDefined = require("../../core/utils/type").isDefined,
     stringUtils = require("../../core/utils/string"),
+    typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -20,10 +21,13 @@ var stubCaret = function() {
 
 var EMPTY_CHAR = " ";
 var EMPTY_CHAR_CODE = 32;
+var BACKSPACE_KEY_CODE = 8;
+var DELETE_KEY_CODE = 46;
 var ESCAPED_CHAR = "\\";
 
 var TEXTEDITOR_MASKED_CLASS = "dx-texteditor-masked";
 var MASK_EVENT_NAMESPACE = "dxMask";
+var MASK_FORMATTER_NAMESPACE = "dxMaskFormatter";
 var FORWARD_DIRECTION = "forward";
 var BACKWARD_DIRECTION = "backward";
 var BLUR_EVENT = "blur beforedeactivate";
@@ -143,6 +147,7 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _render: function() {
         this._renderHiddenElement();
+        this._renderFormatter();
         this.callBase();
         this._renderMask();
     },
@@ -176,6 +181,62 @@ var TextEditorMask = TextEditorBase.inherit({
         this._renderMaskedValue();
 
         this._changedValue = this._input().val();
+    },
+
+    _renderFormatter: function() {
+        var format = this.option("format"),
+            parse = this.option("parse");
+
+        this._formatter = this._createAction(typeUtils.isFunction(format) ? format : this._defaultFormatter);
+        this._parser = this._createAction(typeUtils.isFunction(parse) ? parse : this._defaultParser);
+
+        this._detachFormatterEvents();
+        this._attachFormatterEvents();
+    },
+
+    _detachFormatterEvents: function() {
+        eventsEngine.off(this._input(), "." + MASK_FORMATTER_NAMESPACE);
+    },
+
+    _attachFormatterEvents: function() {
+        var $input = this._input();
+
+        eventsEngine.on($input, eventUtils.addNamespace("input", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("keydown", MASK_FORMATTER_NAMESPACE), this._keyDown.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("change", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
+    },
+
+    _formatValue: function() {
+        if(this._preventFormat || !this.option("format")) {
+            this._preventFormat = false;
+            return;
+        }
+
+        var caret = this._caret(),
+            value = this._input().val(),
+            formattedValue = this._formatter(this._parser(value));
+
+        this._input().val(formattedValue);
+
+        if(caret.start < value.length) {
+            this._caret(caret);
+        }
+    },
+
+    _updateParsedValue: function() {
+        this.option("value", this._parser(this._input().val()));
+    },
+
+    _keyDown: function(e) {
+        this._preventFormat = e.keyCode === BACKSPACE_KEY_CODE || e.keyCode === DELETE_KEY_CODE;
+    },
+
+    _defaultFormatter: function(e) {
+        return e.actionValue;
+    },
+
+    _defaultParser: function(e) {
+        return e.actionValue;
     },
 
     _attachMaskEventHandlers: function() {
@@ -334,16 +395,22 @@ var TextEditorMask = TextEditorBase.inherit({
             }
         }
         this.callBase();
+        this._formatValue();
     },
 
     _valueChangeEventHandler: function(e) {
+        if(this.option("parse")) {
+            this._saveValueChangeEvent(e);
+            this._updateParsedValue();
+            return;
+        }
+
         if(!this._maskRulesChain) {
             this.callBase.apply(this, arguments);
             return;
         }
 
         this._saveValueChangeEvent(e);
-
         this.option("value", this._convertToValue().replace(/\s+$/, ""));
     },
 
@@ -633,6 +700,8 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _clean: function() {
         this._clearDragTimer();
+        delete this._formatter;
+        delete this._parser;
         this.callBase();
     },
 
@@ -692,6 +761,14 @@ var TextEditorMask = TextEditorBase.inherit({
             case "mask":
                 this._updateMaskOption();
                 this._processEmptyMask(args.value);
+                break;
+            case "format":
+                this._renderFormatter();
+                this._formatValue();
+                break;
+            case "parse":
+                this._renderFormatter();
+                this._updateParsedValue();
                 break;
             case "maskChar":
             case "maskRules":
