@@ -214,7 +214,7 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      * @name customRuleOptions_validationCallback
      * @publicName validationCallback
      * @type function
-     * @type_function_return true|false
+     * @type_function_return boolean
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 rule:object

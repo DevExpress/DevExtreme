@@ -18,7 +18,7 @@ var BaseBaseSeries = {
     /**
     * @name baseSeriesObjectmethods_deselectpoint
     * @publicName deselectPoint(point)
-    * @param1 point:Point
+    * @param1 point:basePointObject
     */
     deselectPoint: function() { },
     /**
@@ -61,7 +61,7 @@ var BaseBaseSeries = {
     /**
     * @name baseSeriesObjectmethods_selectpoint
     * @publicName selectPoint(point)
-    * @param1 point:Point
+    * @param1 point:basePointObject
     */
     selectPoint: function () { },
     /**
@@ -209,7 +209,7 @@ var BasePoint = {
     /**
     * @name basePointObjectmethods_getlabel
     * @publicName getLabel()
-    * @return pointLabelObject|array
+    * @return baseLabelObject|array
     */
     getLabel: function() { }
 };
