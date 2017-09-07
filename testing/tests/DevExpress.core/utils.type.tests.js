@@ -96,9 +96,7 @@ QUnit.test('isPlainObject', function(assert) {
         return "test";
     };
 
-    var event = document.createEvent("Event");
-    event.initEvent("dxbuild", true, true);
-    var dxEvent = eventsEngine.copy(event);
+    var dxEvent = eventsEngine.Event("testevent");
 
     assert.strictEqual(typeUtils.isPlainObject({}), true, 'object is plain');
     assert.strictEqual(typeUtils.isPlainObject(new Object({})), true, 'object is plain');
