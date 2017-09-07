@@ -377,16 +377,6 @@ var eventsEngine = {
         });
     }),
 
-    copy: function(event) {
-        var result = eventsEngine.Event(event, event);
-        // TODO: optimize by Object.defineProperty
-        hookTouchProps(function(name, hook) {
-            result[name] = hook(result);
-        });
-
-        return result;
-    },
-
     Event: normalizeEventArguments(function(src, config) {
         var that = this;
         var propagationStopped = false;
@@ -425,35 +415,37 @@ var eventsEngine = {
                     that.originalEvent && that.originalEvent.preventDefault();
                 }
             });
-
-            ["pageX", "pageY"].forEach(function(propName) {
-                if(!(propName in that)) {
-                    Object.defineProperty(that, propName, {
-                        enumerable: true,
-                        configurable: true,
-
-                        get: function() {
-                            return that.originalEvent && that.originalEvent[propName];
-                        },
-
-                        set: function(value) {
-                            Object.defineProperty(that, propName, {
-                                enumerable: true,
-                                configurable: true,
-                                writable: true,
-                                value: value
-                            });
-                        }
-                    });
-                }
-            });
         }
 
         extend(that, config);
 
         that.guid = ++guid;
-    })
+    }),
+
+    copy: function(event) {
+        return eventsEngine.Event(event, event);
+    }
 };
+
+hookTouchProps(function(propName, hook) {
+    Object.defineProperty(eventsEngine.Event.prototype, propName, {
+        enumerable: true,
+        configurable: true,
+
+        get: function() {
+            return this.originalEvent && hook(this.originalEvent);
+        },
+
+        set: function(value) {
+            Object.defineProperty(this, propName, {
+                enumerable: true,
+                configurable: true,
+                writable: true,
+                value: value
+            });
+        }
+    } );
+});
 
 var cleanData = dataUtilsStrategy.cleanData;
 dataUtilsStrategy.cleanData = function(nodes) {
