@@ -512,9 +512,13 @@
 .dx-scheduler-work-space-day,
 .dx-scheduler-work-space-week,
 .dx-scheduler-work-space-work-week {
-    .dx-scheduler-date-table-row:nth-child(odd) .dx-scheduler-date-table-cell {
-        border-top: @SCHEDULER_ACCENT_BORDER;
-    }
+    &.dx-scheduler-work-space-odd-cells {
+        .dx-scheduler-date-table-row:nth-child(odd) .dx-scheduler-date-table-cell {
+            border-top: @SCHEDULER_ACCENT_BORDER;
+        }
+        .dx-scheduler-date-table-row:first-child .dx-scheduler-date-table-cell {
+            border-top: none;
+        }
 }
 
 .dx-scheduler-work-space-day {

@@ -25,6 +25,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
 
     WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
+    WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
 
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
@@ -372,6 +373,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "groups":
                 this._cleanView();
                 this._toggleGroupedClass();
+                this._toggleWorkSpaceWithOddCells();
                 this._renderView();
                 break;
             case "showAllDayPanel":
@@ -405,6 +407,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this.callBase();
 
         this._toggleHorizontalScrollClass();
+        this._toggleWorkSpaceWithOddCells();
+
         this.element()
             .addClass(COMPONENT_CLASS)
             .addClass(this._getElementClass());
@@ -418,6 +422,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _toggleHorizontalScrollClass: function() {
         this.element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
+    },
+
+    _toggleWorkSpaceWithOddCells: function() {
+        this.element().toggleClass(WORKSPACE_WITH_ODD_CELLS_CLASS, this._isWorkspaceWithOddCells());
+    },
+
+    _isWorkspaceWithOddCells: function() {
+        return this.option("hoursInterval") === 0.5;
     },
 
     _getTimePanelClass: function() {
