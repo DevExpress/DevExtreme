@@ -28,7 +28,7 @@ var BaseWidget = {
 
     /**
     * @pseudo CommonVizDataSource
-    * @type array|DataSource|DataSource configuration|string
+    * @type array|DataSource|DataSourceOptions|string
     * @notUsedInTheme
     */
 

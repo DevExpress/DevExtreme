@@ -1021,7 +1021,7 @@ module.exports = {
                 /**
                  * @name GridBaseMethods_getScrollable
                  * @publicName getScrollable()
-                 * @return Scrollable
+                 * @return dxScrollable
                  */
                 getScrollable: function() {
                     return this._scrollable;

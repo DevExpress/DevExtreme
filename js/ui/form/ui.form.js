@@ -155,7 +155,7 @@ var Form = Widget.inherit({
              * @name dxFormOptions_customizeItem
              * @publicName customizeItem
              * @type function
-             * @type_function_param1 item:Form item
+             * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem
              */
             customizeItem: null,
             /**
@@ -500,7 +500,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormTabbedItemOptions_tabPanelOptions
              * @publicName tabPanelOptions
-             * @type TabPanel options
+             * @type dxTabPanelOptions
              * @default undefined
              */
             /**
