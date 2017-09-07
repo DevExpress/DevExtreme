@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    typeUtils = require("core/utils/type"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     DataSource = require("data/data_source/data_source").DataSource,
     Store = require("data/abstract_store"),
@@ -725,6 +726,28 @@ QUnit.test("customizeStoreLoadOptions cache", function(assert) {
         assert.equal(loadingCount, 1, "loading is not raised");
         assert.equal(changedCount, 2, "changed is raised");
     });
+});
+
+QUnit.test("load promise should be rejected if DataSource is disposed while loading data (T541870)", function(assert) {
+    var d = $.Deferred();
+    var source = new DataSource({
+        load: function() {
+            return d.promise();
+        }
+    });
+
+    var loadPromise = source.load().done(function(data) {
+        assert.deepEqual(data, TEN_NUMBERS);
+    });
+
+    assert.equal(loadPromise.state(), "pending");
+
+    source.dispose();
+
+    d.resolve();
+
+    assert.equal(loadPromise.state(), "rejected");
+    assert.ok(typeUtils.isEmptyObject(source._operationManager._deferreds));
 });
 
 QUnit.test("customizeLoadResult", function(assert) {
