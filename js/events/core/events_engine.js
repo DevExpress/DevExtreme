@@ -426,11 +426,6 @@ var eventsEngine = {
                 }
             });
 
-            // TODO: refactor
-            var getOriginal = function(event) {
-                return event.originalEvent && getOriginal(event.originalEvent) || event;
-            };
-
             ["pageX", "pageY"].forEach(function(propName) {
                 if(!(propName in that)) {
                     Object.defineProperty(that, propName, {
@@ -438,11 +433,11 @@ var eventsEngine = {
                         configurable: true,
 
                         get: function() {
-                            return this.originalEvent && getOriginal(this.originalEvent)[propName];
+                            return that.originalEvent && that.originalEvent[propName];
                         },
 
                         set: function(value) {
-                            Object.defineProperty(this, propName, {
+                            Object.defineProperty(that, propName, {
                                 enumerable: true,
                                 configurable: true,
                                 writable: true,
@@ -452,7 +447,6 @@ var eventsEngine = {
                     });
                 }
             });
-
         }
 
         extend(that, config);
