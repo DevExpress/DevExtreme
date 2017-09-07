@@ -772,7 +772,7 @@ var Box = CollectionWidget.inherit({
 /**
 * @name dxBoxItemTemplate_box
 * @publicName box
-* @type dxBox options
+* @type dxBoxOptions
 * @default undefined
 */
 

@@ -27,7 +27,7 @@ var dxChart = {
         * @publicName customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return Series configuration
+        * @type_function_return dxChartOptions_series
         */
         customizeSeries: function() { }
     },
@@ -2259,7 +2259,7 @@ var dxPieChart = {
         * @publicName customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return PieSeries configuration
+        * @type_function_return dxPieChartOptions_series
         */
         customizeSeries: function() { }
     },
@@ -2465,7 +2465,7 @@ var dxPolarChart = {
         * @publicName customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return PolarSeries configuration
+        * @type_function_return dxPolarChartOptions_series
         */
         customizeSeries: function() { }
     },
@@ -4046,7 +4046,7 @@ var BaseChart = {
     * @publicName customizePoint
     * @type function(pointInfo)
     * @type_function_param1 pointInfo:object
-    * @type_function_return Point configuration
+    * @type_function_return dxChartSeriesTypes_CommonSeries_point
     */
     customizePoint: undefined,
     /**
@@ -4054,7 +4054,7 @@ var BaseChart = {
     * @publicName customizeLabel
     * @type function(pointInfo)
     * @type_function_param1 pointInfo:object
-    * @type_function_return Label configuration
+    * @type_function_return dxChartSeriesTypes_CommonSeries_label
     */
     customizeLabel: undefined,
     /**

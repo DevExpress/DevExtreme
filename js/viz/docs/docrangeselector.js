@@ -1004,7 +1004,7 @@ var dxRangeSelector = {
         * @publicName customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return Series configuration
+        * @type_function_return dxChartOptions_series
         */
         customizeSeries: function() { }
     },

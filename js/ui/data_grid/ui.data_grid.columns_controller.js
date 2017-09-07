@@ -2459,11 +2459,11 @@ gridCore.registerModule("columns", {
             /**
              * @name dxDataGridOptions_columns_lookup_dataSource
              * @publicName dataSource
-             * @type array|DataSource configuration|function(options)
+             * @type array|DataSourceOptions|function(options)
              * @type_function_param1 options:object
              * @type_function_param1_field1 data:object
              * @type_function_param1_field2 key:any
-             * @type_function_return array|DataSource configuration
+             * @type_function_return array|DataSourceOptions
              * @default undefined
              */
             /**
@@ -2501,7 +2501,7 @@ gridCore.registerModule("columns", {
             /**
              * @name dxDataGridOptions_columns_headerFilter_dataSource
              * @publicName dataSource
-             * @type array|function(options)|DataSource configuration
+             * @type array|function(options)|DataSourceOptions
              * @type_function_param1 options:object
              * @type_function_param1_field1 component:object
              * @type_function_param1_field2 dataSource:object
@@ -2522,7 +2522,7 @@ gridCore.registerModule("columns", {
             /**
              * @name dxDataGridOptions_columns_formItem
              * @publicName formItem
-             * @type Form Simple Item
+             * @type dxFormSimpleItem
              */
             regenerateColumnsByVisibleItems: false,
             /**
