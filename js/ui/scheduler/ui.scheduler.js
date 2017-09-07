@@ -397,7 +397,7 @@ var Scheduler = Widget.inherit({
                     /**
                     * @name dxSchedulerOptions_resources_dataSource
                     * @publicName dataSource
-                    * @type string|array|DataSource|DataSource configuration
+                    * @type string|array|DataSource|DataSourceOptions
                     * @default null
                     */
             ],
@@ -405,7 +405,7 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_dataSource
                 * @publicName dataSource
-                * @type string|array|DataSource|DataSource configuration
+                * @type string|array|DataSource|DataSourceOptions
                 * @default null
                 */
             dataSource: null,

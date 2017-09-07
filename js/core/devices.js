@@ -29,7 +29,7 @@ var KNOWN_UA_TABLE = {
 /**
 * @name device
 * @section commonObjectStructures
-* @publicName device
+* @publicName Device
 * @type object
 * @module core/devices
 * @export default

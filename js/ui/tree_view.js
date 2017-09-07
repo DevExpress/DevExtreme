@@ -325,7 +325,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_createChildren
             * @publicName createChildren
             * @type function
-            * @type_function_param1 parentNode:dxtreeviewnode
+            * @type_function_param1 parentNode:dxTreeViewNode
             * @type_function_return Promise|array
             */
             createChildren: null
@@ -1812,7 +1812,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
          /**
          * @name dxTreeViewNode_parent
          * @publicName parent
-         * @type dxtreeviewnode
+         * @type dxTreeViewNode
          */
 
          /**

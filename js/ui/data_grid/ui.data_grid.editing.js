@@ -1505,7 +1505,7 @@ gridCore.registerModule("editing", {
                 /**
                  * @name dxDataGridOptions_editing_form
                  * @publicName form
-                 * @type Form options
+                 * @type dxFormOptions
                  */
                 texts: {
                     /**

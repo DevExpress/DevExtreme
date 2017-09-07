@@ -186,7 +186,7 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_parent
     * @publicName parent(direction)
     * @param1 direction:string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
     parent: function(direction) {
         var path = this._getPath(direction).slice(),
@@ -225,13 +225,13 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_grandTotal
     * @publicName grandTotal(direction)
     * @param1 direction:string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     /**
    * @name dxPivotGridSummaryCell_grandTotal
    * @publicName grandTotal()
-   * @return SummaryCell
+   * @return dxPivotGridSummaryCell
    */
     grandTotal: function(direction) {
         var config = {},
@@ -253,7 +253,7 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_next
     * @publicName next(direction)
     * @param1 direction:string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     /**
@@ -261,7 +261,7 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     * @publicName next(direction, allowCrossGroup)
     * @param1 direction:string
     * @param2 allowCrossGroup:bool
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     next: function(direction, allowCrossGroup) {
@@ -297,7 +297,7 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_prev
     * @publicName prev(direction)
     * @param1 direction:string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     /**
@@ -305,7 +305,7 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     * @publicName prev(direction, allowCrossGroup)
     * @param1 direction:string
     * @param2 allowCrossGroup:bool
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     prev: function(direction, allowCrossGroup) {
@@ -345,7 +345,7 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_field
     * @publicName field(area)
     * @param1 area:string
-    * @return PivotGridField
+    * @return PivotGridDataSourceOptions_fields
     */
 
     field: function(area) {
@@ -361,7 +361,7 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     * @publicName child(direction, fieldValue)
     * @param1 direction:string
     * @param2 fieldValue:number|string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
     child: function(direction, fieldValue) {
         var children = this.children(direction),
@@ -379,9 +379,9 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     /**
    * @name dxPivotGridSummaryCell_slice
    * @publicName slice(field, value)
-   * @param1 field:PivotGridField
+   * @param1 field:PivotGridDataSourceOptions_fields
    * @param2 value:number|string
-   * @return SummaryCell
+   * @return dxPivotGridSummaryCell
    */
     slice: function(field, value) {
         var that = this,
@@ -442,13 +442,13 @@ SummaryCell.prototype = $.extend(SummaryCell.prototype, {
     /**
    * @name dxPivotGridSummaryCell_value
    * @publicName value(field)
-   * @param1 field:PivotGridField
+   * @param1 field:PivotGridDataSourceOptions_fields
    * @return any
    */
     /**
   * @name dxPivotGridSummaryCell_value
   * @publicName value(field, isCalculatedValue)
-  * @param1 field:PivotGridField
+  * @param1 field:PivotGridDataSourceOptions_fields
   * @param2 isCalculatedValue:boolean
   * @return any
   */

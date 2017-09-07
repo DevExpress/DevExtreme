@@ -638,7 +638,7 @@ exports.RowsView = columnsView.ColumnsView.inherit({
     /**
      * @name dxDataGridMethods_getScrollable
      * @publicName getScrollable()
-     * @return Scrollable
+     * @return dxScrollable
      */
     getScrollable: function() {
         return this._scrollable;

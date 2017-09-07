@@ -916,7 +916,7 @@ gridCore.registerModule("data", {
             /**
              * @name dxDataGridOptions_dataSource
              * @publicName dataSource
-             * @type string|array|DataSource|DataSource configuration
+             * @type string|array|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
