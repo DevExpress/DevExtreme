@@ -10,8 +10,6 @@ var matches = require("../../core/polyfills/matches");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
-var EMPTY_TYPE_KEY = "dxEmptyEventType";
-
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
 };
@@ -39,7 +37,7 @@ var special = (function() {
 var getElementEventData = function(element, eventName) {
     var elementData = elementDataMap.get(element);
 
-    eventName = eventName || EMPTY_TYPE_KEY;
+    eventName = eventName || "";
 
     var eventNameParts = eventName.split(".");
     var namespaces = eventNameParts.slice(1);
@@ -50,6 +48,7 @@ var getElementEventData = function(element, eventName) {
         elementDataMap.set(element, elementData);
     }
 
+    // TODO: handle empty event name correctly
     if(!elementData[eventName]) {
         elementData[eventName] = [];
     }
@@ -171,8 +170,8 @@ var getElementEventData = function(element, eventName) {
             };
 
             elementData[eventName].forEach(handleCallback);
-            if(namespaces.length && elementData[EMPTY_TYPE_KEY]) {
-                elementData[EMPTY_TYPE_KEY].forEach(handleCallback);
+            if(namespaces.length && elementData[""]) {
+                elementData[""].forEach(handleCallback);
             }
         }
     };
