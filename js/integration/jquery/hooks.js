@@ -4,6 +4,7 @@ var $ = require("jquery");
 var compareVersion = require("../../core/utils/version").compare;
 var each = require("../../core/utils/iterator").each;
 var isNumeric = require("../../core/utils/type").isNumeric;
+var setEventFixMethod = require("../../events/core/events_engine").setEventFixMethod;
 var registerEvent = require("../../events/core/event_registrator");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
@@ -93,15 +94,9 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
         return fixHook.filter ? fixHook.filter(event, originalEvent) : event;
     };
 
-    exports.copy = function(originalEvent) {
-        return fix($.Event(originalEvent.type, originalEvent), originalEvent);
-    };
+    setEventFixMethod(fix);
 } else {
     hookTouchProps(function(name, hook) {
         $.event.addProp(name, hook);
     });
-
-    exports.copy = function(originalEvent) {
-        return $.Event(originalEvent, originalEvent);
-    };
 }

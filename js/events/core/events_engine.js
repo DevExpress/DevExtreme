@@ -420,14 +420,10 @@ var eventsEngine = {
         extend(that, config);
 
         that.guid = ++guid;
-    }),
-
-    copy: function(event) {
-        return eventsEngine.Event(event, event);
-    }
+    })
 };
 
-hookTouchProps(function(propName, hook) {
+var addProperty = function(propName, hook) {
     Object.defineProperty(eventsEngine.Event.prototype, propName, {
         enumerable: true,
         configurable: true,
@@ -445,7 +441,9 @@ hookTouchProps(function(propName, hook) {
             });
         }
     });
-});
+};
+
+hookTouchProps(addProperty);
 
 var cleanData = dataUtilsStrategy.cleanData;
 dataUtilsStrategy.cleanData = function(nodes) {
@@ -477,21 +475,30 @@ var getHandler = function(methodName) {
     return result;
 };
 
+var fixMethod = function(e) { return e; };
+var setEventFixMethod = function(func) {
+    fixMethod = func;
+};
+
+var copyEvent = function(originalEvent) {
+    return fixMethod(eventsEngine.Event(originalEvent, originalEvent), originalEvent);
+};
+
 var result = {
     on: getHandler("on"),
     one: getHandler("one"),
     off: getHandler("off"),
     trigger: getHandler("trigger"),
     triggerHandler: getHandler("triggerHandler"),
-    copy: function() {
-        return eventsEngine.copy.apply(eventsEngine, arguments);
-    },
     Event: function() {
         return eventsEngine.Event.apply(eventsEngine, arguments);
     },
     set: function(engine) {
         eventsEngine = engine;
-    }
+    },
+    // TODO: Move to event/utils after getting rid of circular dependency
+    setEventFixMethod: setEventFixMethod,
+    copy: copyEvent
 };
 
 result.Event.prototype = eventsEngine.Event.prototype;
