@@ -480,6 +480,9 @@ var result = {
     off: getHandler("off"),
     trigger: getHandler("trigger"),
     triggerHandler: getHandler("triggerHandler"),
+    copy: function() {
+        return eventsEngine.copy.apply(eventsEngine, arguments);
+    },
     Event: function() {
         return eventsEngine.Event.apply(eventsEngine, arguments);
     },
