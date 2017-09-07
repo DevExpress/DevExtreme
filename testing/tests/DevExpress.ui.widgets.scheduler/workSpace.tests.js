@@ -161,6 +161,16 @@ QUnit.testStart(function() {
         assert.notOk($element.hasClass("dx-scheduler-work-space-all-day"), "dxSchedulerWorkSpace hasn't 'dx-scheduler-work-space-all-day' css class");
     });
 
+    QUnit.test("Workspace should have specific css class, if hoursInterval = 0.5 ", function(assert) {
+        this.instance.option("hoursInterval", 0.5);
+
+        var $element = this.instance.element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-odd-cells"), "dxSchedulerWorkSpace has 'dx-scheduler-work-space-odd-cells' css class");
+
+        this.instance.option("hoursInterval", 0.75);
+        assert.notOk($element.hasClass("dx-scheduler-work-space-odd-cells"), "dxSchedulerWorkSpace hasn't 'dx-scheduler-work-space-odd-cells' css class");
+    });
+
     QUnit.test("All day panel has specific class when allDayExpanded = true", function(assert) {
         this.instance.option("showAllDayPanel", true);
         this.instance.option("allDayExpanded", true);

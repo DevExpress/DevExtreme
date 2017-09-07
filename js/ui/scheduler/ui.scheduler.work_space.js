@@ -28,6 +28,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
 
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
     WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
+    WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
     WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
 
     WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
@@ -415,6 +416,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _cleanWorkSpace: function() {
         this._cleanView();
         this._toggleGroupedClass();
+        this._toggleWorkSpaceWithOddCells();
         this._renderView();
     },
 
@@ -423,6 +425,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._toggleHorizontalScrollClass();
         this._toggleWorkSpaceCountClass();
+        this._toggleWorkSpaceWithOddCells();
         this._toggleWorkSpaceOverlappingClass();
 
         this.element()
@@ -446,6 +449,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _isWorkSpaceWithCount: function() {
         return this.option("intervalCount") > 1;
+    },
+
+    _toggleWorkSpaceWithOddCells: function() {
+        this.element().toggleClass(WORKSPACE_WITH_ODD_CELLS_CLASS, this._isWorkspaceWithOddCells());
+    },
+
+    _isWorkspaceWithOddCells: function() {
+        return this.option("hoursInterval") === 0.5;
     },
 
     _toggleWorkSpaceOverlappingClass: function() {
