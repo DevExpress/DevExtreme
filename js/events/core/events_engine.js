@@ -10,6 +10,8 @@ var matches = require("../../core/polyfills/matches");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
+var EMPTY_EVENT_NAME = "dxEmptyEventType";
+
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
 };
@@ -41,14 +43,15 @@ var getElementEventData = function(element, eventName) {
 
     var eventNameParts = eventName.split(".");
     var namespaces = eventNameParts.slice(1);
-    eventName = eventNameParts[0];
+    var eventNameIsDefined = !!eventNameParts[0];
+
+    eventName = eventNameParts[0] || EMPTY_EVENT_NAME;
 
     if(!elementData) {
         elementData = {};
         elementDataMap.set(element, elementData);
     }
 
-    // TODO: handle empty event name correctly
     if(!elementData[eventName]) {
         elementData[eventName] = [];
     }
@@ -111,13 +114,15 @@ var getElementEventData = function(element, eventName) {
 
             elementData[eventName].push(handleObject);
 
-            // First handler for this event name
-            if(elementData[eventName].length === 1) {
+            var firstHandlerForTheType = elementData[eventName].length === 1;
+
+            if(firstHandlerForTheType) {
                 special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
             }
             // TODO: Add single event listener for all namespaces
             // TODO: Add event listeners only if setup returned true (Or not?)
-            element.addEventListener(eventName, wrappedHandler);
+
+            eventNameIsDefined && element.addEventListener(eventName, wrappedHandler);
 
             special.callMethod(eventName, "add", element, [ handleObject ]);
         },
@@ -135,7 +140,8 @@ var getElementEventData = function(element, eventName) {
                     || selector && eventData.selector !== selector;
 
                     if(!skip) {
-                        element.removeEventListener(eventName, eventData.wrappedHandler); // TODO: Fix several subscriptions problem
+                        eventNameIsDefined && element.removeEventListener(eventName, eventData.wrappedHandler); // TODO: Fix several subscriptions problem
+
                         removedHandler = eventData.handler;
                         special.callMethod(eventName, "remove", element, [ eventData ]);
                     }
@@ -148,7 +154,7 @@ var getElementEventData = function(element, eventName) {
                 }
             };
 
-            if(eventName) {
+            if(eventNameIsDefined) {
                 removeByEventName(eventName);
             } else {
                 for(var name in elementData) {
@@ -170,8 +176,8 @@ var getElementEventData = function(element, eventName) {
             };
 
             elementData[eventName].forEach(handleCallback);
-            if(namespaces.length && elementData[""]) {
-                elementData[""].forEach(handleCallback);
+            if(namespaces.length && elementData[EMPTY_EVENT_NAME]) {
+                elementData[EMPTY_EVENT_NAME].forEach(handleCallback);
             }
         }
     };
