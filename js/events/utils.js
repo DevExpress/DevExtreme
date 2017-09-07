@@ -5,6 +5,7 @@ var eventsEngine = require("./core/events_engine");
 var errors = require("../core/errors");
 var extend = require("../core/utils/extend").extend;
 var each = require("../core/utils/iterator").each;
+var touchProps = require("../integration/jquery/touch_props");
 
 var eventSource = (function() {
     var EVENT_SOURCES_REGEX = {
@@ -111,7 +112,13 @@ var needSkipEvent = function(e) {
 
 
 var createEvent = function(originalEvent, args) {
-    var event = eventsEngine.copy(originalEvent);
+
+    var event = eventsEngine.Event(originalEvent, originalEvent);
+
+    // TODO: optimize by Object.defineProperty
+    touchProps.touchPropsToHook.forEach(function(name) {
+        event[name] = touchProps.touchPropHook(name, event);
+    });
 
     if(args) {
         extend(event, args);
