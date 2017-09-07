@@ -1,14 +1,11 @@
 "use strict";
 
-var $ = require("jquery"),
-    compareVersion = require("../../core/utils/version").compare,
-    each = require("../../core/utils/iterator").each,
-    isNumeric = require("../../core/utils/type").isNumeric,
-    registerEvent = require("../../events/core/event_registrator"),
-    touchProps = require("./touch_props"),
-
-    touchPropsToHook = touchProps.touchPropsToHook,
-    touchPropHook = touchProps.touchPropHook;
+var $ = require("jquery");
+var compareVersion = require("../../core/utils/version").compare;
+var each = require("../../core/utils/iterator").each;
+var isNumeric = require("../../core/utils/type").isNumeric;
+var registerEvent = require("../../events/core/event_registrator");
+var touchProps = require("../../events/core/touch_props");
 
 if(compareVersion($.fn.jquery, [3]) < 0) {
     var POINTER_TYPE_MAP = {
@@ -52,8 +49,8 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
     each(["touchstart", "touchmove", "touchend", "touchcancel"], function() {
         $.event.fixHooks[this] = {
             filter: function(event, originalEvent) {
-                each(touchPropsToHook, function(_, name) {
-                    event[name] = touchPropHook(name, originalEvent);
+                touchProps.iterateTouchPropsToHook(function(name, hook) {
+                    event[name] = hook(originalEvent);
                 });
 
                 return event;
@@ -100,10 +97,8 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
         return fix($.Event(originalEvent.type, originalEvent), originalEvent);
     };
 } else {
-    each(touchPropsToHook, function(_, name) {
-        $.event.addProp(name, function(event) {
-            return touchPropHook(name, event);
-        });
+    touchProps.iterateTouchPropsToHook(function(name, hook) {
+        $.event.addProp(name, hook);
     });
 
     exports.copy = function(originalEvent) {

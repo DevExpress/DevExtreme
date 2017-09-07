@@ -6,7 +6,6 @@ require("integration/jquery/events");
 QUnit.module("namespaces: off");
 
 QUnit.test("Event is not removed if 'off' has extra namespace", function(assert) {
-
     var done = assert.async();
 
     var element = document.createElement("div");
@@ -20,7 +19,6 @@ QUnit.test("Event is not removed if 'off' has extra namespace", function(assert)
 });
 
 QUnit.test("Event is removed for any namespace", function(assert) {
-
     assert.expect(0);
     var done = assert.async();
 
@@ -46,7 +44,6 @@ QUnit.test("Event is removed for any namespace", function(assert) {
 QUnit.module("namespaces: trigger");
 
 QUnit.test("Trigger custom events", function(assert) {
-
     var done = assert.async();
     assert.expect(4);
 

@@ -14,5 +14,10 @@ var touchPropHook = function(name, event) {
     return touches[0][name];
 };
 
-exports.touchPropsToHook = touchPropsToHook;
-exports.touchPropHook = touchPropHook;
+exports.iterateTouchPropsToHook = function(callback) {
+    touchPropsToHook.forEach(function(name) {
+        callback(name, function(event) {
+            return touchPropHook(name, event);
+        });
+    }, this);
+};
