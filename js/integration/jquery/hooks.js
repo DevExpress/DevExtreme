@@ -81,32 +81,10 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
     registerEvent.callbacks.add(function(name) {
         $.event.fixHooks[name] = DX_EVENT_HOOKS;
     });
-
-    var fix = function(event, originalEvent) {
-        var fixHook = $.event.fixHooks[originalEvent.type] || $.event.mouseHooks;
-
-        var props = fixHook.props ? $.event.props.concat(fixHook.props) : $.event.props,
-            propIndex = props.length;
-
-        while(propIndex--) {
-            var prop = props[propIndex];
-            event[prop] = originalEvent[prop];
-        }
-
-        return fixHook.filter ? fixHook.filter(event, originalEvent) : event;
-    };
-
-    exports.copy = function(originalEvent) {
-        return fix($.Event(originalEvent.type, originalEvent), originalEvent);
-    };
 } else {
     each(touchPropsToHook, function(_, name) {
         $.event.addProp(name, function(event) {
             return touchPropHook(name, event);
         });
     });
-
-    exports.copy = function(originalEvent) {
-        return $.Event(originalEvent, originalEvent);
-    };
 }
