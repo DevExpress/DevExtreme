@@ -1378,9 +1378,12 @@ module.exports = {
                     if(!that._dataSourceApplied || that._dataSourceColumnsCount === 0 || forceApplying || that.option("regenerateColumnsByVisibleItems")) {
                         if(isDataSourceLoaded) {
                             if(!that._isColumnsFromOptions) {
-                                assignColumns(that, createColumnsFromDataSource(that, dataSource));
-                                that._dataSourceColumnsCount = that._columns.length;
-                                applyUserState(that);
+                                var columnsFromDataSource = createColumnsFromDataSource(that, dataSource);
+                                if(columnsFromDataSource.length) {
+                                    assignColumns(that, columnsFromDataSource);
+                                    that._dataSourceColumnsCount = that._columns.length;
+                                    applyUserState(that);
+                                }
                             }
                             return that.updateColumns(dataSource, forceApplying);
                         } else {
