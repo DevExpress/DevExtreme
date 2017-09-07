@@ -136,10 +136,11 @@ var getElementEventData = function(element, eventName) {
 
                 elementData[eventName] = elementData[eventName].filter(function(eventData) {
                     var skip = namespaces.length && !isSubset(eventData.namespaces, namespaces)
-                    || handler && eventData.handler !== handler
-                    || selector && eventData.selector !== selector;
+                        || handler && eventData.handler !== handler
+                        || selector && eventData.selector !== selector;
 
                     if(!skip) {
+                        var eventNameIsDefined = eventName !== EMPTY_EVENT_NAME;
                         eventNameIsDefined && element.removeEventListener(eventName, eventData.wrappedHandler); // TODO: Fix several subscriptions problem
 
                         removedHandler = eventData.handler;
