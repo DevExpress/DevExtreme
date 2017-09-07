@@ -444,7 +444,7 @@ hookTouchProps(function(propName, hook) {
                 value: value
             });
         }
-    } );
+    });
 });
 
 var cleanData = dataUtilsStrategy.cleanData;
