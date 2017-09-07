@@ -8,7 +8,7 @@ var isWindow = typeUtils.isWindow;
 var isFunction = typeUtils.isFunction;
 var matches = require("../../core/polyfills/matches");
 var WeakMap = require("../../core/polyfills/weak_map");
-var touchProps = require("../../events/core/touch_props");
+var hookTouchProps = require("../../events/core/hook_touch_props");
 
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
@@ -373,7 +373,7 @@ var eventsEngine = {
     copy: function(event) {
         var result = eventsEngine.Event(event, event);
         // TODO: optimize by Object.defineProperty
-        touchProps.iterateTouchPropsToHook(function(name, hook) {
+        hookTouchProps(function(name, hook) {
             result[name] = hook(result);
         });
 
