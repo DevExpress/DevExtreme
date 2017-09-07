@@ -21,18 +21,73 @@ function leftPad(text, length) {
     return text;
 }
 
+var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+var shortMonths = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    shortDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+var amPm = ["AM", "PM"];
+
+var shortQuarters = ["Q1", "Q2", "Q3", "Q4"];
+
+
+/* TODO patterns q, e, c */
+
 var LDML_FORMATTERS = {
     y: function(date, count, useUtc) {
-        return leftPad(date[useUtc ? "getUTCFullYear" : "getFullYear"]().toString(), count);
+        var year = date[useUtc ? "getUTCFullYear" : "getFullYear"]();
+        if(count === 2) {
+            year = year % 100;
+        }
+        return leftPad(year.toString(), count);
     },
     M: function(date, count, useUtc) {
-        return leftPad((date[useUtc ? "getUTCMonth" : "getMonth"]() + 1).toString(), Math.min(count, 2));
+        var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
+        if(count === 4) {
+            return months[month];
+        }
+        if(count === 3) {
+            return shortMonths[month];
+        }
+        return leftPad((month + 1).toString(), Math.min(count, 2));
+    },
+    //TODO
+    L: function(date, count, useUtc) {
+        var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
+        if(count === 4) {
+            return months[month];
+        }
+        if(count === 3) {
+            return shortMonths[month];
+        }
+        return leftPad((month + 1).toString(), Math.min(count, 2));
+    },
+    Q: function(date, count, useUtc) {
+        var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
+        var quarter = Math.floor(month / 3);
+        if(count >= 3) {
+            return shortQuarters[quarter];
+        }
+        return leftPad((quarter + 1).toString(), Math.min(count, 2));
+    },
+    E: function(date, count, useUtc) {
+        var day = date[useUtc ? "getUTCDay" : "getDay"]();
+        return count === 4 ? days[day] : shortDays[day];
+    },
+    a: function(date, count, useUtc) {
+        var hours = date[useUtc ? "getUTCHours" : "getHours"]();
+        return amPm[hours < 12 ? 0 : 1];
     },
     d: function(date, count, useUtc) {
         return leftPad(date[useUtc ? "getUTCDate" : "getDate"]().toString(), Math.min(count, 2));
     },
     H: function(date, count, useUtc) {
         return leftPad(date[useUtc ? "getUTCHours" : "getHours"]().toString(), Math.min(count, 2));
+    },
+    h: function(date, count, useUtc) {
+        var hours = date[useUtc ? "getUTCHours" : "getHours"]();
+        return leftPad((hours % 12 || 12).toString(), Math.min(count, 2));
     },
     m: function(date, count, useUtc) {
         return leftPad(date[useUtc ? "getUTCMinutes" : "getMinutes"]().toString(), Math.min(count, 2));

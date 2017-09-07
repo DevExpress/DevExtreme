@@ -1,10 +1,10 @@
 "use strict";
 
-var numberLocalization = require("./number"),
-    dependencyInjector = require("../core/utils/dependency_injector"),
+var dependencyInjector = require("../core/utils/dependency_injector"),
     isString = require("../core/utils/type").isString,
     iteratorUtils = require("../core/utils/iterator"),
     inArray = require("../core/utils/array").inArray,
+    serializeDate = require("../core/utils/date_serialization").serializeDate,
     errors = require("../core/errors");
 
 require("./core");
@@ -67,324 +67,6 @@ var removeTimezoneOffset = function(date) {
 
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-var amPm = function(date) {
-    return date.getHours() >= 12 ? 'PM' : 'AM';
-};
-
-var getTwelveHourTimeFormat = function(hours) {
-    return hours % 12 || 12;
-};
-
-var formatNumber = function(number, precision) {
-    return numberLocalization.format(number, {
-        type: "decimal",
-        precision: precision
-    });
-};
-
-// TODO: add other formatters and parsers
-var FORMATTERS = {
-    "millisecond": function(date) {
-        return formatNumber(date.getMilliseconds(date), 3);
-    },
-
-    "second": function(date) {
-        return formatNumber(date.getSeconds(), 2);
-    },
-
-    "minute": function(date) {
-        return formatNumber(date.getMinutes(), 2);
-    },
-
-    "h": function(date) {
-        return formatNumber(getTwelveHourTimeFormat(date.getHours()), 1);
-    },
-    "hh": function(date) {
-        return formatNumber(getTwelveHourTimeFormat(date.getHours()), 2);
-    },
-    "hour": function(date) {
-        return formatNumber(date.getHours(), 2);
-    },
-
-    "day": function(date) {
-        return String(date.getDate());
-    },
-    "dayofweek": function(date) {
-        return days[date.getDay()];
-    },
-
-    "M": function(date) {
-        return date.getMonth() + 1;
-    },
-    "MM": function(date) {
-        return formatNumber(date.getMonth() + 1, 2);
-    },
-    "month": function(date) {
-        return months[date.getMonth()];
-    },
-
-    "year": function(date) {
-        return String(date.getFullYear());
-    },
-    "shortyear": function(date) {
-        return String(date.getFullYear()).substr(2, 2);
-    },
-    "shorttime": function(date) {
-        return FORMATTERS["h"](date) +
-            ":" +
-            FORMATTERS["minute"](date) +
-            " " +
-            amPm(date);
-    },
-    "shortdate": function(date) {
-        return [
-            FORMATTERS["M"](date),
-            FORMATTERS["day"](date),
-            FORMATTERS["year"](date)
-        ].join("/");
-    },
-    "shortdateshorttime": function(date) {
-        return [
-            FORMATTERS["shortdate"](date),
-            FORMATTERS["shorttime"](date)
-        ].join(", ");
-    },
-    "mediumdatemediumtime": function(date) {
-        return [
-            FORMATTERS["monthandday"](date),
-            FORMATTERS["shorttime"](date)
-        ].join(", ");
-    },
-    "monthandyear": function(date) {
-        return [
-            FORMATTERS["month"](date),
-            FORMATTERS["year"](date)
-        ].join(" ");
-    },
-    "monthandday": function(date) {
-        return [
-            FORMATTERS["month"](date),
-            FORMATTERS["day"](date)
-        ].join(" ");
-    },
-    "longdate": function(date) {
-        return FORMATTERS["dayofweek"](date) +
-            ", " +
-            FORMATTERS["month"](date) +
-            " " +
-            FORMATTERS["day"](date) +
-            ", " +
-            FORMATTERS["year"](date);
-    },
-    "longtime": function(date) {
-        return [
-            FORMATTERS["h"](date),
-            FORMATTERS["minute"](date),
-            FORMATTERS["second"](date)
-        ].join(":") + " " + amPm(date);
-    },
-    "longdatelongtime": function(date) {
-        return [
-            FORMATTERS["longdate"](date),
-            FORMATTERS["longtime"](date)
-        ].join(", ");
-    },
-
-    "d": function(date) {
-        return formatNumber(date.getDate(), 1);
-    },
-    "dd": function(date) {
-        return formatNumber(date.getDate(), 2);
-    },
-
-    "d MMMM": function(date) {
-        return FORMATTERS["day"](date) +
-            " " +
-            FORMATTERS["month"](date);
-    },
-    "yyyy/M/d": function(date) {
-        return [
-            FORMATTERS["year"](date),
-            FORMATTERS["M"](date),
-            FORMATTERS["day"](date)
-        ].join("/");
-    },
-    "yyyy/MM/dd": function(date) {
-        return [
-            FORMATTERS["year"](date),
-            FORMATTERS["MM"](date),
-            FORMATTERS["dd"](date)
-        ].join("/");
-    },
-    "dd.MM.yyyy": function(date) {
-        return [
-            FORMATTERS["dd"](date),
-            FORMATTERS["MM"](date),
-            FORMATTERS["year"](date)
-        ].join(".");
-    },
-    "HH:mm": function(date) {
-        return [
-            FORMATTERS["hour"](date),
-            FORMATTERS["minute"](date)
-        ].join(":");
-    },
-    "HH:mm:ss": function(date) {
-        return [
-            FORMATTERS["HH:mm"](date),
-            FORMATTERS["second"](date)
-        ].join(":");
-    },
-
-    "h:mm:ss": function(date) {
-        return [
-            FORMATTERS["h"](date),
-            FORMATTERS["minute"](date),
-            FORMATTERS["second"](date)
-        ].join(":");
-    },
-    "h:mm:ss:SSS": function(date) {
-        return [
-            FORMATTERS["h"](date),
-            FORMATTERS["minute"](date),
-            FORMATTERS["second"](date),
-            FORMATTERS["SSS"](date)
-        ].join(":");
-    },
-    "yyyy/MM/dd HH:mm:ss": function(date) {
-        return [
-            FORMATTERS["yyyy/MM/dd"](date),
-            FORMATTERS["HH:mm:ss"](date)
-        ].join(" ");
-    },
-
-    "yyyy-MM-dd hh:mm:ss.SSS a": function(date) {
-        return [
-            [
-                FORMATTERS["year"](date),
-                FORMATTERS["MM"](date),
-                FORMATTERS["dd"](date)
-            ].join("-"),
-
-            [
-                FORMATTERS["hh"](date),
-                FORMATTERS["minute"](date),
-                FORMATTERS["second"](date)
-            ].join(":") + "." + FORMATTERS["SSS"](date),
-
-            amPm(date)
-
-        ].join(" ");
-    },
-
-    "yyyy-MM-dd": function(date) {
-        return [
-            FORMATTERS["year"](date),
-            FORMATTERS["MM"](date),
-            FORMATTERS["dd"](date)
-        ].join("-");
-    },
-    "yyyyMMddTHHmmss": function(date) {
-        return [
-            FORMATTERS["year"](date),
-            FORMATTERS["MM"](date),
-            FORMATTERS["dd"](date),
-            "T",
-            FORMATTERS["hour"](date),
-            FORMATTERS["minute"](date),
-            FORMATTERS["second"](date)
-        ].join("");
-    },
-    "datetime-local": function(date) {
-        return FORMATTERS["yyyy-MM-dd"](date) +
-            "T" +
-            FORMATTERS["HH:mm:ss"](date);
-    },
-    "yyyy-MM-ddTHH:mm:ssZ": function(date) {
-        return FORMATTERS["datetime-local"](date) + "Z";
-    },
-    "yyyy-MM-ddTHH:mmZ": function(date) {
-        return FORMATTERS["yyyy-MM-dd"](date) + "T"
-            +
-            FORMATTERS["hour"](date) +
-            ":" +
-            FORMATTERS["minute"](date) + "Z";
-    },
-    "dd/MM/yyyy": function(date) {
-        return [
-            FORMATTERS["dd"](date),
-            FORMATTERS["MM"](date),
-            FORMATTERS["year"](date)
-        ].join("/");
-    },
-    "yyyy MMMM d": function(date) {
-        return [
-            FORMATTERS["year"](date),
-            FORMATTERS["month"](date),
-            FORMATTERS["day"](date)
-        ].join(" ");
-    },
-    "EEEE, d": function(date) {
-        return [
-            FORMATTERS["dayofweek"](date),
-            FORMATTERS["d"](date)
-        ].join(", ");
-    },
-    "EEEE MM yy": function(date) {
-        return [
-            FORMATTERS["dayofweek"](date),
-            FORMATTERS["MM"](date),
-            FORMATTERS["shortyear"](date)
-        ].join(" ");
-    },
-    "d MMMM yyyy": function(date) {
-        return [
-            FORMATTERS["day"](date),
-            FORMATTERS["month"](date),
-            FORMATTERS["year"](date)
-        ].join(" ");
-    },
-    "E": function(date) {
-        return cutCaptions([FORMATTERS["dayofweek"](date)], "abbreviated")[0];
-    },
-    "EEE": function(date) {
-        return FORMATTERS["E"](date);
-    },
-    "EEE hh": function(date) {
-        return [
-            FORMATTERS["EEE"](date),
-            FORMATTERS["hh"](date)
-        ].join(" ");
-    },
-    "ss SSS": function(date) {
-        return [
-            FORMATTERS["second"](date),
-            FORMATTERS["SSS"](date)
-        ].join(" ");
-    },
-    "quarter": function(date) {
-        var month = date.getMonth();
-        if(month >= 0 && month < 3) {
-            return "Q1";
-        }
-
-        if(month > 2 && month < 6) {
-            return "Q2";
-        }
-
-        if(month > 5 && month < 9) {
-            return "Q3";
-        }
-
-        return "Q4";
-    },
-    "quarterandyear": function(date) {
-        return FORMATTERS["quarter"](date) +
-            " " +
-            FORMATTERS["year"](date);
-    }
-};
 
 // TODO: find best solution for parsing without timezone
 var parseWithoutTimezone = function(text) {
@@ -542,7 +224,6 @@ var PARSERS = {
 // generating pattern aliases
 iteratorUtils.each(FORMATS_TO_PATTERN_MAP, function(key, value) {
     value = value.replace(/'/g, "");
-    FORMATTERS[value] = FORMATTERS[key];
     PARSERS[value] = PARSERS[key];
 });
 
@@ -643,7 +324,10 @@ var dateLocalization = dependencyInjector({
             formatter = format.formatter;
         } else {
             format = format.type || format;
-            formatter = getByFormat(FORMATTERS, format);
+            if(isString(format)) {
+                format = FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format;
+                return serializeDate(date, format);
+            }
         }
 
         if(!formatter) {
