@@ -3,6 +3,7 @@
 var $ = require("jquery");
 var eventsEngine = require("../../events/core/events_engine");
 var useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
+var hooks = require("./hooks");
 var registerEventCallbacks = require("../../events/core/event_registrator_callbacks");
 
 if(useJQueryRenderer) {
@@ -26,6 +27,7 @@ if(useJQueryRenderer) {
         triggerHandler: function(element) {
             $(element).triggerHandler.apply($(element), Array.prototype.slice.call(arguments, 1));
         },
+        copy: hooks.copy,
         Event: $.Event
     });
 }
