@@ -85,7 +85,7 @@ var DropDownBox = DropDownEditor.inherit({
             /**
              * @name dxDropDownBoxOptions_dropDownOptions
              * @publicName dropDownOptions
-             * @type Popup options
+             * @type dxPopupOptions
              * @default {}
              */
             dropDownOptions: {},

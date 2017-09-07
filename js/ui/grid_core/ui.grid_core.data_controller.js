@@ -19,7 +19,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_dataSource
              * @publicName dataSource
-             * @type string|array|DataSource|DataSource configuration
+             * @type string|array|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
