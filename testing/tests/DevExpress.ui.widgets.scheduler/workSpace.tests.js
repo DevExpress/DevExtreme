@@ -400,6 +400,26 @@ QUnit.testStart(function() {
             "Exception messages should be correct"
         );
     });
+
+    QUnit.test("DateTimeIndicator should be rendered if needed", function(assert) {
+        this.instance.option("showDateTimeIndicator", true);
+        var $element = this.instance.element();
+
+        assert.equal($element.find(".dx-scheduler-date-time-indicator-content").length, 1, "Indicator is rendered correctly");
+
+        this.instance.option("showDateTimeIndicator", false);
+        $element = this.instance.element();
+
+        assert.equal($element.find(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator wasn't rendered");
+    });
+
+    QUnit.test("DateTimeIndicator should be wrapped by scrollable", function(assert) {
+        this.instance.option("showDateTimeIndicator", true);
+        var $element = this.instance.element();
+
+        assert.ok($element.find(".dx-scheduler-date-time-indicator").parent().hasClass("dx-scrollable-content"), "Scrollable contains time indicator");
+    });
+
 })("Work Space Base");
 
 (function() {

@@ -548,6 +548,15 @@ var Scheduler = Widget.inherit({
                 * @default true
                 */
             showAllDayPanel: true,
+
+            /**
+                * @name dxSchedulerOptions_showDateTimeIndicator
+                * @publicName showDateTimeIndicator
+                * @type boolean
+                * @default true
+                */
+            showDateTimeIndicator: true,
+
                 /**
                 * @name dxSchedulerOptions_recurrenceEditMode
                 * @publicName recurrenceEditMode
@@ -1205,6 +1214,9 @@ var Scheduler = Widget.inherit({
                     this._reloadDataSource();
                 }).bind(this));
                 break;
+            case "showDateTimeIndicator":
+                this._updateOption("workSpace", "showDateTimeIndicator", value);
+                break;
             case "appointmentTooltipTemplate":
             case "appointmentPopupTemplate":
             case "recurrenceEditMode":
@@ -1808,6 +1820,7 @@ var Scheduler = Widget.inherit({
             focusStateEnabled: this.option("focusStateEnabled"),
             cellDuration: this.option("cellDuration"),
             showAllDayPanel: this.option("showAllDayPanel"),
+            showDateTimeIndicator: this.option("showDateTimeIndicator"),
             allDayExpanded: this._appointments.option("items"),
             crossScrollingEnabled: this.option("crossScrollingEnabled"),
             dataCellTemplate: this.option("dataCellTemplate"),

@@ -63,6 +63,8 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_ROW_CLASS = "dx-scheduler-date-table-row",
     DATE_TABLE_FOCUSED_CELL_CLASS = "dx-scheduler-focused-cell",
 
+    DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
+    DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content",
     DATE_TABLE_DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",
 
     SCHEDULER_HEADER_SCROLLABLE_CLASS = "dx-scheduler-header-scrollable",
@@ -380,6 +382,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "currentDate":
             case "groups":
             case "startDate":
+            case "showDateTimeIndicator":
                 this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
@@ -738,6 +741,25 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderAllDayPanel();
 
         this._renderDateTable();
+
+        this._renderDateTimeIndicator();
+    },
+
+    _renderDateTimeIndicator: function() {
+        if(!this.option("showDateTimeIndicator")) {
+            return;
+        }
+
+        var $container = this._dateTableScrollable.content(),
+            $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-clock");
+
+        this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
+
+        var today = new Date();
+        $content.append($("<span>").text(dateLocalization.format(today, "shorttime")));
+
+        this._$indicator.append($content);
+        $container.append(this._$indicator);
     },
 
     _setFirstViewDate: function() {
@@ -1328,6 +1350,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
+        this._$indicator && this._$indicator.empty();
         this._$timePanel.empty();
         this._$allDayTable.empty();
         delete this._hiddenInterval;
