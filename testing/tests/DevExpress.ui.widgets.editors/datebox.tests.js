@@ -452,6 +452,18 @@ QUnit.test("the value should be passed to the hidden input in the correct format
     });
 });
 
+//T552313
+QUnit.test("the value should be passed to the hidden input in the correct format if dateSerializationFormat option is defined", function(assert) {
+    var dateValue = new Date(Date.UTC(2016, 6, 15, 14, 30)),
+        $element = $("#dateBox").dxDateBox({
+            type: "datetime",
+            dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
+            value: dateValue
+        });
+
+    assert.equal($element.find("input[type='hidden']").val(), "2016-07-15T14:30:00Z", "input value is correct for the 'yyyy-MM-ddTHH:mm:ssZ' format");
+});
+
 QUnit.test("the value should be passed to the hidden input on widget value change", function(assert) {
     var type = "date",
         $element = $("#dateBox").dxDateBox({

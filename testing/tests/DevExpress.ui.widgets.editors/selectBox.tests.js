@@ -1973,6 +1973,29 @@ QUnit.test("filter should be cleared if all text was removed using backspace", f
     assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
 });
 
+QUnit.test("search timer should not be cleared when the widget is opening", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            searchTimeout: 100,
+            openOnFieldClick: false,
+            opened: true,
+            items: [1, 2, 3]
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        $button = $selectBox.find(".dx-dropdowneditor-button"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("4");
+    this.clock.tick(100);
+    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "items are filtered");
+
+    keyboard.press("backspace");
+    $button.trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+});
+
 QUnit.test("Custom value should be selected in list if items were modified on custom item creation", function(assert) {
     var items = [1, 2, 3],
         $selectBox = $("#selectBox").dxSelectBox({

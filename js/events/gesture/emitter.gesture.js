@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     styleUtils = require("../../core/utils/style"),
     browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
+    ready = require("../../core/utils/ready"),
     mathUtils = require("../../core/utils/math"),
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
@@ -50,7 +51,7 @@ var gestureCover = (function() {
         e.preventDefault();
     });
 
-    domUtils.ready(function() {
+    ready(function() {
         $cover.appendTo("body");
     });
 

@@ -202,7 +202,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_datasource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSource configuration
+            * @type string|array|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,

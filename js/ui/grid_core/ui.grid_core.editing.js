@@ -1878,7 +1878,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_editing_form
                  * @publicName form
-                 * @type Form options
+                 * @type dxFormOptions
                  */
                 form: {
                     colCount: 2
@@ -1887,7 +1887,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_editing_popup
                  * @publicName popup
-                 * @type Popup options
+                 * @type dxPopupOptions
                  */
                 popup: {}
             }
