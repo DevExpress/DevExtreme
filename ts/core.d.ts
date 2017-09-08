@@ -596,7 +596,7 @@ declare module DevExpress {
 
         //T184606
         interface Promise {
-            then(doneFn?: Function, failFn?: Function, progressFn?: Function): Promise;
+            then(doneFn?: Function | null, failFn?: Function | null, progressFn?: Function | null): Promise;
         }
 
         export interface CustomStoreOptions extends StoreOptions {
