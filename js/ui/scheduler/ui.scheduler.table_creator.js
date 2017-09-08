@@ -73,7 +73,7 @@ var SchedulerTableCreator = {
 
                 } else {
                     if(options.getCellText) {
-                        td.innerHTML = "<div>" + options.getCellText(i, j) + "</div>";
+                        td.innerHTML = "<div>" + options.getCellText(i, j, td) + "</div>";
                     }
                 }
 

@@ -62,6 +62,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     DATE_TABLE_ROW_CLASS = "dx-scheduler-date-table-row",
     DATE_TABLE_FOCUSED_CELL_CLASS = "dx-scheduler-focused-cell",
+    DATE_TABLE_CURRENT_TIME_CELL_CLASS = "dx-scheduler-current-time-cell",
 
     DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
     DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content",
@@ -364,7 +365,8 @@ var SchedulerWorkSpace = Widget.inherit({
             timeCellTemplate: null,
             resourceCellTemplate: null,
             dateCellTemplate: null,
-            allowMultipleCellSelection: true
+            allowMultipleCellSelection: true,
+            _currentDateTime: new Date()
         });
     },
 
@@ -383,6 +385,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "groups":
             case "startDate":
             case "showDateTimeIndicator":
+            case "_currentDateTime":
                 this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
@@ -751,25 +754,30 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var $container = this._dateTableScrollable.content(),
-            indicatorHeight = this._getDateTimeIndicatorHeight();
+            indicatorHeight = this._getDateTimeIndicatorHeight(),
+            maxHeight = $container.outerHeight(),
+            renderIndicatorContent = true;
+
+        if(indicatorHeight > maxHeight) {
+            indicatorHeight = maxHeight;
+            renderIndicatorContent = false;
+        }
 
         if(indicatorHeight > 0) {
-            var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-clock");
-
             this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
-            this._$indicator.height(this._getDateTimeIndicatorHeight());
-            var today = new Date();
-            $content.append($("<span>").text(dateLocalization.format(today, "shorttime")));
+            this._$indicator.height(indicatorHeight);
 
-            $content.css("top", indicatorHeight - 10);
-
-            this._$indicator.append($content);
+            if(renderIndicatorContent) {
+                var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
+                $content.css("top", indicatorHeight - 10);
+                this._$indicator.append($content);
+            }
             $container.append(this._$indicator);
         }
     },
 
     _getDateTimeIndicatorHeight: function() {
-        var today = new Date(),
+        var today = this.option("_currentDateTime") || new Date(),
             cellHeight = this.getCellHeight(),
             duration = today.getTime() - this._firstViewDate.getTime(),
             cellCount = duration / this.getCellDuration();
@@ -1100,14 +1108,32 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.option("endDayHour") - this.option("startDayHour");
     },
 
-    _getTimeText: function(i) {
+    _getTimeText: function(i, j, td) {
         // T410490: incorrectly displaying time slots on Linux
         var startViewDate = new Date(this.getStartViewDate()),
             timeCellDuration = this.getCellDuration() * 2;
 
         startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
 
+        if(this._isCurrentTime(startViewDate)) {
+            $(td).addClass(DATE_TABLE_CURRENT_TIME_CELL_CLASS);
+        }
         return dateLocalization.format(startViewDate, "shorttime");
+    },
+
+    _isCurrentTime: function(date) {
+        var now = new Date(),
+            result = false,
+            startCellDate = new Date(date),
+            endCellDate = new Date(date);
+
+        if(dateUtils.sameDate(now, date)) {
+            startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration());
+            endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
+
+            result = dateUtils.dateInRange(now, startCellDate, endCellDate);
+        }
+        return result;
     },
 
     _renderDateTable: function() {
@@ -1359,7 +1385,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
-        this._$indicator && this._$indicator.empty();
+        this._$indicator && this._$indicator.remove();
         this._$timePanel.empty();
         this._$allDayTable.empty();
         delete this._hiddenInterval;
