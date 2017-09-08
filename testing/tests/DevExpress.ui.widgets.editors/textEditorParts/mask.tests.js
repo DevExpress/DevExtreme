@@ -1083,22 +1083,30 @@ QUnit.test("mask should not be crushed after set in mask option empty value in c
 QUnit.module("clear button");
 
 QUnit.test("mask should be displayed instead of empty string after clear button click", function(assert) {
-    var $textEditor = $("#texteditor").dxTextEditor({
-            mask: "999",
-            showClearButton: true,
-            focusStateEnabled: true
-        }),
-        instance = $textEditor.dxTextEditor("instance"),
-        $input = $textEditor.find(".dx-texteditor-input"),
-        $clearButton = $textEditor.find(".dx-clear-button-area");
+    var clock = sinon.useFakeTimers();
 
-    caretWorkaround($input);
+    try {
+        var $textEditor = $("#texteditor").dxTextEditor({
+                mask: "999",
+                showClearButton: true,
+                focusStateEnabled: true
+            }),
+            instance = $textEditor.dxTextEditor("instance"),
+            $input = $textEditor.find(".dx-texteditor-input"),
+            $clearButton = $textEditor.find(".dx-clear-button-area");
 
-    $input.trigger("focus");
-    $clearButton.trigger("dxclick");
+        caretWorkaround($input);
 
-    assert.equal(instance.option("text"), "___", "option 'text' has mask as value");
-    assert.equal($input.val(), "___", "input has mask as value");
+        $input.trigger("focus");
+        clock.tick();
+
+        $clearButton.trigger("dxclick");
+
+        assert.equal(instance.option("text"), "___", "option 'text' has mask as value");
+        assert.equal($input.val(), "___", "input has mask as value");
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test("clear button click should not lead to error when value is empty", function(assert) {
