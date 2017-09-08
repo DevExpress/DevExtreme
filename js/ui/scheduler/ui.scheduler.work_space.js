@@ -62,10 +62,11 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     DATE_TABLE_ROW_CLASS = "dx-scheduler-date-table-row",
     DATE_TABLE_FOCUSED_CELL_CLASS = "dx-scheduler-focused-cell",
-    DATE_TABLE_CURRENT_TIME_CELL_CLASS = "dx-scheduler-current-time-cell",
 
     DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
     DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content",
+    TIME_PANEL_CURRENT_TIME_CELL_CLASS = "dx-scheduler-time-panel-current-time-cell",
+
     DATE_TABLE_DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",
 
     SCHEDULER_HEADER_SCROLLABLE_CLASS = "dx-scheduler-header-scrollable",
@@ -749,31 +750,35 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderDateTimeIndicator: function() {
-        if(!this.option("showDateTimeIndicator")) {
-            return;
-        }
+        if(this.option("showDateTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var $container = this._dateTableScrollable.content(),
+                indicatorHeight = this._getDateTimeIndicatorHeight(),
+                maxHeight = $container.outerHeight(),
+                renderIndicatorContent = true;
 
-        var $container = this._dateTableScrollable.content(),
-            indicatorHeight = this._getDateTimeIndicatorHeight(),
-            maxHeight = $container.outerHeight(),
-            renderIndicatorContent = true;
-
-        if(indicatorHeight > maxHeight) {
-            indicatorHeight = maxHeight;
-            renderIndicatorContent = false;
-        }
-
-        if(indicatorHeight > 0) {
-            this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
-            this._$indicator.height(indicatorHeight);
-
-            if(renderIndicatorContent) {
-                var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
-                $content.css("top", indicatorHeight - 10);
-                this._$indicator.append($content);
+            if(indicatorHeight > maxHeight) {
+                indicatorHeight = maxHeight;
+                renderIndicatorContent = false;
             }
-            $container.append(this._$indicator);
+
+            if(indicatorHeight > 0) {
+                this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
+                this._$indicator.height(indicatorHeight);
+
+                if(renderIndicatorContent) {
+                    var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
+                    $content.css("top", indicatorHeight - 10);
+                    this._$indicator.append($content);
+                }
+                $container.append(this._$indicator);
+            }
         }
+    },
+
+    _needRenderDateTimeIndicator: function() {
+        var now = this.option("_currentDateTime") || new Date();
+
+        return dateUtils.sameDate(now, this._firstViewDate);
     },
 
     _getDateTimeIndicatorHeight: function() {
@@ -1116,13 +1121,13 @@ var SchedulerWorkSpace = Widget.inherit({
         startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
 
         if(this._isCurrentTime(startViewDate)) {
-            $(td).addClass(DATE_TABLE_CURRENT_TIME_CELL_CLASS);
+            $(td).addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
         }
         return dateLocalization.format(startViewDate, "shorttime");
     },
 
     _isCurrentTime: function(date) {
-        var now = new Date(),
+        var now = this.option("_currentDateTime") || new Date(),
             result = false,
             startCellDate = new Date(date),
             endCellDate = new Date(date);
