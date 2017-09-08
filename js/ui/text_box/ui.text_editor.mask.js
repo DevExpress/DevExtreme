@@ -6,11 +6,11 @@ var $ = require("../../core/renderer"),
     domUtils = require("../../core/utils/dom"),
     isDefined = require("../../core/utils/type").isDefined,
     stringUtils = require("../../core/utils/string"),
-    typeUtils = require("../../core/utils/type"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    messageLocalization = require("../../localization/message"),
+    localization = require("../../localization"),
+    messageLocalization = localization.message,
     TextEditorBase = require("./ui.text_editor.base"),
     MaskRules = require("./ui.text_editor.mask.rule"),
     eventUtils = require("../../events/utils");
@@ -21,8 +21,6 @@ var stubCaret = function() {
 
 var EMPTY_CHAR = " ";
 var EMPTY_CHAR_CODE = 32;
-var BACKSPACE_KEY_CODE = 8;
-var DELETE_KEY_CODE = 46;
 var ESCAPED_CHAR = "\\";
 
 var TEXTEDITOR_MASKED_CLASS = "dx-texteditor-masked";
@@ -188,11 +186,8 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _renderFormatter: function() {
-        var format = this.option("format"),
-            parse = this.option("parse");
-
-        this._formatter = this._createAction(typeUtils.isFunction(format) ? format : this._defaultFormatter);
-        this._parser = this._createAction(typeUtils.isFunction(parse) ? parse : this._defaultParser);
+        this._formatter = localization.number.format;
+        this._parser = localization.number.parse;
 
         this._detachFormatterEvents();
         this._attachFormatterEvents();
@@ -206,41 +201,22 @@ var TextEditorMask = TextEditorBase.inherit({
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace("input", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("keydown", MASK_FORMATTER_NAMESPACE), this._keyDown.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("change", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
     },
 
     _formatValue: function() {
-        if(this._preventFormat || !this.option("format")) {
-            this._preventFormat = false;
-            return;
-        }
+        var format = this.option("displayFormat");
 
-        var caret = this._caret(),
-            value = this._input().val(),
-            formattedValue = this._formatter(this._parser(value));
+        if(!format) return;
+
+        var value = this._input().val(),
+            formattedValue = this._formatter(this._parser(value, format), format);
 
         this._input().val(formattedValue);
-
-        if(caret.start < value.length) {
-            this._caret(caret);
-        }
     },
 
     _updateParsedValue: function() {
-        this.option("value", this._parser(this._input().val()));
-    },
-
-    _keyDown: function(e) {
-        this._preventFormat = e.keyCode === BACKSPACE_KEY_CODE || e.keyCode === DELETE_KEY_CODE;
-    },
-
-    _defaultFormatter: function(e) {
-        return e.actionValue;
-    },
-
-    _defaultParser: function(e) {
-        return e.actionValue;
+        this.option("value", this._parser(this._input().val(), this.option("displayFormat")));
     },
 
     _attachMaskEventHandlers: function() {
@@ -403,7 +379,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        if(this.option("parse")) {
+        if(this.option("displayFormat")) {
             this._saveValueChangeEvent(e);
             this._updateParsedValue();
             return;
@@ -766,13 +742,8 @@ var TextEditorMask = TextEditorBase.inherit({
                 this._updateMaskOption();
                 this._processEmptyMask(args.value);
                 break;
-            case "format":
-                this._renderFormatter();
+            case "displayFormat":
                 this._formatValue();
-                break;
-            case "parse":
-                this._renderFormatter();
-                this._updateParsedValue();
                 break;
             case "maskChar":
             case "maskRules":
