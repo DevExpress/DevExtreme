@@ -164,7 +164,7 @@ var getElementEventData = function(element, eventName) {
             }
         },
 
-        iterateHandlers: function(callback) {
+        callHandlers: function(event, extraParameters) {
             var forceStop = false;
             var handleCallback = function(eventData) {
                 if(forceStop) {
@@ -172,7 +172,8 @@ var getElementEventData = function(element, eventName) {
                 }
 
                 if(!namespaces.length || isSubset(eventData.namespaces, namespaces)) {
-                    forceStop = callback(eventData.wrappedHandler, eventData.handler) === false;
+                    eventData.wrappedHandler(event, extraParameters);
+                    forceStop = event.isImmediatePropagationStopped();
                 }
             };
 
@@ -323,9 +324,10 @@ var eventsEngine = {
 
     trigger: normalizeTriggerArguments(function(element, event, extraParameters) {
         var eventName = event.type;
+        var elementDataByEvent = getElementEventData(element, event.type);
 
         special.callMethod(eventName, "trigger", element, [ event, extraParameters ]);
-        eventsEngine.triggerHandler(element, event, extraParameters);
+        elementDataByEvent.callHandlers(event, extraParameters);
 
         var noBubble = special.getField(eventName, "noBubble") || event.isPropagationStopped();
 
@@ -343,7 +345,8 @@ var eventsEngine = {
             var i = 0;
 
             while(parents[i] && !event.isPropagationStopped()) {
-                eventsEngine.triggerHandler(parents[i], extend(event, { currentTarget: parents[i] }), extraParameters);
+                var parentDataByEvent = getElementEventData(parents[i], event.type);
+                parentDataByEvent.callHandlers(extend(event, { currentTarget: parents[i] }), extraParameters);
                 i++;
             }
         }
@@ -370,11 +373,7 @@ var eventsEngine = {
 
     triggerHandler: normalizeTriggerArguments(function(element, event, extraParameters) {
         var elementDataByEvent = getElementEventData(element, event.type);
-
-        elementDataByEvent.iterateHandlers(function(wrappedHandler) {
-            wrappedHandler(event, extraParameters);
-            return !event.isImmediatePropagationStopped();
-        });
+        elementDataByEvent.callHandlers(event, extraParameters);
     }),
 
     Event: normalizeEventArguments(function(src, config) {
