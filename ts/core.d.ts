@@ -431,6 +431,9 @@ declare module DevExpress {
         /** @docid domcomponentmethods_element */
         element(): JQuery;
 
+        /** @docid domcomponentmethods_dispose */
+        dispose(): void;
+
         /** @docid domcomponentmethods_defaultOptions */
         static defaultOptions(rule: {
             device?: any;
