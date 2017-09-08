@@ -40,12 +40,17 @@ QUnit.test("changed input value should be formatted correctly", function(assert)
 });
 
 QUnit.test("text should be formatted on input", function(assert) {
-    this.keyboard
-        .caret(5)
-        .type("4")
-        .change();
+    this.instance.option("format", function(e) {
+        return e.actionValue.replace(/(\d)$/, " $1");
+    });
 
-    assert.equal(this.input.val(), "$ 1234", "value is formatted");
+    this.input.val("1234");
+    this.keyboard.input();
+
+    assert.equal(this.input.val(), "123 4", "value is formatted");
+    assert.equal(this.instance.option("value"), "123", "value was not changed yet");
+
+    this.keyboard.change();
     assert.equal(this.instance.option("value"), "1234", "widget got parsed value");
 });
 

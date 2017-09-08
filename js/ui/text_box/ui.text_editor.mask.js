@@ -147,9 +147,13 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _render: function() {
         this._renderHiddenElement();
-        this._renderFormatter();
         this.callBase();
         this._renderMask();
+    },
+
+    _renderInput: function() {
+        this.callBase();
+        this._renderFormatter();
     },
 
     _renderHiddenElement: function() {
