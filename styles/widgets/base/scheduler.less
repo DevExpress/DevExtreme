@@ -471,8 +471,18 @@
         position: absolute;
         margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
         opacity: 0.2;
-        background-color:  @SCHEDULER_BASE_BORDER_COLOR
+        background-color:  @SCHEDULER_BASE_BORDER_COLOR;
+        pointer-events: none;
     }
+}
+
+.dx-scheduler-date-time-indicator-all-day {
+    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+    width: 100%;
+    background-color:  @SCHEDULER_BASE_BORDER_COLOR;
+    opacity: 0.2;
+    position: absolute;
+    pointer-events: none;
 }
 
 .dx-scheduler-work-space {
