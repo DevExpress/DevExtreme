@@ -789,6 +789,8 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
+    _getDateTimeIndicatorWidth: noop,
+
     _needRenderDateTimeIndicator: function() {
         var now = this.option("_currentDateTime") || new Date();
 

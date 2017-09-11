@@ -476,6 +476,59 @@
     }
 }
 
+.dx-scheduler-work-space-week {
+        .dx-scheduler-date-time-indicator{
+            border-bottom: 1px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
+            box-shadow: @SCHEDULER_TIME_INDICATOR_SHADOW;
+            margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+            width: 100%;
+
+            /*.dx-scheduler-date-time-indicator-content {
+                position: absolute;
+                text-align: center;
+                padding-top: 2px;
+                font-size: 30px;
+                color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+                left: 83px;
+                opacity: 1;
+                margin-top: -8px;
+                text-shadow: white 1px -1px 3px;
+                //background-color: darkgrey;
+            }*/
+
+            &:before {
+                display: none;
+            }
+
+            .dx-scheduler-date-time-indicator-top {
+                 &:before {
+                    width: inherit;
+                    height: inherit;
+                    content: "";
+                    left: 0;
+                    position: absolute;
+                    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+                    opacity: 0.2;
+                    background-color:  @SCHEDULER_BASE_BORDER_COLOR;
+                    pointer-events: none;
+                }
+            }
+
+            .dx-scheduler-date-time-indicator-bottom {
+                 &:before {
+                    width: inherit;
+                    height: inherit;
+                    content: "";
+                    left: 0;
+                    position: absolute;
+                    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+                    opacity: 0.2;
+                    background-color:  @SCHEDULER_BASE_BORDER_COLOR;
+                    pointer-events: none;
+                }
+            }
+    }
+}
 .dx-scheduler-date-time-indicator-all-day {
     margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
     width: 100%;
@@ -1317,7 +1370,8 @@
     }
 
     &.dx-scheduler-time-panel-current-time-cell {
-        border-right: 3px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        box-shadow: inset -3px 0px 0px 0px @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
     }
 }
 
