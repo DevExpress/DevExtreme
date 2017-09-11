@@ -18,17 +18,22 @@ function parseStyles(color, style, baseStyle) {
 }
 
 function Item(widget, options) {
-    this.code = 0;
-    this.widget = widget;
+    var that = this,
+        data = options.data;
 
-    this.figure = options.figure;
-    this.data = options.data;
-    this.percent = options.percent;
+    that.code = 0;
+    that.widget = widget;
 
-    this.id = options.id;
-    this.color = options.color;
+    that.figure = options.figure;
+    that.argument = data.argument;
+    that.value = data.value;
+    that.data = data.dataItem;
+    that.percent = options.percent;
 
-    this.states = {
+    that.id = options.id;
+    that.color = options.color;
+
+    that.states = {
         normal: parseStyles(options.color, options.itemOptions, options.itemOptions),
         hover: parseStyles(options.color, options.itemOptions.hoverStyle, options.itemOptions),
         selection: parseStyles(options.color, options.itemOptions.selectionStyle, options.itemOptions)

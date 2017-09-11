@@ -183,7 +183,8 @@ var dxFunnel = require("../core/base_widget").inherit({
                     d[0].push({
                         value: value,
                         color: item[colorField],
-                        argument: item[argumentField]
+                        argument: item[argumentField],
+                        dataItem: item
                     });
                     d[1] += value;
                 }

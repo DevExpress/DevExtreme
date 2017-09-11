@@ -36,6 +36,12 @@ var dxFunnel = {
         keepLabels: true
     },
     /**
+    * @name dxfunneloptions_datasource
+    * @publicName dataSource
+    * @extends CommonVizDataSource
+    */
+    dataSource: undefined,
+    /**
     * @name dxfunneloptions_valuefield
     * @publicName valueField
     * @type string
@@ -467,8 +473,8 @@ var dxFunnel = {
         * @type function(itemInfo)
         * @type_function_param1 itemInfo:object
         * @type_function_param1_field1 item:dxfunnelItem
+        * @type_function_param1_field2 value:Number
         * @type_function_param1_field2 valueText:string
-        * @type_function_param1_field3 value:Number
         * @type_function_param1_field4 percent:Number
         * @type_function_param1_field5 percentText:string
         * @type_function_return string
@@ -716,8 +722,8 @@ var dxFunnel = {
         /**
         * @name dxfunneloptions_legend_customizetext
         * @publicName customizeText
-        * @type function(itemsInfo)
-        * @type_function_param1 itemsInfo:object
+        * @type function(itemInfo)
+        * @type_function_param1 itemInfo:object
         * @type_function_param1_field1 item:dxfunnelItem
         * @type_function_param1_field2 text:string
         * @type_function_return string
@@ -727,8 +733,8 @@ var dxFunnel = {
         /**
         * @name dxfunneloptions_legend_customizehint
         * @publicName customizeHint
-        * @type function(itemsInfo)
-        * @type_function_param1 itemsInfo:object
+        * @type function(itemInfo)
+        * @type_function_param1 itemInfo:object
         * @type_function_param1_field1 item:dxfunnelItem
         * @type_function_param1_field2 text:string
         * @type_function_return string
@@ -748,9 +754,9 @@ var dxFunnel = {
         * @default undefined
         * @type function(info)
         * @type_function_param1 info:object
-        * @type_function_param1_field1 value:Number
-        * @type_function_param1_field2 valueText:string
-        * @type_function_param1_field3 item:dxfunnelItem
+        * @type_function_param1_field1 item:dxfunnelItem
+        * @type_function_param1_field2 value:Number
+        * @type_function_param1_field3 valueText:string
         * @type_function_param1_field4 percent:Number
         * @type_function_param1_field5 percentText:string
         * @type_function_return object
