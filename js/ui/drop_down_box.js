@@ -264,7 +264,12 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _getMaxHeight: function() {
-        return $(window).height() * 0.9;
+        var $element = this.element(),
+            offsetTop = $element.offset().top - $(window).scrollTop(),
+            offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight(),
+            maxHeight = Math.max(offsetTop, offsetBottom) * 0.9;
+
+        return maxHeight;
     },
 
     _popupShownHandler: function() {
