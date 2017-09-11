@@ -1596,6 +1596,21 @@ declare module DevExpress.ui {
 
         /** @docid dxListOptions_activeStateEnabled */
         activeStateEnabled?: boolean;
+
+        /** @docid dxListOptions_searchEnabled */
+        searchEnabled?: boolean;
+
+        /** @docid dxListOptions_searchValue */
+        searchValue?: any;
+
+        /** @docid dxListOptions_searchExpr */
+        searchExpr?: any;
+
+        /** @docid dxListOptions_searchMode */
+        searchMode?: string;
+
+        /** @docid dxListOptions_searchEditorOptions */
+        searchEditorOptions?: DevExpress.ui.dxTextBoxOptions;
     }
 
     /** @docid dxList */

@@ -14,7 +14,8 @@ var $ = require("jquery"),
     DOMComponent = require("core/dom_component"),
     holdEvent = require("events/hold"),
     swipeEvents = require("events/swipe"),
-    ScrollView = require("ui/scroll_view");
+    ScrollView = require("ui/scroll_view"),
+    errors = require("ui/widget/ui.errors");
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -1019,6 +1020,94 @@ QUnit.test("list should be able to change grouped option after dataSource option
     });
 
     assert.notOk(instance.option("grouped"), "grouped option was changed without exceptions");
+});
+
+QUnit.test("searchEnabled", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true
+        }),
+        instance = $element.dxList("instance");
+
+    instance.option("searchEnabled", false);
+
+    assert.notOk($element.find(".dx-list-search").length, "hasn't search editor");
+
+    instance.option("searchEnabled", true);
+
+    assert.ok($element.children().first().hasClass("dx-list-search"), "has search editor");
+});
+
+QUnit.test("searchValue", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.option("searchValue", 2);
+
+    assert.deepEqual(instance.option("items"), [2], "items");
+    assert.strictEqual(instance.getDataSource().searchValue(), 2, "search value of dataSource");
+});
+
+QUnit.test("searchMode", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 21, 3],
+            searchExpr: "this",
+            searchValue: "1"
+        }),
+        instance = $element.dxList("instance");
+
+    assert.deepEqual(instance.option("items"), [1, 21], "items");
+
+    instance.option("searchMode", "startswith");
+
+    assert.deepEqual(instance.option("items"), [1], "items");
+    assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation of dataSource");
+});
+
+QUnit.test("searchExpr", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [
+                { text: "test1", value: "3" },
+                { text: "test2", value: "3" },
+                { text: "test3", value: "2" }
+            ],
+            searchExpr: "text",
+            searchValue: "3"
+        }),
+        instance = $element.dxList("instance");
+
+    assert.deepEqual(instance.option("items"), [{ text: "test3", value: "2" }], "items");
+
+    instance.option("searchExpr", "value");
+
+    assert.deepEqual(instance.option("items"), [{ text: "test1", value: "3" }, { text: "test2", value: "3" }], "items");
+    assert.strictEqual(instance.getDataSource().searchExpr(), "value", "search operation of dataSource");
+});
+
+QUnit.test("searchEditorOptions", function(assert) {
+    var searchEditorInstance,
+        $element = $("#list").dxList({
+            dataSource: [
+                { text: "test1", value: "3" },
+                { text: "test2", value: "3" },
+                { text: "test3", value: "2" }
+            ],
+            searchEnabled: true,
+            searchEditorOptions: {
+                placeholder: "Search"
+            }
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditorInstance = $element.children(".dx-list-search").dxTextBox("instance");
+    assert.strictEqual(searchEditorInstance.option("placeholder"), "Search", "placeholder of the search box");
+
+    instance.option("searchEditorOptions", { placeholder: "Test" });
+
+    assert.strictEqual(searchEditorInstance.option("placeholder"), "Test", "placeholder of the search box");
 });
 
 
@@ -2405,6 +2494,34 @@ QUnit.test("list should attach keyboard events even if focusStateEnabled is fals
     assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
 });
 
+QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", function(assert) {
+    var $element = $("#list"),
+        instance = $element.dxList({
+            _keyboardProcessor: new KeyboardProcessor({ element: $element }),
+            dataSource: [1, 2, 3],
+            searchEnabled: true
+        }).dxList("instance"),
+        $searchEditor = $element.children(".dx-list-search");
+
+    $searchEditor.find("input").focus();
+    this.clock.tick();
+
+    assert.ok($element.hasClass("dx-state-focused"), "list is focused");
+    assert.ok($searchEditor.hasClass("dx-state-focused"), "search editor is focused");
+
+    instance.registerKeyHandler("tab", function(e) {
+        $element.find("[tabIndex]").not(":focus").first().focus();
+    });
+
+    $element.trigger($.Event("keydown", { which: 9 }));
+    this.clock.tick();
+
+    $searchEditor = $element.children(".dx-list-search");
+    assert.ok($element.find(toSelector(LIST_ITEM_CLASS)).first().hasClass("dx-state-focused"), "first list item is focused");
+    assert.ok($element.hasClass("dx-state-focused"), "list is focused");
+    assert.ok($element.find(".dx-scrollview-content").hasClass("dx-state-focused"), "scrollview content is focused");
+});
+
 
 QUnit.module("aria accessibility");
 
@@ -2422,4 +2539,68 @@ QUnit.test("list item role", function(assert) {
     $element.find(".dx-list-item").each(function(i, item) {
         assert.equal($(item).attr("role"), "option", "role for item " + i + " is correct");
     });
+});
+
+QUnit.module("Search");
+
+QUnit.test("Render search editor", function(assert) {
+    var $searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchValue: "3"
+        });
+
+    $searchEditor = $element.children().first();
+    assert.ok($searchEditor.hasClass("dx-list-search"), "has search editor");
+    assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "3", "editor value");
+    assert.strictEqual($element.children(".dx-scrollable-wrapper")[0].style.height, "calc(100% - " + $searchEditor.outerHeight(true) + "px)", "height of the scrollable wrapper");
+});
+
+QUnit.test("Search", function(assert) {
+    var searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditor = $element.children().first().dxTextBox("instance");
+    searchEditor.option("value", "2");
+
+    assert.deepEqual(instance.option("items"), [2], "items");
+    assert.strictEqual(instance.option("searchValue"), "2", "search value");
+});
+
+QUnit.test("Focusing widget when there is search editor", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.focus();
+
+    assert.ok($element.hasClass("dx-state-focused"), "widget is focused");
+    assert.ok($element.children(".dx-list-search").hasClass("dx-state-focused"), "search editor is focused");
+});
+
+QUnit.test("Show warning when dataSource is not specified", function(assert) {
+    var instance = $("#list").dxList({
+            items: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }).dxList("instance"),
+        warningHandler = sinon.spy(errors, "log");
+
+    try {
+        instance.option("searchValue", "2");
+
+        assert.equal(warningHandler.callCount, 1, "warning has been called once");
+        assert.equal(warningHandler.getCall(0).args[0], "W1009", "warning has correct error id");
+    } finally {
+        warningHandler.restore();
+    }
 });

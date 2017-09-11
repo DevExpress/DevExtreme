@@ -6,11 +6,14 @@ var $ = require("../../core/renderer"),
     GroupedEditStrategy = require("./ui.list.edit.strategy.grouped"),
     messageLocalization = require("../../localization/message"),
     EditProvider = require("./ui.list.edit.provider"),
-    ListBase = require("./ui.list.base");
+    ListBase = require("./ui.list.base"),
+    TextBox = require("../text_box"),
+    errors = require("../widget/ui.errors");
 
 var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
-    LIST_ITEM_RESPONSE_WAIT_CLASS = "dx-list-item-response-wait";
-
+    LIST_ITEM_RESPONSE_WAIT_CLASS = "dx-list-item-response-wait",
+    LIST_SEARCH_CLASS = "dx-list-search",
+    SCROLLABLE_WRAPPER_CLASS = "dx-scrollable-wrapper";
 /**
 * @name dxList
 * @publicName dxList
@@ -169,7 +172,47 @@ var ListEdit = ListBase.inherit({
             * @type boolean
             * @default false
             */
-            allowItemReordering: false
+            allowItemReordering: false,
+
+            /**
+            * @name dxListOptions_searchMode
+            * @publicName searchMode
+            * @type string
+            * @default 'contains'
+            */
+            searchMode: "contains",
+
+            /**
+            * @name dxListOptions_searchExpr
+            * @publicName searchExpr
+            * @type getter|array
+            * @default null
+            */
+            searchExpr: null,
+
+            /**
+            * @name dxListOptions_searchValue
+            * @type String
+            * @publicName searchValue
+            * @default ""
+            */
+            searchValue: "",
+
+            /**
+            * @name dxListOptions_searchEnabled
+            * @publicName searchEnabled
+            * @type boolean
+            * @default false
+            */
+            searchEnabled: false,
+
+            /**
+             * @name dxListOptions_searchEditorOptions
+             * @publicName searchEditorOptions
+             * @type TextBox options
+             * @default {}
+             */
+            searchEditorOptions: {},
 
             /**
             * @name dxListOptions_onItemDeleting
@@ -281,6 +324,14 @@ var ListEdit = ListBase.inherit({
         }
     },
 
+    _dataSourceOptions: function() {
+        return extend(this.callBase(), {
+            searchValue: this.option("searchValue"),
+            searchOperations: this.option("searchMode"),
+            searchExpr: this.option("searchExpr")
+        });
+    },
+
     _isPageSelectAll: function() {
         return this.option("selectAllMode") === "page";
     },
@@ -310,6 +361,7 @@ var ListEdit = ListBase.inherit({
 
     _render: function() {
         this._refreshEditProvider();
+        this._renderSearch();
         this.callBase();
     },
 
@@ -318,12 +370,94 @@ var ListEdit = ListBase.inherit({
         this._editProvider.afterItemsRendered();
     },
 
+    _renderSearch: function() {
+        var editorOptions,
+            $element = this.element(),
+            searchEnabled = this.option("searchEnabled");
+
+        if(!searchEnabled) {
+            this._$searchEditorElement && this._$searchEditorElement.remove();
+            delete this._$searchEditorElement;
+            delete this._searchEditor;
+            return;
+        }
+
+        editorOptions = this._getSearchEditorOptions();
+
+        if(this._searchEditor) {
+            this._searchEditor.option(editorOptions);
+        } else {
+            this._$searchEditorElement = $("<div>").addClass(LIST_SEARCH_CLASS).prependTo($element);
+            this._searchEditor = this._createComponent(this._$searchEditorElement, TextBox, editorOptions);
+        }
+    },
+
+    _getSearchEditorOptions: function() {
+        var that = this,
+            $element = that.element(),
+            userEditorOptions = that.option("searchEditorOptions"),
+            editorOptions = extend({
+                mode: "search",
+                placeholder: messageLocalization.format("Search"),
+                tabIndex: that.option("tabIndex"),
+                value: that.option("searchValue"),
+                valueChangeEvent: "keyup",
+                onValueChanged: function(e) {
+                    that.option("searchValue", e.value);
+                }
+            }, userEditorOptions);
+
+        editorOptions.onFocusIn = function() {
+            that._toggleFocusClass(true, $element);
+            userEditorOptions.onFocusIn && userEditorOptions.onFocusIn.apply(this, arguments);
+        };
+
+        editorOptions.onFocusOut = function() {
+            that._toggleFocusClass(false, $element);
+            userEditorOptions.onFocusOut && userEditorOptions.onFocusOut.apply(this, arguments);
+        };
+
+        return editorOptions;
+    },
+
+    _renderDimensions: function() {
+        this.callBase();
+
+        var searchEditorHeight,
+            $element = this.element(),
+            $scrollableWrapper = $element && $element.children("." + SCROLLABLE_WRAPPER_CLASS);
+
+        if($scrollableWrapper && this._$searchEditorElement) {
+            searchEditorHeight = this._$searchEditorElement.outerHeight(true);
+            $scrollableWrapper.css("height", "calc(100% - " + searchEditorHeight + "px)");
+        }
+    },
+
     _selectedItemClass: function() {
         return LIST_ITEM_SELECTED_CLASS;
     },
 
     _itemResponseWaitClass: function() {
         return LIST_ITEM_RESPONSE_WAIT_CLASS;
+    },
+
+    _getAriaTarget: function() {
+        return this.element();
+    },
+
+    _focusTarget: function() {
+        if(this.option("searchEnabled")) {
+            return this._itemContainer();
+        }
+
+        return this.callBase();
+    },
+
+    _updateFocusState: function(e, isFocused) {
+        if(this.option("searchEnabled")) {
+            this._toggleFocusClass(isFocused, this.element());
+        }
+        this.callBase(e, isFocused);
     },
 
     _itemClickHandler: function(e) {
@@ -405,13 +539,34 @@ var ListEdit = ListBase.inherit({
             case "itemDeleteMode":
             case "allowItemReordering":
             case "selectAllText":
+            case "searchEnabled":
+            case "searchEditorOptions":
                 this._invalidate();
                 break;
             case "onSelectAllValueChanged":
                 break;
+            case "searchExpr":
+            case "searchMode":
+            case "searchValue":
+                if(!this._dataSource) {
+                    errors.log("W1009");
+                    return;
+                }
+                this._dataSource[args.name === "searchMode" ? "searchOperation" : args.name](args.value);
+                this._dataSource.load();
+                break;
             default:
                 this.callBase(args);
         }
+    },
+
+    focus: function() {
+        if(!this.option("focusedElement") && this.option("searchEnabled")) {
+            this._searchEditor && this._searchEditor.focus();
+            return;
+        }
+
+        this.callBase();
     },
 
     /**
