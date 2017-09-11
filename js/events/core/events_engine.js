@@ -80,9 +80,6 @@ var getElementEventData = function(element, eventName) {
                     return;
                 }
 
-                if(e instanceof Event) {
-                    e = eventsEngine.Event(e);
-                }
                 e.data = data;
 
                 if(selector) {
@@ -118,11 +115,9 @@ var getElementEventData = function(element, eventName) {
 
             if(firstHandlerForTheType) {
                 special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
+                eventNameIsDefined && element.addEventListener(eventName, nativeHandler);
             }
-            // TODO: Add single event listener for all namespaces
             // TODO: Add event listeners only if setup returned true (Or not?)
-
-            eventNameIsDefined && element.addEventListener(eventName, wrappedHandler);
 
             special.callMethod(eventName, "add", element, [ handleObject ]);
         },
@@ -141,7 +136,7 @@ var getElementEventData = function(element, eventName) {
 
                     if(!skip) {
                         var eventNameIsDefined = eventName !== EMPTY_EVENT_NAME;
-                        eventNameIsDefined && element.removeEventListener(eventName, eventData.wrappedHandler); // TODO: Fix several subscriptions problem
+                        eventNameIsDefined && element.removeEventListener(eventName, nativeHandler);
 
                         removedHandler = eventData.handler;
                         special.callMethod(eventName, "remove", element, [ eventData ]);
@@ -166,6 +161,11 @@ var getElementEventData = function(element, eventName) {
 
         callHandlers: function(event, extraParameters) {
             var forceStop = false;
+
+            if(event instanceof Event) {
+                event = eventsEngine.Event(event);
+            }
+
             var handleCallback = function(eventData) {
                 if(forceStop) {
                     return;
@@ -183,6 +183,11 @@ var getElementEventData = function(element, eventName) {
             }
         }
     };
+};
+
+var nativeHandler = function(event, extraParameters) {
+    var elementDataByEvent = getElementEventData(this, event.type);
+    elementDataByEvent.callHandlers(event, extraParameters);
 };
 
 var isSubset = function(original, checked) {
