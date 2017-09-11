@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     fx = require("animation/fx"),
     CustomStore = require("data/custom_store"),
@@ -325,6 +326,33 @@ QUnit.test("popup should be flipped when container size is smaller than content 
         assert.ok($popupContent.hasClass("dx-dropdowneditor-overlay-flipped"), "popup was flipped");
     } finally {
         $dropDownBox.remove();
+    }
+});
+
+QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets including page scroll", function(assert) {
+    this.$element.dxDropDownBox({
+        items: [1, 2, 3],
+        value: 2
+    });
+
+    var scrollTop = sinon.stub(renderer.fn, "scrollTop").returns(100),
+        windowHeight = sinon.stub(renderer.fn, "innerHeight").returns(700),
+        offset = sinon.stub(renderer.fn, "offset").returns({ left: 0, top: 200 }),
+
+        instance = this.$element.dxDropDownBox("instance");
+
+    try {
+        instance.open();
+
+        var popup = $(".dx-popup").dxPopup("instance"),
+            maxHeight = popup.option("maxHeight");
+
+        assert.equal(Math.floor(maxHeight()), 523, "maxHeight is correct");
+
+    } finally {
+        scrollTop.restore();
+        windowHeight.restore();
+        offset.restore();
     }
 });
 
