@@ -3444,6 +3444,66 @@ QUnit.test("change selectAllMode to 'allPages' at runtime", function(assert) {
     });
 });
 
+//T550013
+QUnit.test("Click on selected selection checkbox with shift key", function(assert) {
+    var testElement = $('#container');
+
+    this.options.selection.showCheckBoxesMode = 'onClick';
+    this.setup();
+    this.columnHeadersView.render(testElement);
+    this.rowsView.render(testElement);
+
+    //act
+    var $checkbox = testElement.find(".dx-data-row .dx-select-checkbox").eq(0);
+    $checkbox.trigger("dxclick");
+    $checkbox.trigger($.Event("dxclick", { shiftKey: true }));
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: "Alex" }], "one item is selected");
+    assert.strictEqual($checkbox.dxCheckBox("instance").option("value"), true, "checkbox is checked");
+});
+
+//T550013
+QUnit.test("Click on selected selection checkbox with shift key to select range", function(assert) {
+    var testElement = $('#container');
+
+    this.options.selection.showCheckBoxesMode = 'onClick';
+    this.setup();
+    this.columnHeadersView.render(testElement);
+    this.rowsView.render(testElement);
+
+    //act
+    var $checkboxes = testElement.find(".dx-data-row .dx-select-checkbox");
+    $checkboxes.eq(1).trigger("dxclick");
+    $checkboxes.eq(0).trigger("dxclick");
+    $checkboxes.eq(1).trigger($.Event("dxclick", { shiftKey: true }));
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys().length, 2, "two items are selected");
+    assert.strictEqual($checkboxes.eq(0).dxCheckBox("instance").option("value"), true, "checkbox 0 is checked");
+    assert.strictEqual($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "checkbox 1 is checked");
+});
+
+//T550013
+QUnit.test("Click on unselected selection checkbox with shift key", function(assert) {
+    var testElement = $('#container');
+
+    this.options.selection.showCheckBoxesMode = 'onClick';
+    this.setup();
+    this.columnHeadersView.render(testElement);
+    this.rowsView.render(testElement);
+
+    //act
+    var $checkbox = testElement.find(".dx-data-row .dx-select-checkbox").eq(0);
+    $checkbox.trigger("dxclick");
+    $checkbox.trigger("dxclick");
+    $checkbox.trigger($.Event("dxclick", { shiftKey: true }));
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: "Alex" }], "one item is selected");
+    assert.strictEqual($checkbox.dxCheckBox("instance").option("value"), true, "checkbox is checked");
+});
+
 QUnit.module("Deferred selection", {
     beforeEach: function() {
         this.setupDataGrid = function(options) {

@@ -482,11 +482,11 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_lookup_dataSource
              * @publicName dataSource
-             * @type array|DataSource configuration|function(options)
+             * @type array|DataSourceOptions|function(options)
              * @type_function_param1 options:object
              * @type_function_param1_field1 data:object
              * @type_function_param1_field2 key:any
-             * @type_function_return array|DataSource configuration
+             * @type_function_return array|DataSourceOptions
              * @default undefined
              */
             /**
@@ -524,7 +524,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_headerFilter_dataSource
              * @publicName dataSource
-             * @type array|function(options)|DataSource configuration
+             * @type array|function(options)|DataSourceOptions
              * @type_function_param1 options:object
              * @type_function_param1_field1 component:object
              * @type_function_param1_field2 dataSource:object
@@ -545,7 +545,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_formItem
              * @publicName formItem
-             * @type Form Simple Item
+             * @type dxFormSimpleItem
              */
             regenerateColumnsByVisibleItems: false,
             /**
@@ -1370,9 +1370,12 @@ module.exports = {
                     if(!that._dataSourceApplied || that._dataSourceColumnsCount === 0 || forceApplying || that.option("regenerateColumnsByVisibleItems")) {
                         if(isDataSourceLoaded) {
                             if(!that._isColumnsFromOptions) {
-                                assignColumns(that, createColumnsFromDataSource(that, dataSource));
-                                that._dataSourceColumnsCount = that._columns.length;
-                                applyUserState(that);
+                                var columnsFromDataSource = createColumnsFromDataSource(that, dataSource);
+                                if(columnsFromDataSource.length) {
+                                    assignColumns(that, columnsFromDataSource);
+                                    that._dataSourceColumnsCount = that._columns.length;
+                                    applyUserState(that);
+                                }
                             }
                             return that.updateColumns(dataSource, forceApplying);
                         } else {

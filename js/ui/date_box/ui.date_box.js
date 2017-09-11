@@ -617,12 +617,14 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.dateOption("value");
+        var value = this.dateOption("value"),
+            dateSerializationFormat = this.option("dateSerializationFormat");
 
         this.option("text", this._getDisplayedText(value));
 
         var submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option("type")];
-        this._$submitElement.val(uiDateUtils.toStandardDateFormat(value, submitFormat));
+        var submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
+        this._$submitElement.val(submitValue);
 
         this._strategy.renderValue();
         this.callBase();

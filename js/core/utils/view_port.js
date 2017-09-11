@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    ready = require("./dom").ready,
+    ready = require("./ready"),
     changeCallback = $.Callbacks(),
     $originalViewPort = $();
 

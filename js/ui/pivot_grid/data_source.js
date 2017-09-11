@@ -923,7 +923,7 @@ module.exports = Class.inherit((function() {
             * @name PivotGridDataSourceOptions_fields_calculateSummaryValue
             * @publicName calculateSummaryValue
             * @type function(e)
-            * @type_function_param1 e:SummaryCell
+            * @type_function_param1 e:dxPivotGridSummaryCell
             * @type_function_return number
             * @default undefined
             */

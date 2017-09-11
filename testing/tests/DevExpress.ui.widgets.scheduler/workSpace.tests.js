@@ -172,6 +172,16 @@ QUnit.testStart(function() {
         assert.ok($element.hasClass("dx-scheduler-work-space-all-day-collapsed"), "dxSchedulerWorkSpace has 'dx-scheduler-work-space-all-day-collapsed' css class");
     });
 
+    QUnit.test("Workspace should have specific css class, if hoursInterval = 0.5 ", function(assert) {
+        this.instance.option("hoursInterval", 0.5);
+
+        var $element = this.instance.element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-odd-cells"), "dxSchedulerWorkSpace has 'dx-scheduler-work-space-odd-cells' css class");
+
+        this.instance.option("hoursInterval", 0.75);
+        assert.notOk($element.hasClass("dx-scheduler-work-space-odd-cells"), "dxSchedulerWorkSpace hasn't 'dx-scheduler-work-space-odd-cells' css class");
+    });
+
     QUnit.test("Scheduler workspace parts should be wrapped by scrollable", function(assert) {
         var $element = this.instance.element();
 

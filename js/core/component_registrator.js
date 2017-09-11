@@ -12,7 +12,7 @@ var callbacks = new MemorizedCallbacks();
  * @name registerComponent
  * @publicName registerComponent(name, class)
  * @param1 name:string
- * @param2 class:Class
+ * @param2 class:object
  * @module core/component_registrator
  * @hidden
  */
@@ -21,7 +21,7 @@ var callbacks = new MemorizedCallbacks();
  * @publicName registerComponent(name, namespace, class)
  * @param1 name:string
  * @param2 namespace:object
- * @param3 class:Class
+ * @param3 class:object
  * @module core/component_registrator
  * @hidden
  */
