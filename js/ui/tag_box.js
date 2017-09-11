@@ -152,7 +152,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _isCaretAtTheStart: function() {
-        return caret(this._input()).start === 0;
+        var position = caret(this._input());
+        return position.start === 0 && position.end === 0;
     },
 
     _moveTagFocus: function(direction, clearOnBoundary) {
