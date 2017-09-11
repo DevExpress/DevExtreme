@@ -114,10 +114,10 @@ var getElementEventData = function(element, eventName) {
             var firstHandlerForTheType = elementData[eventName].length === 1;
 
             if(firstHandlerForTheType) {
-                special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
-                eventNameIsDefined && element.addEventListener(eventName, nativeHandler);
+                if(!special.callMethod(eventName, "setup", element, [ data, namespaces, handler ])) {
+                    eventNameIsDefined && element.addEventListener(eventName, nativeHandler);
+                }
             }
-            // TODO: Add event listeners only if setup returned true (Or not?)
 
             special.callMethod(eventName, "add", element, [ handleObject ]);
         },
@@ -161,10 +161,6 @@ var getElementEventData = function(element, eventName) {
         callHandlers: function(event, extraParameters) {
             var forceStop = false;
 
-            if(event instanceof Event) {
-                event = eventsEngine.Event(event);
-            }
-
             var handleCallback = function(eventData) {
                 if(forceStop) {
                     return;
@@ -186,6 +182,7 @@ var getElementEventData = function(element, eventName) {
 
 var nativeHandler = function(event, extraParameters) {
     var elementDataByEvent = getElementEventData(this, event.type);
+    event = eventsEngine.Event(event);
     elementDataByEvent.callHandlers(event, extraParameters);
 };
 
