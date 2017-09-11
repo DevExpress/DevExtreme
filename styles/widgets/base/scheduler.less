@@ -476,25 +476,17 @@
     }
 }
 
-.dx-scheduler-work-space-week {
+.dx-scheduler-work-space-week, 
+.dx-scheduler-work-space-work-week {
+        .dx-scheduler-header-panel-current-time-cell {
+            box-shadow: inset 0px -3px 0px 0px @SCHEDULER_APPOINTMENT_BASE_COLOR;
+            color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        }
         .dx-scheduler-date-time-indicator{
             border-bottom: 1px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
             box-shadow: @SCHEDULER_TIME_INDICATOR_SHADOW;
             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
             width: 100%;
-
-            /*.dx-scheduler-date-time-indicator-content {
-                position: absolute;
-                text-align: center;
-                padding-top: 2px;
-                font-size: 30px;
-                color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
-                left: 83px;
-                opacity: 1;
-                margin-top: -8px;
-                text-shadow: white 1px -1px 3px;
-                //background-color: darkgrey;
-            }*/
 
             &:before {
                 display: none;

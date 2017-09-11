@@ -3670,4 +3670,15 @@ QUnit.testStart(function() {
 
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
     });
+
+    QUnit.test("DateHeader currentTime cell should have specific class", function(assert) {
+        this.instance.option({
+            _currentDateTime: new Date(2017, 8, 7, 12, 45)
+        });
+
+        var $element = this.instance.element(),
+            $cell = $element.find(".dx-scheduler-header-panel-cell").eq(4);
+
+        assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
+    });
 })("DateTime indicator on Day View");
