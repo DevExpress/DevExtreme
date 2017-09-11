@@ -135,9 +135,6 @@ var getElementEventData = function(element, eventName) {
                         || selector && eventData.selector !== selector;
 
                     if(!skip) {
-                        var eventNameIsDefined = eventName !== EMPTY_EVENT_NAME;
-                        eventNameIsDefined && element.removeEventListener(eventName, nativeHandler);
-
                         removedHandler = eventData.handler;
                         special.callMethod(eventName, "remove", element, [ eventData ]);
                     }
@@ -147,6 +144,8 @@ var getElementEventData = function(element, eventName) {
 
                 if(!elementData[eventName].length) {
                     special.callMethod(eventName, "teardown", element, [ namespaces, removedHandler ]);
+                    var eventNameIsDefined = eventName !== EMPTY_EVENT_NAME;
+                    eventNameIsDefined && element.removeEventListener(eventName, nativeHandler);
                 }
             };
 
