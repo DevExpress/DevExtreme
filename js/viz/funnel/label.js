@@ -233,7 +233,7 @@ exports.plugin = {
                 var item = that._items[index],
                     bBox,
                     pos;
-                if(!options.showForZeroValues && item.data.value === 0) {
+                if(!options.showForZeroValues && item.value === 0) {
                     label.hide();
                     return;
                 }
@@ -288,7 +288,7 @@ exports.plugin = {
 
                 label.setData({
                     item: item,
-                    value: item.data.value,
+                    value: item.value,
                     percent: item.percent
                 });
 

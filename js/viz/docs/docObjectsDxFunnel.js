@@ -5,6 +5,12 @@
 */
 var Item = {
     /**
+    * @name dxfunnelItemfields_argument
+    * @publicName argument
+    * @type any
+    */
+    argument: undefined,
+    /**
     * @name dxfunnelItemfields_data
     * @publicName data
     * @type object
@@ -22,6 +28,12 @@ var Item = {
     * @type number
     */
     percent: undefined,
+    /**
+    * @name dxfunnelItemfields_value
+    * @publicName value
+    * @type number
+    */
+    value: undefined,
     /**
     * @name dxfunnelItemmethods_select
     * @publicName select(state)

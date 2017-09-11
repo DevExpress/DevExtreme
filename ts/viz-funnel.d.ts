@@ -6,10 +6,10 @@ declare module DevExpress.viz.funnel {
 
     export interface Legend extends viz.core.BaseLegend {
         /** @docid dxfunneloptions_legend_customizehint */
-        customizeHint?: (itemsInfo: { item: funnelItem; text: string; }) => string;
+        customizeHint?: (itemInfo: { item: funnelItem; text: string; }) => string;
 
         /** @docid dxfunneloptions_legend_customizetext */
-        customizeText?: (itemsInfo: { item: funnelItem; text: string; }) => string;
+        customizeText?: (itemInfo: { item: funnelItem; text: string; }) => string;
     }
 
     /** @docid dxfunnelItem */
@@ -18,11 +18,17 @@ declare module DevExpress.viz.funnel {
     /** @docid dxfunnelItemfields_data */
         data: Object;
 
+        /** @docid dxfunnelItemfields_argument */
+        argument: any;
+
         /** @docid dxfunnelItemfields_id */
         id: number;
 
         /** @docid dxfunnelItemfields_percent */
         percent: number;
+
+        /** @docid dxfunnelItemfields_value */
+        value: number;
 
         /** @docid dxfunnelItemmethods_select */
         select(state: boolean): void;
@@ -53,6 +59,9 @@ declare module DevExpress.viz.funnel {
             /** @docid dxfunneloptions_adaptivelayout_keeplabels */
             keepLabels?: boolean;
         };
+
+        /** @docid dxfunneloptions_datasource */
+        dataSource?: any;
 
         /** @docid dxfunneloptions_valuefield */
         valueField?: string;
@@ -155,12 +164,12 @@ declare module DevExpress.viz.funnel {
             showForZeroValues?: boolean;
 
             /** @docid dxfunneloptions_label_customizetext */
-            customizeText?: (itemsInfo: {
+            customizeText?: (itemInfo: {
+                item: funnelItem;
                 valueText: string;
                 value: number;
                 percent: number;
                 percentText: string;
-                item: funnelItem;
             }) => string;
 
             /** @docid dxfunneloptions_label_format */
