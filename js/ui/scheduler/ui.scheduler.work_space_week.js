@@ -8,6 +8,11 @@ var $ = require("../../core/renderer"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space");
 
 var WEEK_CLASS = "dx-scheduler-work-space-week";
+var DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
+    DATE_TIME_INDICATOR_TOP_CLASS = "dx-scheduler-date-time-indicator-top",
+    DATE_TIME_INDICATOR_BOTTOM_CLASS = "dx-scheduler-date-time-indicator-bottom",
+    DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content";
+
 var toMs = dateUtils.dateToMilliseconds;
 var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     _getElementClass: function() {
@@ -88,7 +93,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _getDateTimeIndicatorHeight: function() {
-        var today = new Date(),
+        var today = this.option("_currentDateTime") || new Date(),
             cellHeight = this.getCellHeight(),
             date = new Date(this._firstViewDate);
 
@@ -98,6 +103,83 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
             cellCount = duration / this.getCellDuration();
 
         return cellCount * cellHeight;
+    },
+
+    _renderDateTimeIndicator: function() {
+        if(this.option("showDateTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var $container = this._dateTableScrollable.content(),
+                indicatorHeight = this._getDateTimeIndicatorHeight(),
+                maxHeight = $container.outerHeight(),
+                renderIndicatorContent = true;
+
+            if(indicatorHeight > maxHeight) {
+                indicatorHeight = maxHeight;
+                renderIndicatorContent = false;
+            }
+
+            if(indicatorHeight > 0) {
+                this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
+                this._$indicator.height(indicatorHeight);
+
+                this._$firstIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_TOP_CLASS);
+                var indicatorWidth = this._getDateTimeIndicatorWidth();
+                indicatorWidth && this._$firstIndicator.width(indicatorWidth) && this._$firstIndicator.height(indicatorHeight);
+
+                this._$secondIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_BOTTOM_CLASS);
+                this._$secondIndicator.width(indicatorWidth - this.getCellWidth()) && this._$secondIndicator.height(maxHeight - indicatorHeight);
+
+                this._$indicator.append(this._$firstIndicator);
+                this._$indicator.append(this._$secondIndicator);
+
+                this._renderAllDayIndicator();
+
+                this._$allDayIndicator && this._$allDayIndicator.width(indicatorWidth);
+
+                if(renderIndicatorContent) {
+                    var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
+                    $content.css("top", indicatorHeight - 10);
+                    this._$indicator.append($content);
+                }
+                $container.append(this._$indicator);
+            }
+        }
+    },
+
+    _getDateTimeIndicatorWidth: function() {
+        var today = this.option("_currentDateTime") || new Date(),
+            firstViewDate = new Date(this._firstViewDate);
+
+        var timeDiff = today.getTime() - firstViewDate.getTime();
+        var difference = Math.ceil(timeDiff / toMs("day"));
+
+        return difference * this.getCellWidth();
+    },
+
+    _needRenderDateTimeIndicator: function() {
+        var now = this.option("_currentDateTime") || new Date();
+
+        return dateUtils.dateInRange(now, this.getStartViewDate(), this.getEndViewDate());
+    },
+
+    _isCurrentTime: function(date) {
+        if(this.option("showDateTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var now = this.option("_currentDateTime") || new Date(),
+                result = false;
+            date = new Date(date);
+
+            date.setFullYear(now.getFullYear(), now.getMonth(), now.getDate());
+
+            var startCellDate = new Date(date),
+                endCellDate = new Date(date);
+
+            if(dateUtils.sameDate(now, date)) {
+                startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration());
+                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
+
+                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
+            }
+            return result;
+        }
     },
 
     _getRightCell: function(isMultiSelection) {
