@@ -332,6 +332,10 @@ var eventsEngine = {
 
         var noBubble = special.getField(eventName, "noBubble") || event.isPropagationStopped();
 
+        if(eventName === "load") {
+            noBubble = true;
+        }
+
         if(!noBubble) {
             var parents = [];
             var getParents = function(element) {
@@ -363,6 +367,10 @@ var eventsEngine = {
             } else if((eventName === "blur" || eventName === "focusout") && isFunction(element.blur)) {
                 skipEvent = eventName;
                 element.blur && element.blur();
+                skipEvent = undefined;
+            } else if(eventName === "click" && (element.localName === "input" && element.type === "checkbox" || element.localName === "a")) {
+                skipEvent = eventName;
+                element.click && element.click();
                 skipEvent = undefined;
             } else if(isFunction(element[eventName])) {
                 skipEvent = eventName;

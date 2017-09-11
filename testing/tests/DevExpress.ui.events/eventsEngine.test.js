@@ -88,3 +88,50 @@ QUnit.test("add single native handler for one element, handler removed", functio
     delListener.restore();
 });
 
+QUnit.test("'click' event for checkbox and a", function(assert) {
+    var counter = 0;
+
+    var checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+
+    var a = document.createElement("a");
+    a.href = "#someId";
+
+    var handler = function() { counter++; };
+
+    document.body.appendChild(checkbox);
+    document.body.appendChild(a);
+
+    eventsEngine.on(checkbox, "click", handler);
+    eventsEngine.on(a, "click", handler);
+
+    assert.notOk(checkbox.checked);
+    eventsEngine.trigger(checkbox, "click");
+    assert.ok(checkbox.checked);
+    eventsEngine.trigger(checkbox, "click");
+    assert.notOk(checkbox.checked);
+
+    eventsEngine.trigger(a, "click");
+    assert.notOk(location.href.indexOf("#someId") < 0);
+
+    assert.equal(counter, 3);
+
+});
+
+QUnit.test("prevent triggered 'load' event bubbling to body", function(assert) {
+    var done = assert.async();
+    var image = document.createElement("img");
+
+    eventsEngine.on(image, "load", function() {
+        assert.ok(true);
+        done();
+    });
+    eventsEngine.on(document.body, "load", function() {
+        assert.ok(false);
+    });
+
+    document.body.appendChild(image);
+
+    eventsEngine.trigger(image, "load");
+
+});
