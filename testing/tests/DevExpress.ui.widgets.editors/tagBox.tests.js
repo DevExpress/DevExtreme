@@ -1733,6 +1733,21 @@ QUnit.test("the focused tag should be removed after pressing the 'backspace' key
     assert.deepEqual(value, expectedValue, "the widget's value is correct");
 });
 
+QUnit.test("backspace should remove selected search text but not tag if any text is selected", function(assert) {
+    this.reinit({
+        items: ["item 1", "item 2"],
+        value: ["item 1"],
+        focusStateEnabled: true,
+        searchEnabled: true
+    });
+
+    this.$input.val("item");
+    this.keyboard.caret({ start: 0, end: 4 });
+    this.keyboard.press("backspace");
+
+    assert.equal(this.instance.option("value"), "item 1", "tag was not removed");
+});
+
 QUnit.test("the focused tag should be removed after pressing the 'delete' key", function(assert) {
     this.keyboard
         .focus()
