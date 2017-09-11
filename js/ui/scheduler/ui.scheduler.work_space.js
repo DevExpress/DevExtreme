@@ -64,6 +64,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_FOCUSED_CELL_CLASS = "dx-scheduler-focused-cell",
 
     DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
+    DATE_TIME_INDICATOR_ALL_DAY_CLASS = "dx-scheduler-date-time-indicator-all-day",
     DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content",
     TIME_PANEL_CURRENT_TIME_CELL_CLASS = "dx-scheduler-time-panel-current-time-cell",
 
@@ -391,12 +392,14 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "showAllDayPanel":
                 this._toggleAllDayVisibility();
+                this._refreshDateTimeIndicator();
                 break;
             case "allDayExpanded":
                 this._changeAllDayVisibility();
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
                 this.headerPanelOffsetRecalculate();
+                this._refreshDateTimeIndicator();
                 break;
             case "onCellClick":
                 this._createCellClickAction();
@@ -765,6 +768,8 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
                 this._$indicator.height(indicatorHeight);
 
+                this._renderAllDayIndicator();
+
                 if(renderIndicatorContent) {
                     var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
                     $content.css("top", indicatorHeight - 10);
@@ -772,6 +777,15 @@ var SchedulerWorkSpace = Widget.inherit({
                 }
                 $container.append(this._$indicator);
             }
+        }
+    },
+
+    _renderAllDayIndicator: function() {
+        if(this.option("showAllDayPanel")) {
+            this._$allDayIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_ALL_DAY_CLASS);
+            this._$allDayIndicator.height(this.getAllDayHeight());
+
+            this._$allDayPanel.prepend(this._$allDayIndicator);
         }
     },
 
@@ -1390,11 +1404,21 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
-        this._$indicator && this._$indicator.remove();
+        this._cleanDateTimeIndicator();
         this._$timePanel.empty();
         this._$allDayTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
+    },
+
+    _cleanDateTimeIndicator: function() {
+        this._$indicator && this._$indicator.remove();
+        this._$allDayIndicator && this._$allDayIndicator.remove();
+    },
+
+    _refreshDateTimeIndicator: function() {
+        this._cleanDateTimeIndicator();
+        this._renderDateTimeIndicator();
     },
 
     getWorkArea: function() {
