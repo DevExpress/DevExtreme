@@ -667,6 +667,18 @@ declare module DevExpress.ui {
         /** @docid dxTreeViewOptions_searchValue */
         searchValue?: string;
 
+        /** @docid dxTreeViewOptions_searchEnabled */
+        searchEnabled?: boolean;
+
+        /** @docid dxTreeViewOptions_searchExpr */
+        searchExpr?: any;
+
+        /** @docid dxTreeViewOptions_searchMode */
+        searchMode?: string;
+
+        /** @docid dxTreeViewOptions_searchEditorOptions */
+        searchEditorOptions?: DevExpress.ui.dxTextBoxOptions;
+
         /** @docid dxTreeViewOptions_scrollDirection */
         scrollDirection?: string;
 

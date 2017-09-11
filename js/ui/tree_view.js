@@ -11,6 +11,7 @@ var $ = require("../core/renderer"),
     each = require("../core/utils/iterator").each,
     registerComponent = require("../core/component_registrator"),
     CheckBox = require("./check_box"),
+    TextBox = require("./text_box"),
     HierarchicalCollectionWidget = require("./hierarchical_collection/ui.hierarchical_collection_widget"),
     eventUtils = require("../events/utils"),
     pointerEvents = require("../events/pointer"),
@@ -39,6 +40,7 @@ var WIDGET_CLASS = "dx-treeview",
     SELECT_ALL_ITEM_CLASS = "dx-treeview-select-all-item",
     DISABLED_STATE_CLASS = "dx-state-disabled",
     SELECTED_ITEM_CLASS = "dx-state-selected",
+    TREEVIEW_SEARCH_CLASS = "dx-treeview-search",
 
     DATA_ITEM_ID = "data-item-id";
 
@@ -298,6 +300,38 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @default ""
             */
             searchValue: "",
+
+            /**
+            * @name dxTreeViewOptions_searchMode
+            * @publicName searchMode
+            * @type string
+            * @default 'contains'
+            */
+            searchMode: "contains",
+
+            /**
+            * @name dxTreeViewOptions_searchExpr
+            * @publicName searchExpr
+            * @type getter|array
+            * @default null
+            */
+            searchExpr: null,
+
+            /**
+            * @name dxTreeViewOptions_searchEnabled
+            * @publicName searchEnabled
+            * @type boolean
+            * @default false
+            */
+            searchEnabled: false,
+
+            /**
+             * @name dxTreeViewOptions_searchEditorOptions
+             * @publicName searchEditorOptions
+             * @type TextBox options
+             * @default {}
+             */
+            searchEditorOptions: {},
 
             /*
             component: inheritor
@@ -560,6 +594,16 @@ var TreeView = HierarchicalCollectionWidget.inherit({
                 }
 
                 this._initDataAdapter();
+                this._updateSearch();
+                this._repaintContainer();
+                break;
+            case "searchExpr":
+            case "searchMode":
+                this._initDataAdapter();
+                this.repaint();
+                break;
+            case "searchEnabled":
+            case "searchEditorOptions":
                 this.repaint();
                 break;
             case "createChildren":
@@ -701,7 +745,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
                 that.option().items = that.option("items").concat(newItem);
                 that._dataAdapter.addItem(newItem);
 
-                if(!that._isFiltered(newItem)) {
+                if(!that._dataAdapter.isFiltered(newItem)) {
                     return;
                 }
 
@@ -739,13 +783,6 @@ var TreeView = HierarchicalCollectionWidget.inherit({
                 counter++;
             }
         });
-    },
-
-    _isFiltered: function(item) {
-        var value = this.option("searchValue"),
-            reg = new RegExp(value, 'i');
-
-        return reg.test(this._displayGetter(item));
     },
 
     _updateLevel: function(parentId) {
@@ -797,6 +834,8 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             recursiveSelection: this._isRecursiveSelection(),
             recursiveExpansion: this.option("expandNodesRecursive"),
             searchValue: this.option("searchValue"),
+            searchMode: this.option("searchMode"),
+            searchExpr: this.option("searchExpr"),
             dataType: this.option("dataStructure")
         };
     },
@@ -813,15 +852,75 @@ var TreeView = HierarchicalCollectionWidget.inherit({
 
         var $nodeContainer = this._renderNodeContainer();
 
+        this._renderSearch();
         this._renderScrollableContainer();
         this._scrollableContainer.content().append($nodeContainer);
 
         this._renderItems($nodeContainer, this._dataAdapter.getRootNodes());
 
         this._initExpandEvent();
+        this._renderSelectAllItem($nodeContainer);
+    },
 
-        if(this._selectAllEnabled()) {
-            this._renderSelectAllItem($nodeContainer);
+    _renderSearch: function() {
+        var that = this,
+            editorOptions,
+            $element = that.element(),
+            searchEnabled = that.option("searchEnabled");
+
+        if(!searchEnabled) {
+            that._$searchEditorElement && that._$searchEditorElement.remove();
+            delete that._$searchEditorElement;
+            delete that._searchEditor;
+            return;
+        }
+
+        editorOptions = that._getSearchEditorOptions();
+        that._$searchEditorElement = $("<div>").addClass(TREEVIEW_SEARCH_CLASS).prependTo($element);
+        that._searchEditor = that._createComponent(that._$searchEditorElement, TextBox, editorOptions);
+    },
+
+    _getSearchEditorOptions: function() {
+        var that = this,
+            $element = that.element(),
+            userEditorOptions = that.option("searchEditorOptions"),
+            editorOptions = extend({
+                mode: "search",
+                placeholder: messageLocalization.format("Search"),
+                tabIndex: that.option("tabIndex"),
+                value: that.option("searchValue"),
+                valueChangeEvent: "keyup",
+                onValueChanged: function(e) {
+                    that.option("searchValue", e.value);
+                }
+            }, userEditorOptions);
+
+        editorOptions.onFocusIn = function() {
+            that._toggleFocusClass(true, $element);
+            userEditorOptions.onFocusIn && userEditorOptions.onFocusIn.apply(this, arguments);
+        };
+
+        editorOptions.onFocusOut = function() {
+            that._toggleFocusClass(false, $element);
+            userEditorOptions.onFocusOut && userEditorOptions.onFocusOut.apply(this, arguments);
+        };
+
+        return editorOptions;
+    },
+
+    _updateSearch: function() {
+        if(this._searchEditor) {
+            var editorOptions = this._getSearchEditorOptions();
+            this._searchEditor.option(editorOptions);
+        }
+    },
+
+    _repaintContainer: function() {
+        var $container = this.element().find("." + NODE_CONTAINER_CLASS).first();
+
+        if($container) {
+            $container.empty();
+            this._renderItems($container, this._dataAdapter.getRootNodes());
         }
     },
 
@@ -842,10 +941,16 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _renderScrollableContainer: function() {
-        this._scrollableContainer = this._createComponent($("<div>").appendTo(this.element()), Scrollable, {
+        var options = {
             direction: this.option("scrollDirection"),
             useKeyboard: false
-        });
+        };
+
+        if(this._$searchEditorElement) {
+            options.height = "calc(100% - " + this._$searchEditorElement.outerHeight(true) + "px)";
+        }
+
+        this._scrollableContainer = this._createComponent($("<div>").appendTo(this.element()), Scrollable, options);
     },
 
     _renderNodeContainer: function($parent) {
@@ -1276,6 +1381,10 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _renderSelectAllItem: function($container) {
+        if(!this._selectAllEnabled()) {
+            return;
+        }
+
         $container = $container || this.element().find("." + NODE_CONTAINER_CLASS).first();
 
         this._$selectAllItem = $("<div>").addClass(SELECT_ALL_ITEM_CLASS);
@@ -1515,14 +1624,33 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _focusInHandler: function(e) {
-        var that = this,
-            currentTarget = e.currentTarget,
-            focusTargets = that._focusTarget();
-
-        if(inArray(currentTarget, focusTargets) !== -1) {
-            that._toggleFocusClass(true, currentTarget);
+    _focusTarget: function() {
+        if(this.option("searchEnabled")) {
+            return this._scrollableContainer.element();
         }
+
+        return this.callBase();
+    },
+
+    _getAriaTarget: function() {
+        return this.element();
+    },
+
+    _addWidgetClass: function() {
+        this.element().addClass(this._widgetClass());
+    },
+
+    _updateFocusState: function(e, isFocused) {
+        if(this.option("searchEnabled")) {
+            this._toggleFocusClass(isFocused, this.element());
+        }
+        this.callBase(e, isFocused);
+    },
+
+    _focusInHandler: function(e) {
+        var that = this;
+
+        that._updateFocusState(e, true);
 
         if(that.option("focusedElement")) {
             clearTimeout(that._setFocusedItemTimeout);
@@ -1873,8 +2001,16 @@ var TreeView = HierarchicalCollectionWidget.inherit({
         each(this._dataAdapter.getExpandedNodesKeys(), function(_, key) {
             that._toggleExpandedState(key, false);
         });
-    }
+    },
 
+    focus: function() {
+        if(!this.option("focusedElement") && this.option("searchEnabled")) {
+            this._searchEditor && this._searchEditor.focus();
+            return;
+        }
+
+        this.callBase();
+    }
 });
 
 registerComponent("dxTreeView", TreeView);
