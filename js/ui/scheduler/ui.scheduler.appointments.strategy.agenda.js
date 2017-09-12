@@ -176,6 +176,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             }
 
             $.each(currentAppointments, function(index, appointment) {
+                var endDate = new Date(this._endDate(appointment));
+                this.instance.fire("setField", "endDate", appointment, endDate);
+
                 needClearSettings && delete appointment.settings;
 
                 var result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
