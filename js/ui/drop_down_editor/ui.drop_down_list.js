@@ -397,7 +397,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _loadItem: function(value) {
-        var selectedItem = commonUtils.grep(this._getPlainItems(this.option("items")) || [], (function(item) {
+        var selectedItem = commonUtils.grep(this._getPlainItems(this.option("items") || []), (function(item) {
             return this._isValueEquals(this._valueGetter(item), value);
         }).bind(this))[0];
 
