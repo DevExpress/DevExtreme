@@ -3433,7 +3433,7 @@ QUnit.testStart(function() {
     QUnit.module("DateTime indicator on Day View", {
         beforeEach: function() {
             this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay({
-                showDateTimeIndicator: true,
+                showCurrentTimeIndicator: true,
                 currentDate: new Date(2017, 8, 5),
                 startDayHour: 8,
             }).dxSchedulerWorkSpaceDay("instance");
@@ -3449,7 +3449,7 @@ QUnit.testStart(function() {
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered correctly");
 
-        this.instance.option("showDateTimeIndicator", false);
+        this.instance.option("showCurrentTimeIndicator", false);
         $element = this.instance.element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "Indicator wasn't rendered");
@@ -3559,7 +3559,7 @@ QUnit.testStart(function() {
     QUnit.module("DateTime indicator on Week View", {
         beforeEach: function() {
             this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
-                showDateTimeIndicator: true,
+                showCurrentTimeIndicator: true,
                 currentDate: new Date(2017, 8, 5),
                 startDayHour: 8,
             }).dxSchedulerWorkSpaceWeek("instance");
@@ -3576,7 +3576,7 @@ QUnit.testStart(function() {
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered correctly");
 
-        this.instance.option("showDateTimeIndicator", false);
+        this.instance.option("showCurrentTimeIndicator", false);
         $element = this.instance.element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "Indicator wasn't rendered");

@@ -106,7 +106,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _renderDateTimeIndicator: function() {
-        if(this.option("showDateTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
             var $container = this._dateTableScrollable.content(),
                 indicatorHeight = this._getDateTimeIndicatorHeight(),
                 maxHeight = $container.outerHeight(),
@@ -162,7 +162,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
     },
 
     _isCurrentTime: function(date) {
-        if(this.option("showDateTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
             var now = this.option("_currentDateTime") || new Date(),
                 result = false;
             date = new Date(date);
