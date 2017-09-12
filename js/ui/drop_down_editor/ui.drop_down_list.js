@@ -397,7 +397,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _loadItem: function(value) {
-        var plainItems = this._getPlainItems(this.option("items") || []),
+        var plainItems = this._getPlainItems(this.option("items")),
             selectedItem = commonUtils.grep(plainItems, (function(item) {
                 return this._isValueEquals(this._valueGetter(item), value);
             }).bind(this))[0];
@@ -409,6 +409,8 @@ var DropDownList = DropDownEditor.inherit({
 
     _getPlainItems: function(items) {
         var plainItems = [];
+
+        items = items || [];
 
         for(var i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {
