@@ -241,7 +241,7 @@ module.exports = {
              * @name GridBaseOptions_columns_calculateFilterExpression
              * @publicName calculateFilterExpression
              * @type function(filterValue, selectedFilterOperation, target)
-             * @type_function_param1 filtervalue:any
+             * @type_function_param1 filterValue:any
              * @type_function_param2 selectedFilterOperation:string
              * @type_function_param3 target:string
              * @type_function_return Filter expression
