@@ -9,8 +9,6 @@ var $ = require("../../core/renderer"),
 
 var WEEK_CLASS = "dx-scheduler-work-space-week";
 var DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
-    DATE_TIME_INDICATOR_TOP_CLASS = "dx-scheduler-date-time-indicator-top",
-    DATE_TIME_INDICATOR_BOTTOM_CLASS = "dx-scheduler-date-time-indicator-bottom",
     DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content";
 
 var toMs = dateUtils.dateToMilliseconds;
@@ -121,15 +119,14 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
                 this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
                 this._$indicator.height(indicatorHeight);
 
-                this._$firstIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_TOP_CLASS);
                 var indicatorWidth = this._getDateTimeIndicatorWidth();
-                indicatorWidth && this._$firstIndicator.width(indicatorWidth) && this._$firstIndicator.height(indicatorHeight);
 
-                this._$secondIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_BOTTOM_CLASS);
-                this._$secondIndicator.width(indicatorWidth - this.getCellWidth()) && this._$secondIndicator.height(maxHeight - indicatorHeight);
+                this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth);
 
-                this._$indicator.append(this._$firstIndicator);
-                this._$indicator.append(this._$secondIndicator);
+                this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth);
+
+                // this._$indicator.append(this._$firstIndicator);
+                // this._$indicator.append(this._$secondIndicator);
 
                 this._renderAllDayIndicator();
 
@@ -153,12 +150,6 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         var difference = Math.ceil(timeDiff / toMs("day"));
 
         return difference * this.getCellWidth();
-    },
-
-    _needRenderDateTimeIndicator: function() {
-        var now = this.option("_currentDateTime") || new Date();
-
-        return dateUtils.dateInRange(now, this.getStartViewDate(), this.getEndViewDate());
     },
 
     _isCurrentTime: function(date) {
