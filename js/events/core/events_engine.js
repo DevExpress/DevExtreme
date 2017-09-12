@@ -356,25 +356,22 @@ var eventsEngine = {
             }
         }
 
-        // TODO: Consider other native events
-        // TODO: native click for checkboxes and links
         if(element.nodeType) {
             special.callMethod(eventName, "_default", element, [ event, extraParameters ]);
-            if((eventName === "focus" || eventName === "focusin") && isFunction(element.focus)) {
+
+            var nativeMethodName = eventName;
+            if(eventName === "focusin") nativeMethodName = "focus";
+            if(eventName === "focusout") nativeMethodName = "blur";
+
+            var isLinkClickEvent = function(eventName, element) {
+                return eventName === "click" && element.localName === "a";
+            };
+
+            if(isLinkClickEvent(eventName, element)) return;
+
+            if(isFunction(element[nativeMethodName])) {
                 skipEvent = eventName;
-                element.focus();
-                skipEvent = undefined;
-            } else if((eventName === "blur" || eventName === "focusout") && isFunction(element.blur)) {
-                skipEvent = eventName;
-                element.blur && element.blur();
-                skipEvent = undefined;
-            } else if(eventName === "click" && (element.localName === "input" && element.type === "checkbox" || element.localName === "a")) {
-                skipEvent = eventName;
-                element.click && element.click();
-                skipEvent = undefined;
-            } else if(isFunction(element[eventName])) {
-                skipEvent = eventName;
-                element[eventName]();
+                element[nativeMethodName]();
                 skipEvent = undefined;
             }
         }

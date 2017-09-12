@@ -88,22 +88,19 @@ QUnit.test("add single native handler for one element, handler removed", functio
     delListener.restore();
 });
 
-QUnit.test("'click' event for checkbox and a", function(assert) {
+QUnit.test("triggering 'click' event for checkbox calls native click method", function(assert) {
     var counter = 0;
 
     var checkbox = document.createElement("input");
     checkbox.type = "checkbox";
 
-    var a = document.createElement("a");
-    a.href = "#someId";
+    var click = sinon.spy(HTMLElement.prototype, "click");
 
     var handler = function() { counter++; };
 
     document.body.appendChild(checkbox);
-    document.body.appendChild(a);
 
     eventsEngine.on(checkbox, "click", handler);
-    eventsEngine.on(a, "click", handler);
 
     assert.notOk(checkbox.checked);
     eventsEngine.trigger(checkbox, "click");
@@ -111,11 +108,46 @@ QUnit.test("'click' event for checkbox and a", function(assert) {
     eventsEngine.trigger(checkbox, "click");
     assert.notOk(checkbox.checked);
 
+    assert.equal(counter, 2);
+    assert.equal(click.callCount, 2);
+
+    click.restore();
+
+});
+
+QUnit.test(" trigering 'click' event for <a> does not calls native click method", function(assert) {
+    var a = document.createElement("a");
+
+    var click = sinon.spy(HTMLElement.prototype, "click");
+
+    document.body.appendChild(a);
+
     eventsEngine.trigger(a, "click");
-    assert.notOk(location.href.indexOf("#someId") < 0);
 
-    assert.equal(counter, 3);
+    assert.ok(click.notCalled);
 
+    click.restore();
+});
+
+QUnit.test("'focusin' and 'focus' events call element.focus, 'focusout' and 'blur' - element.blur", function(assert) {
+    var textBox = document.createElement("input");
+    textBox.type = "text";
+
+    var focus = sinon.spy(HTMLElement.prototype, "focus");
+    var blur = sinon.spy(HTMLElement.prototype, "blur");
+
+    document.body.appendChild(textBox);
+
+    eventsEngine.trigger(textBox, "focusin");
+    eventsEngine.trigger(textBox, "focusout");
+    eventsEngine.trigger(textBox, "focus");
+    eventsEngine.trigger(textBox, "blur");
+
+    assert.ok(focus.calledTwice);
+    assert.ok(blur.calledTwice);
+
+    blur.restore();
+    focus.restore();
 });
 
 QUnit.test("prevent triggered 'load' event bubbling to body", function(assert) {
