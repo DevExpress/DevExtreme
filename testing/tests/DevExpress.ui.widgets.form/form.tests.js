@@ -3065,6 +3065,7 @@ QUnit.test("One column screen should be customizable with screenByWidth option o
 
         //assert
     assert.equal($form.find(".dx-layout-manager-one-col").length, 1, "single column screen was changed");
+    assert.equal($form.find(".dx-single-column-item-content").length, 4, "There are 4 items in the column");
 });
 
 QUnit.test("One column screen should be customizable with screenByWidth option on option change", function(assert) {
@@ -3082,10 +3083,14 @@ QUnit.test("One column screen should be customizable with screenByWidth option o
             items: ["name", "lastName", "room", "isDeveloper"]
         }).data("dxForm");
 
-        //act
+
+    assert.equal($form.find(".dx-single-column-item-content").length, 0, "There are no single column items");
+
+    //act
     form.option("screenByWidth", function() { return "xs"; });
 
-        //assert
+    //assert
+    assert.equal($form.find(".dx-single-column-item-content").length, 4, "There are 4 items in the column");
     assert.equal($form.find(".dx-layout-manager-one-col").length, 1, "single column screen was changed");
 });
 
