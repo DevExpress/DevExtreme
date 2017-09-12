@@ -177,8 +177,8 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             }
 
             $.each(currentAppointments, function(index, appointment) {
-                var startDate = this.instance.fire("getField", "startDate", appointment),
-                    endDate = this.instance.fire("getField", "endDate", appointment);
+                var startDate = new Date(this.instance.invoke("getField", "startDate", appointment)),
+                    endDate = new Date(this.instance.invoke("getField", "endDate", appointment));
 
                 this._checkWrongEndDate(appointment, startDate, endDate);
 
