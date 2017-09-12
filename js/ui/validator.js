@@ -80,7 +80,7 @@ var Validator = DOMComponent.inherit({
             * @name dxValidatorOptions_onValidated
             * @publicName onValidated
             * @type function(validatedInfo)
-            * @type_function_param1 selectedRowsInfo:object
+            * @type_function_param1 validatedInfo:object
             * @type_function_param1_field1 name:string
             * @type_function_param1_field2 isValid:boolean
             * @type_function_param1_field3 value:object
