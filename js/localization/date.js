@@ -4,6 +4,7 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     isString = require("../core/utils/type").isString,
     iteratorUtils = require("../core/utils/iterator"),
     inArray = require("../core/utils/array").inArray,
+    dateParts = require("../core/utils/date_parts"),
     serializeDate = require("../core/utils/date_serialization").serializeDate,
     errors = require("../core/errors");
 
@@ -66,7 +67,9 @@ var removeTimezoneOffset = function(date) {
 };
 
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+    periods = ["AM", "PM"],
+    quarters = ["Q1", "Q2", "Q3", "Q4"];
 
 // TODO: find best solution for parsing without timezone
 var parseWithoutTimezone = function(text) {
@@ -289,7 +292,12 @@ var dateLocalization = dependencyInjector({
     getDayNames: function(format) {
         return cutCaptions(days, format);
     },
-
+    getQuarterNames: function(format) {
+        return quarters;
+    },
+    getPeriodNames: function(format) {
+        return periods;
+    },
     getTimeSeparator: function() {
         return ":";
     },
@@ -379,6 +387,12 @@ var dateLocalization = dependencyInjector({
     firstDayOfWeekIndex: function() {
         return 0;
     }
+});
+
+Object.keys(dateParts).forEach(function(methodName) {
+    dateParts[methodName] = function() {
+        return dateLocalization[methodName].apply(this, arguments);
+    };
 });
 
 module.exports = dateLocalization;

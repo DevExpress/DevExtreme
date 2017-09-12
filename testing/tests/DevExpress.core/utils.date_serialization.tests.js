@@ -3,6 +3,8 @@
 var dateSerialization = require("core/utils/date_serialization");
 var config = require("core/config");
 
+require("localization/date");
+
 QUnit.module("date serialization tests", {
     beforeEach: function() {
         this.defaultForceIsoDateParsing = config().forceIsoDateParsing;
