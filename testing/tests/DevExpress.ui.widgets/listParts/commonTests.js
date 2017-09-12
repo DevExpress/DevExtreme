@@ -1031,10 +1031,12 @@ QUnit.test("searchEnabled", function(assert) {
 
     instance.option("searchEnabled", false);
 
+    assert.notOk($element.hasClass("dx-list-with-search"), "list without search");
     assert.notOk($element.find(".dx-list-search").length, "hasn't search editor");
 
     instance.option("searchEnabled", true);
 
+    assert.ok($element.hasClass("dx-list-with-search"), "list with search");
     assert.ok($element.children().first().hasClass("dx-list-search"), "has search editor");
 });
 
@@ -2506,9 +2508,6 @@ QUnit.testInActiveWindow("First list item should be focused on the 'tab' key pre
     $searchEditor.find("input").focus();
     this.clock.tick();
 
-    assert.ok($element.hasClass("dx-state-focused"), "list is focused");
-    assert.ok($searchEditor.hasClass("dx-state-focused"), "search editor is focused");
-
     instance.registerKeyHandler("tab", function(e) {
         $element.find("[tabIndex]").not(":focus").first().focus();
     });
@@ -2552,9 +2551,9 @@ QUnit.test("Render search editor", function(assert) {
         });
 
     $searchEditor = $element.children().first();
+    assert.ok($element.hasClass("dx-list-with-search"), "list with search");
     assert.ok($searchEditor.hasClass("dx-list-search"), "has search editor");
     assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "3", "editor value");
-    assert.strictEqual($element.children(".dx-scrollable-wrapper")[0].style.height, "calc(100% - " + $searchEditor.outerHeight(true) + "px)", "height of the scrollable wrapper");
 });
 
 QUnit.test("Search", function(assert) {
@@ -2573,7 +2572,7 @@ QUnit.test("Search", function(assert) {
     assert.strictEqual(instance.option("searchValue"), "2", "search value");
 });
 
-QUnit.test("Focusing widget when there is search editor", function(assert) {
+QUnit.testInActiveWindow("Focusing widget when there is search editor", function(assert) {
     var $element = $("#list").dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
@@ -2583,7 +2582,6 @@ QUnit.test("Focusing widget when there is search editor", function(assert) {
 
     instance.focus();
 
-    assert.ok($element.hasClass("dx-state-focused"), "widget is focused");
     assert.ok($element.children(".dx-list-search").hasClass("dx-state-focused"), "search editor is focused");
 });
 
@@ -2603,4 +2601,22 @@ QUnit.test("Show warning when dataSource is not specified", function(assert) {
     } finally {
         warningHandler.restore();
     }
+});
+
+QUnit.test("Search when searchMode is specified", function(assert) {
+    var searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 12, 23],
+            searchEnabled: true,
+            searchExpr: "this",
+            searchMode: "startswith"
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditor = $element.children().first().dxTextBox("instance");
+    searchEditor.option("value", "2");
+
+    assert.deepEqual(instance.option("items"), [23], "items");
+    assert.strictEqual(instance.option("searchValue"), "2", "search value");
+    assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
 });

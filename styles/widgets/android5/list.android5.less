@@ -1,6 +1,7 @@
 @ANDROID5_LIST_ITEM_PADDING: 16px;
 @ANDROID5_LIST_ITEM_BORDER_BOTTOM: 1px solid @ANDROID5_LIST_ITEM_BORDER_BOTTOM_COLOR;
 @ANDROID5_LIST_GROUP_HEADER_BORDER_BOTTOM: 2px solid @ANDROID5_LIST_GROUP_HEADER_BORDER_BOTTOM_COLOR;
+@ANDROID5_LIST_SEARCH_EDITOR_HEIGHT: 48px;
 
 .dx-list {
     .dx-empty-message {
@@ -14,6 +15,10 @@
 
     .dx-scrollview-content {
         overflow: hidden;
+    }
+
+    &.dx-list-with-search .dx-scrollable-wrapper {
+        height: calc(~"100% - "@ANDROID5_LIST_SEARCH_EDITOR_HEIGHT);
     }
 }
 
