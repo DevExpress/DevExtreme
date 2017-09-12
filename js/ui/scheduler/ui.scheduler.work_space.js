@@ -68,6 +68,8 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     DATE_TIME_INDICATOR_ALL_DAY_CLASS = "dx-scheduler-date-time-indicator-all-day",
     DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content",
     TIME_PANEL_CURRENT_TIME_CELL_CLASS = "dx-scheduler-time-panel-current-time-cell",
+    DATE_TIME_INDICATOR_TOP_CLASS = "dx-scheduler-date-time-indicator-top",
+    DATE_TIME_INDICATOR_BOTTOM_CLASS = "dx-scheduler-date-time-indicator-bottom",
 
     DATE_TABLE_DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",
 
@@ -769,6 +771,13 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
                 this._$indicator.height(indicatorHeight);
 
+                if(this._isWorkSpaceWithCount()) {
+                    var indicatorWidth = this._getDateTimeIndicatorWidth();
+
+                    this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth);
+                    this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth);
+                }
+
                 this._renderAllDayIndicator();
 
                 if(renderIndicatorContent) {
@@ -781,6 +790,30 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
+    _getDateTimeIndicatorWidth: function() {
+        var today = this.option("_currentDateTime") || new Date(),
+            firstViewDate = new Date(this._firstViewDate);
+
+        var timeDiff = today.getTime() - firstViewDate.getTime();
+        var difference = Math.ceil(timeDiff / toMs("day"));
+
+        return difference * this.getCellWidth();
+    },
+
+    _renderTopCurrentTimeIndicator: function($indicator, height, width) {
+        this._$firstIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_TOP_CLASS);
+        width && this._$firstIndicator.width(width) && this._$firstIndicator.height(height);
+
+        $indicator.append(this._$firstIndicator);
+    },
+
+    _renderBottomCurrentTimeIndicator: function($indicator, height, width) {
+        this._$secondIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_BOTTOM_CLASS);
+        this._$secondIndicator.width(width - this.getCellWidth()) && this._$secondIndicator.height(height);
+
+        $indicator.append(this._$secondIndicator);
+    },
+
     _renderAllDayIndicator: function() {
         if(this.option("showAllDayPanel")) {
             this._$allDayIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_ALL_DAY_CLASS);
@@ -790,18 +823,20 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
-    _getDateTimeIndicatorWidth: noop,
-
     _needRenderDateTimeIndicator: function() {
-        var now = this.option("_currentDateTime") || new Date();
-
-        return dateUtils.sameDate(now, this._firstViewDate);
+        var now = this.option("_currentDateTime") || new Date(),
+            endViewDate = dateUtils.trimTime(this.getEndViewDate());
+        return dateUtils.dateInRange(now, dateUtils.trimTime(this.getStartViewDate()), new Date(endViewDate.getTime() + DAY_MS));
     },
 
     _getDateTimeIndicatorHeight: function() {
         var today = this.option("_currentDateTime") || new Date(),
             cellHeight = this.getCellHeight(),
-            duration = today.getTime() - this._firstViewDate.getTime(),
+            date = new Date(this._firstViewDate);
+
+        date.setDate(today.getDate());
+
+        var duration = today.getTime() - date.getTime(),
             cellCount = duration / this.getCellDuration();
 
         return cellCount * cellHeight;
