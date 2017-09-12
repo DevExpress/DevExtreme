@@ -347,7 +347,7 @@ QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets includin
         var popup = $(".dx-popup").dxPopup("instance"),
             maxHeight = popup.option("maxHeight");
 
-        assert.equal(Math.floor(maxHeight()), 523, "maxHeight is correct");
+        assert.roughEqual(Math.floor(maxHeight()), 523, 2, "maxHeight is correct");
 
     } finally {
         scrollTop.restore();
