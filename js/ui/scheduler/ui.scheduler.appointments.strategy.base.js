@@ -452,8 +452,9 @@ var BaseRenderingStrategy = Class.inherit({
 
     _checkWrongEndDate: function(appointment, startDate, endDate) {
         if(!endDate || startDate.getTime() >= endDate.getTime()) {
-            endDate = new Date(startDate.getTime() + this.instance.getAppointmentDurationInMinutes() * 60000);
-            this.instance.fire("setField", "endDate", appointment, endDate);
+            endDate = new Date(startDate.getTime() + this.instance.option("appointmentDurationInMinutes") * 60000);
+            this.instance.invoke("setField", "endDate", appointment, endDate);
+
         }
 
         return endDate;
