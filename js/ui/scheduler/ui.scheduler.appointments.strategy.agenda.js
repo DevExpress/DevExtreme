@@ -177,6 +177,11 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             }
 
             $.each(currentAppointments, function(index, appointment) {
+                var startDate = new Date(this.instance.invoke("getField", "startDate", appointment)),
+                    endDate = new Date(this.instance.invoke("getField", "endDate", appointment));
+
+                this._checkWrongEndDate(appointment, startDate, endDate);
+
                 var result = this.instance._processRecurrenceAppointment(appointment, index, true);
                 appts.parts = appts.parts.concat(result.parts);
                 appts.indexes = appts.indexes.concat(result.indexes);
