@@ -205,7 +205,7 @@ var normalizeOnArguments = function(callback) {
         }
 
         if(!handler) {
-            handler = arguments[2];
+            handler = data || selector;
             selector = undefined;
             data = undefined;
         }
