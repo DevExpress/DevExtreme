@@ -1272,6 +1272,23 @@ QUnit.test("Menu should stop show submenu timeout when another level submenu was
     assert.ok(submenu.isOverlayVisible(), "submenu is still visible");
 });
 
+QUnit.test("click should not be blocked on menu's item", function(assert) {
+    var menu = createMenu({
+            items: [{ text: "Item 1" }]
+        }),
+        $item = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
+        clickHandler = sinon.stub();
+
+    try {
+        $(document).on("click", clickHandler);
+        $item.trigger("click");
+
+        assert.equal(clickHandler.callCount, 1, "click was handled");
+    } finally {
+        $(document).off("click");
+    }
+});
+
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
