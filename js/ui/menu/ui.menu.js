@@ -937,8 +937,6 @@ var Menu = MenuBase.inherit({
             return;
         }
 
-        args.jQueryEvent.stopPropagation();
-
         currentSubmenu = this._getSubmenuByElement(args.itemElement, args.itemData);
 
         this._updateSelectedItemOnClick(actionArgs);
