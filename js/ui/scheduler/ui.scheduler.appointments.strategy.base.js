@@ -429,10 +429,7 @@ var BaseRenderingStrategy = Class.inherit({
             realStartDate = this._startDate(appointment, true),
             viewStartDate = this._startDate(appointment, false, position);
 
-        if(!endDate || realStartDate.getTime() >= endDate.getTime()) {
-            endDate = new Date(realStartDate.getTime() + this.instance.getAppointmentDurationInMinutes() * 60000);
-            this.instance.fire("setField", "endDate", appointment, endDate);
-        }
+        this._checkWrongEndDate(appointment, realStartDate, endDate);
 
         if(viewStartDate.getTime() >= endDate.getTime()) {
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
@@ -456,6 +453,13 @@ var BaseRenderingStrategy = Class.inherit({
         }
 
         return endDate;
+    },
+
+    _checkWrongEndDate: function(appointment, startDate, endDate) {
+        if(!endDate || startDate.getTime() >= endDate.getTime()) {
+            endDate = new Date(startDate.getTime() + this.instance.getAppointmentDurationInMinutes() * 60000);
+            this.instance.fire("setField", "endDate", appointment, endDate);
+        }
     },
 
     _getAppointmentDurationInMs: function(startDate, endDate, allDay) {
