@@ -387,7 +387,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "currentDate":
             case "groups":
             case "startDate":
-            case "showDateTimeIndicator":
+            case "showCurrentTimeIndicator":
             case "_currentDateTime":
                 this._cleanWorkSpace();
                 break;
@@ -754,7 +754,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderDateTimeIndicator: function() {
-        if(this.option("showDateTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
             var $container = this._dateTableScrollable.content(),
                 indicatorHeight = this._getDateTimeIndicatorHeight(),
                 maxHeight = $container.outerHeight(),
@@ -1165,7 +1165,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         var result = false;
 
-        if(this.option("showDateTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
             var date = this._getDateByIndex(headerIndex),
                 now = this.option("_currentDateTime") || new Date();
 
