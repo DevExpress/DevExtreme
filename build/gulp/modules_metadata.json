@@ -622,6 +622,12 @@
     }
   },
   {
+    "name": "viz/funnel",
+    "exports": {
+      "default": "viz.dxFunnel"
+    }
+  },
+  {
     "name": "viz/linear_gauge",
     "exports": {
       "default": "viz.dxLinearGauge"
