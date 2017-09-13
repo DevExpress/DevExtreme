@@ -778,9 +778,6 @@ QUnit.testInActiveWindow("First list item should be focused on the 'tab' key pre
     $searchEditor.find("input").focus();
     this.clock.tick();
 
-    assert.ok($treeView.hasClass("dx-state-focused"), "treeview is focused");
-    assert.ok($searchEditor.hasClass("dx-state-focused"), "search editor is focused");
-
     $searchEditor.on("keydown", function(e) {
         if(e.which === 9) {
             $treeView.find("[tabIndex]").not(":focus").first().focus();

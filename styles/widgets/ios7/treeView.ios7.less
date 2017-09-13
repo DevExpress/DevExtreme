@@ -18,6 +18,7 @@
 @IOS7_TREEVIEW_LOADINCICATOR_SIZE: 18px;
 
 @IOS7_TREEVIEW_ARROW_ICON_SIZE: 15px;
+@IOS7_TREEVIEW_SEARCH_EDITOR_MARGIN: 6px;
 
 .dx-treeview-node-loadindicator {
     top: @IOS7_TREEVIEW_LOADINCICATOR_OFFSET_TOP;
@@ -26,11 +27,15 @@
     height: @IOS7_TREEVIEW_LOADINCICATOR_SIZE;
 }
 
-.dx-treeview-search {
-    margin-bottom: 6px;
-}
-
 .dx-treeview {
+    .dx-treeview-search {
+        margin-bottom: @IOS7_TREEVIEW_SEARCH_EDITOR_MARGIN;
+    }
+
+    &.dx-treeview-with-search > .dx-scrollable {
+        height: calc(~"100% - 1.2em - "2*@TEXTEDITOR_INPUT_PADDING + @IOS7_TREEVIEW_SEARCH_EDITOR_MARGIN);
+    }
+
     &.dx-treeview-border-visible {
         border: 1px solid @IOS7_TREE_VIEW_BORDER_COLOR;
 

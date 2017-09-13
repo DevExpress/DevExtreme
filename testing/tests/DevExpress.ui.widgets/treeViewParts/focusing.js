@@ -212,6 +212,5 @@ QUnit.test("Focusing widget when there is search editor", function(assert) {
 
     instance.focus();
 
-    assert.ok($treeView.hasClass("dx-state-focused"), "widget is focused");
     assert.ok($treeView.children(".dx-treeview-search").hasClass("dx-state-focused"), "search editor is focused");
 });

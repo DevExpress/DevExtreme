@@ -804,5 +804,4 @@ QUnit.test("Render Search editor", function(assert) {
     $searchEditor = $treeView.children().first();
     assert.ok($searchEditor.hasClass("dx-treeview-search"), "has search editor");
     assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "2", "editor value");
-    assert.strictEqual($treeView.children(".dx-scrollable")[0].style.height, "calc(100% - " + $searchEditor.outerHeight(true) + "px)", "height of the scrollable");
 });
