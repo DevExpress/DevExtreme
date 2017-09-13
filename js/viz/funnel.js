@@ -10,5 +10,4 @@ dxFunnel.addPlugin(require("./funnel/tracker").plugin);
 dxFunnel.addPlugin(require("./funnel/tooltip").plugin);
 dxFunnel.addPlugin(require("./core/loading_indicator").plugin);
 
-registerComponent("dxFunnel", dxFunnel);
 module.exports = dxFunnel;
