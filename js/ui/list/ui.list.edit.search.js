@@ -57,7 +57,7 @@ var ListSearch = ListEdit.inherit({
             /**
              * @name dxListOptions_searchEditorOptions
              * @publicName searchEditorOptions
-             * @type TextBox options
+             * @type dxTextBoxOptions
              * @default {}
              */
             searchEditorOptions: {}
