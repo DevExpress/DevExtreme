@@ -321,6 +321,28 @@ var callNativeMethod = function(eventName, element) {
     }
 };
 
+var calculateWhich = function(event) {
+    var setForMouseEvent = function(event) {
+        var mouseEventRegex = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
+        return !event.which && event.button !== undefined && mouseEventRegex.test(event.type);
+    };
+
+    var setForKeyEvent = function(event) {
+        return event.which == null && event.type.indexOf("key") === 0;
+    };
+
+    if(setForKeyEvent(event)) {
+        return event.charCode != null ? event.charCode : event.keyCode;
+    }
+
+    if(setForMouseEvent(event)) {
+        var whichByButton = { 1: 1, 2: 3, 3: 1, 4: 2 };
+        return whichByButton[event.button];
+    }
+
+    return event.which;
+};
+
 var eventsEngine = {
     on: normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
         var elementDataByEvent = getElementEventData(element, eventName);
@@ -426,14 +448,16 @@ var eventsEngine = {
             });
         }
 
+        addProperty("which", calculateWhich, that);
+
         extend(that, config);
 
         that.guid = ++guid;
     })
 };
 
-var addProperty = function(propName, hook) {
-    Object.defineProperty(eventsEngine.Event.prototype, propName, {
+var addProperty = function(propName, hook, object) {
+    Object.defineProperty(object || eventsEngine.Event.prototype, propName, {
         enumerable: true,
         configurable: true,
 
@@ -453,22 +477,6 @@ var addProperty = function(propName, hook) {
 };
 
 hookTouchProps(addProperty);
-
-addProperty("which", function(event) {
-    var keyEventRegex = /^key/;
-    var mouseEventRegex = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
-    var button = event.button;
-
-    if(event.which == null && keyEventRegex.test(event.type)) {
-        return event.charCode != null ? event.charCode : event.keyCode;
-    }
-
-    if(!event.which && button !== undefined && mouseEventRegex.test(event.type)) {
-        return (button & 1 ? 1 : (button & 2 ? 3 : (button & 4 ? 2 : 0)));
-    }
-
-    return event.which;
-});
 
 var cleanData = dataUtilsStrategy.cleanData;
 dataUtilsStrategy.cleanData = function(nodes) {

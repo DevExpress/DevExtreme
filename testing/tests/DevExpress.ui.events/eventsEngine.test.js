@@ -179,6 +179,8 @@ QUnit.test("Simulate clicks, check which property", function(assert) {
         { button: 2, which: 3 },
         { button: 0, which: 1 },
         { button: 1, which: 2 },
+        { button: 3, which: 4 },
+        { button: 4, which: 5 },
     ];
     var i = 0;
     var div = document.createElement("div");
