@@ -144,8 +144,14 @@ QUnit.test("'focusin' and 'focus' events call element.focus, 'focusout' and 'blu
     eventsEngine.trigger(textBox, "focus");
     eventsEngine.trigger(textBox, "blur");
 
-    assert.ok(focus.calledTwice);
-    assert.ok(blur.calledTwice);
+    // jQuery  does not call native focus/blur for focusin/focusout
+    if(QUnit.urlParams["nojquery"]) {
+        assert.ok(focus.calledTwice);
+        assert.ok(blur.calledTwice);
+    } else {
+        assert.ok(focus.calledOnce);
+        assert.ok(blur.calledOnce);
+    }
 
     blur.restore();
     focus.restore();
