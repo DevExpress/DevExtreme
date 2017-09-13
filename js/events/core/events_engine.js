@@ -303,6 +303,24 @@ var iterate = function(callback) {
     };
 };
 
+var callNativeMethod = function(eventName, element) {
+    var nativeMethodName = eventName;
+    if(eventName === "focusin") nativeMethodName = "focus";
+    if(eventName === "focusout") nativeMethodName = "blur";
+
+    var isLinkClickEvent = function(eventName, element) {
+        return eventName === "click" && element.localName === "a";
+    };
+
+    if(isLinkClickEvent(eventName, element)) return;
+
+    if(isFunction(element[nativeMethodName])) {
+        skipEvent = eventName;
+        element[nativeMethodName]();
+        skipEvent = undefined;
+    }
+};
+
 var eventsEngine = {
     on: normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
         var elementDataByEvent = getElementEventData(element, eventName);
@@ -358,22 +376,7 @@ var eventsEngine = {
 
         if(element.nodeType) {
             special.callMethod(eventName, "_default", element, [ event, extraParameters ]);
-
-            var nativeMethodName = eventName;
-            if(eventName === "focusin") nativeMethodName = "focus";
-            if(eventName === "focusout") nativeMethodName = "blur";
-
-            var isLinkClickEvent = function(eventName, element) {
-                return eventName === "click" && element.localName === "a";
-            };
-
-            if(isLinkClickEvent(eventName, element)) return;
-
-            if(isFunction(element[nativeMethodName])) {
-                skipEvent = eventName;
-                element[nativeMethodName]();
-                skipEvent = undefined;
-            }
+            callNativeMethod(eventName, element);
         }
     }),
 
