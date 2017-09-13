@@ -144,13 +144,12 @@ QUnit.test("'focusin' and 'focus' events call element.focus, 'focusout' and 'blu
     eventsEngine.trigger(textBox, "focus");
     eventsEngine.trigger(textBox, "blur");
 
-    // jQuery  does not call native focus/blur for focusin/focusout
+    // jQuery does not call native focus/blur for focusin/focusout
     if(QUnit.urlParams["nojquery"]) {
         assert.ok(focus.calledTwice);
         assert.ok(blur.calledTwice);
     } else {
-        assert.ok(focus.calledOnce);
-        assert.ok(blur.calledOnce);
+        assert.expect(0);
     }
 
     blur.restore();
@@ -215,4 +214,31 @@ QUnit.test("Simulate tab press, check which property", function(assert) {
 
     var keyboard = keyboardMock(input);
     keyboard.press("tab");
+});
+
+QUnit.test("Event bubbling", function(assert) {
+    var fired = {
+        focus: 0,
+        click: 0,
+        load: 0
+    };
+
+    var div = document.createElement("div");
+    document.body.appendChild(div);
+
+    var handler = function() {
+        fired[event]++;
+    };
+
+    for(var event in fired) {
+        eventsEngine.on(window, event, handler);
+        eventsEngine.on(document, event, handler);
+        eventsEngine.on(document.body, event, handler);
+
+        eventsEngine.trigger(div, event);
+    }
+
+    assert.equal(fired.click, 3);
+    assert.equal(fired.load, 0);
+    assert.equal(fired.focus, 0);
 });

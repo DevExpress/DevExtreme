@@ -350,7 +350,7 @@ var eventsEngine = {
 
         var noBubble = special.getField(eventName, "noBubble") || event.isPropagationStopped();
 
-        if(eventName === "load") {
+        if(["blur", "focusout", "focus", "focusin", "load"].indexOf(eventName) !== -1) {
             noBubble = true;
         }
 
@@ -364,6 +364,7 @@ var eventsEngine = {
                 }
             };
             getParents(element);
+            parents.push(window);
 
             var i = 0;
 
