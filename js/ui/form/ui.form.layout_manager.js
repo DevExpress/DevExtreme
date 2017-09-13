@@ -351,16 +351,16 @@ var LayoutManager = Widget.inherit({
             _layoutStrategy: that._hasBrowserFlex() ? LAYOUT_STRATEGY_FLEX : LAYOUT_STRATEGY_FALLBACK,
             onLayoutChanged: function() {
                 var onLayoutChanged = that.option("onLayoutChanged"),
-                    isLayoutChanged = that.isLayoutChanged();
+                    isSingleColumnMode = that.isSingleColumnMode();
 
                 if(onLayoutChanged) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isLayoutChanged);
-                    onLayoutChanged(isLayoutChanged);
+                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isSingleColumnMode);
+                    onLayoutChanged(isSingleColumnMode);
                 }
             },
             onContentReady: function(e) {
                 if(that.option("onLayoutChanged")) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isLayoutChanged(e.component));
+                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
                 that._fireContentReadyAction();
             },
@@ -374,7 +374,7 @@ var LayoutManager = Widget.inherit({
                         .addClass(item.cssClass)
                         .appendTo($itemElement);
 
-                $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isLayoutChanged(this));
+                $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_ROW_CLASS);
@@ -1083,7 +1083,7 @@ var LayoutManager = Widget.inherit({
         return this._editorInstancesByField[field];
     },
 
-    isLayoutChanged: function(component) {
+    isSingleColumnMode: function(component) {
         var responsiveBox = this._responsiveBox || component;
         if(responsiveBox) {
             return responsiveBox.option("currentScreenFactor") === responsiveBox.option("singleColumnScreen");
