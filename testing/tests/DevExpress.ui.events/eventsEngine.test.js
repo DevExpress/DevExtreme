@@ -1,6 +1,7 @@
 "use strict";
 
 var eventsEngine = require("events/core/events_engine");
+var keyboardMock = require("../../helpers/keyboardMock.js");
 require("integration/jquery/events");
 
 QUnit.module("namespaces");
@@ -166,4 +167,46 @@ QUnit.test("prevent triggered 'load' event bubbling to body", function(assert) {
 
     eventsEngine.trigger(image, "load");
 
+});
+
+QUnit.test("Simulate clicks, check which property", function(assert) {
+    var testData = [
+        { button: 2, which: 3 },
+        { button: 0, which: 1 },
+        { button: 1, which: 2 },
+    ];
+    var i = 0;
+    var div = document.createElement("div");
+    var handler = function(e) {
+        assert.equal(e.which, testData[i].which);
+    };
+
+    var fireEvent = function(button) {
+        var event = div.ownerDocument.createEvent("MouseEvents");
+        event.initMouseEvent("click", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, button, null);
+        div.dispatchEvent(event);
+    };
+
+    document.body.appendChild(div);
+    eventsEngine.on(div, "click", handler);
+
+    for(; i < testData.length; i++) {
+        fireEvent(testData[i].button);
+    }
+});
+
+QUnit.test("Simulate tab press, check which property", function(assert) {
+    var done = assert.async();
+    var input = document.createElement("input");
+    input.type = "text";
+    var handler = function(e) {
+        assert.equal(e.which, 9);
+        done();
+    };
+
+    document.body.appendChild(input);
+    eventsEngine.on(input, "keydown", handler);
+
+    var keyboard = keyboardMock(input);
+    keyboard.press("tab");
 });

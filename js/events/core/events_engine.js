@@ -453,6 +453,22 @@ var addProperty = function(propName, hook) {
 
 hookTouchProps(addProperty);
 
+addProperty("which", function(event) {
+    var keyEventRegex = /^key/;
+    var mouseEventRegex = /^(?:mouse|pointer|contextmenu|drag|drop)|click/;
+    var button = event.button;
+
+    if(event.which == null && keyEventRegex.test(event.type)) {
+        return event.charCode != null ? event.charCode : event.keyCode;
+    }
+
+    if(!event.which && button !== undefined && mouseEventRegex.test(event.type)) {
+        return (button & 1 ? 1 : (button & 2 ? 3 : (button & 4 ? 2 : 0)));
+    }
+
+    return event.which;
+});
+
 var cleanData = dataUtilsStrategy.cleanData;
 dataUtilsStrategy.cleanData = function(nodes) {
     for(var i = 0; i < nodes.length; i++) {
