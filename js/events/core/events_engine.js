@@ -456,8 +456,8 @@ var eventsEngine = {
     })
 };
 
-var addProperty = function(propName, hook, object) {
-    Object.defineProperty(object || eventsEngine.Event.prototype, propName, {
+var addProperty = function(propName, hook, eventInstance) {
+    Object.defineProperty(eventInstance || eventsEngine.Event.prototype, propName, {
         enumerable: true,
         configurable: true,
 
