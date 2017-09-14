@@ -368,7 +368,7 @@ QUnit.test("Change row expand state on row click", function(assert) {
 });
 
 //T553981
-QUnit.test("Row expand state should not be changed on row click", function(assert) {
+QUnit.test("Row expand state should not be changed on row click when scrolling mode is 'infinite'", function(assert) {
     //arrange
     var dataGrid = $("#dataGrid").dxDataGrid({
         columns: ["field1", "field2"],
