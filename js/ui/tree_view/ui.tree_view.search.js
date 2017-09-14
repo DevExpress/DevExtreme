@@ -1,61 +1,15 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    registerComponent = require("../../core/component_registrator"),
-    messageLocalization = require("../../localization/message"),
+var registerComponent = require("../../core/component_registrator"),
+    searchBoxMixin = require("../widget/ui.search_box_mixin"),
     extend = require("../../core/utils/extend").extend,
-    TextBox = require("../text_box"),
     TreeViewBase = require("./ui.tree_view.base");
 
-var NODE_CONTAINER_CLASS = "dx-treeview-node-container",
-    TREEVIEW_SEARCH_CLASS = "dx-treeview-search",
-    TREEVIEW_WITH_SEARCH_CLASS = "dx-treeview-with-search";
+var NODE_CONTAINER_CLASS = "dx-treeview-node-container";
 
-
-var TreeViewSearch = TreeViewBase.inherit({
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            /**
-            * @name dxTreeViewOptions_searchEnabled
-            * @publicName searchEnabled
-            * @type boolean
-            * @default false
-            */
-            searchEnabled: false,
-
-            /**
-            * @name dxTreeViewOptions_searchValue
-            * @type String
-            * @publicName searchValue
-            * @default ""
-            */
-            searchValue: "",
-
-            /**
-            * @name dxTreeViewOptions_searchMode
-            * @publicName searchMode
-            * @type string
-            * @default 'contains'
-            * @acceptValues "contains"|"startswith"
-            */
-            searchMode: "contains",
-
-            /**
-            * @name dxTreeViewOptions_searchExpr
-            * @publicName searchExpr
-            * @type getter|array
-            * @default null
-            */
-            searchExpr: null,
-
-            /**
-             * @name dxTreeViewOptions_searchEditorOptions
-             * @publicName searchEditorOptions
-             * @type dxTextBoxOptions
-             * @default {}
-             */
-            searchEditorOptions: {}
-        });
+var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSourceOptions: function() {} })).inherit({
+    _addWidgetPrefix: function(className) {
+        return "dx-treeview-" + className;
     },
 
     _optionChanged: function(args) {
@@ -78,10 +32,6 @@ var TreeViewSearch = TreeViewBase.inherit({
                 this._initDataAdapter();
                 this.repaint();
                 break;
-            case "searchEnabled":
-            case "searchEditorOptions":
-                this.repaint();
-                break;
             default:
                 this.callBase(args);
         }
@@ -93,47 +43,6 @@ var TreeViewSearch = TreeViewBase.inherit({
             searchMode: this.option("searchMode"),
             searchExpr: this.option("searchExpr")
         });
-    },
-
-    _render: function() {
-        this._renderSearch();
-        this.callBase();
-    },
-
-    _renderSearch: function() {
-        var that = this,
-            editorOptions,
-            $element = that.element(),
-            searchEnabled = that.option("searchEnabled");
-
-        if(!searchEnabled) {
-            $element.removeClass(TREEVIEW_WITH_SEARCH_CLASS);
-            that._$searchEditorElement && that._$searchEditorElement.remove();
-            delete that._$searchEditorElement;
-            delete that._searchEditor;
-            return;
-        }
-
-        editorOptions = that._getSearchEditorOptions();
-        $element.addClass(TREEVIEW_WITH_SEARCH_CLASS);
-        that._$searchEditorElement = $("<div>").addClass(TREEVIEW_SEARCH_CLASS).prependTo($element);
-        that._searchEditor = that._createComponent(that._$searchEditorElement, TextBox, editorOptions);
-    },
-
-    _getSearchEditorOptions: function() {
-        var that = this,
-            userEditorOptions = that.option("searchEditorOptions");
-
-        return extend({
-            mode: "search",
-            placeholder: messageLocalization.format("Search"),
-            tabIndex: that.option("tabIndex"),
-            value: that.option("searchValue"),
-            valueChangeEvent: "keyup",
-            onValueChanged: function(e) {
-                that.option("searchValue", e.value);
-            }
-        }, userEditorOptions);
     },
 
     _updateSearch: function() {
@@ -160,28 +69,13 @@ var TreeViewSearch = TreeViewBase.inherit({
         return this.callBase();
     },
 
-    _getAriaTarget: function() {
-        return this.element();
-    },
-
     _addWidgetClass: function() {
         this.element().addClass(this._widgetClass());
     },
 
-    _updateFocusState: function(e, isFocused) {
-        if(this.option("searchEnabled")) {
-            this._toggleFocusClass(isFocused, this.element());
-        }
-        this.callBase(e, isFocused);
-    },
-
-    focus: function() {
-        if(!this.option("focusedElement") && this.option("searchEnabled")) {
-            this._searchEditor && this._searchEditor.focus();
-            return;
-        }
-
+    _clean: function() {
         this.callBase();
+        this._removeSearchBox();
     }
 });
 

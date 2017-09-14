@@ -41,14 +41,6 @@ var WIDGET_CLASS = "dx-treeview",
 
     DATA_ITEM_ID = "data-item-id";
 
-/**
-* @name dxTreeView
-* @publicName dxTreeView
-* @inherits HierarchicalCollectionWidget
-* @groupName Navigation and Layouting
-* @module ui/tree_view
-* @export default
-*/
 var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _supportedKeys: function(e) {
