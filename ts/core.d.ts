@@ -1273,7 +1273,7 @@ declare module DevExpress {
             searchEnabled?: boolean;
 
             /** @docid SearchBoxMixinOptions_searchValue */
-            searchValue?: any;
+            searchValue?: string;
 
             /** @docid SearchBoxMixinOptions_searchExpr */
             searchExpr?: any;
