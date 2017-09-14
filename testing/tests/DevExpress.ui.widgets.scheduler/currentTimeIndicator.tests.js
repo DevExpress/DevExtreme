@@ -155,6 +155,18 @@ QUnit.testStart(function() {
 
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
     });
+
+    QUnit.test("TimePanel currentTime cell should have specific class, day view with intervalCount ", function(assert) {
+        this.instance.option({
+            _currentDateTime: new Date(2017, 8, 6, 12, 45),
+            intervalCount: 3
+        });
+
+        var $element = this.instance.element(),
+            $cell = $element.find(".dx-scheduler-time-panel-cell").eq(5);
+
+        assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
+    });
 })("DateTime indicator on Day View");
 
 (function() {

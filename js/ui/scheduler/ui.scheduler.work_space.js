@@ -771,14 +771,17 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
                 this._$indicator.height(indicatorHeight);
 
-                if(this._isWorkSpaceWithCount()) {
-                    var indicatorWidth = this._getDateTimeIndicatorWidth();
+                var indicatorWidth = this._getDateTimeIndicatorWidth();
 
+                if(this._getCellCount() > 1) {
                     this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth);
+
                     this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth);
                 }
 
                 this._renderAllDayIndicator();
+
+                this._$allDayIndicator && this._$allDayIndicator.width(indicatorWidth);
 
                 if(renderIndicatorContent) {
                     var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
@@ -790,8 +793,25 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
+    _getToday: function() {
+        return this.option("_currentDateTime") || new Date();
+    },
+
+    _getDateTimeIndicatorHeight: function() {
+        var today = this._getToday(),
+            cellHeight = this.getCellHeight(),
+            date = new Date(this._firstViewDate);
+
+        date.setDate(today.getDate());
+
+        var duration = today.getTime() - date.getTime(),
+            cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellHeight;
+    },
+
     _getDateTimeIndicatorWidth: function() {
-        var today = this.option("_currentDateTime") || new Date(),
+        var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate);
 
         var timeDiff = today.getTime() - firstViewDate.getTime();
@@ -824,22 +844,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _needRenderDateTimeIndicator: function() {
-        var now = this.option("_currentDateTime") || new Date(),
+        var now = this._getToday(),
             endViewDate = dateUtils.trimTime(this.getEndViewDate());
         return dateUtils.dateInRange(now, dateUtils.trimTime(this.getStartViewDate()), new Date(endViewDate.getTime() + DAY_MS));
-    },
-
-    _getDateTimeIndicatorHeight: function() {
-        var today = this.option("_currentDateTime") || new Date(),
-            cellHeight = this.getCellHeight(),
-            date = new Date(this._firstViewDate);
-
-        date.setDate(today.getDate());
-
-        var duration = today.getTime() - date.getTime(),
-            cellCount = duration / this.getCellDuration();
-
-        return cellCount * cellHeight;
     },
 
     _setFirstViewDate: function() {
@@ -1182,19 +1189,26 @@ var SchedulerWorkSpace = Widget.inherit({
         return dateLocalization.format(startViewDate, "shorttime");
     },
 
+
     _isCurrentTime: function(date) {
-        var now = this.option("_currentDateTime") || new Date(),
-            result = false,
-            startCellDate = new Date(date),
-            endCellDate = new Date(date);
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var now = this._getToday(),
+                result = false;
+            date = new Date(date);
 
-        if(dateUtils.sameDate(now, date)) {
-            startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration());
-            endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
+            date.setFullYear(now.getFullYear(), now.getMonth(), now.getDate());
 
-            result = dateUtils.dateInRange(now, startCellDate, endCellDate);
+            var startCellDate = new Date(date),
+                endCellDate = new Date(date);
+
+            if(dateUtils.sameDate(now, date)) {
+                startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration());
+                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
+
+                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
+            }
+            return result;
         }
-        return result;
     },
 
     _isCurrentTimeHeaderCell: function(headerIndex) {
