@@ -204,15 +204,40 @@ var TextEditorMask = TextEditorBase.inherit({
         eventsEngine.on($input, eventUtils.addNamespace("change", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
     },
 
+    _getDefaultValue: function() {
+        return "";
+    },
+
+    _adjustCaret2: function(initialCaret, oldValue, value) {
+        var oldStubCount = oldValue.slice(0, initialCaret.start).replace(/[0-9]/g, "").length,
+            newStubCount = value.slice(0, initialCaret.start).replace(/[0-9]/g, "").length,
+            newCaret = {
+                start: initialCaret.start + (newStubCount - oldStubCount),
+                end: initialCaret.end + (newStubCount - oldStubCount)
+            };
+
+        this._caret(newCaret);
+    },
+
     _formatValue: function() {
         var format = this.option("displayFormat");
 
         if(!format) return;
 
         var value = this._input().val(),
-            formattedValue = this._formatter(this._parser(value, format), format);
+            parsedValue = this._parser(value, format),
+            formattedValue = this._formatter(isNaN(parsedValue) ? this._getDefaultValue() : parsedValue, format);
 
-        this._input().val(formattedValue);
+        var initialCaret = this._caret();
+
+        if(!value || !isNaN(parsedValue)) {
+            this._input().val(formattedValue);
+            this._formattedValue = formattedValue;
+        } else {
+            this._input().val(this._formattedValue || "");
+        }
+
+        this._adjustCaret2(initialCaret, value, formattedValue, false);
     },
 
     _updateParsedValue: function() {
