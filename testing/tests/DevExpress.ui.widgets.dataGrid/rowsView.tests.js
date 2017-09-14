@@ -1728,6 +1728,10 @@ QUnit.test('Selection on hold should not work when showCheckBoxesMode is always'
 
 //T355686
 QUnit.test('ContextMenu on hold when touch and when assign items in onContextMenuPreparing', function(assert) {
+    if(devices.real().deviceType === "desktop" && browser.msie && parseInt(browser.version) <= 10) {
+        assert.ok(true);
+        return;
+    }
     //arrange
     var rowInfos = this.items,
         dataController = new MockDataController({ items: rowInfos }),
