@@ -7,7 +7,10 @@ require("generic_light.css!");
 
 require("ui/scheduler/ui.scheduler.work_space_day");
 require("ui/scheduler/ui.scheduler.work_space_week");
-
+require("ui/scheduler/ui.scheduler.timeline_day"),
+require("ui/scheduler/ui.scheduler.timeline_week"),
+require("ui/scheduler/ui.scheduler.timeline_work_week"),
+require("ui/scheduler/ui.scheduler.timeline_month"),
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-work-space"></div>');
 });
@@ -23,7 +26,7 @@ QUnit.testStart(function() {
         }
     });
 
-    QUnit.test("DateTimeIndicator should be rendered if needed", function(assert) {
+    QUnit.test("DateTimeIndicator should be rendered if needed, Day view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 12, 45)
         });
@@ -37,7 +40,7 @@ QUnit.testStart(function() {
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "Indicator wasn't rendered");
     });
 
-    QUnit.test("DateTimeIndicator on allDayPanel should be rendered if needed", function(assert) {
+    QUnit.test("DateTimeIndicator on allDayPanel should be rendered if needed, Day view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: false
@@ -51,7 +54,7 @@ QUnit.testStart(function() {
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered");
     });
 
-    QUnit.test("DateTimeIndicator on allDayPanel should have correct height", function(assert) {
+    QUnit.test("DateTimeIndicator on allDayPanel should have correct height, Day view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: true,
@@ -66,7 +69,7 @@ QUnit.testStart(function() {
         assert.roughEqual($element.find(".dx-scheduler-date-time-indicator-all-day").eq(0).outerHeight(), 74, 1, "Indicator has correct height");
     });
 
-    QUnit.test("DateTimeIndicator should be wrapped by scrollable", function(assert) {
+    QUnit.test("DateTimeIndicator should be wrapped by scrollable, Day view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 12, 45)
         });
@@ -75,7 +78,7 @@ QUnit.testStart(function() {
         assert.ok($element.find(".dx-scheduler-date-time-indicator").parent().hasClass("dx-scrollable-content"), "Scrollable contains time indicator");
     });
 
-    QUnit.test("AllDay dateTimeIndicator should be wrapped by allDay panel", function(assert) {
+    QUnit.test("AllDay dateTimeIndicator should be wrapped by allDay panel, Day view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: true
@@ -85,7 +88,7 @@ QUnit.testStart(function() {
         assert.ok($element.find(".dx-scheduler-date-time-indicator-all-day").parent().hasClass("dx-scheduler-all-day-panel"), "AllDay panel contains time indicator");
     });
 
-    QUnit.test("DateTimeIndicator should have correct height", function(assert) {
+    QUnit.test("DateTimeIndicator should have correct height, Day view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 12, 45)
         });
@@ -96,7 +99,7 @@ QUnit.testStart(function() {
         assert.roughEqual($indicator.outerHeight(), 475, 1, "Indicator has correct height");
     });
 
-    QUnit.test("DateTimeIndicator should have limited height", function(assert) {
+    QUnit.test("DateTimeIndicator should have limited height, Day view", function(assert) {
         this.instance.option({
             endDayHour: 18,
             _currentDateTime: new Date(2017, 8, 5, 19, 45)
@@ -106,10 +109,10 @@ QUnit.testStart(function() {
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerHeight(), 1000, 1, "Indicator has correct height");
-        assert.equal($indicator.children().length, 0, "Indicator has no content");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
     });
 
-    QUnit.test("DateTimeIndicator should have correct height & width, day view with intervalCount", function(assert) {
+    QUnit.test("DateTimeIndicator should have correct height & width, Day view with intervalCount", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 6, 12, 45),
             intervalCount: 3
@@ -124,12 +127,12 @@ QUnit.testStart(function() {
         assert.roughEqual($topIndicator.outerHeight(), 475, 1, "Top indicator has correct height");
         assert.roughEqual($bottomIndicator.outerHeight(), 1125, 1, "Bottom indicator has correct height");
 
-        assert.roughEqual($indicator.outerWidth(), 998, 1, "Indicator has correct width");
+        assert.roughEqual($indicator.outerWidth(), 898, 1, "Indicator has correct width");
         assert.roughEqual($topIndicator.outerWidth(), 598, 1, "Top indicator has correct width");
         assert.roughEqual($bottomIndicator.outerWidth(), 299, 1, "Bottom indicator has correct width");
     });
 
-    QUnit.test("DateTimeIndicator should not be renderd after currentDate changing", function(assert) {
+    QUnit.test("DateTimeIndicator should not be renderd after currentDate changing, Day view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 19, 45),
             showAllDayPanel: true
@@ -145,7 +148,7 @@ QUnit.testStart(function() {
         assert.equal($element.find(".dx-scheduler-date-time-indicator-all-day").length, 0, "AllDay indicator wasn't rendered");
     });
 
-    QUnit.test("TimePanel currentTime cell should have specific class", function(assert) {
+    QUnit.test("TimePanel currentTime cell should have specific class, Day view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 12, 45)
         });
@@ -156,7 +159,7 @@ QUnit.testStart(function() {
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
     });
 
-    QUnit.test("TimePanel currentTime cell should have specific class, day view with intervalCount ", function(assert) {
+    QUnit.test("TimePanel currentTime cell should have specific class, Day view with intervalCount", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 6, 12, 45),
             intervalCount: 3
@@ -180,7 +183,7 @@ QUnit.testStart(function() {
         }
     });
 
-    QUnit.test("DateTimeIndicator should be rendered if needed", function(assert) {
+    QUnit.test("DateTimeIndicator should be rendered if needed, Week view", function(assert) {
         this.instance.option({
             currentDate: new Date(),
             startDayHour: 0
@@ -195,7 +198,7 @@ QUnit.testStart(function() {
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "Indicator wasn't rendered");
     });
 
-    QUnit.test("DateTimeIndicator on allDayPanel should be rendered if needed", function(assert) {
+    QUnit.test("DateTimeIndicator on allDayPanel should be rendered if needed, Week view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 7, 12, 45),
             showAllDayPanel: false
@@ -209,7 +212,7 @@ QUnit.testStart(function() {
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered");
     });
 
-    QUnit.test("DateTimeIndicator on allDayPanel should have correct height & width", function(assert) {
+    QUnit.test("DateTimeIndicator on allDayPanel should have correct height & width, Week view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 7, 12, 45),
             showAllDayPanel: true,
@@ -225,7 +228,7 @@ QUnit.testStart(function() {
         assert.roughEqual($element.find(".dx-scheduler-date-time-indicator-all-day").eq(0).outerHeight(), 74, 1, "Indicator has correct height");
     });
 
-    QUnit.test("DateTimeIndicator should have correct height & width", function(assert) {
+    QUnit.test("DateTimeIndicator should have correct height & width, Week view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 6, 12, 45)
         });
@@ -239,12 +242,12 @@ QUnit.testStart(function() {
         assert.roughEqual($topIndicator.outerHeight(), 475, 1, "Top indicator has correct height");
         assert.roughEqual($bottomIndicator.outerHeight(), 1125, 1, "Bottom indicator has correct height");
 
-        assert.roughEqual($indicator.outerWidth(), 998, 1, "Indicator has correct width");
+        assert.roughEqual($indicator.outerWidth(), 898, 1, "Indicator has correct width");
         assert.roughEqual($topIndicator.outerWidth(), 512, 1, "Top indicator has correct width");
         assert.roughEqual($bottomIndicator.outerWidth(), 384, 1, "Bottom indicator has correct width");
     });
 
-    QUnit.test("DateTimeIndicator should have limited height", function(assert) {
+    QUnit.test("DateTimeIndicator should have limited height, Week view", function(assert) {
         this.instance.option({
             endDayHour: 18,
             _currentDateTime: new Date(2017, 8, 5, 19, 45)
@@ -257,7 +260,7 @@ QUnit.testStart(function() {
         assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
     });
 
-    QUnit.test("DateTimeIndicator should not be renderd after currentDate changing", function(assert) {
+    QUnit.test("DateTimeIndicator should not be renderd after currentDate changing, Week view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 5, 19, 45),
             showAllDayPanel: true
@@ -273,7 +276,7 @@ QUnit.testStart(function() {
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "AllDay indicator wasn't rendered");
     });
 
-    QUnit.test("TimePanel currentTime cell should have specific class", function(assert) {
+    QUnit.test("TimePanel currentTime cell should have specific class, Week view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 6, 12, 45)
         });
@@ -284,7 +287,7 @@ QUnit.testStart(function() {
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
     });
 
-    QUnit.test("DateHeader currentTime cell should have specific class", function(assert) {
+    QUnit.test("DateHeader currentTime cell should have specific class, Week view", function(assert) {
         this.instance.option({
             _currentDateTime: new Date(2017, 8, 7, 12, 45)
         });
@@ -295,3 +298,93 @@ QUnit.testStart(function() {
         assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
     });
 })("DateTime indicator on Week View");
+
+(function() {
+    QUnit.module("DateTime indicator on TimelineDay View", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerTimelineDay({
+                showCurrentTimeIndicator: true,
+                currentDate: new Date(2017, 8, 5),
+                startDayHour: 8,
+                height: 307
+            }).dxSchedulerTimelineDay("instance");
+        }
+    });
+
+    QUnit.test("DateTimeIndicator should be rendered if needed, TimelineDay view", function(assert) {
+        this.instance.option({
+            currentDate: new Date(),
+            startDayHour: 0
+        });
+        var $element = this.instance.element();
+
+        assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered correctly");
+
+        this.instance.option("showCurrentTimeIndicator", false);
+        $element = this.instance.element();
+
+        assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "Indicator wasn't rendered");
+    });
+
+    QUnit.test("DateTimeIndicator should have correct height & width, TimelineDay view", function(assert) {
+        this.instance.option({
+            _currentDateTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        var $element = this.instance.element(),
+            $indicator = $element.find(".dx-scheduler-date-time-indicator"),
+            cellWidth = $element.find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+
+        assert.roughEqual($indicator.outerHeight(), 200, 1, "Indicator has correct height");
+
+        assert.roughEqual($indicator.outerWidth(), 9.5 * cellWidth, 1, "Indicator has correct width");
+    });
+
+    QUnit.test("DateTimeIndicator should have limited width, TimelineDay view", function(assert) {
+        this.instance.option({
+            endDayHour: 18,
+            _currentDateTime: new Date(2017, 8, 5, 19, 45)
+        });
+
+        var $element = this.instance.element(),
+            $indicator = $element.find(".dx-scheduler-date-time-indicator");
+
+        assert.roughEqual($indicator.outerWidth(), 4000, 1, "Indicator has correct width");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
+    });
+
+    QUnit.test("DateHeader currentTime cell should have specific class", function(assert) {
+        this.instance.option({
+            _currentDateTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        var $element = this.instance.element(),
+            $cell = $element.find(".dx-scheduler-header-panel-cell").eq(9);
+
+        assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
+    });
+})("DateTime indicator on TimelineDay View");
+
+(function() {
+    QUnit.module("DateTime indicator on other timelines");
+
+    QUnit.test("DateTimeIndicator should have correct height & width, TimelineWeek view", function(assert) {
+        var instance = $("#scheduler-work-space").dxSchedulerTimelineWeek({
+            showCurrentTimeIndicator: true,
+            currentDate: new Date(2017, 8, 5),
+            startDayHour: 8,
+            height: 307,
+            _currentDateTime: new Date(2017, 8, 5, 12, 30),
+            hoursInterval: 1
+        }).dxSchedulerTimelineWeek("instance");
+
+        var $element = instance.element(),
+            $indicator = $element.find(".dx-scheduler-date-time-indicator"),
+            cellWidth = $element.find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+
+        assert.roughEqual($indicator.outerHeight(), 160, 1, "Indicator has correct height");
+
+        assert.roughEqual($indicator.outerWidth(), 36.5 * cellWidth, 1, "Indicator has correct width");
+    });
+})("DateTime indicator on TimelineDay View");
+
