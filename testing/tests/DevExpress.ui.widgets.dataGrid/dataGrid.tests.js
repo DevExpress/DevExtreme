@@ -372,6 +372,37 @@ QUnit.test("Change row expand state on row click", function(assert) {
 
 });
 
+//T553981
+QUnit.test("Row expand state should not be changed on row click", function(assert) {
+    //arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        columns: ["field1", "field2"],
+        loadingTimeout: undefined,
+        grouping: {
+            expandMode: "rowClick"
+        },
+        dataSource: {
+            store: [{ field1: "1", field2: "2" }, { field1: "1", field2: "4" }],
+            group: "field1"
+        },
+        scrolling: {
+            mode: "infinite"
+        }
+    }).dxDataGrid("instance");
+
+    //assert
+    assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
+
+    //act
+    dataGrid.element()
+        .find(".dx-datagrid-rowsview .dx-group-row")
+        .first()
+        .trigger("dxclick");
+
+    //assert
+    assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
+});
+
 QUnit.test("cellClick/cellHoverChanged handler should be executed when define via 'on' method", function(assert) {
     var cellClickCount = 0,
         cellHoverChangedCount = 0,
