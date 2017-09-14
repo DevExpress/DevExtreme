@@ -244,7 +244,8 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return position;
     },
 
-    scrollToTime: noop
+    scrollToTime: noop,
+    _renderDateTimeIndicator: noop
 });
 
 registerComponent("dxSchedulerWorkSpaceMonth", SchedulerWorkSpaceMonth);

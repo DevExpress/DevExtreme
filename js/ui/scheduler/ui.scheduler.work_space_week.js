@@ -8,8 +8,6 @@ var $ = require("../../core/renderer"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space");
 
 var WEEK_CLASS = "dx-scheduler-work-space-week";
-var DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
-    DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content";
 
 var toMs = dateUtils.dateToMilliseconds;
 var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
@@ -88,68 +86,6 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
             $cells = $(arr);
         }
         return $cells;
-    },
-
-    _getDateTimeIndicatorHeight: function() {
-        var today = this.option("_currentDateTime") || new Date(),
-            cellHeight = this.getCellHeight(),
-            date = new Date(this._firstViewDate);
-
-        date.setDate(today.getDate());
-
-        var duration = today.getTime() - date.getTime(),
-            cellCount = duration / this.getCellDuration();
-
-        return cellCount * cellHeight;
-    },
-
-    _renderDateTimeIndicator: function() {
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            var $container = this._dateTableScrollable.content(),
-                indicatorHeight = this._getDateTimeIndicatorHeight(),
-                maxHeight = $container.outerHeight(),
-                renderIndicatorContent = true;
-
-            if(indicatorHeight > maxHeight) {
-                indicatorHeight = maxHeight;
-                renderIndicatorContent = false;
-            }
-
-            if(indicatorHeight > 0) {
-                this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
-                this._$indicator.height(indicatorHeight);
-
-                var indicatorWidth = this._getDateTimeIndicatorWidth();
-
-                this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth);
-
-                this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth);
-
-                // this._$indicator.append(this._$firstIndicator);
-                // this._$indicator.append(this._$secondIndicator);
-
-                this._renderAllDayIndicator();
-
-                this._$allDayIndicator && this._$allDayIndicator.width(indicatorWidth);
-
-                if(renderIndicatorContent) {
-                    var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
-                    $content.css("top", indicatorHeight - 10);
-                    this._$indicator.append($content);
-                }
-                $container.append(this._$indicator);
-            }
-        }
-    },
-
-    _getDateTimeIndicatorWidth: function() {
-        var today = this.option("_currentDateTime") || new Date(),
-            firstViewDate = new Date(this._firstViewDate);
-
-        var timeDiff = today.getTime() - firstViewDate.getTime();
-        var difference = Math.ceil(timeDiff / toMs("day"));
-
-        return difference * this.getCellWidth();
     },
 
     _isCurrentTime: function(date) {
