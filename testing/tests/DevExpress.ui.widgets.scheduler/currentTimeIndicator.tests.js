@@ -386,5 +386,55 @@ QUnit.testStart(function() {
 
         assert.roughEqual($indicator.outerWidth(), 36.5 * cellWidth, 1, "Indicator has correct width");
     });
-})("DateTime indicator on TimelineDay View");
+
+    QUnit.test("DateHeader currentTime cell should have specific class, TimelineWeek view", function(assert) {
+        var instance = $("#scheduler-work-space").dxSchedulerTimelineWeek({
+            showCurrentTimeIndicator: true,
+            currentDate: new Date(2017, 8, 5),
+            startDayHour: 8,
+            height: 307,
+            _currentDateTime: new Date(2017, 8, 5, 12, 30),
+            hoursInterval: 1
+        }).dxSchedulerTimelineWeek("instance");
+
+        var $element = instance.element(),
+            $cell = $element.find(".dx-scheduler-header-panel-cell").eq(43);
+
+        assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
+    });
+
+    QUnit.test("DateTimeIndicator should have correct height & width, TimelineMonth view", function(assert) {
+        var instance = $("#scheduler-work-space").dxSchedulerTimelineMonth({
+            showCurrentTimeIndicator: true,
+            currentDate: new Date(2017, 8, 5),
+            startDayHour: 8,
+            height: 307,
+            _currentDateTime: new Date(2017, 8, 16, 12, 0),
+            hoursInterval: 1
+        }).dxSchedulerTimelineMonth("instance");
+
+        var $element = instance.element(),
+            $indicator = $element.find(".dx-scheduler-date-time-indicator"),
+            cellWidth = $element.find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+
+        assert.roughEqual($indicator.outerHeight(), 200, 1, "Indicator has correct height");
+
+        assert.roughEqual($indicator.outerWidth(), 15.5 * cellWidth, 1, "Indicator has correct width");
+    });
+
+    QUnit.test("DateHeader currentTime cell should have specific class, TimelineMonth view", function(assert) {
+        var instance = $("#scheduler-work-space").dxSchedulerTimelineMonth({
+            showCurrentTimeIndicator: true,
+            currentDate: new Date(2017, 8, 5),
+            startDayHour: 8,
+            height: 307,
+            _currentDateTime: new Date(2017, 8, 15, 12, 30)
+        }).dxSchedulerTimelineMonth("instance");
+
+        var $element = instance.element(),
+            $cell = $element.find(".dx-scheduler-header-panel-cell").eq(14);
+
+        assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
+    });
+})("DateTime indicator on other timelines");
 
