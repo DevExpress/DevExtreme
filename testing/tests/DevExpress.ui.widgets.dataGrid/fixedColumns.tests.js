@@ -2,7 +2,14 @@
 
 QUnit.testStart(function() {
     var markup =
-'<div>\
+'<style>\
+    .qunit-fixture-static {\
+        position: absolute !important;\
+        left: 0 !important;\
+        top: 0 !important;\
+    }\
+</style>\
+<div>\
     <div id="container"  class="dx-datagrid dx-widget" style = "width: 400px;"></div>\
 </div>';
 
@@ -76,7 +83,7 @@ QUnit.module("Fixed columns", {
         };
 
         that.setupDataGrid = function(dataOptions) {
-            setupDataGridModules(that, ["data", "columns", "rows", "columnHeaders", "summary", "columnFixing", "grouping", "filterRow", "editorFactory", "masterDetail", "virtualScrolling", "errorHandling", "keyboardNavigation"], {
+            setupDataGridModules(that, ["data", "columns", "rows", "columnHeaders", "summary", "columnFixing", "grouping", "filterRow", "editorFactory", "masterDetail", "virtualScrolling", "errorHandling", "keyboardNavigation", "contextMenu"], {
                 initViews: true,
                 controllers: {
                     columns: new MockColumnsController(that.columns),
@@ -132,6 +139,41 @@ QUnit.test("Draw fixed table for columnHeadersView", function(assert) {
     assert.ok($fixTable.find("td").eq(1).hasClass("dx-pointer-events-none"), "has class dx-pointer-events-none");
     assert.strictEqual($fixTable.find("td").last().text(), "Column 2", "fixed column");
 });
+
+if(device.deviceType === "desktop" && browser.msie && parseInt(browser.version) <= 10) {
+    //T551322
+    QUnit.test("Context menu should works if fixed columns are shown", function(assert) {
+        //arrange
+        var that = this,
+            testElement = $('#container');
+
+        $("#qunit-fixture").addClass("qunit-fixture-static");
+
+        that.element = function() {
+            return $("#container");
+        };
+
+        that.setupDataGrid();
+
+        that.columnHeadersView.render(testElement);
+        that.contextMenuView.render(testElement);
+
+        var $fixedCell = testElement.find('.dx-header-row').eq(0).find('td').eq(1);
+        var $cell = testElement.find('.dx-header-row').eq(1).find('td').eq(1);
+        var boundingClientRect = $cell[0].getBoundingClientRect();
+
+        //act
+        $($fixedCell).trigger($.Event("dxcontextmenu", {
+            clientX: boundingClientRect.left + 8,
+            clientY: boundingClientRect.top + 8
+        }));
+
+        //assert
+        assert.equal($(".dx-overlay-wrapper .dx-context-menu").length, 1, 'context menu is shown');
+
+        $("#qunit-fixture").removeClass("qunit-fixture-static");
+    });
+}
 
 QUnit.test("Draw fixed table for rowsView", function(assert) {
     //arrange
