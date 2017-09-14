@@ -389,7 +389,7 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 
     //act
-    dataGrid.element()
+    $(dataGrid.element())
         .find(".dx-datagrid-rowsview .dx-group-row")
         .first()
         .trigger("dxclick");
