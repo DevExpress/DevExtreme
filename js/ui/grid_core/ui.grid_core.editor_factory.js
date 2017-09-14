@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     positionUtils = require("../../animation/position"),
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
+    contextMenuEvent = require("../../events/contextmenu"),
     pointerEvents = require("../../events/pointer"),
     normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
     compareVersion = require("../../core/utils/version").compare,
@@ -412,8 +413,8 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                //T112103, T110581, T174768
-                isIE10OrLower && $container.on([pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
+                //T112103, T110581, T174768, T551322
+                isIE10OrLower && $container.on([pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name, contextMenuEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
             }
         },
 
