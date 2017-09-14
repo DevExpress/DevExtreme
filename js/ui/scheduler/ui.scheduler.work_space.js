@@ -773,11 +773,9 @@ var SchedulerWorkSpace = Widget.inherit({
 
                 var indicatorWidth = this._getDateTimeIndicatorWidth();
 
-                if(this._getCellCount() > 1) {
-                    this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth);
+                this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth);
 
-                    this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth);
-                }
+                this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth);
 
                 this._renderAllDayIndicator();
 

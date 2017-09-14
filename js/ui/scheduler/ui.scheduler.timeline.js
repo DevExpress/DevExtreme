@@ -18,6 +18,9 @@ var HORIZONTAL = "horizontal",
     DATE_TABLE_CELL_BORDER = 1,
     toMs = dateUtils.dateToMilliseconds;
 
+var DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
+    DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content";
+
 var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _init: function() {
         this.callBase();
@@ -158,11 +161,73 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderAllDayPanel();
         this._renderTimePanel();
         this._renderDateTable();
+        this._renderDateTimeIndicator();
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.content());
 
         this._setGroupHeaderCellsHeight();
         this._applyCellTemplates(groupCellTemplates);
+    },
+
+    _renderDateTimeIndicator: function() {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var $container = this._dateTableScrollable.content(),
+                indicatorWidth = this._getDateTimeIndicatorWidth(),
+                maxWidth = $container.outerWidth(),
+                renderIndicatorContent = true;
+
+            if(indicatorWidth > maxWidth) {
+                indicatorWidth = maxWidth;
+                renderIndicatorContent = false;
+            }
+
+            if(indicatorWidth > 0) {
+                this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
+                this._$indicator.width(indicatorWidth);
+
+                if(renderIndicatorContent) {
+                    var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spindown");
+                    $content.css("left", indicatorWidth - 16);
+                    this._$indicator.append($content);
+                }
+                $container.append(this._$indicator);
+            }
+        }
+    },
+
+    _getDateTimeIndicatorWidth: function() {
+        var today = this._getToday(),
+            cellWidth = this.getCellWidth(),
+            date = new Date(this._firstViewDate),
+            hiddenInterval = (24 - this.option("endDayHour") + this.option("startDayHour")) * toMs("hour"),
+            timeDiff = today.getTime() - date.getTime();
+
+        var differenceInDays = Math.ceil(timeDiff / toMs("day")) - 1,
+            duration = timeDiff - differenceInDays * hiddenInterval,
+            cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellWidth;
+    },
+
+    _isCurrentTimeHeaderCell: function(headerIndex) {
+        var result = false;
+
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var date = this._getDateByIndex(headerIndex);
+
+            var now = this._getToday();
+            date = new Date(date);
+
+            if(dateUtils.sameDate(now, date)) {
+                var startCellDate = new Date(date),
+                    endCellDate = new Date(date);
+                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
+
+                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
+            }
+        }
+
+        return result;
     },
 
     _cleanView: function() {
