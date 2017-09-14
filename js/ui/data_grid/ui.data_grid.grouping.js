@@ -560,7 +560,8 @@ var GroupingRowsViewExtender = (function() {
         _rowClick: function(e) {
             var that = this,
                 expandMode = that.option("grouping.expandMode"),
-                isGroupRowStateChanged = expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
+                scrollingMode = that.option("scrolling.mode"),
+                isGroupRowStateChanged = scrollingMode !== "infinite" && expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
                 isExpandButtonClicked = $(e.jQueryEvent.target).closest("." + DATAGRID_EXPAND_CLASS).length;
 
             if(isGroupRowStateChanged || isExpandButtonClicked) {
