@@ -1267,6 +1267,24 @@ declare module DevExpress {
             value?: any;
         }
 
+        /** @docid SearchBoxMixin */
+        export interface SearchBoxMixinOptions {
+            /** @docid SearchBoxMixinOptions_searchEnabled */
+            searchEnabled?: boolean;
+
+            /** @docid SearchBoxMixinOptions_searchValue */
+            searchValue?: any;
+
+            /** @docid SearchBoxMixinOptions_searchExpr */
+            searchExpr?: any;
+
+            /** @docid SearchBoxMixinOptions_searchMode */
+            searchMode?: string;
+
+            /** @docid SearchBoxMixinOptions_searchEditorOptions */
+            searchEditorOptions?: DevExpress.ui.dxTextBoxOptions;
+        }
+
         export interface EditorOptions extends WidgetOptions {
             /** @docid EditorOptions_value */
             value?: any;

@@ -11,14 +11,6 @@ var $ = require("../../core/renderer"),
 var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
     LIST_ITEM_RESPONSE_WAIT_CLASS = "dx-list-item-response-wait";
 
-/**
-* @name dxList
-* @publicName dxList
-* @type object
-* @inherits CollectionWidget
-* @groupName Collection Widgets
-*/
-
 var ListEdit = ListBase.inherit({
     _supportedKeys: function() {
         var that = this,
