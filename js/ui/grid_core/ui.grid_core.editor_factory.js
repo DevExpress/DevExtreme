@@ -35,7 +35,6 @@ var CHECKBOX_SIZE_CLASS = "checkbox-size",
     FOCUSED_ELEMENT_CLASS = "dx-focused",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
-    EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
     FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus",
     DX_HIDDEN = "dx-hidden",
     TAB_KEY = 9;
@@ -424,8 +423,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             var $target = $(e.target),
                 $currentTarget = $(e.currentTarget),
                 element,
-                needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS),
-                $focusedElement = this._$focusedElement;
+                needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
 
             if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
 
@@ -442,7 +440,9 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
             $currentTarget.removeClass(DX_HIDDEN);
 
-            $focusedElement && eventsEngine.trigger($focusedElement.find(EDITORS_INPUT_SELECTOR), "focus");
+            if(e.type === clickEvent.name && element.tagName === "INPUT") {
+                eventsEngine.trigger($(element), "focus");
+            }
         },
 
         dispose: function() {
