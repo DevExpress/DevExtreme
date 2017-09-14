@@ -18,6 +18,7 @@ QUnit.testStart(function() {
 
 
 require("common.css!");
+require("generic_light.css!");
 
 require("ui/data_grid/ui.data_grid");
 
@@ -170,6 +171,45 @@ if(device.deviceType === "desktop" && browser.msie && parseInt(browser.version) 
 
         //assert
         assert.equal($(".dx-overlay-wrapper .dx-context-menu").length, 1, 'context menu is shown');
+
+        $("#qunit-fixture").removeClass("qunit-fixture-static");
+    });
+
+    //T551323
+    QUnit.test("Filter row editor should be focused after click on it if fixed columns are shown", function(assert) {
+        //arrange
+        var that = this,
+            testElement = $('#container');
+
+        $("#qunit-fixture").addClass("qunit-fixture-static");
+
+        that.element = function() {
+            return $("#container");
+        };
+
+        that.setupDataGrid();
+
+        that.columns.forEach(function(column) {
+            column.allowFiltering = true;
+        });
+
+        that.options.filterRow = {
+            visible: true
+        };
+
+        that.columnHeadersView.render(testElement);
+
+        var $fixedCell = testElement.find('.dx-datagrid-filter-row').eq(0).find('td').eq(1);
+        var $cell = testElement.find('.dx-datagrid-filter-row').eq(1).find('td').eq(1);
+        var boundingClientRect = $cell[0].getBoundingClientRect();
+        //act
+        $($fixedCell).trigger($.Event("dxclick", {
+            clientX: boundingClientRect.left + 8,
+            clientY: boundingClientRect.top + 8
+        }));
+
+        //assert
+        assert.ok($cell.find(".dx-texteditor-input").is(":focus"), 'cell editor is focused');
 
         $("#qunit-fixture").removeClass("qunit-fixture-static");
     });
@@ -1180,7 +1220,7 @@ QUnit.test("Synchronize rows for fixed table with master detail", function(asser
     assert.equal($fixTable.find("tbody > tr").length, 4, "count fixed rows");
     assert.ok($table.find("tbody > tr").first().outerHeight() === $fixTable.find("tbody > tr").first().outerHeight(), "height first row");
     assert.ok($table.find("tbody > tr").eq(1).outerHeight() === $fixTable.find("tbody > tr").eq(1).outerHeight(), "height second row");
-    assert.ok($table.find("tbody > tr").eq(2).outerHeight() === $fixTable.find("tbody > tr").eq(2).outerHeight(), "height third row");
+    assert.roughEqual($table.find("tbody > tr").eq(2).outerHeight(), $fixTable.find("tbody > tr").eq(2).outerHeight(), 0.1, "height third row");
 });
 
 QUnit.test("Synchronize rows with floating-point height", function(assert) {
@@ -1261,7 +1301,7 @@ QUnit.test("Synchronize position fixed table with main table", function(assert) 
 
     //assert
     assert.ok(scrollableInstance, "has scrollable");
-    assert.equal(that.rowsView.element().height(), 50, "height rowsView");
+    assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
     assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
     assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
     assert.equal($fixTable.position().top, 0, "fixed table - position top");
@@ -1304,7 +1344,7 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
 
     //assert
     assert.ok(scrollableInstance, "has scrollable");
-    assert.equal(that.rowsView.element().height(), 50, "height rowsView");
+    assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
     assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
     assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
     assert.equal($fixTable.position().top, 0, "fixed table - position top");
@@ -1355,7 +1395,7 @@ if(device.deviceType === "desktop") {
 
         //assert
         assert.ok(scrollableInstance, "has scrollable");
-        assert.equal(that.rowsView.element().height(), 50, "height rowsView");
+        assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
         assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
         assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
         assert.equal($fixTable.position().top, 0, "fixed table - position top");
@@ -1412,7 +1452,7 @@ if(device.deviceType === "desktop") {
 
         //assert
         assert.ok(scrollableInstance, "has scrollable");
-        assert.equal(that.rowsView.element().height(), 50, "height rowsView");
+        assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
         assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
         assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
         assert.equal($fixTable.position().top, 0, "fixed table - position top");
@@ -1470,7 +1510,7 @@ if(device.deviceType === "desktop") {
 
         //assert
         assert.ok(scrollableInstance, "has scrollable");
-        assert.equal(that.rowsView.element().height(), 50, "height rowsView");
+        assert.equal(that.rowsView.element().outerHeight(), 50, "height rowsView");
         assert.equal($testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find(".dx-datagrid-content").length, 1, "has main content");
         assert.ok($testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").length, "has fix content");
         assert.equal($fixTable.position().top, 0, "fixed table - position top");
