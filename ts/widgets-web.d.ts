@@ -2345,6 +2345,7 @@ declare module DevExpress.ui {
         searchByText(text: string): void;
 
         /** @docid GridBaseMethods_focus */
+        focus(element?: Element): void;
         focus(element?: JQuery): void;
 
         /** @docid GridBaseMethods_clearFilter#clearFilter() */

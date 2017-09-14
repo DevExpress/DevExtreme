@@ -7994,6 +7994,24 @@ QUnit.test("Focus row element", function(assert) {
     }, "Check that correct cell is focused");
 });
 
+QUnit.test("Focus row element should support native DOM", function(assert) {
+    //arrange
+    var $focusedCell;
+
+    //act
+    this.focusGridCell($(this.dataGrid.element()).find(".dx-datagrid-rowsview td").get(4));
+
+    $focusedCell = $(this.dataGrid.element()).find(".dx-focused");
+
+    //assert
+    assert.ok($focusedCell.length, "We have focused cell in markup");
+    assert.equal(this.keyboardNavigationController._focusedView.name, "rowsView", "Check that correct view is focused");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
+        columnIndex: 0,
+        rowIndex: 2
+    }, "Check that correct cell is focused");
+});
+
 QUnit.module("Formatting");
 
 QUnit.test("Empty value for dateTime formatting", function(assert) {

@@ -860,9 +860,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
     /**
     * @name GridBaseMethods_focus
     * @publicName focus(element)
-    * @param1 element:jQuery
+    * @param1 element:Node|jQuery
     */
-    focus: function($element) {
+    focus: function(element) {
+        var $element = $(element);
         var focusView = this._getFocusedViewByElement($element);
 
         if(focusView) {
