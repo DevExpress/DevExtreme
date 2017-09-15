@@ -10,7 +10,8 @@ var $ = require("jquery"),
     publicComponentUtils = require("core/utils/public_component"),
     nameSpace = {},
     coreConfig = require("core/config"),
-    eventsEngine = require("events/core/events_engine");
+    eventsEngine = require("events/core/events_engine"),
+    browser = require("core/utils/browser");
 
 QUnit.testStart(function() {
     var markup = '<div id="component"></div>' + '<div id="anotherComponent"></div>';
@@ -939,6 +940,7 @@ QUnit.test("Dispose: attributes deleted", function(assert) {
     });
     assert.equal(element.attr("data-dx-content-placeholder-name"), undefined);
     assert.equal(element.attr("style"), undefined);
+    if(browser.msie && parseInt(browser.version) < 10) return;
     assert.equal(element.attr("tabindex"), undefined);
 
 });
