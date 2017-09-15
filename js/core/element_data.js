@@ -13,6 +13,20 @@ exports.cleanData = function(elements) {
     return dataUtils.cleanData.apply(this, arguments);
 };
 
+exports.cleanDataRecursive = function(element, cleanSelf) {
+    if(!(element instanceof Element)) {
+        return;
+    }
+
+    var childElements = element.getElementsByTagName("*");
+
+    dataUtils.cleanData(childElements);
+
+    if(cleanSelf) {
+        dataUtils.cleanData([element]);
+    }
+};
+
 exports.setDataStrategy = function(value) {
     dataUtils = value;
 };
