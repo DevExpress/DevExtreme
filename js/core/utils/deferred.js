@@ -1,7 +1,5 @@
 "use strict";
 
-var jQuery = require("jquery");
-var compareVersion = require("../utils/version").compare;
 var typeUtils = require("../utils/type");
 var isPromise = typeUtils.isPromise;
 var isDeferred = typeUtils.isDeferred;
@@ -49,7 +47,6 @@ var Deferred = function() {
         };
     }.bind(this));
 
-
     this._promise.always = function(handler) {
         return this.done(handler).fail(handler);
     };
@@ -89,11 +86,7 @@ deferredConfig.forEach(function(config) {
     };
 });
 
-module.exports.Deferred = function() {
-    return new Deferred();
-};
-
-module.exports.fromPromise = function(promise, context) {
+exports.fromPromise = function(promise, context) {
     if(isDeferred(promise)) {
         return promise;
     } else if(isPromise(promise)) {
@@ -109,19 +102,55 @@ module.exports.fromPromise = function(promise, context) {
     return new Deferred().resolveWith(context, [promise]);
 };
 
-module.exports.when = compareVersion(jQuery.fn.jquery, [3]) < 0
-    ? jQuery.when
-    : function(singleArg) {
-        if(arguments.length === 0) {
-            return new Deferred().resolve();
-        } else if(arguments.length === 1) {
-            return singleArg && singleArg.then ? singleArg : new Deferred().resolve(singleArg);
-        } else {
-            return jQuery.when.apply(jQuery, arguments);
-        }
+var when = function() {
+    if(arguments.length === 1) {
+        return exports.fromPromise(arguments[0]);
+    }
+
+    var values = [].slice.call(arguments),
+        contexts = [],
+        resolvedCount = 0,
+        deferred = new Deferred();
+
+    var updateState = function(i) {
+        return function(value) {
+            contexts[i] = this;
+            values[i] = arguments.length > 1 ? [].slice.call(arguments) : value;
+            resolvedCount++;
+            if(resolvedCount === values.length) {
+                deferred.resolveWith(contexts, values);
+            }
+        };
     };
 
+    for(var i = 0; i < values.length; i++) {
+        if(isDeferred(values[i])) {
+            values[i].promise()
+                .done(updateState(i))
+                .fail(deferred.reject);
+        } else {
+            resolvedCount++;
+        }
+    }
 
-module.exports.setStrategy = function(value) {
-    Deferred = value;
+    if(resolvedCount === values.length) {
+        deferred.resolveWith(contexts, values);
+    }
+
+    return deferred.promise();
 };
+
+exports.setStrategy = function(value) {
+    Deferred = value.Deferred;
+    when = value.when;
+};
+
+
+exports.Deferred = function() {
+    return new Deferred();
+};
+
+exports.when = function() {
+    return when.apply(this, arguments);
+};
+

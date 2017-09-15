@@ -212,6 +212,16 @@ QUnit.test("default value is null", function(assert) {
     assert.strictEqual(instance.option("value"), null, "value is null on default");
 });
 
+QUnit.test("widget should render with empty items", function(assert) {
+    var $dropDownList = $("#dropDownList").dxDropDownList({
+            items: null,
+            opened: true
+        }),
+        instance = $dropDownList.dxDropDownList("instance");
+
+    assert.ok(instance, "widget was rendered");
+});
+
 QUnit.test("items option contains items from dataSource after load", function(assert) {
     var dataSource = [1, 2, 3];
 

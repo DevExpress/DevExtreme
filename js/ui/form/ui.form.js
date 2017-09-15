@@ -952,7 +952,7 @@ var Form = Widget.inherit({
                 that._alignLabels.bind(that)(that._rootLayoutManager, inOneColumn);
             },
             onContentReady: function(e) {
-                that._alignLabels(e.component, e.component.isLayoutChanged());
+                that._alignLabels(e.component, e.component.isSingleColumnMode());
             }
         });
     },
@@ -990,7 +990,7 @@ var Form = Widget.inherit({
                             $container: $container,
                             layoutManager: layoutManager,
                             items: itemData.items,
-                            inOneColumn: layoutManager.isLayoutChanged()
+                            inOneColumn: layoutManager.isSingleColumnMode()
                         });
                     }
                 }
@@ -1202,7 +1202,7 @@ var Form = Widget.inherit({
             case "width":
                 this.callBase(args);
                 this._rootLayoutManager.option(args.name, args.value);
-                this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isLayoutChanged());
+                this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
                 break;
             case "visible":
                 this.callBase(args);

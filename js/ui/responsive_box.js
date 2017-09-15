@@ -466,7 +466,7 @@ var ResponsiveBox = CollectionWidget.inherit({
         return extend({
             width: "100%",
             height: "100%",
-            itemTemplate: this.option("itemTemplate"),
+            itemTemplate: this._getTemplateByOption("itemTemplate"),
             itemHoldTimeout: this.option("itemHoldTimeout"),
             onItemHold: this._createActionByOption("onItemHold"),
             onItemClick: this._createActionByOption("onItemClick"),

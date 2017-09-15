@@ -431,6 +431,9 @@ declare module DevExpress {
         /** @docid domcomponentmethods_element */
         element(): JQuery;
 
+        /** @docid domcomponentmethods_dispose */
+        dispose(): void;
+
         /** @docid domcomponentmethods_defaultOptions */
         static defaultOptions(rule: {
             device?: any;
@@ -596,7 +599,7 @@ declare module DevExpress {
 
         //T184606
         interface Promise {
-            then(doneFn?: Function, failFn?: Function, progressFn?: Function): Promise;
+            then(doneFn?: any, failFn?: any, progressFn?: any): Promise;
         }
 
         export interface CustomStoreOptions extends StoreOptions {
@@ -1265,6 +1268,24 @@ declare module DevExpress {
 
             /** @docid DataExpressionMixinOptions_value */
             value?: any;
+        }
+
+        /** @docid SearchBoxMixin */
+        export interface SearchBoxMixinOptions {
+            /** @docid SearchBoxMixinOptions_searchEnabled */
+            searchEnabled?: boolean;
+
+            /** @docid SearchBoxMixinOptions_searchValue */
+            searchValue?: string;
+
+            /** @docid SearchBoxMixinOptions_searchExpr */
+            searchExpr?: any;
+
+            /** @docid SearchBoxMixinOptions_searchMode */
+            searchMode?: string;
+
+            /** @docid SearchBoxMixinOptions_searchEditorOptions */
+            searchEditorOptions?: DevExpress.ui.dxTextBoxOptions;
         }
 
         export interface EditorOptions extends WidgetOptions {

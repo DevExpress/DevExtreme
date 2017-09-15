@@ -603,7 +603,7 @@ declare module DevExpress.ui {
     export class HierarchicalCollectionWidget extends CollectionWidget {
     }
 
-    export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions {
+    export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions, SearchBoxMixinOptions {
         /** @docid_ignore dxTreeViewItemTemplate_icon */
         /** @docid_ignore dxTreeViewItemTemplate_iconSrc */
         /** @docid_ignore dxTreeViewItemTemplate_selected */
@@ -663,9 +663,6 @@ declare module DevExpress.ui {
 
         /** @docid dxTreeViewOptions_rootValue */
         rootValue?: Object;
-
-        /** @docid dxTreeViewOptions_searchValue */
-        searchValue?: string;
 
         /** @docid dxTreeViewOptions_scrollDirection */
         scrollDirection?: string;
@@ -2345,6 +2342,7 @@ declare module DevExpress.ui {
         searchByText(text: string): void;
 
         /** @docid GridBaseMethods_focus */
+        focus(element?: Element): void;
         focus(element?: JQuery): void;
 
         /** @docid GridBaseMethods_clearFilter#clearFilter() */

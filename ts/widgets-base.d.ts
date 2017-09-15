@@ -1470,7 +1470,7 @@ declare module DevExpress.ui {
         action?: (itemElement: Element, itemData: any) => void;
     }
 
-    export interface dxListOptions extends CollectionWidgetOptions {
+    export interface dxListOptions extends CollectionWidgetOptions, SearchBoxMixinOptions {
         /** @docid_ignore dxListOptions_selectedIndex */
         /** @docid_ignore dxListOptions_selectedItem */
         /** @docid_ignore dxListOptions_focusStateEnabled */

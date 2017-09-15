@@ -13,6 +13,7 @@ var $ = require("../../core/renderer"),
     positionUtils = require("../../animation/position"),
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
+    contextMenuEvent = require("../../events/contextmenu"),
     pointerEvents = require("../../events/pointer"),
     normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
     addNamespace = eventUtils.addNamespace;
@@ -34,7 +35,6 @@ var CHECKBOX_SIZE_CLASS = "checkbox-size",
     FOCUSED_ELEMENT_CLASS = "dx-focused",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
-    EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
     FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus",
     DX_HIDDEN = "dx-hidden",
     TAB_KEY = 9;
@@ -414,8 +414,8 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                //T112103, T110581, T174768
-                isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
+                //T112103, T110581, T174768, T551322
+                isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name, contextMenuEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
             }
         },
 
@@ -423,8 +423,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             var $target = $(e.target),
                 $currentTarget = $(e.currentTarget),
                 element,
-                needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS),
-                $focusedElement = this._$focusedElement;
+                needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
 
             if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
 
@@ -441,7 +440,9 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
             $currentTarget.removeClass(DX_HIDDEN);
 
-            $focusedElement && eventsEngine.trigger($focusedElement.find(EDITORS_INPUT_SELECTOR), "focus");
+            if(e.type === clickEvent.name && element.tagName === "INPUT") {
+                eventsEngine.trigger($(element), "focus");
+            }
         },
 
         dispose: function() {

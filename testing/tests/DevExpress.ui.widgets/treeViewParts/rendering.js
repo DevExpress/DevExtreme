@@ -791,3 +791,17 @@ QUnit.test("TreeView with empty dataSource should updates after item inserted in
 
     assert.equal(treeView.option("items").length, 1, "item was inserted");
 });
+
+QUnit.test("Render Search editor", function(assert) {
+    var $searchEditor,
+        $treeView = initTree({
+            items: $.extend(true, [], DATA[1]),
+            keyExpr: "key",
+            searchEnabled: true,
+            searchValue: "2"
+        });
+
+    $searchEditor = $treeView.children().first();
+    assert.ok($searchEditor.hasClass("dx-treeview-search"), "has search editor");
+    assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "2", "editor value");
+});
