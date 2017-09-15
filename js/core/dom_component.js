@@ -340,9 +340,9 @@ var DOMComponent = Component.inherit({
     },
 
     _removeAttributes: function(element) {
-        var removeAttributes = [];
+        var i = element.attributes.length - 1;
 
-        for(var i = 0; i < element.attributes.length; i++) {
+        for(; i >= 0; i--) {
             var attributeName = element.attributes[i].name;
 
             if(attributeName.indexOf("aria-") === 0 ||
@@ -350,13 +350,9 @@ var DOMComponent = Component.inherit({
                 attributeName === "role" ||
                 attributeName === "style" ||
                 attributeName === "tabindex") {
-                removeAttributes.push(attributeName);
+                element.removeAttribute(attributeName);
             }
         }
-
-        removeAttributes.forEach(function(attribute) {
-            element.removeAttribute(attribute);
-        });
     },
 
     _removeClasses: function(element) {
