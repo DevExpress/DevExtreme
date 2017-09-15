@@ -6,6 +6,14 @@ var $ = require("../../core/renderer"),
     TextBox = require("../text_box"),
     errors = require("../widget/ui.errors");
 
+/**
+* @name SearchBoxMixin
+* @publicName SearchBoxMixin
+* @module ui/widget/ui.search_box_mixin
+* @export default
+* @hidden
+*/
+
 module.exports = {
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
