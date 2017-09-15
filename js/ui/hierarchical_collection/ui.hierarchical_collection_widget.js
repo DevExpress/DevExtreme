@@ -219,6 +219,10 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
 
     _render: function() {
         this.callBase();
+        this._addWidgetClass();
+    },
+
+    _addWidgetClass: function() {
         this._focusTarget().addClass(this._widgetClass());
     },
 

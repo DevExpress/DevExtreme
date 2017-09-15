@@ -74,9 +74,7 @@ module.exports = {
 
         if(!searchEnabled) {
             $element.removeClass(rootElementClassName);
-            this._$searchEditorElement && this._$searchEditorElement.remove();
-            delete this._$searchEditorElement;
-            delete this._searchEditor;
+            this._removeSearchBox();
             return;
         }
 
@@ -89,6 +87,12 @@ module.exports = {
             this._$searchEditorElement = $("<div>").addClass(searchBoxClassName).prependTo($element);
             this._searchEditor = this._createComponent(this._$searchEditorElement, TextBox, editorOptions);
         }
+    },
+
+    _removeSearchBox: function() {
+        this._$searchEditorElement && this._$searchEditorElement.remove();
+        delete this._$searchEditorElement;
+        delete this._searchEditor;
     },
 
     _getSearchEditorOptions: function() {
