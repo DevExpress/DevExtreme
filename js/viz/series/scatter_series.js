@@ -94,7 +94,7 @@ var baseScatterMethods = {
     _createLegendState: function(styleOptions, defaultColor) {
         return {
             fill: styleOptions.color || defaultColor,
-            hatching: styleOptions.hatching
+            hatching: styleOptions.hatching ? _extend({}, styleOptions.hatching, { direction: "right" }) : undefined
         };
     },
 

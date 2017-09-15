@@ -601,21 +601,6 @@ QUnit.test('pattern, with left hatching', function(assert) {
     assert.strictEqual(pattern.path.stub("attr").firstCall.args[0].d, "M 0 0 L 3 3 M -1.5 1.5 L 1.5 4.5 M 1.5 -1.5 L 4.5 1.5", "pattern.path d param for left hatching");
 });
 
-QUnit.test('pattern, without hatching', function(assert) {
-    //act
-    var pattern = this.renderer.pattern('red', { direction: 'NoNe' });
-
-    //assert
-    assert.ok(pattern);
-    assert.ok(!(pattern instanceof renderers.SvgElement));
-    assert.ok($.isPlainObject(pattern));
-    assert.equal(pattern.id, 'red');
-    assert.ok($.isFunction(pattern.append));
-    assert.deepEqual(pattern.append(), pattern);
-    assert.ok($.isFunction(pattern.clear));
-    assert.ok($.isFunction(pattern.dispose));
-});
-
 QUnit.test('clipRect with params', function(assert) {
     //act
     var clipRect = this.renderer.clipRect(10, 20, 30, 40);
