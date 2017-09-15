@@ -145,7 +145,6 @@ exports.setStrategy = function(value) {
     when = value.when;
 };
 
-
 exports.Deferred = function() {
     return new Deferred();
 };
