@@ -397,6 +397,16 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.strictEqual(lock.lastCall, null, "lock");
     });
 
+    QUnit.test("smartAttr with 'none' hatching", function(assert) {
+        var lock = this.rendererStub.lockHatching = sinon.stub().returns("test-pattern"),
+            element = (new this.Element(this.rendererStub, "rect"));
+
+        element.smartAttr({ fill: "red", hatching: { direction: "NoNe" } });
+
+        assert.strictEqual(element._settings.fill, "red", "fill");
+        assert.ok(!lock.called, "lock");
+    });
+
     QUnit.test("smartAttr / no hatching and previous hatching", function(assert) {
         var release = this.rendererStub.releaseHatching = sinon.spy(),
             element = (new this.Element(this.rendererStub, "rect"));

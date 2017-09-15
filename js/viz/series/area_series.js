@@ -18,9 +18,11 @@ var baseAreaMethods = {
     _createBorderElement: chartLineSeries._createMainElement,
 
     _createLegendState: function(styleOptions, defaultColor) {
-        var legendState = scatterSeries._createLegendState.call(this, styleOptions, defaultColor);
-        legendState.opacity = styleOptions.opacity;
-        return legendState;
+        return {
+            fill: styleOptions.color || defaultColor,
+            opacity: styleOptions.opacity,
+            hatching: styleOptions.hatching
+        };
     },
 
     getValueRangeInitialValue: function() {

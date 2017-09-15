@@ -181,19 +181,11 @@ var environment = {
     }
 };
 
-function defaultHatching() {
-    return {
-        direction: "right",
-        step: 5,
-        width: 2
-    };
-}
-
 function getDefaultStates() {
     return {
-        hover: { hatching: {}, fill: 'blue' },
+        hover: { hatching: { direction: "right" }, fill: 'blue' },
         normal: { fill: '#00FF00' },
-        selection: { hatching: { direction: 'none' }, fill: 'black' }
+        selection: { hatching: { direction: "right" }, fill: 'black' }
     };
 }
 
@@ -312,7 +304,7 @@ QUnit.test('Draw with Title', function(assert) {
     }
 });
 
-QUnit.test('Create legend with pattern, hover fill is "none"', function(assert) {
+QUnit.test('Create legend, hover fill is "none"', function(assert) {
     var states = {
         hover: { hatching: {}, fill: 'none' },
         selection: { hatching: {}, fill: 'black' }
@@ -341,25 +333,16 @@ QUnit.test('Create legend with pattern, hover fill is "none"', function(assert) 
     states = $.map(legend._items, function(item) { return item.states; });
 
     assert.equal(states[0].hovered.fill, "#00FF00");
-    assert.deepEqual(states[0].hovered.hatching, defaultHatching());
     assert.equal(states[0].selected.fill, "black");
-    assert.deepEqual(states[0].selected.hatching, defaultHatching());
-
 
     assert.equal(states[1].hovered.fill, "#99FF99");
-    assert.deepEqual(states[1].hovered.hatching, defaultHatching());
     assert.equal(states[1].selected.fill, "black");
-    assert.deepEqual(states[1].selected.hatching, defaultHatching());
-
 
     assert.equal(states[2].hovered.fill, "blue");
-    assert.deepEqual(states[2].hovered.hatching, defaultHatching());
     assert.equal(states[2].selected.fill, "black");
-    assert.deepEqual(states[2].selected.hatching, defaultHatching());
-
 });
 
-QUnit.test('Create legend with pattern, textOpacity is "undefined"', function(assert) {
+QUnit.test('Create legend, textOpacity is "undefined"', function(assert) {
     this.options.font.opacity = 0.5;
     var states = {
         hover: { hatching: {}, fill: 'none' },
@@ -380,7 +363,7 @@ QUnit.test('Create legend with pattern, textOpacity is "undefined"', function(as
     assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].opacity, 0.5, "Label should have opacity");
 });
 
-QUnit.test('Create legend with pattern, textOpacity less than font opacity', function(assert) {
+QUnit.test('Create legend, textOpacity less than font opacity', function(assert) {
     this.options.font.opacity = 0.5;
     var states = {
         hover: { hatching: {}, fill: 'none' },
@@ -399,7 +382,7 @@ QUnit.test('Create legend with pattern, textOpacity less than font opacity', fun
     assert.equal(this.renderer.text.lastCall.returnValue.css.lastCall.args[0].opacity, 0.3, "Label should be changed");
 });
 
-QUnit.test('Create legend with pattern, selected fill is "none"', function(assert) {
+QUnit.test('Create legend, selected fill is "none"', function(assert) {
     var states = {
         hover: { hatching: {}, fill: 'red' },
         selection: { hatching: {}, fill: 'none' }
@@ -427,98 +410,13 @@ QUnit.test('Create legend with pattern, selected fill is "none"', function(asser
     states = $.map(legend._items, function(item) { return item.states; });
 
     assert.equal(states[0].hovered.fill, "red");
-    assert.deepEqual(states[0].hovered.hatching, defaultHatching());
     assert.equal(states[0].selected.fill, "#00FF00");
-    assert.deepEqual(states[0].selected.hatching, defaultHatching());
-
 
     assert.equal(states[1].hovered.fill, "red");
-    assert.deepEqual(states[1].hovered.hatching, defaultHatching());
     assert.equal(states[1].selected.fill, "#99FF99");
-    assert.deepEqual(states[1].selected.hatching, defaultHatching());
-
 
     assert.equal(states[2].hovered.fill, "red");
-    assert.deepEqual(states[2].hovered.hatching, defaultHatching());
     assert.equal(states[2].selected.fill, "blue");
-    assert.deepEqual(states[2].selected.hatching, defaultHatching());
-});
-
-QUnit.test('Create legend with pattern, hover hatching is "none"', function(assert) {
-    var states = {
-        hover: { hatching: { direction: 'none' }, fill: 'red' },
-        selection: { hatching: {}, fill: 'black' }
-    };
-    this.data = [{
-        text: 'First',
-        id: 0,
-        states: { hover: states.hover, selection: states.selection, normal: { fill: '#00FF00' } }
-    }, {
-        text: 'Second',
-        id: 1,
-        states: { hover: states.hover, selection: states.selection, normal: { fill: '#99FF99' } }
-    }, {
-        text: 'Third',
-        id: 2,
-        states: { hover: states.hover, selection: states.selection, normal: { fill: 'blue' } }
-    }];
-    var legend = this.createSimpleLegend();
-
-    legend.draw(200, 200);
-
-    states = $.map(legend._items, function(item) { return item.states; });
-
-    assert.equal(states[0].hovered.fill, "red");
-    assert.deepEqual(states[0].hovered.hatching, defaultHatching(), "hover hatching");
-    assert.equal(states[0].selected.fill, "black");
-    assert.deepEqual(states[0].selected.hatching, defaultHatching());
-
-    assert.equal(states[1].hovered.fill, "red");
-    assert.deepEqual(states[1].hovered.hatching, defaultHatching());
-    assert.equal(states[1].selected.fill, "black");
-    assert.deepEqual(states[1].selected.hatching, defaultHatching());
-
-    assert.equal(states[2].hovered.fill, "red");
-    assert.deepEqual(states[2].hovered.hatching, defaultHatching());
-    assert.equal(states[2].selected.fill, "black");
-    assert.deepEqual(states[2].selected.hatching, defaultHatching());
-});
-
-QUnit.test('Create legend with pattern, selected hatching is "none"', function(assert) {
-    var states = getDefaultStates();
-    this.data = [{
-        text: 'First',
-        id: 0,
-        states: states
-    }, {
-        text: 'Second',
-        id: 1,
-        states: states
-    }, {
-        text: 'Third',
-        id: 2,
-        states: states
-    }];
-    var legend = this.createSimpleLegend();
-
-    legend.draw(200, 200);
-
-    states = $.map(legend._items, function(item) { return item.states; });
-
-    assert.equal(states[0].hovered.fill, "blue");
-    assert.deepEqual(states[0].hovered.hatching, defaultHatching(), "hover hatching");
-    assert.equal(states[0].selected.fill, "black");
-    assert.deepEqual(states[0].selected.hatching, defaultHatching());
-
-    assert.equal(states[1].hovered.fill, "blue");
-    assert.deepEqual(states[1].hovered.hatching, defaultHatching());
-    assert.equal(states[1].selected.fill, "black");
-    assert.deepEqual(states[1].selected.hatching, defaultHatching());
-
-    assert.equal(states[2].hovered.fill, "blue");
-    assert.deepEqual(states[2].hovered.hatching, defaultHatching());
-    assert.equal(states[2].selected.fill, "black");
-    assert.deepEqual(states[2].selected.hatching, defaultHatching());
 });
 
 QUnit.test('Update', function(assert) {
@@ -532,9 +430,9 @@ QUnit.test('Update', function(assert) {
             .draw(200, 200)
             .update([{
                 text: 'newText', id: 0, states: {
-                    hover: { fill: 'green1', hatching: { direction: 'none' } },
+                    hover: { fill: 'green1', hatching: { direction: 'right' } },
                     normal: { fill: 'none' },
-                    selection: { fill: 'blue1', hatching: { direction: 'none' } }
+                    selection: { fill: 'blue1', hatching: { direction: 'left' } }
                 }
             }], this.options)
             .draw();
@@ -542,9 +440,9 @@ QUnit.test('Update', function(assert) {
     states = $.map(legend._items, function(item) { return item.states; });
 
     assert.equal(states[0].hovered.fill, "green1");
-    assert.deepEqual(states[0].hovered.hatching, defaultHatching(), "hover hatching");
+    assert.deepEqual(states[0].hovered.hatching.direction, "right", "hover hatching");
     assert.equal(states[0].selected.fill, "blue1");
-    assert.deepEqual(states[0].selected.hatching, defaultHatching());
+    assert.deepEqual(states[0].selected.hatching.direction, 'left');
 });
 
 QUnit.test('Draw legend, orientation = "horizontal"', function(assert) {
@@ -1733,7 +1631,7 @@ QUnit.test('applyHover', function(assert) {
     this.legend.applyHover(0);
 
     assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, "blue");
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, defaultHatching());
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, { direction: "right", step: 5, width: 2 });
     assert.equal(this.renderer.rect.getCall(1).returnValue._stored_settings.fill, '#00FF00');
     assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
 });
@@ -1744,7 +1642,7 @@ QUnit.test('applySelected', function(assert) {
     this.legend.applySelected(0);
 
     assert.equal(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].fill, "black");
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, defaultHatching());
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.smartAttr.lastCall.args[0].hatching, { direction: "right", step: 5, width: 2 });
     assert.equal(this.renderer.rect.getCall(1).returnValue._stored_settings.fill, '#00FF00');
     assert.strictEqual(this.renderer.rect.getCall(1).returnValue.stub("smartAttr").callCount, 0);
 });
