@@ -10,7 +10,8 @@ var $ = require("jquery"),
     publicComponentUtils = require("core/utils/public_component"),
     nameSpace = {},
     coreConfig = require("core/config"),
-    eventsEngine = require("events/core/events_engine");
+    eventsEngine = require("events/core/events_engine"),
+    browser = require("core/utils/browser");
 
 QUnit.testStart(function() {
     var markup = '<div id="component"></div>' + '<div id="anotherComponent"></div>';
@@ -894,6 +895,12 @@ QUnit.test("Dispose: dx classes are removed", function(assert) {
 });
 
 QUnit.test("Dispose: attributes deleted", function(assert) {
+
+    if(browser.msie && parseInt(browser.version) < 10) {
+        assert.expect(0);
+        return;
+    }
+
     var element = $("#component").TestComponent(),
         instance = element.data("TestComponent"),
         attributes = [
