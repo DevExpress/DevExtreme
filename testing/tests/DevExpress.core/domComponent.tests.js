@@ -895,12 +895,6 @@ QUnit.test("Dispose: dx classes are removed", function(assert) {
 });
 
 QUnit.test("Dispose: attributes deleted", function(assert) {
-
-    if(browser.msie && parseInt(browser.version) < 10) {
-        assert.expect(0);
-        return;
-    }
-
     var element = $("#component").TestComponent(),
         instance = element.data("TestComponent"),
         attributes = [
@@ -946,6 +940,7 @@ QUnit.test("Dispose: attributes deleted", function(assert) {
     });
     assert.equal(element.attr("data-dx-content-placeholder-name"), undefined);
     assert.equal(element.attr("style"), undefined);
+    if(browser.msie && parseInt(browser.version) < 10) return;
     assert.equal(element.attr("tabindex"), undefined);
 
 });
