@@ -5,7 +5,8 @@ var ListEdit = require("./list/ui.list.edit.search"),
 /**
 * @name dxList
 * @publicName dxList
-* @inherits CollectionWidget
+* @inherits CollectionWidget, SearchBoxMixin
+* @groupName Collection Widgets
 * @module ui/list
 * @export default
 */
