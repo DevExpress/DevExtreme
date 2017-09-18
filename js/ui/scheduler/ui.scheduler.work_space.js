@@ -772,13 +772,14 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._$indicator.height(indicatorHeight);
 
                 var indicatorWidth = this._getDateTimeIndicatorWidth();
+                var groupCount = this._getGroupCount() || 1;
+                for(var i = 0; i < groupCount; i++) {
+                    this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth, i);
 
-                this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth);
+                    this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth, i);
 
-                this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth);
-
-                this._renderAllDayIndicator(indicatorWidth);
-
+                    this._renderAllDayIndicator(indicatorWidth, i);
+                }
                 if(renderIndicatorContent) {
                     var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
                     $content.css("top", indicatorHeight - 10);
@@ -786,6 +787,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 }
                 $container.append(this._$indicator);
             }
+
         }
     },
 
@@ -810,33 +812,44 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getDateTimeIndicatorWidth: function() {
         var today = this._getToday(),
-            firstViewDate = new Date(this._firstViewDate);
+            firstViewDate = new Date(this._firstViewDate),
+            maxWidth = this.getCellWidth() * this._getCellCount();
 
-        var timeDiff = today.getTime() - firstViewDate.getTime();
-        var difference = Math.ceil(timeDiff / toMs("day"));
+        var timeDiff = today.getTime() - firstViewDate.getTime(),
+            difference = Math.ceil(timeDiff / toMs("day")),
+            width = difference * this.getCellWidth();
 
-        return difference * this.getCellWidth();
+        return maxWidth < width ? maxWidth : width;
     },
 
-    _renderTopCurrentTimeIndicator: function($indicator, height, width) {
+    _renderTopCurrentTimeIndicator: function($indicator, height, width, i) {
         this._$topIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_TOP_CLASS);
         width && this._$topIndicator.width(width) && this._$topIndicator.height(height);
+
+        this._$topIndicator.css("marginTop", -this._dateTableScrollable.content().outerHeight() * i);
+        this._$topIndicator.css("marginLeft", this._getCellCount() * this.getCellWidth() * i);
+        this._$topIndicator.css("left", this._getCellCount() * this.getCellWidth() * i);
 
         $indicator.append(this._$topIndicator);
     },
 
-    _renderBottomCurrentTimeIndicator: function($indicator, height, width) {
+    _renderBottomCurrentTimeIndicator: function($indicator, height, width, i) {
         this._$bottomIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_BOTTOM_CLASS);
         this._$bottomIndicator.width(width - this.getCellWidth()) && this._$bottomIndicator.height(height);
+
+        this._$bottomIndicator.css("marginLeft", this._getCellCount() * this.getCellWidth() * i);
+        this._$bottomIndicator.css("left", this._getCellCount() * this.getCellWidth() * i);
+
 
         $indicator.append(this._$bottomIndicator);
     },
 
-    _renderAllDayIndicator: function(indicatorWidth) {
+    _renderAllDayIndicator: function(indicatorWidth, i) {
         if(this.option("showAllDayPanel")) {
             this._$allDayIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_ALL_DAY_CLASS);
             this._$allDayIndicator.height(this.getAllDayHeight());
             this._$allDayIndicator.width(indicatorWidth);
+            this._$allDayIndicator.css("left", this._getCellCount() * this.getCellWidth() * i);
 
             this._$allDayPanel.prepend(this._$allDayIndicator);
         }
@@ -1505,7 +1518,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _cleanDateTimeIndicator: function() {
         this._$indicator && this._$indicator.remove();
-        this._$allDayIndicator && this._$allDayIndicator.remove();
+        this._$allDayPanel.find("." + DATE_TIME_INDICATOR_ALL_DAY_CLASS).remove();
     },
 
     _refreshDateTimeIndicator: function() {

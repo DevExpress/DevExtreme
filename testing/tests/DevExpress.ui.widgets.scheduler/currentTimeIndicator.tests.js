@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("jquery");
+var $ = require("jquery"),
+    SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager");
 
 require("common.css!");
 require("generic_light.css!");
@@ -15,6 +16,20 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-work-space"></div>');
 });
 
+var stubInvokeMethod = function(instance, options) {
+    options = options || {};
+    sinon.stub(instance, "invoke", function() {
+        var subscribe = arguments[0];
+        if(subscribe === "createResourcesTree") {
+            return new SchedulerResourcesManager().createResourcesTree(arguments[1]);
+        }
+        if(subscribe === "getResourceTreeLeaves") {
+            var resources = instance.resources || [{ field: "one", dataSource: [{ id: 1 }, { id: 2 }] }];
+            return new SchedulerResourcesManager(resources).getResourceTreeLeaves(arguments[1], arguments[2]);
+        }
+    });
+};
+
 (function() {
     QUnit.module("DateTime indicator on Day View", {
         beforeEach: function() {
@@ -23,6 +38,7 @@ QUnit.testStart(function() {
                 currentDate: new Date(2017, 8, 5),
                 startDayHour: 8,
             }).dxSchedulerWorkSpaceDay("instance");
+            stubInvokeMethod(this.instance);
         }
     });
 
@@ -130,6 +146,38 @@ QUnit.testStart(function() {
         assert.roughEqual($indicator.outerWidth(), 898, 1, "Indicator has correct width");
         assert.roughEqual($topIndicator.outerWidth(), 598, 1, "Top indicator has correct width");
         assert.roughEqual($bottomIndicator.outerWidth(), 299, 1, "Bottom indicator has correct width");
+    });
+
+    QUnit.test("DateTimeIndicator should be rendered correctly, Day view with groups", function(assert) {
+        this.instance.option({
+            _currentDateTime: new Date(2017, 8, 6, 12, 45),
+            intervalCount: 3
+        });
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var $element = this.instance.element(),
+            $indicator = $element.find(".dx-scheduler-date-time-indicator"),
+            $firstTopIndicator = $element.find(".dx-scheduler-date-time-indicator-top").eq(0),
+            $firstBottomIndicator = $element.find(".dx-scheduler-date-time-indicator-bottom").eq(0),
+            $firstAllDayIndicator = $element.find(".dx-scheduler-date-time-indicator-all-day").eq(0),
+            $secondTopIndicator = $element.find(".dx-scheduler-date-time-indicator-top").eq(1),
+            $secondBottomIndicator = $element.find(".dx-scheduler-date-time-indicator-bottom").eq(1),
+            $secondAllDayIndicator = $element.find(".dx-scheduler-date-time-indicator-all-day").eq(0);
+
+        assert.roughEqual($indicator.outerHeight(), 475, 1, "Indicator has correct height");
+        assert.roughEqual($firstTopIndicator.outerHeight(), 475, 1, "Top indicator has correct height");
+        assert.roughEqual($firstBottomIndicator.outerHeight(), 1125, 1, "Bottom indicator has correct height");
+        assert.roughEqual($secondTopIndicator.outerHeight(), 475, 1, "Top indicator has correct height");
+        assert.roughEqual($secondBottomIndicator.outerHeight(), 1125, 1, "Bottom indicator has correct height");
+
+        assert.roughEqual($indicator.outerWidth(), 898, 1, "Indicator has correct width");
+        assert.roughEqual($firstTopIndicator.outerWidth(), 298, 1, "Top indicator has correct width");
+        assert.roughEqual($firstBottomIndicator.outerWidth(), 149, 1, "Bottom indicator has correct width");
+        assert.roughEqual($firstAllDayIndicator.outerWidth(), 298, 1, "AllDay indicator has correct width");
+        assert.roughEqual($secondTopIndicator.outerWidth(), 298, 1, "Top indicator has correct width");
+        assert.roughEqual($secondBottomIndicator.outerWidth(), 149, 1, "Bottom indicator has correct width");
+        assert.roughEqual($secondAllDayIndicator.outerWidth(), 298, 1, "AllDay indicator has correct width");
     });
 
     QUnit.test("DateTimeIndicator should not be renderd after currentDate changing, Day view", function(assert) {
