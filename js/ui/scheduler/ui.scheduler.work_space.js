@@ -777,9 +777,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
                 this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth);
 
-                this._renderAllDayIndicator();
-
-                this._$allDayIndicator && this._$allDayIndicator.width(indicatorWidth);
+                this._renderAllDayIndicator(indicatorWidth);
 
                 if(renderIndicatorContent) {
                     var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
@@ -821,23 +819,24 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderTopCurrentTimeIndicator: function($indicator, height, width) {
-        this._$firstIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_TOP_CLASS);
-        width && this._$firstIndicator.width(width) && this._$firstIndicator.height(height);
+        this._$topIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_TOP_CLASS);
+        width && this._$topIndicator.width(width) && this._$topIndicator.height(height);
 
-        $indicator.append(this._$firstIndicator);
+        $indicator.append(this._$topIndicator);
     },
 
     _renderBottomCurrentTimeIndicator: function($indicator, height, width) {
-        this._$secondIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_BOTTOM_CLASS);
-        this._$secondIndicator.width(width - this.getCellWidth()) && this._$secondIndicator.height(height);
+        this._$bottomIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_BOTTOM_CLASS);
+        this._$bottomIndicator.width(width - this.getCellWidth()) && this._$bottomIndicator.height(height);
 
-        $indicator.append(this._$secondIndicator);
+        $indicator.append(this._$bottomIndicator);
     },
 
-    _renderAllDayIndicator: function() {
+    _renderAllDayIndicator: function(indicatorWidth) {
         if(this.option("showAllDayPanel")) {
             this._$allDayIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_ALL_DAY_CLASS);
             this._$allDayIndicator.height(this.getAllDayHeight());
+            this._$allDayIndicator.width(indicatorWidth);
 
             this._$allDayPanel.prepend(this._$allDayIndicator);
         }
@@ -1169,7 +1168,7 @@ var SchedulerWorkSpace = Widget.inherit({
             container: this._$timePanel,
             rowCount: rowCount,
             cellCount: 1,
-            cellClass: TIME_PANEL_CELL_CLASS,
+            cellClass: this._getTimeCellClass.bind(this),
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this)
@@ -1188,19 +1187,31 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.option("endDayHour") - this.option("startDayHour");
     },
 
-    _getTimeText: function(i, j, td) {
+    _getTimeCellClass: function(i) {
+        var startViewDate = this._getTimeCellDate(i);
+
+        if(this._isCurrentTime(startViewDate)) {
+            return TIME_PANEL_CELL_CLASS + " " + TIME_PANEL_CURRENT_TIME_CELL_CLASS;
+        } else {
+            return TIME_PANEL_CELL_CLASS;
+        }
+    },
+
+    _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
+        var startViewDate = this._getTimeCellDate(i);
+
+        return dateLocalization.format(startViewDate, "shorttime");
+    },
+
+    _getTimeCellDate: function(i) {
         var startViewDate = new Date(this.getStartViewDate()),
             timeCellDuration = this.getCellDuration() * 2;
 
         startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
 
-        if(this._isCurrentTime(startViewDate)) {
-            $(td).addClass(TIME_PANEL_CURRENT_TIME_CELL_CLASS);
-        }
-        return dateLocalization.format(startViewDate, "shorttime");
+        return startViewDate;
     },
-
 
     _isCurrentTime: function(date) {
         if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {

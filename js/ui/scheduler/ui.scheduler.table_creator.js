@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    dataUtils = require("../../core/element_data");
+    dataUtils = require("../../core/element_data"),
+    typeUtils = require("../../core/utils/type");
 
 var SchedulerTableCreator = {
 
@@ -26,8 +27,15 @@ var SchedulerTableCreator = {
                 var td = document.createElement("td");
                 row.appendChild(td);
 
+                if(typeUtils.isFunction(options.cellClass)) {
+                    td.className = options.cellClass(i);
+                }
                 if(options.cellClass) {
-                    td.className = options.cellClass;
+                    if(typeUtils.isFunction(options.cellClass)) {
+
+                    } else {
+                        td.className = options.cellClass;
+                    }
                 }
 
 
