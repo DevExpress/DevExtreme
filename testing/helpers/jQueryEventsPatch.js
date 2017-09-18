@@ -10,7 +10,6 @@ if(!QUnit.urlParams["nojquery"]) {
 
 var originalJQueryEvent = jQuery.Event;
 var originalJQueryMethods = {};
-var originalCleanData;
 
 QUnit.testStart(function() {
     jQuery.Event = function() {
@@ -43,19 +42,9 @@ QUnit.testStart(function() {
             jQuery.fn[methodName] = patchedMethod;
         }
     });
-
-    originalCleanData = jQuery.cleanData;
-    jQuery.cleanData = function(nodes) {
-        for(var i = 0; i < nodes.length; i++) {
-            eventsEngine.off(nodes[i]);
-        }
-
-        return originalCleanData(nodes);
-    };
 });
 
 QUnit.testDone(function() {
     jQuery.Event = originalJQueryEvent;
     jQuery.fn.extend(originalJQueryMethods);
-    jQuery.cleanData = originalCleanData;
 });
