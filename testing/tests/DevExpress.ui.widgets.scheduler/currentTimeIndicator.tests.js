@@ -363,7 +363,7 @@ QUnit.testStart(function() {
         var $element = this.instance.element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
-        assert.roughEqual($indicator.outerWidth(), 4001, 1, "Indicator has correct width");
+        assert.roughEqual($indicator.outerWidth(), 4000, 1, "Indicator has correct width");
         assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
     });
 
@@ -376,7 +376,7 @@ QUnit.testStart(function() {
         var $element = this.instance.element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
-        assert.roughEqual($indicator.outerWidth(), 6401, 1, "Indicator has correct width");
+        assert.roughEqual($indicator.outerWidth(), 6400, 1, "Indicator has correct width");
         assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
     });
 
