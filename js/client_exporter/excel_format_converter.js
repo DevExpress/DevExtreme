@@ -25,6 +25,12 @@ var typeUtils = require("../core/utils/type"),
         currency: " "
     };
 
+var PERIOD_REGEXP = /a+/g,
+    DAY_REGEXP = /E/g,
+    HOUR_REGEXP = /h/g,
+    SLASH_REGEXP = /\//g,
+    ANY_REGEXP = /./g;
+
 require("../localization/currency");
 
 var excelFormatConverter = module.exports = {
@@ -59,6 +65,20 @@ var excelFormatConverter = module.exports = {
         return false;
     },
 
+    _convertDateFormatToOpenXml: function(format) {
+        return format.replace(SLASH_REGEXP, "\\/").split("'").map(function(datePart, index) {
+            if(index % 2 === 0) {
+                return datePart
+                    .replace(PERIOD_REGEXP, "AM/PM")
+                    .replace(DAY_REGEXP, "d")
+                    .replace(HOUR_REGEXP, "H");
+            } if(datePart) {
+                return datePart.replace(ANY_REGEXP, "\\$&");
+            }
+            return "'";
+        }).join("");
+    },
+
     _convertDateFormat: function(format) {
         format = UNSUPPORTED_FORMAT_MAPPING[format && format.type || format] || format;
 
@@ -66,6 +86,7 @@ var excelFormatConverter = module.exports = {
             formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString(),
             result = generateDateFormat(format);
 
+        result = that._convertDateFormatToOpenXml(result);
         result = that._getLanguageInfo(formattedValue) + result;
 
         return result;

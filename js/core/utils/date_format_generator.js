@@ -107,22 +107,34 @@ var formatValue = function(value, format) {
     return (dateLocalization.format(value, format) || "").toString();
 };
 
-var _escapeChars = function(pattern, defaultPattern, processedIndexes, patternPositions) {
+var ESCAPE_CHARS_REGEXP = /[a-zA-Z]/g;
+
+var escapeChars = function(pattern, defaultPattern, processedIndexes, patternPositions) {
     var escapeIndexes = defaultPattern.split("").map(function(char, index) {
-        if(processedIndexes.indexOf(index) < 0 && (FORMAT_SEPARATORS.indexOf(char) < 0 || char === "\/")) {
+        if(processedIndexes.indexOf(index) < 0 && (char.match(ESCAPE_CHARS_REGEXP) || char === "'")) {
             return patternPositions[index];
         }
         return -1;
     });
 
     pattern = pattern.split("").map(function(char, index) {
-        if(escapeIndexes.indexOf(index) >= 0) {
-            return "\\" + char;
+        var result = char,
+            isCurrentCharEscaped = escapeIndexes.indexOf(index) >= 0,
+            isPrevCharEscaped = escapeIndexes.indexOf(index - 1) >= 0,
+            isNextCharEscaped = escapeIndexes.indexOf(index + 1) >= 0;
+
+        if(isCurrentCharEscaped) {
+            if(!isPrevCharEscaped) {
+                result = "'" + result;
+            }
+            if(!isNextCharEscaped) {
+                result = result + "'";
+            }
         }
-        return char;
+
+        return result;
     }).join("");
 
-    pattern = pattern.replace("AM\\/PM", "AM/PM");
     return pattern;
 };
 
@@ -135,9 +147,9 @@ var generateDateFormat = function(format) {
             { date: new Date(2009, 8, 8, 6, 5, 2), pattern: "s" },
             { date: new Date(2009, 8, 8, 6, 2, 4), pattern: "m" },
             { date: new Date(2009, 8, 8, 2, 5, 4), pattern: "H" },
-            { date: new Date(2009, 8, 8, 18, 5, 4), pattern: "AM/PM" },
+            { date: new Date(2009, 8, 8, 18, 5, 4), pattern: "a" },
             { date: new Date(2009, 8, 1, 6, 5, 4), pattern: "d" },
-            { date: [new Date(2009, 8, 2, 6, 5, 4), new Date(2009, 8, 3, 6, 5, 4), new Date(2009, 8, 4, 6, 5, 4)], pattern: "d" },
+            { date: [new Date(2009, 8, 2, 6, 5, 4), new Date(2009, 8, 3, 6, 5, 4), new Date(2009, 8, 4, 6, 5, 4)], pattern: "E" },
             { date: new Date(2009, 9, 6, 6, 5, 4), pattern: "M" },
             { date: new Date(1998, 8, 8, 6, 5, 4), pattern: "y" }];
 
@@ -149,7 +161,7 @@ var generateDateFormat = function(format) {
         result = replaceChars(result, diff, test.pattern, patternPositions);
     });
 
-    result = _escapeChars(result, defaultPattern, processedIndexes, patternPositions);
+    result = escapeChars(result, defaultPattern, processedIndexes, patternPositions);
 
     return result;
 };
