@@ -108,7 +108,7 @@ QUnit.testStart(function() {
         var $element = this.instance.element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
-        assert.roughEqual($indicator.outerHeight(), 1000, 1, "Indicator has correct height");
+        assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
         assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
     });
 
@@ -256,7 +256,21 @@ QUnit.testStart(function() {
         var $element = this.instance.element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
-        assert.roughEqual($indicator.outerHeight(), 1000, 1, "Indicator has correct height");
+        assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
+    });
+
+    QUnit.test("DateTimeIndicator should be rendered for 'overdue' views", function(assert) {
+        this.instance.option({
+            endDayHour: 18,
+            currentDate: new Date(2017, 7, 5),
+            _currentDateTime: new Date(2017, 8, 5, 19, 45)
+        });
+
+        var $element = this.instance.element(),
+            $indicator = $element.find(".dx-scheduler-date-time-indicator");
+
+        assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
         assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
     });
 
@@ -349,7 +363,20 @@ QUnit.testStart(function() {
         var $element = this.instance.element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
-        assert.roughEqual($indicator.outerWidth(), 4000, 1, "Indicator has correct width");
+        assert.roughEqual($indicator.outerWidth(), 4001, 1, "Indicator has correct width");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
+    });
+
+    QUnit.test("DateTimeIndicator should be rendered for 'overdue' views, TimelineDay view", function(assert) {
+        this.instance.option({
+            currentDate: new Date(2017, 8, 3),
+            _currentDateTime: new Date(2017, 8, 5, 19, 45)
+        });
+
+        var $element = this.instance.element(),
+            $indicator = $element.find(".dx-scheduler-date-time-indicator");
+
+        assert.roughEqual($indicator.outerWidth(), 6401, 1, "Indicator has correct width");
         assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
     });
 
