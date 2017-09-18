@@ -177,7 +177,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
                 renderIndicatorContent = true;
 
             if(indicatorWidth > maxWidth) {
-                indicatorWidth = maxWidth + 1;
+                indicatorWidth = maxWidth;
                 renderIndicatorContent = false;
             }
 
