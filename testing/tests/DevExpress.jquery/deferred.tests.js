@@ -1,9 +1,24 @@
 "use strict";
 
-var $ = require("jquery"),
-    deferredUtils = require("core/utils/deferred");
+var $ = require("jquery");
+var deferredUtils = require("core/utils/deferred");
+var useJQueryRenderer = require("core/config")().useJQueryRenderer;
 
-require("integration/jquery/deferred");
+require("integration/jquery");
+
+QUnit.module("jQuery strategy");
+
+QUnit.test("jQuery strategy should be used if useJQueryRenderer flag was set", function(assert) {
+    if(!useJQueryRenderer) {
+        assert.expect(0);
+        return;
+    }
+
+    var d1 = new deferredUtils.Deferred();
+    var d2 = new $.Deferred();
+
+    assert.equal(d1.constructor, d2.constructor, "deferred is jQuery.Deferred");
+});
 
 QUnit.module("when");
 
