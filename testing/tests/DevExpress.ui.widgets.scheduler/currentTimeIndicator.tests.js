@@ -44,7 +44,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should be rendered if needed, Day view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45)
         });
         var $element = this.instance.element();
 
@@ -58,7 +58,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator on allDayPanel should be rendered if needed, Day view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45),
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: false
         });
         var $element = this.instance.element();
@@ -72,7 +72,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator on allDayPanel should have correct height, Day view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45),
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: true,
             allDayExpanded: false
         });
@@ -87,7 +87,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should be wrapped by scrollable, Day view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45)
         });
         var $element = this.instance.element();
 
@@ -96,7 +96,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("AllDay dateTimeIndicator should be wrapped by allDay panel, Day view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45),
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: true
         });
         var $element = this.instance.element();
@@ -106,7 +106,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should have correct height, Day view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45)
         });
 
         var $element = this.instance.element(),
@@ -118,7 +118,7 @@ var stubInvokeMethod = function(instance, options) {
     QUnit.test("DateTimeIndicator should have limited height, Day view", function(assert) {
         this.instance.option({
             endDayHour: 18,
-            _currentDateTime: new Date(2017, 8, 5, 19, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 19, 45)
         });
 
         var $element = this.instance.element(),
@@ -130,7 +130,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should have correct height & width, Day view with intervalCount", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 6, 12, 45),
+            currentIndicatorDate: new Date(2017, 8, 6, 12, 45),
             intervalCount: 3
         });
 
@@ -150,7 +150,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should be rendered correctly, Day view with groups", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 6, 12, 45),
+            currentIndicatorDate: new Date(2017, 8, 6, 12, 45),
             intervalCount: 3
         });
 
@@ -182,7 +182,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should not be renderd after currentDate changing, Day view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 19, 45),
+            currentIndicatorDate: new Date(2017, 8, 5, 19, 45),
             showAllDayPanel: true
         });
 
@@ -198,7 +198,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("TimePanel currentTime cell should have specific class, Day view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45)
         });
 
         var $element = this.instance.element(),
@@ -209,7 +209,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("TimePanel currentTime cell should have specific class, Day view with intervalCount", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 6, 12, 45),
+            currentIndicatorDate: new Date(2017, 8, 6, 12, 45),
             intervalCount: 3
         });
 
@@ -248,7 +248,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator on allDayPanel should be rendered if needed, Week view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 7, 12, 45),
+            currentIndicatorDate: new Date(2017, 8, 7, 12, 45),
             showAllDayPanel: false
         });
         var $element = this.instance.element();
@@ -262,7 +262,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator on allDayPanel should have correct height & width, Week view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 7, 12, 45),
+            currentIndicatorDate: new Date(2017, 8, 7, 12, 45),
             showAllDayPanel: true,
             allDayExpanded: false
         });
@@ -278,7 +278,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should have correct height & width, Week view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 6, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 6, 12, 45)
         });
 
         var $element = this.instance.element(),
@@ -298,7 +298,7 @@ var stubInvokeMethod = function(instance, options) {
     QUnit.test("DateTimeIndicator should have limited height, Week view", function(assert) {
         this.instance.option({
             endDayHour: 18,
-            _currentDateTime: new Date(2017, 8, 5, 19, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 19, 45)
         });
 
         var $element = this.instance.element(),
@@ -312,7 +312,7 @@ var stubInvokeMethod = function(instance, options) {
         this.instance.option({
             endDayHour: 18,
             currentDate: new Date(2017, 7, 5),
-            _currentDateTime: new Date(2017, 8, 5, 19, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 19, 45)
         });
 
         var $element = this.instance.element(),
@@ -324,7 +324,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should not be renderd after currentDate changing, Week view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 19, 45),
+            currentIndicatorDate: new Date(2017, 8, 5, 19, 45),
             showAllDayPanel: true
         });
 
@@ -340,7 +340,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("TimePanel currentTime cell should have specific class, Week view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 6, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 6, 12, 45)
         });
 
         var $element = this.instance.element(),
@@ -351,7 +351,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateHeader currentTime cell should have specific class, Week view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 7, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 7, 12, 45)
         });
 
         var $element = this.instance.element(),
@@ -390,7 +390,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should have correct height & width, TimelineDay view", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45)
         });
 
         var $element = this.instance.element(),
@@ -405,7 +405,7 @@ var stubInvokeMethod = function(instance, options) {
     QUnit.test("DateTimeIndicator should have limited width, TimelineDay view", function(assert) {
         this.instance.option({
             endDayHour: 18,
-            _currentDateTime: new Date(2017, 8, 5, 19, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 19, 45)
         });
 
         var $element = this.instance.element(),
@@ -418,7 +418,7 @@ var stubInvokeMethod = function(instance, options) {
     QUnit.test("DateTimeIndicator should be rendered for 'overdue' views, TimelineDay view", function(assert) {
         this.instance.option({
             currentDate: new Date(2017, 8, 3),
-            _currentDateTime: new Date(2017, 8, 5, 19, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 19, 45)
         });
 
         var $element = this.instance.element(),
@@ -430,7 +430,7 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateHeader currentTime cell should have specific class", function(assert) {
         this.instance.option({
-            _currentDateTime: new Date(2017, 8, 5, 12, 45)
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 45)
         });
 
         var $element = this.instance.element(),
@@ -449,7 +449,7 @@ var stubInvokeMethod = function(instance, options) {
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             height: 307,
-            _currentDateTime: new Date(2017, 8, 5, 12, 30),
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 30),
             hoursInterval: 1
         }).dxSchedulerTimelineWeek("instance");
 
@@ -468,7 +468,7 @@ var stubInvokeMethod = function(instance, options) {
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             height: 307,
-            _currentDateTime: new Date(2017, 8, 5, 12, 30),
+            currentIndicatorDate: new Date(2017, 8, 5, 12, 30),
             hoursInterval: 1
         }).dxSchedulerTimelineWeek("instance");
 
@@ -484,7 +484,7 @@ var stubInvokeMethod = function(instance, options) {
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             height: 307,
-            _currentDateTime: new Date(2017, 8, 16, 12, 0),
+            currentIndicatorDate: new Date(2017, 8, 16, 12, 0),
             hoursInterval: 1
         }).dxSchedulerTimelineMonth("instance");
 
@@ -503,7 +503,7 @@ var stubInvokeMethod = function(instance, options) {
             currentDate: new Date(2017, 8, 5),
             startDayHour: 8,
             height: 307,
-            _currentDateTime: new Date(2017, 8, 15, 12, 30)
+            currentIndicatorDate: new Date(2017, 8, 15, 12, 30)
         }).dxSchedulerTimelineMonth("instance");
 
         var $element = instance.element(),
