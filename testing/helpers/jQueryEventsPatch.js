@@ -48,3 +48,12 @@ QUnit.testDone(function() {
     jQuery.Event = originalJQueryEvent;
     jQuery.fn.extend(originalJQueryMethods);
 });
+
+var cleanData = jQuery.cleanData;
+jQuery.cleanData = function(nodes) {
+    for(var i = 0; i < nodes.length; i++) {
+        eventsEngine.off(nodes[i]);
+    }
+
+    return cleanData(nodes);
+};
