@@ -177,7 +177,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
                 renderIndicatorContent = true;
 
             if(indicatorWidth > maxWidth) {
-                indicatorWidth = maxWidth;
+                indicatorWidth = maxWidth + 1;
                 renderIndicatorContent = false;
             }
 
@@ -212,7 +212,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         var result = false;
 
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
             var date = this._getDateByIndex(headerIndex);
 
             var now = this._getToday();

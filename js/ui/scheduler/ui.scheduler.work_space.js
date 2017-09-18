@@ -763,7 +763,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 renderIndicatorContent = true;
 
             if(indicatorHeight > maxHeight) {
-                indicatorHeight = maxHeight;
+                indicatorHeight = maxHeight + 1;
                 renderIndicatorContent = false;
             }
 
@@ -800,7 +800,9 @@ var SchedulerWorkSpace = Widget.inherit({
             cellHeight = this.getCellHeight(),
             date = new Date(this._firstViewDate);
 
-        date.setDate(today.getDate());
+        if(this._needRenderDateTimeIndicatorCells()) {
+            date.setDate(today.getDate());
+        }
 
         var duration = today.getTime() - date.getTime(),
             cellCount = duration / this.getCellDuration();
@@ -841,10 +843,16 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
-    _needRenderDateTimeIndicator: function() {
+    _needRenderDateTimeIndicatorCells: function() {
         var now = this._getToday(),
             endViewDate = dateUtils.trimTime(this.getEndViewDate());
         return dateUtils.dateInRange(now, dateUtils.trimTime(this.getStartViewDate()), new Date(endViewDate.getTime() + DAY_MS));
+    },
+
+    _needRenderDateTimeIndicator: function() {
+        var now = this._getToday();
+
+        return now >= dateUtils.trimTime(new Date(this.getStartViewDate()));
     },
 
     _setFirstViewDate: function() {
@@ -1189,7 +1197,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
 
     _isCurrentTime: function(date) {
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
             var now = this._getToday(),
                 result = false;
             date = new Date(date);
@@ -1212,7 +1220,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         var result = false;
 
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
             var date = this._getDateByIndex(headerIndex),
                 now = this.option("_currentDateTime") || new Date();
 
