@@ -570,6 +570,12 @@ var ContextMenu = MenuBase.inherit((function() {
             this._actions.onHidden(arg);
         },
 
+        _itemClickHandler: function(e) {
+            if(e.cancel) return;
+            this.callBase(e);
+            e.cancel = true;
+        },
+
         _closeOnOutsideClickHandler: function(e) {
             var $clickedItem,
                 $activeItemContainer,
@@ -758,8 +764,6 @@ var ContextMenu = MenuBase.inherit((function() {
         //TODO: try to simplify it
         _updateSubmenuVisibilityOnClick: function(actionArgs) {
             if(!actionArgs.args.length) return;
-
-            actionArgs.args[0].jQueryEvent.stopPropagation();
 
             var $itemElement = actionArgs.args[0].itemElement,
                 itemData = actionArgs.args[0].itemData,
