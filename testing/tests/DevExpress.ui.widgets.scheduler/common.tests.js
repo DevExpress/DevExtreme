@@ -228,7 +228,9 @@ QUnit.testStart(function() {
 
     QUnit.module("Methods", {
         beforeEach: function() {
-            this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler({
+                showCurrentTimeIndicator: false
+            }).dxScheduler("instance");
             this.clock = sinon.useFakeTimers();
 
             fx.off = true;
