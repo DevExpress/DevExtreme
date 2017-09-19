@@ -765,17 +765,28 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _dispose: function() {
-        clearInterval(this._indicatorInterval);
+        this._clearIndicatorUpdateInterval();
+        this.callBase.apply(this, arguments);
     },
 
     _setIndicatorUpdateInterval: function() {
+        if(!this.option("showCurrentTimeIndicator")) {
+            return;
+        }
         var that = this;
-        clearInterval(this._indicatorInterval);
+        this._clearIndicatorUpdateInterval();
 
         this._indicatorInterval = setInterval(function() {
             that._cleanDateTimeIndicator();
             that._renderDateTimeIndicator();
         }, this.option("indicatorUpdateInterval"));
+    },
+
+    _clearIndicatorUpdateInterval: function() {
+        if(this._indicatorInterval) {
+            clearInterval(this._indicatorInterval);
+            delete this._indicatorInterval;
+        }
     },
 
     _renderDateTimeIndicator: function() {
