@@ -184,6 +184,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, "date");
     },
 
+    _needRenderDateTimeIndicator: function() {
+        return false;
+    },
+
     getCellDuration: function() {
         return this._calculateDayDuration() * 3600000;
     },
