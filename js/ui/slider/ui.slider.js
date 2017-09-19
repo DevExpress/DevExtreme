@@ -120,7 +120,7 @@ var Slider = TrackBar.inherit({
             * @type number
             * @default 50
             */
-            value: 50,            
+            value: 50,
 
             /**
              * @name dxSliderBaseOptions_hoverStateEnabled
