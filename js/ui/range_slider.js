@@ -18,7 +18,7 @@ var RANGE_SLIDER_CLASS = "dx-rangeslider",
 * @name dxRangeSlider
 * @isEditor
 * @publicName dxRangeSlider
-* @inherits dxSlider
+* @inherits dxSliderBase
 * @groupName Editors
 * @module ui/range_slider
 * @export default
