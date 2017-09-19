@@ -294,6 +294,64 @@ QUnit.test("then.reject handler should be called after reject", function(assert)
     deferred.reject(3, 5);
 });
 
+QUnit.test("then should support chaining", function(assert) {
+    assert.expect(2);
+
+    var deferred = new Deferred(),
+        chainingDeferred = new Deferred();
+
+    deferred.then(function() {
+        return 5;
+    }).then(function(value) {
+        assert.equal(value, 5);
+        return chainingDeferred.promise();
+    }).then(function(value) {
+        assert.equal(value, 8);
+    });
+
+    deferred.resolve(3);
+    chainingDeferred.resolve(8);
+});
+
+QUnit.test("then should support chaining with native Promise", function(assert) {
+    assert.expect(1);
+
+    var deferred = new Deferred(),
+        promiseResolve,
+        promise = new Promise(function(resolve, reject) {
+            promiseResolve = resolve;
+        });
+
+    deferred.then(function() {
+        return promise;
+    }).then(function(value) {
+        assert.equal(value, 9);
+    });
+
+    deferred.resolve();
+    promiseResolve(9);
+
+    return promise;
+});
+
+QUnit.test("then should call only first handler after reject", function(assert) {
+    assert.expect(1);
+
+    var deferred = new Deferred(),
+        chainingDeferred = new Deferred();
+
+    deferred.then(function() {
+        return chainingDeferred;
+    }).then(undefined, function() {
+        assert.ok(true, "should handle first then");
+    }).then(undefined, function() {
+        assert.ok(false, "shouldn't call second handler");
+    });
+
+    deferred.resolve();
+    chainingDeferred.reject();
+});
+
 QUnit.test("promise method should extend promise object", function(assert) {
     var props = {
         test: "testProperty"
