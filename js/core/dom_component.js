@@ -362,14 +362,6 @@ var DOMComponent = Component.inherit({
         element.className = classes.join(" ");
     },
 
-    _removeEvents: function(element) {
-        var elements = element.getElementsByTagName("*");
-        for(var i = 0; i < elements.length; i++) {
-            eventsEngine.off(elements[i]);
-        }
-        eventsEngine.off(element);
-    },
-
     endUpdate: function() {
         var requireRender = !this._initializing && !this._initialized;
 
@@ -401,7 +393,6 @@ var DOMComponent = Component.inherit({
     dispose: function() {
         var element = this.element().get(0);
         dataUtils.cleanDataRecursive(element, true);
-        this._removeEvents(element);
         element.textContent = "";
         this._removeAttributes(element);
         this._removeClasses(element);
