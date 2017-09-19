@@ -1,6 +1,7 @@
 "use strict";
 
 var registerEventCallbacks = require("./event_registrator_callbacks");
+var dataUtilsStrategy = require("../../core/element_data").getDataStrategy();
 var extend = require("../../core/utils/extend").extend;
 var typeUtils = require("../../core/utils/type");
 var isWindow = typeUtils.isWindow;
@@ -476,6 +477,15 @@ var addProperty = function(propName, hook, eventInstance) {
 };
 
 hookTouchProps(addProperty);
+
+var cleanData = dataUtilsStrategy.cleanData;
+dataUtilsStrategy.cleanData = function(nodes) {
+    for(var i = 0; i < nodes.length; i++) {
+        eventsEngine.off(nodes[i]);
+    }
+
+    return cleanData(nodes);
+};
 
 var getHandler = function(methodName) {
     var result = function(element) {

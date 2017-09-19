@@ -965,8 +965,7 @@ QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
 
     instance.dispose();
 
-    // TODO. We use patched jQuery.cleanData in no-jquery approach, that call off(). 'callCount' must be 2 after $.Data implementation/
-    //assert.equal(off.callCount, 2);
+    assert.equal(off.callCount, 2);
     assert.ok(disposeRun);
     assert.deepEqual(off.getCall(0).args[0].localName, "p");
     assert.deepEqual(off.getCall(1).args[0].localName, "div");
