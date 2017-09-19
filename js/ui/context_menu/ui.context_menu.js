@@ -570,12 +570,6 @@ var ContextMenu = MenuBase.inherit((function() {
             this._actions.onHidden(arg);
         },
 
-        _itemClickHandler: function(e) {
-            if(e.cancel) return;
-            this.callBase(e);
-            e.cancel = true;
-        },
-
         _closeOnOutsideClickHandler: function(e) {
             var $clickedItem,
                 $activeItemContainer,
