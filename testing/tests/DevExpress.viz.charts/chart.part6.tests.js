@@ -202,9 +202,7 @@ QUnit.test("change rotated option only", function(assert) {
         series: [
             { name: "First series", type: "line" }
         ],
-        argumentAxis: {
-            name: "argument"
-        },
+        argumentAxis: { },
         valueAxis: {
             name: "value"
         }
@@ -230,7 +228,6 @@ QUnit.test("change rotated option only", function(assert) {
     assert.equal(chart.series[0].options.name, "First series", "name");
     assert.equal(chart.series[0].type, "line", "type");
     assert.equal(chart.series[0].options.rotated, true, " rotated");
-    assert.equal(chart._argumentAxes[0].getOptions().name, "argument", "argument axis");
     assert.equal(chart._valueAxes[0].getOptions().name, "value", "value axis");
     assert.ok(chart.horizontalAxesDisposed, "Horizontal axes should be disposed");
     assert.ok(chart.verticalAxesDisposed, "Vertical axes should be disposed");
