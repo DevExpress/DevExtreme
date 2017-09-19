@@ -556,7 +556,7 @@ var Scheduler = Widget.inherit({
                 * @default true
                 */
             showCurrentTimeIndicator: true,
-            currentIndicatorDate: undefined,
+            indicatorTime: undefined,
             currentIndicatorInterval: 10000,
 
                 /**
@@ -1208,7 +1208,7 @@ var Scheduler = Widget.inherit({
                 }).bind(this));
                 break;
             case "showCurrentTimeIndicator":
-            case "currentIndicatorDate":
+            case "indicatorTime":
             case "currentIndicatorInterval":
                 this._updateOption("workSpace", name, value);
                 break;
@@ -1814,7 +1814,7 @@ var Scheduler = Widget.inherit({
             cellDuration: this.option("cellDuration"),
             showAllDayPanel: this.option("showAllDayPanel"),
             showCurrentTimeIndicator: this.option("showCurrentTimeIndicator"),
-            currentIndicatorDate: this.option("currentIndicatorDate"),
+            indicatorTime: this.option("indicatorTime"),
             currentIndicatorInterval: this.option("currentIndicatorInterval"),
             allDayExpanded: this._appointments.option("items"),
             crossScrollingEnabled: this.option("crossScrollingEnabled"),

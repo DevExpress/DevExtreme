@@ -371,7 +371,7 @@ var SchedulerWorkSpace = Widget.inherit({
             resourceCellTemplate: null,
             dateCellTemplate: null,
             allowMultipleCellSelection: true,
-            currentIndicatorDate: new Date()
+            indicatorTime: new Date()
         });
     },
 
@@ -390,7 +390,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "groups":
             case "startDate":
             case "showCurrentTimeIndicator":
-            case "currentIndicatorDate":
+            case "indicatorTime":
                 this._cleanWorkSpace();
                 break;
             case "currentIndicatorInterval":
@@ -805,7 +805,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getToday: function() {
-        return this.option("currentIndicatorDate") || new Date();
+        return this.option("indicatorTime") || new Date();
     },
 
     _getDateTimeIndicatorHeight: function() {
@@ -1259,7 +1259,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
             var date = this._getDateByIndex(headerIndex),
-                now = this.option("currentIndicatorDate") || new Date();
+                now = this.option("indicatorTime") || new Date();
 
             result = dateUtils.sameDate(date, now);
         }

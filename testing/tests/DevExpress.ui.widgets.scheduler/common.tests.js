@@ -1060,19 +1060,19 @@ QUnit.testStart(function() {
         assert.equal(workSpaceWeek.option("showCurrentTimeIndicator"), true, "workspace has correct showCurrentTimeIndicator");
     });
 
-    QUnit.test("currentIndicatorDate option should be passed to workSpace", function(assert) {
+    QUnit.test("indicatorTime option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
-            currentIndicatorDate: new Date(2017, 8, 19)
+            indicatorTime: new Date(2017, 8, 19)
         });
 
         var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
 
-        assert.deepEqual(workSpaceWeek.option("currentIndicatorDate"), new Date(2017, 8, 19), "workspace has correct currentIndicatorDate");
+        assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 19), "workspace has correct indicatorTime");
 
-        this.instance.option("currentIndicatorDate", new Date(2017, 8, 20));
+        this.instance.option("indicatorTime", new Date(2017, 8, 20));
 
-        assert.deepEqual(workSpaceWeek.option("currentIndicatorDate"), new Date(2017, 8, 20), "workspace has correct currentIndicatorDate");
+        assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 20), "workspace has correct indicatorTime");
     });
 
     QUnit.test("currentIndicatorInterval option should be passed to workSpace", function(assert) {
