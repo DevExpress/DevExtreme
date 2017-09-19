@@ -840,7 +840,7 @@ QUnit.test("Start date of appointment should be changed when resize is finished,
     });
 });
 
-QUnit.test("End date of appointment should be changed сonsidering endDayHour and startDayHour when resize is finished", function(assert) {
+QUnit.test("End date of appointment should be changed considering endDayHour and startDayHour when resize is finished", function(assert) {
     var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9, 18), endDate: new Date(2015, 1, 9, 19) },
         updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 10, 10) });
 
@@ -877,7 +877,7 @@ QUnit.test("End date of appointment should be changed сonsidering endDayHour an
     });
 });
 
-QUnit.test("Start date of appointment should be changed сonsidering endDayHour and startDayHour when resize is finished", function(assert) {
+QUnit.test("Start date of appointment should be changed considering endDayHour and startDayHour when resize is finished", function(assert) {
     var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10) },
         updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 8, 19) });
 
@@ -913,7 +913,7 @@ QUnit.test("Start date of appointment should be changed сonsidering endDayHour 
     });
 });
 
-QUnit.test("Start date of long multiday appointment should be changed сonsidering endDayHour and startDayHour when resize is finished", function(assert) {
+QUnit.test("Start date of long multiday appointment should be changed considering endDayHour and startDayHour when resize is finished", function(assert) {
     var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10) },
         updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 7, 18) });
 
@@ -952,7 +952,7 @@ QUnit.test("Start date of long multiday appointment should be changed сonsideri
     });
 });
 
-QUnit.test("End date of long multiday appointment should be changed сonsidering endDayHour and startDayHour when resize is finished", function(assert) {
+QUnit.test("End date of long multiday appointment should be changed considering endDayHour and startDayHour when resize is finished", function(assert) {
     var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9, 18), endDate: new Date(2015, 1, 9, 19) },
         updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 11, 10) });
 

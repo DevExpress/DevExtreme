@@ -546,7 +546,7 @@ QUnit.test("Arc path", function(assert) {
                 y: 28
             }, "First component of path");
             assert.equal(that.paths[0][1].action, "A", "action");
-            //assert.equal(that.paths[0][1].с, true, "c");
+            //assert.equal(that.paths[0][1].c, true, "c");
             assert.equal(that.paths[0][1].r, 15, "radius");
             assert.roughEqual(that.paths[0][1].sa, 0.3012034806537296, 0.1, "start angle");
             assert.roughEqual(that.paths[0][1].ea, -0.6065021374442598, 0.1, "end angle");

@@ -1208,7 +1208,7 @@ QUnit.test("context menu should hide after click on item without children", func
     assert.notOk(instance.option("visible"), "menu was hidden");
 });
 
-QUnit.test("сontext menu should not hide after click when item.closeMenuOnClick is false", function(assert) {
+QUnit.test("context menu should not hide after click when item.closeMenuOnClick is false", function(assert) {
     var instance = new ContextMenu(this.$element, {
             items: [{ text: "a", closeMenuOnClick: false }],
             visible: true
