@@ -33,19 +33,25 @@ var stubInvokeMethod = function(instance, options) {
 (function() {
     QUnit.module("DateTime indicator on Day View", {
         beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
+
             this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay({
                 showCurrentTimeIndicator: true,
                 currentDate: new Date(2017, 8, 5),
                 startDayHour: 8,
             }).dxSchedulerWorkSpaceDay("instance");
             stubInvokeMethod(this.instance);
+        },
+        afterEach: function() {
+            this.clock.restore();
         }
     });
 
     QUnit.test("DateTimeIndicator should be rendered if needed, Day view", function(assert) {
         this.instance.option({
-            currentIndicatorDate: new Date(2017, 8, 5, 12, 45)
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
+
         var $element = this.instance.element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered correctly");
@@ -114,6 +120,20 @@ var stubInvokeMethod = function(instance, options) {
 
         assert.roughEqual($indicator.outerHeight(), 475, 1, "Indicator has correct height");
     });
+
+    // QUnit.test("DateTimeIndicator should be updated by some timer", function(assert) {
+    //     var renderIndicatorStub = sinon.stub(this.instance, "_renderDateTimeIndicator");
+
+    //     this.instance.option({
+    //         currentIndicatorInterval: 2000
+    //     });
+
+    //     setTimeout(function() {
+    //         assert.ok(renderIndicatorStub.calledTwice, "Indicator was updated");
+    //     }, 5000);
+
+    //     this.clock.tick(5000);
+    // });
 
     QUnit.test("DateTimeIndicator should have limited height, Day view", function(assert) {
         this.instance.option({

@@ -393,7 +393,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "indicatorTime":
                 this._cleanWorkSpace();
                 break;
-            case "currentIndicatorInterval":
+            case "indicatorUpdateInterval":
                 this._setIndicatorUpdateInterval();
                 break;
             case "showAllDayPanel":
@@ -760,14 +760,18 @@ var SchedulerWorkSpace = Widget.inherit({
         this._setIndicatorUpdateInterval();
     },
 
+    _dispose: function() {
+        clearInterval(this._indicatorInterval);
+    },
+
     _setIndicatorUpdateInterval: function() {
         var that = this;
-        this._indicatorInterval && clearInterval(this._indicatorInterval);
+        clearInterval(this._indicatorInterval);
 
         this._indicatorInterval = setInterval(function() {
             that._cleanDateTimeIndicator();
             that._renderDateTimeIndicator();
-        }, this.option("currentIndicatorInterval"));
+        }, this.option("indicatorUpdateInterval"));
     },
 
     _renderDateTimeIndicator: function() {
