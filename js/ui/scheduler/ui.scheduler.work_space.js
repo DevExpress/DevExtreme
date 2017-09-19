@@ -739,6 +739,8 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderView: function() {
+        var that = this;
+
         this._setFirstViewDate();
 
         this._applyCellTemplates(
@@ -753,6 +755,11 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderDateTable();
 
         this._renderDateTimeIndicator();
+
+        setInterval(function() {
+            that._cleanDateTimeIndicator();
+            that._renderDateTimeIndicator();
+        }, 1000);
     },
 
     _renderDateTimeIndicator: function() {
@@ -1512,7 +1519,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _cleanDateTimeIndicator: function() {
         this._$indicator && this._$indicator.remove();
-        this._$allDayPanel.find("." + DATE_TIME_INDICATOR_ALL_DAY_CLASS).remove();
+        this._$allDayPanel && this._$allDayPanel.find("." + DATE_TIME_INDICATOR_ALL_DAY_CLASS).remove();
     },
 
     _refreshDateTimeIndicator: function() {
