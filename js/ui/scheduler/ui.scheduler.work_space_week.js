@@ -90,7 +90,7 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
 
     _isCurrentTime: function(date) {
         if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
-            var now = this.option("currentIndicatorDate") || new Date(),
+            var now = this.option("indicatorTime") || new Date(),
                 result = false;
             date = new Date(date);
 
