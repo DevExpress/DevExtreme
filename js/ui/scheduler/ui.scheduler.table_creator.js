@@ -50,7 +50,7 @@ var SchedulerTableCreator = {
                 if(options.cellTemplate && options.cellTemplate.render) {
                     var templateOptions = {
                         model: {
-                            text: options.getCellText ? options.getCellText(i, j, td) : ""
+                            text: options.getCellText ? options.getCellText(i, j) : ""
                         },
                         container: $(td),
                         index: i * options.cellCount + j
@@ -78,7 +78,7 @@ var SchedulerTableCreator = {
 
                 } else {
                     if(options.getCellText) {
-                        td.innerHTML = "<div>" + options.getCellText(i, j, td) + "</div>";
+                        td.innerHTML = "<div>" + options.getCellText(i, j) + "</div>";
                     }
                 }
 

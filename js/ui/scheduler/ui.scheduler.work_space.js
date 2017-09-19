@@ -861,7 +861,6 @@ var SchedulerWorkSpace = Widget.inherit({
         width && this._$topIndicator.width(width) && this._$topIndicator.height(height);
 
         this._$topIndicator.css("marginTop", -this._dateTableScrollable.content().outerHeight() * i);
-        this._$topIndicator.css("marginLeft", this._getCellCount() * this.getCellWidth() * i);
         this._$topIndicator.css("left", this._getCellCount() * this.getCellWidth() * i);
 
         $indicator.append(this._$topIndicator);
@@ -871,9 +870,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$bottomIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_BOTTOM_CLASS);
         this._$bottomIndicator.width(width - this.getCellWidth()) && this._$bottomIndicator.height(height);
 
-        this._$bottomIndicator.css("marginLeft", this._getCellCount() * this.getCellWidth() * i);
         this._$bottomIndicator.css("left", this._getCellCount() * this.getCellWidth() * i);
-
 
         $indicator.append(this._$bottomIndicator);
     },
