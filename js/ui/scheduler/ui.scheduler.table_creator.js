@@ -27,12 +27,9 @@ var SchedulerTableCreator = {
                 var td = document.createElement("td");
                 row.appendChild(td);
 
-                if(typeUtils.isFunction(options.cellClass)) {
-                    td.className = options.cellClass(i);
-                }
                 if(options.cellClass) {
                     if(typeUtils.isFunction(options.cellClass)) {
-
+                        td.className = options.cellClass(i);
                     } else {
                         td.className = options.cellClass;
                     }
