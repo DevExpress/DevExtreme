@@ -95,16 +95,13 @@ QUnit.test("item click should not prevent document click handler", function(asse
         }),
         documentClickHandler = sinon.stub();
 
-    try {
-        $(document).on("click", documentClickHandler);
-        instance.show();
-        var $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
-        $($items.eq(0)).trigger("click");
+    $(document).on("click", documentClickHandler);
+    instance.show();
+    var $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
+    $($items.eq(0)).trigger("click");
 
-        assert.equal(documentClickHandler.callCount, 1, "click was not prevented");
-    } finally {
-        $(document).off("click");
-    }
+    assert.equal(documentClickHandler.callCount, 1, "click was not prevented");
+    $(document).off("click");
 });
 
 QUnit.test("context menu items with submenu should have 'has-submenu' class", function(assert) {
