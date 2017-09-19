@@ -3,7 +3,6 @@
 "use strict";
 
 var eventsEngine = require("events/core/events_engine");
-var dataUtilsStrategy = require("core/element_data").getDataStrategy();
 
 if(!QUnit.urlParams["nojquery"]) {
     return;
@@ -50,8 +49,8 @@ QUnit.testDone(function() {
     jQuery.fn.extend(originalJQueryMethods);
 });
 
-var cleanData = dataUtilsStrategy.cleanData;
-dataUtilsStrategy.cleanData = function(nodes) {
+var cleanData = jQuery.cleanData;
+jQuery.cleanData = function(nodes) {
     for(var i = 0; i < nodes.length; i++) {
         eventsEngine.off(nodes[i]);
     }

@@ -245,21 +245,18 @@
             });
         });
 
-        SystemJS.import("@Url.Content("~/testing/helpers/jQueryEventsPatch.js")")
-            .then(function() {
-                return new Promise(function(resolve) { jQuery(resolve); });
-            })
-            .then(function() {
-                return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
-            })
-            .then(function() {
-                 QUnit.start();
-            })
-            .catch(function (err) {
-                QUnit.start();
-                QUnit.test("load failed", function(assert) {
-                    throw err;
-                });
-            });
+        Promise.all([
+            SystemJS.import("@Url.Content(Model.ScriptVirtualPath)"),
+            SystemJS.import("@Url.Content("~/testing/helpers/jQueryEventsPatch.js")"),
+            new Promise(function(resolve) { jQuery(resolve); })
+        ]).then(function() {
+            QUnit.start();
+        }).catch(function (err) {
+            QUnit.start();
+            QUnit.test("load failed", function(assert) {
+                throw err;
+             });
+        });
+
     })();
 </script>
