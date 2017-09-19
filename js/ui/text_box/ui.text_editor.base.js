@@ -92,7 +92,7 @@ var TextEditorBase = Editor.inherit({
             /**
             * @name dxTextEditorOptions_value
             * @publicName value
-            * @type string
+            * @type any
             * @default ""
             */
             value: "",
