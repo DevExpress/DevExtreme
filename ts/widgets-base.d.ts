@@ -2338,50 +2338,51 @@ declare module DevExpress.ui {
         /** @docid_ignore dxProgressBarMethods_focus */
     }
 
+    /** @docid dxSliderBase */
     export interface dxSliderBaseOptions extends dxTrackBarOptions {
-        /** @docid_ignore dxSliderOptions_hoverStateEnabled */
-        /** @docid_ignore dxSliderOptions_focusStateEnabled */
+        /** @docid_ignore dxSliderBaseOptions_hoverStateEnabled */
+        /** @docid_ignore dxSliderBaseOptions_focusStateEnabled */
 
-        /** @docid dxSliderOptions_activeStateEnabled */
+        /** @docid dxSliderBaseOptions_activeStateEnabled */
         activeStateEnabled?: boolean;
 
-        /** @docid dxSliderOptions_step */
+        /** @docid dxSliderBaseOptions_step */
         step?: number;
 
-        /** @docid dxSliderOptions_showRange */
+        /** @docid dxSliderBaseOptions_showRange */
         showRange?: boolean;
 
-        /** @docid dxSliderOptions_keyStep */
+        /** @docid dxSliderBaseOptions_keyStep */
         keyStep?: number;
 
-        /** @docid dxSliderOptions_tooltip */
+        /** @docid dxSliderBaseOptions_tooltip */
         tooltip?: {
-            /** @docid dxSliderOptions_tooltip_enabled */
+            /** @docid dxSliderBaseOptions_tooltip_enabled */
             enabled?: boolean;
 
-            /** @docid dxSliderOptions_tooltip_format */
+            /** @docid dxSliderBaseOptions_tooltip_format */
             format?: any;
 
-            /** @docid dxSliderOptions_tooltip_position */
+            /** @docid dxSliderBaseOptions_tooltip_position */
             position?: string;
 
-            /** @docid dxSliderOptions_tooltip_showMode */
+            /** @docid dxSliderBaseOptions_tooltip_showMode */
             showMode?: string;
         };
 
-        /** @docid dxSliderOptions_label */
+        /** @docid dxSliderBaseOptions_label */
         label?: {
-            /** @docid dxSliderOptions_label_visible */
+            /** @docid dxSliderBaseOptions_label_visible */
             visible?: boolean;
 
-            /** @docid dxSliderOptions_label_position */
+            /** @docid dxSliderBaseOptions_label_position */
             position?: string;
 
-            /** @docid dxSliderOptions_label_format */
+            /** @docid dxSliderBaseOptions_label_format */
             format?: any;
         };
 
-        /** @docid dxSliderOptions_name */
+        /** @docid dxSliderBaseOptions_name */
         name?: string;
     }
 
