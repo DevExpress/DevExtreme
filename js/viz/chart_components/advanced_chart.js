@@ -86,6 +86,7 @@ var AdvancedChart = BaseChart.inherit({
         argumentAxes = _map(panes, function(pane, index) {
             return that._createAxis("argumentAxis", argumentAxesOptions, {
                 pane: pane.name,
+                name: null,
                 crosshairMargin: rotated ? crosshairMargins.x : crosshairMargins.y
             }, rotated, pane.name !== paneWithNonVirtualAxis, index);
         });

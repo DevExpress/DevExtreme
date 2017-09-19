@@ -934,6 +934,16 @@ QUnit.test("Title for Axes - initialization as String ", function(assert) {
     assert.strictEqual(verticalAxis.getOptions().pane, "bottomPane");
 });
 
+QUnit.test("T555770. Do not pass name for argumentAxis", function(assert) {
+    var chart = this.createChart({
+        argumentAxis: {
+            name: "argumentAxis"
+        }
+    });
+
+    assert.strictEqual(chart._argumentAxes[0].getOptions().name, null);
+});
+
 function assertCommonAxesProperties(assert, axis, options) {
     options = options || {};
     assert.ok(axis._renderer, "Renderer should be passed into axis");
