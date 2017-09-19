@@ -200,7 +200,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             if(this.option("autoExpandAll")) {
                 options.remoteOperations.sorting = false;
                 options.remoteOperations.filtering = false;
-                if(isReload && !options.isCustomLoading) {
+                if(isReload && !this._lastLoadOptions && !options.isCustomLoading) {
                     expandVisibleNodes = true;
                 }
             }
