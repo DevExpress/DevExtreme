@@ -393,6 +393,9 @@ var SchedulerWorkSpace = Widget.inherit({
             case "currentIndicatorDate":
                 this._cleanWorkSpace();
                 break;
+            case "currentIndicatorInterval":
+                this._setIndicatorUpdateInterval();
+                break;
             case "showAllDayPanel":
                 this._toggleAllDayVisibility();
                 this._refreshDateTimeIndicator();
@@ -739,8 +742,6 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderView: function() {
-        var that = this;
-
         this._setFirstViewDate();
 
         this._applyCellTemplates(
@@ -755,11 +756,16 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderDateTable();
 
         this._renderDateTimeIndicator();
+    },
 
-        setInterval(function() {
+    _setIndicatorUpdateInterval: function() {
+        var that = this;
+        this._indicatorInterval && clearInterval(this._indicatorInterval);
+
+        this._indicatorInterval = setInterval(function() {
             that._cleanDateTimeIndicator();
             that._renderDateTimeIndicator();
-        }, 1000);
+        }, this.option("currentIndicatorInterval"));
     },
 
     _renderDateTimeIndicator: function() {

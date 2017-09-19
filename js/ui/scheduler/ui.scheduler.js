@@ -557,6 +557,7 @@ var Scheduler = Widget.inherit({
                 */
             showCurrentTimeIndicator: true,
             currentIndicatorDate: undefined,
+            currentIndicatorInterval: 10000,
 
                 /**
                 * @name dxSchedulerOptions_recurrenceEditMode
@@ -1208,6 +1209,7 @@ var Scheduler = Widget.inherit({
                 break;
             case "showCurrentTimeIndicator":
             case "currentIndicatorDate":
+            case "currentIndicatorInterval":
                 this._updateOption("workSpace", name, value);
                 break;
             case "appointmentTooltipTemplate":
@@ -1813,6 +1815,7 @@ var Scheduler = Widget.inherit({
             showAllDayPanel: this.option("showAllDayPanel"),
             showCurrentTimeIndicator: this.option("showCurrentTimeIndicator"),
             currentIndicatorDate: this.option("currentIndicatorDate"),
+            currentIndicatorInterval: this.option("currentIndicatorInterval"),
             allDayExpanded: this._appointments.option("items"),
             crossScrollingEnabled: this.option("crossScrollingEnabled"),
             dataCellTemplate: this.option("dataCellTemplate"),

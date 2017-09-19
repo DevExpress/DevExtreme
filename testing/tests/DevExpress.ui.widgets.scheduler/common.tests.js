@@ -1060,6 +1060,36 @@ QUnit.testStart(function() {
         assert.equal(workSpaceWeek.option("showCurrentTimeIndicator"), true, "workspace has correct showCurrentTimeIndicator");
     });
 
+    QUnit.test("currentIndicatorDate option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            currentIndicatorDate: new Date(2017, 8, 19)
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+
+        assert.deepEqual(workSpaceWeek.option("currentIndicatorDate"), new Date(2017, 8, 19), "workspace has correct currentIndicatorDate");
+
+        this.instance.option("currentIndicatorDate", new Date(2017, 8, 20));
+
+        assert.deepEqual(workSpaceWeek.option("currentIndicatorDate"), new Date(2017, 8, 20), "workspace has correct currentIndicatorDate");
+    });
+
+    QUnit.test("currentIndicatorInterval option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            currentIndicatorInterval: 2000
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+
+        assert.equal(workSpaceWeek.option("currentIndicatorInterval"), 2000, "workspace has correct currentIndicatorInterval");
+
+        this.instance.option("currentIndicatorInterval", 3000);
+
+        assert.equal(workSpaceWeek.option("currentIndicatorInterval"), 3000, "workspace has correct currentIndicatorInterval");
+    });
+
     QUnit.test("appointments should be repainted after scheduler dimensions changing", function(assert) {
         var data = [{
             id: 1, text: "abc", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 10, 30)
