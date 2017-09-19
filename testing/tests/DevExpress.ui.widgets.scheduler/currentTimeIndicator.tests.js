@@ -121,19 +121,20 @@ var stubInvokeMethod = function(instance, options) {
         assert.roughEqual($indicator.outerHeight(), 475, 1, "Indicator has correct height");
     });
 
-    // QUnit.test("DateTimeIndicator should be updated by some timer", function(assert) {
-    //     var renderIndicatorStub = sinon.stub(this.instance, "_renderDateTimeIndicator");
+    QUnit.test("DateTimeIndicator should be updated by some timer", function(assert) {
+        var renderIndicatorStub = sinon.stub(this.instance, "_renderDateTimeIndicator");
 
-    //     this.instance.option({
-    //         currentIndicatorInterval: 2000
-    //     });
+        this.instance.option({
+            indicatorUpdateInterval: 20
+        });
 
-    //     setTimeout(function() {
-    //         assert.ok(renderIndicatorStub.calledTwice, "Indicator was updated");
-    //     }, 5000);
+        var timer = setTimeout(function() {
+            assert.ok(renderIndicatorStub.calledTwice, "Indicator was updated");
+        }, 40);
 
-    //     this.clock.tick(5000);
-    // });
+        this.clock.tick(40);
+        clearTimeout(timer);
+    });
 
     QUnit.test("DateTimeIndicator should have limited height, Day view", function(assert) {
         this.instance.option({

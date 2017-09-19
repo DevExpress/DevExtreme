@@ -371,7 +371,8 @@ var SchedulerWorkSpace = Widget.inherit({
             resourceCellTemplate: null,
             dateCellTemplate: null,
             allowMultipleCellSelection: true,
-            indicatorTime: new Date()
+            indicatorTime: new Date(),
+            indicatorUpdateInterval: 10000
         });
     },
 
