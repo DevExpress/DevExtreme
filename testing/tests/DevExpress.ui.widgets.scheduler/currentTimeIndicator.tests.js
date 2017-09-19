@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("jquery"),
-    SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager");
+    SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
+    resizeCallbacks = require("core/utils/window").resizeCallbacks;
 
 require("common.css!");
 require("generic_light.css!");
@@ -134,6 +135,18 @@ var stubInvokeMethod = function(instance, options) {
 
         this.clock.tick(40);
         clearTimeout(timer);
+    });
+
+    QUnit.test("DateTimeIndicator should be updated on dimensionChanged", function(assert) {
+        var renderIndicatorStub = sinon.stub(this.instance, "_renderDateTimeIndicator");
+
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        resizeCallbacks.fire();
+
+        assert.ok(renderIndicatorStub.calledTwice, "Indicator was updated");
     });
 
     QUnit.test("DateTimeIndicator should have limited height, Day view", function(assert) {

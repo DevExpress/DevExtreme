@@ -717,6 +717,9 @@ var SchedulerWorkSpace = Widget.inherit({
         this.headerPanelOffsetRecalculate();
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
+
+        this._cleanDateTimeIndicator();
+        this._renderDateTimeIndicator();
     },
 
     _getElementClass: noop,
