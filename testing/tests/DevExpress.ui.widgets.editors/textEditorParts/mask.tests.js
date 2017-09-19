@@ -661,7 +661,7 @@ QUnit.test("show mask on focus only", function(assert) {
     assert.equal($input.val(), "", "input is empty");
 });
 
-QUnit.test("show mask on focus only with useMAskedValue and stub symbols", function(assert) {
+QUnit.test("show mask on focus only with useMaskedValue and stub symbols", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
             mask: "0-0",
             useMaskedValue: true,
