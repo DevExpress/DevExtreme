@@ -88,27 +88,6 @@ var SchedulerWorkSpaceWeek = SchedulerWorkSpace.inherit({
         return $cells;
     },
 
-    _isCurrentTime: function(date) {
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
-            var now = this.option("indicatorTime") || new Date(),
-                result = false;
-            date = new Date(date);
-
-            date.setFullYear(now.getFullYear(), now.getMonth(), now.getDate());
-
-            var startCellDate = new Date(date),
-                endCellDate = new Date(date);
-
-            if(dateUtils.sameDate(now, date)) {
-                startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration());
-                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
-
-                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
-            }
-            return result;
-        }
-    },
-
     _getRightCell: function(isMultiSelection) {
         if(!isMultiSelection) {
             return this.callBase(isMultiSelection);
