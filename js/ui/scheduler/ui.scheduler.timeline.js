@@ -161,7 +161,9 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderAllDayPanel();
         this._renderTimePanel();
         this._renderDateTable();
+
         this._renderDateTimeIndicator();
+        this._setIndicatorUpdateInterval();
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.content());
 
