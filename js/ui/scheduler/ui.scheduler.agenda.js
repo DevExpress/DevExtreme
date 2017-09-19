@@ -307,7 +307,10 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     _attachTablesEvents: noop,
     _attachEvents: noop,
     _cleanCellDataCache: noop,
-    _renderDateTimeIndicator: noop,
+
+    _needRenderDateTimeIndicator: function() {
+        return false;
+    },
 
     _prepareCellTemplateOptions: function(text, date, rowIndex, $cell) {
         var groupsOpt = this.option("groups"),
