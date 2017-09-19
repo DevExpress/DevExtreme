@@ -297,7 +297,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _isValueEmpty: function() {
-        return stringUtils.isEmpty(this._convertToValue());
+        return stringUtils.isEmpty(this._value);
     },
 
     _shouldShowMask: function() {

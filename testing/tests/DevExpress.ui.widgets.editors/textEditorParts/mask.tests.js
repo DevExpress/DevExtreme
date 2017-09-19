@@ -659,7 +659,30 @@ QUnit.test("show mask on focus only", function(assert) {
     $input.blur();
     assert.equal(textEditor.option("text"), "", "editor is empty");
     assert.equal($input.val(), "", "input is empty");
+});
 
+QUnit.test("show mask on focus only with useMaskedValue and stub symbols", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "0-0",
+            useMaskedValue: true,
+            showMaskMode: "onFocus"
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input, true);
+
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
+
+    $input.focus();
+    this.clock.tick();
+    assert.equal(textEditor.option("text"), "_-_", "editor is not empty");
+    assert.equal($input.val(), "_-_", "input is not empty");
+    assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, "caret position is on the start");
+
+    $input.blur();
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
 });
 
 QUnit.test("change mask visibility", function(assert) {
