@@ -154,7 +154,7 @@ var ODataStore = Store.inherit({
     /**
     * @name ODataStoreMethods_load
     * @publicName load(options)
-    * @param1 obj:object
+    * @param1 options:object
     * @param1_field8 expand:string|array
     * @param1_field9 requireTotalCount:boolean
     * @param1_field10 customQueryParams:object

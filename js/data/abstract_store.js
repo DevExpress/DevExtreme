@@ -190,7 +190,7 @@ var Store = Class.inherit({
     /**
     * @name StoreMethods_load
     * @publicName load(options)
-    * @param1 obj:object
+    * @param1 options:object
     * @param1_field1 filter:object
     * @param1_field2 sort:object
     * @param1_field3 select:object
