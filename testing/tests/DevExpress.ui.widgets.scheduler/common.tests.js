@@ -1075,19 +1075,19 @@ QUnit.testStart(function() {
         assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 20), "workspace has correct indicatorTime");
     });
 
-    QUnit.test("currentIndicatorInterval option should be passed to workSpace", function(assert) {
+    QUnit.test("indicatorUpdateInterval option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
-            currentIndicatorInterval: 2000
+            indicatorUpdateInterval: 2000
         });
 
         var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
 
-        assert.equal(workSpaceWeek.option("currentIndicatorInterval"), 2000, "workspace has correct currentIndicatorInterval");
+        assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 2000, "workspace has correct indicatorUpdateInterval");
 
-        this.instance.option("currentIndicatorInterval", 3000);
+        this.instance.option("indicatorUpdateInterval", 3000);
 
-        assert.equal(workSpaceWeek.option("currentIndicatorInterval"), 3000, "workspace has correct currentIndicatorInterval");
+        assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 3000, "workspace has correct indicatorUpdateInterval");
     });
 
     QUnit.test("appointments should be repainted after scheduler dimensions changing", function(assert) {

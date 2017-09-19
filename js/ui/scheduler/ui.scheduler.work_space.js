@@ -756,6 +756,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderDateTable();
 
         this._renderDateTimeIndicator();
+
+        this._setIndicatorUpdateInterval();
     },
 
     _setIndicatorUpdateInterval: function() {
