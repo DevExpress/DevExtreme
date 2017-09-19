@@ -859,7 +859,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         rangeContainerCanvas = {
             left: canvas.left + indents.left,
             top: canvas.top + indents.top,
-            width: _max(canvas.width + canvas.left - indents.right, 1),
+            width: canvas.left + indents.left + _max(canvas.width - indents.left - indents.right, 1),
             height: _max(!isCompactMode ? canvas.height - indents.top - indents.bottom - scaleLabelsAreaHeight : commonModule.HEIGHT_COMPACT_MODE, 0),
             right: 0,
             bottom: 0
