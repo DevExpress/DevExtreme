@@ -526,7 +526,7 @@ var ListBase = CollectionWidget.inherit({
         }
     },
 
-    _reorderItem: function(itemElement, toItemElement) {
+    reorderItem: function(itemElement, toItemElement) {
         this.callBase(itemElement, toItemElement);
         this._refreshItemElements();
     },
