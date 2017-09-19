@@ -31,7 +31,7 @@ var SLIDER_CLASS = "dx-slider",
 
 /**
 * @name dxSliderBase
-* @isEditor
+* @publicName dxSliderBase
 * @inherits dxTrackBar
 * @hidden
 */
