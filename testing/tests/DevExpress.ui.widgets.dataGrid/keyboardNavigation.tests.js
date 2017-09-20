@@ -2588,7 +2588,8 @@ QUnit.test("Get a valid index of cell on enter key_T259896", function(assert) {
 
     this.keyboardNavigationController._enterKeyHandler({
         originalEvent: {
-            target: $("#container").find(".txt").first()
+            target: $("#container").find(".txt").first(),
+            preventDefault: commonUtils.noop
         }
     }, true);
 
