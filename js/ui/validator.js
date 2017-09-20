@@ -3,6 +3,7 @@
 var dataUtils = require("../core/element_data"),
     Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),
+    logger = require("../core/utils/console").logger,
     DOMComponent = require("../core/dom_component"),
     extend = require("../core/utils/extend").extend,
     map = require("../core/utils/iterator").map,
@@ -55,7 +56,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_adapter_validationRequestsCallbacks
             * @publicName validationRequestsCallbacks
-            * @type jquery.callbacks
+            * @type array
             */
             /**
             * @name dxValidatorOptions_adapter_applyValidationResults
@@ -176,9 +177,16 @@ var Validator = DOMComponent.inherit({
         }
 
         if(adapter.validationRequestsCallbacks) {
-            adapter.validationRequestsCallbacks.add(function() {
-                that.validate();
-            });
+            if(Array.isArray(adapter.validationRequestsCallbacks)) {
+                adapter.validationRequestsCallbacks.push(function() {
+                    that.validate();
+                });
+            } else {
+                logger.warn("Specifying the validationRequestsCallbacks option with jQuery.Callbacks are now deprecated. Instead, use the array.");
+                adapter.validationRequestsCallbacks.add(function() {
+                    that.validate();
+                });
+            }
         }
     },
 

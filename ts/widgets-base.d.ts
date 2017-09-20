@@ -8,7 +8,7 @@ declare module DevExpress.ui {
         getValue?: Function;
 
         /** @docid dxValidatorOptions_adapter_validationRequestsCallbacks */
-        validationRequestsCallbacks?: JQueryCallback;
+        validationRequestsCallbacks?: Array<any>;
 
         /** @docid dxValidatorOptions_adapter_applyValidationResults */
         applyValidationResults?: (params: validationEngine.ValidatorValidationResult) => void;
