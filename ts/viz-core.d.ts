@@ -546,7 +546,7 @@ declare module DevExpress.viz.core {
           * @docid dxtreemapoptions_tooltip_customizetooltip
           * @docid dxfunneloptions_tooltip_customizetooltip
           */
-        customizeTooltip?: (arg: Object) => {
+        customizeTooltip?: (arg: any) => {
             color?: string;
             text?: string;
             html?: string;
@@ -807,7 +807,7 @@ declare module DevExpress.viz.core {
         }) => void;
 
         /** @docid BaseWidgetOptions_onexported */
-        onExported?: (e: Object) => void;
+        onExported?: (e: any) => void;
 
         /** @docid BaseWidgetOptions_pathmodified */
         pathModified?: boolean;
