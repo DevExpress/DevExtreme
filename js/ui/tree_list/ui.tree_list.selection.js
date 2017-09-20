@@ -116,17 +116,20 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 selectAll: function() {
-                    var isRecursiveSelection = this.isRecursiveSelection(),
-                        visibleKeys = this._getVisibleNodeKeys(isRecursiveSelection);
+                    var that = this,
+                        isRecursiveSelection = that.isRecursiveSelection(),
+                        visibleKeys = that._getVisibleNodeKeys(isRecursiveSelection).filter(function(key) {
+                            return !that.isRowSelected(key);
+                        });
 
-                    return this.selectRows(visibleKeys, true);
+                    return that.selectRows(visibleKeys, true);
                 },
 
                 deselectAll: function() {
                     var isRecursiveSelection = this.isRecursiveSelection(),
-                        visibleKeys = this._getVisibleNodeKeys(isRecursiveSelection);
+                        visibleKeys = this._getVisibleNodeKeys();
 
-                    return this.deselectRows(visibleKeys);
+                    return isRecursiveSelection ? this.callBase() : this.deselectRows(visibleKeys);
                 },
 
                 _updateParentSelectionState: function(node, isSelected) {

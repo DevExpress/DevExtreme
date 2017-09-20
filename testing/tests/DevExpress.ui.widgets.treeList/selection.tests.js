@@ -852,3 +852,54 @@ QUnit.test("Deselecting child node when all nodes are selected", function(assert
     assert.ok(items[4].isSelected, "fifth item is selected");
     assert.ok(items[5].isSelected, "sixth item is selected");
 });
+
+//T550090
+QUnit.test("Select all when end nodes are selected", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+            { id: 5, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+    ];
+
+    this.options.selectedRowKeys = [2, 3, 4];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectAll();
+
+    //assert
+    assert.deepEqual(this.option("selectedRowKeys"), [2, 3, 4, 5], "selected row keys");
+});
+
+//T550090
+QUnit.test("Deselect all after deselecting  -> selecting a nested node", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+            { id: 5, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+    ];
+
+    this.options.selectedRowKeys = [1, 5];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    this.deselectRows(2);
+    this.selectRows(2);
+
+    //act
+    this.deselectAll();
+
+    //assert
+    assert.deepEqual(this.option("selectedRowKeys"), [], "selected row keys");
+});
