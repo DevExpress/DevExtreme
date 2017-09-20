@@ -1050,7 +1050,7 @@ var EditingController = modules.ViewController.inherit((function() {
         /**
          * @name GridBaseMethods_saveEditData
          * @publicName saveEditData()
-         * @return Promise
+         * @return Promise<void>
          */
         saveEditData: function() {
             var that = this,

@@ -158,7 +158,7 @@ var ODataStore = Store.inherit({
     * @param1_field8 expand:string|array
     * @param1_field9 requireTotalCount:boolean
     * @param1_field10 customQueryParams:object
-    * @return Promise
+    * @return Promise<any>
     * @extend_doc
     */
 
@@ -168,7 +168,7 @@ var ODataStore = Store.inherit({
     * @param1 key:object|string|number
     * @param2 extraOptions:object
     * @param2_field1 expand:string|array
-    * @return Promise
+    * @return Promise<any>
     */
     _byKeyImpl: function(key, extraOptions) {
         var params = {};

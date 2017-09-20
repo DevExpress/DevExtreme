@@ -1585,7 +1585,7 @@ var Form = Widget.inherit({
     /**
      * @name dxFormMethods_updateDimensions
      * @publicName updateDimensions()
-     * @return Promise
+     * @return Promise<void>
      */
     updateDimensions: function() {
         var that = this,

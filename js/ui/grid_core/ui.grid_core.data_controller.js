@@ -951,7 +951,7 @@ module.exports = {
                 * @name GridBaseMethods_byKey
                 * @publicName byKey(key)
                 * @param1 key:object|string|number
-                * @return Promise
+                * @return Promise<any>
                 */
                 byKey: function(key) {
                     var store = this.store(),
@@ -1072,7 +1072,7 @@ module.exports = {
                 /**
                  * @name GridBaseMethods_refresh
                  * @publicName refresh()
-                 * @return Promise
+                 * @return Promise<void>
                  */
                 refresh: function() {
                     var that = this,

@@ -186,20 +186,20 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         /**
          * @name dxTreeListMethods_loadDescendants
          * @publicName loadDescendants()
-         * @return Promise
+         * @return Promise<void>
          */
         /**
          * @name dxTreeListMethods_loadDescendants
          * @publicName loadDescendants(keys)
          * @param1 keys:array
-         * @return Promise
+         * @return Promise<void>
          */
         /**
          * @name dxTreeListMethods_loadDescendants
          * @publicName loadDescendants(keys, childrenOnly)
          * @param1 keys:array
          * @param2 childrenOnly:boolean
-         * @return Promise
+         * @return Promise<void>
          */
         loadDescendants: function(keys, childrenOnly) {
             if(!this._dataSource) {

@@ -765,7 +765,7 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_load
     * @publicName load()
-    * @return Promise
+    * @return Promise<any>
     */
     load: function() {
         var that = this,
@@ -823,7 +823,7 @@ var DataSource = Class.inherit({
     /**
      * @name DataSourceMethods_reload
      * @publicName reload()
-     * @return Promise
+     * @return Promise<any>
      */
     reload: function() {
         var store = this.store();

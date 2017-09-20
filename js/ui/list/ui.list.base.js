@@ -1065,7 +1065,7 @@ var ListBase = CollectionWidget.inherit({
     * @name dxListMethods_expandGroup
     * @publicName expandGroup(groupIndex)
     * @param1 groupIndex:Number
-    * @return Promise
+    * @return Promise<void>
     */
     expandGroup: function(groupIndex) {
         var deferred = new Deferred(),
@@ -1082,7 +1082,7 @@ var ListBase = CollectionWidget.inherit({
     * @name dxListMethods_collapseGroup
     * @publicName collapseGroup(groupIndex)
     * @param1 groupIndex:Number
-    * @return Promise
+    * @return Promise<void>
     */
     collapseGroup: function(groupIndex) {
         var deferred = new Deferred(),
@@ -1098,7 +1098,7 @@ var ListBase = CollectionWidget.inherit({
     /**
     * @name dxListMethods_updateDimensions
     * @publicName updateDimensions()
-    * @return Promise
+    * @return Promise<void>
     */
     updateDimensions: function() {
         var that = this,

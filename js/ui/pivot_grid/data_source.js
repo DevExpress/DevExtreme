@@ -1084,7 +1084,7 @@ module.exports = Class.inherit((function() {
         /**
         * @name PivotGridDataSourceMethods_reload
         * @publicName reload()
-        * @return Promise
+        * @return Promise<any>
         */
         reload: function() {
             return this.load({ reload: true });
@@ -1109,7 +1109,7 @@ module.exports = Class.inherit((function() {
         /**
         * @name PivotGridDataSourceMethods_load
         * @publicName load()
-        * @return Promise
+        * @return Promise<any>
         */
         load: function(options) {
             var that = this,

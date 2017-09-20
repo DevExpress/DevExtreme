@@ -789,7 +789,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     * @name CollectionWidgetMethods_deleteItem
     * @publicName deleteItem(itemElement)
     * @param1 itemElement:Node
-    * @return Promise
+    * @return Promise<void>
     * @hidden
     */
     deleteItem: function(itemElement) {
@@ -839,7 +839,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     * @publicName reorderItem(itemElement, toItemElement)
     * @param1 itemElement:Node
     * @param2 toItemElement:Node
-    * @return Promise
+    * @return Promise<void>
     * @hidden
     */
     reorderItem: function(itemElement, toItemElement) {

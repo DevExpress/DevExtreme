@@ -316,7 +316,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @publicName createChildren
             * @type function
             * @type_function_param1 parentNode:dxTreeViewNode
-            * @type_function_return Promise|array
+            * @type_function_return Promise<any>|Array<Object>
             */
             createChildren: null
 
@@ -1651,7 +1651,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     /**
     * @name dxTreeViewMethods_updateDimensions
     * @publicName updateDimensions()
-    * @return Promise
+    * @return Promise<void>
     */
     updateDimensions: function() {
         var that = this,

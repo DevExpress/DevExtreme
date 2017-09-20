@@ -198,7 +198,7 @@ var Store = Class.inherit({
     * @param1_field5 skip:number
     * @param1_field6 take:number
     * @param1_field7 userData:object
-    * @return Promise
+    * @return Promise<any>
     */
     load: function(options) {
         var that = this;
@@ -244,7 +244,7 @@ var Store = Class.inherit({
     * @param1 obj:object
     * @param1_field1 filter:object
     * @param1_field2 group:object
-    * @return Promise
+    * @return Promise<number>
     */
     totalCount: function(options) {
         return this._totalCountImpl(options);
@@ -258,7 +258,7 @@ var Store = Class.inherit({
     * @name StoreMethods_byKey
     * @publicName byKey(key)
     * @param1 key:object|string|number
-    * @return Promise
+    * @return Promise<any>
     */
     byKey: function(key, extraOptions) {
         return this._addFailHandlers(this._withLock(this._byKeyImpl(key, extraOptions)));
@@ -270,7 +270,7 @@ var Store = Class.inherit({
     * @name StoreMethods_insert
     * @publicName insert(values)
     * @param1 values:object
-    * @return Promise
+    * @return Promise<any>
     */
     insert: function(values) {
         var that = this;
@@ -291,7 +291,7 @@ var Store = Class.inherit({
     * @publicName update(key, values)
     * @param1 key:object|string|number
     * @param2 values:object
-    * @return Promise
+    * @return Promise<any>
     */
     update: function(key, values) {
         var that = this;
@@ -311,7 +311,7 @@ var Store = Class.inherit({
     * @name StoreMethods_remove
     * @publicName remove(key)
     * @param1 key:object|string|number
-    * @return Promise
+    * @return Promise<void>
     */
     remove: function(key) {
         var that = this;

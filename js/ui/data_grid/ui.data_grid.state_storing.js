@@ -137,7 +137,7 @@ gridCore.registerModule("stateStoring", {
                  * @name dxDataGridOptions_stateStoring_customLoad
                  * @publicName customLoad
                  * @type function()
-                 * @type_function_return Promise
+                 * @type_function_return Promise<Object>
                  */
                 customLoad: null,
 

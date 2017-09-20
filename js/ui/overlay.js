@@ -1434,7 +1434,7 @@ var Overlay = Widget.inherit({
     * @name dxOverlaymethods_toggle
     * @publicName toggle(showing)
     * @param1 showing:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     toggle: function(showing) {
         showing = showing === undefined ? !this.option("visible") : showing;
@@ -1455,7 +1455,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods_show
     * @publicName show()
-    * @return Promise
+    * @return Promise<void>
     */
     show: function() {
         return this.toggle(true);
@@ -1464,7 +1464,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods_hide
     * @publicName hide()
-    * @return Promise
+    * @return Promise<void>
     */
     hide: function() {
         return this.toggle(false);

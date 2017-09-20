@@ -422,7 +422,7 @@ var SlideOut = CollectionWidget.inherit({
     /**
     * @name dxslideoutmethods_show
     * @publicName showMenu()
-    * @return Promise
+    * @return Promise<void>
     */
     showMenu: function() {
         return this._slideOutView.toggleMenuVisibility(true);
@@ -431,7 +431,7 @@ var SlideOut = CollectionWidget.inherit({
     /**
     * @name dxslideoutmethods_hide
     * @publicName hideMenu()
-    * @return Promise
+    * @return Promise<void>
     */
     hideMenu: function() {
         return this._slideOutView.toggleMenuVisibility(false);
@@ -441,7 +441,7 @@ var SlideOut = CollectionWidget.inherit({
     * @name dxslideoutmethods_toggleMenuVisibility
     * @publicName toggleMenuVisibility(showing)
     * @param1 showing:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     toggleMenuVisibility: function(showing) {
         return this._slideOutView.toggleMenuVisibility(showing);

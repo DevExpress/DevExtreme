@@ -1151,7 +1151,7 @@ var Gallery = CollectionWidget.inherit({
     * @publicName goToItem(itemIndex, animation)
     * @param1 itemIndex:numeric
     * @param2 animation:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     goToItem: function(itemIndex, animation) {
         var selectedIndex = this.option("selectedIndex"),
@@ -1178,7 +1178,7 @@ var Gallery = CollectionWidget.inherit({
     * @name dxgallerymethods_prevItem
     * @publicName prevItem(animation)
     * @param1 animation:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     prevItem: function(animation) {
         return this.goToItem(this.option("selectedIndex") - 1, animation);
@@ -1188,7 +1188,7 @@ var Gallery = CollectionWidget.inherit({
     * @name dxgallerymethods_nextItem
     * @publicName nextItem(animation)
     * @param1 animation:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     nextItem: function(animation) {
         return this.goToItem(this.option("selectedIndex") + 1, animation);
