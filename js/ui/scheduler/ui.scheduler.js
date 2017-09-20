@@ -564,6 +564,15 @@ var Scheduler = Widget.inherit({
                 */
             cellDuration: 30,
 
+                 /**
+                * @name dxSchedulerOptions_maxAppointmentsPerCell
+                * @publicName maxAppointmentsPerCell
+                * @type number|string
+                * @default "auto"
+                * @acceptValues 'auto'|'unlimited'
+                */
+            maxAppointmentsPerCell: "auto",
+
                 /**
                 * @name dxSchedulerOptions_onAppointmentRendered
                 * @publicName onAppointmentRendered
@@ -1825,17 +1834,7 @@ var Scheduler = Widget.inherit({
     },
 
     _getCurrentViewOptions: function() {
-        var result,
-            currentView = this.option("currentView");
-
-        each(this.option("views"), function(_, view) {
-            if(typeUtils.isObject(view) && view.type === currentView) {
-                result = view;
-                return false;
-            }
-        });
-
-        return result;
+        return this._currentView;
     },
 
     _getCurrentViewOption: function(optionName) {
@@ -1918,7 +1917,7 @@ var Scheduler = Widget.inherit({
     },
 
     getMaxAppointmentsPerCell: function() {
-        return this._currentView.maxAppointmentsPerCell;
+        return this._getCurrentViewOption("maxAppointmentsPerCell");
     },
 
     _createPopup: function(appointmentData, processTimeZone) {
