@@ -318,8 +318,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     this._focusEditFormCell($cell);
                     setTimeout(this._editingController.saveEditData.bind(this._editingController));
                 } else {
+                    $(eventArgs.originalEvent.target).blur().focus();
                     this._editingController.closeEditCell();
                 }
+                eventArgs.originalEvent.preventDefault();
             } else {
                 var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex];
 
