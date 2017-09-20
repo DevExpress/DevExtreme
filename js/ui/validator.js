@@ -56,7 +56,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_adapter_validationRequestsCallbacks
             * @publicName validationRequestsCallbacks
-            * @type array
+            * @type array | jquery.callbacks
             */
             /**
             * @name dxValidatorOptions_adapter_applyValidationResults
@@ -161,12 +161,13 @@ var Validator = DOMComponent.inherit({
         var that = this,
             element = that.element()[0],
             dxStandardEditor = dataUtils.data(element, "dx-validation-target"),
-            adapter = that.option("adapter");
+            adapter = that.option("adapter"),
+            callbacks = adapter.validationRequestsCallbacks;
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
 
-                adapter.validationRequestsCallbacks.add(function() {
+                callbacks.add(function() {
                     that.validate();
                 });
 
@@ -176,14 +177,14 @@ var Validator = DOMComponent.inherit({
             throw errors.Error("E0120");
         }
 
-        if(adapter.validationRequestsCallbacks) {
-            if(Array.isArray(adapter.validationRequestsCallbacks)) {
-                adapter.validationRequestsCallbacks.push(function() {
+        if(callbacks) {
+            if(Array.isArray(callbacks)) {
+                callbacks.push(function() {
                     that.validate();
                 });
             } else {
                 logger.warn("Specifying the validationRequestsCallbacks option with jQuery.Callbacks are now deprecated. Instead, use the array.");
-                adapter.validationRequestsCallbacks.add(function() {
+                callbacks.add(function() {
                     that.validate();
                 });
             }
