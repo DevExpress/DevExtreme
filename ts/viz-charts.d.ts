@@ -1993,10 +1993,10 @@ declare module DevExpress.viz.charts {
         animation?: ChartAnimation;
 
         /** @docid basechartoptions_customizelabel */
-        customizeLabel?: (pointInfo: Object) => Object;
+        customizeLabel?: (pointInfo: any) => Object;
 
         /** @docid basechartoptions_customizepoint */
-        customizePoint?: (pointInfo: Object) => Object;
+        customizePoint?: (pointInfo: any) => Object;
 
         /** @docid basechartoptions_datasource */
         dataSource?: any;
