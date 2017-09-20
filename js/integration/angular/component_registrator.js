@@ -409,11 +409,9 @@ var ComponentBuilder = Class.inherit({
 
         result.templatesRenderAsynchronously = true;
 
-        if(Config().wrapActionsBeforeExecute) {
-            result.forceApplyBindings = function() {
-                safeApply(function() {}, scope);
-            };
-        }
+        result.forceApplyBindings = function() {
+            safeApply(function() {}, scope);
+        };
 
         result.integrationOptions = {
             createTemplate: function(element) {
