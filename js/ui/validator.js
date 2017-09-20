@@ -161,13 +161,12 @@ var Validator = DOMComponent.inherit({
         var that = this,
             element = that.element()[0],
             dxStandardEditor = dataUtils.data(element, "dx-validation-target"),
-            adapter = that.option("adapter"),
-            callbacks = adapter.validationRequestsCallbacks;
+            adapter = that.option("adapter");
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
 
-                callbacks.add(function() {
+                adapter.validationRequestsCallbacks.add(function() {
                     that.validate();
                 });
 
@@ -176,6 +175,8 @@ var Validator = DOMComponent.inherit({
             }
             throw errors.Error("E0120");
         }
+
+        var callbacks = adapter.validationRequestsCallbacks;
 
         if(callbacks) {
             if(Array.isArray(callbacks)) {
