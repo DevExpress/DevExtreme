@@ -414,11 +414,25 @@ var eventsEngine = {
         var immediatePropagationStopped = false;
         var defaultPrevented = false;
 
-        extend(that, src);
+        //extend(that, src);
 
-        if(src instanceof eventsEngine.Event || src instanceof Event) {
+        for(var property in src) {
+            if(src[property] !== undefined) {
+                addProperty(property, null, that);
+            }
+        }
+
+        addProperty("which", calculateWhich, that);
+
+        // if(src instanceof eventsEngine.Event || src instanceof Event) {
+        //     that.originalEvent = src;
+        //     that.currentTarget = undefined;
+        // }
+
+        if(src && src.type) { // problems with native functions like that.originalEvent.preventDefault, add check below
             that.originalEvent = src;
-            that.currentTarget = undefined;
+            that.type = src.type; //scrollable.tests.js, try to access which through getter while that.originalEvent does not set
+            //that.currentTarget = undefined; // menu.tests.js
         }
 
         if(!(src instanceof eventsEngine.Event)) {
@@ -428,7 +442,7 @@ var eventsEngine = {
                 },
                 stopPropagation: function() {
                     propagationStopped = true;
-                    that.originalEvent && that.originalEvent.stopPropagation();
+                    that.originalEvent && that.originalEvent.stopPropagation && that.originalEvent.stopPropagation();
                 },
                 isImmediatePropagationStopped: function() {
                     return immediatePropagationStopped;
@@ -436,19 +450,17 @@ var eventsEngine = {
                 stopImmediatePropagation: function() {
                     this.stopPropagation();
                     immediatePropagationStopped = true;
-                    that.originalEvent && that.originalEvent.stopImmediatePropagation();
+                    that.originalEvent && that.originalEvent.stopImmediatePropagation && that.originalEvent.stopImmediatePropagation();
                 },
                 isDefaultPrevented: function() {
                     return !!(defaultPrevented || that.originalEvent && that.originalEvent.defaultPrevented);
                 },
                 preventDefault: function() {
                     defaultPrevented = true;
-                    that.originalEvent && that.originalEvent.preventDefault();
+                    that.originalEvent && that.originalEvent.preventDefault && that.originalEvent.preventDefault();
                 }
             });
         }
-
-        addProperty("which", calculateWhich, that);
 
         extend(that, config);
 
@@ -462,7 +474,7 @@ var addProperty = function(propName, hook, eventInstance) {
         configurable: true,
 
         get: function() {
-            return this.originalEvent && hook(this.originalEvent);
+            return this.originalEvent && (isFunction(hook) ? hook(this.originalEvent) : this.originalEvent[propName]);
         },
 
         set: function(value) {
