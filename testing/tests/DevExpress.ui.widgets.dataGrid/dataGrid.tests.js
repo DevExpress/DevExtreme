@@ -5641,6 +5641,43 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     assert.ok($(dataGrid.element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
 
+//T553067
+QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    //arrange
+    var dataGrid = createDataGrid({
+            dataSource: [{ name: "name 1", value: 1 }, { name: "name 2", value: 2 }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
+        }),
+        navigationController = dataGrid.getController("keyboardNavigation");
+
+    this.clock.tick();
+    dataGrid.editCell(0, 0);
+    this.clock.tick();
+    $(":focus").on("blur", function(e) {
+        //emulate browser behaviour
+        $(e.target).trigger("change");
+    });
+    $(":focus").val("test");
+
+    //act
+    var event = $.Event("keydown", { target: $(":focus").get(0) });
+    navigationController._keyDownHandler({ key: "enter", originalEvent: event });
+    this.clock.tick();
+
+    //assert
+    assert.ok(event.isDefaultPrevented(), "keydown event is prevented");
+    assert.equal(dataGrid.cellValue(0, 0), "test", "cell value is changed");
+});
+
 QUnit.test("expandAll", function(assert) {
     //arrange, act
     var expandAllGroupIndex,
