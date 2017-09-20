@@ -318,7 +318,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     this._focusEditFormCell($cell);
                     setTimeout(this._editingController.saveEditData.bind(this._editingController));
                 } else {
-                    $(eventArgs.originalEvent.target).blur().focus();
+                    var $target = $(eventArgs.originalEvent.target);
+                    eventsEngine.trigger($target, "blur");
+                    eventsEngine.trigger($target, "focus");
                     this._editingController.closeEditCell();
                 }
                 eventArgs.originalEvent.preventDefault();
