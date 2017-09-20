@@ -53,7 +53,23 @@ var Deferred = function() {
 
     this._promise.then = function(resolve, reject) {
         var result = new Deferred();
-        this.done(resolve).fail(reject);
+
+        ["done", "fail"].forEach(function(method) {
+            var callback = method === "done" ? resolve : reject;
+            if(!callback) return;
+
+            this[method](function() {
+                var callbackResult = callback.apply(this, arguments);
+                if(isDeferred(callbackResult)) {
+                    callbackResult.done(result.resolve).fail(result.reject);
+                } else if(isPromise(callbackResult)) {
+                    callbackResult.then(result.resolve, result.reject);
+                } else {
+                    result.resolve(callbackResult);
+                }
+            });
+        }.bind(this));
+
         return result.promise();
     };
 

@@ -30,6 +30,13 @@ var TextBox = TextEditor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
+            * @name dxTextBoxOptions_value
+            * @publicName value
+            * @type string
+            * @default ""
+            */
+            value: "",
+            /**
             * @name dxTextBoxOptions_mode
             * @publicName mode
             * @type string

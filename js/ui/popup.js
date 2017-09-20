@@ -251,7 +251,6 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_width
                     * @publicName width
-                    * @type string|number|function
                     * @custom_default_for_windows_8 function() { return $(window).width(); }
                     * @extend_doc
                     */
