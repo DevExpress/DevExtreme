@@ -396,7 +396,7 @@ module.exports = gridCore.Controller.inherit((function() {
 
                 that._handleDataLoading(loadResult);
                 executeTask(function() {
-                    if(dataSource._disposed) return;
+                    if(!dataSource.store()) return;
 
                     when(loadResult.data || that.loadFromStore(loadResult.storeLoadOptions)).done(function(data, extra) {
                         loadResult.data = data;
