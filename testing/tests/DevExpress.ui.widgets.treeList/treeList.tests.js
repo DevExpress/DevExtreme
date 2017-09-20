@@ -466,7 +466,6 @@ QUnit.test("Click on selectCheckBox shouldn't render editor, editing & selection
     assert.notOk($("#treeList").find(".dx-texteditor").length, "Editing textEditor wasn't rendered");
 });
 
-
 QUnit.test("Aria accessibility", function(assert) {
     //arrange, act
     var $dataRows,
@@ -502,4 +501,30 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(1).attr("aria-level"), "1", "second data row - value of 'aria-level' attribute");
     assert.equal($dataRows.eq(2).attr("aria-expanded"), undefined, "third data row hasn't the 'aria-expanded' attribute");
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
+});
+
+QUnit.module("Option Changed", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Change dataSource, selectedRowKeys and scrolling options together", function(assert) {
+    //arrange
+    var treeList = createTreeList({});
+    this.clock.tick(30);
+
+    //act
+    treeList.option({
+        dataSource: [{ id: 1 }],
+        selectedRowKeys: [1],
+        scrolling: { mode: "virtual" }
+    });
+    this.clock.tick(30);
+
+    //assert
+    assert.strictEqual(treeList.getVisibleRows().length, 1, "row count");
 });
