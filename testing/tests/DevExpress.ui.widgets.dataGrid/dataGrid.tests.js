@@ -5662,7 +5662,7 @@ QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour",
     this.clock.tick();
     dataGrid.editCell(0, 0);
     this.clock.tick();
-    $(":focus").on("blur", function(e) {
+    $(":focus").on("focusout", function(e) {
         //emulate browser behaviour
         $(e.target).trigger("change");
     });
