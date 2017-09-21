@@ -657,7 +657,7 @@ var DateBox = DropDownEditor.inherit({
     _valueChangeEventHandler: function(e) {
         var text = this.option("text"),
             parsedDate = this._getParsedDate(text),
-            value = this.dateOption("value") || this._strategy.useCurrentDateByDefault() && new Date(),
+            value = this.dateOption("value") || this._getDateByDefault(),
             type = this.option("type"),
             newValue = uiDateUtils.mergeDates(value, parsedDate, type),
             date = parsedDate && type === "time" ? newValue : parsedDate;
@@ -676,6 +676,10 @@ var DateBox = DropDownEditor.inherit({
             value: newValue,
             editor: this
         });
+    },
+
+    _getDateByDefault: function() {
+        return this._strategy.useCurrentDateByDefault() && new Date();
     },
 
     _getParsedDate: function(text) {
