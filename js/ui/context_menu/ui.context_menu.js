@@ -755,8 +755,6 @@ var ContextMenu = MenuBase.inherit((function() {
         _updateSubmenuVisibilityOnClick: function(actionArgs) {
             if(!actionArgs.args.length) return;
 
-            actionArgs.args[0].jQueryEvent.stopPropagation();
-
             var $itemElement = actionArgs.args[0].itemElement,
                 itemData = actionArgs.args[0].itemData,
                 node = this._dataAdapter.getNodeByItem(itemData);

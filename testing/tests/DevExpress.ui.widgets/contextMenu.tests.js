@@ -89,6 +89,21 @@ QUnit.test("lazy rendering: not render overlay on init", function(assert) {
     assert.ok($itemsContainer.length, "overlay is defined");
 });
 
+QUnit.test("item click should not prevent document click handler", function(assert) {
+    var instance = new ContextMenu(this.$element, {
+            items: [{ text: "a" }]
+        }),
+        documentClickHandler = sinon.stub();
+
+    $(document).on("click", documentClickHandler);
+    instance.show();
+    var $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
+    $($items.eq(0)).trigger("click");
+
+    assert.equal(documentClickHandler.callCount, 1, "click was not prevented");
+    $(document).off("click");
+});
+
 QUnit.test("context menu items with submenu should have 'has-submenu' class", function(assert) {
     var instance = new ContextMenu(this.$element, {
             items: [{ text: "item1", items: [{ text: "item11" }] }],
