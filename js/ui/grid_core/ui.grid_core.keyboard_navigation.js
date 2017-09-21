@@ -481,7 +481,9 @@ var KeyboardNavigationController = core.ViewController.inherit({
             var $nextCell = this._getNextCell(direction, "row");
             if(!this._isInsideEditForm($nextCell)) {
                 $nextCell && this._applyTabIndexToElement($nextCell);
-            } else {
+            }
+
+            if(this._isRowEditMode()) {
                 return true;
             }
         }
