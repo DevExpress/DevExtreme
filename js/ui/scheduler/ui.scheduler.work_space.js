@@ -464,7 +464,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _isWorkSpaceWithOverlapping: function() {
-        return this.invoke("getMaxAppointmentsPerCell") !== undefined;
+        return this.invoke("getMaxAppointmentsPerCell") !== null;
     },
 
     _getTimePanelClass: function() {

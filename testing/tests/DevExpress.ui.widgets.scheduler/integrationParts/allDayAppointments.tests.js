@@ -17,7 +17,7 @@ QUnit.module("Integration: allDay appointments", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
         };
 
         this.clock = sinon.useFakeTimers();

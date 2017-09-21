@@ -218,7 +218,7 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_views_maxAppointmentsPerCell
                 * @publicName maxAppointmentsPerCell
                 * @type number|string
-                * @default undefined
+                * @default "auto"
                 * @acceptValues 'auto'|'unlimited'
                 */
 
@@ -1213,6 +1213,8 @@ var Scheduler = Widget.inherit({
                 this.repaint();
                 break;
             case "dateSerializationFormat":
+                break;
+            case "maxAppointmentsPerCell":
                 break;
             case "startDateExpr":
             case "endDateExpr":

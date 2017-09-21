@@ -1248,6 +1248,20 @@ QUnit.testStart(function() {
         assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has right class");
     });
 
+    QUnit.test("Workspace shouldn't have specific class if maxAppointmentsPerCell=null", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            maxAppointmentsPerCell: null,
+            views: [{
+                type: "week",
+                name: "Week",
+            }]
+        });
+
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has right class");
+    });
+
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
         this.createInstance({
             currentView: "week",
