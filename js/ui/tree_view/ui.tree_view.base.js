@@ -774,15 +774,14 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderContentImpl: function() {
-        if(!this.option("items") || !this.option("items").length) {
-            return;
-        }
-
         var $nodeContainer = this._renderNodeContainer();
 
         this._renderScrollableContainer();
         this._scrollableContainer.content().append($nodeContainer);
 
+        if(!this.option("items") || !this.option("items").length) {
+            return;
+        }
         this._renderItems($nodeContainer, this._dataAdapter.getRootNodes());
 
         this._initExpandEvent();

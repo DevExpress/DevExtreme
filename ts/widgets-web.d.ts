@@ -2626,6 +2626,9 @@ declare module DevExpress.ui {
             /** @docid dxPivotGridOptions_fieldChooser_enabled */
             enabled?: boolean;
 
+            /** @docid dxPivotGridOptions_fieldChooser_searchEnabled */
+            searchEnabled?: boolean;
+
             /** @docid dxPivotGridOptions_fieldChooser_layout */
             layout?: number;
 
@@ -2794,6 +2797,9 @@ declare module DevExpress.ui {
 
         /** @docid dxPivotGridFieldChooserOptions_height*/
         height?: any;
+
+        /** @docid dxPivotGridFieldChooserOptions_searchEnabled*/
+        searchEnabled?: boolean;
 
         /** @docid dxPivotGridFieldChooserOptions_layout */
         layout?: number;
