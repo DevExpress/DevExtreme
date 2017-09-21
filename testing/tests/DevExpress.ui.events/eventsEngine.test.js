@@ -272,3 +272,43 @@ QUnit.test("'on' signatures", function(assert) {
     assert.equal(fired, 6);
     assert.equal(hasData, 3);
 });
+
+QUnit.test("mouseenter bubble to document", function(assert) {
+    var div = document.createElement("div");
+    div.className = "selector";
+    var handler = function(e) {
+        assert.ok(true);
+    };
+
+    document.body.appendChild(div);
+
+    eventsEngine.on(document, "mouseenter", ".selector", handler);
+
+    var triggerEvent = function(name, bubble) {
+        var mouseMoveEvent = document.createEvent("MouseEvents");
+
+        mouseMoveEvent.initMouseEvent(
+            name, //event type : click, mousedown, mouseup, mouseover, mousemove, mouseout.
+            bubble, //canBubble
+            false, //cancelable
+            window, //event's AbstractView : should be window
+            1, // detail : Event's mouse click count
+            50, // screenX
+            50, // screenY
+            50, // clientX
+            50, // clientY
+            false, // ctrlKey
+            false, // altKey
+            false, // shiftKey
+            false, // metaKey
+            0, // button : 0 = click, 1 = middle button, 2 = right button
+            null // relatedTarget : Only used with some event types (e.g. mouseover and mouseout). In other cases, pass null.
+        );
+
+        div.dispatchEvent(mouseMoveEvent);
+    };
+
+    //triggerEvent("mouseenter", false);
+    triggerEvent("mouseover", true);
+
+});

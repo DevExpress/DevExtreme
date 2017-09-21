@@ -115,7 +115,16 @@ var getElementEventData = function(element, eventName) {
 
             if(firstHandlerForTheType) {
                 if(!special.callMethod(eventName, "setup", element, [ data, namespaces, handler ])) {
-                    eventNameIsDefined && element.addEventListener(eventName, nativeHandler);
+                    var nativeMap = {
+                        "mouseenter": "mouseover",
+                        "mouseleave": "mouseout",
+                        "pointerenter": "pointerover",
+                        "pointerleave": "pointerout"
+                    };
+                    var nativeName = nativeMap[eventName] || eventName;
+
+                    elementData[eventName].nativeHandler = getNativeHandler(eventName);
+                    eventNameIsDefined && element.addEventListener(nativeName, elementData[eventName].nativeHandler);
                 }
             }
 
@@ -129,6 +138,8 @@ var getElementEventData = function(element, eventName) {
                 }
                 var removedHandler;
 
+                //TODO - save native handler in elementData[eventName] in the different way
+                var savedNativeHandler = elementData[eventName].nativeHandler;
                 elementData[eventName] = elementData[eventName].filter(function(eventData) {
                     var skip = namespaces.length && !isSubset(eventData.namespaces, namespaces)
                         || handler && eventData.handler !== handler
@@ -141,11 +152,12 @@ var getElementEventData = function(element, eventName) {
 
                     return skip;
                 });
+                elementData[eventName].nativeHandler = savedNativeHandler;
 
                 if(!elementData[eventName].length) {
                     special.callMethod(eventName, "teardown", element, [ namespaces, removedHandler ]);
                     var eventNameIsDefined = eventName !== EMPTY_EVENT_NAME;
-                    eventNameIsDefined && element.removeEventListener(eventName, nativeHandler);
+                    eventNameIsDefined && element.removeEventListener(eventName, elementData[eventName].nativeHandler);
                 }
             };
 
@@ -180,10 +192,12 @@ var getElementEventData = function(element, eventName) {
     };
 };
 
-var nativeHandler = function(event, extraParameters) {
-    var elementDataByEvent = getElementEventData(this, event.type);
-    event = eventsEngine.Event(event);
-    elementDataByEvent.callHandlers(event, extraParameters);
+var getNativeHandler = function(subscribeName) {
+    return function(event, extraParameters) {
+        var elementDataByEvent = getElementEventData(this, subscribeName);
+        event = eventsEngine.Event(event);
+        elementDataByEvent.callHandlers(event, extraParameters);
+    };
 };
 
 var isSubset = function(original, checked) {
