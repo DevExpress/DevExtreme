@@ -651,7 +651,7 @@ module.exports = Class.inherit((function() {
              * @name PivotGridDataSourceOptions_onFieldsPrepared
              * @publicName onFieldsPrepared
              * @type function(fields)
-             * @type_function_param1 fields:Array<any>
+             * @type_function_param1 fields:Array<PivotGridDataSourceOptions_fields>
              * @action
              */
             each(
@@ -1457,7 +1457,7 @@ module.exports = Class.inherit((function() {
          * @name PivotGridDataSourceMethods_expandHeaderItem
          * @publicName expandHeaderItem(area, path)
          * @param1 area:string
-         * @param2 path:Array<any>
+         * @param2 path:Array<Object>
          */
         expandHeaderItem: function(area, path) {
             var that = this,

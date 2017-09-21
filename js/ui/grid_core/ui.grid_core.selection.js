@@ -578,7 +578,7 @@ module.exports = {
              * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
              * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
              * @type_function_param1_field6 selectedRowKeys:Array<any>
-             * @type_function_param1_field7 selectedRowsData:Array<any>
+             * @type_function_param1_field7 selectedRowsData:Array<Object>
              * @extends Action
              * @action
              */

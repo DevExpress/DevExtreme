@@ -207,7 +207,7 @@ var PivotGrid = Widget.inherit({
             /**
              * @name dxPivotGridOptions_dataSource
              * @publicName dataSource
-             * @type Array<PivotGridDataSourceOptions_fields>|PivotGridDataSource|PivotGridDataSourceOptions
+             * @type Array<Object>|PivotGridDataSource|PivotGridDataSourceOptions
              * @default null
              */
             dataSource: null,
