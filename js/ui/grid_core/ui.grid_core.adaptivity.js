@@ -998,6 +998,44 @@ module.exports = {
                 _isColumnVisible: function(column) {
                     return this.callBase(column) && !column.adaptiveHidden;
                 }
+            },
+            keyboardNavigation: {
+                _handleTabKeyOnMasterDetailCell: function(target, direction) {
+                    var editMode = this._editingController.getEditMode(),
+                        isInsideAdaptiveDetailRow = $(target).closest(".dx-adaptive-detail-row").length > 0;
+
+                    if(isInsideAdaptiveDetailRow && (editMode !== EDIT_MODE_ROW && editMode !== EDIT_MODE_FORM)) {
+                        var rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()),
+                            formItemData = $(target).closest(".dx-field-item-content").data("dxFormItem"),
+                            column = formItemData && formItemData.column,
+                            nextHiddenColumn = this._getNextHiddenColumn(column, direction);
+
+                        if(nextHiddenColumn) {
+                            this._editingController.editCell(rowIndex + 1, this._columnsController.getVisibleIndex(nextHiddenColumn.index));
+                            return true;
+                        }
+                    }
+
+                    return this.callBase(target, direction);
+                },
+
+                _getNextHiddenColumn: function(targetColumn, direction) {
+                    var hiddenColumns = this.getController("adaptiveColumns").getHiddenColumns(),
+                        i;
+
+                    hiddenColumns.sort(function(col1, col2) {
+                        return col1.visibleIndex - col2.visibleIndex;
+                    });
+
+                    if(targetColumn) {
+                        for(i = 0; i < hiddenColumns.length; i++) {
+                            var isValidIndex = direction === "next" ? i < hiddenColumns.length - 1 : i > 0;
+                            if(hiddenColumns[i].index === targetColumn.index && isValidIndex) {
+                                return hiddenColumns[i + (direction === "next" ? 1 : -1)];
+                            }
+                        }
+                    }
+                }
             }
         }
     }
