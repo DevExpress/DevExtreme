@@ -282,7 +282,7 @@ var baseGauge = {
             /**
             * @name basegaugeoptions_scale_majorTick_customTickValues
             * @publicName customTickValues
-            * @type Array<any>
+            * @type Array<number>
             * @default []
             * @deprecated basegaugeoptions_scale_customTicks
             * @notUsedInTheme
@@ -373,7 +373,7 @@ var baseGauge = {
             /**
             * @name basegaugeoptions_scale_minorTick_customTickValues
             * @publicName customTickValues
-            * @type Array<any>
+            * @type Array<number>
             * @default []
             * @deprecated basegaugeoptions_scale_customMinorTicks
             * @notUsedInTheme
@@ -1157,7 +1157,7 @@ var dxBarGauge = {
     /**
     * @name dxbargaugeoptions_values
     * @publicName values
-    * @type Array<any>
+    * @type Array<number>
     * @default []
     * @notUsedInTheme
     */
@@ -1165,13 +1165,13 @@ var dxBarGauge = {
     /**
     * @name dxbargaugemethods_values
     * @publicName values()
-    * @return Array<any>
+    * @return Array<number>
     */
     values: function() { },
     /**
     * @name dxbargaugemethods_values
     * @publicName values(newValues)
-    * @param1 values:Array<any>
+    * @param1 values:Array<number>
     */
     values: function() { },
     /**

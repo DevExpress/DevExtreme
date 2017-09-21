@@ -4111,7 +4111,7 @@ var BaseChart = {
     /**
     * @name basechartmethods_getallseries
     * @publicName getAllSeries()
-    * @return Array<Object>
+    * @return Array<baseSeriesObject>
     */
     getAllSeries: function() { },
     /**

@@ -326,7 +326,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_selectAll
          * @publicName selectAll()
-         * @return Promise<any>
+         * @return Promise<void>
          */
         selectAll: function() {
             if(this.option(SHOW_CHECKBOXES_MODE) === "onClick") {
@@ -339,7 +339,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_deselectAll
          * @publicName deselectAll()
-         * @return Promise<any>
+         * @return Promise<void>
          */
         deselectAll: function() {
             return this._selection.deselectAll(this._isOnePageSelectAll());

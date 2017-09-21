@@ -1491,7 +1491,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapmethods_viewport
     * @publicName viewport()
-    * @return Array<any>
+    * @return Array<number>
     */
     viewport: function() { },
     /**

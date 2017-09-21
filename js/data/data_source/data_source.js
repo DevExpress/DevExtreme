@@ -399,7 +399,7 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_items
     * @publicName items()
-    * @return Array<string,object,any>
+    * @return Array<any>
     */
     items: function() {
         return this._items;

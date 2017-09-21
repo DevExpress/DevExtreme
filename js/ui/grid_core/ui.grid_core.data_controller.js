@@ -23,7 +23,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_dataSource
              * @publicName dataSource
-             * @type string|Array<any>|DataSource|DataSourceOptions
+             * @type string|Array<Object>|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -951,7 +951,7 @@ module.exports = {
                 * @name GridBaseMethods_byKey
                 * @publicName byKey(key)
                 * @param1 key:object|string|number
-                * @return Promise<any>
+                * @return Promise<Object>
                 */
                 byKey: function(key) {
                     var store = this.store(),

@@ -146,25 +146,25 @@ var query = function() {
 /**
 * @name QueryMethods_min
 * @publicName min()
-* @return Promise<number>
+* @return Promise<number,Date>
 */
 /**
 * @name QueryMethods_min
 * @publicName min(getter)
 * @param1 getter:object
-* @return Promise<number>
+* @return Promise<number,Date>
 */
 
 /**
 * @name QueryMethods_max
 * @publicName max()
-* @return Promise<number>
+* @return Promise<number,Date>
 */
 /**
 * @name QueryMethods_max
 * @publicName max(getter)
 * @param1 getter:object
-* @return Promise<number>
+* @return Promise<number,Date>
 */
 
 /**
