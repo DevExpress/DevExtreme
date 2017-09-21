@@ -685,8 +685,10 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     },
 
     _itemClickHandler: function(e) {
+        if(e._skipHandling) return;
         var itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
         this._itemJQueryEventHandler(e, "onItemClick", {}, { afterExecute: itemClickActionHandler.bind(this) });
+        e._skipHandling = true;
     },
 
     _updateSubmenuVisibilityOnClick: function(actionArgs) {
