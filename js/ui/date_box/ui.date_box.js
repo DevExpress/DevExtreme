@@ -657,7 +657,7 @@ var DateBox = DropDownEditor.inherit({
     _valueChangeEventHandler: function(e) {
         var text = this.option("text"),
             parsedDate = this._getParsedDate(text),
-            value = this.dateOption("value"),
+            value = this.dateOption("value") || this._strategy.useCurrentDateByDefault() && new Date(),
             type = this.option("type"),
             newValue = uiDateUtils.mergeDates(value, parsedDate, type),
             date = parsedDate && type === "time" ? newValue : parsedDate;
@@ -878,10 +878,7 @@ var DateBox = DropDownEditor.inherit({
         return dateSerialization.getDateSerializationFormat(value);
     },
 
-    dateValue: function() {
-        var jQueryEvent = arguments[1],
-            value = arguments[0];
-
+    dateValue: function(value, jQueryEvent) {
         if(this._isValueChanged(value) && jQueryEvent) {
             this._saveValueChangeEvent(jQueryEvent);
         }
