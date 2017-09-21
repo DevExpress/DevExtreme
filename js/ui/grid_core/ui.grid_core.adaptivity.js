@@ -1002,7 +1002,7 @@ module.exports = {
             keyboardNavigation: {
                 _handleTabKeyOnMasterDetailCell: function(target, direction) {
                     var editMode = this._editingController.getEditMode(),
-                        isInsideAdaptiveDetailRow = $(target).closest(".dx-adaptive-detail-row").length > 0;
+                        isInsideAdaptiveDetailRow = $(target).closest("." + ADAPTIVE_DETAIL_ROW_CLASS).length > 0;
 
                     if(isInsideAdaptiveDetailRow && (editMode !== EDIT_MODE_ROW && editMode !== EDIT_MODE_FORM)) {
                         var rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()),
@@ -1035,6 +1035,10 @@ module.exports = {
                             }
                         }
                     }
+                },
+
+                _isCellValid: function($cell) {
+                    return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                 }
             }
         }

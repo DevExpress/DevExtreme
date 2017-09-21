@@ -3090,6 +3090,43 @@ QUnit.test("Edit batch. Editable cell is closed when focus moving outside detail
     assert.equal($input.val(), "Super", "value of FirstName");
 });
 
+QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
+    //arrange
+    var $dataGrid = $(".dx-datagrid").width(200);
+
+    this.options = {
+        editing: {
+            mode: 'batch',
+            allowUpdating: true
+        }
+    };
+
+    setupDataGrid(this);
+
+    this.element = function() {
+        return $("#container");
+    };
+
+    this.gridView.render($("#container"));
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
+    this.clock.tick();
+
+    //act
+    this.editingController.editCell(0, 0);
+    this.clock.tick();
+
+    var e = $.Event('keydown');
+    e.which = 9;
+    $dataGrid.find("input").first().trigger(e);
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-focused input").val(), "Super");
+});
+
 QUnit.test("Edit cell. Render editor of form's item when clicked on a text of item", function(assert) {
     //arrange
     $(".dx-datagrid").width(200);
