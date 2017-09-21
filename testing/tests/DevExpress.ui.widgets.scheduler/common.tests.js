@@ -1234,6 +1234,34 @@ QUnit.testStart(function() {
         assert.equal(navigator.option("date").getMonth(), 10, "navigator has correct date");
     });
 
+    QUnit.test("maxAppointmentsPerCell should have correct default", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            views: [{
+                type: "week",
+                name: "Week",
+            }]
+        });
+
+        assert.equal(this.instance.option("maxAppointmentsPerCell"), "auto", "Default Option value is right");
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has right class");
+    });
+
+    QUnit.test("Workspace shouldn't have specific class if maxAppointmentsPerCell=null", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            maxAppointmentsPerCell: null,
+            views: [{
+                type: "week",
+                name: "Week",
+            }]
+        });
+
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
+    });
+
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
         this.createInstance({
             currentView: "week",
@@ -3295,7 +3323,8 @@ QUnit.testStart(function() {
             },
             {
                 type: "day",
-                name: "day"
+                name: "day",
+                maxAppointmentsPerCell: null
             }]
         });
 
@@ -3306,4 +3335,5 @@ QUnit.testStart(function() {
         $workSpace = this.instance.getWorkSpace().element();
         assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
+
 })("View with configuration");

@@ -30,7 +30,7 @@ QUnit.testStart(function() {
 var moduleOptions = {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler($.extend(options, { editing: true })).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { editing: true, maxAppointmentsPerCell: null })).dxScheduler("instance");
         };
     },
     afterEach: function() {

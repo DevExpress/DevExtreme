@@ -405,6 +405,8 @@ declare module DevExpress.ui {
         showAllDayPanel?: boolean;
         /** @docid dxSchedulerOptions_cellDuration */
         cellDuration?: number;
+        /** @docid dxSchedulerOptions_maxAppointmentsPerCell */
+        maxAppointmentsPerCell?: any;
         /** @docid dxSchedulerOptions_recurrenceEditMode */
         recurrenceEditMode?: string;
         /** @docid dxSchedulerOptions_editing */

@@ -218,7 +218,7 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_views_maxAppointmentsPerCell
                 * @publicName maxAppointmentsPerCell
                 * @type number|string
-                * @default undefined
+                * @default "auto"
                 * @acceptValues 'auto'|'unlimited'
                 */
 
@@ -563,6 +563,15 @@ var Scheduler = Widget.inherit({
                 * @extends CellDuration
                 */
             cellDuration: 30,
+
+                 /**
+                * @name dxSchedulerOptions_maxAppointmentsPerCell
+                * @publicName maxAppointmentsPerCell
+                * @type number|string
+                * @default "auto"
+                * @acceptValues 'auto'|'unlimited'
+                */
+            maxAppointmentsPerCell: "auto",
 
                 /**
                 * @name dxSchedulerOptions_onAppointmentRendered
@@ -1205,6 +1214,8 @@ var Scheduler = Widget.inherit({
                 break;
             case "dateSerializationFormat":
                 break;
+            case "maxAppointmentsPerCell":
+                break;
             case "startDateExpr":
             case "endDateExpr":
             case "startDateTimeZoneExpr":
@@ -1825,23 +1836,13 @@ var Scheduler = Widget.inherit({
     },
 
     _getCurrentViewOptions: function() {
-        var result,
-            currentView = this.option("currentView");
-
-        each(this.option("views"), function(_, view) {
-            if(typeUtils.isObject(view) && view.type === currentView) {
-                result = view;
-                return false;
-            }
-        });
-
-        return result;
+        return this._currentView;
     },
 
     _getCurrentViewOption: function(optionName) {
         var currentViewOptions = this._getCurrentViewOptions();
 
-        if(currentViewOptions && currentViewOptions[optionName]) {
+        if(currentViewOptions && currentViewOptions[optionName] !== undefined) {
             return currentViewOptions[optionName];
         }
 
@@ -1918,7 +1919,7 @@ var Scheduler = Widget.inherit({
     },
 
     getMaxAppointmentsPerCell: function() {
-        return this._currentView.maxAppointmentsPerCell;
+        return this._getCurrentViewOption("maxAppointmentsPerCell");
     },
 
     _createPopup: function(appointmentData, processTimeZone) {
