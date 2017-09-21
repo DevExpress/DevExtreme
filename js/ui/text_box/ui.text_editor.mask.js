@@ -25,7 +25,6 @@ var ESCAPED_CHAR = "\\";
 
 var TEXTEDITOR_MASKED_CLASS = "dx-texteditor-masked";
 var MASK_EVENT_NAMESPACE = "dxMask";
-var MASK_FORMATTER_NAMESPACE = "dxMaskFormatter";
 var FORWARD_DIRECTION = "forward";
 var BACKWARD_DIRECTION = "backward";
 var BLUR_EVENT = "blur beforedeactivate";
@@ -149,11 +148,6 @@ var TextEditorMask = TextEditorBase.inherit({
         this._renderMask();
     },
 
-    _renderInput: function() {
-        this.callBase();
-        this._renderFormatter();
-    },
-
     _renderHiddenElement: function() {
         if(this.option("mask")) {
             this._$hiddenElement = $("<input>")
@@ -183,65 +177,6 @@ var TextEditorMask = TextEditorBase.inherit({
         this._renderMaskedValue();
 
         this._changedValue = this._input().val();
-    },
-
-    _renderFormatter: function() {
-        this._formatter = localization.number.format;
-        this._parser = localization.number.parse;
-
-        this._detachFormatterEvents();
-        this._attachFormatterEvents();
-    },
-
-    _detachFormatterEvents: function() {
-        eventsEngine.off(this._input(), "." + MASK_FORMATTER_NAMESPACE);
-    },
-
-    _attachFormatterEvents: function() {
-        var $input = this._input();
-
-        eventsEngine.on($input, eventUtils.addNamespace("input", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("change", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
-    },
-
-    _getDefaultValue: function() {
-        return "";
-    },
-
-    _adjustCaret2: function(initialCaret, oldValue, value) {
-        var oldStubCount = oldValue.slice(0, initialCaret.start).replace(/[0-9]/g, "").length,
-            newStubCount = value.slice(0, initialCaret.start).replace(/[0-9]/g, "").length,
-            newCaret = {
-                start: initialCaret.start + (newStubCount - oldStubCount),
-                end: initialCaret.end + (newStubCount - oldStubCount)
-            };
-
-        this._caret(newCaret);
-    },
-
-    _formatValue: function() {
-        var format = this.option("displayFormat");
-
-        if(!format) return;
-
-        var value = this._input().val(),
-            parsedValue = this._parser(value, format),
-            formattedValue = this._formatter(isNaN(parsedValue) ? this._getDefaultValue() : parsedValue, format);
-
-        var initialCaret = this._caret();
-
-        if(!value || !isNaN(parsedValue)) {
-            this._input().val(formattedValue);
-            this._formattedValue = formattedValue;
-        } else {
-            this._input().val(this._formattedValue || "");
-        }
-
-        this._adjustCaret2(initialCaret, value, formattedValue, false);
-    },
-
-    _updateParsedValue: function() {
-        this.option("value", this._parser(this._input().val(), this.option("displayFormat")));
     },
 
     _attachMaskEventHandlers: function() {
@@ -400,16 +335,9 @@ var TextEditorMask = TextEditorBase.inherit({
             }
         }
         this.callBase();
-        this._formatValue();
     },
 
     _valueChangeEventHandler: function(e) {
-        if(this.option("displayFormat")) {
-            this._saveValueChangeEvent(e);
-            this._updateParsedValue();
-            return;
-        }
-
         if(!this._maskRulesChain) {
             this.callBase.apply(this, arguments);
             return;
@@ -705,8 +633,6 @@ var TextEditorMask = TextEditorBase.inherit({
 
     _clean: function() {
         this._clearDragTimer();
-        delete this._formatter;
-        delete this._parser;
         this.callBase();
     },
 
@@ -766,9 +692,6 @@ var TextEditorMask = TextEditorBase.inherit({
             case "mask":
                 this._updateMaskOption();
                 this._processEmptyMask(args.value);
-                break;
-            case "displayFormat":
-                this._formatValue();
                 break;
             case "maskChar":
             case "maskRules":
