@@ -204,7 +204,7 @@ var normalizeOnArguments = function(callback) {
             selector = undefined;
         }
 
-        if(!handler) {
+        if(!handler && typeof eventName === "string") {
             handler = data || selector;
             selector = undefined;
             data = undefined;

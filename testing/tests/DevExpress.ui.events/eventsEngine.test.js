@@ -244,3 +244,31 @@ QUnit.test("Event bubbling", function(assert) {
     assert.equal(fired.load, 0);
     assert.equal(fired.focus, 0);
 });
+
+QUnit.test("'on' signatures", function(assert) {
+    var fired = 0;
+    var hasData = 0;
+    var event = "click";
+    var div = document.createElement("div");
+    var handler = function(e) {
+        fired++;
+        if(e.data && e.data.testData) hasData++;
+    };
+    var eventObj = {};
+    eventObj[event] = handler;
+
+    div.className += " someclass";
+    document.body.appendChild(div);
+
+    eventsEngine.on(div, event, handler);
+    eventsEngine.on(div, eventObj);
+    eventsEngine.on(div, eventObj, { testData: true });
+    eventsEngine.on(document, event, ".someclass", handler);
+    eventsEngine.on(div, event, { testData: true }, handler);
+    eventsEngine.on(document, event, ".someclass", { testData: true }, handler);
+
+    eventsEngine.trigger(div, event);
+
+    assert.equal(fired, 6);
+    assert.equal(hasData, 3);
+});
