@@ -1259,7 +1259,7 @@ QUnit.testStart(function() {
         });
 
         var $workSpace = this.instance.getWorkSpace().element();
-        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has right class");
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
 
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
@@ -3323,7 +3323,8 @@ QUnit.testStart(function() {
             },
             {
                 type: "day",
-                name: "day"
+                name: "day",
+                maxAppointmentsPerCell: null
             }]
         });
 
@@ -3332,7 +3333,7 @@ QUnit.testStart(function() {
 
         this.instance.option("currentView", "day");
         $workSpace = this.instance.getWorkSpace().element();
-        assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has correct class");
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
 
 })("View with configuration");

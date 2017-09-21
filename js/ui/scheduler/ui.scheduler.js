@@ -1842,7 +1842,7 @@ var Scheduler = Widget.inherit({
     _getCurrentViewOption: function(optionName) {
         var currentViewOptions = this._getCurrentViewOptions();
 
-        if(currentViewOptions && currentViewOptions[optionName]) {
+        if(currentViewOptions && currentViewOptions[optionName] !== undefined) {
             return currentViewOptions[optionName];
         }
 
