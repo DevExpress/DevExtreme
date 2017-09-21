@@ -973,10 +973,11 @@ module.exports = {
                         tabIndex = that.option("tabIndex"),
                         oldFocusedView = keyboardNavigation._focusedView,
                         $row,
-                        $cell;
+                        $cell,
+                        $element = that.element();
 
-                    if(!that.element().is(":focus")) {
-                        that.element().attr("tabIndex", null);
+                    if($element && !$element.is(":focus")) {
+                        $element.attr("tabIndex", null);
                     }
 
                     if(that.option("useKeyboard") && cellElements) {
