@@ -43,42 +43,42 @@ declare module DevExpress {
         }
 
         /** @docid_ignore requiredRule */
-        /** @docid_ignore requiredRuleOptions_type */
-        /** @docid_ignore requiredRuleOptions_trim */
-        /** @docid_ignore requiredRuleOptions_message */
+        /** @docid_ignore requiredRule_type */
+        /** @docid_ignore requiredRule_trim */
+        /** @docid_ignore requiredRule_message */
         /** @docid_ignore numericRule */
-        /** @docid_ignore numericRuleOptions_type */
-        /** @docid_ignore numericRuleOptions_message */
+        /** @docid_ignore numericRule_type */
+        /** @docid_ignore numericRule_message */
         /** @docid_ignore rangeRule */
-        /** @docid_ignore rangeRuleOptions_type */
-        /** @docid_ignore rangeRuleOptions_min */
-        /** @docid_ignore rangeRuleOptions_max */
-        /** @docid_ignore rangeRuleOptions_message */
-        /** @docid_ignore rangeRuleOptions_reevaluate */
+        /** @docid_ignore rangeRule_type */
+        /** @docid_ignore rangeRule_min */
+        /** @docid_ignore rangeRule_max */
+        /** @docid_ignore rangeRule_message */
+        /** @docid_ignore rangeRule_reevaluate */
         /** @docid_ignore stringLengthRule */
-        /** @docid_ignore stringLengthRuleOptions_type */
-        /** @docid_ignore stringLengthRuleOptions_min */
-        /** @docid_ignore stringLengthRuleOptions_max */
-        /** @docid_ignore stringLengthRuleOptions_trim */
-        /** @docid_ignore stringLengthRuleOptions_message */
+        /** @docid_ignore stringLengthRule_type */
+        /** @docid_ignore stringLengthRule_min */
+        /** @docid_ignore stringLengthRule_max */
+        /** @docid_ignore stringLengthRule_trim */
+        /** @docid_ignore stringLengthRule_message */
         /** @docid_ignore customRule */
-        /** @docid_ignore customRuleOptions_type */
-        /** @docid_ignore customRuleOptions_validationCallback */
-        /** @docid_ignore customRuleOptions_message */
-        /** @docid_ignore customRuleOptions_reevaluate */
+        /** @docid_ignore customRule_type */
+        /** @docid_ignore customRule_validationCallback */
+        /** @docid_ignore customRule_message */
+        /** @docid_ignore customRule_reevaluate */
         /** @docid_ignore compareRule */
-        /** @docid_ignore compareRuleOptions_type */
-        /** @docid_ignore compareRuleOptions_comparisonTarget */
-        /** @docid_ignore compareRuleOptions_comparisonType */
-        /** @docid_ignore compareRuleOptions_message */
-        /** @docid_ignore compareRuleOptions_reevaluate */
+        /** @docid_ignore compareRule_type */
+        /** @docid_ignore compareRule_comparisonTarget */
+        /** @docid_ignore compareRule_comparisonType */
+        /** @docid_ignore compareRule_message */
+        /** @docid_ignore compareRule_reevaluate */
         /** @docid_ignore patternRule */
-        /** @docid_ignore patternRuleOptions_type */
-        /** @docid_ignore patternRuleOptions_pattern */
-        /** @docid_ignore patternRuleOptions_message */
+        /** @docid_ignore patternRule_type */
+        /** @docid_ignore patternRule_pattern */
+        /** @docid_ignore patternRule_message */
         /** @docid_ignore emailRule */
-        /** @docid_ignore emailRuleOptions_type */
-        /** @docid_ignore emailRuleOptions_message */
+        /** @docid_ignore emailRule_type */
+        /** @docid_ignore emailRule_message */
 
         export interface ValidatorValidationResult {
             isValid: boolean;
