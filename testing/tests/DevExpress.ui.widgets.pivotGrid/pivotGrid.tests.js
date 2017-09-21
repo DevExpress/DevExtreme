@@ -641,7 +641,6 @@ QUnit.test("create field chooser with search", function(assert) {
 
     var fieldChooser = fieldChooserPopup.content().data("dxPivotGridFieldChooser"),
         treeView = fieldChooser.element().find(".dx-treeview").dxTreeView("instance");
-    this.clock.tick(500);
 
     //assert
     assert.ok(treeView.option("searchEnabled"), 'fieldChooser with search');
