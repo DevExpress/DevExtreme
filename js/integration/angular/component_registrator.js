@@ -531,7 +531,9 @@ ComponentBuilder = ComponentBuilder.inherit({
 
                 that._ngModelController.$setViewValue(args.value);
             } finally {
-                that._ngLocker.release(that._ngModelOption());
+                if(that._ngLocker.locked(that._ngModelOption())) {
+                    that._ngLocker.release(that._ngModelOption());
+                }
             }
         });
 
