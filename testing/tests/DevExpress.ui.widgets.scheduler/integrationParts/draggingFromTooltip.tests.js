@@ -53,7 +53,7 @@ QUnit.test("Phantom appointment should be rendered after tooltip item dragStart"
     var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();
-    var $ddAppointment = dropDown._list.element().find(".dx-list-item").eq(0);
+    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0));
 
     var apptsInstance = this.instance.getAppointmentsInstance(),
         renderStub = sinon.stub(apptsInstance, "_renderItem");
@@ -68,7 +68,7 @@ QUnit.test("Phantom appointment should have correct appointmentData", function(a
     var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();
-    var $ddAppointment = dropDown._list.element().find(".dx-list-item").eq(0);
+    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0));
 
     var apptsInstance = this.instance.getAppointmentsInstance(),
         renderStub = sinon.stub(apptsInstance, "_renderItem");
@@ -87,7 +87,7 @@ QUnit.test("Phantom appointment position should be recalculated during dragging 
     var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();
-    var $ddAppointment = dropDown._list.element().find(".dx-list-item").eq(0);
+    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0));
 
     var pointer = pointerMock($ddAppointment).start().dragStart(),
         $phantomAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
@@ -96,7 +96,7 @@ QUnit.test("Phantom appointment position should be recalculated during dragging 
     pointer.drag(30, 60);
 
     var phantomPosition = translator.locate($phantomAppointment);
-    assert.equal(phantomPosition.top, initialPhantomPosition.top + 60, "Phantom top is OK");
+    assert.equal(phantomPosition.top, initialPhantomPosition.top + 60 + 51, "Phantom top is OK");
     assert.equal(phantomPosition.left, initialPhantomPosition.left + 30, "Phantom left is OK");
 
     pointer.dragEnd();
@@ -108,7 +108,7 @@ QUnit.test("Phantom appointment position should be corrected during dragging too
     var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();
-    var $ddAppointment = dropDown._list.element().find(".dx-list-item").eq(0);
+    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0));
 
     var pointer = pointerMock($ddAppointment).start().dragStart(),
         $phantomAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
