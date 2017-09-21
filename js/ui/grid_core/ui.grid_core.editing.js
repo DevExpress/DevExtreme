@@ -532,11 +532,14 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         _beforeEditCell: function(rowIndex, columnIndex, item) {
-            if(getEditMode(this) === EDIT_MODE_CELL && !item.inserted && this.hasChanges()) {
-                this.saveEditData();
-                if(this.hasChanges()) {
-                    return true;
-                }
+            var that = this;
+
+            if(getEditMode(that) === EDIT_MODE_CELL && !item.inserted && that.hasChanges()) {
+                var d = $.Deferred();
+                that.saveEditData().always(function() {
+                    d.resolve(that.hasChanges());
+                });
+                return d;
             }
         },
 
@@ -690,7 +693,6 @@ var EditingController = modules.ViewController.inherit((function() {
          */
         editCell: function(rowIndex, columnIndex) {
             var that = this,
-                $cell,
                 columnsController = that._columnsController,
                 dataController = that._dataController,
                 items = dataController.items(),
@@ -700,73 +702,86 @@ var EditingController = modules.ViewController.inherit((function() {
                     cancel: false
                 },
                 oldEditRowIndex = that._getVisibleEditRowIndex(),
-                oldEditColumnIndex = that._editColumnIndex,
-                columns = columnsController.getVisibleColumns(),
-                rowsView = that.getView("rowsView"),
-                showEditorAlways;
+                visibleColumns = columnsController.getVisibleColumns(),
+                oldColumn = visibleColumns[that._editColumnIndex];
 
             if(commonUtils.isString(columnIndex)) {
                 columnIndex = columnsController.columnOption(columnIndex, "index");
                 columnIndex = columnsController.getVisibleIndex(columnIndex);
             }
 
-            params.column = columnsController.getVisibleColumns()[columnIndex];
-            showEditorAlways = params.column && params.column.showEditorAlways;
+            var column = params.column = visibleColumns[columnIndex];
 
-            if(params.column && item && (item.rowType === "data" || item.rowType === "detailAdaptive") && !item.removed && !isRowEditMode(that)) {
-                if(this.isEditCell(rowIndex, columnIndex)) {
+            if(column && item && (item.rowType === "data" || item.rowType === "detailAdaptive") && !item.removed && !isRowEditMode(that)) {
+                if(that.isEditCell(rowIndex, columnIndex)) {
                     return true;
                 }
 
-                var editRowIndex = rowIndex + that._dataController.getRowIndexOffset();
+                var editRowIndex = rowIndex + dataController.getRowIndexOffset();
 
-                if(that._beforeEditCell(rowIndex, columnIndex, item)) {
-                    return true;
-                }
+                return when(that._beforeEditCell(rowIndex, columnIndex, item)).done(function(cancel) {
+                    if(cancel) {
+                        return;
+                    }
 
-                if(!item.inserted) {
-                    params.key = item.key;
-                }
+                    if(that._prepareEditCell(params, item, columnIndex, editRowIndex)) {
+                        that._repaintEditCell(column, oldColumn, oldEditRowIndex);
+                    }
 
-                if(that._isEditingStart(params)) {
-                    return true;
-                }
-
-                that._editRowIndex = editRowIndex;
-                that._editColumnIndex = columnIndex;
-                that._pageIndex = dataController.pageIndex();
-
-                that._addEditData({
-                    data: {},
-                    key: item.key,
-                    oldData: item.data
                 });
-
-                if(!showEditorAlways || (columns[oldEditColumnIndex] && !columns[oldEditColumnIndex].showEditorAlways)) {
-                    that._editCellInProgress = true;
-
-                    //T316439
-                    that.getController("editorFactory").loseFocus();
-
-                    dataController.updateItems({
-                        changeType: "update",
-                        rowIndices: [oldEditRowIndex, that._getVisibleEditRowIndex()]
-                    });
-                }
-
-                //TODO no focus border when call editCell via API
-                $cell = rowsView && rowsView.getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
-                if($cell && !$cell.find(":focus").length) {
-                    that._focusEditingCell(function() {
-                        that._editCellInProgress = false;
-                    }, $cell, true);
-                } else {
-                    that._editCellInProgress = false;
-                }
-
-                return true;
             }
             return false;
+        },
+
+        _prepareEditCell: function(params, item, editColumnIndex, editRowIndex) {
+            var that = this;
+
+            if(!item.inserted) {
+                params.key = item.key;
+            }
+
+            if(that._isEditingStart(params)) {
+                return false;
+            }
+
+            that._editRowIndex = editRowIndex;
+            that._editColumnIndex = editColumnIndex;
+            that._pageIndex = that._dataController.pageIndex();
+
+            that._addEditData({
+                data: {},
+                key: item.key,
+                oldData: item.data
+            });
+
+            return true;
+        },
+
+        _repaintEditCell: function(column, oldColumn, oldEditRowIndex) {
+            var that = this,
+                rowsView = that._rowsView;
+
+            if(!column || !column.showEditorAlways || (oldColumn && !oldColumn.showEditorAlways)) {
+                that._editCellInProgress = true;
+
+                //T316439
+                that.getController("editorFactory").loseFocus();
+
+                that._dataController.updateItems({
+                    changeType: "update",
+                    rowIndices: [oldEditRowIndex, that._getVisibleEditRowIndex()]
+                });
+            }
+
+            //TODO no focus border when call editCell via API
+            var $cell = rowsView && rowsView.getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
+            if($cell && !$cell.find(":focus").length) {
+                that._focusEditingCell(function() {
+                    that._editCellInProgress = false;
+                }, $cell, true);
+            } else {
+                that._editCellInProgress = false;
+            }
         },
 
         _delayedInputFocus: function($cell, beforeFocusCallback, callBeforeFocusCallbackAlways) {
@@ -1095,7 +1110,6 @@ var EditingController = modules.ViewController.inherit((function() {
                         when(dataController.refresh()).always(function() {
                             that._fireSaveEditDataEvents(editData);
                             that._afterSaveEditData();
-                            that._focusEditingCell();
                             result.resolve();
                         });
                     } else {
@@ -1108,6 +1122,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 });
 
                 return result.always(function() {
+                    that._focusEditingCell();
                     that._saving = false;
                 }).promise();
             }
@@ -1233,9 +1248,11 @@ var EditingController = modules.ViewController.inherit((function() {
             if(!isRowEditMode(that)) {
                 setTimeout(function() {
                     if(editMode === EDIT_MODE_CELL && that.hasChanges()) {
-                        that._editRowIndex = -1;
-                        that._editColumnIndex = -1;
-                        that.saveEditData();
+                        that.saveEditData().done(function() {
+                            if(!that.hasChanges()) {
+                                that.closeEditCell();
+                            }
+                        });
                     } else if(oldEditRowIndex >= 0) {
                         var rowIndices = [oldEditRowIndex];
 
