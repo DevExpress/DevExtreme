@@ -91,19 +91,19 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns
              * @publicName columns
-             * @type array
+             * @type Array<Object>
              * @default undefined
              */
             /**
              * @name dxDataGridOptions_columns
              * @publicName columns
-             * @type array
+             * @type Array<Object>
              * @default undefined
              */
             /**
              * @name dxTreeListOptions_columns
              * @publicName columns
-             * @type array
+             * @type Array<Object>
              * @default undefined
              */
             columns: undefined,
@@ -128,13 +128,13 @@ module.exports = {
             /**
              * @name dxDataGridOptions_columns_columns
              * @publicName columns
-             * @type array
+             * @type Array<dxDataGridOptions_columns>
              * @default undefined
              */
             /**
              * @name dxTreeListOptions_columns_columns
              * @publicName columns
-             * @type array
+             * @type Array<dxTreeListOptions_columns>
              * @default undefined
              */
             /**
@@ -184,7 +184,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_validationRules
              * @publicName validationRules
-             * @type array
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
              */
             /**
              * @name GridBaseOptions_columns_calculateCellValue
@@ -329,7 +329,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_filterOperations
              * @publicName filterOperations
-             * @type array
+             * @type Array<string>
              * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "between"
              * @default undefined
              */
@@ -349,7 +349,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_filterValues
              * @publicName filterValues
-             * @type array
+             * @type Array<any>
              * @default undefined
             */
             /**
@@ -488,11 +488,11 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_lookup_dataSource
              * @publicName dataSource
-             * @type array|DataSourceOptions|function(options)
+             * @type Array<any>|DataSourceOptions|function(options)
              * @type_function_param1 options:object
              * @type_function_param1_field1 data:object
              * @type_function_param1_field2 key:any
-             * @type_function_return array|DataSourceOptions
+             * @type_function_return Array<any>|DataSourceOptions
              * @default undefined
              */
             /**
@@ -530,7 +530,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_headerFilter_dataSource
              * @publicName dataSource
-             * @type array|function(options)|DataSourceOptions
+             * @type Array<any>|function(options)|DataSourceOptions
              * @type_function_param1 options:object
              * @type_function_param1_field1 component:object
              * @type_function_param1_field2 dataSource:object
@@ -558,13 +558,13 @@ module.exports = {
              * @name dxDataGridOptions_customizeColumns
              * @publicName customizeColumns
              * @type function(columns)
-             * @type_function_param1 columns:Array
+             * @type_function_param1 columns:Array<dxDataGridOptions_columns>
              */
             /**
              * @name dxTreeListOptions_customizeColumns
              * @publicName customizeColumns
              * @type function(columns)
-             * @type_function_param1 columns:Array
+             * @type_function_param1 columns:Array<dxTreeListOptions_columns>
              */
             customizeColumns: null,
             /**
@@ -1468,23 +1468,23 @@ module.exports = {
                  * @name dxDataGridMethods_getVisibleColumns
                  * @publicName getVisibleColumns(headerLevel)
                  * @param1 headerLevel:number
-                 * @return array
+                 * @return Array<dxDataGridOptions_columns>
                  */
                 /**
                  * @name dxTreeListMethods_getVisibleColumns
                  * @publicName getVisibleColumns(headerLevel)
                  * @param1 headerLevel:number
-                 * @return array
+                 * @return Array<dxTreeListOptions_columns>
                  */
                 /**
                  * @name dxDataGridMethods_getVisibleColumns
                  * @publicName getVisibleColumns()
-                 * @return array
+                 * @return Array<dxDataGridOptions_columns>
                  */
                 /**
                  * @name dxTreeListMethods_getVisibleColumns
                  * @publicName getVisibleColumns()
-                 * @return array
+                 * @return Array<dxTreeListOptions_columns>
                  */
                 getVisibleColumns: function(rowIndex) {
                     this._visibleColumns = this._visibleColumns || this._getVisibleColumnsCore();

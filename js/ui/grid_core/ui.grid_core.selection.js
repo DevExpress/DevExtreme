@@ -575,17 +575,17 @@ module.exports = {
              * @publicName onSelectionChanged
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field4 currentSelectedRowKeys:array
-             * @type_function_param1_field5 currentDeselectedRowKeys:array
-             * @type_function_param1_field6 selectedRowKeys:array
-             * @type_function_param1_field7 selectedRowsData:array
+             * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
+             * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
+             * @type_function_param1_field6 selectedRowKeys:Array<any>
+             * @type_function_param1_field7 selectedRowsData:Array<any>
              * @extends Action
              * @action
              */
             /**
              * @name GridBaseOptions_selectedRowKeys
              * @publicName selectedRowKeys
-             * @type array
+             * @type Array<any>
              */
             selectedRowKeys: []
         };

@@ -55,7 +55,7 @@ var Map = Widget.inherit({
                 /**
                 * @name dxMapOptions_bounds_northEast
                 * @publicName northEast
-                * @type object|string|array
+                * @type object|string|Array<object>
                 * @default null
                 * @hidden
                 */
@@ -78,7 +78,7 @@ var Map = Widget.inherit({
                 /**
                 * @name dxMapOptions_bounds_southWest
                 * @publicName southWest
-                * @type object|string|array
+                * @type object|string|Array<object>
                 * @default null
                 * @hidden
                 */
@@ -101,7 +101,7 @@ var Map = Widget.inherit({
 
             /**
             * @pseudo MapLocationType
-            * @type object|string|array
+            * @type Object|string|Array<Object>
             */
             /**
             * @name MapLocation
@@ -182,7 +182,7 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions_markers
             * @publicName markers
-            * @type array
+            * @type Array<Object>
             */
             /**
             * @name dxMapOptions_markers_location
@@ -247,14 +247,14 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions_routes
             * @publicName routes
-            * @type array
+            * @type Array<Object>
             */
             /**
             * @name dxMapOptions_routes_locations
             * @publicName locations
             * @extends MapLocationType
             * @inherits MapLocation
-            * @type array
+            * @type Array<Object>
             */
             /**
             * @name dxMapOptions_routes_mode
@@ -609,7 +609,7 @@ var Map = Widget.inherit({
     /**
     * @name dxmapmethods_addmarker
     * @publicName addMarker(markerOptions)
-    * @param1 markerOptions:object|array
+    * @param1 markerOptions:Object|Array<Object>
     * @return Promise<Object>
     */
     addMarker: function(marker) {
@@ -619,7 +619,7 @@ var Map = Widget.inherit({
     /**
     * @name dxmapmethods_removemarker
     * @publicName removeMarker(marker)
-    * @param1 marker:object|number|array
+    * @param1 marker:Object|number|Array<Object>
     * @return Promise<void>
     */
     removeMarker: function(marker) {
@@ -629,7 +629,7 @@ var Map = Widget.inherit({
     /**
     * @name dxmapmethods_addroute
     * @publicName addRoute(routeOptions)
-    * @param1 options:object|array
+    * @param1 options:object|Array<Object>
     * @return Promise<Object>
     */
     addRoute: function(route) {
@@ -639,7 +639,7 @@ var Map = Widget.inherit({
     /**
     * @name dxmapmethods_removeroute
     * @publicName removeRoute(route)
-    * @param1 route:object|number|array
+    * @param1 route:object|number|Array<Object>
     * @return Promise<void>
     */
     removeRoute: function(route) {

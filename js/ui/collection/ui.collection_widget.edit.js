@@ -66,14 +66,14 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             /**
             * @name CollectionWidgetOptions_selectedItems
             * @publicName selectedItems
-            * @type array
+            * @type Array<any>
             */
             selectedItems: [],
 
             /**
              * @name CollectionWidgetOptions_selectedItemKeys
              * @publicName selectedItemKeys
-             * @type array
+             * @type Array<any>
              */
             selectedItemKeys: [],
 
@@ -108,8 +108,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
-            * @type_function_param1_field4 addedItems:array
-            * @type_function_param1_field5 removedItems:array
+            * @type_function_param1_field4 addedItems:array<any>
+            * @type_function_param1_field5 removedItems:array<any>
             * @action
             */
             onSelectionChanged: null,

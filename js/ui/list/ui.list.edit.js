@@ -112,7 +112,7 @@ var ListEdit = ListBase.inherit({
             /**
             * @name dxListOptions_menuItems
             * @publicName menuItems
-            * @type Array
+            * @type Array<Object>
             * @default []
             */
             /**

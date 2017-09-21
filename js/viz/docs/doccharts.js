@@ -375,7 +375,7 @@ var dxChart = {
     /**
     * @name dxchartoptions_panes
     * @publicName panes
-    * @type object|array
+    * @type Object|Array<Object>
     * @inherits dxchartoptions_commonpanesettings
     * @notUsedInTheme
     */
@@ -1644,7 +1644,7 @@ var dxChart = {
         /**
         * @name dxchartoptions_argumentaxis_strips
         * @publicName strips
-        * @type array
+        * @type Array<Object>
         * @notUsedInTheme
         * @inherits dxchartoptions_commonaxissettings_stripstyle
         */
@@ -1718,7 +1718,7 @@ var dxChart = {
         /**
         * @name dxchartoptions_argumentaxis_constantlines
         * @publicName constantLines
-        * @type array
+        * @type Array<Object>
         * @inherits dxchartoptions_commonaxissettings_constantlinestyle
         * @notUsedInTheme
         */
@@ -1793,7 +1793,7 @@ var dxChart = {
         /**
         * @name dxchartoptions_argumentaxis_categories
         * @publicName categories
-        * @type array
+        * @type Array<number,string,Date>
         */
         categories: [],
         /**
@@ -1831,7 +1831,7 @@ var dxChart = {
     /**
     * @name dxchartoptions_valueaxis
     * @publicName valueAxis
-    * @type object|array
+    * @type Object|Array<Object>
     * @inherits dxchartoptions_commonaxissettings
     */
     valueAxis: {
@@ -1942,7 +1942,7 @@ var dxChart = {
         /**
         * @name dxchartoptions_valueaxis_strips
         * @publicName strips
-        * @type array
+        * @type Array<Object>
         * @notUsedInTheme
         * @inherits dxchartoptions_commonaxissettings_stripstyle
         */
@@ -2016,7 +2016,7 @@ var dxChart = {
         /**
         * @name dxchartoptions_valueaxis_constantlines
         * @publicName constantLines
-        * @type array
+        * @type Array<Object>
         * @notUsedInTheme
         * @inherits dxchartoptions_commonaxissettings_constantlinestyle
         */
@@ -2091,7 +2091,7 @@ var dxChart = {
         /**
         * @name dxchartoptions_valueaxis_categories
         * @publicName categories
-        * @type array
+        * @type Array<number,string,Date>
         */
         categories: [],
         /**
@@ -2200,7 +2200,7 @@ var dxChart = {
     /**
     * @name dxchartoptions_series
     * @publicName series
-    * @type object|array
+    * @type Object|Array<Object>
     * @default undefined
     * @inherits dxChartSeriesTypes_CommonSeries
     * @hideDefaults true
@@ -2345,7 +2345,7 @@ var dxPieChart = {
     /**
     * @name dxpiechartoptions_series
     * @publicName series
-    * @type object|array
+    * @type Object|Array<Object>
     * @default undefined
     * @inherits dxPieChartSeriesTypes_CommonPieChartSeries
     * @hideDefaults true
@@ -2454,9 +2454,9 @@ var dxPieChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQueryEvent
     * @type_function_param1_field4 target:String|Number
-    * @type_function_param1_field5 points:Array
+    * @type_function_param1_field5 points:Array<Object>
     * @notUsedInTheme
     * @action
     */
@@ -3239,7 +3239,7 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_argumentaxis_strips
         * @publicName strips
-        * @type array
+        * @type Array<Object>
         * @notUsedInTheme
         * @inherits dxpolarchartoptions_commonaxissettings_stripstyle
         */
@@ -3283,7 +3283,7 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_argumentaxis_constantlines
         * @publicName constantLines
-        * @type array
+        * @type Array<Object>
         * @inherits dxpolarchartoptions_commonaxissettings_constantlinestyle
         * @notUsedInTheme
         */
@@ -3320,7 +3320,7 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_argumentaxis_categories
         * @publicName categories
-        * @type array
+        * @type Array<number,string,Date>
         */
         categories: [],
         /**
@@ -3449,7 +3449,7 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_valueaxis_strips
         * @publicName strips
-        * @type array
+        * @type Array<Object>
         * @notUsedInTheme
         * @inherits dxpolarchartoptions_commonaxissettings_stripstyle
         */
@@ -3493,7 +3493,7 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_valueaxis_constantlines
         * @publicName constantLines
-        * @type array
+        * @type Array<Object>
         * @notUsedInTheme
         * @inherits dxpolarchartoptions_commonaxissettings_constantlinestyle
         */
@@ -3551,7 +3551,7 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_valueaxis_categories
         * @publicName categories
-        * @type array
+        * @type Array<number,string,Date>
         */
         categories: [],
         /**
@@ -3620,7 +3620,7 @@ var dxPolarChart = {
     /**
     * @name dxpolarchartoptions_series
     * @publicName series
-    * @type object|array
+    * @type Object|Array<Object>
     * @default undefined
     * @inherits dxPolarChartSeriesTypes_CommonPolarChartSeries
     * @hideDefaults true
@@ -4068,7 +4068,7 @@ var BaseChart = {
     /**
     * @name basechartoptions_series
     * @publicName series
-    * @type object|array
+    * @type Object|Array<Object>
     * @default undefined
     * @notUsedInTheme
     * @hideDefaults true
@@ -4111,7 +4111,7 @@ var BaseChart = {
     /**
     * @name basechartmethods_getallseries
     * @publicName getAllSeries()
-    * @return array
+    * @return Array<Object>
     */
     getAllSeries: function() { },
     /**

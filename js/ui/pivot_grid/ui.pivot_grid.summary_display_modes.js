@@ -204,7 +204,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_children
     * @publicName children(direction)
     * @param1 direction:string
-    * @return array
+    * @return Array<dxPivotGridSummaryCell>
     */
     children: function(direction) {
         var path = this._getPath(direction).slice(),

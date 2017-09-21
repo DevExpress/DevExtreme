@@ -127,7 +127,7 @@ var RangeSlider = Slider.inherit({
 
             /**
             * @name dxRangeSliderOptions_value
-            * @type array
+            * @type Array<number>
             * @publicName value
             * @default [40, 60]
             * @extend_doc

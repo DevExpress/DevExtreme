@@ -86,7 +86,7 @@ exports.DataController = Class.inherit((function() {
                 /**
                 * @name dxPivotGridPivotGridCell_path
                 * @publicName path
-                * @type array
+                * @type Array<any>
                 */
                 infoItem.path = headerItem.path;
             }
@@ -573,13 +573,13 @@ exports.DataController = Class.inherit((function() {
                         /**
                        * @name dxPivotGridPivotGridCell_rowPath
                        * @publicName rowPath
-                       * @type array
+                       * @type Array<any>
                        */
                         rowPath: rowInfo.path || [],
                         /**
                         * @name dxPivotGridPivotGridCell_columnPath
                         * @publicName columnPath
-                        * @type array
+                        * @type Array<any>
                         */
                         columnPath: columnInfo.path || [],
                         /**

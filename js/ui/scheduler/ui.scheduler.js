@@ -114,7 +114,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo Groups
-                * @type Array
+                * @type Array<string>
                 * @default []
                 */
 
@@ -193,7 +193,7 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_views
                 * @publicName views
-                * @type Array
+                * @type Array<string>
                 * @default ['day', 'week']
                 * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
                 */
@@ -362,7 +362,7 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_resources
                 * @publicName resources
-                * @type Array
+                * @type Array<Object>
                 * @default []
                 */
             resources: [
@@ -434,7 +434,7 @@ var Scheduler = Widget.inherit({
                     /**
                     * @name dxSchedulerOptions_resources_dataSource
                     * @publicName dataSource
-                    * @type string|array|DataSource|DataSourceOptions
+                    * @type string|Array<Object>|DataSource|DataSourceOptions
                     * @default null
                     */
             ],
@@ -442,7 +442,7 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_dataSource
                 * @publicName dataSource
-                * @type string|array|DataSource|DataSourceOptions
+                * @type string|Array<dxSchedulerAppointmentTemplate>|DataSource|DataSourceOptions
                 * @default null
                 */
             dataSource: null,

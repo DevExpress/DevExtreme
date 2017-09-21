@@ -23,7 +23,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_dataSource
              * @publicName dataSource
-             * @type string|array|DataSource|DataSourceOptions
+             * @type string|Array<any>|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -1086,12 +1086,12 @@ module.exports = {
                 /**
                  * @name dxDataGridMethods_getVisibleRows
                  * @publicName getVisibleRows()
-                 * @return array
+                 * @return Array<dxDataGridRowObject>
                  */
                 /**
                  * @name dxTreeListMethods_getVisibleRows
                  * @publicName getVisibleRows()
-                 * @return array
+                 * @return Array<dxTreeListRowObject>
                  */
                 getVisibleRows: function() {
                     return this.items();
@@ -1103,7 +1103,7 @@ module.exports = {
                 /**
                 * @name GridBaseMethods_repaintRows
                 * @publicName repaintRows(rowIndexes)
-                * @param1 rowIndexes:array
+                * @param1 rowIndexes:Array<number>
                 */
                 repaintRows: function(rowIndexes) {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];

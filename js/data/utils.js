@@ -246,7 +246,7 @@ var utils = {
     /**
     * @name Utils_base64encode
     * @publicName base64_encode(input)
-    * @param1 input:string|array
+    * @param1 input:string|Array<number>
     * @return string
     * @module data/utils
     * @export base64_encode

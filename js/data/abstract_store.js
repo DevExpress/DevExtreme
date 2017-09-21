@@ -34,7 +34,7 @@ var Store = Class.inherit({
                  * @name StoreOptions_onLoaded
                  * @publicName onLoaded
                  * @type function
-                 * @type_function_param1 result:array
+                 * @type_function_param1 result:Array<any>
                  * @action
                  */
                 "onLoaded",
@@ -53,7 +53,7 @@ var Store = Class.inherit({
                  * @type_function_param1_field7 userData:object
                  * @type_function_param1_field8 searchValue:object
                  * @type_function_param1_field9 searchOperation:string
-                 * @type_function_param1_field10 searchExpr:getter|array
+                 * @type_function_param1_field10 searchExpr:getter|Array<string>
                  * @action
                  */
                 "onLoading",
@@ -140,7 +140,7 @@ var Store = Class.inherit({
         /**
          * @name StoreOptions_key
          * @publicName key
-         * @type string|array
+         * @type string|Array<string>
          */
         this._key = options.key;
 

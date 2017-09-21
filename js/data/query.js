@@ -11,7 +11,7 @@ var queryImpl = {
 /**
 * @name Utils_query
 * @publicName query(array)
-* @param1 array:array
+* @param1 array:Array<any>
 * @return object
 * @module data/query
 * @export default
@@ -44,7 +44,7 @@ var query = function() {
 /**
 * @name QueryMethods_toArray
 * @publicName toArray()
-* @return array
+* @return Array<any>
 */
 
 /**
@@ -78,7 +78,7 @@ var query = function() {
 /**
 * @name QueryMethods_filter
 * @publicName filter(criteria)
-* @param1 criteria:array
+* @param1 criteria:Array<any>
 * @return object
 */
 /**

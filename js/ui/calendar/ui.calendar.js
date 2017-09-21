@@ -169,7 +169,7 @@ var Calendar = Editor.inherit({
             /**
              * @name dxCalendarOptions_disabledDates
              * @publicName disabledDates
-             * @type array|function(data)
+             * @type Array<Date>|function(data)
              * @default null
              * @type_function_param1 data:object
              * @type_function_param1_field1 component:object

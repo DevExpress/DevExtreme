@@ -269,7 +269,7 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions_value
             * @publicName value
-            * @type array
+            * @type Array<string,Object>
             */
             value: [],
 
@@ -299,7 +299,7 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions_selectedItems
             * @publicName selectedItems
-            * @type array
+            * @type Array<string,Object>
             * @readonly
             */
             selectedItems: [],
@@ -343,7 +343,7 @@ var TagBox = SelectBox.inherit({
              * @publicName onMultiTagPreparing
              * @extends Action
              * @type_function_param1_field4 multiTagElement:jQuery
-             * @type_function_param1_field5 selectedItems:array
+             * @type_function_param1_field5 selectedItems:Array<string,Object>
              * @type_function_param1_field6 text:string
              * @type_function_param1_field7 cancel:boolean
              * @action
@@ -370,8 +370,8 @@ var TagBox = SelectBox.inherit({
             * @name dxTagBoxOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
-            * @type_function_param1_field4 addedItems:array
-            * @type_function_param1_field5 removedItems:array
+            * @type_function_param1_field4 addedItems:Array<string,Object>
+            * @type_function_param1_field5 removedItems:Array<string,Object>
             * @action
             */
 

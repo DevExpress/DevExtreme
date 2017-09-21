@@ -407,7 +407,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 * @name dxTreeListMethods_getSelectedRowKeys
                 * @publicName getSelectedRowKeys(leavesOnly)
                 * @param1 leavesOnly:boolean
-                * @return array
+                * @return Array<any>
                 */
                 getSelectedRowKeys: function(leavesOnly) {
                     var that = this,
