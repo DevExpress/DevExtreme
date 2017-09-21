@@ -498,9 +498,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this._renderAppointment(args.itemElement, this._currentAppointmentSettings);
     },
 
-    _renderAppointment: function($appointment, settings) {
+    _renderAppointment: function($appointment, settings, itemData) {
         this._applyResourceDataAttr($appointment);
-        var data = this._getItemData($appointment),
+        var data = this._getItemData($appointment) || itemData,
             geometry = this.invoke("getAppointmentGeometry", settings),
             allowResize = !settings.isCompact && this.option("allowResize") && (!typeUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing)),
             allowDrag = this.option("allowDrag"),
@@ -779,7 +779,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 result = offset;
             }
         });
-
         return result;
     },
 
@@ -821,6 +820,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             };
         }
 
+        appointmentData.settings = [appointmentSetting];
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
         this._virtualAppointments[virtualGroupIndex].items.colors.push(color);
 

@@ -4,6 +4,9 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     translator = require("../../animation/translator"),
     typeUtils = require("../../core/utils/type"),
+    dragEvents = require("../../events/drag"),
+    eventUtils = require("../../events/utils"),
+    eventsEngine = require("../../events/core/events_engine"),
     Button = require("../button"),
     DropDownMenu = require("../drop_down_menu");
 
@@ -16,6 +19,10 @@ var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENT_EDIT_BUTTON_CLASS = "dx-scheduler-dropdown-appointment-edit-button",
     DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-info-block",
     DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block";
+
+var DRAG_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, "dropDownAppointments"),
+    DRAG_UPDATE_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, "dropDownAppointments"),
+    DRAG_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, "dropDownAppointments");
 
 var dropDownAppointments = Class.inherit({
     render: function(options, instance) {
@@ -91,7 +98,8 @@ var dropDownAppointments = Class.inherit({
         var $element = config.$element,
             items = config.items,
             onAppointmentClick = config.onAppointmentClick,
-            itemTemplate;
+            itemTemplate,
+            that = this;
 
         if(!DropDownMenu.getInstance($element)) {
 
@@ -99,7 +107,9 @@ var dropDownAppointments = Class.inherit({
                 this._createDropDownAppointmentTemplate(appointmentData, appointmentElement, items.colors[index]);
             }).bind(this);
 
-            var instance = this.instance;
+            var instance = this.instance,
+                $menu = $element;
+
             this.instance._createComponent($element, DropDownMenu, {
                 buttonIcon: null,
                 usePopover: true,
@@ -116,7 +126,59 @@ var dropDownAppointments = Class.inherit({
                 },
                 activeStateEnabled: false,
                 focusStateEnabled: false,
-                itemTemplate: itemTemplate
+                itemTemplate: itemTemplate,
+                onItemRendered: function(args) {
+                    var $item = args.itemElement,
+                        itemData = args.itemData,
+                        settings = args.itemData.settings;
+
+                    eventsEngine.on($item, DRAG_START_EVENT_NAME, (function(e) {
+                        settings[0].isCompact = false;
+                        settings[0].virtual = false;
+                        var appointmentData = {
+                            itemData: itemData,
+                            settings: settings
+                        };
+                        that.instance.getAppointmentsInstance()._currentAppointmentSettings = settings;
+                        that.instance.getAppointmentsInstance()._renderItem(4, appointmentData);
+
+                        var $items = that.instance.getAppointmentsInstance()._findItemElementByItem(itemData);
+
+                        if($items.length) {
+                            that._$draggedItem = $items[0];
+                            that._draggedItemData = itemData;
+                            that._startPosition = translator.locate(that._$draggedItem);
+                            eventsEngine.trigger(that._$draggedItem, "dxdragstart");
+                        }
+
+                    }).bind(this));
+
+                    eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (function(e) {
+                        var coordinates = {
+                            left: that._startPosition.left + e.offset.x,
+                            top: that._startPosition.top + e.offset.y
+                        };
+
+                        that.instance.getAppointmentsInstance().notifyObserver("correctAppointmentCoordinates", {
+                            coordinates: coordinates,
+                            allDay: that._draggedItemData.allDay,
+                            isFixedContainer: false,
+                            callback: function(result) {
+                                if(result) {
+                                    coordinates = result;
+                                }
+                            }
+                        });
+
+                        translator.move(that._$draggedItem, coordinates);
+
+                        DropDownMenu.getInstance($menu).close();
+                    }).bind(this));
+
+                    eventsEngine.on($item, DRAG_END_EVENT_NAME, (function(e) {
+                        eventsEngine.trigger(that._$draggedItem, "dxdragend");
+                    }).bind(this));
+                }
             });
         }
     },
