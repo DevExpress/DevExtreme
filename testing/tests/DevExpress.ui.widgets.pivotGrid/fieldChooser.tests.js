@@ -1443,7 +1443,7 @@ QUnit.test("Enable search", function(assert) {
 
     this.fieldChooser.option("searchEnabled", false);
     treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
-    assert.ok(!treeview.option("searchEnabled"), "treeview with search");
+    assert.ok(!treeview.option("searchEnabled"), "treeview without search");
 });
 
 

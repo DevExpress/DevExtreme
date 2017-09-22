@@ -639,11 +639,10 @@ QUnit.test("create field chooser with search", function(assert) {
     fieldChooserPopup.show();
     this.clock.tick(500);
 
-    var fieldChooser = fieldChooserPopup.content().data("dxPivotGridFieldChooser"),
-        treeView = fieldChooser.element().find(".dx-treeview").dxTreeView("instance");
+    var fieldChooser = fieldChooserPopup.content().data("dxPivotGridFieldChooser");
 
     //assert
-    assert.ok(treeView.option("searchEnabled"), 'fieldChooser with search');
+    assert.ok(fieldChooser.option("searchEnabled"), 'fieldChooser with search');
 });
 
 QUnit.test("fieldChooser layout change at runtime should not hide popup", function(assert) {
