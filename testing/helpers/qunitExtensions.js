@@ -188,6 +188,7 @@
 
 }();
 
+
 (function clearQUnitFixtureByJQuery() {
     var isMsEdge = "CollectGarbage" in window && !("ActiveXObject" in window);
 

@@ -716,9 +716,7 @@ var SelectBox = DropDownList.inherit({
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
         var $clearButton = this.callBase();
 
-        eventsEngine.on($clearButton, eventName, function(e) {
-            e.stopPropagation();
-        });
+        eventsEngine.on($clearButton, eventName, function() { return false; });
 
         return $clearButton;
     },
