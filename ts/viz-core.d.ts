@@ -137,19 +137,19 @@ declare module DevExpress.viz.core {
 
     export interface Font {
 
-        /** @docid VizFont_color */
+        /** @docid Font_color */
         color?: string;
 
-        /** @docid VizFont_family */
+        /** @docid Font_family */
         family?: string;
 
-        /** @docid VizFont_opacity */
+        /** @docid Font_opacity */
         opacity?: number;
 
-        /** @docid VizFont_size */
+        /** @docid Font_size */
         size?: any;
 
-        /** @docid VizFont_weight */
+        /** @docid Font_weight */
         weight?: number;
     }
 
