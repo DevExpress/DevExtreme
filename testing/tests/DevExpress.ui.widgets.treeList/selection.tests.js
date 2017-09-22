@@ -488,7 +488,7 @@ QUnit.test("Deselecting the row when all children are selected", function(assert
     this.rowsView.render($testElement);
 
     //act
-    this.selectRows(1);
+    this.deselectRows(1);
 
     //assert
     items = this.dataController.items();
@@ -902,4 +902,67 @@ QUnit.test("Deselect all after deselecting  -> selecting a nested node", functio
 
     //assert
     assert.deepEqual(this.option("selectedRowKeys"), [], "selected row keys");
+});
+
+//T557278
+QUnit.test("SelectRows - onSelectionChanged event should be fired before resolving the Deferred object", function(assert) {
+    //arrange
+    var $testElement = $('#treeList'),
+        done = assert.async(),
+        onSelectionChangedFired;
+
+    this.options.dataSource = {
+        load: function() {
+            var d = $.Deferred();
+
+            setTimeout(function() {
+                d.resolve([
+                    { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
+                    { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+                    { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+                    { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+                    { id: 5, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+                ]);
+            }, 30);
+
+            return d.promise();
+        }
+    };
+    this.options.selectedRowKeys = [2, 3];
+    this.options.onSelectionChanged = function() {
+        onSelectionChangedFired = true;
+    };
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectRows(1, true).done(function() {
+        assert.ok(onSelectionChangedFired, "onSelectionChanged event fired");
+        done();
+    });
+});
+
+QUnit.test("Selecting a node and its child node", function(assert) {
+    //arrange
+    var items,
+        $testElement = $('#treeList');
+
+    this.options.dataSource = [
+        { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
+        { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+        { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) }
+    ];
+    this.options.expandedRowKeys = [1];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectRows([1, 2]);
+
+    //assert
+    items = this.dataController.items();
+    assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "selected row keys");
+    assert.ok(items[0].isSelected, "first item is selected");
+    assert.ok(items[1].isSelected, "second item is selected");
+    assert.ok(items[2].isSelected, "third item is selected");
 });
