@@ -4,13 +4,7 @@ var $ = require("jquery");
 var noop = require("core/utils/common").noop;
 var BaseStrategy = require("events/pointer/base");
 var registerEvent = require("events/core/event_registrator");
-
-// TODO: Discuss with Ziborov and extract to the helper
-var registerEventCallbacks = require("events/core/event_registrator_callbacks");
-var special = {};
-registerEventCallbacks.add(function(name, eventObject) {
-    special[name] = eventObject;
-});
+var special = require("../../../helpers/eventHelper.js").special;
 
 var TestEventMap = {
     "dxpointerdown": "testdown",

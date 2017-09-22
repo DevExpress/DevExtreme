@@ -1,13 +1,7 @@
 "use strict";
 
 var $ = require("jquery");
-var registerEventCallbacks = require("events/core/event_registrator_callbacks");
-
-var special = {};
-registerEventCallbacks.add(function(name, eventObject) {
-    special[name] = eventObject;
-});
-
+var special = require("../../../helpers/eventHelper.js").special;
 
 QUnit.test("events", function(assert) {
 

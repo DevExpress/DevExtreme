@@ -5,6 +5,7 @@ var $ = require("jquery"),
     registerEvent = require("events/core/event_registrator"),
     support = require("core/utils/support"),
     nativePointerMock = require("../../../helpers/nativePointerMock.js"),
+    special = require("../../../helpers/eventHelper.js").special,
     onlyMSPointerSupport = !window.PointerEvent && window.MSPointerEvent,
     POINTER_DOWN_EVENT_NAME = onlyMSPointerSupport ? "MSPointerDown" : "pointerdown",
     POINTER_UP_EVENT_NAME = onlyMSPointerSupport ? "MSPointerUp" : "pointerup",
@@ -13,12 +14,6 @@ var $ = require("jquery"),
     POINTER_OUT_EVENT_NAME = onlyMSPointerSupport ? "MSPointerOut" : "pointerout",
     POINTER_ENTER_EVENT_NAME = onlyMSPointerSupport ? "mouseenter" : "pointerenter",
     POINTER_LEAVE_EVENT_NAME = onlyMSPointerSupport ? "mouseleave" : "pointerleave";
-
-var registerEventCallbacks = require("events/core/event_registrator_callbacks");
-var special = {};
-registerEventCallbacks.add(function(name, eventObject) {
-    special[name] = eventObject;
-});
 
 QUnit.module("mspointer events", {
     beforeEach: function() {

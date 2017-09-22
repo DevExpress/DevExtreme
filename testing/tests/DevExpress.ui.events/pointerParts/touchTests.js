@@ -3,13 +3,8 @@
 var $ = require("jquery"),
     TouchStrategy = require("events/pointer/touch"),
     registerEvent = require("events/core/event_registrator"),
-    nativePointerMock = require("../../../helpers/nativePointerMock.js");
-
-var registerEventCallbacks = require("events/core/event_registrator_callbacks");
-var special = {};
-registerEventCallbacks.add(function(name, eventObject) {
-    special[name] = eventObject;
-});
+    nativePointerMock = require("../../../helpers/nativePointerMock.js"),
+    special = require("../../../helpers/eventHelper.js").special;
 
 QUnit.module("touch events", {
     beforeEach: function() {
