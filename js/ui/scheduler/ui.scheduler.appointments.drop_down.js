@@ -125,36 +125,42 @@ var dropDownAppointments = Class.inherit({
                 focusStateEnabled: false,
                 itemTemplate: itemTemplate,
                 onItemRendered: function(args) {
-                    var $item = args.itemElement;
+                    var $item = args.itemElement,
+                        itemData = args.itemData;
 
-                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, args.itemData.settings, args.itemData));
+                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, itemData.settings));
 
                     eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (function(e) {
                         DropDownMenu.getInstance($menu).close();
-                        that._dragHandler(e);
+                        that._dragHandler(e, itemData.allDay);
                     }).bind(this));
 
                     eventsEngine.on($item, DRAG_END_EVENT_NAME, (function(e) {
                         eventsEngine.trigger(that._$draggedItem, "dxdragend");
+                        delete that._$draggedItem;
                     }).bind(this));
                 }
             });
         }
     },
 
-    _dragStartHandler: function($item, settings, itemData, e) {
+    _dragStartHandler: function($item, itemData, settings, e) {
+        var appointmentInstance = this.instance.getAppointmentsInstance(),
+            appointmentIndex = appointmentInstance.option("items").length;
+
         settings[0].isCompact = false;
         settings[0].virtual = false;
+
 
         var appointmentData = {
             itemData: itemData,
             settings: settings
         };
 
-        this.instance.getAppointmentsInstance()._currentAppointmentSettings = settings;
-        this.instance.getAppointmentsInstance()._renderItem(4, appointmentData);
+        appointmentInstance._currentAppointmentSettings = settings;
+        appointmentInstance._renderItem(appointmentIndex, appointmentData);
 
-        var $items = this.instance.getAppointmentsInstance()._findItemElementByItem(itemData);
+        var $items = appointmentInstance._findItemElementByItem(itemData);
 
         if(!$items.length) {
             return;
@@ -162,12 +168,11 @@ var dropDownAppointments = Class.inherit({
 
         this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, itemData.settings[0].startDate) : $items[0];
 
-        this._draggedItemData = itemData;
         this._startPosition = translator.locate(this._$draggedItem);
         eventsEngine.trigger(this._$draggedItem, "dxdragstart");
     },
 
-    _dragHandler: function(e) {
+    _dragHandler: function(e, allDay) {
         var coordinates = {
             left: this._startPosition.left + e.offset.x,
             top: this._startPosition.top + e.offset.y
@@ -175,7 +180,7 @@ var dropDownAppointments = Class.inherit({
 
         this.instance.getAppointmentsInstance().notifyObserver("correctAppointmentCoordinates", {
             coordinates: coordinates,
-            allDay: this._draggedItemData.allDay,
+            allDay: allDay,
             isFixedContainer: false,
             callback: function(result) {
                 if(result) {
