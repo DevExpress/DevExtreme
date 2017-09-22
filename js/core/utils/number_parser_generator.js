@@ -12,14 +12,12 @@ var FLOAT_CHAR_MAP = {
 function getRegExpByCharMap(formatString, charMap) {
     if(!formatString) return "";
 
-    var result = "";
+    Object.keys(charMap).forEach(function(charRule) {
+        var ruleRegexp = new RegExp(charRule, "g");
+        formatString = formatString.replace(ruleRegexp, charMap[charRule]);
+    });
 
-    for(var i = 0; i < formatString.length; i++) {
-        var char = formatString.charAt(i);
-        result = result + (charMap[char] || char);
-    }
-
-    return result;
+    return formatString;
 }
 
 function getRegExp(formatString) {

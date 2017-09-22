@@ -49,3 +49,16 @@ QUnit.test("float parser", function(assert) {
     assert.strictEqual(parser("123456789012345678901234567890"), null, "parse number larger then max int");
     assert.strictEqual(parser("12345.67"), 12345.67, "parse float number");
 });
+
+QUnit.skip("different positive and negative parsing", function(assert) {
+    var parser = generateNumberParser("#.##;(#.##)");
+
+    assert.strictEqual(parser("0"), 0, "parse zero number");
+    assert.strictEqual(parser("(5)"), -5, "parse negative integer");
+    assert.strictEqual(parser("5"), 5, "parse positive integer");
+    assert.strictEqual(parser("(15.1)"), -15.1, "parse negative float");
+    assert.strictEqual(parser("15.17"), 15.17, "parse positive float");
+    assert.strictEqual(parser("(15.175)"), null, "parse negative float with overflow");
+    assert.strictEqual(parser("15.175"), null, "parse positive float with overflow");
+    assert.strictEqual(parser("-15.17"), null, "default negative format should be invalid");
+});
