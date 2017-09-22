@@ -329,33 +329,25 @@ module.exports = {
 
                     //T103538
                     if(this.option("rowTemplate")) {
-                        if(this.option("templatesRenderAsynchronously")) {
-                            clearTimeout(this._highlightTimer);
-
-                            this._highlightTimer = setTimeout(function() {
-                                this._highlightSearchText(this._getTableElement());
-                            }.bind(this));
-                        } else {
-                            this._highlightSearchText(this._getTableElement());
-                        }
+                        (this.option("forceApplyBindings") || function() {})();
+                        this._highlightSearchText(this._getTableElement());
                     }
                 },
 
                 _updateCell: function($cell, parameters) {
-                    var that = this,
-                        column = parameters.column,
+                    var column = parameters.column,
                         dataType = column.lookup && column.lookup.dataType || column.dataType,
                         isEquals = dataType !== "string";
 
                     if(allowSearch(column)) {
-                        that._highlightSearchText($cell, isEquals, column);
+                        (this.option("forceApplyBindings") || function() {})();
+                        this._highlightSearchText($cell, isEquals, column);
                     }
 
-                    that.callBase($cell, parameters);
+                    this.callBase($cell, parameters);
                 },
 
                 dispose: function() {
-                    clearTimeout(this._highlightTimer);
                     this.callBase();
                 }
             }
