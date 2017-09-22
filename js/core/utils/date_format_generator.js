@@ -111,7 +111,7 @@ var ESCAPE_CHARS_REGEXP = /[a-zA-Z]/g;
 
 var escapeChars = function(pattern, defaultPattern, processedIndexes, patternPositions) {
     var escapeIndexes = defaultPattern.split("").map(function(char, index) {
-        if(processedIndexes.indexOf(index) < 0 && (char.match(ESCAPE_CHARS_REGEXP) || char === "'")) {
+        if(processedIndexes.indexOf(index) < 0 && (ESCAPE_CHARS_REGEXP.exec(char) || char === "'")) {
             return patternPositions[index];
         }
         return -1;
