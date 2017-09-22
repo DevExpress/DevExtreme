@@ -187,7 +187,7 @@ var getElementEventData = function(element, eventName) {
 
             elementData[eventName].handleObjects.forEach(handleCallback);
             if(namespaces.length && elementData[EMPTY_EVENT_NAME]) {
-                elementData[EMPTY_EVENT_NAME].forEach(handleCallback);
+                elementData[EMPTY_EVENT_NAME].handleObjects.forEach(handleCallback);
             }
         }
     };
