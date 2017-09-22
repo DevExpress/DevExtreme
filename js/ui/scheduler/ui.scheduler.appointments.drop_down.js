@@ -16,7 +16,6 @@ var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENT_TITLE_CLASS = "dx-scheduler-dropdown-appointment-title",
     DROPDOWN_APPOINTMENT_DATE_CLASS = "dx-scheduler-dropdown-appointment-date",
     DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS = "dx-scheduler-dropdown-appointment-remove-button",
-    DROPDOWN_APPOINTMENT_EDIT_BUTTON_CLASS = "dx-scheduler-dropdown-appointment-edit-button",
     DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-info-block",
     DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block";
 
@@ -120,6 +119,9 @@ var dropDownAppointments = Class.inherit({
                     if(typeUtils.isFunction(onAppointmentClick)) {
                         onAppointmentClick.call(that.instance._appointments, args);
                     }
+
+                    args.jQueryEvent.stopPropagation();
+                    that.instance.fire("showEditAppointmentPopup", { data: args.itemData });
                 },
                 activeStateEnabled: false,
                 focusStateEnabled: false,
@@ -267,8 +269,7 @@ var dropDownAppointments = Class.inherit({
         }
 
         var $container = $("<div>").addClass(DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS),
-            $removeButton = $("<div>").addClass(DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS),
-            $editButton = $("<div>").addClass(DROPDOWN_APPOINTMENT_EDIT_BUTTON_CLASS);
+            $removeButton = $("<div>").addClass(DROPDOWN_APPOINTMENT_REMOVE_BUTTON_CLASS);
 
         if(allowDeleting) {
             $container.append($removeButton);
@@ -279,18 +280,6 @@ var dropDownAppointments = Class.inherit({
                 onClick: (function(e) {
                     e.jQueryEvent.stopPropagation();
                     this.instance.deleteAppointment(appointmentData);
-                }).bind(this)
-            });
-        }
-        if(allowUpdating) {
-            $container.append($editButton);
-            this.instance._createComponent($editButton, Button, {
-                icon: "edit",
-                height: 25,
-                width: 25,
-                onClick: (function(e) {
-                    e.jQueryEvent.stopPropagation();
-                    this.instance.fire("showEditAppointmentPopup", { data: appointmentData });
                 }).bind(this)
             });
         }
