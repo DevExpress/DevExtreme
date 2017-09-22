@@ -342,16 +342,30 @@ module.exports = {
                 },
 
                 _updateCell: function($cell, parameters) {
-                    var that = this,
-                        column = parameters.column,
+                    var column = parameters.column,
                         dataType = column.lookup && column.lookup.dataType || column.dataType,
                         isEquals = dataType !== "string";
 
                     if(allowSearch(column)) {
-                        that._highlightSearchText($cell, isEquals, column);
+                        if(this.option("templatesRenderAsynchronously")) {
+                            if(!this._searchParams) {
+                                this._searchParams = [];
+
+                                clearTimeout(this._highlightTimer);
+
+                                this._highlightTimer = setTimeout(function() {
+                                    this._searchParams.forEach(function(params) {
+                                        this._highlightSearchText.apply(this, params);
+                                    }.bind(this));
+                                }.bind(this));
+                            }
+                            this._searchParams.push([$cell, isEquals, column]);
+                        } else {
+                            this._highlightSearchText($cell, isEquals, column);
+                        }
                     }
 
-                    that.callBase($cell, parameters);
+                    this.callBase($cell, parameters);
                 },
 
                 dispose: function() {
