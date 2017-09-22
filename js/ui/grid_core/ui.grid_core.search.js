@@ -258,6 +258,11 @@ module.exports = {
                 };
             })(),
             rowsView: {
+                init: function() {
+                    this.callBase.apply(this, arguments);
+                    this._searchParams = [];
+                },
+
                 _highlightSearchText: function(cellElement, isEquals, column) {
                     var that = this,
                         $parent,
@@ -349,15 +354,15 @@ module.exports = {
 
                     if(allowSearch(column)) {
                         if(this.option("templatesRenderAsynchronously")) {
-                            if(!this._searchParams) {
-                                this._searchParams = [];
-
+                            if(!this._searchParams.length) {
                                 clearTimeout(this._highlightTimer);
 
                                 this._highlightTimer = setTimeout(function() {
                                     this._searchParams.forEach(function(params) {
                                         this._highlightSearchText.apply(this, params);
                                     }.bind(this));
+
+                                    this._searchParams = [];
                                 }.bind(this));
                             }
                             this._searchParams.push([$cell, isEquals, column]);
