@@ -117,7 +117,9 @@ var getElementEventData = function(element, eventName) {
                 if(!special.callMethod(eventName, "setup", element, [ data, namespaces, handler ])) {
                     var nativeMap = {
                         "mouseenter": "mouseover",
+                        "dxhoverstart": "mouseover",
                         "mouseleave": "mouseout",
+                        "dxhoverend": "mouseout",
                         "pointerenter": "pointerover",
                         "pointerleave": "pointerout"
                     };
