@@ -1069,6 +1069,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9),
             currentView: "month",
             dataSource: data,
+            maxAppointmentsPerCell: null,
             height: 500,
             width: 800
         });
