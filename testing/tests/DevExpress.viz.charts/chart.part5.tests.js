@@ -268,6 +268,35 @@ QUnit.test("Aggregation with min and max on argument axis, without zooming", fun
     assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [50, 60], "zoom args");
 });
 
+//T557040
+QUnit.test("Aggregation. One of the series without points", function(assert) {
+    var series1 = new MockSeries({}),
+        series2 = new MockSeries({});
+
+    series1.getViewport.returns({
+        min: 0,
+        max: 15
+    });
+
+    series2.getViewport.returns({
+        min: null,
+        max: null
+    });
+
+    seriesMockData.series.push(series1, series2);
+
+    this.createChart({
+        useAggregation: true,
+        adjustOnZoom: true,
+        series: [{
+            type: "line"
+        }, {}]
+    });
+
+    assert.strictEqual(series1.getValueAxis().zoom.callCount, 1);
+    assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [0, 15], "zoom args");
+});
+
 QUnit.test("Event, zoomEnd", function(assert) {
     var zoomEnd = sinon.spy(),
         series = new MockSeries();
