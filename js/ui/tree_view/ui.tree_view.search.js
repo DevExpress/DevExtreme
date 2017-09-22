@@ -58,6 +58,7 @@ var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSour
         if($container) {
             $container.empty();
             this._renderItems($container, this._dataAdapter.getRootNodes());
+            this._fireContentReadyAction();
         }
     },
 

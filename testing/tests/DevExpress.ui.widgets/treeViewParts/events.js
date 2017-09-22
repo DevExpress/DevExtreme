@@ -800,3 +800,17 @@ QUnit.test("Fire contentReady event if new dataSource is empty", function(assert
 
     assert.ok(contentReadyHandler.calledOnce);
 });
+
+QUnit.test("Fire contentReady event when search", function(assert) {
+    var contentReadyHandler = sinon.spy(),
+        instance = initTree({
+            items: $.extend(true, [], DATA[0]),
+            onContentReady: contentReadyHandler
+        }).dxTreeView("instance");
+
+    assert.strictEqual(contentReadyHandler.callCount, 1, "onContentReady was first time");
+
+    instance.option("searchValue", "2");
+
+    assert.strictEqual(contentReadyHandler.callCount, 2, "onContentReady was second time");
+});
