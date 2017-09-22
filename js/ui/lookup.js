@@ -834,11 +834,12 @@ var Lookup = DropDownList.inherit({
             width: this._isInitialOptionValue("popupWidth") ? (function() { return this.element().outerWidth(); }).bind(this) : this._popupConfig().width
         }));
 
-
-        this._popup.on("showing", this._popupShowingHandler.bind(this));
-        this._popup.on("shown", this._popupShownHandler.bind(this));
-        this._popup.on("hiding", this._popupHidingHandler.bind(this));
-        this._popup.on("hidden", this._popupHiddenHandler.bind(this));
+        this._popup.on({
+            "showing": this._popupShowingHandler.bind(this),
+            "shown": this._popupShownHandler.bind(this),
+            "hiding": this._popupHidingHandler.bind(this),
+            "hidden": this._popupHiddenHandler.bind(this)
+        });
 
         this._popup.option("onContentReady", this._contentReadyHandler.bind(this));
         this._contentReadyHandler();
