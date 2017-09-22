@@ -84,6 +84,7 @@ var getElementEventData = function(element, eventName) {
                 }
 
                 e.data = data;
+                e.delegateTarget = element;
 
                 if(selector) {
                     var currentTarget = e.target;
@@ -91,7 +92,6 @@ var getElementEventData = function(element, eventName) {
                     while(currentTarget && currentTarget !== element) {
                         if(matchesSafe(currentTarget, selector)) {
                             e.currentTarget = currentTarget;
-                            e.delegateTarget = element;
                             callHandler(e, extraParameters);
                             return;
                         }

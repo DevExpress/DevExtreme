@@ -312,3 +312,37 @@ QUnit.test("mouseenter bubble to document (throught catching native 'mouseover')
     triggerEvent("mouseover", true);
 
 });
+
+QUnit.test("delegateTarget", function(assert) {
+    var event = "click";
+    var div = document.createElement("div");
+    var p = document.createElement("p");
+
+    var divHandler = function(e) {
+        assert.equal(e.delegateTarget, div);
+        assert.equal(e.target, p);
+        assert.equal(this, div);
+    };
+
+    var docHandler = function(e) {
+        assert.equal(e.delegateTarget, document);
+        assert.equal(e.target, p);
+        assert.equal(this, div);
+    };
+
+    var pHandler = function(e) {
+        assert.equal(e.delegateTarget, p);
+        assert.equal(e.target, p);
+        assert.equal(this, p);
+    };
+
+    div.className = "testClass";
+    div.appendChild(p);
+    document.body.appendChild(div);
+
+    eventsEngine.on(p, event, pHandler);
+    eventsEngine.on(div, event, divHandler);
+    eventsEngine.on(document, event, ".testClass", docHandler);
+
+    eventsEngine.trigger(p, event);
+});
