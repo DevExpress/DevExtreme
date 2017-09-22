@@ -53,7 +53,10 @@ var getElementEventData = function(element, eventName) {
     }
 
     if(!elementData[eventName]) {
-        elementData[eventName] = [];
+        elementData[eventName] = {
+            handleObjects: [],
+            nativeHandler: null
+        };
     }
 
     return {
@@ -88,6 +91,7 @@ var getElementEventData = function(element, eventName) {
                     while(currentTarget && currentTarget !== element) {
                         if(matchesSafe(currentTarget, selector)) {
                             e.currentTarget = currentTarget;
+                            e.delegateTarget = element;
                             callHandler(e, extraParameters);
                             return;
                         }
@@ -109,17 +113,15 @@ var getElementEventData = function(element, eventName) {
                 guid: ++guid
             };
 
-            elementData[eventName].push(handleObject);
+            elementData[eventName].handleObjects.push(handleObject);
 
-            var firstHandlerForTheType = elementData[eventName].length === 1;
+            var firstHandlerForTheType = elementData[eventName].handleObjects.length === 1;
 
             if(firstHandlerForTheType) {
                 if(!special.callMethod(eventName, "setup", element, [ data, namespaces, handler ])) {
                     var nativeMap = {
                         "mouseenter": "mouseover",
-                        "dxhoverstart": "mouseover",
                         "mouseleave": "mouseout",
-                        "dxhoverend": "mouseout",
                         "pointerenter": "pointerover",
                         "pointerleave": "pointerout"
                     };
@@ -135,14 +137,12 @@ var getElementEventData = function(element, eventName) {
 
         removeHandler: function(handler, selector) {
             var removeByEventName = function(eventName) {
-                if(!elementData[eventName].length) {
+                if(!elementData[eventName].handleObjects.length) {
                     return;
                 }
                 var removedHandler;
 
-                //TODO - save native handler in elementData[eventName] in the different way
-                var savedNativeHandler = elementData[eventName].nativeHandler;
-                elementData[eventName] = elementData[eventName].filter(function(eventData) {
+                elementData[eventName].handleObjects = elementData[eventName].handleObjects.filter(function(eventData) {
                     var skip = namespaces.length && !isSubset(eventData.namespaces, namespaces)
                         || handler && eventData.handler !== handler
                         || selector && eventData.selector !== selector;
@@ -154,9 +154,8 @@ var getElementEventData = function(element, eventName) {
 
                     return skip;
                 });
-                elementData[eventName].nativeHandler = savedNativeHandler;
 
-                if(!elementData[eventName].length) {
+                if(!elementData[eventName].handleObjects.length) {
                     special.callMethod(eventName, "teardown", element, [ namespaces, removedHandler ]);
                     var eventNameIsDefined = eventName !== EMPTY_EVENT_NAME;
                     eventNameIsDefined && element.removeEventListener(eventName, elementData[eventName].nativeHandler);
@@ -186,7 +185,7 @@ var getElementEventData = function(element, eventName) {
                 }
             };
 
-            elementData[eventName].forEach(handleCallback);
+            elementData[eventName].handleObjects.forEach(handleCallback);
             if(namespaces.length && elementData[EMPTY_EVENT_NAME]) {
                 elementData[EMPTY_EVENT_NAME].forEach(handleCallback);
             }

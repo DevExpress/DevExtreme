@@ -273,11 +273,12 @@ QUnit.test("'on' signatures", function(assert) {
     assert.equal(hasData, 3);
 });
 
-QUnit.test("mouseenter bubble to document", function(assert) {
+QUnit.test("mouseenter bubble to document (throught catching native 'mouseover'), has delegateTarget", function(assert) {
     var div = document.createElement("div");
     div.className = "selector";
     var handler = function(e) {
         assert.ok(true);
+        assert.equal(e.delegateTarget, document);
     };
 
     document.body.appendChild(div);
@@ -308,7 +309,6 @@ QUnit.test("mouseenter bubble to document", function(assert) {
         div.dispatchEvent(mouseMoveEvent);
     };
 
-    //triggerEvent("mouseenter", false);
     triggerEvent("mouseover", true);
 
 });
