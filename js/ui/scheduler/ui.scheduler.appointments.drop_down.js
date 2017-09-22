@@ -132,53 +132,12 @@ var dropDownAppointments = Class.inherit({
                         itemData = args.itemData,
                         settings = args.itemData.settings;
 
-                    eventsEngine.on($item, DRAG_START_EVENT_NAME, (function(e) {
-                        settings[0].isCompact = false;
-                        settings[0].virtual = false;
-                        var appointmentData = {
-                            itemData: itemData,
-                            settings: settings
-                        };
-                        that.instance.getAppointmentsInstance()._currentAppointmentSettings = settings;
-                        that.instance.getAppointmentsInstance()._renderItem(4, appointmentData);
-
-                        var $items = that.instance.getAppointmentsInstance()._findItemElementByItem(itemData);
-
-                        if($items.length === 1) {
-                            that._$draggedItem = $items[0];
-                            that._draggedItemData = itemData;
-                            that._startPosition = translator.locate(that._$draggedItem);
-                            eventsEngine.trigger(that._$draggedItem, "dxdragstart");
-                        } else if($items.length > 1) {
-                            var $appointment = that._getRecurrencePart($items, itemData.settings[0].startDate);
-                            that._$draggedItem = $appointment;
-                            that._draggedItemData = itemData;
-                            that._startPosition = translator.locate(that._$draggedItem);
-                            eventsEngine.trigger(that._$draggedItem, "dxdragstart");
-                        }
-
-                    }).bind(this));
+                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, settings, $item, itemData));
 
                     eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (function(e) {
-                        var coordinates = {
-                            left: that._startPosition.left + e.offset.x,
-                            top: that._startPosition.top + e.offset.y
-                        };
-
-                        that.instance.getAppointmentsInstance().notifyObserver("correctAppointmentCoordinates", {
-                            coordinates: coordinates,
-                            allDay: that._draggedItemData.allDay,
-                            isFixedContainer: false,
-                            callback: function(result) {
-                                if(result) {
-                                    coordinates = result;
-                                }
-                            }
-                        });
-
-                        translator.move(that._$draggedItem, coordinates);
-
                         DropDownMenu.getInstance($menu).close();
+
+                        that._dragHandler(e);
                     }).bind(this));
 
                     eventsEngine.on($item, DRAG_END_EVENT_NAME, (function(e) {
@@ -187,6 +146,52 @@ var dropDownAppointments = Class.inherit({
                 }
             });
         }
+    },
+
+    _dragStartHandler: function(settings, $item, itemData, e) {
+        settings[0].isCompact = false;
+        settings[0].virtual = false;
+        var appointmentData = {
+            itemData: itemData,
+            settings: settings
+        };
+        this.instance.getAppointmentsInstance()._currentAppointmentSettings = settings;
+        this.instance.getAppointmentsInstance()._renderItem(4, appointmentData);
+
+        var $items = this.instance.getAppointmentsInstance()._findItemElementByItem(itemData);
+
+        if($items.length === 1) {
+            this._$draggedItem = $items[0];
+            this._draggedItemData = itemData;
+            this._startPosition = translator.locate(this._$draggedItem);
+            eventsEngine.trigger(this._$draggedItem, "dxdragstart");
+        } else if($items.length > 1) {
+            var $appointment = this._getRecurrencePart($items, itemData.settings[0].startDate);
+            this._$draggedItem = $appointment;
+            this._draggedItemData = itemData;
+            this._startPosition = translator.locate(this._$draggedItem);
+            eventsEngine.trigger(this._$draggedItem, "dxdragstart");
+        }
+    },
+
+    _dragHandler: function(e) {
+        var coordinates = {
+            left: this._startPosition.left + e.offset.x,
+            top: this._startPosition.top + e.offset.y
+        };
+
+        this.instance.getAppointmentsInstance().notifyObserver("correctAppointmentCoordinates", {
+            coordinates: coordinates,
+            allDay: this._draggedItemData.allDay,
+            isFixedContainer: false,
+            callback: function(result) {
+                if(result) {
+                    coordinates = result;
+                }
+            }
+        });
+
+        translator.move(this._$draggedItem, coordinates);
     },
 
     _getRecurrencePart: function(appointments, startDate) {
