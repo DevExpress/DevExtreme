@@ -498,9 +498,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this._renderAppointment(args.itemElement, this._currentAppointmentSettings);
     },
 
-    _renderAppointment: function($appointment, settings, itemData) {
+    _renderAppointment: function($appointment, settings) {
         this._applyResourceDataAttr($appointment);
-        var data = this._getItemData($appointment) || itemData,
+        var data = this._getItemData($appointment),
             geometry = this.invoke("getAppointmentGeometry", settings),
             allowResize = !settings.isCompact && this.option("allowResize") && (!typeUtils.isDefined(settings.skipResizing) || typeUtils.isString(settings.skipResizing)),
             allowDrag = this.option("allowDrag"),

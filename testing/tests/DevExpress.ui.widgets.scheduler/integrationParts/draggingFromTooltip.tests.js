@@ -3,7 +3,6 @@
 var $ = require("jquery"),
     fx = require("animation/fx"),
     pointerMock = require("../../../helpers/pointerMock.js"),
-    commonUtils = require("core/utils/common"),
     translator = require("animation/translator");
 
 require("ui/scheduler/ui.scheduler");
@@ -116,16 +115,14 @@ QUnit.test("Phantom appointment position should be corrected during dragging too
 
     pointer.drag(30, 60);
 
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.getAppointmentsInstance().notifyObserver = updateSpy;
+    var correctCoordinatesStub = sinon.stub(this.instance.getAppointmentsInstance(), "notifyObserver").withArgs("correctAppointmentCoordinates");
 
     pointer.dragStart().drag(0, 0);
 
-    assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(6).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(6).args[1].coordinates, { left: initialPhantomPosition.left + 30, top: initialPhantomPosition.top + 60 }, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(6).args[1].allDay, undefined, "Arguments are OK");
+    assert.ok(correctCoordinatesStub.calledOnce, "Observers are notified");
+    var args = correctCoordinatesStub.getCall(0).args;
+    assert.deepEqual(args[1].coordinates, { left: initialPhantomPosition.left + 30, top: initialPhantomPosition.top + 60 }, "Arguments are OK");
+    assert.deepEqual(args[1].allDay, undefined, "Arguments are OK");
 
     pointer.dragEnd();
 });
