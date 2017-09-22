@@ -54,11 +54,16 @@
         height: 100%;
         position: absolute;
         direction: ltr;
+        table-layout: fixed;
     }
 
     td {
         cursor: pointer;
         .box-sizing(content-box);
+    }
+
+    thead th {
+        .dx-overflow();
     }
 }
 
