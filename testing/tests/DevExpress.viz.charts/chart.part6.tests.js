@@ -1334,9 +1334,9 @@ QUnit.test("useAggregation option", function(assert) {
     //assert
     assert.equal(stubSeries2.resamplePoints.callCount, 1);
 
-    assert.ok(series !== chart.getAllSeries()[0], "Series should not be recreated");
-    assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
-    assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
+    assert.ok(series !== chart.getAllSeries()[0], "Series should be recreated");
+    assert.ok(valAxis !== chart._valueAxes[0], "Val axis should be recreated");
+    assert.ok(argAxis !== chart._argumentAxes[0], "Arg axis should be recreated");
 });
 
 QUnit.test("synchronizeMultiAxes option", function(assert) {
