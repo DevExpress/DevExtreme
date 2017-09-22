@@ -116,7 +116,7 @@ var Tabs = CollectionWidget.inherit({
             /**
             * @name dxTabsOptions_selectedItems
             * @publicName selectedItems
-            * @type Array<string,Object>
+            * @type Array<string,number,Object>
             */
 
             /**

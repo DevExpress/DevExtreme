@@ -59,7 +59,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationoptions_navigation
     * @publicName navigation
-    * @type Array<Object>
+    * @type Array<dxCommand,dxCommandOptions>
     */
     /**
     * @name HtmlApplicationoptions_mode
@@ -380,7 +380,7 @@ var HtmlApplication = Application.inherit({
     /**
      * @name HtmlApplicationfields_navigation
      * @publicName navigation
-     * @type Array<Object>
+     * @type Array<dxCommand>
      */
     /**
      * @name HtmlApplicationFields_stateManager
