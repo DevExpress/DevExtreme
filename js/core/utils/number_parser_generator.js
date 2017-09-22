@@ -1,7 +1,5 @@
 "use strict";
 
-var INTEGER_REGEXP = "(\\d+)";
-
 var FLOAT_SEPARATOR = ".";
 
 var CHARS_TO_ESCAPE_REGEXP = /([\\\/\.\*\+\?\|\(\)\[\]\{\}])/g;
@@ -11,11 +9,16 @@ function escapeFormat(formatString) {
 }
 
 function getIntegerPartRegExp(formatString) {
-    return escapeFormat(formatString).replace("#", INTEGER_REGEXP);
+    var result = escapeFormat(formatString);
+    result = result.replace(new RegExp("([0#]+)$"), "($1)");
+    result = result.replace(/0/g, "\\d");
+    result = result.replace("#", "\\d*");
+    return result;
 }
 
 function getFloatPartRegExp(formatString) {
     var result = escapeFormat(FLOAT_SEPARATOR + formatString);
+    result = result.replace(new RegExp("^(\\\\" + FLOAT_SEPARATOR + "0[0#]*)"), "($1)");
     result = result.replace(new RegExp("^(\\\\" + FLOAT_SEPARATOR + "[0#]*)"), "($1)?");
     result = result.replace(/0/g, "\\d");
     result = result.replace(/#/g, "\\d?");
@@ -32,7 +35,7 @@ function getRegExp(formatString) {
 
 function generateNumberParser(format) {
     return function(text) {
-        if(typeof text !== "string" || typeof format !== "string" || !format) {
+        if(typeof text !== "string" || !text || typeof format !== "string" || !format) {
             return null;
         }
 
@@ -52,14 +55,14 @@ function generateNumberParser(format) {
             integerResultIndex = isNegative ? 4 : 2,
             floatResultIndex = integerResultIndex + 1;
 
-        var value = parseInt(parseResult[integerResultIndex]);
+        var value = parseInt(parseResult[integerResultIndex]) || 0;
+
+        if(value > Number.MAX_SAFE_INTEGER) {
+            return null;
+        }
 
         if(parseResult[floatResultIndex]) {
             value += parseFloat(parseResult[floatResultIndex]) || 0;
-        }
-
-        if(isNaN(value) || value > Number.MAX_SAFE_INTEGER) {
-            return null;
         }
 
         if(isNegative) {
