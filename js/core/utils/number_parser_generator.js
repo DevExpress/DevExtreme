@@ -1,50 +1,69 @@
 "use strict";
 
-var NUMBER_REGEXP = "-?\\d+";
+var INTEGER_REGEXP = "(\\d+)";
 
 var FLOAT_SEPARATOR = ".";
 
-var FLOAT_CHAR_MAP = {
-    "#": "\\d?",
-    "0": "\\d"
-};
+var CHARS_TO_ESCAPE_REGEXP = /([\\\/\.\*\+\?\|\(\)\[\]\{\}])/g;
 
-function getRegExpByCharMap(formatString, charMap) {
-    if(!formatString) return "";
+function escapeFormat(formatString) {
+    return formatString.replace(CHARS_TO_ESCAPE_REGEXP, "\\$1");
+}
 
-    Object.keys(charMap).forEach(function(charRule) {
-        var ruleRegexp = new RegExp(charRule, "g");
-        formatString = formatString.replace(ruleRegexp, charMap[charRule]);
-    });
+function getIntegerPartRegExp(formatString) {
+    return escapeFormat(formatString).replace("#", INTEGER_REGEXP);
+}
 
-    return formatString;
+function getFloatPartRegExp(formatString) {
+    var result = escapeFormat(FLOAT_SEPARATOR + formatString);
+    result = result.replace(new RegExp("^(\\\\" + FLOAT_SEPARATOR + "[0#]*)"), "($1)?");
+    result = result.replace(/0/g, "\\d");
+    result = result.replace(/#/g, "\\d?");
+    return result;
 }
 
 function getRegExp(formatString) {
     var floatParts = formatString.split(FLOAT_SEPARATOR),
-        integerRegexp = NUMBER_REGEXP,
-        floatRegexp = getRegExpByCharMap(floatParts[1], FLOAT_CHAR_MAP);
+        integerRegexp = getIntegerPartRegExp(floatParts[0]),
+        floatRegExp = getFloatPartRegExp(floatParts[1] || "");
 
-    floatRegexp = "(" + "\\" + FLOAT_SEPARATOR + floatRegexp + ")?";
-
-    var finalRegexp = "^" + integerRegexp + floatRegexp + "$";
-    //console.log("formatString: " + formatString, "regexp: " + finalRegexp);
-
-    return finalRegexp;
+    return integerRegexp + floatRegExp;
 }
 
 function generateNumberParser(format) {
     return function(text) {
-        if(typeof text !== "string") {
+        if(typeof text !== "string" || typeof format !== "string" || !format) {
             return null;
         }
 
-        var formatRegExp = new RegExp(getRegExp(format), "g"),
-            isValid = formatRegExp.test(text),
-            value = parseFloat(text);
+        var signParts = format.split(";");
+        if(signParts.length === 1) {
+            signParts.push("-" + signParts[0]);
+        }
 
-        if(!isValid || isNaN(value) || Math.abs(value) > Number.MAX_SAFE_INTEGER) {
+        var regExpText = signParts.map(getRegExp).join("|");
+        var parseResult = new RegExp("^(" + regExpText + ")$").exec(text);
+
+        if(!parseResult) {
             return null;
+        }
+
+        var isNegative = parseResult[4],
+            integerResultIndex = isNegative ? 4 : 2,
+            floatResultIndex = integerResultIndex + 1;
+
+        var value = parseInt(parseResult[integerResultIndex]);
+
+        if(parseResult[floatResultIndex]) {
+            value += parseFloat(parseResult[floatResultIndex]) || 0;
+        }
+
+        if(isNaN(value) || value > Number.MAX_SAFE_INTEGER) {
+            return null;
+        }
+
+        if(isNegative) {
+            value = -value;
         }
 
         return value;

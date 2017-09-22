@@ -155,7 +155,7 @@ var getRegExpInfo = function(format) {
     }
     return {
         patterns: patterns,
-        regexp: new RegExp("^" + regexpText + "$", "g")
+        regexp: new RegExp("^" + regexpText + "$")
     };
 };
 

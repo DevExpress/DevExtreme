@@ -50,7 +50,7 @@ QUnit.test("float parser", function(assert) {
     assert.strictEqual(parser("12345.67"), 12345.67, "parse float number");
 });
 
-QUnit.skip("different positive and negative parsing", function(assert) {
+QUnit.test("different positive and negative parsing", function(assert) {
     var parser = generateNumberParser("#.##;(#.##)");
 
     assert.strictEqual(parser("0"), 0, "parse zero number");
