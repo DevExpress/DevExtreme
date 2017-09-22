@@ -4,6 +4,9 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     translator = require("../../animation/translator"),
     typeUtils = require("../../core/utils/type"),
+    dragEvents = require("../../events/drag"),
+    eventUtils = require("../../events/utils"),
+    eventsEngine = require("../../events/core/events_engine"),
     Button = require("../button"),
     DropDownMenu = require("../drop_down_menu");
 
@@ -16,6 +19,10 @@ var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENT_EDIT_BUTTON_CLASS = "dx-scheduler-dropdown-appointment-edit-button",
     DROPDOWN_APPOINTMENT_INFO_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-info-block",
     DROPDOWN_APPOINTMENT_BUTTONS_BLOCK_CLASS = "dx-scheduler-dropdown-appointment-buttons-block";
+
+var DRAG_START_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, "dropDownAppointments"),
+    DRAG_UPDATE_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, "dropDownAppointments"),
+    DRAG_END_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, "dropDownAppointments");
 
 var dropDownAppointments = Class.inherit({
     render: function(options, instance) {
@@ -88,19 +95,19 @@ var dropDownAppointments = Class.inherit({
     },
 
     _createDropDownMenu: function(config) {
-        var $element = config.$element,
+        var $menu = config.$element,
             items = config.items,
             onAppointmentClick = config.onAppointmentClick,
-            itemTemplate;
+            itemTemplate,
+            that = this;
 
-        if(!DropDownMenu.getInstance($element)) {
+        if(!DropDownMenu.getInstance($menu)) {
 
             itemTemplate = (function(appointmentData, index, appointmentElement) {
                 this._createDropDownAppointmentTemplate(appointmentData, appointmentElement, items.colors[index]);
             }).bind(this);
 
-            var instance = this.instance;
-            this.instance._createComponent($element, DropDownMenu, {
+            this.instance._createComponent($menu, DropDownMenu, {
                 buttonIcon: null,
                 usePopover: true,
                 popupHeight: 200,
@@ -111,14 +118,90 @@ var dropDownAppointments = Class.inherit({
                     args.component.open();
 
                     if(typeUtils.isFunction(onAppointmentClick)) {
-                        onAppointmentClick.call(instance._appointments, args);
+                        onAppointmentClick.call(that.instance._appointments, args);
                     }
                 },
                 activeStateEnabled: false,
                 focusStateEnabled: false,
-                itemTemplate: itemTemplate
+                itemTemplate: itemTemplate,
+                onItemRendered: function(args) {
+                    var $item = args.itemElement,
+                        itemData = args.itemData;
+
+                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, itemData.settings));
+
+                    eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (function(e) {
+                        DropDownMenu.getInstance($menu).close();
+                        that._dragHandler(e, itemData.allDay);
+                    }).bind(this));
+
+                    eventsEngine.on($item, DRAG_END_EVENT_NAME, (function(e) {
+                        eventsEngine.trigger(that._$draggedItem, "dxdragend");
+                        delete that._$draggedItem;
+                    }).bind(this));
+                }
             });
         }
+    },
+
+    _dragStartHandler: function($item, itemData, settings, e) {
+        var appointmentInstance = this.instance.getAppointmentsInstance(),
+            appointmentIndex = appointmentInstance.option("items").length;
+
+        settings[0].isCompact = false;
+        settings[0].virtual = false;
+
+
+        var appointmentData = {
+            itemData: itemData,
+            settings: settings
+        };
+
+        appointmentInstance._currentAppointmentSettings = settings;
+        appointmentInstance._renderItem(appointmentIndex, appointmentData);
+
+        var $items = appointmentInstance._findItemElementByItem(itemData);
+
+        if(!$items.length) {
+            return;
+        }
+
+        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, itemData.settings[0].startDate) : $items[0];
+
+        this._startPosition = translator.locate(this._$draggedItem);
+        eventsEngine.trigger(this._$draggedItem, "dxdragstart");
+    },
+
+    _dragHandler: function(e, allDay) {
+        var coordinates = {
+            left: this._startPosition.left + e.offset.x,
+            top: this._startPosition.top + e.offset.y
+        };
+
+        this.instance.getAppointmentsInstance().notifyObserver("correctAppointmentCoordinates", {
+            coordinates: coordinates,
+            allDay: allDay,
+            isFixedContainer: false,
+            callback: function(result) {
+                if(result) {
+                    coordinates = result;
+                }
+            }
+        });
+
+        translator.move(this._$draggedItem, coordinates);
+    },
+
+    _getRecurrencePart: function(appointments, startDate) {
+        var result;
+        for(var i = 0; i < appointments.length; i++) {
+            var $appointment = appointments[i],
+                appointmentStartDate = $appointment.data("dxAppointmentStartDate");
+            if(appointmentStartDate.getTime() === startDate.getTime()) {
+                result = $appointment;
+            }
+        }
+        return result;
     },
 
     _createDropDownAppointmentTemplate: function(appointmentData, appointmentElement, color) {
