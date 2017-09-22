@@ -56,7 +56,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_adapter_validationRequestsCallbacks
             * @publicName validationRequestsCallbacks
-            * @type array | jquery.callbacks
+            * @type Array<function> | jquery.callbacks
             */
             /**
             * @name dxValidatorOptions_adapter_applyValidationResults
