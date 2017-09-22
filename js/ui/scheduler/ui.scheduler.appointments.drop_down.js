@@ -95,22 +95,19 @@ var dropDownAppointments = Class.inherit({
     },
 
     _createDropDownMenu: function(config) {
-        var $element = config.$element,
+        var $menu = config.$element,
             items = config.items,
             onAppointmentClick = config.onAppointmentClick,
             itemTemplate,
             that = this;
 
-        if(!DropDownMenu.getInstance($element)) {
+        if(!DropDownMenu.getInstance($menu)) {
 
             itemTemplate = (function(appointmentData, index, appointmentElement) {
                 this._createDropDownAppointmentTemplate(appointmentData, appointmentElement, items.colors[index]);
             }).bind(this);
 
-            var instance = this.instance,
-                $menu = $element;
-
-            this.instance._createComponent($element, DropDownMenu, {
+            this.instance._createComponent($menu, DropDownMenu, {
                 buttonIcon: null,
                 usePopover: true,
                 popupHeight: 200,
@@ -121,18 +118,16 @@ var dropDownAppointments = Class.inherit({
                     args.component.open();
 
                     if(typeUtils.isFunction(onAppointmentClick)) {
-                        onAppointmentClick.call(instance._appointments, args);
+                        onAppointmentClick.call(that.instance._appointments, args);
                     }
                 },
                 activeStateEnabled: false,
                 focusStateEnabled: false,
                 itemTemplate: itemTemplate,
                 onItemRendered: function(args) {
-                    var $item = args.itemElement,
-                        itemData = args.itemData,
-                        settings = args.itemData.settings;
+                    var $item = args.itemElement;
 
-                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, settings, $item, itemData));
+                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, args.itemData.settings, args.itemData));
 
                     eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (function(e) {
                         DropDownMenu.getInstance($menu).close();
@@ -147,7 +142,7 @@ var dropDownAppointments = Class.inherit({
         }
     },
 
-    _dragStartHandler: function(settings, $item, itemData, e) {
+    _dragStartHandler: function($item, settings, itemData, e) {
         settings[0].isCompact = false;
         settings[0].virtual = false;
 
