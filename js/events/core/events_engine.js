@@ -11,6 +11,17 @@ var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
 var EMPTY_EVENT_NAME = "dxEmptyEventType";
+var NATIVE_EVENTS_TO_SUBSCRIBE = {
+    "mouseenter": "mouseover",
+    "mouseleave": "mouseout",
+    "pointerenter": "pointerover",
+    "pointerleave": "pointerout"
+};
+var NATIVE_EVENTS_TO_TRIGGER = {
+    "focusin": "focus",
+    "focusout": "blur"
+};
+var NO_BUBBLE_EVENTS = ["blur", "focusout", "focus", "focusin", "load"];
 
 var matchesSafe = function(target, selector) {
     return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
@@ -36,7 +47,7 @@ var special = (function() {
     };
 }());
 
-var getElementEventData = function(element, eventName) {
+var getHandlersController = function(element, eventName) {
     var elementData = elementDataMap.get(element);
 
     eventName = eventName || "";
@@ -58,6 +69,8 @@ var getElementEventData = function(element, eventName) {
             nativeHandler: null
         };
     }
+
+    var eventData = elementData[eventName];
 
     return {
         addHandler: function(handler, selector, data) {
@@ -113,23 +126,18 @@ var getElementEventData = function(element, eventName) {
                 guid: ++guid
             };
 
-            elementData[eventName].handleObjects.push(handleObject);
+            eventData.handleObjects.push(handleObject);
 
-            var firstHandlerForTheType = elementData[eventName].handleObjects.length === 1;
+            var firstHandlerForTheType = eventData.handleObjects.length === 1;
+            var shouldAddNativeListener = firstHandlerForTheType && eventNameIsDefined;
 
-            if(firstHandlerForTheType) {
-                if(!special.callMethod(eventName, "setup", element, [ data, namespaces, handler ])) {
-                    var nativeMap = {
-                        "mouseenter": "mouseover",
-                        "mouseleave": "mouseout",
-                        "pointerenter": "pointerover",
-                        "pointerleave": "pointerout"
-                    };
-                    var nativeName = nativeMap[eventName] || eventName;
+            if(shouldAddNativeListener) {
+                shouldAddNativeListener = !special.callMethod(eventName, "setup", element, [ data, namespaces, handler ]);
+            }
 
-                    elementData[eventName].nativeHandler = getNativeHandler(eventName);
-                    eventNameIsDefined && element.addEventListener(nativeName, elementData[eventName].nativeHandler);
-                }
+            if(shouldAddNativeListener) {
+                eventData.nativeHandler = getNativeHandler(eventName);
+                element.addEventListener(NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
             }
 
             special.callMethod(eventName, "add", element, [ handleObject ]);
@@ -137,28 +145,32 @@ var getElementEventData = function(element, eventName) {
 
         removeHandler: function(handler, selector) {
             var removeByEventName = function(eventName) {
-                if(!elementData[eventName].handleObjects.length) {
+                var eventData = elementData[eventName];
+
+                if(!eventData.handleObjects.length) {
                     return;
                 }
                 var removedHandler;
 
-                elementData[eventName].handleObjects = elementData[eventName].handleObjects.filter(function(eventData) {
-                    var skip = namespaces.length && !isSubset(eventData.namespaces, namespaces)
-                        || handler && eventData.handler !== handler
-                        || selector && eventData.selector !== selector;
+                eventData.handleObjects = eventData.handleObjects.filter(function(handleObject) {
+                    var skip = namespaces.length && !isSubset(handleObject.namespaces, namespaces)
+                        || handler && handleObject.handler !== handler
+                        || selector && handleObject.selector !== selector;
 
                     if(!skip) {
-                        removedHandler = eventData.handler;
-                        special.callMethod(eventName, "remove", element, [ eventData ]);
+                        removedHandler = handleObject.handler;
+                        special.callMethod(eventName, "remove", element, [ handleObject ]);
                     }
 
                     return skip;
                 });
 
-                if(!elementData[eventName].handleObjects.length) {
+                var lastHandlerForTheType = !eventData.handleObjects.length;
+                var shouldRemoveNativeListener = lastHandlerForTheType && eventName !== EMPTY_EVENT_NAME;
+
+                if(shouldRemoveNativeListener) {
                     special.callMethod(eventName, "teardown", element, [ namespaces, removedHandler ]);
-                    var eventNameIsDefined = eventName !== EMPTY_EVENT_NAME;
-                    eventNameIsDefined && element.removeEventListener(eventName, elementData[eventName].nativeHandler);
+                    element.removeEventListener(eventName, eventData.nativeHandler);
                 }
             };
 
@@ -174,18 +186,18 @@ var getElementEventData = function(element, eventName) {
         callHandlers: function(event, extraParameters) {
             var forceStop = false;
 
-            var handleCallback = function(eventData) {
+            var handleCallback = function(handleObject) {
                 if(forceStop) {
                     return;
                 }
 
-                if(!namespaces.length || isSubset(eventData.namespaces, namespaces)) {
-                    eventData.wrappedHandler(event, extraParameters);
+                if(!namespaces.length || isSubset(handleObject.namespaces, namespaces)) {
+                    handleObject.wrappedHandler(event, extraParameters);
                     forceStop = event.isImmediatePropagationStopped();
                 }
             };
 
-            elementData[eventName].handleObjects.forEach(handleCallback);
+            eventData.handleObjects.forEach(handleCallback);
             if(namespaces.length && elementData[EMPTY_EVENT_NAME]) {
                 elementData[EMPTY_EVENT_NAME].handleObjects.forEach(handleCallback);
             }
@@ -195,9 +207,9 @@ var getElementEventData = function(element, eventName) {
 
 var getNativeHandler = function(subscribeName) {
     return function(event, extraParameters) {
-        var elementDataByEvent = getElementEventData(this, subscribeName);
+        var handlersController = getHandlersController(this, subscribeName);
         event = eventsEngine.Event(event);
-        elementDataByEvent.callHandlers(event, extraParameters);
+        handlersController.callHandlers(event, extraParameters);
     };
 };
 
@@ -319,9 +331,7 @@ var iterate = function(callback) {
 };
 
 var callNativeMethod = function(eventName, element) {
-    var nativeMethodName = eventName;
-    if(eventName === "focusin") nativeMethodName = "focus";
-    if(eventName === "focusout") nativeMethodName = "blur";
+    var nativeMethodName = NATIVE_EVENTS_TO_TRIGGER[eventName] || eventName;
 
     var isLinkClickEvent = function(eventName, element) {
         return eventName === "click" && element.localName === "a";
@@ -360,8 +370,8 @@ var calculateWhich = function(event) {
 
 var eventsEngine = {
     on: normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
-        var elementDataByEvent = getElementEventData(element, eventName);
-        elementDataByEvent.addHandler(handler, selector, data);
+        var handlersController = getHandlersController(element, eventName);
+        handlersController.addHandler(handler, selector, data);
     })),
 
     one: normalizeOnArguments(function(element, eventName, selector, data, handler) {
@@ -374,22 +384,20 @@ var eventsEngine = {
     }),
 
     off: normalizeOffArguments(iterate(function(element, eventName, selector, handler) {
-        var elementDataByEvent = getElementEventData(element, eventName);
-        elementDataByEvent.removeHandler(handler, selector);
+        var handlersController = getHandlersController(element, eventName);
+        handlersController.removeHandler(handler, selector);
     })),
 
     trigger: normalizeTriggerArguments(function(element, event, extraParameters) {
         var eventName = event.type;
-        var elementDataByEvent = getElementEventData(element, event.type);
+        var handlersController = getHandlersController(element, event.type);
 
         special.callMethod(eventName, "trigger", element, [ event, extraParameters ]);
-        elementDataByEvent.callHandlers(event, extraParameters);
+        handlersController.callHandlers(event, extraParameters);
 
-        var noBubble = special.getField(eventName, "noBubble") || event.isPropagationStopped();
-
-        if(["blur", "focusout", "focus", "focusin", "load"].indexOf(eventName) !== -1) {
-            noBubble = true;
-        }
+        var noBubble = special.getField(eventName, "noBubble")
+            || event.isPropagationStopped()
+            || NO_BUBBLE_EVENTS.indexOf(eventName) !== -1;
 
         if(!noBubble) {
             var parents = [];
@@ -406,7 +414,7 @@ var eventsEngine = {
             var i = 0;
 
             while(parents[i] && !event.isPropagationStopped()) {
-                var parentDataByEvent = getElementEventData(parents[i], event.type);
+                var parentDataByEvent = getHandlersController(parents[i], event.type);
                 parentDataByEvent.callHandlers(extend(event, { currentTarget: parents[i] }), extraParameters);
                 i++;
             }
@@ -419,8 +427,8 @@ var eventsEngine = {
     }),
 
     triggerHandler: normalizeTriggerArguments(function(element, event, extraParameters) {
-        var elementDataByEvent = getElementEventData(element, event.type);
-        elementDataByEvent.callHandlers(event, extraParameters);
+        var handlersController = getHandlersController(element, event.type);
+        handlersController.callHandlers(event, extraParameters);
     }),
 
     Event: normalizeEventArguments(function(src, config) {
