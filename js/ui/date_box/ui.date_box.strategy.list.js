@@ -62,6 +62,10 @@ var ListStrategy = DateBoxStrategy.inherit({
         return result;
     },
 
+    useCurrentDateByDefault: function() {
+        return true;
+    },
+
     _getPopupWidth: function() {
         var device = devices.current(),
             result = this.dateBox.element().outerWidth();
