@@ -30,6 +30,7 @@ QUnit.module("Integration: Dragging from Tooltip", {
 
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend(options, {
+                editing: true,
                 height: 500,
                 views: ["month"],
                 currentView: "month",
@@ -95,8 +96,8 @@ QUnit.test("Phantom appointment position should be recalculated during dragging 
     pointer.drag(30, 60);
 
     var phantomPosition = translator.locate($phantomAppointment);
-    assert.equal(phantomPosition.top, initialPhantomPosition.top + 60 + 51, "Phantom top is OK");
-    assert.equal(phantomPosition.left, initialPhantomPosition.left + 30, "Phantom left is OK");
+    assert.roughEqual(phantomPosition.top, initialPhantomPosition.top + 60 + 51, 1, "Phantom top is OK");
+    assert.roughEqual(phantomPosition.left, initialPhantomPosition.left + 30, 1, "Phantom left is OK");
 
     pointer.dragEnd();
 });
