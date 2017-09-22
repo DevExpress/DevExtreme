@@ -768,6 +768,11 @@ QUnit.test("treeview should not lose focus when parent item is disabled (T303800
 });
 
 QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
     var $treeView = initTree({
             items: $.extend(true, [], DATA[1]),
             keyExpr: "key",

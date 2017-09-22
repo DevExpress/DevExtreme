@@ -15,7 +15,8 @@ var $ = require("jquery"),
     holdEvent = require("events/hold"),
     swipeEvents = require("events/swipe"),
     ScrollView = require("ui/scroll_view"),
-    errors = require("ui/widget/ui.errors");
+    errors = require("ui/widget/ui.errors"),
+    devices = require("core/devices");
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -2497,6 +2498,11 @@ QUnit.test("list should attach keyboard events even if focusStateEnabled is fals
 });
 
 QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
     var $element = $("#list"),
         instance = $element.dxList({
             _keyboardProcessor: new KeyboardProcessor({ element: $element }),
