@@ -29,7 +29,7 @@ module.exports = {
             /**
             * @name SearchBoxMixinOptions_searchExpr
             * @publicName searchExpr
-            * @type getter|array
+            * @type getter|Array<string>
             * @default null
             */
             searchExpr: null,

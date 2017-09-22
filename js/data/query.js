@@ -11,7 +11,7 @@ var queryImpl = {
 /**
 * @name Utils_query
 * @publicName query(array)
-* @param1 array:array
+* @param1 array:Array<any>
 * @return object
 * @module data/query
 * @export default
@@ -38,13 +38,13 @@ var query = function() {
 /**
 * @name QueryMethods_enumerate
 * @publicName enumerate()
-* @return Promise
+* @return Promise<any>
 */
 
 /**
 * @name QueryMethods_toArray
 * @publicName toArray()
-* @return array
+* @return Array<any>
 */
 
 /**
@@ -78,7 +78,7 @@ var query = function() {
 /**
 * @name QueryMethods_filter
 * @publicName filter(criteria)
-* @param1 criteria:array
+* @param1 criteria:Array<any>
 * @return object
 */
 /**
@@ -116,67 +116,67 @@ var query = function() {
 * @param1 seed:object
 * @param2 step:function
 * @param3 finalize:function
-* @return Promise
+* @return Promise<any>
 */
 /**
 * @name QueryMethods_aggregate
 * @publicName aggregate(step)
 * @param1 step:function
-* @return Promise
+* @return Promise<any>
 */
 
 /**
 * @name QueryMethods_count
 * @publicName count()
-* @return Promise
+* @return Promise<number>
 */
 
 /**
 * @name QueryMethods_sum
 * @publicName sum()
-* @return Promise
+* @return Promise<number>
 */
 /**
 * @name QueryMethods_sum
 * @publicName sum(getter)
 * @param1 getter:object
-* @return Promise
+* @return Promise<number>
 */
 
 /**
 * @name QueryMethods_min
 * @publicName min()
-* @return Promise
+* @return Promise<number,Date>
 */
 /**
 * @name QueryMethods_min
 * @publicName min(getter)
 * @param1 getter:object
-* @return Promise
+* @return Promise<number,Date>
 */
 
 /**
 * @name QueryMethods_max
 * @publicName max()
-* @return Promise
+* @return Promise<number,Date>
 */
 /**
 * @name QueryMethods_max
 * @publicName max(getter)
 * @param1 getter:object
-* @return Promise
+* @return Promise<number,Date>
 */
 
 /**
 * @name QueryMethods_avg
 * @publicName avg()
-* @return Promise
+* @return Promise<number>
 */
 /**
 * @name QueryMethods_avg
 * @publicName avg(getter)
 * @param1 getter:object
-* @return Promise
+* @return Promise<number>
 */
 module.exports = query;
 module.exports.queryImpl = queryImpl;

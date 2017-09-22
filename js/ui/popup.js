@@ -172,7 +172,7 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_toolbarItems
             * @publicName toolbarItems
-            * @type array
+            * @type Array<Object>
             */
             /**
             * @name dxPopupOptions_toolbarItems_toolbar
@@ -357,7 +357,6 @@ var Popup = Overlay.inherit({
             * @name dxPopupOptions_buttons
             * @publicName buttons
             * @deprecated dxPopupOptions_toolbarItems
-            * @type array
             */
             "buttons": { since: "16.1", alias: "toolbarItems" }
         });

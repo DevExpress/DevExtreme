@@ -31,7 +31,7 @@ var dxExporter = {
     /**
     * @name dxexporteroptions_exportFormat
     * @publicName exportFormat
-    * @type array
+    * @type Array<string>
     * @default ['PDF', 'PNG', 'SVG']
     * @acceptValues 'PNG'|'JPEG'|'GIF'|'PDF'|'SVG'
     */

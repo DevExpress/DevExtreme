@@ -615,7 +615,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_store
             * @publicName store
-            * @type Store|XmlaStore|Array|Object
+            * @type Store|XmlaStore|Array<Object>|Object
             */
             /**
             * @name PivotGridDataSourceOptions_store_type
@@ -651,7 +651,7 @@ module.exports = Class.inherit((function() {
              * @name PivotGridDataSourceOptions_onFieldsPrepared
              * @publicName onFieldsPrepared
              * @type function(fields)
-             * @type_function_param1 fields:array
+             * @type_function_param1 fields:Array<PivotGridDataSourceOptions_fields>
              * @action
              */
             each(
@@ -693,7 +693,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_fields
             * @publicName fields
-            * @type array
+            * @type Array<Object>
             * @default undefined
             */
             that._fields = options.fields || [];
@@ -809,10 +809,10 @@ module.exports = Class.inherit((function() {
              * @type function(a, b)
              * @type_function_param1 a:object
              * @type_function_param1_field1 value:string|number
-             * @type_function_param1_field2 children:array
+             * @type_function_param1_field2 children:Array<any>
              * @type_function_param2 b:object
              * @type_function_param2_field1 value:string|number
-             * @type_function_param2_field2 children:array
+             * @type_function_param2_field2 children:Array<any>
              * @type_function_return number
              * @default undefined
              */
@@ -825,13 +825,13 @@ module.exports = Class.inherit((function() {
             /**
              * @name PivotGridDataSourceOptions_fields_sortBySummaryPath
              * @publicName sortBySummaryPath
-             * @type array
+             * @type Array<number,string>
              * @default undefined
             */
             /**
              * @name PivotGridDataSourceOptions_fields_filterValues
              * @publicName filterValues
-             * @type array
+             * @type Array<any>
              * @default undefined
             */
             /**
@@ -982,7 +982,7 @@ module.exports = Class.inherit((function() {
         * @publicName getAreaFields(area, collectGroups)
         * @param1 area:string
         * @param2 collectGroups:boolean
-        * @return array
+        * @return Array<PivotGridDataSourceOptions_fields>
         */
         getAreaFields: function(area, collectGroups) {
             var areaFields = [],
@@ -1002,12 +1002,12 @@ module.exports = Class.inherit((function() {
         /**
         * @name PivotGridDataSourceMethods_fields
         * @publicName fields()
-        * @return array
+        * @return Array<PivotGridDataSourceOptions_fields>
         */
         /**
         * @name PivotGridDataSourceMethods_fields
         * @publicName fields(fields)
-        * @param1 fields:array
+        * @param1 fields:Array<PivotGridDataSourceOptions_fields>
         */
         fields: function(fields) {
             var that = this;
@@ -1084,7 +1084,7 @@ module.exports = Class.inherit((function() {
         /**
         * @name PivotGridDataSourceMethods_reload
         * @publicName reload()
-        * @return Promise
+        * @return Promise<any>
         */
         reload: function() {
             return this.load({ reload: true });
@@ -1109,7 +1109,7 @@ module.exports = Class.inherit((function() {
         /**
         * @name PivotGridDataSourceMethods_load
         * @publicName load()
-        * @return Promise
+        * @return Promise<any>
         */
         load: function(options) {
             var that = this,
@@ -1148,11 +1148,11 @@ module.exports = Class.inherit((function() {
         * @name PivotGridDataSourceMethods_createDrillDownDataSource
         * @publicName createDrillDownDataSource(options)
         * @param1 options:object
-        * @param1_field1 columnPath:array
-        * @param1_field2 rowPath:array
+        * @param1_field1 columnPath:Array<any>
+        * @param1_field2 rowPath:Array<any>
         * @param1_field3 dataIndex:number
         * @param1_field4 maxRowCount:number
-        * @param1_field5 customColumns:array
+        * @param1_field5 customColumns:Array<any>
         * @return DataSource
         */
         createDrillDownDataSource: function(params) {
@@ -1457,7 +1457,7 @@ module.exports = Class.inherit((function() {
          * @name PivotGridDataSourceMethods_expandHeaderItem
          * @publicName expandHeaderItem(area, path)
          * @param1 area:string
-         * @param2 path:array
+         * @param2 path:Array<Object>
          */
         expandHeaderItem: function(area, path) {
             var that = this,

@@ -72,7 +72,7 @@ var DropDownMenu = Widget.inherit({
             /**
             * @name dxDropDownMenuOptions_items
             * @publicName items
-            * @type array
+            * @type Array<any>
             */
             items: [],
 
@@ -91,7 +91,7 @@ var DropDownMenu = Widget.inherit({
             /**
             * @name dxDropDownMenuOptions_dataSource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSourceOptions
+            * @type string|Array<any>|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,

@@ -118,7 +118,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_items
             * @publicName items
-            * @type array
+            * @type Array<string,CollectionWidgetItemTemplate>
             */
             items: [],
 
@@ -202,7 +202,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_datasource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSourceOptions
+            * @type string|Array<string,CollectionWidgetItemTemplate>|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
@@ -1075,7 +1075,7 @@ var CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods_itemElements
     * @publicName itemElements()
-    * @return array
+    * @return Array<Node>
     * @hidden
     */
     itemElements: function() {

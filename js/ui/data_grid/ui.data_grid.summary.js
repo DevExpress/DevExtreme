@@ -276,7 +276,7 @@ gridCore.registerModule("summary", {
                 /**
                  * @name dxDataGridOptions_summary_groupItems
                  * @publicName groupItems
-                 * @type array
+                 * @type Array<Object>
                  * @default undefined
                  */
                 groupItems: undefined,
@@ -353,7 +353,7 @@ gridCore.registerModule("summary", {
                 /**
                  * @name dxDataGridOptions_summary_totalItems
                  * @publicName totalItems
-                 * @type array
+                 * @type Array<Object>
                  * @default undefined
                  */
                 totalItems: undefined,
@@ -521,7 +521,7 @@ gridCore.registerModule("summary", {
             /**
              * @name dxDataGridOptions_sortByGroupSummaryInfo
              * @publicName sortByGroupSummaryInfo
-             * @type array
+             * @type Array<Object>
              * @default undefined
              */
             sortByGroupSummaryInfo: undefined

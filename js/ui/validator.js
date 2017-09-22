@@ -28,7 +28,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_validationRules
             * @publicName validationRules
-            * @type array
+            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
             */
             validationRules: []
             /**

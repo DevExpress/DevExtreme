@@ -30,7 +30,7 @@ var Layer = {
     /**
      * @name MapLayermethods_getElements
      * @publicName getElements()
-     * @return array
+     * @return Array<MapLayerElement>
      */
     getElements: function() { },
     /**
@@ -111,7 +111,7 @@ var AreaObjects = {
     /**
     * @name areaObjectsmethods_attribute
     * @publicName attribute(name)
-    * @return object | array | number | string | boolean
+    * @return object | Array<any> | number | string | boolean
     * @param1 name:string
     * @deprecated MapLayerElementmethods_attribute
     */
@@ -155,7 +155,7 @@ var MarkerObjects = {
     /**
     * @name markerObjectsmethods_attribute
     * @publicName attribute(name)
-    * @return object | array | number | string | boolean
+    * @return object | Array<any> | number | string | boolean
     * @param1 name:string
     * @deprecated MapLayerElementmethods_attribute
     */
@@ -184,7 +184,7 @@ var MarkerObjects = {
     /**
     * @name markerObjectsmethods_coordinates
     * @publicName coordinates()
-    * @return array
+    * @return Array<number>
     * @deprecated MapLayerElementmethods_coordinates
     */
     coordinates: function() { },
@@ -205,7 +205,7 @@ var MarkerObjects = {
     /**
    * @name markerObjectsfields_values
    * @publicName values
-   * @type array
+   * @type Array<number>
    * @deprecated
    */
     values: null,

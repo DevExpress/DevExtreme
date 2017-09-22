@@ -1409,12 +1409,12 @@ module.exports = {
 /**
  * @name dxDataGridRowObject_values
  * @publicName values
- * @type array
+ * @type Array<any>
  */
 /**
  * @name dxTreeListRowObject_values
  * @publicName values
- * @type array
+ * @type Array<any>
  */
 
 /**

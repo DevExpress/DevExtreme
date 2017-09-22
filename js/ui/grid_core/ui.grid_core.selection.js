@@ -326,7 +326,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_selectAll
          * @publicName selectAll()
-         * @return Promise
+         * @return Promise<void>
          */
         selectAll: function() {
             if(this.option(SHOW_CHECKBOXES_MODE) === "onClick") {
@@ -339,7 +339,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_deselectAll
          * @publicName deselectAll()
-         * @return Promise
+         * @return Promise<void>
          */
         deselectAll: function() {
             return this._selection.deselectAll(this._isOnePageSelectAll());
@@ -370,12 +370,12 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name dxDataGridMethods_getSelectedRowKeys
          * @publicName getSelectedRowKeys()
-         * @return array | Promise
+         * @return Array<any> | Promise<any>
          */
         /**
          * @name dxTreeListMethods_getSelectedRowKeys
          * @publicName getSelectedRowKeys()
-         * @return array
+         * @return Array<any>
          */
         getSelectedRowKeys: function() {
             return this._selection.getSelectedItemKeys();
@@ -384,9 +384,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_selectRows
          * @publicName selectRows(keys, preserve)
-         * @param1 keys:array
+         * @param1 keys:Array<any>
          * @param2 preserve:boolean
-         * @return Promise
+         * @return Promise<any>
          */
         selectRows: function(keys, preserve) {
             return this.selectedItemKeys(keys, preserve);
@@ -394,8 +394,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
         * @name GridBaseMethods_deselectRows
         * @publicName deselectRows(keys)
-        * @param1 keys:array
-        * @return Promise
+        * @param1 keys:Array<any>
+        * @return Promise<any>
         */
         deselectRows: function(keys) {
             return this.selectedItemKeys(keys, true, true);
@@ -404,8 +404,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_selectRowsByIndexes
          * @publicName selectRowsByIndexes(indexes)
-         * @param1 indexes:array
-         * @return Promise
+         * @param1 indexes:Array<any>
+         * @return Promise<any>
          */
         selectRowsByIndexes: function(indexes) {
             var items = this._dataController.items(),
@@ -427,12 +427,12 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name dxDataGridMethods_getSelectedRowsData
          * @publicName getSelectedRowsData()
-         * @return array | Promise
+         * @return Array<any> | Promise<any>
          */
         /**
          * @name dxTreeListMethods_getSelectedRowsData
          * @publicName getSelectedRowsData()
-         * @return array
+         * @return Array<any>
          */
         getSelectedRowsData: function() {
             return this._selection.getSelectedItems();
@@ -575,17 +575,17 @@ module.exports = {
              * @publicName onSelectionChanged
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field4 currentSelectedRowKeys:array
-             * @type_function_param1_field5 currentDeselectedRowKeys:array
-             * @type_function_param1_field6 selectedRowKeys:array
-             * @type_function_param1_field7 selectedRowsData:array
+             * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
+             * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
+             * @type_function_param1_field6 selectedRowKeys:Array<any>
+             * @type_function_param1_field7 selectedRowsData:Array<Object>
              * @extends Action
              * @action
              */
             /**
              * @name GridBaseOptions_selectedRowKeys
              * @publicName selectedRowKeys
-             * @type array
+             * @type Array<any>
              */
             selectedRowKeys: []
         };

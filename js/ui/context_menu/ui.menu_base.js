@@ -46,7 +46,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxMenuBaseOptions_items
             * @publicName items
-            * @type array
+            * @type Array<dxMenuBaseItemTemplate>
             */
             items: [],
 
@@ -217,12 +217,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
-            * @name dxMenuBaseOptions_items
-            * @publicName items
-            * @type array
-            */
-
-            /**
             * @name dxMenuBaseOptions_selectionMode
             * @publicName selectionMode
             * @type string
@@ -271,7 +265,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxMenuBaseItemTemplate_items
             * @publicName items
-            * @type array
+            * @type Array<dxMenuBaseItemTemplate>
             */
             /**
             * @name dxMenuBaseItemTemplate_selectable

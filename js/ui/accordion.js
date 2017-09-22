@@ -459,7 +459,7 @@ var Accordion = CollectionWidget.inherit({
     * @name dxAccordionMethods_expandItem
     * @publicName expandItem(index)
     * @param1 index:numeric
-    * @return Promise
+    * @return Promise<void>
     */
     expandItem: function(index) {
         this._deferredAnimate = new Deferred();
@@ -473,7 +473,7 @@ var Accordion = CollectionWidget.inherit({
     * @name dxAccordionMethods_collapseItem
     * @publicName collapseItem(index)
     * @param1 index:numeric
-    * @return Promise
+    * @return Promise<void>
     */
     collapseItem: function(index) {
         this._deferredAnimate = new Deferred();
@@ -486,7 +486,7 @@ var Accordion = CollectionWidget.inherit({
     /**
     * @name dxAccordionMethods_updateDimensions
     * @publicName updateDimensions()
-    * @return Promise
+    * @return Promise<void>
     */
     updateDimensions: function() {
         return this._updateItemHeights(false);

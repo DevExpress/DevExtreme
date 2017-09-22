@@ -56,7 +56,7 @@ var DEFAULT_DEVICE = {
     /**
     * @name device_version
     * @publicName version
-    * @type array
+    * @type Array<number>
     */
     version: [],
     /**

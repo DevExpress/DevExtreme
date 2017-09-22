@@ -261,7 +261,7 @@ var CustomStore = Store.inherit({
          * @type_function_param1_field9 searchValue:object
          * @type_function_param1_field10 searchOperation:string
          * @type_function_param1_field11 searchExpr:getter|array
-         * @type_function_return Promise
+         * @type_function_return Promise<any>
          */
         this._loadFunc = options[LOAD];
 
@@ -272,7 +272,7 @@ var CustomStore = Store.inherit({
          * @type_function_param1 loadOptions:object
          * @type_function_param1_field1 filter:object
          * @type_function_param1_field2 group:object
-         * @type_function_return Promise
+         * @type_function_return Promise<number>
          */
         this._totalCountFunc = options[TOTAL_COUNT];
 
@@ -281,7 +281,7 @@ var CustomStore = Store.inherit({
          * @publicName byKey
          * @type function
          * @type_function_param1 key:object|string|number
-         * @type_function_return Promise
+         * @type_function_return Promise<any>
          */
         this._byKeyFunc = options[BY_KEY];
 
@@ -290,7 +290,7 @@ var CustomStore = Store.inherit({
          * @publicName insert
          * @type function
          * @type_function_param1 values:object
-         * @type_function_return Promise
+         * @type_function_return Promise<any>
          */
         this._insertFunc = options[INSERT];
 
@@ -300,7 +300,7 @@ var CustomStore = Store.inherit({
          * @type function
          * @type_function_param1 key:object|string|number
          * @type_function_param2 values:object
-         * @type_function_return Promise
+         * @type_function_return Promise<any>
          */
         this._updateFunc = options[UPDATE];
 
@@ -309,7 +309,7 @@ var CustomStore = Store.inherit({
          * @publicName remove
          * @type function
          * @type_function_param1 key:object|string|number
-         * @type_function_return Promise
+         * @type_function_return Promise<void>
          */
         this._removeFunc = options[REMOVE];
     },

@@ -23,7 +23,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_dataSource
              * @publicName dataSource
-             * @type string|array|DataSource|DataSourceOptions
+             * @type string|Array<Object>|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -951,7 +951,7 @@ module.exports = {
                 * @name GridBaseMethods_byKey
                 * @publicName byKey(key)
                 * @param1 key:object|string|number
-                * @return Promise
+                * @return Promise<Object>
                 */
                 byKey: function(key) {
                     var store = this.store(),
@@ -1072,7 +1072,7 @@ module.exports = {
                 /**
                  * @name GridBaseMethods_refresh
                  * @publicName refresh()
-                 * @return Promise
+                 * @return Promise<void>
                  */
                 refresh: function() {
                     var that = this,
@@ -1086,12 +1086,12 @@ module.exports = {
                 /**
                  * @name dxDataGridMethods_getVisibleRows
                  * @publicName getVisibleRows()
-                 * @return array
+                 * @return Array<dxDataGridRowObject>
                  */
                 /**
                  * @name dxTreeListMethods_getVisibleRows
                  * @publicName getVisibleRows()
-                 * @return array
+                 * @return Array<dxTreeListRowObject>
                  */
                 getVisibleRows: function() {
                     return this.items();
@@ -1103,7 +1103,7 @@ module.exports = {
                 /**
                 * @name GridBaseMethods_repaintRows
                 * @publicName repaintRows(rowIndexes)
-                * @param1 rowIndexes:array
+                * @param1 rowIndexes:Array<number>
                 */
                 repaintRows: function(rowIndexes) {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];
