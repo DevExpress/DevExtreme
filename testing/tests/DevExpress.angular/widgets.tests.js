@@ -29,6 +29,8 @@ require("ui/tabs");
 require("ui/text_box");
 require("ui/toolbar");
 
+var FILTERING_TIMEOUT = 700;
+
 fx.off = true;
 var ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);
@@ -209,33 +211,43 @@ QUnit.test("dxDataGrid - search with row template should highlight data without 
     assert.equal($($(".mycell")[0]).text(), "text.1");
 
     $(".dx-datagrid-search-panel").dxTextBox("instance").option("value", ".");
-    this.clock.tick();
+    this.clock.tick(FILTERING_TIMEOUT);
 
     assert.equal($($(".mycell")[0]).text(), "text.1");
 });
 
-QUnit.test("dxDataGrid - highlight timer was cleared on disposing (T539633)", function(assert) {
-    assert.expect(0);
-    this.clock.restore();
-
+QUnit.test("dxDataGrid - search with cell template should highlight data without template (T554034)", function(assert) {
     var $markup = $(
-        "<div dx-data-grid=\"gridOptions\" dx-item-alias=\"employee\"></div>\
-        <script id=\"gridRow\" type=\"text/html\">\
-            <tbody>\
-                <tr>\
-                    <td class=\"mycell\">{{employee.data.column1}}</td>\
-                </tr>\
-            </tbody>\
-        </script>"
+        "<div dx-data-grid=\"gridOptions\" dx-item-alias=\"item\">\
+            <div data-options=\"dxTemplate:{ name: 'cellTemplate' }\">\
+                <span class=\"mycell\">{{item.data.column1}}</span>\
+            </div>\
+        </div>"
     );
     var controller = function($scope) {
         $scope.gridOptions = {
-            dataSource: [{ column1: "text.1" }],
-            rowTemplate: $("#gridRow")
+            dataSource: [{
+                column1: "text1"
+            }, {
+                column1: "text2"
+            }],
+            columns: [{
+                dataField: "column1",
+                cellTemplate: 'cellTemplate'
+            }],
+            searchPanel: { visible: true }
         };
     };
 
     initMarkup($markup, controller, this);
+    this.clock.tick(30);
+
+    assert.equal($($(".mycell")[0]).text(), "text1");
+
+    $(".dx-datagrid-search-panel").dxTextBox("instance").option("value", "e");
+    this.clock.tick(FILTERING_TIMEOUT);
+
+    assert.equal($($(".mycell")[0]).text(), "text1");
 });
 
 QUnit.test("dxTabs - navigation buttons should show/hide after showing/hiding items (T343231)", function(assert) {
