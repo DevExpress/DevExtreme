@@ -144,8 +144,14 @@ var dropDownAppointments = Class.inherit({
 
                         var $items = that.instance.getAppointmentsInstance()._findItemElementByItem(itemData);
 
-                        if($items.length) {
+                        if($items.length === 1) {
                             that._$draggedItem = $items[0];
+                            that._draggedItemData = itemData;
+                            that._startPosition = translator.locate(that._$draggedItem);
+                            eventsEngine.trigger(that._$draggedItem, "dxdragstart");
+                        } else if($items.length > 1) {
+                            var $appointment = that._getRecurrencePart($items, itemData.settings[0].startDate);
+                            that._$draggedItem = $appointment;
                             that._draggedItemData = itemData;
                             that._startPosition = translator.locate(that._$draggedItem);
                             eventsEngine.trigger(that._$draggedItem, "dxdragstart");
@@ -181,6 +187,18 @@ var dropDownAppointments = Class.inherit({
                 }
             });
         }
+    },
+
+    _getRecurrencePart: function(appointments, startDate) {
+        var result;
+        for(var i = 0; i < appointments.length; i++) {
+            var $appointment = appointments[i],
+                appointmentStartDate = $appointment.data("dxAppointmentStartDate");
+            if(appointmentStartDate.getTime() === startDate.getTime()) {
+                result = $appointment;
+            }
+        }
+        return result;
     },
 
     _createDropDownAppointmentTemplate: function(appointmentData, appointmentElement, color) {

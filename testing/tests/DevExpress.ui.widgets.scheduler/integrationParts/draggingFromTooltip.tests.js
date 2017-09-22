@@ -129,3 +129,41 @@ QUnit.test("Phantom appointment position should be corrected during dragging too
 
     pointer.dragEnd();
 });
+
+QUnit.test("Recurrence appointment dragging should work correctly", function(assert) {
+    var tasks = [
+        {
+            text: "Task 1",
+            startDate: new Date(2015, 1, 9, 1, 0),
+            endDate: new Date(2015, 1, 9, 2, 0)
+        },
+        {
+            text: "Task 2",
+            startDate: new Date(2015, 1, 9, 11, 0),
+            endDate: new Date(2015, 1, 9, 12, 0)
+        },
+        {
+            text: "Task 3",
+            startDate: new Date(2015, 1, 7, 13, 0),
+            endDate: new Date(2015, 1, 7, 14, 0),
+            recurrenceRule: "FREQ=DAILY"
+        }
+    ];
+    this.createInstance();
+    this.instance.option("dataSource", tasks);
+
+    var stub = sinon.stub(this.instance, "_checkRecurringAppointment");
+
+    var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+    dropDown.open();
+
+    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0)),
+        pointer = pointerMock($ddAppointment).start().dragStart(),
+        $phantomAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+
+    assert.deepEqual($phantomAppointment.data("dxItemData").settings[0].startDate, new Date(2015, 1, 9, 13), "Date of phantom recurrence part is OK");
+
+    pointer.drag(0, -100).dragEnd();
+
+    assert.deepEqual(stub.getCall(0).args[2], new Date(2015, 1, 9, 0), "_checkRecurringAppointment has a right exceptionDate");
+});
