@@ -698,7 +698,8 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(9, 5);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.equal(scrollBy.getCall(0).args[0].left, 0, "scrollBy was called with right distance");
     });
 
     QUnit.test("Check scrolling to time, if startDayHour is not 0", function(assert) {
@@ -714,11 +715,11 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(2, 0);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], 0, 2.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, "scrollBy was called with right distance");
 
         this.instance.scrollToTime(5, 0);
 
-        assert.roughEqual(scrollBy.getCall(1).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
     });
 
     QUnit.test("Check scrolling to time, if 'hours' argument greater than the 'endDayHour' option", function(assert) {
@@ -734,7 +735,7 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(12, 0);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
     });
 
     QUnit.test("Scrolling to date which doesn't locate on current view should call console warning", function(assert) {
