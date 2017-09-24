@@ -2690,7 +2690,9 @@ QUnit.testStart(function() {
 
     QUnit.module("Loading", {
         beforeEach: function() {
-            this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler({
+                showCurrentTimeIndicator: false
+            }).dxScheduler("instance");
             this.clock = sinon.useFakeTimers();
             this.instance.option({
                 currentView: "day",
