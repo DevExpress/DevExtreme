@@ -107,3 +107,14 @@ QUnit.test("different positive and negative parsing", function(assert) {
     assert.strictEqual(parser("15.175"), null, "parse positive float with overflow");
     assert.strictEqual(parser("-15.17"), null, "default negative format should be invalid");
 });
+
+QUnit.test("percent format parsing", function(assert) {
+    var parser = generateNumberParser("#.0#%");
+
+    assert.strictEqual(parser("10.15%"), 0.1015, "parse float number with 2 digits");
+    assert.strictEqual(parser("10.0%"), 0.1, "parse float number with 1 digit");
+    assert.strictEqual(parser("10%"), null, "value without float part should be incorrect");
+    assert.strictEqual(parser("-10.15%"), -0.1015, "parse negative float number with 2 digits");
+    assert.strictEqual(parser("-10.0%"), -0.1, "parse negative float number with 1 digit");
+    assert.strictEqual(parser("-10%"), null, "negative value without float part should be incorrect");
+});
