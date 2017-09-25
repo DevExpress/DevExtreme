@@ -1191,7 +1191,7 @@ QUnit.test("'getHeaderHeight' should return correct value", function(assert) {
     assert.equal(headerHeight, 56, "Header height is OK");
 });
 
-QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with view configuration", function(assert) {
+QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with scheduler configuration", function(assert) {
     this.createInstance({
         views: [{
             name: "DAY",
@@ -1199,8 +1199,7 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
             maxAppointmentsPerCell: 5
         }, {
             name: "WEEK",
-            type: "week",
-            maxAppointmentsPerCell: "none"
+            type: "week"
         }],
         currentView: "DAY",
         dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
@@ -1214,5 +1213,31 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
 
     countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
 
-    assert.equal(countPerCell, "none", "overlappingMode is OK");
+    assert.equal(countPerCell, "auto", "overlappingMode is OK");
+});
+
+QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with view configuration", function(assert) {
+    this.createInstance({
+        views: [{
+            name: "DAY",
+            type: "day",
+            maxAppointmentsPerCell: 5
+        }, {
+            name: "WEEK",
+            type: "week",
+            maxAppointmentsPerCell: "unlimited"
+        }],
+        currentView: "DAY",
+        dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
+    });
+
+    var countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
+
+    assert.equal(countPerCell, 5, "overlappingMode is OK");
+
+    this.instance.option("currentView", "WEEK");
+
+    countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
+
+    assert.equal(countPerCell, "unlimited", "overlappingMode is OK");
 });

@@ -90,7 +90,7 @@ var ODataContext = Class.inherit({
      * @publicName get(operationName, params)
      * @param1 operationName:string
      * @param2 params:object
-     * @return Promise
+     * @return Promise<any>
      */
     get: function(operationName, params) {
         return this.invoke(operationName, params, "GET");
@@ -102,7 +102,7 @@ var ODataContext = Class.inherit({
      * @param1 operationName:string
      * @param2 params:object
      * @param3 httpMethod:object
-     * @return Promise
+     * @return Promise<void>
      */
     invoke: function(operationName, params, httpMethod) {
         params = params || {};

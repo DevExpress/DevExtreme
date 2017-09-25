@@ -779,7 +779,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 result = offset;
             }
         });
-
         return result;
     },
 
@@ -821,6 +820,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             };
         }
 
+        appointmentData.settings = [appointmentSetting];
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
         this._virtualAppointments[virtualGroupIndex].items.colors.push(color);
 

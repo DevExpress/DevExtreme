@@ -19,6 +19,13 @@ var baseBarSeriesMethods = {
         this._stackName = "axis_" + (options.axis || "default") + "_stack_" + (options.stack || "default");
     },
 
+    _createLegendState: function(styleOptions, defaultColor) {
+        return {
+            fill: styleOptions.color || defaultColor,
+            hatching: styleOptions.hatching
+        };
+    },
+
     _parsePointStyle: function(style, defaultColor, defaultBorderColor) {
         var color = style.color || defaultColor,
             base = chartSeries._parsePointStyle.call(this, style, color, defaultBorderColor);

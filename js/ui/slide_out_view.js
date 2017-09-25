@@ -403,7 +403,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_showMenu
     * @publicName showMenu()
-    * @return Promise
+    * @return Promise<void>
     */
     showMenu: function() {
         return this.toggleMenuVisibility(true);
@@ -412,7 +412,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_hideMenu
     * @publicName hideMenu()
-    * @return Promise
+    * @return Promise<void>
     */
     hideMenu: function() {
         return this.toggleMenuVisibility(false);
@@ -421,7 +421,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_toggleMenuVisibility
     * @publicName toggleMenuVisibility()
-    * @return Promise
+    * @return Promise<void>
     */
     toggleMenuVisibility: function(showing) {
         showing = showing === undefined ? !this.option("menuVisible") : showing;

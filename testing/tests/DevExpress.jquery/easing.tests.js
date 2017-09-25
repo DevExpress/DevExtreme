@@ -3,7 +3,7 @@
 var $ = require("jquery"),
     easing = require("animation/easing");
 
-require("integration/jquery/easing");
+require("integration/jquery");
 
 if(QUnit.urlParams["nojquery"]) {
     return;

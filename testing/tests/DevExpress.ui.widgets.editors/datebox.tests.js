@@ -815,6 +815,25 @@ QUnit.test("incorrect work of mergeDates function if previous value not valid (Q
     assert.deepEqual(this.instance.option("value"), date);
 });
 
+QUnit.test("if value isn't specified then current day is default for an editor with type 'time'", function(assert) {
+    this.instance.option({
+        type: "time",
+        pickerType: "list",
+        displayFormat: "longTime"
+    });
+
+    $(this.$input())
+        .val("1:1:16")
+        .trigger("change");
+
+    var value = this.instance.option("value"),
+        now = new Date();
+
+    assert.equal(value.getFullYear(), now.getFullYear(), "correct year");
+    assert.equal(value.getMonth(), now.getMonth(), "correct month");
+    assert.equal(value.getDate(), now.getDate(), "correct date");
+});
+
 QUnit.test("mergeDates must merge seconds when type is 'time'", function(assert) {
     this.instance.option({
         type: "time",

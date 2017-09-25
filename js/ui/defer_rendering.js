@@ -50,7 +50,7 @@ var DeferRendering = Widget.inherit({
             /**
             * @name dxDeferRenderingOptions_renderWhen
             * @publicName renderWhen
-            * @type Promise | bool
+            * @type Promise<void> | bool
             * @default undefined
             */
             renderWhen: undefined,

@@ -547,8 +547,8 @@ var dxChart = AdvancedChart.inherit({
                 }).reduce(function(range, s) {
                     var seriesRange = s.getViewport();
 
-                    range.min = range.min < seriesRange.min ? range.min : seriesRange.min;
-                    range.max = range.max > seriesRange.max ? range.max : seriesRange.max;
+                    range.min = _isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
+                    range.max = _isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
                     return range;
                 }, {});
                 axis.zoom(viewport.min, viewport.max);

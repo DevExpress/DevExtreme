@@ -316,7 +316,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @publicName createChildren
             * @type function
             * @type_function_param1 parentNode:dxTreeViewNode
-            * @type_function_return Promise|array
+            * @type_function_return Promise<any>|Array<Object>
             */
             createChildren: null
 
@@ -400,7 +400,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewItemTemplate_items
             * @publicName items
-            * @type Array
+            * @type Array<any>
             */
             /**
             * @name dxTreeViewItemTemplate_parentId
@@ -774,15 +774,14 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderContentImpl: function() {
-        if(!this.option("items") || !this.option("items").length) {
-            return;
-        }
-
         var $nodeContainer = this._renderNodeContainer();
 
         this._renderScrollableContainer();
         this._scrollableContainer.content().append($nodeContainer);
 
+        if(!this.option("items") || !this.option("items").length) {
+            return;
+        }
         this._renderItems($nodeContainer, this._dataAdapter.getRootNodes());
 
         this._initExpandEvent();
@@ -1651,7 +1650,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     /**
     * @name dxTreeViewMethods_updateDimensions
     * @publicName updateDimensions()
-    * @return Promise
+    * @return Promise<void>
     */
     updateDimensions: function() {
         var that = this,
@@ -1747,13 +1746,13 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     /**
     * @name dxTreeViewMethods_getNodes
     * @publicName getNodes()
-    * @return array
+    * @return Array<dxTreeViewNode>
     */
 
          /**
          * @name dxTreeViewNode_children
          * @publicName children
-         * @type array
+         * @type Array<dxTreeViewNode>
          */
 
          /**

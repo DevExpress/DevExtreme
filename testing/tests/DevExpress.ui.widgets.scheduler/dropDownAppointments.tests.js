@@ -147,7 +147,6 @@ QUnit.test("DropDown appointments should have a correct template", function(asse
     assert.equal($infoBlock.find(".dx-scheduler-dropdown-appointment-title").length, 1, "Appointment title is OK");
     assert.equal($infoBlock.find(".dx-scheduler-dropdown-appointment-date").length, 1, "Appointment date is OK");
     assert.equal($buttonsBlock.find(".dx-button.dx-scheduler-dropdown-appointment-remove-button").length, 1, "Remove button is rendered");
-    assert.equal($buttonsBlock.find(".dx-button.dx-scheduler-dropdown-appointment-edit-button").length, 1, "Edit button is rendered");
 });
 
 QUnit.test("DropDown appointments should have a left border", function(assert) {
@@ -221,7 +220,6 @@ QUnit.test("Grouped appointments should not have delete button if deleting is no
     dropDownMenu.open();
 
     assert.equal($buttonsBlock.find(".dx-button.dx-scheduler-dropdown-appointment-remove-button").length, 0, "Remove button isn't rendered");
-    assert.equal($buttonsBlock.find(".dx-button.dx-scheduler-dropdown-appointment-edit-button").length, 1, "Edit button is rendered");
 });
 
 QUnit.test("Propagation should be stopped after click on remove/edit button", function(assert) {
@@ -263,17 +261,16 @@ QUnit.test("Click on the remove button should trigger the 'deleteAppointment' me
 
 });
 
-QUnit.test("Click on the edit button should trigger the 'showEditAppointmentPopup' method", function(assert) {
+QUnit.test("Click on the item should trigger the 'showEditAppointmentPopup' method", function(assert) {
     var notifyObserverStub = sinon.stub(this.widgetMock, "fire");
     this.renderDropDownAppointmentsContainer().trigger("dxclick");
 
     var dropDownMenu = $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance"),
-        $dropDownAppointment = $(".dx-dropdownmenu-list .dx-scheduler-dropdown-appointment").first(),
-        $editButton = $dropDownAppointment.find(".dx-button.dx-scheduler-dropdown-appointment-edit-button");
+        $dropDownAppointment = $(".dx-dropdownmenu-list .dx-scheduler-dropdown-appointment").first();
 
     dropDownMenu.open();
 
-    $($editButton).trigger("dxclick");
+    $($dropDownAppointment).trigger("dxclick");
 
     assert.ok(notifyObserverStub.called, "Observer was notified");
     assert.equal(notifyObserverStub.getCall(4).args[0], "showEditAppointmentPopup", "The 'showAppointmentPopup' method was called");

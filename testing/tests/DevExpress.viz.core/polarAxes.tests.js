@@ -738,7 +738,7 @@ QUnit.test("create constant lines with label, option 'startAngle' > 0", function
     assert.deepEqual(this.renderer.text.getCall(0).args, ["10", 25, 59]);
 });
 
-QUnit.test("adjust constaте line labels", function(assert) {
+QUnit.test("adjust constant line labels", function(assert) {
     this.createDrawnAxis({ constantLines: [{ value: 10, color: "green", label: { visible: true } }], label: { visible: false } });
 
     assert.ok(this.renderer.text.called);

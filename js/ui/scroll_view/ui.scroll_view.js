@@ -292,7 +292,7 @@ var ScrollView = Scrollable.inherit({
     * @name dxscrollviewmethods_release
     * @publicName release(preventScrollBottom)
     * @param1 preventScrollBottom:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     release: function(preventReachBottom) {
         if(preventReachBottom !== undefined) {

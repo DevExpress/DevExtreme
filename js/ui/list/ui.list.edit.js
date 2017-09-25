@@ -112,7 +112,7 @@ var ListEdit = ListBase.inherit({
             /**
             * @name dxListOptions_menuItems
             * @publicName menuItems
-            * @type Array
+            * @type Array<Object>
             * @default []
             */
             /**
@@ -470,13 +470,13 @@ var ListEdit = ListBase.inherit({
     * @name dxListMethods_deleteItem
     * @publicName deleteItem(itemElement)
     * @param1 itemElement:Node
-    * @return Promise
+    * @return Promise<void>
     */
     /**
     * @name dxListMethods_deleteItem
     * @publicName deleteItem(itemIndex)
     * @param1 itemIndex:Number|Object
-    * @return Promise
+    * @return Promise<void>
     */
 
     /**
@@ -519,14 +519,14 @@ var ListEdit = ListBase.inherit({
     * @publicName reorderItem(itemElement, toItemElement)
     * @param1 itemElement:Node
     * @param2 toItemElement:Node
-    * @return Promise
+    * @return Promise<void>
     */
     /**
     * @name dxListMethods_reorderItem
     * @publicName reorderItem(itemIndex, toItemIndex)
     * @param1 itemIndex:Number|Object
     * @param2 toItemIndex:Number|Object
-    * @return Promise
+    * @return Promise<void>
     */
 });
 

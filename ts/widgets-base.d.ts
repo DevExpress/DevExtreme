@@ -8,7 +8,7 @@ declare module DevExpress.ui {
         getValue?: Function;
 
         /** @docid dxValidatorOptions_adapter_validationRequestsCallbacks */
-        validationRequestsCallbacks?: JQueryCallback;
+        validationRequestsCallbacks?: any;
 
         /** @docid dxValidatorOptions_adapter_applyValidationResults */
         applyValidationResults?: (params: validationEngine.ValidatorValidationResult) => void;
@@ -425,6 +425,9 @@ declare module DevExpress.ui {
 
         /** @docid dxTextBoxOptions_mode */
         mode?: string;
+        
+        /** @docid dxTextBoxOptions_value */
+        value?: string;        
     }
 
     /** @docid dxTextbox */
@@ -2335,50 +2338,51 @@ declare module DevExpress.ui {
         /** @docid_ignore dxProgressBarMethods_focus */
     }
 
+    /** @docid dxSliderBase */
     export interface dxSliderBaseOptions extends dxTrackBarOptions {
-        /** @docid_ignore dxSliderOptions_hoverStateEnabled */
-        /** @docid_ignore dxSliderOptions_focusStateEnabled */
+        /** @docid_ignore dxSliderBaseOptions_hoverStateEnabled */
+        /** @docid_ignore dxSliderBaseOptions_focusStateEnabled */
 
-        /** @docid dxSliderOptions_activeStateEnabled */
+        /** @docid dxSliderBaseOptions_activeStateEnabled */
         activeStateEnabled?: boolean;
 
-        /** @docid dxSliderOptions_step */
+        /** @docid dxSliderBaseOptions_step */
         step?: number;
 
-        /** @docid dxSliderOptions_showRange */
+        /** @docid dxSliderBaseOptions_showRange */
         showRange?: boolean;
 
-        /** @docid dxSliderOptions_keyStep */
+        /** @docid dxSliderBaseOptions_keyStep */
         keyStep?: number;
 
-        /** @docid dxSliderOptions_tooltip */
+        /** @docid dxSliderBaseOptions_tooltip */
         tooltip?: {
-            /** @docid dxSliderOptions_tooltip_enabled */
+            /** @docid dxSliderBaseOptions_tooltip_enabled */
             enabled?: boolean;
 
-            /** @docid dxSliderOptions_tooltip_format */
+            /** @docid dxSliderBaseOptions_tooltip_format */
             format?: any;
 
-            /** @docid dxSliderOptions_tooltip_position */
+            /** @docid dxSliderBaseOptions_tooltip_position */
             position?: string;
 
-            /** @docid dxSliderOptions_tooltip_showMode */
+            /** @docid dxSliderBaseOptions_tooltip_showMode */
             showMode?: string;
         };
 
-        /** @docid dxSliderOptions_label */
+        /** @docid dxSliderBaseOptions_label */
         label?: {
-            /** @docid dxSliderOptions_label_visible */
+            /** @docid dxSliderBaseOptions_label_visible */
             visible?: boolean;
 
-            /** @docid dxSliderOptions_label_position */
+            /** @docid dxSliderBaseOptions_label_position */
             position?: string;
 
-            /** @docid dxSliderOptions_label_format */
+            /** @docid dxSliderBaseOptions_label_format */
             format?: any;
         };
 
-        /** @docid dxSliderOptions_name */
+        /** @docid dxSliderBaseOptions_name */
         name?: string;
     }
 
@@ -2420,97 +2424,97 @@ declare module DevExpress.ui {
     }
 
     export interface dxFormItemLabel {
-        /** @docid dxFormSimpleItemOptions_label_text */
+        /** @docid dxFormSimpleItem_label_text */
         text?: string;
 
-        /** @docid dxFormSimpleItemOptions_label_visible */
+        /** @docid dxFormSimpleItem_label_visible */
         visible?: boolean;
 
-        /** @docid dxFormSimpleItemOptions_label_showColon */
+        /** @docid dxFormSimpleItem_label_showColon */
         showColon?: boolean;
 
-        /** @docid dxFormSimpleItemOptions_label_location */
+        /** @docid dxFormSimpleItem_label_location */
         location?: string;
 
-        /** @docid dxFormSimpleItemOptions_label_alignment */
+        /** @docid dxFormSimpleItem_label_alignment */
         alignment?: string;
     }
 
     export interface dxFormItem {
         /**
-         * @docid dxFormEmptyItemOptions_itemType
-         * @docid dxFormGroupItemOptions_itemType
-         * @docid dxFormTabbedItemOptions_itemType
-         * @docid dxFormSimpleItemOptions_itemType
+         * @docid dxFormEmptyItem_itemType
+         * @docid dxFormGroupItem_itemType
+         * @docid dxFormTabbedItem_itemType
+         * @docid dxFormSimpleItem_itemType
         */
         itemType?: string;
 
         /**
-         * @docid dxFormEmptyItemOptions_visible
-         * @docid dxFormGroupItemOptions_visible
-         * @docid dxFormTabbedItemOptions_visible
-         * @docid dxFormSimpleItemOptions_visible
+         * @docid dxFormEmptyItem_visible
+         * @docid dxFormGroupItem_visible
+         * @docid dxFormTabbedItem_visible
+         * @docid dxFormSimpleItem_visible
         */
         visible?: boolean;
 
         /**
-         * @docid dxFormEmptyItemOptions_visibleIndex
-         * @docid dxFormGroupItemOptions_visibleIndex
-         * @docid dxFormTabbedItemOptions_visibleIndex
-         * @docid dxFormSimpleItemOptions_visibleIndex
+         * @docid dxFormEmptyItem_visibleIndex
+         * @docid dxFormGroupItem_visibleIndex
+         * @docid dxFormTabbedItem_visibleIndex
+         * @docid dxFormSimpleItem_visibleIndex
         */
         visibleIndex?: number;
 
         /**
-         * @docid dxFormEmptyItemOptions_cssClass
-         * @docid dxFormGroupItemOptions_cssClass
-         * @docid dxFormTabbedItemOptions_cssClass
-         * @docid dxFormSimpleItemOptions_cssClass
+         * @docid dxFormEmptyItem_cssClass
+         * @docid dxFormGroupItem_cssClass
+         * @docid dxFormTabbedItem_cssClass
+         * @docid dxFormSimpleItem_cssClass
         */
         cssClass?: string;
 
         /**
-         * @docid dxFormEmptyItemOptions_colSpan
-         * @docid dxFormSimpleItemOptions_colSpan
-         * @docid dxFormGroupItemOptions_colSpan
-         * @docid dxFormTabbedItemOptions_colSpan
+         * @docid dxFormEmptyItem_colSpan
+         * @docid dxFormSimpleItem_colSpan
+         * @docid dxFormGroupItem_colSpan
+         * @docid dxFormTabbedItem_colSpan
          */
         colSpan?: number;
     }
 
     /** @docid dxFormEmptyItem */
     export interface dxFormEmptyItem extends dxFormItem {
-        /** @docid dxFormEmptyItemOptions_name */
+        /** @docid dxFormEmptyItem_name */
         name?: string;
     }
 
     /** @docid dxFormSimpleItem */
     export interface dxFormSimpleItem extends dxFormItem {
-        /** @docid dxFormSimpleItemOptions_dataField */
+        /** @docid dxFormSimpleItem_dataField */
         dataField?: string;
 
-        /** @docid dxFormSimpleItemOptions_name */
+        /** @docid dxFormSimpleItem_name */
         name?: string;
 
-        /** @docid dxFormSimpleItemOptions_editorType */
+        /** @docid dxFormSimpleItem_editorType */
         editorType?: string;
 
-        /** @docid dxFormSimpleItemOptions_editorOptions */
+        /** @docid dxFormSimpleItem_editorOptions */
         editorOptions?: Object;
 
-        /** @docid dxFormSimpleItemOptions_template */
+        /** @docid dxFormSimpleItem_template */
         template?: any;
 
-        /** @docid dxFormSimpleItemOptions_helpText */
+        /** @docid dxFormSimpleItem_helpText */
         helpText?: string;
 
-        /** @docid dxFormSimpleItemOptions_isRequired */
+        /** @docid dxFormSimpleItem_isRequired */
         isRequired?: boolean;
 
-        /** @docid dxFormSimpleItemOptions_label */
+        /** @docid dxFormSimpleItem_label */
         label?: dxFormItemLabel;
 
-        /** @docid dxFormSimpleItemOptions_validationRules */
+        /** @docid dxFormSimpleItem_validationRules */
         validationRules?: Array<any>;
     }
 
@@ -2531,63 +2535,63 @@ declare module DevExpress.ui {
 
     /** @docid dxFormGroupItem */
     export interface dxFormGroupItem extends dxFormItem {
-        /** @docid dxFormGroupItemOptions_caption */
+        /** @docid dxFormGroupItem_caption */
         caption?: string;
 
-        /** @docid dxFormGroupItemOptions_template */
+        /** @docid dxFormGroupItem_template */
         template?: any;
 
-        /** @docid dxFormGroupItemOptions_colCount */
+        /** @docid dxFormGroupItem_colCount */
         colCount?: number;
 
-        /** @docid dxFormTabbedItemOptions_tabs_colCountByScreen */
+        /** @docid dxFormTabbedItem_tabs_colCountByScreen */
         colCountByScreen?: ColCountResponsible;
 
-        /** @docid dxFormGroupItemOptions_alignItemLabels */
+        /** @docid dxFormGroupItem_alignItemLabels */
         alignItemLabels?: boolean;
 
-        /** @docid dxFormGroupItemOptions_items */
+        /** @docid dxFormGroupItem_items */
         items?: Array<dxFormItem>;
     }
 
     export interface dxFormTab {
-        /** @docid dxFormTabbedItemOptions_tabs_title */
+        /** @docid dxFormTabbedItem_tabs_title */
         title?: string;
 
-        /** @docid dxFormTabbedItemOptions_tabs_colCount */
+        /** @docid dxFormTabbedItem_tabs_colCount */
         colCount?: number;
 
-        /** @docid dxFormGroupItemOptions_colCountByScreen */
+        /** @docid dxFormGroupItem_colCountByScreen */
         colCountByScreen?: ColCountResponsible;
 
-        /** @docid dxFormTabbedItemOptions_tabs_alignItemLabels */
+        /** @docid dxFormTabbedItem_tabs_alignItemLabels */
         alignItemLabels?: boolean;
 
-        /** @docid dxFormTabbedItemOptions_tabs_items */
+        /** @docid dxFormTabbedItem_tabs_items */
         items?: Array<dxFormItem>;
 
-        /** @docid dxFormTabbedItemOptions_tabs_badge */
+        /** @docid dxFormTabbedItem_tabs_badge */
         badge?: string;
 
-        /** @docid dxFormTabbedItemOptions_tabs_disabled */
+        /** @docid dxFormTabbedItem_tabs_disabled */
         disabled?: boolean;
 
-        /** @docid dxFormTabbedItemOptions_tabs_icon */
+        /** @docid dxFormTabbedItem_tabs_icon */
         icon?: string;
 
-        /** @docid dxFormTabbedItemOptions_tabs_tabTemplate */
+        /** @docid dxFormTabbedItem_tabs_tabTemplate */
         tabTemplate?: any;
 
-        /** @docid dxFormTabbedItemOptions_tabs_template */
+        /** @docid dxFormTabbedItem_tabs_template */
         template?: any;
     }
 
     /** @docid dxFormTabbedItem */
     export interface dxFormTabbedItem extends dxFormItem {
-        /** @docid dxFormTabbedItemOptions_tabPanelOptions */
+        /** @docid dxFormTabbedItem_tabPanelOptions */
         tabPanelOptions?: DevExpress.ui.dxTabPanelOptions;
 
-        /** @docid dxFormTabbedItemOptions_tabs */
+        /** @docid dxFormTabbedItem_tabs */
         tabs?: Array<dxFormTab>;
     }
 

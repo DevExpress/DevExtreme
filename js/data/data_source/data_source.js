@@ -190,7 +190,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_store
         * @publicName store
-        * @type Store|Array|Object
+        * @type Store|Array<any>|Object
         */
         this._store = options.store;
 
@@ -221,7 +221,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_expand
         * @publicName expand
-        * @type Array|String
+        * @type Array<string>|string
         */
 
         /**
@@ -250,8 +250,8 @@ var DataSource = Class.inherit({
         * @name DataSourceOptions_postProcess
         * @publicName postProcess
         * @type function
-        * @type_function_param1 data:array
-        * @type_function_return array
+        * @type_function_param1 data:Array<any>
+        * @type_function_return Array<any>
         */
         this._postProcessFunc = options.postProcess;
 
@@ -287,7 +287,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_searchExpr
         * @publicName searchExpr
-        * @type getter|array
+        * @type getter|Array<string>
         */
         this._searchExpr = options.searchExpr;
 
@@ -399,7 +399,7 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_items
     * @publicName items()
-    * @return array
+    * @return Array<any>
     */
     items: function() {
         return this._items;
@@ -587,12 +587,12 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_searchExpr
     * @publicName searchExpr()
-    * @return getter|array
+    * @return getter|Array<string>
     */
     /**
     * @name DataSourceMethods_searchExpr
     * @publicName searchExpr(expr)
-    * @param1 expr:getter|array
+    * @param1 expr:getter|Array<string>
     */
     searchExpr: function(expr) {
         var argc = arguments.length;
@@ -765,7 +765,7 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_load
     * @publicName load()
-    * @return Promise
+    * @return Promise<any>
     */
     load: function() {
         var that = this,
@@ -823,7 +823,7 @@ var DataSource = Class.inherit({
     /**
      * @name DataSourceMethods_reload
      * @publicName reload()
-     * @return Promise
+     * @return Promise<any>
      */
     reload: function() {
         var store = this.store();

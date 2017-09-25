@@ -30,14 +30,14 @@ var BaseBaseSeries = {
     /**
     * @name baseSeriesObjectmethods_getallpoints
     * @publicName getAllPoints()
-    * @return array
+    * @return Array<basePointObject>
     */
     getAllPoints: function() { },
     /**
     * @name baseSeriesObjectmethods_getpointsbyarg
     * @publicName getPointsByArg(pointArg)
     * @param1 pointArg:number|string|date
-    * @return array
+    * @return Array<basePointObject>
     */
     getPointsByArg: function() { },
     /**
@@ -50,7 +50,7 @@ var BaseBaseSeries = {
     /**
    * @name baseSeriesObjectmethods_getvisiblepoints
    * @publicName getVisiblePoints()
-   * @return array
+   * @return Array<basePointObject>
    */
     getVisiblePoints: function() { },
     /**
@@ -209,7 +209,7 @@ var BasePoint = {
     /**
     * @name basePointObjectmethods_getlabel
     * @publicName getLabel()
-    * @return baseLabelObject|array
+    * @return baseLabelObject|Array<baseLabelObject>
     */
     getLabel: function() { }
 };

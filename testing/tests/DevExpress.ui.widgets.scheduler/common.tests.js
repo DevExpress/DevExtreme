@@ -698,7 +698,8 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(9, 5);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.equal(scrollBy.getCall(0).args[0].left, 0, "scrollBy was called with right distance");
     });
 
     QUnit.test("Check scrolling to time, if startDayHour is not 0", function(assert) {
@@ -714,11 +715,11 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(2, 0);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], 0, 2.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, "scrollBy was called with right distance");
 
         this.instance.scrollToTime(5, 0);
 
-        assert.roughEqual(scrollBy.getCall(1).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
     });
 
     QUnit.test("Check scrolling to time, if 'hours' argument greater than the 'endDayHour' option", function(assert) {
@@ -734,7 +735,7 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(12, 0);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
     });
 
     QUnit.test("Scrolling to date which doesn't locate on current view should call console warning", function(assert) {
@@ -1069,6 +1070,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9),
             currentView: "month",
             dataSource: data,
+            maxAppointmentsPerCell: null,
             height: 500,
             width: 800
         });
@@ -1232,6 +1234,34 @@ QUnit.testStart(function() {
         assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2017, 10, 1), "workspace has correct startDate");
         assert.deepEqual(header.option("startDate"), new Date(2017, 10, 1), "header has correct startDate");
         assert.equal(navigator.option("date").getMonth(), 10, "navigator has correct date");
+    });
+
+    QUnit.test("maxAppointmentsPerCell should have correct default", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            views: [{
+                type: "week",
+                name: "Week",
+            }]
+        });
+
+        assert.equal(this.instance.option("maxAppointmentsPerCell"), "auto", "Default Option value is right");
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has right class");
+    });
+
+    QUnit.test("Workspace shouldn't have specific class if maxAppointmentsPerCell=null", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            maxAppointmentsPerCell: null,
+            views: [{
+                type: "week",
+                name: "Week",
+            }]
+        });
+
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
 
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
@@ -3295,7 +3325,8 @@ QUnit.testStart(function() {
             },
             {
                 type: "day",
-                name: "day"
+                name: "day",
+                maxAppointmentsPerCell: null
             }]
         });
 
@@ -3306,4 +3337,5 @@ QUnit.testStart(function() {
         $workSpace = this.instance.getWorkSpace().element();
         assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
+
 })("View with configuration");

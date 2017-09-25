@@ -172,7 +172,7 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_toolbarItems
             * @publicName toolbarItems
-            * @type array
+            * @type Array<Object>
             */
             /**
             * @name dxPopupOptions_toolbarItems_toolbar
@@ -251,7 +251,6 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_width
                     * @publicName width
-                    * @type string|number|function
                     * @custom_default_for_windows_8 function() { return $(window).width(); }
                     * @extend_doc
                     */
@@ -357,8 +356,8 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_buttons
             * @publicName buttons
+            * @type Array<Object>
             * @deprecated dxPopupOptions_toolbarItems
-            * @type array
             */
             "buttons": { since: "16.1", alias: "toolbarItems" }
         });

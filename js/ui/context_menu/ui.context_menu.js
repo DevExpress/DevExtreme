@@ -759,8 +759,6 @@ var ContextMenu = MenuBase.inherit((function() {
         _updateSubmenuVisibilityOnClick: function(actionArgs) {
             if(!actionArgs.args.length) return;
 
-            actionArgs.args[0].jQueryEvent.stopPropagation();
-
             var $itemElement = actionArgs.args[0].itemElement,
                 itemData = actionArgs.args[0].itemData,
                 node = this._dataAdapter.getNodeByItem(itemData);
@@ -978,7 +976,7 @@ var ContextMenu = MenuBase.inherit((function() {
         * @name dxContextMenuMethods_toggle
         * @publicName toggle()
         * @param1 showing:boolean
-        * @return Promise
+        * @return Promise<void>
         */
         toggle: function(showing) {
             var visible = this.option("visible");
@@ -991,7 +989,7 @@ var ContextMenu = MenuBase.inherit((function() {
         /**
         * @name dxContextMenuMethods_show
         * @publicName show()
-        * @return Promise
+        * @return Promise<void>
         */
         show: function() {
             return this.toggle(true);
@@ -1000,7 +998,7 @@ var ContextMenu = MenuBase.inherit((function() {
         /**
         * @name dxContextMenuMethods_hide
         * @publicName hide()
-        * @return Promise
+        * @return Promise<void>
         */
         hide: function() {
             return this.toggle(false);

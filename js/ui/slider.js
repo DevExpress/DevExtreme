@@ -1,10 +1,9 @@
 "use strict";
-
 /**
 * @name dxSlider
 * @isEditor
 * @publicName dxSlider
-* @inherits dxTrackBar
+* @inherits dxSliderBase
 * @groupName Editors
 * @module ui/slider
 * @export default

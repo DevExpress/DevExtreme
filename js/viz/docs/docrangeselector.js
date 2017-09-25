@@ -408,7 +408,7 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_scale_categories
         * @publicName categories
-        * @type array
+        * @type Array<number,string,Date>
         */
         categories: []
     },
@@ -647,7 +647,7 @@ var dxRangeSelector = {
     /**
     *@name dxrangeselectoroptions_value
     * @publicName value
-    * @type array
+    * @type Array<number,string,Date>
     * @notUsedInTheme
     */
     value: [undefined, undefined],
@@ -912,7 +912,7 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_chart_series
         * @publicName series
-        * @type object|array
+        * @type Object|Array<Object>
         * @default undefined
         * @notUsedInTheme
         */
@@ -980,8 +980,8 @@ var dxRangeSelector = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 value:array
-    * @type_function_param1_field4 previousValue:array
+    * @type_function_param1_field3 value:Array<number,string,Date>
+    * @type_function_param1_field4 previousValue:Array<number,string,Date>
     * @default null
     * @notUsedInTheme
     * @action
@@ -1036,13 +1036,13 @@ var dxRangeSelector = {
     /**
     * @name dxrangeselectormethods_setValue
     * @publicName setValue(value)
-    * @param1 value:array
+    * @param1 value:Array<number,string,Date>
     */
     setValue: function() { },
     /**
     * @name dxrangeselectormethods_getValue
     * @publicName getValue()
-    * @return array
+    * @return Array<number,string,Date>
     */
     getValue: function() { },
     /**

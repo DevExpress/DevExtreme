@@ -692,8 +692,8 @@ dataGridCore.registerModule("export", {
              * @name dxDataGridOptions_customizeExportData
              * @publicName customizeExportData
              * @type function(columns, rows)
-             * @type_function_param1 columns:array
-             * @type_function_param2 rows:array
+             * @type_function_param1 columns:Array<dxDataGridOptions_columns>
+             * @type_function_param2 rows:Array<dxDataGridRowObject>
              */
         };
     },

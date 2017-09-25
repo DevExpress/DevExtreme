@@ -405,6 +405,8 @@ declare module DevExpress.ui {
         showAllDayPanel?: boolean;
         /** @docid dxSchedulerOptions_cellDuration */
         cellDuration?: number;
+        /** @docid dxSchedulerOptions_maxAppointmentsPerCell */
+        maxAppointmentsPerCell?: any;
         /** @docid dxSchedulerOptions_recurrenceEditMode */
         recurrenceEditMode?: string;
         /** @docid dxSchedulerOptions_editing */
@@ -2624,6 +2626,9 @@ declare module DevExpress.ui {
             /** @docid dxPivotGridOptions_fieldChooser_enabled */
             enabled?: boolean;
 
+            /** @docid dxPivotGridOptions_fieldChooser_searchEnabled */
+            searchEnabled?: boolean;
+
             /** @docid dxPivotGridOptions_fieldChooser_layout */
             layout?: number;
 
@@ -2792,6 +2797,9 @@ declare module DevExpress.ui {
 
         /** @docid dxPivotGridFieldChooserOptions_height*/
         height?: any;
+
+        /** @docid dxPivotGridFieldChooserOptions_searchEnabled*/
+        searchEnabled?: boolean;
 
         /** @docid dxPivotGridFieldChooserOptions_layout */
         layout?: number;

@@ -207,7 +207,7 @@ var PivotGrid = Widget.inherit({
             /**
              * @name dxPivotGridOptions_dataSource
              * @publicName dataSource
-             * @type array|PivotGridDataSource|PivotGridDataSourceOptions
+             * @type Array<Object>|PivotGridDataSource|PivotGridDataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -227,6 +227,13 @@ var PivotGrid = Widget.inherit({
                  * @default true
                  */
                 enabled: true,
+                /**
+                 * @name dxPivotGridOptions_fieldChooser_searchEnabled
+                 * @publicName searchEnabled
+                 * @type boolean
+                 * @default false
+                 */
+                searchEnabled: false,
                 /**
                  * @name dxPivotGridOptions_fieldChooser_layout
                  * @publicName layout
@@ -739,7 +746,7 @@ var PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions_stateStoring_customLoad
                  * @publicName customLoad
                  * @type function()
-                 * @type_function_return Promise
+                 * @type_function_return Promise<Object>
                  */
                 customLoad: null,
 
@@ -1058,6 +1065,7 @@ var PivotGrid = Widget.inherit({
                 layout: fieldChooserOptions.layout,
                 texts: fieldChooserOptions.texts || {},
                 dataSource: that.getDataSource(),
+                searchEnabled: fieldChooserOptions.searchEnabled,
                 width: undefined,
                 height: undefined
             },

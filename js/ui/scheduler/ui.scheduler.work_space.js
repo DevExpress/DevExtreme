@@ -464,7 +464,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _isWorkSpaceWithOverlapping: function() {
-        return this.invoke("getMaxAppointmentsPerCell") !== undefined;
+        return this.invoke("getMaxAppointmentsPerCell") !== null;
     },
 
     _getTimePanelClass: function() {
@@ -1882,7 +1882,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable();
 
-        scrollable.scrollBy(coordinates.top - scrollable.scrollTop());
+        scrollable.scrollBy({ top: coordinates.top - scrollable.scrollTop(), left: 0 });
     },
 
     getDistanceBetweenCells: function(startIndex, endIndex) {

@@ -294,7 +294,7 @@ QUnit.test('Prepare options when all options are custom', function(assert) {
             showZeroLevel: true,
             startScaleValue: 1,
             endScaleValue: 20,
-            color: '#00АА00',
+            color: '#00AA00',
             inverted: true,
             tooltip: {
                 paddingLeftRight: 14,

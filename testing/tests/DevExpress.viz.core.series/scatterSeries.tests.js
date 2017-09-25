@@ -2858,4 +2858,36 @@ var checkTwoGroups = function(assert, series) {
         series.draw();
         series.drawTrackers();
     });
+
+    QUnit.module("Legend Styles", environment);
+
+    QUnit.test("Default style", function(assert) {
+        var series = createSeries({
+            type: seriesType,
+            color: "n-color",
+            hoverStyle: {
+                color: "h-color",
+                hatching: { direction: "none", opacity: 0 }
+            },
+            selectionStyle: {
+                color: "s-color",
+                hatching: { direction: "none", opacity: 0 }
+            }
+        });
+
+        assert.deepEqual(series.getLegendStyles(), {
+            "hover": {
+                "fill": "h-color",
+                "hatching": { direction: "right", opacity: 0 }
+            },
+            "normal": {
+                "fill": "n-color",
+                hatching: undefined
+            },
+            "selection": {
+                "fill": "s-color",
+                "hatching": { direction: "right", opacity: 0 }
+            }
+        });
+    });
 })();

@@ -1884,6 +1884,7 @@ QUnit.test("Bootstrap should not fail if container component changes element mar
 });
 
 QUnit.test("Global scope properties are accessible from item template", function(assert) {
+    this.clock = sinon.useFakeTimers();
 
     var controller = function($scope) {
             $scope.collection = [
@@ -1903,8 +1904,12 @@ QUnit.test("Global scope properties are accessible from item template", function
             "</div>"
         ), controller);
 
+    this.clock.tick();
+
     assert.equal($(".item-text", $markup).text(), "Item text");
     assert.equal($(".global-text", $markup).text(), "Global text");
+
+    this.clock.restore();
 });
 
 QUnit.test("binding to circular data (T144697)", function(assert) {

@@ -142,7 +142,6 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions_width
             * @publicName width
-            * @type number|string|function
             * @default function() {return $(window).width() * 0.8 }
             * @extend_doc
             */
@@ -150,7 +149,6 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions_height
             * @publicName height
-            * @type number|string|function
             * @default 'auto'
             * @extend_doc
             */

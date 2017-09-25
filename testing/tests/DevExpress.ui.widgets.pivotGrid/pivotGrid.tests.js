@@ -620,6 +620,31 @@ QUnit.test("show field chooser popup on field chooser button click", function(as
     assert.ok(!pivotGrid.element().find(".dx-area-description-cell").hasClass("dx-pivotgrid-background"));
 });
 
+QUnit.test("create field chooser with search", function(assert) {
+    var pivotGrid = createPivotGrid({
+            dataSource: {
+                rows: [],
+                columns: [],
+                values: []
+            },
+            fieldChooser: {
+                searchEnabled: true,
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    //act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    var fieldChooser = fieldChooserPopup.content().data("dxPivotGridFieldChooser");
+
+    //assert
+    assert.ok(fieldChooser.option("searchEnabled"), 'fieldChooser with search');
+});
+
 QUnit.test("fieldChooser layout change at runtime should not hide popup", function(assert) {
     var pivotGrid = createPivotGrid({
             dataSource: {

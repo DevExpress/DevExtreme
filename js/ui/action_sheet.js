@@ -467,7 +467,7 @@ var ActionSheet = CollectionWidget.inherit({
     * @name dxactionsheetmethods_toggle
     * @publicName toggle(showing)
     * @param1 showing:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     toggle: function(showing) {
         var that = this,
@@ -484,7 +484,7 @@ var ActionSheet = CollectionWidget.inherit({
     /**
     * @name dxactionsheetmethods_show
     * @publicName show()
-    * @return Promise
+    * @return Promise<void>
     */
     show: function() {
         return this.toggle(true);
@@ -493,7 +493,7 @@ var ActionSheet = CollectionWidget.inherit({
     /**
     * @name dxactionsheetmethods_hide
     * @publicName hide()
-    * @return Promise
+    * @return Promise<void>
     */
     hide: function() {
         return this.toggle(false);

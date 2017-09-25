@@ -201,7 +201,7 @@ QUnit.test("Widget should be rerendered on the 'deferRendering' option change", 
     assert.equal(renderCount, prevRenderCount + 1, "widget was rerendered one time on option changed");
 });
 
-QUnit.test("onContentReady action should bе fired after opened item was rendered", function(assert) {
+QUnit.test("onContentReady action should be fired after opened item was rendered", function(assert) {
     var count = 0;
     this.$element.dxAccordion({
         items: this.items,

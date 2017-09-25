@@ -821,7 +821,7 @@ var dxFunnel = {
     /**
     * @name dxfunnelmethods_getallitems
     * @publicName getAllItems()
-    * @return array
+    * @return Array<dxfunnelItem>
     */
     getAllItems: function () { },
     /**
