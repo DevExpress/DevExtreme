@@ -170,7 +170,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _renderDateTimeIndicator: function() {
         if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            this._dateTimeIndicator.render(false, this);
+            this._dateTimeIndicator.render(this);
         }
     },
 

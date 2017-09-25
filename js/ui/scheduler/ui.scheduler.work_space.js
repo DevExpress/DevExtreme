@@ -787,7 +787,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _renderDateTimeIndicator: function() {
         if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            this._dateTimeIndicator.render(true, this);
+            this._dateTimeIndicator.render(this, true);
         }
     },
 
