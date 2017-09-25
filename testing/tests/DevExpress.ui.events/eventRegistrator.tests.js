@@ -6,9 +6,10 @@ var $ = require("jquery"),
     registerEventCallbacks = require("events/core/event_registrator_callbacks"),
     Class = require("core/class");
 
-var special = {};
+var eventHelper = require("../../helpers/eventHelper.js");
+
 registerEventCallbacks.add(function(name, eventObject) {
-    special[name] = eventObject;
+    eventHelper.special[name] = eventObject;
 });
 
 QUnit.testStart(function() {
@@ -60,20 +61,20 @@ QUnit.module("event registration", {
     },
 
     afterEach: function() {
-        special = {};
+        eventHelper.special = {};
     }
 });
 
 QUnit.test("'noBubble' property", function(assert) {
-    assert.strictEqual(special["dxtestevent"].noBubble, false);
+    assert.strictEqual(eventHelper.special["dxtestevent"].noBubble, false);
 });
 
 QUnit.test("'bindType' property", function(assert) {
-    assert.strictEqual(special["dxtestevent"].bindType, false);
+    assert.strictEqual(eventHelper.special["dxtestevent"].bindType, false);
 });
 
 QUnit.test("'delegateType' property", function(assert) {
-    assert.strictEqual(special["dxtestevent"].delegateType, false);
+    assert.strictEqual(eventHelper.special["dxtestevent"].delegateType, false);
 });
 
 QUnit.test("'setup' method", function(assert) {
