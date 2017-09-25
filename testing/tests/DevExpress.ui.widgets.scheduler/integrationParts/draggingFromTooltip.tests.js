@@ -96,8 +96,8 @@ QUnit.test("Phantom appointment position should be recalculated during dragging 
     pointer.drag(30, 60);
 
     var phantomPosition = translator.locate($phantomAppointment);
-    assert.roughEqual(phantomPosition.top, initialPhantomPosition.top + 60 + 51, 1, "Phantom top is OK");
-    assert.roughEqual(phantomPosition.left, initialPhantomPosition.left + 30, 1, "Phantom left is OK");
+    assert.roughEqual(phantomPosition.top, initialPhantomPosition.top + 60 + 51, 1.5, "Phantom top is OK");
+    assert.roughEqual(phantomPosition.left, initialPhantomPosition.left + 30, 1.5, "Phantom left is OK");
 
     pointer.dragEnd();
 });
