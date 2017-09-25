@@ -1,6 +1,7 @@
 "use strict";
 
 var config = require("../config"),
+    dateParts = require("./date_parts"),
     typeUtils = require("./type"),
     isString = typeUtils.isString,
     isDate = typeUtils.isDate,
@@ -21,18 +22,65 @@ function leftPad(text, length) {
     return text;
 }
 
+var FORMAT_TYPES = {
+    "3": "abbreviated",
+    "4": "wide",
+    "5": "narrow"
+};
+
 var LDML_FORMATTERS = {
     y: function(date, count, useUtc) {
-        return leftPad(date[useUtc ? "getUTCFullYear" : "getFullYear"]().toString(), count);
+        var year = date[useUtc ? "getUTCFullYear" : "getFullYear"]();
+        if(count === 2) {
+            year = year % 100;
+        }
+        return leftPad(year.toString(), count);
     },
     M: function(date, count, useUtc) {
-        return leftPad((date[useUtc ? "getUTCMonth" : "getMonth"]() + 1).toString(), Math.min(count, 2));
+        var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
+        var formatType = FORMAT_TYPES[count];
+        if(formatType) {
+            return dateParts.getMonthNames(formatType, "format")[month];
+        }
+        return leftPad((month + 1).toString(), Math.min(count, 2));
+    },
+    L: function(date, count, useUtc) {
+        var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
+        var formatType = FORMAT_TYPES[count];
+        if(formatType) {
+            return dateParts.getMonthNames(formatType, "standalone")[month];
+        }
+        return leftPad((month + 1).toString(), Math.min(count, 2));
+    },
+    Q: function(date, count, useUtc) {
+        var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
+        var quarter = Math.floor(month / 3);
+        var formatType = FORMAT_TYPES[count];
+        if(formatType) {
+            return dateParts.getQuarterNames(formatType)[quarter];
+        }
+        return leftPad((quarter + 1).toString(), Math.min(count, 2));
+    },
+    E: function(date, count, useUtc) {
+        var day = date[useUtc ? "getUTCDay" : "getDay"]();
+        var formatType = FORMAT_TYPES[count < 3 ? 3 : count];
+        return dateParts.getDayNames(formatType)[day];
+    },
+    a: function(date, count, useUtc) {
+        var hours = date[useUtc ? "getUTCHours" : "getHours"](),
+            period = hours < 12 ? 0 : 1,
+            formatType = FORMAT_TYPES[count];
+        return dateParts.getPeriodNames(formatType)[period];
     },
     d: function(date, count, useUtc) {
         return leftPad(date[useUtc ? "getUTCDate" : "getDate"]().toString(), Math.min(count, 2));
     },
     H: function(date, count, useUtc) {
         return leftPad(date[useUtc ? "getUTCHours" : "getHours"]().toString(), Math.min(count, 2));
+    },
+    h: function(date, count, useUtc) {
+        var hours = date[useUtc ? "getUTCHours" : "getHours"]();
+        return leftPad((hours % 12 || 12).toString(), Math.min(count, 2));
     },
     m: function(date, count, useUtc) {
         return leftPad(date[useUtc ? "getUTCMinutes" : "getMinutes"]().toString(), Math.min(count, 2));
@@ -62,7 +110,7 @@ var LDML_FORMATTERS = {
     },
     Z: function(date, count, useUtc) {
         return LDML_FORMATTERS.X(date, count >= 5 ? 3 : 2, useUtc);
-    },
+    }
 };
 
 var formatDate = function(date, format) {
