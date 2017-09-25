@@ -20,9 +20,9 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
 
-function setupDataGrid(that) {
+function setupDataGrid(that, $dataGridContainer) {
     that.element = function() {
-        return $(".dx-datagrid");
+        return $dataGridContainer ? $dataGridContainer : $(".dx-datagrid");
     };
 
     if(that.columns !== null) {
@@ -43,8 +43,7 @@ function setupDataGrid(that) {
             asyncLoadEnabled: false,
             store: that.items
         },
-        columnHidingEnabled: true,
-        useKeyboard: true
+        columnHidingEnabled: true
     }, that.options);
 
     that.setupOptions = {
@@ -2958,175 +2957,6 @@ QUnit.test("Edit batch. Repaint form with unsaved data", function(assert) {
     assert.equal(editor.option("value"), 102, "editor's value is ok");
 });
 
-QUnit.test("Edit batch. Edit next an adaptive detail item by tab key", function(assert) {
-    //arrange
-    var $dataGrid = $(".dx-datagrid").width(200);
-
-    this.columns = [
-        { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-        { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
-        { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
-    ];
-
-    this.items = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
-        { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
-    ];
-
-    this.options = {
-        useKeyboard: true,
-        editing: {
-            mode: 'batch',
-            allowUpdating: true
-        }
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-
-    $(".dx-field-item-content").first().trigger("dxclick");
-
-    //act
-    var e = $.Event('keydown');
-    e.which = 9;
-    $dataGrid.find("input").trigger(e);
-
-    //assert
-    assert.equal($dataGrid.find("input").val(), "Full Name", "value of FullName");
-});
-
-QUnit.test("Edit batch. Edit previous an adaptive detail item by shift + tab key", function(assert) {
-    //arrange
-    var $dataGrid = $(".dx-datagrid").width(200);
-
-    this.columns = [
-        { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-        { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
-        { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
-    ];
-
-    this.items = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
-        { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
-    ];
-
-    this.options = {
-        useKeyboard: true,
-        editing: {
-            mode: 'batch',
-            allowUpdating: true
-        }
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-
-    $(".dx-field-item-content").eq(1).trigger("dxclick");
-
-    //act
-    var e = $.Event('keydown');
-    e.which = 9;
-    e.shiftKey = true;
-    $dataGrid.find("input").trigger(e);
-
-    //assert
-    assert.equal($dataGrid.find("input").val(), "Psy", "value of LastName");
-});
-
-QUnit.test("Edit batch. Editable cell is closed when focus moving outside detail form", function(assert) {
-    //arrange
-    var $dataGrid = $(".dx-datagrid").width(200);
-
-    this.columns = [
-        { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-        { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
-        { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
-    ];
-
-    this.items = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
-        { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
-    ];
-
-    this.options = {
-        useKeyboard: true,
-        editing: {
-            mode: 'batch',
-            allowUpdating: true
-        }
-    };
-
-    setupDataGrid(this);
-
-    this.element = function() {
-        return $("#container");
-    };
-
-    this.gridView.render($("#container"));
-    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-
-    $(".dx-field-item-content").eq(1).trigger("dxclick");
-
-    //act
-    var e = $.Event('keydown');
-    e.which = 9;
-    $dataGrid.find("input").trigger(e);
-
-    //assert
-    var $input = $dataGrid.find("input");
-    assert.equal($input.length, 1, "inputs count");
-    assert.equal($input.val(), "Super", "value of FirstName");
-});
-
-QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
-    //arrange
-    var $dataGrid = $(".dx-datagrid").width(200);
-
-    this.options = {
-        editing: {
-            mode: 'batch',
-            allowUpdating: true
-        }
-    };
-
-    setupDataGrid(this);
-
-    this.element = function() {
-        return $("#container");
-    };
-
-    this.gridView.render($("#container"));
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-    this.clock.tick();
-
-    //act
-    this.editingController.editCell(0, 0);
-    this.clock.tick();
-
-    var e = $.Event('keydown');
-    e.which = 9;
-    $dataGrid.find("input").first().trigger(e);
-    this.clock.tick();
-
-    //assert
-    assert.equal($(".dx-focused input").val(), "Super");
-});
-
 QUnit.test("Edit cell. Render editor of form's item when clicked on a text of item", function(assert) {
     //arrange
     $(".dx-datagrid").width(200);
@@ -3244,138 +3074,6 @@ QUnit.test("Edit cell. Render editor for column with wrong visibleIndex", functi
 
     //assert
     assert.equal($(".dx-texteditor").length, 1, "editor's count");
-});
-
-QUnit.test("Edit cell. Edit next an adaptive detail item by tab key", function(assert) {
-    //arrange
-    var $dataGrid = $(".dx-datagrid").width(200);
-
-    this.columns = [
-        { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-        { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
-        { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
-    ];
-
-    this.items = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
-        { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
-    ];
-
-    this.options = {
-        useKeyboard: true,
-        editing: {
-            mode: 'cell',
-            allowUpdating: true
-        }
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-
-    $(".dx-field-item-content").first().trigger("dxclick");
-
-    //act
-    var e = $.Event('keydown');
-    e.which = 9;
-    $dataGrid.find("input").trigger(e);
-
-    //assert
-    assert.equal($dataGrid.find("input").val(), "Full Name", "value of FullName");
-});
-
-QUnit.test("Edit cell. Edit previous an adaptive detail item by shift + tab key", function(assert) {
-    //arrange
-    var $dataGrid = $(".dx-datagrid").width(200);
-
-    this.columns = [
-        { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-        { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
-        { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
-    ];
-
-    this.items = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
-        { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
-    ];
-
-    this.options = {
-        useKeyboard: true,
-        editing: {
-            mode: 'cell',
-            allowUpdating: true
-        }
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-
-    $(".dx-field-item-content").eq(1).trigger("dxclick");
-
-    //act
-    var e = $.Event('keydown');
-    e.which = 9;
-    e.shiftKey = true;
-    $dataGrid.find("input").trigger(e);
-
-    //assert
-    assert.equal($dataGrid.find("input").val(), "Psy", "value of LastName");
-});
-
-QUnit.test("Edit cell. Editable cell is closed when focus moving outside detail form", function(assert) {
-    //arrange
-    var $dataGrid = $(".dx-datagrid").width(200);
-
-    this.columns = [
-        { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-        { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
-        { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
-    ];
-
-    this.items = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
-        { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
-    ];
-
-    this.options = {
-        useKeyboard: true,
-        editing: {
-            mode: 'cell',
-            allowUpdating: true
-        }
-    };
-
-    setupDataGrid(this);
-
-    this.element = function() {
-        return $("#container");
-    };
-
-    this.gridView.render($("#container"));
-    this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
-
-    $(".dx-field-item-content").eq(1).trigger("dxclick");
-
-    //act
-    var e = $.Event('keydown');
-    e.which = 9;
-    $dataGrid.find("input").trigger(e);
-
-    //assert
-    var $input = $dataGrid.find("input");
-    assert.equal($input.length, 1, "inputs count");
-    assert.equal($input.val(), "Super", "value of FirstName");
 });
 
 QUnit.test("Create new row in the batch mode", function(assert) {
@@ -3918,4 +3616,112 @@ QUnit.testInActiveWindow("Cell edit mode. Validation works only for editable for
 
     //assert
     assert.ok(!$itemsContent.first().hasClass("dx-datagrid-invalid"), "invalid style should not be applied");
+});
+
+QUnit.module("Keyboard navigation", {
+    setupModule: function() {
+        this.$dataGrid = $(".dx-datagrid").width(200);
+
+        this.columns = [
+            { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
+            { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
+            { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
+        ];
+
+        this.items = [
+            { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
+            { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
+        ];
+
+        this.options = {
+            useKeyboard: true,
+            tabIndex: 0,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            }
+        };
+        setupDataGrid(this, $("#container"));
+
+        this.gridView.render($("#container"));
+        this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
+    },
+
+    triggerTabKey: function($focusableElement, shiftKey) {
+        var e = $.Event('keydown');
+        e.which = 9;
+        e.shiftKey = shiftKey;
+        this.getActiveInputElement().trigger(e);
+
+        $focusableElement && $focusableElement.focus();
+    },
+
+    getActiveInputElement: function() {
+        return this.$dataGrid.find("input");
+    },
+
+    triggerFormItemClick: function(index) {
+        $(".dx-field-item-content").eq(index).trigger("dxclick");
+        this.clock.tick();
+    },
+
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.setupModule();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
+        //arrange
+        this.triggerFormItemClick(0);
+
+        //act
+        this.triggerTabKey($(".dx-field-item-content").eq(1));
+
+        //assert
+        assert.equal(this.getActiveInputElement().val(), "Full Name", "value of FullName");
+    });
+
+    QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
+        //arrange
+        this.triggerFormItemClick(1);
+
+        //act
+        this.triggerTabKey($(".dx-field-item-content").first(), true);
+
+        //assert
+        assert.equal(this.getActiveInputElement().val(), "Psy", "value of LastName");
+    });
+
+    QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
+        //arrange
+        this.triggerFormItemClick(1);
+
+        //act
+        this.triggerTabKey(this.$dataGrid.find("td:not([class])").eq(1));
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.length, 1, "inputs count");
+        assert.equal($input.val(), "Super", "value of FirstName");
+    });
+
+    QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
+        //arrange
+        this.editingController.editCell(0, 0);
+        this.clock.tick();
+
+        //act
+        this.triggerTabKey();
+
+        //assert
+        assert.equal(this.getActiveInputElement().val(), "Super");
+    });
 });

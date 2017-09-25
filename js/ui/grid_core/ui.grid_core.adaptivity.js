@@ -58,10 +58,20 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         var that = this,
             column = item.column,
             cellValue = column.calculateCellValue(cellOptions.data),
+            focusAction = that.createAction(function() {
+                $container.trigger(clickEvent.name);
+            }),
             cellText;
 
         cellValue = gridCoreUtils.getDisplayValue(column, cellValue, cellOptions.data, cellOptions.rowType);
         cellText = gridCoreUtils.formatValue(cellValue, column);
+
+        if(column.allowEditing && that.option("useKeyboard")) {
+            $container
+                .attr("tabIndex", that.option("tabIndex"))
+                .off("focus", focusAction)
+                .on("focus", focusAction);
+        }
 
         if(column.cellTemplate) {
             var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
@@ -1000,45 +1010,20 @@ module.exports = {
                 }
             },
             keyboardNavigation: {
-                _handleTabKeyOnMasterDetailCell: function(target, direction) {
-                    var editMode = this._editingController.getEditMode(),
-                        isInsideAdaptiveDetailRow = $(target).closest("." + ADAPTIVE_DETAIL_ROW_CLASS).length > 0;
-
-                    if(isInsideAdaptiveDetailRow && (editMode !== EDIT_MODE_ROW && editMode !== EDIT_MODE_FORM)) {
-                        var rowIndex = this._dataController.getRowIndexByKey(this._dataController.adaptiveExpandedKey()),
-                            formItemData = $(target).closest(".dx-field-item-content").data("dxFormItem"),
-                            column = formItemData && formItemData.column,
-                            nextHiddenColumn = this._getNextHiddenColumn(column, direction);
-
-                        if(nextHiddenColumn) {
-                            this._editingController.editCell(rowIndex + 1, this._columnsController.getVisibleIndex(nextHiddenColumn.index));
-                            return true;
-                        }
-                    }
-
-                    return this.callBase(target, direction);
-                },
-
-                _getNextHiddenColumn: function(targetColumn, direction) {
-                    var hiddenColumns = this.getController("adaptiveColumns").getHiddenColumns(),
-                        i;
-
-                    hiddenColumns.sort(function(col1, col2) {
-                        return col1.visibleIndex - col2.visibleIndex;
-                    });
-
-                    if(targetColumn) {
-                        for(i = 0; i < hiddenColumns.length; i++) {
-                            var isValidIndex = direction === "next" ? i < hiddenColumns.length - 1 : i > 0;
-                            if(hiddenColumns[i].index === targetColumn.index && isValidIndex) {
-                                return hiddenColumns[i + (direction === "next" ? 1 : -1)];
-                            }
-                        }
-                    }
-                },
-
                 _isCellValid: function($cell) {
                     return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                },
+
+                _processNextCellInMasterDetail: function($nextCell) {
+                    this.callBase($nextCell);
+
+                    if(!this._isInsideEditForm($nextCell) && $nextCell) {
+                        var focusHandler = function() {
+                            $nextCell.off("focus", focusHandler);
+                            $nextCell.trigger("dxclick");
+                        };
+                        $nextCell.on("focus", focusHandler);
+                    }
                 }
             }
         }
