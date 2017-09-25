@@ -22,6 +22,10 @@
     }
 }(this, function($, popupLayoutControllerModule, layoutHelper) {
 
+    if(QUnit.urlParams["nojquery"]) {
+        return;
+    }
+
     includeLayout("Simple");
     includeLayout("Popup");
 

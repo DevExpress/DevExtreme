@@ -27,6 +27,10 @@
     }
 }(this, function($, dxCommand, fx, SlideOutController, layoutHelper) {
 
+    if(QUnit.urlParams["nojquery"]) {
+        return;
+    }
+
     includeLayout("SlideOut");
 
     QUnit.testStart(function() {

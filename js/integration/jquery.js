@@ -11,6 +11,7 @@ if(jQuery) {
     }
 
     require("./jquery/renderer");
+    require("./jquery/hooks");
     require("./jquery/deferred");
     require("./jquery/hold_ready");
     require("./jquery/events");

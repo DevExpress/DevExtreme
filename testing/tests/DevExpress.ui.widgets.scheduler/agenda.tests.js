@@ -5,6 +5,7 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date"),
     ResourceManager = require("ui/scheduler/ui.scheduler.resource_manager");
 
+var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell";
 var formatWeekday = function(date) {
     return dateLocalization.getDayNames("abbreviated")[date.getDay()];
 };
@@ -227,13 +228,16 @@ QUnit.test("Agenda element should not handle click event", function(assert) {
     var currentDate = new Date(2016, 1, 17).toString();
 
     this.createInstance({
-        currentDate: currentDate
+        currentDate: currentDate,
+        focusStateEnabled: true,
+        onCellClick: function(e) {
+            assert.ok(false);
+        }
     });
 
-    var element = this.instance.element().get(0),
-        events = $._data(element, "events");
-
-    assert.strictEqual(events["dxclick"], undefined, "Agenda doesn't handle click event");
+    var $element = $(this.instance.element());
+    $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).trigger("dxclick");
+    assert.ok(true);
 });
 
 QUnit.test("Time panel rows should have a right height", function(assert) {

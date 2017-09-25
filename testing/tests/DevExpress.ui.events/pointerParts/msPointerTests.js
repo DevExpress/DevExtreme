@@ -5,7 +5,7 @@ var $ = require("jquery"),
     registerEvent = require("events/core/event_registrator"),
     support = require("core/utils/support"),
     nativePointerMock = require("../../../helpers/nativePointerMock.js"),
-    $eventSpecial = $.event.special,
+    special = require("../../../helpers/eventHelper.js").special,
     onlyMSPointerSupport = !window.PointerEvent && window.MSPointerEvent,
     POINTER_DOWN_EVENT_NAME = onlyMSPointerSupport ? "MSPointerDown" : "pointerdown",
     POINTER_UP_EVENT_NAME = onlyMSPointerSupport ? "MSPointerUp" : "pointerup",
@@ -20,8 +20,8 @@ QUnit.module("mspointer events", {
         this.clock = sinon.useFakeTimers();
 
         $.each(MsPointerStrategy.map, function(pointerEvent, originalEvents) {
-            if($eventSpecial[pointerEvent]) {
-                $eventSpecial[pointerEvent].dispose();
+            if(special[pointerEvent]) {
+                special[pointerEvent].dispose();
             }
             registerEvent(pointerEvent, new MsPointerStrategy(pointerEvent, originalEvents));
         });

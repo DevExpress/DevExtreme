@@ -13,6 +13,9 @@ require("../../../vendor/template-engines/jsrender.min.js");
 window.Mustache = require("../../../vendor/template-engines/mustache.min.js");
 window._ = require("../../../vendor/template-engines/underscore-min.js");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
 
 QUnit.module("custom template rendering", {
     beforeEach: function() {

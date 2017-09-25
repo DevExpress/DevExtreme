@@ -17,6 +17,10 @@ require("angular-route");
 require("ui/list");
 require("ui/button");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 var FIXTURE_ELEMENT = function() { return $("#qunit-fixture"); };
 
 var ignoreAngularBrowserDeferTimer = function(args) {

@@ -948,12 +948,16 @@ QUnit.test("Dispose: attributes deleted", function(assert) {
 QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
 
     var disposeRun = false;
+    var clickRun = false;
 
     var SomeComponent = DOMComponent.inherit({
         _render: function() {
             var p = document.createElement("p");
             p.textContent = "Some text";
             this.element()[0].appendChild(p);
+            eventsEngine.on(this.element(), "click", function() {
+                clickRun = true;
+            });
             this.callBase();
         },
         _dispose: function() {
@@ -961,17 +965,13 @@ QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
         }
     });
 
-    var element = $("#component"),
-        instance = new SomeComponent(element),
-        off = sinon.spy(eventsEngine, "off");
+    var element = $("#component");
+    var instance = new SomeComponent(element);
 
     instance.dispose();
 
-    assert.equal(off.callCount, 2);
+    eventsEngine.trigger(element, "click");
+
     assert.ok(disposeRun);
-    assert.deepEqual(off.getCall(0).args[0].localName, "p");
-    assert.deepEqual(off.getCall(1).args[0].localName, "div");
-
-    off.restore();
-
+    assert.notOk(clickRun);
 });

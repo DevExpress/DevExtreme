@@ -1,8 +1,11 @@
 "use strict";
 
 var StateManager = require("framework/state_manager"),
-
     frameworkMocks = require("../../helpers/frameworkMocks.js");
+
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
 
 QUnit.module("StateManager");
 

@@ -7556,8 +7556,7 @@ QUnit.testInActiveWindow("Cell editor invalid value don't miss focus on saveEdit
     this.editRow(0);
     that.clock.tick();
     var $input = $(rowsView.element().find(".dx-data-row").first().find("td").eq(2).find(".dx-texteditor-input"));
-
-    $input.focus();
+    $input.get(0).focus();
     that.clock.tick();
 
     //assert
@@ -7569,7 +7568,8 @@ QUnit.testInActiveWindow("Cell editor invalid value don't miss focus on saveEdit
     $($input).trigger("change");
 
     $input = $(rowsView.element().find(".dx-data-row").first().find("td").eq(2).find(".dx-texteditor-input"));
-    $input.focus();
+    $input.get(0).blur();
+    $input.get(0).focus();
 
     that.saveEditData();
     that.clock.tick();
@@ -8133,6 +8133,8 @@ QUnit.testInActiveWindow("Save a valid value for an invalid cell when focus in o
         $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
     };
     this.editCell(0, 1);
+
+    getInputElements($cells).first().trigger("dxclick");
     this.clock.tick();
 
     //assert
@@ -8850,6 +8852,7 @@ QUnit.testInActiveWindow("Show the revert button when a row updating is canceled
     $($input).trigger('change');
 
     this.editingController.saveEditData();
+    $input.trigger("dxclick");
     this.clock.tick();
 
     assert.ok(testElement.find(".dx-revert-button").length, "the revert button is shown");
@@ -10375,15 +10378,15 @@ QUnit.testInActiveWindow("Focus editor after click on a label", function(assert)
     this.editRow(0);
     $labels = testElement.find(".dx-datagrid-edit-form label");
 
-    $labels.eq(0).click();
+    $labels.eq(0).trigger("click");
     assert.ok(testElement.find("input[id*='name']").parent().parent().hasClass("dx-state-focused"), "input with 'name' id");
-    $labels.eq(1).click();
+    $labels.eq(1).trigger("click");
     assert.ok(testElement.find("input[id*='age']").parent().parent().hasClass("dx-state-focused"), "input with 'age' id");
-    $labels.eq(2).click();
+    $labels.eq(2).trigger("click");
     assert.ok(testElement.find("input[id*='lastName']").parent().parent().hasClass("dx-state-focused"), "input with 'lastName' id");
-    $labels.eq(3).click();
+    $labels.eq(3).trigger("click");
     assert.ok(testElement.find("input[id*='phone']").parent().parent().hasClass("dx-state-focused"), "input with 'phone' id");
-    $labels.eq(4).click();
+    $labels.eq(4).trigger("click");
     assert.ok(testElement.find("input[id*='room']").parent().parent().hasClass("dx-state-focused"), "input with 'room' id");
 });
 
