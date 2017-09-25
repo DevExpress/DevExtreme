@@ -31,16 +31,6 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
         return this.option("dateCellTemplate");
     },
 
-    _getDateTimeIndicatorWidth: function() {
-        var today = this._getToday(),
-            firstViewDate = new Date(this._firstViewDate);
-
-        var timeDiff = today.getTime() - dateUtils.trimTime(firstViewDate).getTime();
-        var difference = timeDiff / toMs("day");
-
-        return difference * this.getCellWidth();
-    },
-
     _getHiddenInterval: function() {
         return 0;
     },
