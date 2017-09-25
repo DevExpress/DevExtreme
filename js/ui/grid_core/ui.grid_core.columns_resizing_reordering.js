@@ -89,7 +89,7 @@ var TrackerView = modules.View.inherit({
     },
 
     hide: function() {
-        this.element().hide();
+        this.element() && this.element().hide();
     },
 
     setHeight: function(value) {
