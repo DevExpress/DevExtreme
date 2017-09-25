@@ -41,8 +41,16 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
         return difference * this.getCellWidth();
     },
 
+    _getHiddenInterval: function() {
+        return 0;
+    },
+
+    _getDateForIndicator: function() {
+        return dateUtils.trimTime(new Date(this._firstViewDate));
+    },
+
     getCellDuration: function() {
-        return this._calculateDayDuration() * 3600000;
+        return toMs("day");
     },
 
     _getCellCount: function() {

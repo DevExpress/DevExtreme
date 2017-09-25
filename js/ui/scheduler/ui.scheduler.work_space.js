@@ -21,7 +21,8 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
-    tableCreator = require("./ui.scheduler.table_creator");
+    tableCreator = require("./ui.scheduler.table_creator"),
+    DateTimeIndicator = require("./ui.scheduler.currentTimeIndicator");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
@@ -64,12 +65,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     DATE_TABLE_ROW_CLASS = "dx-scheduler-date-table-row",
     DATE_TABLE_FOCUSED_CELL_CLASS = "dx-scheduler-focused-cell",
 
-    DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
-    DATE_TIME_INDICATOR_ALL_DAY_CLASS = "dx-scheduler-date-time-indicator-all-day",
-    DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content",
     TIME_PANEL_CURRENT_TIME_CELL_CLASS = "dx-scheduler-time-panel-current-time-cell",
-    DATE_TIME_INDICATOR_TOP_CLASS = "dx-scheduler-date-time-indicator-top",
-    DATE_TIME_INDICATOR_BOTTOM_CLASS = "dx-scheduler-date-time-indicator-bottom",
 
     DATE_TABLE_DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",
 
@@ -454,6 +450,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this._initDateTableScrollable();
 
         this._createWorkSpaceElements();
+
+        this._dateTimeIndicator = new DateTimeIndicator();
     },
 
     _toggleHorizontalScrollClass: function() {
@@ -718,8 +716,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
 
-        this._cleanDateTimeIndicator();
-        this._renderDateTimeIndicator();
+        this._refreshDateTimeIndicator();
     },
 
     _getElementClass: noop,
@@ -777,8 +774,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._clearIndicatorUpdateInterval();
 
         this._indicatorInterval = setInterval(function() {
-            that._cleanDateTimeIndicator();
-            that._renderDateTimeIndicator();
+            that._refreshDateTimeIndicator();
         }, this.option("indicatorUpdateInterval"));
     },
 
@@ -791,99 +787,12 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _renderDateTimeIndicator: function() {
         if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            var $container = this._dateTableScrollable.content(),
-                indicatorHeight = this._getDateTimeIndicatorHeight(),
-                maxHeight = $container.outerHeight(),
-                renderIndicatorContent = true;
-
-            if(indicatorHeight > maxHeight) {
-                indicatorHeight = maxHeight + 1;
-                renderIndicatorContent = false;
-            }
-
-            if(indicatorHeight > 0) {
-                this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
-                this._$indicator.height(indicatorHeight);
-
-                var indicatorWidth = this._getDateTimeIndicatorWidth();
-                var groupCount = this._getGroupCount() || 1;
-                for(var i = 0; i < groupCount; i++) {
-                    this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth, i);
-
-                    this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth, i);
-
-                    this._renderAllDayIndicator(indicatorWidth, i);
-                }
-                if(renderIndicatorContent) {
-                    var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
-                    $content.css("top", indicatorHeight - 10);
-                    this._$indicator.append($content);
-                }
-                $container.append(this._$indicator);
-            }
-
+            this._dateTimeIndicator.render(true, this);
         }
     },
 
     _getToday: function() {
         return this.option("indicatorTime") || new Date();
-    },
-
-    _getDateTimeIndicatorHeight: function() {
-        var today = this._getToday(),
-            cellHeight = this.getCellHeight(),
-            date = new Date(this._firstViewDate);
-
-        if(this._needRenderDateTimeIndicatorCells()) {
-            date.setDate(today.getDate());
-        }
-
-        var duration = today.getTime() - date.getTime(),
-            cellCount = duration / this.getCellDuration();
-
-        return cellCount * cellHeight;
-    },
-
-    _getDateTimeIndicatorWidth: function() {
-        var today = this._getToday(),
-            firstViewDate = new Date(this._firstViewDate),
-            maxWidth = this.getCellWidth() * this._getCellCount();
-
-        var timeDiff = today.getTime() - firstViewDate.getTime(),
-            difference = Math.ceil(timeDiff / toMs("day")),
-            width = difference * this.getCellWidth();
-
-        return maxWidth < width ? maxWidth : width;
-    },
-
-    _renderTopCurrentTimeIndicator: function($indicator, height, width, i) {
-        this._$topIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_TOP_CLASS);
-        width && this._$topIndicator.width(width) && this._$topIndicator.height(height);
-
-        this._$topIndicator.css("marginTop", -this._dateTableScrollable.content().outerHeight() * i);
-        this._$topIndicator.css("left", this._getCellCount() * this.getCellWidth() * i);
-
-        $indicator.append(this._$topIndicator);
-    },
-
-    _renderBottomCurrentTimeIndicator: function($indicator, height, width, i) {
-        this._$bottomIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_BOTTOM_CLASS);
-        this._$bottomIndicator.width(width - this.getCellWidth()) && this._$bottomIndicator.height(height);
-
-        this._$bottomIndicator.css("left", this._getCellCount() * this.getCellWidth() * i);
-
-        $indicator.append(this._$bottomIndicator);
-    },
-
-    _renderAllDayIndicator: function(indicatorWidth, i) {
-        if(this.option("showAllDayPanel")) {
-            this._$allDayIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_ALL_DAY_CLASS);
-            this._$allDayIndicator.height(this.getAllDayHeight());
-            this._$allDayIndicator.width(indicatorWidth);
-            this._$allDayIndicator.css("left", this._getCellCount() * this.getCellWidth() * i);
-
-            this._$allDayPanel.prepend(this._$allDayIndicator);
-        }
     },
 
     _needRenderDateTimeIndicatorCells: function() {
@@ -1540,20 +1449,15 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
-        this._cleanDateTimeIndicator();
+        this._dateTimeIndicator.clean();
         this._$timePanel.empty();
         this._$allDayTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
     },
 
-    _cleanDateTimeIndicator: function() {
-        this._$indicator && this._$indicator.remove();
-        this._$allDayPanel && this._$allDayPanel.find("." + DATE_TIME_INDICATOR_ALL_DAY_CLASS).remove();
-    },
-
     _refreshDateTimeIndicator: function() {
-        this._cleanDateTimeIndicator();
+        this._dateTimeIndicator.clean();
         this._renderDateTimeIndicator();
     },
 
