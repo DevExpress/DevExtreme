@@ -2,10 +2,10 @@
 
 var FLOAT_SEPARATOR = ".";
 var GROUP_SEPARATOR = ",";
-var CHARS_TO_ESCAPE_REGEXP = /([\\\/\.\*\+\?\|\(\)\[\]\{\}])/g;
-
 function escapeFormat(formatString) {
-    return formatString.replace(CHARS_TO_ESCAPE_REGEXP, "\\$1");
+    var charsToEscape = /([\\\/\.\*\+\?\|\(\)\[\]\{\}])/g;
+
+    return formatString.replace(charsToEscape, "\\$1");
 }
 
 function getGroupSizes(formatString) {
@@ -53,19 +53,33 @@ function getRegExp(formatString) {
     return integerRegexp + floatRegExp;
 }
 
+function getSignParts(format) {
+    var signParts = format.split(";");
+
+    if(signParts.length === 1) {
+        signParts.push("-" + signParts[0]);
+    }
+
+    return signParts;
+}
+
+function isTextAndFormatValid(format, text) {
+    return format && text && typeof format === "string" && typeof text === "string";
+}
+
+function isPercentFormat(format) {
+    return format.endsWith("%");
+}
+
 function generateNumberParser(format) {
     return function(text) {
-        if(typeof text !== "string" || !text || typeof format !== "string" || !format) {
+        if(!isTextAndFormatValid(format, text)) {
             return null;
         }
 
-        var signParts = format.split(";");
-        if(signParts.length === 1) {
-            signParts.push("-" + signParts[0]);
-        }
-
-        var regExpText = signParts.map(getRegExp).join("|");
-        var parseResult = new RegExp("^(" + regExpText + ")$").exec(text);
+        var signParts = getSignParts(format),
+            regExpText = signParts.map(getRegExp).join("|"),
+            parseResult = new RegExp("^(" + regExpText + ")$").exec(text);
 
         if(!parseResult) {
             return null;
@@ -90,6 +104,10 @@ function generateNumberParser(format) {
 
         if(isNegative) {
             value = -value;
+        }
+
+        if(isPercentFormat(format)) {
+            value = value / 100;
         }
 
         return value;
