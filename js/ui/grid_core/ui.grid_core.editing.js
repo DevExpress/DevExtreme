@@ -538,7 +538,7 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this;
 
             if(getEditMode(that) === EDIT_MODE_CELL && !item.inserted && that.hasChanges()) {
-                var d = $.Deferred();
+                var d = new Deferred();
                 that.saveEditData().always(function() {
                     d.resolve(that.hasChanges());
                 });
