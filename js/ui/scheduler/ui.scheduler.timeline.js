@@ -18,9 +18,6 @@ var HORIZONTAL = "horizontal",
     DATE_TABLE_CELL_BORDER = 1,
     toMs = dateUtils.dateToMilliseconds;
 
-var DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
-    DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content";
-
 var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _init: function() {
         this.callBase();
@@ -173,42 +170,8 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _renderDateTimeIndicator: function() {
         if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            var $container = this._dateTableScrollable.content(),
-                indicatorWidth = this._getDateTimeIndicatorWidth(),
-                maxWidth = $container.outerWidth(),
-                renderIndicatorContent = true;
-
-            if(indicatorWidth > maxWidth) {
-                indicatorWidth = maxWidth;
-                renderIndicatorContent = false;
-            }
-
-            if(indicatorWidth > 0) {
-                this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
-                this._$indicator.width(indicatorWidth);
-
-                if(renderIndicatorContent) {
-                    var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spindown");
-                    $content.css("left", indicatorWidth - 16);
-                    this._$indicator.append($content);
-                }
-                $container.append(this._$indicator);
-            }
+            this._dateTimeIndicator.render(false, this);
         }
-    },
-
-    _getDateTimeIndicatorWidth: function() {
-        var today = this._getToday(),
-            cellWidth = this.getCellWidth(),
-            date = new Date(this._firstViewDate),
-            hiddenInterval = (24 - this.option("endDayHour") + this.option("startDayHour")) * toMs("hour"),
-            timeDiff = today.getTime() - date.getTime();
-
-        var differenceInDays = Math.ceil(timeDiff / toMs("day")) - 1,
-            duration = timeDiff - differenceInDays * hiddenInterval,
-            cellCount = duration / this.getCellDuration();
-
-        return cellCount * cellWidth;
     },
 
     _isCurrentTimeHeaderCell: function(headerIndex) {
@@ -341,6 +304,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getGroupIndexByCell: function($cell) {
         return $cell.parent().index();
+    },
+
+    _getDateForIndicator: function() {
+        return new Date(this._firstViewDate);
     },
 
     _getIntervalBetween: function(currentDate, allDay) {
