@@ -64,11 +64,6 @@ QUnit.test("event args", function(assert) {
         "pageX", "pageY", "relatedTarget", "screenX", "screenY", "shiftKey",
         "target", "timeStamp", "type", "view", "which"];
 
-
-    if(!QUnit.urlParams["nojquery"]) {
-        fields = fields.concat(["bubbles", "buttons", "eventPhase", "handleObj", "offsetX", "offsetY", "toElement"]);
-    }
-
     var element = this.element.on("dxclick", function(e) {
         $.each(fields, function() {
             assert.ok(this in e, this);
