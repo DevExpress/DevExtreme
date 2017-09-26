@@ -286,6 +286,11 @@ QUnit.test("Action argument should contain both Event and jQueryEvent field or n
         assert.ok(e.Event);
         assert.ok(e.jQueryEvent);
     }).execute({ Event: eventMock });
+
+    assert.throws(function() {
+        new Action(noop).execute({ jQueryEvent: eventMock });
+    }, /The jQueryEvent field is deprecated\. Please, use the Event field instead/);
+
 });
 
 QUnit.module("excludeValidators", {
