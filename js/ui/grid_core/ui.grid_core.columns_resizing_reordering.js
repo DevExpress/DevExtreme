@@ -1028,9 +1028,21 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                     nameDraggingPanel = draggingPanel.getName(),
                     subscribeToEvents = function(index, columnElement) {
                         var $columnElement = $(columnElement),
-                            column = columns[index];
+                            columnIndex = index,
+                            visibleIndex = index,
+                            column = columns[columnIndex];
 
-                        if(draggingPanel.allowDragging(columns[index], nameDraggingPanel, draggingPanels)) {
+                        if(draggingPanel.getName() === "columnChooser") {
+                            columnIndex = $columnElement.data("dxItemIndex");
+                            column = columns.filter(function(column, index) {
+                                if(column.index === columnIndex) {
+                                    visibleIndex = index;
+                                    return true;
+                                }
+                            })[0];
+                        }
+
+                        if(draggingPanel.allowDragging(column, nameDraggingPanel, draggingPanels)) {
                             $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
                             eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
                                 var e = args.jQueryEvent,
@@ -1040,8 +1052,8 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                                     deltaX: eventData.x - $(e.currentTarget).offset().left,
                                     deltaY: eventData.y - $(e.currentTarget).offset().top,
                                     sourceColumn: column,
-                                    index: column.index,
-                                    columnIndex: index,
+                                    index: columnIndex,
+                                    columnIndex: visibleIndex,
                                     columnElement: $columnElement,
                                     sourceLocation: nameDraggingPanel,
                                     draggingPanels: draggingPanels,
