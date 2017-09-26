@@ -417,7 +417,7 @@ var EditingController = modules.ViewController.inherit((function() {
         /**
          * @name dxDataGridMethods_insertRow
          * @publicName insertRow()
-         * @deprecated
+         * @deprecated dxDataGridMethods_addRow
          */
         insertRow: function() {
             errors.log("W0002", "dxDataGrid", "insertRow", "15.2", "Use the 'addRow' method instead");
@@ -824,7 +824,7 @@ var EditingController = modules.ViewController.inherit((function() {
          * @name dxDataGridMethods_removeRow
          * @publicName removeRow(rowIndex)
          * @param1 rowIndex:number
-         * @deprecated
+         * @deprecated GridBaseMethods_deleteRow
          */
         removeRow: function(rowIndex) {
             errors.log("W0002", "dxDataGrid", "removeRow", "15.2", "Use the 'deleteRow' method instead");

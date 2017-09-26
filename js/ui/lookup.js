@@ -64,6 +64,7 @@ var Lookup = DropDownList.inherit({
         extend(this._deprecatedOptions, {
             /**
             * @name dxLookupOptions_showNextButton
+            * @type boolean
             * @publicName showNextButton
             * @deprecated #pageLoadMode
             */
@@ -337,14 +338,6 @@ var Lookup = DropDownList.inherit({
             * @acceptValues 'scrollBottom'|'nextButton'
             */
             pageLoadMode: "scrollBottom",
-
-            /**
-            * @name dxLookupOptions_showNextButton
-            * @publicName showNextButton
-            * @type boolean
-            * @default undefined
-            */
-            showNextButton: undefined,
 
             /**
             * @name dxLookupOptions_nextButtonText
