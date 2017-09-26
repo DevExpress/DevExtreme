@@ -27,7 +27,9 @@ function getIntegerPartRegExp(formatString) {
         var firstGroupSize = groupSizes[0],
             lastGroupSize = groupSizes[groupSizes.length - 1];
 
-        result = result.replace(new RegExp("[#\\" + GROUP_SEPARATOR + "]+"), "([1-9]\\d{0," + (firstGroupSize - 1) + "},)(\\d{" + firstGroupSize + "},)*\\d{" + lastGroupSize + "}|([1-9]\\d{0," + (lastGroupSize - 1 - requiredDigitCount) + "})?");
+        result = result.replace(new RegExp("[#\\" + GROUP_SEPARATOR + "]+"),
+            "([1-9]\\d{0," + (firstGroupSize - 1) + "},)(\\d{" + firstGroupSize + "},)*\\d{" +
+            lastGroupSize + "}|([1-9]\\d{0," + (lastGroupSize - 1 - requiredDigitCount) + "})?");
     } else {
         result = result.replace(/#+/g, "([1-9]\\d*)?" + (requiredDigitCount ? "" : "|[0]"));
     }
@@ -63,17 +65,17 @@ function getSignParts(format) {
     return signParts;
 }
 
-function isTextAndFormatValid(format, text) {
+function checkParserArguments(format, text) {
     return format && text && typeof format === "string" && typeof text === "string";
 }
 
 function isPercentFormat(format) {
-    return format.endsWith("%");
+    return format.slice(-1) === "%";
 }
 
 function generateNumberParser(format) {
     return function(text) {
-        if(!isTextAndFormatValid(format, text)) {
+        if(!checkParserArguments(format, text)) {
             return null;
         }
 
