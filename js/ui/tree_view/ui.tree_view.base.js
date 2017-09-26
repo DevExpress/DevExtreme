@@ -395,7 +395,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxTreeViewItemTemplate_icon
             */
             /**
             * @name dxTreeViewItemTemplate_items
@@ -426,7 +426,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @publicName showCheckBoxes
             * @type boolean
             * @default false
-            * @deprecated
+            * @deprecated dxTreeViewOptions_showCheckBoxesMode
             */
             "showCheckBoxes": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
 
@@ -435,7 +435,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
              * @publicName selectAllEnabled
              * @type boolean
              * @default false
-             * @deprecated
+            * @deprecated dxTreeViewOptions_showCheckBoxesMode
              */
             "selectAllEnabled": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
 
