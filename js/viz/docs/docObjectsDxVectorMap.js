@@ -119,6 +119,7 @@ var AreaObjects = {
     /**
     * @name areaObjectsmethods_selected
     * @publicName selected(state)
+    * @param1 state:boolean
     * @deprecated MapLayerElementmethods_selected
     * @extend_doc
     */
