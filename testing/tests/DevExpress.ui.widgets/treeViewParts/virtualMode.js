@@ -657,13 +657,13 @@ QUnit.test("SearchValue in virtualMode", function(assert) {
             virtualModeEnabled: true,
             searchValue: "a"
         }),
-        $items = treeView.element().find(".dx-treeview-item");
+        $items = treeView.$element().find(".dx-treeview-item");
 
     assert.equal($items.length, 1, "1 item was rendered after filtration");
 
     treeView.expandItem(1);
 
-    $items = treeView.element().find(".dx-treeview-item");
+    $items = treeView.$element().find(".dx-treeview-item");
     assert.equal($items.length, 2, "2 items were rendered after filtration");
 });
 
@@ -693,7 +693,7 @@ QUnit.test("SearchValue should work after sublevels were expanded", function(ass
 
     treeView.option("searchValue", "a");
 
-    var $items = treeView.element().find(".dx-treeview-item");
+    var $items = treeView.$element().find(".dx-treeview-item");
     assert.equal($items.length, 2, "2 items were rendered after filtration");
 });
 

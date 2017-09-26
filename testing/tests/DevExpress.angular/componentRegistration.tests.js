@@ -1209,7 +1209,7 @@ QUnit.module("nested Widget with templates enabled", {
             _render: function() {
                 var content = $("<div />")
                         .addClass("dx-content")
-                        .appendTo(this.element());
+                        .appendTo(this.$element());
 
                 this.option("integrationOptions.templates")["template"].render({
                     container: content
@@ -1224,7 +1224,7 @@ QUnit.module("nested Widget with templates enabled", {
             _renderContentImpl: noop,
 
             _clean: function() {
-                this.element().empty();
+                this.$element().empty();
             },
 
             _optionChanged: function() {
@@ -1242,13 +1242,13 @@ QUnit.module("nested Widget with templates enabled", {
             },
 
             _render: function() {
-                this.element().append($("<span />").text(this.option("text")));
+                this.$element().append($("<span />").text(this.option("text")));
             },
 
             _renderContentImpl: noop,
 
             _clean: function() {
-                this.element().empty();
+                this.$element().empty();
             },
 
             _optionChanged: function() {
@@ -1337,7 +1337,7 @@ QUnit.test("Dispose nested containers", function(assert) {
         innerDisposed = true;
     });
 
-    outer.element().remove();
+    outer.$element().remove();
     assert.ok(outerDisposed);
     assert.ok(innerDisposed);
 });
@@ -1398,7 +1398,7 @@ QUnit.test("dynamic templates should be supported by angular", function(assert) 
     var TestContainer = Widget.inherit({
         _renderContentImpl: function(template) {
             this._getTemplateByOption("template").render({
-                container: this.element()
+                container: this.$element()
             });
         }
     });
@@ -1461,7 +1461,7 @@ QUnit.test("default NG template is not retrieved for widgets created with angula
             template = template || this.option("integrationOptions.templates").template;
             if(template) {
                 template.render({
-                    container: this.element()
+                    container: this.$element()
                 });
             }
         }
@@ -1497,7 +1497,7 @@ QUnit.test("retrieving default NG template for collection widgets created with a
             template = template || this.option("integrationOptions.templates").template;
             if(template) {
                 template.render({
-                    container: this.element()
+                    container: this.$element()
                 });
             }
         }
@@ -1537,14 +1537,14 @@ QUnit.test("creates anonymous template from its contents", function(assert) {
 
         _render: function() {
             this.option("integrationOptions.templates")["template"].render({
-                container: this.element()
+                container: this.$element()
             });
         },
 
         _renderContentImpl: noop,
 
         _clean: function() {
-            this.element().empty();
+            this.$element().empty();
         }
     });
 
@@ -1594,14 +1594,14 @@ QUnit.test("correct scope as model for template", function(assert) {
 
         _render: function() {
             this.option("integrationOptions.templates")["template"].render({
-                container: this.element()
+                container: this.$element()
             });
         },
 
         _renderContentImpl: noop,
 
         _clean: function() {
-            this.element().empty();
+            this.$element().empty();
         }
     });
 
@@ -1649,12 +1649,12 @@ QUnit.test("Directive is in DOM on linking (T306481)", function(assert) {
     var TestContainer = Widget.inherit({
         _render: function() {
             this.option("integrationOptions.templates")["template"].render({
-                container: this.element()
+                container: this.$element()
             });
         },
         _renderContentImpl: noop,
         _clean: function() {
-            this.element().empty();
+            this.$element().empty();
         }
     });
 
@@ -1689,7 +1689,7 @@ QUnit.test("Widget options does not override scope properties", function(assert)
             if(template) {
                 template.render({
                     model: { text: "Widget model" },
-                    container: this.element()
+                    container: this.$element()
                 });
             }
         }
@@ -1745,11 +1745,11 @@ var initMarkup = function($markup, controller) {
         },
 
         _render: function() {
-            this.element().append($("<span />").text(this.option("text")));
+            this.$element().append($("<span />").text(this.option("text")));
         },
 
         _clean: function() {
-            this.element().empty();
+            this.$element().empty();
         }
     });
 
@@ -2090,7 +2090,7 @@ QUnit.test("template.render() - data parameter is Scope", function(assert) {
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            var element = this.element().get(0);
+            var element = this.$element().get(0);
             this.scope = angular.element(element).scope().$new();
             this.scope.text = this.option("text");
         },
@@ -2098,7 +2098,7 @@ QUnit.test("template.render() - data parameter is Scope", function(assert) {
         _render: function() {
             var content = $("<div />")
                     .addClass("dx-content")
-                    .appendTo(this.element());
+                    .appendTo(this.$element());
 
             this.option("integrationOptions.templates")["template"].render({
                 model: this.scope,
@@ -2216,7 +2216,7 @@ QUnit.test("child collection widget should be rendered correctly when template p
     var ChildWidget = Widget.inherit({
         _render: function() {
             this.callBase();
-            this.element().addClass("child-widget");
+            this.$element().addClass("child-widget");
         }
     });
 
@@ -2225,7 +2225,7 @@ QUnit.test("child collection widget should be rendered correctly when template p
     var ParentWidget = Widget.inherit({
         _render: function() {
             this.callBase();
-            var $childWidget = $("<div>").appendTo(this.element());
+            var $childWidget = $("<div>").appendTo(this.$element());
             this._createComponent($childWidget, "dxChildWidget");
         }
     });

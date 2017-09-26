@@ -1328,7 +1328,7 @@ QUnit.test("item hold should not open overlay if editing disabled", function(ass
 
     list.option("allowItemDeleting", false);
 
-    var $menu = list.element().find(toSelector(CONTEXTMENU_CLASS));
+    var $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS));
     assert.ok(!$menu.length, "overlay won't created");
 });
 
@@ -1345,7 +1345,7 @@ QUnit.test("item hold should not open overlay if widget is disabled", function(a
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
-        $menu = list.element().find(toSelector(CONTEXTMENU_CLASS)),
+        $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance");
 
     $item.trigger(contextMenuEvent.name);
@@ -1403,7 +1403,7 @@ QUnit.test("delete menu item click should remove item and hide overlay", functio
 
     var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
         $item = $items.eq(0),
-        $menu = list.element().find(toSelector(CONTEXTMENU_CLASS)),
+        $menu = list.$element().find(toSelector(CONTEXTMENU_CLASS)),
         menu = $menu.dxOverlay("instance"),
         $menuContent = $(menu.content()),
         $deleteMenuItem = $menuContent.find(toSelector(CONTEXTMENU_MENUITEM));
@@ -2804,7 +2804,7 @@ QUnit.module("reordering decorator", {
 });
 
 var mockScrollViewForReordering = function(list) {
-    var $items = list.element().find(toSelector(LIST_ITEM_CLASS)),
+    var $items = list.$element().find(toSelector(LIST_ITEM_CLASS)),
         itemHeight = $items.eq(0).outerHeight(),
         listHeight = itemHeight * $items.length,
 
@@ -2821,7 +2821,7 @@ var mockScrollViewForReordering = function(list) {
         }
     };
 
-    list.element().dxScrollView("option", "pushBackValue", 0);
+    list.$element().dxScrollView("option", "pushBackValue", 0);
 
     list.scrollTo = function(y) {
         scrollTop = y;

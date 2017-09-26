@@ -1535,7 +1535,7 @@ QUnit.test("scrollTop should be greater than 0 on init for prevent WebView bounc
         refreshStrategy: "pullDown"
     }).dxScrollView("instance");
 
-    var $container = $(scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS));
+    var $container = $(scrollView.$element().find("." + SCROLLABLE_CONTAINER_CLASS));
 
     assert.equal($container.scrollTop(), 1, "real scrollTop is greater than 0");
 });
@@ -1546,7 +1546,7 @@ QUnit.test("scrollTop should be greater than 0 after scroll event for prevent We
         refreshStrategy: "pullDown"
     }).dxScrollView("instance");
 
-    var $container = $(scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS));
+    var $container = $(scrollView.$element().find("." + SCROLLABLE_CONTAINER_CLASS));
 
     scrollView.scrollTo({ y: 10 });
     $($container).trigger("scroll");
@@ -2188,7 +2188,7 @@ QUnit.test("onReachBottom", function(assert) {
         }
     }).dxScrollView("instance");
 
-    var $container = scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS);
+    var $container = scrollView.$element().find("." + SCROLLABLE_CONTAINER_CLASS);
 
     $container.scrollTop($container.prop("scrollHeight") - $container.prop("clientHeight"));
     $($container).trigger("scroll");

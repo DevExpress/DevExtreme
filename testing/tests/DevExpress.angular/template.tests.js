@@ -45,7 +45,7 @@ QUnit.test("template should be rendered to container directly", function(assert)
         assert.equal($(element).parent().get(0), $container.get(0), "template rendered in attached container");
     };
 
-    this.instance.element().append($container);
+    this.instance.$element().append($container);
     var template = this.instance._getTemplate($("<div class='content' test-binding>"));
     template.render({
         container: $container
@@ -60,7 +60,7 @@ QUnit.test("template result should be correct", function(assert) {
         $result = element;
     };
 
-    this.instance.element().append($container);
+    this.instance.$element().append($container);
     var template = this.instance._getTemplate($("<div class='content' test-binding>"));
     template.render({
         container: $container

@@ -13,7 +13,7 @@ var TestComponent = HierarchicalCollectionWidget.inherit({
     _activeStateUnit: ".item",
 
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     },
 
     _createActionByOption: function(optionName, config) {

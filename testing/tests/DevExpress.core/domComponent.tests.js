@@ -771,7 +771,7 @@ QUnit.test("element method should return correct component element", function(as
     var $element = $("#component").TestComponent();
     var instance = $element.TestComponent("instance");
 
-    assert.strictEqual(instance.element().get(0), $element.get(0), "correct element present");
+    assert.strictEqual(instance.$element().get(0), $element.get(0), "correct element present");
 });
 
 $.each(["onInitialized", "onOptionChanged", "onDisposing"], function(_, action) {
@@ -808,9 +808,9 @@ QUnit.test("the 'elementAttr' option should set attributes to widget element acc
 QUnit.test("changing class via 'elementAttr' option should preserve component specific classes", function(assert) {
     var SomeComponent = DOMComponent.inherit({
         _render: function() {
-            this.element().addClass("dx-some-class1");
+            this.$element().addClass("dx-some-class1");
             this.callBase();
-            this.element().addClass("dx-some-class2");
+            this.$element().addClass("dx-some-class2");
         }
     });
 
@@ -856,7 +856,7 @@ QUnit.test("Dispose: content of container is cleaned", function(assert) {
         _render: function() {
             var p = document.createElement("p");
             p.textContent = "Some text";
-            this.element()[0].appendChild(p);
+            this.$element()[0].appendChild(p);
             this.callBase();
         }
     });
@@ -953,7 +953,7 @@ QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
         _render: function() {
             var p = document.createElement("p");
             p.textContent = "Some text";
-            this.element()[0].appendChild(p);
+            this.$element()[0].appendChild(p);
             this.callBase();
         },
         _dispose: function() {

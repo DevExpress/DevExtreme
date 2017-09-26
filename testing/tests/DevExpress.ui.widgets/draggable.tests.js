@@ -48,7 +48,7 @@ var moduleConfig = {
 QUnit.module("rendering", moduleConfig);
 
 QUnit.test("element has class", function(assert) {
-    assert.ok(this.createDraggable().element().hasClass(DRAGGABLE_CLASS));
+    assert.ok(this.createDraggable().$element().hasClass(DRAGGABLE_CLASS));
 });
 
 QUnit.test("'immediate' option", function(assert) {
@@ -116,11 +116,11 @@ QUnit.test("'disabled' option", function(assert) {
 QUnit.test("'dx-state-disabled' class (T284305)", function(assert) {
     var instance = this.createDraggable({ direction: 'horizontal' });
 
-    instance.element().addClass("dx-state-disabled");
+    instance.$element().addClass("dx-state-disabled");
     this.pointer.down().move(100, 0).up();
     this.checkPosition(0, 0, assert);
 
-    instance.element().removeClass("dx-state-disabled");
+    instance.$element().removeClass("dx-state-disabled");
     this.pointer.down().move(100, 0).up();
     this.checkPosition(100, 0, assert);
 });

@@ -62,7 +62,7 @@
 
                 var summary = $("#summary").dxValidationSummary("instance"),
                     item = summary.option("items")[0],
-                    editor = item.validator.element().dxTextBox("instance");
+                    editor = item.validator.$element().dxTextBox("instance");
 
                 assert.equal(summary.option("items").length, 1, "item count is OK");
                 assert.equal(item.text, "Server exception", "text of first item is OK");

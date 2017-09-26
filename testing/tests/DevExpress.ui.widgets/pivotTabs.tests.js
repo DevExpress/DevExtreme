@@ -102,7 +102,7 @@ var animationCapturing = {
 QUnit.module("pivot tabs rendering");
 
 QUnit.test("widget should be rendered", function(assert) {
-    var $pivotTabs = new PivotTabs($("#pivottabs")).element();
+    var $pivotTabs = new PivotTabs($("#pivottabs")).$element();
 
     assert.ok($pivotTabs.hasClass(PIVOT_CLASS), "widget class added");
 });
@@ -157,7 +157,7 @@ var testItemsPositionsRTL = function($itemElements, items, selectedIndex, tabsCo
 QUnit.test("selected item should have selected class", function(assert) {
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
-    }).element();
+    }).$element();
 
     var $item = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)).eq(0);
 
@@ -169,7 +169,7 @@ QUnit.test("items should be rendered in correctly positions", function(assert) {
 
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: items
-    }).element();
+    }).$element();
 
     testItemsPositions($pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)), items, 0);
 });
@@ -180,7 +180,7 @@ QUnit.test("items should be rendered in correctly positions in RTL mode", functi
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: items,
         rtlEnabled: true
-    }).element();
+    }).$element();
 
     testItemsPositionsRTL($pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)), items, 0, $pivotTabs.width());
 });
@@ -192,7 +192,7 @@ QUnit.test("items should be rendered properly if index differs from zero", funct
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: items,
         selectedIndex: selectedIndex
-    }).element();
+    }).$element();
 
     testItemsPositions($pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)), items, selectedIndex);
 });
@@ -205,7 +205,7 @@ QUnit.test("items should be rendered properly if index differs from zero in RTL 
         items: items,
         selectedIndex: selectedIndex,
         rtlEnabled: true
-    }).element();
+    }).$element();
 
     testItemsPositionsRTL($pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)), items, selectedIndex, $pivotTabs.width());
 });
@@ -213,7 +213,7 @@ QUnit.test("items should be rendered properly if index differs from zero in RTL 
 QUnit.test("ghost item should be rendered", function(assert) {
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
-    }).element();
+    }).$element();
 
     var $ghostItem = $pivotTabs.find(toSelector(PIVOT_GHOST_ITEM_CLASS));
 
@@ -239,7 +239,7 @@ QUnit.test("swipe should be rejected", function(assert) {
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
         selectedIndex: 0
-    }).element();
+    }).$element();
 
     var pointer = pointerMock($pivotTabs);
 
@@ -252,7 +252,7 @@ QUnit.test("tab click should be rejected", function(assert) {
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
             selectedIndex: 0
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS));
 
@@ -276,7 +276,7 @@ QUnit.test("disabled should reject swipe", function(assert) {
             selectedIndex: 0,
             disabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var pointer = pointerMock($pivotTabs);
 
@@ -290,7 +290,7 @@ QUnit.test("disabled should reject tab click", function(assert) {
             selectedIndex: 0,
             disabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS));
 
@@ -303,7 +303,7 @@ QUnit.test("swipeEnabled option", function(assert) {
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
             swipeEnabled: false
         }),
-        $pivotTabs = pivotTabs.element(),
+        $pivotTabs = pivotTabs.$element(),
         pointer = pointerMock($pivotTabs);
 
     var swipeEvent = pointer.start().swipeStart().lastEvent();
@@ -331,7 +331,7 @@ QUnit.test("items change should draw items in correct positions", function(asser
     var pivotTabs = new PivotTabs($("#pivottabs"), {
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     pivotTabs.option("items", items);
 
@@ -345,7 +345,7 @@ QUnit.test("items change should draw items in correct positions in RTL mode", fu
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     pivotTabs.option("items", items);
 
@@ -359,7 +359,7 @@ QUnit.test("selected index change should change items positions", function(asser
     var pivotTabs = new PivotTabs($("#pivottabs"), {
             items: items
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     pivotTabs.option("selectedIndex", 1);
 
@@ -374,7 +374,7 @@ QUnit.test("selected index change should change items positions in RTL mode", fu
             items: items,
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     pivotTabs.option("selectedIndex", 1);
 
@@ -478,7 +478,7 @@ QUnit.test("change to next item should cause animation to new item", function(as
     var pivotTabs = new PivotTabs($("#pivottabs"), {
             items: [{ title: "all" }, { title: "unread" }]
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS));
 
@@ -505,7 +505,7 @@ QUnit.test("change to next item should cause animation to new item in RTL mode",
             items: [{ title: "all" }, { title: "unread" }],
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         tabsContainerWidth = $pivotTabs.width();
@@ -529,7 +529,7 @@ QUnit.test("change to not next item should cause animation to new position from 
     var pivotTabs = new PivotTabs($("#pivottabs"), {
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS));
 
@@ -560,7 +560,7 @@ QUnit.test("change to not next item should cause animation to new position from 
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         tabsContainerWidth = $pivotTabs.width();
@@ -620,7 +620,7 @@ QUnit.test("tab click should change selected item", function(assert) {
     var pivotTabs = new PivotTabs($("#pivottabs"), {
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS));
 
@@ -651,7 +651,7 @@ QUnit.test("swipe should change selected item", function(assert) {
     var pivotTabs = new PivotTabs($("#pivottabs"), {
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     pointerMock($pivotTabs).start().swipeStart().swipe(-0.5).swipeEnd(-1);
     assert.equal(pivotTabs.option("selectedIndex"), 1, "item selected");
@@ -665,7 +665,7 @@ QUnit.test("swipe should change selected item in RTL mode", function(assert) {
             items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     pointerMock($pivotTabs).start().swipeStart().swipe(0.5).swipeEnd(1);
     assert.equal(pivotTabs.option("selectedIndex"), 1, "item selected");
@@ -679,7 +679,7 @@ QUnit.test("long fast left or right swipe should change selected index only by +
             items: [{ title: "all" }, { title: "unread" }],
             width: 100
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var startEvent = pointerMock($pivotTabs).start().swipeStart().lastEvent();
 
@@ -691,7 +691,7 @@ QUnit.test("left swipe should cause correct animation", function(assert) {
     var pivotTabs = new PivotTabs($("#pivottabs"), {
             items: [{ title: "all" }, { title: "unread" }]
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         pointer = pointerMock($pivotTabs);
@@ -721,7 +721,7 @@ QUnit.test("right swipe should cause correct animation in RTL mode", function(as
             items: [{ title: "all" }, { title: "unread" }],
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         pointer = pointerMock($pivotTabs),
@@ -753,7 +753,7 @@ QUnit.test("canceled left swipe should cause correct animation", function(assert
                 assert.ok(true, "rollback fired");
             }
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         pointer = pointerMock($pivotTabs);
@@ -778,7 +778,7 @@ QUnit.test("canceled right swipe should cause correct animation in RTL", functio
             items: [{ title: "all" }, { title: "unread" }],
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         pointer = pointerMock($pivotTabs),
@@ -801,7 +801,7 @@ QUnit.test("right swipe should cause correct animation", function(assert) {
     var pivotTabs = new PivotTabs($("#pivottabs"), {
             items: [{ title: "all" }, { title: "unread" }]
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         pointer = pointerMock($pivotTabs);
@@ -830,7 +830,7 @@ QUnit.test("left swipe should cause correct animation in RTL mode", function(ass
             items: [{ title: "all" }, { title: "unread" }],
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         pointer = pointerMock($pivotTabs),
@@ -862,7 +862,7 @@ QUnit.test("canceled right swipe should cause correct animation", function(asser
                 assert.ok(true, "rollback fired");
             }
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         pointer = pointerMock($pivotTabs);
@@ -892,7 +892,7 @@ QUnit.test("canceled left swipe should cause correct animation in RTL mode", fun
             items: [{ title: "all" }, { title: "unread" }],
             rtlEnabled: true
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var $items = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)),
         pointer = pointerMock($pivotTabs),
@@ -924,7 +924,7 @@ QUnit.test("items should respond to mouse move", function(assert) {
             assert.ok(true, "update position fired");
             assert.ok(args.offset, "offset present");
         }
-    }).element();
+    }).$element();
 
     var $item = $pivotTabs.find(toSelector(PIVOT_ITEM_CLASS)).eq(0);
 
@@ -940,7 +940,7 @@ QUnit.test("items should respond to mouse move", function(assert) {
 QUnit.test("items should not respond to mouse move if only one item present", function(assert) {
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "favorites" }]
-    }).element();
+    }).$element();
 
     var mouse = pointerMock($pivotTabs);
     var startEvent = mouse.start().swipeStart().lastEvent();
@@ -951,7 +951,7 @@ QUnit.test("items should not respond to mouse move if only one item present", fu
 QUnit.test("tabs should not move left greater that tabs container width", function(assert) {
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
-    }).element();
+    }).$element();
 
     var mouse = pointerMock($pivotTabs).start();
 
@@ -965,7 +965,7 @@ QUnit.test("tabs should not move left greater that tabs container width", functi
 QUnit.test("ghost item should appear replacing last item when user swiping left to right", function(assert) {
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
-    }).element();
+    }).$element();
 
     var $ghostItem = $pivotTabs.find(toSelector(PIVOT_GHOST_ITEM_CLASS));
 
@@ -990,7 +990,7 @@ QUnit.test("ghost item should appear replacing last item when user swiping right
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
         rtlEnabled: true
-    }).element();
+    }).$element();
 
     var $ghostItem = $pivotTabs.find(toSelector(PIVOT_GHOST_ITEM_CLASS));
 
@@ -1014,7 +1014,7 @@ QUnit.test("ghost item should appear replacing last item when user swiping right
 QUnit.test("ghost item should not appear when user swiping right to left", function(assert) {
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }]
-    }).element();
+    }).$element();
 
     var $ghostItem = $pivotTabs.find(toSelector(PIVOT_GHOST_ITEM_CLASS));
 
@@ -1029,7 +1029,7 @@ QUnit.test("ghost item should not appear when user swiping left to right in RTL 
     var $pivotTabs = new PivotTabs($("#pivottabs"), {
         items: [{ title: "all" }, { title: "unread" }, { title: "favorites" }],
         rtlEnabled: true
-    }).element();
+    }).$element();
 
     var $ghostItem = $pivotTabs.find(toSelector(PIVOT_GHOST_ITEM_CLASS));
 
@@ -1049,7 +1049,7 @@ QUnit.test("previous animation should be stopped", function(assert) {
                 assert.ok(true, "prepare fired");
             }
         }),
-        $pivotTabs = pivotTabs.element();
+        $pivotTabs = pivotTabs.$element();
 
     var pointer = pointerMock($pivotTabs);
 
@@ -1085,7 +1085,7 @@ QUnit.test("items should respond to updatePosition method call", function(assert
         }
     });
 
-    var $item = pivotTabs.element().find(toSelector(PIVOT_ITEM_CLASS)).eq(0);
+    var $item = pivotTabs.$element().find(toSelector(PIVOT_ITEM_CLASS)).eq(0);
 
     pivotTabs.prepare();
     pivotTabs.updatePosition(10);

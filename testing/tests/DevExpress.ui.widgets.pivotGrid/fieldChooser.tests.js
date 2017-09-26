@@ -86,7 +86,7 @@ QUnit.test("Empty options", function(assert) {
     assert.equal($areaFieldsContainers.eq(4).attr("group"), "data", "group 5");
     assert.equal($areaFieldsContainers.eq(4).attr("allow-scrolling"), "true", "group 5 - allow-scrolling");
 
-    var sortable = this.fieldChooser.element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortable("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), true, "dragging should be enabled by default");
 });
@@ -1243,7 +1243,7 @@ QUnit.test("Pass allowDragging to sortable", function(assert) {
         allowFieldDragging: false
     });
 
-    var sortable = this.fieldChooser.element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortable("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), false, "allowDragging is passed to sortable");
 });
@@ -1255,7 +1255,7 @@ QUnit.test("Change allowDragging at runtime", function(assert) {
     });
     this.fieldChooser.option("allowFieldDragging", true);
 
-    var sortable = this.fieldChooser.element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortable("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), true, "allowDragging is passed to sortable");
 });
@@ -1352,7 +1352,7 @@ QUnit.test("change group position", function(assert) {
 
     changedArgs.sourceElement = this.$container.find(".dx-area-field").eq(2);
 
-    var sortable = this.fieldChooser.element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged");
     //act
     onChangedHandler(changedArgs);
@@ -1481,7 +1481,7 @@ QUnit.test("render dxContextMenu", function(assert) {
     this.setup(dataSourceOptions);
 
     //assert
-    assert.equal(this.fieldChooser.element().find(".dx-has-context-menu").length, 1, "ContextMenu was created");
+    assert.equal(this.fieldChooser.$element().find(".dx-has-context-menu").length, 1, "ContextMenu was created");
 
 });
 
@@ -1782,7 +1782,7 @@ QUnit.test("change group position", function(assert) {
     };
     this.setup(dataSourceOptions);
 
-    var sortable = this.fieldChooser.element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged"),
         changedArgs = {
             sourceElement: this.$container.find(".dx-area-field").eq(2),

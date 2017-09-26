@@ -522,7 +522,7 @@ QUnit.test("T184799: expand item", function(assert) {
             onItemExpanded: handler
         }).dxTreeView("instance");
 
-        var $rootItem = $(treeView.element()).find("." + internals.ITEM_CLASS).eq(0);
+        var $rootItem = $(treeView.$element()).find("." + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
         this.clock.tick(0);
@@ -537,7 +537,7 @@ QUnit.test("T184799: expand item", function(assert) {
         assert.ok(args.node.expanded);
         assert.equal(args.itemData.text, "Item 1");
         assert.equal(args.node.text, "Item 1");
-        assert.equal(treeView.element().find("." + internals.ITEM_CLASS).length, 3);
+        assert.equal(treeView.$element().find("." + internals.ITEM_CLASS).length, 3);
     }
 });
 
@@ -629,7 +629,7 @@ QUnit.test("T184799: collapse item", function(assert) {
             onItemCollapsed: handler
         }).dxTreeView("instance");
 
-        var $rootItem = $(treeView.element()).find("." + internals.ITEM_CLASS).eq(0);
+        var $rootItem = $(treeView.$element()).find("." + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
 
@@ -643,7 +643,7 @@ QUnit.test("T184799: collapse item", function(assert) {
         assert.ok(!args.node.expanded);
         assert.equal(args.itemData.text, "Item 1");
         assert.equal(args.node.text, "Item 1");
-        assert.equal(treeView.element().find("." + internals.ITEM_CLASS).length, 3);
+        assert.equal(treeView.$element().find("." + internals.ITEM_CLASS).length, 3);
     }
 });
 
