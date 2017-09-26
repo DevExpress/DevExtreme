@@ -102,7 +102,7 @@ var SchedulerHeader = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(COMPONENT_CLASS);
+        this.$element().addClass(COMPONENT_CLASS);
     },
 
     _render: function() {
@@ -125,13 +125,13 @@ var SchedulerHeader = Widget.inherit({
             observer: this.option("observer")
         });
 
-        this._navigator.element().appendTo(this.element());
+        this._navigator.$element().appendTo(this.$element());
     },
 
     _renderViewSwitcher: function() {
         this._validateViews();
 
-        var $viewSwitcher = $("<div>").addClass(VIEW_SWITCHER_CLASS).appendTo(this.element());
+        var $viewSwitcher = $("<div>").addClass(VIEW_SWITCHER_CLASS).appendTo(this.$element());
 
         if(!this.option("useDropDownViewSwitcher")) {
             this._renderViewSwitcherTabs($viewSwitcher);
@@ -183,7 +183,7 @@ var SchedulerHeader = Widget.inherit({
 
     _refreshViewSwitcher: function() {
         this._viewSwitcher._dispose();
-        this._viewSwitcher.element().remove();
+        this._viewSwitcher.$element().remove();
 
         delete this._viewSwitcher;
 
@@ -204,7 +204,7 @@ var SchedulerHeader = Widget.inherit({
     _renderViewSwitcherDropDownMenu: function($element) {
         var that = this;
 
-        this._$viewSwitcherLabel = $("<div>").addClass(VIEW_SWITCHER_LABEL_CLASS).appendTo(this.element());
+        this._$viewSwitcherLabel = $("<div>").addClass(VIEW_SWITCHER_LABEL_CLASS).appendTo(this.$element());
 
         this._changeViewSwitcherLabelText();
 

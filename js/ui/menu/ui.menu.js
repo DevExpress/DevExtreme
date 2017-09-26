@@ -222,7 +222,7 @@ var Menu = MenuBase.inherit({
     },
 
     _focusTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _isMenuHorizontal: function() {
@@ -322,9 +322,9 @@ var Menu = MenuBase.inherit({
             return;
         }
 
-        var $menuItems = this.element().find("ul").first().children("li").children("." + DX_MENU_ITEM_CLASS),
+        var $menuItems = this.$element().find("ul").first().children("li").children("." + DX_MENU_ITEM_CLASS),
             menuItemsWidth = 0,
-            containerWidth = this.element().outerWidth();
+            containerWidth = this.$element().outerWidth();
 
         $menuItems.each(function(_, menuItem) {
             menuItemsWidth += $(menuItem).outerWidth(true);
@@ -349,7 +349,7 @@ var Menu = MenuBase.inherit({
     _render: function() {
         this._visibleSubmenu = null;
         this.callBase();
-        this.element().addClass(DX_MENU_CLASS);
+        this.$element().addClass(DX_MENU_CLASS);
         this._isAdaptivityEnabled() && this._initAdaptivity();
         this.setAria("role", "menubar");
     },
@@ -361,7 +361,7 @@ var Menu = MenuBase.inherit({
             onClick: this._toggleTreeView.bind(this)
         });
 
-        return this._hamburger.element();
+        return this._hamburger.$element();
     },
 
     _toggleTreeView: function(state) {
@@ -373,12 +373,12 @@ var Menu = MenuBase.inherit({
     },
 
     _toggleHamburgerActiveState: function(state) {
-        this._hamburger && this._hamburger.element().toggleClass(DX_STATE_ACTIVE_CLASS, state);
+        this._hamburger && this._hamburger.$element().toggleClass(DX_STATE_ACTIVE_CLASS, state);
     },
 
     _toggleAdaptiveMode: function(state) {
-        var $menuItemsContainer = this.element().find("." + DX_MENU_HORIZONTAL_CLASS),
-            $adaptiveElements = this.element().find("." + DX_ADAPTIVE_MODE_CLASS);
+        var $menuItemsContainer = this.$element().find("." + DX_MENU_HORIZONTAL_CLASS),
+            $adaptiveElements = this.$element().find("." + DX_ADAPTIVE_MODE_CLASS);
 
         if(state) {
             this._hideVisibleSubmenu();
@@ -431,7 +431,7 @@ var Menu = MenuBase.inherit({
                 collision: "flipfit",
                 at: "bottom " + position,
                 my: "top " + position,
-                of: this._hamburger.element()
+                of: this._hamburger.$element()
             }
         };
     },
@@ -486,14 +486,14 @@ var Menu = MenuBase.inherit({
         this._overlay = this._createComponent($("<div>"), Overlay, this._getAdaptiveOverlayOptions());
 
         this._overlay.content()
-            .append(this._treeView.element())
+            .append(this._treeView.$element())
             .addClass(DX_ADAPTIVE_MODE_CLASS)
             .addClass(this.option("cssClass"));
 
         this._$adaptiveContainer.append($hamburger);
-        this._$adaptiveContainer.append(this._overlay.element());
+        this._$adaptiveContainer.append(this._overlay.$element());
 
-        this.element().append(this._$adaptiveContainer);
+        this.$element().append(this._$adaptiveContainer);
 
         this._dimensionChanged();
     },
@@ -512,7 +512,7 @@ var Menu = MenuBase.inherit({
         var $wrapper = $("<div>");
 
         $wrapper
-            .appendTo(this.element())
+            .appendTo(this.$element())
             .addClass(this._isMenuHorizontal() ? DX_MENU_HORIZONTAL_CLASS : DX_MENU_VERTICAL_CLASS);
 
         return this.callBase($wrapper);
@@ -642,7 +642,7 @@ var Menu = MenuBase.inherit({
     },
 
     _clearRootSelection: function() {
-        var $prevSelectedItem = this.element().find("." + DX_MENU_ITEMS_CONTAINER_CLASS).first().children().children().filter("." + this._selectedItemClass());
+        var $prevSelectedItem = this.$element().find("." + DX_MENU_ITEMS_CONTAINER_CLASS).first().children().children().filter("." + this._selectedItemClass());
 
         if($prevSelectedItem.length) {
             var prevSelectedItemData;
@@ -737,7 +737,7 @@ var Menu = MenuBase.inherit({
             return;
         }
 
-        var isRootItemHovered = $(this._visibleSubmenu.element().context).hasClass(DX_STATE_HOVER_CLASS),
+        var isRootItemHovered = $(this._visibleSubmenu.$element().context).hasClass(DX_STATE_HOVER_CLASS),
             isSubmenuItemHovered = this._visibleSubmenu.getOverlayContent().find("." + DX_STATE_HOVER_CLASS).length;
 
         if(!isSubmenuItemHovered && !isRootItemHovered) {

@@ -157,7 +157,7 @@ QUnit.test("Check root layout width on init", function(assert) {
         rootLayoutManager = instance._rootLayoutManager;
 
     //assert
-    assert.equal(rootLayoutManager.element().width(), 100, "Correct width");
+    assert.equal(rootLayoutManager.$element().width(), 100, "Correct width");
 });
 
 QUnit.test("Check root layout width on option change", function(assert) {
@@ -864,7 +864,7 @@ QUnit.test("The dxForm is not rendered correctly when colCount is zero", functio
 
     //assert
     assert.equal(form.getEditor("name").option("value"), "Batman");
-    assert.equal(form.element().find("." + internals.FORM_FIELD_ITEM_COL_CLASS + "0").length, 1);
+    assert.equal(form.$element().find("." + internals.FORM_FIELD_ITEM_COL_CLASS + "0").length, 1);
 
     //act
     form.option("colCount", 1);
@@ -872,7 +872,7 @@ QUnit.test("The dxForm is not rendered correctly when colCount is zero", functio
 
     //assert
     assert.equal(form.getEditor("name").option("value"), "Batman");
-    assert.equal(form.element().find("." + internals.FORM_FIELD_ITEM_COL_CLASS + "0").length, 1);
+    assert.equal(form.$element().find("." + internals.FORM_FIELD_ITEM_COL_CLASS + "0").length, 1);
 });
 
 QUnit.test("Invalid field name when item is defined not as string and not as object", function(assert) {
@@ -883,7 +883,7 @@ QUnit.test("Invalid field name when item is defined not as string and not as obj
     }).data("dxForm");
 
     //assert
-    assert.equal(form.element().find("." + internals.FIELD_ITEM_CLASS).length, 1, "items count");
+    assert.equal(form.$element().find("." + internals.FIELD_ITEM_CLASS).length, 1, "items count");
     assert.equal(form.getEditor("name"), undefined, "editor by name field");
     assert.equal(form.getEditor("lastName").option("value"), "Klark", "editor by lastName field");
 });
@@ -954,8 +954,8 @@ QUnit.test("Validation boundary for editors when scrolling is enabled_T306331", 
     form.validate();
 
     //assert
-    assert.equal(form.getEditor("id").option("validationBoundary"), form.element());
-    assert.equal(form.getEditor("name").option("validationBoundary"), form.element());
+    assert.equal(form.getEditor("id").option("validationBoundary"), form.$element());
+    assert.equal(form.getEditor("name").option("validationBoundary"), form.$element());
 });
 
 QUnit.test("Validation boundary for editors when scrolling is disabled_T306331", function(assert) {
@@ -990,7 +990,7 @@ QUnit.test("dxshown event fire when visible option changed to true", function(as
         }).data("dxForm"),
         dxShownEventCounter = 0;
 
-    $(form.element())
+    $(form.$element())
         .find(".dx-visibility-change-handler")
         .first()
         .on("dxshown", function() {
@@ -1086,7 +1086,7 @@ QUnit.test("Reset editor's value with validation", function(assert) {
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
 
-    assert.ok(!form.getEditor("lastName").element().hasClass("dx-invalid"), "not invalid css class");
+    assert.ok(!form.getEditor("lastName").$element().hasClass("dx-invalid"), "not invalid css class");
     assert.ok(form.getEditor("lastName").option("isValid"), "isValid");
 });
 
@@ -2565,7 +2565,7 @@ QUnit.test("Check component instance onEditorEnterKey", function(assert) {
 
     //act
     editor = form.getEditor("work");
-    triggerKeyUp(editor.element(), 13);
+    triggerKeyUp(editor.$element(), 13);
 
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
@@ -2821,9 +2821,9 @@ QUnit.test("Validate via validation rules", function(assert) {
     form.validate();
 
     //assert
-    assert.equal(form.element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
 });
 
 QUnit.test("Validate with a custom validation group", function(assert) {
@@ -2846,9 +2846,9 @@ QUnit.test("Validate with a custom validation group", function(assert) {
     form.validate();
 
     //assert
-    assert.equal(form.element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
 });
 
 QUnit.test("Validate form when several forms are rendered", function(assert) {
@@ -2882,13 +2882,13 @@ QUnit.test("Validate form when several forms are rendered", function(assert) {
     form1.validate();
 
     //assert
-    assert.equal(form1.element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form1.element().find(".dx-invalid [id=" + getID(form1, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form1.element().find(".dx-invalid [id=" + getID(form1, "firstName") + "]").length, 1, "invalid firstName editor");
+    assert.equal(form1.$element().find(".dx-invalid").length, 2, "invalid editors count");
+    assert.equal(form1.$element().find(".dx-invalid [id=" + getID(form1, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form1.$element().find(".dx-invalid [id=" + getID(form1, "firstName") + "]").length, 1, "invalid firstName editor");
 
-    assert.equal(form2.element().find(".dx-invalid").length, 0, "invalid editors count");
-    assert.equal(form2.element().find(".dx-invalid [id=" + getID(form2, "name2") + "]").length, 0, "invalid name editor");
-    assert.equal(form2.element().find(".dx-invalid [id=" + getID(form2, "firstName2") + "]").length, 0, "invalid firstName editor");
+    assert.equal(form2.$element().find(".dx-invalid").length, 0, "invalid editors count");
+    assert.equal(form2.$element().find(".dx-invalid [id=" + getID(form2, "name2") + "]").length, 0, "invalid name editor");
+    assert.equal(form2.$element().find(".dx-invalid [id=" + getID(form2, "firstName2") + "]").length, 0, "invalid firstName editor");
 });
 
 QUnit.test("Validate via 'isRequired' item option", function(assert) {
@@ -2913,11 +2913,11 @@ QUnit.test("Validate via 'isRequired' item option", function(assert) {
     form.validate();
 
     //assert
-    assert.equal(form.element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.element().find(".dx-invalid-message").first().text(), "Middle name is required", "Message contains the custom label name of validated field by default");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
-    assert.equal(form.element().find(".dx-invalid-message").last().text(), "First Name is required", "Message contains the name of validated field by default if label isn't defined");
+    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(".dx-invalid-message").first().text(), "Middle name is required", "Message contains the custom label name of validated field by default");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    assert.equal(form.$element().find(".dx-invalid-message").last().text(), "First Name is required", "Message contains the name of validated field by default if label isn't defined");
 });
 
 QUnit.test("Validate via validationRules when rules and 'isRequired' item option are both defined", function(assert) {
@@ -2938,8 +2938,8 @@ QUnit.test("Validate via validationRules when rules and 'isRequired' item option
     form.validate();
 
     //assert
-    assert.equal(form.element().find(".dx-invalid").length, 1, "invalid editors count");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "lastName") + "]").length, 1, "invalid lastName editor");
+    assert.equal(form.$element().find(".dx-invalid").length, 1, "invalid editors count");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "lastName") + "]").length, 1, "invalid lastName editor");
 });
 
 QUnit.test("Reset validation summary when values are reset in form", function(assert) {

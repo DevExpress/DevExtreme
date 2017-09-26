@@ -686,14 +686,14 @@ var Lookup = DropDownList.inherit({
     },
 
     _inputWrapper: function() {
-        return this.element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
+        return this.$element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
     },
 
     _render: function() {
         this._renderSubmitElement();
         this.callBase();
 
-        this.element()
+        this.$element()
             .addClass(LOOKUP_CLASS)
             .toggleClass(LOOKUP_POPOVER_MODE, this.option("usePopover"));
     },
@@ -701,7 +701,7 @@ var Lookup = DropDownList.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _getSubmitElement: function() {
@@ -729,7 +729,7 @@ var Lookup = DropDownList.inherit({
         this._$fieldWrapper = $("<div>").addClass(LOOKUP_FIELD_WRAPPER_CLASS)
             .append(this._$field)
             .append($arrow)
-            .appendTo(this.element());
+            .appendTo(this.$element());
 
         this.option("useInkRipple") && this._renderInkRipple();
     },
@@ -766,7 +766,7 @@ var Lookup = DropDownList.inherit({
         }
 
         this._$field.text(this.option("displayValue") || this.option("placeholder"));
-        this.element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option("selectedItem"));
+        this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option("selectedItem"));
     },
 
     _renderFieldTemplate: function(template) {
@@ -827,11 +827,11 @@ var Lookup = DropDownList.inherit({
         this._popup = this._createComponent(this._$popup, Popover, extend(this._popupConfig(), {
             showEvent: null,
             hideEvent: null,
-            target: this.element(),
+            target: this.$element(),
             fullScreen: false,
             shading: false,
             closeOnTargetScroll: true,
-            width: this._isInitialOptionValue("popupWidth") ? (function() { return this.element().outerWidth(); }).bind(this) : this._popupConfig().width
+            width: this._isInitialOptionValue("popupWidth") ? (function() { return this.$element().outerWidth(); }).bind(this) : this._popupConfig().width
         }));
 
         this._popup.on({
@@ -946,7 +946,7 @@ var Lookup = DropDownList.inherit({
 
     _dimensionChanged: function() {
         if(this.option("usePopover") && !this.option("popupWidth")) {
-            this.option("popupWidth", this.element().width());
+            this.option("popupWidth", this.$element().width());
         }
 
         this.callBase();
@@ -1170,7 +1170,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _renderPlaceholder: function() {
-        if(this.element().find("input").length === 0) {
+        if(this.$element().find("input").length === 0) {
             return;
         }
 

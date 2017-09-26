@@ -257,12 +257,12 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     _clean: function() {
-        this.element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
+        this.$element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
     },
 
     _renderContentImpl: function() {
         var that = this,
-            element = this.element(),
+            element = this.$element(),
             $container = $(DIV).addClass(FIELDCHOOSER_CONTAINER_CLASS).appendTo(element),
             layout = that.option("layout"),
             $col1,
@@ -343,10 +343,10 @@ var FieldChooser = BaseFieldChooser.inherit({
 
     _renderContextMenu: function() {
         var that = this,
-            $container = that.element();
+            $container = that.$element();
 
         if(that._contextMenu) {
-            that._contextMenu.element().remove();
+            that._contextMenu.$element().remove();
         }
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
@@ -628,7 +628,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName updateDimensions()
     */
     updateDimensions: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             $container = $element.children(".dx-pivotgridfieldchooser-container"),
             $cols = $element.find(".dx-col"),
             $areaElements = $element.find(".dx-area-fields"),

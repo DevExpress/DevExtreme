@@ -390,7 +390,7 @@ var Map = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        this.element()
+        this.$element()
             .addClass(MAP_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
 
@@ -421,13 +421,13 @@ var Map = Widget.inherit({
         this._$container = $("<div>")
             .addClass(MAP_CONTAINER_CLASS);
 
-        this.element().append(this._$container);
+        this.$element().append(this._$container);
     },
 
     _grabEvents: function() {
         var eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
 
-        eventsEngine.on(this.element(), eventName, this._cancelEvent.bind(this));
+        eventsEngine.on(this.$element(), eventName, this._cancelEvent.bind(this));
     },
 
     _cancelEvent: function(e) {
@@ -460,9 +460,9 @@ var Map = Widget.inherit({
 
         if(DevExpress && DevExpress.designMode || this.option("disabled")) {
             $shield = $("<div>").addClass(MAP_SHIELD_CLASS);
-            this.element().append($shield);
+            this.$element().append($shield);
         } else {
-            $shield = this.element().find("." + MAP_SHIELD_CLASS);
+            $shield = this.$element().find("." + MAP_SHIELD_CLASS);
             $shield.remove();
         }
     },

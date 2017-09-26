@@ -101,13 +101,13 @@ QUnit.test("Bind chart instance to pivotGrid", function(assert) {
     assert.ok(chartOptions);
     assert.ok(chartOptions.dataSource);
     assert.ok(chartOptions.seriesTemplate);
-    assert.strictEqual(chart.element().data("dxPivotGridUnbinding"), chartBinding);
+    assert.strictEqual(chart.$element().data("dxPivotGridUnbinding"), chartBinding);
 });
 
 QUnit.test("Bind chart instance set as element to pivotGrid", function(assert) {
     var pivotGrid = createPivotGrid(this.pivotGridOptions),
         chart = createChart(),
-        chartBinding = pivotGrid.bindChart(chart.element()),
+        chartBinding = pivotGrid.bindChart(chart.$element()),
         chartOptions = this.getChartOptions();
 
     assert.ok(chartBinding);
@@ -189,7 +189,7 @@ QUnit.test("Unbind chart from pivotGrid", function(assert) {
 
     newChartDS = this.getChartOptions().dataSource;
     assert.ok(chartDataSource === newChartDS, "chart dataSource is not updated");
-    assert.ok(!chart.element().data("dxPivotGridUnbinding"));
+    assert.ok(!chart.$element().data("dxPivotGridUnbinding"));
 });
 
 QUnit.test("Binding same chart two times", function(assert) {
@@ -215,7 +215,7 @@ QUnit.test("Change pivotGrid after disposing bound chart", function(assert) {
     pivotGrid.bindChart(chart);
     pivotGrid.getDataSource().field(0, { area: null });
 
-    chart.element().remove();
+    chart.$element().remove();
 
     assert.ok(pivotGrid.getDataSource().load());
 });
@@ -229,7 +229,7 @@ QUnit.test("Unbind chart after pivotGrid disposing", function(assert) {
     pivotGrid.bindChart(chart);
     pivotGridDataSource.field(0, { area: null });
 
-    pivotGrid.element().remove();
+    pivotGrid.$element().remove();
     chart.on("done", chartReady);
 
     pivotGridDataSource.load();

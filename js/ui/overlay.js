@@ -441,7 +441,7 @@ var Overlay = Widget.inherit({
         this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
 
-        var $element = this.element();
+        var $element = this.$element();
         this._$wrapper.addClass($element.attr("class"));
         $element.addClass(OVERLAY_CLASS);
 
@@ -495,7 +495,7 @@ var Overlay = Widget.inherit({
     _initContainer: function(container) {
         container = container === undefined ? viewPortUtils.value() : container;
 
-        var $element = this.element(),
+        var $element = this.$element(),
             $container = $element.closest(container);
 
         if(!$container.length) {
@@ -922,7 +922,7 @@ var Overlay = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._$content.appendTo(this.element());
+        this._$content.appendTo(this.$element());
         this._renderVisibilityAnimate(this.option("visible"));
     },
 
@@ -952,7 +952,7 @@ var Overlay = Widget.inherit({
             return this._parentHidden;
         }
 
-        var $parent = this.element().parent();
+        var $parent = this.$element().parent();
 
         if($parent.is(":visible")) {
             return false;
@@ -971,7 +971,7 @@ var Overlay = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        var $element = this.element();
+        var $element = this.$element();
         this._$content.appendTo($element);
 
         var contentTemplate = this._getTemplate(this.option("contentTemplate"));
@@ -1149,7 +1149,7 @@ var Overlay = Widget.inherit({
     },
 
     _moveFromContainer: function() {
-        this._$content.appendTo(this.element());
+        this._$content.appendTo(this.$element());
 
         this._detachWrapperToContainer();
     },
@@ -1165,7 +1165,7 @@ var Overlay = Widget.inherit({
     },
 
     _attachWrapperToContainer: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         if(this._$container && this._$container[0] !== $element.parent()[0]) {
             this._$wrapper.appendTo(this._$container);

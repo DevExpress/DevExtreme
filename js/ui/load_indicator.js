@@ -144,7 +144,7 @@ var LoadIndicator = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(LOADINDICATOR_CLASS);
+        this.$element().addClass(LOADINDICATOR_CLASS);
     },
 
     _render: function() {
@@ -157,7 +157,7 @@ var LoadIndicator = Widget.inherit({
 
     _renderWrapper: function() {
         this._$wrapper = $("<div>").addClass(LOADINDICATOR_WRAPPER_CLASS);
-        this.element().append(this._$wrapper);
+        this.$element().append(this._$wrapper);
     },
 
     _renderIndicatorContent: function() {
@@ -217,8 +217,8 @@ var LoadIndicator = Widget.inherit({
             height = this.option("height");
 
         if(width || height) {
-            width = this.element().width();
-            height = this.element().height();
+            width = this.$element().width();
+            height = this.$element().height();
             var minDimension = Math.min(height, width);
 
             this._$wrapper.css({

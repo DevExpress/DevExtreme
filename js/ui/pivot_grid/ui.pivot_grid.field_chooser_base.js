@@ -156,13 +156,13 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
     },
 
     _renderContentImpl: function() {
-        this._headerFilterView.render(this.element());
+        this._headerFilterView.render(this.$element());
     },
 
     renderSortable: function() {
         var that = this;
 
-        that._createComponent(that.element(), Sortable, extend({
+        that._createComponent(that.$element(), Sortable, extend({
             allowDragging: that.option("allowFieldDragging"),
             itemSelector: ".dx-area-field",
             itemContainerSelector: ".dx-area-field-container",
@@ -306,7 +306,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             eventsEngine.on(element, clickEvent.name, ".dx-area-field.dx-area-box", func);
             return;
         }
-        eventsEngine.on(that.element(), clickEvent.name, ".dx-area-field.dx-area-box", func);
+        eventsEngine.on(that.$element(), clickEvent.name, ".dx-area-field.dx-area-box", func);
     },
 
     _initTemplates: noop,
