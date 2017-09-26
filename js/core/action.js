@@ -38,6 +38,11 @@ var Action = Class.inherit({
         var beforeExecute = this._beforeExecute,
             afterExecute = this._afterExecute;
 
+        var argsBag = e.args[0] || {};
+        if(argsBag.Event) {
+            argsBag.jQueryEvent = argsBag.Event;
+        }
+
         if(!this._validateAction(e)) {
             return;
         }
@@ -50,8 +55,7 @@ var Action = Class.inherit({
 
         var result = this._executeAction(e);
 
-        var argsBag = e.args[0];
-        if(argsBag && argsBag.cancel) {
+        if(argsBag.cancel) {
             return;
         }
 

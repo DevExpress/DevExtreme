@@ -274,6 +274,19 @@ QUnit.test("ui interaction validator should prevent all ui action handlers by 'd
     assert.ok(!handlerSpy.called);
 });
 
+QUnit.test("Action argument should contain both Event and jQueryEvent field or none of them", function(assert) {
+    var eventMock = {};
+
+    new Action(function(e) {
+        assert.notOk(e.Event);
+        assert.notOk(e.jQueryEvent);
+    }).execute({});
+
+    new Action(function(e) {
+        assert.ok(e.Event);
+        assert.ok(e.jQueryEvent);
+    }).execute({ Event: eventMock });
+});
 
 QUnit.module("excludeValidators", {
     beforeEach: function() {
