@@ -64,7 +64,7 @@ var BaseView = Widget.inherit({
 
     _renderImpl: function() {
         this._$table = $("<table>");
-        this.element().append(this._$table);
+        this.$element().append(this._$table);
 
         this._createDisabledDatesHandler();
         this._renderBody();

@@ -193,7 +193,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             partialWidth = options.containerWidth * parseFloat(options.columnWidth) / 100,
             resultWidth = options.columnsCanFit && (partialWidth < options.bestFitWidth) ? options.bestFitWidth : partialWidth;
 
-        return columnFitted ? this.component.element().width() * parseFloat(options.columnWidth) / 100 : resultWidth;
+        return columnFitted ? this.component.$element().width() * parseFloat(options.columnWidth) / 100 : resultWidth;
     },
 
     _getNotTruncatedColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
@@ -380,7 +380,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         if(that._isVisibleColumnsValid(visibleColumns) && hiddenQueue.length) {
             var totalWidth = 0,
                 percentWidths,
-                $rootElement = that.component.element(),
+                $rootElement = that.component.$element(),
                 rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth(),
                 contentColumns = visibleColumns.filter(function(item) {
                     return !item.command;
@@ -677,7 +677,7 @@ module.exports = {
 
                 _getColumnIndexByElementCore: function($element) {
                     var $itemContent = $element.closest("." + FORM_ITEM_CONTENT_CLASS);
-                    if($itemContent.length && $itemContent.closest(this.component.element()).length) {
+                    if($itemContent.length && $itemContent.closest(this.component.$element()).length) {
                         var formItem = $itemContent.length ? $itemContent.first().data("dx-form-item") : null;
                         return formItem && formItem.column && this._columnsController.getVisibleIndex(formItem.column.index);
                     } else {

@@ -59,7 +59,7 @@ var GalleryNavButton = Widget.inherit({
         this.callBase();
 
         var that = this,
-            $element = this.element(),
+            $element = this.$element(),
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
         $element.addClass(GALLERY_CLASS + "-nav-button-" + this.option("direction"));
@@ -338,7 +338,7 @@ var Gallery = CollectionWidget.inherit({
 
     _itemPercentWidth: function() {
         var percentWidth,
-            elementWidth = this.element().outerWidth(),
+            elementWidth = this.$element().outerWidth(),
             initialItemWidth = this.option("initialItemWidth");
 
         if(initialItemWidth && initialItemWidth <= elementWidth) {
@@ -369,8 +369,8 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _render: function() {
-        this.element().addClass(GALLERY_CLASS);
-        this.element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
+        this.$element().addClass(GALLERY_CLASS);
+        this.$element().toggleClass(GALLERY_LOOP_CLASS, this.option("loop"));
 
         this._renderDragHandler();
         this._renderWrapper();
@@ -418,8 +418,8 @@ var Gallery = CollectionWidget.inherit({
     _renderDragHandler: function() {
         var eventName = eventUtils.addNamespace("dragstart", this.NAME);
 
-        eventsEngine.off(this.element(), eventName);
-        eventsEngine.on(this.element(), eventName, "img", function() { return false; });
+        eventsEngine.off(this.$element(), eventName);
+        eventsEngine.on(this.$element(), eventName, "img", function() { return false; });
     },
 
     _renderWrapper: function() {
@@ -428,7 +428,7 @@ var Gallery = CollectionWidget.inherit({
         }
         this._$wrapper = $("<div>")
             .addClass(GALLERY_WRAPPER_CLASS)
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _renderItems: function(items) {
@@ -458,7 +458,7 @@ var Gallery = CollectionWidget.inherit({
 
         if(!itemsCount) return;
 
-        this.element().find("." + GALLERY_LOOP_ITEM_CLASS).remove();
+        this.$element().find("." + GALLERY_LOOP_ITEM_CLASS).remove();
 
         var duplicateCount = Math.min(this._itemsPerPage(), itemsCount);
 
@@ -492,7 +492,7 @@ var Gallery = CollectionWidget.inherit({
         var itemWidth = this._actualItemWidth(),
             itemsCount = this._itemsCount(),
             itemsPerPage = this._itemsPerPage(),
-            loopItemsCount = this.element().find("." + GALLERY_LOOP_ITEM_CLASS).length,
+            loopItemsCount = this.$element().find("." + GALLERY_LOOP_ITEM_CLASS).length,
             lastItemDuplicateIndex = itemsCount + loopItemsCount - 1,
             offsetRatio = this.option("wrapAround") ? 0.5 : 0,
             freeSpace = this._itemFreeSpace(),
@@ -555,11 +555,11 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _startSwipe: function() {
-        this.element().addClass(GALLERY_ACTIVE_CLASS);
+        this.$element().addClass(GALLERY_ACTIVE_CLASS);
     },
 
     _endSwipe: function() {
-        this.element().removeClass(GALLERY_ACTIVE_CLASS);
+        this.$element().removeClass(GALLERY_ACTIVE_CLASS);
     },
 
     _animate: function(targetPosition, extraConfig) {
@@ -679,7 +679,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _renderUserInteraction: function() {
-        var rootElement = this.element(),
+        var rootElement = this.$element(),
             swipeEnabled = this.option("swipeEnabled") && this._itemsCount() > 1;
 
         this._createComponent(rootElement, Swipeable, {
@@ -880,7 +880,7 @@ var Gallery = CollectionWidget.inherit({
 
     _elementWidth: function() {
         if(!this._cacheElementWidth) {
-            this._cacheElementWidth = this.element().width();
+            this._cacheElementWidth = this.$element().width();
         }
 
         return this._cacheElementWidth;
@@ -1118,7 +1118,7 @@ var Gallery = CollectionWidget.inherit({
                 break;
             case "loop":
                 this.option("loopItemFocus", value);
-                this.element().toggleClass(GALLERY_LOOP_CLASS, value);
+                this.$element().toggleClass(GALLERY_LOOP_CLASS, value);
                 this._renderDuplicateItems();
                 this._renderItemPositions();
                 this._renderNavButtonsVisibility();

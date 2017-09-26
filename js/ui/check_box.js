@@ -133,7 +133,7 @@ var CheckBox = Editor.inherit({
         this._renderText();
         this.option("useInkRipple") && this._renderInkRipple();
 
-        this.element()
+        this.$element()
             .addClass(CHECKBOX_CLASS)
             .append(this._$container);
     },
@@ -141,7 +141,7 @@ var CheckBox = Editor.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _getSubmitElement: function() {
@@ -197,7 +197,7 @@ var CheckBox = Editor.inherit({
         if(!textValue) {
             if(this._$text) {
                 this._$text.remove();
-                this.element().removeClass(CHECKBOX_HAS_TEXT_CLASS);
+                this.$element().removeClass(CHECKBOX_HAS_TEXT_CLASS);
             }
             return;
         }
@@ -209,7 +209,7 @@ var CheckBox = Editor.inherit({
         this._$text.text(textValue);
 
         this._$container.append(this._$text);
-        this.element().addClass(CHECKBOX_HAS_TEXT_CLASS);
+        this.$element().addClass(CHECKBOX_HAS_TEXT_CLASS);
     },
 
     _renderClick: function() {
@@ -218,8 +218,8 @@ var CheckBox = Editor.inherit({
 
         that._clickAction = that._createAction(that._clickHandler);
 
-        eventsEngine.off(that.element(), eventName);
-        eventsEngine.on(that.element(), eventName, function(e) {
+        eventsEngine.off(that.$element(), eventName);
+        eventsEngine.on(that.$element(), eventName, function(e) {
             that._clickAction({ jQueryEvent: e });
         });
     },
@@ -232,7 +232,7 @@ var CheckBox = Editor.inherit({
     },
 
     _renderValue: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             checked = this.option("value"),
             indeterminate = checked === undefined;
 

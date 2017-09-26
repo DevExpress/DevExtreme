@@ -31,7 +31,7 @@ var appointmentTooltip = {
 
         this.hide();
 
-        this._$tooltip = $("<div>").appendTo(instance.element());
+        this._$tooltip = $("<div>").appendTo(instance.$element());
 
         this._tooltip = instance._createComponent(this._$tooltip, Tooltip, {
             visible: true,
@@ -47,7 +47,7 @@ var appointmentTooltip = {
                 my: "bottom",
                 at: "top",
                 of: $appointment,
-                boundary: isAllDay ? instance.element() : instance.getWorkSpaceScrollableContainer(),
+                boundary: isAllDay ? instance.$element() : instance.getWorkSpaceScrollableContainer(),
                 collision: "fit flipfit"
             }
         });
@@ -144,7 +144,7 @@ var appointmentTooltip = {
                 }, true);
                 that.hide();
             }
-        })).element();
+        })).$element();
     },
 
     _getOpenButton: function(appointmentData, singleAppointmentData) {
@@ -157,7 +157,7 @@ var appointmentTooltip = {
                 that.instance.showAppointmentPopup(appointmentData, false, singleAppointmentData);
                 that.hide();
             }
-        })).element();
+        })).$element();
     }
 };
 module.exports = appointmentTooltip;

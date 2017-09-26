@@ -95,20 +95,20 @@ var DeferRendering = Widget.inherit({
         this._initElement();
         this._initRender();
 
-        this._$initialContent = this.element().clone().contents();
+        this._$initialContent = this.$element().clone().contents();
 
         this._initActions();
         this.callBase();
     },
 
     _initElement: function() {
-        this.element()
+        this.$element()
             .addClass(DEFER_RENDERING_CLASS);
     },
 
     _initRender: function() {
         var that = this,
-            $element = this.element(),
+            $element = this.$element(),
             renderWhen = this.option("renderWhen");
 
         var doRender = function() {
@@ -134,14 +134,14 @@ var DeferRendering = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this.element().removeClass(WIDGET_CLASS);
-        this.element().append(this._$initialContent);
+        this.$element().removeClass(WIDGET_CLASS);
+        this.$element().append(this._$initialContent);
         this._setLoadingState();
     },
 
     _renderDeferredContent: function() {
         var that = this,
-            $element = this.element(),
+            $element = this.$element(),
             result = new Deferred();
 
         $element.removeClass(PENDING_RENDERING_MANUAL_CLASS);
@@ -173,7 +173,7 @@ var DeferRendering = Widget.inherit({
 
     _animate: function() {
         var that = this,
-            $element = this.element(),
+            $element = this.$element(),
             animation = this.option("animation"),
             staggerItemSelector = this.option("staggerItemSelector"),
             animatePromise;
@@ -199,7 +199,7 @@ var DeferRendering = Widget.inherit({
     },
 
     _renderImpl: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             renderedArgs = {
                 element: $element
             };
@@ -222,7 +222,7 @@ var DeferRendering = Widget.inherit({
     },
 
     _setLoadingState: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             hasCustomLoadIndicator = !!$element.find("." + VISIBLE_WHILE_PENDING_RENDERING_CLASS).length;
 
         $element.addClass(PENDING_RENDERING_CLASS);
@@ -236,7 +236,7 @@ var DeferRendering = Widget.inherit({
     },
 
     _showLoadIndicator: function($container) {
-        this._$loadIndicator = new LoadIndicator($('<div>'), { visible: true }).element()
+        this._$loadIndicator = new LoadIndicator($('<div>'), { visible: true }).$element()
             .addClass(DEFER_DEFER_RENDERING_LOAD_INDICATOR);
 
         $("<div>")
@@ -247,7 +247,7 @@ var DeferRendering = Widget.inherit({
     },
 
     _setRenderedState: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         if(this._$loadIndicator) {
             this._$loadIndicator.remove();

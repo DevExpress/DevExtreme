@@ -162,13 +162,13 @@ var DropDownBox = DropDownEditor.inherit({
     _render: function() {
         this._renderSubmitElement();
         this.callBase();
-        this.element().addClass(DROP_DOWN_BOX_CLASS);
+        this.$element().addClass(DROP_DOWN_BOX_CLASS);
     },
 
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _renderValue: function() {
@@ -229,7 +229,7 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _updatePopupWidth: function() {
-        this._setPopupOption("width", this.element().outerWidth());
+        this._setPopupOption("width", this.$element().outerWidth());
     },
 
     _dimensionChanged: function() {
@@ -269,7 +269,7 @@ var DropDownBox = DropDownEditor.inherit({
 
     _popupConfig: function() {
         return extend(this.callBase(), {
-            width: this.element().outerWidth(),
+            width: this.$element().outerWidth(),
             height: "auto",
             tabIndex: -1,
             dragEnabled: false,
@@ -279,7 +279,7 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _getMaxHeight: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             offsetTop = $element.offset().top - $(window).scrollTop(),
             offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight(),
             maxHeight = Math.max(offsetTop, offsetBottom) * 0.9;

@@ -98,7 +98,7 @@ var ContextMenuView = modules.View.inherit({
                 },
 
                 cssClass: that.getWidgetContainerClass(),
-                target: that.component.element()
+                target: that.component.$element()
             });
     }
 });

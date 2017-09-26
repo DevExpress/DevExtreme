@@ -59,7 +59,7 @@ exports.HeaderFilterView = modules.View.inherit({
     applyHeaderFilter: function(options) {
         var that = this,
             list = that.getListContainer(),
-            isSelectAll = list.element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
+            isSelectAll = list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
             filterValues = [];
 
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {

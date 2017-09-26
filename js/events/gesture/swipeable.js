@@ -37,7 +37,7 @@ var Swipeable = DOMComponent.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(SWIPEABLE_CLASS);
+        this.$element().addClass(SWIPEABLE_CLASS);
         this._attachEventHandlers();
     },
 
@@ -57,7 +57,7 @@ var Swipeable = DOMComponent.inherit({
 
             eventName = eventUtils.addNamespace(eventName, NAME);
 
-            eventsEngine.on(this.element(), eventName, this._eventData, function(e) {
+            eventsEngine.on(this.$element(), eventName, this._eventData, function(e) {
                 return action({ jQueryEvent: e });
             });
         }).bind(this));
@@ -73,7 +73,7 @@ var Swipeable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        eventsEngine.off(this.element(), "." + DX_SWIPEABLE);
+        eventsEngine.off(this.$element(), "." + DX_SWIPEABLE);
     },
 
     _optionChanged: function(args) {

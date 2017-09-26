@@ -132,14 +132,14 @@ var Command = DOMComponent.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass("dx-command");
+        this.$element().addClass("dx-command");
     },
 
     _renderDisabledState: noop,
 
     _dispose: function() {
         this.callBase();
-        this.element().removeData(this.NAME);
+        this.$element().removeData(this.NAME);
     }
 });
 

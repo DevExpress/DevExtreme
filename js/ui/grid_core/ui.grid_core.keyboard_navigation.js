@@ -107,7 +107,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent(),
             data = event.data;
 
-        if($grid.is(this.component.element()) && this._isCellValid($cell)) {
+        if($grid.is(this.component.$element()) && this._isCellValid($cell)) {
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($cell);
             if(!this._editingController.isEditing()) {
@@ -475,7 +475,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         var $masterDetailCell = $(element).closest("." + MASTER_DETAIL_CELL_CLASS),
             $masterDetailGrid = $masterDetailCell.closest("." + this.getWidgetContainerClass()).parent();
 
-        return $masterDetailCell.length && $masterDetailGrid.is(this.component.element());
+        return $masterDetailCell.length && $masterDetailGrid.is(this.component.$element());
     },
 
     _handleTabKeyOnMasterDetailCell: function(target, direction) {

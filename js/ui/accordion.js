@@ -188,7 +188,7 @@ var Accordion = CollectionWidget.inherit({
         this.option("selectionRequired", !this.option("collapsible"));
         this.option("selectionMode", this.option("multiple") ? "multiple" : "single");
 
-        var $element = this.element();
+        var $element = this.$element();
         $element.addClass(ACCORDION_CLASS);
 
         this._$container = $("<div>").addClass(ACCORDION_WRAPPER_CLASS);
@@ -416,7 +416,7 @@ var Accordion = CollectionWidget.inherit({
             itemsHeight += $(title).outerHeight();
         });
 
-        return this.element().height() - itemsHeight;
+        return this.$element().height() - itemsHeight;
     },
 
     _visibilityChanged: function(visible) {

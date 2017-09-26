@@ -625,7 +625,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(!that._editPopup) {
                 var $popupContainer = $("<div>")
-                        .appendTo(that.component.element())
+                        .appendTo(that.component.$element())
                         .addClass(that.addWidgetPrefix(EDIT_POPUP_CLASS));
 
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
@@ -1337,7 +1337,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(rowIndex >= 0 && this._editForm) {
                 if(!forceUpdateRow) {
-                    $focusedItemElement = this._editForm.element().find(".dx-state-focused");
+                    $focusedItemElement = this._editForm.$element().find(".dx-state-focused");
                     columnIndex = rowsView.getCellIndex($focusedItemElement, rowIndex);
                 }
 
@@ -1958,7 +1958,7 @@ module.exports = {
                         editFormRowIndex = editingController.getEditFormRowIndex();
 
                     if(editFormRowIndex === rowIndex && $cellElements && editForm) {
-                        return editForm.element().find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
+                        return editForm.$element().find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
                     }
 
                     return $cellElements;

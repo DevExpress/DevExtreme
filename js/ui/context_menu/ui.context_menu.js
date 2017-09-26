@@ -326,7 +326,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _getAriaTarget: function() {
-            return this.element();
+            return this.$element();
         },
 
         _refreshActiveDescendant: function() {
@@ -375,7 +375,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _clean: function() {
             if(this._overlay) {
-                this._overlay.element().remove();
+                this._overlay.$element().remove();
                 this._overlay = null;
             }
             this._detachShowContextMenuEvents(this._getTarget());
@@ -383,7 +383,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _render: function() {
-            this.element()
+            this.$element()
                 .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
             this.callBase();
@@ -594,7 +594,7 @@ var ContextMenu = MenuBase.inherit((function() {
             $activeItemContainer = this._getActiveItemsContainer(e.target);
             $itemContainers = this._getItemsContainers();
             $clickedItem = this._searchActiveItem(e.target);
-            $rootItem = this.element().parents("." + DX_MENU_ITEM_CLASS);
+            $rootItem = this.$element().parents("." + DX_MENU_ITEM_CLASS);
             isRootItemClicked = $clickedItem[0] === $rootItem[0] && $clickedItem.length && $rootItem.length;
             isInnerOverlayClicked = this._isIncludeOverlay($activeItemContainer, $itemContainers) && $clickedItem.length;
 

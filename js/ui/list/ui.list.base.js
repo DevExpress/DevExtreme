@@ -63,7 +63,7 @@ var ListBase = CollectionWidget.inherit({
 
         var getEdgeVisibleItem = function(direction) {
             var scrollTop = that.scrollTop(),
-                containerHeight = that.element().height();
+                containerHeight = that.$element().height();
 
             var $item = that.option("focusedElement"),
                 isItemVisible = true;
@@ -94,7 +94,7 @@ var ListBase = CollectionWidget.inherit({
             var resultPosition = $item.position().top;
 
             if(direction === "prev") {
-                resultPosition = $item.position().top - that.element().height() + $item.outerHeight();
+                resultPosition = $item.position().top - that.$element().height() + $item.outerHeight();
             }
 
             that.scrollTo(resultPosition);
@@ -554,7 +554,7 @@ var ListBase = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-        this._$container = this.element();
+        this._$container = this.$element();
 
         this._initScrollView();
 
@@ -586,7 +586,7 @@ var ListBase = CollectionWidget.inherit({
             autoPagingEnabled = scrollingEnabled && commonUtils.ensureDefined(this.option("autoPagingEnabled"), this.option("pageLoadMode") === "scrollBottom") && !!this._dataSource;
         this._resumeDeprecatedWarnings();
 
-        this._scrollView = this._createComponent(this.element(), ScrollView, {
+        this._scrollView = this._createComponent(this.$element(), ScrollView, {
             disabled: this.option("disabled") || !scrollingEnabled,
             onScroll: this._scrollHandler.bind(this),
             onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
@@ -712,7 +712,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _infiniteDataLoading: function() {
-        var isElementVisible = this.element().is(":visible");
+        var isElementVisible = this.$element().is(":visible");
 
         if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
             clearTimeout(this._loadNextPageTimer);
@@ -746,7 +746,7 @@ var ListBase = CollectionWidget.inherit({
     _attachGroupCollapseEvent: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
             selector = "." + LIST_GROUP_HEADER_CLASS,
-            $element = this.element(),
+            $element = this.$element(),
             collapsibleGroups = this.option("collapsibleGroups");
 
         $element.toggleClass(LIST_COLLAPSIBLE_GROUPS_CLASS, collapsibleGroups);
@@ -805,7 +805,7 @@ var ListBase = CollectionWidget.inherit({
     _render: function() {
         this._itemElementsCache = $();
 
-        this.element().addClass(LIST_CLASS);
+        this.$element().addClass(LIST_CLASS);
         this.callBase();
 
         this.option("useInkRipple") && this._renderInkRipple();
@@ -930,7 +930,7 @@ var ListBase = CollectionWidget.inherit({
         var dataSource = this._dataSource,
             $nextButton = this._getNextButton();
 
-        this.element().toggleClass(LIST_HAS_NEXT_CLASS, value);
+        this.$element().toggleClass(LIST_HAS_NEXT_CLASS, value);
 
         if(value && dataSource && dataSource.isLoaded()) {
             $nextButton.appendTo(this._itemContainer());

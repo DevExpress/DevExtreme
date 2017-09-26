@@ -553,7 +553,7 @@ module.exports = {
                                             onClick: function() {
                                                 that._editingController.cancelEditData();
                                             }
-                                        })).element();
+                                        })).$element();
                                 },
                                 position: {
                                     my: "left top",

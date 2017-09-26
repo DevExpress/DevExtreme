@@ -272,7 +272,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
         _updateFocusCore: function() {
             var $focus = this._$focusedElement,
-                $dataGridElement = this.component && this.component.element(),
+                $dataGridElement = this.component && this.component.$element(),
                 $focusCell,
                 hideBorders;
 
@@ -403,7 +403,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
         _attachContainerEventHandlers: function() {
             var that = this,
-                $container = that.component && that.component.element(),
+                $container = that.component && that.component.$element(),
                 isIE10OrLower = browser.msie && parseInt(browser.version) < 11;
 
             if($container) {

@@ -580,15 +580,15 @@ var Box = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(BOX_CLASS + "-" + this.option("_layoutStrategy"));
+        this.$element().addClass(BOX_CLASS + "-" + this.option("_layoutStrategy"));
         this._initLayout();
         this._initBoxQueue();
     },
 
     _initLayout: function() {
         this._layout = (this.option("_layoutStrategy") === "fallback") ?
-            new FallbackLayoutStrategy(this.element(), this.option.bind(this)) :
-            new FlexLayoutStrategy(this.element(), this.option.bind(this));
+            new FallbackLayoutStrategy(this.$element(), this.option.bind(this)) :
+            new FlexLayoutStrategy(this.$element(), this.option.bind(this));
     },
 
     _initBoxQueue: function() {
@@ -610,7 +610,7 @@ var Box = CollectionWidget.inherit({
     _render: function() {
         this._renderActions();
         this.callBase();
-        this.element().addClass(BOX_CLASS);
+        this.$element().addClass(BOX_CLASS);
         this._renderBox();
     },
 

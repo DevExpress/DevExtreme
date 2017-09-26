@@ -1427,7 +1427,7 @@ QUnit.test("Render. Container size is changed - redraw widget", function(assert)
     var spy = sinon.spy(),
         widget = this.createWidget({ onDrawn: spy });
 
-    widget.element().height(widget.element().height() + 1);
+    widget.$element().height(widget.$element().height() + 1);
     spy.reset();
     widget.render();
 

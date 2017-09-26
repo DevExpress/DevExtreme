@@ -37,7 +37,7 @@ var Navigator = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(CALENDAR_NAVIGATOR_CLASS);
+        this.$element().addClass(CALENDAR_NAVIGATOR_CLASS);
 
         this._renderButtons();
 
@@ -56,7 +56,7 @@ var Navigator = Widget.inherit({
                 integrationOptions: {}
             });
 
-        var $prevButton = this._prevButton.element()
+        var $prevButton = this._prevButton.$element()
             .addClass(CALENDAR_NAVIGATOR_PREVIOUS_VIEW_CLASS)
             .addClass(CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS);
 
@@ -68,7 +68,7 @@ var Navigator = Widget.inherit({
                 integrationOptions: {}
             });
 
-        var $nextButton = this._nextButton.element()
+        var $nextButton = this._nextButton.$element()
             .addClass(CALENDAR_NAVIGATOR_NEXT_VIEW_CLASS)
             .addClass(CALENDAR_NAVIGATOR_NEXT_MONTH_CLASS);
 
@@ -79,9 +79,9 @@ var Navigator = Widget.inherit({
                 integrationOptions: {}
             });
 
-        var $caption = this._caption.element();
+        var $caption = this._caption.$element();
 
-        this.element().append($prevButton, $caption, $nextButton);
+        this.$element().append($prevButton, $caption, $nextButton);
     },
 
     _renderCaption: function() {
@@ -94,7 +94,7 @@ var Navigator = Widget.inherit({
 
         if(button) {
             button.option("disabled", value);
-            button.element().toggleClass(CALENDAR_NAVIGATOR_DISABLED_LINK_CLASS, value);
+            button.$element().toggleClass(CALENDAR_NAVIGATOR_DISABLED_LINK_CLASS, value);
         }
     },
 
