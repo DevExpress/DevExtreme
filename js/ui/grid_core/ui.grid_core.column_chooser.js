@@ -190,14 +190,16 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 searchEnabled: columnChooser.searchEnabled
             };
 
+
+        if(isSelectMode) {
+            scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
+            scrollTop = scrollableInstance && scrollableInstance.scrollTop();
+        }
+
         treeViewConfig.onContentReady = function(e) {
-            if(isSelectMode) {
-                scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
-                scrollTop = scrollableInstance && scrollableInstance.scrollTop();
-                if(scrollTop) {
-                    var scrollable = e.element.find(".dx-scrollable").data("dxScrollable");
-                    scrollable && scrollable.scrollTo({ y: scrollTop });
-                }
+            if(scrollTop) {
+                var scrollable = e.element.find(".dx-scrollable").data("dxScrollable");
+                scrollable && scrollable.scrollTo({ y: scrollTop });
             }
 
             that.renderCompleted.fire();
@@ -282,9 +284,23 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     getColumnElements: function() {
-        var $content = this._popupContainer && this._popupContainer.content();
+        var result = [],
+            $node,
+            $item,
+            isSelectMode = this.option("columnChooser.mode") === "select",
+            chooserColumns = this._columnsController.getChooserColumns(isSelectMode),
+            $content = this._popupContainer && this._popupContainer.content(),
+            $nodes = $content && $content.find(".dx-treeview-node");
 
-        return $content && $content.find("." + COLUMN_CHOOSER_ITEM_CLASS);
+        if($nodes) {
+            chooserColumns.forEach(function(column) {
+                $node = $nodes.filter("[data-item-id = '" + column.index + "']");
+                $item = $node.length ? $node.children("." + COLUMN_CHOOSER_ITEM_CLASS) : null;
+                result.push($item);
+            });
+        }
+
+        return result;
     },
 
     getName: function() {

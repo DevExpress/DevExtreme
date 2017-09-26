@@ -363,7 +363,11 @@ QUnit.test("Get column elements", function(assert) {
         columnChooser,
         columnHiddenElements;
 
-    $.extend(this.columns, [{ caption: "Column 1", visible: true }, { caption: "Column 2", visible: false, showInColumnChooser: true }, { caption: "Column 3", visible: false, showInColumnChooser: true }]);
+    $.extend(this.columns, [
+        { caption: "Column 1", visible: true, index: 0 },
+        { caption: "Column 2", visible: false, showInColumnChooser: true, index: 1 },
+        { caption: "Column 3", visible: false, showInColumnChooser: true, index: 2 }
+    ]);
     this.setTestElement(testElement);
 
     this.renderColumnChooser();
@@ -384,8 +388,8 @@ QUnit.test("Get column elements", function(assert) {
 
     //assert
     assert.equal(columnHiddenElements.length, 2, "count hidden elements");
-    assert.strictEqual(columnHiddenElements.first().text(), "Column 2", "text hidden element 1");
-    assert.strictEqual(columnHiddenElements.last().text(), "Column 3", "text hidden element 2");
+    assert.strictEqual(columnHiddenElements[0].text(), "Column 2", "text hidden element 1");
+    assert.strictEqual(columnHiddenElements[1].text(), "Column 3", "text hidden element 2");
 });
 
 //B255428
