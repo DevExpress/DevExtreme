@@ -546,6 +546,41 @@ QUnit.test("Check grouping context menu operability", function(assert) {
     clock.restore();
 });
 
+QUnit.test("Group panel should set correct 'max-width' after clear grouping", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: {
+                store: [
+                    { field1: "1", field2: "2", field3: "3", field4: "4", field5: "5" },
+                    { field1: "11", field2: "22", field3: "33", field4: "44", field5: "55" }]
+            },
+            width: 460,
+            groupPanel: {
+                emptyPanelText: "Long long long long long long long long long long long text",
+                visible: true
+            },
+            editing: { allowAdding: true, mode: "batch" },
+            columnChooser: {
+                enabled: true
+            }
+        }).dxDataGrid("instance"),
+        $dataGrid = dataGrid.element();
+
+    clock.tick();
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden, group panel has a long message");
+
+    dataGrid.columnOption("field2", "groupIndex", 0);
+    clock.tick();
+
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 0, "all toolbar items are visible, group panel has a group with short name");
+
+    dataGrid.clearGrouping();
+    clock.tick();
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden after clear grouping");
+
+    clock.restore();
+});
+
 QUnit.test("Check grouping context menu operability (ungroup one column)", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({

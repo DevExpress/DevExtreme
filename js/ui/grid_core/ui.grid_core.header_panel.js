@@ -92,6 +92,12 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         }
     },
 
+    updateToolbarDimensions: function() {
+        if(this._toolbar) {
+            domUtils.triggerResizeEvent(this.getHeaderPanel());
+        }
+    },
+
     getHeaderPanel: function() {
         return this.element();
     },
@@ -138,11 +144,7 @@ module.exports = {
                 _updateDimensionsCore: function() {
                     this.callBase.apply(this, arguments);
 
-                    var $headerPanelElement = this.getView("headerPanel").element();
-
-                    if($headerPanelElement) {
-                        domUtils.triggerResizeEvent($headerPanelElement);
-                    }
+                    this.getView("headerPanel").updateToolbarDimensions();
                 }
             }
         }
