@@ -334,7 +334,7 @@ QUnit.test("get current value text", function(assert) {
     assert.equal(utils.getCurrentValueText({}, ""), "");
 
     field = { format: "shortDate" };
-    value = new Date("Tue Sep 05 2017 00:00:00 GMT+0300 (Russia TZ 2 Standard Time)");
+    value = new Date(2017, 8, 5);
     assert.equal(utils.getCurrentValueText(field, value), "9/5/2017");
 
     field = { dataType: "boolean" };
