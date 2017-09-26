@@ -1,16 +1,61 @@
 "use strict";
-var dataUtils = require("jquery");
+
+var WeakMap = require("./polyfills/weak_map");
+
+var dataMap = new WeakMap();
+var strategy = {
+    data: function(element, key, value) {
+        if(!element) return;
+        var elementData = dataMap.get(element);
+        if(!elementData) {
+            elementData = {};
+            dataMap.set(element, elementData);
+        }
+        if(key === undefined) {
+            return elementData;
+        }
+        if(arguments.length === 2) {
+            return elementData[key];
+        }
+        elementData[key] = value;
+        return value;
+    },
+    removeData: function(element, key) {
+        if(!element) return;
+        if(key === undefined) {
+            dataMap.delete(element);
+        } else {
+            var elementData = dataMap.get(element);
+            if(elementData) {
+                delete elementData[key];
+            }
+        }
+    },
+    cleanData: function(elements) {
+        for(var i = 0; i < elements.length; i++) {
+            dataMap.delete(elements[i]);
+        }
+    }
+};
+
+exports.setDataStrategy = function(value) {
+    strategy = value;
+};
+
+exports.getDataStrategy = function() {
+    return strategy;
+};
 
 exports.data = function() {
-    return dataUtils.data.apply(this, arguments);
+    return strategy.data.apply(this, arguments);
 };
 
-exports.removeData = function(elements) {
-    return dataUtils.removeData.apply(this, arguments);
+exports.removeData = function() {
+    return strategy.removeData.apply(this, arguments);
 };
 
-exports.cleanData = function(elements) {
-    return dataUtils.cleanData.apply(this, arguments);
+exports.cleanData = function() {
+    return strategy.cleanData.apply(this, arguments);
 };
 
 exports.cleanDataRecursive = function(element, cleanSelf) {
@@ -20,18 +65,10 @@ exports.cleanDataRecursive = function(element, cleanSelf) {
 
     var childElements = element.getElementsByTagName("*");
 
-    dataUtils.cleanData(childElements);
+    strategy.cleanData(childElements);
 
     if(cleanSelf) {
-        dataUtils.cleanData([element]);
+        strategy.cleanData([element]);
     }
-};
-
-exports.setDataStrategy = function(value) {
-    dataUtils = value;
-};
-
-exports.getDataStrategy = function() {
-    return dataUtils;
 };
 
