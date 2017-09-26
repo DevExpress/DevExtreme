@@ -5184,7 +5184,7 @@ QUnit.test('Focus position should be correct after editing in cell editing mode 
         allowDeleting: true,
         mode: 'cell'
     };
-    that.element = function() {
+    that.$element = function() {
         return $testElement;
     };
 
@@ -5230,7 +5230,7 @@ QUnit.test('Focus position should be retured after editing in cell editing mode 
         allowDeleting: true,
         mode: 'cell'
     };
-    that.element = function() {
+    that.$element = function() {
         return $testElement;
     };
 
