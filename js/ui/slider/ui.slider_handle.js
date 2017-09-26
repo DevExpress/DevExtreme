@@ -35,7 +35,7 @@ var SliderHandle = Widget.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(SLIDER_HANDLE_CLASS);
+        this.$element().addClass(SLIDER_HANDLE_CLASS);
         this._renderTooltip();
 
         this.setAria({
@@ -47,9 +47,9 @@ var SliderHandle = Widget.inherit({
     _renderTooltip: function() {
         if(this.option("tooltipEnabled")) {
             if(!this._$tooltip) {
-                this._$tooltip = $("<div>").appendTo(this.element());
+                this._$tooltip = $("<div>").appendTo(this.$element());
             }
-            this._$slider = this.element().closest("." + SLIDER_CLASS);
+            this._$slider = this.$element().closest("." + SLIDER_CLASS);
 
             this._updateTooltip();
         } else {
@@ -64,9 +64,9 @@ var SliderHandle = Widget.inherit({
 
         this._tooltip = this._createComponent(this._$tooltip, Tooltip, {
             visible: true,
-            target: this.element(),
+            target: this.$element(),
             closeOnOutsideClick: false,
-            container: this.element(),
+            container: this.$element(),
             closeOnBackButton: false,
             closeOnTargetScroll: false,
             onPositioned: (function(args) {
@@ -143,7 +143,7 @@ var SliderHandle = Widget.inherit({
         this._$tooltipContent
             .outerWidth(roundedTooltipOuterWidth);
 
-        var tooltipCenter = (roundedTooltipOuterWidth - this.element().width()) / 2;
+        var tooltipCenter = (roundedTooltipOuterWidth - this.$element().width()) / 2;
 
         this._contentLocate.left = -tooltipCenter;
         this._$tooltipArrow.css({
@@ -163,7 +163,7 @@ var SliderHandle = Widget.inherit({
 
         if(typeUtils.type(position) === "string") {
             position = extend({
-                of: this.element(),
+                of: this.$element(),
                 boundary: this._$slider,
                 boundaryOffset: { h: 2, v: 1 }
             }, POSITION_ALIASES[position], { collision: 'fit none' });
@@ -196,7 +196,7 @@ var SliderHandle = Widget.inherit({
         if(!hoverMode) {
             this._createTooltip();
         }
-        this.element().toggleClass("dx-slider-tooltip-on-hover", hoverMode);
+        this.$element().toggleClass("dx-slider-tooltip-on-hover", hoverMode);
 
         this._renderTooltipPosition();
         this._renderValue();

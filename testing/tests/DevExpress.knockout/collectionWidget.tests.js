@@ -111,7 +111,7 @@ var TestComponent = CollectionWidget.inherit({
     },
 
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     }
 
 });

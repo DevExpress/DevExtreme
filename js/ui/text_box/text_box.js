@@ -58,7 +58,7 @@ var TextBox = TextEditor.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(TEXTBOX_CLASS);
+        this.$element().addClass(TEXTBOX_CLASS);
         this.setAria("role", "textbox");
 
         this._renderMaxLengthHandlers();

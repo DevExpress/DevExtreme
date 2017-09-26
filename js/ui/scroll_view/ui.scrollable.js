@@ -247,7 +247,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _initMarkup: function() {
-        var $element = this.element().addClass(SCROLLABLE_CLASS),
+        var $element = this.$element().addClass(SCROLLABLE_CLASS),
             $container = this._$container = $("<div>").addClass(SCROLLABLE_CONTAINER_CLASS),
             $wrapper = this._$wrapper = $("<div>").addClass(SCROLLABLE_WRAPPER_CLASS),
             $content = this._$content = $("<div>").addClass(SCROLLABLE_CONTENT_CLASS);
@@ -273,7 +273,7 @@ var Scrollable = DOMComponent.inherit({
         // NOTE: Customize native scrollbars for dashboard team
 
         if(devices.real().deviceType === "desktop" && !(navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
-            this.element().addClass("dx-scrollable-customizable-scrollbars");
+            this.$element().addClass("dx-scrollable-customizable-scrollbars");
         }
     },
 
@@ -347,7 +347,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _renderDisabledState: function() {
-        this.element().toggleClass(SCROLLABLE_DISABLED_CLASS, this.option("disabled"));
+        this.$element().toggleClass(SCROLLABLE_DISABLED_CLASS, this.option("disabled"));
 
         if(this.option("disabled")) {
             this._lock();
@@ -357,7 +357,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _renderDirection: function() {
-        this.element()
+        this.$element()
             .removeClass("dx-scrollable-" + HORIZONTAL)
             .removeClass("dx-scrollable-" + VERTICAL)
             .removeClass("dx-scrollable-" + BOTH)
@@ -367,7 +367,7 @@ var Scrollable = DOMComponent.inherit({
     _renderStrategy: function() {
         this._createStrategy();
         this._strategy.render();
-        this.element().data(SCROLLABLE_STRATEGY, this._strategy);
+        this.$element().data(SCROLLABLE_STRATEGY, this._strategy);
     },
 
     _createStrategy: function() {

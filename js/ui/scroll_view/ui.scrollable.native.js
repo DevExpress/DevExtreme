@@ -27,7 +27,7 @@ var NativeStrategy = Class.inherit({
 
     _init: function(scrollable) {
         this._component = scrollable;
-        this._$element = scrollable.element();
+        this._$element = scrollable.$element();
         this._$container = scrollable._$container;
         this._$content = scrollable._$content;
 
@@ -272,7 +272,7 @@ var NativeStrategy = Class.inherit({
 
     _removeScrollbars: function() {
         this._eachScrollbar(function(scrollbar) {
-            scrollbar.element().remove();
+            scrollbar.$element().remove();
         });
     },
 

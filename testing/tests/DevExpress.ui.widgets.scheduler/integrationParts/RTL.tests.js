@@ -38,8 +38,8 @@ QUnit.test("Task positions, day view", function(assert) {
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true, currentView: "day" });
 
-    var $targetCell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(8),
-        $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $targetCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(8),
+        $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
     assert.equal($appointment.position().left + $appointment.outerWidth(), $targetCell.position().left + $targetCell.outerWidth(), "task position is correct");
 });
@@ -51,8 +51,8 @@ QUnit.test("Task positions, week view", function(assert) {
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true, currentView: "week" });
 
-    var $cell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(1),
-        $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $cell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1),
+        $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
     assert.equal(Math.round($appointment.position().left + $appointment.outerWidth()), Math.round($cell.position().left + $cell.outerWidth()), "task position is correct");
 });
@@ -64,8 +64,8 @@ QUnit.test("Task positions, month view", function(assert) {
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true, currentView: "month" });
 
-    var $cell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(1),
-        $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $cell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1),
+        $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
     assert.roughEqual($appointment.position().left + $appointment.outerWidth(), $cell.position().left + $cell.outerWidth(), 0.1, "task position is correct");
 });

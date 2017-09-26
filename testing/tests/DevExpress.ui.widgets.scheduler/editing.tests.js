@@ -31,16 +31,16 @@ QUnit.module("Editing option: boolean", {
 
 QUnit.test("Scheduler should have 'readonly' css class", function(assert) {
     this.createInstance();
-    assert.ok(this.instance.element().hasClass("dx-scheduler-readonly"), "Readonly class is defined");
+    assert.ok(this.instance.$element().hasClass("dx-scheduler-readonly"), "Readonly class is defined");
 
     this.instance.option("editing", true);
-    assert.notOk(this.instance.element().hasClass("dx-scheduler-readonly"), "Readonly class is removed");
+    assert.notOk(this.instance.$element().hasClass("dx-scheduler-readonly"), "Readonly class is removed");
 });
 
 QUnit.test("popup should not be shown  after click on focused cell", function(assert) {
     this.createInstance();
 
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown").trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown").trigger("dxclick");
 
     assert.notOk($(".dx-scheduler-appointment-popup .dx-overlay-content").length, "Popup is not shown");
 
@@ -49,7 +49,7 @@ QUnit.test("popup should not be shown  after click on focused cell", function(as
 QUnit.test("popup should not be shown after press Enter", function(assert) {
     this.createInstance({ focusStateEnabled: true });
 
-    var $workSpace = $(this.instance.element().find(".dx-scheduler-work-space")),
+    var $workSpace = $(this.instance.$element().find(".dx-scheduler-work-space")),
         keyboard = keyboardMock($workSpace);
 
     $($workSpace).trigger("focusin");
@@ -69,7 +69,7 @@ QUnit.test("Appointment should not be draggable & resizable", function(assert) {
         }]
     });
 
-    var appointments = this.instance.element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+    var appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
     assert.notOk(appointments.option("allowDrag"), "Drag is not allowed");
     assert.notOk(appointments.option("allowResize"), "Resize is not allowed");
 
@@ -89,7 +89,7 @@ QUnit.test("Delete button should not be rendered in details tooltip", function(a
         }]
     });
 
-    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first()),
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
         itemData = $appointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
@@ -110,7 +110,7 @@ QUnit.test("Edit button should not be contain the 'pencil' icon", function(asser
         }]
     });
 
-    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first());
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first());
 
     var itemData = $appointment.data("dxItemData");
 
@@ -300,10 +300,10 @@ QUnit.module("Editing option: complex object", {
 
 QUnit.test("Scheduler should have 'readonly' css class for complex object editing option", function(assert) {
     this.createInstance();
-    assert.ok(this.instance.element().hasClass("dx-scheduler-readonly"), "Readonly class is defined");
+    assert.ok(this.instance.$element().hasClass("dx-scheduler-readonly"), "Readonly class is defined");
 
     this.instance.option("editing.allowUpdating", true);
-    assert.notOk(this.instance.element().hasClass("dx-scheduler-readonly"), "Readonly class is removed");
+    assert.notOk(this.instance.$element().hasClass("dx-scheduler-readonly"), "Readonly class is removed");
 });
 
 QUnit.test("showAppointmentPopup method should not be called after click on focused cell if editing.allowAdding is false", function(assert) {
@@ -314,7 +314,7 @@ QUnit.test("showAppointmentPopup method should not be called after click on focu
     });
     var spy = sinon.spy(this.instance, "showAppointmentPopup");
 
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown");
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").first().trigger("dxpointerdown").trigger("dxpointerdown");
 
     assert.notOk(spy.called, "showAppointmentPopup is not called");
 
@@ -353,7 +353,7 @@ QUnit.test("Edit button should not be contain the 'pencil' icon if editing.allow
         }]
     });
 
-    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first()),
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
         itemData = $appointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
@@ -380,7 +380,7 @@ QUnit.test("There is no need to check recurring appointment if editing.allowUpda
         }]
     });
 
-    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first()),
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
         itemData = $appointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
@@ -405,7 +405,7 @@ QUnit.test("Delete button should not exist if editing.allowUpdating is false", f
         }]
     });
 
-    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment").first()),
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
         itemData = $appointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
@@ -436,7 +436,7 @@ QUnit.test("Appointment should not be draggable & resizable if editing.allowUpda
         }]
     });
 
-    var appointments = this.instance.element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+    var appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
     assert.notOk(appointments.option("allowDrag"), "Drag is not allowed");
     assert.notOk(appointments.option("allowResize"), "Resize is not allowed");
 
@@ -461,7 +461,7 @@ QUnit.test("Appointment should not be resizable if editing.allowResizing is fals
         }]
     });
 
-    var appointments = this.instance.element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+    var appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
     assert.notOk(appointments.option("allowResize"), "Resize is not allowed");
 
     this.instance.option("editing", {
@@ -484,7 +484,7 @@ QUnit.test("Appointment should not be draggable if editing.allowDragging is fals
         }]
     });
 
-    var appointments = this.instance.element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+    var appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
     assert.notOk(appointments.option("allowDrag"), "Drag is not allowed");
 
     this.instance.option("editing", {
@@ -508,7 +508,7 @@ QUnit.test("Appointment should not be deleted, if allowUpdating || allowDeleting
         }
     });
 
-    var appointments = this.instance.element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+    var appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
     assert.notOk(appointments.option("allowDelete"), "Delete is not allowed");
 
     this.instance.option("editing", {

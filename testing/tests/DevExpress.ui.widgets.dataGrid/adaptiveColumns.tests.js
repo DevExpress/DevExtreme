@@ -21,7 +21,7 @@ var $ = require("jquery"),
     CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
 
 function setupDataGrid(that) {
-    that.element = function() {
+    that.$element = function() {
         return $(".dx-datagrid");
     };
 

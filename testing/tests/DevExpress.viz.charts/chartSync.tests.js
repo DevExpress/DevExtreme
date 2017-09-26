@@ -1737,18 +1737,18 @@ var environment = {
     QUnit.test("event contextmenu on div element", function(assert) {
         var chart = this.createChart();
 
-        $(chart.element()).trigger(new $.Event("contextmenu"));
+        $(chart.$element()).trigger(new $.Event("contextmenu"));
 
-        assert.ok(chart.element());
+        assert.ok(chart.$element());
         assert.equal(chart.eventType, "contextmenu");
     });
 
     QUnit.test("event MSHoldVisual on div element", function(assert) {
         var chart = this.createChart();
 
-        $(chart.element()).trigger(new $.Event("MSHoldVisual"));
+        $(chart.$element()).trigger(new $.Event("MSHoldVisual"));
 
-        assert.ok(chart.element());
+        assert.ok(chart.$element());
         assert.equal(chart.eventType, "MSHoldVisual");
     });
 }());

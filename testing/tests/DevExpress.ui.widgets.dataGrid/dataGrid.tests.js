@@ -253,7 +253,7 @@ QUnit.test("Scroll position after grouping when RTL", function(assert) {
 
         setTimeout(function() {
             //assert
-            assert.ok($(dataGrid.element()).find(".dx-datagrid-rowsview").find("tbody > tr").first().hasClass("dx-group-row"));
+            assert.ok($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("tbody > tr").first().hasClass("dx-group-row"));
             assert.equal(scrollable.scrollLeft(), 100, "scroll position after grouping");
             done();
         });
@@ -284,7 +284,7 @@ QUnit.test("Vertical scrollbar spacing should not be added when widget does not 
     clock.tick();
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-datagrid-headers").css("padding-right"), "0px");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-headers").css("padding-right"), "0px");
 
     clock.restore();
 });
@@ -360,7 +360,7 @@ QUnit.test("Change row expand state on row click", function(assert) {
         }).dxDataGrid("instance");
 
     isRowClicked = true;
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-datagrid-rowsview tr")
         .eq(0)
         .trigger("dxclick");
@@ -389,7 +389,7 @@ QUnit.test("Row expand state should not be changed on row click when scrolling m
     assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
 
     //act
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-datagrid-rowsview .dx-group-row")
         .first()
         .trigger("dxclick");
@@ -422,7 +422,7 @@ QUnit.test("cellClick/cellHoverChanged handler should be executed when define vi
         assert.equal(e.cellElement.text(), "1", "correct cell content");
     });
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-datagrid-rowsview tr > td")
         .eq(0)
         .trigger("dxclick")
@@ -449,7 +449,7 @@ QUnit.test("Default context menu shown when click on header panel items", functi
         }).dxDataGrid("instance"),
         e = $.Event("dxcontextmenu");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-datagrid-addrow-button")
         .trigger(e);
 
@@ -474,7 +474,7 @@ QUnit.test("Default context menu shown when click on command column", function(a
         }).dxDataGrid("instance"),
         e = $.Event("dxcontextmenu");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-header-row .dx-command-edit")
         .first()
         .trigger(e);
@@ -495,7 +495,7 @@ QUnit.test("Default context menu shown when click on rows", function(assert) {
         }).dxDataGrid("instance"),
         e = $.Event("dxcontextmenu");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-datagrid-rowsview .dx-row")
         .first()
         .trigger(e);
@@ -516,7 +516,7 @@ QUnit.test("Check grouping context menu operability", function(assert) {
             }
         }).dxDataGrid("instance");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-header-row td")
         .eq(1)
         .trigger("dxcontextmenu");
@@ -530,7 +530,7 @@ QUnit.test("Check grouping context menu operability", function(assert) {
     assert.deepEqual(dataGrid.getController("data")._dataSource.group(), [{ selector: "field2", desc: false, isExpanded: true }], "datasource grouping is up to date");
     assert.equal(dataGrid.columnOption("field2", "groupIndex"), 0, "Group by field2");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-header-row td")
         .eq(1)
         .trigger("dxcontextmenu");
@@ -563,7 +563,7 @@ QUnit.test("Check grouping context menu operability (ungroup one column)", funct
             }
         }).dxDataGrid("instance");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-header-row td")
         .eq(3)
         .trigger("dxcontextmenu");
@@ -597,7 +597,7 @@ QUnit.test("Ungroup one column via group row context menu", function(assert) {
             }
         }).dxDataGrid("instance");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-group-row")
         .eq(1)
         .find("td")
@@ -630,7 +630,7 @@ QUnit.test("Ungroup all columns via group row context menu", function(assert) {
             }
         }).dxDataGrid("instance");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-group-row td")
         .eq(1)
         .trigger("dxcontextmenu");
@@ -664,7 +664,7 @@ QUnit.test("Grouping with context menu - check custom texts", function(assert) {
         }
     }).dxDataGrid("instance");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-header-row td")
         .eq(2)
         .trigger("dxcontextmenu");
@@ -689,7 +689,7 @@ QUnit.test("Context menu does not have grouping items when 'contextMenuEnabled' 
         }
     }).dxDataGrid("instance");
 
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-header-row td")
         .eq(2)
         .trigger("dxcontextmenu");
@@ -750,12 +750,12 @@ QUnit.test("Edit cell by click when grid is created in dxForm", function(assert)
     });
 
     //act
-    $($(dataGrid.element()).find(".dx-data-row > td").eq(0)).trigger("dxclick");
+    $($(dataGrid.$element()).find(".dx-data-row > td").eq(0)).trigger("dxclick");
     clock.tick();
     clock.restore();
 
     //assert
-    assert.equal($(dataGrid.element()).find(TEXTEDITOR_INPUT_SELECTOR).length, 1, "one editor is shown");
+    assert.equal($(dataGrid.$element()).find(TEXTEDITOR_INPUT_SELECTOR).length, 1, "one editor is shown");
 });
 
 QUnit.test("Resize columns", function(assert) {
@@ -1026,7 +1026,7 @@ QUnit.test("Resize grid after column resizing", function(assert) {
     instance.updateDimensions();
 
     //assert
-    assert.strictEqual(instance.element().width(), 400);
+    assert.strictEqual(instance.$element().width(), 400);
     assert.strictEqual(instance.columnOption(0, "width"), "60.000%");
     assert.strictEqual(instance.columnOption(1, "width"), "40.000%");
 
@@ -1068,7 +1068,7 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
         $visibleColumns;
 
     clock.tick();
-    $visibleColumns = $(instance.element().find(".dx-header-row td"));
+    $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
     //act
     assert.equal($visibleColumns.length, 3, "only 1 column is visible");
@@ -1082,7 +1082,7 @@ QUnit.test("Columns hiding - columnHidingEnabled is true", function(assert) {
     instance.updateDimensions();
     clock.tick();
 
-    $visibleColumns = $(instance.element().find(".dx-header-row td"));
+    $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
     //assert
     assert.equal($visibleColumns.length, 3, "2 columns are visible");
@@ -1111,7 +1111,7 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
         $visibleColumns;
 
     clock.tick();
-    $visibleColumns = $(instance.element().find(".dx-header-row td"));
+    $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
     //act
     assert.ok(isColumnHidden(dataGrid, 0), "first column is hidden");
@@ -1124,7 +1124,7 @@ QUnit.test("Columns hiding - hidingPriority", function(assert) {
     $("#container").width(450);
     instance.updateDimensions();
     clock.tick();
-    $visibleColumns = $(instance.element().find(".dx-header-row td"));
+    $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
     //assert
     assert.ok(!isColumnHidden(dataGrid, 0), "first column is shown");
@@ -1154,7 +1154,7 @@ QUnit.test("Columns hiding - grouping with hidingPriority", function(assert) {
 
     clock.tick();
 
-    $visibleColumns = $(instance.element().find(".dx-header-row td:not(.dx-datagrid-group-space)"));
+    $visibleColumns = $(instance.$element().find(".dx-header-row td:not(.dx-datagrid-group-space)"));
 
     //act
     assert.equal($visibleColumns.length, 3, "2 column are visible");
@@ -1165,7 +1165,7 @@ QUnit.test("Columns hiding - grouping with hidingPriority", function(assert) {
     $("#container").width(150);
     instance.updateDimensions();
     clock.tick();
-    $visibleColumns = $(instance.element().find(".dx-header-row td:not(.dx-datagrid-group-space)"));
+    $visibleColumns = $(instance.$element().find(".dx-header-row td:not(.dx-datagrid-group-space)"));
 
     //assert
     assert.ok(!isColumnHidden(dataGrid, 0), "first column is shown");
@@ -1193,7 +1193,7 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
 
     clock.tick();
 
-    $visibleColumns = $(instance.element().find(".dx-header-row td"));
+    $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
     //act
     assert.ok(isColumnHidden(dataGrid, 0), "first column is hidden");
@@ -1213,7 +1213,7 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
 
     clock.tick();
 
-    $visibleColumns = $(instance.element().find(".dx-header-row td"));
+    $visibleColumns = $(instance.$element().find(".dx-header-row td"));
 
     //assert
     assert.ok(!isColumnHidden(dataGrid, 0), "first column is shown");
@@ -1246,7 +1246,7 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
         $unfixedColumns;
 
     clock.tick();
-    $cells = $(instance.element().find(".dx-header-row").first().find("td"));
+    $cells = $(instance.$element().find(".dx-header-row").first().find("td"));
 
     //act
     assert.equal($cells.length, 3, "columns count");
@@ -1259,8 +1259,8 @@ QUnit.test("Columns hiding - column without priority must stay (hidingPriority)"
     $("#container").width(800);
     instance.updateDimensions();
     clock.tick();
-    $cells = $(instance.element().find(".dx-header-row").first().find("td")),
-    $unfixedColumns = $(instance.element().find(".dx-header-row").last().find("td"));
+    $cells = $(instance.$element().find(".dx-header-row").first().find("td")),
+    $unfixedColumns = $(instance.$element().find(".dx-header-row").last().find("td"));
 
     //assert
     assert.equal($cells.length, 3, "3 columns are visible");
@@ -1424,7 +1424,7 @@ QUnit.test("Resize grid after column resizing when adaptColumnWidthByRatio false
     instance.updateDimensions();
 
     //assert
-    assert.strictEqual(instance.element().width(), 200);
+    assert.strictEqual(instance.$element().width(), 200);
     assert.strictEqual(instance.columnOption(0, "width"), 120);
     assert.strictEqual(instance.columnOption(1, "width"), 80);
 
@@ -1473,7 +1473,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     });
 
     //assert
-    assert.strictEqual(instance.element().children().width(), 280);
+    assert.strictEqual(instance.$element().children().width(), 280);
     assert.strictEqual(instance.columnOption(0, "width"), 80);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
     assert.strictEqual(instance.columnOption(2, "width"), 100);
@@ -1531,7 +1531,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     });
 
     //assert
-    assert.strictEqual(instance.element().children().width(), 250);
+    assert.strictEqual(instance.$element().children().width(), 250);
     assert.strictEqual(instance.columnOption(0, "width"), 50);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
     assert.strictEqual(instance.columnOption(2, "width"), 100);
@@ -1591,7 +1591,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     instance.updateDimensions();
 
     //assert
-    assert.strictEqual(instance.element().children().width(), 200);
+    assert.strictEqual(instance.$element().children().width(), 200);
     assert.strictEqual(instance.columnOption(0, "width"), "75.000%");
     assert.strictEqual(instance.columnOption(1, "width"), "25.000%");
 
@@ -1640,7 +1640,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     });
 
     //assert
-    assert.strictEqual(instance.element().children().width(), 300);
+    assert.strictEqual(instance.$element().children().width(), 300);
     assert.strictEqual(instance.columnOption(0, "width"), 80);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
     assert.strictEqual(instance.columnOption(2, "width"), 100);
@@ -1690,7 +1690,7 @@ QUnit.test("Resize grid after column resizing to right when columnResizingMode i
     });
 
     //assert
-    assert.strictEqual(instance.element().children().width(), 300);
+    assert.strictEqual(instance.$element().children().width(), 300);
     assert.strictEqual(instance.columnOption(0, "width"), 220);
     assert.strictEqual(instance.columnOption(1, "width"), 100);
     assert.strictEqual(instance.columnOption(2, "width"), 100);
@@ -1722,7 +1722,7 @@ QUnit.test("Initialize grid with any columns when columnMinWidth option is assig
         $cols;
 
     //act
-    assert.strictEqual(instance.element().children().width(), 200);
+    assert.strictEqual(instance.$element().children().width(), 200);
     assert.ok(instance.getScrollable(), "scrollable is created");
 
     $colGroups = $(".dx-datagrid colgroup");
@@ -1752,7 +1752,7 @@ QUnit.test("width should not be applied if minWidth greater than width", functio
         $cols;
 
     //act
-    assert.strictEqual(instance.element().children().width(), 200);
+    assert.strictEqual(instance.$element().children().width(), 200);
     assert.ok(instance.getScrollable(), "scrollable is created");
 
     $colGroups = $(".dx-datagrid colgroup");
@@ -2474,7 +2474,7 @@ QUnit.testInActiveWindow("Focus search textbox after change search text", functi
         });
 
     //act
-    $(dataGrid.element())
+    $(dataGrid.$element())
         .find(".dx-datagrid-search-panel input")
         .focus()
         .val("test")
@@ -2483,7 +2483,7 @@ QUnit.testInActiveWindow("Focus search textbox after change search text", functi
     clock.tick();
 
     //assert
-    var $search = $($(dataGrid.element()).find(".dx-datagrid-search-panel"));
+    var $search = $($(dataGrid.$element()).find(".dx-datagrid-search-panel"));
 
     assert.ok($search.hasClass("dx-state-focused"));
     clock.restore();
@@ -3438,15 +3438,15 @@ QUnit.test("no action cursor for column header when sorting and dragging not all
     });
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-datagrid-drag-action").length, 0, "no drag actions");
-    assert.equal($(dataGrid.element()).find(".dx-datagrid-action").length, 1, "one action");
-    assert.ok($(dataGrid.element()).find(".dx-header-row > td").eq(1).hasClass("dx-datagrid-action"));
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-drag-action").length, 0, "no drag actions");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-action").length, 1, "one action");
+    assert.ok($(dataGrid.$element()).find(".dx-header-row > td").eq(1).hasClass("dx-datagrid-action"));
 
     //act
     dataGrid.showColumnChooser();
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-datagrid-drag-action").length, 2, "two drag actions for hiding columns");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-drag-action").length, 2, "two drag actions for hiding columns");
 });
 
 QUnit.test("Correct runtime changing of a columnChooser mode (string)", function(assert) {
@@ -3674,7 +3674,7 @@ QUnit.test("Error on loading", function(assert) {
     //assert
     assert.ok(dataGrid.isReady(), "dataGrid is ready");
     assert.ok(!dataGrid.getController("data").isLoaded(), "data is not loaded");
-    var $errorRow = $($(dataGrid.element()).find(".dx-error-row"));
+    var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
     assert.equal($errorRow.length, 1, "error row is shown");
     assert.equal($errorRow.children().attr("colspan"), "2", "error row colspan");
     assert.equal($errorRow.find(".dx-error-message").text(), "Test Error", "error row text");
@@ -3705,7 +3705,7 @@ QUnit.test("updateDimensions during grouping when fixed to right column exists",
 
     //assert
     assert.ok(dataGrid.isReady(), "dataGrid is ready");
-    assert.ok($(dataGrid.element()).find(".dx-group-row").length, 1, "one grouped row is rendered");
+    assert.ok($(dataGrid.$element()).find(".dx-group-row").length, 1, "one grouped row is rendered");
 });
 
 //T334530
@@ -3732,8 +3732,8 @@ QUnit.test("columnHeaders visibility after change some options", function(assert
     //assert
     assert.ok(!dataGrid.isReady(), "dataGrid is not ready");
     assert.ok(!dataGrid.getController("data").isLoaded(), "data is not loaded");
-    assert.equal($(dataGrid.element()).find(".dx-header-row").length, 1, "header row is rendered");
-    assert.ok($(dataGrid.element()).find(".dx-header-row").is(":visible"), "header row is visible");
+    assert.equal($(dataGrid.$element()).find(".dx-header-row").length, 1, "header row is rendered");
+    assert.ok($(dataGrid.$element()).find(".dx-header-row").is(":visible"), "header row is visible");
     clock.restore();
 });
 
@@ -3752,7 +3752,7 @@ QUnit.test("Load panel visibility during first loading", function(assert) {
 
     clock.tick(500);
 
-    var $loadPanel = $($(dataGrid.element()).find(".dx-loadpanel"));
+    var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
     assert.ok($loadPanel.is(":visible"), "load panel is visible");
 
     //act
@@ -3774,7 +3774,7 @@ QUnit.test("Load panel is not rendered for ArrayStore", function(assert) {
     clock.tick(500);
 
     //assert
-    var $loadPanel = $($(dataGrid.element()).find(".dx-loadpanel"));
+    var $loadPanel = $($(dataGrid.$element()).find(".dx-loadpanel"));
     assert.ok(!$loadPanel.length, "load panel is visible");
 });
 
@@ -3802,7 +3802,7 @@ QUnit.test("Collapse the group row of the grid, nested in the master detail", fu
                 }
             }
         }),
-        $dataGrid = $($(dataGrid.element()));
+        $dataGrid = $($(dataGrid.$element()));
 
     clock.tick();
     $($dataGrid.find(".dx-datagrid-rowsview .dx-command-expand").first()).trigger("dxclick");
@@ -3872,11 +3872,11 @@ QUnit.test("Custom toolbar item should be aligned", function(assert) {
         }
     });
 
-    var toolbarItemOffset = $(dataGrid.element()).find(".dx-toolbar .dx-button").offset().top;
+    var toolbarItemOffset = $(dataGrid.$element()).find(".dx-toolbar .dx-button").offset().top;
 
     //assert
-    assert.equal(toolbarItemOffset, $(dataGrid.element()).find(".dx-datagrid-search-panel").offset().top, "toolbar sarch panel is aligned");
-    assert.equal(toolbarItemOffset, $(dataGrid.element()).find(".dx-toolbar .dx-datebox").offset().top, "toolbar custom item is aligned");
+    assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-datagrid-search-panel").offset().top, "toolbar sarch panel is aligned");
+    assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-toolbar .dx-datebox").offset().top, "toolbar custom item is aligned");
 });
 
 QUnit.module("Assign options", {
@@ -3953,7 +3953,7 @@ QUnit.test('dataSource change to null', function(assert) {
     assert.ok(!dataGrid.getController("data").dataSource(), "no dataSource");
     assert.equal(dataGrid.getController("data").items().length, 0, "items count");
     assert.equal(contentReadyCount, 1, "contentReady call count");
-    assert.equal($(dataGrid.element()).find(".dx-data-row").length, 0, "data row count");
+    assert.equal($(dataGrid.$element()).find(".dx-data-row").length, 0, "data row count");
 });
 
 //T405875
@@ -4012,7 +4012,7 @@ QUnit.test("noData should be hidden after assign dataSource and height", functio
     clock.tick(0);
 
     //assert
-    var $noData = $($(dataGrid.element()).find(".dx-datagrid-nodata"));
+    var $noData = $($(dataGrid.$element()).find(".dx-datagrid-nodata"));
     assert.equal($noData.length, 1, "nodata is rendered once");
     assert.notOk($noData.is(":visible"), "nodata is hidden");
 
@@ -4029,7 +4029,7 @@ QUnit.test("rtlEnabled change", function(assert) {
     dataGrid.option("rtlEnabled", true);
 
     //assert
-    assert.ok($(dataGrid.element()).hasClass("dx-rtl"), "dx-rtl class added");
+    assert.ok($(dataGrid.$element()).hasClass("dx-rtl"), "dx-rtl class added");
 });
 
 //T288385
@@ -4042,7 +4042,7 @@ QUnit.test("disabled change", function(assert) {
     dataGrid.option("disabled", true);
 
     //assert
-    assert.ok($(dataGrid.element()).hasClass("dx-state-disabled"), "dx-state-disabled class added");
+    assert.ok($(dataGrid.$element()).hasClass("dx-state-disabled"), "dx-state-disabled class added");
 });
 
 //T360631
@@ -4058,13 +4058,13 @@ QUnit.test("disabled change when selection enabled", function(assert) {
         }
     });
 
-    assert.strictEqual($(dataGrid.element()).find(".dx-state-disabled").length, 3, "dx-state-disabled class exists");
+    assert.strictEqual($(dataGrid.$element()).find(".dx-state-disabled").length, 3, "dx-state-disabled class exists");
 
     //act
     dataGrid.option("disabled", false);
 
     //assert
-    assert.strictEqual($(dataGrid.element()).find(".dx-state-disabled").length, 0, "dx-state-disabled class does not exist");
+    assert.strictEqual($(dataGrid.$element()).find(".dx-state-disabled").length, 0, "dx-state-disabled class does not exist");
 });
 
 QUnit.test("dataSource change with selection", function(assert) {
@@ -4113,7 +4113,7 @@ QUnit.test("selection.showCheckBoxesMode change", function(assert) {
 
     this.clock.tick(0);
 
-    assert.equal($(dataGrid.element()).find(".dx-select-checkboxes-hidden").length, 1, "select checkboxes are hidden");
+    assert.equal($(dataGrid.$element()).find(".dx-select-checkboxes-hidden").length, 1, "select checkboxes are hidden");
 
 
     //act
@@ -4121,8 +4121,8 @@ QUnit.test("selection.showCheckBoxesMode change", function(assert) {
     dataGrid.option("selection.showCheckBoxesMode", "always");
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-select-checkboxes-hidden").length, 0, "select checkboxes are not hidden");
-    assert.equal($(dataGrid.element()).find(".dx-select-checkbox").length, 2, "two select checkboxes");
+    assert.equal($(dataGrid.$element()).find(".dx-select-checkboxes-hidden").length, 0, "select checkboxes are not hidden");
+    assert.equal($(dataGrid.$element()).find(".dx-select-checkbox").length, 2, "two select checkboxes");
 });
 
 //T420180
@@ -4135,14 +4135,14 @@ QUnit.test("selection.mode change from single to multiple", function(assert) {
         selection: { mode: "single" }
     });
 
-    assert.equal($(dataGrid.element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
+    assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
 
 
     //act
     dataGrid.option("selection.mode", "multiple");
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
+    assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ id: 1 }], "one selected row key via method");
     assert.deepEqual(dataGrid.option("selectedRowKeys"), [{ id: 1 }], "one selected row key via option");
 });
@@ -4156,13 +4156,13 @@ QUnit.test("selection.mode change from multiple to single and none", function(as
         selection: { mode: "multiple" }
     });
 
-    assert.equal($(dataGrid.element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
+    assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
 
     //act
     dataGrid.option("selection.mode", "single");
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
+    assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 1, "one row is selected");
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ id: 1 }], "one selected row key via method");
     assert.deepEqual(dataGrid.option("selectedRowKeys"), [{ id: 1 }], "one selected row key via option");
 
@@ -4170,7 +4170,7 @@ QUnit.test("selection.mode change from multiple to single and none", function(as
     dataGrid.option("selection.mode", "none");
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-row.dx-selection").length, 0, "no selected rows");
+    assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 0, "no selected rows");
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [], "no selected row key via method");
     assert.deepEqual(dataGrid.option("selectedRowKeys"), [], "no selected row key via option");
 
@@ -4185,13 +4185,13 @@ QUnit.test("selection change without changing mode do not change selectedRowKeys
         selection: { mode: "none" }
     });
 
-    assert.equal($(dataGrid.element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
+    assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
 
     //act
     dataGrid.option("selection", { mode: "none" });
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
+    assert.equal($(dataGrid.$element()).find(".dx-row.dx-selection").length, 2, "one row is selected");
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ id: 1 }, { id: 3 }], "one selected row key via method");
     assert.deepEqual(dataGrid.option("selectedRowKeys"), [{ id: 1 }, { id: 3 }], "one selected row key via option");
 });
@@ -4264,7 +4264,7 @@ QUnit.test("columns change to empty array", function(assert) {
     assert.equal(dataGrid.getController("columns").getColumns().length, 0);
     assert.equal(dataGrid.getController("columns").getVisibleColumns().length, 0);
 
-    var tableElement = $(dataGrid.element()).find(".dx-datagrid-rowsview table");
+    var tableElement = $(dataGrid.$element()).find(".dx-datagrid-rowsview table");
 
     assert.equal(tableElement.find("col").length, 0, "col count");
     assert.equal(tableElement.find("tbody > tr").length, 2, "row count");
@@ -4286,7 +4286,7 @@ QUnit.test("change columns at the time refresh the grid", function(assert) {
 
     //assert
     assert.equal(dataGrid.getController("columns").getColumns().length, 2, "count column");
-    assert.equal($(dataGrid.element()).find(".dx-datagrid-rowsview table").find("tbody > tr.dx-data-row").length, 2, "row count");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-rowsview table").find("tbody > tr.dx-data-row").length, 2, "row count");
 
     //act
     dataGrid.refresh();
@@ -4295,7 +4295,7 @@ QUnit.test("change columns at the time refresh the grid", function(assert) {
 
     //assert
     visibleColumns = dataGrid.getController("columns").getVisibleColumns();
-    $headerElements = $($(dataGrid.element()).find(".dx-header-row").children());
+    $headerElements = $($(dataGrid.$element()).find(".dx-header-row").children());
     assert.equal(dataGrid.getController("columns").getColumns().length, 1, "count column");
     assert.equal(visibleColumns.length, 1, "count visible column");
     assert.strictEqual(visibleColumns[0].dataField, "column3", "dataField of the first column");
@@ -4411,7 +4411,7 @@ QUnit.test("search editor have not been recreated when search text is changed", 
                 }
             }
         }),
-        searchEditor = $(dataGrid.element()).find(".dx-datagrid-search-panel").dxTextBox("instance");
+        searchEditor = $(dataGrid.$element()).find(".dx-datagrid-search-panel").dxTextBox("instance");
     //act
     dataGrid.option("searchPanel.text", "123");
     //assert
@@ -4433,11 +4433,11 @@ QUnit.test("search editor have not been recreated on typing", function(assert) {
                 }
             }
         }),
-        searchEditor = $(dataGrid.element()).find(".dx-datagrid-search-panel").dxTextBox("instance");
+        searchEditor = $(dataGrid.$element()).find(".dx-datagrid-search-panel").dxTextBox("instance");
     //act
     searchEditor.option("value", "123");
     //assert
-    assert.strictEqual(searchEditor, $(dataGrid.element()).find(".dx-datagrid-search-panel").dxTextBox("instance"));
+    assert.strictEqual(searchEditor, $(dataGrid.$element()).find(".dx-datagrid-search-panel").dxTextBox("instance"));
 });
 
 QUnit.test("customizeColumns change", function(assert) {
@@ -4516,7 +4516,7 @@ QUnit.test("selectRows after change scrolling", function(assert) {
 
     //assert
     assert.deepEqual(dataGrid.getSelectedRowKeys(), [{ a: 1111, b: 222 }], "selected row keys");
-    assert.equal($(dataGrid.element()).find(".dx-selection").length, 1, "one row is selected");
+    assert.equal($(dataGrid.$element()).find(".dx-selection").length, 1, "one row is selected");
 });
 
 QUnit.test("several options change", function(assert) {
@@ -4696,17 +4696,17 @@ QUnit.test("scrolling mode change from infinite to virtual", function(assert) {
     });
 
     this.clock.tick();
-    assert.equal($(dataGrid.element()).find(".dx-datagrid-bottom-load-panel").length, 1);
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-bottom-load-panel").length, 1);
     //act
     dataGrid.option("scrolling.mode", "virtual");
 
     //assert
-    assert.ok($(dataGrid.element()).find(".dx-datagrid-rowsview").height() > 0);
+    assert.ok($(dataGrid.$element()).find(".dx-datagrid-rowsview").height() > 0);
     //act
     this.clock.tick();
     //assert
-    assert.ok($(dataGrid.element()).find(".dx-datagrid-rowsview").height() > 0);
-    assert.equal($(dataGrid.element()).find(".dx-datagrid-bottom-load-panel").length, 0);
+    assert.ok($(dataGrid.$element()).find(".dx-datagrid-rowsview").height() > 0);
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-bottom-load-panel").length, 0);
 });
 
 QUnit.test("filterRow.visible change after clearFilter", function(assert) {
@@ -4725,7 +4725,7 @@ QUnit.test("filterRow.visible change after clearFilter", function(assert) {
     clock.tick();
 
     //assert
-    assert.equal($(dataGrid.element()).find(".dx-datagrid-filter-row").length, 1, "filter row is rendered");
+    assert.equal($(dataGrid.$element()).find(".dx-datagrid-filter-row").length, 1, "filter row is rendered");
 
     assert.strictEqual(dataGrid.getView("columnHeadersView")._requireReady, false, "columnHeadersView requireReady is false");
     assert.strictEqual(dataGrid.getView("rowsView")._requireReady, false, "rowsView requireReady is false");
@@ -5442,7 +5442,7 @@ QUnit.test("Group row has correct text-align in RTL", function(assert) {
             },
             columns: ["field1", "field2", { dataField: "field3", groupIndex: 0 }]
         }),
-        groupedRows = $(dataGrid.element()).find(".dx-group-row"),
+        groupedRows = $(dataGrid.$element()).find(".dx-group-row"),
         cells = groupedRows.children();
 
     //assert
@@ -5480,7 +5480,7 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
             }
         }),
         getCellTextAlignByButtonNumber = function(buttonNumber) {
-            return $(dataGrid.element()).find(".dx-button").eq(buttonNumber).closest("td").css("text-align");
+            return $(dataGrid.$element()).find(".dx-button").eq(buttonNumber).closest("td").css("text-align");
         };
 
     //assert
@@ -5549,15 +5549,15 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     dataGrid.editCell(rowData.index + 1, 0);
     this.clock.tick();
 
-    $(dataGrid.element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.element()).find("input").get(0) }) });
+    $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
+    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
     this.clock.tick();
 
     //assert
     assert.equal(Math.floor(rowData.index / 20), 2, "scroll position is on third page");
     assert.equal(dataGrid.getTopVisibleRowData().index, rowData.index, "scroll position is not changed");
-    assert.equal($(dataGrid.element()).find("input").val(), (rowData.index + 1).toString(), "editor in second column with correct row index is opened");
-    assert.ok($(dataGrid.element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
+    assert.equal($(dataGrid.$element()).find("input").val(), (rowData.index + 1).toString(), "editor in second column with correct row index is opened");
+    assert.ok($(dataGrid.$element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
 
 QUnit.testInActiveWindow("Tab key on editor should focus next cell if editing mode is cell", function(assert) {
@@ -5631,14 +5631,14 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     dataGrid.editCell(dataGrid.getRowIndexByKey(array[198]), 0);
     this.clock.tick();
 
-    $(dataGrid.element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
-    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.element()).find("input").get(0) }) });
+    $(dataGrid.$element()).find(".dx-textbox").dxTextBox("instance").option("value", "Test");
+    navigationController._keyDownHandler({ key: "tab", originalEvent: $.Event("keydown", { target: $(dataGrid.$element()).find("input").get(0) }) });
     this.clock.tick();
 
     //assert
     assert.equal(dataGrid.getTopVisibleRowData().index, rowData.index, "scroll position is not changed");
-    assert.equal($(dataGrid.element()).find("input").val(), "198", "editor in second column with correct row index is opened");
-    assert.ok($(dataGrid.element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
+    assert.equal($(dataGrid.$element()).find("input").val(), "198", "editor in second column with correct row index is opened");
+    assert.ok($(dataGrid.$element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
 
 //T553067
@@ -5932,7 +5932,7 @@ QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled a
     this.clock.tick();
 
     //assert
-    var $dataRows = $(dataGrid.element()).find(".dx-data-row");
+    var $dataRows = $(dataGrid.$element()).find(".dx-data-row");
     assert.equal($dataRows.length, 20, "rendered data row count");
     assert.equal($dataRows.filter(":contains(Test)").length, 1, "only one row contains text 'Test'");
 });
@@ -6352,7 +6352,7 @@ QUnit.testInActiveWindow("focus method for cell with editor must focus this edit
     this.clock.tick();
 
     //assert
-    var $inputs = $($(dataGrid.element()).find(TEXTEDITOR_INPUT_SELECTOR));
+    var $inputs = $($(dataGrid.$element()).find(TEXTEDITOR_INPUT_SELECTOR));
 
     assert.equal($inputs.length, 2, "dataGrid has two inputs");
     assert.ok($inputs.eq(1).is(":focus"), "second input is focused");
@@ -6394,9 +6394,9 @@ QUnit.test("Click on detail cell with cellIndex more than number of parent grid 
     $(dataGrid.getCellElement(0, 0)).trigger("dxclick");
     this.clock.tick();
 
-    $($(dataGrid.element()).find("td").eq(14)).trigger("dxpointerdown"); //check that error is not raised
+    $($(dataGrid.$element()).find("td").eq(14)).trigger("dxpointerdown"); //check that error is not raised
 
-    assert.ok(dataGrid.getController("keyboardNavigation")._isCellValid($(dataGrid.element()).find("td").eq(14)), "detail-grid cell with cellIndex greater than number of parent columns causes no errors");
+    assert.ok(dataGrid.getController("keyboardNavigation")._isCellValid($(dataGrid.$element()).find("td").eq(14)), "detail-grid cell with cellIndex greater than number of parent columns causes no errors");
 });
 
 //T454990
@@ -6474,7 +6474,7 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
     this.clock.tick();
 
     //assert
-    var $masterDetailRows = $($(dataGrid.element()).find(".dx-master-detail-row"));
+    var $masterDetailRows = $($(dataGrid.$element()).find(".dx-master-detail-row"));
     assert.equal($masterDetailRows.length, 2, "master-detail row count");
     assert.notOk($masterDetailRows.is(":visible"), "master-detail rows are not visible");
 });
@@ -6566,8 +6566,8 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     dataGrid.editRow(0);
     clock.tick();
 
-    var editor = $(dataGrid.element()).find(".dx-form .dx-texteditor").first().dxTextBox("instance"),
-        $input = $(editor.element().find(".dx-texteditor-input"));
+    var editor = $(dataGrid.$element()).find(".dx-form .dx-texteditor").first().dxTextBox("instance"),
+        $input = $(editor.$element().find(".dx-texteditor-input"));
 
     editor.focus();
     $input.val("Josh");
@@ -6576,7 +6576,7 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     clock.tick();
 
     //assert
-    var $secondEditor = $($(dataGrid.element()).find(".dx-form .dx-texteditor").eq(1));
+    var $secondEditor = $($(dataGrid.$element()).find(".dx-form .dx-texteditor").eq(1));
 
     assert.deepEqual(
         dataGrid.getController("keyboardNavigation")._focusedCellPosition,
@@ -6662,13 +6662,13 @@ QUnit.test("resize when all columns have width", function(assert) {
     });
 
     //assert
-    assert.equal($(dataGrid.element()).width(), 150, "total width");
+    assert.equal($(dataGrid.$element()).width(), 150, "total width");
 
     //act
     dataGrid.resize();
 
     //assert
-    assert.equal($(dataGrid.element()).width(), 150, "total width after resize");
+    assert.equal($(dataGrid.$element()).width(), 150, "total width after resize");
 });
 
 //T335767
@@ -6694,7 +6694,7 @@ QUnit.test("skip columns synchronization on window resize when grid size is not 
 
 
     //act
-    $(dataGrid.element()).height(500);
+    $(dataGrid.$element()).height(500);
     dataGrid._dimensionChanged();
 
     //assert
@@ -6748,13 +6748,13 @@ QUnit.test("change pageIndex when all columns have width", function(assert) {
     });
 
     //assert
-    assert.ok($(dataGrid.element()).width() < $("#qunit-fixture").width(), "total width");
+    assert.ok($(dataGrid.$element()).width() < $("#qunit-fixture").width(), "total width");
 
     //act
     dataGrid.pageIndex(1);
 
     //assert
-    assert.ok($(dataGrid.element()).width() < $("#qunit-fixture").width(), "total width after change pageIndex");
+    assert.ok($(dataGrid.$element()).width() < $("#qunit-fixture").width(), "total width after change pageIndex");
 });
 
 //T179519
@@ -6772,21 +6772,21 @@ QUnit.test("update focus border on resize", function(assert) {
         dataSource: [{ field1: 1, field2: 2, field3: 3 }]
     });
 
-    var $cell = $($(dataGrid.element()).find(".dx-editor-cell").first());
+    var $cell = $($(dataGrid.$element()).find(".dx-editor-cell").first());
 
     assert.equal($cell.length, 1, "editor cell exists");
 
     dataGrid.getController("editorFactory").focus($cell);
     this.clock.tick();
 
-    var $focusOverlay = $($(dataGrid.element()).find(".dx-datagrid-focus-overlay"));
+    var $focusOverlay = $($(dataGrid.$element()).find(".dx-datagrid-focus-overlay"));
 
     assert.equal($focusOverlay.length, 1, "focus overlay exists");
 
     var oldFocusWidth = $focusOverlay.width();
 
     //act
-    $(dataGrid.element()).width(100);
+    $(dataGrid.$element()).width(100);
     dataGrid.resize();
     this.clock.tick();
 
@@ -6877,7 +6877,7 @@ QUnit.test("Change state when lookup column exists and remote data is used", fun
     this.clock.tick(0);
 
     //assert
-    var $firstCell = $($(dataGrid.element()).find(".dx-data-row").eq(0).children().eq(0));
+    var $firstCell = $($(dataGrid.$element()).find(".dx-data-row").eq(0).children().eq(0));
     assert.equal($firstCell.text(), "Test 1", "Lookup text is correct");
 });
 
@@ -7042,7 +7042,7 @@ QUnit.test("columnOption in onInitialized", function(assert) {
 
     //assert
     assert.ok(initialized, "onInitialized called");
-    var $commandColumnCells = $($(dataGrid.element()).find(".dx-command-edit"));
+    var $commandColumnCells = $($(dataGrid.$element()).find(".dx-command-edit"));
     assert.equal($commandColumnCells.length, 3, "three command cells");
     assert.equal($commandColumnCells.eq(0).index(), 0, "command cell 1 in first td");
     assert.equal($commandColumnCells.eq(1).index(), 0, "command cell 2 in first td");
@@ -7064,7 +7064,7 @@ QUnit.test("Change expand column width in onInitialized", function(assert) {
     });
 
     //assert
-    var $commandColumnCells = $($(dataGrid.element()).find(".dx-command-expand"));
+    var $commandColumnCells = $($(dataGrid.$element()).find(".dx-command-expand"));
     assert.equal($commandColumnCells.eq(0).width(), 15, "expand command column width");
 });
 
@@ -7134,7 +7134,7 @@ QUnit.test("Repaint row", function(assert) {
     dataSource.store().update(1, { field1: "test3" });
 
     //assert
-    $rowElements = $($(dataGrid.element()).find(".dx-data-row"));
+    $rowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($rowElements.length, 2, "count row");
     assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test1", "first row - value of the first cell");
 
@@ -7142,7 +7142,7 @@ QUnit.test("Repaint row", function(assert) {
     dataGrid.repaintRows(0);
 
     //assert
-    $updatedRowElements = $($(dataGrid.element()).find(".dx-data-row"));
+    $updatedRowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($updatedRowElements.length, 2, "count row");
     assert.ok(!$updatedRowElements.eq(0).is($rowElements.eq(0)), "first row is updated");
     assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
@@ -7175,7 +7175,7 @@ QUnit.test("Repaint rows", function(assert) {
     dataSource.store().update(3, { field1: "test6" });
 
     //assert
-    $rowElements = $($(dataGrid.element()).find(".dx-data-row"));
+    $rowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($rowElements.length, 4, "count row");
     assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test1", "first row - value of the first cell");
     assert.strictEqual(dataGrid.getCellElement(2, 0).text(), "test3", "third row - value of the first cell");
@@ -7184,7 +7184,7 @@ QUnit.test("Repaint rows", function(assert) {
     dataGrid.repaintRows([0, 2]);
 
     //assert
-    $updatedRowElements = $($(dataGrid.element()).find(".dx-data-row"));
+    $updatedRowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($updatedRowElements.length, 4, "count row");
     assert.ok(!$updatedRowElements.eq(0).is($rowElements.eq(0)), "first row is updated");
     assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
@@ -7204,7 +7204,7 @@ QUnit.test("Show searchPanel via option method", function(assert) {
     dataGrid.option("searchPanel.visible", true);
 
     //assert
-    $headerPanelElement = $($(dataGrid.element()).find(".dx-datagrid-header-panel"));
+    $headerPanelElement = $($(dataGrid.$element()).find(".dx-datagrid-header-panel"));
     assert.ok($headerPanelElement.length, "has headerPanel");
     assert.ok($headerPanelElement.find(".dx-datagrid-search-panel").length, "has searchPanel");
 });
@@ -7308,7 +7308,7 @@ QUnit.test("jsrender row template should works", function(assert) {
     });
 
     //assert
-    var $rows = $($(dataGrid.element()).find(".jsrender-row"));
+    var $rows = $($(dataGrid.$element()).find(".jsrender-row"));
 
     assert.equal($rows.length, 2);
     assert.equal($rows.eq(0).text(), "Row 1");
@@ -7370,7 +7370,7 @@ QUnit.test("Setting cellTemplate via DOM node with id attribute", function(asser
     clock.tick();
 
     //assert
-    $cells = $($(dataGrid.element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
+    $cells = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
     assert.strictEqual($cells.eq(0).html().toLowerCase(), "<span id=\"template1\">template1</span>", "template of the first column");
     assert.strictEqual($cells.eq(1).html().toLowerCase(), "<span>template2</span>", "template of the second column");
 
@@ -7392,7 +7392,7 @@ QUnit.test("Setting cellTemplate via DOM node without id attribute", function(as
     clock.tick();
 
     //assert
-    $cells = $($(dataGrid.element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
+    $cells = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
     assert.strictEqual($cells.eq(0).html().toLowerCase(), "<span id=\"template1\">template1</span>", "template of the first column");
     assert.strictEqual($cells.eq(1).html().toLowerCase(), "<span>template2</span>", "template of the second column");
 
@@ -7414,7 +7414,7 @@ QUnit.test("Setting cellTemplate via dxTemplate", function(assert) {
     clock.tick();
 
     //assert
-    $cells = $($(dataGrid.element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
+    $cells = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find("td"));
     assert.strictEqual($cells.eq(0).text(), "Template Content", "template of the first column");
     assert.strictEqual($cells.eq(1).text(), "Template Content2", "template of the second column");
 
@@ -7433,11 +7433,11 @@ QUnit.test("Setting rowTemplate via dxTemplate", function(assert) {
         });
 
     //assert
-    $rowElements = $($(dataGrid.element()).find(".dx-datagrid-rowsview").find("table > tbody").find("tr.test"));
+    $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find("tr.test"));
     assert.strictEqual($rowElements.length, 1, "row element count");
     assert.strictEqual($rowElements.eq(0).text(), "Row Content", "row element content");
-    assert.strictEqual($(dataGrid.element()).find("table").length, 2, "table count");
-    assert.strictEqual($(dataGrid.element()).find("[data-options]").length, 0, "no elements with data-options attribute");
+    assert.strictEqual($(dataGrid.$element()).find("table").length, 2, "table count");
+    assert.strictEqual($(dataGrid.$element()).find("[data-options]").length, 0, "no elements with data-options attribute");
 });
 
 //T484419
@@ -7461,10 +7461,10 @@ QUnit.test("rowTemplate via dxTemplate should works with masterDetail template",
 
 
     //act
-    $($(dataGrid.element()).find(".dx-datagrid-expand").eq(0)).trigger("dxclick");
+    $($(dataGrid.$element()).find(".dx-datagrid-expand").eq(0)).trigger("dxclick");
 
     //assert
-    $rowElements = $($(dataGrid.element()).find(".dx-datagrid-rowsview").find("table > tbody").find(".dx-row"));
+    $rowElements = $($(dataGrid.$element()).find(".dx-datagrid-rowsview").find("table > tbody").find(".dx-row"));
     assert.strictEqual($rowElements.length, 5, "row element count");
     assert.strictEqual($rowElements.eq(0).text(), "Row Content More info", "row 0 content");
     assert.strictEqual($rowElements.eq(1).text(), "Test Details", "row 1 content");
@@ -8037,7 +8037,7 @@ QUnit.test("try to focus unknown element", function(assert) {
 
     this.focusGridCell($(".lalala"));
 
-    $focusedCell = $(this.dataGrid.element()).find(".dx-focused");
+    $focusedCell = $(this.dataGrid.$element()).find(".dx-focused");
 
     //assert
     assert.ok(!$focusedCell.length, "We do not have focused cell in markup");
@@ -8049,9 +8049,9 @@ QUnit.test("Focus row element", function(assert) {
     var $focusedCell;
 
     //act
-    this.focusGridCell($(this.dataGrid.element()).find(".dx-datagrid-rowsview td").eq(4));
+    this.focusGridCell($(this.dataGrid.$element()).find(".dx-datagrid-rowsview td").eq(4));
 
-    $focusedCell = $(this.dataGrid.element()).find(".dx-focused");
+    $focusedCell = $(this.dataGrid.$element()).find(".dx-focused");
 
     //assert
     assert.ok($focusedCell.length, "We have focused cell in markup");
@@ -8067,9 +8067,9 @@ QUnit.test("Focus row element should support native DOM", function(assert) {
     var $focusedCell;
 
     //act
-    this.focusGridCell($(this.dataGrid.element()).find(".dx-datagrid-rowsview td").get(4));
+    this.focusGridCell($(this.dataGrid.$element()).find(".dx-datagrid-rowsview td").get(4));
 
-    $focusedCell = $(this.dataGrid.element()).find(".dx-focused");
+    $focusedCell = $(this.dataGrid.$element()).find(".dx-focused");
 
     //assert
     assert.ok($focusedCell.length, "We have focused cell in markup");

@@ -728,7 +728,7 @@ QUnit.module(
                 _render: function() {
                     var content = $("<div />")
                         .addClass("dx-content")
-                        .appendTo(this.element());
+                        .appendTo(this.$element());
 
                     this.option("integrationOptions.templates")["template"].render({
                         container: content
@@ -743,7 +743,7 @@ QUnit.module(
                 _renderContentImpl: noop,
 
                 _clean: function() {
-                    this.element().empty();
+                    this.$element().empty();
                 },
 
                 _optionChanged: function() {
@@ -761,11 +761,11 @@ QUnit.module(
                 },
 
                 _render: function() {
-                    this.element().append($("<span />").text(this.option("text")));
+                    this.$element().append($("<span />").text(this.option("text")));
                 },
 
                 _clean: function() {
-                    this.element().empty();
+                    this.$element().empty();
                 },
 
                 _optionChanged: function() {
@@ -878,7 +878,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
     var TestContainer = Widget.inherit({
         _renderContentImpl: function() {
             if(this.option("integrationOptions.templates").template) {
-                this.option("integrationOptions.templates").template.render({ container: this.element() });
+                this.option("integrationOptions.templates").template.render({ container: this.$element() });
             }
         }
     });
@@ -920,7 +920,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
         var TestContainer = CollectionWidget.inherit({
             _renderContentImpl: function() {
                 if(this.option("integrationOptions.templates").template) {
-                    this.option("integrationOptions.templates").template.render({ container: this.element() });
+                    this.option("integrationOptions.templates").template.render({ container: this.$element() });
                 }
             }
         });
@@ -960,13 +960,13 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
             },
 
             _render: function() {
-                this.option("integrationOptions.templates")["template"].render({ container: this.element() });
+                this.option("integrationOptions.templates")["template"].render({ container: this.$element() });
             },
 
             _renderContentImpl: noop,
 
             _clean: function() {
-                this.element().empty();
+                this.$element().empty();
             }
         });
 
@@ -1018,7 +1018,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
                 $.each(that.option("items"), function(index, item) {
                     that.option("integrationOptions.templates")["itemTemplate"].render({
                         model: item,
-                        container: that.element()
+                        container: that.$element()
                     });
                 });
             },
@@ -1026,7 +1026,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
             _renderContentImpl: noop,
 
             _clean: function() {
-                this.element().empty();
+                this.$element().empty();
             }
         });
 
@@ -1311,7 +1311,7 @@ QUnit.module("Template w/o ko scenario", function() {
         var TestContainer = Widget.inherit({
             _renderContentImpl: function() {
                 if(this.option("integrationOptions.templates").template) {
-                    this.option("integrationOptions.templates").template.render({ container: this.element() });
+                    this.option("integrationOptions.templates").template.render({ container: this.$element() });
                 }
             },
             _optionChanged: function() {

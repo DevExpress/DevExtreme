@@ -46,7 +46,7 @@ var SwipeDownNativeScrollViewStrategy = NativeStrategy.inherit({
 
     _renderPullDown: function() {
         var $loadContainer = $("<div>").addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($("<div>")).element();
+            $loadIndicator = new LoadIndicator($("<div>")).$element();
 
         this._$icon = $("<div>")
             .addClass(PULLDOWN_ICON_CLASS);

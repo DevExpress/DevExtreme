@@ -50,10 +50,10 @@ QUnit.module("Integration: Dragging from Tooltip", {
 QUnit.test("Phantom appointment should be rendered after tooltip item dragStart", function(assert) {
     this.createInstance();
 
-    var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();
-    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0));
+    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0));
 
     var apptsInstance = this.instance.getAppointmentsInstance(),
         renderStub = sinon.stub(apptsInstance, "_renderItem");
@@ -65,10 +65,10 @@ QUnit.test("Phantom appointment should be rendered after tooltip item dragStart"
 QUnit.test("Phantom appointment should have correct appointmentData", function(assert) {
     this.createInstance();
 
-    var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();
-    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0));
+    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0));
 
     var apptsInstance = this.instance.getAppointmentsInstance(),
         renderStub = sinon.stub(apptsInstance, "_renderItem");
@@ -84,13 +84,13 @@ QUnit.test("Phantom appointment should have correct appointmentData", function(a
 QUnit.test("Phantom appointment position should be recalculated during dragging tooltip item", function(assert) {
     this.createInstance();
 
-    var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();
-    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0));
+    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0));
 
     var pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        $phantomAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0),
         initialPhantomPosition = translator.locate($phantomAppointment);
 
     pointer.drag(30, 60);
@@ -105,13 +105,13 @@ QUnit.test("Phantom appointment position should be recalculated during dragging 
 QUnit.test("Phantom appointment position should be corrected during dragging tooltip item", function(assert) {
     this.createInstance();
 
-    var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();
-    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0));
+    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0));
 
     var pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(0),
+        $phantomAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0),
         initialPhantomPosition = translator.locate($phantomAppointment);
 
     pointer.drag(30, 60);
@@ -152,12 +152,12 @@ QUnit.test("Recurrence appointment dragging should work correctly", function(ass
 
     var stub = sinon.stub(this.instance, "_checkRecurringAppointment");
 
-    var dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
     dropDown.open();
 
-    var $ddAppointment = $(dropDown._list.element().find(".dx-list-item").eq(0)),
+    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0)),
         pointer = pointerMock($ddAppointment).start().dragStart(),
-        $phantomAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+        $phantomAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
     assert.deepEqual($phantomAppointment.data("dxItemData").settings[0].startDate, new Date(2015, 1, 9, 13), "Date of phantom recurrence part is OK");
 

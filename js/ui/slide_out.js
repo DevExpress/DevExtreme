@@ -202,7 +202,7 @@ var SlideOut = CollectionWidget.inherit({
     _init: function() {
         this._selectedItemContentRendered = false;
         this.callBase();
-        this.element().addClass(SLIDEOUT_CLASS);
+        this.$element().addClass(SLIDEOUT_CLASS);
         this._initSlideOutView();
     },
 
@@ -233,7 +233,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _initSlideOutView: function() {
-        this._slideOutView = this._createComponent(this.element(), SlideOutView, {
+        this._slideOutView = this._createComponent(this.$element(), SlideOutView, {
             integrationOptions: {},
             menuVisible: this.option("menuVisible"),
             swipeEnabled: this.option("swipeEnabled"),
@@ -259,7 +259,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderList: function() {
-        var $list = this._list && this._list.element() || $("<div>").addClass(SLIDEOUT_MENU).appendTo(this._slideOutView.menuContent());
+        var $list = this._list && this._list.$element() || $("<div>").addClass(SLIDEOUT_MENU).appendTo(this._slideOutView.menuContent());
 
         this._renderItemClickAction();
 
@@ -290,7 +290,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _listItemClickHandler: function(e) {
-        var selectedIndex = this._list.element().find(".dx-list-item").index(e.itemElement);
+        var selectedIndex = this._list.$element().find(".dx-list-item").index(e.itemElement);
         this.option("selectedIndex", selectedIndex);
         this._itemClickAction(e);
     },
