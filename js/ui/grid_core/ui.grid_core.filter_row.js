@@ -521,8 +521,10 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     that.getController("editorFactory").loseFocus();
                 },
                 onSubmenuHiding: function() {
+                    var menu = Menu.getInstance($menu);
+
                     $menu.blur();
-                    Menu.getInstance($menu).option("focusedElement", null);
+                    menu && menu.option("focusedElement", null);
                     isCellWasFocused && that._focusEditor($editorContainer);
                 },
                 rtlEnabled: that.option("rtlEnabled")
