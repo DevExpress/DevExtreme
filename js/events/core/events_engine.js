@@ -148,6 +148,7 @@ var getHandlersController = function(element, eventName) {
                 var eventData = elementData[eventName];
 
                 if(!eventData.handleObjects.length) {
+                    delete elementData[eventName];
                     return;
                 }
                 var removedHandler;
@@ -171,6 +172,7 @@ var getHandlersController = function(element, eventName) {
                 if(shouldRemoveNativeListener) {
                     special.callMethod(eventName, "teardown", element, [ namespaces, removedHandler ]);
                     element.removeEventListener(eventName, eventData.nativeHandler);
+                    delete elementData[eventName];
                 }
             };
 
@@ -180,6 +182,12 @@ var getHandlersController = function(element, eventName) {
                 for(var name in elementData) {
                     removeByEventName(name);
                 }
+            }
+
+            var elementDataIsEmpty = Object.keys(elementData).length === 0;
+
+            if(elementDataIsEmpty) {
+                elementDataMap.delete(element);
             }
         },
 
@@ -558,5 +566,9 @@ var result = {
 };
 
 result.Event.prototype = eventsEngine.Event.prototype;
+
+///#DEBUG
+result.elementDataMap = elementDataMap;
+///#ENDDEBUG
 
 module.exports = result;
