@@ -239,6 +239,13 @@
 
         "vizExport-printingButtonText": "Print",
         "vizExport-titleMenuText": "Exporting/Printing",
-        "vizExport-exportButtonText": "{0} file"
+        "vizExport-exportButtonText": "{0} file",
+
+        "dxFilterBuilder-and": "And",
+        "dxFilterBuilder-or": "Or",
+        "dxFilterBuilder-notAnd": "Not And",
+        "dxFilterBuilder-notOr": "Not Or",
+        "dxFilterBuilder-addCondition": "Add Condition",
+        "dxFilterBuilder-addGroup": "Add Group"
     }
 }
