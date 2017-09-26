@@ -271,6 +271,42 @@ QUnit.test('Change operation via operation chooser', function(assert) {
     });
 });
 
+//T557200
+QUnit.test('Repaint view on change operation via operation chooser', function(assert) {
+    //arrange
+    var that = this,
+        testElement = $('#container'),
+        filterMenu,
+        filterMenuItems,
+        rootMenuItem;
+
+    $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], index: 0 }, { caption: 'Column 2', allowFiltering: true, index: 1 }, { caption: 'Column 3', index: 2 }]);
+
+    this.columnHeadersView.render(testElement);
+
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
+    rootMenuItem = filterMenu.find(".dx-menu-item");
+    $(rootMenuItem).trigger("dxclick");
+    filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
+
+    var oldColumnOption = this.columnsController.columnOption,
+        isViewRepainted = false;
+
+    this.columnsController.columnOption = function(columnIndex, options) {
+        oldColumnOption.apply(this, arguments);
+        if(options && options.selectedFilterOperation) {
+            that.columnHeadersView.render();
+            isViewRepainted = true;
+        }
+    };
+
+    //act
+    filterMenuItems.find('.dx-menu-item').eq(1).trigger('dxclick');
+
+    //assert
+    assert.ok(isViewRepainted, "view is repainted without exceptions");
+});
+
 QUnit.test('Reset operation via operation chooser', function(assert) {
     //arrange
     var testElement = $('#container'),
