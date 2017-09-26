@@ -62,7 +62,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             column = item.column,
             cellValue = column.calculateCellValue(cellOptions.data),
             focusAction = that.createAction(function() {
-                $container.trigger(clickEvent.name);
+                eventsEngine.trigger($container, clickEvent.name);
             }),
             cellText;
 
@@ -70,10 +70,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         cellText = gridCoreUtils.formatValue(cellValue, column);
 
         if(column.allowEditing && that.option("useKeyboard")) {
-            $container
-                .attr("tabIndex", that.option("tabIndex"))
-                .off("focus", focusAction)
-                .on("focus", focusAction);
+            $container.attr("tabIndex", that.option("tabIndex"));
+            eventsEngine.off($container, "focus", focusAction);
+            eventsEngine.on($container, "focus", focusAction);
         }
 
         if(column.cellTemplate) {
@@ -1010,19 +1009,19 @@ module.exports = {
                 }
             },
             keyboardNavigation: {
-                _isCellValid: function($cell) {
-                    return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                _isCellValid: function(cell) {
+                    return this.callBase(cell) && !cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                 },
 
-                _processNextCellInMasterDetail: function($nextCell) {
-                    this.callBase($nextCell);
+                _processNextCellInMasterDetail: function(nextCell) {
+                    this.callBase(nextCell);
 
-                    if(!this._isInsideEditForm($nextCell) && $nextCell) {
+                    if(!this._isInsideEditForm(nextCell) && nextCell) {
                         var focusHandler = function() {
-                            $nextCell.off("focus", focusHandler);
-                            $nextCell.trigger("dxclick");
+                            eventsEngine.off(nextCell, "focus", focusHandler);
+                            eventsEngine.trigger(nextCell, "dxclick");
                         };
-                        $nextCell.on("focus", focusHandler);
+                        eventsEngine.on(nextCell, "focus", focusHandler);
                     }
                 }
             }
