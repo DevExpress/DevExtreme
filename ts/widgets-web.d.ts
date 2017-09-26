@@ -2026,6 +2026,9 @@ declare module DevExpress.ui {
             /** @docid GridBaseOptions_columnChooser_enabled */
             enabled?: boolean;
 
+            /** @docid GridBaseOptions_columnChooser_searchEnabled */
+            searchEnabled?: boolean;
+
             /** @docid GridBaseOptions_columnChooser_mode */
             mode?: string;
 

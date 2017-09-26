@@ -1027,10 +1027,14 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                     rowCount = draggingPanel.getRowCount ? draggingPanel.getRowCount() : 1,
                     nameDraggingPanel = draggingPanel.getName(),
                     subscribeToEvents = function(index, columnElement) {
+                        if(!columnElement) {
+                            return;
+                        }
+
                         var $columnElement = $(columnElement),
                             column = columns[index];
 
-                        if(draggingPanel.allowDragging(columns[index], nameDraggingPanel, draggingPanels)) {
+                        if(draggingPanel.allowDragging(column, nameDraggingPanel, draggingPanels)) {
                             $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
                             eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
                                 var e = args.jQueryEvent,
