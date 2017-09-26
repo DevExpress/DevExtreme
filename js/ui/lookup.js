@@ -66,7 +66,6 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_showNextButton
             * @publicName showNextButton
             * @deprecated #pageLoadMode
-            * @extend_doc
             */
             "showNextButton": { since: "15.1", message: "Use the 'pageLoadMode' option instead" },
 
@@ -338,6 +337,14 @@ var Lookup = DropDownList.inherit({
             * @acceptValues 'scrollBottom'|'nextButton'
             */
             pageLoadMode: "scrollBottom",
+
+            /**
+            * @name dxLookupOptions_showNextButton
+            * @publicName showNextButton
+            * @type boolean
+            * @default undefined
+            */
+            showNextButton: undefined,
 
             /**
             * @name dxLookupOptions_nextButtonText

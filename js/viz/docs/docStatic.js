@@ -98,49 +98,52 @@ var staticMethods = {
     /**
     * @name viz_core
     * @publicName core
-    * @deprecated viz
-    * @extend_doc
+    * @deprecated
     */
     core: {
         /**
         * @name viz_coremethods_currentTheme
         * @publicName currentTheme(theme)
-        * @deprecated vizmethods_currentTheme
-        * @extend_doc
+        * @param1 theme:string
+        * @deprecated
         */
         /**
         * @name viz_coremethods_currentTheme
         * @publicName currentTheme(platform, colorScheme)
-        * @deprecated vizmethods_currentTheme
-        * @extend_doc
+        * @param1 platform:string
+        * @param2 colorScheme:string
+        * @deprecated
         */
         currentTheme: function() { },
         /**
         * @name viz_coremethods_registerTheme
         * @publicName registerTheme(customTheme, baseTheme)
-        * @deprecated vizmethods_registerTheme
-        * @extend_doc
+        * @param1 customTheme:object
+        * @param2 baseTheme:string
+        * @deprecated
         */
         registerTheme: function() { },
         /**
         * @name viz_coremethods_currentPalette
         * @publicName currentPalette(paletteName)
-        * @deprecated vizmethods_currentPalette
-        * @extend_doc
+        * @param1 paletteName:string
+        * @deprecated
         */
         currentPalette: function() { },
         /**
         * @name viz_coremethods_getPalette
         * @publicName getPalette(paletteName)
-        * @deprecated vizmethods_getPalette
-        * @extend_doc
+        * @param1 paletteName:string
+        * @return object
+        * @deprecated
         */
         getPalette: function() { },
         /**
         * @name viz_coremethods_registerPalette
         * @publicName registerPalette(paletteName, palette)
-        * @deprecated vizmethods_registerPalette
-        * @extend_doc
+        * @param1 paletteName:string
+        * @param2 palette:object
+        * @deprecated
         */
         registerPalette: function() { }
     },

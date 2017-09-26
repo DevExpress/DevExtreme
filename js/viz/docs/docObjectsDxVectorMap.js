@@ -98,44 +98,43 @@ var LayerElement = {
 /**
 * @name areaObjects
 * @publicName Area
-* @deprecated MapLayerElement
-* @extend_doc
+* @deprecated
 */
 var AreaObjects = {
     /**
     * @name areaObjectsfields_type
     * @publicName type
+    * @type string
     * @deprecated MapLayerfields_type
-    * @extend_doc
     */
     type: null,
     /**
     * @name areaObjectsmethods_attribute
     * @publicName attribute(name)
+    * @return object | array | number | string | boolean
+    * @param1 name:string
     * @deprecated MapLayerElementmethods_attribute
-    * @extend_doc
     */
     attribute: function() { },
     /**
     * @name areaObjectsmethods_selected
     * @publicName selected(state)
     * @param1 state:boolean
-    * @deprecated MapLayerElementmethods_selected
-    * @extend_doc
+    * @deprecated
     */
     selected: function() { },
     /**
     * @name areaObjectsmethods_selected
     * @publicName selected()
-    * @deprecated MapLayerElementmethods_selected
-    * @extend_doc
+    * @return boolean
+    * @deprecated
     */
     selected: function() { },
     /**
     * @name areaObjectsmethods_applySettings
     * @publicName applySettings(settings)
+    * @param1 settings:object
     * @deprecated MapLayerElementmethods_applySettings
-    * @extend_doc
     */
     applySettings: function() { }
 };
@@ -143,79 +142,78 @@ var AreaObjects = {
 /**
 * @name markerObjects
 * @publicName Marker
-* @deprecated MapLayerElement
-* @extend_doc
+* @deprecated
 */
 var MarkerObjects = {
     /**
     * @name markerObjectsfields_type
     * @publicName type
+    * @type string
     * @deprecated MapLayerfields_type
-    * @extend_doc
     */
     type: null,
     /**
     * @name markerObjectsmethods_attribute
     * @publicName attribute(name)
+    * @return object | array | number | string | boolean
+    * @param1 name:string
     * @deprecated MapLayerElementmethods_attribute
-    * @extend_doc
     */
     attribute: function() { },
     /**
     * @name markerObjectsmethods_selected
     * @publicName selected(state)
     * @param1 state:boolean
-    * @deprecated MapLayerElementmethods_selected
-    * @extend_doc
+    * @deprecated
     */
     selected: function() { },
     /**
     * @name markerObjectsmethods_selected
     * @publicName selected()
-    * @deprecated MapLayerElementmethods_selected
-    * @extend_doc
+    * @return boolean
+    * @deprecated
     */
     selected: function() { },
     /**
     * @name markerObjectsmethods_applySettings
     * @publicName applySettings(settings)
+    * @param1 settings:object
     * @deprecated MapLayerElementmethods_applySettings
-    * @extend_doc
     */
     applySettings: function() { },
     /**
     * @name markerObjectsmethods_coordinates
     * @publicName coordinates()
+    * @return array
     * @deprecated MapLayerElementmethods_coordinates
-    * @extend_doc
     */
     coordinates: function() { },
     /**
     * @name markerObjectsfields_text
     * @publicName text
-    * @deprecated MapLayerElementmethods_attribute
-    * @extend_doc
+    * @type string
+    * @deprecated
     */
     text: null,
     /**
    * @name markerObjectsfields_value
    * @publicName value
-   * @deprecated MapLayerElementmethods_attribute
-   * @extend_doc
+   * @type number
+   * @deprecated
    */
     value: null,
     /**
    * @name markerObjectsfields_values
    * @publicName values
-   * @deprecated MapLayerElementmethods_attribute
-   * @extend_doc
+   * @type array
+   * @deprecated
    */
     values: null,
     /**
    * @name markerObjectsfields_url
    * @publicName url
-   * @deprecated MapLayerElementmethods_attribute
-   * @extend_doc
+   * @type string
+   * @deprecated
    */
     url: null
 };

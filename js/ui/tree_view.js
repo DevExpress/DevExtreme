@@ -406,8 +406,8 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewItemTemplate_iconSrc
             * @publicName iconSrc
-            * @deprecated dxTreeViewItemTemplate_icon
-            * @extend_doc
+            * @type String
+            * @deprecated
             */
             /**
             * @name dxTreeViewItemTemplate_items
@@ -436,25 +436,28 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewOptions_showCheckBoxes
             * @publicName showCheckBoxes
-            * @deprecated dxTreeViewOptions_showCheckBoxesMode
-            * @extend_doc
+            * @type boolean
+            * @default false
+            * @deprecated
             */
             "showCheckBoxes": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
 
             /**
              * @name dxTreeViewOptions_selectAllEnabled
              * @publicName selectAllEnabled
-             * @deprecated dxTreeViewOptions_showCheckBoxesMode
-             * @extend_doc
+             * @type boolean
+             * @default false
+             * @deprecated
              */
             "selectAllEnabled": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
 
             /**
             * @name dxTreeViewOptions_onItemSelected
             * @publicName onItemSelected
+            * @extends Action
             * @deprecated dxTreeViewOptions_onItemSelectionChanged
+            * @type_function_param1_field7 node:dxtreeviewnode
             * @action
-            * @extend_doc
             */
             "onItemSelected": { since: "16.1", alias: "onItemSelectionChanged" }
         });

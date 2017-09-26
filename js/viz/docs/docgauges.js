@@ -22,8 +22,10 @@ var baseGauge = {
         /**
         * @name basegaugeoptions_title_position
         * @publicName position
-        * @deprecated BaseWidgetOptions_title_horizontalalignment
-        * @extend_doc
+        * @type string
+        * @default 'top-center'
+        * @acceptValues 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+        * @deprecated
         */
         position: undefined
     },
@@ -59,57 +61,63 @@ var baseGauge = {
     /**
     * @name basegaugeoptions_subtitle
     * @publicName subtitle
+    * @type object|string
     * @deprecated BaseWidgetOptions_title_subtitle
-    * @extend_doc
     */
     subtitle: {
         /**
         * @name basegaugeoptions_subtitle_text
         * @publicName text
+        * @type string
+        * @default undefined
         * @deprecated BaseWidgetOptions_title_subtitle_text
-        * @extend_doc
         */
         text: undefined,
         /**
         * @name basegaugeoptions_subtitle_font
         * @publicName font
+        * @type object
         * @deprecated BaseWidgetOptions_title_subtitle_font
-        * @extend_doc
         */
         font: {
             /**
             * @name basegaugeoptions_subtitle_font_family
             * @publicName family
+            * @type string
+            * @default "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana"
             * @deprecated BaseWidgetOptions_title_subtitle_font_family
-            * @extend_doc
             */
             family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
             /**
             * @name basegaugeoptions_subtitle_font_weight
             * @publicName weight
+            * @type number
+            * @default 200
             * @deprecated BaseWidgetOptions_title_subtitle_font_weight
-            * @extend_doc
             */
             weight: 200,
             /**
             * @name basegaugeoptions_subtitle_font_color
             * @publicName color
+            * @type string
+            * @default '#232323'
             * @deprecated BaseWidgetOptions_title_subtitle_font_color
-            * @extend_doc
             */
             color: '#232323',
             /**
             * @name basegaugeoptions_subtitle_font_size
             * @publicName size
+            * @type number|string
+            * @default 16
             * @deprecated BaseWidgetOptions_title_subtitle_font_size
-            * @extend_doc
             */
             size: 16,
             /**
             * @name basegaugeoptions_subtitle_font_opacity
             * @publicName opacity
+            * @type number
+            * @default 1
             * @deprecated BaseWidgetOptions_title_subtitle_font_opacity
-            * @extend_doc
             */
             opacity: 1
         }
@@ -139,29 +147,33 @@ var baseGauge = {
         /**
         * @name basegaugeoptions_scale_hideFirstTick
         * @publicName hideFirstTick
-        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
-        * @extend_doc
+        * @type boolean
+        * @default false
+        * @deprecated
         */
         hideFirstTick: undefined,
         /**
         * @name basegaugeoptions_scale_hideLastTick
         * @publicName hideLastTick
-        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
-        * @extend_doc
+        * @type boolean
+        * @default false
+        * @deprecated
         */
         hideLastTick: undefined,
         /**
         * @name basegaugeoptions_scale_hideFirstLabel
         * @publicName hideFirstLabel
-        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
-        * @extend_doc
+        * @type boolean
+        * @default false
+        * @deprecated
         */
         hideFirstLabel: undefined,
         /**
         * @name basegaugeoptions_scale_hideLastLabel
         * @publicName hideLastLabel
-        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
-        * @extend_doc
+        * @type boolean
+        * @default false
+        * @deprecated
         */
         hideLastLabel: undefined,
         /**
@@ -239,63 +251,73 @@ var baseGauge = {
         /**
         * @name basegaugeoptions_scale_majorTick
         * @publicName majorTick
+        * @type object
         * @deprecated basegaugeoptions_scale_tick
-        * @extend_doc
         */
         majorTick: {
             /**
             * @name basegaugeoptions_scale_majorTick_color
             * @publicName color
+            * @type string
+            * @default '#FFFFFF'
             * @deprecated basegaugeoptions_scale_tick_color
-            * @extend_doc
             */
             color: '#FFFFFF',
             /**
             * @name basegaugeoptions_scale_majorTick_length
             * @publicName length
+            * @type number
+            * @default 5
             * @deprecated basegaugeoptions_scale_tick_length
-            * @extend_doc
             */
             length: 5,
             /**
             * @name basegaugeoptions_scale_majorTick_width
             * @publicName width
+            * @type number
+            * @default 2
             * @deprecated basegaugeoptions_scale_tick_width
-            * @extend_doc
             */
             width: 2,
             /**
             * @name basegaugeoptions_scale_majorTick_customTickValues
             * @publicName customTickValues
+            * @type array
+            * @default []
             * @deprecated basegaugeoptions_scale_customTicks
-            * @extend_doc
+            * @notUsedInTheme
             */
             customTickValues: [],
             /**
             * @name basegaugeoptions_scale_majorTick_useTicksAutoArrangement
             * @publicName useTicksAutoArrangement
+            * @type boolean
+            * @default true
             * @deprecated basegaugeoptions_scale_label_overlappingBehavior
-            * @extend_doc
             */
             useTicksAutoArrangement: true,
             /**
             * @name basegaugeoptions_scale_majorTick_tickInterval
             * @publicName tickInterval
+            * @type number
+            * @default undefined
             * @deprecated basegaugeoptions_scale_tickInterval
-            * @extend_doc
             */
             tickInterval: undefined,
             /**
             * @name basegaugeoptions_scale_majorTick_showCalculatedTicks
             * @publicName showCalculatedTicks
+            * @type boolean
+            * @default true
             * @deprecated
             */
             showCalculatedTicks: true,
             /**
             * @name basegaugeoptions_scale_majorTick_visible
             * @publicName visible
+            * @type boolean
+            * @default true
             * @deprecated basegaugeoptions_scale_tick_visible
-            * @extend_doc
             */
             visible: true
         },
@@ -351,15 +373,18 @@ var baseGauge = {
             /**
             * @name basegaugeoptions_scale_minorTick_customTickValues
             * @publicName customTickValues
+            * @type array
+            * @default []
             * @deprecated basegaugeoptions_scale_customMinorTicks
-            * @extend_doc
+            * @notUsedInTheme
             */
             customTickValues: [],
             /**
             * @name basegaugeoptions_scale_minorTick_tickInterval
             * @publicName tickInterval
+            * @type number
+            * @default undefined
             * @deprecated basegaugeoptions_scale_minorTickInterval
-            * @extend_doc
             */
             tickInterval: undefined,
         },
@@ -387,8 +412,9 @@ var baseGauge = {
                 /**
                 * @name basegaugeoptions_scale_label_overlappingBehavior_useAutoArrangement
                 * @publicName useAutoArrangement
+                * @type boolean
+                * @default true
                 * @deprecated basegaugeoptions_scale_label_overlappingBehavior
-                * @extend_doc
                 */
                 useAutoArrangement: true
             },
@@ -679,8 +705,10 @@ var dxCircularGauge = {
                 /**
                 * @name dxcirculargaugeoptions_scale_label_overlappingBehavior_hideFirstOrLast
                 * @publicName hideFirstOrLast
+                * @type string
+                * @default "last"
+                * @acceptValues 'last' | 'first'
                 * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
-                * @extend_doc
                 */
                 hideFirstOrLast: "last"
             }
@@ -920,17 +948,19 @@ var dxBarGauge = {
         /**
         * @name dxbargaugeoptions_title_position
         * @publicName position
-        * @deprecated BaseWidgetOptions_title_horizontalalignment
-        * @extend_doc
+        * @type string
+        * @default 'top-center'
+        * @acceptValues 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
+        * @deprecated
         */
         position: undefined
     },
     /**
     * @name dxbargaugeoptions_subtitle
     * @publicName subtitle
+    * @type object|string
     * @inherits basegaugeoptions_subtitle
     * @deprecated BaseWidgetOptions_title_subtitle
-    * @extend_doc
     */
     subtitle: {},
     /**

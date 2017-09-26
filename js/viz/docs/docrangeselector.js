@@ -68,8 +68,9 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_scale_showminorticks
         * @publicName showMinorTicks
+        * @type boolean
+        * @default true
         * @deprecated dxrangeselectoroptions_scale_minortick_visible
-        * @extend_doc
         */
         showMinorTicks: true,
         /**
@@ -82,57 +83,59 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_scale_majortickinterval
         * @publicName majorTickInterval
+        * @type number|object|string
+        * @default undefined
+        * @acceptValues 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year'
         * @deprecated dxrangeselectoroptions_scale_tickinterval
-        * @extend_doc
         */
         majorTickInterval: {
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_years
             * @publicName years
+            * @type number
             * @deprecated dxrangeselectoroptions_scale_tickinterval
-            * @extend_doc
             */
             years: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_months
             * @publicName months
+            * @type number
             * @deprecated dxrangeselectoroptions_scale_tickinterval
-            * @extend_doc
             */
             months: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_days
             * @publicName days
+            * @type number
             * @deprecated dxrangeselectoroptions_scale_tickinterval
-            * @extend_doc
             */
             days: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_hours
             * @publicName hours
+            * @type number
             * @deprecated dxrangeselectoroptions_scale_tickinterval
-            * @extend_doc
             */
             hours: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_minutes
             * @publicName minutes
+            * @type number
             * @deprecated dxrangeselectoroptions_scale_tickinterval
-            * @extend_doc
             */
             minutes: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_seconds
             * @publicName seconds
+            * @type number
             * @deprecated dxrangeselectoroptions_scale_tickinterval
-            * @extend_doc
             */
             seconds: undefined,
             /**
             * @name dxrangeselectoroptions_scale_majortickinterval_milliseconds
             * @publicName milliseconds
+            * @type number
             * @deprecated dxrangeselectoroptions_scale_tickinterval
-            * @extend_doc
             */
             milliseconds: undefined
         },
@@ -146,8 +149,9 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_scale_useticksautoarrangement
         * @publicName useTicksAutoArrangement
+        * @type boolean
+        * @default true
         * @deprecated dxrangeselectoroptions_scale_label_overlappingbehavior
-        * @extend_doc
         */
         useTicksAutoArrangement: true,
         /**
@@ -447,8 +451,9 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_slidermarker_padding
         * @publicName padding
-        * @deprecated dxrangeselectoroptions_slidermarker_paddingleftright
-        * @extend_doc
+        * @type number
+        * @default 6
+        * @deprecated
         */
         padding: 6,
         /**
@@ -482,8 +487,9 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_slidermarker_placeholdersize
         * @publicName placeholderSize
-        * @deprecated dxrangeselectoroptions_slidermarker_placeholderHeight
-        * @extend_doc
+        * @type number|object
+        * @default undefined
+        * @deprecated
         */
         placeholderSize: {
             /**
@@ -619,8 +625,8 @@ var dxRangeSelector = {
     /**
     * @name dxrangeselectoroptions_selectedrange
     * @publicName selectedRange
-    * @deprecated dxrangeselectoroptions_value
-    * @extend_doc
+    * @type object
+    * @deprecated
     */
     selectedRange: {
         /**
@@ -719,8 +725,10 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_behavior_callselectedrangechanged
         * @publicName callSelectedRangeChanged
-        * @deprecated dxrangeselectoroptions_behavior_callvaluechanged
-        * @extend_doc
+        * @type string
+        * @default 'onMovingComplete'
+        * @acceptValues 'onMovingComplete' | 'onMoving'
+        * @deprecated
         */
         callSelectedRangeChanged: "onMovingComplete",
         /**
@@ -953,10 +961,16 @@ var dxRangeSelector = {
     /**
     * @name dxrangeselectoroptions_onselectedrangechanged
     * @publicName onSelectedRangeChanged
-    * @deprecated dxrangeselectoroptions_onvaluechanged
+    * @type function(e)
+    * @type_function_param1 e:object
+    * @type_function_param1_field1 component:object
+    * @type_function_param1_field2 element:object
+    * @type_function_param1_field3 startValue:Date|Number
+    * @type_function_param1_field4 endValue:Date|Number
+    * @default null
+    * @deprecated
     * @notUsedInTheme
     * @action
-    * @extend_doc
     */
     onSelectedRangeChanged: null,
     /**
@@ -1006,15 +1020,17 @@ var dxRangeSelector = {
     /**
     * @name dxrangeselectormethods_getSelectedRange
     * @publicName getSelectedRange()
-    * @deprecated dxrangeselectormethods_getValue
-    * @extend_doc
+    * @return object
+    * @deprecated
     */
     getSelectedRange: function() { },
     /**
     * @name dxrangeselectormethods_setSelectedRange
     * @publicName setSelectedRange(selectedRange)
-    * @deprecated dxrangeselectormethods_setValue
-    * @extend_doc
+    * @param1 selectedRange:object
+    * @param1_field1 startValue:Date|Number|String
+    * @param1_field2 endValue:Date|Number|String
+    * @deprecated
     */
     setSelectedRange: function() { },
     /**

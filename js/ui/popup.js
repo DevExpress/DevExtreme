@@ -356,7 +356,7 @@ var Popup = Overlay.inherit({
             * @name dxPopupOptions_buttons
             * @publicName buttons
             * @deprecated dxPopupOptions_toolbarItems
-            * @extend_doc
+            * @type array
             */
             "buttons": { since: "16.1", alias: "toolbarItems" }
         });
