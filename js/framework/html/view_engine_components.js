@@ -168,10 +168,8 @@ var Transition = MarkupComponent.inherit({
             /**
             * @name dxtransitionoptions_type
             * @publicName type
-            * @type string
-            * @default undefined
-            * @acceptValues 'slide'|'fade'|'overflow'
             * @deprecated #animation
+            * @extend_doc
             */
             type: undefined,
             /**
@@ -224,10 +222,8 @@ var ContentPlaceholder = MarkupComponent.inherit({
             /**
             * @name dxcontentplaceholderoptions_transition
             * @publicName transition
-            * @type string
-            * @default undefined
-            * @acceptValues 'none'|'slide'|'fade'|'overflow'
             * @deprecated #animation
+            * @extend_doc
             */
             transition: undefined,
             /**

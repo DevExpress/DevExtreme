@@ -259,8 +259,8 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxMenuBaseItemTemplate_iconSrc
             * @publicName iconSrc
-            * @type String
-            * @deprecated
+            * @deprecated dxMenuBaseItemTemplate_icon
+            * @extend_doc
             */
             /**
             * @name dxMenuBaseItemTemplate_text
@@ -301,9 +301,8 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxMenuBaseOptions_selectionByClick
             * @publicName selectionByClick
-            * @type boolean
             * @deprecated dxMenuBaseOptions_selectByClick
-            * @default false
+            * @extend_doc
             */
             selectionByClick: { since: "16.1", alias: "selectByClick" }
 

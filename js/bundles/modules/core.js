@@ -33,7 +33,6 @@ var animationFrame = require("../../animation/frame");
 /**
  * @name requestAnimationFrame
  * @publicName requestAnimationFrame(callback)
- * @type method
  * @deprecated utils_requestAnimationFrame
  * @extend_doc
  */
@@ -45,7 +44,6 @@ DevExpress.requestAnimationFrame = function() {
 /**
  * @name cancelAnimationFrame
  * @publicName cancelAnimationFrame(requestID)
- * @type method
  * @deprecated utils_cancelAnimationFrame
  * @extend_doc
  */
@@ -98,9 +96,8 @@ var config = DevExpress.config = require("../../core/config");
 /**
  * @name rtlEnabled
  * @publicName rtlEnabled
- * @type boolean
- * @default false
- * @deprecated #config
+ * @deprecated config
+ * @extend_doc
  */
 
 Object.defineProperty(DevExpress, 'rtlEnabled', {

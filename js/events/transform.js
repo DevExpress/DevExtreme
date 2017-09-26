@@ -239,32 +239,25 @@ var TransformEmitter = Emitter.inherit({
  * @name ui events_dxzoomstart
  * @publicName dxzoomstart
  * @type EVENT
- * @deprecated
- * @type_function_param1 event:jQuery.event
- * @type_function_param1_field1 cancel:boolean
+ * @deprecated ui events_dxpinchstart
  * @module events/transform
+ * @extend_doc
 */
 /**
   * @name ui events_dxzoom
   * @publicName dxzoom
   * @type EVENT
-  * @deprecated
-  * @type_function_param1 event:jQuery.event
-  * @type_function_param1_field1 scale:number
-  * @type_function_param1_field2 deltaScale:number
-  * @type_function_param1_field3 cancel:boolean
+  * @deprecated ui events_dxpinch
   * @module events/transform
+  * @extend_doc
 */
 /**
   * @name ui events_dxzoomend
   * @publicName dxzoomend
   * @type EVENT
-  * @deprecated
-  * @type_function_param1 event:jQuery.event
-  * @type_function_param1_field1 scale:number
-  * @type_function_param1_field2 deltaScale:number
-  * @type_function_param1_field3 cancel:boolean
+  * @deprecated ui events_dxpinchend
   * @module events/transform
+  * @extend_doc
 */
 
 /**
@@ -274,7 +267,7 @@ var TransformEmitter = Emitter.inherit({
 * @type_function_param1 event:jQuery.event
 * @type_function_param1_field1 cancel:boolean
 * @module events/transform
-   */
+*/
 /**
   * @name ui events_dxpinch
   * @publicName dxpinch

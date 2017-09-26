@@ -71,6 +71,7 @@ var DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions_pagingEnabled
             * @publicName pagingEnabled
             * @deprecated DataSourceOptions_paginate
+            * @extend_doc
             */
             "pagingEnabled": { since: "15.1", message: "Use the 'dataSource.paginate' option instead" }
         });
@@ -145,14 +146,6 @@ var DropDownList = DropDownEditor.inherit({
             * @ref
             */
             selectedItem: null,
-
-            /**
-            * @name dxDropDownListOptions_pagingEnabled
-            * @publicName pagingEnabled
-            * @type boolean
-            * @default undefined
-            */
-            pagingEnabled: undefined,
 
             /**
             * @name dxDropDownListOptions_noDataText

@@ -318,27 +318,22 @@ var commonPieChartSeries = {
     /**
 	* @name dxPieChartSeriesTypes_CommonPieChartSeries_segmentsdirection
 	* @publicName segmentsDirection
-	* @type string
-	* @default 'clockwise'
-	* @acceptValues 'clockwise' | 'anticlockwise'
-    * @deprecated
+    * @deprecated dxpiechartoptions_segmentsdirection
+    * @extend_doc
 	*/
     segmentsDirection: 'clockwise',
     /**
 	* @name dxPieChartSeriesTypes_CommonPieChartSeries_startangle
 	* @publicName startAngle
-	* @type number
-	* @default 0
-    * @deprecated
+    * @deprecated dxpiechartoptions_startangle
+    * @extend_doc
 	*/
     startAngle: 0,
     /**
 	* @name dxPieChartSeriesTypes_CommonPieChartSeries_innerradius
 	* @publicName innerRadius
-	* @type number
-	* @default 0.5
-	* @propertyOf dxPieChartSeriesTypes_DoughnutSeries
-    * @deprecated
+    * @deprecated dxpiechartoptions_innerradius
+    * @extend_doc
 	*/
     innerRadius: 0.5,
     /**

@@ -1053,27 +1053,22 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_commonaxissettings_label_overlappingBehavior_mode
                 * @publicName mode
-                * @type string
-                * @default 'hide'
-                * @acceptValues 'stagger' | 'rotate' | 'hide' | 'none'
-                * @deprecatedAcceptValues 'ignore' | 'enlargeTickInterval'
                 * @deprecated dxchartoptions_commonaxissettings_label_overlappingBehavior
+                * @extend_doc
                 */
                 mode: 'hide',
                 /**
                 * @name dxchartoptions_commonaxissettings_label_overlappingBehavior_rotationangle
                 * @publicName rotationAngle
-                * @type number
-                * @default 90
                 * @deprecated dxchartoptions_commonaxissettings_label_rotationangle
+                * @extend_doc
                 */
                 rotationAngle: 90,
                 /**
                 * @name dxchartoptions_commonaxissettings_label_overlappingBehavior_staggeringSpacing
                 * @publicName staggeringSpacing
-                * @type number
-                * @default 5
                 * @deprecated dxchartoptions_commonaxissettings_label_staggeringspacing
+                * @extend_doc
                 */
                 staggeringSpacing: 5
             },
@@ -2369,10 +2364,8 @@ var dxPieChart = {
         /**
         * @name dxpiechartoptions_series_type
         * @publicName type
-        * @type string
-        * @default 'pie'
-        * @acceptValues 'pie' | 'doughnut' | 'donut'
-        * @deprecated
+        * @deprecated dxpiechartoptions_type
+        * @extend_doc
         */
         type: 'pie'
     }],
@@ -2396,18 +2389,16 @@ var dxPieChart = {
         /**
         * @name dxpiechartoptions_commonseriessettings_type
         * @publicName type
-        * @type string
-        * @default 'pie'
-        * @acceptValues 'pie' | 'doughnut' | 'donut'
-        * @deprecated
+        * @deprecated dxpiechartoptions_type
+        * @extend_doc
         */
         type: 'pie'
     },
     /**
     * @name dxpiechartmethods_getseries
     * @publicName getSeries()
-    * @return object
     * @deprecated basechartmethods_getallseries
+    * @extend_doc
     */
     getSeries: function() { },
     /**

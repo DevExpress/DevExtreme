@@ -141,8 +141,8 @@ var Tabs = CollectionWidget.inherit({
             /**
             * @name dxTabsItemTemplate_iconSrc
             * @publicName iconSrc
-            * @type String
-            * @deprecated
+            * @deprecated dxTabsItemTemplate_icon
+            * @extend_doc
             */
             /**
             * @name dxTabsItemTemplate_badge
