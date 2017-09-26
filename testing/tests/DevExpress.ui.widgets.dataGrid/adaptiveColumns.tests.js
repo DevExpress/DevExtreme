@@ -3679,38 +3679,70 @@ QUnit.module("Keyboard navigation", {
     }
 }, function() {
     QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
-        //arrange
-        this.triggerFormItemClick(0);
+        var that = this,
+            done = assert.async();
 
-        //act
-        this.triggerTabKey($(".dx-field-item-content").eq(1));
+        //arrange
+        that.triggerFormItemClick(0);
 
         //assert
-        assert.equal(this.getActiveInputElement().val(), "Full Name", "value of FullName");
+        var $itemContent = $(".dx-field-item-content");
+        $itemContent.on("focusin", function() {
+            setTimeout(function() {
+                assert.equal(that.getActiveInputElement().val(), "Full Name", "value of FullName");
+                that.editingController.dispose();
+                done();
+            });
+        });
+
+        //act
+        that.clock.restore();
+        that.triggerTabKey($itemContent.eq(1));
     });
 
     QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
-        //arrange
-        this.triggerFormItemClick(1);
+        var that = this,
+            done = assert.async();
 
-        //act
-        this.triggerTabKey($(".dx-field-item-content").first(), true);
+        //arrange
+        that.triggerFormItemClick(1);
 
         //assert
-        assert.equal(this.getActiveInputElement().val(), "Psy", "value of LastName");
+        var $itemContent = $(".dx-field-item-content");
+        $itemContent.on("focusin", function() {
+            setTimeout(function() {
+                assert.equal(that.getActiveInputElement().val(), "Psy", "value of LastName");
+                that.editingController.dispose();
+                done();
+            });
+        });
+
+        //act
+        that.clock.restore();
+        that.triggerTabKey($(".dx-field-item-content").first(), true);
     });
 
     QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
+        var that = this,
+            done = assert.async();
+
         //arrange
-        this.triggerFormItemClick(1);
+        that.triggerFormItemClick(1);
+
+        var $cell = that.$dataGrid.find("td:not([class])").eq(1);
+        $cell.on("focusin", function() {
+            setTimeout(function() {
+                var $input = that.getActiveInputElement();
+                assert.equal($input.length, 1, "inputs count");
+                assert.equal($input.val(), "Super", "value of FirstName");
+                that.editingController.dispose();
+                done();
+            });
+        });
 
         //act
-        this.triggerTabKey(this.$dataGrid.find("td:not([class])").eq(1));
-
-        //assert
-        var $input = this.getActiveInputElement();
-        assert.equal($input.length, 1, "inputs count");
-        assert.equal($input.val(), "Super", "value of FirstName");
+        that.clock.restore();
+        that.triggerTabKey($cell);
     });
 
     QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
