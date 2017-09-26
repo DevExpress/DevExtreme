@@ -35,7 +35,6 @@ var animationFrame = require("../../animation/frame");
  * @publicName requestAnimationFrame(callback)
  * @type method
  * @deprecated utils_requestAnimationFrame
- * @extend_doc
  */
 DevExpress.requestAnimationFrame = function() {
     errors.log("W0000", "DevExpress.requestAnimationFrame", "15.2", "Use the 'DevExpress.utils.requestAnimationFrame' method instead.");
@@ -47,7 +46,6 @@ DevExpress.requestAnimationFrame = function() {
  * @publicName cancelAnimationFrame(requestID)
  * @type method
  * @deprecated utils_cancelAnimationFrame
- * @extend_doc
  */
 DevExpress.cancelAnimationFrame = function() {
     errors.log("W0000", "DevExpress.cancelAnimationFrame", "15.2", "Use the 'DevExpress.utils.cancelAnimationFrame' method instead.");
@@ -100,7 +98,7 @@ var config = DevExpress.config = require("../../core/config");
  * @publicName rtlEnabled
  * @type boolean
  * @default false
- * @deprecated #config
+ * @deprecated config
  */
 
 Object.defineProperty(DevExpress, 'rtlEnabled', {

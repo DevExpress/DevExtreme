@@ -2372,7 +2372,7 @@ var dxPieChart = {
         * @type string
         * @default 'pie'
         * @acceptValues 'pie' | 'doughnut' | 'donut'
-        * @deprecated
+        * @deprecated dxpiechartoptions_type
         */
         type: 'pie'
     }],
@@ -2399,7 +2399,7 @@ var dxPieChart = {
         * @type string
         * @default 'pie'
         * @acceptValues 'pie' | 'doughnut' | 'donut'
-        * @deprecated
+        * @deprecated dxpiechartoptions_type
         */
         type: 'pie'
     },
