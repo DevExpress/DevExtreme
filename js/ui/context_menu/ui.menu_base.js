@@ -452,7 +452,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
         var config = {
             element: $element,
-            jQueryEvent: e
+            Event: e
         };
 
         if(value) {
@@ -681,7 +681,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     _itemClickHandler: function(e) {
         if(e._skipHandling) return;
         var itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
-        this._itemJQueryEventHandler(e, "onItemClick", {}, { afterExecute: itemClickActionHandler.bind(this) });
+        this._itemDXEventHandler(e, "onItemClick", {}, { afterExecute: itemClickActionHandler.bind(this) });
         e._skipHandling = true;
     },
 

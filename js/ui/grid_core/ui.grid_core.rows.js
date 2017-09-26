@@ -564,7 +564,7 @@ module.exports = {
                 _handleScroll: function(e) {
                     var that = this;
 
-                    that._isScrollByEvent = !!e.jQueryEvent;
+                    that._isScrollByEvent = !!e.Event;
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
                     that.scrollChanged.fire(e.scrollOffset, that.name);

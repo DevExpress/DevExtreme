@@ -781,7 +781,7 @@ QUnit.test("Resize columns", function(assert) {
     resizeController._targetPoint = { columnIndex: 1 };
     resizeController._setupResizingInfo(-9830);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: -9780,
@@ -819,7 +819,7 @@ QUnit.test("Grid's height should be updated during column resizing if column hea
     resizeController._targetPoint = { columnIndex: 0 };
     resizeController._setupResizingInfo(-9900);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: -9970,
@@ -887,7 +887,7 @@ QUnit.test("Lose focus on start of resize columns", function(assert) {
     resizeController._targetPoint = { columnIndex: 1 };
     resizeController._setupResizingInfo(-9830);
     resizeController._startResizing({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousedown",
             pageX: -9780,
@@ -966,7 +966,7 @@ QUnit.test("Resize columns and move column to another position in virtual scroll
 
     resizeController._setupResizingInfo(-9900);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: -9880,
@@ -1014,7 +1014,7 @@ QUnit.test("Resize grid after column resizing", function(assert) {
 
     resizeController._setupResizingInfo(-9900);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: -9880,
@@ -1412,7 +1412,7 @@ QUnit.test("Resize grid after column resizing when adaptColumnWidthByRatio false
 
     resizeController._setupResizingInfo(-9900);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: -9880,
@@ -1464,7 +1464,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     var startPosition = -9900;
     resizeController._setupResizingInfo(startPosition);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: startPosition - 20,
@@ -1514,7 +1514,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     var startPosition = -9900;
     resizeController._setupResizingInfo(startPosition);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: startPosition - 50,
@@ -1522,7 +1522,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         }
     });
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: startPosition - 60,
@@ -1572,7 +1572,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     var startPosition = -9900;
     resizeController._setupResizingInfo(startPosition);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: startPosition + 50,
@@ -1580,7 +1580,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         }
     });
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: startPosition + 60,
@@ -1631,7 +1631,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
     var startPosition = -9900;
     resizeController._setupResizingInfo(startPosition);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: startPosition - 20,
@@ -1681,7 +1681,7 @@ QUnit.test("Resize grid after column resizing to right when columnResizingMode i
     var startPosition = -9900;
     resizeController._setupResizingInfo(startPosition);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: startPosition + 120,
@@ -2446,7 +2446,7 @@ QUnit.test("Resize columns for virtual scrolling", function(assert) {
     columnsResizer._targetPoint = { columnIndex: 0 };
     columnsResizer._setupResizingInfo(-9750);
     columnsResizer._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: columnsResizer,
             type: "mousemove",
             pageX: -9600,

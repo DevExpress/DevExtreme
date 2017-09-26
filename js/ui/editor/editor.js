@@ -166,7 +166,7 @@ var Editor = Widget.inherit({
         return {
             value: value,
             previousValue: previousValue,
-            jQueryEvent: this._valueChangeEventInstance
+            Event: this._valueChangeEventInstance
         };
     },
 

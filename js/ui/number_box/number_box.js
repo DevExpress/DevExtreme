@@ -236,23 +236,23 @@ var NumberBox = TextEditor.inherit({
         var eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
 
         var mouseWheelAction = this._createAction((function(e) {
-            this._mouseWheelHandler(e.jQueryEvent);
+            this._mouseWheelHandler(e.Event);
         }).bind(this));
 
         eventsEngine.off(this._input(), eventName);
         eventsEngine.on(this._input(), eventName, function(e) {
-            mouseWheelAction({ jQueryEvent: e });
+            mouseWheelAction({ Event: e });
         });
     },
 
-    _mouseWheelHandler: function(jQueryEvent) {
+    _mouseWheelHandler: function(dxEvent) {
         if(!this._input().is(":focus")) {
             return;
         }
 
-        jQueryEvent.delta > 0 ? this._spinValueChange(1, jQueryEvent) : this._spinValueChange(-1, jQueryEvent);
-        jQueryEvent.preventDefault();
-        jQueryEvent.stopPropagation();
+        dxEvent.delta > 0 ? this._spinValueChange(1, dxEvent) : this._spinValueChange(-1, dxEvent);
+        dxEvent.preventDefault();
+        dxEvent.stopPropagation();
     },
 
     _renderValue: function() {
@@ -345,7 +345,7 @@ var NumberBox = TextEditor.inherit({
 
         eventsEngine.off($spinContainer, eventName);
         eventsEngine.on($spinContainer, eventName, function(e) {
-            pointerDownAction({ jQueryEvent: e });
+            pointerDownAction({ Event: e });
         });
 
         this._$spinUp = $("<div>").appendTo($spinContainer);
@@ -366,17 +366,17 @@ var NumberBox = TextEditor.inherit({
 
     _spinUpChangeHandler: function(e) {
         if(!this.option("readOnly")) {
-            this._spinValueChange(1, e.jQueryEvent || e);
+            this._spinValueChange(1, e.Event || e);
         }
     },
 
     _spinDownChangeHandler: function(e) {
         if(!this.option("readOnly")) {
-            this._spinValueChange(-1, e.jQueryEvent || e);
+            this._spinValueChange(-1, e.Event || e);
         }
     },
 
-    _spinValueChange: function(sign, jQueryEvent) {
+    _spinValueChange: function(sign, dxEvent) {
         var value = parseFloat(this._normalizeInputValue()) || 0,
             step = parseFloat(this.option("step"));
 
@@ -393,7 +393,7 @@ var NumberBox = TextEditor.inherit({
             value = Math.min(max, value);
         }
 
-        this._saveValueChangeEvent(jQueryEvent);
+        this._saveValueChangeEvent(dxEvent);
         this.option("value", value);
     },
 

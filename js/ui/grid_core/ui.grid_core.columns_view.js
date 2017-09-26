@@ -130,7 +130,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(that.option("cellHintEnabled")) {
             eventsEngine.on($table, "mousemove", ".dx-row > td", this.createAction(function(args) {
-                var e = args.jQueryEvent,
+                var e = args.Event,
                     $element = $(e.target),
                     $cell = $(e.currentTarget),
                     $row = $cell.parent(),
@@ -169,7 +169,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
             resultOptions = extend({}, options, {
                 cellElement: $cell,
-                jQueryEvent: event,
+                Event: event,
                 eventType: event.type
             });
 
@@ -196,13 +196,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         });
 
         eventsEngine.on($table, clickEvent.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
-            var jQueryEvent = e.jQueryEvent;
+            var dxEvent = e.Event;
 
-            if(!$(jQueryEvent.target).closest("a").length) {
-                e.rowIndex = that.getRowIndex(jQueryEvent.currentTarget);
+            if(!$(dxEvent.target).closest("a").length) {
+                e.rowIndex = that.getRowIndex(dxEvent.currentTarget);
 
                 if(e.rowIndex >= 0) {
-                    e.rowElement = $(jQueryEvent.currentTarget);
+                    e.rowElement = $(dxEvent.currentTarget);
                     e.columns = that.getColumns();
                     that._rowClick(e);
                 }

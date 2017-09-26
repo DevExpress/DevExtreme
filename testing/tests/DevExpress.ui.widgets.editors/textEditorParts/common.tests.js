@@ -494,7 +494,7 @@ QUnit.test("event handler callbacks", function(assert) {
         options = {};
 
     var eventHandler = function(e) {
-        called = e.jQueryEvent.type;
+        called = e.Event.type;
     };
 
     $.each(EVENTS, function(index, event) {
@@ -517,7 +517,7 @@ QUnit.test("events should be fired in readOnly state", function(assert) {
         options = { readOnly: true };
 
     var eventHandler = function(e) {
-        called = e.jQueryEvent.type;
+        called = e.Event.type;
     };
 
     $.each(EVENTS, function(index, event) {
@@ -784,21 +784,21 @@ QUnit.test("events work when relevant actions is not set", function(assert) {
     textBox.on("keyDown", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
         assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
-        assert.equal(e.jQueryEvent.type, "keydown", "event has related jQueryEvent");
+        assert.equal(e.Event.type, "keydown", "event has related Event");
         assert.ok(true, "keyDown was fired");
     });
 
     textBox.on("keyPress", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
         assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
-        assert.equal(e.jQueryEvent.type, "keypress", "event has related jQueryEvent");
+        assert.equal(e.Event.type, "keypress", "event has related Event");
         assert.ok(true, "keyPress was fired");
     });
 
     textBox.on("keyUp", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
         assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
-        assert.equal(e.jQueryEvent.type, "keyup", "event has related jQueryEvent");
+        assert.equal(e.Event.type, "keyup", "event has related Event");
         assert.ok(true, "keyUp was fired");
     });
 
@@ -911,7 +911,7 @@ QUnit.test("Enter key event raising (B238135)", function(assert) {
     $("#texteditor input").trigger($.Event("keyup", { which: 13 }));
 
     assert.ok(handler.calledOnce, "event raised");
-    assert.ok(handler.getCall(0).args[0].jQueryEvent, "event args have jQueryEvent prop");
+    assert.ok(handler.getCall(0).args[0].Event, "event args have Event prop");
 });
 
 QUnit.test("Enter key event changing handler (B238135)", function(assert) {

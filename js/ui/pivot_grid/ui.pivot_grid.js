@@ -1104,7 +1104,7 @@ var PivotGrid = Widget.inherit({
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
             onPositioning: function(actionArgs) {
-                var event = actionArgs.jQueryEvent,
+                var event = actionArgs.Event,
                     targetElement,
                     args,
                     items;
@@ -1254,14 +1254,14 @@ var PivotGrid = Widget.inherit({
         }
     },
 
-    _createEventArgs: function(targetElement, jQueryEvent) {
+    _createEventArgs: function(targetElement, dxEvent) {
         var that = this,
             dataSource = that.getDataSource(),
             args = {
                 rowFields: dataSource.getAreaFields("row"),
                 columnFields: dataSource.getAreaFields("column"),
                 dataFields: dataSource.getAreaFields("data"),
-                jQueryEvent: jQueryEvent
+                Event: dxEvent
             };
 
         if(clickedOnFieldsArea($(targetElement))) {

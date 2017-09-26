@@ -1505,7 +1505,7 @@ QUnit.test("create event args from field", function(assert) {
 
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
-    assert.ok(eventArgs.jQueryEvent);
+    assert.ok(eventArgs.Event);
     assert.strictEqual(eventArgs.field, this.fields[1]);
     assert.strictEqual(eventArgs.area, this.fields[1].area);
     assert.notOk(e.isDefaultPrevented(), "default behavior should not be prevented");
@@ -1531,7 +1531,7 @@ QUnit.test("create event args from area", function(assert) {
 
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
-    assert.ok(eventArgs.jQueryEvent);
+    assert.ok(eventArgs.Event);
     assert.strictEqual(eventArgs.field, undefined);
     assert.strictEqual(eventArgs.area, this.fields[1].area);
     assert.notOk(e.isDefaultPrevented(), "default behavior should not be prevented");
@@ -1556,7 +1556,7 @@ QUnit.test("create event args from empty area", function(assert) {
 
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
-    assert.ok(eventArgs.jQueryEvent);
+    assert.ok(eventArgs.Event);
     assert.strictEqual(eventArgs.field, undefined);
     assert.strictEqual(eventArgs.area, "row");
     assert.notOk(e.isDefaultPrevented(), "default behavior should not be prevented");
@@ -1581,7 +1581,7 @@ QUnit.test("create event args from empty space", function(assert) {
 
     eventArgs = onContextMenuPreparingHandler.lastCall.args[0];
 
-    assert.ok(eventArgs.jQueryEvent);
+    assert.ok(eventArgs.Event);
     assert.strictEqual(eventArgs.field, undefined);
     assert.strictEqual(eventArgs.area, undefined);
     assert.notOk(e.isDefaultPrevented(), "default behavior should not be prevented");

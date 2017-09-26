@@ -535,7 +535,7 @@ QUnit.test("onCellClick event", function(assert) {
     }, 'second cell click arguments');
 
     assert.strictEqual(cellClickArgs[0].component, pivotGrid);
-    assert.ok(cellClickArgs[0].jQueryEvent instanceof $.Event);
+    assert.ok(cellClickArgs[0].Event instanceof $.Event);
     assert.strictEqual(clickHandler.callCount, 2);
 
 });

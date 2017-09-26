@@ -318,9 +318,9 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    _getContextMenuArgs: function(jQueryEvent) {
-        var targetFieldElement = $(jQueryEvent.target).closest(".dx-area-field"),
-            targetGroupElement = $(jQueryEvent.target).closest(".dx-area-fields"),
+    _getContextMenuArgs: function(dxEvent) {
+        var targetFieldElement = $(dxEvent.target).closest(".dx-area-field"),
+            targetGroupElement = $(dxEvent.target).closest(".dx-area-fields"),
             field,
             area;
 
@@ -334,7 +334,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
 
         return {
-            jQueryEvent: jQueryEvent,
+            Event: dxEvent,
             field: field,
             area: area,
             items: []
@@ -351,7 +351,7 @@ var FieldChooser = BaseFieldChooser.inherit({
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
             onPositioning: function(actionArgs) {
-                var event = actionArgs.jQueryEvent,
+                var event = actionArgs.Event,
                     args;
 
                 if(!event) {

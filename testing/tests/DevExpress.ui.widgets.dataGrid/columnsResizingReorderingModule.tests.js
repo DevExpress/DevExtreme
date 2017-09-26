@@ -66,11 +66,11 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
     },
 
     moveHeader: function(args) {
-        args.jQueryEvent.data.that.callMoveCounter++;
+        args.Event.data.that.callMoveCounter++;
     },
 
     dropHeader: function(args) {
-        args.jQueryEvent.data.that.callDropCounter++;
+        args.Event.data.that.callDropCounter++;
     }
 });
 
@@ -693,9 +693,9 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
     });
 }());
 
-function getJQueryEvent(options) {
+function getEvent(options) {
     return {
-        jQueryEvent: $.extend({}, {
+        Event: $.extend({}, {
             preventDefault: noop,
             stopPropagation: noop
         }, options)
@@ -877,7 +877,7 @@ function getJQueryEvent(options) {
         resizeController._columnsSeparatorView.render($container);
         resizeController._$parentContainer = $container;
         resizeController._moveSeparator({
-            jQueryEvent: {
+            Event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -971,7 +971,7 @@ function getJQueryEvent(options) {
 
         //act
         resizeController._moveSeparator({
-            jQueryEvent: {
+            Event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -1004,7 +1004,7 @@ function getJQueryEvent(options) {
         resizeController._columnsSeparatorView.render($container);
         resizeController._$parentContainer = $container;
         resizeController._moveSeparator({
-            jQueryEvent: {
+            Event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -1026,7 +1026,7 @@ function getJQueryEvent(options) {
         resizeController._columnsSeparatorView.render($container);
         resizeController._$parentContainer = $container;
         resizeController._moveSeparator({
-            jQueryEvent: {
+            Event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -1157,7 +1157,7 @@ function getJQueryEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840
@@ -1187,7 +1187,7 @@ function getJQueryEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840
@@ -1220,7 +1220,7 @@ function getJQueryEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840
@@ -1252,7 +1252,7 @@ function getJQueryEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840
@@ -1281,7 +1281,7 @@ function getJQueryEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840
@@ -1309,7 +1309,7 @@ function getJQueryEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840
@@ -1331,7 +1331,7 @@ function getJQueryEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840.5
@@ -1355,7 +1355,7 @@ function getJQueryEvent(options) {
         resizeController._isResizing = true;
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -10000
@@ -1388,7 +1388,7 @@ function getJQueryEvent(options) {
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._isResizing = true;
         resizeController._endResizing({
-            jQueryEvent: {
+            Event: {
                 data: resizeController
             }
         });
@@ -1416,7 +1416,7 @@ function getJQueryEvent(options) {
         //act
         var $container = $("#container").width(500),
             args = {
-                jQueryEvent: {
+                Event: {
                     data: resizeController,
                     pageY: -9995
                 }
@@ -1469,7 +1469,7 @@ function getJQueryEvent(options) {
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._columnsSeparatorView.height(0);
         resizeController._setupResizingInfo(-9850);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840
@@ -1565,7 +1565,7 @@ function getJQueryEvent(options) {
         //act
         resizeController._$parentContainer = testElement;
         resizeController._moveSeparator({
-            jQueryEvent: {
+            Event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -1611,7 +1611,7 @@ function getJQueryEvent(options) {
         assert.equal(parseInt(resizeController._columnsSeparatorView.element().css("top")), 0, 'columnsSeparator top');
 
         //act
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9750,
@@ -1637,7 +1637,7 @@ function getJQueryEvent(options) {
         resizeController._isReadyResizing = true;
         resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
         resizeController._startResizing({
-            jQueryEvent: {
+            Event: {
                 data: resizeController,
                 type: 'mousedown',
                 pageX: -9750,
@@ -1671,7 +1671,7 @@ function getJQueryEvent(options) {
             resizeController._isReadyResizing = true;
             resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
             resizeController._startResizing({
-                jQueryEvent: {
+                Event: {
                     data: resizeController,
                     type: 'mousedown',
                     pageX: -9750,
@@ -1707,7 +1707,7 @@ function getJQueryEvent(options) {
             resizeController._isReadyResizing = true;
             resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
             resizeController._startResizing({
-                jQueryEvent: {
+                Event: {
                     data: resizeController,
                     type: 'mousedown',
                     pageX: -9750,
@@ -1743,7 +1743,7 @@ function getJQueryEvent(options) {
             resizeController._isReadyResizing = true;
             resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
             resizeController._startResizing({
-                jQueryEvent: {
+                Event: {
                     data: resizeController,
                     type: 'mousedown',
                     pageX: -9750,
@@ -1771,7 +1771,7 @@ function getJQueryEvent(options) {
         //act
         this.renderViews($("#container"));
 
-        resizeController._startResizing(getJQueryEvent({
+        resizeController._startResizing(getEvent({
             pageX: -9750,
             data: resizeController,
             type: 'touchstart',
@@ -1793,7 +1793,7 @@ function getJQueryEvent(options) {
 
         //act
         this.renderViews($("#container"));
-        resizeController._startResizing(getJQueryEvent({
+        resizeController._startResizing(getEvent({
             pageY: -9995,
             pageX: -9750,
             data: resizeController,
@@ -1822,7 +1822,7 @@ function getJQueryEvent(options) {
         //assert
         assert.notOk(resizeController._pointsByColumns, "pointsByColumns is null");
 
-        resizeController._startResizing(getJQueryEvent({
+        resizeController._startResizing(getEvent({
             pageY: -9995,
             pageX: -9750,
             data: resizeController,
@@ -1851,7 +1851,7 @@ function getJQueryEvent(options) {
             { x: -9750, columnIndex: 1, index: 2 },
             { x: -9625, columnIndex: 2, index: 3 }
         ];
-        resizeController._startResizing(getJQueryEvent({
+        resizeController._startResizing(getEvent({
             pageY: -9995,
             pageX: -9750,
             data: resizeController,
@@ -1877,7 +1877,7 @@ function getJQueryEvent(options) {
             { x: -9750, columnIndex: 1, index: 2 },
             { x: -9625, columnIndex: 2, index: 3 }
         ];
-        resizeController._startResizing(getJQueryEvent({
+        resizeController._startResizing(getEvent({
             pageY: -9995,
             pageX: -9750,
             data: resizeController,
@@ -1906,7 +1906,7 @@ function getJQueryEvent(options) {
 
         resizeController._isReadyResizing = true;
 
-        resizeController._startResizing(getJQueryEvent({
+        resizeController._startResizing(getEvent({
             pageY: -10000 + resizeController._columnHeadersView.getHeadersRowHeight() + 1,
             pageX: -9750,
             data: resizeController,
@@ -1930,7 +1930,7 @@ function getJQueryEvent(options) {
             { x: -9625, columnIndex: 2, index: 3, y: -9995 }
         ];
         resizeController._columnsSeparatorView.height(100);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9750,
@@ -1956,7 +1956,7 @@ function getJQueryEvent(options) {
             { x: -9625, columnIndex: 2, index: 3, y: -9995 }
         ];
         resizeController._columnsSeparatorView.height(100);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9875,
@@ -1979,7 +1979,7 @@ function getJQueryEvent(options) {
             { x: -9625, columnIndex: 2, index: 3, y: -9995 }
         ];
         resizeController._columnsSeparatorView.height(100);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9625,
@@ -2012,9 +2012,9 @@ function getJQueryEvent(options) {
             pageX: -9750,
             pageY: -9995
         };
-        resizeController._moveSeparator(getJQueryEvent(options));
-        resizeController._moveSeparator(getJQueryEvent(options));
-        resizeController._moveSeparator(getJQueryEvent(options));
+        resizeController._moveSeparator(getEvent(options));
+        resizeController._moveSeparator(getEvent(options));
+        resizeController._moveSeparator(getEvent(options));
 
         //assert
         assert.equal(cursorNames.length, 3, "changeCursor called count");
@@ -2037,7 +2037,7 @@ function getJQueryEvent(options) {
         resizeController._isReadyResizing = true;
         resizeController._columnsSeparatorView.changeCursor("col-resize");
 
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9750,
@@ -2067,7 +2067,7 @@ function getJQueryEvent(options) {
         resizeController._targetPoint = { x: -9850, columnIndex: 1, index: 2 };
         resizeController._resizingInfo = { startPosX: -9847, currentColumnIndex: 0 };
         resizeController._columnHeadersView.setColumnWidths([this.options.columns[0].width + 7, this.options.columns[1].width - 7]);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9840
@@ -2096,7 +2096,7 @@ function getJQueryEvent(options) {
         resizeController.pointsByColumns();
         resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
         resizeController._resizingInfo = { startPosX: -9747 };
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9740
@@ -2104,7 +2104,7 @@ function getJQueryEvent(options) {
 
         resizeController._columnHeadersView.resizeCompleted.fire();
 
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9738
@@ -2128,7 +2128,7 @@ function getJQueryEvent(options) {
         resizeController._isHeadersRowArea = function() {
             return true;
         };
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9740
@@ -2137,7 +2137,7 @@ function getJQueryEvent(options) {
         //act
         sinon.spy(resizeController, "_generatePointsByColumns");
         resizeController._previousParentOffset = { left: 1, top: 10 };
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9738
@@ -2159,7 +2159,7 @@ function getJQueryEvent(options) {
         };
         resizeController._isResizing = true;
         resizeController._targetPoint = { x: -9875, columnIndex: 0, index: 1 };
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -9600
@@ -2169,7 +2169,7 @@ function getJQueryEvent(options) {
         assert.ok(!resizeController._columnsSeparatorView._testPosX, 'posX of columnsSeparator');
 
         //act
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousemove',
             pageX: -10001
@@ -2183,7 +2183,7 @@ function getJQueryEvent(options) {
         //arrange
         var resizeController = this.createColumnsResizerViewController(),
             args = {
-                jQueryEvent: {
+                Event: {
                     data: resizeController,
                     pageY: -9995
                 }
@@ -2231,7 +2231,7 @@ function getJQueryEvent(options) {
             left: 10
         });
         resizeController._columnsSeparatorView.height(300);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9750,
@@ -2259,7 +2259,7 @@ function getJQueryEvent(options) {
             left: 10
         });
         resizeController._columnsSeparatorView.height(300);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9750,
@@ -2303,7 +2303,7 @@ function getJQueryEvent(options) {
 
         resizeController._setupResizingInfo(-9850);
 
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9825,
@@ -2350,7 +2350,7 @@ function getJQueryEvent(options) {
 
         resizeController._setupResizingInfo(-9850);
 
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9825,
@@ -2393,7 +2393,7 @@ function getJQueryEvent(options) {
 
         resizeController._setupResizingInfo(-9850);
 
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9825,
@@ -2436,7 +2436,7 @@ function getJQueryEvent(options) {
 
         resizeController._setupResizingInfo(-9850);
 
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9825,
@@ -2486,7 +2486,7 @@ function getJQueryEvent(options) {
 
         resizeController._setupResizingInfo(-9850);
 
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9909,
@@ -2637,7 +2637,7 @@ function getJQueryEvent(options) {
         this.renderViews(testElement);
         controller._isReadyResizing = true;
         controller._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
-        controller._startResizing(getJQueryEvent({
+        controller._startResizing(getEvent({
             data: controller,
             type: 'mousedown',
             pageX: -9750,
@@ -2665,13 +2665,13 @@ function getJQueryEvent(options) {
         //act
         controller._isReadyResizing = true;
         controller._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
-        controller._startResizing(getJQueryEvent({
+        controller._startResizing(getEvent({
             data: controller,
             type: 'mousedown',
             pageX: -9750
         }));
 
-        controller._endResizing(getJQueryEvent({
+        controller._endResizing(getEvent({
             data: controller,
             type: 'mouseup'
         }));
@@ -2699,7 +2699,7 @@ function getJQueryEvent(options) {
 
         controller._isReadyResizing = true;
         controller._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
-        controller._startResizing(getJQueryEvent({
+        controller._startResizing(getEvent({
             data: controller,
             type: 'mousedown',
             pageX: -9750
@@ -2805,7 +2805,7 @@ function getJQueryEvent(options) {
 
         //act
         resizeController._columnsSeparatorView.height(100);
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9750,
@@ -2816,7 +2816,7 @@ function getJQueryEvent(options) {
         assert.equal(resizeController._columnsSeparatorView.cursorName, 'col-resize');
 
         //act
-        resizeController._moveSeparator(getJQueryEvent({
+        resizeController._moveSeparator(getEvent({
             data: resizeController,
             type: 'mousedown',
             pageX: -9700,
@@ -3268,7 +3268,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3316,7 +3316,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3374,7 +3374,7 @@ function getJQueryEvent(options) {
         //act
 
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3439,7 +3439,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3451,7 +3451,7 @@ function getJQueryEvent(options) {
             }
         });
 
-        draggingHeader.dropHeader({ jQueryEvent: { data: { that: draggingHeader } } });
+        draggingHeader.dropHeader({ Event: { data: { that: draggingHeader } } });
 
         $draggingHeader = $(".dx-datagrid-drag-header");
 
@@ -3513,7 +3513,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3526,7 +3526,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: { that: draggingHeader }
             }
         });
@@ -3588,7 +3588,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3602,7 +3602,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: { that: draggingHeader }
             }
         });
@@ -3645,7 +3645,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3693,7 +3693,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3745,7 +3745,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3795,7 +3795,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3851,7 +3851,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3864,7 +3864,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3954,7 +3954,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3967,7 +3967,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -4055,7 +4055,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -4068,7 +4068,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -4120,7 +4120,7 @@ function getJQueryEvent(options) {
     //    });
     //
     //    draggingHeader.dropHeader({
-    //        jQueryEvent: {
+    //        Event: {
     //            data: {
     //                that: draggingHeader,
     //                rootElement: testElement
@@ -4198,7 +4198,7 @@ function getJQueryEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -4216,7 +4216,7 @@ function getJQueryEvent(options) {
 
         //act
         draggingHeader.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: { that: draggingHeader }
             }
         });
@@ -4234,7 +4234,7 @@ function getJQueryEvent(options) {
             moveHeaderDataSelfArgs = [];
 
         controller1._draggingHeaderView.moveHeader = function(args) {
-            moveHeaderDataSelfArgs.push(args.jQueryEvent.data.that);
+            moveHeaderDataSelfArgs.push(args.Event.data.that);
         };
 
         that.renderViews($("#container"));
@@ -4250,7 +4250,7 @@ function getJQueryEvent(options) {
         var controller2 = that.createDraggingHeaderViewController([{ caption: 'Column 3', width: 300 }, { caption: 'Column 4', width: 400 }]);
 
         controller2._draggingHeaderView.moveHeader = function(args) {
-            moveHeaderDataSelfArgs.push(args.jQueryEvent.data.that);
+            moveHeaderDataSelfArgs.push(args.Event.data.that);
         };
 
         that.renderViews($("#container2").height(500));
@@ -4353,7 +4353,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4413,7 +4413,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4426,7 +4426,7 @@ function getJQueryEvent(options) {
         });
 
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -4487,7 +4487,7 @@ function getJQueryEvent(options) {
         });
 
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4501,7 +4501,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -4545,7 +4545,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4589,7 +4589,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4641,7 +4641,7 @@ function getJQueryEvent(options) {
         });
 
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4655,7 +4655,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -4701,7 +4701,7 @@ function getJQueryEvent(options) {
         //act
         this.columnsResizerController._isResizing = true;
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4751,7 +4751,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4797,7 +4797,7 @@ function getJQueryEvent(options) {
         $blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
 
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4847,7 +4847,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4900,7 +4900,7 @@ function getJQueryEvent(options) {
         });
 
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4919,7 +4919,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -4974,7 +4974,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -4991,7 +4991,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5045,7 +5045,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5100,7 +5100,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5117,7 +5117,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5169,7 +5169,7 @@ function getJQueryEvent(options) {
         });
 
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5223,7 +5223,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5372,7 +5372,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5431,7 +5431,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5444,7 +5444,7 @@ function getJQueryEvent(options) {
         });
 
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5504,7 +5504,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5517,7 +5517,7 @@ function getJQueryEvent(options) {
         });
 
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5579,7 +5579,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5592,7 +5592,7 @@ function getJQueryEvent(options) {
         });
 
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5636,7 +5636,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5680,7 +5680,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5729,7 +5729,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5779,7 +5779,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5832,7 +5832,7 @@ function getJQueryEvent(options) {
         });
 
         this.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5851,7 +5851,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5901,7 +5901,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5918,7 +5918,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5967,7 +5967,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5984,7 +5984,7 @@ function getJQueryEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -6030,7 +6030,7 @@ function getJQueryEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            jQueryEvent: {
+            Event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement

@@ -55,7 +55,7 @@ registerDecorator(
                 hoverStateEnabled: false,
                 onValueChanged: (function(e) {
                     this._processCheckedState($itemElement, e.value);
-                    e.jQueryEvent && e.jQueryEvent.stopPropagation();
+                    e.Event && e.Event.stopPropagation();
                 }).bind(this)
             }));
 
@@ -119,7 +119,7 @@ registerDecorator(
         },
 
         _selectAllHandler: function(e) {
-            e.jQueryEvent && e.jQueryEvent.stopPropagation();
+            e.Event && e.Event.stopPropagation();
 
             var isSelectedAll = this._selectAllCheckBox.option("value");
 

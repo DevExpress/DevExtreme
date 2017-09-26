@@ -218,7 +218,7 @@ var Resizable = DOMComponent.inherit({
         this._renderDragOffsets(e);
 
         this._resizeStartAction({
-            jQueryEvent: e,
+            Event: e,
             width: this._elementSize.width,
             height: this._elementSize.height,
             handles: this._movingSides
@@ -279,7 +279,7 @@ var Resizable = DOMComponent.inherit({
         });
 
         this._resizeAction({
-            jQueryEvent: e,
+            Event: e,
             width: this.option("width") || width,
             height: this.option("height") || height,
             handles: this._movingSides
@@ -424,7 +424,7 @@ var Resizable = DOMComponent.inherit({
         var $element = this.$element();
 
         this._resizeEndAction({
-            jQueryEvent: e,
+            Event: e,
             width: $element.outerWidth(),
             height: $element.outerHeight(),
             handles: this._movingSides

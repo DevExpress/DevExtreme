@@ -340,8 +340,8 @@ var Calendar = Editor.inherit({
         return dateSerialization.deserializeDate(value);
     },
 
-    _dateValue: function(value, jQueryEvent) {
-        if(jQueryEvent) this._saveValueChangeEvent(jQueryEvent);
+    _dateValue: function(value, dxEvent) {
+        if(dxEvent) this._saveValueChangeEvent(dxEvent);
         this._dateOption("value", value);
     },
 
@@ -704,10 +704,10 @@ var Calendar = Editor.inherit({
         var isMaxZoomLevel = this._isMaxZoomLevel();
 
         if(nextView && !isMaxZoomLevel) {
-            this._navigateDown(e.jQueryEvent.currentTarget);
+            this._navigateDown(e.Event.currentTarget);
         } else {
             var newValue = this._updateTimeComponent(e.value);
-            this._dateValue(newValue, e.jQueryEvent);
+            this._dateValue(newValue, e.Event);
             this._cellClickAction(e);
         }
     },
@@ -833,8 +833,8 @@ var Calendar = Editor.inherit({
     _swipeStartHandler: function(e) {
         fx.stop(this._$viewsWrapper, true);
 
-        e.jQueryEvent.maxLeftOffset = this._getRequiredView("next") ? 1 : 0;
-        e.jQueryEvent.maxRightOffset = this._getRequiredView("prev") ? 1 : 0;
+        e.Event.maxLeftOffset = this._getRequiredView("next") ? 1 : 0;
+        e.Event.maxRightOffset = this._getRequiredView("prev") ? 1 : 0;
     },
 
     _getRequiredView: function(name) {
@@ -851,14 +851,14 @@ var Calendar = Editor.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        var offset = e.jQueryEvent.offset;
+        var offset = e.Event.offset;
 
         translator.move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
         this._updateNavigatorCaption(offset);
     },
 
     _swipeEndHandler: function(e) {
-        var targetOffset = e.jQueryEvent.targetOffset,
+        var targetOffset = e.Event.targetOffset,
             moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
 
         if(moveOffset === 0) {

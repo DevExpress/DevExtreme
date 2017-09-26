@@ -1049,7 +1049,7 @@ var FileUploader = Editor.inherit({
 
         this._uploadStartedAction({
             file: file.value,
-            jQueryEvent: e,
+            Event: e,
             request: file.request
         });
     },
@@ -1067,7 +1067,7 @@ var FileUploader = Editor.inherit({
 
         this._uploadErrorAction({
             file: file.value,
-            jQueryEvent: e,
+            Event: e,
             request: file.request
         });
     },
@@ -1075,7 +1075,7 @@ var FileUploader = Editor.inherit({
     _onAbortHandler: function(file, e) {
         this._uploadAbortedAction({
             file: file.value,
-            jQueryEvent: e,
+            Event: e,
             request: file.request
         });
     },
@@ -1093,7 +1093,7 @@ var FileUploader = Editor.inherit({
 
         this._uploadedAction({
             file: file.value,
-            jQueryEvent: e,
+            Event: e,
             request: file.request
         });
     },
@@ -1119,7 +1119,7 @@ var FileUploader = Editor.inherit({
                 segmentSize: segmentSize,
                 bytesLoaded: e.loaded,
                 bytesTotal: e.total,
-                jQueryEvent: e,
+                Event: e,
                 request: file.request
             });
 

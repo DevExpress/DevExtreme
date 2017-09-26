@@ -116,7 +116,7 @@ QUnit.test("Resize columns", function(assert) {
     resizeController._targetPoint = { columnIndex: 1 };
     resizeController._setupResizingInfo(-9830);
     resizeController._moveSeparator({
-        jQueryEvent: {
+        Event: {
             data: resizeController,
             type: "mousemove",
             pageX: -9780,

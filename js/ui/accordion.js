@@ -297,7 +297,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _itemTitleClickHandler: function(e) {
-        this._itemJQueryEventHandler(e, "onItemTitleClick");
+        this._itemDXEventHandler(e, "onItemTitleClick");
     },
 
     _renderSelection: function(addedSelection, removedSelection) {

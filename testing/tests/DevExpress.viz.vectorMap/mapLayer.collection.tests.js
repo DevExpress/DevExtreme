@@ -182,7 +182,7 @@ QUnit.test("Click background", function(assert) {
         data: { name: "background" }
     });
 
-    assert.deepEqual(this.params.eventTrigger.lastCall.args, ["click", { jQueryEvent: { tag: "event", x: 7, y: 15 } }], "click");
+    assert.deepEqual(this.params.eventTrigger.lastCall.args, ["click", { Event: { tag: "event", x: 7, y: 15 } }], "click");
 });
 
 QUnit.test("Hover on layer", function(assert) {

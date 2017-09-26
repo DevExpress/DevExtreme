@@ -222,7 +222,7 @@ QUnit.test("onClick", function(assert) {
     assert.ok(clickHandler.calledOnce, "Handler should be called");
     var params = clickHandler.getCall(0).args[0];
     assert.ok(params, "Event params should be passed");
-    assert.ok(params.jQueryEvent, "jQueryEvent should be passed");
+    assert.ok(params.Event, "Event should be passed");
     assert.ok(params.validationGroup, "validationGroup should be passed");
 });
 
@@ -368,7 +368,7 @@ QUnit.test("arguments on key press", function(assert) {
 
     var params = clickHandler.getCall(0).args[0];
     assert.ok(params, "Event params should be passed");
-    assert.ok(params.jQueryEvent, "jQueryEvent should be passed");
+    assert.ok(params.Event, "Event should be passed");
     assert.ok(params.validationGroup, "validationGroup should be passed");
 });
 

@@ -21,7 +21,7 @@ registerDecorator(
             this._list._createComponent($button, Button, {
                 icon: "remove",
                 onClick: (function(args) {
-                    args.jQueryEvent.stopPropagation();
+                    args.Event.stopPropagation();
                     this._deleteItem($itemElement);
                 }).bind(this),
                 integrationOptions: {}

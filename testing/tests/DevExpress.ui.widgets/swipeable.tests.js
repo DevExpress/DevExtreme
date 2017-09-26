@@ -69,11 +69,11 @@ QUnit.test("'elastic' option", function(assert) {
     var swipeable = new Swipeable(this.element, {
         elastic: true,
         onStart: function(e) {
-            e.jQueryEvent.maxRightOffset = 1;
-            e.jQueryEvent.maxLeftOffset = 1;
+            e.Event.maxRightOffset = 1;
+            e.Event.maxLeftOffset = 1;
         },
         onEnd: function(e) {
-            assert.equal(e.jQueryEvent.offset, 2);
+            assert.equal(e.Event.offset, 2);
         }
     });
 
@@ -88,7 +88,7 @@ QUnit.test("'elastic' option", function(assert) {
     swipeable.option({
         elastic: false,
         onEnd: function(e) {
-            assert.equal(e.jQueryEvent.offset, 1);
+            assert.equal(e.Event.offset, 1);
         }
     });
 
@@ -107,7 +107,7 @@ QUnit.test("'itemSizeFunc' option", function(assert) {
             return 100;
         },
         onEnd: function(e) {
-            assert.equal(e.jQueryEvent.offset, 0.5);
+            assert.equal(e.Event.offset, 0.5);
         }
     });
 

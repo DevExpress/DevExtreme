@@ -318,7 +318,7 @@ var Tabs = CollectionWidget.inherit({
 
         var config = {
             element: $element,
-            jQueryEvent: e
+            Event: e
         };
 
         if(value) {
@@ -425,7 +425,7 @@ var Tabs = CollectionWidget.inherit({
 
         var $navButton = navButton.$element();
 
-        eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ jQueryEvent: e }); }).bind(this));
+        eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ Event: e }); }).bind(this));
         eventsEngine.on($navButton, pointerUpEventName, function() {
             that._clearInterval();
         });

@@ -538,7 +538,7 @@ var TextEditorBase = Editor.inherit({
                         return;
                     }
 
-                    action({ jQueryEvent: e });
+                    action({ Event: e });
                 });
             }
         });
@@ -634,7 +634,7 @@ var TextEditorBase = Editor.inherit({
 
         if(e.which === 13) {
             this._enterKeyAction({
-                jQueryEvent: e
+                Event: e
             });
         }
     },

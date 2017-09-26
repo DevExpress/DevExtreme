@@ -19,11 +19,11 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
 
         if(row.rowType === "header") {
             eventsEngine.on($row, eventUtils.addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "td", that.createAction(function(e) {
-                if($(e.jQueryEvent.currentTarget).parent().get(0) !== $row.get(0)) {
+                if($(e.Event.currentTarget).parent().get(0) !== $row.get(0)) {
                     return;
                 }
                 var keyName = null,
-                    event = e.jQueryEvent,
+                    event = e.Event,
                     $cellElementFromEvent = $(event.currentTarget),
                     rowIndex = $cellElementFromEvent.parent().index(),
                     columnIndex = map(that.getCellElements(rowIndex), function($cellElement, index) {

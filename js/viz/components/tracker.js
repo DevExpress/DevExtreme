@@ -75,7 +75,7 @@ function processClick(e, params) {
         params.click({
             node: params.getNode(id),
             coords: params.getCoords(e),
-            jQueryEvent: e
+            Event: e
         });
     }
 }

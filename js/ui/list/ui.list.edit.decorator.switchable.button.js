@@ -29,7 +29,7 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
             type: "danger",
             onClick: (function(e) {
                 this._deleteItem();
-                e.jQueryEvent.stopPropagation();
+                e.Event.stopPropagation();
             }).bind(this),
             integrationOptions: {}
         });
@@ -119,7 +119,7 @@ registerDecorator(
                 icon: "toggle-delete",
                 onClick: (function(e) {
                     this._toggleDeleteReady($itemElement);
-                    e.jQueryEvent.stopPropagation();
+                    e.Event.stopPropagation();
                 }).bind(this),
                 integrationOptions: {}
             });

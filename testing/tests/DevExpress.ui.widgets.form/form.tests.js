@@ -2570,7 +2570,7 @@ QUnit.test("Check component instance onEditorEnterKey", function(assert) {
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
     assert.notEqual(testArgs.element, undefined, "element");
-    assert.notEqual(testArgs.jQueryEvent, undefined, "jQueryEvent");
+    assert.notEqual(testArgs.Event, undefined, "Event");
     assert.equal(testArgs.dataField, "work", "dataField");
     assert.equal(testArgs.component.NAME, "dxForm", "correct component");
 });

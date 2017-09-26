@@ -404,7 +404,7 @@ var ActionSheet = CollectionWidget.inherit({
                 disabled: false,
                 text: this.option("cancelText"),
                 onClick: function(e) {
-                    var hidingArgs = { jQueryEvent: e, cancel: false };
+                    var hidingArgs = { Event: e, cancel: false };
                     cancelClickAction(hidingArgs);
 
                     if(!hidingArgs.cancel) {

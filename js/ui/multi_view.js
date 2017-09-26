@@ -339,13 +339,13 @@ var MultiView = CollectionWidget.inherit({
             elastic: false,
             itemSizeFunc: this._itemWidth.bind(this),
             onStart: (function(args) {
-                this._swipeStartHandler(args.jQueryEvent);
+                this._swipeStartHandler(args.Event);
             }).bind(this),
             onUpdated: (function(args) {
-                this._swipeUpdateHandler(args.jQueryEvent);
+                this._swipeUpdateHandler(args.Event);
             }).bind(this),
             onEnd: (function(args) {
-                this._swipeEndHandler(args.jQueryEvent);
+                this._swipeEndHandler(args.Event);
             }).bind(this)
         });
     },

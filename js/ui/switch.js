@@ -42,7 +42,7 @@ var Switch = Editor.inherit({
 
         var click = function(e) {
                 e.preventDefault();
-                this._clickAction({ jQueryEvent: e });
+                this._clickAction({ Event: e });
             },
             move = function(value, e) {
                 e.preventDefault();
@@ -255,14 +255,14 @@ var Switch = Editor.inherit({
         });
     },
 
-    _renderInkWave: function(element, jQueryEvent, doRender, waveIndex) {
+    _renderInkWave: function(element, dxEvent, doRender, waveIndex) {
         if(!this._inkRipple) {
             return;
         }
 
         var config = {
             element: element,
-            jQueryEvent: jQueryEvent,
+            Event: dxEvent,
             wave: waveIndex
         };
 
@@ -320,12 +320,12 @@ var Switch = Editor.inherit({
 
         eventsEngine.off($element, eventName);
         eventsEngine.on($element, eventName, (function(e) {
-            this._clickAction({ jQueryEvent: e });
+            this._clickAction({ Event: e });
         }).bind(this));
     },
 
     _clickHandler: function(args) {
-        var e = args.jQueryEvent;
+        var e = args.Event;
 
         this._saveValueChangeEvent(e);
 
@@ -373,8 +373,8 @@ var Switch = Editor.inherit({
             maxOffOffset = rtlEnabled ? 0 : 1,
             maxOnOffset = rtlEnabled ? 1 : 0;
 
-        e.jQueryEvent.maxLeftOffset = state ? maxOffOffset : maxOnOffset;
-        e.jQueryEvent.maxRightOffset = state ? maxOnOffset : maxOffOffset;
+        e.Event.maxLeftOffset = state ? maxOffOffset : maxOnOffset;
+        e.Event.maxRightOffset = state ? maxOnOffset : maxOffOffset;
         this._swiping = true;
 
         this._feedbackDeferred = new Deferred();
@@ -383,7 +383,7 @@ var Switch = Editor.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        this._renderPosition(this.option("value"), this._offsetDirection() * e.jQueryEvent.offset);
+        this._renderPosition(this.option("value"), this._offsetDirection() * e.Event.offset);
     },
 
     _swipeEndHandler: function(e) {
@@ -391,14 +391,14 @@ var Switch = Editor.inherit({
             offsetDirection = this._offsetDirection(),
             toConfig = {};
 
-        toConfig["margin" + this._marginDirection()] = this._getHandleOffset(that.option("value"), offsetDirection * e.jQueryEvent.targetOffset);
+        toConfig["margin" + this._marginDirection()] = this._getHandleOffset(that.option("value"), offsetDirection * e.Event.targetOffset);
 
         fx.animate(this._$switchInner, {
             to: toConfig,
             duration: SWITCH_ANIMATION_DURATION,
             complete: function() {
                 that._swiping = false;
-                var pos = that.option("value") + offsetDirection * e.jQueryEvent.targetOffset;
+                var pos = that.option("value") + offsetDirection * e.Event.targetOffset;
                 that.option("value", Boolean(pos));
                 that._feedbackDeferred.resolve();
                 that._toggleActiveState(that.$element(), false);

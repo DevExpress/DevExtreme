@@ -755,7 +755,7 @@ var ListBase = CollectionWidget.inherit({
         if(collapsibleGroups) {
             eventsEngine.on($element, eventName, selector, (function(e) {
                 this._createAction((function(e) {
-                    var $group = $(e.jQueryEvent.currentTarget).parent();
+                    var $group = $(e.Event.currentTarget).parent();
                     this._collapseGroupHandler($group);
                     if(this.option("focusStateEnabled")) {
                         this.option("focusedElement", $group.find("." + LIST_ITEM_CLASS).eq(0));
@@ -763,7 +763,7 @@ var ListBase = CollectionWidget.inherit({
                 }).bind(this), {
                     validatingTargetName: "element"
                 })({
-                    jQueryEvent: e
+                    Event: e
                 });
             }).bind(this));
         }
@@ -824,7 +824,7 @@ var ListBase = CollectionWidget.inherit({
 
         var config = {
             element: $element,
-            jQueryEvent: e
+            Event: e
         };
 
         if(value) {
@@ -850,7 +850,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _itemSwipeEndHandler: function(e) {
-        this._itemJQueryEventHandler(e, "onItemSwipe", {
+        this._itemDXEventHandler(e, "onItemSwipe", {
             direction: e.offset < 0 ? "left" : "right"
         });
     },

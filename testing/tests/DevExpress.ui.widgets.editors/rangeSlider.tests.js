@@ -124,7 +124,7 @@ QUnit.test("value change should have jQuery event", function(assert) {
         start: 0,
         end: 500,
         onValueChanged: function(args) {
-            assert.ok(args.jQueryEvent, "jQueryEvent present");
+            assert.ok(args.Event, "Event present");
         },
         useInkRipple: false
     }).css("width", 500);

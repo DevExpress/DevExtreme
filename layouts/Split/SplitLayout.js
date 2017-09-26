@@ -275,7 +275,7 @@
 
         _onNavigating: function(args) {
             var options = args.options,
-                $sourceElement = this._getEventSourceElement(args.options.jQueryEvent);
+                $sourceElement = this._getEventSourceElement(args.options.Event);
 
             var routeValues = this._router.parse(args.uri),
                 viewTemplateInfo = this._viewEngine.getViewTemplateInfo(routeValues.view).option(),

@@ -2012,13 +2012,13 @@ QUnit.module("adaptivity: transfer options", {
 });
 
 transferActionTest("itemClick", [
-    "component", "element", "itemData", "itemElement", "itemIndex", "jQueryEvent"
+    "component", "element", "itemData", "itemElement", "itemIndex", "Event"
 ], function(treeview) {
     $(treeview.itemElements()).eq(1).trigger("dxclick");
 });
 
 transferActionTest("itemContextMenu", [
-    "component", "element", "itemData", "itemElement", "itemIndex", "jQueryEvent"
+    "component", "element", "itemData", "itemElement", "itemIndex", "Event"
 ], function(treeview) {
     $(treeview.itemElements()).eq(1).trigger("dxcontextmenu");
 });

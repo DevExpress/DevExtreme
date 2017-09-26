@@ -166,7 +166,7 @@ var BaseView = Widget.inherit({
         eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, "td", (function(e) {
             if(!$(e.currentTarget).hasClass(CALENDAR_EMPTY_CELL_CLASS)) {
                 this._cellClickAction({
-                    jQueryEvent: e,
+                    Event: e,
                     value: $(e.currentTarget).data(CALENDAR_DATE_VALUE_KEY)
                 });
             }

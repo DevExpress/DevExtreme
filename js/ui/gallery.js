@@ -66,7 +66,7 @@ var GalleryNavButton = Widget.inherit({
 
         eventsEngine.off($element, eventName);
         eventsEngine.on($element, eventName, function(e) {
-            that._createActionByOption("onClick")({ jQueryEvent: e });
+            that._createActionByOption("onClick")({ Event: e });
         });
     },
 
@@ -694,12 +694,12 @@ var Gallery = CollectionWidget.inherit({
 
         eventsEngine.off(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR);
         eventsEngine.on(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
-            indicatorSelectAction({ jQueryEvent: e });
+            indicatorSelectAction({ Event: e });
         });
     },
 
     _indicatorSelectHandler: function(args) {
-        var e = args.jQueryEvent,
+        var e = args.Event,
             instance = args.component;
 
         if(!instance.option("indicatorEnabled")) {
@@ -897,7 +897,7 @@ var Gallery = CollectionWidget.inherit({
         var itemsCount = this._itemsCount();
 
         if(!itemsCount) {
-            e.jQueryEvent.cancel = true;
+            e.Event.cancel = true;
             return;
         }
 
@@ -910,8 +910,8 @@ var Gallery = CollectionWidget.inherit({
                 endOffset = selectedIndex,
                 rtlEnabled = this.option("rtlEnabled");
 
-            e.jQueryEvent.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
-            e.jQueryEvent.maxRightOffset = rtlEnabled ? startOffset : endOffset;
+            e.Event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
+            e.Event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
         }
     },
 
@@ -922,7 +922,7 @@ var Gallery = CollectionWidget.inherit({
     _swipeUpdateHandler: function(e) {
         var wrapAroundRatio = this.option("wrapAround") ? 1 : 0;
 
-        var offset = this._offsetDirection() * e.jQueryEvent.offset * (this._itemsPerPage() + wrapAroundRatio) - this.option("selectedIndex");
+        var offset = this._offsetDirection() * e.Event.offset * (this._itemsPerPage() + wrapAroundRatio) - this.option("selectedIndex");
 
         if(offset < 0) {
             this._loadNextPageIfNeeded(Math.ceil(Math.abs(offset)));
@@ -932,7 +932,7 @@ var Gallery = CollectionWidget.inherit({
     },
 
     _swipeEndHandler: function(e) {
-        var targetOffset = e.jQueryEvent.targetOffset * this._offsetDirection() * this._itemsPerPage(),
+        var targetOffset = e.Event.targetOffset * this._offsetDirection() * this._itemsPerPage(),
             selectedIndex = this.option("selectedIndex"),
             newIndex = this._fitIndex(selectedIndex - targetOffset),
             paginatedIndex = this._fitPaginatedIndex(newIndex);

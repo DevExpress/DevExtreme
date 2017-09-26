@@ -44,13 +44,13 @@ exports.plugin = {
                 return that._items[index];
             },
             click: function(e) {
-                var proxyData = getProxyData(e.jQueryEvent),
+                var proxyData = getProxyData(e.Event),
                     dataType = proxyData && proxyData.type,
                     event = dataType === "legend" ? "legendClick" : "itemClick";
 
                 that._eventTrigger(event, {
                     item: e.node,
-                    jQueryEvent: e.jQueryEvent
+                    Event: e.Event
                 });
             }
         });
