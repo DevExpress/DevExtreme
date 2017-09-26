@@ -450,7 +450,7 @@
     color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
 }
 
-.dx-scheduler-date-time-indicator-content {
+.dx-scheduler-date-time-indicator .dx-scheduler-date-time-indicator-content {
     position: absolute;
     text-align: center;
     font-size: @SCHEDULER_TIME_INDICATOR_FONT_SIZE;
@@ -510,7 +510,6 @@
 
 .dx-scheduler-timeline {
     .dx-scheduler-date-time-indicator{
-        border-right: 1px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
         height: 100%;
 
         .dx-scheduler-date-time-indicator-content {
@@ -524,6 +523,7 @@
             content: "";
             left: 0;
             position: absolute;
+            border-right: 1px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
             background-color:  @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
             pointer-events: none;
         }
