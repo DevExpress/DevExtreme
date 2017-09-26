@@ -44,7 +44,7 @@ var FilterBuilder = Widget.inherit({
               * @type_function_param1_field4 editorElement:jQuery
               * @type_function_param1_field6 editorName:string
               * @type_function_param1_field7 editorOptions:object
-              * @type_function_param1_field8 field:string
+              * @type_function_param1_field8 dataField:string
               * @extends Action
               * @action
              */
@@ -61,7 +61,7 @@ var FilterBuilder = Widget.inherit({
               * @type_function_param1_field4 editorElement:jQuery
               * @type_function_param1_field6 editorName:string
               * @type_function_param1_field7 editorOptions:object
-              * @type_function_param1_field8 field:string
+              * @type_function_param1_field8 dataField:string
               * @extends Action
               * @action
              */
