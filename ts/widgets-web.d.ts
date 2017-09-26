@@ -2798,4 +2798,13 @@ declare module DevExpress.ui {
         getDataSource(): DevExpress.data.PivotGridDataSource;
     }
 
+    export interface dxFilterBuilderOptions extends WidgetOptions {
+    }
+
+    /** @docid dxfilterbuilder */
+    export class dxFilterBuilder extends Widget {
+        constructor(element: JQuery, options?: dxFilterBuilderOptions);
+        constructor(element: Element, options?: dxFilterBuilderOptions);
+    }
+
 }

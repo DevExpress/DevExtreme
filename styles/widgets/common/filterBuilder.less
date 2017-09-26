@@ -1,0 +1,128 @@
+@plusIconColor: #b1d4a9;
+@removeIconColor: #F9B7B7;
+@groupOperationColor: #F9B7B7;
+@itemFieldColor: #d0e9ff;
+@itemOperatorColor: #c9ebc1;
+@itemValueColor: #eee;
+
+
+
+.dx-filterbuilder {
+    .buttonColor(@color) {
+        background-color: @color;
+
+        &:hover {
+            background-color: darken(@color, 10%);
+        }
+
+        &:focus, &.dx-state-active {
+            background-color: darken(@color, 20%);
+            outline: none;
+            color: white;
+        }
+    }
+    .dx-icon-plus{
+        color: @plusIconColor;
+        &:hover {
+            color: darken(@plusIconColor, 10%);
+        }
+        &:focus, &.dx-state-active {
+            color: darken(@plusIconColor, 20%);
+        }
+    }
+    .dx-icon-remove{
+        color: @removeIconColor;
+        &:hover {
+            color: darken(@removeIconColor, 10%);
+        }
+        &:focus {
+            color: darken(@removeIconColor, 20%);
+        }
+    }
+
+    .dx-filterbuilder-group {
+        .dx-filterbuilder-group-item {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        .dx-texteditor {
+            vertical-align: middle;
+            margin-top: -7px;
+            margin-bottom: -4px;
+            display: inline-block;
+        }
+
+        .dx-filterbuilder-group-content .dx-filterbuilder-group-content {
+            padding: 0 26px;
+        }
+
+        .dx-filterbuilder-text {
+            font-size: 14px;
+            font-family: 'Helvetica Neue','Segoe UI',Helvetica,Verdana,san-serif;
+            display: inline-block;
+            line-height: 24px;
+            color: #2b2b2b;
+            margin-right: 5px;
+            cursor: pointer;
+            white-space: pre;
+
+            &.dx-filterbuilder-group-operation {
+                text-align: center;
+                min-width: 30px;
+                padding: 0 7px;
+                border-radius: 5px;
+                .buttonColor(@groupOperationColor);
+            }
+
+            &.dx-filterbuilder-item-field {
+                text-align: center;
+                min-width: 30px;
+                padding: 0 7px;
+                border-radius: 5px;
+                .buttonColor(@itemFieldColor);
+            }
+
+            &.dx-filterbuilder-item-operator {
+                text-align: center;
+                min-width: 30px;
+                padding: 0 7px;
+                border-radius: 5px;
+                .buttonColor(@itemOperatorColor);
+            }
+
+            .dx-filterbuilder-item-value {
+                min-width: 30px;
+                padding-left: 10px;
+
+                text-align: center;
+                min-width: 30px;
+                padding: 0 7px;
+                border-radius: 5px;
+                .buttonColor(@itemValueColor);
+            }
+        }
+
+        .dx-filterbuilder-action {
+            display: inline-block;
+            cursor: pointer;
+
+            &.dx-filterbuilder-action-image {
+                padding: 10px 8px;
+                margin-right: 5px;
+                font-size: 12px;
+                font-weight: bold;
+
+                &:focus {
+                    outline: none;
+                }
+            }
+
+            &.dx-filterbuilder-action-image-edit {
+                width: 24px;
+                background-position: center;
+                height: 25px;
+            }
+        }
+    }
+}

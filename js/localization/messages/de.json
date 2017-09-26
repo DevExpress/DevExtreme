@@ -207,6 +207,12 @@
         "dxTagBox-moreSelected": "{0} weitere",
         "vizExport-printingButtonText": "Drucken",
         "vizExport-titleMenuText": "Export/Druck",
-        "vizExport-exportButtonText": "{0}-Datei"
+        "vizExport-exportButtonText": "{0}-Datei",
+        "dxFilterBuilder-and": "!TODO!",
+        "dxFilterBuilder-or": "!TODO!",
+        "dxFilterBuilder-notAnd": "!TODO!",
+        "dxFilterBuilder-notOr": "!TODO!",
+        "dxFilterBuilder-addCondition": "!TODO!",
+        "dxFilterBuilder-addGroup": "!TODO!"
     }
 }
