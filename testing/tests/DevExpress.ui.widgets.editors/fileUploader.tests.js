@@ -1961,7 +1961,7 @@ QUnit.test("T323019 - click on the 'Drop' field should not lead to file choosing
         event = e;
     });
 
-    $input.click();
+    $input.trigger("click");
     assert.ok(event.isDefaultPrevented(), "input click is prevented");
 });
 

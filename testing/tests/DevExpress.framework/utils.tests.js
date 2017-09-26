@@ -5,6 +5,10 @@ var dxCommand = require("framework/command"),
     mergeCommands = utils.mergeCommands,
     commandToContainer = utils.commandToContainer;
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.module("Framework utils");
 
 QUnit.test("mergeCommands", function(assert) {

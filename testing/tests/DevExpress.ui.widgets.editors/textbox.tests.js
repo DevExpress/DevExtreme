@@ -126,7 +126,7 @@ QUnit.test("call focus() method", function(assert) {
         inFocus = element.find(".dx-texteditor-input").is(":focus");
         assert.ok(!inFocus, "at start  input has not focused");
 
-        element.find(".dx-texteditor-input").focusin();
+        element.find(".dx-texteditor-input").trigger("focusin");
         assert.ok(inFocus, "when call 'focus' method, then focus on input");
 
     } finally {

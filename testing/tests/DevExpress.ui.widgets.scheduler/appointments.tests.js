@@ -1068,7 +1068,7 @@ QUnit.test("Items has a tab index if focusStateEnabled", function(assert) {
     assert.ok(!$appointments.eq(0).attr("tabindex"), "item tabindex is right");
 });
 
-QUnit.test("Focused element should be changed on focusin", function(assert) {
+QUnit.testInActiveWindow("Focused element should be changed on focusin", function(assert) {
     var items = [
         {
             itemData: {
@@ -1094,10 +1094,10 @@ QUnit.test("Focused element should be changed on focusin", function(assert) {
         focusStateEnabled: true
     });
     var $appointments = $(".dx-scheduler-appointment");
-    $($appointments.eq(0)).trigger("focusin");
+    $appointments.get(0).focus();
     assert.deepEqual($appointments.get(0), this.instance.option("focusedElement").get(0), "right element is focused");
 
-    $($appointments.eq(1)).trigger("focusin");
+    $appointments.get(1).focus();
     assert.deepEqual($appointments.get(1), this.instance.option("focusedElement").get(0), "right element is focused");
 });
 

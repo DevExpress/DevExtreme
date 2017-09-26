@@ -580,11 +580,11 @@ QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", functio
 QUnit.test("tabs focusedElement lose focused class", function(assert) {
     assert.expect(6);
 
-    this.$element.find(toSelector(TABS_CLASS)).focusin();
+    this.$element.find(toSelector(TABS_CLASS)).get(0).focus();
     assert.ok($(toSelector(TABS_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
     assert.ok($(toSelector(TABPANEL_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
     assert.ok($(toSelector(MULTIVIEW_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
-    this.$element.find(toSelector(TABS_CLASS)).focusout();
+    this.$element.find(toSelector(TABS_CLASS)).get(0).blur();
     assert.ok(!$(toSelector(TABS_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
     assert.ok(!$(toSelector(TABPANEL_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
     assert.ok(!$(toSelector(MULTIVIEW_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");

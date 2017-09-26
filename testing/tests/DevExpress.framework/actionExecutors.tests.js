@@ -9,6 +9,10 @@ var $ = require("jquery"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     frameworkMocks = require("../../helpers/frameworkMocks.js");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.testStart(function() {
     var markup = '                                                                                      \
         <div id="qunit-fixture">                                                                        \

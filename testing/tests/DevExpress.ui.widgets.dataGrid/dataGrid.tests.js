@@ -750,7 +750,7 @@ QUnit.test("Edit cell by click when grid is created in dxForm", function(assert)
     });
 
     //act
-    $($(dataGrid.$element()).find(".dx-data-row > td").eq(0)).trigger("dxclick");
+    $(dataGrid.$element().find(".dx-data-row > td").eq(0)).trigger("dxclick");
     clock.tick();
     clock.restore();
 

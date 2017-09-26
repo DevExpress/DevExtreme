@@ -11,6 +11,10 @@ var $ = require("jquery"),
 require("ui/tag_box");
 require("integration/angular");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 var ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);
 };

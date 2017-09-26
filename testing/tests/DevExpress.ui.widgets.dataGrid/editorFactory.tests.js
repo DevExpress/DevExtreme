@@ -222,7 +222,7 @@ if(browser.msie && parseInt(browser.version) === 11) {
         textBox.focus();
         $container.find("input").val("AB");
         $container.find("input").trigger($.Event("keyup"));
-        $(window).focus();
+        $(window).trigger("focus");
 
         this.clock.tick();
 
@@ -1478,7 +1478,7 @@ QUnit.testInActiveWindow("Focus on a filtering cell after editing cell in 'batch
     assert.ok($cell.hasClass("dx-focused"), "focused cell");
 
     //act
-    $testElement.find(".dx-datagrid-filter-row input").eq(1).focus();
+    $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("focus");
     $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("dxclick");
     that.clock.tick();
 

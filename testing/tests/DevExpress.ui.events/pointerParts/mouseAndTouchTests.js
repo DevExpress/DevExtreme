@@ -4,15 +4,15 @@ var $ = require("jquery"),
     MouseAndTouchStrategy = require("events/pointer/mouse_and_touch"),
     registerEvent = require("events/core/event_registrator"),
     nativePointerMock = require("../../../helpers/nativePointerMock.js"),
-    $eventSpecial = $.event.special;
+    special = require("../../../helpers/eventHelper.js").special;
 
 QUnit.module("mouse and touch events", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
 
         $.each(MouseAndTouchStrategy.map, function(pointerEvent, originalEvents) {
-            if($eventSpecial[pointerEvent]) {
-                $eventSpecial[pointerEvent].dispose();
+            if(special[pointerEvent]) {
+                special[pointerEvent].dispose();
             }
             registerEvent(pointerEvent, new MouseAndTouchStrategy(pointerEvent, originalEvents));
         });
