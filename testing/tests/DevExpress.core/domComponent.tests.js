@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     registerComponent = require("core/component_registrator"),
+    config = require("core/config"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
     devices = require("core/devices"),
     DOMComponent = require("core/dom_component"),
@@ -974,4 +975,16 @@ QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
 
     assert.ok(disposeRun);
     assert.notOk(clickRun);
+});
+
+
+QUnit.test("get element", function(assert) {
+    var element = $("#component").TestComponent(),
+        instance = element.data("TestComponent");
+
+    if(config().useJQueryRenderer) {
+        assert.deepEqual(instance.element(), $("#component"));
+    } else {
+        assert.equal(instance.element(), $("#component").get(0));
+    }
 });

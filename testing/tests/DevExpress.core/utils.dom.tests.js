@@ -3,7 +3,6 @@
 var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     support = require("core/utils/support"),
-    config = require("core/config"),
     styleUtils = require("core/utils/style"),
     devices = require("core/devices"),
     initMobileViewport = require("mobile/init_mobile_viewport"),
@@ -148,15 +147,5 @@ QUnit.test("dont prevent touch move on win10 devices", function(assert) {
         assert.strictEqual(isPointerMoveDefaultPrevented, false, "default behaviour is not prevented");
     } finally {
         devices.real(originalRealDevice);
-    }
-});
-
-QUnit.test("return element", function(assert) {
-    var getElement = domUtils.getPublicElement,
-        element = $("#qunit-fixture").html('"<div id="widget"></div>"');
-    if(config().useJQueryRenderer) {
-        assert.deepEqual(getElement(element), $("#qunit-fixture"));
-    } else {
-        assert.deepEqual(getElement(element), $("#qunit-fixture").get(0));
     }
 });
