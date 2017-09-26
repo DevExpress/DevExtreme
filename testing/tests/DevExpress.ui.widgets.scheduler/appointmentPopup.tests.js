@@ -256,7 +256,7 @@ QUnit.test("Popup should contains caption textbox with right value", function(as
     var form = this.instance.getAppointmentDetailsForm(),
         textBox = form.getEditor("text");
 
-    assert.equal(textBox.element().length, 1, "Caption text is rendered");
+    assert.equal(textBox.$element().length, 1, "Caption text is rendered");
     assert.equal(textBox.option("value"), "caption", "value is right");
 });
 
@@ -369,7 +369,7 @@ QUnit.test("Popup should contains description editor", function(assert) {
     var form = this.instance.getAppointmentDetailsForm(),
         descriptionEditor = form.getEditor("description");
 
-    assert.equal(descriptionEditor.element().length, 1, "Description editor is rendered");
+    assert.equal(descriptionEditor.$element().length, 1, "Description editor is rendered");
     assert.equal(descriptionEditor.option("value"), "First task of this day", "value is right");
 });
 

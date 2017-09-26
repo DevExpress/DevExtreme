@@ -86,7 +86,7 @@ QUnit.test("Render context menu", function(assert) {
 
     //assert
     assert.ok(this.contextMenuView.element().dxContextMenu("instance")._initialized, "dxContextMenu initialized");
-    assert.ok(this.contextMenuView.element().dxContextMenu("instance").element().parent().hasClass("dx-datagrid"), "parent context menu");
+    assert.ok(this.contextMenuView.element().dxContextMenu("instance").$element().parent().hasClass("dx-datagrid"), "parent context menu");
     assert.ok(testElement.hasClass("dx-datagrid"), "has class dx-datagrid");
 });
 

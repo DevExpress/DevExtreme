@@ -164,7 +164,7 @@ QUnit.test("Edit popup", function(assert) {
     };
 
     this.setupTreeList();
-    this.editingController.component.element = function() {
+    this.editingController.component.$element = function() {
         return $("#treeList");
     };
 

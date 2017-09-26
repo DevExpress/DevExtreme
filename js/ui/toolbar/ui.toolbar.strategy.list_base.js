@@ -55,7 +55,7 @@ var ListStrategy = ToolbarStrategy.inherit({
     },
 
     _renderListOverlay: function() {
-        var $listOverlay = $("<div>").appendTo(this._toolbar.element());
+        var $listOverlay = $("<div>").appendTo(this._toolbar.$element());
         this._listOverlay = this._toolbar._createComponent($listOverlay, Overlay, this._listOverlayConfig());
     },
 
@@ -82,7 +82,7 @@ var ListStrategy = ToolbarStrategy.inherit({
 
     _getListHeight: function() {
         var listHeight = this._listOverlay.content().find(".dx-list").height(),
-            semiHiddenHeight = this._toolbar._$toolbarItemsContainer.height() - this._toolbar.element().height();
+            semiHiddenHeight = this._toolbar._$toolbarItemsContainer.height() - this._toolbar.$element().height();
 
         return listHeight + semiHiddenHeight;
     },
@@ -138,7 +138,7 @@ var ListStrategy = ToolbarStrategy.inherit({
         this._toggleHideTopOverlayCallback();
 
         this._renderMenuPosition(this._menuShown ? 0 : 1, animate).done((function() {
-            this._toolbar.element().toggleClass(TOOLBAR_LIST_VISIBLE_CLASS, visible);
+            this._toolbar.$element().toggleClass(TOOLBAR_LIST_VISIBLE_CLASS, visible);
         }).bind(this));
     },
 

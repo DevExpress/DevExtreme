@@ -43,7 +43,7 @@ var ListTopStrategy = ListStrategy.inherit({
     },
 
     _getItemsContainerHeight: function() {
-        var semiHiddenHeight = this._toolbar._$toolbarItemsContainer.height() - this._toolbar.element().height();
+        var semiHiddenHeight = this._toolbar._$toolbarItemsContainer.height() - this._toolbar.$element().height();
         return semiHiddenHeight;
     },
 

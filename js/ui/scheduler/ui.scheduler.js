@@ -1266,7 +1266,7 @@ var Scheduler = Widget.inherit({
         }
 
         this._appointments.option(editingConfig);
-        this._dropDownAppointments.repaintExisting(this.element());
+        this._dropDownAppointments.repaintExisting(this.$element());
     },
 
     _isAgenda: function() {
@@ -1346,9 +1346,9 @@ var Scheduler = Widget.inherit({
             });
 
             this._dataSource.isLoading() && loading.show({
-                container: this.element(),
+                container: this.$element(),
                 position: {
-                    of: this.element()
+                    of: this.$element()
                 }
             });
         }
@@ -1377,8 +1377,8 @@ var Scheduler = Widget.inherit({
     },
 
     _toggleSmallClass: function() {
-        var width = this.element().outerWidth();
-        this.element().toggleClass(WIDGET_SMALL_CLASS, width < WIDGET_SMALL_WIDTH);
+        var width = this.$element().outerWidth();
+        this.$element().toggleClass(WIDGET_SMALL_CLASS, width < WIDGET_SMALL_WIDTH);
     },
 
     _visibilityChanged: function(visible) {
@@ -1411,7 +1411,7 @@ var Scheduler = Widget.inherit({
         this._proxiedCustomizeStoreLoadOptionsHandler = this._customizeStoreLoadOptionsHandler.bind(this);
         this._customizeStoreLoadOptions();
 
-        this.element().addClass(WIDGET_CLASS);
+        this.$element().addClass(WIDGET_CLASS);
         this._initEditing();
 
         this._resourcesManager = new SchedulerResourceManager(this.option("resources"));
@@ -1579,7 +1579,7 @@ var Scheduler = Widget.inherit({
         this._editing.allowDragging = this._editing.allowDragging && this._editing.allowUpdating;
         this._editing.allowResizing = this._editing.allowResizing && this._editing.allowUpdating;
 
-        this.element().toggleClass(WIDGET_READONLY_CLASS, this._isReadOnly());
+        this.$element().toggleClass(WIDGET_READONLY_CLASS, this._isReadOnly());
     },
 
     _isReadOnly: function() {
@@ -1666,7 +1666,7 @@ var Scheduler = Widget.inherit({
     },
 
     _renderHeader: function() {
-        var $header = $("<div>").appendTo(this.element());
+        var $header = $("<div>").appendTo(this.$element());
         this._header = this._createComponent($header, SchedulerHeader, this._headerConfig());
     },
 
@@ -1755,11 +1755,11 @@ var Scheduler = Widget.inherit({
     },
 
     _renderWorkSpace: function(groups) {
-        var $workSpace = $("<div>").appendTo(this.element());
+        var $workSpace = $("<div>").appendTo(this.$element());
 
         var countConfig = this._getViewCountConfig();
         this._workSpace = this._createComponent($workSpace, VIEWS_CONFIG[this._getCurrentViewType()].workSpace, this._workSpaceConfig(groups, countConfig));
-        this._workSpace.getWorkArea().append(this._appointments.element());
+        this._workSpace.getWorkArea().append(this._appointments.$element());
 
         this._recalculateWorkspace();
 
@@ -1790,7 +1790,7 @@ var Scheduler = Widget.inherit({
     _recalculateWorkspace: function() {
         this._workSpaceRecalculation = new Deferred();
 
-        domUtils.triggerResizeEvent(this._workSpace.element());
+        domUtils.triggerResizeEvent(this._workSpace.$element());
         this._workSpaceRecalculation.resolve();
     },
 
@@ -1868,9 +1868,9 @@ var Scheduler = Widget.inherit({
     },
 
     _refreshWorkSpace: function(groups) {
-        this._appointments.element().detach();
+        this._appointments.$element().detach();
         this._workSpace._dispose();
-        this._workSpace.element().remove();
+        this._workSpace.$element().remove();
 
         delete this._workSpace;
 
@@ -1925,7 +1925,7 @@ var Scheduler = Widget.inherit({
     _createPopup: function(appointmentData, processTimeZone) {
         this._$popup = $("<div>")
                 .addClass(APPOINTMENT_POPUP_CLASS)
-                .appendTo(this.element());
+                .appendTo(this.$element());
 
         this._initDynamicPopupTemplate(appointmentData, processTimeZone);
 
@@ -2070,7 +2070,7 @@ var Scheduler = Widget.inherit({
 
     _cleanPopup: function() {
         if(this._$popup) {
-            this._popup.element().remove();
+            this._popup.$element().remove();
             delete this._$popup;
             delete this._popup;
             delete this._appointmentForm;
@@ -2568,7 +2568,7 @@ var Scheduler = Widget.inherit({
 
     recurrenceEditorVisibilityChanged: function(visible) {
         if(this._appointmentForm) {
-            this._appointmentForm.element()
+            this._appointmentForm.$element()
                 .find("." + RECURRENCE_EDITOR_ITEM_CLASS)
                 .toggleClass(RECURRENCE_EDITOR_OPENED_ITEM_CLASS, visible);
         }

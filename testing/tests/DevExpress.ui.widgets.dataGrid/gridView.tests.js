@@ -57,7 +57,7 @@ function createGridView(options, userOptions) {
             }
         });
 
-    this.element = function() {
+    this.$element = function() {
         return $("#container");
     };
 
@@ -452,7 +452,7 @@ function createGridView(options, userOptions) {
             pointsByColumns;
 
         //act
-        this.element = function() {
+        this.$element = function() {
             return testElement;
         };
         gridView = this.createGridView(defaultOptions, { commonColumnSettings: { allowResizing: true } });

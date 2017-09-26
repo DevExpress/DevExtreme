@@ -29,7 +29,7 @@ var SchedulerTimezoneEditor = Editor.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(TIMEZONE_EDITOR_CLASS);
+        this.$element().addClass(TIMEZONE_EDITOR_CLASS);
     },
 
     _render: function() {
@@ -73,7 +73,7 @@ var SchedulerTimezoneEditor = Editor.inherit({
         var $element = $("<div>").addClass(cssClass),
             selectBox = this._createComponent($element, SelectBox, options);
 
-        this.element().append($element);
+        this.$element().append($element);
 
         return selectBox;
     },

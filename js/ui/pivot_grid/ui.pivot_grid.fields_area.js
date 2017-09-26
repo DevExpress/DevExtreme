@@ -54,8 +54,7 @@ exports.FieldsArea = areaItem.AreaItem.inherit({
                     }
                 }
             });
-
-        button.element().addClass("dx-pivotgrid-fields-area-hamburger");
+        button.$element().addClass("dx-pivotgrid-fields-area-hamburger");
     },
 
     _getPopupOptions: function(row, button) {
@@ -90,15 +89,15 @@ exports.FieldsArea = areaItem.AreaItem.inherit({
         var that = this,
             button = tableElement.find(".dx-button"),
             popupOptions = that._getPopupOptions(row, button),
-            FieldChooserBase = that.component.element().dxPivotGridFieldChooserBase("instance");
+            FieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase("instance");
 
         if(that._rowPopup) {
-            that._rowPopup.element().remove();
+            that._rowPopup.$element().remove();
         }
 
         that._rowPopup = that.component._createComponent($(DIV).appendTo(tableElement), Popup, popupOptions);
 
-        that._rowPopup.element().addClass("dx-fields-area-popup");
+        that._rowPopup.$element().addClass("dx-fields-area-popup");
         that._rowPopup.content()
             .addClass("dx-pivotgrid-fields-container");
         that._rowPopup.content().parent()
@@ -116,7 +115,7 @@ exports.FieldsArea = areaItem.AreaItem.inherit({
         var that = this,
             groupElement = this.groupElement(),
             isVisible = this.isVisible(),
-            fieldChooserBase = that.component.element().dxPivotGridFieldChooserBase("instance"),
+            fieldChooserBase = that.component.$element().dxPivotGridFieldChooserBase("instance"),
             head = $("<thead>").addClass("dx-pivotgrid-fields-area-head").appendTo(tableElement),
             area = that._area,
             row = $("<tr>");

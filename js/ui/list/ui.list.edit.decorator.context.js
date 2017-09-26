@@ -18,7 +18,7 @@ registerDecorator(
 
         _init: function() {
             var $menu = $("<div>").addClass(CONTEXTMENU_CLASS);
-            this._list.element().append($menu);
+            this._list.$element().append($menu);
 
             this._menu = this._renderOverlay($menu);
         },
@@ -56,7 +56,7 @@ registerDecorator(
                     }
                 },
                 height: (function() { return this._$menuList ? this._$menuList.outerHeight() : 0; }).bind(this),
-                width: (function() { return this._list.element().outerWidth(); }).bind(this),
+                width: (function() { return this._list.$element().outerWidth(); }).bind(this),
                 onContentReady: this._renderMenuContent.bind(this)
             });
         },
@@ -111,7 +111,7 @@ registerDecorator(
 
         dispose: function() {
             if(this._menu) {
-                this._menu.element().remove();
+                this._menu.$element().remove();
             }
 
             this.callBase.apply(this, arguments);

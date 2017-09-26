@@ -225,7 +225,7 @@ var TileView = CollectionWidget.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(TILEVIEW_CLASS);
+        this.$element().addClass(TILEVIEW_CLASS);
         this._initScrollView();
     },
 
@@ -250,7 +250,7 @@ var TileView = CollectionWidget.inherit({
     },
 
     _initScrollView: function() {
-        this._scrollView = this._createComponent(this.element(), ScrollView, {
+        this._scrollView = this._createComponent(this.$element(), ScrollView, {
             direction: this.option("direction"),
             scrollByContent: true,
             useKeyboard: false,
@@ -299,7 +299,7 @@ var TileView = CollectionWidget.inherit({
                 return Math.round(item[config.itemCrossRatio] || 1);
             }));
 
-        this._cellsPerDimension = Math.floor(this.element()[config.crossDimension]() / (this.option(config.baseItemCrossDimension) + itemMargin));
+        this._cellsPerDimension = Math.floor(this.$element()[config.crossDimension]() / (this.option(config.baseItemCrossDimension) + itemMargin));
         this._cellsPerDimension = Math.max(this._cellsPerDimension, maxItemCrossRatio);
         this._cells = [];
         this._cells.push(new Array(this._cellsPerDimension));
@@ -528,7 +528,7 @@ var TileView = CollectionWidget.inherit({
             itemDimension = $itemElement[outerMainProp](),
             itemTail = itemPosition + itemDimension,
             scrollPosition = this.scrollPosition(),
-            clientWidth = this.element()[outerMainProp]();
+            clientWidth = this.$element()[outerMainProp]();
 
         if(scrollPosition <= itemPosition && itemTail <= scrollPosition + clientWidth) {
             return;

@@ -211,7 +211,7 @@ var Button = Widget.inherit({
     },
 
     _render: function() {
-        this.element().addClass(BUTTON_CLASS);
+        this.$element().addClass(BUTTON_CLASS);
         this._renderType();
 
         this.option("useInkRipple") && this._renderInkRipple();
@@ -258,7 +258,7 @@ var Button = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             data = this._getContentData();
 
         if(this._$content) {
@@ -341,8 +341,8 @@ var Button = Widget.inherit({
 
         this._clickAction = this._createActionByOption("onClick", actionConfig);
 
-        eventsEngine.off(this.element(), eventName);
-        eventsEngine.on(this.element(), eventName, function(e) {
+        eventsEngine.off(this.$element(), eventName);
+        eventsEngine.on(this.$element(), eventName, function(e) {
             that._executeClickAction(e);
         });
     },
@@ -372,18 +372,18 @@ var Button = Widget.inherit({
     _renderType: function() {
         var type = this.option("type");
         if(type) {
-            this.element().addClass("dx-button-" + type);
+            this.$element().addClass("dx-button-" + type);
         }
     },
 
     _refreshType: function(prevType) {
         var type = this.option("type");
 
-        prevType && this.element()
+        prevType && this.$element()
             .removeClass("dx-button-" + prevType)
             .addClass("dx-button-" + type);
 
-        if(!this.element().hasClass(BUTTON_HAS_ICON_CLASS) && type === "back") {
+        if(!this.$element().hasClass(BUTTON_HAS_ICON_CLASS) && type === "back") {
             this._renderContentImpl();
         }
     },

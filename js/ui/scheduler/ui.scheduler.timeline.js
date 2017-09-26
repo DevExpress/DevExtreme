@@ -21,7 +21,7 @@ var HORIZONTAL = "horizontal",
 var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _init: function() {
         this.callBase();
-        this.element().addClass(TIMELINE_CLASS);
+        this.$element().addClass(TIMELINE_CLASS);
         this._$sidebarTable = $("<table>")
             .addClass(GROUP_TABLE_CLASS);
     },
@@ -108,7 +108,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             return this._$dateTable.outerHeight();
         }
 
-        return this.element().outerHeight();
+        return this.$element().outerHeight();
     },
 
     _dateTableScrollableConfig: function() {
@@ -193,7 +193,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceMinHeight: function() {
         var minHeight = this._getWorkSpaceHeight(),
-            workspaceContainerHeight = this.element().outerHeight(true) - this.getHeaderPanelHeight();
+            workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight();
 
         if(minHeight < workspaceContainerHeight) {
             minHeight = workspaceContainerHeight;
@@ -234,11 +234,11 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _detachGroupCountAttr: function() {
-        this.element().removeAttr(TIMELINE_GROUPED_ATTR);
+        this.$element().removeAttr(TIMELINE_GROUPED_ATTR);
     },
 
     _attachGroupCountAttr: function() {
-        this.element().attr(TIMELINE_GROUPED_ATTR, this.option("groups").length);
+        this.$element().attr(TIMELINE_GROUPED_ATTR, this.option("groups").length);
     },
 
     _getCellCoordinatesByIndex: function(index) {
@@ -341,7 +341,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         var isRtl = this.option("rtlEnabled");
 
         var result = {},
-            $scrollable = this.getScrollable().element(),
+            $scrollable = this.getScrollable().$element(),
             cellWidth = this.getCellWidth(),
             scrollableOffset = isRtl ? (this.getScrollableOuterWidth() - this.getScrollableScrollLeft()) : this.getScrollableScrollLeft(),
             scrolledCellCount = scrollableOffset / cellWidth,

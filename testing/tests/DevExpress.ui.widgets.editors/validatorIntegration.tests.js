@@ -129,7 +129,7 @@ var Fixture = Class.inherit({
 
             validator.validate();
 
-            var $overlayWrapper = validator.element().find(".dx-overlay-wrapper");
+            var $overlayWrapper = validator.$element().find(".dx-overlay-wrapper");
 
             assert.equal($overlayWrapper.length, 1, "validation message not blinking on render");
         } finally {
@@ -144,13 +144,13 @@ var Fixture = Class.inherit({
         $("<div style='height: 100px'/>").insertAfter(
             this.fixture.$element.wrap("<div id='bingo' style='overflow-y: scroll; height: 100px' />")
         );
-        var $scrollableWrapper = validator.element().parent().appendTo("body");
+        var $scrollableWrapper = validator.$element().parent().appendTo("body");
 
         validator.validate();
 
-        var top1 = validator.element().find(".dx-overlay").offset().top;
+        var top1 = validator.$element().find(".dx-overlay").offset().top;
         $scrollableWrapper.scrollTop(topDiff);
-        var top2 = validator.element().find(".dx-overlay").offset().top;
+        var top2 = validator.$element().find(".dx-overlay").offset().top;
 
         assert.roughEqual(top1 - top2 - topDiff, 0, 0.01, "message overlay was not detached from input");
     });

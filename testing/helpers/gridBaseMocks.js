@@ -701,7 +701,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             element: getElement,
 
             component: {
-                element: getElement
+                $element: getElement
             },
 
             init: commonUtils.noop,
@@ -923,7 +923,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             return handler;
         };
 
-        that.element = that.element || function() { };
+        that.$element = that.$element || function() { };
 
         that.on = commonUtils.noop;
 

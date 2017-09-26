@@ -46,7 +46,7 @@ var TestComponent = MenuBase.inherit({
         return "123";
     },
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     }
 });
 

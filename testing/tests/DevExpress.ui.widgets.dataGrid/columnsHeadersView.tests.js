@@ -38,7 +38,7 @@ QUnit.module('Headers', {
             showColumnLines: false
         };
 
-        this.element = function() {
+        this.$element = function() {
             return $("#container");
         };
 
@@ -2033,7 +2033,7 @@ QUnit.module('Headers with band columns', {
         that.clock = sinon.useFakeTimers();
 
         that.columns = [];
-        that.element = function() {
+        that.$element = function() {
             return $("#container");
         };
         that.options = {

@@ -32,7 +32,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
         eventsEngine.on(this._$topShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
         eventsEngine.on(this._$bottomShield, POINTER_DOWN_EVENT_NAME, this._cancelDeleteReadyItem.bind(this));
 
-        this._list.element()
+        this._list.$element()
             .append(this._$topShield.toggle(false))
             .append(this._$bottomShield.toggle(false));
     },
@@ -70,7 +70,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _toggleShields: function($itemElement, enabled) {
-        this._list.element().toggleClass(SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS, enabled);
+        this._list.$element().toggleClass(SWITCHABLE_MENU_SHIELD_POSITIONING_CLASS, enabled);
         this._$topShield.toggle(enabled);
         this._$bottomShield.toggle(enabled);
         if(enabled) {
@@ -81,7 +81,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _updateShieldsHeight: function($itemElement) {
-        var $list = this._list.element(),
+        var $list = this._list.$element(),
 
             listTopOffset = $list.offset().top,
             listHeight = $list.outerHeight(),
@@ -107,7 +107,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _toggleScrolling: function(readyToDelete) {
-        var scrollView = this._list.element().dxScrollView("instance");
+        var scrollView = this._list.$element().dxScrollView("instance");
 
         if(readyToDelete) {
             scrollView.on("start", this._cancelScrolling);

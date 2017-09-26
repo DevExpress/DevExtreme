@@ -510,10 +510,10 @@ var DropDownList = DropDownEditor.inherit({
             templatesRenderAsynchronously: false,
             width: this.option("width"),
             onShowing: function() {
-                that.element().addClass(SKIP_GESTURE_EVENT_CLASS);
+                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
             },
             onHidden: function() {
-                that.element().removeClass(SKIP_GESTURE_EVENT_CLASS);
+                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
             },
             height: "auto",
             maxHeight: this._getMaxHeight.bind(this)
@@ -782,7 +782,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupWidth: function() {
-        this._setPopupOption("width", this.element().outerWidth() + this.option("popupWidthExtension"));
+        this._setPopupOption("width", this.$element().outerWidth() + this.option("popupWidthExtension"));
     },
 
     _needPopupRepaint: function() {
@@ -807,7 +807,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _getMaxHeight: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             offset = $element.offset(),
             windowHeight = $(window).height(),
             maxHeight = Math.max(offset.top, windowHeight - offset.top - $element.outerHeight());

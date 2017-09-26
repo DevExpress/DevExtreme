@@ -23,13 +23,13 @@ QUnit.test("Scheduler header should be initialized", function(assert) {
 });
 
 QUnit.test("Scheduler header should have a right css class", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.ok($element.hasClass("dx-scheduler-header"), "dxSchedulerHeader has 'dx-scheduler-header' css class");
 });
 
 QUnit.test("Header should contain dxTabs view switcher on default", function(assert) {
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher"),
         $switcherLabel = $element.find(".dx-scheduler-view-switcher-label");
 
@@ -43,7 +43,7 @@ QUnit.test("Header should contain dxDropDownMenu view switcher if useDropDownVie
         useDropDownViewSwitcher: true
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         $switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher"),
         $switcherLabel = $element.find(".dx-scheduler-view-switcher-label");
 
@@ -53,7 +53,7 @@ QUnit.test("Header should contain dxDropDownMenu view switcher if useDropDownVie
 });
 
 QUnit.test("Header should contain a navigator", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.equal($element.find(".dx-scheduler-navigator").length, 1);
 });
@@ -70,7 +70,7 @@ QUnit.module("Header Options", {
 QUnit.test("View Switcher should be rerendering after useDropDownViewSwitcher option changing", function(assert) {
     this.instance.option("useDropDownViewSwitcher", true);
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher");
 
     assert.equal($switcher.length, 1, "View switcher was rendered");
@@ -85,14 +85,14 @@ QUnit.test("View Switcher label should be removed after useDropDownViewSwitcher 
 
     this.instance.option("useDropDownViewSwitcher", false);
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         $switcherLabel = $element.find(".dx-scheduler-view-switcher-label");
 
     assert.equal($switcherLabel.length, 0, "View switcher label was removed");
 });
 
 QUnit.test("Min & Max options should be passed to navigator", function(assert) {
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         navigator = $element.find(".dx-scheduler-navigator").dxSchedulerNavigator("instance");
 
     assert.deepEqual(navigator.option("min"), new Date(2015, 1, 2), "min is passed");
@@ -110,7 +110,7 @@ QUnit.test("Views option should be passed to viewSwitcher", function(assert) {
         views: ['month', 'day']
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher").dxTabs("instance");
 
     assert.deepEqual(switcher.option("items"), ['month', 'day'], "views were passed");
@@ -128,7 +128,7 @@ QUnit.test("Views option with objects should be passed to viewSwitcher", functio
         }]
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher").dxTabs("instance");
 
     assert.deepEqual(switcher.option("items"), ['month', {
@@ -147,7 +147,7 @@ QUnit.test("View switcher should be rendered correctly when views contains objec
         }]
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         $switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher");
 
     assert.equal($switcher.text(), "MonthTestDay", "ViewSwitcher was rendered correctly");
@@ -170,7 +170,7 @@ QUnit.test("currentView option should be passed correctly to the navigator", fun
 
     instance.option("currentView", views[1]);
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         navigator = $element.find(".dx-scheduler-navigator").dxSchedulerNavigator("instance"),
         switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher").dxTabs("instance");
 
@@ -185,7 +185,7 @@ QUnit.test("Views option should be passed to viewSwitcher, useDropDownViewSwitch
         currentView: "month"
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher").dxDropDownMenu("instance");
 
     assert.deepEqual(switcher.option("items"), ['month', 'day'], "views were passed");
@@ -205,7 +205,7 @@ QUnit.test("Views option with objects should be passed to viewSwitcher, useDropD
         currentView: "month"
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher").dxDropDownMenu("instance");
 
     assert.deepEqual(switcher.option("items"), ["month", {
@@ -223,7 +223,7 @@ QUnit.test("View switcher should be rendered correctly when views contains objec
         }]
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher").dxDropDownMenu("instance");
 
     switcher.open();
@@ -236,7 +236,7 @@ QUnit.test("currentView option should be saved then views changed", function(ass
         currentView: "day"
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         switcher = $element.find(".dx-scheduler-view-switcher").dxTabs("instance");
 
     instance.option("views", ['month', 'week', "day"]);
@@ -251,7 +251,7 @@ QUnit.test("'currentViewUpdated' observer should be notified after selection of 
         currentView: 'month'
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         $switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher"),
         switcher = $switcher.dxTabs("instance");
 
@@ -274,7 +274,7 @@ QUnit.test("'currentViewUpdated' observer should be notified after selection of 
         currentView: 'month'
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         $switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher");
 
     var stub = sinon.stub(this.instance, "notifyObserver").withArgs("currentViewUpdated");
@@ -293,7 +293,7 @@ QUnit.test("'currentViewUpdated' observer should be notified after click on dxDr
         currentView: 'month'
     }).dxSchedulerHeader("instance");
 
-    var $element = instance.element(),
+    var $element = instance.$element(),
         $switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher"),
         switcher = $switcher.dxDropDownMenu("instance");
 
@@ -319,13 +319,13 @@ QUnit.module("Header Keyboard Navigation", {
 });
 
 QUnit.test("Header should not have tabIndex", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.equal($element.attr("tabindex"), null, "tabIndex is correct");
 });
 
 QUnit.test("Focus options should be passed to switcher", function(assert) {
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         switcher = $element.find(".dx-tabs.dx-scheduler-view-switcher").dxTabs("instance");
 
     assert.equal(switcher.option("focusStateEnabled"), true, "focusStateEnabled is passed");
@@ -340,7 +340,7 @@ QUnit.test("Focus options should be passed to switcher", function(assert) {
 });
 
 QUnit.test("Focus options should be passed to navigator", function(assert) {
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         navigator = $element.find(".dx-scheduler-navigator").dxSchedulerNavigator("instance");
 
     assert.equal(navigator.option("focusStateEnabled"), true, "focusStateEnabled is passed");

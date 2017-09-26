@@ -20,7 +20,7 @@ var DateBoxStrategy = Class.inherit({
     _renderWidget: function(element) {
         element = element || $("<div>");
         this._widget = this._createWidget(element);
-        this._widget.element().appendTo(this._getWidgetContainer());
+        this._widget.$element().appendTo(this._getWidgetContainer());
     },
 
     _createWidget: function(element) {

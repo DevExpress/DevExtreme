@@ -240,7 +240,7 @@ QUnit.test("nested widget rendering", function(assert) {
         items: this.items,
         itemTemplate: function() {
             nested = new Accordion($("<div>"), { items: that.items, selectedIndex: 0 });
-            return nested.element();
+            return nested.$element();
         }
     });
 

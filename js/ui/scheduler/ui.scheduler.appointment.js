@@ -121,9 +121,9 @@ var Appointment = DOMComponent.inherit({
         this._renderAllDayClass();
         this._renderDirection();
 
-        this.element().data("dxAppointmentStartDate", this.option("startDate"));
-        this.element().attr("title", this.invoke("getField", "text", this.option("data")));
-        this.element().attr("role", "button");
+        this.$element().data("dxAppointmentStartDate", this.option("startDate"));
+        this.$element().attr("title", this.invoke("getField", "text", this.option("data")));
+        this.$element().attr("role", "button");
 
         this._renderRecurrenceClass();
         this._renderResizable();
@@ -131,7 +131,7 @@ var Appointment = DOMComponent.inherit({
 
     _renderAppointmentGeometry: function() {
         var geometry = this.option("geometry"),
-            $element = this.element();
+            $element = this.$element();
 
         translator.move($element, {
             top: geometry.top,
@@ -148,7 +148,7 @@ var Appointment = DOMComponent.inherit({
         var geometry = this.option("geometry");
 
         if(geometry.width < EMPTY_APPOINTMENT_MAX_WIDTH || geometry.height < EMPTY_APPOINTMENT_MAX_HEIGHT) {
-            this.element().addClass(EMPTY_APPOINTMENT_CLASS);
+            this.$element().addClass(EMPTY_APPOINTMENT_CLASS);
         }
     },
 
@@ -159,7 +159,7 @@ var Appointment = DOMComponent.inherit({
             return;
         }
 
-        this.element()
+        this.$element()
             .toggleClass(REDUCED_APPOINTMENT_CLASS, true)
             .toggleClass(REDUCED_APPOINTMENT_PARTS_CLASSES[reducedPart], true);
 
@@ -169,7 +169,7 @@ var Appointment = DOMComponent.inherit({
     _renderAppointmentReducedIcon: function() {
         var $icon = $("<div>")
             .addClass(REDUCED_APPOINTMENT_ICON)
-            .appendTo(this.element()),
+            .appendTo(this.$element()),
 
             endDate = this._getEndDate();
         var tooltipLabel = messageLocalization.format("dxScheduler-editorLabelEndDate"),
@@ -197,23 +197,23 @@ var Appointment = DOMComponent.inherit({
     },
 
     _renderAllDayClass: function() {
-        this.element().toggleClass(APPOINTMENT_ALL_DAY_ITEM_CLASS, !!this.option("allDay"));
+        this.$element().toggleClass(APPOINTMENT_ALL_DAY_ITEM_CLASS, !!this.option("allDay"));
     },
 
     _renderRecurrenceClass: function() {
         var rule = this.invoke("getField", "recurrenceRule", this.option("data"));
 
         if(recurrenceUtils.getRecurrenceRule(rule).isValid) {
-            this.element().addClass(RECURRENCE_APPOINTMENT_CLASS);
+            this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);
         }
     },
 
     _renderCompactClass: function() {
-        this.element().toggleClass(COMPACT_APPOINTMENT_CLASS, !!this.option("isCompact"));
+        this.$element().toggleClass(COMPACT_APPOINTMENT_CLASS, !!this.option("isCompact"));
     },
 
     _renderDirection: function() {
-        this.element().addClass(DIRECTION_APPOINTMENT_CLASSES[this.option("direction")]);
+        this.$element().addClass(DIRECTION_APPOINTMENT_CLASSES[this.option("direction")]);
     },
 
     _renderResizable: function() {
@@ -223,7 +223,7 @@ var Appointment = DOMComponent.inherit({
 
         var config = this._resizingRules[this.option("direction")].apply(this);
         config.stepPrecision = "strict";
-        this._createComponent(this.element(), Resizable, extend(config, this.option("resizableConfig")));
+        this._createComponent(this.$element(), Resizable, extend(config, this.option("resizableConfig")));
     }
 
 }).include(publisherMixin);

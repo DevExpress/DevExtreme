@@ -41,8 +41,8 @@ QUnit.test("Tasks should be duplicated according to recurrence rule", function(a
         dataSource: dataSource
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 3, "tasks are OK");
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 2, "recurrence tasks are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 3, "tasks are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment-recurrence").length, 2, "recurrence tasks are OK");
 });
 
 QUnit.test("Tasks should be duplicated according to recurrence rule, if firstDayOfWeek was set", function(assert) {
@@ -59,7 +59,7 @@ QUnit.test("Tasks should be duplicated according to recurrence rule, if firstDay
         firstDayOfWeek: 4
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 3, "recurrence tasks are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment-recurrence").length, 3, "recurrence tasks are OK");
 });
 
 QUnit.test("Tasks should be duplicated according to recurrence rule and recurrence exception", function(assert) {
@@ -75,7 +75,7 @@ QUnit.test("Tasks should be duplicated according to recurrence rule and recurren
         dataSource: dataSource
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 5, "tasks are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment-recurrence").length, 5, "tasks are OK");
 });
 
 QUnit.test("Recurring appointments with resources should have color of the first resource if groups option is not defined", function(assert) {
@@ -99,7 +99,7 @@ QUnit.test("Recurring appointments with resources should have color of the first
         ]
     });
     var that = this;
-    $(this.instance.element()).find(".dx-scheduler-appointment").each(function() {
+    $(this.instance.$element()).find(".dx-scheduler-appointment").each(function() {
         assert.equal(that.getAppointmentColor($(this)), "#ff0000", "Color is OK");
     });
 
@@ -133,9 +133,9 @@ QUnit.test("Recurring Task dragging", function(assert) {
         allDay: false
     };
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var dataSourceItem = this.instance.option("dataSource").items()[0];
@@ -146,9 +146,9 @@ QUnit.test("Recurring Task dragging", function(assert) {
     assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, "New data is correct");
     assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, "New data is correct");
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(8).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(8).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     dataSourceItem = this.instance.option("dataSource").items()[0];
@@ -189,9 +189,9 @@ QUnit.test("Recurring Task dragging with 'series' recurrenceEditMode", function(
         allDay: false
     };
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
     var dataSourceItem = this.instance.option("dataSource").items()[0];
 
@@ -231,9 +231,9 @@ QUnit.test("Recurrent Task dragging with 'occurrence' recurrenceEditMode", funct
         recurrenceException: ""
     };
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
         updatedRecurringItem = this.instance.option("dataSource").items()[0];
@@ -267,9 +267,9 @@ QUnit.test("Updated single item should not have recurrenceException ", function(
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.end);
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var singleItem = this.instance.option("dataSource").items()[1];
@@ -305,9 +305,9 @@ QUnit.test("Recurrent Task dragging, single mode", function(assert) {
         recurrenceRule: ""
     };
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
@@ -343,9 +343,9 @@ QUnit.test("Recurrent Task dragging, single mode - recurrenceException updating 
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger(dragEvents.end);
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedRecurringItem = this.instance.option("dataSource").items()[0];
@@ -381,10 +381,10 @@ QUnit.test("Recurrent Task resizing, single mode", function(assert) {
         recurrenceRule: ""
     };
 
-    var cellHeight = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).outerHeight(),
+    var cellHeight = $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).outerHeight(),
         hourHeight = cellHeight * 2;
 
-    var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-bottom").eq(1)).start();
+    var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-bottom").eq(1)).start();
     pointer.dragStart().drag(0, hourHeight).dragEnd();
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
@@ -412,12 +412,12 @@ QUnit.test("Recurrence task resizing when currentDate != recStartDate (T488760)"
         }]
     });
 
-    var cellHeight = $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).outerHeight(),
-        pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-bottom").eq(0)).start();
+    var cellHeight = $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).outerHeight(),
+        pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-bottom").eq(0)).start();
 
     pointer.dragStart().drag(0, cellHeight).dragEnd();
 
-    var apptData = $(this.instance.element()).find(".dx-scheduler-appointment").dxSchedulerAppointment("instance").option("data");
+    var apptData = $(this.instance.$element()).find(".dx-scheduler-appointment").dxSchedulerAppointment("instance").option("data");
 
     assert.deepEqual(apptData.endDate, new Date(2017, 2, 20, 3), "End date is OK");
 });
@@ -441,7 +441,7 @@ QUnit.test("Recurrent Task deleting, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(0).trigger("dxclick");
@@ -472,7 +472,7 @@ QUnit.test("Recurrent Task editing, confirmation tooltip should be shown after t
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
     this.clock.tick(300);
     $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
 
@@ -507,7 +507,7 @@ QUnit.test("Recurrent Task editing, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
     this.clock.tick(300);
     $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
@@ -552,13 +552,13 @@ QUnit.test("Recurrent Task edition canceling, single mode", function(assert) {
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
     this.clock.tick(300);
     $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
     $(".dx-button.dx-popup-cancel").eq(0).trigger("dxclick");
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
     this.clock.tick(300);
     $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
     $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
@@ -588,7 +588,7 @@ QUnit.test("Recurrent Task editing, single mode - canceling", function(assert) {
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
     this.clock.tick(300);
     $(".dx-scheduler-appointment-tooltip-buttons .dx-button").eq(1).trigger("dxclick");
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
@@ -620,7 +620,7 @@ QUnit.test("Recurrent Task editing, confirmation tooltip should be shown after d
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(2).trigger(dblclickEvent.name);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger(dblclickEvent.name);
     this.clock.tick(300);
 
     assert.ok($(".dx-dialog.dx-overlay-modal").length, "Dialog was shown");
@@ -654,7 +654,7 @@ QUnit.test("Recurrent Task editing, single mode - double click", function(assert
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(2).trigger(dblclickEvent.name);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger(dblclickEvent.name);
     this.clock.tick(300);
 
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
@@ -710,9 +710,9 @@ QUnit.test("Recurrent allDay task dragging on month view, single mode", function
         recurrenceRule: ""
     };
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
@@ -758,9 +758,9 @@ QUnit.test("Recurrent allDay task dragging on month view, single mode, 24h appoi
         recurrenceRule: ""
     };
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(0).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
     $(".dx-dialog-buttons .dx-button").eq(1).trigger("dxclick");
 
     var updatedSingleItem = this.instance.option("dataSource").items()[1],
@@ -788,12 +788,12 @@ QUnit.test("Recurrence item in form should have a special css class", function(a
     var form = this.instance.getAppointmentDetailsForm(),
         recurrenceItemClass = "dx-scheduler-recurrence-rule-item",
         openedRecurrenceItemClass = "dx-scheduler-recurrence-rule-item-opened",
-        $recurrenceItem = form.element().find("." + recurrenceItemClass);
+        $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.notOk($recurrenceItem.hasClass(openedRecurrenceItemClass));
 
-    form.element().find(".dx-recurrence-switch").dxSwitch("instance").option("value", true);
-    $recurrenceItem = form.element().find("." + recurrenceItemClass);
+    form.$element().find(".dx-recurrence-switch").dxSwitch("instance").option("value", true);
+    $recurrenceItem = form.$element().find("." + recurrenceItemClass);
 
     assert.ok($recurrenceItem.hasClass(openedRecurrenceItemClass));
 });
@@ -869,7 +869,7 @@ QUnit.test("AllDay recurrence appointments should be rendered correctly after ch
     });
 
     this.instance.option("currentDate", new Date(2015, 2, 23));
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 7, "appointments are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment-recurrence").length, 7, "appointments are OK");
 });
 
 QUnit.test("AllDay recurrence appointments should be rendered correctly after changing currentDate, day view", function(assert) {
@@ -886,9 +886,9 @@ QUnit.test("AllDay recurrence appointments should be rendered correctly after ch
         currentDate: new Date(2015, 4, 26),
         dataSource: dataSource
     });
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 1, "appointments are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment-recurrence").length, 1, "appointments are OK");
     this.instance.option("currentDate", new Date(2015, 4, 27));
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 0, "appointments are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment-recurrence").length, 0, "appointments are OK");
 });
 
 QUnit.test("Recurring appt should be rendered correctly after changing of repeate count", function(assert) {
@@ -904,7 +904,7 @@ QUnit.test("Recurring appt should be rendered correctly after changing of repeat
     });
 
     this.instance.updateAppointment(task, newTask);
-    var appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal(appointments.length, 4, "appt was rendered correctly");
 });
@@ -933,7 +933,7 @@ QUnit.test("Recurring appt should be rendered correctly after setting recurrence
     });
 
     this.instance.updateAppointment(task, newTask);
-    var appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal(appointments.length, 2, "appt was rendered correctly");
 });

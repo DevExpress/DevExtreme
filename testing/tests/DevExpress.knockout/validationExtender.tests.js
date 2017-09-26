@@ -183,7 +183,7 @@ QUnit.test("dxValidator binding handler should be evaluated after editor binding
     registerComponent("dxTestEditor", { }, Editor.inherit({
         ctor: function() {
             this.callBase.apply(this, arguments);
-            assert.ok(!this.element().data("dxValidator"));
+            assert.ok(!this.$element().data("dxValidator"));
         }
     }));
 

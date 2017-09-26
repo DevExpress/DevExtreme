@@ -639,7 +639,7 @@ var Panorama = CollectionWidget.inherit({
 
     _elementWidth: function() {
         if(!this._elementWidthCache) {
-            this._elementWidthCache = this.element().width();
+            this._elementWidthCache = this.$element().width();
         }
 
         return this._elementWidthCache;
@@ -681,7 +681,7 @@ var Panorama = CollectionWidget.inherit({
     _initWrapper: function() {
         this._$wrapper = $("<div>")
             .addClass(PANORAMA_WRAPPER_CLASS)
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _initItemsRenderStrategy: function() {
@@ -705,7 +705,7 @@ var Panorama = CollectionWidget.inherit({
     _initBackgroundImage: function() {
         var backgroundUrl = this.option("backgroundImage.url");
         if(backgroundUrl) {
-            this.element().css("background-image", "url(" + backgroundUrl + ")");
+            this.$element().css("background-image", "url(" + backgroundUrl + ")");
         }
     },
 
@@ -749,7 +749,7 @@ var Panorama = CollectionWidget.inherit({
     },
 
     _render: function() {
-        this.element().addClass(PANORAMA_CLASS);
+        this.$element().addClass(PANORAMA_CLASS);
 
         this.callBase();
         this._initBackgroundImage();
@@ -765,7 +765,7 @@ var Panorama = CollectionWidget.inherit({
     },
 
     _updateBackgroundPosition: function(offset) {
-        moveBackground(this.element(), this._calculateBackgroundPosition(this.option("selectedIndex")) + offset);
+        moveBackground(this.$element(), this._calculateBackgroundPosition(this.option("selectedIndex")) + offset);
     },
 
     _updateTitlePosition: function(offset) {
@@ -779,7 +779,7 @@ var Panorama = CollectionWidget.inherit({
     },
 
     _animateBackgroundMove: function(toIndex) {
-        return animation.backgroundMove(this.element(), this._calculateBackgroundPosition(toIndex));
+        return animation.backgroundMove(this.$element(), this._calculateBackgroundPosition(toIndex));
     },
 
     _animateTitleMove: function(toIndex) {
@@ -817,8 +817,8 @@ var Panorama = CollectionWidget.inherit({
             animationEndPositionShift = isLeft ^ this.option("rtlEnabled") ? -this._calculateBackgroundScaledWidth() : this._calculateBackgroundScaledWidth(),
             animationEndPosition = afterAnimationPosition + animationEndPositionShift;
 
-        return animation.backgroundMove(this.element(), animationEndPosition, function() {
-            moveBackground(that.element(), afterAnimationPosition);
+        return animation.backgroundMove(this.$element(), animationEndPosition, function() {
+            moveBackground(that.$element(), afterAnimationPosition);
         });
     },
 
@@ -900,15 +900,15 @@ var Panorama = CollectionWidget.inherit({
     },
 
     _calculateBackgroundScaledWidth: function() {
-        return this.element().height() * this.option("backgroundImage.width") / (this.option("backgroundImage.height") || 1);
+        return this.$element().height() * this.option("backgroundImage.width") / (this.option("backgroundImage.height") || 1);
     },
 
     _initSwipeHandlers: function() {
-        eventsEngine.on(this.element(), eventUtils.addNamespace(swipeEvents.start, this.NAME), {
+        eventsEngine.on(this.$element(), eventUtils.addNamespace(swipeEvents.start, this.NAME), {
             itemSizeFunc: this._elementWidth.bind(this)
         }, this._swipeStartHandler.bind(this));
-        eventsEngine.on(this.element(), eventUtils.addNamespace(swipeEvents.swipe, this.NAME), this._swipeUpdateHandler.bind(this));
-        eventsEngine.on(this.element(), eventUtils.addNamespace(swipeEvents.end, this.NAME), this._swipeEndHandler.bind(this));
+        eventsEngine.on(this.$element(), eventUtils.addNamespace(swipeEvents.swipe, this.NAME), this._swipeUpdateHandler.bind(this));
+        eventsEngine.on(this.$element(), eventUtils.addNamespace(swipeEvents.end, this.NAME), this._swipeEndHandler.bind(this));
     },
 
     _swipeStartHandler: function(e) {
@@ -923,7 +923,7 @@ var Panorama = CollectionWidget.inherit({
     },
 
     _stopAnimations: function() {
-        endAnimation([this.element(), this._$ghostTitle, this._$title]);
+        endAnimation([this.$element(), this._$ghostTitle, this._$title]);
         endAnimation(this._itemsRenderStrategy.allItemElements());
     },
 

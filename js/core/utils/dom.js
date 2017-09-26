@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
+    config = require("../config"),
     inArray = require("./array").inArray,
     typeUtils = require("./type"),
     isDefined = typeUtils.isDefined,
@@ -169,6 +170,13 @@ var contains = function(container, element) {
     return container.nodeType === Node.DOCUMENT_NODE ? container.body.contains(element) : container.contains(element);
 };
 
+var getPublicElement = function($element) {
+    if(config().useJQueryRenderer) {
+        return $element;
+    }
+    return $element.get(0);
+};
+
 exports.resetActiveElement = resetActiveElement;
 exports.createMarkupFromString = createMarkupFromString;
 exports.triggerShownEvent = triggerVisibilityChangeEvent("dxshown");
@@ -183,3 +191,4 @@ exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.toggleAttr = toggleAttr;
 exports.contains = contains;
+exports.getPublicElement = getPublicElement;

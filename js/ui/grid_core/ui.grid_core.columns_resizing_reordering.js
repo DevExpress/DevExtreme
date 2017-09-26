@@ -884,7 +884,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         that._rowsView = that.getView("rowsView");
         that._columnsController = that.getController("columns");
         that._tablePositionController = that.getController("tablePosition");
-        that._$parentContainer = that._columnsSeparatorView.component.element();
+        that._$parentContainer = that._columnsSeparatorView.component.$element();
 
         that._subscribeToCallback(that._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
         that._subscribeToCallback(that._columnHeadersView.resizeCompleted, generatePointsByColumnsHandler);

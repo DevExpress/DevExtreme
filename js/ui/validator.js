@@ -159,7 +159,7 @@ var Validator = DOMComponent.inherit({
 
     _initAdapter: function() {
         var that = this,
-            element = that.element()[0],
+            element = that.$element()[0],
             dxStandardEditor = dataUtils.data(element, "dx-validation-target"),
             adapter = that.option("adapter");
         if(!adapter) {
@@ -193,7 +193,7 @@ var Validator = DOMComponent.inherit({
     },
 
     _render: function() {
-        this.element().addClass(VALIDATOR_CLASS);
+        this.$element().addClass(VALIDATOR_CLASS);
         this.callBase();
     },
 

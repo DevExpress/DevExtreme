@@ -1427,7 +1427,7 @@ QUnit.test("Editors with object value correctly work with values from data", fun
         ]
     }).data("dxLayoutManager");
 
-    var lookupCurrentItemText = layoutManager.element().find(".dx-lookup-field").text();
+    var lookupCurrentItemText = layoutManager.$element().find(".dx-lookup-field").text();
 
     //assert
     assert.equal(lookupCurrentItemText, "test2", "lookup has correct current item");
@@ -2143,7 +2143,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
 
     //act
     editor = layoutManager.getEditor("profession");
-    triggerKeyUp(editor.element(), 13);
+    triggerKeyUp(editor.$element(), 13);
 
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
@@ -2154,7 +2154,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
 
     //act
     editor = layoutManager.getEditor("name");
-    triggerKeyUp(editor.element(), 13);
+    triggerKeyUp(editor.$element(), 13);
 
     //assert
     assert.notEqual(testArgs.component, undefined, "component");

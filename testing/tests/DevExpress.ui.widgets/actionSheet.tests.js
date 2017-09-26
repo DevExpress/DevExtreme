@@ -295,7 +295,7 @@ QUnit.test("regression: B233733 dxActionSheet: popup hides on render", function(
     this.instance.show();
     this.instance.option("items", items);
 
-    var popup = this.instance.element().find(".dx-popup").dxPopup("instance");
+    var popup = this.instance.$element().find(".dx-popup").dxPopup("instance");
 
     assert.ok(popup.option("visible"), "popup is shown after items change");
     assert.equal(popup.content().text(), ["Action 1", "Action 2", "Cancel"].join(""), "popup refreshed after items change");

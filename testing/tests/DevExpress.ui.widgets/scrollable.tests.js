@@ -118,9 +118,9 @@ QUnit.test("scrollable - root element should has 'dx-scrollable-customizable-scr
     var scrollable = new Scrollable($("#scrollable"));
 
     if(devices.real().deviceType !== "desktop" || navigator.platform.indexOf('Mac') > -1 && browser.webkit) {
-        assert.notOk(scrollable.element().hasClass("dx-scrollable-customizable-scrollbars"), "root element hasn't 'dx-scrollable-customizable-scrollbars' class");
+        assert.notOk(scrollable.$element().hasClass("dx-scrollable-customizable-scrollbars"), "root element hasn't 'dx-scrollable-customizable-scrollbars' class");
     } else {
-        assert.ok(scrollable.element().hasClass("dx-scrollable-customizable-scrollbars"), "root element has 'dx-scrollable-customizable-scrollbars' class");
+        assert.ok(scrollable.$element().hasClass("dx-scrollable-customizable-scrollbars"), "root element has 'dx-scrollable-customizable-scrollbars' class");
     }
 });
 
@@ -1794,7 +1794,7 @@ QUnit.test("container size should be rounded to prevent unexpected scrollbar app
         contentSize: 101
     });
 
-    assert.ok(scrollbar.element().is(":hidden"), "scrollbar is not visible");
+    assert.ok(scrollbar.$element().is(":hidden"), "scrollbar is not visible");
 });
 
 QUnit.test("content size should be rounded to prevent unexpected scrollbar appearance", function(assert) {
@@ -1803,7 +1803,7 @@ QUnit.test("content size should be rounded to prevent unexpected scrollbar appea
         contentSize: 100.4
     });
 
-    assert.ok(scrollbar.element().is(":hidden"), "scrollbar is not visible");
+    assert.ok(scrollbar.$element().is(":hidden"), "scrollbar is not visible");
 });
 
 QUnit.module("api", moduleConfig);
@@ -3410,7 +3410,7 @@ QUnit.test("scrollbar is visible for parent scrollable after mouse leave for chi
     $childrenContainer.trigger($.Event("mouseenter", { originalEvent: { target: $childrenContainer.get(0) } }));
 
     var childrenScrollbar = Scrollbar.getInstance($childScrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS));
-    var parentScrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.element()));
+    var parentScrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.$element()));
 
     assert.equal(parentScrollbar.option("visible"), false, "parent scrollbar is hidden");
     assert.equal(childrenScrollbar.option("visible"), true, "children scrollbar is visible");
@@ -3446,7 +3446,7 @@ QUnit.test("scrollbar is visible for parent scrollable after start", function(as
     $childrenContainer.trigger($.Event("mouseleave", { originalEvent: { target: $childrenContainer.get(0) } }));
 
     var childrenScrollbar = Scrollbar.getInstance($childScrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS));
-    var parentScrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.element()));
+    var parentScrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.$element()));
 
     assert.equal(parentScrollbar.option("visible"), false, "parent scrollbar is hidden");
     assert.equal(childrenScrollbar.option("visible"), true, "children scrollbar is visible");

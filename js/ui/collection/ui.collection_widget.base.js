@@ -295,7 +295,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _initItemsFromMarkup: function() {
-        var $items = this.element().contents().filter(ITEMS_SELECTOR);
+        var $items = this.$element().contents().filter(ITEMS_SELECTOR);
         if(!$items.length || this.option("items").length) {
             return;
         }
@@ -323,7 +323,7 @@ var CollectionWidget = Widget.inherit({
 
         $item.detach().clone()
             .attr("data-options", templateOptions)
-            .data("options", templateOptions).appendTo(this.element());
+            .data("options", templateOptions).appendTo(this.$element());
 
         return templateId;
     },
@@ -337,7 +337,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _focusTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _focusInHandler: function(e) {
@@ -657,7 +657,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     },
 
     _itemClass: function() {
@@ -697,7 +697,7 @@ var CollectionWidget = Widget.inherit({
 
         this.callBase();
 
-        this.element().addClass(COLLECTION_CLASS);
+        this.$element().addClass(COLLECTION_CLASS);
 
         this._attachClickEvent();
         this._attachHoldEvent();
@@ -964,7 +964,7 @@ var CollectionWidget = Widget.inherit({
 
     _createItemRenderAction: function() {
         return (this._itemRenderAction = this._createActionByOption("onItemRendered", {
-            element: this.element(),
+            element: this.$element(),
             excludeValidators: ["designMode", "disabled", "readOnly"],
             category: "rendering"
         }));
@@ -1012,7 +1012,7 @@ var CollectionWidget = Widget.inherit({
                 .html(noDataText);
             this.setAria("label", noDataText);
         }
-        this.element().toggleClass(EMPTY_COLLECTION, !hideNoData);
+        this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
     },
 
     _itemJQueryEventHandler: function(jQueryEvent, handlerOptionName, actionArgs, actionConfig) {

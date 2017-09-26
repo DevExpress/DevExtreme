@@ -192,7 +192,7 @@ var TabPanel = MultiView.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(TABPANEL_CLASS);
+        this.$element().addClass(TABPANEL_CLASS);
 
         this.setAria("role", "tabpanel");
     },
@@ -253,7 +253,7 @@ var TabPanel = MultiView.inherit({
             return;
         }
 
-        var $element = this.element();
+        var $element = this.$element();
 
         this._$tabContainer = $("<div>")
             .addClass(TABPANEL_TABS_CLASS)

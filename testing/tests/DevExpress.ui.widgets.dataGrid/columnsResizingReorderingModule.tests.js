@@ -777,12 +777,12 @@ function getJQueryEvent(options) {
                     return function(e) {
                         return action.execute.call(action, $.extend(e, {
                             component: that,
-                            element: that.component.element()
+                            element: that.component.$element()
                         }));
                     };
                 },
 
-                element: function() {
+                $element: function() {
                     return $("#container");
                 },
 
@@ -2872,7 +2872,7 @@ function getJQueryEvent(options) {
             that.component = {
                 NAME: "dxDataGrid",
 
-                element: function() {
+                $element: function() {
                     return $("#container");
                 },
 

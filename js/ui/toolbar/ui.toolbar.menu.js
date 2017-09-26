@@ -49,7 +49,7 @@ var ToolbarMenu = List.inherit({
     },
 
     _updateSections: function() {
-        var $sections = this.element().find("." + TOOLBAR_MENU_SECTION_CLASS);
+        var $sections = this.$element().find("." + TOOLBAR_MENU_SECTION_CLASS);
         $sections.removeClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
         $sections.not(":empty").eq(-1).addClass(TOOLBAR_MENU_LAST_SECTION_CLASS);
     },

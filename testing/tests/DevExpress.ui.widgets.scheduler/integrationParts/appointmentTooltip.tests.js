@@ -54,7 +54,7 @@ QUnit.test("Click on appointment should call scheduler.showAppointmentTooltip", 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
     var stub = sinon.stub(this.instance, "showAppointmentTooltip");
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     assert.deepEqual(stub.getCall(0).args[0],
@@ -81,7 +81,7 @@ QUnit.test("Click on disabled appointment should not call scheduler.showAppointm
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
     var stub = sinon.stub(this.instance, "showAppointmentTooltip");
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     assert.notOk(stub.called, "showAppointmentTooltip doesn't called");
@@ -98,7 +98,7 @@ QUnit.test("Click on appointment should not call scheduler.showAppointmentToolti
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, disabled: true });
     var stub = sinon.stub(this.instance, "showAppointmentTooltip");
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     assert.equal(stub.calledOnce, false, "Observer was not notified");
@@ -123,17 +123,17 @@ QUnit.test("Shown tooltip should have right boundary", function(assert) {
         });
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-    var $firstAppointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1),
+    var $firstAppointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1),
         firstItemData = $firstAppointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(firstItemData, $firstAppointment);
-    assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), this.instance.getWorkSpace().element().find(".dx-scrollable-container").get(0), "Boundary is correct");
+    assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), this.instance.getWorkSpace().$element().find(".dx-scrollable-container").get(0), "Boundary is correct");
 
-    var $secondAppointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
+    var $secondAppointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0),
         secondItemData = $secondAppointment.data("dxItemData");
 
     this.instance.showAppointmentTooltip(secondItemData, $secondAppointment);
-    assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), $(this.instance.element()).get(0), "Boundary of allDay appointment is correct");
+    assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), $(this.instance.$element()).get(0), "Boundary of allDay appointment is correct");
 });
 
 QUnit.test("'rtlEnabled' option value should be passed to appointmentTooltip", function(assert) {
@@ -144,7 +144,7 @@ QUnit.test("'rtlEnabled' option value should be passed to appointmentTooltip", f
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, rtlEnabled: true });
     this.clock.tick();
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     assert.equal(Tooltip.getInstance($(".dx-tooltip")).option("rtlEnabled"), true, "rtlEnabled for tooltip was set to true");
@@ -159,7 +159,7 @@ QUnit.test("Scheduler appointment tooltip should has right content", function(as
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip");
@@ -192,7 +192,7 @@ QUnit.test("Scheduler appointment tooltip should has right content when appointm
         }
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".new-scheduler-tooltip-template");
@@ -209,7 +209,7 @@ QUnit.test("Scheduler appointment tooltip dates are displayed with right format,
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "day" });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -226,7 +226,7 @@ QUnit.test("Scheduler tooltip should be closed after call hideAppointmentTooltip
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "day" });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     assert.equal($(".dx-scheduler-appointment-tooltip").length, 1, "tooltip is shown");
@@ -247,7 +247,7 @@ QUnit.test("Appointment Tooltip on Day view should have a right dates", function
         cellDuration: 60
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -271,7 +271,7 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when custom t
     var deltaTz = getDeltaTz(5, startDate);
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week", timeZone: 5 });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -322,7 +322,7 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when appointm
         currentView: "week"
     });
 
-    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0);
 
     this.instance.showAppointmentTooltip(appointment, $appointment);
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -350,7 +350,7 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when appointm
         timeZone: "Asia/Qyzylorda"
     });
 
-    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0);
     this.instance.showAppointmentTooltip(appointment, $appointment);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -369,7 +369,7 @@ QUnit.test("Scheduler appointment tooltip dates are displayed with right format,
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "month", maxAppointmentsPerCell: null });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -391,7 +391,7 @@ QUnit.test("Click on tooltip-edit button should call scheduler.showAppointmentPo
 
     var stub = sinon.stub(this.instance, "showAppointmentPopup");
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip");
@@ -419,7 +419,7 @@ QUnit.test("Click on tooltip-remove button should call scheduler.deleteAppointme
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
     var stub = sinon.stub(this.instance, "deleteAppointment");
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip");
@@ -448,7 +448,7 @@ QUnit.test("Tooltip should appear if mouse is over arrow icon", function(assert)
         dataSource: [{ startDate: new Date(2015, 4, 10), endDate: endDate }]
     });
 
-    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment"),
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment"),
         $arrowIcon = $appointment.find(".dx-scheduler-appointment-reduced-icon");
 
     $arrowIcon.trigger("dxpointerenter");
@@ -475,7 +475,7 @@ QUnit.test("showAppointmentTooltip should be called after click on arrow icon an
         dataSource: [{ startDate: new Date(2015, 4, 10), endDate: endDate }]
     });
 
-    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment"),
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment"),
         $arrowIcon = $appointment.find(".dx-scheduler-appointment-reduced-icon");
 
     $arrowIcon.trigger("dxpointerenter");
@@ -504,7 +504,7 @@ QUnit.test("Tooltip of allDay appointment should display right dates", function(
         }]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -529,7 +529,7 @@ QUnit.test("Tooltip of allDay appointment with startDate = endDate should displa
         }]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -553,7 +553,7 @@ QUnit.test("Tooltip of multiday appointment should display date & time for usual
         }]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -577,7 +577,7 @@ QUnit.test("Tooltip of multiday appointment should display date & time for month
         }]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -601,7 +601,7 @@ QUnit.test("Tooltip of appointment part after midnight should display right date
         }]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -626,7 +626,7 @@ QUnit.test("Tooltip of recurrence appointment part after midnight should display
         }]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(2).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip"),
@@ -652,7 +652,7 @@ QUnit.test("Tooltip for recurrence appointment should display right dates(T38418
         }]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
 
     this.clock.tick(300);
 
@@ -676,7 +676,7 @@ QUnit.test("Tooltip should hide when window was resized", function(assert) {
         }]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
     this.clock.tick(300);
 
     var $tooltip = $(".dx-scheduler-appointment-tooltip");
@@ -705,8 +705,8 @@ QUnit.test("Tooltip for the same appointment should not be rendered twice if it 
         dataSource: [appt1, appt2]
     });
 
-    var $appt1 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
-        $appt2 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1);
+    var $appt1 = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0),
+        $appt2 = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1);
 
     this.instance.showAppointmentTooltip(appt1, $appt1);
     var tooltip = appointmentTooltip._tooltip;
@@ -733,7 +733,7 @@ QUnit.test("Appointment tooltip should be hidden after immediately delete key pr
         focusStateEnabled: true
     });
 
-    var $appt1 = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
+    var $appt1 = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0),
         keyboard = keyboardMock($appt1),
         notifyStub = sinon.spy(this.instance.getAppointmentsInstance(), "notifyObserver");
 

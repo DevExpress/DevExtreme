@@ -191,11 +191,11 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     },
 
     _detachGroupCountAttr: function() {
-        this.element().removeAttr(AGENDA_GROUPED_ATTR);
+        this.$element().removeAttr(AGENDA_GROUPED_ATTR);
     },
 
     _attachGroupCountAttr: function() {
-        this.element().attr(AGENDA_GROUPED_ATTR, this.option("groups").length);
+        this.$element().attr(AGENDA_GROUPED_ATTR, this.option("groups").length);
     },
 
     _removeEmptyRows: function(rows) {
@@ -293,7 +293,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         }
 
         this._dateTableScrollable.content().append(this._$timePanel, this._$dateTable);
-        this.element().append(this._dateTableScrollable.element());
+        this.$element().append(this._dateTableScrollable.$element());
     },
 
     _renderDateTable: function() {

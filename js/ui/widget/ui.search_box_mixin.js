@@ -75,7 +75,7 @@ module.exports = {
 
     _renderSearch: function() {
         var editorOptions,
-            $element = this.element(),
+            $element = this.$element(),
             searchEnabled = this.option("searchEnabled"),
             searchBoxClassName = this._addWidgetPrefix("search"),
             rootElementClassName = this._addWidgetPrefix("with-search");
@@ -120,7 +120,7 @@ module.exports = {
     },
 
     _getAriaTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _focusTarget: function() {
@@ -133,7 +133,7 @@ module.exports = {
 
     _updateFocusState: function(e, isFocused) {
         if(this.option("searchEnabled")) {
-            this._toggleFocusClass(isFocused, this.element());
+            this._toggleFocusClass(isFocused, this.$element());
         }
         this.callBase(e, isFocused);
     },
