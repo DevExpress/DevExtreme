@@ -213,6 +213,7 @@
         "dxFilterBuilder-notAnd": "Не И",
         "dxFilterBuilder-notOr": "Не Или",
         "dxFilterBuilder-addCondition": "Добавить условие",
-        "dxFilterBuilder-addGroup": "Добавить группу"
+        "dxFilterBuilder-addGroup": "Добавить группу",
+        "dxFilterBuilder-enterValueText": "<введите значение>"
     }
 }

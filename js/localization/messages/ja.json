@@ -213,6 +213,7 @@
         "dxFilterBuilder-notAnd": "!TODO!",
         "dxFilterBuilder-notOr": "!TODO!",
         "dxFilterBuilder-addCondition": "!TODO!",
-        "dxFilterBuilder-addGroup": "!TODO!"
+        "dxFilterBuilder-addGroup": "!TODO!",
+        "dxFilterBuilder-enterValueText": "!TODO!"
     }
 }

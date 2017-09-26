@@ -332,12 +332,12 @@ var FilterBuilder = Widget.inherit({
                 .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS);
 
         var setText = function(item, field, $container) {
-            var caption = utils.getCurrentValueText(field, item[2]) || " ";
+            var valueText = utils.getCurrentValueText(field, item[2]) || messageLocalization.format("dxFilterBuilder-enterValueText");
 
             var $text = $("<div>")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS)
                 .attr("tabindex", 0)
-                .text(caption);
+                .text(valueText);
 
             that._subscribeOnClickAndEnterKey($text, function() {
                 $container.empty();
