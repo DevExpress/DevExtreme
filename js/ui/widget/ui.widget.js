@@ -352,7 +352,7 @@ var Widget = DOMComponent.inherit({
 
                 var dispose = false;
                 var template = this._acquireTemplate(templateSourceResult, function(templateSource) {
-                    if(templateSource.nodeType || templateSource.jquery && !$(templateSource).is("script")) {
+                    if(templateSource.nodeType || typeUtils.isRenderer(templateSource) && !$(templateSource).is("script")) {
                         return new FunctionTemplate(function() {
                             return templateSource;
                         });
@@ -380,11 +380,11 @@ var Widget = DOMComponent.inherit({
         }
 
         //TODO: templateSource.render is needed for angular2 integration. Try to remove it after supporting TypeScript modules.
-        if(typeUtils.isFunction(templateSource.render) && !templateSource.jquery) {
+        if(typeUtils.isFunction(templateSource.render) && !typeUtils.isRenderer(templateSource)) {
             return templateSource;
         }
 
-        if(templateSource.nodeType || templateSource.jquery) {
+        if(templateSource.nodeType || typeUtils.isRenderer(templateSource)) {
             templateSource = $(templateSource);
 
             return createTemplate(templateSource);
@@ -408,7 +408,7 @@ var Widget = DOMComponent.inherit({
 
     _createTemplateIfNeeded: function(templateSource) {
         var templateKey = function(templateSource) {
-            return (templateSource.jquery && templateSource[0]) || templateSource;
+            return (typeUtils.isRenderer(templateSource) && templateSource[0]) || templateSource;
         };
 
         var cachedTemplate = this._tempTemplates.filter(function(t) {
@@ -509,13 +509,14 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderFocusState: function() {
+        this._attachKeyboardEvents();
+
         if(!this.option("focusStateEnabled") || this.option("disabled")) {
             return;
         }
 
         this._renderFocusTarget();
         this._attachFocusEvents();
-        this._attachKeyboardEvents();
         this._renderAccessKey();
     },
 
@@ -643,12 +644,18 @@ var Widget = DOMComponent.inherit({
     },
 
     _attachKeyboardEvents: function() {
-        var processor = this.option("_keyboardProcessor") || new KeyboardProcessor({
-            element: this._keyboardEventBindingTarget(),
-            focusTarget: this._focusTarget()
-        });
+        var processor = this.option("_keyboardProcessor");
 
-        this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
+        if(processor) {
+            this._keyboardProcessor = processor.reinitialize(this._keyboardHandler, this);
+        } else if(this.option("focusStateEnabled")) {
+            this._keyboardProcessor = new KeyboardProcessor({
+                element: this._keyboardEventBindingTarget(),
+                handler: this._keyboardHandler,
+                focusTarget: this._focusTarget(),
+                context: this
+            });
+        }
     },
 
     _keyboardHandler: function(options) {
@@ -681,6 +688,7 @@ var Widget = DOMComponent.inherit({
 
         if(this._keyboardProcessor) {
             this._keyboardProcessor.dispose();
+            delete this._keyboardProcessor;
         }
     },
 

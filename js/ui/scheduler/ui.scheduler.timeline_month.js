@@ -8,6 +8,19 @@ var TIMELINE_CLASS = "dx-scheduler-timeline-month",
     DAY_IN_MILLISECONDS = 86400000;
 
 var SchedulerTimelineMonth = SchedulerTimeline.inherit({
+
+    _renderView: function() {
+        this.callBase();
+
+        this._updateScrollable();
+    },
+
+    _updateScrollable: function() {
+        this._dateTableScrollable.update();
+        this._headerScrollable.update();
+        this._sidebarScrollable.update();
+    },
+
     _getElementClass: function() {
         return TIMELINE_CLASS;
     },
@@ -17,8 +30,19 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
     },
 
     _getCellCount: function() {
-        var currentDate = this.option("currentDate");
-        return new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        var currentDate = this.option("currentDate"),
+            cellCount = 0;
+        if(this._isWorkSpaceWithCount()) {
+            var intervalCount = this.option("intervalCount");
+
+            for(var i = 1; i <= intervalCount; i++) {
+                cellCount += new Date(currentDate.getFullYear(), currentDate.getMonth() + i, 0).getDate();
+            }
+        } else {
+            cellCount = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0).getDate();
+        }
+
+        return cellCount;
     },
 
     _setFirstViewDate: function() {

@@ -146,27 +146,6 @@ module.exports = {
                         return gridCoreUtils.combineFilters([filter, searchFilter]);
                     },
 
-                    _loadDataSource: function() {
-                        var that = this,
-                            callBase = that.callBase,
-                            searchText = that.option("searchPanel.text"),
-                            columnsController = that._columnsController,
-                            columns = columnsController.getColumns(),
-                            hasLookup = columns.filter(function(column) { return !!column.lookup; }).length,
-                            result;
-
-                        if(searchText && hasLookup) {
-                            result = $.Deferred();
-                            columnsController.refresh(true).always(function() {
-                                callBase.apply(that, arguments).then(result.resolve, result.reject);
-                            });
-                        } else {
-                            result = callBase.apply(that, arguments);
-                        }
-
-                        return result;
-                    },
-
                     /**
                      * @name GridBaseMethods_searchByText
                      * @publicName searchByText(text)
@@ -279,6 +258,11 @@ module.exports = {
                 };
             })(),
             rowsView: {
+                init: function() {
+                    this.callBase.apply(this, arguments);
+                    this._searchParams = [];
+                },
+
                 _highlightSearchText: function(cellElement, isEquals, column) {
                     var that = this,
                         $parent,
@@ -317,7 +301,7 @@ module.exports = {
                                 if(content.nodeType !== 3) return;
 
                                 var highlightSearchTextInTextNode = function($content, searchText) {
-                                    var $searchTextSpan = $("<span />").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
+                                    var $searchTextSpan = $("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)),
                                         text = $content.text(),
                                         index = normalizeString(text).indexOf(normalizeString(searchText));
 
@@ -336,7 +320,7 @@ module.exports = {
 
                                 if(isEquals) {
                                     if(normalizeString($(content).text()) === normalizeString(searchText)) {
-                                        $(this).replaceWith($("<span />").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
+                                        $(this).replaceWith($("<span>").addClass(that.addWidgetPrefix(SEARCH_TEXT_CLASS)).text($(content).text()));
                                     }
                                 } else {
                                     highlightSearchTextInTextNode($(content), searchText);
@@ -349,23 +333,50 @@ module.exports = {
                 _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
+                    //T103538
                     if(this.option("rowTemplate")) {
-                        //T103538
-                        this._highlightSearchText(this._getTableElement());
+                        if(this.option("templatesRenderAsynchronously")) {
+                            clearTimeout(this._highlightTimer);
+
+                            this._highlightTimer = setTimeout(function() {
+                                this._highlightSearchText(this._getTableElement());
+                            }.bind(this));
+                        } else {
+                            this._highlightSearchText(this._getTableElement());
+                        }
                     }
                 },
 
                 _updateCell: function($cell, parameters) {
-                    var that = this,
-                        column = parameters.column,
+                    var column = parameters.column,
                         dataType = column.lookup && column.lookup.dataType || column.dataType,
                         isEquals = dataType !== "string";
 
                     if(allowSearch(column)) {
-                        that._highlightSearchText($cell, isEquals, column);
+                        if(this.option("templatesRenderAsynchronously")) {
+                            if(!this._searchParams.length) {
+                                clearTimeout(this._highlightTimer);
+
+                                this._highlightTimer = setTimeout(function() {
+                                    this._searchParams.forEach(function(params) {
+                                        this._highlightSearchText.apply(this, params);
+                                    }.bind(this));
+
+                                    this._searchParams = [];
+                                }.bind(this));
+                            }
+                            this._searchParams.push([$cell, isEquals, column]);
+                        } else {
+                            this._highlightSearchText($cell, isEquals, column);
+                        }
                     }
 
-                    that.callBase($cell, parameters);
+                    this.callBase($cell, parameters);
+                },
+
+                dispose: function() {
+                    clearTimeout(this._highlightTimer);
+                    this.callBase();
                 }
             }
         }

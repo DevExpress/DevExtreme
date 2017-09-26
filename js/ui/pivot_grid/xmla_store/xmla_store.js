@@ -9,7 +9,9 @@ var $ = require("../../../core/renderer"),
     iteratorUtils = require("../../../core/utils/iterator"),
     inArray = require("../../../core/utils/array").inArray,
     pivotGridUtils = require("../ui.pivot_grid.utils"),
-    when = require("../../../integration/jquery/deferred").when,
+    deferredUtils = require("../../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     getLanguageId = require("../../../localization/language_codes").getLanguageId;
 
 exports.XmlaStore = Class.inherit((function() {
@@ -30,7 +32,7 @@ exports.XmlaStore = Class.inherit((function() {
         MD_DIMTYPE_MEASURE = "2";
 
     function execXMLA(requestOptions, data) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             beforeSend = requestOptions.beforeSend,
             ajaxSettings = {
                 url: requestOptions.url,
@@ -838,7 +840,7 @@ exports.XmlaStore = Class.inherit((function() {
                 measuresRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASURES", localeIdProperty)),
                 hierarchiesRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_HIERARCHIES", localeIdProperty)),
                 levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_LEVELS", localeIdProperty)),
-                result = $.Deferred();
+                result = new Deferred();
 
             when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest).done(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) {
                 var dimensions = parseDimensionsDiscoverRowSet(dimensionsResponse),
@@ -866,7 +868,7 @@ exports.XmlaStore = Class.inherit((function() {
         },
 
         load: function(options) {
-            var result = $.Deferred(),
+            var result = new Deferred(),
                 storeOptions = this._options,
                 parseOptions = {},
                 mdxString = generateMDX(options, storeOptions.cube, parseOptions);
@@ -897,7 +899,7 @@ exports.XmlaStore = Class.inherit((function() {
         },
 
         getDrillDownItems: function(options, params) {
-            var result = $.Deferred(),
+            var result = new Deferred(),
                 storeOptions = this._options,
                 mdxString = generateDrillDownMDX(options, storeOptions.cube, params);
 

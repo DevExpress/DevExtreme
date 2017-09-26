@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     resizeCallbacks = require("../../core/utils/window").resizeCallbacks,
     support = require("../../core/utils/support"),
+    styleUtils = require("../../core/utils/style"),
     devices = require("../../core/devices");
 
 var initMobileViewport = function(options) {
@@ -16,7 +17,7 @@ var initMobileViewport = function(options) {
 
     var metaSelector = "meta[name=viewport]";
     if(!$(metaSelector).length) {
-        $("<meta />").attr("name", "viewport").appendTo("head");
+        $("<meta>").attr("name", "viewport").appendTo("head");
     }
 
     var metaVerbs = ["width=device-width"],
@@ -43,7 +44,7 @@ var initMobileViewport = function(options) {
     }
 
     if(!allowSelection && support.supportProp("user-select")) {
-        $(".dx-viewport").css(support.styleProp("user-select"), "none");
+        $(".dx-viewport").css(styleUtils.styleProp("user-select"), "none");
     }
 
     $(metaSelector).attr("content", metaVerbs.join());

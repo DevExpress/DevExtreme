@@ -1,13 +1,13 @@
 "use strict";
 
-var isFunction = require("../../core/utils/type").isFunction,
-    inArray = require("./array").inArray;
+var isFunction = require("../../core/utils/type").isFunction;
 
 var Callback = function(options) {
     this._options = options || {};
     this._list = [];
     this._queue = [];
     this._firing = false;
+    this._fired = false;
     this._firingIndexes = [];
 };
 
@@ -25,7 +25,7 @@ Callback.prototype._fireCore = function(context, args) {
         }
     }
 
-    firingIndexes.unshift(step);
+    firingIndexes.pop();
 };
 
 
@@ -39,7 +39,7 @@ Callback.prototype.add = function(fn) {
 Callback.prototype.remove = function(fn) {
     var list = this._list,
         firingIndexes = this._firingIndexes,
-        index = inArray(fn, list);
+        index = list.indexOf(fn);
 
     if(index > -1) {
         list.splice(index, 1);
@@ -59,7 +59,7 @@ Callback.prototype.remove = function(fn) {
 Callback.prototype.has = function(fn) {
     var list = this._list;
 
-    return fn ? inArray(fn, list) > -1 : !!list.length;
+    return fn ? list.indexOf(fn) > -1 : !!list.length;
 };
 
 Callback.prototype.empty = function(fn) {
@@ -93,12 +93,17 @@ Callback.prototype.fireWith = function(context, args) {
     }
 
     this._firing = false;
+    this._fired = true;
 
     return this;
 };
 
 Callback.prototype.fire = function() {
     this.fireWith(this, arguments);
+};
+
+Callback.prototype.fired = function() {
+    return this._fired;
 };
 
 var Callbacks = function(options) {

@@ -20,7 +20,8 @@ var $ = require("../../core/renderer"),
     dateLocalization = require("../../localization/date"),
     messageLocalization = require("../../localization/message"),
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    Draggable = require("../draggable");
+    Draggable = require("../draggable"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var COMPONENT_CLASS = "dx-scheduler-scrollable-appointments",
     APPOINTMENT_ITEM_CLASS = "dx-scheduler-appointment",
@@ -252,7 +253,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _clearDropDownItems: function() {
         this._virtualAppointments = {};
 
-        var $items = this.element().find(".dx-scheduler-dropdown-appointments");
+        var $items = this._itemContainer().find(".dx-scheduler-dropdown-appointments");
         if(!$items.length) {
             return;
         }
@@ -685,7 +686,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _paintAppointment: function($appointment, groupIndex) {
-        var res = $.Deferred();
+        var res = new Deferred();
         this.notifyObserver("getAppointmentColor", {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
@@ -745,14 +746,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 that._skipDraggableRestriction(e);
 
                 that.notifyObserver("hideAppointmentTooltip");
-                that.notifyObserver("getDragEventTargetElements", {
-                    callback: function(result) {
-                        if(result) {
-                            e.targetElements = result;
-                        }
-                    }
-                });
-
                 $fixedContainer.append($appointment);
 
                 that._$currentAppointment = $(args.element);
@@ -786,7 +779,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 result = offset;
             }
         });
-
         return result;
     },
 
@@ -828,6 +820,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             };
         }
 
+        appointmentData.settings = [appointmentSetting];
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
         this._virtualAppointments[virtualGroupIndex].items.colors.push(color);
 
@@ -1055,7 +1048,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             startDate.setDate(startDate.getDate() + 1);
         }
 
-        while(appointmentIsLong && startDate.getTime() < endDate.getTime() - 1 && startDate.getTime() < maxAllowedDate.getTime()) {
+        while(appointmentIsLong && startDate.getTime() < endDate.getTime() - 1 && startDate < maxAllowedDate) {
             var currentStartDate = new Date(startDate),
                 currentEndDate = new Date(startDate);
 
@@ -1068,7 +1061,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
             this._applyEndDateToObj(currentEndDate, appointmentSettings);
             appointmentData.settings = appointmentSettings;
             result.push(appointmentData);
+
             startDate.setDate(startDate.getDate() + 1);
+            startDate.setHours(startDayHour);
         }
 
         return result;

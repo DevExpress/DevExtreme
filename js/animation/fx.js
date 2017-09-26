@@ -13,7 +13,9 @@ var $ = require("../core/renderer"),
     positionUtils = require("./position"),
     removeEvent = require("../core/remove_event"),
     eventUtils = require("../events/utils"),
-    when = require("../integration/jquery/deferred").when,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     transitionEndEventName = support.transitionEndEventName + ".dxFX",
     removeEventName = eventUtils.addNamespace(removeEvent, "dxFX"),
     isFunction = typeUtils.isFunction,
@@ -110,7 +112,7 @@ var TransitionAnimationStrategy = {
         }
 
         var that = this,
-            deferred = $.Deferred(),
+            deferred = new Deferred(),
             cleanupWhen = config.cleanupWhen;
 
         config.transitionAnimation = {
@@ -154,9 +156,9 @@ var TransitionAnimationStrategy = {
     _completeAnimationCallback: function($element, config) {
         var that = this,
             startTime = Date.now() + config.delay,
-            deferred = $.Deferred(),
-            transitionEndFired = $.Deferred(),
-            simulatedTransitionEndFired = $.Deferred(),
+            deferred = new Deferred(),
+            transitionEndFired = new Deferred(),
+            simulatedTransitionEndFired = new Deferred(),
             simulatedEndEventTimer,
             waitForJSCompleteTimer;
 
@@ -246,7 +248,7 @@ var FrameAnimationStrategy = {
         setProps($element, config.from);
     },
     animate: function($element, config) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             that = this;
 
         if(!config) {
@@ -432,7 +434,7 @@ var FallbackToNoAnimationStrategy = {
     initAnimation: function() {
     },
     animate: function() {
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     },
     stop: noop,
     isSynchronous: true
@@ -744,7 +746,7 @@ var createAnimation = function(element, initialConfig) {
             setup: setupAnimationOnElement,
             start: startAnimationOnElement,
             stop: stopAnimationOnElement,
-            deferred: $.Deferred()
+            deferred: new Deferred()
         };
 
     if(isFunction(configurator.validateConfig)) {
@@ -760,7 +762,7 @@ var animate = function(element, config) {
     var $element = $(element);
 
     if(!$element.length) {
-        return $.Deferred().resolve().promise();
+        return new Deferred().resolve().promise();
     }
 
     var animation = createAnimation($element, config);
@@ -846,7 +848,7 @@ var setupPosition = function($element, config) {
 var setProps = function($element, props) {
     iteratorUtils.each(props, function(key, value) {
         try {
-            $element.css(key, value);
+            $element.css(key, typeUtils.isFunction(value) ? value() : value);
         } catch(e) { }
     });
 };

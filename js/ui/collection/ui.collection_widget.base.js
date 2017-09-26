@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
-    when = require("../../integration/jquery/deferred").when,
+    when = require("../../core/utils/deferred").when,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
@@ -118,7 +118,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_items
             * @publicName items
-            * @type array
+            * @type Array<string,CollectionWidgetItemTemplate>
             */
             items: [],
 
@@ -202,7 +202,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_datasource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSource configuration
+            * @type string|Array<string,CollectionWidgetItemTemplate>|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
@@ -1075,7 +1075,7 @@ var CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods_itemElements
     * @publicName itemElements()
-    * @return array
+    * @return Array<Node>
     * @hidden
     */
     itemElements: function() {

@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    Config = require("./config"),
+var Config = require("./config"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
     Action = require("./action"),
@@ -199,7 +198,7 @@ var Component = Class.inherit({
         oldValue = coreDataUtils.toComparable(oldValue, true);
         newValue = coreDataUtils.toComparable(newValue, true);
 
-        if(oldValue && newValue && oldValue.jquery && newValue.jquery) {
+        if(oldValue && newValue && typeUtils.isRenderer(oldValue) && typeUtils.isRenderer(newValue)) {
             return newValue.is(oldValue);
         }
 
@@ -380,12 +379,6 @@ var Component = Class.inherit({
             if(!arguments.length) {
                 e = {};
             }
-
-            ///#DEBUG
-            if(e instanceof $.Event) {
-                throw Error("Action must be executed with jQuery.Event like action({ jQueryEvent: event })");
-            }
-            ///#ENDDEBUG
 
             if(!typeUtils.isPlainObject(e)) {
                 e = { actionValue: e };
@@ -647,7 +640,17 @@ var Component = Class.inherit({
                 that.endUpdate();
             }
         };
-    })()
+    })(),
+
+    _getOptionValue: function(name) {
+        var value = this.option(name);
+
+        if(isFunction(value)) {
+            return value();
+        }
+
+        return value;
+    }
 }).include(EventsMixin);
 
 module.exports = Component;

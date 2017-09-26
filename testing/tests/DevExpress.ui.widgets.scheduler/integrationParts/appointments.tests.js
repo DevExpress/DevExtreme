@@ -32,7 +32,7 @@ QUnit.module("Integration: Appointments", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
         };
         this.getAppointmentColor = function($task, checkedProperty) {
             checkedProperty = checkedProperty || "background-color";
@@ -521,7 +521,7 @@ QUnit.test("The part of the appointment that ends after midnight should have rig
 
     var $element = this.instance.element(),
         $appointment = $element.find(".dx-scheduler-appointment").eq(1),
-        cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight();
+        cellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
     assert.equal($appointment.outerHeight(), cellHeight, "appt part has right height");
 });
@@ -565,7 +565,7 @@ QUnit.test("The part of recurrence appointment after midnight should have right 
 
     var $element = this.instance.element(),
         $appointment = $element.find(".dx-scheduler-appointment").eq(0),
-        cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight();
+        cellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
     assert.equal($appointment.outerHeight(), cellHeight * 3, "appt part has right height");
 });
@@ -631,7 +631,7 @@ QUnit.test("Appts should be filtered correctly if there is a custom tz and start
 
     var $element = this.instance.element(),
         $appt = $element.find(".dx-scheduler-appointment"),
-        cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight(),
+        cellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight(),
         apptPosition = translator.locate($appt.eq(0)),
         clientTzOffset = new Date("2015-05-27T23:00:00+01:00").getTimezoneOffset() / 60;
 
@@ -736,7 +736,7 @@ QUnit.test("Appointments should have correctly height with a custom timezone(T38
 
         var $element = this.instance.element(),
             $appts = this.instance.element().find(".dx-scheduler-appointment"),
-            cellHeight = $element.find(".dx-scheduler-date-table-cell").outerHeight();
+            cellHeight = $element.find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
         assert.roughEqual($appts.eq(0).outerHeight(), cellHeight / 2, 2.001, "Appts top is OK");
         assert.roughEqual($appts.eq(1).outerHeight(), cellHeight * 4, 2.001, "Appts top is OK");
@@ -870,7 +870,7 @@ QUnit.test("Two vertical neighbor appointments should be placed correctly", func
 
     var $commonAppointments = this.instance.element().find(".dx-scheduler-scrollable-appointments .dx-scheduler-appointment"),
         $allDayAppts = this.instance.element().find(".dx-scheduler-all-day-appointment"),
-        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
     assert.roughEqual(translator.locate($commonAppointments.eq(0)).left, 100, 2.001, "Left position is OK");
     assert.roughEqual(translator.locate($commonAppointments.eq(1)).left, 100, 2.001, "Left position is OK");
@@ -2391,6 +2391,45 @@ QUnit.test("Appointment should have correct position while vertical dragging, cr
     pointer.dragEnd();
 });
 
+QUnit.test("Appointment should have correct position while dragging from group", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 6, 10),
+        editing: true,
+        views: ["week"],
+        currentView: "week",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 6, 10, 0),
+            endDate: new Date(2015, 6, 10, 0, 30),
+            ownerId: { id: 1 }
+        }],
+        groups: ["ownerId.id"],
+        resources: [
+            {
+                field: "ownerId.id",
+                allowMultiple: false,
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ],
+        width: 800
+    });
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment")).eq(0);
+
+    $appointment.trigger(dragEvents.start);
+    $(this.instance.element().find(".dx-scheduler-date-table-cell")).eq(7).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.end);
+
+    this.clock.tick();
+    var appointmentData = this.instance.element().find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+
+    assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 0), "Start date is correct");
+    assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 0, 30), "End date is correct");
+    assert.deepEqual(appointmentData.ownerId, { id: [2] }, "Resources is correct");
+});
+
 QUnit.test("Appointments should be repainted if the 'crossScrollingEnabled' is changed", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),
@@ -3569,6 +3608,29 @@ QUnit.test("Recurrence appointment should be rendered correctly when currentDate
     assert.equal($appointment.length, 1, "Appointment is rendered");
 });
 
+QUnit.test("Recurrence long appointment should be rendered correctly when currentDate was changed: month view", function(assert) {
+    var appointment = {
+        text: "Website Re-Design Plan",
+        priorityId: 2,
+        startDate: new Date(2015, 4, 25, 9, 0),
+        endDate: new Date(2015, 4, 26, 11, 30),
+        recurrenceRule: "FREQ=DAILY;INTERVAL=5"
+    };
+
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        dataSource: [appointment],
+        views: ["month"],
+        currentView: "month"
+    });
+
+    this.instance.option("currentDate", new Date(2015, 5, 25));
+
+    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointment.length, 10, "Appointments were rendered");
+});
+
 QUnit.test("Recurrence appointment should be rendered correctly when currentDate was changed: all-day", function(assert) {
     var appointment = {
         startDate: new Date(2015, 1, 4, 0),
@@ -4394,4 +4456,222 @@ QUnit.test("Exception should not be thrown on second details view opening if for
     } catch(e) {
         assert.ok(false, "Exception: " + e);
     }
+});
+
+QUnit.test("Appointments should be rendered correctly, Day view with intervalCount", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2015, 2, 16, 7), endDate: new Date(2015, 2, 16, 7, 30) },
+        { text: "Two", startDate: new Date(2015, 2, 16, 11), endDate: new Date(2015, 2, 16, 11, 30) },
+        { text: "Three", startDate: new Date(2015, 2, 18, 12), endDate: new Date(2015, 2, 18, 12, 30) },
+        { text: "Four", startDate: new Date(2015, 2, 18, 15), endDate: new Date(2015, 2, 18, 15, 30) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2015, 2, 16),
+        dataSource: dataSource,
+        views: [{
+            type: "day",
+            name: "Day",
+            intervalCount: 3
+        }],
+        currentView: "day"
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 4, "Appointments were rendered correctly");
+});
+
+QUnit.test("Appointments should be rendered correctly, Week view with intervalCount", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2015, 4, 25, 7), endDate: new Date(2015, 4, 25, 7, 30) },
+        { text: "Two", startDate: new Date(2015, 5, 1, 11), endDate: new Date(2015, 5, 1, 11, 30) },
+        { text: "Three", startDate: new Date(2015, 5, 6, 12), endDate: new Date(2015, 5, 6, 12, 30) },
+        { text: "Four", startDate: new Date(2015, 5, 12, 15), endDate: new Date(2015, 5, 12, 15, 30) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        dataSource: dataSource,
+        views: [{
+            type: "week",
+            name: "week",
+            intervalCount: 3
+        }],
+        currentView: "week"
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 4, "Appointments were rendered correctly");
+});
+
+QUnit.test("Appointments should be rendered correctly, Day view with intervalCount and startDate", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2017, 5, 25, 4), endDate: new Date(2017, 5, 25, 4, 30) },
+        { text: "Two", startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
+        { text: "Three", startDate: new Date(2017, 5, 27, 10), endDate: new Date(2017, 5, 27, 11) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2017, 5, 26),
+        dataSource: dataSource,
+        views: [{
+            type: "day",
+            name: "day",
+            intervalCount: 3,
+            startDate: new Date(2017, 5, 25)
+        }],
+        currentView: "day"
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 3, "Appointments were rendered correctly");
+});
+
+QUnit.test("Appointments should be rendered correctly, Week view with intervalCount and startDate", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2017, 5, 22, 4), endDate: new Date(2017, 5, 22, 4, 30) },
+        { text: "Two", startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
+        { text: "Three", startDate: new Date(2017, 6, 2, 10), endDate: new Date(2017, 6, 2, 11) },
+        { text: "Four", startDate: new Date(2017, 6, 9, 8), endDate: new Date(2017, 6, 9, 8, 30) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2017, 5, 26),
+        dataSource: dataSource,
+        views: [{
+            type: "week",
+            name: "week",
+            intervalCount: 3,
+            startDate: new Date(2017, 5, 19)
+        }],
+        currentView: "week",
+        firstDayOfWeek: 1
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 4, "Appointments were rendered correctly");
+});
+
+QUnit.test("Appointments should be rendered correctly, Month view with intervalCount and startDate", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2017, 5, 22, 4), endDate: new Date(2017, 5, 22, 4, 30) },
+        { text: "Two", startDate: new Date(2017, 5, 26, 0), endDate: new Date(2017, 5, 26, 0, 30) },
+        { text: "Three", startDate: new Date(2017, 6, 2, 10), endDate: new Date(2017, 6, 2, 11) },
+        { text: "Four", startDate: new Date(2017, 6, 9, 8), endDate: new Date(2017, 6, 9, 8, 30) },
+        { text: "Five", startDate: new Date(2017, 7, 9, 8), endDate: new Date(2017, 7, 9, 8, 30) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2017, 5, 26),
+        dataSource: dataSource,
+        views: [{
+            type: "month",
+            intervalCount: 3,
+            startDate: new Date(2017, 0, 19)
+        }],
+        currentView: "month",
+        firstDayOfWeek: 1
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 3, "Appointments were rendered correctly");
+});
+
+QUnit.test("Appointments should be rendered correctly after switching Day view with intervalCount and startDate", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2017, 5, 28, 4), endDate: new Date(2017, 5, 28, 4, 30) },
+        { text: "Two", startDate: new Date(2017, 5, 29, 0), endDate: new Date(2017, 5, 29, 0, 30) },
+        { text: "Three", startDate: new Date(2017, 5, 30, 10), endDate: new Date(2017, 5, 30, 11) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2017, 5, 26),
+        dataSource: dataSource,
+        views: [{
+            type: "day",
+            name: "day",
+            intervalCount: 3,
+            startDate: new Date(2017, 5, 25)
+        }],
+        currentView: "day"
+    });
+
+    $(this.instance.element().find(".dx-scheduler-navigator-next")).trigger("dxclick");
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 3, "Appointments were rendered correctly");
+});
+
+QUnit.test("Appointments should be rendered correctly after switching Week view with intervalCount and startDate", function(assert) {
+    var tasks = [
+        { text: "One", startDate: new Date(2017, 6, 10, 4), endDate: new Date(2017, 6, 10, 4, 30) },
+        { text: "Two", startDate: new Date(2017, 6, 18, 0), endDate: new Date(2017, 6, 18, 0, 30) },
+        { text: "Three", startDate: new Date(2017, 6, 25, 10), endDate: new Date(2017, 6, 25, 11) }
+    ];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentDate: new Date(2017, 5, 26),
+        dataSource: dataSource,
+        views: [{
+            type: "week",
+            name: "week",
+            intervalCount: 3,
+            startDate: new Date(2017, 5, 19)
+        }],
+        currentView: "week",
+        firstDayOfWeek: 1
+    });
+
+    $(this.instance.element().find(".dx-scheduler-navigator-next")).trigger("dxclick");
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 3, "Appointments were rendered correctly");
+});
+
+QUnit.test("Scheduler should add only one appointment at multiple 'done' button clicks on appointment form", function(assert) {
+    var a = { text: "a", startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 15) };
+    this.createInstance({
+        dataSource: [],
+        currentDate: new Date(2017, 7, 9),
+        currentView: "week",
+        views: ["week"],
+        onAppointmentAdding: function(e) {
+            var d = $.Deferred();
+
+            window.setTimeout(function() {
+                d.resolve();
+            }, 300);
+
+            e.cancel = d.promise();
+        }
+    });
+
+    this.instance.showAppointmentPopup(a, true);
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick").trigger("dxclick");
+    this.clock.tick(300);
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal($appointments.length, 1, "right appointment quantity");
 });

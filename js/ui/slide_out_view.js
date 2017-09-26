@@ -11,7 +11,8 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     Widget = require("./widget/ui.widget"),
     Swipeable = require("../events/gesture/swipeable"),
-    EmptyTemplate = require("./widget/empty_template");
+    EmptyTemplate = require("./widget/empty_template"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var SLIDEOUTVIEW_CLASS = "dx-slideoutview",
     SLIDEOUTVIEW_WRAPPER_CLASS = "dx-slideoutview-wrapper",
@@ -303,7 +304,7 @@ var SlideOutView = Widget.inherit({
     _getMenuWidth: function() {
         if(!this._menuWidth) {
             var maxMenuWidth = this.element().width() - this.option("contentOffset");
-            this.menuContent().css("max-width", maxMenuWidth);
+            this.menuContent().css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
             var currentMenuWidth = this.menuContent().width();
 
             this._menuWidth = Math.min(currentMenuWidth, maxMenuWidth);
@@ -402,7 +403,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_showMenu
     * @publicName showMenu()
-    * @return Promise
+    * @return Promise<void>
     */
     showMenu: function() {
         return this.toggleMenuVisibility(true);
@@ -411,7 +412,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_hideMenu
     * @publicName hideMenu()
-    * @return Promise
+    * @return Promise<void>
     */
     hideMenu: function() {
         return this.toggleMenuVisibility(false);
@@ -420,12 +421,12 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_toggleMenuVisibility
     * @publicName toggleMenuVisibility()
-    * @return Promise
+    * @return Promise<void>
     */
     toggleMenuVisibility: function(showing) {
         showing = showing === undefined ? !this.option("menuVisible") : showing;
 
-        this._deferredAnimate = $.Deferred();
+        this._deferredAnimate = new Deferred();
         this.option("menuVisible", showing);
 
         return this._deferredAnimate.promise();

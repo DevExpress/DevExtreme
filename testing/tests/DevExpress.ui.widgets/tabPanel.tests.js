@@ -418,6 +418,90 @@ QUnit.test("click on tab should be handled correctly when the 'deferRendering' o
 });
 
 
+QUnit.module("events handlers", {
+    beforeEach: function() {
+        var that = this;
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        that.createTabPanel = function(assert, spies) {
+            spies = spies || {};
+
+            that.titleClickSpy = sinon.spy(function() {
+                assert.step("titleClick");
+            });
+            that.titleHoldSpy = sinon.spy(function() {
+                assert.step("titleHold");
+            });
+            that.titleRenderedSpy = sinon.spy(function() {
+                assert.step("titleRendered");
+            });
+
+            that.$tabPanel = $("#tabPanel").dxTabPanel({
+                dataSource: [{ text: "user", icon: "user", title: "Personal Data", firstName: "John", lastName: "Smith" },
+                            { text: "comment", icon: "comment", title: "Contacts", phone: "(555)555-5555", email: "John.Smith@example.com" }],
+                onInitialized: function(e) {
+                    spies.titleClick && e.component.on("titleClick", that.titleClickSpy);
+                    spies.titleHold && e.component.on("titleHold", that.titleHoldSpy);
+                    spies.titleRendered && e.component.on("titleRendered", that.titleRenderedSpy);
+                },
+                swipeEnabled: true
+            });
+
+            that.tabPanelInstance = that.$tabPanel.dxTabPanel("instance");
+
+            that.tabWidgetMouse = pointerMock(that.$tabPanel.find(toSelector(TABS_ITEM_CLASS))[0]).start();
+        };
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+});
+
+QUnit.test("'titleRendered' event successfully raised", function(assert) {
+    this.createTabPanel(assert, { titleRendered: true });
+
+    assert.verifySteps(["titleRendered", "titleRendered"]);
+});
+
+QUnit.test("'titleClick' event successfully raised", function(assert) {
+    this.createTabPanel(assert, { titleClick: true });
+
+    this.tabWidgetMouse.click();
+    assert.verifySteps(["titleClick"]);
+});
+
+QUnit.test("'titleHold' event successfully raised", function(assert) {
+    this.createTabPanel(assert, { titleHold: true });
+
+    this.tabWidgetMouse.down();
+    this.clock.tick(1000);
+    this.tabWidgetMouse.up();
+    assert.verifySteps(["titleHold"]);
+});
+
+QUnit.test("runtime subscription to 'titleClick' event works fine", function(assert) {
+    this.createTabPanel(assert);
+
+    this.tabPanelInstance.on("titleClick", this.titleClickSpy);
+
+    this.tabWidgetMouse.click();
+    assert.verifySteps(["titleClick"]);
+});
+
+QUnit.test("runtime subscription to 'titleHold' event works fine", function(assert) {
+    this.createTabPanel(assert);
+
+    this.tabPanelInstance.on("titleHold", this.titleHoldSpy);
+
+    this.tabWidgetMouse.down();
+    this.clock.tick(1000);
+    this.tabWidgetMouse.up();
+    assert.verifySteps(["titleHold"]);
+});
+
+
 QUnit.module("focus policy", {
     beforeEach: function() {
         fx.off = true;
@@ -496,11 +580,11 @@ QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", functio
 QUnit.test("tabs focusedElement lose focused class", function(assert) {
     assert.expect(6);
 
-    this.$element.find(toSelector(TABS_CLASS)).focusin();
+    this.$element.find(toSelector(TABS_CLASS)).get(0).focus();
     assert.ok($(toSelector(TABS_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
     assert.ok($(toSelector(TABPANEL_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
     assert.ok($(toSelector(MULTIVIEW_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem obtained focused class after focus");
-    this.$element.find(toSelector(TABS_CLASS)).focusout();
+    this.$element.find(toSelector(TABS_CLASS)).get(0).blur();
     assert.ok(!$(toSelector(TABS_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
     assert.ok(!$(toSelector(TABPANEL_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");
     assert.ok(!$(toSelector(MULTIVIEW_ITEM_CLASS)).eq(0).hasClass("dx-state-focused"), "selectedItem lose focused class after blur");

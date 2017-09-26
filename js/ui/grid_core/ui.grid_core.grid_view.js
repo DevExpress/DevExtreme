@@ -6,7 +6,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     messageLocalization = require("../../localization/message"),
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 var TABLE_CLASS = "table",
     BORDERS_CLASS = "borders",
@@ -123,7 +123,7 @@ var ResizingController = modules.ViewController.inherit({
         //B253906
         $element.find(EDITORS_INPUT_SELECTOR).toggleClass(HIDDEN_CLASS, isBestFit);
         $element.find(".dx-group-cell").toggleClass(HIDDEN_CLASS, isBestFit);
-        $element.find(".dx-header-row ." + this.addWidgetPrefix(TEXT_CONTENT_CLASS)).css("max-width", "");
+        $element.find(".dx-header-row ." + this.addWidgetPrefix(TEXT_CONTENT_CLASS)).css("maxWidth", "");
     },
 
     _synchronizeColumns: function() {
@@ -253,7 +253,7 @@ var ResizingController = modules.ViewController.inherit({
 
         if($element && that._maxWidth) {
             delete that._maxWidth;
-            $element.css("max-width", "");
+            $element.css("maxWidth", "");
         }
 
         if(!hasAutoWidth && resultWidths.length) {
@@ -271,7 +271,7 @@ var ResizingController = modules.ViewController.inherit({
                     isColumnWidthsCorrected = true;
                     if(!hasWidth && !hasPercentWidth) {
                         that._maxWidth = totalWidth + scrollbarWidth + (that.option("showBorders") ? 2 : 0);
-                        $element.css("max-width", that._maxWidth);
+                        $element.css("maxWidth", that._maxWidth);
                     }
                 }
             }

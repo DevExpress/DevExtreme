@@ -14,7 +14,7 @@ build:
 
   pre_ci_boot:
     image_name: docker.io/devexpress/devextreme-build
-    image_tag: 17_2
+    image_tag: "17_2"
     pull: true
 
   ci:
@@ -24,4 +24,4 @@ build:
   cache_dir_list:
     - $SHIPPABLE_BUILD_DIR/.git
     - $SHIPPABLE_BUILD_DIR/node_modules
-    - /root/.nuget
+    - $SHIPPABLE_BUILD_DIR/dotnet_packages

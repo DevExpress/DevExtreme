@@ -23,12 +23,6 @@ DevExpress.devices = require("../../core/devices");
 
 DevExpress.Color = require("../../color");
 
-var $ = require("../../core/renderer");
-var compareVersions = require("../../core/utils/version").compare;
-if(compareVersions($.fn.jquery, [1, 10]) < 0) {
-    throw errors.Error("E0012");
-}
-
 var animationFrame = require("../../animation/frame");
 /**
  * @name requestAnimationFrame

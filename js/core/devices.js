@@ -33,7 +33,7 @@ var KNOWN_UA_TABLE = {
 /**
 * @name device
 * @section commonObjectStructures
-* @publicName device
+* @publicName Device
 * @type object
 * @module core/devices
 * @export default
@@ -56,7 +56,7 @@ var DEFAULT_DEVICE = {
     /**
     * @name device_version
     * @publicName version
-    * @type array
+    * @type Array<number>
     */
     version: [],
     /**

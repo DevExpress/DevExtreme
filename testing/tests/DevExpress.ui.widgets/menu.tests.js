@@ -72,22 +72,6 @@ QUnit.module("Render content delimiters", {
     }
 });
 
-QUnit.test("Don't render content delimiter", function(assert) {
-    var options = { _hideDelimiter: true, showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
-        menu = createMenuInWindow(options),
-        rootMenuItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
-        submenu,
-        delimiter;
-
-    assert.ok(menu);
-    assert.ok(!rootMenuItem.children("." + DX_CONTEXT_MENU_CLASS).length);
-    $(rootMenuItem).trigger("dxclick");
-    submenu = getSubMenuInstance(rootMenuItem);
-    assert.ok(submenu._overlay.option("visible"));
-    delimiter = submenu.$contentDelimiter;
-    assert.ok(!delimiter);
-});
-
 QUnit.test("Render horizontal content delimiter", function(assert) {
     var options = { showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
         menu = createMenuInWindow(options),
@@ -724,6 +708,57 @@ QUnit.test("Don't hide submenu when cancel is true", function(assert) {
     assert.equal(i, 1, "event triggered");
 });
 
+QUnit.test("Fire submenu events for all levels", function(assert) {
+    var handlerShowing = sinon.stub(),
+        handlerShown = sinon.stub(),
+        handlerHiding = sinon.stub(),
+        handlerHidden = sinon.stub(),
+        options = {
+            showFirstSubmenuMode: "onClick",
+            showSubmenuMode: "onClick",
+            items: [{
+                text: "rootItem",
+                items: [{
+                    text: "item1",
+                    items: [{ text: "item1-1" }]
+                }, {
+                    text: "item2",
+                    items: [{ text: "item2-1" }],
+                }]
+            }],
+            onSubmenuShowing: handlerShowing,
+            onSubmenuShown: handlerShown,
+            onSubmenuHiding: handlerHiding,
+            onSubmenuHidden: handlerHidden
+        },
+        menu = createMenu(options),
+        $rootItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
+
+    //show submenu
+    $($rootItem).trigger("dxclick");
+    assert.equal(handlerShowing.callCount, 1);
+    assert.equal(handlerShown.callCount, 1);
+    assert.equal(handlerHiding.callCount, 0);
+    assert.equal(handlerHidden.callCount, 0);
+
+    var submenu = getSubMenuInstance($rootItem),
+        $submenuItems = submenu.itemElements();
+
+    //show second level first time
+    $($submenuItems.eq(0)).trigger("dxclick");
+    assert.equal(handlerShowing.callCount, 2);
+    assert.equal(handlerShown.callCount, 2);
+    assert.equal(handlerHiding.callCount, 0);
+    assert.equal(handlerHidden.callCount, 0);
+
+    //show second level second time
+    $($submenuItems.eq(1)).trigger("dxclick");
+    assert.equal(handlerShowing.callCount, 3);
+    assert.equal(handlerShown.callCount, 3);
+    assert.equal(handlerHiding.callCount, 1);
+    assert.equal(handlerHidden.callCount, 1);
+});
+
 QUnit.test("Do not show contextmenu on hover with pressed mouse button", function(assert) {
     var options = { showFirstSubmenuMode: "onHover", items: [{ text: "item1", items: [{ text: "item1-1" }] }] },
         menu = createMenu(options),
@@ -1237,6 +1272,23 @@ QUnit.test("Menu should stop show submenu timeout when another level submenu was
     assert.ok(submenu.isOverlayVisible(), "submenu is still visible");
 });
 
+QUnit.test("click should not be blocked on menu's item", function(assert) {
+    var menu = createMenu({
+            items: [{ text: "Item 1" }]
+        }),
+        $item = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
+        clickHandler = sinon.stub();
+
+    try {
+        $(document).on("click", clickHandler);
+        $item.trigger("click");
+
+        assert.equal(clickHandler.callCount, 1, "click was handled");
+    } finally {
+        $(document).off("click");
+    }
+});
+
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
@@ -1552,10 +1604,7 @@ QUnit.test("right key in submenu can move focus to next item of main menu (horiz
 
     visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
 
-    $(visibleSubmenu._itemContainer())
-        .trigger(rightKeyKeydown)
-        .trigger(rightKeyKeydown)
-        .trigger(rightKeyKeydown);
+    $(visibleSubmenu._itemContainer()).trigger(rightKeyKeydown);
 
     //assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
@@ -1605,8 +1654,6 @@ QUnit.test("RTL: left key in submenu can move focus to next item of main menu (h
     visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
 
     $(visibleSubmenu._itemContainer())
-        .trigger(leftKeyKeydown)
-        .trigger(leftKeyKeydown)
         .trigger(leftKeyKeydown);
 
     //assert

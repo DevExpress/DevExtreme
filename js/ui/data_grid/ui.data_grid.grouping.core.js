@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
     gridCore = require("./ui.data_grid.core"),
     normalizeSortingInfo = require("../../data/utils").normalizeSortingInfo,
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 exports.createGroupFilter = function(path, storeLoadOptions) {
     var groups = normalizeSortingInfo(storeLoadOptions.group),

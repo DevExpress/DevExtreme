@@ -42,6 +42,9 @@ viz.dxBullet = require("../../../viz/bullet");
 /* Treemap */
 viz.dxTreeMap = require("../../../viz/tree_map");
 
+/* Funnel */
+viz.dxFunnel = require("../../../viz/funnel");
+
 /// BUNDLER_PARTS_END
 // DEPRECATED_15_1 start
 var core = {};

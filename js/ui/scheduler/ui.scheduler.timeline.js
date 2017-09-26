@@ -9,7 +9,9 @@ var $ = require("../../core/renderer"),
     tableCreator = require("./ui.scheduler.table_creator");
 
 var TIMELINE_CLASS = "dx-scheduler-timeline",
-    GROUP_TABLE_CLASS = "dx-scheduler-group-table";
+    GROUP_TABLE_CLASS = "dx-scheduler-group-table",
+
+    TIMELINE_GROUPED_ATTR = "dx-group-column-count";
 
 var HORIZONTAL = "horizontal",
     DATE_TABLE_CELL_HEIGHT = 75,
@@ -69,7 +71,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _getCellCount: function() {
-        return this._getCellCountInDay();
+        return this._getCellCountInDay() * this.option("intervalCount");
     },
 
     _getTotalCellCount: function() {
@@ -231,8 +233,12 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return (dateTable.outerHeight() / dateTable.find(dateTableRowSelector).length) - DATE_TABLE_CELL_BORDER * 2;
     },
 
+    _detachGroupCountAttr: function() {
+        this.element().removeAttr(TIMELINE_GROUPED_ATTR);
+    },
+
     _attachGroupCountAttr: function() {
-        this.element().attr("dx-group-column-count", this.option("groups").length);
+        this.element().attr(TIMELINE_GROUPED_ATTR, this.option("groups").length);
     },
 
     _getCellCoordinatesByIndex: function(index) {
@@ -282,7 +288,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             fullDays = Math.floor(fullInterval / (toMs("day"))),
             tailDuration = fullInterval - (fullDays * toMs("day")),
             tailDelta = 0,
-            cellCount = this._getCellCountInDay() * fullDays,
+            cellCount = this._getCellCountInDay() * (fullDays - this._getWeekendsCount(fullDays)),
             gapBeforeAppt = apptStart - dateUtils.trimTime(new Date(currentDate)).getTime(),
             result = cellCount * this.option("hoursInterval") * toMs("hour");
 
@@ -301,6 +307,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         }
 
         return result;
+    },
+
+    _getWeekendsCount: function() {
+        return 0;
     },
 
     getAllDayContainer: function() {
@@ -384,7 +394,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         var trimmedDate = dateUtils.trimTime(new Date(date)),
             isUpdateNeeded = false;
 
-        if(trimmedDate.getTime() < bounds.left.date.getTime() || trimmedDate.getTime() > bounds.right.date.getTime()) {
+        if(trimmedDate < bounds.left.date || trimmedDate > bounds.right.date) {
             isUpdateNeeded = true;
         }
 

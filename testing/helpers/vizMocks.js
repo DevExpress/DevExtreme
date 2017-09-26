@@ -111,6 +111,9 @@
             $(this.element).trigger.apply($(this.element), arguments);
             return this;
         },
+        restoreText: function() {
+
+        }
     }, {
         $constructor: function() {
             this.children = [];
@@ -120,7 +123,9 @@
             this.element = {
                 nodeType: 1,
                 getScreenCTM: function() { return [0, 1, 1, 0, 210, 240]; },
-                createSVGPoint: function() { return { matrixTransform: function() { return { x: 3, y: 5 }; } }; }
+                createSVGPoint: function() { return { matrixTransform: function() { return { x: 3, y: 5 }; } }; },
+                addEventListener: function() {},
+                removeEventListener: function() {}
             };
         },
         $thisReturnFunctions: ["toBackground", "sharp", "rotate", "enableLinks", "virtualLink", "linkOn", "linkOff", "linkAppend", "linkRemove", "data"]

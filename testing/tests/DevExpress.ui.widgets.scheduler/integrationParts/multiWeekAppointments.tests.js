@@ -22,7 +22,7 @@ QUnit.module("Integration: Multi-Week appointments", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
         };
     },
     afterEach: function() {
@@ -285,7 +285,7 @@ QUnit.test("Multi-week appointments should be split by several parts", function(
     });
 
     var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment"),
-        rowHeight = this.instance.getWorkSpace().getWorkArea().find(".dx-scheduler-date-table tr").outerHeight(),
+        rowHeight = this.instance.getWorkSpace().getWorkArea().find(".dx-scheduler-date-table tr").eq(0).outerHeight(),
         appointmentHeight = $appointments.outerHeight(),
         appointmentTopOffsetInsideCell = (rowHeight - appointmentHeight) / 2,
 

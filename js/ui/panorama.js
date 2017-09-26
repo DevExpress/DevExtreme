@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     noop = require("../core/utils/common").noop,
-    when = require("../integration/jquery/deferred").when,
+    when = require("../core/utils/deferred").when,
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
     Class = require("../core/class"),

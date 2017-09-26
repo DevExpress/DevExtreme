@@ -3,9 +3,10 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
-    support = require("../../core/utils/support"),
+    styleUtils = require("../../core/utils/style"),
     browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
+    ready = require("../../core/utils/ready"),
     mathUtils = require("../../core/utils/math"),
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
@@ -27,7 +28,7 @@ var isMouseWheelEvent = function(e) {
 };
 
 var supportPointerEvents = function() {
-    var cssSupport = support.styleProp("pointer-events");
+    var cssSupport = styleUtils.styleProp("pointer-events");
     var msieLess11 = browser.msie && parseInt(browser.version, 10) < 11;
 
     return cssSupport && !msieLess11;
@@ -50,7 +51,7 @@ var gestureCover = (function() {
         e.preventDefault();
     });
 
-    domUtils.ready(function() {
+    ready(function() {
         $cover.appendTo("body");
     });
 
@@ -172,7 +173,7 @@ var GestureEmitter = Emitter.inherit({
     },
 
     _resetActiveElement: function() {
-        if(devices.real().platform === "ios" && $(":focus", this.getElement()).length) {
+        if(devices.real().platform === "ios" && this.getElement().find(":focus").length) {
             domUtils.resetActiveElement();
         }
     },

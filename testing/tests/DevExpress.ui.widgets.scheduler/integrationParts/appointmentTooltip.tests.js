@@ -367,7 +367,7 @@ QUnit.test("Scheduler appointment tooltip dates are displayed with right format,
         store: this.tasks
     });
 
-    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "month" });
+    this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "month", maxAppointmentsPerCell: null });
 
     $(this.instance.element()).find(".dx-scheduler-appointment").eq(1).trigger("dxclick");
     this.clock.tick(300);

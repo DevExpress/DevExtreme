@@ -1,74 +1,32 @@
 "use strict";
 
-var $ = require("jquery"),
-    deferredUtils = require("integration/jquery/deferred");
+var $ = require("jquery");
+var deferredUtils = require("core/utils/deferred");
+var useJQueryRenderer = require("core/config")().useJQueryRenderer;
 
+require("integration/jquery");
 
-QUnit.module("promise");
+QUnit.module("jQuery strategy");
 
-QUnit.test("converted deferred should be resolved when source resolved", function(assert) {
-    return new Promise(function(resolve) {
-        var promiseResult = {};
-        var context = {};
+QUnit.test("jQuery strategy should be used if useJQueryRenderer flag was set", function(assert) {
+    if(!useJQueryRenderer) {
+        assert.expect(0);
+        return;
+    }
 
-        deferredUtils.fromPromise(Promise.resolve(promiseResult), context).done(function(result) {
-            assert.equal(result, promiseResult);
-            assert.equal(this, context);
+    var d1 = new deferredUtils.Deferred();
+    var d2 = new $.Deferred();
 
-            resolve();
-        });
-    });
+    assert.equal(d1.constructor, d2.constructor, "deferred is jQuery.Deferred");
 });
-
-QUnit.test("converted deferred should be rejected when source rejected", function(assert) {
-    return new Promise(function(resolve) {
-        var promiseResult = {};
-        var context = {};
-
-        deferredUtils.fromPromise(Promise.reject(promiseResult), context).fail(function(result) {
-            assert.equal(result, promiseResult);
-            assert.equal(this, context);
-
-            resolve();
-        });
-    });
-});
-
-
-QUnit.module("deferred");
-
-QUnit.test("converted deferred should be resolved sync when source resolved", function(assert) {
-    assert.expect(2);
-
-    var promiseResult = {};
-    var context = {};
-
-    deferredUtils.fromPromise($.Deferred().resolveWith(context, [promiseResult]).promise()).done(function(result) {
-        assert.equal(result, promiseResult);
-        assert.equal(this, context);
-    });
-});
-
-QUnit.test("converted deferred should be rejected sync when source rejected", function(assert) {
-    assert.expect(2);
-
-    var promiseResult = {};
-    var context = {};
-
-    deferredUtils.fromPromise($.Deferred().rejectWith(context, [promiseResult]).promise()).fail(function(result) {
-        assert.equal(result, promiseResult);
-        assert.equal(this, context);
-    });
-});
-
 
 QUnit.module("when");
 
 QUnit.test("when should be resolved synchronously", function(assert) {
     var log = [];
 
-    var d1 = $.Deferred();
-    var d2 = $.Deferred();
+    var d1 = new $.Deferred();
+    var d2 = new $.Deferred();
 
     deferredUtils.when().done(function() {
         assert.deepEqual(arguments.length, 0, "correct args");
@@ -81,12 +39,12 @@ QUnit.test("when should be resolved synchronously", function(assert) {
     });
 
     deferredUtils.when(d1, d2).done(function(result) {
-        assert.deepEqual($.makeArray(arguments), [1, 2], "correct args");
+        assert.deepEqual($.makeArray(arguments), [1, [2, 3]], "correct args");
         log.push(3);
     });
 
     d1.resolve(1);
-    d2.resolve(2);
+    d2.resolve(2, 3);
 
     assert.deepEqual(log, [1, 2, 3], "resolved synchronous");
 });

@@ -290,6 +290,15 @@ declare module DevExpress.ui {
         /** @docid dxSchedulerOptions_views_name */
         name?: string;
 
+        /** @docid dxSchedulerOptions_views_maxAppointmentsPerCell */
+        maxAppointmentsPerCell?: any;
+
+        /** @docid dxSchedulerOptions_views_intervalCount */
+        intervalCount?: number;
+
+        /** @docid dxSchedulerOptions_views_startDate */
+        startDate?: any;
+
         /** @docid dxSchedulerOptions_views_firstDayOfWeek */
         firstDayOfWeek?: number;
 
@@ -396,6 +405,8 @@ declare module DevExpress.ui {
         showAllDayPanel?: boolean;
         /** @docid dxSchedulerOptions_cellDuration */
         cellDuration?: number;
+        /** @docid dxSchedulerOptions_maxAppointmentsPerCell */
+        maxAppointmentsPerCell?: any;
         /** @docid dxSchedulerOptions_recurrenceEditMode */
         recurrenceEditMode?: string;
         /** @docid dxSchedulerOptions_editing */
@@ -594,7 +605,7 @@ declare module DevExpress.ui {
     export class HierarchicalCollectionWidget extends CollectionWidget {
     }
 
-    export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions {
+    export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions, SearchBoxMixinOptions {
         /** @docid_ignore dxTreeViewItemTemplate_icon */
         /** @docid_ignore dxTreeViewItemTemplate_iconSrc */
         /** @docid_ignore dxTreeViewItemTemplate_selected */
@@ -654,9 +665,6 @@ declare module DevExpress.ui {
 
         /** @docid dxTreeViewOptions_rootValue */
         rootValue?: Object;
-
-        /** @docid dxTreeViewOptions_searchValue */
-        searchValue?: string;
 
         /** @docid dxTreeViewOptions_scrollDirection */
         scrollDirection?: string;
@@ -726,17 +734,41 @@ declare module DevExpress.ui {
         /** @docid dxTreeViewMethods_updateDimensions */
         updateDimensions(): JQueryPromise<void>;
 
-        /** @docid dxTreeViewMethods_selectItem */
-        selectItem(itemElement: any): void;
+        /** @docid dxTreeViewMethods_selectItem#selectItem(itemElement) */
+        selectItem(itemElement: Node): void;
 
-        /** @docid dxTreeViewMethods_unselectItem */
-        unselectItem(itemElement: any): void;
+        /** @docid dxTreeViewMethods_selectItem#selectItem(itemData) */
+        selectItem(itemData: Object): void;
 
-        /** @docid dxTreeViewMethods_expandItem */
-        expandItem(itemElement: any): void;
+        /** @docid dxTreeViewMethods_selectItem#selectItem(key) */
+        selectItem(key: any): void;
 
-        /** @docid dxTreeViewMethods_collapseItem */
-        collapseItem(itemElement: any): void;
+        /** @docid dxTreeViewMethods_unselectItem#unselectItem(itemElement) */
+        unselectItem(itemElement: Node): void;
+
+        /** @docid dxTreeViewMethods_unselectItem#unselectItem(itemData) */
+        unselectItem(itemData: Object): void;
+
+        /** @docid dxTreeViewMethods_unselectItem#unselectItem(key) */
+        unselectItem(key: any): void;
+
+        /** @docid dxTreeViewMethods_expandItem#expandItem(itemElement) */
+        expandItem(itemElement: Node): void;
+
+        /** @docid dxTreeViewMethods_expandItem#expandItem(itemData) */
+        expandItem(itemData: Object): void;
+
+        /** @docid dxTreeViewMethods_expandItem#expandItem(key) */
+        expandItem(key: any): void;
+
+        /** @docid dxTreeViewMethods_collapseItem#collapseItem(itemElement) */
+        collapseItem(itemElement: Node): void;
+
+        /** @docid dxTreeViewMethods_collapseItem#collapseItem(itemData) */
+        collapseItem(itemData: Object): void;
+
+        /** @docid dxTreeViewMethods_collapseItem#collapseItem(key) */
+        collapseItem(key: any): void;
 
         /** @docid dxTreeViewMethods_getNodes */
         getNodes(): Array<Object>;
@@ -1094,6 +1126,9 @@ declare module DevExpress.ui {
 
         /** @docid GridBaseOptions_columns_calculateSortValue */
         calculateSortValue?: any;
+
+        /** @docid GridBaseOptions_columns_sortingMethod */
+        sortingMethod?: (value1: any, value2: any) => number;
 
         /** @docid GridBaseOptions_columns_customizeText */
         customizeText?: (cellInfo: { value: any; valueText: string; target: string; groupInterval: any }) => string;
@@ -1561,7 +1596,7 @@ declare module DevExpress.ui {
         /** @docid dxDataGridOptions_sortByGroupSummaryInfo */
         sortByGroupSummaryInfo?: Array<{
             /** @docid dxDataGridOptions_sortByGroupSummaryInfo_summaryItem */
-            summaryItem?: string;
+            summaryItem?: any;
 
             /** @docid dxDataGridOptions_sortByGroupSummaryInfo_groupColumn */
             groupColumn?: string;
@@ -2309,6 +2344,7 @@ declare module DevExpress.ui {
         searchByText(text: string): void;
 
         /** @docid GridBaseMethods_focus */
+        focus(element?: Element): void;
         focus(element?: JQuery): void;
 
         /** @docid GridBaseMethods_clearFilter#clearFilter() */
@@ -2383,14 +2419,14 @@ declare module DevExpress.ui {
         /** @docid dxTreeListMethods_addRow#addRow(parentId) */
         addRow(parentId: any): void;
 
-        /** @docid dxTreeListMethods_loadChildren#loadChildren() */
-        loadChildren(): JQueryPromise<void>;
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants() */
+        loadDescendants(): JQueryPromise<void>;
 
-        /** @docid dxTreeListMethods_loadChildren#loadChildren(keys) */
-        loadChildren(keys: any): JQueryPromise<void>;
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants(keys) */
+        loadDescendants(keys: any): JQueryPromise<void>;
 
-        /** @docid dxTreeListMethods_loadChildren#loadChildren(keys, deep) */
-        loadChildren(keys: any, deep: boolean): JQueryPromise<void>;
+        /** @docid dxTreeListMethods_loadDescendants#loadDescendants(keys, childrenOnly) */
+        loadDescendants(keys: any, childrenOnly: boolean): JQueryPromise<void>;
     }
 
     /** @docid dxdataGrid */
@@ -2590,6 +2626,9 @@ declare module DevExpress.ui {
             /** @docid dxPivotGridOptions_fieldChooser_enabled */
             enabled?: boolean;
 
+            /** @docid dxPivotGridOptions_fieldChooser_searchEnabled */
+            searchEnabled?: boolean;
+
             /** @docid dxPivotGridOptions_fieldChooser_layout */
             layout?: number;
 
@@ -2758,6 +2797,9 @@ declare module DevExpress.ui {
 
         /** @docid dxPivotGridFieldChooserOptions_height*/
         height?: any;
+
+        /** @docid dxPivotGridFieldChooserOptions_searchEnabled*/
+        searchEnabled?: boolean;
 
         /** @docid dxPivotGridFieldChooserOptions_layout */
         layout?: number;

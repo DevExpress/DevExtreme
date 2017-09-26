@@ -698,7 +698,8 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(9, 5);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.equal(scrollBy.getCall(0).args[0].left, 0, "scrollBy was called with right distance");
     });
 
     QUnit.test("Check scrolling to time, if startDayHour is not 0", function(assert) {
@@ -714,11 +715,11 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(2, 0);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], 0, 2.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, "scrollBy was called with right distance");
 
         this.instance.scrollToTime(5, 0);
 
-        assert.roughEqual(scrollBy.getCall(1).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
     });
 
     QUnit.test("Check scrolling to time, if 'hours' argument greater than the 'endDayHour' option", function(assert) {
@@ -734,7 +735,7 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(12, 0);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
     });
 
     QUnit.test("Scrolling to date which doesn't locate on current view should call console warning", function(assert) {
@@ -1021,6 +1022,18 @@ QUnit.testStart(function() {
         assert.ok(this.instance.getAppointmentsInstance().option("allowAllDayResize"));
     });
 
+    QUnit.test("allowAllDayResize option should depend on intervalCount", function(assert) {
+        this.createInstance({
+            views: [{ type: "week", name: "WEEK" }, { type: "day", name: "DAY" }, { type: "day", name: "DAY1", intervalCount: 3 } ],
+            currentView: "DAY"
+        });
+
+        assert.notOk(this.instance.getAppointmentsInstance().option("allowAllDayResize"));
+
+        this.instance.option("currentView", "DAY1");
+        assert.ok(this.instance.getAppointmentsInstance().option("allowAllDayResize"));
+    });
+
     QUnit.test("showAllDayPanel option value = true on init", function(assert) {
         this.createInstance();
 
@@ -1057,6 +1070,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 1, 9),
             currentView: "month",
             dataSource: data,
+            maxAppointmentsPerCell: null,
             height: 500,
             width: 800
         });
@@ -1071,6 +1085,183 @@ QUnit.testStart(function() {
         this.clock.tick();
 
         assert.notEqual(this.instance.element().find(".dx-scheduler-appointment").eq(0).outerHeight(), initialAppointmentHeight, "Appointment was repainted");
+    });
+
+    QUnit.test("view.intervalCount is passed to workspace & header & navigator", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            views: [{
+                type: "week",
+                name: "Week",
+                intervalCount: 3
+            }]
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 3, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 3, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
+    });
+
+    QUnit.test("view.intervalCount is passed to workspace & header & navigator, currentView is set by view.name", function(assert) {
+        this.createInstance({
+            currentView: "WEEK1",
+            views: [{
+                type: "day",
+                name: "DAY1",
+                intervalCount: 5
+            }, {
+                type: "week",
+                name: "WEEK1",
+                intervalCount: 3
+            }]
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace(),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 3, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 3, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
+    });
+
+    QUnit.test("view.intervalCount is passed to workspace & header & navigator, currentView is set by view.type", function(assert) {
+        var views = [{
+            type: "day",
+            name: "DAY1",
+            intervalCount: 5
+        }, {
+            type: "week",
+            name: "WEEK1",
+            intervalCount: 3
+        }];
+
+        this.createInstance({
+            currentView: "week",
+            views: views,
+            useDropDownViewSwitcher: false
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace(),
+            header = this.instance.getHeader(),
+            viewSwitcher = header._viewSwitcher,
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 3, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 3, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 3, "navigator has correct count");
+        assert.deepEqual(viewSwitcher.option("selectedItem"), views[1], "View switcher has correct selectedItem");
+    });
+
+    QUnit.test("view.startDate is passed to workspace & header & navigator", function(assert) {
+        var date = new Date(2017, 3, 4);
+
+        this.createInstance({
+            currentView: "week",
+            currentDate: new Date(2017, 2, 10),
+            views: [{
+                type: "week",
+                name: "Week",
+                intervalCount: 3,
+                startDate: date
+            }]
+        });
+
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.deepEqual(workSpaceWeek.option("startDate"), date, "workspace has correct startDate");
+        assert.deepEqual(header.option("startDate"), date, "header has correct startDate");
+        assert.equal(navigator.option("date").getMonth(), 1, "navigator has correct date depending on startDate");
+    });
+
+    QUnit.test("currentView option should be passed to header correctly", function(assert) {
+        this.createInstance({
+            currentView: "Week1",
+            currentDate: new Date(2017, 10, 25),
+            views: [{
+                type: "day",
+                name: "day1"
+            }, {
+                type: "week",
+                name: "Week1"
+            }]
+        });
+
+        var header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.deepEqual(header.option("currentView"), { type: "week", name: "Week1" }, "header has correct currentView");
+        assert.equal(navigator.option("step"), "week", "navigator has correct currentView");
+
+        this.instance.option("currentView", "day1");
+
+        assert.deepEqual(header.option("currentView"), { type: "day", name: "day1" }, "header has correct currentView");
+        assert.equal(navigator.option("step"), "day", "navigator has correct currentView");
+    });
+
+    QUnit.test("currentView option changing should work correctly, when intervalCount & startDate is set", function(assert) {
+        this.createInstance({
+            currentView: "day",
+            currentDate: new Date(2017, 10, 25),
+            views: [{
+                type: "day",
+                name: "day",
+                intervalCount: 3,
+                startDate: new Date(2017, 1, 1)
+            }, {
+                type: "week",
+                name: "Week",
+                intervalCount: 2,
+                startDate: new Date(2017, 10, 1)
+            }]
+        });
+
+        this.instance.option("currentView", "week");
+        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+            header = this.instance.getHeader(),
+            navigator = header._navigator;
+
+        assert.equal(workSpaceWeek.option("intervalCount"), 2, "workspace has correct count");
+        assert.equal(header.option("intervalCount"), 2, "header has correct count");
+        assert.equal(navigator.option("intervalCount"), 2, "navigator has correct count");
+
+        assert.deepEqual(workSpaceWeek.option("startDate"), new Date(2017, 10, 1), "workspace has correct startDate");
+        assert.deepEqual(header.option("startDate"), new Date(2017, 10, 1), "header has correct startDate");
+        assert.equal(navigator.option("date").getMonth(), 10, "navigator has correct date");
+    });
+
+    QUnit.test("maxAppointmentsPerCell should have correct default", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            views: [{
+                type: "week",
+                name: "Week",
+            }]
+        });
+
+        assert.equal(this.instance.option("maxAppointmentsPerCell"), "auto", "Default Option value is right");
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has right class");
+    });
+
+    QUnit.test("Workspace shouldn't have specific class if maxAppointmentsPerCell=null", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            maxAppointmentsPerCell: null,
+            views: [{
+                type: "week",
+                name: "Week",
+            }]
+        });
+
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
 
     QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
@@ -1289,6 +1480,32 @@ QUnit.testStart(function() {
         this.clock.tick(200);
 
         assert.ok(dataSource.items().length === 0, "Insert operation is canceled");
+    });
+
+    QUnit.test("Appointment should not be added to the data source if 'cancel' flag is defined as Promise", function(assert) {
+        var promise = new Promise(function(resolve) {
+            setTimeout(function() {
+                resolve(true);
+            }, 200);
+        });
+        var dataSource = new DataSource({
+            store: []
+        });
+        this.createInstance({
+            onAppointmentAdding: function(args) {
+                args.cancel = promise;
+            },
+            dataSource: dataSource
+        });
+
+        this.instance.addAppointment({ startDate: new Date(), text: "Appointment 1" });
+        this.clock.tick(200);
+
+        promise.then(function() {
+            assert.ok(dataSource.items().length === 0, "Insert operation is canceled");
+        });
+
+        return promise;
     });
 
     QUnit.test("onAppointmentAdded", function(assert) {
@@ -3097,4 +3314,28 @@ QUnit.testStart(function() {
 
         assert.ok(result, "Appointment takes all day");
     });
+
+    QUnit.test("Workspace should have an specific class if view.maxAppointmentsPerCell is set", function(assert) {
+        this.createInstance({
+            currentView: "Week",
+            views: [{
+                type: "week",
+                name: "Week",
+                maxAppointmentsPerCell: 3
+            },
+            {
+                type: "day",
+                name: "day",
+                maxAppointmentsPerCell: null
+            }]
+        });
+
+        var $workSpace = this.instance.getWorkSpace().element();
+        assert.ok($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace has correct class");
+
+        this.instance.option("currentView", "day");
+        $workSpace = this.instance.getWorkSpace().element();
+        assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
+    });
+
 })("View with configuration");

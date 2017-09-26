@@ -1,14 +1,14 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    eventsEngine = require("../../events/core/events_engine"),
+var eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
     errors = require("../widget/ui.errors"),
     browser = require("../../core/utils/browser"),
     sessionStorage = require("../../core/utils/storage").sessionStorage,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    typeUtils = require("../../core/utils/type");
+    typeUtils = require("../../core/utils/type"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
 
@@ -115,7 +115,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
             loadResult = that._loadState();
 
             if(!loadResult || !typeUtils.isFunction(loadResult.done)) {
-                loadResult = $.Deferred().resolve(loadResult);
+                loadResult = new Deferred().resolve(loadResult);
             }
 
             loadResult.done(function(state) {

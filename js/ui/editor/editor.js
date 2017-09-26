@@ -118,7 +118,10 @@ var Editor = Widget.inherit({
         }
 
         this.callBase();
-        this._attachChildKeyboardEvents();
+
+        if(this._keyboardProcessor) {
+            this._attachChildKeyboardEvents();
+        }
     },
 
     _attachChildKeyboardEvents: commonUtils.noop,
@@ -186,7 +189,7 @@ var Editor = Widget.inherit({
         }
 
         if(!isValid && validationError && validationError.message) {
-            this._$validationMessage = $("<div/>", { "class": INVALID_MESSAGE })
+            this._$validationMessage = $("<div>").addClass(INVALID_MESSAGE)
                 .html(validationError.message)
                 .appendTo($element);
 

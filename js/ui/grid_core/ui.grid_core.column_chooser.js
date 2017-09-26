@@ -62,7 +62,7 @@ var ColumnChooserController = modules.ViewController.inherit({
 
         if(columnChooserEnabled) {
             if(!$showColumnChooserButton.length) {
-                $columnChooserButton = $("<div />")
+                $columnChooserButton = $("<div>")
                     .addClass(columnChooserButtonClass)
                     .appendTo($element);
 
@@ -141,7 +141,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 rtlEnabled: that.option("rtlEnabled"),
                 onHidden: function() {
                     if(that._isWinDevice()) {
-                        $(document.body).removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
+                        $("body").removeClass(that.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
                     }
                 },
                 container: columnChooserOptions.container
@@ -332,7 +332,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         this._popupContainer.show();
 
         if(this._isWinDevice()) {
-            $(document.body).addClass(this.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
+            $("body").addClass(this.addWidgetPrefix(NOTOUCH_ACTION_CLASS));
         }
     },
 

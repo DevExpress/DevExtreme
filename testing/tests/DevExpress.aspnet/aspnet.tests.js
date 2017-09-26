@@ -3,26 +3,25 @@
 (function(factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
+            require("ui/validator");
+            require("ui/validation_summary");
+            require("ui/text_box");
+            require("ui/button");
+
             module.exports = factory(
                 require("jquery"),
                 require("ui/set_template_engine"),
-                require("aspnet"),
-                require("ui/text_box"),
-                require("ui/button"),
-                require("ui/validator"),
-                require("ui/validation_summary")
+                require("aspnet")
             );
         });
     } else {
         factory(
             window.jQuery,
             DevExpress.ui.setTemplateEngine,
-            DevExpress.aspnet,
-            DevExpress.ui.dxTextBox,
-            DevExpress.ui.dxButton
+            DevExpress.aspnet
         );
     }
-}(function($, setTemplateEngine, aspnet, dxTextBox, dxButton) {
+}(function($, setTemplateEngine, aspnet) {
 
     QUnit.module(
         "Client Validation",
@@ -139,6 +138,12 @@
                 $("#qunit-fixture").html(
                     '<div id="button"></div>\
                     \
+                    <script id="templateWithCreateComponent" type="text/html">\
+                    <div id="templateContent">\
+                        <div id="inner-button"></div>\
+                        <% DevExpress.aspnet.createComponent("dxButton", { text: "text" }, "inner-button"); %>\
+                    </div>\
+                    </script>\
                     <script id="simpleTemplate" type="text/html">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton") %>\
@@ -191,6 +196,11 @@
 
                 return $("#templateContent").children();
             }
+
+            QUnit.test("Create component", function(assert) {
+                var $result = renderTemplate("#templateWithCreateComponent");
+                assert.ok($result.is(".dx-button"));
+            });
 
             QUnit.test("Component element rendering", function(assert) {
                 var $result = renderTemplate("#simpleTemplate");
@@ -268,6 +278,11 @@
         testTemplate("Evaluate",
             "<% text %>",
             ""
+        );
+
+        testTemplate("Evalute expr w/ semicolon",
+            "<% text %>abc",
+            "abc"
         );
 
         testTemplate("For loop",

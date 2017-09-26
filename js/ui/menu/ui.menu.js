@@ -355,7 +355,7 @@ var Menu = MenuBase.inherit({
     },
 
     _renderHamburgerButton: function() {
-        this._hamburger = new Button($("<div>", { "class": DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS }), {
+        this._hamburger = new Button($("<div>").addClass(DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), {
             icon: 'menu',
             activeStateEnabled: false,
             onClick: this._toggleTreeView.bind(this)
@@ -477,7 +477,7 @@ var Menu = MenuBase.inherit({
     _initAdaptivity: function() {
         if(!this._isAdaptivityEnabled()) return;
 
-        this._$adaptiveContainer = $("<div>", { "class": DX_ADAPTIVE_MODE_CLASS });
+        this._$adaptiveContainer = $("<div>").addClass(DX_ADAPTIVE_MODE_CLASS);
 
         var $hamburger = this._renderHamburgerButton();
 
@@ -570,8 +570,7 @@ var Menu = MenuBase.inherit({
             onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
             onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
             onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
-            onExpandLastSubmenu: isMenuHorizontal ? this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION) : null,
-            _hideDelimiter: this.option("_hideDelimiter")
+            onExpandLastSubmenu: isMenuHorizontal ? this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION) : null
         };
     },
 
@@ -937,8 +936,6 @@ var Menu = MenuBase.inherit({
         if(!args || this._disabledGetter(args.itemData)) {
             return;
         }
-
-        args.jQueryEvent.stopPropagation();
 
         currentSubmenu = this._getSubmenuByElement(args.itemElement, args.itemData);
 

@@ -14,7 +14,8 @@ var $ = require("../core/renderer"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     PivotTabs = require("./pivot/ui.pivot_tabs"),
     EmptyTemplate = require("./widget/empty_template"),
-    ChildDefaultTemplate = require("./widget/child_default_template");
+    ChildDefaultTemplate = require("./widget/child_default_template"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var PIVOT_CLASS = "dx-pivot",
     PIVOT_AUTOHEIGHT_CLASS = "dx-pivot-autoheight",
@@ -344,7 +345,7 @@ var Pivot = CollectionWidget.inherit({
         }
 
         this._selectionChangePromise && this._selectionChangePromise.resolve();
-        this._selectionChangePromise = $.Deferred();
+        this._selectionChangePromise = new Deferred();
     },
 
     _updateContentPosition: function(offset) {

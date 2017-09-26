@@ -195,8 +195,13 @@ var TabPanel = MultiView.inherit({
         this.element().addClass(TABPANEL_CLASS);
 
         this.setAria("role", "tabpanel");
+    },
 
+    _render: function() {
+        this._createTitleActions();
         this._renderLayout();
+
+        this.callBase();
     },
 
     _initTemplates: function() {
@@ -214,6 +219,24 @@ var TabPanel = MultiView.inherit({
         }, ["title", "html", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"));
     },
 
+    _createTitleActions: function() {
+        this._createTitleClickAction();
+        this._createTitleHoldAction();
+        this._createTitleRenderedAction();
+    },
+
+    _createTitleClickAction: function() {
+        this._titleClickAction = this._createActionByOption("onTitleClick");
+    },
+
+    _createTitleHoldAction: function() {
+        this._titleHoldAction = this._createActionByOption("onTitleHold");
+    },
+
+    _createTitleRenderedAction: function() {
+        this._titleRenderedAction = this._createActionByOption("onTitleRendered");
+    },
+
     _renderContent: function() {
         var that = this;
 
@@ -226,6 +249,10 @@ var TabPanel = MultiView.inherit({
     },
 
     _renderLayout: function() {
+        if(this._tabs) {
+            return;
+        }
+
         var $element = this.element();
 
         this._$tabContainer = $("<div>")
@@ -247,8 +274,8 @@ var TabPanel = MultiView.inherit({
     _updateLayout: function() {
         var tabsHeight = this._$tabContainer.outerHeight();
         this._$container.css({
-            "margin-top": -tabsHeight,
-            "padding-top": tabsHeight
+            "marginTop": -tabsHeight,
+            "paddingTop": tabsHeight
         });
     },
 
@@ -270,14 +297,14 @@ var TabPanel = MultiView.inherit({
             tabIndex: this.option("tabIndex"),
             selectedIndex: this.option("selectedIndex"),
 
-            onItemClick: this.option("onTitleClick"),
-            onItemHold: this.option("onTitleHold"),
+            onItemClick: this._titleClickAction.bind(this),
+            onItemHold: this._titleHoldAction.bind(this),
             itemHoldTimeout: this.option("itemHoldTimeout"),
             onSelectionChanged: (function(e) {
                 this.option("selectedIndex", e.component.option("selectedIndex"));
                 this._refreshActiveDescendant();
             }).bind(this),
-            onItemRendered: this.option("onTitleRendered"),
+            onItemRendered: this._titleRenderedAction.bind(this),
             itemTemplate: this._getTemplateByOption("itemTitleTemplate"),
 
             items: this.option("items"),
@@ -368,13 +395,16 @@ var TabPanel = MultiView.inherit({
                 this._setTabsOption("itemTemplate", this._getTemplateByOption("itemTitleTemplate"));
                 break;
             case "onTitleClick":
-                this._setTabsOption("onItemClick", value);
+                this._createTitleClickAction();
+                this._setTabsOption("onItemClick", this._titleClickAction.bind(this));
                 break;
             case "onTitleHold":
-                this._setTabsOption("onItemHold", value);
+                this._createTitleHoldAction();
+                this._setTabsOption("onItemHold", this._titleHoldAction.bind(this));
                 break;
             case "onTitleRendered":
-                this._setTabsOption("onItemRendered", value);
+                this._createTitleRenderedAction();
+                this._setTabsOption("onItemRendered", this._titleRenderedAction.bind(this));
                 break;
             case "loop":
                 this._setTabsOption("loopItemFocus", value);

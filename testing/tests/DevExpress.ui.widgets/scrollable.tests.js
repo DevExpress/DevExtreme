@@ -4,6 +4,7 @@ var $ = require("jquery"),
     browser = require("core/utils/browser"),
     noop = require("core/utils/common").noop,
     support = require("core/utils/support"),
+    styleUtils = require("core/utils/style"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
     domUtils = require("core/utils/dom"),
@@ -82,6 +83,9 @@ QUnit.testStart(function() {
             <div class="content1" style="height: 100px; width: 100px;"></div>\
             <div class="content2"></div>\
         </div>\
+        <div id="scrollableVary" style="height: auto">\
+            <div class="content3" style="height: 100px; width: 100px;"></div>\
+        </div>\
         <div id="scrollableNeighbour"></div>\
         <div id="scrollable1" style="height: 100px;">\
             <div id="scrollable2" style="height: 50px;">\
@@ -137,6 +141,21 @@ QUnit.test("rtlEnabled scrolls to very right position", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         direction: "horizontal",
         rtlEnabled: true,
+        useNative: false
+    });
+
+    var scrollable = $scrollable.dxScrollable("instance");
+    var veryRightPosition = scrollable.content().width() - $scrollable.width();
+
+    assert.equal(scrollable.scrollLeft(), veryRightPosition, "scrolled to very right position");
+});
+
+QUnit.test("rtlEnabled scrolls to very right position after changing the size of the scrollable (T544872)", function(assert) {
+    var $scrollable = $("#scrollableVary").dxScrollable({
+        direction: "horizontal",
+        rtlEnabled: true,
+        width: 50,
+        height: 50,
         useNative: false
     });
 
@@ -539,7 +558,7 @@ QUnit.test("inertia calc distance", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.top), Math.round(distance), "distance was calculated correctly");
         }
     });
 
@@ -567,7 +586,7 @@ QUnit.test("no inertia when gesture end is deferred", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(moveDistance), "no inertia");
+            assert.equal(Math.round(location.top), Math.round(moveDistance), "no inertia");
         }
     });
 
@@ -618,7 +637,7 @@ QUnit.test("stop inertia on click", function(assert) {
             useNative: false,
             onStop: function() {
                 var location = getScrollOffset($scrollable);
-                assert.notEqual(location.top, Math.round(distance), "scroll was stopped");
+                assert.notEqual(Math.round(location.top), Math.round(distance), "scroll was stopped");
             }
         }),
         mouse = pointerMock($scrollable.find("." + SCROLLABLE_CONTENT_CLASS)).start();
@@ -848,7 +867,7 @@ QUnit.test("inertia calc distance out of bounds", function(assert) {
 
         onBounce: function() {
             var location = getScrollOffset($scrollable);
-            assert.ok(location.top < Math.round(distance), "distance was calculated wrong");
+            assert.ok(Math.round(location.top) < Math.round(distance), "distance was calculated wrong");
         },
 
         onEnd: function() {
@@ -1103,7 +1122,7 @@ QUnit.test("horizontal inertia calc distance", function(assert) {
         direction: "horizontal",
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.left, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.left), Math.round(distance), "distance was calculated correctly");
         }
     });
 
@@ -1803,7 +1822,7 @@ QUnit.test("update", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.top), Math.round(distance), "distance was calculated correctly");
         }
     });
 
@@ -4431,7 +4450,7 @@ QUnit.test("scroll should save position on dxhiding when scroll is hidden", func
 });
 
 
-if(support.styleProp("touchAction")) {
+if(styleUtils.styleProp("touchAction")) {
     QUnit.module("nested scrolling in IE/Edge");
 
     QUnit.test("touch-action none should be present on not stretched list", function(assert) {

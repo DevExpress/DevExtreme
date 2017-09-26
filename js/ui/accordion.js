@@ -11,7 +11,9 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     eventUtils = require("../events/utils"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
-    when = require("../integration/jquery/deferred").when,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     BindableTemplate = require("./widget/bindable_template"),
     iconUtils = require("../core/utils/icon");
 
@@ -273,7 +275,7 @@ var Accordion = CollectionWidget.inherit({
             defaultTemplateName: this.option("itemTitleTemplate")
         }));
 
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
         this._deferredItems.push(deferred);
 
         if(!this.option("deferRendering")) {
@@ -372,7 +374,7 @@ var Accordion = CollectionWidget.inherit({
         var d;
         if(skipAnimation || startHeight === endHeight) {
             $element.css("height", endHeight);
-            d = $.Deferred().resolve();
+            d = new Deferred().resolve();
         } else {
             d = fx.animate($element, {
                 type: "custom",
@@ -457,10 +459,10 @@ var Accordion = CollectionWidget.inherit({
     * @name dxAccordionMethods_expandItem
     * @publicName expandItem(index)
     * @param1 index:numeric
-    * @return Promise
+    * @return Promise<void>
     */
     expandItem: function(index) {
-        this._deferredAnimate = $.Deferred();
+        this._deferredAnimate = new Deferred();
 
         this.selectItem(index);
 
@@ -471,10 +473,10 @@ var Accordion = CollectionWidget.inherit({
     * @name dxAccordionMethods_collapseItem
     * @publicName collapseItem(index)
     * @param1 index:numeric
-    * @return Promise
+    * @return Promise<void>
     */
     collapseItem: function(index) {
-        this._deferredAnimate = $.Deferred();
+        this._deferredAnimate = new Deferred();
 
         this.unselectItem(index);
 
@@ -484,7 +486,7 @@ var Accordion = CollectionWidget.inherit({
     /**
     * @name dxAccordionMethods_updateDimensions
     * @publicName updateDimensions()
-    * @return Promise
+    * @return Promise<void>
     */
     updateDimensions: function() {
         return this._updateItemHeights(false);

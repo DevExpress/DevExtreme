@@ -9,6 +9,7 @@
     @GENERIC_LIST_DELETEBUTTON_PADDING: 3px;
 
     @GENERIC_LIST_SELECT_ALL_MARGIN_TOP: -1px;
+    @GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT: 0px;
     @GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 3px;
 }
 
@@ -23,6 +24,7 @@
     @GENERIC_LIST_DELETEBUTTON_PADDING: 1px;
 
     @GENERIC_LIST_SELECT_ALL_MARGIN_TOP: 1px;
+    @GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT: @GENERIC_LIST_ITEM_HORIZONTAL_PADDING;
     @GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 0;
 }
 
@@ -30,6 +32,7 @@
 
 @GENERIC_LIST_BORDER: @GENERIC_LIST_BORDER_WIDTH solid @list-border-color;
 @GENERIC_LIST_ITEM_BORDER: @GENERIC_LIST_ITEM_BORDER_WIDTH solid @list-border-color;
+@GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round(@GENERIC_BASE_LINE_HEIGHT * @GENERIC_BASE_FONT_SIZE) + @GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING + @GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING + 2*@GENERIC_BASE_BORDER_WIDTH;
 
 
 .dx-list-item-chevron {
@@ -96,6 +99,10 @@
 
     .dx-list {
         border: none;
+
+        &.dx-list-with-search .dx-scrollable-wrapper {
+            height: calc(~"100% - "@GENERIC_LIST_SEARCH_EDITOR_HEIGHT);
+        }
 
         .dx-empty-message {
             text-align: left;
@@ -251,14 +258,12 @@
 
     .dx-list-select-all-checkbox {
         float: left;
-        margin-top: -1px;
-        margin-bottom: -3px;
-        margin-left: @item_horizontal_padding;
+        margin: -1px @GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT -3px @item_horizontal_padding;
     }
 
     .dx-list-select-all-label {
         line-height: 1;
-        padding: 0 6px;
+        padding: 0 @GENERIC_LIST_ITEM_HORIZONTAL_PADDING;
         margin-top: @GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP;
     }
 

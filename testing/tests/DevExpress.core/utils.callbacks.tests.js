@@ -37,6 +37,21 @@ QUnit.test("Call all of the Callbacks with the argument", function(assert) {
     assert.ok(callBack2, "callBack1");
 });
 
+QUnit.test("Fired method", function(assert) {
+    //arrange
+    this.Callbacks.add(function(param) {});
+
+    //assert
+    assert.ok(!this.Callbacks.fired(), "Callback not fired at start");
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.ok(this.Callbacks.fired(), "Callback fired");
+});
+
+
 QUnit.test("Call all Callbacks in a list with the given context", function(assert) {
     //arrange
     var context = {},
@@ -206,6 +221,21 @@ QUnit.test("Base strategy", function(assert) {
     ]);
 });
 
+QUnit.test("Fired method", function(assert) {
+    //arrange
+
+    this.Callbacks.add(function() {});
+
+    //assert
+    assert.notOk(this.Callbacks.fired(), "Callback not fired yet");
+
+    //act
+    this.Callbacks.fire();
+
+    //assert
+    assert.ok(this.Callbacks.fired(), "Callback fired");
+});
+
 QUnit.module("Flags", {
     afterEach: function() {
         this.Callbacks.empty();
@@ -247,6 +277,43 @@ QUnit.test("Sync strategy with one inner fire", function(assert) {
         { callback: 1, params: 2 },
         { callback: 2, params: 2 },
         { callback: 3, params: 2 },
+        { callback: 3, params: 1 }
+    ]);
+});
+
+//T544647
+QUnit.test("Sync strategy with one inner fire in first callback", function(assert) {
+    //arrange
+    var that = this,
+        callOrder = [];
+
+    this.Callbacks = Callbacks({ syncStrategy: true });
+
+    that.Callbacks.add(function(param) {
+        callOrder.push({ callback: 1, params: param });
+        if(callOrder.length === 1) {
+            that.Callbacks.fire(2);
+        }
+    });
+
+    that.Callbacks.add(function(param) {
+        callOrder.push({ callback: 2, params: param });
+    });
+
+    that.Callbacks.add(function(param) {
+        callOrder.push({ callback: 3, params: param });
+    });
+
+    //act
+    that.Callbacks.fire(1);
+
+    //assert
+    assert.deepEqual(callOrder, [
+        { callback: 1, params: 1 },
+        { callback: 1, params: 2 },
+        { callback: 2, params: 2 },
+        { callback: 3, params: 2 },
+        { callback: 2, params: 1 },
         { callback: 3, params: 1 }
     ]);
 });
@@ -388,3 +455,4 @@ QUnit.test("Unique", function(assert) {
     //assert
     assert.equal(fireCount, 1);
 });
+

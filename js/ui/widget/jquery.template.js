@@ -37,13 +37,16 @@ registerTemplateEngine("jquery-tmpl", {
         return outerHtml(element);
     },
     render: function(template, data) {
-        return $.tmpl(template, data);
+        /* global jQuery */
+        return jQuery.tmpl(template, data);
     }
 });
 
 registerTemplateEngine("jsrender", {
     compile: function(element) {
-        return $.templates(outerHtml(element));
+        /* global jQuery */
+        /* global jsrender */
+        return (jQuery ? jQuery : jsrender).templates(outerHtml(element));
     },
     render: function(template, data) {
         return template.render(data);
@@ -125,7 +128,7 @@ var Template = TemplateBase.inherit({
     },
 
     _renderCore: function(options) {
-        return $("<div>").append(currentTemplateEngine.render(this._compiledTemplate, options.model)).contents();
+        return $("<div>").append(currentTemplateEngine.render(this._compiledTemplate, options.model, options.index)).contents();
     },
 
     source: function() {

@@ -9,7 +9,8 @@ var $ = require("../../core/renderer"),
     FunctionTemplate = require("../widget/function_template"),
     DataHelperMixin = require("../../data_helper"),
     DataSourceModule = require("../../data/data_source/data_source"),
-    ArrayStore = require("../../data/array_store");
+    ArrayStore = require("../../data/array_store"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 /**
 * @name DataExpressionMixin
@@ -26,14 +27,14 @@ var DataExpressionMixin = extend(DataHelperMixin, {
             /**
             * @name DataExpressionMixinOptions_items
             * @publicName items
-            * @type array
+            * @type Array<any>
             */
             items: [],
 
             /**
             * @name DataExpressionMixinOptions_dataSource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSource configuration
+            * @type string|Array<any>|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
@@ -111,7 +112,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     },
 
     _loadValue: function(value) {
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
         value = this._unwrappedValue(value);
 
         if(!typeUtils.isDefined(value)) {
@@ -213,7 +214,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         if(this._displayGetterExpr()) {
             this._originalItemTemplate = this._defaultTemplates["item"];
             this._defaultTemplates["item"] = new FunctionTemplate((function(options) {
-                return $('<div/>').text(this._displayGetter(options.model)).html();
+                return $('<div>').text(this._displayGetter(options.model)).html();
             }).bind(this));
         } else if(this._originalItemTemplate) {
             this._defaultTemplates["item"] = this._originalItemTemplate;

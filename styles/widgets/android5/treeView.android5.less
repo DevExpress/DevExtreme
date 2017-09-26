@@ -19,6 +19,8 @@
 @ANDROID5_TREEVIEW_EXPANDER_COLOR: #757575;
 
 @ANDROID5_TREEVIEW_ARROW_ICON_SIZE: 14px;
+@ANDROID5_TREEVIEW_SEARCH_EDITOR_HEIGHT: 48px;
+
 
 .dx-treeview-node-loadindicator {
     width: @ANDRIOD_TREEVIEW_LOADINCICATOR_SIZE;
@@ -32,6 +34,10 @@
 }
 
 .dx-treeview {
+    &.dx-treeview-with-search > .dx-scrollable {
+        height: calc(~"100% - "@ANDROID5_TREEVIEW_SEARCH_EDITOR_HEIGHT);
+    }
+
     &.dx-treeview-border-visible {
         border: 1px solid @ANDROID5_TREE_VIEW_BORDER_COLOR;
 

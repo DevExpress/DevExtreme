@@ -28,13 +28,13 @@ var BaseWidget = {
 
     /**
     * @pseudo CommonVizDataSource
-    * @type array|DataSource|DataSource configuration|string
+    * @type Array<any>|DataSource|DataSourceOptions|string
     * @notUsedInTheme
     */
 
     /**
     * @pseudo CommonVizPalette
-    * @type array|string
+    * @type Array<string>|string
     * @default "Default"
     * @acceptValues "Default" | "Soft Pastel" | "Harmony Light" | "Pastel" | "Bright" | "Soft" | "Ocean" | "Vintage" | "Violet"
     */
@@ -404,7 +404,7 @@ var BaseWidget = {
         /**
         * @name BaseWidgetOptions_export_formats
         * @publicName formats
-        * @type array
+        * @type Array<string>
         * @default ['PNG', 'PDF', 'JPEG', 'SVG', 'GIF']
         */
         formats: ['PNG', 'PDF', 'JPEG', 'SVG', 'GIF'],

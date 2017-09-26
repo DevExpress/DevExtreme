@@ -620,6 +620,31 @@ QUnit.test("show field chooser popup on field chooser button click", function(as
     assert.ok(!pivotGrid.element().find(".dx-area-description-cell").hasClass("dx-pivotgrid-background"));
 });
 
+QUnit.test("create field chooser with search", function(assert) {
+    var pivotGrid = createPivotGrid({
+            dataSource: {
+                rows: [],
+                columns: [],
+                values: []
+            },
+            fieldChooser: {
+                searchEnabled: true,
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    //act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    var fieldChooser = fieldChooserPopup.content().data("dxPivotGridFieldChooser");
+
+    //assert
+    assert.ok(fieldChooser.option("searchEnabled"), 'fieldChooser with search');
+});
+
 QUnit.test("fieldChooser layout change at runtime should not hide popup", function(assert) {
     var pivotGrid = createPivotGrid({
             dataSource: {
@@ -2191,6 +2216,35 @@ if(!devices.real().ios) {
     });
 }
 
+QUnit.test("no bottom border if vertical scroll when small height", function(assert) {
+    //act
+    $("#pivotGrid").height(200);
+    this.testOptions.scrolling = {
+        useNative: true
+    };
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    //assert
+    assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
+    assert.equal(parseFloat(pivotGrid.element().find(".dx-area-data-cell").css('border-bottom-width')), 0, 'data area border bottom width');
+    assert.equal(parseFloat(pivotGrid.element().find(".dx-area-row-cell").css('border-bottom-width')), 0, 'row area border bottom width');
+});
+
+QUnit.test("bottom border if horizontal scroll", function(assert) {
+    //act
+    $("#pivotGrid").width(300);
+    this.testOptions.scrolling = {
+        useNative: true
+    };
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    //assert
+    assert.ok(!pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
+    assert.ok(pivotGrid._columnsArea.hasScroll(), 'has horizontal scroll');
+    assert.ok(parseFloat(pivotGrid.element().find(".dx-area-data-cell").css('border-bottom-width')) > 0, 'data area border bottom width');
+    assert.ok(parseFloat(pivotGrid.element().find(".dx-area-row-cell").css('border-bottom-width')) > 0, 'row area border bottom width when no scrollbar width');
+});
+
 QUnit.test('mergeArraysByMaxValue', function(assert) {
     var array1 = [10, 12, 35, 7],
         array2 = [8, 12, 39, 5];
@@ -2914,7 +2968,7 @@ QUnit.test('No size reservation for scrolling when changed size to no scroll', f
         return pivotGridOptions;
     };
 
-    var pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1005, height: 250 }), assert);
+    var pivotGrid = createPivotGrid(createPivotGridOptions({ width: 1050, height: 250 }), assert);
 
     this.clock.tick();
 
@@ -2935,7 +2989,7 @@ QUnit.test('No size reservation for scrolling when changed size to no scroll', f
 
     var table = pivotGrid.element().find("table").first();
 
-    assert.strictEqual(table.width(), 1005, "table width");
+    assert.strictEqual(table.width(), 1050, "table width");
 });
 
 QUnit.test('B253995 - dxPivotGrid height is wrong when rows area has text wrapped to another line', function(assert) {
@@ -4718,7 +4772,6 @@ QUnit.test('Update colspans. when new columns count less than headers area have'
     assert.strictEqual($lastCells.get(2).colSpan, 2);
     assert.strictEqual($lastCells.get(3).colSpan, 2);
 });
-
 
 QUnit.module('Data area');
 

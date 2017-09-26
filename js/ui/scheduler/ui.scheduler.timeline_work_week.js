@@ -2,7 +2,8 @@
 
 var registerComponent = require("../../core/component_registrator"),
     SchedulerTimelineWeek = require("./ui.scheduler.timeline_week"),
-    dateUtils = require("../../core/utils/date");
+    dateUtils = require("../../core/utils/date"),
+    toMs = dateUtils.dateToMilliseconds;
 
 var TIMELINE_CLASS = "dx-scheduler-timeline-work-week",
     MONDAY_INDEX = 1;
@@ -18,6 +19,27 @@ var SchedulerTimelineWorkWeek = SchedulerTimelineWeek.inherit({
 
     _firstDayOfWeek: function() {
         return this.option("firstDayOfWeek") || MONDAY_INDEX;
+    },
+
+    _incrementDate: function(date) {
+        var day = date.getDay();
+        if(day === 5) {
+            date.setDate(date.getDate() + 2);
+        }
+        this.callBase(date);
+    },
+
+    _getOffsetByCount: function(cellIndex, rowIndex) {
+        var weekendCount = Math.floor(cellIndex / (5 * this._getCellCountInDay()));
+        if(weekendCount > 0) {
+            return toMs("day") * weekendCount * 2;
+        } else {
+            return 0;
+        }
+    },
+
+    _getWeekendsCount: function(days) {
+        return 2 * Math.floor(days / 7);
     },
 
     _setFirstViewDate: function() {

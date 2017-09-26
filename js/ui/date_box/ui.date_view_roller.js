@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -60,11 +59,6 @@ var DateViewRoller = Scrollable.inherit({
     _render: function() {
         this.callBase();
 
-        //Note: fx animations in 'moveTo' interrupt by '_correctLocation'
-        each(this._strategy._scrollers, function(index, scroller) {
-            scroller._correctLocation = noop;
-        });
-
         this.element().addClass(DATEVIEW_ROLLER_CLASS);
 
         this._renderContainerClick();
@@ -111,11 +105,11 @@ var DateViewRoller = Scrollable.inherit({
 
         this._$content.empty();
         // NOTE: rendering ~166+30+12+24+60 <div>s >> 50mc
-        each(items, function() {
+        items.forEach(function(item) {
             $items = $items.add(
                 $("<div>")
                     .addClass(DATEVIEW_ROLLER_ITEM_CLASS)
-                    .append(this)
+                    .append(item)
             );
         });
 

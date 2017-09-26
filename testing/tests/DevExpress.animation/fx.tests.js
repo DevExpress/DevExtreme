@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    eventsEngine = require("events/core/events_engine"),
     fx = require("animation/fx"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
@@ -892,15 +893,15 @@ if(support.transition) {
         function eventUsedTimes(sinonSpy, eventName) {
             var result = 0;
             for(var i = 0; i < sinonSpy.callCount; i++) {
-                if(sinonSpy.getCall(i).args[0] === eventName) {
+                if(sinonSpy.getCall(i).args[1] === eventName) {
                     result++;
                 }
             }
             return result;
         }
 
-        sinon.spy($.prototype, "on");
-        sinon.spy($.prototype, "off");
+        sinon.spy(eventsEngine, "on");
+        sinon.spy(eventsEngine, "off");
 
         var animation = fx.createAnimation($test, {
                 type: 'slide',
@@ -915,16 +916,16 @@ if(support.transition) {
             .done(function() {
                 assert.fail("Should be rejected when the element is removed from DOM");
             }).fail(function() {
-                assert.equal(eventUsedTimes($.prototype.on, testedEventName), 1);
-                assert.equal(eventUsedTimes($.prototype.off, testedEventName), 2);
+                assert.equal(eventUsedTimes(eventsEngine.on, testedEventName), 1);
+                assert.equal(eventUsedTimes(eventsEngine.off, testedEventName), 2);
             }).always(function() {
-                $.prototype.on.restore();
-                $.prototype.off.restore();
+                eventsEngine.on.restore();
+                eventsEngine.off.restore();
                 done();
             });
 
-        assert.equal(eventUsedTimes($.prototype.on, testedEventName), 1);
-        assert.equal(eventUsedTimes($.prototype.off, testedEventName), 1);
+        assert.equal(eventUsedTimes(eventsEngine.on, testedEventName), 1);
+        assert.equal(eventUsedTimes(eventsEngine.off, testedEventName), 1);
         $test.remove();
     });
 
@@ -938,15 +939,15 @@ if(support.transition) {
         function eventUsedTimes(sinonSpy, eventName) {
             var result = 0;
             for(var i = 0; i < sinonSpy.callCount; i++) {
-                if(sinonSpy.getCall(i).args[0] === eventName) {
+                if(sinonSpy.getCall(i).args[1] === eventName) {
                     result++;
                 }
             }
             return result;
         }
 
-        sinon.spy($.prototype, "on");
-        sinon.spy($.prototype, "off");
+        sinon.spy(eventsEngine, "on");
+        sinon.spy(eventsEngine, "off");
 
         var animation = fx.createAnimation($test, {
                 type: 'slide',
@@ -959,13 +960,13 @@ if(support.transition) {
         animation.setup();
         result = animation.start()
             .done(function() {
-                assert.equal(eventUsedTimes($.prototype.on, testedEventName), 1);
-                assert.equal(eventUsedTimes($.prototype.off, testedEventName), 2);
+                assert.equal(eventUsedTimes(eventsEngine.on, testedEventName), 1);
+                assert.equal(eventUsedTimes(eventsEngine.off, testedEventName), 2);
             }).fail(function() {
                 assert.fail("animation.start() deferred shouldn't fail");
             }).always(function() {
-                $.prototype.on.restore();
-                $.prototype.off.restore();
+                eventsEngine.on.restore();
+                eventsEngine.off.restore();
                 done();
             });
     });

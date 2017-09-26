@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
+    Deferred = require("../../core/utils/deferred").Deferred,
     treeListCore = require("./ui.tree_list.core"),
     dataSourceAdapterProvider = require("./ui.tree_list.data_source_adapter"),
     dataControllerModule = require("../grid_core/ui.grid_core.data_controller");
@@ -67,7 +67,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         publicMethods: function() {
-            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadChildren"]);
+            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadDescendants"]);
         },
 
         changeRowExpand: function(key) {
@@ -87,7 +87,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                 }
             }
 
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
 
         /**
@@ -109,7 +109,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             if(!this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
 
         /**
@@ -121,7 +121,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             if(this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
 
         /**
@@ -184,29 +184,29 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         /**
-         * @name dxTreeListMethods_loadChildren
-         * @publicName loadChildren()
-         * @return Promise
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants()
+         * @return Promise<void>
          */
         /**
-         * @name dxTreeListMethods_loadChildren
-         * @publicName loadChildren(keys)
-         * @param1 keys:array
-         * @return Promise
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants(keys)
+         * @param1 keys:Array<any>
+         * @return Promise<void>
          */
         /**
-         * @name dxTreeListMethods_loadChildren
-         * @publicName loadChildren(keys, deep)
-         * @param1 keys:array
-         * @param2 deep:boolean
-         * @return Promise
+         * @name dxTreeListMethods_loadDescendants
+         * @publicName loadDescendants(keys, childrenOnly)
+         * @param1 keys:Array<any>
+         * @param2 childrenOnly:boolean
+         * @return Promise<void>
          */
-        loadChildren: function(keys, deep) {
+        loadDescendants: function(keys, childrenOnly) {
             if(!this._dataSource) {
                 return;
             }
 
-            return this._dataSource.loadChildren(keys, deep);
+            return this._dataSource.loadDescendants(keys, childrenOnly);
         }
     };
 })());
@@ -257,7 +257,7 @@ treeListCore.registerModule("data", {
             /**
             * @name dxTreeListOptions_expandedRowKeys
             * @publicName expandedRowKeys
-            * @type array
+            * @type Array<any>
             * @default []
             */
             expandedRowKeys: [],
@@ -313,7 +313,7 @@ treeListCore.registerModule("data", {
 /**
  * @name dxTreeListNode_children
  * @publicName children
- * @type array
+ * @type Array<dxTreeListNode>
  */
 /**
  * @name dxTreeListNode_hasChildren

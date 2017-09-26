@@ -367,6 +367,37 @@ QUnit.test("Change row expand state on row click", function(assert) {
 
 });
 
+//T553981
+QUnit.test("Row expand state should not be changed on row click when scrolling mode is 'infinite'", function(assert) {
+    //arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        columns: ["field1", "field2"],
+        loadingTimeout: undefined,
+        grouping: {
+            expandMode: "rowClick"
+        },
+        dataSource: {
+            store: [{ field1: "1", field2: "2" }, { field1: "1", field2: "4" }],
+            group: "field1"
+        },
+        scrolling: {
+            mode: "infinite"
+        }
+    }).dxDataGrid("instance");
+
+    //assert
+    assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
+
+    //act
+    $(dataGrid.element())
+        .find(".dx-datagrid-rowsview .dx-group-row")
+        .first()
+        .trigger("dxclick");
+
+    //assert
+    assert.ok(dataGrid.isRowExpanded(["1"]), "first group row is expanded");
+});
+
 QUnit.test("cellClick/cellHoverChanged handler should be executed when define via 'on' method", function(assert) {
     var cellClickCount = 0,
         cellHoverChangedCount = 0,
@@ -719,7 +750,7 @@ QUnit.test("Edit cell by click when grid is created in dxForm", function(assert)
     });
 
     //act
-    $($(dataGrid.element()).find(".dx-data-row > td").eq(0)).trigger("dxclick");
+    $(dataGrid.element().find(".dx-data-row > td").eq(0)).trigger("dxclick");
     clock.tick();
     clock.restore();
 
@@ -2296,8 +2327,8 @@ QUnit.test("min-height from styles when showBorders true", function(assert) {
     dataGrid.updateDimensions();
 
     //assert
-    assert.equal($dataGrid.height(), firstRenderHeight, "height is not changed");
-    assert.equal($dataGrid.height(), 200, "height is equal min-height");
+    assert.roughEqual($dataGrid.height(), firstRenderHeight, 1.01, "height is not changed");
+    assert.roughEqual($dataGrid.height(), 200, 1.01, "height is equal min-height");
 
     clock.restore();
 });
@@ -5023,7 +5054,7 @@ QUnit.test("Height rows view = height content", function(assert) {
     //assert
     rowsViewElement = $dataGrid.find(".dx-datagrid-rowsview");
     assert.equal(rowsViewElement.find(".dx-datagrid-content").length, 1, "has content");
-    var heightDiff = Math.round(rowsViewElement.height()) - rowsViewElement.find(".dx-datagrid-content")[0].offsetHeight;
+    var heightDiff = Math.round(rowsViewElement.height()) - rowsViewElement.find("tbody")[0].offsetHeight;
     assert.ok(heightDiff === 0 || heightDiff === 1/* chrome */, "height rows view = height content");
 });
 
@@ -5610,6 +5641,43 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
     assert.ok($(dataGrid.element()).find("input").closest("td").hasClass("dx-focused"), "cell with editor is focused");
 });
 
+//T553067
+QUnit.testInActiveWindow("Enter key on editor should prevent default behaviour", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    //arrange
+    var dataGrid = createDataGrid({
+            dataSource: [{ name: "name 1", value: 1 }, { name: "name 2", value: 2 }],
+            editing: {
+                mode: "cell",
+                allowUpdating: true
+            },
+            columns: [{ dataField: "name", allowEditing: false }, { dataField: "value", showEditorAlways: true }]
+        }),
+        navigationController = dataGrid.getController("keyboardNavigation");
+
+    this.clock.tick();
+    dataGrid.editCell(0, 0);
+    this.clock.tick();
+    $(":focus").on("focusout", function(e) {
+        //emulate browser behaviour
+        $(e.target).trigger("change");
+    });
+    $(":focus").val("test");
+
+    //act
+    var event = $.Event("keydown", { target: $(":focus").get(0) });
+    navigationController._keyDownHandler({ key: "enter", originalEvent: event });
+    this.clock.tick();
+
+    //assert
+    assert.ok(event.isDefaultPrevented(), "keydown event is prevented");
+    assert.equal(dataGrid.cellValue(0, 0), "test", "cell value is changed");
+});
+
 QUnit.test("expandAll", function(assert) {
     //arrange, act
     var expandAllGroupIndex,
@@ -5809,6 +5877,38 @@ QUnit.test("loading count after refresh when scrolling mode virtual", function(a
     assert.equal(contentReadyCount, 1, "contentReady is called once");
 });
 
+//T551304
+QUnit.test("row should rendered after editing if scrolling mode is virtual", function(assert) {
+    //arrange, act
+
+    var array = [];
+    for(var i = 0; i < 4; i++) {
+        array.push({ id: i, text: "text " + i });
+    }
+
+    var dataGrid = createDataGrid({
+        scrolling: {
+            mode: "virtual"
+        },
+        paging: {
+            pageSize: 2
+        },
+        dataSource: array
+    });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.cellValue(2, 1, 666);
+    dataGrid.saveEditData();
+    this.clock.tick();
+
+    //assert
+    assert.equal(dataGrid.getVisibleRows().length, 4, "visible row count");
+    assert.equal(dataGrid.cellValue(2, 1), 666, "value is changed");
+    assert.equal(dataGrid.hasEditData(), false, "no unsaved data");
+});
+
 QUnit.test("Duplicate rows should not be rendered if virtual scrolling enabled and column has values on second page only", function(assert) {
     //arrange, act
 
@@ -5881,7 +5981,7 @@ QUnit.test("round scroll position for columnHeadersView", function(assert) {
     scrollable.scrollTo(100.7);
 
     //assert
-    assert.equal(scrollable.scrollLeft(), 101);
+    assert.equal(Math.round(scrollable.scrollLeft()), 101);
 
     var $headersScrollable = $dataGrid.find(".dx-datagrid-headers" + " .dx-datagrid-scroll-container").first();
     assert.equal($headersScrollable.scrollLeft(), 101);
@@ -7109,6 +7209,36 @@ QUnit.test("Show searchPanel via option method", function(assert) {
     assert.ok($headerPanelElement.find(".dx-datagrid-search-panel").length, "has searchPanel");
 });
 
+//T548906
+QUnit.test("Change page index when virtual scrolling is enabled", function(assert) {
+    //arrange
+    var generateDataSource = function(count) {
+            var result = [],
+                i;
+
+            for(i = 0; i < count; ++i) {
+                result.push({ firstName: "test name" + i, lastName: "test lastName" + i, room: 100 + i, cash: 101 + i * 10 });
+            }
+
+            return result;
+        },
+        dataGrid = createDataGrid({
+            height: 800,
+            loadingTimeout: undefined,
+            dataSource: generateDataSource(100),
+            scrolling: {
+                mode: "virtual",
+                timeout: 0
+            }
+        });
+
+    //act
+    dataGrid.pageIndex(3);
+
+    //assert
+    assert.equal(dataGrid.pageIndex(), 3, "page index");
+});
+
 
 QUnit.module("templates");
 
@@ -7920,6 +8050,24 @@ QUnit.test("Focus row element", function(assert) {
 
     //act
     this.focusGridCell($(this.dataGrid.element()).find(".dx-datagrid-rowsview td").eq(4));
+
+    $focusedCell = $(this.dataGrid.element()).find(".dx-focused");
+
+    //assert
+    assert.ok($focusedCell.length, "We have focused cell in markup");
+    assert.equal(this.keyboardNavigationController._focusedView.name, "rowsView", "Check that correct view is focused");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
+        columnIndex: 0,
+        rowIndex: 2
+    }, "Check that correct cell is focused");
+});
+
+QUnit.test("Focus row element should support native DOM", function(assert) {
+    //arrange
+    var $focusedCell;
+
+    //act
+    this.focusGridCell($(this.dataGrid.element()).find(".dx-datagrid-rowsview td").get(4));
 
     $focusedCell = $(this.dataGrid.element()).find(".dx-focused");
 

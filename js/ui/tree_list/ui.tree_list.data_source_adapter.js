@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    treeListCore = require("./ui.tree_list.core"),
+var treeListCore = require("./ui.tree_list.core"),
     errors = require("../widget/ui.errors"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -11,7 +10,8 @@ var $ = require("../../core/renderer"),
     gridCoreUtils = require("../grid_core/ui.grid_core.utils"),
     ArrayStore = require("../../data/array_store"),
     query = require("../../data/query"),
-    DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter");
+    DataSourceAdapter = require("../grid_core/ui.grid_core.data_source_adapter"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var DEFAULT_KEY_EXPRESSION = "id";
 
@@ -217,18 +217,21 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             if(this.option("autoExpandAll")) {
                 options.remoteOperations.sorting = false;
                 options.remoteOperations.filtering = false;
-                if(isReload && !options.isCustomLoading) {
+                if(isReload && !this._lastLoadOptions && !options.isCustomLoading) {
                     expandVisibleNodes = true;
                 }
             }
 
             this._isReload = this._isReload || isReload || operationTypes.reload;
 
-            if((isReload || operationTypes.filtering) && !options.isCustomLoading) {
-                this._hasItemsMap = {};
-
-                if((options.storeLoadOptions.filter || (operationTypes.filtering && this.option("autoExpandAll"))) && this.option("expandNodesOnFiltering")) {
-                    expandVisibleNodes = true;
+            if(!options.isCustomLoading) {
+                if(!options.cachedStoreData) {
+                    this._hasItemsMap = {};
+                }
+                if(this.option("expandNodesOnFiltering") && (isReload || operationTypes.filtering)) {
+                    if(options.storeLoadOptions.filter || (operationTypes.filtering && this.option("autoExpandAll"))) {
+                        expandVisibleNodes = true;
+                    }
                 }
             }
 
@@ -315,7 +318,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 parentInfo = that._generateParentInfoToLoad(data),
                 parentIds = parentInfo.parentIds,
                 parentIdMap = parentInfo.parentIdMap,
-                d = $.Deferred(),
+                d = new Deferred(),
                 isRemoteFiltering = options.remoteOperations.filtering,
                 maxFilterLengthInRequest = that.option("maxFilterLengthInRequest"),
                 loadOptions = isRemoteFiltering ? options.storeLoadOptions : options.loadOptions;
@@ -418,7 +421,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
                 this._rootNode = this._createNodesByItems(data, visibleItems);
                 if(!this._rootNode) {
-                    options.data = $.Deferred().reject(errors.Error("E1046", this.getKeyExpr()));
+                    options.data = new Deferred().reject(errors.Error("E1046", this.getKeyExpr()));
                     return;
                 }
                 this._fillNodes(this._rootNode.children, options, expandedRowKeys);
@@ -448,7 +451,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
             if(!options.isCustomLoading) {
                 if(filter && !options.storeLoadOptions.parentIds && filterMode !== "standard") {
-                    var d = options.data = $.Deferred();
+                    var d = options.data = new Deferred();
                     if(filterMode === "smart") {
                         visibleItems = data;
                     }
@@ -534,7 +537,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
         changeRowExpand: function(key) {
             this._changeRowExpandCore(key);
-            return this._isNodesInitializing ? $.Deferred().resolve() : this.load();
+            return this._isNodesInitializing ? new Deferred().resolve() : this.load();
         },
 
         getNodeByKey: function(key) {
@@ -565,10 +568,10 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             return result;
         },
 
-        loadChildren: function(keys, deep) {
+        loadDescendants: function(keys, childrenOnly) {
             var that = this,
                 loadOptions,
-                d = $.Deferred(),
+                d = new Deferred(),
                 remoteOperations = that.remoteOperations();
 
             if(typeUtils.isDefined(keys)) {
@@ -586,11 +589,11 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
 
             that.load(loadOptions)
                 .done(function() {
-                    if(deep !== false) {
+                    if(!childrenOnly) {
                         var childKeys = getChildKeys(that, keys);
 
                         if(childKeys.length) {
-                            that.loadChildren(childKeys, deep).done(d.resolve).fail(d.reject);
+                            that.loadDescendants(childKeys, childrenOnly).done(d.resolve).fail(d.reject);
                             return;
                         }
                     }

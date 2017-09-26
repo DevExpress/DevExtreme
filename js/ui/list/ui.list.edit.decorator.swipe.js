@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    translator = require("../../animation/translator"),
+var translator = require("../../animation/translator"),
     fx = require("../../animation/fx"),
     registerDecorator = require("./ui.list.edit.decorator_registry").register,
-    EditDecorator = require("./ui.list.edit.decorator");
+    EditDecorator = require("./ui.list.edit.decorator"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 
 registerDecorator(
@@ -15,7 +15,7 @@ registerDecorator(
         _shouldHandleSwipe: true,
 
         _renderItemPosition: function($itemElement, offset, animate) {
-            var deferred = $.Deferred(),
+            var deferred = new Deferred(),
                 itemOffset = offset * this._itemElementWidth;
 
             if(animate) {

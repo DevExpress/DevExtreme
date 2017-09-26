@@ -16,7 +16,8 @@ var $ = require("../../core/renderer"),
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
     themes = require("../themes"),
-    ChildDefaultTemplate = require("../widget/child_default_template");
+    ChildDefaultTemplate = require("../widget/child_default_template"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var LIST_ITEM_SELECTOR = ".dx-list-item",
     LIST_ITEM_DATA_KEY = "dxListItemData",
@@ -125,7 +126,7 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions_searchExpr
             * @publicName searchExpr
-            * @type getter|array
+            * @type getter|Array<string>
             * @default null
             */
             searchExpr: null,
@@ -396,17 +397,20 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _loadItem: function(value) {
-        var selectedItem = commonUtils.grep(this._getPlainItems(this.option("items")) || [], (function(item) {
-            return this._isValueEquals(this._valueGetter(item), value);
-        }).bind(this))[0];
+        var plainItems = this._getPlainItems(this.option("items")),
+            selectedItem = commonUtils.grep(plainItems, (function(item) {
+                return this._isValueEquals(this._valueGetter(item), value);
+            }).bind(this))[0];
 
         return selectedItem !== undefined
-            ? $.Deferred().resolve(selectedItem).promise()
+            ? new Deferred().resolve(selectedItem).promise()
             : this._loadValue(value);
     },
 
     _getPlainItems: function(items) {
         var plainItems = [];
+
+        items = items || [];
 
         for(var i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {
@@ -536,7 +540,7 @@ var DropDownList = DropDownEditor.inherit({
     _renderList: function() {
         this._listId = "dx-" + new Guid()._value;
 
-        var $list = this._$list = $("<div>", { id: this._listId })
+        var $list = this._$list = $("<div>").attr("id", this._listId)
             .appendTo(this._popup.content());
 
         this._list = this._createComponent($list, List, this._listConfig());

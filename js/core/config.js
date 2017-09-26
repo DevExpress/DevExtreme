@@ -7,7 +7,7 @@ var config = {
     designMode: false,
     serverDecimalSeparator: ".",
     forceIsoDateParsing: true,
-    wrapActionsBeforeExecute: false,
+    wrapActionsBeforeExecute: true,
     useJQueryRenderer: true
 };
 

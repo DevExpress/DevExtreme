@@ -51,15 +51,15 @@ function getState(state, color) {
     if(!state) {
         return;
     }
-    var direction = state.hatching.direction,
-        hatching,
-        colorFromAction = state.fill;
+    var colorFromAction = state.fill;
 
-    color = colorFromAction === NONE ? color : colorFromAction;
-    direction = (!direction || direction === NONE) ? RIGHT : direction;
-    hatching = _extend({}, state.hatching, { direction: direction, step: DEFAULT_MARKER_HATCHING_STEP, width: DEFAULT_MARKER_HATCHING_WIDTH });
-
-    return { fill: color, hatching: hatching };
+    return {
+        fill: colorFromAction === NONE ? color : colorFromAction,
+        hatching: _extend({}, state.hatching, {
+            step: DEFAULT_MARKER_HATCHING_STEP,
+            width: DEFAULT_MARKER_HATCHING_WIDTH
+        })
+    };
 }
 
 function parseMargins(options) {
@@ -378,8 +378,7 @@ extend(legendPrototype, {
         that._finalUpdate(options);
 
         if(that.getLayoutOptions().width > width || that.getLayoutOptions().height > height) {
-            that._options._incidentOccurred("W2104");
-            that.erase();
+            this.freeSpace();
         }
 
         return that;
@@ -831,8 +830,121 @@ extend(legendPrototype, {
         var that = this;
         that._legendGroup = that._insideLegendGroup = that._renderer = that._options = that._data = that._items = null;
         return that;
+    },
+
+    // BaseWidget_layout_implementation
+    layoutOptions: function() {
+        var pos = this.getLayoutOptions();
+        return {
+            horizontalAlignment: this._options.horizontalAlignment,
+            verticalAlignment: this._options.verticalAlignment,
+            side: pos.cutSide,
+            priority: 1
+        };
+    },
+
+    measure: function(size) {
+        this.draw(size[0], size[1]);
+        var rect = this.getLayoutOptions();
+        return [rect.width, rect.height];
+    },
+
+    move: function(rect) {
+        this.shift(rect[0], rect[1]);
+    },
+
+    freeSpace: function() {
+        this._options._incidentOccurred("W2104");
+        this.erase();
     }
+    // BaseWidget_layout_implementation
 });
+
+
+exports.plugin = {
+    name: "legend",
+    init: function() {
+        var that = this,
+            group = this._renderer.g()
+                .attr({
+                    class: this._rootClassPrefix + "-legend"
+                })
+                .append(that._renderer.root);
+
+        that._legend = new exports.Legend({
+            renderer: that._renderer,
+            group: group,
+            textField: "text",
+            getFormatObject: function(item) {
+                return {
+                    item: item,
+                    text: item.data.argument
+                };
+            },
+        });
+
+        that._layout.add(that._legend);
+    },
+    extenders: {
+        _applyTilesAppearance: function() {
+            var that = this;
+            this._items.forEach(function(item) {
+                that._applyLegendItemStyle(item.id, item.getState());
+            });
+        },
+        _buildNodes: function() {
+            this._createLegendItems();
+        }
+    },
+    members: {
+        _applyLegendItemStyle: function(id, state) {
+            var legend = this._legend;
+            switch(state) {
+                case "hover":
+                    legend.applyHover(id);
+                    break;
+                case "selection":
+                    legend.applySelected(id);
+                    break;
+                default:
+                    legend.resetItem(id);
+                    break;
+            }
+        },
+
+        _createLegendItems: function() {
+            if(this._legend.update(this.getAllItems(), this._getOption("legend"))) {
+                this._requestChange(["LAYOUT"]);
+            }
+        }
+    },
+    dispose: function() {
+        this._legend.dispose();
+    },
+    customize: function(constructor) {
+        constructor.prototype._proxyData.push(function(x, y) {
+            if(this._legend.coordsIn(x, y)) {
+                var item = this._legend.getItemByCoord(x, y);
+                if(item) {
+                    return {
+                        id: item.id,
+                        type: "legend"
+                    };
+                }
+            }
+        });
+
+        constructor.addChange({
+            code: "LEGEND",
+            handler: function() {
+                this._createLegendItems();
+            },
+            isThemeDependent: true,
+            option: "legend",
+            isOptionChange: true
+        });
+    }
+};
 
 ///#DEBUG
 var __getMarkerCreator = getMarkerCreator;

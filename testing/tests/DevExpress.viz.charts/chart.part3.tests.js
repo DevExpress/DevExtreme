@@ -299,6 +299,76 @@ QUnit.test("create axes with crosshair. vertical line is invisible. rotated", fu
     assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 0);
 });
 
+QUnit.test("T543486. Named value axis in non-existent pane should have crosshairMargin", function(assert) {
+    //Arrange
+    var stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    seriesMockData.series.push(stubSeries);
+
+    //act
+    var chart = this.createChart({
+        panes: [{}],
+        valueAxis: [{
+            pane: "Non-existing pane name",
+            name: "Axis name"
+        }],
+        crosshair: {
+            enabled: true,
+            horizontalLine: {
+                visible: true
+            },
+            verticalLine: {
+                visible: true
+            }
+        },
+        series: {
+            type: "line"
+        }
+    });
+
+    assert.equal(chart._argumentAxes.length, 1);
+    assert.equal(chart._valueAxes.length, 1);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 8);
+});
+
+QUnit.test("T543486. Named value axis in non-existent pane should have crosshairMargin. Rotated", function(assert) {
+    //Arrange
+    var stubSeries = new MockSeries({
+        range: { val: { min: 1, max: 3 } }
+    });
+    seriesMockData.series.push(stubSeries);
+
+    //act
+    var chart = this.createChart({
+        rotated: true,
+        panes: [{}],
+        valueAxis: [{
+            pane: "Non-existing pane name",
+            name: "Axis name"
+        }],
+        crosshair: {
+            enabled: true,
+            horizontalLine: {
+                visible: true
+            },
+            verticalLine: {
+                visible: true
+            }
+        },
+        series: {
+            type: "line"
+        }
+    });
+
+    assert.equal(chart._argumentAxes.length, 1);
+    assert.equal(chart._valueAxes.length, 1);
+    assert.strictEqual(chart._valueAxes[0].getOptions().crosshairMargin, 4);
+});
+
+
+
+
 QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", function(assert) {
     //Arrange
     var stubSeries = new MockSeries({
@@ -862,6 +932,16 @@ QUnit.test("Title for Axes - initialization as String ", function(assert) {
 
     verticalAxis = chart._valueAxes[1];
     assert.strictEqual(verticalAxis.getOptions().pane, "bottomPane");
+});
+
+QUnit.test("T555770. Do not pass name for argumentAxis", function(assert) {
+    var chart = this.createChart({
+        argumentAxis: {
+            name: "argumentAxis"
+        }
+    });
+
+    assert.strictEqual(chart._argumentAxes[0].getOptions().name, null);
 });
 
 function assertCommonAxesProperties(assert, axis, options) {

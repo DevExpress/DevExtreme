@@ -2601,7 +2601,8 @@ QUnit.test("Get a valid index of cell on enter key_T259896", function(assert) {
 
     this.keyboardNavigationController._enterKeyHandler({
         originalEvent: {
-            target: $("#container").find(".txt").first()
+            target: $("#container").find(".txt").first(),
+            preventDefault: $.noop
         }
     }, true);
 
@@ -4430,6 +4431,48 @@ QUnit.testInActiveWindow("Add custom tabIndex to group row", function(assert) {
 
     //assert
     assert.equal(this.rowsView.element().find(".dx-group-row").first().attr("tabIndex"), "3", "tabIndex of group row");
+});
+
+//T547660
+QUnit.testInActiveWindow("Edit next cell after tab key when there is masterDetail", function(assert) {
+    //arrange
+    var $testElement = $("#container");
+
+    this.columns = [
+        { visible: true, command: "expand" },
+        { caption: "Column 1", visible: true, allowEditing: true, dataField: "Column2" }
+    ];
+    this.dataControllerOptions = {
+        items: [
+            { values: [false, "test1"], rowType: "data", key: 0 },
+            { values: [false, "test2"], rowType: "data", key: 1 },
+        ]
+    };
+    this.options = {
+        editing: {
+            allowUpdating: true,
+            mode: "batch"
+        },
+        masterDetail: { enabled: true }
+    };
+    setupModules(this);
+
+    this.gridView.render($testElement);
+
+    //assert
+    assert.ok($testElement.find(".dx-datagrid-rowsview").find("tbody > tr > td").first().hasClass("dx-datagrid-expand"), "has an expand cell");
+
+    this.focusCell(1, 0);
+    this.triggerKeyDown("enter");
+
+    //assert
+    assert.ok($testElement.find(".dx-datagrid-rowsview").find("tbody > tr").first().children().eq(1).hasClass("dx-editor-cell"), "second cell of the first row is edited");
+
+    //act
+    this.triggerKeyDown("tab", false, false, $("#container").find('input'));
+
+    //assert
+    assert.ok($testElement.find(".dx-datagrid-rowsview").find("tbody > tr").eq(1).children().eq(1).hasClass("dx-editor-cell"), "second cell of the second row is edited");
 });
 
 QUnit.module("Rows view", {

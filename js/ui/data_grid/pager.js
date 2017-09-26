@@ -39,7 +39,7 @@ var Page = Class.inherit({
     ctor: function(value, index) {
         var that = this;
         that.index = index;
-        that._$page = $('<div />')
+        that._$page = $('<div>')
             .text(value)
             .addClass(PAGER_PAGE_CLASS);
     },
@@ -299,7 +299,7 @@ var Pager = Widget.inherit({
             }, page.element());
 
             if(pages[i + 1] && pages[i + 1].value() - page.value() > 1) {
-                $separator = $("<div>. . .</div>").addClass(PAGER_PAGE_SEPARATOR_CLASS);
+                $separator = $("<div>").text(". . .").addClass(PAGER_PAGE_SEPARATOR_CLASS);
 
                 that.option('rtlEnabled') ? $separator.prependTo(that._$pagesChooser) : $separator.appendTo(that._$pagesChooser);
             }
@@ -307,7 +307,7 @@ var Pager = Widget.inherit({
     },
 
     _calculateLightPagesWidth: function($pageIndex, pageCount) {
-        return Number($pageIndex.css("min-width").replace("px", "")) + 10 * pageCount.toString().length;
+        return Number($pageIndex.css("minWidth").replace("px", "")) + 10 * pageCount.toString().length;
     },
 
     _renderLightPages: function() {
@@ -321,11 +321,11 @@ var Pager = Widget.inherit({
             }),
             pagesCountText = this.option("pagesCountText");
 
-        var $container = $("<div/>")
+        var $container = $("<div>")
             .addClass(LIGHT_PAGES_CLASS)
             .appendTo(this._$pagesChooser);
 
-        $pageIndex = $("<div/>").addClass(PAGER_PAGE_INDEX_CLASS).appendTo($container);
+        $pageIndex = $("<div>").addClass(PAGER_PAGE_INDEX_CLASS).appendTo($container);
 
         that._pageIndexEditor = that._createComponent($pageIndex, NumberBox, {
             value: pageIndex,
@@ -337,12 +337,12 @@ var Pager = Widget.inherit({
             }
         });
 
-        $("<span/>")
+        $("<span>")
             .text(pagesCountText)
             .addClass(PAGER_INFO_TEXT_CLASS + " " + PAGER_INFO_CLASS)
             .appendTo($container);
 
-        $pageCount = $("<span/>")
+        $pageCount = $("<span>")
             .addClass(PAGER_PAGES_COUNT_CLASS)
             .text(pageCount);
 
@@ -375,7 +375,7 @@ var Pager = Widget.inherit({
             return;
         }
 
-        that._$pagesChooser = $('<div />').addClass(PAGER_PAGES_CLASS).appendTo($element);
+        that._$pagesChooser = $('<div>').addClass(PAGER_PAGES_CLASS).appendTo($element);
 
         if(pagesNavigatorVisible === "auto") {
             that._$pagesChooser.css("visibility", that.option("pageCount") === 1 ? "hidden" : "");
@@ -427,7 +427,7 @@ var Pager = Widget.inherit({
         });
 
         for(i = 0; i < pagesSizesLength; i++) {
-            $pageSize = $('<div />')
+            $pageSize = $('<div>')
                 .text(pageSizes[i])
                 .addClass(PAGER_PAGE_SIZE_CLASS);
 
@@ -444,7 +444,7 @@ var Pager = Widget.inherit({
     },
 
     _calculateLightPageSizesWidth: function(pageSizes) {
-        return Number(this._$pagesSizeChooser.css("min-width").replace("px", "")) + 10 * Math.max.apply(Math, pageSizes).toString().length;
+        return Number(this._$pagesSizeChooser.css("minWidth").replace("px", "")) + 10 * Math.max.apply(Math, pageSizes).toString().length;
     },
 
     _renderLightPageSizes: function() {
@@ -452,7 +452,7 @@ var Pager = Widget.inherit({
             $editor,
             pageSizes = that.option("pageSizes");
 
-        $editor = $("<div/>").appendTo(that._$pagesSizeChooser);
+        $editor = $("<div>").appendTo(that._$pagesSizeChooser);
 
         that._pageSizeEditor = that._createComponent($editor, SelectBox, {
             dataSource: pageSizes,
@@ -479,7 +479,7 @@ var Pager = Widget.inherit({
         }
 
         that._$pagesSizeChooser && that._$pagesSizeChooser.remove();
-        that._$pagesSizeChooser = $('<div />').addClass(PAGER_PAGE_SIZES_CLASS).appendTo($element);
+        that._$pagesSizeChooser = $('<div>').addClass(PAGER_PAGE_SIZES_CLASS).appendTo($element);
 
         if(that.option("lightModeEnabled")) {
             that._renderLightPageSizes();

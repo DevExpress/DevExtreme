@@ -1,9 +1,11 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    isFunction = require("../core/utils/type").isFunction,
+var isFunction = require("../core/utils/type").isFunction,
     map = require("../core/utils/iterator").map,
-    toComparable = require("../core/utils/data").toComparable;
+    toComparable = require("../core/utils/data").toComparable,
+    Deferred = require("../core/utils/deferred").Deferred;
+
+var XHR_ERROR_UNLOAD = "DEVEXTREME_XHR_ERROR_UNLOAD";
 
 var normalizeBinaryCriterion = function(crit) {
     return [
@@ -19,10 +21,14 @@ var normalizeSortingInfo = function(info) {
     }
 
     return map(info, function(i) {
-        return {
+        var result = {
             selector: (isFunction(i) || typeof i === "string") ? i : (i.getter || i.field || i.selector),
             desc: !!(i.desc || String(i.dir).charAt(0).toLowerCase() === "d")
         };
+        if(i.compare) {
+            result.compare = i.compare;
+        }
+        return result;
     });
 };
 
@@ -55,8 +61,14 @@ var errorMessageFromXhr = (function() {
         return result;
     };
 
+    // T542570, https://stackoverflow.com/a/18170879
+    var unloading;
+    window.addEventListener("beforeunload", function() { unloading = true; });
 
     return function(xhr, textStatus) {
+        if(unloading) {
+            return XHR_ERROR_UNLOAD;
+        }
         if(xhr.status < 400) {
             return explainTextStatus(textStatus);
         }
@@ -96,7 +108,7 @@ var processRequestResultLock = (function() {
 
     var obtain = function() {
         if(lockCount === 0) {
-            lockDeferred = $.Deferred();
+            lockDeferred = new Deferred();
         }
         lockCount++;
     };
@@ -109,7 +121,7 @@ var processRequestResultLock = (function() {
     };
 
     var promise = function() {
-        var deferred = lockCount === 0 ? $.Deferred().resolve() : lockDeferred;
+        var deferred = lockCount === 0 ? new Deferred().resolve() : lockDeferred;
         return deferred.promise();
     };
 
@@ -215,6 +227,8 @@ var isUnaryOperation = function(crit) {
 * @publicName Utils
 */
 var utils = {
+    XHR_ERROR_UNLOAD: XHR_ERROR_UNLOAD,
+
     normalizeBinaryCriterion: normalizeBinaryCriterion,
     normalizeSortingInfo: normalizeSortingInfo,
     errorMessageFromXhr: errorMessageFromXhr,
@@ -232,7 +246,7 @@ var utils = {
     /**
     * @name Utils_base64encode
     * @publicName base64_encode(input)
-    * @param1 input:string|array
+    * @param1 input:string|Array<number>
     * @return string
     * @module data/utils
     * @export base64_encode

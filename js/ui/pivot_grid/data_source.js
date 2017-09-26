@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    DataSourceModule = require("../../data/data_source/data_source"),
+var DataSourceModule = require("../../data/data_source/data_source"),
     Store = require("../../data/abstract_store"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -10,7 +9,9 @@ var $ = require("../../core/renderer"),
     iteratorUtils = require("../../core/utils/iterator"),
     isDefined = typeUtils.isDefined,
     each = iteratorUtils.each,
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     Class = require("../../core/class"),
     EventsMixin = require("../../core/events_mixin"),
     inflector = require("../../core/utils/inflector"),
@@ -142,7 +143,7 @@ module.exports = Class.inherit((function() {
             emptyIndex = getHeaderItemsLastIndex(headerItems, grandTotalIndex) + 1,
             index,
             applyingItemIndexesToCurrent = [],
-            d = $.Deferred();
+            d = new Deferred();
 
         for(index = 0; index < applyingHeaderItemsCount; index++) {
             applyingItemIndexesToCurrent[index] = emptyIndex++;
@@ -159,7 +160,7 @@ module.exports = Class.inherit((function() {
     };
 
     var updateHeaderItems = function(headerItems, newHeaderItems) {
-        var d = $.Deferred();
+        var d = new Deferred();
 
         var applyingItemIndexesToCurrent = [];
 
@@ -451,7 +452,7 @@ module.exports = Class.inherit((function() {
     }
 
     function getFields(that) {
-        var result = $.Deferred(),
+        var result = new Deferred(),
             store = that._store,
             storeFields = store && store.getFields(that._fields),
             mergedFields;
@@ -566,7 +567,7 @@ module.exports = Class.inherit((function() {
     }
 
     function updateCache(headerItems) {
-        var d = $.Deferred();
+        var d = new Deferred();
         var cacheByPath = {};
 
         when(foreachTreeAsync(headerItems, function(items) {
@@ -614,7 +615,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_store
             * @publicName store
-            * @type Store|XmlaStore|Array|Object
+            * @type Store|XmlaStore|Array<Object>|Object
             */
             /**
             * @name PivotGridDataSourceOptions_store_type
@@ -650,7 +651,7 @@ module.exports = Class.inherit((function() {
              * @name PivotGridDataSourceOptions_onFieldsPrepared
              * @publicName onFieldsPrepared
              * @type function(fields)
-             * @type_function_param1 fields:array
+             * @type_function_param1 fields:Array<PivotGridDataSourceOptions_fields>
              * @action
              */
             each(
@@ -692,7 +693,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_fields
             * @publicName fields
-            * @type array
+            * @type Array<Object>
             * @default undefined
             */
             that._fields = options.fields || [];
@@ -808,10 +809,10 @@ module.exports = Class.inherit((function() {
              * @type function(a, b)
              * @type_function_param1 a:object
              * @type_function_param1_field1 value:string|number
-             * @type_function_param1_field2 children:array
+             * @type_function_param1_field2 children:Array<any>
              * @type_function_param2 b:object
              * @type_function_param2_field1 value:string|number
-             * @type_function_param2_field2 children:array
+             * @type_function_param2_field2 children:Array<any>
              * @type_function_return number
              * @default undefined
              */
@@ -824,13 +825,13 @@ module.exports = Class.inherit((function() {
             /**
              * @name PivotGridDataSourceOptions_fields_sortBySummaryPath
              * @publicName sortBySummaryPath
-             * @type array
+             * @type Array<number,string>
              * @default undefined
             */
             /**
              * @name PivotGridDataSourceOptions_fields_filterValues
              * @publicName filterValues
-             * @type array
+             * @type Array<any>
              * @default undefined
             */
             /**
@@ -936,7 +937,7 @@ module.exports = Class.inherit((function() {
             * @name PivotGridDataSourceOptions_fields_calculateSummaryValue
             * @publicName calculateSummaryValue
             * @type function(e)
-            * @type_function_param1 e:SummaryCell
+            * @type_function_param1 e:dxPivotGridSummaryCell
             * @type_function_return number
             * @default undefined
             */
@@ -981,7 +982,7 @@ module.exports = Class.inherit((function() {
         * @publicName getAreaFields(area, collectGroups)
         * @param1 area:string
         * @param2 collectGroups:boolean
-        * @return array
+        * @return Array<PivotGridDataSourceOptions_fields>
         */
         getAreaFields: function(area, collectGroups) {
             var areaFields = [],
@@ -1001,12 +1002,12 @@ module.exports = Class.inherit((function() {
         /**
         * @name PivotGridDataSourceMethods_fields
         * @publicName fields()
-        * @return array
+        * @return Array<PivotGridDataSourceOptions_fields>
         */
         /**
         * @name PivotGridDataSourceMethods_fields
         * @publicName fields(fields)
-        * @param1 fields:array
+        * @param1 fields:Array<PivotGridDataSourceOptions_fields>
         */
         fields: function(fields) {
             var that = this;
@@ -1062,7 +1063,7 @@ module.exports = Class.inherit((function() {
                 store = this.store(),
                 loadFields = [],
                 loadOptions = { columns: loadFields, rows: [], values: this.getAreaFields("data"), filters: [] },
-                d = $.Deferred();
+                d = new Deferred();
 
             if(field && store) {
                 each(field.levels || [field], function() {
@@ -1083,7 +1084,7 @@ module.exports = Class.inherit((function() {
         /**
         * @name PivotGridDataSourceMethods_reload
         * @publicName reload()
-        * @return Promise
+        * @return Promise<any>
         */
         reload: function() {
             return this.load({ reload: true });
@@ -1108,19 +1109,19 @@ module.exports = Class.inherit((function() {
         /**
         * @name PivotGridDataSourceMethods_load
         * @publicName load()
-        * @return Promise
+        * @return Promise<any>
         */
         load: function(options) {
             var that = this,
-                d = $.Deferred();
+                d = new Deferred();
             options = options || {};
 
-            that._changeLoadingCount(1);
+            that.beginLoading();
 
             d.fail(function(e) {
                 that.fireEvent("loadError", [e]);
             }).always(function() {
-                that._changeLoadingCount(-1);
+                that.endLoading();
             });
 
             function loadTask() {
@@ -1147,11 +1148,11 @@ module.exports = Class.inherit((function() {
         * @name PivotGridDataSourceMethods_createDrillDownDataSource
         * @publicName createDrillDownDataSource(options)
         * @param1 options:object
-        * @param1_field1 columnPath:array
-        * @param1_field2 rowPath:array
+        * @param1_field1 columnPath:Array<any>
+        * @param1_field2 rowPath:Array<any>
         * @param1_field3 dataIndex:number
         * @param1_field4 maxRowCount:number
-        * @param1_field5 customColumns:array
+        * @param1_field5 customColumns:Array<any>
         * @return DataSource
         */
         createDrillDownDataSource: function(params) {
@@ -1262,13 +1263,13 @@ module.exports = Class.inherit((function() {
                 }, state);
 
                 if(!that._descriptions) {
-                    that._changeLoadingCount(1);
+                    that.beginLoading();
                     when(getFields(that)).done(function(fields) {
                         that._fields = setFieldsState(state.fields, fields);
                         that._fieldsPrepared(fields);
                         that.load(state);
                     }).always(function() {
-                        that._changeLoadingCount(-1);
+                        that.endLoading();
                     });
                 } else {
                     that._fields = setFieldsState(state.fields, that._fields);
@@ -1283,6 +1284,14 @@ module.exports = Class.inherit((function() {
                     rowExpandedPaths: getExpandedPaths(that._data, that._descriptions, "rows")
                 };
             }
+        },
+
+        beginLoading: function() {
+            this._changeLoadingCount(1);
+        },
+
+        endLoading: function() {
+            this._changeLoadingCount(-1);
         },
 
         _changeLoadingCount: function(increment) {
@@ -1314,9 +1323,9 @@ module.exports = Class.inherit((function() {
                     options.headerName = headerName;
                 }
 
-                that._changeLoadingCount(1);
+                that.beginLoading();
                 deferred.always(function() {
-                    that._changeLoadingCount(-1);
+                    that.endLoading();
                 });
                 when(store.load(options)).done(function(data) {
                     if(options.path) {
@@ -1448,7 +1457,7 @@ module.exports = Class.inherit((function() {
          * @name PivotGridDataSourceMethods_expandHeaderItem
          * @publicName expandHeaderItem(area, path)
          * @param1 area:string
-         * @param2 path:array
+         * @param2 path:Array<Object>
          */
         expandHeaderItem: function(area, path) {
             var that = this,

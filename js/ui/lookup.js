@@ -716,7 +716,7 @@ var Lookup = DropDownList.inherit({
 
     _renderInput: function() {
         var fieldClickAction = this._createAction((function() {
-            this._validatedOpening();
+            this._toggleOpenState();
         }).bind(this));
 
         this._$field = $("<div>").addClass(LOOKUP_FIELD_CLASS);
@@ -831,7 +831,6 @@ var Lookup = DropDownList.inherit({
             fullScreen: false,
             shading: false,
             closeOnTargetScroll: true,
-            closeOnOutsideClick: true,
             width: this._isInitialOptionValue("popupWidth") ? (function() { return this.element().outerWidth(); }).bind(this) : this._popupConfig().width
         }));
 

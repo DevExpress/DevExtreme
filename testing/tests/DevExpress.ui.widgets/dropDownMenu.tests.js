@@ -350,6 +350,19 @@ QUnit.module("position", {
     }
 });
 
+QUnit.test("check default position", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "unnecessary test on mobile devices");
+        return;
+    }
+    var element = $("#dropDownMenu").dxDropDownMenu(),
+        instance = element.dxDropDownMenu("instance"),
+        defaultPosition = { my: "top center", at: "bottom center", collision: "fit flip", offset: { v: 4 } };
+
+    assert.deepEqual(defaultPosition, instance.option("popupPosition"));
+    assert.equal(false, instance.option("usePopover"));
+});
+
 QUnit.test("check position for LTR and RTL", function(assert) {
     var element = $("#dropDownMenu").dxDropDownMenu({
             usePopover: false,

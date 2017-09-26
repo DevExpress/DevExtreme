@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    when = require("../../integration/jquery/deferred").when,
+    when = require("../../core/utils/deferred").when,
     fx = require("../../animation/fx"),
     swipeEvents = require("../../events/swipe"),
     translator = require("../../animation/translator"),
@@ -167,7 +167,8 @@ var PivotTabs = CollectionWidget.inherit({
 
         this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
             var text = (data && data.title) ? data.title : String(data);
-            $container.html($("<span>").text(text));
+            $container.empty();
+            $container.append($("<span>").text(text));
         }, ["title"], this.option("integrationOptions.watchMethod"));
     },
 

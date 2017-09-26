@@ -642,3 +642,25 @@ QUnit.test("Validation happens on firing callback, result are applied through cu
     assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
     assert.ok(adapter.applyValidationResults.calledOnce, "ApplyValidationResults function should be called");
 });
+
+QUnit.test("Validation happens on firing callback when validationRequestsCallbacks is array", function(assert) {
+    var that = this,
+        adapter = {
+            getValue: sinon.stub(),
+            validationRequestsCallbacks: []
+        };
+
+    that.fixture.createValidator({
+        adapter: adapter,
+        validationRules: [{
+            type: "required"
+        }]
+    });
+
+    adapter.getValue.returns("123");
+    adapter.validationRequestsCallbacks.forEach(function(item) {
+        item();
+    });
+
+    assert.ok(adapter.getValue.calledOnce, "Value should be requested");
+});

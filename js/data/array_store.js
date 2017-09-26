@@ -1,14 +1,14 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    extend = require("../core/utils/extend").extend,
+var extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
     Guid = require("../core/guid"),
     objectUtils = require("../core/utils/object"),
     keysEqual = require("./utils").keysEqual,
     Query = require("./query"),
     errors = require("./errors").errors,
-    Store = require("./abstract_store");
+    Store = require("./abstract_store"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var hasKey = function(target, keyOrKeys) {
     var key,
@@ -25,12 +25,12 @@ var hasKey = function(target, keyOrKeys) {
 };
 
 var trivialPromise = function() {
-    var d = $.Deferred();
+    var d = new Deferred();
     return d.resolve.apply(d, arguments).promise();
 };
 
 var rejectedPromise = function() {
-    var d = $.Deferred();
+    var d = new Deferred();
     return d.reject.apply(d, arguments).promise();
 };
 
@@ -60,7 +60,7 @@ var ArrayStore = Store.inherit({
         /**
          * @name ArrayStoreOptions_data
          * @publicName data
-         * @type array
+         * @type Array<any>
          */
         this._array = initialArray || [];
     },

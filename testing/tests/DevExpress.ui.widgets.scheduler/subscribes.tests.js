@@ -1026,6 +1026,38 @@ QUnit.test("Agenda row count calculation with recurrence appointments", function
     }
 });
 
+QUnit.test("Agenda row count calculation with wrong endDate appointments", function(assert) {
+    this.createInstance({
+        views: ["agenda"],
+        currentView: "agenda"
+    });
+    var instance = this.instance,
+        endViewDateStub = sinon.stub(instance, "getEndViewDate").returns(new Date(2016, 1, 5, 23, 59)),
+        startViewDateStub = sinon.stub(instance, "getStartViewDate").returns(new Date(2016, 1, 1));
+
+    try {
+        instance._reloadDataSource = function() {
+            this._dataSourceLoadedCallback.fireWith(this, [[
+                { startDate: new Date(2016, 1, 2), endDate: new Date(2016, 1, 2, 0, 30) },
+                { startDate: new Date(2016, 1, 3, 3, 30), endDate: new Date(2016, 1, 3) },
+                { startDate: new Date(2016, 1, 4), endDate: new Date(2016, 1, 4, 0, 30) }
+            ]]);
+        };
+
+        instance.fire("getAgendaRows", {
+            agendaDuration: 5,
+            currentDate: new Date(2016, 1, 1)
+        }).done(function(rows) {
+            assert.deepEqual(rows, [[0, 1, 1, 1, 0]], "Rows are OK");
+        });
+
+        instance._reloadDataSource();
+    } finally {
+        endViewDateStub.restore();
+        startViewDateStub.restore();
+    }
+});
+
 QUnit.test("Agenda row count calculation with long appointments", function(assert) {
     this.createInstance({
         views: ["agenda"],
@@ -1157,4 +1189,55 @@ QUnit.test("'getHeaderHeight' should return correct value", function(assert) {
     var headerHeight = this.instance.fire("getHeaderHeight");
 
     assert.equal(headerHeight, 56, "Header height is OK");
+});
+
+QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with scheduler configuration", function(assert) {
+    this.createInstance({
+        views: [{
+            name: "DAY",
+            type: "day",
+            maxAppointmentsPerCell: 5
+        }, {
+            name: "WEEK",
+            type: "week"
+        }],
+        currentView: "DAY",
+        dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
+    });
+
+    var countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
+
+    assert.equal(countPerCell, 5, "overlappingMode is OK");
+
+    this.instance.option("currentView", "WEEK");
+
+    countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
+
+    assert.equal(countPerCell, "auto", "overlappingMode is OK");
+});
+
+QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with view configuration", function(assert) {
+    this.createInstance({
+        views: [{
+            name: "DAY",
+            type: "day",
+            maxAppointmentsPerCell: 5
+        }, {
+            name: "WEEK",
+            type: "week",
+            maxAppointmentsPerCell: "unlimited"
+        }],
+        currentView: "DAY",
+        dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
+    });
+
+    var countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
+
+    assert.equal(countPerCell, 5, "overlappingMode is OK");
+
+    this.instance.option("currentView", "WEEK");
+
+    countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
+
+    assert.equal(countPerCell, "unlimited", "overlappingMode is OK");
 });

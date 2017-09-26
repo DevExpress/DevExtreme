@@ -9,7 +9,8 @@ var $ = require("../core/renderer"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     Popup = require("./popup"),
     Popover = require("./popover"),
-    BindableTemplate = require("./widget/bindable_template");
+    BindableTemplate = require("./widget/bindable_template"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var ACTION_SHEET_CLASS = "dx-actionsheet",
     ACTION_SHEET_CONTAINER_CLASS = "dx-actionsheet-container",
@@ -466,11 +467,11 @@ var ActionSheet = CollectionWidget.inherit({
     * @name dxactionsheetmethods_toggle
     * @publicName toggle(showing)
     * @param1 showing:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     toggle: function(showing) {
         var that = this,
-            d = $.Deferred();
+            d = new Deferred();
 
         that._popup.toggle(showing).done(function() {
             that.option("visible", showing);
@@ -483,7 +484,7 @@ var ActionSheet = CollectionWidget.inherit({
     /**
     * @name dxactionsheetmethods_show
     * @publicName show()
-    * @return Promise
+    * @return Promise<void>
     */
     show: function() {
         return this.toggle(true);
@@ -492,7 +493,7 @@ var ActionSheet = CollectionWidget.inherit({
     /**
     * @name dxactionsheetmethods_hide
     * @publicName hide()
-    * @return Promise
+    * @return Promise<void>
     */
     hide: function() {
         return this.toggle(false);

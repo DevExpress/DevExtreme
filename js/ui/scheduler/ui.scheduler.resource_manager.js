@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     arrayUtils = require("../../core/utils/array"),
     grep = require("../../core/utils/common").grep,
     isDefined = require("../../core/utils/type").isDefined,
@@ -12,7 +11,9 @@ var $ = require("../../core/renderer"),
     query = require("../../data/query"),
     dataCoreUtils = require("../../core/utils/data"),
     DataSourceModule = require("../../data/data_source/data_source"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var getValueExpr = function(resource) {
         return resource.valueExpr || "id";
@@ -138,7 +139,7 @@ var ResourceManager = Class.inherit({
 
     getResourceDataByValue: function(field, value) {
         var that = this,
-            result = $.Deferred();
+            result = new Deferred();
 
         iteratorUtils.each(this.getResources(), function(_, resource) {
             var resourceField = that.getField(resource);
@@ -207,12 +208,12 @@ var ResourceManager = Class.inherit({
     },
 
     loadResources: function(groups) {
-        var result = $.Deferred(),
+        var result = new Deferred(),
             that = this,
             deferreds = [];
 
         iteratorUtils.each(this.getResourcesByFields(groups), function(i, resource) {
-            var deferred = $.Deferred(),
+            var deferred = new Deferred(),
                 field = that.getField(resource);
             deferreds.push(deferred);
 
@@ -266,7 +267,7 @@ var ResourceManager = Class.inherit({
             colorExpr = this.getResourceByField(field).colorExpr || "color",
             colorGetter = dataCoreUtils.compileGetter(colorExpr);
 
-        var result = $.Deferred(),
+        var result = new Deferred(),
             resourceData = this._getResourceDataByField(field),
             resourceDataLength = resourceData.length,
             color;

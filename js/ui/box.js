@@ -7,7 +7,7 @@ var $ = require("../core/renderer"),
     extend = require("../core/utils/extend").extend,
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
-    support = require("../core/utils/support"),
+    styleUtils = require("../core/utils/style"),
     each = require("../core/utils/iterator").each,
     browser = require("../core/utils/browser"),
     CollectionWidgetItem = require("./collection/item"),
@@ -19,9 +19,9 @@ var BOX_CLASS = "dx-box",
     BOX_ITEM_CLASS = "dx-box-item",
     BOX_ITEM_DATA_KEY = "dxBoxItemData";
 
-var flexGrowProp = support.styleProp("flexGrow");
-var flexShrinkProp = support.styleProp("flexShrink");
-var flexPropPrefix = support.stylePropPrefix("flexDirection");
+var flexGrowProp = styleUtils.styleProp("flexGrow");
+var flexShrinkProp = styleUtils.styleProp("flexShrink");
+var flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
 
 var MINSIZE_MAP = {
     "row": "minWidth",
@@ -79,7 +79,7 @@ var FlexLayoutStrategy = Class.inherit({
 
     renderBox: function() {
         this._$element.css({
-            display: support.stylePropPrefix("flexDirection") + "flex",
+            display: styleUtils.stylePropPrefix("flexDirection") + "flex",
             flexDirection: FLEX_DIRECTION_MAP[this._option("direction")]
         });
     },
@@ -126,7 +126,7 @@ var FlexLayoutStrategy = Class.inherit({
                 $(itemContent).css({
                     width: "auto",
                     height: "auto",
-                    display: support.stylePropPrefix("flexDirection") + "flex",
+                    display: styleUtils.stylePropPrefix("flexDirection") + "flex",
                     flexDirection: $item.children().css("flexDirection") || "column",
                     flexBasis: 0
                 });
@@ -775,7 +775,7 @@ var Box = CollectionWidget.inherit({
 /**
 * @name dxBoxItemTemplate_box
 * @publicName box
-* @type dxBox options
+* @type dxBoxOptions
 * @default undefined
 */
 

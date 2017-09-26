@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     fx = require("animation/fx"),
     CustomStore = require("data/custom_store"),
@@ -307,6 +308,52 @@ QUnit.test("popup should not be draggable by default", function(assert) {
     var popup = this.$element.find(".dx-popup").dxPopup("instance");
 
     assert.strictEqual(popup.option("dragEnabled"), false, "dragging is disabled");
+});
+
+QUnit.test("popup should be flipped when container size is smaller than content size", function(assert) {
+    var $dropDownBox = $("<div>").appendTo("body");
+    try {
+        $dropDownBox.css({ position: "fixed", bottom: 0 });
+        $dropDownBox.dxDropDownBox({
+            opened: true,
+            contentTemplate: function() {
+                return $("<div>").css({ height: "300px", border: "1px solid #000" });
+            }
+        });
+
+        var $popupContent = $(".dx-overlay-content");
+
+        assert.ok($popupContent.hasClass("dx-dropdowneditor-overlay-flipped"), "popup was flipped");
+    } finally {
+        $dropDownBox.remove();
+    }
+});
+
+QUnit.test("maxHeight should be 90% of maximum of top or bottom offsets including page scroll", function(assert) {
+    this.$element.dxDropDownBox({
+        items: [1, 2, 3],
+        value: 2
+    });
+
+    var scrollTop = sinon.stub(renderer.fn, "scrollTop").returns(100),
+        windowHeight = sinon.stub(renderer.fn, "innerHeight").returns(700),
+        offset = sinon.stub(renderer.fn, "offset").returns({ left: 0, top: 200 }),
+
+        instance = this.$element.dxDropDownBox("instance");
+
+    try {
+        instance.open();
+
+        var popup = $(".dx-popup").dxPopup("instance"),
+            maxHeight = popup.option("maxHeight");
+
+        assert.roughEqual(Math.floor(maxHeight()), 523, 2, "maxHeight is correct");
+
+    } finally {
+        scrollTop.restore();
+        windowHeight.restore();
+        offset.restore();
+    }
 });
 
 

@@ -8,7 +8,9 @@ var $ = require("../../core/renderer"),
     iteratorUtils = require("../../core/utils/iterator"),
     fx = require("../fx"),
     animationPresetsModule = require("../presets/presets"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var directionPostfixes = {
         forward: " dx-forward",
@@ -135,7 +137,7 @@ var TransitionExecutor = Class.inherit({
         this._accumulatedDelays.enter = 0;
         this._accumulatedDelays.leave = 0;
         this._clearAnimations();
-        this._completeDeferred = $.Deferred();
+        this._completeDeferred = new Deferred();
         this._completePromise = this._completeDeferred.promise();
     },
     /**
@@ -161,7 +163,7 @@ var TransitionExecutor = Class.inherit({
     /**
     * @name TransitionExecutorMethods_start
     * @publicName start()
-    * @return Promise
+    * @return Promise<void>
     */
     start: function() {
         var that = this,
@@ -169,10 +171,10 @@ var TransitionExecutor = Class.inherit({
 
         if(!this._animations.length) {
             that.reset();
-            result = $.Deferred().resolve().promise();
+            result = new Deferred().resolve().promise();
         } else {
             var animationDeferreds = iteratorUtils.map(this._animations, function(animation) {
-                var result = $.Deferred();
+                var result = new Deferred();
 
                 animation.deferred.always(function() {
                     result.resolve();

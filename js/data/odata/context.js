@@ -1,14 +1,15 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     errorsModule = require("../errors"),
     ODataStore = require("./store"),
     mixins = require("./mixins"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 require("./query_adapter");
 
@@ -89,7 +90,7 @@ var ODataContext = Class.inherit({
      * @publicName get(operationName, params)
      * @param1 operationName:string
      * @param2 params:object
-     * @return Promise
+     * @return Promise<any>
      */
     get: function(operationName, params) {
         return this.invoke(operationName, params, "GET");
@@ -101,13 +102,13 @@ var ODataContext = Class.inherit({
      * @param1 operationName:string
      * @param2 params:object
      * @param3 httpMethod:object
-     * @return Promise
+     * @return Promise<void>
      */
     invoke: function(operationName, params, httpMethod) {
         params = params || {};
         httpMethod = (httpMethod || "POST").toLowerCase();
 
-        var d = $.Deferred(),
+        var d = new Deferred(),
             url = this._url + "/" + encodeURIComponent(operationName),
             payload;
 
@@ -128,7 +129,9 @@ var ODataContext = Class.inherit({
                 }
                 d.resolve(r);
             })
-            .fail([this._errorHandler, errorsModule._errorHandler, d.reject]);
+            .fail(this._errorHandler)
+            .fail(errorsModule._errorHandler)
+            .fail(d.reject);
 
         return d.promise();
     },

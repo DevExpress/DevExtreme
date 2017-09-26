@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    extend = require("../../core/utils/extend").extend,
+var extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     gridCore = require("./ui.data_grid.core"),
     normalizeSortingInfo = gridCore.normalizeSortingInfo,
@@ -10,7 +9,9 @@ var $ = require("../../core/renderer"),
     createOffsetFilter = groupingCore.createOffsetFilter,
     errors = require("../widget/ui.errors"),
     dataErrors = require("../../data/errors").errors,
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
     var foreachExpandedGroups = function(that, callback, updateGroups) {
@@ -209,7 +210,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
 
     function makeDataDeferred(options) {
         if(!isDataDeferred(options.data)) {
-            options.data = $.Deferred();
+            options.data = new Deferred();
         }
     }
 
@@ -322,7 +323,7 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
     }
 
     var loadGroupTotalCount = function(dataSource, options) {
-        var d = $.Deferred(),
+        var d = new Deferred(),
             isGrouping = !!(options.group && options.group.length),
             loadOptions = extend({ skip: 0, take: 1, requireGroupCount: isGrouping, requireTotalCount: !isGrouping }, options, { group: isGrouping ? options.group : null });
 
@@ -467,11 +468,11 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
                     });
                 }
 
-                return $.Deferred().resolve();
+                return new Deferred().resolve();
 
             }
 
-            return $.Deferred().reject();
+            return new Deferred().reject();
         },
         handleDataLoading: function(options) {
             var that = this,

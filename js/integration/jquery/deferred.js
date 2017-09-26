@@ -1,32 +1,25 @@
-"use strict";
+'use strict';
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("../../core/utils/type"),
-    compareVersion = require("../../core/utils/version").compare;
+var jQuery = require("jquery");
+var Deferred = jQuery.Deferred;
+var deferredUtils = require("../../core/utils/deferred");
+var useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
+var compareVersion = require("../../core/utils/version").compare;
 
-exports.fromPromise = function(promise, context) {
-    var isDeferred = promise && typeUtils.isFunction(promise.done) && typeUtils.isFunction(promise.fail);
-    if(isDeferred) {
-        return promise;
-    }
+if(useJQueryRenderer) {
+    var strategy = { Deferred: Deferred };
 
-    var d = $.Deferred();
-    promise.then(function() {
-        d.resolveWith.apply(d, [context].concat([[].slice.call(arguments)]));
-    }, function() {
-        d.rejectWith.apply(d, [context].concat([[].slice.call(arguments)]));
-    });
-    return d;
-};
-
-exports.when = compareVersion($.fn.jquery, [3]) < 0
-    ? $.when
+    strategy.when = compareVersion(jQuery.fn.jquery, [3]) < 0
+    ? jQuery.when
     : function(singleArg) {
         if(arguments.length === 0) {
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         } else if(arguments.length === 1) {
-            return singleArg && singleArg.then ? singleArg : $.Deferred().resolve(singleArg);
+            return singleArg && singleArg.then ? singleArg : new Deferred().resolve(singleArg);
         } else {
-            return $.when.apply($, arguments);
+            return jQuery.when.apply(jQuery, arguments);
         }
     };
+
+    deferredUtils.setStrategy(strategy);
+}

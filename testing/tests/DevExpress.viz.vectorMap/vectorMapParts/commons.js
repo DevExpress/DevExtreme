@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     vizMocks = require("../../../helpers/vizMocks.js"),
     dxVectorMapModule = require("viz/vector_map/vector_map"),
 
@@ -84,17 +85,17 @@ exports.environment = {
         this.title = new vizMocks.Title();
         this.exportMenu = new StubExportMenu();
         this.tooltip = new vizMocks.Tooltip();
-        this._$fn_width = $.fn.width;
-        this._$fn_height = $.fn.height;
-        $.fn.width = returnValue(400);
-        $.fn.height = returnValue(300);
+        this._$fn_width = renderer.fn.width;
+        this._$fn_height = renderer.fn.height;
+        renderer.fn.width = returnValue(400);
+        renderer.fn.height = returnValue(300);
         stubComponentConstructors(this);
     },
 
     afterEach: function() {
         this.$container.remove();   //  To invoke Component disposing mechanism
-        $.fn.width = this._$fn_width;
-        $.fn.height = this._$fn_height;
+        renderer.fn.width = this._$fn_width;
+        renderer.fn.height = this._$fn_height;
     },
 
     createMap: function(options) {

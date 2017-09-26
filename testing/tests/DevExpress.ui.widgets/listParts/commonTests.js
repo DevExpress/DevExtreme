@@ -2,17 +2,21 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    fx = require("animation/fx"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     List = require("ui/list"),
     executeAsyncMock = require("../../../helpers/executeAsyncMock.js"),
     pointerMock = require("../../../helpers/pointerMock.js"),
+    KeyboardProcessor = require("ui/widget/ui.keyboard_processor"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     registerComponent = require("core/component_registrator"),
     DOMComponent = require("core/dom_component"),
     holdEvent = require("events/hold"),
     swipeEvents = require("events/swipe"),
-    ScrollView = require("ui/scroll_view");
+    ScrollView = require("ui/scroll_view"),
+    errors = require("ui/widget/ui.errors"),
+    devices = require("core/devices");
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -430,11 +434,8 @@ QUnit.test("group body should be not collapsed by click on header in disabled st
 });
 
 QUnit.test("group collapsing is animated", function(assert) {
-    var origSlideToggle = $.fn.slideToggle;
-
     try {
-        var slideToggleSpy = sinon.spy();
-        $.fn.slideToggle = slideToggleSpy;
+        var animateSpy = sinon.spy(fx, "animate");
 
         var $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
@@ -446,25 +447,33 @@ QUnit.test("group collapsing is animated", function(assert) {
             $groupHeader = $group.find("." + LIST_GROUP_HEADER_CLASS),
             $groupBody = $group.find("." + LIST_GROUP_BODY_CLASS);
 
+        var groupBodyHeight = $groupBody.height();
+
         $groupHeader.trigger("dxclick");
-        assert.ok(slideToggleSpy.calledOnce, "slideToggle is executed");
-        assert.equal(slideToggleSpy.thisValues[0].get(0), $groupBody.get(0), "slideToggle ran on correct element");
+
+        var args = animateSpy.getCall(0).args;
+
+        assert.ok(animateSpy.calledOnce, "fx.animate is executed");
+        assert.equal(args[0].get(0), $groupBody.get(0), "fx.animate ran on correct element");
+        assert.equal(args[1].type, "custom", "fx.animate ran with correct animation type");
+        assert.equal(args[1].from.height, groupBodyHeight, "fx.animate ran with correct start height");
+        assert.equal(args[1].to.height, 0, "fx.animate ran with correct end height");
     } finally {
-        $.fn.slideToggle = origSlideToggle;
+        fx.animate.restore();
     }
 });
 
 QUnit.test("group collapsing should update scroller position after animation", function(assert) {
-    var origSlideToggle = $.fn.slideToggle;
+    var origAnimate = fx.animate;
 
     try {
-        var slideToggleDeferred = $.Deferred(),
-            slideToggleSpy = sinon.spy(function(options) {
-                slideToggleDeferred.done(function() {
-                    options.complete();
-                });
+        var animationDeferred = $.Deferred();
+
+        fx.animate = sinon.spy(function(_, options) {
+            animationDeferred.done(function() {
+                options.complete();
             });
-        $.fn.slideToggle = slideToggleSpy;
+        });
 
         var $element = this.element.dxList({
             items: [{ key: "a", items: ["0"] }],
@@ -480,24 +489,24 @@ QUnit.test("group collapsing should update scroller position after animation", f
 
         $groupHeader.trigger("dxclick");
         assert.ok(!updateDimensionsSpy.called, "updateDimensions is not executed");
-        slideToggleDeferred.resolve();
+        animationDeferred.resolve();
         assert.ok(updateDimensionsSpy.calledOnce, "updateDimensions is executed");
     } finally {
-        $.fn.slideToggle = origSlideToggle;
+        fx.animate = origAnimate;
     }
 });
 
 QUnit.test("group should be collapsed by the collapseGroup method", function(assert) {
-    var origSlideUp = $.fn.slideUp;
+    var origAnimate = fx.animate;
 
     try {
-        var slideUpDeferred = $.Deferred(),
-            slideUpSpy = sinon.spy(function(options) {
-                slideUpDeferred.done(function() {
-                    options.complete();
-                });
+        var AnimationDeferred = $.Deferred();
+
+        fx.animate = sinon.spy(function(_, options) {
+            AnimationDeferred.done(function() {
+                options.complete();
             });
-        $.fn.slideUp = slideUpSpy;
+        });
 
         var $element = this.element.dxList({
                 items: [{ key: "a", items: ["0"] }, { key: "b", items: ["0"] }],
@@ -507,31 +516,34 @@ QUnit.test("group should be collapsed by the collapseGroup method", function(ass
             }),
             instance = $element.dxList("instance");
 
-        instance.collapseGroup(1).done(function() {
-            var $group = $element.find("." + LIST_GROUP_CLASS).eq(1);
-            assert.ok($group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is present");
+        var $group = $element.find("." + LIST_GROUP_CLASS);
+        var $groupBody = $group.find("." + LIST_GROUP_BODY_CLASS);
+        var groupBodyHeight = $groupBody.height();
 
-            assert.ok(slideUpSpy.calledOnce, "slideUp used");
+        instance.collapseGroup(1).done(function() {
+            assert.ok($group.eq(1).hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is present");
+
+            var args = fx.animate.getCall(0).args;
+
+            assert.ok(fx.animate.calledOnce, "fx.animate used");
+            assert.equal(args[1].type, "custom", "fx.animate ran with correct animation type");
+            assert.equal(args[1].from.height, groupBodyHeight, "fx.animate ran with correct start height");
+            assert.equal(args[1].to.height, 0, "fx.animate ran with correct end height");
+
             assert.equal(this, instance, "resolved on list");
         });
 
-        slideUpDeferred.resolve();
+        AnimationDeferred.resolve();
     } finally {
-        $.fn.slideUp = origSlideUp;
+        fx.animate = origAnimate;
     }
 });
 
 QUnit.test("group should be expanded by the expandGroup method", function(assert) {
-    var origSlideDown = $.fn.slideDown;
+    var origAnimate = fx.animate;
 
     try {
-        var slideDownDeferred = $.Deferred(),
-            slideDownSpy = sinon.spy(function(options) {
-                slideDownDeferred.done(function() {
-                    options.complete();
-                });
-            });
-        $.fn.slideDown = slideDownSpy;
+        var AnimationDeferred = $.Deferred();
 
         var $element = this.element.dxList({
                 items: [{ key: "a", items: ["0"] }, { key: "b", items: ["0"] }],
@@ -541,24 +553,42 @@ QUnit.test("group should be expanded by the expandGroup method", function(assert
             }),
             instance = $element.dxList("instance");
 
-        instance.expandGroup(1).done(function() {
-            var $group = $element.find("." + LIST_GROUP_CLASS).eq(1);
-            assert.ok(!$group.hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
+        var $group = $element.find("." + LIST_GROUP_CLASS);
+        var $groupBody = $group.find("." + LIST_GROUP_BODY_CLASS);
+        var groupBodyHeight = $groupBody.height();
 
-            assert.ok(slideDownSpy.calledOnce, "slideDown used");
+        instance.collapseGroup(1);
+        this.clock.tick(1000);
+
+        fx.animate = sinon.spy(function(_, options) {
+            AnimationDeferred.done(function() {
+                options.complete();
+            });
+        });
+
+        instance.expandGroup(1).done(function() {
+            assert.ok(!$group.eq(1).hasClass(LIST_GROUP_COLLAPSED_CLASS), "collapsed class is not present");
+
+            var args = fx.animate.getCall(0).args;
+
+            assert.ok(fx.animate.calledOnce, "fx.animate used");
+            assert.equal(args[1].type, "custom", "fx.animate ran with correct animation type");
+            assert.equal(args[1].from.height, 0, "fx.animate ran with correct start height");
+            assert.equal(args[1].to.height, groupBodyHeight, "fx.animate ran with correct end height");
+
             assert.equal(this, instance, "resolved on list");
         });
 
-        slideDownDeferred.resolve();
+        AnimationDeferred.resolve();
     } finally {
-        $.fn.slideDown = origSlideDown;
+        fx.animate = origAnimate;
     }
 });
 
 QUnit.test("scrollView should be updated after group collapsed", function(assert) {
     try {
         List.mockScrollView(this.originalScrollView);
-        $.fx.off = true;
+        fx.off = true;
 
         var $element = this.element.dxList({
                 autoPagingEnabled: true,
@@ -581,14 +611,14 @@ QUnit.test("scrollView should be updated after group collapsed", function(assert
         var $groups = $element.find("." + LIST_GROUP_CLASS);
         assert.equal($groups.length, 2, "second group was loaded");
     } finally {
-        $.fx.off = false;
+        fx.off = false;
     }
 });
 
 QUnit.test("scrollView should update its position after a group has been collapsed", function(assert) {
     try {
         List.mockScrollView(this.originalScrollView);
-        $.fx.off = true;
+        fx.off = true;
 
         var $element = this.element.dxList({
                 pageLoadMode: "scrollBottom",
@@ -643,9 +673,73 @@ QUnit.test("scrollView should update its position after a group has been collaps
 
         assert.ok(releaseSpy.lastCall.args[0], "The last call of 'release' hides load indicator");
     } finally {
-        $.fx.off = false;
+        fx.off = false;
     }
 });
+
+QUnit.test("more button shouldn't disappear after group collapsed with array store", function(assert) {
+    try {
+        List.mockScrollView(this.originalScrollView);
+        fx.off = true;
+        var $element = this.element.dxList({
+                dataSource: {
+                    store: [
+                        { key: "a", items: ["0", "1", "2"] },
+                        { key: "b", items: ["0", "1", "2"] },
+                        { key: "c", items: ["0", "1", "2"] },
+                        { key: "d", items: ["0", "1", "2"] }],
+                    paginate: true,
+                    pageSize: 3
+                },
+                pageLoadMode: "nextButton",
+                height: 500,
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        instance.collapseGroup(1);
+
+        this.clock.tick();
+        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("more button shouldn't disappear after group collapsed with custom store", function(assert) {
+    try {
+        List.mockScrollView(this.originalScrollView);
+        fx.off = true;
+        var data = [
+                { key: "a", items: ["0", "1", "2"] },
+                { key: "b", items: ["0", "1", "2"] },
+                { key: "c", items: ["0", "1", "2"] },
+                { key: "d", items: ["0", "1", "2"] }],
+            $element = this.element.dxList({
+                dataSource: {
+                    load: function() {
+                        return data;
+                    },
+                    paginate: true,
+                    pageSize: 3
+                },
+                pageLoadMode: "nextButton",
+                height: 400,
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        instance.collapseGroup(1);
+
+        this.clock.tick();
+        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+    } finally {
+        fx.off = false;
+    }
+});
+
 
 
 QUnit.module("next button", moduleSetup);
@@ -927,6 +1021,96 @@ QUnit.test("list should be able to change grouped option after dataSource option
     });
 
     assert.notOk(instance.option("grouped"), "grouped option was changed without exceptions");
+});
+
+QUnit.test("searchEnabled", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true
+        }),
+        instance = $element.dxList("instance");
+
+    instance.option("searchEnabled", false);
+
+    assert.notOk($element.hasClass("dx-list-with-search"), "list without search");
+    assert.notOk($element.find(".dx-list-search").length, "hasn't search editor");
+
+    instance.option("searchEnabled", true);
+
+    assert.ok($element.hasClass("dx-list-with-search"), "list with search");
+    assert.ok($element.children().first().hasClass("dx-list-search"), "has search editor");
+});
+
+QUnit.test("searchValue", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.option("searchValue", 2);
+
+    assert.deepEqual(instance.option("items"), [2], "items");
+    assert.strictEqual(instance.getDataSource().searchValue(), 2, "search value of dataSource");
+});
+
+QUnit.test("searchMode", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 21, 3],
+            searchExpr: "this",
+            searchValue: "1"
+        }),
+        instance = $element.dxList("instance");
+
+    assert.deepEqual(instance.option("items"), [1, 21], "items");
+
+    instance.option("searchMode", "startswith");
+
+    assert.deepEqual(instance.option("items"), [1], "items");
+    assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation of dataSource");
+});
+
+QUnit.test("searchExpr", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [
+                { text: "test1", value: "3" },
+                { text: "test2", value: "3" },
+                { text: "test3", value: "2" }
+            ],
+            searchExpr: "text",
+            searchValue: "3"
+        }),
+        instance = $element.dxList("instance");
+
+    assert.deepEqual(instance.option("items"), [{ text: "test3", value: "2" }], "items");
+
+    instance.option("searchExpr", "value");
+
+    assert.deepEqual(instance.option("items"), [{ text: "test1", value: "3" }, { text: "test2", value: "3" }], "items");
+    assert.strictEqual(instance.getDataSource().searchExpr(), "value", "search operation of dataSource");
+});
+
+QUnit.test("searchEditorOptions", function(assert) {
+    var searchEditorInstance,
+        $element = $("#list").dxList({
+            dataSource: [
+                { text: "test1", value: "3" },
+                { text: "test2", value: "3" },
+                { text: "test3", value: "2" }
+            ],
+            searchEnabled: true,
+            searchEditorOptions: {
+                placeholder: "Search"
+            }
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditorInstance = $element.children(".dx-list-search").dxTextBox("instance");
+    assert.strictEqual(searchEditorInstance.option("placeholder"), "Search", "placeholder of the search box");
+
+    instance.option("searchEditorOptions", { placeholder: "Test" });
+
+    assert.strictEqual(searchEditorInstance.option("placeholder"), "Test", "placeholder of the search box");
 });
 
 
@@ -2298,6 +2482,51 @@ QUnit.test("list scroll to hidden focused item after press pageUp", function(ass
     assert.ok($items.eq(1).hasClass("dx-state-focused"), "focused item change to last visible item on new page");
 });
 
+QUnit.test("list should attach keyboard events even if focusStateEnabled is false when this option was passed from outer widget", function(assert) {
+    var handler = sinon.stub(),
+        $element = $("#list"),
+        instance = $element.dxList({
+            focusStateEnabled: false,
+            _keyboardProcessor: new KeyboardProcessor({ element: $element }),
+            items: [1, 2, 3]
+        }).dxList("instance");
+
+    instance.registerKeyHandler("enter", handler);
+    $element.trigger($.Event("keydown", { which: 13 }));
+
+    assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
+});
+
+QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    var $element = $("#list"),
+        instance = $element.dxList({
+            _keyboardProcessor: new KeyboardProcessor({ element: $element }),
+            dataSource: [1, 2, 3],
+            searchEnabled: true
+        }).dxList("instance"),
+        $searchEditor = $element.children(".dx-list-search");
+
+    $searchEditor.find("input").focus();
+    this.clock.tick();
+
+    instance.registerKeyHandler("tab", function(e) {
+        $element.find("[tabIndex]").not(":focus").first().focus();
+    });
+
+    $element.trigger($.Event("keydown", { which: 9 }));
+    this.clock.tick();
+
+    $searchEditor = $element.children(".dx-list-search");
+    assert.ok($element.find(toSelector(LIST_ITEM_CLASS)).first().hasClass("dx-state-focused"), "first list item is focused");
+    assert.ok($element.hasClass("dx-state-focused"), "list is focused");
+    assert.ok($element.find(".dx-scrollview-content").hasClass("dx-state-focused"), "scrollview content is focused");
+});
+
 
 QUnit.module("aria accessibility");
 
@@ -2315,4 +2544,85 @@ QUnit.test("list item role", function(assert) {
     $element.find(".dx-list-item").each(function(i, item) {
         assert.equal($(item).attr("role"), "option", "role for item " + i + " is correct");
     });
+});
+
+QUnit.module("Search");
+
+QUnit.test("Render search editor", function(assert) {
+    var $searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchValue: "3"
+        });
+
+    $searchEditor = $element.children().first();
+    assert.ok($element.hasClass("dx-list-with-search"), "list with search");
+    assert.ok($searchEditor.hasClass("dx-list-search"), "has search editor");
+    assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "3", "editor value");
+});
+
+QUnit.test("Search", function(assert) {
+    var searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditor = $element.children().first().dxTextBox("instance");
+    searchEditor.option("value", "2");
+
+    assert.deepEqual(instance.option("items"), [2], "items");
+    assert.strictEqual(instance.option("searchValue"), "2", "search value");
+});
+
+QUnit.testInActiveWindow("Focusing widget when there is search editor", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.focus();
+
+    assert.ok($element.children(".dx-list-search").hasClass("dx-state-focused"), "search editor is focused");
+});
+
+QUnit.test("Show warning when dataSource is not specified", function(assert) {
+    var instance = $("#list").dxList({
+            items: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }).dxList("instance"),
+        warningHandler = sinon.spy(errors, "log");
+
+    try {
+        instance.option("searchValue", "2");
+
+        assert.equal(warningHandler.callCount, 1, "warning has been called once");
+        assert.equal(warningHandler.getCall(0).args[0], "W1009", "warning has correct error id");
+    } finally {
+        warningHandler.restore();
+    }
+});
+
+QUnit.test("Search when searchMode is specified", function(assert) {
+    var searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 12, 23],
+            searchEnabled: true,
+            searchExpr: "this",
+            searchMode: "startswith"
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditor = $element.children().first().dxTextBox("instance");
+    searchEditor.option("value", "2");
+
+    assert.deepEqual(instance.option("items"), [23], "items");
+    assert.strictEqual(instance.option("searchValue"), "2", "search value");
+    assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
 });

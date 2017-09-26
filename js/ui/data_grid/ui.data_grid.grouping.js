@@ -9,7 +9,9 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
     devices = require("../../core/devices"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
@@ -96,10 +98,9 @@ var GroupingDataSourceAdapterExtender = (function() {
                 dataSource = that._dataSource;
 
             if(dataSource.group()) {
-                //TODO remove access to _changeLoadingCount
-                dataSource._changeLoadingCount(1);
+                dataSource.beginLoading();
                 return that._changeRowExpandCore(path).always(function() {
-                    dataSource._changeLoadingCount(-1);
+                    dataSource.endLoading();
                 });
             }
         },
@@ -290,7 +291,7 @@ var GroupingDataControllerExtender = (function() {
 
             if(!dataSource) return;
 
-            d = $.Deferred();
+            d = new Deferred();
             when(dataSource.changeRowExpand(key)).done(function() {
                 that.load().done(d.resolve).fail(d.reject);
             }).fail(d.reject);
@@ -317,7 +318,7 @@ var GroupingDataControllerExtender = (function() {
             if(!this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
         /**
          * @name dxDataGridMethods_collapseRow
@@ -328,7 +329,7 @@ var GroupingDataControllerExtender = (function() {
             if(this.isRowExpanded(key)) {
                 return this.changeRowExpand(key);
             }
-            return $.Deferred().resolve();
+            return new Deferred().resolve();
         },
         optionChanged: function(args) {
             if(args.name === "grouping"/* autoExpandAll */) {
@@ -413,7 +414,7 @@ var GroupingHeaderPanelExtender = (function() {
         },
 
         _createGroupPanelItem: function($rootElement, groupColumn) {
-            return $("<div />")
+            return $("<div>")
                 .addClass(groupColumn.cssClass)
                 .addClass(DATAGRID_GROUP_PANEL_ITEM_CLASS)
                 .data("columnData", groupColumn)
@@ -442,7 +443,7 @@ var GroupingHeaderPanelExtender = (function() {
             that._renderGroupPanelItems($groupPanel, groupColumns);
 
             if(groupPanelOptions.allowColumnDragging && !groupColumns.length) {
-                $("<div />")
+                $("<div>")
                     .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
                     .text(groupPanelOptions.emptyPanelText)
                     .appendTo($groupPanel);
@@ -559,7 +560,8 @@ var GroupingRowsViewExtender = (function() {
         _rowClick: function(e) {
             var that = this,
                 expandMode = that.option("grouping.expandMode"),
-                isGroupRowStateChanged = expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
+                scrollingMode = that.option("scrolling.mode"),
+                isGroupRowStateChanged = scrollingMode !== "infinite" && expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
                 isExpandButtonClicked = $(e.jQueryEvent.target).closest("." + DATAGRID_EXPAND_CLASS).length;
 
             if(isGroupRowStateChanged || isExpandButtonClicked) {

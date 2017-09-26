@@ -1,7 +1,10 @@
 "use strict";
 
-var $ = require("jquery"),
-    typeUtils = require("core/utils/type");
+var $ = require("jquery");
+var typeUtils = require("core/utils/type");
+var Deferred = require("core/utils/deferred").Deferred;
+var renderer = require("core/renderer");
+var eventsEngine = require("events/core/events_engine");
 
 QUnit.module('Type checking');
 
@@ -93,6 +96,8 @@ QUnit.test('isPlainObject', function(assert) {
         return "test";
     };
 
+    var dxEvent = eventsEngine.Event("testevent");
+
     assert.strictEqual(typeUtils.isPlainObject({}), true, 'object is plain');
     assert.strictEqual(typeUtils.isPlainObject(new Object({})), true, 'object is plain');
 
@@ -101,4 +106,27 @@ QUnit.test('isPlainObject', function(assert) {
     assert.strictEqual(typeUtils.isPlainObject(1), false, 'number is not plain object');
     assert.strictEqual(typeUtils.isPlainObject('s'), false, 'string is not plain object');
     assert.strictEqual(typeUtils.isPlainObject(new Date()), false, 'date is not plain object');
+    assert.strictEqual(typeUtils.isPlainObject($.Event), false, '$.Event is not plain object');
+    assert.strictEqual(typeUtils.isPlainObject(dxEvent), false, 'dxEvent is not plain object');
+});
+
+QUnit.test('isRenderer', function(assert) {
+    assert.strictEqual(typeUtils.isRenderer($("body")), true, "jQuery is renderer");
+    assert.strictEqual(typeUtils.isRenderer(renderer("body")), true, "renderer is renderer");
+    assert.strictEqual(typeUtils.isRenderer(document.getElementsByTagName("body")), false, "HTMLCollection is not renderer");
+    assert.strictEqual(typeUtils.isRenderer(document.getElementsByTagName("body")[0]), false, "HTMLElement is not renderer");
+    assert.strictEqual(typeUtils.isRenderer(document), false, "document is not renderer");
+    assert.strictEqual(typeUtils.isRenderer({}), false, "Object is not renderer");
+});
+
+QUnit.test('isDeferred', function(assert) {
+    assert.strictEqual(typeUtils.isDeferred(new Deferred()), true, "Deferred");
+    assert.strictEqual(typeUtils.isDeferred({ done: function() {} }), false, "Deferred should have fail method");
+    assert.strictEqual(typeUtils.isDeferred({ fail: function() {} }), false, "Deferred should have done method");
+});
+
+QUnit.test('isPromise', function(assert) {
+    assert.strictEqual(typeUtils.isPromise(Promise.resolve()), true, "native Promise");
+    assert.strictEqual(typeUtils.isPromise({ then: function() {} }), true, "thenable is Promise");
+    assert.strictEqual(typeUtils.isPromise({ then: 1 }), false, "object with property 'then' isn't Promise");
 });

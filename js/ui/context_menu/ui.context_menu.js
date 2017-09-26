@@ -15,7 +15,8 @@ var $ = require("../../core/renderer"),
     devices = require("../../core/devices"),
     eventUtils = require("../../events/utils"),
     Overlay = require("../overlay"),
-    MenuBase = require("./ui.menu_base");
+    MenuBase = require("./ui.menu_base"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var DX_MENU_CLASS = "dx-menu",
     DX_MENU_ITEM_CLASS = DX_MENU_CLASS + "-item",
@@ -355,7 +356,8 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _expandSubmenuHandler: function($items, location) {
             var $curItem = this._getActiveItem(true),
-                node = this._dataAdapter.getNodeByItem(this._getItemData($curItem)),
+                itemData = this._getItemData($curItem),
+                node = this._dataAdapter.getNodeByItem(itemData),
                 isItemHasSubmenu = this._hasSubmenu(node),
                 $submenu = $curItem.children("." + DX_SUBMENU_CLASS);
 
@@ -473,7 +475,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             contextMenuAction = that._createAction(contextMenuAction);
 
-            if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {
+            if(typeUtils.isRenderer(target) || target.nodeType || typeUtils.isWindow(target)) {
                 that._showContextMenuEventHandler = undefined;
                 eventsEngine.on(target, eventName, handler);
             } else {
@@ -507,10 +509,10 @@ var ContextMenu = MenuBase.inherit((function() {
             }
 
             if(this.option("width")) {
-                return $itemsContainer.css("min-width", this.option("width"));
+                return $itemsContainer.css("minWidth", this.option("width"));
             }
             if(this.option("height")) {
-                return $itemsContainer.css("min-height", this.option("height"));
+                return $itemsContainer.css("minHeight", this.option("height"));
             }
 
             return $itemsContainer;
@@ -671,7 +673,6 @@ var ContextMenu = MenuBase.inherit((function() {
                     .parent("." + DX_MENU_ITEM_WRAPPER_CLASS).siblings()
                     .find("." + DX_MENU_ITEM_EXPANDED_CLASS);
 
-
             if($expandedItems.length) {
                 $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
                 this._hideSubmenu($expandedItems.find("." + DX_SUBMENU_CLASS));
@@ -757,8 +758,6 @@ var ContextMenu = MenuBase.inherit((function() {
         //TODO: try to simplify it
         _updateSubmenuVisibilityOnClick: function(actionArgs) {
             if(!actionArgs.args.length) return;
-
-            actionArgs.args[0].jQueryEvent.stopPropagation();
 
             var $itemElement = actionArgs.args[0].itemElement,
                 itemData = actionArgs.args[0].itemData,
@@ -890,7 +889,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _show: function(jQEvent) {
             var args = { jQEvent: jQEvent },
-                promise = $.Deferred().reject().promise();
+                promise = new Deferred().reject().promise();
 
             this._actions.onShowing(args);
 
@@ -970,14 +969,14 @@ var ContextMenu = MenuBase.inherit((function() {
 
             this.setAria("owns", undefined);
 
-            return promise || $.Deferred().reject().promise();
+            return promise || new Deferred().reject().promise();
         },
 
         /**
         * @name dxContextMenuMethods_toggle
         * @publicName toggle()
         * @param1 showing:boolean
-        * @return Promise
+        * @return Promise<void>
         */
         toggle: function(showing) {
             var visible = this.option("visible");
@@ -990,7 +989,7 @@ var ContextMenu = MenuBase.inherit((function() {
         /**
         * @name dxContextMenuMethods_show
         * @publicName show()
-        * @return Promise
+        * @return Promise<void>
         */
         show: function() {
             return this.toggle(true);
@@ -999,7 +998,7 @@ var ContextMenu = MenuBase.inherit((function() {
         /**
         * @name dxContextMenuMethods_hide
         * @publicName hide()
-        * @return Promise
+        * @return Promise<void>
         */
         hide: function() {
             return this.toggle(false);

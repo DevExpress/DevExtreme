@@ -92,7 +92,7 @@ var TextEditorBase = Editor.inherit({
             /**
             * @name dxTextEditorOptions_value
             * @publicName value
-            * @type string
+            * @type any
             * @default ""
             */
             value: "",
@@ -302,7 +302,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _buttonsContainer: function() {
-        return this._inputWrapper().find("." + TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
+        return this._inputWrapper().find("." + TEXTEDITOR_BUTTONS_CONTAINER_CLASS).eq(0);
     },
 
     _isControlKey: function(key) {
@@ -342,7 +342,7 @@ var TextEditorBase = Editor.inherit({
         $input.attr("autocomplete", "off")
             .attr(customAttributes)
             .addClass(TEXTEDITOR_INPUT_CLASS)
-            .css("min-height", this.option("height") ? "0" : "");
+            .css("minHeight", this.option("height") ? "0" : "");
     },
 
     _renderValue: function() {
@@ -405,9 +405,9 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderProps: function() {
-        this._toggleDisabledState(this.option("disabled"));
         this._toggleReadOnlyState();
         this._toggleSpellcheckState();
+        this._toggleTabIndex();
     },
 
     _toggleDisabledState: function(value) {
@@ -415,9 +415,21 @@ var TextEditorBase = Editor.inherit({
 
         var $input = this._input();
         if(value) {
-            $input.attr("disabled", true).attr("tabIndex", -1);
+            $input.attr("disabled", true);
         } else {
-            $input.removeAttr("disabled").removeAttr("tabIndex");
+            $input.removeAttr("disabled");
+        }
+    },
+
+    _toggleTabIndex: function() {
+        var $input = this._input(),
+            disabled = this.option("disabled"),
+            focusStateEnabled = this.option("focusStateEnabled");
+
+        if(disabled || !focusStateEnabled) {
+            $input.attr("tabIndex", -1);
+        } else {
+            $input.removeAttr("tabIndex");
         }
     },
 
@@ -661,6 +673,10 @@ var TextEditorBase = Editor.inherit({
             case "readOnly":
                 this.callBase(args);
                 this._renderInputAddons();
+                break;
+            case "focusStateEnabled":
+                this.callBase(args);
+                this._toggleTabIndex();
                 break;
             case "spellcheck":
                 this._toggleSpellcheckState();

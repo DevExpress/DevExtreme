@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     noop = require("core/utils/common").noop,
     browser = require("core/utils/browser"),
     support = require("core/utils/support"),
@@ -451,6 +452,18 @@ QUnit.test("the value should be passed to the hidden input in the correct format
     });
 });
 
+//T552313
+QUnit.test("the value should be passed to the hidden input in the correct format if dateSerializationFormat option is defined", function(assert) {
+    var dateValue = new Date(Date.UTC(2016, 6, 15, 14, 30)),
+        $element = $("#dateBox").dxDateBox({
+            type: "datetime",
+            dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
+            value: dateValue
+        });
+
+    assert.equal($element.find("input[type='hidden']").val(), "2016-07-15T14:30:00Z", "input value is correct for the 'yyyy-MM-ddTHH:mm:ssZ' format");
+});
+
 QUnit.test("the value should be passed to the hidden input on widget value change", function(assert) {
     var type = "date",
         $element = $("#dateBox").dxDateBox({
@@ -799,6 +812,57 @@ QUnit.test("incorrect work of mergeDates function if previous value not valid (Q
 
     var date = new Date(null);
     date.setHours(12, 30, 0);
+    assert.deepEqual(this.instance.option("value"), date);
+});
+
+QUnit.test("if value isn't specified then current day is default for an editor with type 'time'", function(assert) {
+    this.instance.option({
+        type: "time",
+        pickerType: "list",
+        displayFormat: "longTime"
+    });
+
+    $(this.$input())
+        .val("1:1:16")
+        .trigger("change");
+
+    var value = this.instance.option("value"),
+        now = new Date();
+
+    assert.equal(value.getFullYear(), now.getFullYear(), "correct year");
+    assert.equal(value.getMonth(), now.getMonth(), "correct month");
+    assert.equal(value.getDate(), now.getDate(), "correct date");
+});
+
+QUnit.test("mergeDates must merge seconds when type is 'time'", function(assert) {
+    this.instance.option({
+        type: "time",
+        value: new Date(2000, 6, 31, 1, 1, 1),
+        pickerType: "list",
+        displayFormat: "longTime"
+    });
+
+    $(this.$input())
+        .val("1:1:16")
+        .trigger("change");
+
+    var date = new Date(2000, 6, 31, 1, 1, 16);
+    assert.deepEqual(this.instance.option("value"), date);
+});
+
+QUnit.test("mergeDates must merge milliseconds when type is 'time'", function(assert) {
+    this.instance.option({
+        type: "time",
+        value: new Date(1),
+        pickerType: "list",
+        displayFormat: "millisecond"
+    });
+
+    $(this.$input())
+        .val("16")
+        .trigger("change");
+
+    var date = new Date(16);
     assert.deepEqual(this.instance.option("value"), date);
 });
 
@@ -1528,6 +1592,24 @@ QUnit.test("changing 'displayFormat' should update input value", function(assert
     dateBox.option("displayFormat", "shortDateShortTime");
 
     assert.equal($dateBox.find("." + TEXTEDITOR_INPUT_CLASS).val(), "3/10/2015, 12:00 AM", "input value is updated");
+});
+
+QUnit.test("displayFormat should affect on timeView", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            value: new Date('03/10/2015'),
+            displayFormat: 'shortdateshorttime',
+            pickerType: 'calendar',
+            opened: true,
+            type: 'datetime'
+        }),
+        dateBox = $dateBox.dxDateBox("instance"),
+        $content = $(dateBox._popup.content()),
+        timeView = $content.find("." + TIMEVIEW_CLASS).dxTimeView("instance");
+
+    assert.notOk(timeView.option("use24HourFormat"), "using 12 hour format");
+
+    dateBox.option("displayFormat", "hour");
+    assert.ok(timeView.option("use24HourFormat"), "using 24 hour format");
 });
 
 QUnit.test("disabledDates correctly displays", function(assert) {
@@ -2299,10 +2381,10 @@ QUnit.module("datebox with time component", {
 });
 
 QUnit.test("date box should contain calendar and time view inside box in large screen", function(assert) {
-    var originalWidthFunction = $.prototype.width;
+    var originalWidthFunction = renderer.fn.width;
 
     try {
-        sinon.stub($.prototype, 'width').returns(600);
+        sinon.stub(renderer.fn, 'width').returns(600);
 
         var $element = $("#dateBox").dxDateBox({
                 type: "datetime",
@@ -2320,15 +2402,15 @@ QUnit.test("date box should contain calendar and time view inside box in large s
         assert.ok(box.itemElements().eq(1).find("." + TIMEVIEW_CLASS).length, "timeview rendered");
         assert.equal($clock.length, 1, "clock was rendered");
     } finally {
-        $.prototype.width = originalWidthFunction;
+        renderer.fn.width = originalWidthFunction;
     }
 });
 
 QUnit.test("date box should contain calendar and time view inside box in small screen", function(assert) {
-    var originalWidthFunction = $.prototype.width;
+    var originalWidthFunction = renderer.fn.width;
 
     try {
-        sinon.stub($.prototype, 'width').returns(300);
+        sinon.stub(renderer.fn, 'width').returns(300);
 
         var $element = $("#dateBox").dxDateBox({
                 type: "datetime",
@@ -2346,7 +2428,7 @@ QUnit.test("date box should contain calendar and time view inside box in small s
         assert.ok(box.itemElements().eq(0).find("." + TIMEVIEW_CLASS).length, "timeview rendered");
         assert.equal($clock.length, 0, "clock was not rendered");
     } finally {
-        $.prototype.width = originalWidthFunction;
+        renderer.fn.width = originalWidthFunction;
     }
 });
 
@@ -2354,7 +2436,7 @@ QUnit.test("date box wrapper adaptivity class depends on the screen size", funct
     var LARGE_SCREEN_SIZE = 2000,
         SMALL_SCREEN_SIZE = 300;
 
-    var stub = sinon.stub($.prototype, 'width').returns(LARGE_SCREEN_SIZE);
+    var stub = sinon.stub(renderer.fn, 'width').returns(LARGE_SCREEN_SIZE);
 
     try {
         var instance = $("#dateBox").dxDateBox({
@@ -2369,7 +2451,7 @@ QUnit.test("date box wrapper adaptivity class depends on the screen size", funct
         instance.close();
 
         stub.restore();
-        stub = sinon.stub($.prototype, 'width').returns(SMALL_SCREEN_SIZE);
+        stub = sinon.stub(renderer.fn, 'width').returns(SMALL_SCREEN_SIZE);
 
         instance.open();
         assert.ok(instance._popup._wrapper().hasClass(DATEBOX_ADAPTIVITY_MODE_CLASS), "there is the adaptivity class for the small screen");
@@ -2894,6 +2976,27 @@ QUnit.test("min/max settings should be work if value option is undefined", funct
 
     assert.equal($listItems.first().text(), "8:00 AM", "min value is right");
     assert.equal($listItems.last().text(), "7:30 PM", "max value is right");
+});
+
+QUnit.test("validator correctly check value with 'time' format", function(assert) {
+    var $dateBox = $("#dateBox").dxDateBox({
+            type: "time",
+            pickerType: "list",
+            min: new Date(2015, 1, 1, 6, 0),
+            max: new Date(2015, 1, 1, 16, 0),
+            value: new Date(2015, 1, 1, 12, 0),
+            opened: true
+        }),
+        dateBox = $dateBox.dxDateBox("instance"),
+        $input = $dateBox.find("." + TEXTEDITOR_INPUT_CLASS);
+
+    $input.val("11:30 AM").change();
+
+    var value = dateBox.option("value");
+    assert.equal($input.val(), "11:30 AM", "Correct input value");
+    assert.equal(value.getHours(), 11, "Correct hours");
+    assert.equal(value.getMinutes(), 30, "Correct minutes");
+    assert.equal(dateBox.option("isValid"), true, "Editor should be marked as valid");
 });
 
 

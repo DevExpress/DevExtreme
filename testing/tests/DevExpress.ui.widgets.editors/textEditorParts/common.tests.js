@@ -31,6 +31,10 @@ var moduleConfig = {
         this.input = this.element.find("." + INPUT_CLASS);
         this.instance = this.element.data("dxTextEditor");
         this.keyboard = keyboardMock(this.input);
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
     }
 };
 
@@ -61,6 +65,17 @@ QUnit.test("init with options", function(assert) {
     assert.equal(input.prop("placeholder") || element.find("." + PLACEHOLDER_CLASS).attr("data-dx_placeholder"), "enter value");
     assert.equal(input.prop("readOnly"), true);
     assert.equal(input.prop("tabindex"), 3);
+});
+
+QUnit.test("init with focusStateEnabled = false", function(assert) {
+    var element = $("#texteditor").dxTextEditor({
+        focusStateEnabled: false,
+        tabIndex: 3
+    });
+
+    var input = element.find("." + INPUT_CLASS);
+
+    assert.equal(input.prop("tabindex"), -1);
 });
 
 QUnit.test("repaint() should not drop any elements without any widget option changing", function(assert) {
@@ -441,6 +456,14 @@ QUnit.test("disabled", function(assert) {
     assert.ok(!this.input.prop("disabled"));
 });
 
+QUnit.test("focusStateEnabled", function(assert) {
+    this.instance.option("focusStateEnabled", false);
+    assert.equal(this.input.prop("tabIndex"), -1);
+
+    this.instance.option("focusStateEnabled", true);
+    assert.ok(!this.input.prop("tabIndex"));
+});
+
 QUnit.test("spellcheck", function(assert) {
     this.instance.option("spellcheck", true);
     assert.ok(this.input.prop("spellcheck"));
@@ -665,7 +688,10 @@ QUnit.testInActiveWindow("Remove .dx-state-focused class after disabled of the e
 QUnit.module("api", moduleConfig);
 
 QUnit.test("focus method", function(assert) {
-    var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(this.input.get(0), "focus");
+    var input = this.input.get(0);
+    var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(sinon.match(function($element) {
+        return ($element.get && $element.get(0) || $element) === input;
+    }), "focus");
 
     this.instance.focus();
     assert.ok(focusSpy.called);
@@ -962,6 +988,8 @@ QUnit.test("TextEditor with mask option should firing the 'onChange' event", fun
     caretWorkaround($input);
 
     $input.triggerHandler("focus");
+    this.clock.tick();
+
     keyboard.type("123").press("enter");
     assert.equal(handler.callCount, 1, "'change' event is fired on enter after value change");
 

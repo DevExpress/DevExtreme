@@ -9,6 +9,10 @@ var registerComponent = require("core/component_registrator"),
 
 require("integration/angular");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.module("CollectionWidgetItem", {
     beforeEach: function() {
         var TestCollectionItem = this.TestCollectionItem = CollectionWidgetItem.inherit({

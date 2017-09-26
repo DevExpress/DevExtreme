@@ -447,7 +447,7 @@ var DraggingHeaderView = modules.View.inherit({
             .addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS))
             .text(options.sourceColumn.caption);
 
-        that.element().appendTo($(document.body));
+        that.element().appendTo($("body"));
     },
 
     moveHeader: function(args) {

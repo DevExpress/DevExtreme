@@ -10,7 +10,8 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
-    Swipeable = require("../events/gesture/swipeable");
+    Swipeable = require("../events/gesture/swipeable"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 
 var MULTIVIEW_CLASS = "dx-multiview",
@@ -236,12 +237,12 @@ var MultiView = CollectionWidget.inherit({
     },
 
     _renderItemContent: function(args) {
-        var renderContentDeferred = $.Deferred();
+        var renderContentDeferred = new Deferred();
 
         var that = this,
             callBase = this.callBase;
 
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
         deferred.done(function() {
             var $itemContent = callBase.call(that, args);
             renderContentDeferred.resolve($itemContent);

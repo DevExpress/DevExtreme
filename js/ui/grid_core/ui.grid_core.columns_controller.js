@@ -24,7 +24,9 @@ var $ = require("../../core/renderer"),
     numberLocalization = require("../../localization/number"),
     dateLocalization = require("../../localization/date"),
     messageLocalization = require("../../localization/message"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     DataSourceModule = require("../../data/data_source/data_source"),
     normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
 
@@ -89,19 +91,19 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns
              * @publicName columns
-             * @type array
+             * @type Array<Object>
              * @default undefined
              */
             /**
              * @name dxDataGridOptions_columns
              * @publicName columns
-             * @type array
+             * @type Array<Object>
              * @default undefined
              */
             /**
              * @name dxTreeListOptions_columns
              * @publicName columns
-             * @type array
+             * @type Array<Object>
              * @default undefined
              */
             columns: undefined,
@@ -126,13 +128,13 @@ module.exports = {
             /**
              * @name dxDataGridOptions_columns_columns
              * @publicName columns
-             * @type array
+             * @type Array<dxDataGridOptions_columns>
              * @default undefined
              */
             /**
              * @name dxTreeListOptions_columns_columns
              * @publicName columns
-             * @type array
+             * @type Array<dxTreeListOptions_columns>
              * @default undefined
              */
             /**
@@ -182,7 +184,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_validationRules
              * @publicName validationRules
-             * @type array
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
              */
             /**
              * @name GridBaseOptions_columns_calculateCellValue
@@ -221,6 +223,15 @@ module.exports = {
              * @type_function_return any
              */
             /**
+             * @name GridBaseOptions_columns_sortingMethod
+             * @publicName sortingMethod
+             * @type function(value1, value2)
+             * @type_function_param1 value1:any
+             * @type_function_param2 value2:any
+             * @type_function_return number
+             * @default undefined
+             */
+            /**
              * @name dxDataGridOptions_columns_showWhenGrouped
              * @publicName showWhenGrouped
              * @type boolean
@@ -230,7 +241,7 @@ module.exports = {
              * @name GridBaseOptions_columns_calculateFilterExpression
              * @publicName calculateFilterExpression
              * @type function(filterValue, selectedFilterOperation, target)
-             * @type_function_param1 filtervalue:any
+             * @type_function_param1 filterValue:any
              * @type_function_param2 selectedFilterOperation:string
              * @type_function_param3 target:string
              * @type_function_return Filter expression
@@ -318,7 +329,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_filterOperations
              * @publicName filterOperations
-             * @type array
+             * @type Array<string>
              * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "between"
              * @default undefined
              */
@@ -338,7 +349,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_filterValues
              * @publicName filterValues
-             * @type array
+             * @type Array<any>
              * @default undefined
             */
             /**
@@ -477,11 +488,11 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_lookup_dataSource
              * @publicName dataSource
-             * @type array|DataSource configuration|function(options)
+             * @type Array<any>|DataSourceOptions|function(options)
              * @type_function_param1 options:object
              * @type_function_param1_field1 data:object
              * @type_function_param1_field2 key:any
-             * @return array|DataSource configuration
+             * @type_function_return Array<any>|DataSourceOptions
              * @default undefined
              */
             /**
@@ -519,7 +530,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_headerFilter_dataSource
              * @publicName dataSource
-             * @type array|function(options)|DataSource configuration
+             * @type Array<any>|function(options)|DataSourceOptions
              * @type_function_param1 options:object
              * @type_function_param1_field1 component:object
              * @type_function_param1_field2 dataSource:object
@@ -540,20 +551,20 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_formItem
              * @publicName formItem
-             * @type Form Simple Item
+             * @type dxFormSimpleItem
              */
             regenerateColumnsByVisibleItems: false,
             /**
              * @name dxDataGridOptions_customizeColumns
              * @publicName customizeColumns
              * @type function(columns)
-             * @type_function_param1 columns:Array
+             * @type_function_param1 columns:Array<dxDataGridOptions_columns>
              */
             /**
              * @name dxTreeListOptions_customizeColumns
              * @publicName customizeColumns
              * @type function(columns)
-             * @type_function_param1 columns:Array
+             * @type_function_param1 columns:Array<dxTreeListOptions_columns>
              */
             customizeColumns: null,
             /**
@@ -641,7 +652,7 @@ module.exports = {
                     parent = columnParentByIndex[columnIndex];
 
                 while(parent) {
-                    result.push(parent);
+                    result.unshift(parent);
                     columnIndex = parent.index;
                     parent = columnParentByIndex[columnIndex];
                 }
@@ -1367,9 +1378,12 @@ module.exports = {
                     if(!that._dataSourceApplied || that._dataSourceColumnsCount === 0 || forceApplying || that.option("regenerateColumnsByVisibleItems")) {
                         if(isDataSourceLoaded) {
                             if(!that._isColumnsFromOptions) {
-                                assignColumns(that, createColumnsFromDataSource(that, dataSource));
-                                that._dataSourceColumnsCount = that._columns.length;
-                                applyUserState(that);
+                                var columnsFromDataSource = createColumnsFromDataSource(that, dataSource);
+                                if(columnsFromDataSource.length) {
+                                    assignColumns(that, columnsFromDataSource);
+                                    that._dataSourceColumnsCount = that._columns.length;
+                                    applyUserState(that);
+                                }
                             }
                             return that.updateColumns(dataSource, forceApplying);
                         } else {
@@ -1378,7 +1392,7 @@ module.exports = {
                     } else if(isDataSourceLoaded && !that.isAllDataTypesDefined(true) && that.updateColumnDataTypes(dataSource)) {
                         updateColumnChanges(that, "columns");
                         fireColumnsChanged(that);
-                        return $.Deferred().reject().promise();
+                        return new Deferred().reject().promise();
                     }
                 },
                 reset: function() {
@@ -1454,23 +1468,23 @@ module.exports = {
                  * @name dxDataGridMethods_getVisibleColumns
                  * @publicName getVisibleColumns(headerLevel)
                  * @param1 headerLevel:number
-                 * @return array
+                 * @return Array<dxDataGridOptions_columns>
                  */
                 /**
                  * @name dxTreeListMethods_getVisibleColumns
                  * @publicName getVisibleColumns(headerLevel)
                  * @param1 headerLevel:number
-                 * @return array
+                 * @return Array<dxTreeListOptions_columns>
                  */
                 /**
                  * @name dxDataGridMethods_getVisibleColumns
                  * @publicName getVisibleColumns()
-                 * @return array
+                 * @return Array<dxDataGridOptions_columns>
                  */
                 /**
                  * @name dxTreeListMethods_getVisibleColumns
                  * @publicName getVisibleColumns()
-                 * @return array
+                 * @return Array<dxTreeListOptions_columns>
                  */
                 getVisibleColumns: function(rowIndex) {
                     this._visibleColumns = this._visibleColumns || this._getVisibleColumnsCore();
@@ -1578,7 +1592,7 @@ module.exports = {
                     }
 
                     expandColumns = iteratorUtils.map(expandColumns, function(column) {
-                        return extend({}, column, { visibleWidth: null }, expandColumn, { index: column.index });
+                        return extend({}, column, { visibleWidth: null, minWidth: null }, expandColumn, { index: column.index });
                     });
 
                     return expandColumns;
@@ -1903,10 +1917,16 @@ module.exports = {
                     iteratorUtils.each(sortColumns, function() {
                         var sortOrder = this && this.sortOrder;
                         if(isSortOrderValid(sortOrder)) {
-                            sort.push({
+                            var sortItem = {
                                 selector: this.calculateSortValue || this.displayField || this.calculateDisplayValue || (useLocalSelector && this.selector) || this.dataField || this.calculateCellValue,
                                 desc: (this.sortOrder === "desc")
-                            });
+                            };
+
+                            if(this.sortingMethod) {
+                                sortItem.compare = this.sortingMethod.bind(this);
+                            }
+
+                            sort.push(sortItem);
                         }
                     });
                     return sort.length > 0 ? sort : null;
@@ -1917,11 +1937,17 @@ module.exports = {
                     iteratorUtils.each(this.getGroupColumns(), function() {
                         var selector = this.calculateGroupValue || this.displayField || this.calculateDisplayValue || (useLocalSelector && this.selector) || this.dataField || this.calculateCellValue;
                         if(selector) {
-                            group.push({
+                            var groupItem = {
                                 selector: selector,
                                 desc: (this.sortOrder === "desc"),
                                 isExpanded: !!this.autoExpandGroup
-                            });
+                            };
+
+                            if(this.sortingMethod) {
+                                groupItem.compare = this.sortingMethod.bind(this);
+                            }
+
+                            group.push(groupItem);
                         }
                     });
                     return group.length > 0 ? group : null;

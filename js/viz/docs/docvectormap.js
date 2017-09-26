@@ -38,7 +38,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_layers
     * @publicName layers
-    * @type array|object
+    * @type Array<Object>|Object
     * @default undefined
     * @notUsedInTheme
     */
@@ -53,14 +53,14 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_layers_dataSource
         * @publicName dataSource
-        * @type object|DataSource|DataSource configuration|string
+        * @type object|DataSource|DataSourceOptions|string
         * @extends CommonVizDataSource
         */
         dataSource: undefined,
         /**
         * @name dxvectormapoptions_layers_data
         * @publicName data
-        * @type object|DataSource|DataSource configuration
+        * @type object|DataSource|DataSourceOptions
         * @deprecated dxvectormapoptions_layers_dataSource
         * @notUsedInTheme
         */
@@ -203,7 +203,7 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_layers_colorGroups
         * @publicName colorGroups
-        * @type array
+        * @type Array<number>
         * @default undefined
         */
         colorGroups: undefined,
@@ -217,7 +217,7 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_layers_sizeGroups
         * @publicName sizeGroups
-        * @type array
+        * @type Array<number>
         * @default undefined
         */
         sizeGroups: undefined,
@@ -239,7 +239,7 @@ var dxVectorMap = {
         * @name dxvectormapoptions_layers_customize
         * @publicName customize
         * @type function(elements)
-        * @type_function_param1 elements:array
+        * @type_function_param1 elements:Array<any>
         * @notUsedInTheme
         */
         customize: function() { },
@@ -309,7 +309,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_mapData
     * @publicName mapData
-    * @type array|string
+    * @type Array<string>|string
     * @default undefined
     * @deprecated
     * @notUsedInTheme
@@ -429,7 +429,7 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_areaSettings_colorGroups
         * @publicName colorGroups
-        * @type array
+        * @type Array<number>
         * @default undefined
         * @deprecated dxvectormapoptions_layers_colorGroups
         */
@@ -516,8 +516,8 @@ var dxVectorMap = {
         * @name dxvectormapoptions_areaSettings_customize
         * @publicName customize
         * @type function(area)
-        * @type_function_param1 area:Area object
-        * @type_function_return Area configuration
+        * @type_function_param1 area:areaObjects
+        * @type_function_return dxVectorMapOptions_areaSettings
         * @deprecated dxvectormapoptions_layers_customize
         * @notUsedInTheme
         */
@@ -526,7 +526,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_markers
     * @publicName markers
-    * @type array|string
+    * @type Array<Object>|string
     * @default undefined
     * @deprecated
     * @notUsedInTheme
@@ -534,7 +534,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_markers_coordinates
     * @publicName coordinates
-    * @type array
+    * @type Array<any>
     * @default undefined
     * @deprecated
     */
@@ -562,7 +562,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_markers_values
     * @publicName values
-    * @type array
+    * @type Array<any>
     * @default undefined
     * @deprecated
     */
@@ -704,7 +704,7 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_markerSettings_colorGroups
         * @publicName colorGroups
-        * @type array
+        * @type Array<number>
         * @default undefined
         * @deprecated dxvectormapoptions_layers_colorGroups
         */
@@ -720,7 +720,7 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_markerSettings_sizeGroups
         * @publicName sizeGroups
-        * @type array
+        * @type Array<any>
         * @default undefined
         * @deprecated dxvectormapoptions_layers_sizeGroups
         */
@@ -818,8 +818,8 @@ var dxVectorMap = {
         * @name dxvectormapoptions_markerSettings_customize
         * @publicName customize
         * @type function(marker)
-        * @type_function_param1 marker:Marker object
-        * @type_function_return Marker configuration
+        * @type_function_param1 marker:markerObjects
+        * @type_function_return dxVectorMapOptions_markerSettings
         * @deprecated dxvectormapoptions_layers_customize
         * @notUsedInTheme
         */
@@ -893,7 +893,7 @@ var dxVectorMap = {
         * @name dxvectormapoptions_tooltip_customizetooltip
         * @publicName customizeTooltip
         * @type function(info)
-        * @type_function_param1 info:Area object|Marker object
+        * @type_function_param1 info:areaObjects|markerObjects
         * @type_function_return object
         * @default undefined
         * @notUsedInTheme
@@ -941,7 +941,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_legends
     * @publicName legends
-    * @type array
+    * @type Array<Object>
     * @default undefined
     */
     legends: [{
@@ -1253,7 +1253,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_bounds
     * @publicName bounds
-    * @type array
+    * @type Array<number>
     * @default undefined
     * @notUsedInTheme
     */
@@ -1289,7 +1289,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_center
     * @publicName center
-    * @type array
+    * @type Array<number>
     * @default [0, 0]
     * @notUsedInTheme
     */
@@ -1330,7 +1330,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 center:array
+    * @type_function_param1_field3 center:Array<number>
     * @notUsedInTheme
     * @action
     */
@@ -1366,8 +1366,8 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
-    * @type_function_param1_field4 target:Area object
+    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field4 target:areaObjects
     * @notUsedInTheme
     * @deprecated
     * @action
@@ -1380,7 +1380,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Area object
+    * @type_function_param1_field3 target:areaObjects
     * @notUsedInTheme
     * @deprecated
     * @action
@@ -1416,7 +1416,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapmethods_getLayers
     * @publicName getLayers()
-    * @return array
+    * @return Array<MapLayer>
     */
     getLayers: function() { },
     /**
@@ -1436,14 +1436,14 @@ var dxVectorMap = {
     /**
     * @name dxvectormapmethods_getAreas
     * @publicName getAreas()
-    * @return array
+    * @return Array<areaObjects>
     * @deprecated
     */
     getAreas: function() { },
     /**
     * @name dxvectormapmethods_getMarkers
     * @publicName getMarkers()
-    * @return array
+    * @return Array<markerObjects>
     * @deprecated
     */
     getMarkers: function() { },
@@ -1467,13 +1467,13 @@ var dxVectorMap = {
     /**
     * @name dxvectormapmethods_center
     * @publicName center()
-    * @return array
+    * @return Array<number>
     */
     center: function() { },
     /**
     * @name dxvectormapmethods_center
     * @publicName center(centerCoordinates)
-    * @param1 centerCoordinates:array
+    * @param1 centerCoordinates:Array<number>
     */
     center: function() { },
     /**
@@ -1491,13 +1491,13 @@ var dxVectorMap = {
     /**
     * @name dxvectormapmethods_viewport
     * @publicName viewport()
-    * @return array
+    * @return Array<number>
     */
     viewport: function() { },
     /**
     * @name dxvectormapmethods_viewport
     * @publicName viewport(viewportCoordinates)
-    * @param1 viewportCoordinates:array
+    * @param1 viewportCoordinates:Array<number>
     */
     viewport: function() { },
     /**
@@ -1505,7 +1505,7 @@ var dxVectorMap = {
     * @publicName convertCoordinates(x, y)
     * @param1 x:number
     * @param2 y:number
-    * @return array
+    * @return Array<number>
     */
     convertCoordinates: function() { }
 };

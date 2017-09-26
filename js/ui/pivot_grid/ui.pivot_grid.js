@@ -27,7 +27,9 @@ var $ = require("../../core/renderer"),
     chartIntegrationMixin = require("./ui.pivot_grid.chart_integration"),
     Popup = require("../popup"),
     ContextMenu = require("../context_menu"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
 
     DATA_AREA_CELL_CLASS = "dx-area-data-cell",
     ROW_AREA_CELL_CLASS = "dx-area-row-cell",
@@ -205,7 +207,7 @@ var PivotGrid = Widget.inherit({
             /**
              * @name dxPivotGridOptions_dataSource
              * @publicName dataSource
-             * @type array|PivotGridDataSource|PivotGridDataSource configuration
+             * @type Array<Object>|PivotGridDataSource|PivotGridDataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -225,6 +227,13 @@ var PivotGrid = Widget.inherit({
                  * @default true
                  */
                 enabled: true,
+                /**
+                 * @name dxPivotGridOptions_fieldChooser_searchEnabled
+                 * @publicName searchEnabled
+                 * @type boolean
+                 * @default false
+                 */
+                searchEnabled: false,
                 /**
                  * @name dxPivotGridOptions_fieldChooser_layout
                  * @publicName layout
@@ -737,7 +746,7 @@ var PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions_stateStoring_customLoad
                  * @publicName customLoad
                  * @type function()
-                 * @type_function_return deferred object
+                 * @type_function_return Promise<Object>
                  */
                 customLoad: null,
 
@@ -1056,6 +1065,7 @@ var PivotGrid = Widget.inherit({
                 layout: fieldChooserOptions.layout,
                 texts: fieldChooserOptions.texts || {},
                 dataSource: that.getDataSource(),
+                searchEnabled: fieldChooserOptions.searchEnabled,
                 width: undefined,
                 height: undefined
             },
@@ -1509,7 +1519,7 @@ var PivotGrid = Widget.inherit({
 
             dataHeaderContainer = $(TD).addClass("dx-data-header");
 
-            filterHeaderContainer = $("<td colspan='2'>").addClass("dx-filter-header");
+            filterHeaderContainer = $("<td>").attr("colspan", "2").addClass("dx-filter-header");
             columnHeaderContainer = $(TD).addClass("dx-column-header");
             rowHeaderContainer = $(TD).addClass(DESCRIPTION_AREA_CELL_CLASS);
 
@@ -1690,7 +1700,7 @@ var PivotGrid = Widget.inherit({
             rowFieldsHeader = that._rowFields,
             columnsAreaRowCount,
             needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option("rowHeaderLayout") !== "tree",
-            d = $.Deferred();
+            d = new Deferred();
 
         ///#DEBUG
         that.__scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
@@ -1792,8 +1802,8 @@ var PivotGrid = Widget.inherit({
 
                 needSynchronizeFieldPanel && rowFieldsHeader.setColumnsWidth(rowsAreaColumnWidths);
 
-                dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !(hasRowsScroll || scrollBarWidth));
-                rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !(hasRowsScroll && !scrollBarWidth));
+                dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
+                rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
 
                 //T317921
                 if(!that._hasHeight && (elementWidth !== that.element().width())) {

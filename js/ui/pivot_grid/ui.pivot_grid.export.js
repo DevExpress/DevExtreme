@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -10,7 +9,9 @@ var $ = require("../../core/renderer"),
     excelExporter = clientExporter.excel,
     DEFAULT_DATA_TYPE = "string",
     exportMixin = require("../grid_core/ui.grid_core.export_mixin"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     COLUMN_HEADER_STYLE_ID = 0,
     ROW_HEADER_STYLE_ID = 1,
     DATA_STYLE_OFFSET = 2,
@@ -79,7 +80,7 @@ exports.ExportMixin = extend({}, exportMixin, {
     getDataProvider: function() {
         var that = this,
             dataController = this._dataController,
-            items = $.Deferred();
+            items = new Deferred();
 
         dataController.beginLoading();
         setTimeout(function() {
@@ -141,13 +142,19 @@ exports.DataProvider = Class.inherit({
                 { alignment: options.rtlEnabled ? "right" : "left", dataType: "string" }
             ];
 
-            dataFields.forEach(function(dataField) {
-                that._styles.push(extend({}, dataItemStyle, {
-                    format: dataField.format,
-                    precision: dataField.precision,
-                    dataType: getCellDataType(dataField)
-                }));
-            });
+            if(dataFields.length) {
+                dataFields.forEach(function(dataField) {
+                    that._styles.push(extend({}, dataItemStyle, {
+                        format: dataField.format,
+                        precision: dataField.precision,
+                        dataType: getCellDataType(dataField)
+                    }));
+                });
+            } else {
+                that._styles.push(dataItemStyle);
+            }
+
+
 
             each(columns, function(columnIndex, column) {
                 column.width = DEFAUL_COLUMN_WIDTH;
@@ -212,14 +219,14 @@ exports.DataProvider = Class.inherit({
             rowHeaderSize = items[0][0].colspan,
             item = items[rowIndex] && items[rowIndex][cellIndex] || {};
 
-        if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
+        if(cellIndex === 0 && rowIndex === 0) {
+            return COLUMN_HEADER_STYLE_ID;
+        } else if(cellIndex >= rowHeaderSize && rowIndex < columnHeaderSize) {
             return COLUMN_HEADER_STYLE_ID;
         } else if(rowIndex >= columnHeaderSize && cellIndex < rowHeaderSize) {
             return ROW_HEADER_STYLE_ID;
-        } else {
-            return DATA_STYLE_OFFSET + (item.dataIndex || 0);
         }
 
-        return item.styleId;
+        return DATA_STYLE_OFFSET + (item.dataIndex || 0);
     }
 });

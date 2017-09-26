@@ -1,11 +1,10 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop,
-    BaseStrategy = require("events/pointer/base"),
-    registerEvent = require("events/core/event_registrator"),
-    $eventSpecial = $.event.special;
-
+var $ = require("jquery");
+var noop = require("core/utils/common").noop;
+var BaseStrategy = require("events/pointer/base");
+var registerEvent = require("events/core/event_registrator");
+var special = require("../../../helpers/eventHelper.js").special;
 
 var TestEventMap = {
     "dxpointerdown": "testdown",
@@ -20,8 +19,8 @@ QUnit.module("base events", {
         this.clock = sinon.useFakeTimers();
 
         $.each(TestEventMap, function(pointerEvent, originalEvents) {
-            if($eventSpecial[pointerEvent]) {
-                $eventSpecial[pointerEvent].dispose();
+            if(special[pointerEvent]) {
+                special[pointerEvent].dispose();
             }
             registerEvent(pointerEvent, new BaseStrategy(pointerEvent, originalEvents));
         });
@@ -56,6 +55,22 @@ $.each({
 
         $element.trigger("testup");
         assert.equal(triggered, assertions[3]);
+    });
+});
+
+$.each(TestEventMap, function(pointerEvent, originalEvent) {
+    QUnit.test("'" + pointerEvent + "' event should be prevented if original event was prevented", function(assert) {
+        var $element = $("#element");
+
+        $element.on(originalEvent, function(e) {
+            e.preventDefault();
+        });
+
+        $element.on(pointerEvent, function(e) {
+            assert.strictEqual(e.isDefaultPrevented(), true, "'" + pointerEvent + "' event was prevented");
+        });
+
+        $element.trigger(originalEvent);
     });
 });
 
@@ -121,14 +136,16 @@ QUnit.test("empty original event should not unsubscribe the whole namespace", fu
     var element = document.getElementById("element"),
         $element = $(element);
 
-    $element.on("any.dxPointerEvents", noop);
-    var events = $.extend({}, $._data(element).events);
+    var handlerSpy = sinon.spy();
+    $element.on("any.dxPointerEvents", handlerSpy);
 
     var strategy = new BaseStrategy("other", "");
     strategy.noBubble = true;
     strategy.teardown($element);
 
-    assert.deepEqual($._data(element).events, events, "handlers for '.dxPointerEvents' remain");
+    $element.trigger("any.dxPointerEvents");
+
+    assert.ok(handlerSpy.calledOnce, "handlers for '.dxPointerEvents' remain");
 });
 
 QUnit.test("event is triggered one time after refresh", function(assert) {

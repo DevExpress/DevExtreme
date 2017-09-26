@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Tooltip = require("./tooltip"),
     extend = require("../../core/utils/extend").extend,
+    Deferred = require("../../core/utils/deferred").Deferred,
     viewPortUtils = require("../../core/utils/view_port");
 
 var tooltip = null;
@@ -14,7 +15,7 @@ var createTooltip = function(options) {
     var content = options.content;
     delete options.content;
 
-    var $tooltip = $("<div />")
+    var $tooltip = $("<div>")
         .html(content)
         .appendTo(viewPortUtils.value());
 
@@ -42,7 +43,7 @@ exports.show = function(options) {
 
 exports.hide = function() {
     if(!tooltip) {
-        return $.Deferred().resolve();
+        return new Deferred().resolve();
     }
 
     return tooltip.hide()

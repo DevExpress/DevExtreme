@@ -3843,6 +3843,67 @@ QUnit.test("Update cell when edit mode batch and cancel in onRowUpdating is defe
     assert.deepEqual(that.dataController.store().update.lastCall.args, [ that.array[0], { name: "Test1", room: 666 } ], "update args");
 });
 
+QUnit.test("Update cell when edit mode batch and cancel in onRowUpdating is Promise and resolved", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = that.rowsView,
+        testElement = $("#container");
+
+    that.options.editing = {
+        mode: "batch",
+        allowUpdating: true,
+        texts: {
+            saveRowChanges: "Save"
+        }
+    };
+
+    sinon.spy(that.dataController.store(), "update");
+
+    var resolve,
+        cancelPromise = new Promise(function(onResolve) {
+            resolve = onResolve;
+        });
+
+    that.options.onRowUpdating = function(params) {
+
+        cancelPromise.then(function() {
+            params.newData.room = 666;
+        });
+
+        params.cancel = cancelPromise;
+    };
+
+    rowsView.render(testElement);
+    that.editingController.optionChanged({ name: "onRowUpdating" });
+
+    //act
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    //assert
+    assert.equal(testElement.find("input").length, 1, "count input");
+
+    //act
+    testElement.find("input").first().val("Test1");
+    testElement.find("input").first().trigger("change");
+
+    //$(document).trigger("dxclick"); // Save
+    //that.clock.tick();
+    that.saveEditData();
+
+    //assert
+    assert.ok(!that.dataController.store().update.called, "update is not called");
+    cancelPromise.then(function() {
+        assert.equal(that.dataController.store().update.callCount, 1, "update called one time");
+        assert.deepEqual(that.dataController.store().update.lastCall.args, [ that.array[0], { name: "Test1", room: 666 } ], "update args");
+    });
+
+    //act
+    resolve();
+
+    return cancelPromise;
+});
+
 QUnit.test("Update cell when edit mode batch and cancel in onRowUpdating is deferred and resolved with true", function(assert) {
     //arrange
     var that = this,
@@ -5111,6 +5172,98 @@ QUnit.test('Error during save changes in batch mode', function(assert) {
     assert.equal(items[3].data.name, "Dmitry", "row 3 name");
 });
 
+//T555797
+QUnit.test('Focus position should be correct after editing in cell editing mode if data source is remote', function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        allowDeleting: true,
+        mode: 'cell'
+    };
+    that.element = function() {
+        return $testElement;
+    };
+
+    that.options.dataSource = {
+        load: function() {
+            return that.array;
+        },
+        update: function(key, values) {
+            var d = $.Deferred();
+
+            setTimeout(function() {
+                $.extend(true, that.array[0], values);
+                d.resolve();
+            }, 100);
+
+            return d;
+        }
+    };
+
+    rowsView.render($testElement);
+    that.dataController.optionChanged({ name: "dataSource" });
+
+    //act
+    that.cellValue(0, 0, "Test");
+    that.editCell(0, 1);
+    this.clock.tick(100);
+
+    //assert
+    assert.ok(!this.hasEditData(), 'edit data is empty');
+    assert.equal(that.array[0].name, "Test", "value is saved");
+    assert.ok($(":focus").hasClass("dx-texteditor-input"), "editor is focused");
+    assert.ok(this.getCellElement(0, 1).hasClass("dx-focused"), "new edit cell is focused");
+});
+
+QUnit.test('Focus position should be retured after editing in cell editing mode if remote updating return error', function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        allowDeleting: true,
+        mode: 'cell'
+    };
+    that.element = function() {
+        return $testElement;
+    };
+
+    that.options.dataSource = {
+        load: function() {
+            return that.array;
+        },
+        update: function(key, values) {
+            var d = $.Deferred();
+
+            setTimeout(function() {
+                d.reject("Error");
+            }, 100);
+
+            return d;
+        }
+    };
+
+    rowsView.render($testElement);
+    that.dataController.optionChanged({ name: "dataSource" });
+
+    //act
+    that.editCell(0, 0);
+    that.cellValue(0, 0, "Test");
+    that.editCell(0, 1);
+    this.clock.tick(100);
+
+    //assert
+    assert.ok(this.hasEditData(), 'edit data is not empty');
+    assert.ok($(":focus").hasClass("dx-texteditor-input"), "editor is focused");
+    assert.ok(this.getCellElement(0, 0).hasClass("dx-focused"), "new edit cell is focused");
+});
+
 QUnit.test("Add edit data with save array without extend_T256598", function(assert) {
     //arrange
     this.editingController._editData = [{
@@ -5372,6 +5525,48 @@ QUnit.test("Save edit data when update fails in batch edit mode", function(asser
     assert.deepEqual(that.editingController._editData[0].oldData, that.array[1], "old data");
 });
 
+//T539602
+QUnit.test("loadingChanged should be called before editing oeprations", function(assert) {
+    //arrange
+    var that = this,
+        deferreds = [],
+        rowsView = this.rowsView,
+        loadingChangedArgs = [],
+        $testElement = $('#container');
+
+    that.options.editing.mode = "batch";
+    that.options.dataSource = {
+        load: function() {
+            return that.array;
+        },
+        update: function(key, value) {
+            var d = $.Deferred();
+            deferreds.push(d);
+            return d.promise();
+        }
+    };
+    that.dataController.init();
+    rowsView.render($testElement);
+    that.getDataSource().on("loadingChanged", function(isLoading) {
+        loadingChangedArgs.push(isLoading);
+    });
+
+    //act
+    that.cellValue(0, 0, "Test1");
+    that.saveEditData();
+
+    //assert
+    assert.strictEqual(deferreds.length, 1, "count of deferred updates");
+    assert.deepEqual(loadingChangedArgs, [true], "loading changed args after updating start");
+
+
+    //act
+    deferreds[0].resolve();
+
+    //assert
+    assert.deepEqual(loadingChangedArgs, [true, false, true, false], "loading changed args after updating end");
+});
+
 //T533546
 QUnit.testInActiveWindow("The lookup column should keep focus after changing value when it has 'setCellValue' option", function(assert) {
    //arrange
@@ -5417,6 +5612,38 @@ QUnit.testInActiveWindow("The lookup column should keep focus after changing val
     //assert
     $cellElement = $(rowsView.element().find("tbody > tr").first().children().first());
     assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
+});
+
+QUnit.test("Batch mode - Correct insert row index for a new row when a previous new row is deleted_T541129", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowAdding: true,
+        allowUpdating: true,
+        allowDeleting: true,
+        mode: 'batch',
+        texts: {
+            addRow: "Add New Item",
+            saveGridChanges: "Save changes",
+            cancelGridChanges: "Cancel changes"
+        }
+    };
+
+    rowsView.render(testElement);
+
+    //act
+    this.addRow();
+    this.addRow();
+    this.deleteRow(1);
+    this.addRow();
+
+    //assert
+    var items = this.dataController.items();
+    assert.ok(items[0].inserted, "first row is inserted");
+    assert.ok(items[1].inserted, "second row is inserted");
 });
 
 if(device.ios || device.android) {
@@ -7087,7 +7314,7 @@ QUnit.test("Show tooltip on focus when one row with set validate in column and e
 });
 
 //T470216
-QUnit.test("Tooltip should be positioned by left side when the drop-down editor is shown", function(assert) {
+QUnit.testInActiveWindow("Tooltip should be positioned by left side when the drop-down editor is shown", function(assert) {
     //arrange
     var that = this,
         tooltipInstance,
@@ -7329,8 +7556,7 @@ QUnit.testInActiveWindow("Cell editor invalid value don't miss focus on saveEdit
     this.editRow(0);
     that.clock.tick();
     var $input = $(rowsView.element().find(".dx-data-row").first().find("td").eq(2).find(".dx-texteditor-input"));
-
-    $input.focus();
+    $input.get(0).focus();
     that.clock.tick();
 
     //assert
@@ -7342,7 +7568,8 @@ QUnit.testInActiveWindow("Cell editor invalid value don't miss focus on saveEdit
     $($input).trigger("change");
 
     $input = $(rowsView.element().find(".dx-data-row").first().find("td").eq(2).find(".dx-texteditor-input"));
-    $input.focus();
+    $input.get(0).blur();
+    $input.get(0).focus();
 
     that.saveEditData();
     that.clock.tick();
@@ -7906,6 +8133,8 @@ QUnit.testInActiveWindow("Save a valid value for an invalid cell when focus in o
         $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
     };
     this.editCell(0, 1);
+
+    getInputElements($cells).first().trigger("dxclick");
     this.clock.tick();
 
     //assert
@@ -8623,6 +8852,7 @@ QUnit.testInActiveWindow("Show the revert button when a row updating is canceled
     $($input).trigger('change');
 
     this.editingController.saveEditData();
+    $input.trigger("dxclick");
     this.clock.tick();
 
     assert.ok(testElement.find(".dx-revert-button").length, "the revert button is shown");
@@ -8801,6 +9031,44 @@ QUnit.test("Cell edit mode - The validation should not work for column with 'sho
     //assert
     $cellElement = $(rowsView.element().find('tbody > tr.dx-row-inserted').first().children().first());
     assert.notOk($cellElement.hasClass("dx-datagrid-invalid"), "first cell is valid");
+});
+
+QUnit.testInActiveWindow("Batch edit mode - Validation message should be shown when column has showEditorAlways", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container'),
+        inputElement;
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{
+                type: "required"
+            }],
+            showEditorAlways: true
+        }]
+    });
+
+    //act
+
+    that.editCell(0, 0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement
+        .val("")
+        .trigger('change');
+
+    this.clock.tick();
+
+    //assert
+    var cells = rowsView.element().find('tbody > tr').first().find("td");
+    assert.ok(cells.eq(0).hasClass("dx-datagrid-invalid"), "validation border should be shown");
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
@@ -10110,15 +10378,15 @@ QUnit.testInActiveWindow("Focus editor after click on a label", function(assert)
     this.editRow(0);
     $labels = testElement.find(".dx-datagrid-edit-form label");
 
-    $labels.eq(0).click();
+    $labels.eq(0).trigger("click");
     assert.ok(testElement.find("input[id*='name']").parent().parent().hasClass("dx-state-focused"), "input with 'name' id");
-    $labels.eq(1).click();
+    $labels.eq(1).trigger("click");
     assert.ok(testElement.find("input[id*='age']").parent().parent().hasClass("dx-state-focused"), "input with 'age' id");
-    $labels.eq(2).click();
+    $labels.eq(2).trigger("click");
     assert.ok(testElement.find("input[id*='lastName']").parent().parent().hasClass("dx-state-focused"), "input with 'lastName' id");
-    $labels.eq(3).click();
+    $labels.eq(3).trigger("click");
     assert.ok(testElement.find("input[id*='phone']").parent().parent().hasClass("dx-state-focused"), "input with 'phone' id");
-    $labels.eq(4).click();
+    $labels.eq(4).trigger("click");
     assert.ok(testElement.find("input[id*='room']").parent().parent().hasClass("dx-state-focused"), "input with 'room' id");
 });
 

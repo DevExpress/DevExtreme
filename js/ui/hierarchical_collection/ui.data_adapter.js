@@ -124,17 +124,18 @@ var DataAdapter = Class.inherit({
     },
 
     _setParentSelection: function() {
-        var length = this._dataStructure.length;
+        var that = this;
 
-        for(var i = length - 1; i >= 0; i--) {
-            var node = this._dataStructure[i],
-                parent = this.options.dataConverter.getParentNode(node);
+        each(this._dataStructure, function(_, node) {
+            var parent = that.options.dataConverter.getParentNode(node);
 
-            if(parent && node.internalFields.parentKey !== this.options.rootValue) {
-                var newParentState = this._calculateSelectedState(parent);
-                this._setFieldState(parent, SELECTED, newParentState);
+            if(parent && node.internalFields.parentKey !== that.options.rootValue) {
+                that._iterateParents(node, function(parent) {
+                    var newParentState = that._calculateSelectedState(parent);
+                    that._setFieldState(parent, SELECTED, newParentState);
+                });
             }
-        }
+        });
     },
 
     _setParentExpansion: function() {
@@ -414,23 +415,25 @@ var DataAdapter = Class.inherit({
         this._expandedNodesKeys = this._updateNodesKeysArray(EXPANDED);
     },
 
-    _filterDataStructure: function(substring) {
-        var matches = [], text,
-            dataStructure = this._initialDataStructure,
-            escaped = commonUtils.escapeRegExp(substring),
-            reg = new RegExp(escaped, 'i');
-
-        for(var i = 0, size = dataStructure.length; i < size; i++) {
-            text = this.options.dataAccessors.getters.display(dataStructure[i]);
-            reg.test(text) && matches.push(dataStructure[i]);
-        }
-
-        return matches;
+    isFiltered: function(item) {
+        return !this.options.searchValue.length || !!this._filterDataStructure(this.options.searchValue, [item]).length;
     },
 
-    search: function(substring) {
+    _filterDataStructure: function(filterValue, dataStructure) {
+        var selector = this.options.searchExpr;
+
+        dataStructure = dataStructure || this._initialDataStructure;
+
+        if(!selector) {
+            selector = this.options.dataAccessors.getters.display;
+        }
+
+        return query(dataStructure).filter(selector, this.options.searchMode || "contains", filterValue).toArray();
+    },
+
+    search: function(searchValue) {
         var that = this,
-            matches = this._filterDataStructure(substring),
+            matches = this._filterDataStructure(searchValue),
             dataConverter = this.options.dataConverter;
 
         function lookForParents(matches, index) {

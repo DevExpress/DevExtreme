@@ -4,7 +4,10 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
     inArray = require("./array").inArray,
-    isDefined = require("./type").isDefined;
+    typeUtils = require("./type"),
+    isDefined = typeUtils.isDefined,
+    isRenderer = typeUtils.isRenderer,
+    htmlParser = require("../../core/utils/html_parser");
 
 var resetActiveElement = function() {
     var activeElement = document.activeElement;
@@ -115,10 +118,10 @@ var createComponents = function(elements, componentTypes) {
 
 var createMarkupFromString = function(str) {
     if(!window.WinJS) {
-        return $(str);
+        return $(htmlParser.parseHTML(str));
     }
 
-    var tempElement = $("<div />");
+    var tempElement = $("<div>");
 
     // otherwise WinJS browser strips HTML comments required for KO
     window.WinJS.Utilities.setInnerHTMLUnsafe(tempElement.get(0), str);
@@ -128,7 +131,7 @@ var createMarkupFromString = function(str) {
 
 
 var normalizeTemplateElement = function(element) {
-    var $element = isDefined(element) && (element.nodeType || element.jquery)
+    var $element = isDefined(element) && (element.nodeType || isRenderer(element))
         ? $(element)
         : $("<div>").html(element).contents();
 
@@ -164,20 +167,6 @@ var contains = function(container, element) {
     }
 
     return container.nodeType === Node.DOCUMENT_NODE ? container.body.contains(element) : container.contains(element);
-};
-
-exports.ready = function(callback) {
-    //NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
-    if(document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
-        callback();
-        return;
-    }
-
-    var loadedCallback = function() {
-        callback();
-        document.removeEventListener("DOMContentLoaded", loadedCallback);
-    };
-    document.addEventListener("DOMContentLoaded", loadedCallback);
 };
 
 exports.resetActiveElement = resetActiveElement;

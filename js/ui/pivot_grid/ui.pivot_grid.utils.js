@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    typeUtils = require("../../core/utils/type"),
+var typeUtils = require("../../core/utils/type"),
     ajax = require("../../core/utils/ajax"),
     dataCoreUtils = require("../../core/utils/data"),
     iteratorUtils = require("../../core/utils/iterator"),
@@ -10,7 +9,9 @@ var $ = require("../../core/renderer"),
     formatHelper = require("../../format_helper"),
     DataSourceModule = require("../../data/data_source/data_source"),
     ArrayStore = require("../../data/array_store"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var setFieldProperty = exports.setFieldProperty = function(field, property, value, isInitialization) {
     var initProperties = field._initProperties = field._initProperties || {},
@@ -49,7 +50,7 @@ function createForeachTreeFunc(isAsync) {
 
             if(isAsync && i > index && i % 10000 === 0 && (new Date() - foreachTreeAsyncDate >= 300)) {
                 foreachTreeAsyncDate = new Date();
-                deferred = $.Deferred();
+                deferred = new Deferred();
                 setTimeout(createForeachTreeAsyncHandler(deferred, i, false), 0);
 
                 return deferred;
@@ -67,7 +68,7 @@ function createForeachTreeFunc(isAsync) {
                 if(item.children) {
                     childrenDeferred = foreachTreeFunc(item.children, callback, parentAtFirst, members);
                     if(isAsync && childrenDeferred) {
-                        deferred = $.Deferred();
+                        deferred = new Deferred();
                         childrenDeferred.done(createForeachTreeAsyncHandler(deferred, i, true));
                         return deferred;
                     }
@@ -302,7 +303,7 @@ exports.storeDrillDownMixin = {
                 if(arrayStore) {
                     d = arrayStore[methodName](options);
                 } else {
-                    d = $.Deferred();
+                    d = new Deferred();
                     when(items).done(function(data) {
                         arrayStore = new ArrayStore(data);
                         arrayStore[methodName](options).done(d.resolve).fail(d.reject);

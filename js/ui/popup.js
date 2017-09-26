@@ -172,7 +172,7 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_toolbarItems
             * @publicName toolbarItems
-            * @type array
+            * @type Array<Object>
             */
             /**
             * @name dxPopupOptions_toolbarItems_toolbar
@@ -251,7 +251,6 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_width
                     * @publicName width
-                    * @type string|number|function
                     * @custom_default_for_windows_8 function() { return $(window).width(); }
                     * @extend_doc
                     */
@@ -357,8 +356,8 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_buttons
             * @publicName buttons
+            * @type Array<Object>
             * @deprecated dxPopupOptions_toolbarItems
-            * @type array
             */
             "buttons": { since: "16.1", alias: "toolbarItems" }
         });
@@ -479,11 +478,16 @@ var Popup = Overlay.inherit({
             toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
+            var toolbarOptions = {
+                items: data,
+                rtlEnabled: this.option("rtlEnabled")
+            };
+
             this._getTemplate("dx-polymorph-widget").render({
                 container: $container,
                 model: {
                     widget: "dxToolbarBase",
-                    options: { items: data }
+                    options: toolbarOptions
                 }
             });
             var $toolbar = $container.children("div");
@@ -691,9 +695,7 @@ var Popup = Overlay.inherit({
             contentHeight -= this._$bottom.get(0).getBoundingClientRect().height || 0;
         }
 
-        this._$popupContent.css({
-            "height": contentHeight
-        });
+        this._$popupContent.css("height", contentHeight < 0 ? 0 : contentHeight);
     },
 
     _disallowUpdateContentHeight: function() {

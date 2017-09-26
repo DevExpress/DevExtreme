@@ -416,9 +416,11 @@ var TileView = CollectionWidget.inherit({
             itemMargin = this.option("itemMargin");
 
 
-        var cssProps = { display: (itemRatioMain <= 0 || itemRatioCross <= 0) ? "none" : "" };
-        cssProps[config.mainDimension] = itemRatioMain * baseItemMain + (itemRatioMain - 1) * itemMargin;
-        cssProps[config.crossDimension] = itemRatioCross * baseItemCross + (itemRatioCross - 1) * itemMargin;
+        var cssProps = { display: (itemRatioMain <= 0 || itemRatioCross <= 0) ? "none" : "" },
+            mainDimension = itemRatioMain * baseItemMain + (itemRatioMain - 1) * itemMargin,
+            crossDimension = itemRatioCross * baseItemCross + (itemRatioCross - 1) * itemMargin;
+        cssProps[config.mainDimension] = mainDimension < 0 ? 0 : mainDimension;
+        cssProps[config.crossDimension] = crossDimension < 0 ? 0 : crossDimension;
         cssProps[config.mainPosition] = itemPositionMain * baseItemMain + (itemPositionMain + 1) * itemMargin;
         cssProps[config.crossPosition] = itemPositionCross * baseItemCross + (itemPositionCross + 1) * itemMargin;
 

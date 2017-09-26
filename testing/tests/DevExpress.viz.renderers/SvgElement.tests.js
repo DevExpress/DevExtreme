@@ -397,6 +397,16 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.strictEqual(lock.lastCall, null, "lock");
     });
 
+    QUnit.test("smartAttr with 'none' hatching", function(assert) {
+        var lock = this.rendererStub.lockHatching = sinon.stub().returns("test-pattern"),
+            element = (new this.Element(this.rendererStub, "rect"));
+
+        element.smartAttr({ fill: "red", hatching: { direction: "NoNe" } });
+
+        assert.strictEqual(element._settings.fill, "red", "fill");
+        assert.ok(!lock.called, "lock");
+    });
+
     QUnit.test("smartAttr / no hatching and previous hatching", function(assert) {
         var release = this.rendererStub.releaseHatching = sinon.spy(),
             element = (new this.Element(this.rendererStub, "rect"));
@@ -522,12 +532,15 @@ function checkDashStyle(assert, elem, result, style, value) {
 
             this.Element = renderer.SvgElement;
 
+            this.jQuery = $;
+            $ = require("core/renderer");
+            this.eventsEngine = require("events/core/events_engine");
             this.rendererStub = { fake: "fake", root: { element: document.createElement("div") } };
             this.$emptyStub = sinon.stub($.fn, "empty");
             this.$removeStub = sinon.stub($.fn, "remove", function() { return this; });
-            this.$onStub = sinon.stub($.fn, "on");
-            this.$offStub = sinon.stub($.fn, "off");
-            this.$triggerStub = sinon.stub($.fn, "trigger");
+            this.$onStub = sinon.stub(this.eventsEngine, "on");
+            this.$offStub = sinon.stub(this.eventsEngine, "off");
+            this.$triggerStub = sinon.stub(this.eventsEngine, "trigger");
         },
         afterEach: function() {
             this.$emptyStub.restore();
@@ -535,6 +548,7 @@ function checkDashStyle(assert, elem, result, style, value) {
             this.$onStub.restore();
             this.$offStub.restore();
             this.$triggerStub.restore();
+            $ = this.jQuery;
         }
     });
 
@@ -575,10 +589,11 @@ function checkDashStyle(assert, elem, result, style, value) {
         result = elem.on(1, 2, 3, 4);
 
         //assert
+
         assert.equal(result, elem);
-        assert.ok($.fn.on.calledOnce);
-        assert.deepEqual($.fn.on.firstCall.args, [1, 2, 3, 4]);
-        assert.equal($.fn.on.firstCall.thisValue.get(0), $(elem.element).get(0));
+        assert.ok(this.eventsEngine.on.calledOnce);
+        assert.deepEqual(this.eventsEngine.on.firstCall.args.slice(1), [1, 2, 3, 4]);
+        assert.equal(this.eventsEngine.on.firstCall.args[0].get(0), $(elem.element).get(0));
     });
 
     QUnit.test("Off", function(assert) {
@@ -591,28 +606,27 @@ function checkDashStyle(assert, elem, result, style, value) {
 
         //assert
         assert.equal(result, elem);
-        assert.ok($.fn.off.calledOnce);
-        assert.deepEqual($.fn.off.firstCall.args, [1, 2, 3, 4]);
-        assert.equal($.fn.off.firstCall.thisValue.get(0), $(elem.element).get(0));
+
+        assert.ok(this.eventsEngine.off.calledOnce);
+        assert.deepEqual(this.eventsEngine.off.firstCall.args.slice(1), [1, 2, 3, 4]);
+        assert.equal(this.eventsEngine.off.firstCall.args[0].get(0), $(elem.element).get(0));
     });
 
     QUnit.test("Trigger", function(assert) {
         //arrange
         var elem = (new this.Element(this.rendererStub, "svg")),
-            result,
-            originalF = $.fn.trigger;
+            result;
 
-        $.fn.trigger = sinon.spy();
         //act
         result = elem.trigger(1, 2, 3, 4);
 
         //assert
         assert.equal(result, elem);
-        assert.ok($.fn.trigger.calledOnce);
-        assert.deepEqual($.fn.trigger.firstCall.args, [1, 2, 3, 4]);
-        assert.equal($.fn.trigger.firstCall.thisValue, elem._$element);
 
-        $.fn.trigger = originalF;
+        assert.ok(this.eventsEngine.trigger.calledOnce);
+        assert.deepEqual(this.eventsEngine.trigger.firstCall.args.slice(1), [1, 2, 3, 4]);
+        assert.equal(this.eventsEngine.trigger.firstCall.args[0].length, 1);
+        assert.equal(this.eventsEngine.trigger.firstCall.args[0].get(0), $(elem.element).get(0));
     });
 
     QUnit.module("SvgElement. attr API, set attrs", {

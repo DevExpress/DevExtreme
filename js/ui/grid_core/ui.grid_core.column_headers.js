@@ -45,7 +45,7 @@ module.exports = {
         columnHeadersView: columnsView.ColumnsView.inherit((function() {
             var createCellContent = function(that, $cell, options) {
                 var showColumnLines,
-                    $cellContent = $("<div />").addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
+                    $cellContent = $("<div>").addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
 
                 addCssClassesToCellContent(that, $cell, options.column, $cellContent);
                 showColumnLines = that.option("showColumnLines");
@@ -284,6 +284,10 @@ module.exports = {
                     var $indicatorsContainer = this.callBase($cell);
 
                     return returnAll ? $indicatorsContainer : $indicatorsContainer.filter(":not(." + VISIBILITY_HIDDEN_CLASS + ")");
+                },
+
+                _isSortableElement: function() {
+                    return true;
                 },
 
                 getHeadersRowHeight: function() {

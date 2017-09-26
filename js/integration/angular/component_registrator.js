@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Config = require("../../core/config"),
-    registerComponent = require("../../core/component_registrator"),
+    registerComponentCallbacks = require("../../core/component_registrator_callbacks"),
     Class = require("../../core/class"),
     Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
@@ -249,7 +249,7 @@ var ComponentBuilder = Class.inherit({
         return function(options) {
             var $resultMarkup = $(template).clone(),
                 dataIsScope = options.model && options.model.constructor === that._scope.$root.constructor,
-                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options.model));
+                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options));
 
             if(scopeItemsPath) {
                 that._synchronizeScopes(templateScope, scopeItemsPath, options.index);
@@ -298,11 +298,15 @@ var ComponentBuilder = Class.inherit({
         }
     },
 
-    _createScopeWithData: function(data) {
+    _createScopeWithData: function(options) {
         var newScope = this._scope.$new();
 
         if(this._itemAlias) {
-            newScope[this._itemAlias] = data;
+            newScope[this._itemAlias] = options.model;
+        }
+
+        if(typeUtils.isDefined(options.index)) {
+            newScope.$index = options.index;
         }
 
         return newScope;
@@ -461,7 +465,7 @@ var ComponentBuilder = Class.inherit({
                             errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
                         }
 
-                        var markup = $("<div " + inflector.dasherize(widgetName) + "=\"options\">").get(0);
+                        var markup = $("<div>").attr(inflector.dasherize(widgetName), "options").get(0);
 
                         var newScope = this._scope.$new();
                         newScope.options = options.model.options;
@@ -529,7 +533,9 @@ ComponentBuilder = ComponentBuilder.inherit({
 
                 that._ngModelController.$setViewValue(args.value);
             } finally {
-                that._ngLocker.release(that._ngModelOption());
+                if(that._ngLocker.locked(that._ngModelOption())) {
+                    that._ngLocker.release(that._ngModelOption());
+                }
             }
         });
 
@@ -595,7 +601,7 @@ var registerComponentDirective = function(name) {
     }]);
 };
 
-registerComponent.callbacks.add(function(name, componentClass) {
+registerComponentCallbacks.add(function(name, componentClass) {
 
     if(!registeredComponents[name]) {
         registerComponentDirective(name);

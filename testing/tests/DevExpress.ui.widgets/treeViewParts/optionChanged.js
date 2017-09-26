@@ -211,6 +211,79 @@ QUnit.test("searchValue with the same text in items", function(assert) {
     assert.equal($checkboxes.eq(5).dxCheckBox("instance").option("value"), false);
 });
 
+QUnit.test("searchEnabled", function(assert) {
+    var $treeView = initTree({
+            items: $.extend(true, [], DATA[1]),
+            searchEnabled: true
+        }),
+        instance = $treeView.dxTreeView("instance");
+
+    instance.option("searchEnabled", false);
+
+    assert.notOk($treeView.find(".dx-treeview-search").length, "hasn't search editor");
+
+    instance.option("searchEnabled", true);
+
+    assert.ok($treeView.children().first().hasClass("dx-treeview-search"), "has search editor");
+});
+
+QUnit.test("searchMode", function(assert) {
+    var $treeView = initTree({
+            items: $.extend(true, [], DATA[1]),
+            searchValue: "item 2"
+        }),
+        instance = $treeView.dxTreeView("instance"),
+        $items = $treeView.find(".dx-treeview-item");
+
+    assert.strictEqual($items.length, 3, "count item");
+
+    instance.option("searchMode", "startswith");
+
+    $items = $treeView.find(".dx-treeview-item");
+    assert.strictEqual($items.length, 1, "count item");
+});
+
+QUnit.test("searchExpr", function(assert) {
+    var $treeView = initTree({
+            items: [
+                { key: 1, text: "Item 1", value: "test 3" },
+                { key: 2, text: "Item 2", value: "test 3" },
+                { key: 3, text: "Item 3", value: "test 1" }
+            ],
+            searchValue: "3"
+        }),
+        instance = $treeView.dxTreeView("instance"),
+        $items = $treeView.find(".dx-treeview-item");
+
+    assert.strictEqual($items.length, 1, "count item");
+    assert.strictEqual($items.text(), "Item 3", "text of the first item");
+
+    instance.option("searchExpr", "value");
+
+    $items = $treeView.find(".dx-treeview-item");
+    assert.strictEqual($items.length, 2, "count item");
+    assert.strictEqual($items.first().text(), "Item 1", "text of the first item");
+    assert.strictEqual($items.last().text(), "Item 2", "text of the second item");
+});
+
+QUnit.test("searchEditorOptions", function(assert) {
+    var $treeView = initTree({
+            items: $.extend(true, [], DATA[1]),
+            searchEnabled: true,
+            searchEditorOptions: {
+                placeholder: "Search"
+            }
+        }),
+        searchEditorInstance = $treeView.children().first().dxTextBox("instance"),
+        instance = $treeView.dxTreeView("instance");
+
+    assert.strictEqual(searchEditorInstance.option("placeholder"), "Search", "placeholder of the search editor");
+
+    instance.option("searchEditorOptions", { placeholder: "Test" });
+
+    searchEditorInstance = $treeView.children().first().dxTextBox("instance"),
+    assert.strictEqual(searchEditorInstance.option("placeholder"), "Test", "placeholder of the search editor");
+});
 
 QUnit.test("parentIdExpr should work correctly when it was dynamically changed", function(assert) {
     var $treeView = initTree({

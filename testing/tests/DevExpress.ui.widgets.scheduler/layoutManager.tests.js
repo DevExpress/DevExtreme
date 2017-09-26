@@ -10,6 +10,7 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     SchedulerLayoutManager = require("ui/scheduler/ui.scheduler.appointments.layout_manager"),
     BaseAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.base"),
+    VerticalAppointmentStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.vertical"),
     HorizontalAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal"),
     HorizontalMonthLineAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month_line"),
     Color = require("color");
@@ -29,7 +30,7 @@ QUnit.testStart(function() {
 var moduleOptions = {
     beforeEach: function() {
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler($.extend(options, { editing: true })).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { editing: true, maxAppointmentsPerCell: null })).dxScheduler("instance");
         };
     },
     afterEach: function() {
@@ -65,6 +66,24 @@ QUnit.test("Scheduler should have a right rendering strategy for timeline views"
 
     this.instance.option("currentView", "timelineMonth");
     assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalMonthLineAppointmentsStrategy, "Strategy is OK");
+});
+
+QUnit.test("Scheduler should have a right rendering strategy for views with config", function(assert) {
+    this.createInstance({
+        views: [ {
+            name: "MonthView",
+            type: "month"
+        }, {
+            name: "WeekView",
+            type: "week"
+        }],
+        currentView: "WeekView"
+    });
+
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof VerticalAppointmentStrategy, "Strategy is OK");
+
+    this.instance.option("currentView", "MonthView");
+    assert.ok(this.instance.getRenderingStrategyInstance() instanceof HorizontalAppointmentsStrategy, "Strategy is OK");
 });
 
 QUnit.module("Appointments", moduleOptions);
@@ -840,7 +859,7 @@ QUnit.test("Start date of appointment should be changed when resize is finished,
     });
 });
 
-QUnit.test("End date of appointment should be changed сonsidering endDayHour and startDayHour when resize is finished", function(assert) {
+QUnit.test("End date of appointment should be changed considering endDayHour and startDayHour when resize is finished", function(assert) {
     var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9, 18), endDate: new Date(2015, 1, 9, 19) },
         updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 10, 10) });
 
@@ -877,7 +896,7 @@ QUnit.test("End date of appointment should be changed сonsidering endDayHour an
     });
 });
 
-QUnit.test("Start date of appointment should be changed сonsidering endDayHour and startDayHour when resize is finished", function(assert) {
+QUnit.test("Start date of appointment should be changed considering endDayHour and startDayHour when resize is finished", function(assert) {
     var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10) },
         updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 8, 19) });
 
@@ -913,7 +932,7 @@ QUnit.test("Start date of appointment should be changed сonsidering endDayHour 
     });
 });
 
-QUnit.test("Start date of long multiday appointment should be changed сonsidering endDayHour and startDayHour when resize is finished", function(assert) {
+QUnit.test("Start date of long multiday appointment should be changed considering endDayHour and startDayHour when resize is finished", function(assert) {
     var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 10) },
         updatedItem = $.extend({}, item, { startDate: new Date(2015, 1, 7, 18) });
 
@@ -952,7 +971,7 @@ QUnit.test("Start date of long multiday appointment should be changed сonsideri
     });
 });
 
-QUnit.test("End date of long multiday appointment should be changed сonsidering endDayHour and startDayHour when resize is finished", function(assert) {
+QUnit.test("End date of long multiday appointment should be changed considering endDayHour and startDayHour when resize is finished", function(assert) {
     var item = { text: "Appointment 1", startDate: new Date(2015, 1, 9, 18), endDate: new Date(2015, 1, 9, 19) },
         updatedItem = $.extend({}, item, { endDate: new Date(2015, 1, 11, 10) });
 
@@ -1559,5 +1578,316 @@ QUnit.testInActiveWindow("Apps should be focused in back order while press shift
 
     keyboard.keyDown("tab", { shiftKey: true });
     assert.deepEqual($appointments.get(0), apptInstance.option("focusedElement").get(0), "app 1 in focus");
+});
+
+QUnit.module("Appointment overlapping", moduleOptions);
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "month",
+            views: [{
+                type: "month",
+                maxAppointmentsPerCell: 3
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment")),
+        tableCellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+    for(var i = 0; i < 2; i++) {
+        var appointmentWidth = $appointment.eq(i).outerWidth();
+
+        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
+    }
+
+    var $dropDownMenu = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+        groupedAppointments = dropDownMenu.option("items"),
+        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+
+    assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
+
+    assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
+});
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'auto' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "month",
+            views: [{
+                type: "month",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment")),
+        tableCellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth(),
+        $dropDownMenu = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+
+    assert.roughEqual($appointment.eq(0).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
+    assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
+
+    this.instance.option("height", 900);
+    $appointment = $(this.instance.element().find(".dx-scheduler-appointment"));
+
+    assert.roughEqual($appointment.eq(0).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(2).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(3).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+});
+
+QUnit.test("Full-size appointment should have correct height, 'auto' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "month",
+            views: [{
+                type: "month",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment"));
+
+    assert.ok($appointment.eq(0).outerHeight() > 15, "appointment height is ok");
+    assert.ok($appointment.eq(1).outerHeight() > 15, "appointment height is ok");
+
+    this.instance.option("height", 900);
+    $appointment = $(this.instance.element().find(".dx-scheduler-appointment"));
+
+    assert.ok($appointment.eq(0).outerHeight() > 15, "appointment height is ok");
+    assert.ok($appointment.eq(3).outerHeight() > 15, "appointment height is ok");
+
+});
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'unlimited' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0) },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) },
+        { text: "Task 5", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) },
+        { text: "Task 5", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "month",
+            views: [{
+                type: "month",
+                maxAppointmentsPerCell: 'unlimited'
+            }],
+            height: 200,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-appointment")),
+        tableCellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+
+    assert.roughEqual($appointment.eq(0).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(1).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(2).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(3).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(4).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+    assert.roughEqual($appointment.eq(5).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
+});
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Day view", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0), allDay: true },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "day",
+            views: [{
+                type: "day",
+                maxAppointmentsPerCell: 3
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment")),
+        tableCellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
+        tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+
+    for(var i = 0; i < 3; i++) {
+        var appointmentWidth = $appointment.eq(i).outerWidth(),
+            appointmentHeight = $appointment.eq(i).outerHeight();
+
+        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
+        assert.roughEqual(appointmentHeight, (tableCellHeight - 30) / 3, 1.5, "appointment is full-size");
+    }
+
+    var $dropDownMenu = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+        groupedAppointments = dropDownMenu.option("items"),
+        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+
+    assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
+
+    assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
+});
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Day view, 'auto' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0), allDay: true },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true },
+        { text: "Task 5", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "day",
+            views: [{
+                type: "day",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment")),
+        tableCellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
+        tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+
+    for(var i = 0; i < 3; i++) {
+        var appointmentWidth = $appointment.eq(i).outerWidth(),
+            appointmentHeight = $appointment.eq(i).outerHeight();
+
+        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
+        assert.roughEqual(appointmentHeight, (tableCellHeight - 20) / 3, 1.5, "appointment is full-size");
+    }
+
+    var $dropDownMenu = $(this.instance.element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
+        dropDownMenu = $dropDownMenu.eq(0).dxDropDownMenu("instance"),
+        groupedAppointments = dropDownMenu.option("items"),
+        dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
+
+    assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
+
+    assert.equal(groupedAppointments.length, 2, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
+});
+
+QUnit.test("Appointment should have an unchangeable height, Day view, 'auto' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "day",
+            views: [{
+                type: "day",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment")),
+        tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
+        appointmentHeight = (tableCellHeight - 20) / 3;
+
+    assert.roughEqual($appointment.eq(0).outerHeight(), appointmentHeight, 1.5, "appointment has a correct height");
+
+    this.instance.addAppointment({ text: "Task 2", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true });
+    $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment"));
+
+    assert.roughEqual($appointment.eq(0).outerHeight(), appointmentHeight, 1.5, "appointment has a correct height");
+    assert.roughEqual($appointment.eq(1).outerHeight(), appointmentHeight, 1.5, "appointment has a correct height");
+});
+
+QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Week view, 'unlimited' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
+        { text: "Task 3", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 5, 0), allDay: true },
+        { text: "Task 4", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true },
+        { text: "Task 5", startDate: new Date(2015, 2, 4, 6, 0), endDate: new Date(2015, 2, 4, 8, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 'unlimited'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.element().find(".dx-scheduler-all-day-appointment")),
+        tableCellWidth = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
+        tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+
+    for(var i = 0; i < 5; i++) {
+        var appointmentWidth = $appointment.eq(i).outerWidth(),
+            appointmentHeight = $appointment.eq(i).outerHeight();
+
+        assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
+        assert.roughEqual(appointmentHeight, (tableCellHeight - 10) / 5, 1.5, "appointment is full-size");
+    }
+});
+
+QUnit.test("One full-size appointment should have a correct height, Week view, 'unlimited' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "week",
+            views: [{
+                type: "week",
+                maxAppointmentsPerCell: 'unlimited'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var tableCellHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
+
+    assert.roughEqual($(this.instance.element().find(".dx-scheduler-all-day-appointment")).eq(0).outerHeight(), tableCellHeight, 1.5, "appointment height is correct");
 });
 

@@ -1,10 +1,10 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    queryAdapters = require("./query_adapters"),
+var queryAdapters = require("./query_adapters"),
     errorsModule = require("./errors"),
     each = require("../core/utils/iterator").each,
     isFunction = require("../core/utils/type").isFunction,
+    Deferred = require("../core/utils/deferred").Deferred,
     arrayQueryImpl = require("./array_query");
 
 var remoteQueryImpl = function(url, queryOptions, tasks) {
@@ -16,7 +16,7 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
     };
 
     var exec = function(executorTask) {
-        var d = $.Deferred(),
+        var d = new Deferred(),
             _adapterFactory,
             _adapter,
             _taskQueue,

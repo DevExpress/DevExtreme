@@ -14,7 +14,9 @@ var $ = require("../../core/renderer"),
     Button = require("../button"),
     List = require("../list"),
     ContextMenu = require("../context_menu"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var DATAGRID_EXPORT_MENU_CLASS = "dx-datagrid-export-menu",
     DATAGRID_EXPORT_BUTTON_CLASS = "dx-datagrid-export-button",
@@ -450,7 +452,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
     _getAllItems: function(data) {
         var that = this,
-            d = $.Deferred(),
+            d = new Deferred(),
             dataController = this.getController("data"),
             footerItems = dataController.footerItems(),
             totalItem = footerItems.length && footerItems[0],
@@ -690,8 +692,8 @@ dataGridCore.registerModule("export", {
              * @name dxDataGridOptions_customizeExportData
              * @publicName customizeExportData
              * @type function(columns, rows)
-             * @type_function_param1 columns:array
-             * @type_function_param2 rows:array
+             * @type_function_param1 columns:Array<dxDataGridOptions_columns>
+             * @type_function_param2 rows:Array<dxDataGridRowObject>
              */
         };
     },
@@ -790,7 +792,7 @@ dataGridCore.registerModule("export", {
                     var that = this,
                         texts = that.option("export.texts"),
                         renderFakeButton = function(data, $container, iconName) {
-                            var $icon = $("<div />").addClass("dx-icon dx-icon-" + iconName),
+                            var $icon = $("<div>").addClass("dx-icon dx-icon-" + iconName),
                                 $text = $("<span class='dx-button-text'/>").text(data.text),
                                 $content = $("<div class='dx-button-content' />").append($icon).append($text),
                                 $button = $("<div class='dx-button dx-button-has-text dx-button-has-icon dx-datagrid-toolbar-button'>").append($content),

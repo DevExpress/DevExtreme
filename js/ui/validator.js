@@ -3,6 +3,7 @@
 var dataUtils = require("../core/element_data"),
     Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),
+    logger = require("../core/utils/console").logger,
     DOMComponent = require("../core/dom_component"),
     extend = require("../core/utils/extend").extend,
     map = require("../core/utils/iterator").map,
@@ -27,7 +28,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_validationRules
             * @publicName validationRules
-            * @type array
+            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
             */
             validationRules: []
             /**
@@ -55,7 +56,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_adapter_validationRequestsCallbacks
             * @publicName validationRequestsCallbacks
-            * @type jquery.callbacks
+            * @type Array<function> | jquery.callbacks
             */
             /**
             * @name dxValidatorOptions_adapter_applyValidationResults
@@ -82,7 +83,7 @@ var Validator = DOMComponent.inherit({
             * @name dxValidatorOptions_onValidated
             * @publicName onValidated
             * @type function(validatedInfo)
-            * @type_function_param1 selectedRowsInfo:object
+            * @type_function_param1 validatedInfo:object
             * @type_function_param1_field1 name:string
             * @type_function_param1_field2 isValid:boolean
             * @type_function_param1_field3 value:object
@@ -175,10 +176,19 @@ var Validator = DOMComponent.inherit({
             throw errors.Error("E0120");
         }
 
-        if(adapter.validationRequestsCallbacks) {
-            adapter.validationRequestsCallbacks.add(function() {
-                that.validate();
-            });
+        var callbacks = adapter.validationRequestsCallbacks;
+
+        if(callbacks) {
+            if(Array.isArray(callbacks)) {
+                callbacks.push(function() {
+                    that.validate();
+                });
+            } else {
+                logger.warn("Specifying the validationRequestsCallbacks option with jQuery.Callbacks are now deprecated. Instead, use the array.");
+                callbacks.add(function() {
+                    that.validate();
+                });
+            }
         }
     },
 

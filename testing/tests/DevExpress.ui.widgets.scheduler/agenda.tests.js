@@ -5,6 +5,7 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date"),
     ResourceManager = require("ui/scheduler/ui.scheduler.resource_manager");
 
+var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell";
 var formatWeekday = function(date) {
     return dateLocalization.getDayNames("abbreviated")[date.getDay()];
 };
@@ -227,13 +228,16 @@ QUnit.test("Agenda element should not handle click event", function(assert) {
     var currentDate = new Date(2016, 1, 17).toString();
 
     this.createInstance({
-        currentDate: currentDate
+        currentDate: currentDate,
+        focusStateEnabled: true,
+        onCellClick: function(e) {
+            assert.ok(false);
+        }
     });
 
-    var element = this.instance.element().get(0),
-        events = $._data(element, "events");
-
-    assert.strictEqual(events["dxclick"], undefined, "Agenda doesn't handle click event");
+    var $element = $(this.instance.element());
+    $element.find("." + DATE_TABLE_CELL_CLASS).eq(0).trigger("dxclick");
+    assert.ok(true);
 });
 
 QUnit.test("Time panel rows should have a right height", function(assert) {
@@ -418,6 +422,10 @@ QUnit.test("Agenda should have the right 'dx-group-column-count' attr depend on 
 
     assert.equal($element.attr("dx-group-column-count"), "2", "Attr is OK");
     assert.notOk($element.attr("dx-group-row-count"), "row-count attr is not applied");
+
+    this.instance.option("groups", []);
+
+    assert.notOk($element.attr("dx-group-column-count"), "column-count attr is not applied");
 });
 
 QUnit.test("Agenda should not create scrollable elements, if crossSCrollingEnabled=true ", function(assert) {

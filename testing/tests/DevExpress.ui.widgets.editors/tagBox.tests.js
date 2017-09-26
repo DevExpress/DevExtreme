@@ -1994,6 +1994,21 @@ QUnit.test("the focused tag should be removed after pressing the 'backspace' key
     assert.deepEqual(value, expectedValue, "the widget's value is correct");
 });
 
+QUnit.test("backspace should remove selected search text but not tag if any text is selected", function(assert) {
+    this.reinit({
+        items: ["item 1", "item 2"],
+        value: ["item 1"],
+        focusStateEnabled: true,
+        searchEnabled: true
+    });
+
+    this.$input.val("item");
+    this.keyboard.caret({ start: 0, end: 4 });
+    this.keyboard.press("backspace");
+
+    assert.equal(this.instance.option("value"), "item 1", "tag was not removed");
+});
+
 QUnit.test("the focused tag should be removed after pressing the 'delete' key", function(assert) {
     this.keyboard
         .focus()
@@ -3369,6 +3384,7 @@ QUnit.test("the search should be cleared after pressing the 'OK' button", functi
     $(".dx-button.dx-popup-done").trigger("dxclick");
 
     assert.equal($input.val(), "", "the search is cleared");
+    assert.notOk(this.instance._dataSource.searchValue(), "The search value is cleared");
 });
 
 
@@ -4122,7 +4138,7 @@ QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first tim
     assert.equal(tagBox.option("selectedItems").length, 1, "selectedItems was changed correctly");
 });
 
-QUnit.test("Searching should work correctly in grouped tagBox (T516798)", function(assert) {
+QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T516798)", function(assert) {
     if(devices.real().platform !== "generic") {
         assert.ok(true, "test does not actual for mobile devices");
         return;

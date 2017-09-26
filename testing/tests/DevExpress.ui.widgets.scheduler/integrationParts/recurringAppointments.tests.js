@@ -890,3 +890,50 @@ QUnit.test("AllDay recurrence appointments should be rendered correctly after ch
     this.instance.option("currentDate", new Date(2015, 4, 27));
     assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 0, "appointments are OK");
 });
+
+QUnit.test("Recurring appt should be rendered correctly after changing of repeate count", function(assert) {
+    var task = { startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 30), recurrenceRule: "FREQ=DAILY;COUNT=2" },
+        newTask = { startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 30), recurrenceRule: "FREQ=DAILY;COUNT=4" };
+
+    this.createInstance({
+        dataSource: [task],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2017, 7, 10),
+        recurrenceEditMode: "series"
+    });
+
+    this.instance.updateAppointment(task, newTask);
+    var appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal(appointments.length, 4, "appt was rendered correctly");
+});
+
+QUnit.test("Recurring appt should be rendered correctly after setting recurrenceException", function(assert) {
+    var task = {
+            text: "Stand-up meeting",
+            startDate: new Date(2015, 4, 4, 9, 0),
+            endDate: new Date(2015, 4, 4, 9, 15),
+            recurrenceRule: "FREQ=DAILY;COUNT=3"
+        },
+        newTask = {
+            text: "Stand-up meeting",
+            startDate: new Date(2015, 4, 4, 9, 0),
+            endDate: new Date(2015, 4, 4, 9, 15),
+            recurrenceRule: "FREQ=DAILY;COUNT=3",
+            recurrenceException: "20150506T090000"
+        };
+
+    this.createInstance({
+        dataSource: [task],
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2015, 4, 25),
+        recurrenceEditMode: "single"
+    });
+
+    this.instance.updateAppointment(task, newTask);
+    var appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal(appointments.length, 2, "appt was rendered correctly");
+});

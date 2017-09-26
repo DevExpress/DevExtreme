@@ -323,15 +323,21 @@ module.exports = DOMComponent.inherit({
         }
     },
 
+    _getMinSize: function() {
+        return [0, 0];
+    },
+
+    _getAlignmentRect: noop,
+
     _setContentSize: function() {
         var canvas = this._canvas,
             layout = this._layout,
             rect = canvas.width > 0 && canvas.height > 0 ? [canvas.left, canvas.top, canvas.width - canvas.right, canvas.height - canvas.bottom] : [0, 0, 0, 0],
             nextRect;
 
-        rect = layout.forward(rect);
+        rect = layout.forward(rect, this._getMinSize());
         nextRect = this._applySize(rect) || rect;
-        layout.backward(nextRect);
+        layout.backward(nextRect, this._getAlignmentRect() || nextRect);
     },
 
     ///#DEBUG

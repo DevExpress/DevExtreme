@@ -1,12 +1,12 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     deferredStrategy = require("./selection.strategy.deferred"),
     standardStrategy = require("./selection.strategy.standard"),
     extend = require("../../core/utils/extend").extend,
     noop = require("../../core/utils/common").noop,
-    isDefined = require("../../core/utils/type").isDefined;
+    isDefined = require("../../core/utils/type").isDefined,
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 module.exports = Class.inherit({
     ctor: function(options) {
@@ -33,7 +33,7 @@ module.exports = Class.inherit({
             onSelectionChanged: noop,
             key: noop,
             keyOf: function(item) { return item; },
-            load: function() { return $.Deferred().resolve([]); },
+            load: function() { return new Deferred().resolve([]); },
             totalCount: function() { return -1; },
             isSelectableItem: function() { return true; },
             isItemSelected: function() { return false; },
@@ -174,8 +174,10 @@ module.exports = Class.inherit({
             itemIndexStep,
             index,
             keyOf = this.options.keyOf,
-            key = keyOf(items[this._focusedItemIndex].data),
-            isFocusedItemSelected = items[this._focusedItemIndex] && this.isItemSelected(key);
+            focusedItem = items[this._focusedItemIndex],
+            focusedData = this.options.getItemData(focusedItem),
+            focusedKey = keyOf(focusedData),
+            isFocusedItemSelected = focusedItem && this.isItemSelected(focusedKey);
 
         if(!isDefined(this._shiftFocusedItemIndex)) {
             this._shiftFocusedItemIndex = this._focusedItemIndex;
@@ -208,10 +210,8 @@ module.exports = Class.inherit({
             }
         }
 
-        if(this.isDataItem(items[this._focusedItemIndex]) && !isFocusedItemSelected) {
-            data = this.options.getItemData(items[index]);
-            itemKey = keyOf(data);
-            this._addSelectedItem(data, itemKey);
+        if(this.isDataItem(focusedItem) && !isFocusedItemSelected) {
+            this._addSelectedItem(focusedData, focusedKey);
             isSelectedItemsChanged = true;
         }
 
@@ -260,7 +260,7 @@ module.exports = Class.inherit({
 
         this.onSelectionChanged();
 
-        return $.Deferred().resolve();
+        return new Deferred().resolve();
     },
 
     getSelectAllState: function(visibleOnly) {

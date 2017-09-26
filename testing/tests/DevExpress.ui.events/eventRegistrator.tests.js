@@ -2,7 +2,15 @@
 
 var $ = require("jquery"),
     registerEvent = require("events/core/event_registrator"),
+    eventsEngine = require("events/core/events_engine"),
+    registerEventCallbacks = require("events/core/event_registrator_callbacks"),
     Class = require("core/class");
+
+var eventHelper = require("../../helpers/eventHelper.js");
+
+registerEventCallbacks.add(function(name, eventObject) {
+    eventHelper.special[name] = eventObject;
+});
 
 QUnit.testStart(function() {
     var markup =
@@ -53,20 +61,20 @@ QUnit.module("event registration", {
     },
 
     afterEach: function() {
-        delete $.event.special["dxtestevent"];
+        eventHelper.special = {};
     }
 });
 
 QUnit.test("'noBubble' property", function(assert) {
-    assert.strictEqual($.event.special["dxtestevent"].noBubble, false);
+    assert.strictEqual(eventHelper.special["dxtestevent"].noBubble, false);
 });
 
 QUnit.test("'bindType' property", function(assert) {
-    assert.strictEqual($.event.special["dxtestevent"].bindType, false);
+    assert.strictEqual(eventHelper.special["dxtestevent"].bindType, false);
 });
 
 QUnit.test("'delegateType' property", function(assert) {
-    assert.strictEqual($.event.special["dxtestevent"].delegateType, false);
+    assert.strictEqual(eventHelper.special["dxtestevent"].delegateType, false);
 });
 
 QUnit.test("'setup' method", function(assert) {
@@ -74,7 +82,7 @@ QUnit.test("'setup' method", function(assert) {
         handler = function() { },
         LOG;
 
-    this.element.on("dxtestevent.test1.test2", data, handler);
+    eventsEngine.on(this.element, "dxtestevent.test1.test2", data, handler);
 
     LOG = this.testEventImplementer.LOG.setup;
     assert.strictEqual(LOG.context, this.testEventImplementer, "context");
@@ -90,9 +98,9 @@ QUnit.test("'teardown' method", function(assert) {
         handler = function() { },
         LOG;
 
-    this.element
-        .on("dxtestevent.test1.test2", data, handler)
-        .off("dxtestevent.test1.test2");
+
+    eventsEngine.on(this.element, "dxtestevent.test1.test2", data, handler);
+    eventsEngine.off(this.element, "dxtestevent.test1.test2");
 
     LOG = this.testEventImplementer.LOG.teardown;
 
@@ -108,8 +116,7 @@ QUnit.test("'add' method", function(assert) {
         handler = function() { },
         LOG;
 
-    this.element
-        .on("dxtestevent.test1.test2", ".some", data, handler);
+    eventsEngine.on(this.element, "dxtestevent.test1.test2", ".some", data, handler);
 
     LOG = this.testEventImplementer.LOG.add;
 
@@ -129,9 +136,8 @@ QUnit.test("'remove' method", function(assert) {
         handler = function() { },
         LOG;
 
-    this.element
-        .on("dxtestevent.test1.test2", ".some", data, handler)
-        .off("dxtestevent.test1.test2", handler);
+    eventsEngine.on(this.element, "dxtestevent.test1.test2", ".some", data, handler);
+    eventsEngine.off(this.element, "dxtestevent.test1.test2", handler);
 
     LOG = this.testEventImplementer.LOG.add;
 
@@ -149,12 +155,11 @@ QUnit.test("'remove' method", function(assert) {
 QUnit.test("'trigger' method", function(assert) {
     var data = {},
         handler = function() { },
-        event = $.Event("dxtestevent"),
+        event = eventsEngine.Event("dxtestevent"),
         LOG;
 
-    this.element
-        .on("dxtestevent.test1.test2", handler)
-        .trigger(event, data);
+    eventsEngine.on(this.element, "dxtestevent.test1.test2", handler);
+    eventsEngine.trigger(this.element, event, data);
 
     LOG = this.testEventImplementer.LOG.trigger;
     assert.strictEqual(LOG.context, this.testEventImplementer, "context");
@@ -167,12 +172,11 @@ QUnit.test("'trigger' method", function(assert) {
 QUnit.test("'_default' method", function(assert) {
     var data = {},
         handler = function() { },
-        event = $.Event("dxtestevent"),
+        event = eventsEngine.Event("dxtestevent"),
         LOG;
 
-    this.element
-        .on("dxtestevent.test1.test2", data, handler)
-        .trigger(event, data);
+    eventsEngine.on(this.element, "dxtestevent.test1.test2", data, handler);
+    eventsEngine.trigger(this.element, event, data);
 
     LOG = this.testEventImplementer.LOG._default;
     assert.strictEqual(LOG.context, this.testEventImplementer, "context");
@@ -184,12 +188,11 @@ QUnit.test("'_default' method", function(assert) {
 QUnit.test("'handle' method", function(assert) {
     var data = {},
         handler = function() { },
-        event = $.Event("dxtestevent"),
+        event = eventsEngine.Event("dxtestevent"),
         LOG;
 
-    this.element
-        .on("dxtestevent.test1.test2", data, handler)
-        .trigger(event, data);
+    eventsEngine.on(this.element, "dxtestevent.test1.test2", data, handler);
+    eventsEngine.trigger(this.element, event, data);
 
     LOG = this.testEventImplementer.LOG.handle;
     assert.strictEqual(LOG.context, this.testEventImplementer, "context");

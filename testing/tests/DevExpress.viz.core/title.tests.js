@@ -485,7 +485,7 @@ QUnit.test("layoutOptions - without text", function(assert) {
 
 QUnit.test("layoutOptions", function(assert) {
     this.title.update(this.options);
-    assert.deepEqual(this.title.layoutOptions(), { horizontalAlignment: "center", verticalAlignment: "top" });
+    assert.deepEqual(this.title.layoutOptions(), { horizontalAlignment: "center", verticalAlignment: "top", priority: 0 });
 });
 
 QUnit.test("measure", function(assert) {
@@ -511,6 +511,14 @@ QUnit.test("move - not enough size", function(assert) {
 
     assert.deepEqual(this.renderer.g.getCall(0).returnValue.move.getCall(0).args, [19, -14], "position");
     assert.strictEqual(spy.callCount, 1, "drawn");
+});
+
+QUnit.test("freeSpace", function(assert) {
+    this.title.update(this.options);
+    this.title.measure([400, 300]);
+    this.title.freeSpace();
+
+    this.rendererElementsIsDispose(assert);
 });
 
 QUnit.module("Size changing notification", environment);

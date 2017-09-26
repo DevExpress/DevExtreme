@@ -95,6 +95,21 @@ QUnit.testStart(function() {
         assert.ok($element.hasClass("dx-scheduler-work-space"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
     });
 
+    QUnit.test("Scheduler workspace should have a right default intervalCount and startDate", function(assert) {
+        assert.equal(this.instance.option("intervalCount"), 1, "dxSchedulerWorkSpace intervalCount is right");
+        assert.deepEqual(this.instance.option("startDate"), null, "dxSchedulerWorkSpace startDate is right");
+    });
+
+    QUnit.test("Scheduler workspace with intervalCount should have a right css class", function(assert) {
+        this.instance.option("intervalCount", 3);
+        var $element = this.instance.element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-count"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
+
+        this.instance.option("intervalCount", 1);
+        $element = this.instance.element();
+        assert.notOk($element.hasClass("dx-scheduler-work-space-count"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
+    });
+
     QUnit.test("Scheduler workspace should contain time panel, header panel, allday panel and content", function(assert) {
         var $element = this.instance.element();
 
@@ -144,6 +159,16 @@ QUnit.testStart(function() {
 
         this.instance.option("showAllDayPanel", false);
         assert.notOk($element.hasClass("dx-scheduler-work-space-all-day"), "dxSchedulerWorkSpace hasn't 'dx-scheduler-work-space-all-day' css class");
+    });
+
+    QUnit.test("Workspace should have specific css class, if hoursInterval = 0.5 ", function(assert) {
+        this.instance.option("hoursInterval", 0.5);
+
+        var $element = this.instance.element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-odd-cells"), "dxSchedulerWorkSpace has 'dx-scheduler-work-space-odd-cells' css class");
+
+        this.instance.option("hoursInterval", 0.75);
+        assert.notOk($element.hasClass("dx-scheduler-work-space-odd-cells"), "dxSchedulerWorkSpace hasn't 'dx-scheduler-work-space-odd-cells' css class");
     });
 
     QUnit.test("All day panel has specific class when allDayExpanded = true", function(assert) {
@@ -231,6 +256,10 @@ QUnit.testStart(function() {
 
         assert.ok(this.instance.element().hasClass("dx-scheduler-work-space-grouped"), "'grouped' class is applied");
         assert.equal(this.instance.element().attr("dx-group-row-count"), 1, "'dx-group-row-count' is right");
+
+        this.instance.option("groups", []);
+        assert.ok(!this.instance.element().hasClass("dx-scheduler-work-space-grouped"), "'grouped' class is not applied");
+        assert.notOk(this.instance.element().attr("dx-group-row-count"), "'dx-group-row-count' isn't applied");
     });
 
     QUnit.test("Work space should not have 'grouped' class & group row count attr if groups exist but empty(T381796)", function(assert) {
@@ -1270,10 +1299,12 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Scheduler workspace work week view should be correct with any first day of week", function(assert) {
-        var $element = this.instance.element();
+        var instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek({
+            firstDayOfWeek: 2,
+            currentDate: new Date(2015, 1, 4)
+        }).dxSchedulerWorkSpaceWorkWeek("instance");
 
-        this.instance.option("firstDayOfWeek", 2);
-        this.instance.option("currentDate", new Date(2015, 1, 4));
+        var $element = instance.element();
 
         var $headerCells = $element.find(".dx-scheduler-header-row th");
 
@@ -1296,10 +1327,12 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Scheduler workspace work week view should be correct with any first day of week, if currentDate is Sunday", function(assert) {
-        var $element = this.instance.element();
+        var instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek({
+            currentDate: new Date(2016, 0, 10),
+            firstDayOfWeek: 3
+        }).dxSchedulerWorkSpaceWorkWeek("instance");
 
-        this.instance.option("firstDayOfWeek", 3);
-        this.instance.option("currentDate", new Date(2016, 0, 10));
+        var $element = instance.element();
 
         var $headerCells = $element.find(".dx-scheduler-header-row th");
 
@@ -1503,6 +1536,27 @@ QUnit.testStart(function() {
         var $cells = $element.find(".dx-scheduler-date-table-other-month");
         assert.equal($cells.length, 11, "Other-month cells count is correct");
     });
+
+    // QUnit.test("Scheduler workspace month view should have a dates with other-month class, if startDate is set", function(assert) {
+    //     var $element = this.instance.element();
+
+    //     this.instance.option("currentDate", new Date(2015, 2, 1));
+    //     this.instance.option("startDate", new Date(2015, 5, 1));
+
+    //     var $cells = $element.find(".dx-scheduler-date-table-other-month");
+    //     assert.equal($cells.length, 12, "Other-month cells count is correct");
+    // });
+
+    // QUnit.test("Scheduler workspace month view should have a dates with other-month class, if startDate & intervalCount is set", function(assert) {
+    //     var $element = this.instance.element();
+
+    //     this.instance.option("currentDate", new Date(2015, 2, 1));
+    //     this.instance.option("startDate", new Date(2015, 11, 1));
+    //     this.instance.option("intervalCount", 3);
+
+    //     var $cells = $element.find(".dx-scheduler-date-table-other-month");
+    //     assert.equal($cells.length, 7, "Other-month cells count is correct");
+    // });
 
     QUnit.test("Scheduler workspace should have a right first day of week", function(assert) {
         var $element = this.instance.element();
@@ -2855,8 +2909,6 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Cell data cache should be cleared when dimensions were changed", function(assert) {
-
-
         var workSpace = this.instance,
             $element = this.instance.element(),
             appointment = {
@@ -2882,3 +2934,497 @@ QUnit.testStart(function() {
     });
 
 })("Work Space cellData Cache");
+
+(function() {
+    QUnit.module("Work Space Day with intervalCount", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceDay().dxSchedulerWorkSpaceDay("instance");
+            stubInvokeMethod(this.instance);
+        }
+    });
+
+    QUnit.test("WorkSpace Day view has right count of cells with view option intervalCount=2", function(assert) {
+        this.instance.option("intervalCount", 2);
+
+        var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 2, "view has right cell count");
+
+        this.instance.option("intervalCount", 4);
+
+        cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 4, "view has right cell count");
+    });
+
+    QUnit.test("WorkSpace Day view cells have right cellData with view option intervalCount=2", function(assert) {
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 29));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(1).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(95).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 30, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 30, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 5, 30, 23, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 31, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace Day view cells have right cellData with view option intervalCount = 3 and startDate < currentDate", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("startDate", new Date(2017, 5, 21));
+        this.instance.option("currentDate", new Date(2017, 5, 28));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(143).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 27, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 27, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 5, 29, 23, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 30, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace Day view cells have right cellData with view option intervalCount = 3 and startDate > currentDate", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("startDate", new Date(2017, 5, 30));
+        this.instance.option("currentDate", new Date(2017, 5, 25));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(143).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 24, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 24, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 5, 26, 23, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 5, 27, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("Get date range", function(assert) {
+        this.instance.option("currentDate", new Date(2015, 2, 16));
+        this.instance.option("intervalCount", 2);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 17, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 16, 0, 0), new Date(2015, 2, 19, 23, 59)], "Range is OK");
+    });
+
+    QUnit.test("WorkSpace Day view with option intervalCount = 3 should have right header", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("currentDate", new Date(2017, 5, 25));
+        this.instance.option("startDate", new Date(2017, 5, 24));
+
+        var date = new Date(this.instance.option("startDate")),
+            $element = this.instance.element(),
+            $headerCells = $element.find(".dx-scheduler-header-panel-cell");
+
+        assert.equal($headerCells.length, 3, "Date table has 3 header cells");
+        assert.equal($headerCells.eq(0).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[6].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        assert.equal($headerCells.eq(1).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[0].toLowerCase() + " " + new Date(date.setDate(date.getDate() + 1)).getDate(), "Header has a right text");
+        assert.equal($headerCells.eq(2).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[1].toLowerCase() + " " + new Date(date.setDate(date.getDate() + 1)).getDate(), "Header has a right text");
+
+        this.instance.option("intervalCount", 1);
+
+        $headerCells = $element.find(".dx-scheduler-header-panel-cell");
+        assert.equal($headerCells.length, 0, "Date table hasn't 3 header cells");
+    });
+
+})("Work Space Day with intervalCount");
+
+(function() {
+    QUnit.module("Work Space Week with intervalCount", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek().dxSchedulerWorkSpaceWeek("instance");
+            stubInvokeMethod(this.instance);
+        }
+    });
+
+    QUnit.test("WorkSpace Week view has right count of cells with view option intervalCount", function(assert) {
+        this.instance.option("intervalCount", 2);
+
+        var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 2, "view has right cell count");
+
+        this.instance.option("intervalCount", 4);
+
+        cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 4, "view has right cell count");
+    });
+
+    QUnit.test("WorkSpace Week view cells have right cellData with view option intervalCount", function(assert) {
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 25));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(6).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(671).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 1, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 1, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 8, 23, 30), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 9, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace Week view cells have right cellData with view option intervalCount = 3 and startDate < currentDate", function(assert) {
+        this.instance.option("hoursInterval", 1);
+        this.instance.option("firstDayOfWeek", 1);
+        this.instance.option("intervalCount", 3);
+        this.instance.option("startDate", new Date(2017, 6, 4));
+        this.instance.option("currentDate", new Date(2017, 6, 26));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(240).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(503).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 24, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 24, 1), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 7, 2, 11), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 7, 2, 12), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 7, 13, 23), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 7, 14, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace Week view cells have right cellData with view option intervalCount = 3 and startDate > currentDate", function(assert) {
+        this.instance.option("hoursInterval", 1);
+        this.instance.option("firstDayOfWeek", 1);
+        this.instance.option("intervalCount", 2);
+        this.instance.option("startDate", new Date(2017, 6, 26));
+        this.instance.option("currentDate", new Date(2017, 6, 4));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(160).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(335).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 26, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 26, 1), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 2, 11), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 2, 12), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 9, 23), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 10, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("Get date range", function(assert) {
+        this.instance.option("currentDate", new Date(2015, 2, 15));
+        this.instance.option("intervalCount", 3);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 15, 0, 0), new Date(2015, 3, 4, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 15, 0, 0), new Date(2015, 3, 11, 23, 59)], "Range is OK");
+    });
+
+})("Work Space Week with intervalCount");
+
+(function() {
+    QUnit.module("Work Space Work Week with intervalCount", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek().dxSchedulerWorkSpaceWorkWeek("instance");
+            stubInvokeMethod(this.instance);
+        }
+    });
+
+    QUnit.test("WorkSpace WorkWeek view has right count of cells with view option intervalCount", function(assert) {
+        this.instance.option("intervalCount", 2);
+
+        var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 2, "view has right cell count");
+
+        this.instance.option("intervalCount", 4);
+
+        cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+        assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 4, "view has right cell count");
+    });
+
+    QUnit.test("'getCoordinatesByDate' should return right coordinates with view option intervalCount", function(assert) {
+        this.instance.option({
+            intervalCount: 2,
+            currentDate: new Date(2017, 5, 25),
+            startDayHour: 8,
+            endDayHour: 20
+        });
+
+        var $element = this.instance.element();
+
+        var coords = this.instance.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false),
+            targetCellPosition = $element.find(".dx-scheduler-date-table tbody td").eq(88).position();
+
+        assert.equal(coords.top, targetCellPosition.top, "Cell coordinates are right");
+        assert.equal(coords.left, targetCellPosition.left, "Cell coordinates are right");
+    });
+
+    QUnit.test("WorkSpace WorkWeek view cells have right cellData with view option intervalCount", function(assert) {
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 25));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(4).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(5).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(479).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 30, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 30, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 3, 0, 30), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 7, 23, 30), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 8, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace WorkWeek view cells have right cellData with view option intervalCount = 3 and startDate < currentDate", function(assert) {
+        this.instance.option("hoursInterval", 1);
+        this.instance.option("firstDayOfWeek", 1);
+        this.instance.option("intervalCount", 3);
+        this.instance.option("startDate", new Date(2017, 6, 4));
+        this.instance.option("currentDate", new Date(2017, 6, 26));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(82).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 24, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 24, 1), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 7, 2, 5), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 7, 2, 6), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 7, 11, 23), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 7, 12, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace WorkWeek view cells have right cellData with view option intervalCount = 3 and startDate > currentDate", function(assert) {
+        this.instance.option("hoursInterval", 1);
+        this.instance.option("firstDayOfWeek", 1);
+        this.instance.option("intervalCount", 2);
+        this.instance.option("startDate", new Date(2017, 6, 26));
+        this.instance.option("currentDate", new Date(2017, 6, 4));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(36).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 26, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 26, 1), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 4, 3), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 4, 4), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 7, 23), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 8, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("Get date range", function(assert) {
+        this.instance.option("currentDate", new Date(2017, 5, 26));
+        this.instance.option("intervalCount", 3);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 14, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 26, 0, 0), new Date(2017, 6, 21, 23, 59)], "Range is OK");
+    });
+
+    QUnit.test("Workspace work week view should contain 15 headers if intervalCount=3", function(assert) {
+        var instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek({
+            currentDate: new Date(2017, 5, 26),
+            firstDayOfWeek: 1,
+            intervalCount: 3,
+            width: 1500
+        }).dxSchedulerWorkSpaceWorkWeek("instance");
+
+        var currentDate = instance.option("currentDate"),
+            $element = instance.element(),
+            $headerCells = $element.find(".dx-scheduler-header-panel-cell"),
+            date;
+
+        assert.equal($headerCells.length, 15, "Date table has 15 header cells");
+        for(var i = 0; i < 5; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 7; i < 12; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i - 2).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 14; i < 19; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i - 4).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+    });
+
+    QUnit.test("Grouped Workspace work week view should contain right count of headers with view option intervalCount", function(assert) {
+        var instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWorkWeek({
+            currentDate: new Date(2017, 5, 26),
+            firstDayOfWeek: 1,
+            intervalCount: 2,
+            groups: [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }],
+            width: 1500
+        }).dxSchedulerWorkSpaceWorkWeek("instance");
+
+        var currentDate = instance.option("currentDate"),
+            $element = instance.element(),
+            $headerCells = $element.find(".dx-scheduler-header-panel-cell"),
+            date;
+
+        assert.equal($headerCells.length, 20, "Date table has 15 header cells");
+        for(var i = 0; i < 5; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 7; i < 12; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i);
+            assert.equal($headerCells.eq(i - 2).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 14; i < 19; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i - 14);
+            assert.equal($headerCells.eq(i - 4).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+        for(i = 21; i < 26; i++) {
+            date = new Date(this.instance.option("currentDate"));
+            date.setDate(currentDate.getDate() + i - 14);
+            assert.equal($headerCells.eq(i - 6).text().toLowerCase(), dateLocalization.getDayNames("abbreviated")[(i + 1) % 7].toLowerCase() + " " + date.getDate(), "Header has a right text");
+        }
+    });
+
+    QUnit.test("Grouped WorkSpace WorkWeek view cells have right cellData with view option intervalCount", function(assert) {
+        this.instance.option("hoursInterval", 1);
+        this.instance.option("firstDayOfWeek", 1);
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 6, 4));
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(5).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(10).data("dxCellData"),
+            lastCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(15).data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 3, 1), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 10, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 10, 1), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 3, 1), "cell has right endtDate");
+
+        assert.deepEqual(lastCellData.startDate, new Date(2017, 6, 10, 0), "cell has right startDate");
+        assert.deepEqual(lastCellData.endDate, new Date(2017, 6, 10, 1), "cell has right endtDate");
+    });
+
+})("Work Space Work Week with intervalCount");
+
+(function() {
+    QUnit.module("Work Space Month with intervalCount", {
+        beforeEach: function() {
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth().dxSchedulerWorkSpaceMonth("instance");
+            stubInvokeMethod(this.instance);
+        }
+    });
+
+    QUnit.test("WorkSpace Month view has right count of rows with view option intervalCount", function(assert) {
+        this.instance.option("intervalCount", 2);
+
+        var rows = this.instance.element().find(".dx-scheduler-date-table-row");
+        assert.equal(rows.length, 10, "view has right rows count");
+
+        this.instance.option("intervalCount", 4);
+
+        rows = this.instance.element().find(".dx-scheduler-date-table-row");
+        assert.equal(rows.length, 18, "view has right rows count");
+    });
+
+    QUnit.test("WorkSpace Month view has right count of cells with view option intervalCount", function(assert) {
+        this.instance.option("intervalCount", 2);
+
+        var rows = this.instance.element().find(".dx-scheduler-date-table-cell");
+        assert.equal(rows.length, 7 * 10, "view has right cells count");
+    });
+
+    QUnit.test("WorkSpace Month view cells have right cellData with view option intervalCount & startDate < currentDate", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("currentDate", new Date(2017, 4, 25));
+        this.instance.option("startDate", new Date(2017, 0, 15));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(35).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 2, 26, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 2, 27, 0), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 3, 30, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 4, 1, 0), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 6, 1, 0), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 6, 2, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace Month view cells have right cellData with view option intervalCount & startDate > currentDate", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("currentDate", new Date(2017, 1, 15));
+        this.instance.option("startDate", new Date(2017, 5, 15));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(35).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2016, 10, 27, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2016, 10, 28, 0), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 0, 1, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 0, 2, 0), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 2, 4, 0), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 2, 5, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace Month view cells have right cellData with view option intervalCount & startDate = currentDate", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("currentDate", new Date(2017, 6, 15));
+        this.instance.option("startDate", new Date(2017, 5, 15));
+
+        var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
+            secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(35).data("dxCellData"),
+            thirdCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+
+        assert.deepEqual(firstCellData.startDate, new Date(2017, 4, 28, 0), "cell has right startDate");
+        assert.deepEqual(firstCellData.endDate, new Date(2017, 4, 29, 0), "cell has right endtDate");
+
+        assert.deepEqual(secondCellData.startDate, new Date(2017, 6, 2, 0), "cell has right startDate");
+        assert.deepEqual(secondCellData.endDate, new Date(2017, 6, 3, 0), "cell has right endtDate");
+
+        assert.deepEqual(thirdCellData.startDate, new Date(2017, 8, 2, 0), "cell has right startDate");
+        assert.deepEqual(thirdCellData.endDate, new Date(2017, 8, 3, 0), "cell has right endtDate");
+    });
+
+    QUnit.test("WorkSpace Month view with option intervalCount has cells with special firstDayOfMonth class", function(assert) {
+        this.instance.option("intervalCount", 2);
+        this.instance.option("currentDate", new Date(2017, 5, 25));
+
+        var $firstDayOfMonthCells = this.instance.element().find(".dx-scheduler-date-table-first-of-month");
+
+        assert.equal($firstDayOfMonthCells.length, 3, "view has right special cells count");
+
+        assert.equal($firstDayOfMonthCells.first().text(), "Jun 1", "Cell has a right text");
+        assert.equal($firstDayOfMonthCells.last().text(), "Aug 1", "Cell has a right text");
+    });
+
+    QUnit.test("Get date range", function(assert) {
+        this.instance.option("currentDate", new Date(2017, 5, 26));
+        this.instance.option("intervalCount", 3);
+
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 4, 28, 0, 0), new Date(2017, 8, 2, 23, 59)], "Range is OK");
+
+        this.instance.option("intervalCount", 4);
+        assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 4, 28, 0, 0), new Date(2017, 8, 30, 23, 59)], "Range is OK");
+    });
+
+})("Work Space Work Week with intervalCount");

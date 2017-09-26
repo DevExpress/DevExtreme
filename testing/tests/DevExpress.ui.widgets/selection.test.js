@@ -1024,7 +1024,7 @@ QUnit.test("changeItemSelection with shift key should add several expressions wi
     selection.changeItemSelection(4, { shift: true });
 
     //assert
-    assert.deepEqual(selection.selectionFilter(), [["id", "=", 2], "or", ["id", "=", 5], "or", ["id", "=", 4], "or", ["id", "=", 3]], "selection filter");
+    assert.deepEqual(selection.selectionFilter(), [["id", "=", 5], "or", ["id", "=", 4], "or", ["id", "=", 3], "or", ["id", "=", 2]], "selection filter");
 });
 
 QUnit.test("selectAll when filter is empty", function(assert) {
@@ -1264,6 +1264,97 @@ QUnit.test("changeItemSelection after selectAll", function(assert) {
     //assert
     assert.deepEqual(selection.selectionFilter(), [["age", ">", 18], "and", ["!", ["id", "=", 2]]], "selection filter");
     assert.strictEqual(selection.getSelectAllState(), undefined, "select all is undefined");
+});
+
+QUnit.test("selectAll when filter with 'or' operation is defined", function(assert) {
+    var selection = this.createDeferredSelection(this.data);
+
+    //act
+    this.dataSource.filter([["age", "=", 15], "or", ["age", "=", 20]]);
+    selection.selectAll();
+
+    //assert
+    assert.deepEqual(selection.selectionFilter(), [["age", "=", 15], "or", ["age", "=", 20]], "selection filter");
+    assert.strictEqual(selection.getSelectAllState(), true, "select all is true");
+});
+
+QUnit.test("selectAll after deselect one item", function(assert) {
+    var selection = this.createDeferredSelection(this.data);
+
+    //act
+    this.dataSource.filter(["age", ">", 18]);
+    selection.selectAll();
+    selection.changeItemSelection(1, { control: true });
+    selection.selectAll();
+
+    //assert
+    assert.deepEqual(selection.selectionFilter(), [["!", ["id", "=", 2]], "or", ["age", ">", 18]], "selection filter");
+    assert.strictEqual(selection.getSelectAllState(), true, "select all is true");
+});
+
+QUnit.test("Deselect one item after selectAll", function(assert) {
+    var selection = this.createDeferredSelection(this.data);
+
+    //act
+    this.dataSource.filter(["age", ">", 18]);
+    selection.changeItemSelection(1, { control: true });
+    selection.selectAll();
+    selection.changeItemSelection(1, { control: true });
+
+    //assert
+    assert.deepEqual(selection.selectionFilter(), [[["id", "=", 2], "or", ["age", ">", 18]], "and", ["!", ["id", "=", 2]]], "selection filter");
+    assert.strictEqual(selection.getSelectAllState(), undefined, "select all is true");
+    assert.strictEqual(selection.isItemSelected(this.data[1]), false, "item 1 should not be selected");
+});
+
+QUnit.test("Deselect one item after selectAll when filter contains 'or' operation", function(assert) {
+    var selection = this.createDeferredSelection(this.data);
+
+    //act
+    this.dataSource.filter([["age", "=", 15], "or", ["age", "=", 20]]);
+    selection.changeItemSelection(1, { control: true });
+    selection.selectAll();
+    selection.changeItemSelection(1, { control: true });
+
+    //assert
+    assert.deepEqual(selection.selectionFilter(), [[["id", "=", 2], "or", [["age", "=", 15], "or", ["age", "=", 20]]], "and", ["!", ["id", "=", 2]]], "selection filter");
+    assert.strictEqual(selection.getSelectAllState(), undefined, "select all is true");
+    assert.strictEqual(selection.isItemSelected(this.data[1]), false, "item 1 should not be selected");
+});
+
+QUnit.test("select and deselect several items", function(assert) {
+    var selection = this.createDeferredSelection(this.data);
+
+    //act
+    this.dataSource.filter(["age", ">", 0]);
+    selection.changeItemSelection(0, { control: true });
+    selection.changeItemSelection(1, { control: true });
+    selection.changeItemSelection(0, { control: true });
+    selection.changeItemSelection(1, { control: true });
+
+    //assert
+    assert.strictEqual(selection.getSelectAllState(), undefined, "select all is undefined");
+    assert.strictEqual(selection.isItemSelected(this.data[0]), false, "item 0 should not be selected");
+    assert.strictEqual(selection.isItemSelected(this.data[1]), false, "item 1 should not be selected");
+    assert.strictEqual(selection.isItemSelected(this.data[2]), false, "item 2 should not be selected");
+});
+
+QUnit.test("deselectAll after selectAll when filter by key values is defined", function(assert) {
+    var selection = this.createDeferredSelection(this.data);
+
+    //act
+    this.dataSource.filter([["id", "=", 1], "or", ["id", "=", 2]]);
+    selection.selectAll();
+    selection.deselectAll();
+
+    //assert
+    assert.deepEqual(selection.selectionFilter(), [], "selection filter");
+    assert.strictEqual(selection.getSelectAllState(), false, "select all is false");
+    var selectedItems;
+    selection.getSelectedItems().done(function(items) {
+        selectedItems = items;
+    });
+    assert.deepEqual(selectedItems, [], "no selected items");
 });
 
 QUnit.test("getSelectedItems returns deferred", function(assert) {

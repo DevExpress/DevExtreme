@@ -1,5 +1,7 @@
 "use strict";
 
+var eventsEngine = require("events/core/events_engine");
+
 QUnit.testStart(function() {
     var markup = '<div id="element"><div id="inner"></div></div>';
     $("#qunit-fixture").html(markup);
@@ -17,7 +19,7 @@ QUnit.test("dxremove event should be fired on element removing", function(assert
         .data("testData", true)
         .on(removeEvent, function(e) {
             assert.ok(e, "dxremove fired");
-            assert.ok($(this).data("testData"), "element has data");
+            assert.ok($(e.target).data("testData"), "element has data");
         });
 
     $("#element").remove();
@@ -28,7 +30,7 @@ QUnit.test("dxremove event should be fired for nested removing element", functio
         .data("testData", true)
         .on(removeEvent, function(e) {
             assert.ok(e, "dxremove fired");
-            assert.ok($(this).data("testData"), "element has data");
+            assert.ok($(e.target).data("testData"), "element has data");
         });
 
     $("#element").remove();
@@ -46,10 +48,10 @@ QUnit.test("dxremove event should not bubble", function(assert) {
 
 QUnit.test("dxremove event should not triggers for element without any subscriptions", function(assert) {
     var counter = 0,
-        originalTriggerHandler = $.fn.triggerHandler;
+        originalTriggerHandler = eventsEngine.triggerHandler;
 
     try {
-        $.fn.triggerHandler = function() {
+        eventsEngine.triggerHandler = function() {
             counter++;
         };
 
@@ -57,7 +59,7 @@ QUnit.test("dxremove event should not triggers for element without any subscript
 
         assert.equal(counter, 0, "dxremove handler should be triggered once for each element");
     } finally {
-        $.fn.triggerHandler = originalTriggerHandler;
+        eventsEngine.triggerHandler = originalTriggerHandler;
     }
 });
 
@@ -69,8 +71,8 @@ QUnit.test("dxremove event should be fired on all elements", function(assert) {
 
     var counter = 0;
     $(".item").on(removeEvent, function(e) {
-        if(this.parentNode) {
-            this.parentNode.removeChild(this);
+        if(e.target.parentNode) {
+            e.target.parentNode.removeChild(e.target);
         }
         counter++;
     });

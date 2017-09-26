@@ -61,7 +61,7 @@ var mockFxAnimate = function(animation, type, output) {
 
         var itemIndex = $("#pivottabs")
                             .find(toSelector(PIVOT_ITEM_CLASS) + ", " + toSelector(PIVOT_GHOST_ITEM_CLASS))
-                            .index($element);
+                            .index($element.get(0));
 
         output[itemIndex] = {
             $element: $element,

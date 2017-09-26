@@ -4,7 +4,8 @@ var $ = require("../../core/renderer"),
     Callbacks = require("../../core/utils/callbacks"),
     translator = require("../../animation/translator"),
     NativeStrategy = require("./ui.scrollable.native"),
-    LoadIndicator = require("../load_indicator");
+    LoadIndicator = require("../load_indicator"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var SCROLLVIEW_PULLDOWN_REFRESHING_CLASS = "dx-scrollview-pull-down-loading",
     SCROLLVIEW_PULLDOWN_READY_CLASS = "dx-scrollview-pull-down-ready",
@@ -217,7 +218,7 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     release: function() {
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
 
         this._updateDimensions();
         clearTimeout(this._releaseTimeout);

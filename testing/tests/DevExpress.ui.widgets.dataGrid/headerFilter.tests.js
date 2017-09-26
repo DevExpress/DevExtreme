@@ -15,6 +15,7 @@ require("generic_light.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
+    ArrayStore = require("data/array_store"),
     noop = require("core/utils/common").noop,
     ODataStore = require("data/odata/store"),
     devices = require("core/devices"),
@@ -3092,6 +3093,34 @@ QUnit.test("Proxy customQueryParams load parameter during headerFilter operation
     assert.deepEqual(loadOptions.customQueryParams, { param: "test" }, "custom query param");
 });
 
+QUnit.test("dataSource group parameter should contains compare option if column has sortingMethod callback", function(assert) {
+    //arrange
+    var that = this,
+        column;
+
+    var context;
+    that.options.columns[0].sortingMethod = function(x, y) {
+        context = this;
+        return x - y;
+    };
+
+    that.options.dataSource = [];
+
+    that.setupDataGrid();
+
+    column = that.columnsController.getVisibleColumns()[0];
+
+    //act
+    var dataSource = that.headerFilterController.getDataSource(column);
+    that.clock.tick();
+
+    //assert
+    assert.equal(dataSource.group.length, 1, "one group parameter");
+    assert.equal(dataSource.group[0].selector({ Test1: 5 }), 5, "group selector");
+    assert.equal(dataSource.group[0].compare(10, 1), 9, "group compare");
+    assert.equal(context.dataField, "Test1", "compare context");
+});
+
 //T349706
 QUnit.test("Not apply filter when selected all items", function(assert) {
     //arrange
@@ -3226,4 +3255,49 @@ QUnit.test("Header filter should consider the 'trueText' and 'falseText' column 
     assert.strictEqual($itemElements.eq(0).text(), "(Blanks)", "text of the first item");
     assert.strictEqual($itemElements.eq(1).text(), "No", "text of the second item");
     assert.strictEqual($itemElements.eq(2).text(), "Yes", "text of the third item");
+});
+
+//T544400
+QUnit.test("Updating selection state should be correct when headerFilter.dataSource as ArrayStore", function(assert) {
+    //arrange
+    var that = this,
+        $listItems,
+        $popupContent,
+        $cancelButton,
+        $testElement = $("#container");
+
+    that.options.dataSource = that.items;
+    that.options.columns[0] = {
+        dataField: "Test1",
+        allowHeaderFiltering: true,
+        headerFilter: {
+            dataSource: new ArrayStore([
+                { value: "value1", text: "Value1" },
+                { value: "value2", text: "Value2" }
+            ])
+        }
+    };
+    that.setupDataGrid();
+    that.columnHeadersView.render($testElement);
+    that.headerFilterView.render($testElement);
+
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = $(that.headerFilterView.getPopupContainer().content());
+    $listItems = $popupContent.find(".dx-list-item");
+    $listItems.first().trigger("dxclick");
+
+    //assert
+    assert.ok($listItems.first().find(".dx-checkbox-checked").length, "checkbox checked");
+
+    //act
+    $cancelButton = $popupContent.parent().find(".dx-button").last();
+    $cancelButton.trigger("dxclick");
+
+    that.headerFilterController.showHeaderFilterMenu(0);
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $listItems = $popupContent.find(".dx-list-item");
+
+    //assert
+    assert.notOk($listItems.first().find(".dx-checkbox-checked").length, "checkbox unchecked");
 });

@@ -42,5 +42,9 @@
   {
     "widgetName": "dxBarGauge",
     "optionsPath": "viz.gauges.dxBarGaugeOptions"
+  },
+  {
+    "widgetName": "dxFunnel",
+    "optionsPath": "viz.funnel.dxFunnelOptions"
   }
 ]

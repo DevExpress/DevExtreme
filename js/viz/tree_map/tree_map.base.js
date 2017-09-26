@@ -237,7 +237,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._change(["NODES_RESET"]);
     },
 
-    _onNodesCreated: common.empty,
+    _onNodesCreated: _noop,
 
     _processDataSourceItems: function(items) {
         return { items: items, isPlain: false };
@@ -394,7 +394,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         that._onTilingPerformed();
     },
 
-    _onTilingPerformed: common.empty,
+    _onTilingPerformed: _noop,
 
     _performLabelsLayout: function() {
         this._processNodes(null, processLabelsLayout);
@@ -582,13 +582,13 @@ function layoutTextNode(node, params) {
     var rect = node.rect,
         hOffset = params.hOffset,
         effectiveWidth = rect[2] - rect[0] - params.paddingLeftRight,
-        fitByHeight = params.height + params.paddingTopBottom < rect[3] - rect[1],
-        fitByWidth = node.textWidth < effectiveWidth;
+        fitByHeight = params.height + params.paddingTopBottom <= rect[3] - rect[1],
+        fitByWidth = node.textWidth <= effectiveWidth;
 
     if(params.resolveLabelOverflow === "ellipsis" && fitByHeight) {
         node.text.applyEllipsis(effectiveWidth);
         if(!fitByWidth) {
-            fitByWidth = node.text.getBBox().width < effectiveWidth;
+            fitByWidth = node.text.getBBox().width <= effectiveWidth;
         }
     }
 

@@ -15,7 +15,7 @@ var $ = require("../../core/renderer"),
     scrollEvents = require("./ui.events.emitter.gesture.scroll"),
     simulatedStrategy = require("./ui.scrollable.simulated"),
     NativeStrategy = require("./ui.scrollable.native"),
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 var SCROLLABLE = "dxScrollable",
     SCROLLABLE_STRATEGY = "dxScrollableStrategy",
@@ -284,14 +284,17 @@ var Scrollable = DOMComponent.inherit({
         this._renderDisabledState();
         this._createActions();
         this.update();
+
         this.callBase();
+
+        this._toggleRTLDirection(this.option("rtlEnabled"));
     },
 
     _toggleRTLDirection: function(rtl) {
         var that = this;
 
         this.callBase(rtl);
-
+        this._updateBounds();
         if(rtl && this.option("direction") !== VERTICAL) {
             commonUtils.deferUpdate(function() {
                 var left = that.scrollWidth() - that.clientWidth();
@@ -300,6 +303,10 @@ var Scrollable = DOMComponent.inherit({
                 });
             });
         }
+    },
+
+    _updateBounds: function() {
+        this._strategy.updateBounds();
     },
 
     _attachEventHandlers: function() {

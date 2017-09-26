@@ -485,37 +485,6 @@ QUnit.test("Scheduler appointment should not be draggable if allowDrag is false"
     assert.notOk($appointment.data("dxDraggable"), "Appointment is not dxDraggable");
 });
 
-QUnit.test("Drag event targets should be corrected on dragStart", function(assert) {
-    var item = {
-        itemData: {
-            text: "Appointment 1",
-            startDate: new Date(2015, 1, 9, 8),
-            endDate: new Date(2015, 1, 9, 9)
-        },
-        settings: [{}]
-    };
-
-    this.instance.option({
-        fixedContainer: $("#fixedContainer"),
-        items: [item]
-    });
-
-    var updateSpy = sinon.spy(commonUtils.noop);
-
-    this.instance.notifyObserver = updateSpy;
-
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
-        pointer = pointerMock($appointment).start();
-
-    pointer.dragStart();
-
-    assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(1).args[0], "getDragEventTargetElements", "Correct method of observer is called");
-
-    pointer.dragEnd();
-});
-
-
 QUnit.test("Drag event should not contain maxBottomOffset & maxRightOffset", function(assert) {
     var item = {
         itemData: {
@@ -623,9 +592,9 @@ QUnit.test("Appointment coordinates should be corrected during drag", function(a
     pointer.dragStart().drag(0, 60);
 
     assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(2).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(2).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(2).args[1].allDay, true, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(1).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(1).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(1).args[1].allDay, true, "Arguments are OK");
 
     pointer.dragEnd();
 });
@@ -656,10 +625,10 @@ QUnit.test("Appointment coordinates should be corrected on dragend", function(as
     pointer.dragStart().drag(0, 60).dragEnd();
 
     assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(3).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(3).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(3).args[1].allDay, true, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(3).args[1].isFixedContainer, true, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(2).args[0], "correctAppointmentCoordinates", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(2).args[1].coordinates, { left: 0, top: 60 }, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(2).args[1].allDay, true, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(2).args[1].isFixedContainer, true, "Arguments are OK");
 
     pointer.dragEnd();
 });
@@ -689,9 +658,9 @@ QUnit.test("Start & end date of appointment should be changed when drag is finis
     pointer.dragStart().drag(0, 60).dragEnd();
 
     assert.ok(!updateSpy.calledOnce, "Observers are notified");
-    assert.deepEqual(updateSpy.getCall(4).args[0], "updateAppointmentAfterDrag", "Correct method of observer is called");
-    assert.deepEqual(updateSpy.getCall(4).args[1].data, item.itemData, "Arguments are OK");
-    assert.deepEqual(updateSpy.getCall(4).args[1].$appointment.get(0), $appointment.get(0), "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(3).args[0], "updateAppointmentAfterDrag", "Correct method of observer is called");
+    assert.deepEqual(updateSpy.getCall(3).args[1].data, item.itemData, "Arguments are OK");
+    assert.deepEqual(updateSpy.getCall(3).args[1].$appointment.get(0), $appointment.get(0), "Arguments are OK");
 });
 
 QUnit.test("Appointment tooltip should be hidden when drag is started", function(assert) {
@@ -892,8 +861,7 @@ QUnit.test("Split appointment by day should consider startDayHour & endDayHour",
         { settings: { startDate: new Date(2016, 1, 28, 8), endDate: new Date(2016, 1, 28, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
         { settings: { startDate: new Date(2016, 1, 29, 8), endDate: new Date(2016, 1, 29, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
         { settings: { startDate: new Date(2016, 2, 1, 8), endDate: new Date(2016, 2, 1, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { settings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate },
-        { settings: { startDate: new Date(2016, 2, 3, 8), endDate: new Date(2016, 2, 3, 2) }, startDate: appt2.startDate, endDate: appt2.endDate }
+        { settings: { startDate: new Date(2016, 2, 2, 8), endDate: new Date(2016, 2, 2, 20) }, startDate: appt2.startDate, endDate: appt2.endDate }
     ], "Parts are OK");
 
     assert.deepEqual(parts3, [
@@ -1100,7 +1068,7 @@ QUnit.test("Items has a tab index if focusStateEnabled", function(assert) {
     assert.ok(!$appointments.eq(0).attr("tabindex"), "item tabindex is right");
 });
 
-QUnit.test("Focused element should be changed on focusin", function(assert) {
+QUnit.testInActiveWindow("Focused element should be changed on focusin", function(assert) {
     var items = [
         {
             itemData: {
@@ -1126,10 +1094,10 @@ QUnit.test("Focused element should be changed on focusin", function(assert) {
         focusStateEnabled: true
     });
     var $appointments = $(".dx-scheduler-appointment");
-    $($appointments.eq(0)).trigger("focusin");
+    $appointments.get(0).focus();
     assert.deepEqual($appointments.get(0), this.instance.option("focusedElement").get(0), "right element is focused");
 
-    $($appointments.eq(1)).trigger("focusin");
+    $appointments.get(1).focus();
     assert.deepEqual($appointments.get(1), this.instance.option("focusedElement").get(0), "right element is focused");
 });
 
@@ -1300,8 +1268,11 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
 
     $($appointment).trigger("focusin");
 
-    var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(this.instance.option("focusedElement").get(0), "focus"),
-        appointmentFocusedStub = sinon.stub(this.instance, "notifyObserver").withArgs("appointmentFocused");
+    var focusedElement = this.instance.option("focusedElement").get(0);
+    var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(sinon.match(function($element) {
+        return ($element.get && $element.get(0) || $element) === focusedElement;
+    }), "focus");
+    var appointmentFocusedStub = sinon.stub(this.instance, "notifyObserver").withArgs("appointmentFocused");
 
     this.instance.focus();
 

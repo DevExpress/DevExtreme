@@ -11,7 +11,8 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     eventUtils = require("../../events/utils"),
     holdEvent = require("../../events/hold"),
-    Selection = require("../selection/selection");
+    Selection = require("../selection/selection"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var EDITOR_CELL_CLASS = "dx-editor-cell",
     ROW_CLASS = "dx-row",
@@ -103,7 +104,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                     return dataController.dataSource() && dataController.dataSource().select();
                 },
                 load: function(options) {
-                    return dataController.dataSource() && dataController.dataSource().load(options) || $.Deferred().resolve([]);
+                    return dataController.dataSource() && dataController.dataSource().load(options) || new Deferred().resolve([]);
                 },
                 plainItems: function() {
                     return dataController.items();
@@ -325,7 +326,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_selectAll
          * @publicName selectAll()
-         * @return Promise
+         * @return Promise<void>
          */
         selectAll: function() {
             if(this.option(SHOW_CHECKBOXES_MODE) === "onClick") {
@@ -338,7 +339,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_deselectAll
          * @publicName deselectAll()
-         * @return Promise
+         * @return Promise<void>
          */
         deselectAll: function() {
             return this._selection.deselectAll(this._isOnePageSelectAll());
@@ -359,7 +360,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
                 return this.selectedItemKeys(selectedRowKeys);
             }
 
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         },
 
         selectedItemKeys: function(value, preserve, isDeselect, isSelectAll) {
@@ -369,12 +370,12 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name dxDataGridMethods_getSelectedRowKeys
          * @publicName getSelectedRowKeys()
-         * @return array | Promise
+         * @return Array<any> | Promise<any>
          */
         /**
          * @name dxTreeListMethods_getSelectedRowKeys
          * @publicName getSelectedRowKeys()
-         * @return array
+         * @return Array<any>
          */
         getSelectedRowKeys: function() {
             return this._selection.getSelectedItemKeys();
@@ -383,9 +384,9 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_selectRows
          * @publicName selectRows(keys, preserve)
-         * @param1 keys:array
+         * @param1 keys:Array<any>
          * @param2 preserve:boolean
-         * @return Promise
+         * @return Promise<any>
          */
         selectRows: function(keys, preserve) {
             return this.selectedItemKeys(keys, preserve);
@@ -393,8 +394,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
         * @name GridBaseMethods_deselectRows
         * @publicName deselectRows(keys)
-        * @param1 keys:array
-        * @return Promise
+        * @param1 keys:Array<any>
+        * @return Promise<any>
         */
         deselectRows: function(keys) {
             return this.selectedItemKeys(keys, true, true);
@@ -403,8 +404,8 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_selectRowsByIndexes
          * @publicName selectRowsByIndexes(indexes)
-         * @param1 indexes:array
-         * @return Promise
+         * @param1 indexes:Array<any>
+         * @return Promise<any>
          */
         selectRowsByIndexes: function(indexes) {
             var items = this._dataController.items(),
@@ -426,12 +427,12 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name dxDataGridMethods_getSelectedRowsData
          * @publicName getSelectedRowsData()
-         * @return array | Promise
+         * @return Array<any> | Promise<any>
          */
         /**
          * @name dxTreeListMethods_getSelectedRowsData
          * @publicName getSelectedRowsData()
-         * @return array
+         * @return Array<any>
          */
         getSelectedRowsData: function() {
             return this._selection.getSelectedItems();
@@ -574,17 +575,17 @@ module.exports = {
              * @publicName onSelectionChanged
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field4 currentSelectedRowKeys:array
-             * @type_function_param1_field5 currentDeselectedRowKeys:array
-             * @type_function_param1_field6 selectedRowKeys:array
-             * @type_function_param1_field7 selectedRowsData:array
+             * @type_function_param1_field4 currentSelectedRowKeys:Array<any>
+             * @type_function_param1_field5 currentDeselectedRowKeys:Array<any>
+             * @type_function_param1_field6 selectedRowKeys:Array<any>
+             * @type_function_param1_field7 selectedRowsData:Array<Object>
              * @extends Action
              * @action
              */
             /**
              * @name GridBaseOptions_selectedRowKeys
              * @publicName selectedRowKeys
-             * @type array
+             * @type Array<any>
              */
             selectedRowKeys: []
         };
@@ -651,7 +652,7 @@ module.exports = {
 
                 refresh: function() {
                     var that = this,
-                        d = $.Deferred();
+                        d = new Deferred();
 
                     this.callBase.apply(this, arguments).done(function() {
                         that.getController("selection").refresh().done(d.resolve).fail(d.reject);
@@ -717,7 +718,7 @@ module.exports = {
                         groupElement,
                         selectionController = that.getController("selection");
 
-                    groupElement = $("<div />")
+                    groupElement = $("<div>")
                         .appendTo($container)
                         .addClass(SELECT_CHECKBOX_CLASS);
 
@@ -759,7 +760,6 @@ module.exports = {
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
                             eventsEngine.trigger($(event.currentTarget).children(), clickEvent.name);
                         }
-                        event.stopPropagation();
                         event.preventDefault();
                     }));
                 }
@@ -789,7 +789,7 @@ module.exports = {
                 },
 
                 _renderSelectCheckBox: function(container, value, column) {
-                    var groupElement = $("<div />")
+                    var groupElement = $("<div>")
                             .addClass(SELECT_CHECKBOX_CLASS)
                             .appendTo(container);
 
@@ -817,6 +817,13 @@ module.exports = {
                         if(rowIndex >= 0) {
                             selectionController.startSelectionWithCheckboxes();
                             selectionController.changeItemSelection(rowIndex, { shift: event.shiftKey });
+
+                            if($(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
+                                this.getController("data").updateItems({
+                                    changeType: "updateSelection",
+                                    itemIndexes: [rowIndex]
+                                });
+                            }
                         }
                     }));
                 },

@@ -155,9 +155,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         layoutOptions = that.getLayoutOptions();
 
         if(layoutOptions.height > height) {
-            that._params.incidentOccurred("W2103");
-            that._group.linkRemove();
-            that._boundingRect.width = that._boundingRect.height = 0;
+            this.freeSpace();
         }
 
         return that;
@@ -229,7 +227,8 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
     layoutOptions: function() {
         return this._boundingRect && {
             horizontalAlignment: this._boundingRect.horizontalAlignment,
-            verticalAlignment: this._boundingRect.verticalAlignment
+            verticalAlignment: this._boundingRect.verticalAlignment,
+            priority: 0
         };
     },
 
@@ -244,6 +243,13 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
             this.draw(rect[2] - rect[0], rect[3] - rect[1]);
         }
         this.shift(Math.round(rect[0]), Math.round(rect[1]));
+    },
+
+    freeSpace: function() {
+        var that = this;
+        that._params.incidentOccurred("W2103");
+        that._group.linkRemove();
+        that._boundingRect.width = that._boundingRect.height = 0;
     }
     // BaseWidget_layout_implementation
 });

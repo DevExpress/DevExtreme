@@ -72,7 +72,7 @@ var DropDownMenu = Widget.inherit({
             /**
             * @name dxDropDownMenuOptions_items
             * @publicName items
-            * @type array
+            * @type Array<any>
             */
             items: [],
 
@@ -91,7 +91,7 @@ var DropDownMenu = Widget.inherit({
             /**
             * @name dxDropDownMenuOptions_dataSource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSource configuration
+            * @type string|Array<any>|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
@@ -207,13 +207,13 @@ var DropDownMenu = Widget.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: [{ platform: "ios" }],
+                device: { platform: "ios" },
                 options: {
                     usePopover: true
                 }
             },
             {
-                device: [{ platform: "generic" }],
+                device: { platform: "generic" },
                 options: {
                     popupPosition: { offset: { v: 4 } }
                 }
@@ -227,7 +227,7 @@ var DropDownMenu = Widget.inherit({
                 }
             },
             {
-                device: [{ platform: "android" }],
+                device: { platform: "android" },
 
                 options: {
                     popupPosition: {
@@ -448,7 +448,7 @@ var DropDownMenu = Widget.inherit({
     _attachKeyboardEvents: function() {
         this.callBase.apply(this, arguments);
 
-        this._listProcessor = this._keyboardProcessor.attachChildProcessor();
+        this._listProcessor = this._keyboardProcessor && this._keyboardProcessor.attachChildProcessor();
         if(this._list) {
             this._list.option("_keyboardProcessor", this._listProcessor);
         }

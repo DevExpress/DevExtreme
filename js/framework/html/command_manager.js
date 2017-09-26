@@ -7,7 +7,7 @@ var $ = require("jquery"),
     errors = require("../errors"),
     CommandMapping = require("../command_mapping"),
     commandToDXWidgetAdapters = require("./widget_command_adapters"),
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 require("../command");
 require("./command_container");

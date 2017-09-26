@@ -87,7 +87,9 @@ var getNewFile = function() {
 
 var moduleConfig = {
     beforeEach: function() {
-        internals.changeFileInputTag("<div>");
+        internals.changeFileInputRenderer(function() {
+            return $("<div>");
+        });
 
         this.xhrMock = new window.XMLHttpRequestMock();
         this._nativeXhr = XMLHttpRequest;
@@ -930,7 +932,7 @@ QUnit.test("progressBar should reflect file upload progress", function(assert) {
 });
 
 QUnit.test("request should use url from the 'uploadUrl' option", function(assert) {
-    var uploadUrl = "http://blablabla.com",
+    var uploadUrl = location.href,
         $element = $("#fileuploader").dxFileUploader({
             uploadUrl: uploadUrl,
             uploadMode: "instantly"
@@ -1959,7 +1961,7 @@ QUnit.test("T323019 - click on the 'Drop' field should not lead to file choosing
         event = e;
     });
 
-    $input.click();
+    $input.trigger("click");
     assert.ok(event.isDefaultPrevented(), "input click is prevented");
 });
 

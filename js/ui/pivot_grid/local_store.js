@@ -1,7 +1,8 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    when = require("../../integration/jquery/deferred").when,
+var deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     dataUtils = require("../../data/utils"),
     dataQuery = require("../../data/query"),
     dateSerialization = require("../../core/utils/date_serialization"),
@@ -360,7 +361,7 @@ exports.LocalStore = Class.inherit((function() {
             aggregationCells,
             filter,
             data,
-            d = $.Deferred(),
+            d = new Deferred(),
             i = 0;
 
         filter = createFilter(options);
@@ -413,7 +414,7 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function loadDataSource(dataSource, fieldSelectors, reload) {
-        var d = $.Deferred();
+        var d = new Deferred();
 
         var customizeStoreLoadOptionsHandler = function(options) {
             if(dataSource.store() instanceof ArrayStore) {
@@ -486,7 +487,7 @@ exports.LocalStore = Class.inherit((function() {
         getFields: function(fields) {
             var that = this,
                 dataSource = that._dataSource,
-                d = $.Deferred();
+                d = new Deferred();
 
             loadDataSource(dataSource, getFieldSelectors(fields)).done(function(data) {
                 d.resolve(pivotGridUtils.discoverObjectFields(data, fields));
@@ -502,12 +503,12 @@ exports.LocalStore = Class.inherit((function() {
         load: function(options) {
             var that = this,
                 dataSource = that._dataSource,
-                d = $.Deferred();
+                d = new Deferred();
 
             prepareLoadOption(options);
 
             loadDataSource(dataSource, getFieldSelectors(options), options.reload).done(function(data) {
-                when(loadCore(data, options, that._progressChanged)).progress(d.notify).done(d.resolve);
+                when(loadCore(data, options, that._progressChanged)).done(d.resolve);
             }).fail(d.reject);
 
             return d;

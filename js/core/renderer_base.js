@@ -1,34 +1,52 @@
 "use strict";
 
-var $ = require("jquery");
 var dataUtils = require("./element_data");
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
+var styleUtils = require("./utils/style");
+var sizeUtils = require("./utils/size");
+var htmlParser = require("./utils/html_parser");
 var matches = require("./polyfills/matches");
-
-var methods = [
-    "width", "height", "outerWidth", "innerWidth", "outerHeight", "innerHeight",
-    "html", "css",
-    "slideUp", "slideDown", "slideToggle"];
 
 var renderer = function(selector, context) {
     return new initRender(selector, context);
 };
 
 var initRender = function(selector, context) {
-    if(selector instanceof initRender) {
-        this.$element = selector.$element;
-    } else {
-        this.$element = new $.fn.init(selector, context);
+    if(!selector) {
+        this.length = 0;
+        return this;
     }
 
-    this.length = 0;
-    for(var i = 0; i < this.$element.length; i++) {
-        [].push.call(this, this.$element[i]);
+    if(typeof selector === "string") {
+        context = context || document;
+        if(selector === "body") {
+            this[0] = context.body;
+            this.length = 1;
+            return this;
+        }
+
+        if(selector[0] === "<") {
+            this[0] = rendererStrategy.createElement(selector.slice(1, -1), undefined, context);
+            this.length = 1;
+            return this;
+        }
+
+        [].push.apply(this, context.querySelectorAll(selector));
+        return this;
+    } else if(selector.nodeType) {
+        this[0] = selector;
+        this.length = 1;
+        return this;
+    } else if(selector instanceof HTMLCollection || selector instanceof NodeList || Array.isArray(selector)) {
+        [].push.apply(this, selector);
+        return this;
     }
+
+    return renderer(selector.toArray ? selector.toArray() : [selector]);
 };
 
-renderer.fn = { jquery: $.fn.jquery };
+renderer.fn = { dxRenderer: true };
 initRender.prototype = renderer.fn;
 
 var repeatMethod = function(methodName, args) {
@@ -46,17 +64,6 @@ var setAttributeValue = function(element, attrName, value) {
         rendererStrategy.removeAttribute(element, attrName);
     }
 };
-
-methods.forEach(function(method) {
-    var methodName = method;
-    initRender.prototype[method] = function() {
-        var result = this.$element[methodName].apply(this.$element, arguments);
-        if(result === this.$element) {
-            return this;
-        }
-        return result;
-    };
-});
 
 initRender.prototype.show = function() {
     return this.toggle(true);
@@ -156,18 +163,87 @@ initRender.prototype.toggleClass = function(className, value) {
     return this;
 };
 
-var appendElements = function(element, nextSibling) {
-    if(!this[0]) return;
+["width", "height", "outerWidth", "outerHeight", "innerWidth", "innerHeight"].forEach(function(methodName) {
+    var partialName = methodName.toLowerCase().indexOf("width") >= 0 ? "Width" : "Height";
+    var propName = partialName.toLowerCase();
+    var isOuter = methodName.indexOf("outer") === 0;
+    var isInner = methodName.indexOf("inner") === 0;
 
-    if(typeUtils.type(element) === "string") {
-        var html = element.trim();
-        if(html[0] === "<" && html[html.length - 1] === ">") {
-            element = renderer(element);
-        } else {
-            element = renderer("<div>").html(element).contents();
+    initRender.prototype[methodName] = function(value) {
+        if(this.length > 1) {
+            return repeatMethod.call(this, methodName, arguments);
         }
-    } else {
-        element = renderer(element);
+
+        var element = this[0];
+
+        if(!element) {
+            return;
+        }
+
+        if(typeUtils.isWindow(element)) {
+            return isOuter ? element["inner" + partialName] : element.document.documentElement["client" + partialName];
+        }
+
+        if(element.nodeType === Node.DOCUMENT_NODE) {
+            var documentElement = element.documentElement;
+
+            return Math.max(
+                element.body["scroll" + partialName],
+                element.body["offset" + partialName],
+                documentElement["scroll" + partialName],
+                documentElement["offset" + partialName],
+                documentElement["client" + partialName]
+            );
+        }
+
+        if(arguments.length === 0 || typeof value === "boolean") {
+            var include = {
+                paddings: isInner || isOuter,
+                borders: isOuter,
+                margins: value
+            };
+
+            return sizeUtils.getSize(element, propName, include);
+        }
+
+        if(value === undefined || value === null) {
+            return this;
+        }
+
+        if(typeUtils.isNumeric(value) && isOuter) {
+            value -= sizeUtils.getBorderAdjustment(element, propName);
+        }
+        value += typeUtils.isNumeric(value) ? "px" : "";
+
+        rendererStrategy.setStyle(element, propName, value);
+
+        return this;
+    };
+});
+
+initRender.prototype.html = function(value) {
+    if(!arguments.length) {
+        return this[0].innerHTML;
+    }
+
+    this.empty();
+
+    if(typeof value === "string" && !htmlParser.isTablePart(value) || typeof value === "number") {
+        this[0].innerHTML = value;
+
+        return this;
+    }
+
+    return this.append(htmlParser.parseHTML(value));
+};
+
+var appendElements = function(element, nextSibling) {
+    if(!this[0] || !element) return;
+
+    if(typeof element === "string") {
+        element = htmlParser.parseHTML(element);
+    } else if(element.nodeType) {
+        element = [element];
     }
 
     for(var i = 0; i < element.length; i++) {
@@ -180,6 +256,53 @@ var appendElements = function(element, nextSibling) {
         }
         rendererStrategy.insertElement(container, item.nodeType ? item : item[0], nextSibling);
     }
+};
+
+var pxExceptions = [
+    "fillOpacity",
+    "columnCount",
+    "flexGrow",
+    "flexShrink",
+    "fontWeight",
+    "lineHeight",
+    "opacity",
+    "zIndex",
+    "zoom"
+];
+
+var setCss = function(name, value) {
+    if(!this[0] || !this[0].style) return;
+
+    name = styleUtils.styleProp(name);
+    for(var i = 0; i < this.length; i++) {
+        if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
+            value += "px";
+        }
+
+        this[i].style[name] = value;
+    }
+
+};
+
+initRender.prototype.css = function(name, value) {
+    if(typeUtils.isString(name)) {
+        if(arguments.length === 2) {
+            setCss.call(this, name, value);
+        } else {
+            if(!this[0]) return;
+
+            name = styleUtils.styleProp(name);
+
+            var result = window.getComputedStyle(this[0])[name] || this[0].style[name];
+            return typeUtils.isNumeric(result) ? result.toString() : result;
+        }
+    } else if(typeUtils.isPlainObject(name)) {
+        for(var key in name) {
+            setCss.call(this, key, name[key]);
+        }
+    }
+
+    return this;
 };
 
 initRender.prototype.prepend = function(element) {
@@ -274,21 +397,12 @@ initRender.prototype.wrapInner = function(wrapper) {
 };
 
 initRender.prototype.replaceWith = function(element) {
-    this.$element.replaceWith(element.$element || element);
-    return this;
-};
+    if(!(element && element[0])) return;
 
-var cleanData = function(node, cleanSelf) {
-    if(!node) {
-        return;
-    }
+    element.insertBefore(this);
+    this.remove();
 
-    var childNodes = node.getElementsByTagName("*");
-
-    dataUtils.cleanData(childNodes);
-    if(cleanSelf) {
-        dataUtils.cleanData([node]);
-    }
+    return element;
 };
 
 initRender.prototype.remove = function() {
@@ -296,7 +410,7 @@ initRender.prototype.remove = function() {
         return repeatMethod.call(this, "remove", arguments);
     }
 
-    cleanData(this[0], true);
+    dataUtils.cleanDataRecursive(this[0], true);
     rendererStrategy.removeElement(this[0]);
 
     return this;
@@ -317,7 +431,7 @@ initRender.prototype.empty = function() {
         return repeatMethod.call(this, "empty", arguments);
     }
 
-    cleanData(this[0]);
+    dataUtils.cleanDataRecursive(this[0]);
     rendererStrategy.setText(this[0], "");
 
     return this;
@@ -341,7 +455,7 @@ initRender.prototype.text = function(text) {
         return result;
     }
 
-    cleanData(this[0], false);
+    dataUtils.cleanDataRecursive(this[0], false);
     rendererStrategy.setText(this[0], typeUtils.isDefined(text) ? text : "");
 
     return this;
@@ -731,19 +845,11 @@ initRender.prototype.removeData = function(key) {
     return this;
 };
 
-renderer.tmpl = function() {
-    return $.tmpl.apply(this, arguments);
-};
-renderer.templates = function() {
-    return $.templates.apply(this, arguments);
-};
-renderer.when = $.when;
-renderer.event = $.event;
-renderer.Event = $.Event;
-renderer.holdReady = $.holdReady || $.fn.holdReady;
-renderer.Deferred = $.Deferred;
-
 module.exports = {
-    set: function(strategy) { renderer = strategy; },
-    get: function() { return renderer; }
+    set: function(strategy) {
+        renderer = strategy;
+    },
+    get: function() {
+        return renderer;
+    }
 };

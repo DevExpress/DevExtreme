@@ -27,6 +27,11 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
 
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
+    WORKSPACE_WITH_COUNT_CLASS = "dx-scheduler-work-space-count",
+    WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
+    WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
+
+    WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
 
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
@@ -340,6 +345,8 @@ var SchedulerWorkSpace = Widget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             currentDate: new Date(),
+            intervalCount: 1,
+            startDate: null,
             firstDayOfWeek: undefined,
             startDayHour: 0,
             endDayHour: 24,
@@ -372,9 +379,8 @@ var SchedulerWorkSpace = Widget.inherit({
             case "firstDayOfWeek":
             case "currentDate":
             case "groups":
-                this._cleanView();
-                this._toggleGroupedClass();
-                this._renderView();
+            case "startDate":
+                this._cleanWorkSpace();
                 break;
             case "showAllDayPanel":
                 this._toggleAllDayVisibility();
@@ -387,6 +393,10 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "onCellClick":
                 this._createCellClickAction();
+                break;
+            case "intervalCount":
+                this._cleanWorkSpace();
+                this._toggleWorkSpaceCountClass();
                 break;
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
@@ -403,10 +413,21 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
+    _cleanWorkSpace: function() {
+        this._cleanView();
+        this._toggleGroupedClass();
+        this._toggleWorkSpaceWithOddCells();
+        this._renderView();
+    },
+
     _init: function() {
         this.callBase();
 
         this._toggleHorizontalScrollClass();
+        this._toggleWorkSpaceCountClass();
+        this._toggleWorkSpaceWithOddCells();
+        this._toggleWorkSpaceOverlappingClass();
+
         this.element()
             .addClass(COMPONENT_CLASS)
             .addClass(this._getElementClass());
@@ -420,6 +441,30 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _toggleHorizontalScrollClass: function() {
         this.element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
+    },
+
+    _toggleWorkSpaceCountClass: function() {
+        this.element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this._isWorkSpaceWithCount());
+    },
+
+    _isWorkSpaceWithCount: function() {
+        return this.option("intervalCount") > 1;
+    },
+
+    _toggleWorkSpaceWithOddCells: function() {
+        this.element().toggleClass(WORKSPACE_WITH_ODD_CELLS_CLASS, this._isWorkspaceWithOddCells());
+    },
+
+    _isWorkspaceWithOddCells: function() {
+        return this.option("hoursInterval") === 0.5;
+    },
+
+    _toggleWorkSpaceOverlappingClass: function() {
+        this.element().toggleClass(WORKSPACE_WITH_OVERLAPPING_CLASS, this._isWorkSpaceWithOverlapping());
+    },
+
+    _isWorkSpaceWithOverlapping: function() {
+        return this.invoke("getMaxAppointmentsPerCell") !== null;
     },
 
     _getTimePanelClass: function() {
@@ -689,14 +734,45 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateHeader();
 
-        this._renderAllDayPanel();
         this._renderTimePanel();
+        this._renderAllDayPanel();
+
         this._renderDateTable();
     },
 
     _setFirstViewDate: function() {
-        this._firstViewDate = dateUtils.getFirstWeekDate(this.option("currentDate"), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
+        this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
         this._setStartDayHour(this._firstViewDate);
+    },
+
+    _getViewStartByOptions: function() {
+        if(!this.option("startDate")) {
+            return this.option("currentDate");
+        } else {
+            var startDate = dateUtils.trimTime(this._getStartViewDate()),
+                currentDate = this.option("currentDate"),
+                diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
+                endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
+
+            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
+                startDate = endDate;
+                endDate = new Date(startDate.getTime() + this._getIntervalDuration() * diff);
+            }
+
+            return diff > 0 ? startDate : endDate;
+        }
+    },
+
+    _getStartViewDate: function() {
+        return this.option("startDate");
+    },
+
+    _dateInRange: function(date, startDate, endDate, diff) {
+        return diff > 0 ? dateUtils.dateInRange(date, startDate, new Date(endDate.getTime() - 1)) : dateUtils.dateInRange(date, endDate, startDate, "date");
+    },
+
+    _getIntervalDuration: function() {
+        return toMs("day") * this.option("intervalCount");
     },
 
     _setStartDayHour: function(date) {
@@ -806,6 +882,8 @@ var SchedulerWorkSpace = Widget.inherit({
             this._attachGroupCountAttr(groupRows.elements.length);
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
+        } else {
+            this._detachGroupCountAttr();
         }
 
         return cellTemplates;
@@ -817,8 +895,12 @@ var SchedulerWorkSpace = Widget.inherit({
         });
     },
 
+    _detachGroupCountAttr: function() {
+        this.element().removeAttr(WORKSPACE_GROUPED_ATTR);
+    },
+
     _attachGroupCountAttr: function(groupRowCount) {
-        this.element().attr("dx-group-row-count", groupRowCount);
+        this.element().attr(WORKSPACE_GROUPED_ATTR, groupRowCount);
     },
 
     headerPanelOffsetRecalculate: function() {
@@ -833,7 +915,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         headerPanelHeight && this._dateTableScrollable.element().css({
             "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
-            "margin-bottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
+            "marginBottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
 
         this._$allDayTitle && this._$allDayTitle.css("top", headerHeight + headerPanelHeight + "px");
@@ -1290,10 +1372,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getDateByCellIndexes: function(rowIndex, cellIndex) {
         var firstViewDate = this.getStartViewDate(),
-            currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex));
+            currentDate = new Date(firstViewDate.getTime() + this._getMillisecondsOffset(rowIndex, cellIndex) + this._getOffsetByCount(cellIndex));
 
         currentDate.setTime(currentDate.getTime() + dateUtils.getTimezonesDifference(firstViewDate, currentDate));
         return currentDate;
+    },
+
+    _getOffsetByCount: function() {
+        return 0;
     },
 
     _getMillisecondsOffset: function(rowIndex, cellIndex) {
@@ -1317,14 +1403,22 @@ var SchedulerWorkSpace = Widget.inherit({
             firstViewDate = this.getStartViewDate(),
             timeZoneOffset = dateUtils.getTimezonesDifference(firstViewDate, currentDate),
             fullInterval = currentDate.getTime() - firstViewDate.getTime() - timeZoneOffset,
-            days = Math.floor((fullInterval + startDayTime) / DAY_MS),
-            result = days * DAY_MS;
+            days = this._getDaysOfInterval(fullInterval, startDayTime),
+            result = (days - this._getWeekendsCount(days)) * DAY_MS;
 
         if(!allDay) {
-            result = fullInterval - days * this._getHiddenInterval();
+            result = fullInterval - (days + this._getWeekendsCount(days)) * this._getHiddenInterval();
         }
 
         return result;
+    },
+
+    _getWeekendsCount: function() {
+        return 0;
+    },
+
+    _getDaysOfInterval: function(fullInterval, startDayTime) {
+        return Math.floor((fullInterval + startDayTime) / DAY_MS);
     },
 
     _getGroupIndexes: function(appointmentResources) {
@@ -1788,7 +1882,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable();
 
-        scrollable.scrollBy(coordinates.top - scrollable.scrollTop());
+        scrollable.scrollBy({ top: coordinates.top - scrollable.scrollTop(), left: 0 });
     },
 
     getDistanceBetweenCells: function(startIndex, endIndex) {

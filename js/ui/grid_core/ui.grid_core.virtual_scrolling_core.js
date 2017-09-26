@@ -5,7 +5,8 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     positionUtils = require("../../animation/position"),
     each = require("../../core/utils/iterator").each,
-    Class = require("../../core/class");
+    Class = require("../../core/class"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual";
@@ -437,7 +438,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     changeType: "pageIndex"
                 });
             }
-            return result || $.Deferred().resolve();
+            return result || new Deferred().resolve();
         },
         loadIfNeed: function() {
             var that = this;

@@ -5,7 +5,8 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
     DropDownList = require("./drop_down_editor/ui.drop_down_list"),
-    themes = require("./themes");
+    themes = require("./themes"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var AUTOCOMPLETE_CLASS = "dx-autocomplete",
     AUTOCOMPLETE_POPUP_WRAPPER_CLASS = "dx-autocomplete-popup-wrapper";
@@ -178,7 +179,7 @@ var Autocomplete = DropDownList.inherit({
     },
 
     _loadValue: function() {
-        return $.Deferred().resolve(this.option("value"));
+        return new Deferred().resolve(this.option("value"));
     },
 
     _displayGetterExpr: function() {

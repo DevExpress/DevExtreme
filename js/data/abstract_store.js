@@ -1,7 +1,6 @@
 "use strict";
 
-var $ = require("../core/renderer"),
-    Class = require("../core/class"),
+var Class = require("../core/class"),
     abstract = Class.abstract,
     EventsMixin = require("../core/events_mixin"),
     each = require("../core/utils/iterator").each,
@@ -10,6 +9,7 @@ var $ = require("../core/renderer"),
     compileGetter = require("../core/utils/data").compileGetter,
     storeHelper = require("./store_helper"),
     queryByOptions = storeHelper.queryByOptions,
+    Deferred = require("../core/utils/deferred").Deferred,
 
     storeImpl = {};
 
@@ -34,7 +34,7 @@ var Store = Class.inherit({
                  * @name StoreOptions_onLoaded
                  * @publicName onLoaded
                  * @type function
-                 * @type_function_param1 result:array
+                 * @type_function_param1 result:Array<any>
                  * @action
                  */
                 "onLoaded",
@@ -53,7 +53,7 @@ var Store = Class.inherit({
                  * @type_function_param1_field7 userData:object
                  * @type_function_param1_field8 searchValue:object
                  * @type_function_param1_field9 searchOperation:string
-                 * @type_function_param1_field10 searchExpr:getter|array
+                 * @type_function_param1_field10 searchExpr:getter|Array<string>
                  * @action
                  */
                 "onLoading",
@@ -140,7 +140,7 @@ var Store = Class.inherit({
         /**
          * @name StoreOptions_key
          * @publicName key
-         * @type string|array
+         * @type string|Array<string>
          */
         this._key = options.key;
 
@@ -190,7 +190,7 @@ var Store = Class.inherit({
     /**
     * @name StoreMethods_load
     * @publicName load(options)
-    * @param1 obj:object
+    * @param1 options:object
     * @param1_field1 filter:object
     * @param1_field2 sort:object
     * @param1_field3 select:object
@@ -198,7 +198,7 @@ var Store = Class.inherit({
     * @param1_field5 skip:number
     * @param1_field6 take:number
     * @param1_field7 userData:object
-    * @return Promise
+    * @return Promise<any>
     */
     load: function(options) {
         var that = this;
@@ -217,7 +217,7 @@ var Store = Class.inherit({
     },
 
     _withLock: function(task) {
-        var result = $.Deferred();
+        var result = new Deferred();
 
         task.done(function() {
             var that = this,
@@ -244,7 +244,7 @@ var Store = Class.inherit({
     * @param1 obj:object
     * @param1_field1 filter:object
     * @param1_field2 group:object
-    * @return Promise
+    * @return Promise<number>
     */
     totalCount: function(options) {
         return this._totalCountImpl(options);
@@ -258,7 +258,7 @@ var Store = Class.inherit({
     * @name StoreMethods_byKey
     * @publicName byKey(key)
     * @param1 key:object|string|number
-    * @return Promise
+    * @return Promise<any>
     */
     byKey: function(key, extraOptions) {
         return this._addFailHandlers(this._withLock(this._byKeyImpl(key, extraOptions)));
@@ -270,7 +270,7 @@ var Store = Class.inherit({
     * @name StoreMethods_insert
     * @publicName insert(values)
     * @param1 values:object
-    * @return Promise
+    * @return Promise<any>
     */
     insert: function(values) {
         var that = this;
@@ -291,7 +291,7 @@ var Store = Class.inherit({
     * @publicName update(key, values)
     * @param1 key:object|string|number
     * @param2 values:object
-    * @return Promise
+    * @return Promise<any>
     */
     update: function(key, values) {
         var that = this;
@@ -311,7 +311,7 @@ var Store = Class.inherit({
     * @name StoreMethods_remove
     * @publicName remove(key)
     * @param1 key:object|string|number
-    * @return Promise
+    * @return Promise<void>
     */
     remove: function(key) {
         var that = this;
@@ -328,7 +328,7 @@ var Store = Class.inherit({
     _removeImpl: abstract,
 
     _addFailHandlers: function(deferred) {
-        return deferred.fail(this._errorHandler, errorsModule._errorHandler);
+        return deferred.fail(this._errorHandler).fail(errorsModule._errorHandler);
     }
 }).include(EventsMixin);
 

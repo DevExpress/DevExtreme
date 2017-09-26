@@ -252,7 +252,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             if(visibleColumnCount > columnIndex && isValidGroupSpaceColumn()) {
                 var isExpandColumn = column.command === "expand";
 
-                return (column && !column.command && (!isEditingCurrentRow || column.allowEditing)) || isExpandColumn;
+                return (column && !column.command && (!isEditingCurrentRow || column.allowEditing)) || !isEditingCurrentRow && isExpandColumn;
             }
         }
     },
@@ -318,8 +318,12 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     this._focusEditFormCell($cell);
                     setTimeout(this._editingController.saveEditData.bind(this._editingController));
                 } else {
+                    var $target = $(eventArgs.originalEvent.target);
+                    eventsEngine.trigger($target, "blur");
+                    eventsEngine.trigger($target, "focus");
                     this._editingController.closeEditCell();
                 }
+                eventArgs.originalEvent.preventDefault();
             } else {
                 var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex];
 
@@ -860,9 +864,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
     /**
     * @name GridBaseMethods_focus
     * @publicName focus(element)
-    * @param1 element:jQuery
+    * @param1 element:Node|jQuery
     */
-    focus: function($element) {
+    focus: function(element) {
+        var $element = $(element);
         var focusView = this._getFocusedViewByElement($element);
 
         if(focusView) {

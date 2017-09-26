@@ -261,7 +261,7 @@ var getDatesByRecurrence = function(options) {
 
         getDatesByCount(dateRules, new Date(recurrenceStartDate), new Date(recurrenceStartDate), rule)
             .forEach(function(currentDate, i) {
-                if(currentDate.getTime() < options.max.getTime()) {
+                if(currentDate < options.max) {
                     iteration++;
                     iterationResult = pushToResult(iteration, iterationResult, currentDate, i, config, true);
                 }

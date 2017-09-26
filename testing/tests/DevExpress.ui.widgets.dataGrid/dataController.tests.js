@@ -762,7 +762,7 @@ QUnit.test("update sorting on columnsChanged (changeType == 'sorting'). Refresh 
     assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
 });
 
-QUnit.test("update sorting on columnsChanged when sortingMethod defined(changeType == 'sorting'). Refresh current page", function(assert) {
+QUnit.test("sorting when calculateSortValue is defined", function(assert) {
     var array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
@@ -776,6 +776,37 @@ QUnit.test("update sorting on columnsChanged when sortingMethod defined(changeTy
         columns: [{
             dataField: "name", calculateSortValue: function(data) {
                 return $.inArray(data.name, ['Dan', 'Bob', 'Alex']);
+            }
+        }, "age"],
+        sorting: { mode: 'single' }
+    });
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+
+    //act
+    this.columnsController.changeSortOrder(0, 'asc');
+
+    assert.equal(this.dataController.pageIndex(), 0);
+    assert.equal(this.dataController.items().length, 2);
+    assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
+});
+
+QUnit.test("sorting when sortingMethod is defined", function(assert) {
+    var array = [
+        { name: 'Alex', age: 30 },
+        { name: 'Dan', age: 25 },
+        { name: 'Bob', age: 20 }
+    ];
+
+    var order = ['Dan', 'Bob', 'Alex'];
+    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+
+    this.applyOptions({
+        commonColumnSettings: { allowSorting: true },
+        columns: [{
+            dataField: "name", sortingMethod: function(x, y) {
+                return order.indexOf(x) - order.indexOf(y);
             }
         }, "age"],
         sorting: { mode: 'single' }
@@ -1378,6 +1409,53 @@ QUnit.test("Set remoteOperations option to true", function(assert) {
 
     //assert
     assert.deepEqual(this.dataController.dataSource().remoteOperations(), { filtering: true, sorting: true, paging: true, grouping: true, summary: true }, "remote operations set correct");
+});
+
+//T541798
+QUnit.test("Apply sorting by the lookup column with calculateSortValue when the first load", function(assert) {
+    //arrange
+    var items,
+        array = [
+            { State: 1 },
+            { State: 2 },
+            { State: 3 }
+        ];
+
+    this.applyOptions({
+        dataSource: array,
+        columns: [{
+            dataField: "State",
+            sortOrder: "asc",
+            lookup: {
+                valueExpr: "id",
+                displayExpr: "name",
+                dataSource: [{
+                    id: 1,
+                    name: "Wyoming"
+                }, {
+                    id: 2,
+                    name: "California"
+                }, {
+                    id: 3,
+                    name: "Arkansas"
+                }]
+            },
+            calculateSortValue: function(data) {
+                var value = this.calculateCellValue(data);
+                return this.lookup.calculateCellValue(value);
+            }
+        }]
+    });
+
+    //act
+    this.dataController._refreshDataSource();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 3, "count item");
+    assert.deepEqual(items[0].data, { State: 3 });
+    assert.deepEqual(items[1].data, { State: 2 });
+    assert.deepEqual(items[2].data, { State: 1 });
 });
 
 QUnit.module("No dataSource", { beforeEach: setupModule, afterEach: teardownModule });

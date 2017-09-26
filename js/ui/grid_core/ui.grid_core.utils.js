@@ -202,6 +202,10 @@ module.exports = (function() {
             var that = this;
             $element = $element || this.element();
 
+            if(!$element) {
+                return;
+            }
+
             var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
                 noDataElement = $element.find("." + noDataClass).last(),
                 isVisible = this._dataController.isEmpty(),
@@ -467,13 +471,23 @@ module.exports = (function() {
                 return result;
             }
 
-            return remoteGrouping ? [{ selector: dataField, isExpanded: false }] : function(data) {
-                var result = column.calculateCellValue(data);
-                if(result === undefined || result === "") {
-                    result = null;
+            if(remoteGrouping) {
+                result = [{ selector: dataField, isExpanded: false }];
+            } else {
+                result = function(data) {
+                    var result = column.calculateCellValue(data);
+                    if(result === undefined || result === "") {
+                        result = null;
+                    }
+                    return result;
+                };
+
+                if(column.sortingMethod) {
+                    result = [{ selector: result, compare: column.sortingMethod.bind(column) }];
                 }
-                return result;
-            };
+            }
+
+            return result;
         },
 
         getGroupInterval: function(column) {

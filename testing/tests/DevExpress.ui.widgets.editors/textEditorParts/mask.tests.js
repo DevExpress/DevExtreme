@@ -25,6 +25,19 @@ var testMaskRule = function(title, config) {
     });
 };
 
+var moduleConfig = {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.focusAndTick = function($input, delay) {
+            $input.focus();
+            this.clock.tick(delay);
+        };
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+};
 
 QUnit.module("rendering");
 
@@ -56,7 +69,7 @@ QUnit.test("render mask with fixed chars", function(assert) {
 });
 
 
-QUnit.module("typing");
+QUnit.module("typing", moduleConfig);
 
 QUnit.test("accept only allowed chars", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -126,6 +139,8 @@ QUnit.test("two chars with different maskRules surrounded by fixed chars", funct
     var keyboard = keyboardMock($input, true);
 
     caretWorkaround($input);
+
+    this.focusAndTick($input);
 
     keyboard.type("x").type("y");
     assert.equal($input.val(), "(xy)", "mask rendered correctly");
@@ -375,14 +390,7 @@ QUnit.test("press enter when caret position in the middle of the text", function
 });
 
 
-QUnit.module("backspace key", {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module("backspace key", moduleConfig);
 
 QUnit.test("backspace should remove last char and move caret backward", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -531,14 +539,7 @@ QUnit.test("delete should remove only selected valuable chars (T242341)", functi
 });
 
 
-QUnit.module("selection", {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module("selection", moduleConfig);
 
 QUnit.test("all selected chars should be deleted on key press", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -615,8 +616,97 @@ QUnit.test("all selected chars should be deleted on del key", function(assert) {
     assert.equal(keyboard.caret().start, 1, "caret position set to start");
 });
 
+QUnit.module("showMaskMode", moduleConfig);
 
-QUnit.module("focusing");
+QUnit.test("show mask always", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "XX",
+            showMaskMode: "always",
+            maskRules: {
+                "X": "x"
+            }
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input");
+
+    assert.equal(textEditor.option("text"), "__", "editor is empty");
+
+    $input.focus();
+    assert.equal(textEditor.option("text"), "__", "editor is not empty");
+});
+
+QUnit.test("show mask on focus only", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "XX",
+            showMaskMode: "onFocus",
+            maskRules: {
+                "X": "x"
+            }
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input, true);
+
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
+
+    $input.focus();
+    this.clock.tick();
+    assert.equal(textEditor.option("text"), "__", "editor is not empty");
+    assert.equal($input.val(), "__", "input is not empty");
+    assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, "caret position is on the start");
+
+    $input.blur();
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
+});
+
+QUnit.test("show mask on focus only with useMaskedValue and stub symbols", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "0-0",
+            useMaskedValue: true,
+            showMaskMode: "onFocus"
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input, true);
+
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
+
+    $input.focus();
+    this.clock.tick();
+    assert.equal(textEditor.option("text"), "_-_", "editor is not empty");
+    assert.equal($input.val(), "_-_", "input is not empty");
+    assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, "caret position is on the start");
+
+    $input.blur();
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
+});
+
+QUnit.test("change mask visibility", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "XX",
+            showMaskMode: "always",
+            maskRules: {
+                "X": "x"
+            }
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input");
+
+    assert.equal(textEditor.option("text"), "__", "placeholder is visible");
+
+    textEditor.option("showMaskMode", "onFocus");
+    assert.equal(textEditor.option("text"), "", "placeholder is hidden");
+
+    $input.focus();
+    assert.equal(textEditor.option("text"), "__", "placeholder is visible");
+});
+
+
+QUnit.module("focusing", moduleConfig);
 
 QUnit.testInActiveWindow("cursor should be set after fixed mask letters", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -631,13 +721,14 @@ QUnit.testInActiveWindow("cursor should be set after fixed mask letters", functi
 
     keyboard.caret(0);
     $input.focus();
+    this.clock.tick();
 
     assert.equal(keyboard.caret().start, 1, "caret position set before first rule");
 });
 
 QUnit.testInActiveWindow("selection should consider fixed mask letters", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
-        mask: "X))",
+        mask: ")X))",
         maskRules: {
             "X": "x"
         }
@@ -648,6 +739,8 @@ QUnit.testInActiveWindow("selection should consider fixed mask letters", functio
 
     keyboard.caret(3);
     $input.focus();
+    this.clock.tick();
+
     assert.equal(keyboard.caret().start, 1, "caret position set before last fixed mask letter");
     assert.equal(keyboard.caret().end, 1, "caret position set before last fixed mask letter");
 });
@@ -661,8 +754,45 @@ QUnit.testInActiveWindow("Editor with mask isn't focused after render", function
     assert.notOk($textEditor.hasClass("dx-state-focused"), "editor isn't focused");
 });
 
+QUnit.testInActiveWindow("caret should be in start position on first editor focusing", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+        mask: "00",
+        focusStateEnabled: true
+    });
 
-QUnit.module("value");
+    var $input = $textEditor.find(".dx-texteditor-input");
+    var keyboard = keyboardMock($input, true);
+
+    keyboard.caret(1);
+    this.clock.tick();
+
+    assert.equal(keyboard.caret().start, 0, "caret is at the start");
+    assert.equal(keyboard.caret().end, 0, "caret is at the start");
+});
+
+QUnit.testInActiveWindow("caret should be at the last symbol when input is incomplete", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+        mask: "00",
+        focusStateEnabled: true
+    });
+
+    var $input = $textEditor.find(".dx-texteditor-input");
+    var keyboard = keyboardMock($input, true);
+
+    $input.focus();
+    this.clock.tick();
+    keyboard.type("1");
+
+    $input.blur();
+    $input.focus();
+    this.clock.tick();
+
+    assert.equal(keyboard.caret().start, 1, "caret is at the last symbol");
+    assert.equal(keyboard.caret().end, 1, "caret is at the last symbol");
+});
+
+
+QUnit.module("value", moduleConfig);
 
 QUnit.test("value considers mask", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -762,6 +892,7 @@ QUnit.test("option change should be fired during typing", function(assert) {
     var keyboard = keyboardMock($input);
 
     caretWorkaround($input);
+    this.focusAndTick($input);
 
     keyboard.type("x");
     $input.trigger("change");
@@ -975,33 +1106,55 @@ QUnit.test("mask should not be crushed after set in mask option empty value in c
 QUnit.module("clear button");
 
 QUnit.test("mask should be displayed instead of empty string after clear button click", function(assert) {
-    var $textEditor = $("#texteditor").dxTextEditor({
-            mask: "999",
-            showClearButton: true,
-            focusStateEnabled: true
-        }),
-        instance = $textEditor.dxTextEditor("instance"),
-        $input = $textEditor.find(".dx-texteditor-input"),
-        $clearButton = $textEditor.find(".dx-clear-button-area");
+    var clock = sinon.useFakeTimers();
 
-    caretWorkaround($input);
+    try {
+        var $textEditor = $("#texteditor").dxTextEditor({
+                mask: "999",
+                showClearButton: true,
+                focusStateEnabled: true
+            }),
+            instance = $textEditor.dxTextEditor("instance"),
+            $input = $textEditor.find(".dx-texteditor-input"),
+            $clearButton = $textEditor.find(".dx-clear-button-area");
 
-    $input.trigger("focus");
-    $clearButton.trigger("dxclick");
+        caretWorkaround($input);
 
-    assert.equal(instance.option("text"), "___", "option 'text' has mask as value");
-    assert.equal($input.val(), "___", "input has mask as value");
-});
+        $input.trigger("focus");
+        clock.tick();
 
+        $clearButton.trigger("dxclick");
 
-QUnit.module("paste", {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
+        assert.equal(instance.option("text"), "___", "option 'text' has mask as value");
+        assert.equal($input.val(), "___", "input has mask as value");
+    } finally {
+        clock.restore();
     }
 });
+
+QUnit.test("clear button click should not lead to error when value is empty", function(assert) {
+    var clock = sinon.useFakeTimers();
+
+    try {
+        var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "999",
+            showClearButton: true
+        });
+
+        $textEditor
+            .find(".dx-clear-button-area")
+            .trigger("dxclick");
+
+        clock.tick();
+
+        assert.expect(0);
+    } finally {
+        clock.restore();
+    }
+});
+
+
+QUnit.module("paste", moduleConfig);
 
 QUnit.test("paste on empty editor", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -1096,6 +1249,7 @@ QUnit.test("paste handles stub correctly", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
+    this.focusAndTick($input);
     keyboard.caret(0).paste("+1(999)888-77-66");
 
     assert.equal($input.val(), "+1(999)888-77-66", "paste handled correctly");
@@ -1112,7 +1266,9 @@ QUnit.test("paste move cursor after inserted text", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
-    keyboard.caret(0).paste("xx");
+    keyboard.caret(0);
+    this.clock.tick();
+    keyboard.paste("xx");
 
     // NOTE: wait for textEditor async paste handler
     this.clock.tick();
@@ -1147,6 +1303,7 @@ QUnit.test("paste considers stub maskRules", function(assert) {
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
+    this.focusAndTick($input);
     keyboard.caret(0).paste("x");
 
     assert.equal(keyboard.caret().start, 2, "caret has correct position");
@@ -1188,14 +1345,7 @@ QUnit.test("paste event should be fired in the FireFox when ctrl+V pressed", fun
 });
 
 
-QUnit.module("drag text", {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    },
-    afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module("drag text", moduleConfig);
 
 QUnit.test("mask should support drag", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -1212,7 +1362,7 @@ QUnit.test("mask should support drag", function(assert) {
 
     this.clock.tick();
 
-    assert.equal($input.val(), "(x_)", "mask is corrected");
+    assert.equal($input.val(), "(x_)", "mask is correct");
 });
 
 QUnit.test("mask should support drag with spaces", function(assert) {
@@ -1230,7 +1380,7 @@ QUnit.test("mask should support drag with spaces", function(assert) {
 
     this.clock.tick();
 
-    assert.equal($input.val(), "(x__y)", "mask is corrected");
+    assert.equal($input.val(), "(xy__)", "mask is corrected");
 });
 
 
@@ -1255,7 +1405,7 @@ QUnit.test("cut handled correctly", function(assert) {
     assert.equal($input.val(), "x_x", "cut handled correctly");
 });
 
-QUnit.module("build-in mask rules");
+QUnit.module("build-in mask rules", moduleConfig);
 
 testMaskRule("'0' is digit only", { mask: "0000000", text: "+- Az9$", result: " 9" });
 testMaskRule("'9' is digit or space", { mask: "9999999", text: "+- Az9$", result: " 9" });
@@ -1268,7 +1418,7 @@ testMaskRule("'A' is alphanumeric", { mask: "AAAAAAA", text: " Az9$яШ", result
 testMaskRule("'a' is alphanumeric or space", { mask: "aaaaaaa", text: " Az9$яШ", result: " Az9яШ" });
 
 
-QUnit.module("custom mask maskRules");
+QUnit.module("custom mask maskRules", moduleConfig);
 
 testMaskRule("string custom rule", { mask: "xxxxx", maskRules: { "x": "y" }, text: "z0y$ ", result: "y" });
 testMaskRule("array of chars custom rule", { mask: "xxxxx", maskRules: { "x": ["y", "z"] }, text: "z0y$ ", result: "zy" });
@@ -1452,13 +1602,7 @@ QUnit.test("validation after value changed", function(assert) {
 });
 
 
-QUnit.module("T9", {
-    beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
-    }, afterEach: function() {
-        this.clock.restore();
-    }
-});
+QUnit.module("T9", moduleConfig);
 
 QUnit.test("mask works when keypress is not fired", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
@@ -1520,6 +1664,7 @@ QUnit.test("Last char remove correctly when keypress fired after backspace", fun
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
+    this.focusAndTick($input);
     keyboard.type("xx");
     this.clock.tick();
 
@@ -1614,6 +1759,19 @@ QUnit.test("Remove a hidden input if mask is changed to undefined", function(ass
 
     assert.equal($hiddenInput.length, 0, "Hidden value is removed");
     assert.equal($visibleInput.attr("name"), "number", "Visible input name is restored");
+});
+
+QUnit.test("Replace hidden input if mask is changed to another value", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+        name: "number",
+        mask: "00-00-00"
+    });
+
+    $textEditor.dxTextEditor("instance").option("mask", "0-0-0");
+
+    var $hiddenInput = $textEditor.find("input[type=hidden]");
+
+    assert.equal($hiddenInput.length, 1, "Hidden value is replaced");
 });
 
 QUnit.test("A hidden input should have a correct value if useMaskedValue is true", function(assert) {

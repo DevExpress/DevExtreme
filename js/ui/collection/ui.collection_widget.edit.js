@@ -12,7 +12,9 @@ var $ = require("../../core/renderer"),
     compileGetter = require("../../core/utils/data").compileGetter,
     DataSource = require("../../data/data_source/data_source").DataSource,
     Selection = require("../selection/selection"),
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 var ITEM_DELETING_DATA_KEY = "dxItemDeleting",
     NOT_EXISTING_INDEX = -1;
@@ -64,14 +66,14 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             /**
             * @name CollectionWidgetOptions_selectedItems
             * @publicName selectedItems
-            * @type array
+            * @type Array<any>
             */
             selectedItems: [],
 
             /**
              * @name CollectionWidgetOptions_selectedItemKeys
              * @publicName selectedItemKeys
-             * @type array
+             * @type Array<any>
              */
             selectedItemKeys: [],
 
@@ -106,8 +108,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
-            * @type_function_param1_field4 addedItems:array
-            * @type_function_param1_field5 removedItems:array
+            * @type_function_param1_field4 addedItems:array<any>
+            * @type_function_param1_field5 removedItems:array<any>
             * @action
             */
             onSelectionChanged: null,
@@ -225,7 +227,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             onSelectionChanged: function(args) {
                 if(args.addedItemKeys.length || args.removedItemKeys.length) {
                     that.option("selectedItems", that._getItemsByKeys(args.selectedItemKeys, args.selectedItems));
-                    that._updateSelectedItems(args.addedItems, args.removedItems);
+                    that._updateSelectedItems(args);
                 }
             },
             filter: function() {
@@ -248,7 +250,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     options.userData = that._dataSource._userData;
                 }
                 var store = that._dataSource && that._dataSource.store();
-                return store ? store.load(options) : $.Deferred().resolve([]);
+                return store ? store.load(options) : new Deferred().resolve([]);
             },
             dataFields: function() {
                 return that._dataSource && that._dataSource.select();
@@ -272,6 +274,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         keys = keys || this._selection.getSelectedItemKeys();
 
+        that._editStrategy.beginCache();
+
         each(keys, function(_, key) {
             var selectedIndex = that._getIndexByKey(key);
 
@@ -279,6 +283,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 indices.push(selectedIndex);
             }
         });
+
+        that._editStrategy.endCache();
 
         return indices;
     },
@@ -486,33 +492,39 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
     },
 
-    _updateSelectedItems: function(addedItems, removedItems) {
-        var that = this;
+    _updateSelectedItems: function(args) {
+        var that = this,
+            addedItemKeys = args.addedItemKeys,
+            removedItemKeys = args.removedItemKeys;
 
-        if(that._rendered && (addedItems.length || removedItems.length)) {
+        if(that._rendered && (addedItemKeys.length || removedItemKeys.length)) {
             var selectionChangePromise = that._selectionChangePromise;
             if(!that._rendering) {
                 var addedSelection = [],
                     normalizedIndex, i,
                     removedSelection = [];
 
-                for(i = 0; i < addedItems.length; i++) {
-                    normalizedIndex = that._getIndexByItemData(addedItems[i]);
+                that._editStrategy.beginCache();
+
+                for(i = 0; i < addedItemKeys.length; i++) {
+                    normalizedIndex = that._getIndexByKey(addedItemKeys[i]);
                     addedSelection.push(normalizedIndex);
                     that._addSelection(normalizedIndex);
                 }
 
-                for(i = 0; i < removedItems.length; i++) {
-                    normalizedIndex = that._getIndexByItemData(removedItems[i]);
+                for(i = 0; i < removedItemKeys.length; i++) {
+                    normalizedIndex = that._getIndexByKey(removedItemKeys[i]);
                     removedSelection.push(normalizedIndex);
                     that._removeSelection(normalizedIndex);
                 }
+
+                that._editStrategy.endCache();
 
                 that._updateSelection(addedSelection, removedSelection);
             }
 
             when(selectionChangePromise).done(function() {
-                that._fireSelectionChangeEvent(addedItems, removedItems);
+                that._fireSelectionChangeEvent(args.addedItems, args.removedItems);
             });
         }
     },
@@ -613,12 +625,12 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
     _waitDeletingPrepare: function($itemElement) {
         if($itemElement.data(ITEM_DELETING_DATA_KEY)) {
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         }
 
         $itemElement.data(ITEM_DELETING_DATA_KEY, true);
 
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             deletingActionArgs = { cancel: false },
             deletePromise = this._itemEventHandler($itemElement, "onItemDeleting", deletingActionArgs, { excludeValidators: ["disabled", "readOnly"] });
 
@@ -629,7 +641,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
                 shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
 
-            when(deletingActionArgs.cancel)
+            when(deferredUtils.fromPromise(deletingActionArgs.cancel))
                 .always(function() {
                     $itemElement.data(ITEM_DELETING_DATA_KEY, false);
                 })
@@ -644,10 +656,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
     _deleteItemFromDS: function($item) {
         if(!this._dataSource) {
-            return $.Deferred().resolve().promise();
+            return new Deferred().resolve().promise();
         }
 
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             disabledState = this.option("disabled"),
             dataStore = this._dataSource.store();
 
@@ -677,7 +689,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     _tryRefreshLastPage: function() {
-        var deferred = $.Deferred();
+        var deferred = new Deferred();
 
         if(this._isLastPage() || this.option("grouped")) {
             deferred.resolve();
@@ -777,13 +789,13 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     * @name CollectionWidgetMethods_deleteItem
     * @publicName deleteItem(itemElement)
     * @param1 itemElement:Node
-    * @return Promise
+    * @return Promise<void>
     * @hidden
     */
     deleteItem: function(itemElement) {
         var that = this,
 
-            deferred = $.Deferred(),
+            deferred = new Deferred(),
             $item = this._editStrategy.getItemElement(itemElement),
             index = this._editStrategy.getNormalizedIndex(itemElement),
             changingOption = this._dataSource ? "dataSource" : "items",
@@ -827,11 +839,11 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     * @publicName reorderItem(itemElement, toItemElement)
     * @param1 itemElement:Node
     * @param2 toItemElement:Node
-    * @return Promise
+    * @return Promise<void>
     * @hidden
     */
     reorderItem: function(itemElement, toItemElement) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
 
             that = this,
             strategy = this._editStrategy,

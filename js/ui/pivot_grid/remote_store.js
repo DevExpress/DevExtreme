@@ -1,13 +1,14 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
+var Class = require("../../core/class"),
     grep = require("../../core/utils/common").grep,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     DataSourceModule = require("../../data/data_source/data_source"),
-    when = require("../../integration/jquery/deferred").when,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     pivotGridUtils = require("./ui.pivot_grid.utils"),
     getFiltersByPath = pivotGridUtils.getFiltersByPath;
 
@@ -190,7 +191,9 @@ function forEachGroup(data, callback, level) {
 function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
     valuesArray[rowIndex] = valuesArray[rowIndex] || [];
     valuesArray[rowIndex][columnIndex] = valuesArray[rowIndex][columnIndex] || [];
-    valuesArray[rowIndex][columnIndex][dataIndex] = value;
+    if(!isDefined(valuesArray[rowIndex][columnIndex][dataIndex])) {
+        valuesArray[rowIndex][columnIndex][dataIndex] = value;
+    }
 }
 
 function parseResult(data, total, descriptions, result) {
@@ -426,7 +429,7 @@ module.exports = Class.inherit((function() {
         },
 
         getFields: function(fields) {
-            var d = $.Deferred();
+            var d = new Deferred();
 
             this._store.load({
                 skip: 0,
@@ -444,7 +447,7 @@ module.exports = Class.inherit((function() {
 
         load: function(options) {
             var that = this,
-                d = $.Deferred(),
+                d = new Deferred(),
                 result = {
                     rows: [],
                     columns: [],

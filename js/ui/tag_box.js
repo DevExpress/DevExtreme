@@ -16,7 +16,9 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     caret = require("./text_box/utils.caret"),
     browser = require("../core/utils/browser"),
-    when = require("../integration/jquery/deferred").when,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     pointerEvents = require("../events/pointer"),
     BindableTemplate = require("./widget/bindable_template");
 
@@ -35,7 +37,9 @@ var TAGBOX_CLASS = "dx-tagbox",
     TAGBOX_TAG_CONTENT_CLASS = "dx-tag-content",
     TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template",
     TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template",
-    NATIVE_CLICK_CLASS = "dx-native-click";
+    NATIVE_CLICK_CLASS = "dx-native-click",
+
+    TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container";
 
 var TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -148,7 +152,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _isCaretAtTheStart: function() {
-        return caret(this._input()).start === 0;
+        var position = caret(this._input());
+        return position.start === 0 && position.end === 0;
     },
 
     _moveTagFocus: function(direction, clearOnBoundary) {
@@ -264,7 +269,7 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions_value
             * @publicName value
-            * @type array
+            * @type Array<string,number,Object>
             */
             value: [],
 
@@ -294,7 +299,7 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions_selectedItems
             * @publicName selectedItems
-            * @type array
+            * @type Array<string,number,Object>
             * @readonly
             */
             selectedItems: [],
@@ -338,7 +343,7 @@ var TagBox = SelectBox.inherit({
              * @publicName onMultiTagPreparing
              * @extends Action
              * @type_function_param1_field4 multiTagElement:jQuery
-             * @type_function_param1_field5 selectedItems:array
+             * @type_function_param1_field5 selectedItems:Array<string,number,Object>
              * @type_function_param1_field6 text:string
              * @type_function_param1_field7 cancel:boolean
              * @action
@@ -365,8 +370,8 @@ var TagBox = SelectBox.inherit({
             * @name dxTagBoxOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
-            * @type_function_param1_field4 addedItems:array
-            * @type_function_param1_field5 removedItems:array
+            * @type_function_param1_field4 addedItems:Array<string,number,Object>
+            * @type_function_param1_field5 removedItems:Array<string,number,Object>
             * @action
             */
 
@@ -531,7 +536,8 @@ var TagBox = SelectBox.inherit({
             );
         }
 
-        this._$submitElement.html($options);
+        this._$submitElement.empty();
+        this._$submitElement.append($options);
     },
 
     _render: function() {
@@ -587,7 +593,7 @@ var TagBox = SelectBox.inherit({
     _renderTagRemoveAction: function() {
         var tagRemoveAction = this._createAction(this._removeTagHandler.bind(this));
         var eventName = eventUtils.addNamespace(clickEvent.name, "dxTagBoxTagRemove");
-        var $container = this.element().find(".dx-texteditor-container");
+        var $container = this.element().find("." + TEXTEDITOR_CONTAINER_CLASS);
 
         eventsEngine.off($container, eventName);
         eventsEngine.on($container, eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
@@ -640,7 +646,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _loadInputValue: function() {
-        return $.when();
+        return when();
     },
 
     _clearTextValue: function() {
@@ -717,11 +723,12 @@ var TagBox = SelectBox.inherit({
 
     _renderMultiSelect: function() {
         this._$tagsContainer = this.element()
-            .find(".dx-texteditor-container")
+            .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
+        this._clearFilter();
         this._renderTags();
         this._popup && this._popup.refreshPosition();
     },
@@ -786,7 +793,7 @@ var TagBox = SelectBox.inherit({
 
     _loadTagData: function() {
         var values = this._getValue(),
-            tagData = $.Deferred(),
+            tagData = new Deferred(),
             items = [];
 
         this._selectedItems = [];
@@ -883,7 +890,7 @@ var TagBox = SelectBox.inherit({
 
         if($tag) {
             if(!$tag.hasClass(TAGBOX_CUSTOM_TAG_CLASS)) {
-                return $.Deferred().resolve();
+                return new Deferred().resolve();
             }
 
             $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);

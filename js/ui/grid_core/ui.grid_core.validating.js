@@ -497,12 +497,13 @@ module.exports = {
                     }
                 },
 
-                updateFieldValue: function() {
-                    var that = this;
+                updateFieldValue: function(e) {
+                    var that = this,
+                        editMode = that.getEditMode();
 
                     that.callBase.apply(that, arguments);
 
-                    if(that.getEditMode() === EDIT_MODE_ROW) {
+                    if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
                         var currentValidator = that.getController("validating").getValidator();
                         currentValidator && currentValidator.validate();
                     }
@@ -573,7 +574,7 @@ module.exports = {
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
-                    new Overlay($("<div/>")
+                    new Overlay($("<div>")
                         .addClass(INVALID_MESSAGE_CLASS)
                         .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
                         .text(message)

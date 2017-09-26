@@ -11,6 +11,7 @@ var $ = require("../core/renderer"),
     typeUtils = require("./utils/type"),
     inArray = require("./utils/array").inArray,
     publicComponentUtils = require("./utils/public_component"),
+    dataUtils = require("./element_data"),
     Component = require("./component"),
     abstract = Component.abstract;
 
@@ -154,8 +155,8 @@ var DOMComponent = Component.inherit({
     },
 
     _renderDimensions: function() {
-        var width = this.option("width"),
-            height = this.option("height"),
+        var width = this._getOptionValue("width"),
+            height = this._getOptionValue("height"),
             $element = this.element();
 
         $element.outerWidth(width);
@@ -338,6 +339,29 @@ var DOMComponent = Component.inherit({
         }
     },
 
+    _removeAttributes: function(element) {
+        var i = element.attributes.length - 1;
+
+        for(; i >= 0; i--) {
+            var attributeName = element.attributes[i].name;
+
+            if(attributeName.indexOf("aria-") === 0 ||
+                attributeName.indexOf("dx-") !== -1 ||
+                attributeName === "role" ||
+                attributeName === "style" ||
+                attributeName === "tabindex") {
+                element.removeAttribute(attributeName);
+            }
+        }
+    },
+
+    _removeClasses: function(element) {
+        var classes = element.className.split(" ").filter(function(cssClass) {
+            return cssClass.lastIndexOf("dx-", 0) !== 0;
+        });
+        element.className = classes.join(" ");
+    },
+
     endUpdate: function() {
         var requireRender = !this._initializing && !this._initialized;
 
@@ -360,6 +384,18 @@ var DOMComponent = Component.inherit({
     */
     element: function() {
         return this._$element;
+    },
+
+    /**
+    * @name domcomponentmethods_dispose
+    * @publicName dispose()
+    */
+    dispose: function() {
+        var element = this.element().get(0);
+        dataUtils.cleanDataRecursive(element, true);
+        element.textContent = "";
+        this._removeAttributes(element);
+        this._removeClasses(element);
     }
 
 });

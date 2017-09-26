@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     support = require("core/utils/support"),
+    styleUtils = require("core/utils/style"),
     devices = require("core/devices"),
     initMobileViewport = require("mobile/init_mobile_viewport"),
     keyboardMock = require("../../helpers/keyboardMock.js");
@@ -112,7 +113,7 @@ QUnit.test("allowSelection should be detected by realDevice", function(assert) {
 
         initMobileViewport();
 
-        assert.equal($viewPort.css(support.styleProp("user-select")), "none", "allow selection detected by real device");
+        assert.equal($viewPort.css(styleUtils.styleProp("user-select")), "none", "allow selection detected by real device");
     } finally {
         devices.real(originalRealDevice);
         devices.current(originalCurrentDevice);

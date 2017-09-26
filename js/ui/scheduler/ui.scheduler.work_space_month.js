@@ -10,6 +10,7 @@ var $ = require("../../core/renderer"),
 var MONTH_CLASS = "dx-scheduler-work-space-month",
 
     DATE_TABLE_CURRENT_DATE_CLASS = "dx-scheduler-date-table-current-date",
+    DATE_TABLE_FIRST_OF_MONTH_CLASS = "dx-scheduler-date-table-first-of-month",
     DATE_TABLE_OTHER_MONTH_DATE_CLASS = "dx-scheduler-date-table-other-month";
 
 var DAYS_IN_WEEK = 7,
@@ -21,7 +22,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     },
 
     _getRowCount: function() {
-        return 6;
+        return this._isWorkSpaceWithCount() ? 4 * this.option("intervalCount") + 2 : 6;
     },
 
     _getCellCount: function() {
@@ -84,9 +85,46 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
     _changeAllDayVisibility: noop,
 
     _setFirstViewDate: function() {
-        var firstMonthDate = dateUtils.getFirstMonthDate(this.option("currentDate"));
+        var firstMonthDate = dateUtils.getFirstMonthDate(this._getViewStartByOptions());
         this._firstViewDate = dateUtils.getFirstWeekDate(firstMonthDate, this.option("firstDayOfWeek") || dateLocalization.firstDayOfWeekIndex());
         this._setStartDayHour(this._firstViewDate);
+
+        var date = this._getViewStartByOptions();
+        this._minVisibleDate = new Date(date.setDate(1));
+        this._maxVisibleDate = new Date(new Date(date.setMonth(date.getMonth() + this.option("intervalCount"))).setDate(0));
+    },
+
+    _getViewStartByOptions: function() {
+        if(!this.option("startDate")) {
+            return new Date(this.option("currentDate").getTime());
+        } else {
+            var startDate = this._getStartViewDate(),
+                currentDate = this.option("currentDate"),
+                diff = startDate.getTime() <= currentDate.getTime() ? 1 : -1,
+                endDate = new Date(new Date(this._getStartViewDate().setMonth(this._getStartViewDate().getMonth() + diff * this.option("intervalCount"))));
+
+            if(diff > 0) {
+                endDate.setDate(0);
+            }
+
+            while(!this._dateInRange(currentDate, startDate, endDate, diff)) {
+                startDate = new Date(endDate);
+
+                if(diff > 0) {
+                    startDate.setDate(1);
+                    startDate.setMonth(startDate.getMonth() + 1);
+                }
+
+                endDate = new Date(new Date(endDate.setMonth(endDate.getMonth() + diff * this.option("intervalCount"))));
+            }
+
+            return diff > 0 ? startDate : endDate;
+        }
+    },
+
+    _getStartViewDate: function() {
+        var firstMonthDate = dateUtils.getFirstMonthDate(this.option("startDate"));
+        return firstMonthDate;
     },
 
     _renderTableBody: function(options) {
@@ -98,7 +136,16 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         cellIndex = cellIndex % this._getCellCount();
 
         var date = this._getDate(rowIndex, cellIndex);
+
+        if(this._isWorkSpaceWithCount() && this._isFirstDayOfMonth(date)) {
+            return this._formatMonthAndDay(date);
+        }
         return dateLocalization.format(date, "dd");
+    },
+
+    _formatMonthAndDay: function(date) {
+        var monthName = dateLocalization.getMonthNames("abbreviated")[date.getMonth()];
+        return [monthName, dateLocalization.format(date, "day")].join(" ");
     },
 
     _getDate: function(week, day) {
@@ -117,6 +164,7 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
         $cell
             .toggleClass(DATE_TABLE_CURRENT_DATE_CLASS, this._isCurrentDate(data.startDate))
+            .toggleClass(DATE_TABLE_FIRST_OF_MONTH_CLASS, this._isFirstDayOfMonth(data.startDate))
             .toggleClass(DATE_TABLE_OTHER_MONTH_DATE_CLASS, this._isOtherMonth(data.startDate));
 
         return data;
@@ -128,8 +176,12 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return dateUtils.sameDate(cellDate, today);
     },
 
+    _isFirstDayOfMonth: function(cellDate) {
+        return this._isWorkSpaceWithCount() && cellDate.getDate() === 1;
+    },
+
     _isOtherMonth: function(cellDate) {
-        return cellDate.getMonth() !== this.option("currentDate").getMonth();
+        return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, "date");
     },
 
     getCellDuration: function() {

@@ -273,5 +273,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_W1008
      * @publicName W1008
      */
-    W1008: "Cannot scroll to the '{0}' date because it does not exist on the current view"
+    W1008: "Cannot scroll to the '{0}' date because it does not exist on the current view",
+
+    /**
+     * @name Errors and Warnings_W1009
+     * @publicName W1009
+     */
+    W1009: "Searching works only if data is specified using the dataSource option"
 });

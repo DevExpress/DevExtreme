@@ -1,11 +1,11 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    dataQuery = require("../../data/query"),
+var dataQuery = require("../../data/query"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     getKeyHash = commonUtils.getKeyHash,
-    Class = require("../../core/class");
+    Class = require("../../core/class"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 module.exports = Class.inherit({
     ctor: function(options) {
@@ -68,7 +68,7 @@ module.exports = Class.inherit({
     _loadFilteredData: function(remoteFilter, localFilter, select) {
         var filterLength = encodeURI(JSON.stringify(remoteFilter)).length,
             needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest),
-            deferred = $.Deferred(),
+            deferred = new Deferred(),
             loadOptions = {
                 filter: needLoadAllData ? undefined : remoteFilter,
                 select: needLoadAllData ? this.options.dataFields() : select || this.options.dataFields()

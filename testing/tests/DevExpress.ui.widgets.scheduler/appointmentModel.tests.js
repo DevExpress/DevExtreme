@@ -105,7 +105,7 @@ var dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment
         assert.deepEqual(actualFilter, expectedFilter, "filter is right");
     });
 
-    QUnit.test("Appointment model filterByDate should filter dataSource correctly without сopying dateFilter", function(assert) {
+    QUnit.test("Appointment model filterByDate should filter dataSource correctly without copying dateFilter", function(assert) {
         var dateFilter = [
             [
                 ["endDate", ">", new Date(2015, 1, 9, 0)],

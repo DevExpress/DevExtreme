@@ -9,7 +9,10 @@ var $ = require("../core/renderer"),
     domUtils = require("../core/utils/dom"),
     TransitionExecutorModule = require("../animation/transition_executor/transition_executor"),
     Widget = require("./widget/ui.widget"),
-    LoadIndicator = require("./load_indicator");
+    LoadIndicator = require("./load_indicator"),
+    isPromise = require("../core/utils/type").isPromise,
+    deferredUtils = require("../core/utils/deferred"),
+    Deferred = deferredUtils.Deferred;
 
 var WIDGET_CLASS = "dx-widget",
     DEFER_RENDERING_CLASS = "dx-deferrendering",
@@ -47,7 +50,7 @@ var DeferRendering = Widget.inherit({
             /**
             * @name dxDeferRenderingOptions_renderWhen
             * @publicName renderWhen
-            * @type Promise | bool
+            * @type Promise<void> | bool
             * @default undefined
             */
             renderWhen: undefined,
@@ -112,8 +115,8 @@ var DeferRendering = Widget.inherit({
             return that._renderDeferredContent();
         };
 
-        if(renderWhen && renderWhen.done) {
-            renderWhen.done(doRender);
+        if(isPromise(renderWhen)) {
+            deferredUtils.fromPromise(renderWhen).done(doRender);
         } else {
             $element.data("dx-render-delegate", doRender);
             if(renderWhen === undefined) {
@@ -139,7 +142,7 @@ var DeferRendering = Widget.inherit({
     _renderDeferredContent: function() {
         var that = this,
             $element = this.element(),
-            result = $.Deferred();
+            result = new Deferred();
 
         $element.removeClass(PENDING_RENDERING_MANUAL_CLASS);
         $element.addClass(PENDING_RENDERING_ACTIVE_CLASS);
@@ -189,7 +192,7 @@ var DeferRendering = Widget.inherit({
             }
             animatePromise = that.transitionExecutor.start();
         } else {
-            animatePromise = $.Deferred().resolve().promise();
+            animatePromise = new Deferred().resolve().promise();
         }
 
         return animatePromise;
@@ -233,10 +236,10 @@ var DeferRendering = Widget.inherit({
     },
 
     _showLoadIndicator: function($container) {
-        this._$loadIndicator = new LoadIndicator($('<div/>'), { visible: true }).element()
+        this._$loadIndicator = new LoadIndicator($('<div>'), { visible: true }).element()
             .addClass(DEFER_DEFER_RENDERING_LOAD_INDICATOR);
 
-        $("<div/>")
+        $("<div>")
             .addClass(LOADINDICATOR_CONTAINER_CLASS)
             .addClass(DEFER_RENDERING_LOADINDICATOR_CONTAINER_CLASS)
             .append(this._$loadIndicator)

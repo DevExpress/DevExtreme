@@ -2,7 +2,8 @@
 
 var $ = require("../../core/renderer"),
     viewPortUtils = require("../../core/utils/view_port"),
-    LoadPanel = require("../load_panel");
+    LoadPanel = require("../load_panel"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var loading = null;
 
@@ -30,7 +31,7 @@ exports.hide = function() {
     //todo: hot fix for case without viewport
 
     if(!loading) {
-        return $.Deferred().resolve();
+        return new Deferred().resolve();
     }
     return loading
         .hide()

@@ -12,7 +12,9 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     DataHelperMixin = require("../../data_helper"),
     equalKeys = commonUtils.equalByValue,
-    when = require("../../integration/jquery/deferred").when;
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred;
 
 module.exports = {
     defaultOptions: function() {
@@ -21,7 +23,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_dataSource
              * @publicName dataSource
-             * @type string|array|DataSource|DataSource configuration
+             * @type string|Array<Object>|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -497,8 +499,18 @@ module.exports = {
                     }
                 },
                 _loadDataSource: function() {
-                    var dataSource = this._dataSource;
-                    return dataSource ? dataSource.load() : $.Deferred().resolve().promise();
+                    var dataSource = this._dataSource,
+                        result = new Deferred();
+
+                    when(this._columnsController.refresh(true)).always(function() {
+                        if(dataSource) {
+                            dataSource.load().done(result.resolve).fail(result.reject);
+                        } else {
+                            result.resolve();
+                        }
+                    });
+
+                    return result.promise();
                 },
                 _processItems: function(items, changeType) {
                     var that = this,
@@ -868,7 +880,7 @@ module.exports = {
                 },
                 loadAll: function(data) {
                     var that = this,
-                        d = $.Deferred(),
+                        d = new Deferred(),
                         dataSource = that._dataSource;
 
                     if(dataSource) {
@@ -939,7 +951,7 @@ module.exports = {
                 * @name GridBaseMethods_byKey
                 * @publicName byKey(key)
                 * @param1 key:object|string|number
-                * @return Promise
+                * @return Promise<Object>
                 */
                 byKey: function(key) {
                     var store = this.store(),
@@ -949,7 +961,7 @@ module.exports = {
                     if(!store) return;
 
                     if(rowIndex >= 0) {
-                        result = $.Deferred().resolve(this.items()[rowIndex].data);
+                        result = new Deferred().resolve(this.items()[rowIndex].data);
                     }
 
                     return result || store.byKey(key);
@@ -966,7 +978,7 @@ module.exports = {
                 },
                 getDataByKeys: function(rowKeys) {
                     var that = this,
-                        result = $.Deferred(),
+                        result = new Deferred(),
                         deferreds = [],
                         data = [];
 
@@ -1060,11 +1072,11 @@ module.exports = {
                 /**
                  * @name GridBaseMethods_refresh
                  * @publicName refresh()
-                 * @return Promise
+                 * @return Promise<void>
                  */
                 refresh: function() {
                     var that = this,
-                        d = $.Deferred();
+                        d = new Deferred();
 
                     when(this._columnsController.refresh()).always(function() {
                         when(that.reload(true)).done(d.resolve).fail(d.reject);
@@ -1074,12 +1086,12 @@ module.exports = {
                 /**
                  * @name dxDataGridMethods_getVisibleRows
                  * @publicName getVisibleRows()
-                 * @return array
+                 * @return Array<dxDataGridRowObject>
                  */
                 /**
                  * @name dxTreeListMethods_getVisibleRows
                  * @publicName getVisibleRows()
-                 * @return array
+                 * @return Array<dxTreeListRowObject>
                  */
                 getVisibleRows: function() {
                     return this.items();
@@ -1091,7 +1103,7 @@ module.exports = {
                 /**
                 * @name GridBaseMethods_repaintRows
                 * @publicName repaintRows(rowIndexes)
-                * @param1 rowIndexes:array
+                * @param1 rowIndexes:Array<number>
                 */
                 repaintRows: function(rowIndexes) {
                     rowIndexes = Array.isArray(rowIndexes) ? rowIndexes : [rowIndexes];

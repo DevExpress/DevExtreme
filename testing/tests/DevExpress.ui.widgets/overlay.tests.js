@@ -251,14 +251,16 @@ QUnit.test("RTL markup - rtlEnabled by default", function(assert) {
 QUnit.module("option", moduleConfig);
 
 QUnit.test("RTL markup - rtlEnabled by option", function(assert) {
-    var overlay = $("#overlay").dxOverlay().dxOverlay("instance"),
-        $content = $(overlay.content());
+    var overlay = $("#overlay").dxOverlay({ deferRendering: false }).dxOverlay("instance"),
+        $content = $(overlay.content()),
+        contentRenderSpy = sinon.spy(overlay, "_renderContentImpl");
 
     overlay.option("rtlEnabled", true);
     assert.ok($content.hasClass("dx-rtl"));
 
     overlay.option("rtlEnabled", false);
     assert.ok(!$content.hasClass("dx-rtl"));
+    assert.equal(contentRenderSpy.callCount, 2, "must invalidate content when RTL changed");
 });
 
 QUnit.test("disabled", function(assert) {
@@ -2377,7 +2379,7 @@ QUnit.test("overlay should have correct resizable area if viewport and container
                 visible: true
             }),
             overlay = $overlay.dxOverlay("instance"),
-            resizable = overlay.content().dxResizable("instance");
+            resizable = $(overlay.content()).dxResizable("instance");
 
         assert.ok($.isWindow(resizable.option("area").get(0)), "window is the area of the resizable");
     } finally {
@@ -2740,6 +2742,27 @@ QUnit.test("elements under overlay with shader have not to get focus by tab", fu
     assert.equal(document.activeElement, $lastTabbable.get(0), "last item focused on press tab+shift on first item (does not go under overlay)");
 
     $outsideTabbable.focus();
+    $(document).trigger(this.tabEvent);
+    assert.equal(document.activeElement, $firstTabbable.get(0), "first item focused on press tab on last item (does not go under overlay)");
+});
+
+QUnit.test("elements under overlay with shader have not to get focus by tab when top overlay has no tabbable elements", function(assert) {
+    var overlay1 = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+            shading: true,
+            contentTemplate: $("#focusableTemplate")
+        }),
+        overlay2 = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+            shading: false,
+            contentTemplate: function() { return "test"; }
+        }),
+        $content = $(overlay1.content());
+
+    overlay1.show();
+    overlay2.show();
+
+    var $firstTabbable = $content.find(".firstTabbable");
+
+    $content.find(".lastTabbable").focus();
     $(document).trigger(this.tabEvent);
     assert.equal(document.activeElement, $firstTabbable.get(0), "first item focused on press tab on last item (does not go under overlay)");
 });

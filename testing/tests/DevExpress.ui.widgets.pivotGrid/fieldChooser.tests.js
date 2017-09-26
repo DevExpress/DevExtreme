@@ -673,8 +673,8 @@ QUnit.test("Change filter values for not group field", function(assert) {
     assert.equal(this.$container.find(".dx-header-filter").length, 2, "header filter count");
     assert.equal(this.$container.find(".dx-header-filter-empty").length, 1, "empty header filter count");
     assert.equal(this.$container.find(".dx-header-filter-empty").length, 1, "empty header filter count");
-    assert.equal($scrollableElements.length, 4, "scrollable count");
-    assert.equal(scrollableUpdateCallCount, 4, "scrollable update call count");
+    assert.equal($scrollableElements.length, 5, "scrollable count");
+    assert.equal(scrollableUpdateCallCount, 5, "scrollable update call count");
 });
 
 QUnit.test("T247590. Save tree view scroll position on dataSource changed", function(assert) {
@@ -795,6 +795,10 @@ QUnit.test("Change filter values second time", function(assert) {
 
     assert.ok(this.fieldChooser);
     assert.ok(this.dataSource);
+
+    this.dataSource.field = function(id, options) {
+        $.extend(dataSourceOptions.columnFields[id], options);
+    };
 
     var $filterIndicatorsInColumnArea = this.$container.find(".dx-area-fields[group=column] .dx-header-filter");
     assert.equal($filterIndicatorsInColumnArea.length, 2, 'filter indicators count');
@@ -1429,6 +1433,17 @@ QUnit.test("The 'contentReady' event fires after all data is loaded", function(a
 
     //assert
     assert.equal(contentReadyHandler.callCount, 1, "'contentReady' has been triggered");
+});
+
+QUnit.test("Enable search", function(assert) {
+    this.setup({}, { searchEnabled: true });
+
+    var treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
+    assert.ok(treeview.option("searchEnabled"), "treeview with search");
+
+    this.fieldChooser.option("searchEnabled", false);
+    treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
+    assert.ok(!treeview.option("searchEnabled"), "treeview without search");
 });
 
 

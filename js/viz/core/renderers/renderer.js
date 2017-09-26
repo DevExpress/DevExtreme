@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../../core/renderer"),
-    jQuery = require("jquery"),
+    eventsEngine = require("../../../events/core/events_engine"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
     doc = document,
     animation = require("./animation"),
@@ -1063,7 +1063,7 @@ SvgElement.prototype = {
     constructor: SvgElement,
 
     _getJQElement: function() {
-        return (this._$element || (this._$element = jQuery(this.element)));
+        return (this._$element || (this._$element = $(this.element)));
     },
 
     _addFixIRICallback: function() {
@@ -1187,7 +1187,7 @@ SvgElement.prototype = {
 
     smartAttr: function(attrs) {
         var that = this;
-        if(attrs.hatching) {
+        if(attrs.hatching && _normalizeEnum(attrs.hatching.direction) !== "none") {
             attrs = extend({}, attrs);
             attrs.fill = that._hatching = that.renderer.lockHatching(attrs.fill, attrs.hatching, that._hatching);
             delete attrs.hatching;
@@ -1340,19 +1340,24 @@ SvgElement.prototype = {
         return this;
     },
 
-    //jQuery methods
     on: function() {
-        jQuery.fn.on.apply(this._getJQElement(), arguments);
+        var args = [ this._getJQElement() ];
+        args.push.apply(args, arguments);
+        eventsEngine.on.apply(eventsEngine, args);
         return this;
     },
 
     off: function() {
-        jQuery.fn.off.apply(this._getJQElement(), arguments);
+        var args = [ this._getJQElement() ];
+        args.push.apply(args, arguments);
+        eventsEngine.off.apply(eventsEngine, args);
         return this;
     },
 
     trigger: function() {
-        jQuery.fn.trigger.apply(this._getJQElement(), arguments);
+        var args = [ this._getJQElement() ];
+        args.push.apply(args, arguments);
+        eventsEngine.trigger.apply(eventsEngine, args);
         return this;
     }
 };
@@ -1643,16 +1648,11 @@ Renderer.prototype = {
             path,
             step = hatching.step || 6,
             stepTo2 = step / 2,
-            stepBy15 = step * 1.5,
-            direction = _normalizeEnum(hatching.direction);
-
-        if(direction !== "right" && direction !== "left") {
-            return { id: color, append: function() { return this; }, clear: function() { }, dispose: function() { }, remove: function() { } };
-        }
+            stepBy15 = step * 1.5;
 
         id = _id || getNextDefsSvgId();
 
-        d = (direction === "right" ?
+        d = (_normalizeEnum(hatching.direction) === "right" ?
             "M " + stepTo2 + " " + (-stepTo2) + " L " + (-stepTo2) + " " + stepTo2 + " M 0 " + step + " L " + step + " 0 M " + stepBy15 + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15
             : "M 0 0 L " + step + " " + step + " M " + (-stepTo2) + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15 + " M " + stepTo2 + " " + (-stepTo2) + " L " + stepBy15 + " " + stepTo2);
 

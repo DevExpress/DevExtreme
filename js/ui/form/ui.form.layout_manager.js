@@ -19,7 +19,7 @@ var $ = require("../../core/renderer"),
     normalizeIndexes = require("../../core/utils/array").normalizeIndexes,
     errors = require("../widget/ui.errors"),
     messageLocalization = require("../../localization/message"),
-    support = require("../../core/utils/support"),
+    styleUtils = require("../../core/utils/style"),
     inflector = require("../../core/utils/inflector"),
     Widget = require("../widget/ui.widget"),
     Validator = require("../validator"),
@@ -46,6 +46,7 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
     FIELD_ITEM_CONTENT_LOCATION_CLASS = "dx-field-item-content-location-",
     FIELD_ITEM_CONTENT_WRAPPER_CLASS = "dx-field-item-content-wrapper",
     FIELD_ITEM_HELP_TEXT_CLASS = "dx-field-item-help-text",
+    SINGLE_COLUMN_ITEM_CONTENT = "dx-single-column-item-content",
 
     LABEL_HORIZONTAL_ALIGNMENT_CLASS = "dx-label-h-align",
     LABEL_VERTICAL_ALIGNMENT_CLASS = "dx-label-v-align",
@@ -298,7 +299,7 @@ var LayoutManager = Widget.inherit({
     },
 
     _hasBrowserFlex: function() {
-        return support.styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
+        return styleUtils.styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
     },
 
     _renderContentImpl: function() {
@@ -311,7 +312,7 @@ var LayoutManager = Widget.inherit({
 
         if(that._items && that._items.length) {
             var colCount = that._getColCount(),
-                $container = $("<div />").appendTo(that.element()),
+                $container = $("<div>").appendTo(that.element()),
                 layoutItems;
 
             that._prepareItemsWithMerging(colCount);
@@ -350,16 +351,16 @@ var LayoutManager = Widget.inherit({
             _layoutStrategy: that._hasBrowserFlex() ? LAYOUT_STRATEGY_FLEX : LAYOUT_STRATEGY_FALLBACK,
             onLayoutChanged: function() {
                 var onLayoutChanged = that.option("onLayoutChanged"),
-                    isLayoutChanged = that.isLayoutChanged();
+                    isSingleColumnMode = that.isSingleColumnMode();
 
                 if(onLayoutChanged) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isLayoutChanged);
-                    onLayoutChanged(isLayoutChanged);
+                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isSingleColumnMode);
+                    onLayoutChanged(isSingleColumnMode);
                 }
             },
             onContentReady: function(e) {
                 if(that.option("onLayoutChanged")) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isLayoutChanged(e.component));
+                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
                 that._fireContentReadyAction();
             },
@@ -369,9 +370,11 @@ var LayoutManager = Widget.inherit({
                 }
                 var itemRenderedCountInPreviousRows = e.location.row * colCount,
                     item = that._items[e.location.col + itemRenderedCountInPreviousRows],
-                    $fieldItem = $("<div/>")
+                    $fieldItem = $("<div>")
                         .addClass(item.cssClass)
                         .appendTo($itemElement);
+
+                $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_ROW_CLASS);
@@ -500,7 +503,7 @@ var LayoutManager = Widget.inherit({
             id = that.getItemID(name),
             isRequired = typeUtils.isDefined(item.isRequired) ? item.isRequired : !!that._hasRequiredRuleInSet(item.validationRules),
             labelOptions = that._getLabelOptions(item, id, isRequired),
-            $editor = $("<div/>"),
+            $editor = $("<div>"),
             helpID = item.helpText ? ("dx-" + new Guid()) : null,
             $label;
 
@@ -603,14 +606,14 @@ var LayoutManager = Widget.inherit({
     _renderLabel: function(options) {
         if(typeUtils.isDefined(options.text) && options.text.length > 0) {
             var labelClasses = FIELD_ITEM_LABEL_CLASS + " " + FIELD_ITEM_LABEL_LOCATION_CLASS + options.location,
-                $label = $("<label />")
+                $label = $("<label>")
                     .addClass(labelClasses)
                     .attr("for", options.id),
-                $labelContent = $("<span/>")
+                $labelContent = $("<span>")
                     .addClass(FIELD_ITEM_LABEL_CONTENT_CLASS)
                     .appendTo($label);
 
-            $("<span />")
+            $("<span>")
                 .addClass(FIELD_ITEM_LABEL_TEXT_CLASS)
                 .text(options.text)
                 .appendTo($labelContent);
@@ -635,7 +638,7 @@ var LayoutManager = Widget.inherit({
             var markClass = isRequiredMark ? FIELD_ITEM_REQUIRED_MARK_CLASS : FIELD_ITEM_OPTIONAL_MARK_CLASS,
                 markText = isRequiredMark ? requiredMarksConfig.requiredMark : requiredMarksConfig.optionalMark;
 
-            $mark = $("<span />")
+            $mark = $("<span>")
                 .addClass(markClass)
                 .html("&nbsp" + markText);
         }
@@ -756,7 +759,7 @@ var LayoutManager = Widget.inherit({
                 container: $container
             });
         } else {
-            var $editor = $("<div/>").appendTo($container);
+            var $editor = $("<div>").appendTo($container);
 
             try {
                 editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
@@ -1080,7 +1083,7 @@ var LayoutManager = Widget.inherit({
         return this._editorInstancesByField[field];
     },
 
-    isLayoutChanged: function(component) {
+    isSingleColumnMode: function(component) {
         var responsiveBox = this._responsiveBox || component;
         if(responsiveBox) {
             return responsiveBox.option("currentScreenFactor") === responsiveBox.option("singleColumnScreen");

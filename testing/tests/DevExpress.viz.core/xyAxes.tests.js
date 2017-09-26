@@ -2825,7 +2825,19 @@ QUnit.test("All margins are zero", function(assert) {
     this.renderer.g.getCall(5).returnValue.attr.reset();
 
     axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
-    assert.equal(this.renderer.g.getCall(5).returnValue.attr.callCount, 0);
+    //T548860
+    assert.deepEqual(this.renderer.g.getCall(5).returnValue.attr.lastCall.args[0], {
+        translateX: 0
+    });
+});
+
+QUnit.test("getLabelsPosition returns correct value after empty shift", function(assert) {
+    this.options.multipleAxesSpacing = 5;
+    var axis = this.createDrawnAxis();
+
+    axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
+
+    assert.equal(axis.getLabelsPosition(), 10);
 });
 
 QUnit.test("Vertical axis position is left", function(assert) {

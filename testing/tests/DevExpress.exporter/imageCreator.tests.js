@@ -546,7 +546,7 @@ QUnit.test("Arc path", function(assert) {
                 y: 28
             }, "First component of path");
             assert.equal(that.paths[0][1].action, "A", "action");
-            //assert.equal(that.paths[0][1].с, true, "c");
+            //assert.equal(that.paths[0][1].c, true, "c");
             assert.equal(that.paths[0][1].r, 15, "radius");
             assert.roughEqual(that.paths[0][1].sa, 0.3012034806537296, 0.1, "start angle");
             assert.roughEqual(that.paths[0][1].ea, -0.6065021374442598, 0.1, "end angle");
@@ -921,16 +921,26 @@ QUnit.test("tspan element inside other tspan", function(assert) {
             '<tspan>Imports, Dec 2014 - May 2015</tspan>' +
             '<tspan style="font-size:13px;" dy="-5">(Mod)</tspan>' +
             '</tspan>' +
+
+            '<tspan x="0" y="100" text-anchor="start">' +
+            '<tspan>Second Line</tspan>' +
+            '</tspan>' +
+
             '</text > ' +
             testingMarkupEnd,
         imageBlob = getData(markup);
 
-    assert.expect(2);
+    assert.expect(6);
 
     $.when(imageBlob).done(function(blob) {
         try {
+            assert.equal(that.drawnElements.length, 5, "Canvas elements count");
             assert.equal(that.drawnElements[1].args[1], 0, "X");
             assert.equal(that.drawnElements[1].args[2], 30, "Y");
+
+            assert.equal(that.drawnElements[3].args[1], 0, "X");
+            assert.equal(that.drawnElements[3].args[2], 100, "Y");
+            assert.equal(that.drawnElements[3].args[0], "Second Line");
         } finally {
             done();
         }

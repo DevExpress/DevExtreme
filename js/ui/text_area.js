@@ -104,6 +104,13 @@ var TextArea = TextBox.inherit({
             * @hidden
             * @extend_doc
             */
+
+            /**
+             * @name dxTextAreaOptions_showMaskMode
+             * @publicName showMaskMode
+             * @hidden
+             * @extend_doc
+             */
         });
     },
 
@@ -162,15 +169,15 @@ var TextArea = TextBox.inherit({
     },
 
     _renderDimensions: function() {
-        var width = this.option("width"),
-            height = this.option("height"),
+        var width = this._getOptionValue("width"),
+            height = this._getOptionValue("height"),
             minHeight = this.option("minHeight"),
             maxHeight = this.option("maxHeight"),
             $element = this.element();
 
         $element.css({
-            "min-height": minHeight !== undefined ? minHeight : "",
-            "max-height": maxHeight !== undefined ? maxHeight : ""
+            "minHeight": minHeight !== undefined ? minHeight : "",
+            "maxHeight": maxHeight !== undefined ? maxHeight : ""
         });
 
         $element.outerWidth(width);
@@ -180,8 +187,8 @@ var TextArea = TextBox.inherit({
     _resetDimensions: function() {
         this.element().css({
             "height": "",
-            "min-height": "",
-            "max-height": ""
+            "minHeight": "",
+            "maxHeight": ""
         });
     },
 

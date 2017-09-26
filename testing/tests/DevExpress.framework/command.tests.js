@@ -4,6 +4,10 @@ var $ = require("jquery");
 
 require("bundles/modules/framework");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.testStart(function() {
     var markup = '<div id="command"></div>';
 

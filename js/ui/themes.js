@@ -3,12 +3,13 @@
 var $ = require("../core/renderer"),
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
+    ready = require("../core/utils/ready"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
+    themeReadyCallback = require("./themes_callback"),
     viewPort = viewPortUtils.value,
-    viewPortChanged = viewPortUtils.changeCallback,
-    holdReady = $.holdReady || $.fn.holdReady;
+    viewPortChanged = viewPortUtils.changeCallback;
 
 var DX_LINK_SELECTOR = "link[rel=dx-theme]",
     THEME_ATTR = "data-theme",
@@ -24,7 +25,7 @@ var context,
 var THEME_MARKER_PREFIX = "dx.";
 
 function readThemeMarker() {
-    var element = $("<div></div>", context).addClass("dx-theme-marker").appendTo(context.documentElement),
+    var element = $("<div>", context).addClass("dx-theme-marker").appendTo(context.documentElement),
         result;
 
     try {
@@ -289,15 +290,14 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
-holdReady(true);
 init({
     _autoInit: true,
     loadCallback: function() {
-        holdReady(false);
+        themeReadyCallback.fire();
     }
 });
 
-domUtils.ready(function() {
+ready(function() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error("E0022");
     }
@@ -343,3 +343,4 @@ exports.resetTheme = function() {
     currentThemeName = null;
     pendingThemeName = null;
 };
+

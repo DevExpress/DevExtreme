@@ -18,7 +18,7 @@ var $ = require("jquery"),
     feedbackEvents = require("../../events/core/emitter.feedback"),
     TransitionExecutorModule = require("../../animation/transition_executor/transition_executor"),
     animationPresetsModule = require("../../animation/presets/presets"),
-    when = require("../../integration/jquery/deferred").when;
+    when = require("../../core/utils/deferred").when;
 
 require("./layout_controller");
 require("../../ui/themes");
@@ -59,7 +59,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationoptions_navigation
     * @publicName navigation
-    * @type array
+    * @type Array<dxCommand,dxCommandOptions>
     */
     /**
     * @name HtmlApplicationoptions_mode
@@ -71,7 +71,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationoptions_layoutSet
     * @publicName layoutSet
-    * @type string|array
+    * @type string|Array<Object>
     * @default undefined
     */
     /**
@@ -235,7 +235,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationmethods_createNavigation
     * @publicName createNavigation(navigationConfig)
-    * @param1 navigationConfig:Array
+    * @param1 navigationConfig:Array<Object>
     */
     /**
     * @name HtmlApplicationmethods_navigate
@@ -356,7 +356,7 @@ var HtmlApplication = Application.inherit({
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     * @type_function_param1_field2 layoutController:object
-    * @type_function_param1_field3 availableLayoutControllers:array
+    * @type_function_param1_field3 availableLayoutControllers:Array<Object>
     */
     /**
     * @name HtmlApplicationevents_resolveViewCacheKey
@@ -380,7 +380,7 @@ var HtmlApplication = Application.inherit({
     /**
      * @name HtmlApplicationfields_navigation
      * @publicName navigation
-     * @type array
+     * @type Array<dxCommand>
      */
     /**
      * @name HtmlApplicationFields_stateManager
@@ -716,8 +716,8 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationmethods_loadTemplates
     * @publicName loadTemplates(source)
-    * @param1 source:string|jQuery object
-    * @return Promise
+    * @param1 source:string|jQuery
+    * @return Promise<void>
     */
     loadTemplates: function(source) {
         return this.viewEngine.loadTemplates(source);

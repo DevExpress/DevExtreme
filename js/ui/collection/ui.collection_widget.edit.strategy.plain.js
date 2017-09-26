@@ -44,10 +44,19 @@ var PlainEditStrategy = EditStrategy.inherit({
     },
 
     getIndexByKey: function(key) {
-        var keys = this.getKeysByItems(this._getPlainItems());
+        var cache = this._cache,
+            keys = cache && cache.keys || this.getKeysByItems(this._getPlainItems());
 
-        for(var i = 0, length = keys.length; i < length; i++) {
-            if(this._equalKeys(key, keys[i])) return i;
+        if(cache && !cache.keys) {
+            cache.keys = keys;
+        }
+
+        if(typeof key === "object") {
+            for(var i = 0, length = keys.length; i < length; i++) {
+                if(this._equalKeys(key, keys[i])) return i;
+            }
+        } else {
+            return keys.indexOf(key);
         }
 
         return -1;

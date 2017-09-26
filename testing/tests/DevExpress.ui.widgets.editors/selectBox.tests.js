@@ -1279,9 +1279,9 @@ QUnit.testInActiveWindow("it should be possible to clear the value via keyboard 
         element = $element.dxSelectBox("instance"),
         $input = $element.find(".dx-texteditor-input");
 
-    $input.focusin();
+    $input.trigger("focusin");
     $input.val("");
-    $input.blur();
+    $input.trigger("blur");
 
     assert.equal(element.option("value"), null, "value was changed");
     assert.equal($input.val(), "", "input text has been cleared");
@@ -1862,6 +1862,43 @@ QUnit.test("The 'onCustomItemCreating' option with Deferred", function(assert) {
     assert.equal($input.val(), "display " + customValue, "displayed value is changed");
 });
 
+QUnit.test("The 'onCustomItemCreating' option with Promise", function(assert) {
+    assert.expect(4);
+
+    var resolve,
+        promise = new Promise(function(onResolve) {
+            resolve = onResolve;
+        }),
+        $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            displayExpr: "display",
+            valueExpr: "value",
+            onCustomItemCreating: function() { return promise; }
+        }),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input),
+        customValue = "Custom value";
+
+    keyboard
+        .type(customValue)
+        .change();
+
+    assert.equal($selectBox.dxSelectBox("option", "value"), null, "value is not changed until deferred is resolved");
+    assert.equal($input.val(), customValue, "input value is not changed until deferred is resolved");
+
+    promise.then(function() {
+        assert.equal($selectBox.dxSelectBox("option", "value"), "value " + customValue, "value is changed");
+        assert.equal($input.val(), "display " + customValue, "displayed value is changed");
+    });
+
+    resolve({
+        display: "display " + customValue,
+        value: "value " + customValue
+    });
+
+    return promise;
+});
+
 QUnit.test("Value should be reset if the 'onCustomItemCreating' deferred is rejected", function(assert) {
     var deferred = $.Deferred(),
         $selectBox = $("#selectBox").dxSelectBox({
@@ -1910,6 +1947,52 @@ QUnit.test("Filter should be cleared if the 'onCustomItemCreating' deferred is r
 
     assert.equal($selectBox.dxSelectBox("option", "value"), null, "value is reset");
     assert.equal($input.val(), "", "input value is reset after deferred is rejected");
+    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+});
+
+QUnit.test("filter should be cleared if all text was removed using backspace", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            opened: true,
+            items: [1, 2, 3]
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("456");
+    this.clock.tick(TIME_TO_WAIT);
+    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "filter is applied");
+
+    $input.get(0).setSelectionRange(0, 3);
+    keyboard.caret({ start: 0, end: 3 });
+    keyboard.press("backspace");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($input.val(), "", "value was cleared");
+    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+});
+
+QUnit.test("search timer should not be cleared when the widget is opening", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            searchTimeout: 100,
+            openOnFieldClick: false,
+            opened: true,
+            items: [1, 2, 3]
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        $button = $selectBox.find(".dx-dropdowneditor-button"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("4");
+    this.clock.tick(100);
+    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "items are filtered");
+
+    keyboard.press("backspace");
+    $button.trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
     assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
 });
 
@@ -3668,10 +3751,11 @@ QUnit.test("value should be restored after the focusout when selection was not c
         $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
         keyboard = keyboardMock($input);
 
+    $input.get(0).focus();
     keyboard.keyDown(KEY_DOWN);
     assert.equal($input.val(), "second", "value has been changed");
 
-    $input.blur();
+    $input.trigger("blur");
     assert.equal($input.val(), "first", "value has been restored");
 });
 

@@ -711,6 +711,14 @@ QUnit.test("Array of emails with incorrect one should be invalid", function(asse
     assert.ok(!result.isValid, "IsValid");
 });
 
+QUnit.test("Empty array is invalid", function(assert) {
+    var result = ValidationEngine.validate([], [{
+        type: "required"
+    }]);
+
+    assert.ok(result, "Result is defined");
+    assert.ok(!result.isValid, "IsValid");
+});
 
 QUnit.module("Custom rule with user's callback");
 

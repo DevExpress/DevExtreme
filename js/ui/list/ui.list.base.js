@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     compileGetter = require("../../core/utils/data").compileGetter,
     extend = require("../../core/utils/extend").extend,
+    fx = require("../../animation/fx"),
     clickEvent = require("../../events/click"),
     swipeEvents = require("../../events/swipe"),
     support = require("../../core/utils/support"),
@@ -20,7 +21,8 @@ var $ = require("../../core/renderer"),
     ScrollView = require("../scroll_view"),
     deviceDependentOptions = require("../scroll_view/ui.scrollable").deviceDependentOptions,
     CollectionWidget = require("../collection/ui.collection_widget.edit"),
-    BindableTemplate = require("../widget/bindable_template");
+    BindableTemplate = require("../widget/bindable_template"),
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -524,7 +526,7 @@ var ListBase = CollectionWidget.inherit({
         }
     },
 
-    _reorderItem: function(itemElement, toItemElement) {
+    reorderItem: function(itemElement, toItemElement) {
         this.callBase(itemElement, toItemElement);
         this._refreshItemElements();
     },
@@ -640,7 +642,7 @@ var ListBase = CollectionWidget.inherit({
 
         if(stopLoading || this._scrollViewIsFull()) {
             this._scrollView.release(hideLoadIndicator);
-            this._toggleNextButton(this._shouldRenderNextButton() && !isDataLoaded);
+            this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
         } else {
             this._infiniteDataLoading();
@@ -768,20 +770,18 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _collapseGroupHandler: function($group, toggle) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred();
+        var $groupBody = $group.children("." + LIST_GROUP_BODY_CLASS);
 
-            $groupBody = $group.children("." + LIST_GROUP_BODY_CLASS);
+        var startHeight = $groupBody.outerHeight();
+        var endHeight = startHeight === 0 ? $groupBody.height("auto").outerHeight() : 0;
 
         $group.toggleClass(LIST_GROUP_COLLAPSED_CLASS, toggle);
 
-        var slideMethod = "slideToggle";
-        if(toggle === true) {
-            slideMethod = "slideUp";
-        }
-        if(toggle === false) {
-            slideMethod = "slideDown";
-        }
-        $groupBody[slideMethod]({
+        fx.animate($groupBody, {
+            type: "custom",
+            from: { height: startHeight },
+            to: { height: endHeight },
             duration: 200,
             complete: (function() {
                 this.updateDimensions();
@@ -1065,10 +1065,10 @@ var ListBase = CollectionWidget.inherit({
     * @name dxListMethods_expandGroup
     * @publicName expandGroup(groupIndex)
     * @param1 groupIndex:Number
-    * @return Promise
+    * @return Promise<void>
     */
     expandGroup: function(groupIndex) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             $group = this._itemContainer().find("." + LIST_GROUP_CLASS).eq(groupIndex);
 
         this._collapseGroupHandler($group, false).done((function() {
@@ -1082,10 +1082,10 @@ var ListBase = CollectionWidget.inherit({
     * @name dxListMethods_collapseGroup
     * @publicName collapseGroup(groupIndex)
     * @param1 groupIndex:Number
-    * @return Promise
+    * @return Promise<void>
     */
     collapseGroup: function(groupIndex) {
-        var deferred = $.Deferred(),
+        var deferred = new Deferred(),
             $group = this._itemContainer().find("." + LIST_GROUP_CLASS).eq(groupIndex);
 
         this._collapseGroupHandler($group, true).done((function() {
@@ -1098,11 +1098,11 @@ var ListBase = CollectionWidget.inherit({
     /**
     * @name dxListMethods_updateDimensions
     * @publicName updateDimensions()
-    * @return Promise
+    * @return Promise<void>
     */
     updateDimensions: function() {
         var that = this,
-            deferred = $.Deferred();
+            deferred = new Deferred();
 
         if(that._scrollView) {
             that._scrollView.update().done(function() {

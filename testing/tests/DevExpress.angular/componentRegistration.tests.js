@@ -17,6 +17,10 @@ require("angular-route");
 require("ui/list");
 require("ui/button");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 var FIXTURE_ELEMENT = function() { return $("#qunit-fixture"); };
 
 var ignoreAngularBrowserDeferTimer = function(args) {
@@ -1880,6 +1884,7 @@ QUnit.test("Bootstrap should not fail if container component changes element mar
 });
 
 QUnit.test("Global scope properties are accessible from item template", function(assert) {
+    this.clock = sinon.useFakeTimers();
 
     var controller = function($scope) {
             $scope.collection = [
@@ -1899,8 +1904,12 @@ QUnit.test("Global scope properties are accessible from item template", function
             "</div>"
         ), controller);
 
+    this.clock.tick();
+
     assert.equal($(".item-text", $markup).text(), "Item text");
     assert.equal($(".global-text", $markup).text(), "Global text");
+
+    this.clock.restore();
 });
 
 QUnit.test("binding to circular data (T144697)", function(assert) {
@@ -2026,6 +2035,27 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
 
     $items.eq(0).find(".test-widget").dxTestWidget("option", "text", "widget text");
     assert.equal(scope.collection[0].name, "widget text");
+});
+
+QUnit.test("$index is available in markup (T542335)", function(assert) {
+    var controller = function($scope) {
+            $scope.items = [
+                { text: "text1" },
+                { text: "text2" }
+            ];
+        },
+        $markup = initMarkup($(
+            "<div dx-test-collection-container=\"{ bindingOptions: { items: 'items' } }\" dx-item-alias=\"item\">" +
+            "   <div data-options='dxTemplate: { name: \"item\" }'>" +
+            "       <div dx-test-widget=\"{ bindingOptions: { text: '$index' } }\" class=\"test-widget\"></div>" +
+            "   </div>" +
+            "</div>"
+        ), controller);
+
+    var $items = $markup.find(".test-widget");
+
+    assert.equal($items.eq(0).dxTestWidget("option", "text"), "0");
+    assert.equal($items.eq(1).dxTestWidget("option", "text"), "1");
 });
 
 QUnit.test("$id in item model not caused exception", function(assert) {
@@ -2635,4 +2665,39 @@ QUnit.test("No watchers on disposing", function(assert) {
 
     assert.equal(scope.$$watchers.length, 1);// NOTE: One uncleared watcher created for dxDigestCallbacks service
     assert.ok(!!instance);
+});
+
+
+QUnit.test("Component shouldn't watch digest callback after dispose", function(assert) {
+    var beginCounter = 0,
+        endCounter = 0;
+
+    var TestComponent = DOMComponent.inherit({
+        beginUpdate: function(args) {
+            beginCounter++;
+            this.callBase.apply(this, arguments);
+        },
+        endUpdate: function() {
+            endCounter++;
+            this.callBase.apply(this, arguments);
+        }
+    });
+
+    registerComponent("dxTestWidget", TestComponent);
+
+    var $markup = $("<div></div>")
+            .attr("dx-test-widget", "{}")
+            .appendTo(this.$container);
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    var scope = $markup.scope();
+    $markup.remove();
+
+    beginCounter = 0;
+    endCounter = 0;
+    scope.$apply(function() {});
+
+    assert.equal(beginCounter, 0);
+    assert.equal(endCounter, 0);
 });

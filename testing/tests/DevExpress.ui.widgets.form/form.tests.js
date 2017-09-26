@@ -157,7 +157,7 @@ QUnit.test("Check root layout width on init", function(assert) {
         rootLayoutManager = instance._rootLayoutManager;
 
     //assert
-    assert.equal(rootLayoutManager.option("width"), 100, "Correct width");
+    assert.equal(rootLayoutManager.element().width(), 100, "Correct width");
 });
 
 QUnit.test("Check root layout width on option change", function(assert) {
@@ -304,7 +304,7 @@ QUnit.test("Render form with colspan", function(assert) {
     assert.ok(fieldWidths.ID > fieldWidths.FirstName, "field with colspan 2 is wider than field without colspan");
 });
 
-QUnit.test("Read only change in inner components on option change", function(assert) {
+QUnit.test("'readOnly' is changed in inner components on optionChanged", function(assert) {
     //arrange, act
     var $formContainer = $("#form").dxForm({
         items: [
@@ -315,12 +315,32 @@ QUnit.test("Read only change in inner components on option change", function(ass
         ]
     });
 
-    assert.ok(!$formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor isn't read only");
+    assert.notOk($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor isn't read only");
 
     $formContainer.dxForm("instance").option("readOnly", true);
 
     //assert
     assert.ok($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
+});
+
+QUnit.test("'disable' is changed in inner components on optionChanged", function(assert) {
+    //arrange, act
+    var $formContainer = $("#form").dxForm({
+        items: [
+            {
+                dataField: "name",
+                editorType: "dxTextBox"
+            }
+        ],
+        disabled: true
+    });
+
+    assert.ok($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-disabled"), "editor is disabled");
+
+    $formContainer.dxForm("instance").option("disabled", false);
+
+    //assert
+    assert.notOk($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-disabled"), "editor isn't disabled");
 });
 
 QUnit.test("Customize item event", function(assert) {
@@ -3044,6 +3064,7 @@ QUnit.test("One column screen should be customizable with screenByWidth option o
 
         //assert
     assert.equal($form.find(".dx-layout-manager-one-col").length, 1, "single column screen was changed");
+    assert.equal($form.find(".dx-single-column-item-content").length, 4, "There are 4 items in the column");
 });
 
 QUnit.test("One column screen should be customizable with screenByWidth option on option change", function(assert) {
@@ -3061,10 +3082,14 @@ QUnit.test("One column screen should be customizable with screenByWidth option o
             items: ["name", "lastName", "room", "isDeveloper"]
         }).data("dxForm");
 
-        //act
+
+    assert.equal($form.find(".dx-single-column-item-content").length, 0, "There are no single column items");
+
+    //act
     form.option("screenByWidth", function() { return "xs"; });
 
-        //assert
+    //assert
+    assert.equal($form.find(".dx-single-column-item-content").length, 4, "There are 4 items in the column");
     assert.equal($form.find(".dx-layout-manager-one-col").length, 1, "single column screen was changed");
 });
 

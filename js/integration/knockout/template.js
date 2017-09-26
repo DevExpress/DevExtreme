@@ -2,8 +2,21 @@
 
 var $ = require("../../core/renderer"),
     ko = require("knockout"),
+    typeUtils = require("../../core/utils/type"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     domUtils = require("../../core/utils/dom");
+
+var getParentContext = function() {
+    var parentNode = $("<div>")[0];
+    ko.applyBindingsToNode(parentNode);
+    var parentContext = ko.contextFor(parentNode);
+
+    getParentContext = function() {
+        return parentContext;
+    };
+
+    return parentContext;
+};
 
 var KoTemplate = TemplateBase.inherit({
 
@@ -20,32 +33,28 @@ var KoTemplate = TemplateBase.inherit({
     },
 
     _prepareDataForContainer: function(data, container) {
-        var result = data,
-            containerElement,
-            containerContext;
+        if(container && container.length) {
+            var containerElement = container.get(0);
+            var containerContext = ko.contextFor(containerElement);
 
-        if(container.length) {
-            containerElement = container.get(0);
             data = data !== undefined ? data : ko.dataFor(containerElement) || {};
-            containerContext = ko.contextFor(containerElement);
 
             if(containerContext) {
-                result = (data === containerContext.$data)
+                return (data === containerContext.$data)
                     ? containerContext
                     : containerContext.createChildContext(data);
-            } else {
-                result = data;
             }
         }
 
-        return result;
+        // workaround for https://github.com/knockout/knockout/pull/651
+        return getParentContext().createChildContext(data);
     },
 
     _renderCore: function(options) {
-        var model = options.model;
+        var model = this._prepareDataForContainer(options.model, options.container);
 
-        if(options.container) {
-            model = this._prepareDataForContainer(model, options.container);
+        if(typeUtils.isDefined(options.index)) {
+            model.$index = options.index;
         }
 
         var $placeholder = $("<div>").appendTo(options.container);

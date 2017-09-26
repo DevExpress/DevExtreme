@@ -14,7 +14,8 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     Swipeable = require("../events/gesture/swipeable"),
-    BindableTemplate = require("./widget/bindable_template");
+    BindableTemplate = require("./widget/bindable_template"),
+    Deferred = require("../core/utils/deferred").Deferred;
 
 var GALLERY_CLASS = "dx-gallery",
     GALLERY_WRAPPER_CLASS = GALLERY_CLASS + "-wrapper",
@@ -425,7 +426,7 @@ var Gallery = CollectionWidget.inherit({
         if(this._$wrapper) {
             return;
         }
-        this._$wrapper = $("<div />")
+        this._$wrapper = $("<div>")
             .addClass(GALLERY_WRAPPER_CLASS)
             .appendTo(this.element());
     },
@@ -541,7 +542,7 @@ var Gallery = CollectionWidget.inherit({
             positionReady = that._animate(targetPosition).done(that._endSwipe.bind(that));
         } else {
             translator.move(this._$container, { left: targetPosition * this._elementWidth(), top: 0 });
-            positionReady = $.Deferred().resolveWith(that);
+            positionReady = new Deferred().resolveWith(that);
         }
 
         if(this._deferredAnimate) {
@@ -564,7 +565,7 @@ var Gallery = CollectionWidget.inherit({
     _animate: function(targetPosition, extraConfig) {
         var that = this,
             $container = this._$container,
-            animationComplete = $.Deferred();
+            animationComplete = new Deferred();
 
         fx.animate(this._$container, extend({
             type: "slide",
@@ -1150,7 +1151,7 @@ var Gallery = CollectionWidget.inherit({
     * @publicName goToItem(itemIndex, animation)
     * @param1 itemIndex:numeric
     * @param2 animation:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     goToItem: function(itemIndex, animation) {
         var selectedIndex = this.option("selectedIndex"),
@@ -1162,7 +1163,7 @@ var Gallery = CollectionWidget.inherit({
 
         itemIndex = this._fitIndex(itemIndex);
 
-        this._deferredAnimate = $.Deferred();
+        this._deferredAnimate = new Deferred();
 
         if(itemIndex > itemsCount - 1 || itemIndex < 0 || selectedIndex === itemIndex) {
             return this._deferredAnimate.resolveWith(this).promise();
@@ -1177,7 +1178,7 @@ var Gallery = CollectionWidget.inherit({
     * @name dxgallerymethods_prevItem
     * @publicName prevItem(animation)
     * @param1 animation:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     prevItem: function(animation) {
         return this.goToItem(this.option("selectedIndex") - 1, animation);
@@ -1187,7 +1188,7 @@ var Gallery = CollectionWidget.inherit({
     * @name dxgallerymethods_nextItem
     * @publicName nextItem(animation)
     * @param1 animation:boolean
-    * @return Promise
+    * @return Promise<void>
     */
     nextItem: function(animation) {
         return this.goToItem(this.option("selectedIndex") + 1, animation);

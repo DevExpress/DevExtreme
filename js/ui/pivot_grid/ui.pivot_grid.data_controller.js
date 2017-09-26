@@ -1,8 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Callbacks = require("../../core/utils/callbacks"),
-    when = require("../../integration/jquery/deferred").when,
+var Callbacks = require("../../core/utils/callbacks"),
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
@@ -85,7 +86,7 @@ exports.DataController = Class.inherit((function() {
                 /**
                 * @name dxPivotGridPivotGridCell_path
                 * @publicName path
-                * @type array
+                * @type Array<any>
                 */
                 infoItem.path = headerItem.path;
             }
@@ -178,7 +179,7 @@ exports.DataController = Class.inherit((function() {
             var cellDescriptionsCount = cellDescriptions.length,
                 viewHeaderItems = createViewHeaderItems(headerItems, headerDescriptions),
                 dataFields = options.dataFields,
-                d = $.Deferred();
+                d = new Deferred();
 
             when(viewHeaderItems).done(function(viewHeaderItems) {
                 options.notifyProgress(0.5);
@@ -275,6 +276,10 @@ exports.DataController = Class.inherit((function() {
 
             if(childrenStack[depth + 1]) {
                 node.children = childrenStack[depth + 1];
+                //T541266
+                for(var i = depth + 1; i < childrenStack.length; i++) {
+                    childrenStack[i] = undefined;
+                }
                 childrenStack.length = depth + 1;
             }
 
@@ -284,7 +289,7 @@ exports.DataController = Class.inherit((function() {
         function createViewHeaderItems(headerItems, headerDescriptions) {
             var headerDescriptionsCount = (headerDescriptions && headerDescriptions.length) || 0,
                 childrenStack = [],
-                d = $.Deferred(),
+                d = new Deferred(),
                 headerItem;
 
             when(foreachTreeAsync(headerItems, function(items, index) {
@@ -420,7 +425,7 @@ exports.DataController = Class.inherit((function() {
         return function(headerItems, headerDescriptions, cellDescriptions, isHorizontal, options) {
             var info = [],
                 depthSize = getHeaderItemsDepth(headerItems) || 1,
-                d = $.Deferred();
+                d = new Deferred();
 
             getViewHeaderItems(headerItems, headerDescriptions, cellDescriptions, depthSize, options).done(function(viewHeaderItems) {
                 fillHeaderInfo(info, viewHeaderItems, depthSize, isHorizontal, options.layout === "tree");
@@ -568,13 +573,13 @@ exports.DataController = Class.inherit((function() {
                         /**
                        * @name dxPivotGridPivotGridCell_rowPath
                        * @publicName rowPath
-                       * @type array
+                       * @type Array<any>
                        */
                         rowPath: rowInfo.path || [],
                         /**
                         * @name dxPivotGridPivotGridCell_columnPath
                         * @publicName columnPath
-                        * @type array
+                        * @type Array<any>
                         */
                         columnPath: columnInfo.path || [],
                         /**
@@ -904,10 +909,10 @@ exports.DataController = Class.inherit((function() {
             return this._dataSource.isLoading();
         },
         beginLoading: function() {
-            this._dataSource._changeLoadingCount(1);
+            this._dataSource.beginLoading();
         },
         endLoading: function() {
-            this._dataSource._changeLoadingCount(-1);
+            this._dataSource.endLoading();
         },
         isEmpty: function() {
             var dataFields = this._dataSource.getAreaFields("data"),

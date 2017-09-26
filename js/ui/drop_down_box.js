@@ -7,7 +7,9 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     isDefined = require("../core/utils/type").isDefined,
     selectors = require("./widget/jquery.selectors"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
-    when = require("../integration/jquery/deferred").when,
+    deferredUtils = require("../core/utils/deferred"),
+    when = deferredUtils.when,
+    Deferred = deferredUtils.Deferred,
     $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     grep = require("../core/utils/common").grep,
@@ -19,6 +21,7 @@ var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
 
 /**
  * @name dxDropDownBox
+ * @isEditor
  * @publicName dxDropDownBox
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @module ui/drop_down_box
@@ -87,7 +90,7 @@ var DropDownBox = DropDownEditor.inherit({
             /**
              * @name dxDropDownBoxOptions_dropDownOptions
              * @publicName dropDownOptions
-             * @type Popup options
+             * @type dxPopupOptions
              * @default {}
              */
             dropDownOptions: {},
@@ -216,7 +219,7 @@ var DropDownBox = DropDownEditor.inherit({
         }).bind(this))[0];
 
         return selectedItem !== undefined
-            ? $.Deferred().resolve(selectedItem).promise()
+            ? new Deferred().resolve(selectedItem).promise()
             : this._loadValue(value);
     },
 
@@ -271,18 +274,17 @@ var DropDownBox = DropDownEditor.inherit({
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled: this.option("focusStateEnabled"),
-            onPositioned: null,
             maxHeight: this._getMaxHeight.bind(this)
         }, this.option("dropDownOptions"));
     },
 
     _getMaxHeight: function() {
         var $element = this.element(),
-            offset = $element.offset(),
-            windowHeight = $(window).height(),
-            maxHeight = windowHeight - offset.top - $element.outerHeight();
+            offsetTop = $element.offset().top - $(window).scrollTop(),
+            offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight(),
+            maxHeight = Math.max(offsetTop, offsetBottom) * 0.9;
 
-        return maxHeight * 0.9;
+        return maxHeight;
     },
 
     _popupShownHandler: function() {
