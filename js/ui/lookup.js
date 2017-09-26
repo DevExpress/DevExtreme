@@ -64,6 +64,7 @@ var Lookup = DropDownList.inherit({
         extend(this._deprecatedOptions, {
             /**
             * @name dxLookupOptions_showNextButton
+            * @type boolean
             * @publicName showNextButton
             * @deprecated #pageLoadMode
             */
