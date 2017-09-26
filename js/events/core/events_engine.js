@@ -420,7 +420,7 @@ var eventsEngine = {
             }
         }
 
-        if(element.nodeType) {
+        if(element.nodeType || isWindow(element)) {
             special.callMethod(eventName, "_default", element, [ event, extraParameters ]);
             callNativeMethod(eventName, element);
         }

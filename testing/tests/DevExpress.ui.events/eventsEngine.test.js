@@ -346,3 +346,18 @@ QUnit.test("delegateTarget", function(assert) {
 
     eventsEngine.trigger(p, event);
 });
+
+QUnit.test("nativeEvents should work for window", function(assert) {
+    var focusCount = 0;
+    var windowMock = {
+        focus: function() {
+            focusCount++;
+        }
+    };
+
+    windowMock.window = windowMock;
+
+    eventsEngine.trigger(windowMock, "focus");
+    assert.equal(focusCount, 1, "focus called once");
+});
+
