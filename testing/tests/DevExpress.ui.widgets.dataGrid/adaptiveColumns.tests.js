@@ -3680,6 +3680,13 @@ QUnit.module("Keyboard navigation", {
 }, function() {
     QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
         var that = this,
+            focusHandler = function() {
+                setTimeout(function() {
+                    assert.equal(that.getActiveInputElement().val(), "Full Name", "value of FullName");
+                    that.editingController.dispose();
+                    done();
+                });
+            },
             done = assert.async();
 
         //arrange
@@ -3687,13 +3694,9 @@ QUnit.module("Keyboard navigation", {
 
         //assert
         var $itemContent = $(".dx-field-item-content");
-        $itemContent.on("focusin", function() {
-            setTimeout(function() {
-                assert.equal(that.getActiveInputElement().val(), "Full Name", "value of FullName");
-                that.editingController.dispose();
-                done();
-            });
-        });
+        $itemContent
+            .off("focusin", focusHandler)
+            .on("focusin", focusHandler);
 
         //act
         that.clock.restore();
@@ -3702,6 +3705,13 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
         var that = this,
+            focusHandler = function() {
+                setTimeout(function() {
+                    assert.equal(that.getActiveInputElement().val(), "Psy", "value of LastName");
+                    that.editingController.dispose();
+                    done();
+                });
+            },
             done = assert.async();
 
         //arrange
@@ -3709,13 +3719,9 @@ QUnit.module("Keyboard navigation", {
 
         //assert
         var $itemContent = $(".dx-field-item-content");
-        $itemContent.on("focusin", function() {
-            setTimeout(function() {
-                assert.equal(that.getActiveInputElement().val(), "Psy", "value of LastName");
-                that.editingController.dispose();
-                done();
-            });
-        });
+        $itemContent
+            .off("focusin", focusHandler)
+            .on("focusin", focusHandler);
 
         //act
         that.clock.restore();
@@ -3724,21 +3730,24 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
         var that = this,
+            focusHandler = function() {
+                setTimeout(function() {
+                    var $input = that.getActiveInputElement();
+                    assert.equal($input.length, 1, "inputs count");
+                    assert.equal($input.val(), "Super", "value of FirstName");
+                    that.editingController.dispose();
+                    done();
+                });
+            },
             done = assert.async();
 
         //arrange
         that.triggerFormItemClick(1);
 
         var $cell = that.$dataGrid.find("td:not([class])").eq(1);
-        $cell.on("focusin", function() {
-            setTimeout(function() {
-                var $input = that.getActiveInputElement();
-                assert.equal($input.length, 1, "inputs count");
-                assert.equal($input.val(), "Super", "value of FirstName");
-                that.editingController.dispose();
-                done();
-            });
-        });
+        $cell
+            .off("focusin", focusHandler)
+            .on("focusin", focusHandler);
 
         //act
         that.clock.restore();
