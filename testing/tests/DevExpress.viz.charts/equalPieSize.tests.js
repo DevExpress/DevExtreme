@@ -361,7 +361,7 @@ QUnit.test("Do not touch disposed pies", function(assert) {
         var firstCall = true;
         return function(e) {
             if(firstCall) {
-                pieToKill.element().remove();
+                pieToKill.$element().remove();
                 e.component.option("sizeGroup", "group2");
             }
             done();
