@@ -246,6 +246,7 @@
         "dxFilterBuilder-notAnd": "Not And",
         "dxFilterBuilder-notOr": "Not Or",
         "dxFilterBuilder-addCondition": "Add Condition",
-        "dxFilterBuilder-addGroup": "Add Group"
+        "dxFilterBuilder-addGroup": "Add Group",
+        "dxFilterBuilder-enterValueText": "<enter a value>"
     }
 }
