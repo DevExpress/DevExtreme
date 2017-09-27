@@ -141,7 +141,7 @@ function getFormatString(format, value) {
 
         if(specialFormatChars.indexOf(formatChar) === -1) {
             resultString += formatChar;
-            stringValue = stringValue.replace(new RegExp("^" + formatChar), "");
+            stringValue = stringValue.replace(new RegExp("^" + escapeFormat(formatChar)), "");
             continue;
         }
 
@@ -162,7 +162,7 @@ function generateNumberFormatter(format) {
         var signParts = getSignParts(format),
             numberFormat = signParts[value >= 0 ? 0 : 1],
             floatParts = numberFormat.split(FLOAT_SEPARATOR),
-            valueIntegerPart = parseInt(value),
+            valueIntegerPart = parseInt(Math.abs(value)),
             valueFloatPart = parseInt((value || 0).toString().split(FLOAT_SEPARATOR)[1]),
             integerString = getFormatString(floatParts[0], valueIntegerPart),
             floatString = floatParts[1] ? FLOAT_SEPARATOR + getFormatString(floatParts[1], valueFloatPart) : "";

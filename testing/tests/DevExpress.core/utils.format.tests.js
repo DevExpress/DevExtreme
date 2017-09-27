@@ -151,3 +151,13 @@ QUnit.test("float with precision formatting", function(assert) {
     assert.strictEqual(formatter(123.57), "123.57", "format float");
     assert.strictEqual(formatter(-123.57), "-123.57", "format negative float");
 });
+
+QUnit.test("different positive and negative formatting", function(assert) {
+    var formatter = generateNumberFormat("#.000;(#.000)");
+
+    assert.strictEqual(formatter(null), "0.000", "format an empty value");
+    assert.strictEqual(formatter(0), "0.000", "format zero");
+    assert.strictEqual(formatter(123), "123.000", "format integer");
+    assert.strictEqual(formatter(123.57), "123.570", "format float");
+    assert.strictEqual(formatter(-123.57), "(123.570)", "format negative float");
+});
