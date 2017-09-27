@@ -22,7 +22,11 @@ var currentTimeIndicator = Class.inherit({
         } else {
             this._renderHorizontalIndicator();
         }
-
+        if(this._$indicator && this._workspace.option("crossScrollingEnabled")) {
+            this._$indicator.css("marginTop", -this._$container.outerHeight());
+            this._$indicator.css("height", this._$container.outerHeight());
+        }
+        this._$container.append(this._$indicator);
     },
 
     _renderVerticalIndicator: function() {
@@ -51,8 +55,6 @@ var currentTimeIndicator = Class.inherit({
 
                 this._renderAllDayIndicator(indicatorWidth, i);
             }
-
-            this._$container.append(this._$indicator);
         }
     },
 
@@ -73,7 +75,6 @@ var currentTimeIndicator = Class.inherit({
             if(renderIndicatorLine) {
                 this._renderIndicatorLine(this._$indicator, this._$container.outerHeight(), indicatorWidth, 0);
             }
-            this._$container.append(this._$indicator);
         }
     },
 

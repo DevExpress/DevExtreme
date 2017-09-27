@@ -219,6 +219,20 @@ var stubInvokeMethod = function(instance, options) {
         assert.roughEqual($secondAllDayIndicator.outerWidth(), 298, 1, "AllDay indicator has correct width");
     });
 
+    QUnit.test("DateTimeIndicator should be rendered correctly, Day view with crossScrollingEnabled", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45),
+            crossScrollingEnabled: true
+        });
+
+        var $element = this.instance.element(),
+            $indicator = $element.find(".dx-scheduler-date-time-indicator"),
+            containerHeight = $indicator.parent().outerHeight();
+
+        assert.roughEqual($indicator.outerHeight(), containerHeight, 1, "Indicator has correct height");
+        assert.equal($indicator.css("marginTop"), -containerHeight + "px", "Indicator has correct margin");
+    });
+
     QUnit.test("DateTimeIndicator should not be renderd after currentDate changing, Day view", function(assert) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 19, 45),
