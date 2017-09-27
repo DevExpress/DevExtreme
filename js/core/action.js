@@ -41,7 +41,7 @@ var Action = Class.inherit({
         var argsBag = e.args[0] || {};
 
         ///#DEBUG
-        if(argsBag.jQueryEvent) {
+        if(argsBag.jQueryEvent && !argsBag.Event) {
             throw "The jQueryEvent field is deprecated. Please, use the Event field instead";
         }
         ///#ENDDEBUG
