@@ -492,7 +492,7 @@ var stubInvokeMethod = function(instance, options) {
             hoursInterval: 1
         }).dxSchedulerTimelineWeek("instance");
 
-        var $element = instance.element(),
+        var $element = instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator"),
             cellWidth = $element.find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
@@ -511,7 +511,7 @@ var stubInvokeMethod = function(instance, options) {
             hoursInterval: 1
         }).dxSchedulerTimelineWeek("instance");
 
-        var $element = instance.element(),
+        var $element = instance.$element(),
             $cell = $element.find(".dx-scheduler-header-panel-cell").eq(43);
 
         assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
@@ -527,7 +527,7 @@ var stubInvokeMethod = function(instance, options) {
             hoursInterval: 1
         }).dxSchedulerTimelineMonth("instance");
 
-        var $element = instance.element(),
+        var $element = instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator"),
             cellWidth = $element.find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
@@ -545,7 +545,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 15, 12, 30)
         }).dxSchedulerTimelineMonth("instance");
 
-        var $element = instance.element(),
+        var $element = instance.$element(),
             $cell = $element.find(".dx-scheduler-header-panel-cell").eq(14);
 
         assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
