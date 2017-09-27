@@ -6,13 +6,11 @@ var $ = require("../../core/renderer"),
     toMs = dateUtils.dateToMilliseconds;
 
 var DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
+    DATE_TIME_INDICATOR_LINE_CLASS = "dx-scheduler-date-time-indicator-line",
     DATE_TIME_INDICATOR_ALL_DAY_CLASS = "dx-scheduler-date-time-indicator-all-day",
-    DATE_TIME_INDICATOR_CONTENT_CLASS = "dx-scheduler-date-time-indicator-content",
     DATE_TIME_INDICATOR_TOP_CLASS = "dx-scheduler-date-time-indicator-top",
-    DATE_TIME_INDICATOR_BOTTOM_CLASS = "dx-scheduler-date-time-indicator-bottom",
+    DATE_TIME_INDICATOR_BOTTOM_CLASS = "dx-scheduler-date-time-indicator-bottom";
 
-    DATE_TIME_INDICATOR_CONTENT_TOP_OFFSET = 10,
-    DATE_TIME_INDICATOR_CONTENT_LEFT_OFFSET = 16;
 
 var currentTimeIndicator = Class.inherit({
     render: function(workspace, isVertical) {
@@ -30,11 +28,11 @@ var currentTimeIndicator = Class.inherit({
     _renderVerticalIndicator: function() {
         var indicatorHeight = this._getDateTimeIndicatorHeight(),
             maxHeight = this._$container.outerHeight(),
-            renderIndicatorContent = true;
+            renderIndicatorLine = true;
 
         if(indicatorHeight > maxHeight) {
             indicatorHeight = maxHeight + 1;
-            renderIndicatorContent = false;
+            renderIndicatorLine = false;
         }
 
         if(indicatorHeight > 0) {
@@ -44,17 +42,16 @@ var currentTimeIndicator = Class.inherit({
             var indicatorWidth = this._getVerticalIndicatorWidth();
             var groupCount = this._workspace._getGroupCount() || 1;
             for(var i = 0; i < groupCount; i++) {
+                if(renderIndicatorLine) {
+                    this._renderIndicatorLine(this._$indicator, indicatorHeight, indicatorWidth, i, true);
+                }
                 this._renderTopCurrentTimeIndicator(this._$indicator, indicatorHeight, indicatorWidth, i);
 
                 this._renderBottomCurrentTimeIndicator(this._$indicator, maxHeight - indicatorHeight, indicatorWidth, i);
 
                 this._renderAllDayIndicator(indicatorWidth, i);
             }
-            if(renderIndicatorContent) {
-                var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spinright");
-                $content.css("top", indicatorHeight - DATE_TIME_INDICATOR_CONTENT_TOP_OFFSET);
-                this._$indicator.append($content);
-            }
+
             this._$container.append(this._$indicator);
         }
     },
@@ -62,21 +59,19 @@ var currentTimeIndicator = Class.inherit({
     _renderHorizontalIndicator: function() {
         var indicatorWidth = this._getHorizontalIndicatorWidth(),
             maxWidth = this._$container.outerWidth(),
-            renderIndicatorContent = true;
+            renderIndicatorLine = true;
 
         if(indicatorWidth > maxWidth) {
             indicatorWidth = maxWidth;
-            renderIndicatorContent = false;
+            renderIndicatorLine = false;
         }
 
         if(indicatorWidth > 0) {
             this._$indicator = $("<div>").addClass(DATE_TIME_INDICATOR_CLASS);
             this._$indicator.width(indicatorWidth);
 
-            if(renderIndicatorContent) {
-                var $content = $("<div>").addClass(DATE_TIME_INDICATOR_CONTENT_CLASS).addClass("dx-icon-spindown");
-                $content.css("left", indicatorWidth - DATE_TIME_INDICATOR_CONTENT_LEFT_OFFSET);
-                this._$indicator.append($content);
+            if(renderIndicatorLine) {
+                this._renderIndicatorLine(this._$indicator, this._$container.outerHeight(), indicatorWidth, 0);
             }
             this._$container.append(this._$indicator);
         }
@@ -133,6 +128,23 @@ var currentTimeIndicator = Class.inherit({
             width = difference * this._workspace.getCellWidth();
 
         return maxWidth < width ? maxWidth : width;
+    },
+
+    _renderIndicatorLine: function($indicator, height, width, i, isVertical) {
+        this._$lineIndicator = $("<div>").addClass(DATE_TIME_INDICATOR_LINE_CLASS);
+
+        if(isVertical) {
+            width && this._$lineIndicator.width(this._workspace.getCellWidth());
+
+            this._$lineIndicator.css("marginTop", -this._$container.outerHeight() * i + height);
+            this._$lineIndicator.css("left", this._workspace._getCellCount() * this._workspace.getCellWidth() * i + (width - this._workspace.getCellWidth()));
+        } else {
+            height && this._$lineIndicator.height(height);
+            this._$lineIndicator.css("left", width);
+        }
+
+
+        $indicator.append(this._$lineIndicator);
     },
 
     _renderTopCurrentTimeIndicator: function($indicator, height, width, i) {

@@ -159,7 +159,12 @@ var stubInvokeMethod = function(instance, options) {
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
-        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-line").length, 0, "Indicator has no line");
+
+        this.instance.option("endDayHour", 24);
+
+        $indicator = $element.find(".dx-scheduler-date-time-indicator");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-line").length, 1, "Indicator has line");
     });
 
     QUnit.test("DateTimeIndicator should have correct height & width, Day view with intervalCount", function(assert) {
@@ -339,7 +344,7 @@ var stubInvokeMethod = function(instance, options) {
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
-        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-line").length, 0, "Indicator has no line");
     });
 
     QUnit.test("DateTimeIndicator should be rendered for 'overdue' views", function(assert) {
@@ -353,7 +358,7 @@ var stubInvokeMethod = function(instance, options) {
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
-        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-line").length, 0, "Indicator has no line");
     });
 
     QUnit.test("DateTimeIndicator should not be renderd after currentDate changing, Week view", function(assert) {
@@ -446,7 +451,7 @@ var stubInvokeMethod = function(instance, options) {
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerWidth(), 4000, 1, "Indicator has correct width");
-        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-line").length, 0, "Indicator has no line");
     });
 
     QUnit.test("DateTimeIndicator should be rendered for 'overdue' views, TimelineDay view", function(assert) {
@@ -459,7 +464,7 @@ var stubInvokeMethod = function(instance, options) {
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerWidth(), 6400, 1, "Indicator has correct width");
-        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-content").length, 0, "Indicator has no content");
+        assert.equal($indicator.children(".dx-scheduler-date-time-indicator-line").length, 0, "Indicator has no line");
     });
 
     QUnit.test("DateHeader currentTime cell should have specific class", function(assert) {
