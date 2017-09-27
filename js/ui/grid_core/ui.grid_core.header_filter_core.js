@@ -21,8 +21,11 @@ function resetChildrenItemSelection(items) {
     }
 }
 
-function updateSelectAllState($listContainer, filterValues) {
-    var selectAllCheckBox = $listContainer.find(".dx-list-select-all-checkbox").data("dxCheckBox");
+function updateSelectAllState(e, filterValues) {
+    if(e.component.option("searchValue")) {
+        return;
+    }
+    var selectAllCheckBox = e.element.find(".dx-list-select-all-checkbox").data("dxCheckBox");
 
     if(selectAllCheckBox && filterValues && filterValues.length) {
         selectAllCheckBox.option("value", undefined);
@@ -59,15 +62,19 @@ exports.HeaderFilterView = modules.View.inherit({
     applyHeaderFilter: function(options) {
         var that = this,
             list = that.getListContainer(),
-            isSelectAll = list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
+            isSelectAll = !list.option("searchValue") && list.$element().find(".dx-checkbox").eq(0).hasClass("dx-checkbox-checked"),
             filterValues = [];
 
         var fillSelectedItemKeys = function(filterValues, items, isExclude) {
             each(items, function(_, item) {
                 if(item.selected !== undefined && (!!item.selected) ^ isExclude) {
-                    filterValues.push(item.value);
+                    if(!list.option("searchValue") || !item.items || !item.items.length) {
+                        filterValues.push(item.value);
+                        return;
+                    }
+                }
 
-                } else if(item.items && item.items.length) {
+                if(item.items && item.items.length) {
                     fillSelectedItemKeys(filterValues, item.items, isExclude);
                 }
             });
@@ -186,7 +193,9 @@ exports.HeaderFilterView = modules.View.inherit({
     _initializeListContainer: function(options) {
         var that = this,
             $content = that._popupContainer.content(),
+            headerFilterOptions = that.option("headerFilter"),
             widgetOptions = {
+                searchEnabled: headerFilterOptions.searchEnabled,
                 dataSource: options.dataSource,
                 onContentReady: function() {
                     that.renderCompleted.fire();
@@ -209,6 +218,7 @@ exports.HeaderFilterView = modules.View.inherit({
         } else {
             that._listContainer = that._createComponent($("<div>").appendTo($content),
                 List, extend(widgetOptions, {
+                    searchExpr: options.lookup && options.lookup.displayExpr || options.dataField,
                     pageLoadMode: "scrollBottom",
                     showSelectionControls: true,
                     selectionMode: "all",
@@ -216,7 +226,7 @@ exports.HeaderFilterView = modules.View.inherit({
                         var items = e.component.option("items"),
                             selectedItems = e.component.option("selectedItems");
 
-                        if(!e.component._selectedItemsUpdating) {
+                        if(!e.component._selectedItemsUpdating && !e.component.option("searchValue")) {
                             if(selectedItems.length === 0 && items.length && (!options.filterValues || options.filterValues.length <= 1)) {
                                 options.filterType = "include";
                                 options.filterValues = [];
@@ -246,7 +256,7 @@ exports.HeaderFilterView = modules.View.inherit({
                             }
                         });
 
-                        updateSelectAllState(e.element, options.filterValues);
+                        updateSelectAllState(e, options.filterValues);
                     },
                     onContentReady: function(e) {
                         var component = e.component,
@@ -262,7 +272,7 @@ exports.HeaderFilterView = modules.View.inherit({
                         component.option("selectedItems", selectedItems);
                         component._selectedItemsUpdating = false;
 
-                        updateSelectAllState(e.element, options.filterValues);
+                        updateSelectAllState(e, options.filterValues);
                     }
                 }));
         }

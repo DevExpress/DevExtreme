@@ -315,6 +315,29 @@ QUnit.test("Show header filter", function(assert) {
     assert.strictEqual(that.headerFilterView.getPopupContainer().option("position.collision"), "flip fit");
 });
 
+QUnit.test("Show header filter with search bar", function(assert) {
+    //arrange
+    var that = this,
+        $popupContent,
+        list,
+        testElement = $("#container");
+
+    that.options.headerFilter.searchEnabled = true;
+
+    //act
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    list = $popupContent.find(".dx-list").dxList("instance");
+
+    //assert
+    assert.ok(list.option("searchEnabled"), "list with search bar");
+    assert.equal(list.option("searchExpr"), "Test1", "expr is correct");
+});
+
 //T435785
 QUnit.test("Show header filter when no dataSource", function(assert) {
     //arrange
@@ -398,6 +421,29 @@ QUnit.test("Show header filter when column with dataType date", function(assert)
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-treeview").length, "has list in header filter menu");
     assert.ok($popupContent.find(".dx-empty-message").length, "no data");
+});
+
+QUnit.test("Show header filter when column with dataType date with search bar", function(assert) {
+    //arrange
+    var that = this,
+        $popupContent,
+        treeView,
+        testElement = $("#container");
+
+    that.options.headerFilter.searchEnabled = true;
+    that.columns[0].dataType = "date";
+
+    //act
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    treeView = $popupContent.find(".dx-treeview").dxTreeView("instance");
+
+    //assert
+    assert.ok(treeView.option("searchEnabled"), "treeView with search bar");
 });
 
 //T413416
@@ -524,6 +570,42 @@ QUnit.test("Header filter with items", function(assert) {
     assert.strictEqual($popupContent.find(".dx-list-item").last().text(), "test3", "text second item");
 });
 
+QUnit.test("Check select all state after filtering", function(assert) {
+    //arrange
+    var that = this,
+        list,
+        $selectAll,
+        selectAll,
+        column,
+        testElement = $("#container"),
+        $popupContent;
+
+    that.options.headerFilter.searchEnabled = true;
+
+    that.items = [{ Test1: "test1", Test2: "test2" }, { Test1: "test3", Test2: "test4" }];
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    list = $popupContent.find(".dx-list").dxList("instance");
+
+    //act
+    list.option("searchValue", "3");
+    $selectAll = list.element().find(".dx-list-select-all-checkbox");
+    $($selectAll).trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
+
+    selectAll = $selectAll.dxCheckBox("instance");
+    column = that.columnsController.getVisibleColumns()[0];
+
+    //assert
+    assert.equal(selectAll.option("value"), true, "select all has correct state");
+    assert.deepEqual(column.filterValues, ["test3"], "filterValue is correct");
+    assert.notEqual(column.filterType, "exclude", "filterType is correct");
+});
+
 //T269664, T271835
 QUnit.test("Header filter with items where many duplicate values", function(assert) {
     //arrange
@@ -593,6 +675,44 @@ QUnit.test("Header filter with items when column with dataType date", function(a
     assert.strictEqual($popupContent.find(".dx-treeview-item").eq(4).text(), "4", "text the nested treeview item");
 });
 
+QUnit.test("Check select all state after filtering if column dataType is date", function(assert) {
+    //arrange
+    var that = this,
+        treeView,
+        $selectAll,
+        selectAll,
+        column,
+        testElement = $("#container"),
+        $popupContent;
+
+    that.options.headerFilter.searchEnabled = true;
+    that.columns[0].dataType = "date";
+    that.items = [{ Test1: new Date(1986, 0, 1), Test2: "test2" }, { Test1: new Date(1986, 0, 4), Test2: "test4" }, { Test1: null, Test2: "test6" }];
+
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    treeView = $popupContent.find(".dx-treeview").dxTreeView("instance");
+
+    //act
+    treeView.option("searchValue", "4");
+
+    $selectAll = treeView.element().find(".dx-treeview-select-all-item");
+    $($selectAll).trigger("dxclick");
+    $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
+
+    selectAll = $selectAll.dxCheckBox("instance");
+    column = that.columnsController.getVisibleColumns()[0];
+
+    //assert
+    assert.equal(selectAll.option("value"), undefined, "select all has correct state"); //should be true after treeview fix
+    assert.deepEqual(column.filterValues, ["1986/1/4"], "filterValue is correct");
+    assert.notEqual(column.filterType, "exclude", "filterType is correct");
+});
+
 //T274290
 QUnit.test("Header filter with items when column lookup with simple types", function(assert) {
     //arrange
@@ -609,7 +729,6 @@ QUnit.test("Header filter with items when column lookup with simple types", func
 
     //act
     that.headerFilterController.showHeaderFilterMenu(0);
-
 
     //assert
     $popupContent = that.headerFilterView.getPopupContainer().content();
@@ -657,6 +776,42 @@ QUnit.test("Header filter with items when column lookup with object types", func
     assert.strictEqual($popupContent.find(".dx-list-item").eq(3).text(), "test3", "text item 3");
     assert.ok(!$popupContent.find(".dx-list-item").eq(2).hasClass("dx-list-item-selected"), "text item 2 is not selected");
     assert.ok($popupContent.find(".dx-list-item").eq(3).hasClass("dx-list-item-selected"), "text item 3 is selected");
+});
+
+QUnit.test("Check filtering in column lookup case", function(assert) {
+    //arrange
+    var that = this,
+        list,
+        listItems,
+        testElement = $("#container"),
+        $popupContent;
+
+    that.columns[0].lookup = {
+        valueExpr: "value",
+        displayExpr: "text",
+        dataSource: [
+            { value: 1, text: "test1" },
+            { value: 2, text: "test2" },
+            { value: 3, text: "test3" }
+        ] };
+    that.items = [{ Test1: 1, Test2: "test2" }, { Test1: 2, Test2: "test4" }];
+
+    that.setupDataGrid();
+    that.columnHeadersView.render(testElement);
+    that.headerFilterView.render(testElement);
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    list = $popupContent.find(".dx-list").dxList("instance");
+
+    //act
+    list.option("searchValue", "t2");
+    listItems = list.element().find(".dx-list-item");
+
+    //assert
+    assert.equal(list.option("searchExpr"), "text", "searchExpr is correct");
+    assert.equal(listItems.length, 1, "list item's count");
+    assert.equal(listItems.text(), "test2", "correct item's text");
 });
 
 //T427652
