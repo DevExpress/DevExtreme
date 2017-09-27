@@ -153,7 +153,7 @@ var Accordion = CollectionWidget.inherit({
             * @name dxAccordionItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxAccordionItemTemplate_icon
             */
         });
     },

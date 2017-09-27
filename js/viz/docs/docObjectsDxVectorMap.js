@@ -98,7 +98,7 @@ var LayerElement = {
 /**
 * @name areaObjects
 * @publicName Area
-* @deprecated
+* @deprecated MapLayerElement
 */
 var AreaObjects = {
     /**
@@ -120,14 +120,14 @@ var AreaObjects = {
     * @name areaObjectsmethods_selected
     * @publicName selected(state)
     * @param1 state:boolean
-    * @deprecated
+    * @deprecated MapLayerElementmethods_selected
     */
     selected: function() { },
     /**
     * @name areaObjectsmethods_selected
     * @publicName selected()
     * @return boolean
-    * @deprecated
+    * @deprecated MapLayerElementmethods_selected
     */
     selected: function() { },
     /**
@@ -142,7 +142,7 @@ var AreaObjects = {
 /**
 * @name markerObjects
 * @publicName Marker
-* @deprecated
+* @deprecated MapLayerElement
 */
 var MarkerObjects = {
     /**
@@ -164,14 +164,14 @@ var MarkerObjects = {
     * @name markerObjectsmethods_selected
     * @publicName selected(state)
     * @param1 state:boolean
-    * @deprecated
+    * @deprecated MapLayerElementmethods_selected
     */
     selected: function() { },
     /**
     * @name markerObjectsmethods_selected
     * @publicName selected()
     * @return boolean
-    * @deprecated
+    * @deprecated MapLayerElementmethods_selected
     */
     selected: function() { },
     /**
@@ -192,28 +192,28 @@ var MarkerObjects = {
     * @name markerObjectsfields_text
     * @publicName text
     * @type string
-    * @deprecated
+    * @deprecated MapLayerElementmethods_attribute
     */
     text: null,
     /**
    * @name markerObjectsfields_value
    * @publicName value
    * @type number
-   * @deprecated
+   * @deprecated MapLayerElementmethods_attribute
    */
     value: null,
     /**
    * @name markerObjectsfields_values
    * @publicName values
    * @type Array<number>
-   * @deprecated
+   * @deprecated MapLayerElementmethods_attribute
    */
     values: null,
     /**
    * @name markerObjectsfields_url
    * @publicName url
    * @type string
-   * @deprecated
+   * @deprecated MapLayerElementmethods_attribute
    */
     url: null
 };
