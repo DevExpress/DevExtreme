@@ -564,7 +564,7 @@ QUnit.test("Group panel should set correct 'max-width' after clear grouping", fu
                 enabled: true
             }
         }).dxDataGrid("instance"),
-        $dataGrid = dataGrid.element();
+        $dataGrid = $(dataGrid.element());
 
     clock.tick();
     assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden, group panel has a long message");
