@@ -414,6 +414,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
+                this._refreshDateTimeIndicator();
                 break;
             case "width":
                 this.callBase(args);
