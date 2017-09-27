@@ -593,7 +593,7 @@ QUnit.test("Check select all state after filtering", function(assert) {
 
     //act
     list.option("searchValue", "3");
-    $selectAll = list.element().find(".dx-list-select-all-checkbox");
+    $selectAll = list.$element().find(".dx-list-select-all-checkbox");
     $($selectAll).trigger("dxclick");
     $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
 
@@ -700,7 +700,7 @@ QUnit.test("Check select all state after filtering if column dataType is date", 
     //act
     treeView.option("searchValue", "4");
 
-    $selectAll = treeView.element().find(".dx-treeview-select-all-item");
+    $selectAll = treeView.$element().find(".dx-treeview-select-all-item");
     $($selectAll).trigger("dxclick");
     $($popupContent.parent().find(".dx-button").eq(0)).trigger("dxclick"); // apply filter
 
@@ -806,7 +806,7 @@ QUnit.test("Check filtering in column lookup case", function(assert) {
 
     //act
     list.option("searchValue", "t2");
-    listItems = list.element().find(".dx-list-item");
+    listItems = list.$element().find(".dx-list-item");
 
     //assert
     assert.equal(list.option("searchExpr"), "text", "searchExpr is correct");

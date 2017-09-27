@@ -202,14 +202,11 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 options.dataSource = {
                     filter: filter,
                     group: group,
+                    useDefaultSearch: true,
                     load: function(options) {
                         var d = new Deferred();
                         //TODO remove in 16.1
                         options.dataField = column.dataField || column.name;
-
-                        if(options.searchValue) {
-                            options.filter = gridCoreUtils.combineFilters([options.filter, [options.searchExpr, options.searchOperation, options.searchValue]]);
-                        }
 
                         dataSource.load(options).done(function(data) {
                             that._processGroupItems(data, null, null, {
