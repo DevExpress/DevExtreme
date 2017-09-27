@@ -985,7 +985,7 @@ QUnit.test("menu item action should be fired after item click", function(assert)
             {
                 text: "menu",
                 action: function(e) {
-                    assert.equal(e.itemElement.get(0), $item.get(0));
+                    assert.equal($(e.itemElement).get(0), $item.get(0));
                 }
             },
             {
@@ -1026,7 +1026,7 @@ QUnit.test("menu item action should be fired after item click", function(assert)
             {
                 text: "menu",
                 action: function(e) {
-                    assert.equal(e.itemElement.get(0), $item.get(0));
+                    assert.equal($(e.itemElement).get(0), $item.get(0));
                 }
             }
         ]
@@ -1360,7 +1360,7 @@ QUnit.test("menu item click action should be fired with correct arguments", func
                 {
                     text: "menu",
                     action: function(e) {
-                        assert.equal(e.itemElement.get(0), $item.get(0), "itemElement is correct");
+                        assert.equal($(e.itemElement).get(0), $item.get(0), "itemElement is correct");
                     }
                 }
             ]

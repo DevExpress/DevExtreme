@@ -746,7 +746,7 @@ var runTests = function() {
             selectionMode: "multiple",
             onItemRendered: function(args) {
                 var isSelected = $.inArray(args.itemData, args.component.option("selectedItems")) > -1;
-                assert.equal(args.itemElement.hasClass(ITEM_SELECTED_CLASS), isSelected, "item selection is correct");
+                assert.equal($(args.itemElement).hasClass(ITEM_SELECTED_CLASS), isSelected, "item selection is correct");
             }
         });
 
@@ -1717,7 +1717,7 @@ var runTests = function() {
 
         var $item = instance.itemElements().eq(0);
         instance.deleteItem($item);
-        assert.strictEqual(args.itemElement.get(0), $item.get(0), "item equals selected item");
+        assert.strictEqual($(args.itemElement).get(0), $item.get(0), "item equals selected item");
         assert.strictEqual(args.itemData, 0, "item equals selected item");
         assert.strictEqual(args.itemIndex, 0, "item equals selected item");
     });
@@ -1904,7 +1904,7 @@ var runTests = function() {
             instance = new TestComponent($element, {
                 items: items,
                 onItemReordered: function(args) {
-                    assert.equal(args.itemElement.get(0), item(1), "correct item element");
+                    assert.equal($(args.itemElement).get(0), item(1), "correct item element");
                     assert.equal(args.fromIndex, 0, "correct from index");
                     assert.equal(args.toIndex, 1, "correct to index");
                 }

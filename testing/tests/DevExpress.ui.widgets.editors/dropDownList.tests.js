@@ -949,7 +949,7 @@ QUnit.test("onItemClick action", function(assert) {
     var $listItem = instance._$list.find(LIST_ITEM_SELECTOR).eq(1);
 
     instance.option("onItemClick", function(e) {
-        assert.deepEqual(e.itemElement[0], $listItem[0], "itemElement is correct");
+        assert.deepEqual($(e.itemElement)[0], $listItem[0], "itemElement is correct");
         assert.strictEqual(e.itemData, items[1], "itemData is correct");
         assert.strictEqual(e.itemIndex, 1, "itemIndex is correct");
     });

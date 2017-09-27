@@ -4,6 +4,7 @@ var pointerMock = require("../../helpers/pointerMock.js");
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    isRenderer = require("core/utils/type").isRenderer,
     dxScheduler = require("ui/scheduler/ui.scheduler"),
     translator = require("animation/translator"),
     devices = require("core/devices"),
@@ -2228,7 +2229,8 @@ QUnit.testStart(function() {
             currentView: "month",
             currentDate: new Date(2015, 2, 9),
             onAppointmentClick: function(e) {
-                assert.deepEqual(e.appointmentElement[0], $item[0], "appointmentElement is correct");
+                assert.deepEqual(isRenderer(e.appointmentElement), config().useJQueryRenderer, "appointmentElement is correct");
+                assert.deepEqual($(e.appointmentElement)[0], $item[0], "appointmentElement is correct");
                 assert.strictEqual(e.appointmentData, items[0], "appointmentData is correct");
             }
         });

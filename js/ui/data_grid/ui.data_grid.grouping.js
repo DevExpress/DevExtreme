@@ -369,7 +369,7 @@ var GroupingHeaderPanelExtender = (function() {
         _appendGroupingItem: function(items) {
             var that = this,
                 groupPanelRenderedCallback = function(e) {
-                    that._updateGroupPanelContent(e.itemElement.find("." + DATAGRID_GROUP_PANEL_CLASS));
+                    that._updateGroupPanelContent($(e.itemElement).find("." + DATAGRID_GROUP_PANEL_CLASS));
                 };
 
             if(that._isGroupPanelVisible()) {

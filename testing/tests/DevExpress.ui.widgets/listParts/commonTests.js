@@ -1147,7 +1147,7 @@ QUnit.test("onItemClick should be fired when item is clicked in ungrouped list",
 
     $item.trigger("dxclick");
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -1180,7 +1180,7 @@ QUnit.test("onItemClick should be fired when item is clicked in grouped list", f
 
     assert.ok(actionFired, "action fired");
 
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual(items[1].items[0], actionData.itemData, "correct element passed");
     assert.strictEqual(0, actionData.itemIndex.item, "correct element itemIndex passed");
     assert.strictEqual(1, actionData.itemIndex.group, "correct groupIndex passed");
@@ -1201,7 +1201,7 @@ QUnit.test("onItemHold should be fired when item is held", function(assert) {
 
     $item.trigger(holdEvent.name);
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -1223,7 +1223,7 @@ QUnit.test("onItemSwipe should be fired when item is swiped", function(assert) {
         offset: -1
     });
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
     assert.equal("left", actionData.direction, "correct direction passed");
 

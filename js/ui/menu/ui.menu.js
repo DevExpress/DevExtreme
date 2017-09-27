@@ -937,7 +937,8 @@ var Menu = MenuBase.inherit({
             return;
         }
 
-        currentSubmenu = this._getSubmenuByElement(args.itemElement, args.itemData);
+        var $itemElement = $(args.itemElement);
+        currentSubmenu = this._getSubmenuByElement($itemElement, args.itemData);
 
         this._updateSelectedItemOnClick(actionArgs);
 
@@ -955,7 +956,7 @@ var Menu = MenuBase.inherit({
         }
 
         if(!currentSubmenu.isOverlayVisible()) {
-            this._showSubmenu(args.itemElement);
+            this._showSubmenu($itemElement);
             return;
         }
 

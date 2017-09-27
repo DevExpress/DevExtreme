@@ -819,8 +819,8 @@ QUnit.test("title should be centered considering different before/after block wi
 
     var $element = $("#widget").dxToolbar({
         onItemRendered: function(args) {
-            if(args.itemElement.text() === title) {
-                args.itemElement.css("maxWidth", 200);
+            if($(args.itemElement).text() === title) {
+                $(args.itemElement).css("maxWidth", 200);
             }
         },
         items: [
@@ -844,8 +844,8 @@ QUnit.test("title should be centered considering different before/after block wi
 
     var $element = $("#widget").dxToolbar({
         onItemRendered: function(args) {
-            if(args.itemElement.text() === title) {
-                args.itemElement.css("maxWidth", 200);
+            if($(args.itemElement).text() === title) {
+                $(args.itemElement).css("maxWidth", 200);
             }
         },
         items: [
@@ -1274,7 +1274,7 @@ QUnit.test("hidden overflow items should be rendered in menu", function(assert) 
         dropDown = $dropDownMenu.dxDropDownMenu("instance");
 
     dropDown.option("onItemRendered", function(args) {
-        assert.ok($.contains(args.itemElement.get(0), $item.get(0)), "item was rendered in menu");
+        assert.ok($.contains($(args.itemElement).get(0), $item.get(0)), "item was rendered in menu");
     });
 
     dropDown.open();
@@ -1293,7 +1293,7 @@ QUnit.test("items with locateInMenu == 'always' should be rendered in menu if th
         dropDown = $dropDownMenu.dxDropDownMenu("instance");
 
     dropDown.option("onItemRendered", function(args) {
-        assert.ok($.contains(args.itemElement.get(0), $item.get(0)), "item was rendered in menu");
+        assert.ok($.contains($(args.itemElement).get(0), $item.get(0)), "item was rendered in menu");
     });
 
     dropDown.open();
@@ -1445,7 +1445,7 @@ QUnit.test("overflow item should rendered with correct template in menu and in t
         dropDown = $dropDownMenu.dxDropDownMenu("instance");
 
     dropDown.option("onItemRendered", function(args) {
-        assert.ok($.contains(args.itemElement.get(0), $menuTemplate.get(0)), "item was rendered in menu");
+        assert.ok($.contains($(args.itemElement).get(0), $menuTemplate.get(0)), "item was rendered in menu");
         assert.ok($toolbarTemplate.is(":hidden"), "toolbar template was hidden");
     });
 
