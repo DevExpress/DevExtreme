@@ -53,12 +53,12 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered correctly");
 
         this.instance.option("showCurrentTimeIndicator", false);
-        $element = this.instance.element();
+        $element = this.instance.$element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "Indicator wasn't rendered");
     });
@@ -68,7 +68,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: false
         });
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator-all-day").length, 0, "Indicator wasn't rendered");
 
@@ -83,7 +83,7 @@ var stubInvokeMethod = function(instance, options) {
             showAllDayPanel: true,
             allDayExpanded: false
         });
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.roughEqual($element.find(".dx-scheduler-date-time-indicator-all-day").eq(0).outerHeight(), 24, 1, "Indicator has correct height");
 
@@ -96,7 +96,7 @@ var stubInvokeMethod = function(instance, options) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.ok($element.find(".dx-scheduler-date-time-indicator").parent().hasClass("dx-scrollable-content"), "Scrollable contains time indicator");
     });
@@ -106,7 +106,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45),
             showAllDayPanel: true
         });
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.ok($element.find(".dx-scheduler-date-time-indicator-all-day").parent().hasClass("dx-scheduler-all-day-panel"), "AllDay panel contains time indicator");
     });
@@ -116,7 +116,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerHeight(), 475, 1, "Indicator has correct height");
@@ -155,7 +155,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
@@ -173,7 +173,7 @@ var stubInvokeMethod = function(instance, options) {
             intervalCount: 3
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator"),
             $topIndicator = $element.find(".dx-scheduler-date-time-indicator-top"),
             $bottomIndicator = $element.find(".dx-scheduler-date-time-indicator-bottom");
@@ -195,7 +195,7 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator"),
             $firstTopIndicator = $element.find(".dx-scheduler-date-time-indicator-top").eq(0),
             $firstBottomIndicator = $element.find(".dx-scheduler-date-time-indicator-bottom").eq(0),
@@ -225,7 +225,7 @@ var stubInvokeMethod = function(instance, options) {
             showAllDayPanel: true
         });
 
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered");
         assert.equal($element.find(".dx-scheduler-date-time-indicator-all-day").length, 1, "AllDay indicator is rendered");
 
@@ -240,7 +240,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $cell = $element.find(".dx-scheduler-time-panel-cell").eq(5);
 
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
@@ -252,7 +252,7 @@ var stubInvokeMethod = function(instance, options) {
             intervalCount: 3
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $cell = $element.find(".dx-scheduler-time-panel-cell").eq(5);
 
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
@@ -275,12 +275,12 @@ var stubInvokeMethod = function(instance, options) {
             currentDate: new Date(),
             startDayHour: 0
         });
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered correctly");
 
         this.instance.option("showCurrentTimeIndicator", false);
-        $element = this.instance.element();
+        $element = this.instance.$element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "Indicator wasn't rendered");
     });
@@ -290,7 +290,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 7, 12, 45),
             showAllDayPanel: false
         });
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator-all-day").length, 0, "Indicator wasn't rendered");
 
@@ -305,7 +305,7 @@ var stubInvokeMethod = function(instance, options) {
             showAllDayPanel: true,
             allDayExpanded: false
         });
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.roughEqual($element.find(".dx-scheduler-date-time-indicator-all-day").eq(0).outerHeight(), 24, 1, "Indicator has correct height");
         assert.roughEqual($element.find(".dx-scheduler-date-time-indicator-all-day").eq(0).outerWidth(), 640, 1, "Indicator has correct height");
@@ -320,7 +320,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 6, 12, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator"),
             $topIndicator = $element.find(".dx-scheduler-date-time-indicator-top"),
             $bottomIndicator = $element.find(".dx-scheduler-date-time-indicator-bottom");
@@ -340,7 +340,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
@@ -354,7 +354,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerHeight(), 1001, 1, "Indicator has correct height");
@@ -367,7 +367,7 @@ var stubInvokeMethod = function(instance, options) {
             showAllDayPanel: true
         });
 
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered");
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "AllDay indicator is rendered");
 
@@ -382,7 +382,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 6, 12, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $cell = $element.find(".dx-scheduler-time-panel-cell").eq(5);
 
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
@@ -393,7 +393,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 7, 12, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $cell = $element.find(".dx-scheduler-header-panel-cell").eq(4);
 
         assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
@@ -417,12 +417,12 @@ var stubInvokeMethod = function(instance, options) {
             currentDate: new Date(),
             startDayHour: 0
         });
-        var $element = this.instance.element();
+        var $element = this.instance.$element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 1, "Indicator is rendered correctly");
 
         this.instance.option("showCurrentTimeIndicator", false);
-        $element = this.instance.element();
+        $element = this.instance.$element();
 
         assert.equal($element.find(".dx-scheduler-date-time-indicator").length, 0, "Indicator wasn't rendered");
     });
@@ -432,7 +432,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator"),
             cellWidth = $element.find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
 
@@ -447,7 +447,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerWidth(), 4000, 1, "Indicator has correct width");
@@ -460,7 +460,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 19, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicator = $element.find(".dx-scheduler-date-time-indicator");
 
         assert.roughEqual($indicator.outerWidth(), 6400, 1, "Indicator has correct width");
@@ -472,7 +472,7 @@ var stubInvokeMethod = function(instance, options) {
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $cell = $element.find(".dx-scheduler-header-panel-cell").eq(9);
 
         assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");

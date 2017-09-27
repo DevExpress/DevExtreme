@@ -1070,7 +1070,7 @@ QUnit.testStart(function() {
             indicatorTime: new Date(2017, 8, 19)
         });
 
-        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
 
         assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 19), "workspace has correct indicatorTime");
 
@@ -1085,7 +1085,7 @@ QUnit.testStart(function() {
             indicatorUpdateInterval: 2000
         });
 
-        var workSpaceWeek = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
 
         assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 2000, "workspace has correct indicatorUpdateInterval");
 
