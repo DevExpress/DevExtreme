@@ -2,6 +2,7 @@
 
 var FLOAT_SEPARATOR = ".";
 var GROUP_SEPARATOR = ",";
+
 function escapeFormat(formatString) {
     var charsToEscape = /([\\\/\.\*\+\?\|\(\)\[\]\{\}])/g;
 
@@ -116,4 +117,63 @@ function generateNumberParser(format) {
     };
 }
 
+var formatRules = {
+    "#": {
+        regexp: "\\d*",
+        empty: ""
+    },
+
+    "0": {
+        regexp: "\\d",
+        empty: "0"
+    }
+};
+
+function getFormatString(format, value) {
+    value = value || 0;
+
+    var stringValue = value.toString(),
+        specialFormatChars = Object.keys(formatRules),
+        resultString = "";
+
+    for(var i = 0; i < format.length; i++) {
+        var formatChar = format.charAt(i);
+
+        if(specialFormatChars.indexOf(formatChar) === -1) {
+            resultString += formatChar;
+            stringValue = stringValue.replace(new RegExp("^" + formatChar), "");
+            continue;
+        }
+
+        var formatRule = formatRules[formatChar],
+            formatRegExp = new RegExp("^" + formatRule.regexp);
+
+        var matches = stringValue.match(formatRegExp);
+
+        resultString += matches ? matches[0] : formatRule.empty;
+        stringValue = stringValue.replace(formatRegExp, "");
+    }
+
+    return resultString;
+}
+
+function generateNumberFormatter(format) {
+    return function(value) {
+        var signParts = getSignParts(format),
+            numberFormat = signParts[value >= 0 ? 0 : 1],
+            floatParts = numberFormat.split(FLOAT_SEPARATOR),
+            valueIntegerPart = parseInt(value),
+            valueFloatPart = parseInt((value || 0).toString().split(FLOAT_SEPARATOR)[1]),
+            integerString = getFormatString(floatParts[0], valueIntegerPart),
+            floatString = floatParts[1] ? FLOAT_SEPARATOR + getFormatString(floatParts[1], valueFloatPart) : "";
+
+        if(!integerString.match(/\d/)) integerString += "0";
+
+        var formatString = integerString + floatString;
+
+        return formatString;
+    };
+}
+
 exports.generateNumberParser = generateNumberParser;
+exports.generateNumberFormatter = generateNumberFormatter;

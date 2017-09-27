@@ -1,6 +1,7 @@
 "use strict";
 
 var generateNumberParser = require("core/utils/number_parser_generator").generateNumberParser;
+var generateNumberFormat = require("core/utils/number_parser_generator").generateNumberFormatter;
 var generateDateParser = require("core/utils/date_parser_generator").generateDateParser;
 
 QUnit.module("date parser");
@@ -97,6 +98,7 @@ QUnit.test("float parser with required digits", function(assert) {
     assert.strictEqual(parser("0.123"), null, "parse number with 3 fraction digit");
     assert.strictEqual(parser(".12"), 0.12, "parse number without leading zero and with 2 fraction digit");
     assert.strictEqual(parser("123.45"), 123.45, "parse number with integer part and with 2 fraction digit");
+    assert.strictEqual(parser("123..45"), null, "value with extra points should be invalid");
 });
 
 QUnit.test("float parser with required and non-required digits", function(assert) {
@@ -134,4 +136,18 @@ QUnit.test("percent format parsing", function(assert) {
     assert.strictEqual(parser("-10.15%"), -0.1015, "parse negative float number with 2 digits");
     assert.strictEqual(parser("-10.0%"), -0.1, "parse negative float number with 1 digit");
     assert.strictEqual(parser("-10%"), null, "negative value without float part should be incorrect");
+});
+
+
+QUnit.module("number formatter");
+
+QUnit.test("float with precision formatting", function(assert) {
+    var formatter = generateNumberFormat("#.00");
+
+    assert.strictEqual(formatter(null), "0.00", "format an empty value");
+    assert.strictEqual(formatter(0), "0.00", "format zero");
+    assert.strictEqual(formatter(123), "123.00", "format integer");
+    assert.strictEqual(formatter(123.5), "123.50", "format rounded float");
+    assert.strictEqual(formatter(123.57), "123.57", "format float");
+    assert.strictEqual(formatter(-123.57), "-123.57", "format negative float");
 });
