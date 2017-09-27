@@ -207,7 +207,7 @@ QUnit.test("onContentReady action should be fired after opened item was rendered
         items: this.items,
         selectedIndex: 0,
         onContentReady: function(e) {
-            assert.equal(e.element.find(".dx-accordion-item-body").length, 1, "item is opened");
+            assert.equal($(e.element).find(".dx-accordion-item-body").length, 1, "item is opened");
             count++;
         }
     }).dxAccordion("instance");

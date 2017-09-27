@@ -2381,7 +2381,7 @@ QUnit.test("onContentReady event should be called after update the state Select 
             showSelectionControls: true,
             selectionMode: "all",
             onContentReady: function(e) {
-                e.element.find(".dx-list-select-all-checkbox").dxCheckBox("instance").option("value", undefined);
+                $(e.element).find(".dx-list-select-all-checkbox").dxCheckBox("instance").option("value", undefined);
             }
         });
 

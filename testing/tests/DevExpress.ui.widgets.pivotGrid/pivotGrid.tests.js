@@ -904,7 +904,7 @@ QUnit.test("onCellPrepared event", function(assert) {
     assert.equal(cellPreparedArgs.length, 3, 'cellPreparedArgs count');
 
     assert.strictEqual(cellPreparedArgs.row.cellElement.text(), "B", "row area cellElement");
-    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.$element(), "element");
+    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.element(), "element");
     assert.strictEqual(cellPreparedArgs.row.component, pivotGrid, "component");
     delete cellPreparedArgs.row.cellElement;
     delete cellPreparedArgs.row.element;
@@ -986,7 +986,7 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
     assert.equal(cellPreparedArgs.length, 3, 'cellPreparedArgs count');
 
     assert.strictEqual(cellPreparedArgs.row.cellElement.text(), "B", "row area cellElement");
-    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.$element(), "element");
+    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.element(), "element");
     assert.strictEqual(cellPreparedArgs.row.component, pivotGrid, "component");
     delete cellPreparedArgs.row.cellElement;
     delete cellPreparedArgs.row.element;

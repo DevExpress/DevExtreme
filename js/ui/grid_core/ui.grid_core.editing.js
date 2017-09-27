@@ -1588,7 +1588,7 @@ var EditingController = modules.ViewController.inherit((function() {
             var prepareButtonItem = function(name, methodName, sortIndex) {
                 var className = classNameButtonByNames[name],
                     onInitialized = function(e) {
-                        e.element.addClass(headerPanel._getToolbarButtonClass(EDIT_BUTTON_CLASS + " " + that.addWidgetPrefix(className) + "-button"));
+                        $(e.element).addClass(headerPanel._getToolbarButtonClass(EDIT_BUTTON_CLASS + " " + that.addWidgetPrefix(className) + "-button"));
                     },
                     hintText = titleButtonTextByClassNames[name],
                     isButtonDisabled = (className === "save" || className === "cancel") && !that.hasChanges();

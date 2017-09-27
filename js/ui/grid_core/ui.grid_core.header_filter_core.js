@@ -21,8 +21,8 @@ function resetChildrenItemSelection(items) {
     }
 }
 
-function updateSelectAllState($listContainer, filterValues) {
-    var selectAllCheckBox = $listContainer.find(".dx-list-select-all-checkbox").data("dxCheckBox");
+function updateSelectAllState(listContainer, filterValues) {
+    var selectAllCheckBox = $(listContainer).find(".dx-list-select-all-checkbox").data("dxCheckBox");
 
     if(selectAllCheckBox && filterValues && filterValues.length) {
         selectAllCheckBox.option("value", undefined);

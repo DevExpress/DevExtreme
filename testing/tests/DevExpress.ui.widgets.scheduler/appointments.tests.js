@@ -769,7 +769,7 @@ QUnit.test("Draggable clone should be correct", function(assert) {
         pointer = pointerMock($secondAppointment).start();
 
     $secondAppointment.dxDraggable("instance").option("onDrag", function(e) {
-        assert.deepEqual(arguments[0].element.get(0), $secondAppointment.get(0), "draggable element is right");
+        assert.deepEqual($(arguments[0].element).get(0), $secondAppointment.get(0), "draggable element is right");
     });
 
     pointer.dragStart().drag(0, 60).dragEnd();

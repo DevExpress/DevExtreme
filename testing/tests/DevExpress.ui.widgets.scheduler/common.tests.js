@@ -1439,7 +1439,7 @@ QUnit.testStart(function() {
         var args = addingSpy.getCall(0).args[0];
 
         assert.ok(addingSpy.calledOnce, "onAppointmentAdding was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.strictEqual(args.cancel, false, "'Cancel' flag is OK");
         assert.deepEqual(args.appointmentData, newAppointment, "Appointment field is OK");
@@ -1525,7 +1525,7 @@ QUnit.testStart(function() {
 
         assert.ok(addedSpy.calledOnce, "onAppointmentAdded was called");
         assert.deepEqual(args.appointmentData, newAppointment, "Appointment field is OK");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.strictEqual(args.error, undefined, "Error field is not defined");
     });
@@ -1571,7 +1571,7 @@ QUnit.testStart(function() {
         var args = updatingSpy.getCall(0).args[0];
 
         assert.ok(updatingSpy.calledOnce, "onAppointmentUpdating was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.strictEqual(args.cancel, false, "'Cancel' flag is OK");
         assert.deepEqual(args.newData, newData, "newData field is OK");
@@ -1795,7 +1795,7 @@ QUnit.testStart(function() {
         var args = updatedSpy.getCall(0).args[0];
 
         assert.ok(updatedSpy.calledOnce, "onAppointmentUpdated was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.deepEqual(args.appointmentData, newData, "newData field is OK");
         assert.strictEqual(args.error, undefined, "Error field is not defined");
@@ -1851,7 +1851,7 @@ QUnit.testStart(function() {
         var args = deletingSpy.getCall(0).args[0];
 
         assert.ok(deletingSpy.calledOnce, "onAppointmentDeleting was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.deepEqual(args.appointmentData, { startDate: new Date(2015, 3, 29, 5), text: "Appointment 1", endDate: new Date(2015, 3, 29, 6) }, "Appointment field is OK");
         assert.strictEqual(args.cancel, false, "'Cancel' flag is OK");
@@ -1942,7 +1942,7 @@ QUnit.testStart(function() {
 
         var args = deletedSpy.getCall(0).args[0];
         assert.ok(deletedSpy.calledOnce, "onAppointmentDeleted was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.deepEqual(args.appointmentData, { startDate: new Date(2015, 3, 29, 5), text: "Appointment 1", endDate: new Date(2015, 3, 29, 6) }, "newData field is OK");
         assert.strictEqual(args.error, undefined, "Error field is not defined");
@@ -1989,7 +1989,7 @@ QUnit.testStart(function() {
 
         assert.ok(renderedSpy.calledOnce, "onAppointmentRendered was called");
         assert.deepEqual(args.component, this.instance, "component is scheduler instance");
-        assert.deepEqual(args.element.get(0), this.instance.$element().get(0), "element is $scheduler");
+        assert.deepEqual($(args.element).get(0), this.instance.$element().get(0), "element is $scheduler");
         assert.deepEqual(args.appointmentData, appointments[0], "appointment is OK");
         assert.deepEqual(args.appointmentElement.get(0), this.instance.$element().find(".dx-scheduler-appointment").get(0), "appointment element is OK");
     });

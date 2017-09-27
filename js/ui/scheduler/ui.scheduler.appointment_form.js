@@ -1,6 +1,7 @@
 "use strict";
 
-var Form = require("../form"),
+var $ = require("../../core/renderer"),
+    Form = require("../form"),
     dateSerialization = require("../../core/utils/date_serialization"),
     messageLocalization = require("../../localization/message"),
     clickEvent = require("../../events/click"),
@@ -199,7 +200,7 @@ var SchedulerAppointmentForm = {
                     observer: schedulerInst,
                     firstDayOfWeek: schedulerInst.option("firstDayOfWeek"),
                     onContentReady: function(args) {
-                        var $editorField = args.element.closest(".dx-field-item"),
+                        var $editorField = $(args.element).closest(".dx-field-item"),
                             $editorLabel = $editorField.find(".dx-field-item-label");
 
                         eventsEngine.off($editorLabel, clickEvent.name);

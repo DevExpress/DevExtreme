@@ -883,7 +883,7 @@ module.exports = {
                                 return column.bufferedFilterValue !== undefined;
                             }).length,
                             onInitialized = function(e) {
-                                e.element.addClass(that._getToolbarButtonClass(APPLY_BUTTON_CLASS));
+                                $(e.element).addClass(that._getToolbarButtonClass(APPLY_BUTTON_CLASS));
                             },
                             onClickHandler = function() {
                                 that._applyFilterViewController.applyFilter();

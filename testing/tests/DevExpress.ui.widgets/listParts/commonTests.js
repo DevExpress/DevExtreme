@@ -1756,7 +1756,7 @@ QUnit.test("infinite loading should not happen if widget element is hidden", fun
             pageSize: 2
         },
         onInitialized: function(e) {
-            e.element.dxScrollView("instance").isFull = function() {
+            $(e.element).dxScrollView("instance").isFull = function() {
                 return false;
             };
         }
@@ -1776,7 +1776,7 @@ QUnit.test("infinite loading should happen when widget element is shown", functi
             pageSize: 2
         },
         onInitialized: function(e) {
-            e.element.dxScrollView("instance").isFull = function() {
+            $(e.element).dxScrollView("instance").isFull = function() {
                 return false;
             };
         }
@@ -2007,7 +2007,7 @@ QUnit.test("list should try to load next page if scrollView is not full after di
         scrollingEnabled: true,
         onInitialized: function(e) {
             var list = e.component,
-                $list = e.element;
+                $list = $(e.element);
 
             $list.dxScrollView("instance").isFull = function() {
                 var height = list.option("height");

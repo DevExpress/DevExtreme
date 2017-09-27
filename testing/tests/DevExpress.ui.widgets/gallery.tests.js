@@ -148,7 +148,7 @@ QUnit.test("onContentReady fired after widget completely render", function(asser
     this.$element.dxGallery({
         indicatorEnabled: true,
         onContentReady: function(e) {
-            assert.ok(e.element.find("." + GALLERY_INDICATOR_CLASS).length);
+            assert.ok($(e.element).find("." + GALLERY_INDICATOR_CLASS).length);
         },
         items: ["0"]
     });

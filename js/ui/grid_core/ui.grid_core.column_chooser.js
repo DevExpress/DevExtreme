@@ -198,7 +198,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
 
         treeViewConfig.onContentReady = function(e) {
             if(scrollTop) {
-                var scrollable = e.element.find(".dx-scrollable").data("dxScrollable");
+                var scrollable = $(e.element).find(".dx-scrollable").data("dxScrollable");
                 scrollable && scrollable.scrollTo({ y: scrollTop });
             }
 
@@ -469,7 +469,7 @@ module.exports = {
                                 that.component.getView("columnChooserView").showColumnChooser();
                             },
                             onInitialized = function(e) {
-                                e.element.addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
+                                $(e.element).addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
                             },
                             hintText = that.option("columnChooser.title"),
                             toolbarItem = {

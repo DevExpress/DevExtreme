@@ -190,7 +190,7 @@ QUnit.test("T355000 - the 'onContentReady' action should be fired after widget i
 
     $("#button").dxButton($.extend({}, buttonConfig, {
         onContentReady: function(e) {
-            assert.ok(areElementsEqual($firstButton, e.element), "rendered widget and widget with fired action are equals");
+            assert.ok(areElementsEqual($firstButton, $(e.element)), "rendered widget and widget with fired action are equals");
         }
     }));
 });
