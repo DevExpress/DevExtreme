@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    errors = require("core/errors"),
     Action = require("core/action"),
     config = require("core/config");
 
@@ -290,7 +291,33 @@ QUnit.test("Action argument should contain both Event and jQueryEvent field or n
     assert.throws(function() {
         new Action(noop).execute({ jQueryEvent: eventMock });
     }, /The jQueryEvent field is deprecated\. Please, use the Event field instead/);
+});
 
+QUnit.test("Working with jQueryEvent field should throw warning", function(assert) {
+    var eventMock = {};
+    var expectedWarning = ["W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'Event' field instead"];
+    var originalLog = errors.log;
+    var log = [];
+
+    errors.log = function() {
+        log.push($.makeArray(arguments));
+    };
+
+    new Action(function(e) {
+        e.jQueryEvent;
+    }).execute({ Event: eventMock });
+
+    assert.equal(log.length, 1);
+    assert.deepEqual(log[0], expectedWarning);
+
+    new Action(function(e) {
+        e.jQueryEvent = {};
+    }).execute({ Event: eventMock });
+
+    assert.equal(log.length, 2);
+    assert.deepEqual(log[1], expectedWarning);
+
+    errors.log = originalLog;
 });
 
 QUnit.module("excludeValidators", {

@@ -3,7 +3,8 @@
 var config = require("./config"),
     typeUtils = require("./utils/type"),
     each = require("./utils/iterator").each,
-    Class = require("./class");
+    Class = require("./class"),
+    errors = require("./errors");
 
 var Action = Class.inherit({
 
@@ -47,7 +48,16 @@ var Action = Class.inherit({
         ///#ENDDEBUG
 
         if(argsBag.Event) {
-            argsBag.jQueryEvent = argsBag.Event;
+            Object.defineProperty(argsBag, 'jQueryEvent', {
+                get: function() {
+                    errors.log("W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'Event' field instead");
+                    return argsBag.Event;
+                },
+                set: function(value) {
+                    errors.log("W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'Event' field instead");
+                    argsBag.Event = value;
+                }
+            });
         }
 
         if(!this._validateAction(e)) {
