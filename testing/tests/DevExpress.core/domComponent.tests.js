@@ -12,7 +12,8 @@ var $ = require("jquery"),
     nameSpace = {},
     coreConfig = require("core/config"),
     eventsEngine = require("events/core/events_engine"),
-    browser = require("core/utils/browser");
+    browser = require("core/utils/browser"),
+    compareVersion = require("core/utils/version").compare;
 
 QUnit.testStart(function() {
     var markup = '<div id="component"></div>' + '<div id="anotherComponent"></div>';
@@ -983,6 +984,10 @@ QUnit.test("get element", function(assert) {
         instance = element.data("TestComponent");
 
     if(config().useJQueryRenderer) {
+        if(compareVersion($.fn.jquery, [3], 1) < 0) {
+            assert.expect(0);
+            return;
+        }
         assert.deepEqual(instance.element(), $("#component"));
     } else {
         assert.equal(instance.element(), $("#component").get(0));

@@ -150,7 +150,7 @@ if(device.deviceType === "desktop" && browser.msie && parseInt(browser.version) 
 
         $("#qunit-fixture").addClass("qunit-fixture-static");
 
-        that.element = function() {
+        that.$element = function() {
             return $("#container");
         };
 
@@ -183,7 +183,7 @@ if(device.deviceType === "desktop" && browser.msie && parseInt(browser.version) 
 
         $("#qunit-fixture").addClass("qunit-fixture-static");
 
-        that.element = function() {
+        that.$element = function() {
             return $("#container");
         };
 

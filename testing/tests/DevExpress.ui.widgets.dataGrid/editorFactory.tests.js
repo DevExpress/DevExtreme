@@ -1456,7 +1456,7 @@ QUnit.testInActiveWindow("Focus on a filtering cell after editing cell in 'batch
         dataSource: [{ name: "Bob", lastName: "Smith", age: 19 }, { name: "Dmitry", lastName: "Semenov", age: 31 }, { name: "George ", lastName: "Bush", age: 51 }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1514,7 +1514,7 @@ QUnit.testInActiveWindow("Focus on dxLookup editor", function(assert) {
         dataSource: [{ name: "Bob" }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1559,7 +1559,7 @@ QUnit.testInActiveWindow("Focus on dxTextArea editor", function(assert) {
         dataSource: [{ name: "Bob" }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1600,7 +1600,7 @@ if(devices.real().deviceType === "desktop" && browser.msie && parseInt(browser.v
                 position: "absolute"
             }).appendTo("#container");
 
-            this.element = function() {
+            this.$element = function() {
                 return $("#container");
             };
             setupDataGridModules(this, ['editorFactory']);
