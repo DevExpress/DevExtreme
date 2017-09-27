@@ -63,7 +63,7 @@ var HoldEmitter = Emitter.inherit({
   * @name ui events_dxhold
   * @publicName dxhold
   * @type jQuery.Event
-  * @type_function_param1 event:jQuery.event
+  * @type_function_param1 event:jQuery.Event
   * @module events/hold
 */
 

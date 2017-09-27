@@ -183,7 +183,7 @@ module.exports = {
             * @publicName onRowClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery-event object
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 values:array
@@ -203,7 +203,7 @@ module.exports = {
             * @publicName onRowClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery-event object
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 values:array
@@ -222,7 +222,7 @@ module.exports = {
             * @publicName onCellClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery-event object
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
@@ -242,7 +242,7 @@ module.exports = {
             * @publicName onCellClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery-event object
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any

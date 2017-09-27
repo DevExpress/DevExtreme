@@ -306,7 +306,7 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onScroll
             * @publicName onScroll
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 scrollOffset:object
             * @type_function_param1_field6 reachedLeft:boolean
             * @type_function_param1_field7 reachedRight:boolean
@@ -410,7 +410,7 @@ var Lookup = DropDownList.inherit({
             * @extends Action
             * @type_function_param1_field4 value:object
             * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQueryEvent
+            * @type_function_param1_field6 jQueryEvent:jQuery.Event
             * @action
             */
 

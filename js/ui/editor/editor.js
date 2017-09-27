@@ -67,7 +67,7 @@ var Editor = Widget.inherit({
             * @extends Action
             * @type_function_param1_field4 value:object
             * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQueryEvent
+            * @type_function_param1_field6 jQueryEvent:jQuery.Event
             * @action
             */
             onValueChanged: null,

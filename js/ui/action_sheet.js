@@ -194,7 +194,7 @@ var ActionSheet = CollectionWidget.inherit({
             * @publicName onClick
             * @type function|string
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             */
             /**
             * @name dxActionSheetItemTemplate_icon

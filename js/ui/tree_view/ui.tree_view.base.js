@@ -238,7 +238,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:jQuery
             * @type_function_param1_field6 itemIndex:Number
-            * @type_function_param1_field7 jQueryEvent:jQueryEvent
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event
             * @type_function_param1_field8 node:dxtreeviewnode
             * @action
             */
@@ -251,7 +251,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:jQuery
             * @type_function_param1_field6 itemIndex:Number
-            * @type_function_param1_field7 jQueryEvent:jQueryEvent
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event
             * @type_function_param1_field8 node:dxtreeviewnode
             * @action
             */

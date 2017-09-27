@@ -61,7 +61,7 @@ var dxChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:Series
     * @notUsedInTheme
     * @action
@@ -74,7 +74,7 @@ var dxChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:series
     * @notUsedInTheme
     * @action
@@ -890,7 +890,7 @@ var dxChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 argument:Date|Number|string
     * @notUsedInTheme
     * @action
@@ -2454,7 +2454,7 @@ var dxPieChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:String|Number
     * @type_function_param1_field5 points:Array<Object>
     * @notUsedInTheme
@@ -2540,7 +2540,7 @@ var dxPolarChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:Series
     * @notUsedInTheme
     * @action
@@ -2553,7 +2553,7 @@ var dxPolarChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:series
     * @notUsedInTheme
     * @action
@@ -2671,7 +2671,7 @@ var dxPolarChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:object
     * @type_function_param1_field5 argument:Date|Number|string
     * @notUsedInTheme
@@ -3784,7 +3784,7 @@ var BaseChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:Point
     * @notUsedInTheme
     * @action

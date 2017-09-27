@@ -81,7 +81,7 @@ var Button = Widget.inherit({
             * @publicName onClick
             * @type function|string
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 validationGroup:object
             * @action
             */

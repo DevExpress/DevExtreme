@@ -92,7 +92,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @publicName closeOnOutsideClick
                 * @type boolean|function
                 * @default true
-                * @type_function_param1 event:jQueryEvent
+                * @type_function_param1 event:jQuery.Event
                 * @type_function_return Boolean
                 */
                 closeOnOutsideClick: true,
@@ -149,7 +149,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @name dxContextMenuOptions_onPositioning
                 * @publicName onPositioning
                 * @extends Action
-                * @type_function_param1_field4 jQueryEvent:jQueryEvent
+                * @type_function_param1_field4 jQueryEvent:jQuery.Event
                 * @type_function_param1_field5 position:position
                 * @action
                 */

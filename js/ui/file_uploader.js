@@ -253,7 +253,7 @@ var FileUploader = Editor.inherit({
             * @publicName onUploadStarted
             * @extends Action
             * @type_function_param1_field4 file:object
-            * @type_function_param1_field5 jQueryEvent:jQueryEvent
+            * @type_function_param1_field5 jQueryEvent:jQuery.Event
             * @type_function_param1_field6 request:object
             * @action
             */
@@ -264,7 +264,7 @@ var FileUploader = Editor.inherit({
             * @publicName onUploaded
             * @extends Action
             * @type_function_param1_field4 file:object
-            * @type_function_param1_field5 jQueryEvent:jQueryEvent
+            * @type_function_param1_field5 jQueryEvent:jQuery.Event
             * @type_function_param1_field6 request:object
             * @action
             */
@@ -289,7 +289,7 @@ var FileUploader = Editor.inherit({
             * @publicName onUploadError
             * @extends Action
             * @type_function_param1_field4 file:object
-            * @type_function_param1_field5 jQueryEvent:jQueryEvent
+            * @type_function_param1_field5 jQueryEvent:jQuery.Event
             * @type_function_param1_field6 request:object
             * @action
             */
@@ -300,7 +300,7 @@ var FileUploader = Editor.inherit({
             * @publicName onUploadAborted
             * @extends Action
             * @type_function_param1_field4 file:object
-            * @type_function_param1_field5 jQueryEvent:jQueryEvent
+            * @type_function_param1_field5 jQueryEvent:jQuery.Event
             * @type_function_param1_field6 request:object
             * @action
             */
@@ -329,7 +329,7 @@ var FileUploader = Editor.inherit({
             * @extends Action
             * @type_function_param1_field4 value:array
             * @type_function_param1_field5 previousValue:array
-            * @type_function_param1_field6 jQueryEvent:jQueryEvent
+            * @type_function_param1_field6 jQueryEvent:jQuery.Event
             * @action
             */
 
