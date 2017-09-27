@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     modules = require("./ui.grid_core.modules"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     isDefined = require("../../core/utils/type").isDefined,
+    isFunction = require("../../core/utils/type").isFunction,
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
     Popup = require("../popup"),
@@ -12,6 +13,8 @@ var $ = require("../../core/renderer"),
 
 var HEADER_FILTER_CLASS = "dx-header-filter",
     HEADER_FILTER_MENU_CLASS = "dx-header-filter-menu";
+
+var DEFAULT_SEARCH_EXPRESSION = "text";
 
 function resetChildrenItemSelection(items) {
     items = items || [];
@@ -30,6 +33,16 @@ function updateSelectAllState(e, filterValues) {
     if(selectAllCheckBox && filterValues && filterValues.length) {
         selectAllCheckBox.option("value", undefined);
     }
+}
+
+function isSearchEnabled(that, options) {
+    var headerFilter = options.headerFilter;
+
+    if(headerFilter && isDefined(headerFilter.searchEnabled)) {
+        return headerFilter.searchEnabled;
+    }
+
+    return that.option("headerFilter.searchEnabled");
 }
 
 exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch, isExcludeFilter) {
@@ -135,6 +148,17 @@ exports.HeaderFilterView = modules.View.inherit({
         }
     },
 
+    _getSearchExpr: function(options) {
+        var lookup = options.lookup,
+            headerFilterDataSource = options.headerFilter && options.headerFilter.dataSource;
+
+        if(isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
+            return DEFAULT_SEARCH_EXPRESSION;
+        }
+
+        return lookup ? (lookup.displayExpr || "this") : (options.dataField || options.selector);
+    },
+
     _cleanPopupContent: function() {
         this._popupContainer && this._popupContainer.content().empty();
     },
@@ -193,9 +217,8 @@ exports.HeaderFilterView = modules.View.inherit({
     _initializeListContainer: function(options) {
         var that = this,
             $content = that._popupContainer.content(),
-            headerFilterOptions = that.option("headerFilter"),
             widgetOptions = {
-                searchEnabled: headerFilterOptions.searchEnabled,
+                searchEnabled: isSearchEnabled(that, options),
                 dataSource: options.dataSource,
                 onContentReady: function() {
                     that.renderCompleted.fire();
@@ -218,7 +241,7 @@ exports.HeaderFilterView = modules.View.inherit({
         } else {
             that._listContainer = that._createComponent($("<div>").appendTo($content),
                 List, extend(widgetOptions, {
-                    searchExpr: options.lookup && options.lookup.displayExpr || options.dataField,
+                    searchExpr: that._getSearchExpr(options),
                     pageLoadMode: "scrollBottom",
                     showSelectionControls: true,
                     selectionMode: "all",

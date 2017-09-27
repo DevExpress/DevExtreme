@@ -1254,6 +1254,9 @@ declare module DevExpress.ui {
 
             /** @docid GridBaseOptions_columns_headerFilter_groupInterval */
             groupInterval?: any;
+
+            /** @docid GridBaseOptions_columns_headerFilter_searchEnabled */
+            searchEnabled?: boolean;
         };
     }
 
