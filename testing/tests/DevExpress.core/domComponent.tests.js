@@ -983,7 +983,7 @@ QUnit.test("get element", function(assert) {
         instance = element.data("TestComponent");
 
     if(config().useJQueryRenderer) {
-        assert.deepEqual(instance.element(), $("#component"));
+        assert.deepEqual(instance.element()[0], $("#component")[0]);
     } else {
         assert.equal(instance.element(), $("#component").get(0));
     }
