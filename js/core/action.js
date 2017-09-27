@@ -47,7 +47,7 @@ var Action = Class.inherit({
         }
         ///#ENDDEBUG
 
-        if(argsBag.Event) {
+        if(argsBag.Event && config().useJQueryRenderer) {
             Object.defineProperty(argsBag, 'jQueryEvent', {
                 get: function() {
                     errors.log("W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'Event' field instead");

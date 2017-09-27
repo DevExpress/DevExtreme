@@ -6,6 +6,8 @@ var $ = require("jquery"),
     Action = require("core/action"),
     config = require("core/config");
 
+var noJquery = QUnit.urlParams["nojquery"];
+
 QUnit.testStart(function() {
     var markup =
         '<div class="dx-state-disabled">\
@@ -285,7 +287,7 @@ QUnit.test("Action argument should contain both Event and jQueryEvent field or n
 
     new Action(function(e) {
         assert.ok(e.Event);
-        assert.ok(e.jQueryEvent);
+        assert.ok(noJquery || e.jQueryEvent);
     }).execute({ Event: eventMock });
 
     assert.throws(function() {
@@ -307,15 +309,24 @@ QUnit.test("Working with jQueryEvent field should throw warning", function(asser
         e.jQueryEvent;
     }).execute({ Event: eventMock });
 
-    assert.equal(log.length, 1);
-    assert.deepEqual(log[0], expectedWarning);
+    if(noJquery) {
+        assert.equal(log.length, 0);
+    } else {
+        assert.equal(log.length, 1);
+        assert.deepEqual(log[0], expectedWarning);
+    }
 
     new Action(function(e) {
         e.jQueryEvent = {};
     }).execute({ Event: eventMock });
 
-    assert.equal(log.length, 2);
-    assert.deepEqual(log[1], expectedWarning);
+
+    if(noJquery) {
+        assert.equal(log.length, 0);
+    } else {
+        assert.equal(log.length, 2);
+        assert.deepEqual(log[1], expectedWarning);
+    }
 
     errors.log = originalLog;
 });
