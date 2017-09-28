@@ -411,15 +411,15 @@ QUnit.test("cellClick/cellHoverChanged handler should be executed when define vi
     dataGrid.on("cellClick", function(e) {
         cellClickCount++;
 
-        assert.equal(e.cellElement.get(0).tagName, "TD", "correct cell element tag");
-        assert.equal(e.cellElement.text(), "1", "correct cell content");
+        assert.equal($(e.cellElement).get(0).tagName, "TD", "correct cell element tag");
+        assert.equal($(e.cellElement).text(), "1", "correct cell content");
     });
 
     dataGrid.on("cellHoverChanged", function(e) {
         cellHoverChangedCount++;
 
-        assert.equal(e.cellElement.get(0).tagName, "TD", "correct cell element tag");
-        assert.equal(e.cellElement.text(), "1", "correct cell content");
+        assert.equal($(e.cellElement).get(0).tagName, "TD", "correct cell element tag");
+        assert.equal($(e.cellElement).text(), "1", "correct cell content");
     });
 
     $(dataGrid.$element())

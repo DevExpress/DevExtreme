@@ -1825,7 +1825,8 @@ QUnit.test('onCellClick event handling', function(assert) {
     cells.eq(0).trigger("dxclick");
 
     //assert
-    assert.deepEqual(cellClickArgs.cellElement[0], cells[0], 'Container');
+    assert.equal(typeUtils.isRenderer(cellClickArgs.cellElement), config().useJQueryRenderer, "cellElement is correct");
+    assert.deepEqual($(cellClickArgs.cellElement)[0], cells[0], 'Container');
     assert.ok(cellClickArgs.jQueryEvent, 'jQueryEvent');
     assert.deepEqual(cellClickArgs.jQueryEvent.target, cells[0], 'jQueryEvent.target');
     assert.strictEqual(cellClickArgs.value, 'test1', 'value');
@@ -3944,7 +3945,7 @@ QUnit.test("onCellHoverChanged event handling", function(assert) {
     cells.eq(0).trigger("mouseover");
 
     //assert
-    assert.deepEqual(onCellHoverChanged.cellElement[0], cells[0], "Container");
+    assert.deepEqual($(onCellHoverChanged.cellElement)[0], cells[0], "Container");
     assert.ok(onCellHoverChanged.jQueryEvent, "jQueryEvent");
     assert.strictEqual(onCellHoverChanged.eventType, "mouseover", "eventType");
     assert.deepEqual(onCellHoverChanged.jQueryEvent.target, cells[0], "jQueryEvent.target");

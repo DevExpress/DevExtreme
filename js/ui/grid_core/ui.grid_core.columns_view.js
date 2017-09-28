@@ -169,7 +169,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 resultOptions;
 
             resultOptions = extend({}, options, {
-                cellElement: $cell,
+                cellElement: getPublicElement($cell),
                 jQueryEvent: event,
                 eventType: event.type
             });
