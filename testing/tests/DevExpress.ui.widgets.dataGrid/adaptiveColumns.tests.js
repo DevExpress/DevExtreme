@@ -3686,7 +3686,6 @@ QUnit.module("Keyboard navigation", {
         //assert
         var $input = this.getActiveInputElement();
         assert.equal($input.val(), "Full Name", "current input is correct");
-        assert.ok($input.is(":focus"), "current input is focused");
     });
 
     QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
@@ -3705,7 +3704,6 @@ QUnit.module("Keyboard navigation", {
         //assert
         var $input = this.getActiveInputElement();
         assert.equal($input.val(), "Psy", "current input is correct");
-        assert.ok($input.is(":focus"), "current input is focused");
     });
 
     QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
