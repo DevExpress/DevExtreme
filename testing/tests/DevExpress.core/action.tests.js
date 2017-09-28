@@ -281,23 +281,23 @@ QUnit.test("Action argument should contain both Event and jQueryEvent field or n
     var eventMock = {};
 
     new Action(function(e) {
-        assert.notOk(e.Event);
+        assert.notOk(e.event);
         assert.notOk(e.jQueryEvent);
     }).execute({});
 
     new Action(function(e) {
-        assert.ok(e.Event);
+        assert.ok(e.event);
         assert.ok(noJquery || e.jQueryEvent);
-    }).execute({ Event: eventMock });
+    }).execute({ event: eventMock });
 
     assert.throws(function() {
         new Action(noop).execute({ jQueryEvent: eventMock });
-    }, /The jQueryEvent field is deprecated\. Please, use the Event field instead/);
+    }, /The jQueryEvent field is deprecated\. Please, use the `event` field instead/);
 });
 
 QUnit.test("Working with jQueryEvent field should throw warning", function(assert) {
     var eventMock = {};
-    var expectedWarning = ["W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'Event' field instead"];
+    var expectedWarning = ["W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'event' field instead"];
     var originalLog = errors.log;
     var log = [];
 
@@ -307,7 +307,7 @@ QUnit.test("Working with jQueryEvent field should throw warning", function(asser
 
     new Action(function(e) {
         e.jQueryEvent;
-    }).execute({ Event: eventMock });
+    }).execute({ event: eventMock });
 
     if(noJquery) {
         assert.equal(log.length, 0);
@@ -318,7 +318,7 @@ QUnit.test("Working with jQueryEvent field should throw warning", function(asser
 
     new Action(function(e) {
         e.jQueryEvent = {};
-    }).execute({ Event: eventMock });
+    }).execute({ event: eventMock });
 
 
     if(noJquery) {
