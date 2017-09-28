@@ -488,7 +488,7 @@ var GroupingHeaderPanelExtender = (function() {
         getContextMenuItems: function(options) {
             var that = this,
                 contextMenuEnabled = that.option("grouping.contextMenuEnabled"),
-                $groupedColumnElement = options.targetElement.closest("." + DATAGRID_GROUP_PANEL_ITEM_CLASS),
+                $groupedColumnElement = $(options.targetElement).closest("." + DATAGRID_GROUP_PANEL_ITEM_CLASS),
                 items;
 
             if($groupedColumnElement.length) {
