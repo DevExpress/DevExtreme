@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     errors = require("../widget/ui.errors"),
     positionUtils = require("../../animation/position"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
@@ -852,7 +853,7 @@ var DropDownEditor = TextBox.inherit({
     * @return jQuery
     */
     field: function() {
-        return this._input();
+        return getPublicElement(this._input());
     },
 
     /**

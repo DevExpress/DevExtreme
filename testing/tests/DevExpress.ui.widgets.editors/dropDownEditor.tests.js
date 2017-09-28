@@ -345,8 +345,9 @@ QUnit.test("content method returning overlay content", function(assert) {
 
 QUnit.test("field method returning overlay content", function(assert) {
     var dropDownEditor = this.dropDownEditor,
-        $field = dropDownEditor.field();
+        $field = $(dropDownEditor.field());
 
+    assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
 });
 
