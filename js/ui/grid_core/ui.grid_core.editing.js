@@ -1294,7 +1294,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 newData = {},
                 oldData = options.data,
                 rowKey = options.key,
-                $cellElement = options.cellElement,
+                $cellElement = $(options.cellElement),
                 editMode = getEditMode(that),
                 params;
 

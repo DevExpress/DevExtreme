@@ -3178,7 +3178,7 @@ QUnit.test("Rows with option onCellPrepared", function(assert) {
     this.options.onCellPrepared = function(options) {
         countCallCellPrepared++;
         if(options.rowIndex === 1 && options.columnIndex === 2) {
-            resultCell = options.cellElement.addClass("TestCellPrepared");
+            resultCell = $(options.cellElement).addClass("TestCellPrepared");
             resultOptions = options;
         }
     };
@@ -3305,7 +3305,7 @@ QUnit.test("onCellPrepared for called for command columns", function(assert) {
     this.options.onCellPrepared = function(options) {
         countCallCellPrepared++;
         if(options.rowIndex === 1 && options.columnIndex === 0) {
-            options.cellElement.addClass("TestCellPrepared");
+            $(options.cellElement).addClass("TestCellPrepared");
         }
     };
     rowsView.init();
@@ -3335,7 +3335,7 @@ QUnit.test("Rows with option onCellPrepared for data rows", function(assert) {
         countCallCellPrepared++;
 
         if(options.rowIndex === 1 && options.columnIndex === 0) {
-            resultCell = options.cellElement.addClass("TestCellPrepared");
+            resultCell = $(options.cellElement).addClass("TestCellPrepared");
         }
     };
     rowsView.init();

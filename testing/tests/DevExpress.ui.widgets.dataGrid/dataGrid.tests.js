@@ -1820,7 +1820,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
             },
             onCellPrepared: function(e) {
                 if(e.rowType === "data" && e.column.command === "edit" && e.row.removed) {
-                    e.cellElement.parent().css({ display: 'none' });
+                    $(e.cellElement).parent().css({ display: 'none' });
                 }
             }
         }),

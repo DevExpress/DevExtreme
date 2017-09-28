@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
@@ -433,8 +434,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         };
     },
 
-    _cellPrepared: function($cell, options) {
-        options.cellElement = $cell;
+    _cellPrepared: function(cell, options) {
+        options.cellElement = getPublicElement($(cell));
         this.executeAction("onCellPrepared", options);
     },
 

@@ -6,6 +6,7 @@ require("generic_light.css!");
 var $ = require("jquery"),
     setTemplateEngine = require("ui/set_template_engine"),
     typeUtils = require("core/utils/type"),
+    config = require("core/config"),
     devices = require("core/devices"),
     DataSource = require("data/data_source/data_source").DataSource,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
@@ -1614,8 +1615,9 @@ QUnit.test("onCellPrepared - header with sorting and headerFilter", function(ass
         resultOptions = options;
 
         //assert
-        assert.ok(options.cellElement.find(".dx-header-filter").length, "has header filter");
-        assert.ok(options.cellElement.find(".dx-sort-up").length, "has sort");
+        assert.equal(typeUtils.isRenderer(options.cellElement), config().useJQueryRenderer, "has header filter");
+        assert.ok($(options.cellElement).find(".dx-header-filter").length, "has header filter");
+        assert.ok($(options.cellElement).find(".dx-sort-up").length, "has sort");
     };
     this.columnHeadersView.init();
 
