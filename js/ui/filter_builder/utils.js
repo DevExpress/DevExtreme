@@ -81,27 +81,28 @@ function getGroupValue(group) {
     return value;
 }
 
-function getAvailableOperations(field) {
-    var filterOperations = [];
-    var addItem = function(filterOperations, item) {
-        filterOperations.push({ text: item });
-    }
+function getAvailableOperations(filterOperations) {
+    var operations = [];
+    var addItem = function(operations, item) {
+        operations.push({ text: item });
+    };
+
     if(filterOperations.length === 0) {
-        addItem(filterOperations, "=");
-        addItem(filterOperations, "<>");
+        addItem(operations, "=");
+        addItem(operations, "<>");
     } else {
-        for(var i = 0; i < field.filterOperations.length; i++) {
-            addItem(filterOperations, field.filterOperations[i]);
+        for(var i = 0; i < filterOperations.length; i++) {
+            addItem(operations, filterOperations[i]);
         }
     }
-    return filterOperations;
+    return operations;
 }
 
 function getDefaultOperation(field) {
     if(field.defaultFilterOperation) {
         return field.defaultFilterOperation;
     } else {
-        return getAvailableOperations(field)[0].text;
+        return getAvailableOperations(field.filterOperations)[0].text;
     }
 }
 
