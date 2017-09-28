@@ -3,7 +3,6 @@
 var dataUtils = require("../core/element_data"),
     Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),
-    logger = require("../core/utils/console").logger,
     DOMComponent = require("../core/dom_component"),
     extend = require("../core/utils/extend").extend,
     map = require("../core/utils/iterator").map,
@@ -184,7 +183,7 @@ var Validator = DOMComponent.inherit({
                     that.validate();
                 });
             } else {
-                logger.warn("Specifying the validationRequestsCallbacks option with jQuery.Callbacks are now deprecated. Instead, use the array.");
+                errors.log("W0014", "validationRequestsCallbacks", "jQuery.Callbacks", "17.2", "Use the array instead");
                 callbacks.add(function() {
                     that.validate();
                 });

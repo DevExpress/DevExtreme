@@ -178,7 +178,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 }
                 dataSource = normalizeDataSourceOptions(dataSource);
                 dataSource.postProcess = function(items) {
-                    if(this.pageIndex() === 0) {
+                    if(this.pageIndex() === 0 && !this.searchValue()) {
                         items = items.slice(0);
                         items.unshift(null);
                     }
@@ -202,6 +202,7 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                 options.dataSource = {
                     filter: filter,
                     group: group,
+                    useDefaultSearch: true,
                     load: function(options) {
                         var d = new Deferred();
                         //TODO remove in 16.1
@@ -486,6 +487,13 @@ module.exports = {
                  * @default 325
                  */
                 height: 325,
+                /**
+                 * @name GridBaseOptions_headerFilter_searchEnabled
+                 * @publicName searchEnabled
+                 * @type boolean
+                 * @default false
+                 */
+                searchEnabled: false,
                 /**
                  * @name GridBaseOptions_headerFilter_texts
                  * @publicName texts

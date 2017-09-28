@@ -95,7 +95,7 @@ var config = DevExpress.config = require("../../core/config");
  * @publicName rtlEnabled
  * @type boolean
  * @default false
- * @deprecated #config
+ * @deprecated config
  */
 
 Object.defineProperty(DevExpress, 'rtlEnabled', {

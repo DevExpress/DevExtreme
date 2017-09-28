@@ -544,6 +544,12 @@ module.exports = {
              * @acceptValues 'year' | 'month' | 'day' | 'quarter' | 'hour' | 'minute' | 'second'
              */
             /**
+             * @name GridBaseOptions_columns_headerFilter_searchEnabled
+             * @publicName searchEnabled
+             * @type boolean
+             * @default false
+             */
+            /**
              * @name GridBaseOptions_columns_editorOptions
              * @publicName editorOptions
              * @type object

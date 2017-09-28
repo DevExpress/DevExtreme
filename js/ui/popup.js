@@ -212,7 +212,7 @@ var Popup = Overlay.inherit({
             * @name dxPopupOptions_toolbarItems_widget
             * @publicName widget
             * @type String
-            * @acceptValues 'dxButton'|'dxTabs'|'dxCheckBox'|'dxSelectBox'|'dxTextBox'|'dxAutocomplete'|'dxDateBox'|'dxMenu'|'dxDropDownMenu'
+            * @acceptValues 'dxButton'|'dxTabs'|'dxCheckBox'|'dxSelectBox'|'dxTextBox'|'dxAutocomplete'|'dxDateBox'|'dxMenu'
             */
             /**
             * @name dxPopupOptions_toolbarItems_options

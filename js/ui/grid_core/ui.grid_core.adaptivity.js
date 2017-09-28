@@ -61,10 +61,19 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         var that = this,
             column = item.column,
             cellValue = column.calculateCellValue(cellOptions.data),
+            focusAction = that.createAction(function() {
+                eventsEngine.trigger($container, clickEvent.name);
+            }),
             cellText;
 
         cellValue = gridCoreUtils.getDisplayValue(column, cellValue, cellOptions.data, cellOptions.rowType);
         cellText = gridCoreUtils.formatValue(cellValue, column);
+
+        if(column.allowEditing && that.option("useKeyboard")) {
+            $container.attr("tabIndex", that.option("tabIndex"));
+            eventsEngine.off($container, "focus", focusAction);
+            eventsEngine.on($container, "focus", focusAction);
+        }
 
         if(column.cellTemplate) {
             var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
@@ -997,6 +1006,23 @@ module.exports = {
             columns: {
                 _isColumnVisible: function(column) {
                     return this.callBase(column) && !column.adaptiveHidden;
+                }
+            },
+            keyboardNavigation: {
+                _isCellValid: function(cell) {
+                    return this.callBase(cell) && !cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                },
+
+                _processNextCellInMasterDetail: function(nextCell) {
+                    this.callBase(nextCell);
+
+                    if(!this._isInsideEditForm(nextCell) && nextCell) {
+                        var focusHandler = function() {
+                            eventsEngine.off(nextCell, "focus", focusHandler);
+                            eventsEngine.trigger(nextCell, "dxclick");
+                        };
+                        eventsEngine.on(nextCell, "focus", focusHandler);
+                    }
                 }
             }
         }
