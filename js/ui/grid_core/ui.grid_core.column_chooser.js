@@ -115,7 +115,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 .toggleClass(this.addWidgetPrefix(COLUMN_CHOOSER_SELECT_CLASS), isSelectMode);
 
             items = processItems(this, chooserColumns);
-            this._renderColumnChooserList($popupContent, items);
+            this._renderTreeView($popupContent, items);
         }
     },
 
@@ -172,11 +172,13 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         }
     },
 
-    _renderColumnChooserList: function($container, items) {
-        var scrollTop,
+    _renderTreeView: function($container, items) {
+        var that = this,
+            scrollTop,
             scrollableInstance,
-            isSelectMode = this.option("columnChooser.mode") === "select",
-            listConfig = {
+            columnChooser = this.option("columnChooser"),
+            isSelectMode = columnChooser.mode === "select",
+            treeViewConfig = {
                 items: items,
                 dataStructure: "plain",
                 activeStateEnabled: true,
@@ -184,31 +186,35 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 hoverStateEnabled: true,
                 itemTemplate: "item",
                 showCheckBoxesMode: "none",
-                rootValue: null
+                rootValue: null,
+                searchEnabled: columnChooser.searchEnabled
             };
+
 
         if(isSelectMode) {
             scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
             scrollTop = scrollableInstance && scrollableInstance.scrollTop();
-
-            listConfig.onContentReady = function(e) {
-                if(scrollTop) {
-                    var scrollable = e.element.find(".dx-scrollable").data("dxScrollable");
-
-                    scrollable && scrollable.scrollTo({ y: scrollTop });
-                }
-            };
         }
+
+        treeViewConfig.onContentReady = function(e) {
+            if(scrollTop) {
+                var scrollable = e.element.find(".dx-scrollable").data("dxScrollable");
+                scrollable && scrollable.scrollTo({ y: scrollTop });
+            }
+
+            that.renderCompleted.fire();
+        };
+
 
         if(this._isWinDevice()) {
-            listConfig.useNativeScrolling = false;
+            treeViewConfig.useNativeScrolling = false;
         }
-        extend(listConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
+        extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
         if(this._columnChooserList) {
-            this._columnChooserList.option(listConfig);
+            this._columnChooserList.option(treeViewConfig);
         } else {
-            this._columnChooserList = this._createComponent($container, TreeView, listConfig);
+            this._columnChooserList = this._createComponent($container, TreeView, treeViewConfig);
             $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_LIST_CLASS));
         }
     },
@@ -278,9 +284,23 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     getColumnElements: function() {
-        var $content = this._popupContainer && this._popupContainer.content();
+        var result = [],
+            $node,
+            $item,
+            isSelectMode = this.option("columnChooser.mode") === "select",
+            chooserColumns = this._columnsController.getChooserColumns(isSelectMode),
+            $content = this._popupContainer && this._popupContainer.content(),
+            $nodes = $content && $content.find(".dx-treeview-node");
 
-        return $content && $content.find("." + COLUMN_CHOOSER_ITEM_CLASS);
+        if($nodes) {
+            chooserColumns.forEach(function(column) {
+                $node = $nodes.filter("[data-item-id = '" + column.index + "']");
+                $item = $node.length ? $node.children("." + COLUMN_CHOOSER_ITEM_CLASS) : null;
+                result.push($item);
+            });
+        }
+
+        return result;
     },
 
     getName: function() {
@@ -377,6 +397,13 @@ module.exports = {
                  * @default false
                  */
                 enabled: false,
+                /**
+                 * @name GridBaseOptions_columnChooser_searchEnabled
+                 * @publicName searchEnabled
+                 * @type boolean
+                 * @default false
+                 */
+                searchEnabled: false,
                 /**
                  * @name GridBaseOptions_columnChooser_mode
                  * @publicName mode

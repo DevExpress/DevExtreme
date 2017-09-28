@@ -115,11 +115,11 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
                 switch(data.name) {
                     case "calendar":
-                        $container.append(this._widget.element());
-                        if(this._isShrinkView()) $container.append(this._timeView.element());
+                        $container.append(this._widget.$element());
+                        if(this._isShrinkView()) $container.append(this._timeView.$element());
                         break;
                     case "time":
-                        $container.append(this._timeView.element());
+                        $container.append(this._timeView.$element());
                         break;
                 }
 
@@ -137,7 +137,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
                     if(this._box.option("_layoutStrategy") === "fallback") {
                         var clockMinWidth = this._getPopup().content().find(".dx-timeview-clock").css("minWidth");
 
-                        this._timeView.element().css("width", clockMinWidth);
+                        this._timeView.$element().css("width", clockMinWidth);
                     }
                 }).bind(this),
             });
@@ -146,7 +146,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     getFirstPopupElement: function() {
-        return this._timeView._hourBox.element().find("input");
+        return this._timeView._hourBox.$element().find("input");
     },
 
     _attachTabHandler: function() {

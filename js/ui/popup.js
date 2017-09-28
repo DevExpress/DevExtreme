@@ -212,7 +212,7 @@ var Popup = Overlay.inherit({
             * @name dxPopupOptions_toolbarItems_widget
             * @publicName widget
             * @type String
-            * @acceptValues 'dxButton'|'dxTabs'|'dxCheckBox'|'dxSelectBox'|'dxTextBox'|'dxAutocomplete'|'dxDateBox'|'dxMenu'|'dxDropDownMenu'
+            * @acceptValues 'dxButton'|'dxTabs'|'dxCheckBox'|'dxSelectBox'|'dxTextBox'|'dxAutocomplete'|'dxDateBox'|'dxMenu'
             */
             /**
             * @name dxPopupOptions_toolbarItems_options
@@ -416,7 +416,7 @@ var Popup = Overlay.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(POPUP_CLASS);
+        this.$element().addClass(POPUP_CLASS);
         this._wrapper().addClass(POPUP_WRAPPER_CLASS);
 
         this._$popupContent = this._$content
@@ -515,7 +515,7 @@ var Popup = Overlay.inherit({
 
     _createTitleRenderAction: function() {
         return (this._titleRenderAction = this._createActionByOption("onTitleRendered", {
-            element: this.element(),
+            element: this.$element(),
             excludeValidators: ["designMode", "disabled", "readOnly"]
         }));
     },

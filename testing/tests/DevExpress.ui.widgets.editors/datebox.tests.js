@@ -603,7 +603,7 @@ QUnit.testInActiveWindow("set focus on 'tab' key from editor to overlay and inve
 
     keyboard.keyDown("tab");
 
-    var $hourBox = $(instance._strategy._timeView._hourBox.element()),
+    var $hourBox = $(instance._strategy._timeView._hourBox.$element()),
         $inputHourBox = instance._strategy._timeView._hourBox._input();
     assert.ok($hourBox.hasClass(STATE_FOCUSED_CLASS), "tab set focus to first input in overlay");
 
@@ -692,7 +692,7 @@ QUnit.test("dxDateBox calendar popup should be closed after value is changed if 
 
     var dateBox = $dateBox.dxDateBox("instance");
     dateBox.open();
-    $(getInstanceWidget(dateBox).element().find(".dx-calendar-cell:not(.dx-calendar-selected-date)").eq(0)).trigger("dxclick");
+    $(getInstanceWidget(dateBox).$element().find(".dx-calendar-cell:not(.dx-calendar-selected-date)").eq(0)).trigger("dxclick");
 
     assert.ok(!dateBox.option("opened"), "dateBox popup is closed");
     assert.ok(!dateBox._popup.option("visible"), "popup is not visible");
@@ -1622,7 +1622,7 @@ QUnit.test("disabledDates correctly displays", function(assert) {
             opened: true
         }).dxDateBox("instance"),
         calendar = getInstanceWidget(instance),
-        $disabledCell = calendar.element().find(".dx-calendar-empty-cell");
+        $disabledCell = calendar.$element().find(".dx-calendar-empty-cell");
 
     assert.equal($disabledCell.length, 1, "There is one disabled cell");
     assert.equal($disabledCell.text(), "13", "Correct cell is disabled");
@@ -1644,7 +1644,7 @@ QUnit.test("disabledDates correctly displays after optionChanged", function(asse
     });
 
     var calendar = getInstanceWidget(instance),
-        $disabledCell = calendar.element().find(".dx-calendar-empty-cell");
+        $disabledCell = calendar.$element().find(".dx-calendar-empty-cell");
 
     assert.equal($disabledCell.length, 1, "There is one disabled cell");
     assert.equal($disabledCell.text(), "14", "Correct cell is disabled");
@@ -2062,7 +2062,7 @@ QUnit.test("Value should be changed if it was entered from keyboard and it is ou
     });
 
     var dateBox = this.fixture.dateBox,
-        $input = $(dateBox.element().find(".dx-texteditor-input")),
+        $input = $(dateBox.$element().find(".dx-texteditor-input")),
         kb = keyboardMock($input),
         inputValue = "1/5/2015";
 
@@ -2090,7 +2090,7 @@ QUnit.test("Empty value should not be marked as 'out of range'", function(assert
     });
 
     var dateBox = this.fixture.dateBox,
-        $input = $(dateBox.element().find(".dx-texteditor-input")),
+        $input = $(dateBox.$element().find(".dx-texteditor-input")),
         kb = keyboardMock($input);
 
     clearInput($input, kb);
@@ -2110,7 +2110,7 @@ QUnit.test("Popup should not be hidden after value change using keyboard", funct
     });
 
     var dateBox = this.fixture.dateBox,
-        $input = $(dateBox.element().find(".dx-texteditor-input")),
+        $input = $(dateBox.$element().find(".dx-texteditor-input")),
         kb = keyboardMock($input);
 
     dateBox.open();
@@ -2228,7 +2228,7 @@ QUnit.test("repaint was fired if strategy is fallback", function(assert) {
     });
 
     var dateBox = this.fixture.dateBox;
-    var popup = dateBox.element().find(".dx-popup").dxPopup("instance");
+    var popup = dateBox.$element().find(".dx-popup").dxPopup("instance");
     var repaintSpy = sinon.spy(popup, "repaint");
 
     this.clock.tick();
@@ -2258,7 +2258,7 @@ QUnit.test("T247493 - value is cleared when text is changed to invalid date and 
     });
 
     var dateBox = this.fixture.dateBox,
-        $element = $(dateBox.element()),
+        $element = $(dateBox.$element()),
         $input = $element.find(".dx-texteditor-input"),
         kb = keyboardMock($input);
 
@@ -2283,7 +2283,7 @@ QUnit.test("T252170 - date time should be the same with set value after calendar
     var dateBox = this.fixture.dateBox;
     dateBox.open();
     var calendar = dateBox._strategy._widget,
-        $calendar = $(calendar.element());
+        $calendar = $(calendar.$element());
 
     $($calendar.find(".dx-calendar-cell[data-value='2015/06/10']")).trigger("dxclick");
     assert.deepEqual(calendar.option("value"), new Date(2015, 5, 10, 15, 54, 13), "new calendar value saves set value time");
@@ -2609,7 +2609,7 @@ QUnit.test("DateBox should have time part when pickerType is rollers", function(
     }).dxDateBox("instance");
 
     var format = uiDateUtils.FORMATS_MAP["datetime"];
-    var $input = $(dateBox.element().find("." + TEXTEDITOR_INPUT_CLASS));
+    var $input = $(dateBox.$element().find("." + TEXTEDITOR_INPUT_CLASS));
 
     assert.equal($input.val(), dateLocalization.format(date, format), "input value is correct");
 });
@@ -2677,7 +2677,7 @@ QUnit.test("rendered list markup", function(assert) {
     this.dateBox.option("opened", true);
 
     assert.ok(getInstanceWidget(this.dateBox), "list exist");
-    assert.ok(getInstanceWidget(this.dateBox).element().hasClass("dx-list"), "list initialized");
+    assert.ok(getInstanceWidget(this.dateBox).$element().hasClass("dx-list"), "list initialized");
 });
 
 QUnit.test("width option test", function(assert) {
@@ -2810,7 +2810,7 @@ QUnit.test("T351678 - the date is reset after item click", function(assert) {
         opened: true
     });
 
-    var $list = $(this.dateBox._strategy._widget.element());
+    var $list = $(this.dateBox._strategy._widget.$element());
     $($list.find(".dx-list-item").eq(3)).trigger("dxclick");
 
     assert.deepEqual(this.dateBox.option("value"), new Date(2020, 4, 13, 1, 30), "date is correct");

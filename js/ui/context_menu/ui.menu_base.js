@@ -255,7 +255,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @name dxMenuBaseItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxMenuBaseItemTemplate_icon
             */
             /**
             * @name dxMenuBaseItemTemplate_text
@@ -435,7 +435,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
     _render: function() {
         this.callBase();
-        this._addCustomCssClass(this.element());
+        this._addCustomCssClass(this.$element());
         this.option("useInkRipple") && this._renderInkRipple();
     },
 
@@ -569,7 +569,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         if(nodes.length) {
             this.hasIcons = false;
 
-            $nodeContainer = this._renderContainer(this.element(), submenuContainer);
+            $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
 
             each(nodes, function(index, node) {
                 that._renderItem(index, node, $nodeContainer);

@@ -696,7 +696,7 @@ QUnit.test("it should be possible to expand toolbar with no items in submenu", f
         renderAs: "bottomToolbar"
     }).dxToolbar("instance");
 
-    var $menuButton = instance.element().find("." + TOOLBAR_MENU_BUTTON_CLASS);
+    var $menuButton = instance.$element().find("." + TOOLBAR_MENU_BUTTON_CLASS);
     var isMenuVisible = function(toolbar) {
         return toolbar._menuStrategy._menuShown;
     };

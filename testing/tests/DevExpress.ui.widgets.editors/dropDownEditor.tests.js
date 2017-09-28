@@ -308,7 +308,7 @@ QUnit.test("reset()", function(assert) {
 
 QUnit.test("reset method should clear the input value", function(assert) {
     var dropDownEditor = this.dropDownEditor,
-        $input = dropDownEditor.element().find("input");
+        $input = dropDownEditor.$element().find("input");
 
     dropDownEditor.option("value", null);
     $input.val("456");

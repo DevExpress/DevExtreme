@@ -160,7 +160,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _renderMask: function() {
-        this.element().removeClass(TEXTEDITOR_MASKED_CLASS);
+        this.$element().removeClass(TEXTEDITOR_MASKED_CLASS);
         this._maskRulesChain = null;
 
         this._detachMaskEventHandlers();
@@ -169,7 +169,7 @@ var TextEditorMask = TextEditorBase.inherit({
             return;
         }
 
-        this.element().addClass(TEXTEDITOR_MASKED_CLASS);
+        this.$element().addClass(TEXTEDITOR_MASKED_CLASS);
 
         this._attachMaskEventHandlers();
         this._parseMask();

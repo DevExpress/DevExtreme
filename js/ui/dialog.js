@@ -221,7 +221,7 @@ exports.custom = function(options) {
     function hide(value) {
         deferred.resolve(value);
         popupInstance.hide().done(function() {
-            popupInstance.element().remove();
+            popupInstance.$element().remove();
         });
     }
 

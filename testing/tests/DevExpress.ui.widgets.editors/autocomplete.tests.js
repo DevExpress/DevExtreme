@@ -666,7 +666,7 @@ QUnit.testInActiveWindow("using custom item template", function(assert) {
     keyboard
         .type("i");
 
-    $(instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
+    $(instance._list.$element().find(".dx-list-item").first()).trigger("dxclick");
 
     assert.equal(instance.option("value"), "item 1", "send correct value to input when using custom template");
 });
@@ -734,7 +734,7 @@ QUnit.testInActiveWindow("using multifield datasource", function(assert) {
     keyboard
         .type("i");
 
-    $(instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
+    $(instance._list.$element().find(".dx-list-item").first()).trigger("dxclick");
 
     assert.equal(instance.option("value"), "item 1", "send correct value to input when using multifield datasource");
 
@@ -744,7 +744,7 @@ QUnit.testInActiveWindow("using multifield datasource", function(assert) {
     keyboard
         .type("e");
 
-    $(instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
+    $(instance._list.$element().find(".dx-list-item").first()).trigger("dxclick");
 
     assert.equal(instance.option("value"), "ed", "send correct value to input when change 'valueExpr' option");
 });
@@ -775,7 +775,7 @@ QUnit.testInActiveWindow("using multifield datasource with template", function(a
     keyboard
         .type("i");
 
-    $(instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
+    $(instance._list.$element().find(".dx-list-item").first()).trigger("dxclick");
 
     assert.equal(instance.option("value"), "item 1", "send correct value to input when using multifield datasource");
 });
@@ -905,7 +905,7 @@ QUnit.module("Overlay integration", {
         });
         this.instance = this.element.dxAutocomplete("instance");
         this.$input = this.element.find("." + TEXTEDITOR_INPUT_CLASS);
-        this.popup = this.instance._popup.element();
+        this.popup = this.instance._popup.$element();
         this.keyboard = keyboardMock(this.$input);
     },
     afterEach: function() {
@@ -1113,7 +1113,7 @@ QUnit.testInActiveWindow("when updating value option, input.val() do not updatin
     assert.equal(this.inputValue(), "i", "input value");
     assert.equal(this.widgetValue(), "i", "input value");
 
-    $(this.instance._list.element().find(".dx-list-item").first()).trigger("dxclick");
+    $(this.instance._list.$element().find(".dx-list-item").first()).trigger("dxclick");
 
     this.keyboard.caret(6);
 
@@ -1152,7 +1152,7 @@ QUnit.test("big dataSource loading", function(assert) {
 
     keyboardMock(this.instance._input()).type("0");
 
-    assert.equal(instance._list.element().find(".dx-list-item").length, 10);
+    assert.equal(instance._list.$element().find(".dx-list-item").length, 10);
 });
 
 QUnit.test("B233605 autocomplete shows on short time", function(assert) {
@@ -1293,11 +1293,11 @@ QUnit.test("B238021", function(assert) {
 
 QUnit.test("B251138 disabled", function(assert) {
     this.instance.option("disabled", true);
-    assert.ok(this.instance.element().hasClass("dx-state-disabled"), "disabled state should be added to autocomplete itself");
+    assert.ok(this.instance.$element().hasClass("dx-state-disabled"), "disabled state should be added to autocomplete itself");
     assert.ok(this.instance.option("disabled"), "Disabled state should be propagated to texteditor");
 
     this.instance.option("disabled", false);
-    assert.ok(!this.instance.element().hasClass("dx-state-disabled"), "disabled state should be removed from autocomplete itself");
+    assert.ok(!this.instance.$element().hasClass("dx-state-disabled"), "disabled state should be removed from autocomplete itself");
     assert.ok(!this.instance.option("disabled"), "Disabled state should be propagated to texteditor");
 });
 

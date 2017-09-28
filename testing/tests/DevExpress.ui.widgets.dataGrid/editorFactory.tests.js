@@ -411,7 +411,7 @@ QUnit.test('Boolean editor', function(assert) {
 
     //assert
     assert.ok(checkBox, 'dxCheckBox created');
-    assert.ok(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox has dx-datagrid-checkbox-size class');
+    assert.ok(checkBox.$element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox has dx-datagrid-checkbox-size class');
     assert.equal(checkBox.option('value'), true, 'checkbox editor value');
     assert.ok(checkBox.option('hoverStateEnabled'), 'hover enabled');
     assert.ok(checkBox.option('focusStateEnabled'), 'focus enabled');
@@ -439,7 +439,7 @@ QUnit.test('Boolean editor when inOnForm is true', function(assert) {
 
     //assert
     assert.ok(checkBox, 'dxCheckBox created');
-    assert.notOk(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox not have dx-datagrid-checkbox-size class');
+    assert.notOk(checkBox.$element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox not have dx-datagrid-checkbox-size class');
 });
 
 QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
@@ -455,7 +455,7 @@ QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
     var checkBox = $container.dxCheckBox('instance');
 
     //assert
-    assert.equal(checkBox.element().attr("tabIndex"), "7", "tabIndex attr of checkBox");
+    assert.equal(checkBox.$element().attr("tabIndex"), "7", "tabIndex attr of checkBox");
 });
 
 QUnit.test('Boolean editor with null value should be intermediate', function(assert) {
@@ -1240,7 +1240,7 @@ QUnit.module("Focus", {
         var that = this;
 
         that.clock = sinon.useFakeTimers();
-        that.element = function() {
+        that.$element = function() {
             return $("#container");
         };
         that.columns = [
@@ -1457,7 +1457,7 @@ QUnit.testInActiveWindow("Focus on a filtering cell after editing cell in 'batch
         dataSource: [{ name: "Bob", lastName: "Smith", age: 19 }, { name: "Dmitry", lastName: "Semenov", age: 31 }, { name: "George ", lastName: "Bush", age: 51 }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1515,7 +1515,7 @@ QUnit.testInActiveWindow("Focus on dxLookup editor", function(assert) {
         dataSource: [{ name: "Bob" }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1560,7 +1560,7 @@ QUnit.testInActiveWindow("Focus on dxTextArea editor", function(assert) {
         dataSource: [{ name: "Bob" }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1601,7 +1601,7 @@ if(devices.real().deviceType === "desktop" && browser.msie && parseInt(browser.v
                 position: "absolute"
             }).appendTo("#container");
 
-            this.element = function() {
+            this.$element = function() {
                 return $("#container");
             };
             setupDataGridModules(this, ['editorFactory']);

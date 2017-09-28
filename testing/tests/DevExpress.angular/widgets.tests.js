@@ -1075,7 +1075,7 @@ QUnit.test("Scope for template with 'noModel' option is not destroyed after clea
         _render: function() {
             var content = $("<div />")
                     .addClass("dx-content")
-                    .appendTo(this.element());
+                    .appendTo(this.$element());
 
             this.option("integrationOptions.templates")["template"].render({
                 container: content,

@@ -321,7 +321,7 @@ var commonPieChartSeries = {
 	* @type string
 	* @default 'clockwise'
 	* @acceptValues 'clockwise' | 'anticlockwise'
-    * @deprecated
+    * @deprecated dxpiechartoptions_segmentsdirection
 	*/
     segmentsDirection: 'clockwise',
     /**
@@ -329,7 +329,7 @@ var commonPieChartSeries = {
 	* @publicName startAngle
 	* @type number
 	* @default 0
-    * @deprecated
+    * @deprecated dxpiechartoptions_startangle
 	*/
     startAngle: 0,
     /**
@@ -338,7 +338,7 @@ var commonPieChartSeries = {
 	* @type number
 	* @default 0.5
 	* @propertyOf dxPieChartSeriesTypes_DoughnutSeries
-    * @deprecated
+    * @deprecated dxpiechartoptions_innerradius
 	*/
     innerRadius: 0.5,
     /**

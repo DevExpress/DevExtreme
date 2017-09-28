@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     registerComponent = require("core/component_registrator"),
+    config = require("core/config"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
     devices = require("core/devices"),
     DOMComponent = require("core/dom_component"),
@@ -774,7 +775,7 @@ QUnit.test("element method should return correct component element", function(as
     var $element = $("#component").TestComponent();
     var instance = $element.TestComponent("instance");
 
-    assert.strictEqual(instance.element().get(0), $element.get(0), "correct element present");
+    assert.strictEqual(instance.$element().get(0), $element.get(0), "correct element present");
 });
 
 $.each(["onInitialized", "onOptionChanged", "onDisposing"], function(_, action) {
@@ -811,9 +812,9 @@ QUnit.test("the 'elementAttr' option should set attributes to widget element acc
 QUnit.test("changing class via 'elementAttr' option should preserve component specific classes", function(assert) {
     var SomeComponent = DOMComponent.inherit({
         _render: function() {
-            this.element().addClass("dx-some-class1");
+            this.$element().addClass("dx-some-class1");
             this.callBase();
-            this.element().addClass("dx-some-class2");
+            this.$element().addClass("dx-some-class2");
         }
     });
 
@@ -858,7 +859,7 @@ QUnit.test("Dispose: content of container is cleaned", function(assert) {
         _render: function() {
             var p = document.createElement("p");
             p.textContent = "Some text";
-            this.element()[0].appendChild(p);
+            this.$element()[0].appendChild(p);
             this.callBase();
         }
     });
@@ -956,8 +957,8 @@ QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
         _render: function() {
             var p = document.createElement("p");
             p.textContent = "Some text";
-            this.element()[0].appendChild(p);
-            eventsEngine.on(this.element(), "click", function() {
+            this.$element()[0].appendChild(p);
+            eventsEngine.on(this.$element(), "click", function() {
                 clickRun = true;
             });
             this.callBase();
@@ -976,4 +977,16 @@ QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
 
     assert.ok(disposeRun);
     assert.notOk(clickRun);
+});
+
+
+QUnit.test("get element", function(assert) {
+    var element = $("#component").TestComponent(),
+        instance = dataUtils.data(element[0], "TestComponent");
+
+    if(config().useJQueryRenderer) {
+        assert.deepEqual(instance.element()[0], $("#component")[0]);
+    } else {
+        assert.equal(instance.element(), $("#component").get(0));
+    }
 });

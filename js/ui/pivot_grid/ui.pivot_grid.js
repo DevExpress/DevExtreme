@@ -949,7 +949,7 @@ var PivotGrid = Widget.inherit({
                 that.callBase(args);
                 that._renderFieldChooser();
                 that._renderContextMenu();
-                that._renderLoadPanel(that._dataArea.groupElement(), that.element());
+                that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                 that._invalidate();
                 break;
             case "export":
@@ -970,7 +970,7 @@ var PivotGrid = Widget.inherit({
                 that._renderDescriptionArea();
                 break;
             case "loadPanel":
-                that._renderLoadPanel(that._dataArea.groupElement(), that.element());
+                that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                 that._invalidate();
                 break;
             case "fieldPanel":
@@ -1099,7 +1099,7 @@ var PivotGrid = Widget.inherit({
             $container = that._pivotGridContainer;
 
         if(that._contextMenu) {
-            that._contextMenu.element().remove();
+            that._contextMenu.$element().remove();
         }
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
@@ -1132,7 +1132,7 @@ var PivotGrid = Widget.inherit({
                 params.itemData.onItemClick && params.itemData.onItemClick(params);
             },
             cssClass: PIVOTGRID_CLASS,
-            target: that.element()
+            target: that.$element()
         });
     },
 
@@ -1345,17 +1345,17 @@ var PivotGrid = Widget.inherit({
         if(loadPanelVisible && !isLoading) {
             that._hideLoadingTimeoutID = setTimeout(function() {
                 that._loadPanel.option("visible", false);
-                that.element().removeClass(OVERFLOW_HIDDEN_CLASS);
+                that.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
             });
         } else {
             that._loadPanel.option("visible", isLoading);
-            that.element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
+            that.$element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
         }
     },
 
     _renderDescriptionArea: function() {
         var that = this,
-            $element = that.element(),
+            $element = that.$element(),
             $descriptionCell = $element.find("." + DESCRIPTION_AREA_CELL_CLASS),
             $toolbarContainer = $(DIV).addClass("dx-pivotgrid-toolbar"),
             fieldPanel = that.option("fieldPanel"),
@@ -1377,7 +1377,7 @@ var PivotGrid = Widget.inherit({
 
         $descriptionCell.toggleClass("dx-pivotgrid-background", fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields || fieldPanel.showRowFields));
 
-        that.element().find(".dx-pivotgrid-toolbar").remove();
+        that.$element().find(".dx-pivotgrid-toolbar").remove();
 
         $toolbarContainer.prependTo($targetContainer);
 
@@ -1410,7 +1410,7 @@ var PivotGrid = Widget.inherit({
 
     _detectHasContainerHeight: function() {
         var that = this,
-            element = that.element(),
+            element = that.$element(),
             testElement;
 
         if(isDefined(that._hasHeight) || element.is(":hidden")) {
@@ -1442,7 +1442,7 @@ var PivotGrid = Widget.inherit({
         that._dataFields = that._dataFields || new FieldsArea(that, "data");
         that._dataFields.render(dataHeaderContainer, dataSource.getAreaFields("data"));
 
-        that.element().dxPivotGridFieldChooserBase("instance").renderSortable();
+        that.$element().dxPivotGridFieldChooserBase("instance").renderSortable();
     },
 
     _createTableElement: function() {
@@ -1503,7 +1503,7 @@ var PivotGrid = Widget.inherit({
         tableElement = !isFirstDrawing && that._tableElement();
 
         if(!tableElement) {
-            that.element().addClass(PIVOTGRID_CLASS)
+            that.$element().addClass(PIVOTGRID_CLASS)
                 .addClass(ROW_LINES_CLASS)
                 .addClass(FIELDS_CONTAINER_CLASS);
 
@@ -1545,16 +1545,16 @@ var PivotGrid = Widget.inherit({
                 .appendTo(tableElement);
 
             that._pivotGridContainer.append(tableElement);
-            that.element().append(that._pivotGridContainer);
+            that.$element().append(that._pivotGridContainer);
 
             if(that.option("rowHeaderLayout") === "tree") {
                 rowsAreaElement.addClass("dx-area-tree-view");
             }
         }
 
-        that.element().addClass(OVERFLOW_HIDDEN_CLASS);
+        that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-        that._createComponent(that.element(), PivotGridFieldChooserBase, {
+        that._createComponent(that.$element(), PivotGridFieldChooserBase, {
             dataSource: that.getDataSource(),
             allowFieldDragging: that.option("fieldPanel.allowFieldDragging")
         });
@@ -1566,7 +1566,7 @@ var PivotGrid = Widget.inherit({
         dataArea.tableElement().prepend(columnsArea.headElement());
 
         if(isFirstDrawing) {
-            that._renderLoadPanel(dataArea.groupElement().parent(), that.element());
+            that._renderLoadPanel(dataArea.groupElement().parent(), that.$element());
             that._renderDescriptionArea();
 
             rowsArea.processScroll();
@@ -1647,7 +1647,7 @@ var PivotGrid = Widget.inherit({
     },
 
     _tableElement: function() {
-        return this.element().find('table').first();
+        return this.$element().find('table').first();
     },
 
     addWidgetPrefix: function(className) {
@@ -1745,7 +1745,7 @@ var PivotGrid = Widget.inherit({
 
             if(that._hasHeight) {
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, tableElement.find(".dx-column-header"), filterHeaderCell], "height");
-                groupHeight = that.element().height() - filterHeaderCell.height() - tableElement.find(".dx-data-header").height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
+                groupHeight = that.$element().height() - filterHeaderCell.height() - tableElement.find(".dx-data-header").height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
             totalWidth = dataArea.tableElement().width();
@@ -1754,7 +1754,7 @@ var PivotGrid = Widget.inherit({
 
             rowsAreaWidth = getArraySum(rowsAreaColumnWidths);
 
-            elementWidth = that.element().width();
+            elementWidth = that.$element().width();
 
             bordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], "width");
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
@@ -1806,8 +1806,8 @@ var PivotGrid = Widget.inherit({
                 rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
 
                 //T317921
-                if(!that._hasHeight && (elementWidth !== that.element().width())) {
-                    var diff = elementWidth - that.element().width();
+                if(!that._hasHeight && (elementWidth !== that.$element().width())) {
+                    var diff = elementWidth - that.$element().width();
                     if(!hasColumnsScroll) {
                         adjustSizeArray(resultWidths, diff);
                         columnsArea.setColumnsWidth(resultWidths);

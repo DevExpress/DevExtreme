@@ -314,7 +314,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(COMPONENT_CLASS);
+        this.$element().addClass(COMPONENT_CLASS);
         this._preventSingleAppointmentClick = false;
     },
 
@@ -572,7 +572,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _calculateResizableArea: function(itemSetting, appointmentData) {
-        var area = this.element().closest(".dx-scrollable-content"),
+        var area = this.$element().closest(".dx-scrollable-content"),
             allDay = itemSetting.allDay;
 
         this.notifyObserver("getResizableAppointmentArea", {
@@ -845,7 +845,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             var virtualGroup = this._virtualAppointments[groupIndex],
                 virtualItems = virtualGroup.items,
                 virtualCoordinates = virtualGroup.coordinates,
-                $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.element(),
+                $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
                 left = virtualCoordinates.left;
 
             this.notifyObserver("renderDropDownAppointments", {
@@ -986,7 +986,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     updateDraggablesBoundOffsets: function() {
         if(this.option("allowDrag")) {
-            this.element().find("." + APPOINTMENT_ITEM_CLASS).each((function(_, appointmentElement) {
+            this.$element().find("." + APPOINTMENT_ITEM_CLASS).each((function(_, appointmentElement) {
                 var $appointment = $(appointmentElement),
                     appointmentData = this._getItemData($appointment);
 

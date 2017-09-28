@@ -635,7 +635,7 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
             dataSource: dataSource,
             dataStructure: "plain"
         }).dxTreeView("instance"),
-        toggleIcon = $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(1),
+        toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(1),
         items;
 
     dataSource.store().insert({
@@ -645,7 +645,7 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
     });
 
     toggleIcon.trigger("dxclick");
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 4);
 
     dataSource.store().insert({
@@ -654,11 +654,11 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
         parentId: 0
     });
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 5);
 
     treeView.option("searchValue", "Item 2");
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 5);
 
     dataSource.store().insert({
@@ -667,7 +667,7 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
         parentId: 0
     });
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 5);
 });
 
@@ -715,27 +715,27 @@ QUnit.test("Repaint treeView on every dataSource modified - remove", function(as
             dataSource: dataSource,
             dataStructure: "plain"
         }).dxTreeView("instance"),
-        toggleIcon = $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS),
+        toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS),
         items;
 
     toggleIcon.eq(0).trigger("dxclick");
 
     toggleIcon.eq(1).trigger("dxclick");
 
-    toggleIcon = $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
     toggleIcon.eq(1).trigger("dxclick");
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 6);
 
     dataSource.store().remove(4);
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 5);
 
     dataSource.store().remove(1);
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 2);
     assert.equal(treeView.option("items").length, 2);
 });

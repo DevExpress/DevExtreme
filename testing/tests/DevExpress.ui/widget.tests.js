@@ -447,7 +447,7 @@ require("common.css!");
             NAME: "Widget",
 
             _render: function() {
-                this.element().append("<div></div>");
+                this.$element().append("<div></div>");
             }
         });
 
@@ -753,7 +753,7 @@ require("common.css!");
             item1 = $("<div>").addClass("widget-item-hover"),
             item2 = $("<div>").addClass("widget-item-hover");
 
-        instance.element()
+        instance.$element()
             .append(item1)
             .append(item2);
 
@@ -840,7 +840,7 @@ require("common.css!");
 
         _renderContentImpl: function() {
             if(this.option("integrationOptions.templates").template) {
-                this.option("integrationOptions.templates").template.render({ container: this.element() });
+                this.option("integrationOptions.templates").template.render({ container: this.$element() });
             }
         }
     });
@@ -1060,7 +1060,7 @@ require("common.css!");
                 disposed = true;
             };
 
-            testContainer.element().remove();
+            testContainer.$element().remove();
 
             assert.ok(disposed, "template disposed");
         });
@@ -1102,7 +1102,7 @@ require("common.css!");
 
                 _renderContentImpl: function() {
                     this._getTemplateByOption("template")
-                        .render({ container: this.element() });
+                        .render({ container: this.$element() });
                 }
             });
 
@@ -1139,7 +1139,7 @@ require("common.css!");
 
                 _renderContentImpl: function() {
                     if(this.option("integrationOptions.templates")["item"]) {
-                        this.option("integrationOptions.templates")["item"].render({ container: this.element() });
+                        this.option("integrationOptions.templates")["item"].render({ container: this.$element() });
                     }
                 }
             });
@@ -1188,7 +1188,7 @@ require("common.css!");
 
                 _renderContentImpl: function() {
                     if(this.option("integrationOptions.templates").template) {
-                        this.option("integrationOptions.templates").template.render({ container: this.element() });
+                        this.option("integrationOptions.templates").template.render({ container: this.$element() });
                     }
                 }
             });
@@ -1198,7 +1198,7 @@ require("common.css!");
 
                 _render: function() {
                     this.callBase();
-                    this.element().text("test");
+                    this.$element().text("test");
                 }
             });
 

@@ -109,12 +109,12 @@ var PivotTabs = CollectionWidget.inherit({
     },
 
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     },
 
     _elementWidth: function() {
         if(!this._elementWidthCache) {
-            this._elementWidthCache = this.element().width();
+            this._elementWidthCache = this.$element().width();
         }
 
         return this._elementWidthCache;
@@ -173,7 +173,7 @@ var PivotTabs = CollectionWidget.inherit({
     },
 
     _render: function() {
-        this.element().addClass(PIVOT_TABS_CLASS);
+        this.$element().addClass(PIVOT_TABS_CLASS);
 
         this.callBase();
 
@@ -401,7 +401,7 @@ var PivotTabs = CollectionWidget.inherit({
     },
 
     _initSwipeHandlers: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         eventsEngine.on($element, eventUtils.addNamespace(swipeEvents.start, this.NAME), {
             itemSizeFunc: this._elementWidth.bind(this)

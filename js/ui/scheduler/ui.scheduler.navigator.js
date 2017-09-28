@@ -253,7 +253,7 @@ var SchedulerNavigator = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(ELEMENT_CLASS);
+        this.$element().addClass(ELEMENT_CLASS);
         this._initButtons();
     },
 
@@ -288,7 +288,7 @@ var SchedulerNavigator = Widget.inherit({
         this.setAria("label", "Previous period", $prev);
 
         this._updateButtonsState();
-        this.element().append($prev, $caption, $next);
+        this.$element().append($prev, $caption, $next);
     },
 
     _updateButtonsState: function() {
@@ -345,18 +345,18 @@ var SchedulerNavigator = Widget.inherit({
                         return devices.current().generic;
                     },
                     options: {
-                        target: this._caption.element()
+                        target: this._caption.$element()
                     }
                 }
             ]
         });
-        this._popover.element().appendTo(this.element());
+        this._popover.$element().appendTo(this.$element());
     },
 
     _popoverContentReadyHandler: function() {
         this._calendar = this._createComponent($("<div>"), Calendar, this._calendarOptions());
-        this._calendar.element().addClass(CALENDAR_CLASS);
-        this._popover.content().append(this._calendar.element());
+        this._calendar.$element().addClass(CALENDAR_CLASS);
+        this._popover.content().append(this._calendar.$element());
     },
 
     _calendarOptions: function() {

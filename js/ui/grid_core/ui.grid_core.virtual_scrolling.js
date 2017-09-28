@@ -426,7 +426,7 @@ var VirtualScrollingRowsViewExtender = (function() {
                 if(!bottomLoadPanelElement) {
                     $("<div>")
                         .addClass(that.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS))
-                        .append(that._createComponent($("<div>"), LoadIndicator).element())
+                        .append(that._createComponent($("<div>"), LoadIndicator).$element())
                         .appendTo(that._findContentElement());
                 }
             } else if(bottomLoadPanelElement) {
@@ -511,13 +511,13 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that.callBase();
 
-            if(that.component.element() && !that._windowScroll && $element.closest(document).length) {
+            if(that.component.$element() && !that._windowScroll && $element.closest(document).length) {
                 that._windowScroll = virtualScrollingCore.subscribeToExternalScrollers($element, function(scrollPos) {
                     if(!that._hasHeight && that._rowHeight) {
                         that._setViewportScrollTop(scrollPos);
                     }
 
-                }, that.component.element());
+                }, that.component.$element());
 
                 that.on("disposing", function() {
                     that._windowScroll.dispose();

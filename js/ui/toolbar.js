@@ -55,7 +55,7 @@ var Toolbar = ToolbarBase.inherit({
             * @name dxToolbarOptions_submenuType
             * @publicName submenuType
             * @type string
-            * @default 'dxDropDownMenu'
+            * @default 'dropDownMenu'
             * @acceptValues 'actionSheet'|'listTop'|'listBottom'|'dropDownMenu'
             * @hidden
             */
@@ -254,13 +254,13 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _hideOverflowItems: function(elementWidth) {
-        var overflowItems = this.element().find("." + TOOLBAR_AUTO_HIDE_ITEM_CLASS);
+        var overflowItems = this.$element().find("." + TOOLBAR_AUTO_HIDE_ITEM_CLASS);
 
         if(!overflowItems.length) {
             return;
         }
 
-        elementWidth = elementWidth || this.element().width();
+        elementWidth = elementWidth || this.$element().width();
         $(overflowItems).removeClass(TOOLBAR_HIDDEN_ITEM);
 
         var beforeWidth = this._$beforeSection.outerWidth(),
@@ -356,7 +356,7 @@ var Toolbar = ToolbarBase.inherit({
     },
 
     _arrangeItems: function() {
-        if(this.element().is(":hidden")) {
+        if(this.$element().is(":hidden")) {
             return;
         }
 
@@ -370,7 +370,7 @@ var Toolbar = ToolbarBase.inherit({
         });
         this._restoreItems = [];
 
-        var elementWidth = this.element().width();
+        var elementWidth = this.$element().width();
 
         this._hideOverflowItems(elementWidth);
         this.callBase(elementWidth);

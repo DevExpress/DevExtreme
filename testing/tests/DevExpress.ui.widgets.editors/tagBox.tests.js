@@ -1124,7 +1124,7 @@ QUnit.test("value should be correct if the default tag template is used and the 
             opened: true
         }),
         instance = $element.dxTagBox("instance"),
-        $list = instance._list.element();
+        $list = instance._list.$element();
 
     $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
     assert.deepEqual(instance.option("value"), [items[0]], "the 'value' option is correct");
@@ -1140,7 +1140,7 @@ QUnit.test("selected list items should be correct if the default tag template is
             opened: true
         }),
         list = $element.dxTagBox("instance")._list,
-        $list = list.element();
+        $list = list.$element();
 
     $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
     assert.deepEqual(list.option("selectedItems"), [items[0]], "the 'selectedItems' list option is correct");
@@ -2767,7 +2767,7 @@ QUnit.test("filter should be reset after the search value clearing (T385456)", f
         .type(items[0][0])
         .press("backspace");
 
-    var $listItems = instance._list.element().find(".dx-list-item");
+    var $listItems = instance._list.$element().find(".dx-list-item");
     assert.equal($listItems.length, items.length, "list items count is correct");
 });
 
@@ -2985,7 +2985,7 @@ QUnit.test("selected items should be correct if the list item is selected", func
             value: [items[0]],
             opened: true
         }).dxTagBox("instance"),
-        $listItems = tagBox._list.element().find(".dx-list-item");
+        $listItems = tagBox._list.$element().find(".dx-list-item");
 
     $($listItems.eq(1)).trigger("dxclick");
     assert.deepEqual(tagBox.option("selectedItems"), [items[0], items[1]], "the 'selectedItems' option value is correct");
@@ -2998,7 +2998,7 @@ QUnit.test("selected items should be correct if the list item is unselected", fu
             value: items,
             opened: true
         }).dxTagBox("instance"),
-        $listItems = tagBox._list.element().find(".dx-list-item");
+        $listItems = tagBox._list.$element().find(".dx-list-item");
 
     $($listItems.eq(0)).trigger("dxclick");
     assert.deepEqual(tagBox.option("selectedItems"), [items[1], items[2]], "the 'selectedItems' option value is correct");
@@ -3015,7 +3015,7 @@ QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' 
             opened: true,
             onSelectionChanged: spy
         }).dxTagBox("instance"),
-        $listItems = tagBox._list.element().find(".dx-list-item");
+        $listItems = tagBox._list.$element().find(".dx-list-item");
 
     $($listItems.eq(0)).trigger("dxclick");
     assert.deepEqual(spy.args[1][0].addedItems, [items[0]], "first item is in the 'addedItems' argument");
@@ -3036,7 +3036,7 @@ QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems
             opened: true,
             onSelectionChanged: spy
         }).dxTagBox("instance"),
-        $listItems = tagBox._list.element().find(".dx-list-item");
+        $listItems = tagBox._list.$element().find(".dx-list-item");
 
     $($listItems.eq(0)).trigger("dxclick");
     assert.deepEqual(spy.args[1][0].removedItems, [items[0]], "first item is in the 'removedItems' argument");
@@ -3285,7 +3285,7 @@ QUnit.test("list items selection should not be reset after next page loading", f
     });
 
     var list = this.getListInstance(),
-        $list = list.element(),
+        $list = list.$element(),
         $listItems = this.$listItems;
 
     $($listItems.eq(0)).trigger("dxclick");
@@ -3419,7 +3419,7 @@ QUnit.module("the 'onSelectAllValueChanged' option", {
 });
 
 QUnit.test("the 'onSelectAllValueChanged' option behavior", function(assert) {
-    var $selectAllCheckbox = this.instance._list.element().find(".dx-list-select-all-checkbox");
+    var $selectAllCheckbox = this.instance._list.$element().find(".dx-list-select-all-checkbox");
 
     $($selectAllCheckbox).trigger("dxclick");
     assert.ok(this.spy.args[this.spy.args.length - 1][0].value, "all items are selected");
@@ -3429,7 +3429,7 @@ QUnit.test("the 'onSelectAllValueChanged' option behavior", function(assert) {
 });
 
 QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if all items are selected", function(assert) {
-    var $list = this.instance._list.element();
+    var $list = this.instance._list.$element();
     $($list.find(".dx-list-select-all-checkbox")).trigger("dxclick");
     assert.equal(this.spy.callCount, 1, "count is correct");
 });
@@ -3440,13 +3440,13 @@ QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if all i
         value: this.items.slice()
     });
 
-    var $list = this.instance._list.element();
+    var $list = this.instance._list.$element();
     $($list.find(".dx-list-select-all-checkbox")).trigger("dxclick");
     assert.equal(this.spy.callCount, 1, "count is correct");
 });
 
 QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if one item is selected", function(assert) {
-    var $list = this.instance._list.element();
+    var $list = this.instance._list.$element();
     $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
     assert.equal(this.spy.callCount, 1, "count is correct");
 });
@@ -3457,7 +3457,7 @@ QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if one i
         value: this.items.splice()
     });
 
-    var $list = this.instance._list.element();
+    var $list = this.instance._list.$element();
     $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
     assert.equal(this.spy.callCount, 1, "count is correct");
 });
@@ -4123,7 +4123,7 @@ QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first tim
     this.clock.tick();
     assert.equal(tagBox.option("selectedItems").length, 2, "selectedItems contains all selected values");
 
-    var $container = tagBox.element().find("." + TAGBOX_TAG_CONTAINER_CLASS);
+    var $container = tagBox.$element().find("." + TAGBOX_TAG_CONTAINER_CLASS);
     var $tagRemoveButtons = $container.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS);
 
     tagBox.option("onSelectionChanged", function(e) {

@@ -163,7 +163,7 @@ var SlideOutView = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(SLIDEOUTVIEW_CLASS);
+        this.$element().addClass(SLIDEOUTVIEW_CLASS);
 
         this._deferredAnimate = undefined;
         this._initHideTopOverlayHandler();
@@ -211,7 +211,7 @@ var SlideOutView = Widget.inherit({
 
         $wrapper.append(this._$menu);
         $wrapper.append(this._$container);
-        this.element().append($wrapper);
+        this.$element().append($wrapper);
 
         // NOTE: B251455
         eventsEngine.on(this._$container, "MSPointerDown", noop);
@@ -303,7 +303,7 @@ var SlideOutView = Widget.inherit({
 
     _getMenuWidth: function() {
         if(!this._menuWidth) {
-            var maxMenuWidth = this.element().width() - this.option("contentOffset");
+            var maxMenuWidth = this.$element().width() - this.option("contentOffset");
             this.menuContent().css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
             var currentMenuWidth = this.menuContent().width();
 

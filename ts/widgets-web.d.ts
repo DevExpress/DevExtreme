@@ -1254,6 +1254,9 @@ declare module DevExpress.ui {
 
             /** @docid GridBaseOptions_columns_headerFilter_groupInterval */
             groupInterval?: any;
+
+            /** @docid GridBaseOptions_columns_headerFilter_searchEnabled */
+            searchEnabled?: boolean;
         };
     }
 
@@ -2026,6 +2029,9 @@ declare module DevExpress.ui {
             /** @docid GridBaseOptions_columnChooser_enabled */
             enabled?: boolean;
 
+            /** @docid GridBaseOptions_columnChooser_searchEnabled */
+            searchEnabled?: boolean;
+
             /** @docid GridBaseOptions_columnChooser_mode */
             mode?: string;
 
@@ -2124,6 +2130,9 @@ declare module DevExpress.ui {
 
             /** @docid GridBaseOptions_headerFilter_width */
             width?: number;
+
+            /** @docid GridBaseOptions_headerFilter_searchEnabled */
+            searchEnabled?: boolean;
 
             /** @docid GridBaseOptions_headerFilter_texts */
             texts?: {

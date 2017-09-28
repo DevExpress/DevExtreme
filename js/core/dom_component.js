@@ -5,6 +5,7 @@ var $ = require("../core/renderer"),
     extend = require("./utils/extend").extend,
     config = require("./config"),
     errors = require("./errors"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     windowResizeCallbacks = require("./utils/window").resizeCallbacks,
     commonUtils = require("./utils/common"),
     each = require("./utils/iterator").each,
@@ -136,7 +137,7 @@ var DOMComponent = Component.inherit({
 
         delete attributes.class;
 
-        this.element()
+        this.$element()
             .attr(attributes)
             .addClass(classNames);
     },
@@ -150,14 +151,14 @@ var DOMComponent = Component.inherit({
             return;
         }
 
-        this.element().addClass(VISIBILITY_CHANGE_CLASS);
+        this.$element().addClass(VISIBILITY_CHANGE_CLASS);
         this._attachVisibilityChangeHandlers();
     },
 
     _renderDimensions: function() {
         var width = this._getOptionValue("width"),
             height = this._getOptionValue("height"),
-            $element = this.element();
+            $element = this.$element();
 
         $element.outerWidth(width);
         $element.outerHeight(height);
@@ -168,8 +169,8 @@ var DOMComponent = Component.inherit({
         var resizeEventName = "dxresize." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
 
 
-        eventsEngine.off(that.element(), resizeEventName);
-        eventsEngine.on(that.element(), resizeEventName, function() {
+        eventsEngine.off(that.$element(), resizeEventName);
+        eventsEngine.on(that.$element(), resizeEventName, function() {
             that._dimensionChanged();
         });
     },
@@ -180,18 +181,18 @@ var DOMComponent = Component.inherit({
         var shownEventName = "dxshown." + this.NAME + VISIBILITY_CHANGE_EVENTNAMESPACE;
 
         that._isHidden = !that._isVisible();
-        eventsEngine.off(that.element(), hidingEventName);
-        eventsEngine.on(that.element(), hidingEventName, function() {
+        eventsEngine.off(that.$element(), hidingEventName);
+        eventsEngine.on(that.$element(), hidingEventName, function() {
             that._checkVisibilityChanged("hiding");
         });
-        eventsEngine.off(that.element(), shownEventName);
-        eventsEngine.on(that.element(), shownEventName, function() {
+        eventsEngine.off(that.$element(), shownEventName);
+        eventsEngine.on(that.$element(), shownEventName, function() {
             that._checkVisibilityChanged("shown");
         });
     },
 
     _isVisible: function() {
-        return this.element().is(":visible");
+        return this.$element().is(":visible");
     },
 
     _checkVisibilityChanged: function(event) {
@@ -212,7 +213,7 @@ var DOMComponent = Component.inherit({
 
     _modelByElement: function() {
         var modelByElement = this.option("modelByElement") || commonUtils.noop;
-        return modelByElement(this.element());
+        return modelByElement(this.$element());
     },
 
     _invalidate: function() {
@@ -241,7 +242,7 @@ var DOMComponent = Component.inherit({
     },
 
     _toggleRTLDirection: function(rtl) {
-        this.element().toggleClass(RTL_DIRECTION_CLASS, rtl);
+        this.$element().toggleClass(RTL_DIRECTION_CLASS, rtl);
     },
 
     _createComponent: function(element, component, config) {
@@ -297,7 +298,7 @@ var DOMComponent = Component.inherit({
 
     _defaultActionConfig: function() {
         return extend(this.callBase(), {
-            context: this._modelByElement(this.element())
+            context: this._modelByElement(this.$element())
         });
     },
 
@@ -312,8 +313,8 @@ var DOMComponent = Component.inherit({
     * @type_function_param1_field3 model:object
     **/
     _defaultActionArgs: function() {
-        var element = this.element(),
-            model = this._modelByElement(this.element());
+        var element = this.$element(),
+            model = this._modelByElement(this.$element());
         return extend(this.callBase(), {
             element: element,
             model: model
@@ -377,13 +378,17 @@ var DOMComponent = Component.inherit({
         }
     },
 
+    $element: function() {
+        return this._$element;
+    },
+
     /**
     * @name domcomponentmethods_element
     * @publicName element()
     * @return jQuery
     */
     element: function() {
-        return this._$element;
+        return getPublicElement(this.$element());
     },
 
     /**
@@ -391,7 +396,7 @@ var DOMComponent = Component.inherit({
     * @publicName dispose()
     */
     dispose: function() {
-        var element = this.element().get(0);
+        var element = this.$element().get(0);
         dataUtils.cleanDataRecursive(element, true);
         element.textContent = "";
         this._removeAttributes(element);

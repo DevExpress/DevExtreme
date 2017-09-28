@@ -68,7 +68,7 @@ var FileUploader = Editor.inherit({
     _supportedKeys: function() {
         var click = function(e) {
             e.preventDefault();
-            var $selectButton = this._selectButton.element();
+            var $selectButton = this._selectButton.$element();
             eventsEngine.trigger($selectButton, clickEvent.name);
         };
 
@@ -517,7 +517,7 @@ var FileUploader = Editor.inherit({
     },
 
     _focusTarget: function() {
-        return this.element().find("." + FILEUPLOADER_BUTTON_CLASS);
+        return this.$element().find("." + FILEUPLOADER_BUTTON_CLASS);
     },
 
     _getSubmitElement: function() {
@@ -525,7 +525,7 @@ var FileUploader = Editor.inherit({
     },
 
     _render: function() {
-        this.element().addClass(FILEUPLOADER_CLASS);
+        this.$element().addClass(FILEUPLOADER_CLASS);
 
         this._renderWrapper();
         this._renderInputWrapper();
@@ -606,8 +606,8 @@ var FileUploader = Editor.inherit({
             });
         }
 
-        this.element().toggleClass(FILEUPLOADER_SHOW_FILE_LIST_CLASS, showFileList);
-        this.element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length);
+        this.$element().toggleClass(FILEUPLOADER_SHOW_FILE_LIST_CLASS, showFileList);
+        this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length);
         this._updateFileNameMaxWidth();
 
         this._$validationMessage && this._$validationMessage.dxOverlay("instance").repaint();
@@ -691,7 +691,7 @@ var FileUploader = Editor.inherit({
 
         return $("<div>")
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
-            .append(file.cancelButton.element());
+            .append(file.cancelButton.$element());
     },
 
     _getUploadButton: function(file) {
@@ -711,12 +711,12 @@ var FileUploader = Editor.inherit({
         );
 
         file.onLoadStart.add((function() {
-            file.uploadButton.element().remove();
+            file.uploadButton.$element().remove();
         }).bind(this));
 
         return $("<div>")
             .addClass(FILEUPLOADER_BUTTON_CONTAINER_CLASS)
-            .append(file.uploadButton.element());
+            .append(file.uploadButton.$element());
     },
 
     _removeFile: function(file) {
@@ -731,7 +731,7 @@ var FileUploader = Editor.inherit({
         this.option("value", value);
         this._doPreventRecreatingFiles = false;
 
-        this.element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length);
+        this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length);
 
         this._doPreventInputChange = true;
         this._$fileInput.val("");
@@ -892,7 +892,7 @@ var FileUploader = Editor.inherit({
         }
 
         this._dragEventsCount++;
-        this.element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
+        this.$element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
     },
 
     _dragOverHandler: function(e) {
@@ -909,13 +909,13 @@ var FileUploader = Editor.inherit({
         this._dragEventsCount--;
 
         if(this._dragEventsCount <= 0) {
-            this.element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
+            this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
     },
 
     _dropHandler: function(e) {
         this._dragEventsCount = 0;
-        this.element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
+        this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
 
         if(this._useInputForDrop()) {
             return;
@@ -994,7 +994,7 @@ var FileUploader = Editor.inherit({
     _renderWrapper: function() {
         var $wrapper = $("<div>")
             .addClass(FILEUPLOADER_WRAPPER_CLASS)
-            .appendTo(this.element());
+            .appendTo(this.$element());
 
         var $container = $("<div>")
             .addClass(FILEUPLOADER_CONTAINER_CLASS)
@@ -1031,7 +1031,7 @@ var FileUploader = Editor.inherit({
 
         if($file) {
             file.progressBar = this._createProgressBar(value.size);
-            file.progressBar.element().appendTo($file);
+            file.progressBar.$element().appendTo($file);
             this._initStatusMessage(file);
             this._initCancelButton(file);
         }
@@ -1061,7 +1061,7 @@ var FileUploader = Editor.inherit({
             if(that.option("showFileList")) {
                 file.$statusMessage.text(that.option("uploadFailedMessage"));
                 file.$statusMessage.css("display", "");
-                file.progressBar.element().remove();
+                file.progressBar.$element().remove();
             }
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
 
@@ -1087,7 +1087,7 @@ var FileUploader = Editor.inherit({
             if(that.option("showFileList")) {
                 file.$statusMessage.text(that.option("uploadedMessage"));
                 file.$statusMessage.css("display", "");
-                file.progressBar.element().remove();
+                file.progressBar.$element().remove();
             }
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
 

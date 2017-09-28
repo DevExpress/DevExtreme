@@ -67,7 +67,7 @@ var RadioButton = Editor.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(RADIO_BUTTON_CLASS);
+        this.$element().addClass(RADIO_BUTTON_CLASS);
     },
 
     _render: function() {
@@ -121,11 +121,11 @@ var RadioButton = Editor.inherit({
         this._$icon = $("<div>").addClass(RADIO_BUTTON_ICON_CLASS);
 
         $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo(this._$icon);
-        this.element().append(this._$icon);
+        this.$element().append(this._$icon);
     },
 
     _renderCheckedState: function(checked) {
-        this.element().toggleClass(RADIO_BUTTON_CHECKED_CLASS, checked);
+        this.$element().toggleClass(RADIO_BUTTON_CHECKED_CLASS, checked);
         this.setAria("checked", checked);
     },
 
@@ -137,8 +137,8 @@ var RadioButton = Editor.inherit({
         }).bind(this));
 
 
-        eventsEngine.off(this.element(), eventName);
-        eventsEngine.on(this.element(), eventName, (function(e) {
+        eventsEngine.off(this.$element(), eventName);
+        eventsEngine.on(this.$element(), eventName, (function(e) {
             this._clickAction({ jQueryEvent: e });
         }).bind(this));
     },

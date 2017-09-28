@@ -118,7 +118,7 @@ var ScrollView = Scrollable.inherit({
 
     _initMarkup: function() {
         this.callBase();
-        this.element().addClass(SCROLLVIEW_CLASS);
+        this.$element().addClass(SCROLLVIEW_CLASS);
 
         this._initContent();
         this._initTopPocket();
@@ -142,7 +142,7 @@ var ScrollView = Scrollable.inherit({
         var $bottomPocket = this._$bottomPocket = $("<div>").addClass(SCROLLVIEW_BOTTOM_POCKET_CLASS),
             $reachBottom = this._$reachBottom = $("<div>").addClass(SCROLLVIEW_REACHBOTTOM_CLASS),
             $loadContainer = $("<div>").addClass(SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($("<div>")).element(),
+            $loadIndicator = new LoadIndicator($("<div>")).$element(),
             $text = this._$reachBottomText = $("<div>").addClass(SCROLLVIEW_REACHBOTTOM_TEXT_CLASS);
 
         this._updateReachBottomText();
@@ -158,12 +158,12 @@ var ScrollView = Scrollable.inherit({
 
     _initLoadPanel: function() {
         this._loadPanel = this._createComponent($("<div>").addClass(SCROLLVIEW_LOADPANEL)
-            .appendTo(this.element()), LoadPanel, {
+            .appendTo(this.$element()), LoadPanel, {
                 shading: false,
                 delay: 400,
                 message: this.option("refreshingText"),
                 position: {
-                    of: this.element()
+                    of: this.$element()
                 }
             });
     },
@@ -335,7 +335,7 @@ var ScrollView = Scrollable.inherit({
     },
 
     startLoading: function() {
-        if(this._loadingIndicator() && this.element().is(":visible")) {
+        if(this._loadingIndicator() && this.$element().is(":visible")) {
             this._loadPanel.show();
         }
         this._lock();
@@ -351,7 +351,7 @@ var ScrollView = Scrollable.inherit({
         this.callBase();
 
         if(this._loadPanel) {
-            this._loadPanel.element().remove();
+            this._loadPanel.$element().remove();
         }
     }
 });

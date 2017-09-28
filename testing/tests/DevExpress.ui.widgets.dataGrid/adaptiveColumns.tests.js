@@ -18,23 +18,24 @@ require("ui/data_grid/ui.data_grid");
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
+    CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity",
+    eventsEngine = require("events/core/events_engine");
 
-function setupDataGrid(that) {
-    that.element = function() {
-        return $(".dx-datagrid");
+function setupDataGrid(that, $dataGridContainer) {
+    that.$element = function() {
+        return $dataGridContainer ? $dataGridContainer : $(".dx-datagrid");
     };
 
     if(that.columns !== null) {
         that.columns = that.columns || [
-                { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-                { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true }
+            { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
+            { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true }
         ];
     }
 
     that.items = that.items || [
-            { firstName: 'Blablablablablablablablablabla', lastName: "Psy" },
-            { firstName: 'Super', lastName: "Star" }
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy" },
+        { firstName: 'Super', lastName: "Star" }
     ];
 
     that.options = $.extend({}, {
@@ -51,7 +52,7 @@ function setupDataGrid(that) {
     };
 
     dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'validating',
-        'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'summary', 'gridView'], that.setupOptions);
+        'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'summary', 'gridView'], that.setupOptions);
 }
 
 QUnit.module("AdaptiveColumns", {
@@ -3616,4 +3617,126 @@ QUnit.testInActiveWindow("Cell edit mode. Validation works only for editable for
 
     //assert
     assert.ok(!$itemsContent.first().hasClass("dx-datagrid-invalid"), "invalid style should not be applied");
+});
+
+QUnit.module("Keyboard navigation", {
+    setupModule: function() {
+        this.$dataGrid = $(".dx-datagrid").width(200);
+
+        this.columns = [
+            { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
+            { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
+            { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
+        ];
+
+        this.items = [
+            { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
+            { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
+        ];
+
+        this.options = {
+            useKeyboard: true,
+            tabIndex: 0,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            }
+        };
+        setupDataGrid(this, $("#container"));
+
+        this.gridView.render($("#container"));
+        this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
+    },
+
+    getActiveInputElement: function() {
+        return this.$dataGrid.find("input");
+    },
+
+    triggerFormItemClick: function(index) {
+        $(".dx-field-item-content").eq(index).trigger("dxclick");
+        this.clock.tick();
+    },
+
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+        this.setupModule();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
+        //arrange
+        this.triggerFormItemClick(0);
+
+        //assert
+        var $nextItemContent = this.getActiveInputElement().closest(".dx-item").next().find(".dx-field-item-content");
+        assert.equal($nextItemContent.text(), "Full Name", "next item text");
+        assert.equal($nextItemContent.attr("tabindex"), 0, "next item has tabindex");
+
+        //act
+        eventsEngine.triggerHandler($nextItemContent, "focus");
+        this.clock.tick();
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Full Name", "current input is correct");
+        assert.ok($input.is(":focus"), "current input is focused");
+    });
+
+    QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
+        //arrange
+        this.triggerFormItemClick(1);
+
+        //assert
+        var $nextItemContent = this.getActiveInputElement().closest(".dx-item").prev().find(".dx-field-item-content");
+        assert.equal($nextItemContent.text(), "Psy", "next item text");
+        assert.equal($nextItemContent.attr("tabindex"), 0, "next item has tabindex");
+
+        //act
+        eventsEngine.triggerHandler($nextItemContent, "focus");
+        this.clock.tick();
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Psy", "current input is correct");
+        assert.ok($input.is(":focus"), "current input is focused");
+    });
+
+    QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
+        //arrange
+        this.triggerFormItemClick(1);
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+        this.clock.tick();
+
+        var $cell = this.$dataGrid.find("td:not([class])").eq(1);
+        eventsEngine.triggerHandler($cell, "focus");
+        this.clock.tick();
+
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Super", "current input is correct");
+    });
+
+    QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
+        //arrange
+        this.editingController.editCell(0, 0);
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.equal(this.getActiveInputElement().val(), "Super");
+    });
 });

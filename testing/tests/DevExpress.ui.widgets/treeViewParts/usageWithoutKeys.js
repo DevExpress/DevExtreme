@@ -37,9 +37,9 @@ QUnit.test("Nested items should be rendered correctly", function(assert) {
         items: [{ text: "Item 1", items: [{ text: "Nested item 1" }, { text: "Nested item 2" }] }, { text: "Item 2" }]
     }).dxTreeView("instance");
 
-    $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
+    $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).trigger("dxclick");
 
-    assert.equal(treeView.element().find("." + internals.ITEM_CLASS).length, 4);
+    assert.equal(treeView.$element().find("." + internals.ITEM_CLASS).length, 4);
 });
 
 QUnit.test("onItemSelectionChanged event should work correctly", function(assert) {
@@ -50,7 +50,7 @@ QUnit.test("onItemSelectionChanged event should work correctly", function(assert
         onItemSelectionChanged: onItemSelectionChanged
     }).dxTreeView("instance");
 
-    $(treeView.element()).find(".dx-checkbox").eq(0).trigger("dxclick");
+    $(treeView.$element()).find(".dx-checkbox").eq(0).trigger("dxclick");
     var args = onItemSelectionChanged.getCall(0).args[0];
 
     assert.strictEqual(args.itemData.id, undefined);
@@ -63,7 +63,7 @@ QUnit.test("Parent should be updated correctly", function(assert) {
         showCheckBoxesMode: "normal"
     }).dxTreeView("instance");
 
-    $(treeView.element()).find(".dx-checkbox").eq(1).trigger("dxclick");
+    $(treeView.$element()).find(".dx-checkbox").eq(1).trigger("dxclick");
     assert.ok(treeView.getNodes()[0].selected);
 });
 
@@ -74,7 +74,7 @@ QUnit.test("selectItem() method", function(assert) {
             showCheckBoxesMode: "normal"
         }).dxTreeView("instance");
 
-    var item = treeView.element().find("." + internals.ITEM_CLASS).eq(1).get(0);
+    var item = treeView.$element().find("." + internals.ITEM_CLASS).eq(1).get(0);
     treeView.selectItem(item);
 
     var nodes = treeView.getNodes(),
@@ -88,9 +88,9 @@ QUnit.test("selectItem() method", function(assert) {
     assert.ok(items[0].items[0].selected);
     assert.ok(!items[1].selected);
 
-    assert.ok(treeView.element().find(".dx-checkbox").eq(0).dxCheckBox("instance").option("value"));
-    assert.ok(treeView.element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value"));
-    assert.ok(!treeView.element().find(".dx-checkbox").eq(2).dxCheckBox("instance").option("value"));
+    assert.ok(treeView.$element().find(".dx-checkbox").eq(0).dxCheckBox("instance").option("value"));
+    assert.ok(treeView.$element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value"));
+    assert.ok(!treeView.$element().find(".dx-checkbox").eq(2).dxCheckBox("instance").option("value"));
 });
 
 QUnit.test("unselectItem() method", function(assert) {
@@ -100,7 +100,7 @@ QUnit.test("unselectItem() method", function(assert) {
             showCheckBoxesMode: "normal"
         }).dxTreeView("instance");
 
-    var item = treeView.element().find("." + internals.ITEM_CLASS).eq(1).get(0);
+    var item = treeView.$element().find("." + internals.ITEM_CLASS).eq(1).get(0);
     treeView.unselectItem(item);
 
     var nodes = treeView.getNodes(),
@@ -114,9 +114,9 @@ QUnit.test("unselectItem() method", function(assert) {
     assert.ok(!items[0].items[0].selected);
     assert.ok(!items[1].selected);
 
-    assert.ok(!treeView.element().find(".dx-checkbox").eq(0).dxCheckBox("instance").option("value"));
-    assert.ok(!treeView.element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value"));
-    assert.ok(!treeView.element().find(".dx-checkbox").eq(2).dxCheckBox("instance").option("value"));
+    assert.ok(!treeView.$element().find(".dx-checkbox").eq(0).dxCheckBox("instance").option("value"));
+    assert.ok(!treeView.$element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value"));
+    assert.ok(!treeView.$element().find(".dx-checkbox").eq(2).dxCheckBox("instance").option("value"));
 });
 
 
@@ -128,7 +128,7 @@ QUnit.test("expandItem() method", function(assert) {
             showCheckBoxesMode: "normal"
         }).dxTreeView("instance");
 
-    var item = treeView.element().find("." + internals.ITEM_CLASS).eq(0).get(0);
+    var item = treeView.$element().find("." + internals.ITEM_CLASS).eq(0).get(0);
     treeView.expandItem(item);
 
     var nodes = treeView.getNodes(),
@@ -176,7 +176,7 @@ QUnit.test("collapseItem() method", function(assert) {
             showCheckBoxesMode: "normal"
         }).dxTreeView("instance");
 
-    var item = treeView.element().find("." + internals.ITEM_CLASS).eq(0).get(0);
+    var item = treeView.$element().find("." + internals.ITEM_CLASS).eq(0).get(0);
     treeView.collapseItem(item);
 
     var nodes = treeView.getNodes(),

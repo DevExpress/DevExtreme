@@ -43,7 +43,7 @@ var TestComponent = CollectionWidget.inherit({
     },
 
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     },
 
     _createActionByOption: function(optionName, config) {
@@ -386,7 +386,7 @@ QUnit.test("'itemTemplate' as script element (no root element) with string rende
 
 QUnit.test("No data text message - no items and source", function(assert) {
     var component = new TestComponent("#cmp", {});
-    assert.equal(component.element().find("." + EMPTY_MESSAGE_CLASS).length, 1);
+    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 1);
 });
 
 QUnit.test("No data text message - empty items", function(assert) {
@@ -434,11 +434,11 @@ QUnit.test("No data text message - custom value", function(assert) {
         noDataText: noDataText
     });
 
-    assert.equal(component.element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
+    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
 
     noDataText = noDataText + "123";
     component.option({ noDataText: noDataText });
-    assert.equal(component.element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
+    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).text(), noDataText);
 });
 
 QUnit.test("message element is not rendered if no data text is null, '', false", function(assert) {
@@ -446,20 +446,20 @@ QUnit.test("message element is not rendered if no data text is null, '', false",
         noDataText: null
     });
 
-    assert.equal(component.element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
+    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
 
     component.option({ noDataText: false });
-    assert.equal(component.element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
+    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
 
     component.option({ noDataText: "" });
-    assert.equal(component.element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
+    assert.equal(component.$element().find("." + EMPTY_MESSAGE_CLASS).length, 0);
 });
 
 QUnit.test("No data message may contain HTML markup", function(assert) {
     var component = new TestComponent("#cmp", {
             noDataText: "<div class=\"custom\">No data custom</div>"
         }),
-        $noDataContainer = component.element().find("." + EMPTY_MESSAGE_CLASS);
+        $noDataContainer = component.$element().find("." + EMPTY_MESSAGE_CLASS);
 
     assert.equal($noDataContainer.find(".custom").length, 1, "custom HTML markup is present");
 });
@@ -587,20 +587,20 @@ QUnit.test("item.visible property changing should not re-render whole item (T259
     var instance = new TestComponent("#cmp", {
             items: [{ text: '1' }]
         }),
-        $item = instance.element().find(".item");
+        $item = instance.$element().find(".item");
 
     instance.option("items[0].visible", true);
-    assert.ok($item.is(instance.element().find(".item")));
+    assert.ok($item.is(instance.$element().find(".item")));
 });
 
 QUnit.test("item.disabled property changing should not re-render whole item", function(assert) {
     var instance = new TestComponent("#cmp", {
             items: [{ text: '1' }]
         }),
-        $item = instance.element().find(".item");
+        $item = instance.$element().find(".item");
 
     instance.option("items[0].disabled", true);
-    assert.ok($item.is(instance.element().find(".item")));
+    assert.ok($item.is(instance.$element().find(".item")));
 });
 
 

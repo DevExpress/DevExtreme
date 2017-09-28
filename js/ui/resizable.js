@@ -137,7 +137,7 @@ var Resizable = DOMComponent.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(RESIZABLE_CLASS);
+        this.$element().addClass(RESIZABLE_CLASS);
     },
 
     _render: function() {
@@ -172,7 +172,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _renderHandle: function(handleName) {
-        var $element = this.element(),
+        var $element = this.$element(),
             $handle = $("<div>");
 
         $handle
@@ -200,7 +200,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _dragStartHandler: function(e) {
-        var $element = this.element();
+        var $element = this.$element();
         if($element.is(".dx-state-disabled, .dx-state-disabled *")) {
             e.cancel = true;
             return;
@@ -228,7 +228,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _toggleResizingClass: function(value) {
-        this.element().toggleClass(RESIZABLE_RESIZING_CLASS, value);
+        this.$element().toggleClass(RESIZABLE_RESIZING_CLASS, value);
     },
 
     _renderDragOffsets: function(e) {
@@ -257,7 +257,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _dragHandler: function(e) {
-        var $element = this.element(),
+        var $element = this.$element(),
             sides = this._movingSides;
 
         var location = this._elementLocation,
@@ -270,8 +270,8 @@ var Resizable = DOMComponent.inherit({
         if(offset.x || this.option("stepPrecision") === "strict") this._renderWidth(width);
         if(offset.y || this.option("stepPrecision") === "strict") this._renderHeight(height);
 
-        var offsetTop = offset.y - ((this.element().outerHeight() || height) - height),
-            offsetLeft = offset.x - ((this.element().outerWidth() || width) - width);
+        var offsetTop = offset.y - ((this.$element().outerHeight() || height) - height),
+            offsetLeft = offset.x - ((this.$element().outerWidth() || width) - width);
 
         translator.move($element, {
             top: location.top + (sides.top ? offsetTop : 0),
@@ -413,15 +413,15 @@ var Resizable = DOMComponent.inherit({
         var areaBorderLeft = $area ? this._getBorderWidth($area, "left") : 0,
             areaBorderTop = $area ? this._getBorderWidth($area, "top") : 0;
 
-        result.offset.left += areaBorderLeft + this._getBorderWidth(this.element(), "left");
-        result.offset.top += areaBorderTop + this._getBorderWidth(this.element(), "top");
+        result.offset.left += areaBorderLeft + this._getBorderWidth(this.$element(), "left");
+        result.offset.top += areaBorderTop + this._getBorderWidth(this.$element(), "top");
 
-        result.width -= this.element().outerWidth() - this.element().innerWidth();
-        result.height -= this.element().outerHeight() - this.element().innerHeight();
+        result.width -= this.$element().outerWidth() - this.$element().innerWidth();
+        result.height -= this.$element().outerHeight() - this.$element().innerHeight();
     },
 
     _dragEndHandler: function(e) {
-        var $element = this.element();
+        var $element = this.$element();
 
         this._resizeEndAction({
             jQueryEvent: e,
@@ -449,11 +449,11 @@ var Resizable = DOMComponent.inherit({
                 break;
             case "minWidth":
             case "maxWidth":
-                this._renderWidth(this.element().outerWidth());
+                this._renderWidth(this.$element().outerWidth());
                 break;
             case "minHeight":
             case "maxHeight":
-                this._renderHeight(this.element().outerHeight());
+                this._renderHeight(this.$element().outerHeight());
                 break;
             case "onResize":
             case "onResizeStart":
@@ -471,7 +471,7 @@ var Resizable = DOMComponent.inherit({
     },
 
     _clean: function() {
-        this.element().find("." + RESIZABLE_HANDLE_CLASS).remove();
+        this.$element().find("." + RESIZABLE_HANDLE_CLASS).remove();
     }
 
 });

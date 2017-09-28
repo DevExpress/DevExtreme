@@ -289,7 +289,7 @@ var LayoutManager = Widget.inherit({
 
     _render: function() {
         this._clearEditorInstances();
-        this.element().addClass(FORM_LAYOUT_MANAGER_CLASS);
+        this.$element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
         this.callBase();
     },
@@ -312,7 +312,7 @@ var LayoutManager = Widget.inherit({
 
         if(that._items && that._items.length) {
             var colCount = that._getColCount(),
-                $container = $("<div>").appendTo(that.element()),
+                $container = $("<div>").appendTo(that.$element()),
                 layoutItems;
 
             that._prepareItemsWithMerging(colCount);
@@ -354,13 +354,13 @@ var LayoutManager = Widget.inherit({
                     isSingleColumnMode = that.isSingleColumnMode();
 
                 if(onLayoutChanged) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isSingleColumnMode);
+                    that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isSingleColumnMode);
                     onLayoutChanged(isSingleColumnMode);
                 }
             },
             onContentReady: function(e) {
                 if(that.option("onLayoutChanged")) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
+                    that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
                 that._fireContentReadyAction();
             },
@@ -418,7 +418,7 @@ var LayoutManager = Widget.inherit({
 
     _getMaxColCount: function() {
         var minColWidth = this.option("minColWidth"),
-            width = this.element().width(),
+            width = this.$element().width(),
             itemsCount = this._items.length,
             maxColCount = Math.floor(width / minColWidth) || 1;
 

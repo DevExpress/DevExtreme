@@ -59,7 +59,7 @@ if(device.deviceType === "desktop" && browser.msie && parseInt(browser.version) 
                 { key: 'test3', data: { name: 'test3', id: 3, date: new Date(2003, 2, 3), isTested2: true, age: 13 }, values: ['test3', 3, new Date(2003, 2, 3), true, 13], rowType: 'data' }]
             };
 
-            that.element = function() {
+            that.$element = function() {
                 return $(".dx-datagrid");
             };
 
@@ -998,7 +998,7 @@ QUnit.test('batch mode - correct render boolean cell and functionality on cell c
         allowUpdating: true,
         mode: 'batch'
     };
-    that.element = function() {
+    that.$element = function() {
         return testElement;
     };
 
@@ -1044,7 +1044,7 @@ QUnit.test('batch mode - correct render boolean cell when cancel onEditingStart 
     };
     that.editingController.optionChanged({ name: "onEditingStart" });
 
-    that.element = function() {
+    that.$element = function() {
         return testElement;
     };
 
@@ -1911,7 +1911,7 @@ if(!device.win) {
         };
 
         rowsView.render(testElement);
-        that.element = function() {
+        that.$element = function() {
             return testElement;
         };
         testElement.find('tbody > tr').first().find('td').eq(2).trigger('dxclick'); //Edit
@@ -4912,7 +4912,7 @@ QUnit.testInActiveWindow('Save edit data in cell mode on value change when showE
         allowUpdating: true,
         mode: 'cell'
     };
-    that.element = function() {
+    that.$element = function() {
         return testElement;
     };
 
@@ -4958,7 +4958,7 @@ QUnit.testInActiveWindow('Cell should save focus state after data saving in cell
         mode: 'cell'
     };
 
-    that.element = function() {
+    that.$element = function() {
         return testElement;
     };
 
@@ -5002,7 +5002,7 @@ QUnit.testInActiveWindow('Focus should not returns to previous cell after data s
         mode: 'cell'
     };
 
-    that.element = function() {
+    that.$element = function() {
         return testElement;
     };
 
@@ -5040,7 +5040,7 @@ QUnit.testInActiveWindow('Update be called once in cell mode on value change for
         allowUpdating: true,
         mode: 'cell'
     };
-    that.element = function() {
+    that.$element = function() {
         return testElement;
     };
 
@@ -5184,7 +5184,7 @@ QUnit.test('Focus position should be correct after editing in cell editing mode 
         allowDeleting: true,
         mode: 'cell'
     };
-    that.element = function() {
+    that.$element = function() {
         return $testElement;
     };
 
@@ -5230,7 +5230,7 @@ QUnit.test('Focus position should be retured after editing in cell editing mode 
         allowDeleting: true,
         mode: 'cell'
     };
-    that.element = function() {
+    that.$element = function() {
         return $testElement;
     };
 
@@ -5341,7 +5341,7 @@ QUnit.testInActiveWindow('Hide focus overlay before update on editing cell', fun
         mode: 'batch'
     };
     rowsView.render(testElement);
-    that.element = function() {
+    that.$element = function() {
         return testElement;
     };
 
@@ -5589,7 +5589,7 @@ QUnit.testInActiveWindow("The lookup column should keep focus after changing val
         allowUpdating: true,
         mode: "cell"
     };
-    that.element = function() {
+    that.$element = function() {
         return $testElement;
     };
     rowsView.render($testElement);
@@ -5704,7 +5704,7 @@ if(!devices.win8) {
 
         rowsView.render(testElement);
         that.columnsController.init();
-        that.element = function() {
+        that.$element = function() {
             return testElement;
         };
 
@@ -5743,7 +5743,7 @@ if(!devices.win8) {
 
         rowsView.render(testElement);
         that.columnsController.init();
-        that.element = function() {
+        that.$element = function() {
             return testElement;
         };
 
@@ -5783,7 +5783,7 @@ if(!devices.win8) {
 
         rowsView.render(testElement);
         that.columnsController.init();
-        that.element = function() {
+        that.$element = function() {
             return testElement;
         };
 
@@ -6213,7 +6213,7 @@ if(!devices.win8) {
 
         rowsView.render($testElement);
         that.columnsController.init();
-        that.element = function() {
+        that.$element = function() {
             return $testElement;
         };
 
@@ -6303,7 +6303,7 @@ QUnit.module('Editing with validation', {
             }
         };
 
-        this.element = function() {
+        this.$element = function() {
             return $(".dx-datagrid");
         };
 
@@ -6734,7 +6734,7 @@ QUnit.test("Button inside the selectBox is not clicked", function(assert) {
     that.editCell(0, 0);
     that.clock.tick();
     selectBoxButton = rowsView.getCellElement(0, 0).find(".dx-selectbox .dx-dropdowneditor-button").dxButton("instance");
-    $(selectBoxButton.element()).trigger("dxclick");
+    $(selectBoxButton.$element()).trigger("dxclick");
 
     //assert
     assert.ok($(".dx-dropdowneditor-overlay").length > 0);
@@ -7420,7 +7420,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
-    assert.ok(selectBoxInstance.element().offset().left + selectBoxInstance.element().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after selectbox");
+    assert.ok(selectBoxInstance.$element().offset().left + selectBoxInstance.$element().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after selectbox");
     assert.ok(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width() < invalidTooltipInstance.content().offset().left, "invalid tooltip is shown after revert tooltip");
 });
 
@@ -7477,7 +7477,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
     assert.ok(invalidTooltipInstance.content().offset().left + invalidTooltipInstance.content().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after invalid tooltip");
-    assert.roughEqual(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.element().offset().left, 1, "selectbox is shown after revert tooltip");
+    assert.roughEqual(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.$element().offset().left, 1, "selectbox is shown after revert tooltip");
 
     $("#qunit-fixture").removeClass("qunit-fixture-static").css("width", "");
 });
@@ -10255,7 +10255,7 @@ QUnit.test("Edit and save form with invalid data", function(assert) {
 
     var rowValidatingArgs = [];
 
-    that.element = function() {
+    that.$element = function() {
         return testElement;
     };
     that.options.onRowValidating = function(e) {
@@ -10565,7 +10565,7 @@ QUnit.module('Editing - "popup" mode', {
                 initViews: true
             });
 
-            this.editingController.component.element = function() {
+            this.editingController.component.$element = function() {
                 return this.$testElement;
             };
         };

@@ -1919,7 +1919,7 @@ QUnit.test("widget should correctly react on viewport change if parent container
             animation: null
         }).dxOverlay("instance");
 
-        overlay.element().parent().hide();
+        overlay.$element().parent().hide();
 
         viewPort($origViewport); // Need to trigger viewport change callback but not change viewport value
         assert.equal($origViewport.children("." + OVERLAY_WRAPPER_CLASS).length, 0, "overlay not rendered because parent is hidden");
@@ -2792,7 +2792,7 @@ QUnit.test("elements on the page have to change focus by tab after overlay dispo
         shading: true
     });
 
-    overlay.element().remove();
+    overlay.$element().remove();
 
     $(document).trigger(this.tabEvent);
 

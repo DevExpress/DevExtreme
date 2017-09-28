@@ -165,7 +165,7 @@ var moduleOptions = {
         this.items = items;
         this.instance.option("items", items);
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+        var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
             allDayAppointmentWidth = this.width * 2;
         assert.equal($appointment.eq(0).outerWidth(), allDayAppointmentWidth, "appointment has right width");
     });
@@ -188,7 +188,7 @@ var moduleOptions = {
             renderingStrategy: "horizontalMonth"
         });
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
         assert.equal($appointment.length, 1, "appointment is not multiline");
     });
@@ -209,7 +209,7 @@ var moduleOptions = {
         this.items = items;
         this.instance.option("items", items);
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+        var $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
         assert.ok($appointment.hasClass("dx-scheduler-appointment-empty"), "appointment has the class");
     });
 
@@ -231,7 +231,7 @@ var moduleOptions = {
         this.instance.option("renderingStrategy", "horizontalMonth");
         this.instance.option("items", items);
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
         assert.ok($appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has the class");
     });
 
@@ -254,7 +254,7 @@ var moduleOptions = {
         this.instance.option("renderingStrategy", "horizontalMonth");
         this.instance.option("items", items);
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
         assert.ok($appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has the class");
     });
 
@@ -281,7 +281,7 @@ var moduleOptions = {
         this.instance.option("renderingStrategy", "horizontal");
         this.instance.option("items", items);
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
         assert.ok($appointment.eq(0).hasClass("dx-scheduler-all-day-appointment"), "Appointment has a right css class");
     });
@@ -299,7 +299,7 @@ var moduleOptions = {
         this.instance.option("renderingStrategy", "horizontal");
         this.instance.option("items", items);
 
-        var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
         assert.equal($appointment.outerWidth(), 2, "Min width is OK");
     });

@@ -115,7 +115,7 @@ var WidgetAdapterBase = Class.inherit({
     _addItemToWidget: function(itemWrapper) {
         var items = this.widget.option("items");
         items.push(itemWrapper.widgetItem);
-        if(this.widget.element().is(":visible")) {
+        if(this.widget.$element().is(":visible")) {
             itemWrapper.widgetItem.isJustAdded = true;
         }
         this.widget.option("items", items);

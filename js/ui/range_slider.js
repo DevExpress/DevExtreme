@@ -170,7 +170,7 @@ var RangeSlider = Slider.inherit({
     },
 
     _renderSubmitElement: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         this._$submitStartElement = $("<input>")
             .attr("type", "hidden")
@@ -197,7 +197,7 @@ var RangeSlider = Slider.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(RANGE_SLIDER_CLASS);
+        this.$element().addClass(RANGE_SLIDER_CLASS);
 
         this._callHandlerMethod("repaint");
     },

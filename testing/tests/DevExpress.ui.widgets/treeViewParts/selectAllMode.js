@@ -79,7 +79,7 @@ QUnit.test("'selectAll' item should be selected if all items are selected", func
 
     var checkBox = this.treeView._$selectAllItem.dxCheckBox("instance");
 
-    this.treeView.element().find(".dx-checkbox:not(.dx-treeview-select-all-item)").each(function(_, checkbox) {
+    this.treeView.$element().find(".dx-checkbox:not(.dx-treeview-select-all-item)").each(function(_, checkbox) {
         $(checkbox).dxCheckBox("instance").option("value", true);
     });
 
@@ -93,7 +93,7 @@ QUnit.test("'selectAll' item should be unselected if all items are unselected", 
 
     this.treeView.selectAll();
 
-    this.treeView.element().find(".dx-checkbox:not(.dx-treeview-select-all-item)").each(function(_, checkbox) {
+    this.treeView.$element().find(".dx-checkbox:not(.dx-treeview-select-all-item)").each(function(_, checkbox) {
         $(checkbox).dxCheckBox("instance").option("value", false);
     });
 
@@ -107,7 +107,7 @@ QUnit.test("'selectAll' item should have intermediate state if at least one item
 
     this.treeView.selectAll();
 
-    this.treeView.element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value", false);
+    this.treeView.$element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value", false);
 
     assert.ok(!checkBox.option("value"));
 });

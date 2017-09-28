@@ -35,7 +35,7 @@ var Editor = Widget.inherit({
         this.callBase();
         this.validationRequest = Callbacks();
 
-        var $element = this.element();
+        var $element = this.$element();
 
         if($element) {
             dataUtils.data($element[0], VALIDATION_TARGET, this);
@@ -178,7 +178,7 @@ var Editor = Widget.inherit({
         var isValid = this.option("isValid"),
             validationError = this.option("validationError"),
             validationMessageMode = this.option("validationMessageMode"),
-            $element = this.element();
+            $element = this.$element();
 
         $element.toggleClass(INVALID_CLASS, !isValid);
         this.setAria("invalid", !isValid || undefined);
@@ -233,7 +233,7 @@ var Editor = Widget.inherit({
     },
 
     _getValidationMessageTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _getValidationMessagePosition: function(positionRequest) {
@@ -256,12 +256,12 @@ var Editor = Widget.inherit({
     },
 
     _toggleReadOnlyState: function() {
-        this.element().toggleClass(READONLY_STATE_CLASS, !!this.option("readOnly"));
+        this.$element().toggleClass(READONLY_STATE_CLASS, !!this.option("readOnly"));
         this.setAria("readonly", this.option("readOnly") || undefined);
     },
 
     _dispose: function() {
-        var element = this.element()[0];
+        var element = this.$element()[0];
         dataUtils.data(element, VALIDATION_TARGET, null);
         this.callBase();
     },

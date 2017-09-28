@@ -41,7 +41,7 @@ registerDecorator(
 
             this._controlWidget = this._singleStrategy ? RadioButton : CheckBox;
 
-            this._list.element().addClass(SELECT_DECORATOR_ENABLED_CLASS);
+            this._list.$element().addClass(SELECT_DECORATOR_ENABLED_CLASS);
         },
 
         beforeBag: function(config) {
@@ -161,7 +161,7 @@ registerDecorator(
 
         dispose: function() {
             this._disposeSelectAll();
-            this._list.element().removeClass(SELECT_DECORATOR_ENABLED_CLASS);
+            this._list.$element().removeClass(SELECT_DECORATOR_ENABLED_CLASS);
             this.callBase.apply(this, arguments);
         },
 

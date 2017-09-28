@@ -82,7 +82,7 @@ QUnit.test("markup init", function(assert) {
     var $element = $("#selectBox").dxSelectBox(),
         instance = $element.dxSelectBox("instance"),
         $list = $element.find(".dx-list"),
-        $popup = $(instance._popup.element());
+        $popup = $(instance._popup.$element());
 
     assert.ok($element.hasClass(WIDGET_CLASS));
     assert.ok($popup.hasClass(POPUP_CLASS));
@@ -112,7 +112,7 @@ QUnit.test("Right width of popup", function(assert) {
     $element = $("#selectBox").dxSelectBox({ width: 100 });
     instance = $element.dxSelectBox("instance");
     instance.open();
-    $popup = $(instance._popup.element());
+    $popup = $(instance._popup.$element());
 
     assert.ok($popup.hasClass(POPUP_CLASS));
 
@@ -849,7 +849,7 @@ QUnit.test("the selected item should be focused after popup is opened", function
             opened: true,
             searchEnabled: true
         }).dxSelectBox("instance"),
-        $list = $(selectBox._list.element());
+        $list = $(selectBox._list.$element());
 
     assert.ok($list.find("." + LIST_ITEM_CLASS).eq(1).hasClass("dx-state-focused"), "the selected item is focused");
 
@@ -872,7 +872,7 @@ QUnit.test("no items should be focused if input value is changed", function(asse
         }),
         selectBox = $selectBox.dxSelectBox("instance"),
         $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
-        $list = $(selectBox._list.element());
+        $list = $(selectBox._list.$element());
 
     keyboardMock($input)
         .focus()
@@ -2796,7 +2796,7 @@ QUnit.testInActiveWindow("the first list item should be focused while searching"
         opened: true
     });
 
-    var $list = $(this.selectBox._list.element());
+    var $list = $(this.selectBox._list.$element());
 
     assert.ok($list.find("." + LIST_ITEM_CLASS).eq(2).hasClass("dx-state-focused"), "the focused element is correct after popup is opened");
 
@@ -2829,7 +2829,7 @@ QUnit.test("No items should be focused while searching if the 'acceptCustomValue
         .focus()
         .type(this.item[0]);
 
-    var $list = $(this.selectBox._list.element());
+    var $list = $(this.selectBox._list.$element());
 
     assert.equal($list.find(".dx-state-focused").length, 0, "no items are focused");
 });
@@ -2952,7 +2952,7 @@ QUnit.test("the selected item should be visible if the data source is loaded aft
             value: selectedItem
         }),
         list = $element.dxSelectBox("instance")._list,
-        $scrollableContainer = $(list.element().find(".dx-scrollable-container")),
+        $scrollableContainer = $(list.$element().find(".dx-scrollable-container")),
         $scrollableContent = $scrollableContainer.find(".dx-scrollable-content");
 
     dataSourceLoadedDeferred.promise().done(function() {
@@ -2985,7 +2985,7 @@ QUnit.test("selectbox should not render own components if it was disposed (T5174
         }).dxSelectBox("instance");
 
         instance.option("value", "1");
-        instance.element().remove();
+        instance.$element().remove();
         this.clock.tick(200);
         assert.ok(true, "exception is not expected");
     } catch(e) {
@@ -3041,11 +3041,11 @@ QUnit.test("B251138 disabled", function(assert) {
     var instance = $("#selectBox").dxSelectBox({ dataSource: [0, 1, 2], disabled: false }).dxSelectBox('instance');
 
     instance.option("disabled", true);
-    assert.ok(instance.element().hasClass("dx-state-disabled"), "disabled state should be added to SelectBox itself");
+    assert.ok(instance.$element().hasClass("dx-state-disabled"), "disabled state should be added to SelectBox itself");
     assert.ok(instance.option("disabled"), "Disabled state should be propagated to texteditor");
 
     instance.option("disabled", false);
-    assert.ok(!instance.element().hasClass("dx-state-disabled"), "disabled state should be removed from SelectBox itself");
+    assert.ok(!instance.$element().hasClass("dx-state-disabled"), "disabled state should be removed from SelectBox itself");
     assert.ok(!instance.option("disabled"), "Disabled state should be propagated to texteditor");
 });
 
@@ -4077,7 +4077,7 @@ QUnit.testInActiveWindow("dxSelectBox should not filter a dataSource when the wi
                 return "";
             }
         }).dxSelectBox("instance"),
-        $input = instance.element().find("." + TEXTEDITOR_INPUT_CLASS),
+        $input = instance.$element().find("." + TEXTEDITOR_INPUT_CLASS),
         keyboard = keyboardMock($input),
         filterDataSourceStub = sinon.stub(instance, "_filterDataSource");
 

@@ -54,7 +54,7 @@ var CommandManager = Class.inherit({
     },
     _checkCommandId: function(id, command) {
         if(id === null) {
-            throw errors.Error("E3010", command.element().get(0).outerHTML);
+            throw errors.Error("E3010", command.$element().get(0).outerHTML);
         }
     },
     renderCommandsToContainers: function(commands, containers) {

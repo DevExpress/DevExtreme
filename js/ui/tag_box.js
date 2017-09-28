@@ -520,7 +520,7 @@ var TagBox = SelectBox.inherit({
         this._$submitElement = $("<select>")
             .attr("multiple", "multiple")
             .css("display", "none")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _setSubmitValue: function() {
@@ -545,7 +545,7 @@ var TagBox = SelectBox.inherit({
 
         var isSingleLineMode = !this.option("multiline");
 
-        this.element()
+        this.$element()
             .addClass(TAGBOX_CLASS)
             .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(this.option("searchEnabled") || this.option("acceptCustomValue")))
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
@@ -572,7 +572,7 @@ var TagBox = SelectBox.inherit({
     _renderField: function() {
         var isDefaultFieldTemplate = !isDefined(this.option("fieldTemplate"));
 
-        this.element()
+        this.$element()
             .toggleClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS, isDefaultFieldTemplate)
             .toggleClass(TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS, !isDefaultFieldTemplate);
 
@@ -593,7 +593,7 @@ var TagBox = SelectBox.inherit({
     _renderTagRemoveAction: function() {
         var tagRemoveAction = this._createAction(this._removeTagHandler.bind(this));
         var eventName = eventUtils.addNamespace(clickEvent.name, "dxTagBoxTagRemove");
-        var $container = this.element().find("." + TEXTEDITOR_CONTAINER_CLASS);
+        var $container = this.$element().find("." + TEXTEDITOR_CONTAINER_CLASS);
 
         eventsEngine.off($container, eventName);
         eventsEngine.on($container, eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
@@ -605,7 +605,7 @@ var TagBox = SelectBox.inherit({
 
     _renderSingleLineScroll: function() {
         var mouseWheelEvent = eventUtils.addNamespace("dxmousewheel", this.NAME),
-            $element = this.element(),
+            $element = this.$element(),
             isMultiline = this.option("multiline");
 
         eventsEngine.off($element, mouseWheelEvent);
@@ -696,7 +696,7 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        var $selectAllCheckBox = this._list.element().find("." + LIST_SELECT_ALL_CHECKBOX_CLASS),
+        var $selectAllCheckBox = this._list.$element().find("." + LIST_SELECT_ALL_CHECKBOX_CLASS),
             selectAllCheckbox = $selectAllCheckBox.dxCheckBox("instance");
 
         selectAllCheckbox.registerKeyHandler("tab", this._popupElementTabHandler.bind(this));
@@ -722,7 +722,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderMultiSelect: function() {
-        this._$tagsContainer = this.element()
+        this._$tagsContainer = this.$element()
             .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
@@ -862,7 +862,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _refreshTagElements: function() {
-        this._tagElementsCache = this.element().find("." + TAGBOX_TAG_CLASS);
+        this._tagElementsCache = this.$element().find("." + TAGBOX_TAG_CLASS);
     },
 
     _tagElements: function() {
@@ -1078,7 +1078,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _updateWidgetHeight: function() {
-        var element = this.element(),
+        var element = this.$element(),
             originalHeight = element.height();
 
         this._renderInputSize();
@@ -1222,7 +1222,7 @@ var TagBox = SelectBox.inherit({
                 });
                 break;
             case "multiline":
-                this.element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
+                this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
                 this._renderSingleLineScroll();
                 break;
             default:

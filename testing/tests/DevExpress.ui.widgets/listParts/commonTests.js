@@ -33,12 +33,12 @@ var ScrollViewMock = DOMComponent.inherit({
     NAME: "dxScrollView",
 
     _init: function() {
-        var content = this.element().find(".scroll-view-content");
+        var content = this.$element().find(".scroll-view-content");
         if(content.length) {
             this._$scrollViewContent = content;
         } else {
             this._$scrollViewContent = $("<div />").addClass("scroll-view-content");
-            this.element().append(this._$scrollViewContent);
+            this.$element().append(this._$scrollViewContent);
         }
 
         this.callBase();
@@ -72,7 +72,7 @@ var ScrollViewMock = DOMComponent.inherit({
     release: function(hideOrShow) {
         this._history.push(new Date());
         this.toggleLoading(!hideOrShow);
-        $(this.element()).trigger("released");
+        $(this.$element()).trigger("released");
     },
 
     toggleLoading: function(showOrHide) {
@@ -701,7 +701,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with array sto
         instance.collapseGroup(1);
 
         this.clock.tick();
-        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+        assert.ok(instance.$element().find(".dx-list-next-button").length, "button was not removed");
     } finally {
         fx.off = false;
     }
@@ -734,7 +734,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with custom st
         instance.collapseGroup(1);
 
         this.clock.tick();
-        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+        assert.ok(instance.$element().find(".dx-list-next-button").length, "button was not removed");
     } finally {
         fx.off = false;
     }

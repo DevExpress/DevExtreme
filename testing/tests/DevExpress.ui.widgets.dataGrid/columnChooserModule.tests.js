@@ -363,7 +363,11 @@ QUnit.test("Get column elements", function(assert) {
         columnChooser,
         columnHiddenElements;
 
-    $.extend(this.columns, [{ caption: "Column 1", visible: true }, { caption: "Column 2", visible: false, showInColumnChooser: true }, { caption: "Column 3", visible: false, showInColumnChooser: true }]);
+    $.extend(this.columns, [
+        { caption: "Column 1", visible: true, index: 0 },
+        { caption: "Column 2", visible: false, showInColumnChooser: true, index: 1 },
+        { caption: "Column 3", visible: false, showInColumnChooser: true, index: 2 }
+    ]);
     this.setTestElement(testElement);
 
     this.renderColumnChooser();
@@ -384,8 +388,8 @@ QUnit.test("Get column elements", function(assert) {
 
     //assert
     assert.equal(columnHiddenElements.length, 2, "count hidden elements");
-    assert.strictEqual(columnHiddenElements.first().text(), "Column 2", "text hidden element 1");
-    assert.strictEqual(columnHiddenElements.last().text(), "Column 3", "text hidden element 2");
+    assert.strictEqual(columnHiddenElements[0].text(), "Column 2", "text hidden element 1");
+    assert.strictEqual(columnHiddenElements[1].text(), "Column 3", "text hidden element 2");
 });
 
 //B255428
@@ -501,6 +505,26 @@ QUnit.test("Column chooser is draggable", function(assert) {
     //assert
     columnChooserContainer = this.columnChooserView._popupContainer;
     assert.ok(columnChooserContainer.option("dragEnabled"), "Column chooser is draggable");
+});
+
+QUnit.test("Enable search", function(assert) {
+    var testElement = $("#container"),
+        $overlayWrapper,
+        treeView;
+
+    this.setTestElement(testElement);
+
+    this.options.columnChooser.searchEnabled = true;
+
+    //act
+    this.renderColumnChooser();
+    this.columnChooserView._popupContainer.option("visible", true);
+    this.clock.tick();
+    $overlayWrapper = this.columnChooserView._popupContainer._wrapper();
+
+    //assert
+    treeView = $overlayWrapper.find(".dx-treeview").dxTreeView("instance");
+    assert.ok(treeView.option("searchEnabled"));
 });
 
 if(device.deviceType === "desktop") {
@@ -818,7 +842,7 @@ QUnit.test("CheckBox mode - update treeview when changed the column option is sh
 
     this.renderColumnChooser();
     columnChooserView._popupContainer.option("visible", true);
-    columnChooserView._renderColumnChooserList = function() {
+    columnChooserView._renderTreeView = function() {
         callRenderColumnChooser = true;
     };
 
@@ -961,11 +985,11 @@ QUnit.test("CheckBox mode - update treeview when changing the column options", f
     this.showColumnChooser();
     this.clock.tick(1000);
 
-    sinon.spy(this.columnChooserView, "_renderColumnChooserList");
+    sinon.spy(this.columnChooserView, "_renderTreeView");
 
     //act
     this.columnsController.columnsChanged.fire({ optionNames: { all: true }, changeTypes: { columns: true } });
 
     //assert
-    assert.strictEqual(this.columnChooserView._renderColumnChooserList.callCount, 1, "update treeview");
+    assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, "update treeview");
 });

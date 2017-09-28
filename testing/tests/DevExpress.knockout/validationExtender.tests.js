@@ -1,16 +1,14 @@
 "use strict";
 
-require("integration/knockout");
-
 var $ = require("jquery"),
     Editor = require("ui/editor/editor"),
     ValidationGroup = require("ui/validation_group"),
     ValidationEngine = require("ui/validation_engine"),
     registerComponent = require("core/component_registrator"),
-    ko = require("knockout"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    ko = require("knockout");
 
 require("ui/button");
+require("integration/knockout");
 
 var FIXTURE_ELEMENT = $("<div id=qunit-fixture></div>").appendTo("body");
 
@@ -185,7 +183,7 @@ QUnit.test("dxValidator binding handler should be evaluated after editor binding
     registerComponent("dxTestEditor", { }, Editor.inherit({
         ctor: function() {
             this.callBase.apply(this, arguments);
-            assert.ok(!dataUtils.data(this.element().get(0), "dxValidator"));
+            assert.ok(!this.$element().data("dxValidator"));
         }
     }));
 

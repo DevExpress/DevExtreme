@@ -420,7 +420,7 @@ var EditingController = modules.ViewController.inherit((function() {
         /**
          * @name dxDataGridMethods_insertRow
          * @publicName insertRow()
-         * @deprecated
+         * @deprecated dxDataGridMethods_addRow
          */
         insertRow: function() {
             errors.log("W0002", "dxDataGrid", "insertRow", "15.2", "Use the 'addRow' method instead");
@@ -628,7 +628,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(!that._editPopup) {
                 var $popupContainer = $("<div>")
-                        .appendTo(that.component.element())
+                        .appendTo(that.component.$element())
                         .addClass(that.addWidgetPrefix(EDIT_POPUP_CLASS));
 
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
@@ -827,7 +827,7 @@ var EditingController = modules.ViewController.inherit((function() {
          * @name dxDataGridMethods_removeRow
          * @publicName removeRow(rowIndex)
          * @param1 rowIndex:number
-         * @deprecated
+         * @deprecated GridBaseMethods_deleteRow
          */
         removeRow: function(rowIndex) {
             errors.log("W0002", "dxDataGrid", "removeRow", "15.2", "Use the 'deleteRow' method instead");
@@ -1354,7 +1354,7 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(rowIndex >= 0 && this._editForm) {
                 if(!forceUpdateRow) {
-                    $focusedItemElement = this._editForm.element().find(".dx-state-focused");
+                    $focusedItemElement = this._editForm.$element().find(".dx-state-focused");
                     columnIndex = rowsView.getCellIndex($focusedItemElement, rowIndex);
                 }
 
@@ -1975,7 +1975,7 @@ module.exports = {
                         editFormRowIndex = editingController.getEditFormRowIndex();
 
                     if(editFormRowIndex === rowIndex && $cellElements && editForm) {
-                        return editForm.element().find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
+                        return editForm.$element().find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
                     }
 
                     return $cellElements;

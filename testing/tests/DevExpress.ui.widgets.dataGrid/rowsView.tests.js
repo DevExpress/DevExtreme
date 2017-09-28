@@ -71,7 +71,7 @@ function createRowsView(rows, dataController, columns, initDefaultOptions, userO
         isReady: function() {
             return true;
         },
-        element: function() {
+        $element: function() {
             return $(".dx-datagrid");
         }
     };
