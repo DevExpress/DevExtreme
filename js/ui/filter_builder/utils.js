@@ -17,8 +17,8 @@ function setGroupValue(group, value) {
     var criteria,
         i;
 
-    if(value.indexOf("Not ") !== -1) {
-        value = value.substring(4);
+    if(value.indexOf("!") !== -1) {
+        value = value.substring(1);
         if(group.length > 1 && group[0] === "!") {
             criteria = group[1];
         } else {
@@ -49,6 +49,16 @@ function setGroupValue(group, value) {
     return group;
 }
 
+function getGroupText(group, availableGroups) {
+    var groupValue = getGroupValue(group);
+    for(var i = 0; i < availableGroups.length; i++) {
+        var item = availableGroups[i];
+        if(item.value === groupValue) {
+            return item.text;
+        }
+    }
+}
+
 function getGroupValue(group) {
     var value = "",
         criteria = getGroupCriteria(group);
@@ -66,16 +76,23 @@ function getGroupValue(group) {
         value = "And";
     }
     if(criteria !== group) {
-        value = "Not " + value;
+        value = "!" + value;
     }
     return value;
 }
 
 function getAvailableOperations(field) {
-    var filterOperations = field.filterOperations || [];
+    var filterOperations = [];
+    var addItem = function(filterOperations, item) {
+        filterOperations.push({ text: item });
+    }
     if(filterOperations.length === 0) {
-        filterOperations.push("=");
-        filterOperations.push("<>");
+        addItem(filterOperations, "=");
+        addItem(filterOperations, "<>");
+    } else {
+        for(var i = 0; i < field.filterOperations.length; i++) {
+            addItem(filterOperations, field.filterOperations[i]);
+        }
     }
     return filterOperations;
 }
@@ -84,7 +101,7 @@ function getDefaultOperation(field) {
     if(field.defaultFilterOperation) {
         return field.defaultFilterOperation;
     } else {
-        return getAvailableOperations(field)[0];
+        return getAvailableOperations(field)[0].text;
     }
 }
 
@@ -117,7 +134,7 @@ function createCondition(field, operation, operand) {
 
 function createEmptyGroup(value) {
     var group;
-    if(value.indexOf("Not ") !== -1) {
+    if(value.indexOf("!") !== -1) {
         value = value.substring(4);
         group = ["!", [value]];
     } else {
@@ -238,6 +255,7 @@ function getCurrentValueText(field, value) {
 }
 
 exports.setGroupValue = setGroupValue;
+exports.getGroupText = getGroupText;
 exports.getGroupValue = getGroupValue;
 exports.getAvailableOperations = getAvailableOperations;
 exports.removeItem = removeItem;
