@@ -650,6 +650,7 @@ module.exports = {
                         showValidationMessage = false,
                         revertTooltip,
                         column = $cell && that.getController("columns").getVisibleColumns()[$cell.index()];
+
                     if(!arguments.length) return that.callBase();
 
                     $tooltips && $tooltips.remove();
@@ -666,6 +667,7 @@ module.exports = {
                             }
                         }
                     }
+
                     if((validationResult && !validationResult.isValid) || (editData && editData.type === "update")) {
                         if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
                             revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);

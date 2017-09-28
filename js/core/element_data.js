@@ -6,20 +6,26 @@ var dataMap = new WeakMap();
 var strategy = {
     data: function(element, key, value) {
         if(!element) return;
+
         var elementData = dataMap.get(element);
+
         if(!elementData) {
             elementData = {};
             dataMap.set(element, elementData);
         }
+
         if(key === undefined) {
             return elementData;
         }
+
         if(arguments.length === 2) {
             return elementData[key];
         }
+
         elementData[key] = value;
         return value;
     },
+
     removeData: function(element, key) {
         if(!element) return;
         if(key === undefined) {
@@ -31,11 +37,13 @@ var strategy = {
             }
         }
     },
+
     cleanData: function(elements) {
         for(var i = 0; i < elements.length; i++) {
             dataMap.delete(elements[i]);
         }
     },
+
     cleanDataRecursive: function(element, cleanSelf) {
         if(!(element instanceof Element)) {
             return;
