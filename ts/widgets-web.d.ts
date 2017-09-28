@@ -137,6 +137,18 @@ declare module DevExpress.data {
 
         /** @docid PivotGridDataSourceOptions_fields_showValues */
         showValues?: boolean;
+
+        /** @docid PivotGridDataSourceOptions_fields_headerFilter */
+        headerFilter?: {
+            /** @docid PivotGridDataSourceOptions_fields_headerFilter_height */
+            height?: number;
+
+            /** @docid PivotGridDataSourceOptions_fields_headerFilter_width */
+            width?: number;
+
+            /** @docid PivotGridDataSourceOptions_fields_headerFilter_allowSearch */
+            allowSearch?: boolean;
+        };
     }
 
     export class SummaryCell {
@@ -1257,6 +1269,12 @@ declare module DevExpress.ui {
 
             /** @docid GridBaseOptions_columns_headerFilter_allowSearch */
             allowSearch?: boolean;
+
+            /** @docid GridBaseOptions_columns_headerFilter_height */
+            height?: number;
+
+            /** @docid GridBaseOptions_columns_headerFilter_width */
+            width?: number;
         };
     }
 
@@ -2769,6 +2787,30 @@ declare module DevExpress.ui {
 
             /** @docid dxPivotGridOptions_stateStoring_type */
             type?: string;
+        };
+
+        /** @docid dxPivotGridOptions_headerFilter */
+        headerFilter?: {
+            /** @docid dxPivotGridOptions_headerFilter_height */
+            height?: number;
+
+            /** @docid dxPivotGridOptions_headerFilter_width */
+            width?: number;
+
+            /** @docid dxPivotGridOptions_headerFilter_allowSearch */
+            allowSearch?: boolean;
+
+            /** @docid dxPivotGridOptions_headerFilter_texts */
+            texts?: {
+                /** @docid dxPivotGridOptions_headerFilter_texts_emptyValue */
+                emptyValue?: string;
+
+                /** @docid dxPivotGridOptions_headerFilter_texts_ok */
+                ok?: string;
+
+                /** @docid dxPivotGridOptions_headerFilter_texts_cancel */
+                cancel?: string;
+            }
         };
     }
 
