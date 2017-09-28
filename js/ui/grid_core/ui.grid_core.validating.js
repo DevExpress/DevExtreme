@@ -571,7 +571,7 @@ module.exports = {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
-                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay:visible").length,
+                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
@@ -642,10 +642,8 @@ module.exports = {
                 focus: function($element, hideBorder) {
                     var that = this,
                         $focus = $element && $element.closest(that._getFocusCellSelector()),
-                        validator = $focus && (dataUtils.data($focus[0], "dxValidator") || dataUtils.data($element.find(".dx-validator").get(0), "dxValidator")),
-                        //validator = $focus && ($focus.data("dxValidator") || $element.find(".dx-validator").eq(0).data("dxValidator")),
-                        //rowOptions = $focus && $focus.closest(".dx-row").data("options"),
-                        rowOptions = $focus && dataUtils.data($focus.closest(".dx-row")[0], "options"),
+                        validator = $focus && ($focus.data("dxValidator") || $element.find(".dx-validator").eq(0).data("dxValidator")),
+                        rowOptions = $focus && $focus.closest(".dx-row").data("options"),
                         editData = rowOptions ? that.getController("editing").getEditDataByKey(rowOptions.key) : null,
                         validationResult,
                         $tooltips = $focus && $focus.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector()),

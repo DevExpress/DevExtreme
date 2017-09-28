@@ -170,7 +170,7 @@ initRender.prototype.toggleClass = function(className, value) {
     var isInner = methodName.indexOf("inner") === 0;
 
     initRender.prototype[methodName] = function(value) {
-        if(this.length > 1) {
+        if(this.length > 1 && arguments.length > 0) {
             return repeatMethod.call(this, methodName, arguments);
         }
 

@@ -19,11 +19,12 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity",
-    eventsEngine = require("events/core/events_engine");
+    eventsEngine = require("events/core/events_engine"),
+    renderer = require("core/renderer");
 
 function setupDataGrid(that, $dataGridContainer) {
     that.$element = function() {
-        return $dataGridContainer ? $dataGridContainer : $(".dx-datagrid");
+        return $dataGridContainer ? $dataGridContainer : renderer(".dx-datagrid");
     };
 
     if(that.columns !== null) {

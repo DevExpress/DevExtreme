@@ -1,7 +1,9 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop;
+var $ = require("jquery");
+var noop = require("core/utils/common").noop;
+var renderer = require("core/renderer");
+var eventsEngine = require("events/core/events_engine");
 
 QUnit.testStart(function() {
     var markup =
@@ -6304,7 +6306,7 @@ QUnit.module('Editing with validation', {
         };
 
         this.$element = function() {
-            return $(".dx-datagrid");
+            return renderer(".dx-datagrid");
         };
 
         setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'editing', 'masterDetail', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity'], {
@@ -7082,7 +7084,7 @@ QUnit.test("Show tooltip on focus with set validate in column and edit mode batc
     //arrange
     var that = this,
         rowsView = this.rowsView,
-        $testElement = $('#container'),
+        $testElement = renderer('#container'),
         $cells,
         $overlayElement,
         overlayInstance,
@@ -7175,7 +7177,7 @@ QUnit.test("Show tooltip on focus for last row with set validate in column and e
         $overlayContent,
         $highlightContainer,
         rowsView = that.rowsView,
-        testElement = $('#container'),
+        testElement = renderer('#container'),
         cells,
         inputElement;
 
@@ -7216,7 +7218,7 @@ QUnit.test("Show tooltip on focus for last row with set validate in column and e
     //act
     inputElement = getInputElements(testElement).first();
     inputElement.val(101);
-    inputElement.trigger('change');
+    eventsEngine.trigger(inputElement[0], "change");
 
     that.closeEditCell();
     that.clock.tick();
@@ -7251,7 +7253,7 @@ QUnit.test("Show tooltip on focus when one row with set validate in column and e
     //arrange
     var that = this,
         rowsView = that.rowsView,
-        testElement = $('#container'),
+        testElement = renderer('#container'),
         cells,
         inputElement;
 
@@ -7289,7 +7291,7 @@ QUnit.test("Show tooltip on focus when one row with set validate in column and e
     //act
     inputElement = getInputElements(testElement).first();
     inputElement.val(101);
-    inputElement.trigger('change');
+    eventsEngine.trigger(inputElement[0], "change");
 
     that.closeEditCell();
     that.clock.tick();
@@ -7320,7 +7322,7 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
         tooltipInstance,
         selectBoxInstance,
         rowsView = that.rowsView,
-        $testElement = $("#container");
+        $testElement = renderer("#container");
 
     rowsView.render($testElement);
     that.applyOptions({
@@ -7358,7 +7360,7 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
     assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip");
 
     //act
-    getInputElements($testElement.find("tbody td").eq(2)).trigger("dxclick");
+    eventsEngine.trigger(getInputElements($testElement.find("tbody td").eq(2))[0], "dxclick");
     that.clock.tick();
 
     //assert
@@ -7378,7 +7380,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
         revertTooltipInstance,
         selectBoxInstance,
         rowsView = that.rowsView,
-        $testElement = $("#container");
+        $testElement = renderer("#container");
 
     rowsView.render($testElement);
     that.applyOptions({
@@ -7409,7 +7411,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     that.clock.tick();
 
     //act
-    getInputElements($testElement.find("tbody td").eq(0)).trigger("dxclick");
+    eventsEngine.trigger(getInputElements($testElement.find("tbody td").eq(0))[0], "dxclick");
     that.clock.tick();
 
     //assert
@@ -7432,7 +7434,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
         revertTooltipInstance,
         selectBoxInstance,
         rowsView = that.rowsView,
-        $testElement = $("#container");
+        $testElement = renderer("#container");
 
     $("#qunit-fixture").addClass("qunit-fixture-static").css("width", "auto");
 
@@ -7465,7 +7467,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     that.clock.tick();
 
     //act
-    getInputElements($testElement.find("tbody td").eq(2)).trigger("dxclick");
+    eventsEngine.trigger(getInputElements($testElement.find("tbody td").eq(2))[0], "dxclick");
     that.clock.tick();
 
     //assert
