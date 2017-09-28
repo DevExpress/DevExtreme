@@ -17,7 +17,7 @@ var $ = require("../../core/renderer"),
     Validator = require("../validator"),
     Tooltip = require("../tooltip"),
     Overlay = require("../overlay"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("../../core/element_data").getDataStrategy();
 
 var INVALIDATE_CLASS = "invalid",
     REVERT_TOOLTIP_CLASS = "revert-tooltip",
