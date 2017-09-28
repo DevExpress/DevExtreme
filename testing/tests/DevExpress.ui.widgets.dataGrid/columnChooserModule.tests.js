@@ -872,7 +872,7 @@ QUnit.test("CheckBox mode - column chooser with hidden band column", function(as
     columnChooserView._popupContainer.option("visible", true);
 
     //assert
-    $checkBoxElements = columnChooserView._popupContainer.content().find(".dx-checkbox");
+    $checkBoxElements = columnChooserView._popupContainer.$content().find(".dx-checkbox");
     assert.equal($checkBoxElements.length, 3, "count checkbox");
     assert.ok(!$checkBoxElements.eq(0).hasClass("dx-checkbox-checked"), "checkbox isn't checked");
     assert.ok($checkBoxElements.eq(1).hasClass("dx-checkbox-checked"), "checkbox is checked");
@@ -898,11 +898,11 @@ QUnit.test("CheckBox mode - check hidden band column", function(assert) {
     this.renderColumnChooser();
     columnChooserView._popupContainer.option("visible", true);
 
-    $(columnChooserView._popupContainer.content().find(".dx-checkbox").first()).trigger("dxclick");
+    $(columnChooserView._popupContainer.$content().find(".dx-checkbox").first()).trigger("dxclick");
 
 
     //assert
-    $checkBoxElements = columnChooserView._popupContainer.content().find(".dx-checkbox");
+    $checkBoxElements = columnChooserView._popupContainer.$content().find(".dx-checkbox");
     assert.equal($checkBoxElements.length, 3, "count checkbox");
     assert.ok($checkBoxElements.eq(0).hasClass("dx-checkbox-checked"), "checkbox is checked");
     assert.ok($checkBoxElements.eq(1).hasClass("dx-checkbox-checked"), "checkbox is checked");

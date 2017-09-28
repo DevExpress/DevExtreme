@@ -18,7 +18,7 @@ var ListTopStrategy = ListStrategy.inherit({
     },
 
     _setItemsContainerZIndex: function(e) {
-        var overlayZIndex = e.component.content().css("zIndex");
+        var overlayZIndex = e.component.$content().css("zIndex");
         this._toolbar._$toolbarItemsContainer.css("zIndex", overlayZIndex + 1);
     },
 
@@ -49,7 +49,7 @@ var ListTopStrategy = ListStrategy.inherit({
 
     _listOutsideClickHandler: function(e) {
         var $target = $(e.target);
-        var isOverlayClick = $target.closest(this._listOverlay.content()).length > 0;
+        var isOverlayClick = $target.closest(this._listOverlay.$content()).length > 0;
         var isItemsContainerClick = $target.closest(this._toolbar._$toolbarItemsContainer).length > 0;
 
         if(!isOverlayClick && !isItemsContainerClick) {

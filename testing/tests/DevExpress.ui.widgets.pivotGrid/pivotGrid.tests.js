@@ -282,7 +282,7 @@ QUnit.test("Loading DataSource", function(assert) {
     assert.strictEqual(pivotGrid.isReady(), false);
     assert.ok(!onContentReadyCallback.called, "contentReady should not be called");
 
-    var loadIndicatorElement = pivotGrid._loadPanel.content(),
+    var loadIndicatorElement = pivotGrid._loadPanel.$content(),
         dataAreaGroupElement = pivotGrid._dataArea.groupElement(),
         loadIndicatorElementOffset = loadIndicatorElement.offset(),
         dataAreaGroupElementOffset = dataAreaGroupElement.offset();
@@ -639,7 +639,7 @@ QUnit.test("create field chooser with search", function(assert) {
     fieldChooserPopup.show();
     this.clock.tick(500);
 
-    var fieldChooser = fieldChooserPopup.content().data("dxPivotGridFieldChooser");
+    var fieldChooser = fieldChooserPopup.$content().data("dxPivotGridFieldChooser");
 
     //assert
     assert.ok(fieldChooser.option("searchEnabled"), 'fieldChooser with search');
@@ -668,7 +668,7 @@ QUnit.test("fieldChooser layout change at runtime should not hide popup", functi
     //assert
     assert.ok(fieldChooserPopup.option("visible"), 'fieldChooser popup is visible');
     assert.strictEqual(fieldChooserPopup.option("width"), 900);
-    assert.strictEqual(fieldChooserPopup.content().data("dxPivotGridFieldChooser").option("layout"), 1);
+    assert.strictEqual(fieldChooserPopup.$content().data("dxPivotGridFieldChooser").option("layout"), 1);
 });
 
 QUnit.test("Dragging between PivotGrid and FieldChooser", function(assert) {
@@ -756,7 +756,7 @@ QUnit.test("T257099. Hide fieldChooser popup on dataSource changed", function(as
     this.clock.tick(500);
     //assert
     assert.ok(!$(".dx-fieldchooser-popup").is(":visible"), 'fieldChooser popup is not visible after change dataSource');
-    assert.strictEqual(pivotGrid.getFieldChooserPopup().content().dxPivotGridFieldChooser("option", "dataSource"), pivotGrid.getDataSource(), "dataSource changed");
+    assert.strictEqual(pivotGrid.getFieldChooserPopup().$content().dxPivotGridFieldChooser("option", "dataSource"), pivotGrid.getDataSource(), "dataSource changed");
 
 });
 

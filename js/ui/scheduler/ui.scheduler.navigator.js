@@ -356,7 +356,7 @@ var SchedulerNavigator = Widget.inherit({
     _popoverContentReadyHandler: function() {
         this._calendar = this._createComponent($("<div>"), Calendar, this._calendarOptions());
         this._calendar.$element().addClass(CALENDAR_CLASS);
-        this._popover.content().append(this._calendar.$element());
+        this._popover.$content().append(this._calendar.$element());
     },
 
     _calendarOptions: function() {
@@ -400,7 +400,7 @@ var SchedulerNavigator = Widget.inherit({
 
         var that = this,
             executeHandler = function() {
-                if(that._popover.content().is(":hidden")) {
+                if(that._popover.$content().is(":hidden")) {
                     that._popover.show();
                 } else {
                     return true;

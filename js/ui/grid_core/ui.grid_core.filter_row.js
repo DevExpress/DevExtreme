@@ -181,7 +181,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
                     overlayInstance = $cell.find("." + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).data("dxOverlay");
                     if(overlayInstance) {
-                        $editorRangeElements = overlayInstance.content().find("." + EDITOR_CONTAINER_CLASS);
+                        $editorRangeElements = overlayInstance.$content().find("." + EDITOR_CONTAINER_CLASS);
 
                         that._updateEditorValue(column, $editorRangeElements.first());
                         that._updateEditorValue(column, $editorRangeElements.last());
@@ -293,7 +293,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     return contentElement.addClass(that.getWidgetContainerClass());
                 },
                 onShown: function(e) {
-                    var $editor = e.component.content().find("." + EDITOR_CONTAINER_CLASS).first();
+                    var $editor = e.component.$content().find("." + EDITOR_CONTAINER_CLASS).first();
 
                     eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), "focus");
                 },
@@ -837,7 +837,7 @@ module.exports = {
                             cellIndex = overlayInstance.element().closest("td").index();
 
                             if(cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
-                                overlayInstance.content().hide();
+                                overlayInstance.$content().hide();
                             }
                         }
                     }
@@ -854,7 +854,7 @@ module.exports = {
                         if(overlayInstance) {
                             $cell = overlayInstance.element().closest("td");
                             that._columnHeadersView._updateFilterRangeOverlay({ width: $cell.outerWidth(true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
-                            overlayInstance.content().show();
+                            overlayInstance.$content().show();
                         }
                     }
 

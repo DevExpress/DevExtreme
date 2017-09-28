@@ -10,7 +10,7 @@ var ListBottomStrategy = ListStrategy.inherit({
     _renderWidget: function() {
         this._renderContainerSwipe();
         this.callBase();
-        this._toolbar._$toolbarItemsContainer.prependTo(this._listOverlay.content());
+        this._toolbar._$toolbarItemsContainer.prependTo(this._listOverlay.$content());
     },
 
     _renderContainerSwipe: function() {

@@ -128,7 +128,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
         if(this._widget) {
             this._widget.option(this._getWidgetOptions());
         } else {
-            var element = $("<div>").appendTo(popup.content());
+            var element = $("<div>").appendTo(popup.$content());
             this._widget = this._createWidget(element);
         }
 

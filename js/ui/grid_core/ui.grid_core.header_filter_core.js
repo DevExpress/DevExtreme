@@ -160,7 +160,7 @@ exports.HeaderFilterView = modules.View.inherit({
     },
 
     _cleanPopupContent: function() {
-        this._popupContainer && this._popupContainer.content().empty();
+        this._popupContainer && this._popupContainer.$content().empty();
     },
 
     _initializePopupContainer: function(options) {
@@ -216,7 +216,7 @@ exports.HeaderFilterView = modules.View.inherit({
 
     _initializeListContainer: function(options) {
         var that = this,
-            $content = that._popupContainer.content(),
+            $content = that._popupContainer.$content(),
             widgetOptions = {
                 searchEnabled: isSearchEnabled(that, options),
                 dataSource: options.dataSource,

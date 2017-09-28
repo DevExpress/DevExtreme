@@ -485,7 +485,7 @@ var Menu = MenuBase.inherit({
 
         this._overlay = this._createComponent($("<div>"), Overlay, this._getAdaptiveOverlayOptions());
 
-        this._overlay.content()
+        this._overlay.$content()
             .append(this._treeView.$element())
             .addClass(DX_ADAPTIVE_MODE_CLASS)
             .addClass(this.option("cssClass"));

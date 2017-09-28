@@ -40,7 +40,7 @@ QUnit.module("init", {
 
 QUnit.test("rendered markup", function(assert) {
     var $element = $("#loadPanel").dxLoadPanel({ message: "Test Loading Message", visible: true }),
-        $content = $element.dxLoadPanel("instance").content();
+        $content = $element.dxLoadPanel("instance").$content();
 
     assert.ok($element.hasClass(LOADPANEL_CLASS));
     assert.ok($content.hasClass(LOADPANEL_CONTENT_CLASS), "Load Indicator created");
@@ -78,7 +78,7 @@ QUnit.test("visible changes visibility", function(assert) {
             visible: false
         }),
         loadPanel = $loadPanel.dxLoadPanel("instance"),
-        $content = loadPanel.content();
+        $content = loadPanel.$content();
 
     assert.ok(!$content.is(":visible"));
 
@@ -97,7 +97,7 @@ QUnit.test("visible changes visibility option", function(assert) {
             visible: false,
             message: "Text"
         }),
-        $content = element.dxLoadPanel("instance").content();
+        $content = element.dxLoadPanel("instance").$content();
 
     var loadIndicator = element.data("dxLoadPanel");
 
@@ -133,16 +133,16 @@ QUnit.module("options changed callbacks", {
 QUnit.test("message", function(assert) {
     this.instance.option("message", "new message");
     this.instance.show();
-    assert.equal(this.instance.content().text(), "new message");
+    assert.equal(this.instance.$content().text(), "new message");
 });
 
 QUnit.test("width/height", function(assert) {
     this.instance.option("visible", true);
     this.instance.option("width", 123);
-    assert.equal(this.instance.content().outerWidth(), 123);
+    assert.equal(this.instance.$content().outerWidth(), 123);
 
     this.instance.option("height", 321);
-    assert.equal(this.instance.content().outerHeight(), 321);
+    assert.equal(this.instance.$content().outerHeight(), 321);
 });
 
 QUnit.test("showIndicator option", function(assert) {
@@ -150,17 +150,17 @@ QUnit.test("showIndicator option", function(assert) {
         .dxLoadPanel({ showIndicator: false })
         .dxLoadPanel("instance");
 
-    var indicator = instance.content().find(".dx-loadindicator");
+    var indicator = instance.$content().find(".dx-loadindicator");
     instance.show();
 
     assert.equal(indicator.length, 0, "indicator is hidden");
 
     instance.option("showIndicator", true);
-    indicator = instance.content().find(".dx-loadindicator");
+    indicator = instance.$content().find(".dx-loadindicator");
     assert.equal(indicator.length, 1, "indicator is shown");
 
     instance.option("showIndicator", false);
-    indicator = instance.content().find(".dx-loadindicator");
+    indicator = instance.$content().find(".dx-loadindicator");
     assert.equal(indicator.length, 0, "indicator is hidden");
 });
 
@@ -169,15 +169,15 @@ QUnit.test("showPane option", function(assert) {
         .dxLoadPanel({ showPane: true })
         .dxLoadPanel("instance");
 
-    assert.ok(!instance.content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
+    assert.ok(!instance.$content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
 
     instance.option("showPane", false);
 
-    assert.ok(instance.content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
+    assert.ok(instance.$content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
 
     instance.option("showPane", true);
 
-    assert.ok(!instance.content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
+    assert.ok(!instance.$content().hasClass(LOADPANEL_PANE_HIDDEN_CLASS));
 });
 
 QUnit.test("LoadPanel with custom indicator", function(assert) {
@@ -189,7 +189,7 @@ QUnit.test("LoadPanel with custom indicator", function(assert) {
         })
         .dxLoadPanel("instance");
     instance.show();
-    var loadIndicatorInstance = this.instance.content().find(".dx-loadindicator").dxLoadIndicator().data("dxLoadIndicator");
+    var loadIndicatorInstance = this.instance.$content().find(".dx-loadindicator").dxLoadIndicator().data("dxLoadIndicator");
 
     assert.equal(loadIndicatorInstance.option("indicatorSrc"), url, "custom indicator option installed successfully");
     instance.option("indicatorSrc", "");
@@ -204,7 +204,7 @@ QUnit.test("Load panel should not close on esc button when focusStateEnabled is 
             height: 1,
             visible: true
         }).dxLoadPanel("instance"),
-        keyboard = keyboardMock(instance.content());
+        keyboard = keyboardMock(instance.$content());
 
     keyboard.keyDown("esc");
 
@@ -228,7 +228,7 @@ QUnit.testInActiveWindow("Load panel with shading should grab focus from inputs 
         $input.focus().focusin();
         instance.show();
 
-        assert.equal(document.activeElement, instance.content().get(0), "load panel is focused");
+        assert.equal(document.activeElement, instance.$content().get(0), "load panel is focused");
     } finally {
         $input.remove();
     }
@@ -260,7 +260,7 @@ QUnit.test("option 'delay' delays showing", function(assert) {
     });
 
     $loadPanel.dxLoadPanel("show");
-    var $content = $loadPanel.dxLoadPanel("content");
+    var $content = $loadPanel.dxLoadPanel("$content");
 
     assert.equal($content.is(":visible"), false, "load panel showing delayed");
 
@@ -302,7 +302,7 @@ QUnit.test("hiding rejects delayed showing", function(assert) {
     var $loadPanel = $("#loadPanel").dxLoadPanel({
             delay: delayTimeout
         }),
-        $content = $loadPanel.dxLoadPanel("content");
+        $content = $loadPanel.dxLoadPanel("$content");
 
     $loadPanel.dxLoadPanel("show");
     $loadPanel.dxLoadPanel("hide");

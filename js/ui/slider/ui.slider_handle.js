@@ -116,7 +116,7 @@ var SliderHandle = Widget.inherit({
 
     _saveTooltipElements: function(tooltip) {
         tooltip = this._tooltip || tooltip;
-        this._$tooltipContent = tooltip.content().parent();
+        this._$tooltipContent = tooltip.$content().parent();
         this._$tooltipArrow = this._$tooltipContent.find(".dx-popover-arrow");
     },
 
@@ -187,7 +187,7 @@ var SliderHandle = Widget.inherit({
 
         var formattedValue = numberLocalization.format(this.option("value"), this.option("tooltipFormat"));
 
-        this._tooltip.content().html(formattedValue);
+        this._tooltip.$content().html(formattedValue);
         this._fitTooltip();
     },
 

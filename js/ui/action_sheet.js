@@ -378,7 +378,7 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     _popupContentReadyAction: function() {
-        this._popup.content().append(this._$itemContainer);
+        this._popup.$content().append(this._$itemContainer);
         this._attachClickEvent();
         this._attachHoldEvent();
         this._renderContent();
@@ -399,7 +399,7 @@ var ActionSheet = CollectionWidget.inherit({
                 that = this;
 
             this._$cancelButton = $("<div>").addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
-                .appendTo(this._popup.content());
+                .appendTo(this._popup.$content());
             this._createComponent(this._$cancelButton, Button, {
                 disabled: false,
                 text: this.option("cancelText"),

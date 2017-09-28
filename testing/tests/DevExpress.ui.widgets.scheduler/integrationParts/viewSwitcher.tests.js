@@ -103,7 +103,7 @@ QUnit.test("View switcher should update scheduler and header currentView correct
 
     switcher.open();
 
-    var $secondItem = $(switcher._popup.content()).find(".dx-item").eq(1);
+    var $secondItem = $(switcher._popup.$content()).find(".dx-item").eq(1);
 
     assert.deepEqual(switcher.option("items"), ["day", "week"], "Switcher items is correct on init");
 

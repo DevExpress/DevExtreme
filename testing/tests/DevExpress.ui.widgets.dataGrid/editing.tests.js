@@ -7420,8 +7420,8 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
-    assert.ok(selectBoxInstance.$element().offset().left + selectBoxInstance.$element().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after selectbox");
-    assert.ok(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width() < invalidTooltipInstance.content().offset().left, "invalid tooltip is shown after revert tooltip");
+    assert.ok(selectBoxInstance.$element().offset().left + selectBoxInstance.$element().width() < revertTooltipInstance.$content().offset().left, "revert tooltip is shown after selectbox");
+    assert.ok(revertTooltipInstance.$content().offset().left + revertTooltipInstance.$content().width() < invalidTooltipInstance.$content().offset().left, "invalid tooltip is shown after revert tooltip");
 });
 
 //T523770
@@ -7476,8 +7476,8 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
-    assert.ok(invalidTooltipInstance.content().offset().left + invalidTooltipInstance.content().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after invalid tooltip");
-    assert.roughEqual(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.$element().offset().left, 1, "selectbox is shown after revert tooltip");
+    assert.ok(invalidTooltipInstance.$content().offset().left + invalidTooltipInstance.$content().width() < revertTooltipInstance.$content().offset().left, "revert tooltip is shown after invalid tooltip");
+    assert.roughEqual(revertTooltipInstance.$content().offset().left + revertTooltipInstance.$content().width(), selectBoxInstance.$element().offset().left, 1, "selectbox is shown after revert tooltip");
 
     $("#qunit-fixture").removeClass("qunit-fixture-static").css("width", "");
 });
@@ -8882,7 +8882,7 @@ QUnit.test("Show error message on save inserted rows when edit mode is 'popup'",
 
     this.editRow(0);
 
-    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").content();
+    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").$content();
     $inputElement = $popupContent.find("input").first();
     $inputElement.val("");
     $($inputElement).trigger("change");
@@ -10577,7 +10577,7 @@ QUnit.module('Editing - "popup" mode', {
         this.preparePopupHelpers = function() {
             this.$editPopup = this.$testElement.find(".dx-datagrid-edit-popup");
             this.editPopupInstance = this.$editPopup.dxPopup("instance");
-            this.getEditPopupContent = function() { return this.editPopupInstance.content(); };
+            this.getEditPopupContent = function() { return this.editPopupInstance.$content(); };
             this.isEditingPopupVisible = function() { return this.editPopupInstance.option("visible"); };
         };
     },

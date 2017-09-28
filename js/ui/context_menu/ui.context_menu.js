@@ -222,7 +222,7 @@ var ContextMenu = MenuBase.inherit((function() {
         _focusInHandler: noop,
 
         _itemContainer: function() {
-            return this._overlay ? this._overlay.content() : $();
+            return this._overlay ? this._overlay.$content() : $();
         },
 
         _eventBindingTarget: function() {
@@ -230,7 +230,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         itemsContainer: function() {
-            return this._overlay ? this._overlay.content() : undefined;
+            return this._overlay ? this._overlay.$content() : undefined;
         },
 
         _supportedKeys: function() {
@@ -336,8 +336,8 @@ var ContextMenu = MenuBase.inherit((function() {
 
             var id = this.getFocusedItemId();
 
-            this.setAria("activedescendant", "", this._overlay.content());
-            this.setAria("activedescendant", id, this._overlay.content());
+            this.setAria("activedescendant", "", this._overlay.$content());
+            this.setAria("activedescendant", id, this._overlay.$content());
         },
 
         _hideSubmenuHandler: function() {
@@ -407,7 +407,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             this._overlay = this._createComponent($overlayElement.appendTo(this._$element), Overlay, overlayOptions);
 
-            $overlayContent = this._overlay.content();
+            $overlayContent = this._overlay.$content();
             $overlayContent.addClass(DX_CONTEXT_MENU_CLASS);
 
             this._addCustomCssClass($overlayContent);
@@ -836,7 +836,7 @@ var ContextMenu = MenuBase.inherit((function() {
         _hideAllShownSubmenus: function() {
             var that = this,
                 shownSubmenus = extend([], that._shownSubmenus),
-                $expandedItems = this._overlay.content().find("." + DX_MENU_ITEM_EXPANDED_CLASS);
+                $expandedItems = this._overlay.$content().find("." + DX_MENU_ITEM_EXPANDED_CLASS);
 
             $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
 
@@ -902,7 +902,7 @@ var ContextMenu = MenuBase.inherit((function() {
             if(position) {
                 if(!this._overlay) {
                     this._renderContextMenuOverlay();
-                    this._overlay.content().addClass(this._widgetClass());
+                    this._overlay.$content().addClass(this._widgetClass());
                     this._renderFocusState();
                     this._attachHoverEvents();
                     this._attachClickEvent();
@@ -914,7 +914,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 promise = this._overlay.show();
 
                 var id = "dx-" + new Guid();
-                this._overlay.content().attr({ "id": id, role: "menu" });
+                this._overlay.$content().attr({ "id": id, role: "menu" });
                 this.setAria("owns", id);
             }
 
@@ -962,7 +962,7 @@ var ContextMenu = MenuBase.inherit((function() {
             var promise;
 
             if(this._overlay) {
-                this._overlay.content().removeAttr("id");
+                this._overlay.$content().removeAttr("id");
                 promise = this._overlay.hide();
                 this._setOptionSilent("visible", false);
             }

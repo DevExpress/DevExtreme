@@ -308,7 +308,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 popupVisible = this._editPopup && this._editPopup.option("visible");
 
             if(editMode === EDIT_MODE_POPUP && popupVisible) {
-                return this._editPopup.content();
+                return this._editPopup.$content();
             }
         },
 
@@ -634,7 +634,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
                 that._editPopup.on("hidden", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
-                    eventsEngine.trigger(e.component.content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
+                    eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
                 });
             }
 

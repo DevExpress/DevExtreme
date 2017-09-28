@@ -133,7 +133,7 @@ QUnit.test("Calendar of the start datebox should have right firstDayOfWeek value
             startDateBox = $popupContent.find(".dx-datebox").eq(0).dxDateBox("instance");
 
         startDateBox.open();
-        var calendar = startDateBox._popup.content().find(".dx-calendar").dxCalendar("instance");
+        var calendar = startDateBox._popup.$content().find(".dx-calendar").dxCalendar("instance");
 
         assert.equal(calendar.option("firstDayOfWeek"), 4, "firstDayOfWeek is right");
     } else {
@@ -160,7 +160,7 @@ QUnit.test("Calendar of the end datebox should have right firstDayOfWeek value",
             endDateBox = $popupContent.find(".dx-datebox").eq(1).dxDateBox("instance");
 
         endDateBox.open();
-        var calendar = endDateBox._popup.content().find(".dx-calendar").dxCalendar("instance");
+        var calendar = endDateBox._popup.$content().find(".dx-calendar").dxCalendar("instance");
 
         assert.equal(calendar.option("firstDayOfWeek"), 4, "firstDayOfWeek is right");
     } else {
@@ -711,7 +711,7 @@ QUnit.test("Popup should has default close button in current mobile theme", func
 QUnit.test("Clicking on 'Repeat' label should toggle recurrence editor", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
     var popup = this.instance.getAppointmentPopup(),
-        editorLabel = $(popup.content()).find(".dx-scheduler-recurrence-rule-item .dx-field-item-label");
+        editorLabel = $(popup.$content()).find(".dx-scheduler-recurrence-rule-item .dx-field-item-label");
 
     editorLabel.trigger("dxclick");
 

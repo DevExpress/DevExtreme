@@ -604,7 +604,7 @@ module.exports = {
                                     }
                                 }
 
-                                that._shiftValidationMessageIfNeed(e.component.content(), revertTooltip && revertTooltip.content(), $cell);
+                                that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
                             }
                         });
                 },

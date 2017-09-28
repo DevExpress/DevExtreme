@@ -782,9 +782,9 @@ var Lookup = DropDownList.inherit({
             validationError = this.option("validationError");
             if(validationError && validationError.message) {
                 this._$popupValidationMessage.text(validationError.message);
-                this._popup.content().addClass(LOOKUP_POPUP_INVALID_CLASS);
+                this._popup.$content().addClass(LOOKUP_POPUP_INVALID_CLASS);
             } else {
-                this._popup.content().removeClass(LOOKUP_POPUP_INVALID_CLASS);
+                this._popup.$content().removeClass(LOOKUP_POPUP_INVALID_CLASS);
             }
         }
 
@@ -955,7 +955,7 @@ var Lookup = DropDownList.inherit({
 
     _renderPopupContent: function() {
         if(this._popup.NAME === "dxPopup") {
-            this._$popupValidationMessage = $("<div>").addClass(LOOKUP_POPUP_VALIDATION_MESSAGE).appendTo(this._popup.content());
+            this._$popupValidationMessage = $("<div>").addClass(LOOKUP_POPUP_VALIDATION_MESSAGE).appendTo(this._popup.$content());
         }
         this.callBase();
         this._renderSearch();

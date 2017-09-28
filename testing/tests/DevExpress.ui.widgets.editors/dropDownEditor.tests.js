@@ -110,10 +110,10 @@ QUnit.test("content returned by _renderPopupContent must be rendered inside the 
     var content = $("<div>test</div>");
     var dropDownEditor = this.dropDownEditor;
     dropDownEditor._renderPopupContent = function() {
-        return content.appendTo(dropDownEditor._popup.content());
+        return content.appendTo(dropDownEditor._popup.$content());
     };
     dropDownEditor.open();
-    assert.strictEqual(dropDownEditor._$popup.dxPopup("content").find(content)[0], content[0]);
+    assert.strictEqual(dropDownEditor._$popup.dxPopup("$content").find(content)[0], content[0]);
 });
 
 QUnit.test("dropdown must close on outside click", function(assert) {
@@ -149,13 +149,13 @@ QUnit.test("option opened", function(assert) {
 
     var $popup = $(".dx-popup");
     var popup = $popup.dxPopup("instance");
-    popup.content().append("test");
+    popup.$content().append("test");
 
-    assert.ok(popup.content().is(":visible"), "popup is visible after opening");
+    assert.ok(popup.$content().is(":visible"), "popup is visible after opening");
 
     this.dropDownEditor.option("opened", false);
 
-    assert.ok(popup.content().is(":hidden"), "popup is hidden after closing");
+    assert.ok(popup.$content().is(":hidden"), "popup is hidden after closing");
 });
 
 QUnit.test("overlay get correct open and close", function(assert) {

@@ -554,7 +554,7 @@ var DropDownEditor = TextBox.inherit({
         this._contentReadyHandler();
 
         this._popupContentId = "dx-" + new Guid();
-        this.setAria("id", this._popupContentId, this._popup.content());
+        this.setAria("id", this._popupContentId, this._popup.$content());
     },
 
     _contentReadyHandler: commonUtils.noop,
@@ -625,7 +625,7 @@ var DropDownEditor = TextBox.inherit({
 
         if(this._popup && this._popup.option("visible")) {
             var myTop = positionUtils.setup(this.$element()).top,
-                popupTop = positionUtils.setup(this._popup.content()).top;
+                popupTop = positionUtils.setup(this._popup.$content()).top;
 
             positionRequest = (myTop + this.option("popupPosition").offset.v) > popupTop ? "below" : "above";
         }
@@ -640,7 +640,7 @@ var DropDownEditor = TextBox.inherit({
             return;
         }
 
-        var $popupContent = this._popup.content(),
+        var $popupContent = this._popup.$content(),
             templateData = {
                 value: this._fieldRenderData(),
                 component: this
@@ -861,7 +861,7 @@ var DropDownEditor = TextBox.inherit({
     * @return jQuery
     */
     content: function() {
-        return this._popup ? this._popup.content() : null;
+        return this._popup ? this._popup.$content() : null;
     }
 });
 
