@@ -268,13 +268,8 @@ QUnit.test("Not set title attribute when group cell text is trimmed and groupCel
         $('<tr class = "dx-row dx-group-row"><td class="dx-datagrid-group-space"></td><td class="dx-datagrid-group-space"></td><td>Test Test Test Test Test</td></tr>')
     )));
 
-
-
     dataUtils.data($table.find("tr").get(0), "options", { cells: [{}, { column: that.columns[0] }] });
     dataUtils.data($table.find("tr").get(1), "options", { cells: [{}, {}, { column: that.columns[1] }] });
-
-    // $table.find("tr").eq(0).data("options", { cells: [{}, { column: that.columns[0] }] });
-    // $table.find("tr").eq(1).data("options", { cells: [{}, {}, { column: that.columns[1] }] });
 
     //act
     firstCellElement = $table.find("tr").eq(0).find("td").last();

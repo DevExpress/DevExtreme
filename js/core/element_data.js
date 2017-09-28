@@ -58,30 +58,3 @@ exports.setDataStrategy = function(value) {
 exports.getDataStrategy = function() {
     return strategy;
 };
-
-// exports.data = function() {
-//     return strategy.data.apply(this, arguments);
-// };
-
-// exports.removeData = function() {
-//     return strategy.removeData.apply(this, arguments);
-// };
-
-// exports.cleanData = function() {
-//     return strategy.cleanData.apply(this, arguments);
-// };
-
-exports.cleanDataRecursive = function(element, cleanSelf) {
-    if(!(element instanceof Element)) {
-        return;
-    }
-
-    var childElements = element.getElementsByTagName("*");
-
-    strategy.cleanData(childElements);
-
-    if(cleanSelf) {
-        strategy.cleanData([element]);
-    }
-};
-
