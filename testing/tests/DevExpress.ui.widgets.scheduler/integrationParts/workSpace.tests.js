@@ -1211,8 +1211,8 @@ QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if 
         $allDayTitle = this.instance.element().find(".dx-scheduler-all-day-title"),
         $dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable"),
         allDayPanelHeight = this.instance._workSpace.getAllDayHeight(),
-        $sidebarScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable"),
-        $headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable");
+        $sidebarScrollable = this.instance.element().find(".dx-scheduler-sidebar-scrollable"),
+        $headerScrollable = this.instance.element().find(".dx-scheduler-header-scrollable");
 
 
     assert.equal(parseInt($allDayTitle.css("top"), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, "All day title element top value");
