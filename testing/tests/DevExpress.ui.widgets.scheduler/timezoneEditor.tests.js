@@ -61,7 +61,7 @@ QUnit.test("Timezone editor should contain tz display name selectbox", function(
     var $tzDisplayNameSelectBox = this.instance.element().find(".dx-timezone-display-name");
 
     assert.equal($tzDisplayNameSelectBox.length, 1, "Display name editor is rendered");
-    assert.ok($tzDisplayNameSelectBox.data("dxSelectBox"), "Display name editor is selectbox");
+    assert.ok($tzDisplayNameSelectBox.dxSelectBox("instance"), "Display name editor is selectbox");
 });
 
 QUnit.test("Timezone editor should contain iana id selectbox", function(assert) {
@@ -71,7 +71,7 @@ QUnit.test("Timezone editor should contain iana id selectbox", function(assert) 
         tzIdSelectBox = $tzIdSelectBox.dxSelectBox("instance");
 
     assert.equal($tzIdSelectBox.length, 1, "Tz id editor is rendered");
-    assert.ok($tzIdSelectBox.data("dxSelectBox"), "Tz id editor is selectbox");
+    assert.ok($tzIdSelectBox.dxSelectBox("instance"), "Tz id editor is selectbox");
 
     assert.equal(tzIdSelectBox.option("valueExpr"), "id", "Value expr is OK");
     assert.equal(tzIdSelectBox.option("displayExpr"), "displayName", "Display expr is OK");

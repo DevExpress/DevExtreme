@@ -1736,7 +1736,7 @@ QUnit.test("Render a hidden input when mask option is set via api", function(ass
         name: "number"
     });
 
-    $textEditor.data("dxTextEditor").option("mask", "+1 (00) 00-00");
+    $textEditor.dxTextEditor("instance").option("mask", "+1 (00) 00-00");
 
     var $visibleInput = $textEditor.find(".dx-texteditor-input"),
         $hiddenInput = $textEditor.find("input[type=hidden]");
@@ -1822,7 +1822,7 @@ QUnit.test("Name attr of hidden input is changed when name option of editor is c
         mask: "+1 (000) 0000000"
     });
 
-    $textEditor.data("dxTextEditor").option("name", "Editor with mask");
+    $textEditor.dxTextEditor("instance").option("name", "Editor with mask");
 
     var $hiddenInput = $textEditor.find("input[type=hidden]");
     assert.equal($hiddenInput.attr("name"), "Editor with mask", "name of hidden input");

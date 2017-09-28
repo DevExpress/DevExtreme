@@ -2,7 +2,7 @@
 
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
-    dataUtils = require("../core/element_data"),
+    dataUtils = require("../core/element_data").getDataStrategy(),
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,

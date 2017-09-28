@@ -20,7 +20,7 @@ QUnit.test("execute test", function(assert) {
         onExecute: function() {
             executed = true;
         }
-    }).data("dxCommand");
+    }).dxCommand("instance");
 
     command.execute();
     assert.equal(true, executed, "disabled");

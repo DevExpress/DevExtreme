@@ -13,7 +13,8 @@ var $ = require("jquery"),
     VerticalAppointmentStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.vertical"),
     HorizontalAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal"),
     HorizontalMonthLineAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month_line"),
-    Color = require("color");
+    Color = require("color"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 var APPOINTMENT_DEFAULT_OFFSET = 25;
 
@@ -209,10 +210,10 @@ QUnit.test("Appointment has right sortedIndex", function(assert) {
 
     var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
 
-    assert.equal($appointments.eq(0).data("dxAppointmentSettings").sortedIndex, 0, "app has right sortedIndex");
-    assert.equal($appointments.eq(1).data("dxAppointmentSettings").sortedIndex, 1, "app has right sortedIndex");
-    assert.equal($appointments.eq(2).data("dxAppointmentSettings").sortedIndex, 2, "app has right sortedIndex");
-    assert.equal($appointments.eq(3).data("dxAppointmentSettings").sortedIndex, 3, "app has right sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(0), "dxAppointmentSettings").sortedIndex, 0, "app has right sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(1), "dxAppointmentSettings").sortedIndex, 1, "app has right sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(2), "dxAppointmentSettings").sortedIndex, 2, "app has right sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(3), "dxAppointmentSettings").sortedIndex, 3, "app has right sortedIndex");
 });
 
 //NOTE: check sortedIndex for long appt parts
@@ -233,13 +234,13 @@ QUnit.test("Compact parts of long appointment shouldn't have sortedIndex", funct
 
     var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
 
-    assert.equal($appointments.eq(0).data("dxAppointmentSettings").sortedIndex, 0, "app has sortedIndex");
-    assert.equal($appointments.eq(1).data("dxAppointmentSettings").sortedIndex, 1, "app has sortedIndex");
-    assert.equal($appointments.eq(2).data("dxAppointmentSettings").sortedIndex, 2, "app has sortedIndex");
-    assert.equal($appointments.eq(3).data("dxAppointmentSettings").sortedIndex, null, "app has sortedIndex");
-    assert.equal($appointments.eq(4).data("dxAppointmentSettings").sortedIndex, null, "app has sortedIndex");
-    assert.equal($appointments.eq(5).data("dxAppointmentSettings").sortedIndex, null, "app has sortedIndex");
-    assert.equal($appointments.eq(6).data("dxAppointmentSettings").sortedIndex, 3, "app has sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(0), "dxAppointmentSettings").sortedIndex, 0, "app has sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(1), "dxAppointmentSettings").sortedIndex, 1, "app has sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(2), "dxAppointmentSettings").sortedIndex, 2, "app has sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(3), "dxAppointmentSettings").sortedIndex, null, "app has sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(4), "dxAppointmentSettings").sortedIndex, null, "app has sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(5), "dxAppointmentSettings").sortedIndex, null, "app has sortedIndex");
+    assert.equal(dataUtils.data($appointments.get(6), "dxAppointmentSettings").sortedIndex, 3, "app has sortedIndex");
 
 });
 

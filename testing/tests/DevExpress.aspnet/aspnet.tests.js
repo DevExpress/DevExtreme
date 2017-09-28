@@ -1,5 +1,9 @@
 "use strict";
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 (function(factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {

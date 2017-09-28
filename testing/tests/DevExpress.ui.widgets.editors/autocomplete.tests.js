@@ -67,7 +67,7 @@ QUnit.module("dxAutocomplete", {
             searchTimeout: 0,
             focusStateEnabled: true
         });
-        this.instance = this.element.data("dxAutocomplete");
+        this.instance = this.element.dxAutocomplete("instance");
         this.$input = this.element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.popup = this.instance._popup;
         this.keyboard = keyboardMock(this.$input);
@@ -97,7 +97,7 @@ QUnit.test("init with options", function(assert) {
             dataSource: ["qwerty", "item 2", "item 3"],
             placeholder: "type something"
         }),
-        instance = element.data("dxAutocomplete");
+        instance = element.dxAutocomplete("instance");
 
     assert.equal(instance._dataSource.items()[0], "qwerty", "autocomplete-s dataSource initialization");
     assert.equal(instance.option("value"), "anotherText", "autocomplete-s textbox value initialization");
@@ -148,7 +148,7 @@ QUnit.test("check textbox sizes", function(assert) {
             width: 100,
             height: 100
         }),
-        instance = element.data("dxAutocomplete");
+        instance = element.dxAutocomplete("instance");
 
     assert.equal(element.height(), instance.option("height"), "textbox height is right");
 
@@ -639,7 +639,7 @@ QUnit.test("search mode incorrect name raises exception", function(assert) {
                 dataSource: ["item 1", "thing", "item 3"],
                 searchMode: "startWith"
             }),
-            instance = element.data("dxAutocomplete");
+            instance = element.dxAutocomplete("instance");
 
         instance.option("searchMode", "anotherIncorrectFilterOperatorName");
     });
@@ -653,7 +653,7 @@ QUnit.testInActiveWindow("using custom item template", function(assert) {
         searchTimeout: 0,
         focusStateEnabled: true
     });
-    var instance = element.data("dxAutocomplete"),
+    var instance = element.dxAutocomplete("instance"),
         $input = element.find("." + TEXTEDITOR_INPUT_CLASS),
         keyboard = keyboardMock($input),
         autocompleteItemTemplate = instance._getTemplateByOption("itemTemplate");
@@ -695,7 +695,7 @@ QUnit.test("valueExpr option", function(assert) {
             ],
             valueExpr: "item"
         }),
-        instance = element.data("dxAutocomplete");
+        instance = element.dxAutocomplete("instance");
 
     var keyboard = keyboardMock(instance._input());
 
@@ -727,7 +727,7 @@ QUnit.testInActiveWindow("using multifield datasource", function(assert) {
             searchTimeout: 0,
             focusStateEnabled: true
         }),
-        instance = element.data("dxAutocomplete"),
+        instance = element.dxAutocomplete("instance"),
         $input = element.find("." + TEXTEDITOR_INPUT_CLASS),
         keyboard = keyboardMock($input);
 
@@ -762,7 +762,7 @@ QUnit.testInActiveWindow("using multifield datasource with template", function(a
             searchTimeout: 0,
             focusStateEnabled: true
         }),
-        instance = element.data("dxAutocomplete"),
+        instance = element.dxAutocomplete("instance"),
         $input = element.find("." + TEXTEDITOR_INPUT_CLASS),
         keyboard = keyboardMock($input),
         autocompleteItemTemplate = instance._getTemplateByOption("itemTemplate");
@@ -1042,7 +1042,7 @@ QUnit.module("regressions", {
             searchTimeout: 0,
             focusStateEnabled: true
         });
-        this.instance = this.element.data("dxAutocomplete");
+        this.instance = this.element.dxAutocomplete("instance");
         this.$input = this.element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.keyboard = keyboardMock(this.$input);
         this.inputValue = function() {
@@ -1242,7 +1242,7 @@ QUnit.test("B234608 check offset for win8 devices", function(assert) {
         dataSource: ["item 1", "item 2", "item 3"]
     });
 
-    popup = element.data("dxAutocomplete")._popup;
+    popup = element.dxAutocomplete("instance")._popup;
     vOffset = popup.option("position").offset.v;
     assert.equal(vOffset, -6, "vertical offset for win8 devices");
     devices.current(null);
@@ -1258,7 +1258,7 @@ QUnit.test("B234608 check offset for iOS devices", function(assert) {
         dataSource: ["item 1", "item 2", "item 3"]
     });
 
-    popup = element.data("dxAutocomplete")._popup;
+    popup = element.dxAutocomplete("instance")._popup;
     vOffset = popup.option("position").offset.v;
     assert.equal(vOffset, -1, "vertical offset for iOS devices");
 

@@ -108,7 +108,7 @@ QUnit.test("item should not be rerendered", function(assert) {
     $item.data("rendered", true);
 
     scope.$apply(function() { scope.items[0].value = 2; });
-    assert.equal($item.data("rendered"), true, "item not rerendered");
+    assert.equal($item.rendered("instance"), true, "item not rerendered");
 });
 
 QUnit.test("item should not generate watchers for null expressions", function(assert) {

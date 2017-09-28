@@ -1954,7 +1954,7 @@ QUnit.module("keyboard navigation", {
             focusStateEnabled: true
         });
 
-        this.instance = this.$gallery.data("dxGallery");
+        this.instance = this.$gallery.dxGallery("instance");
         this.keyboard = keyboardMock(this.$gallery);
     },
     afterEach: function() {

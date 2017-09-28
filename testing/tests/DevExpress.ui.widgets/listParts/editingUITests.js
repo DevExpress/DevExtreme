@@ -1210,7 +1210,7 @@ QUnit.test("overlay content markup", function(assert) {
             allowItemDeleting: true,
             itemDeleteMode: "context"
         })),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
@@ -1229,7 +1229,7 @@ QUnit.test("item should be deleted from menu", function(assert) {
             allowItemDeleting: true,
             itemDeleteMode: "context"
         })),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
@@ -1261,7 +1261,7 @@ QUnit.test("menu content markup", function(assert) {
             menuMode: "context",
             menuItems: [{ text: "menu" }]
         }),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
@@ -1282,7 +1282,7 @@ QUnit.test("delete button should be rendered in menu if delete enabled", functio
             menuMode: "context",
             menuItems: [{ text: "menu" }]
         }),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
@@ -1303,7 +1303,7 @@ QUnit.test("item hold should open overlay", function(assert) {
             allowItemDeleting: true,
             itemDeleteMode: "context"
         })),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
@@ -1324,7 +1324,7 @@ QUnit.test("item hold should not open overlay if editing disabled", function(ass
             allowItemDeleting: true,
             itemDeleteMode: "context"
         })),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     list.option("allowItemDeleting", false);
 
@@ -1339,7 +1339,7 @@ QUnit.test("item hold should not open overlay if widget is disabled", function(a
             allowItemDeleting: true,
             itemDeleteMode: "context"
         })),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
@@ -1365,7 +1365,7 @@ QUnit.test("menu item click action should be fired with correct arguments", func
                 }
             ]
         }),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
@@ -1392,7 +1392,7 @@ QUnit.test("delete menu item click should remove item and hide overlay", functio
                 assert.ok(false, "item hold action fired");
             }
         }),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 
@@ -1419,7 +1419,7 @@ QUnit.test("menu should be closed after click", function(assert) {
             menuMode: "context",
             menuItems: [{ text: "menu" }]
         }),
-        list = $list.data("dxList");
+        list = $list.dxList("instance");
 
     $(list.itemElements()).eq(0).trigger("dxcontextmenu");
 

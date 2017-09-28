@@ -4,7 +4,8 @@ var $ = require("jquery"),
     Editor = require("ui/editor/editor"),
     Class = require("core/class"),
     ValidationEngine = require("ui/validation_engine"),
-    hoverEvents = require("events/hover");
+    hoverEvents = require("events/hover"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 require("common.css!");
 
@@ -308,7 +309,7 @@ var Fixture = Class.inherit({
     QUnit.test("Container has dx-editor data mark", function(assert) {
         var editor = this.fixture.createEditor();
 
-        assert.strictEqual(this.fixture.$element.data("dx-validation-target"), editor, "Editor was saved");
+        assert.strictEqual(dataUtils.data(this.fixture.$element[0], "dx-validation-target"), editor, "Editor was saved");
     });
 })("Validation");
 

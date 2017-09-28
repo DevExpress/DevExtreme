@@ -16,7 +16,8 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     config = require("core/config"),
     browser = require("core/utils/browser"),
-    dateSerialization = require("core/utils/date_serialization");
+    dateSerialization = require("core/utils/date_serialization"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 var camelize = inflector.camelize;
 
@@ -718,7 +719,7 @@ QUnit.test("click on view cell changes calendar value", function(assert) {
         calendar.option("maxZoomLevel", type);
 
         var $cell = $element.find(toSelector(CALENDAR_CELL_CLASS)).eq(5);
-        var cellDate = $cell.data(CALENDAR_DATE_VALUE_KEY);
+        var cellDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
 
         $($cell).trigger("dxclick");
         assert.ok($cell, "cell has selected class");
@@ -1127,14 +1128,14 @@ QUnit.test("Pressing home/end keys must contour first/last cell", function(asser
         var view = getCurrentViewInstance(calendar);
         var $view = $(view.element());
 
-        calendar.option("value", new Date($view.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).eq(5).data(CALENDAR_DATE_VALUE_KEY)));
+        calendar.option("value", new Date(dataUtils.data($view.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).eq(5).get(0), CALENDAR_DATE_VALUE_KEY)));
 
-        var expectedContoured = $view.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).first().data(CALENDAR_DATE_VALUE_KEY);
+        var expectedContoured = dataUtils.data($view.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).first().get(0), CALENDAR_DATE_VALUE_KEY);
 
         trigger(HOME_KEY_CODE);
         assert.deepEqual(view.option("contouredDate"), expectedContoured, "home button contoured first cell");
 
-        expectedContoured = $view.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).last().data(CALENDAR_DATE_VALUE_KEY);
+        expectedContoured = dataUtils.data($view.find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).last().get(0), CALENDAR_DATE_VALUE_KEY);
         trigger(END_KEY_CODE);
         assert.deepEqual(view.option("contouredDate"), expectedContoured, "end button contoured last cell");
     });
@@ -2514,7 +2515,7 @@ QUnit.test("go to neighbor view after click on view cell with class 'CALENDAR_OT
         calendar.option("zoomLevel", type);
 
         var $cell = $(calendar.element().find(toSelector(CALENDAR_OTHER_VIEW_CLASS)).first());
-        var date = $cell.data(CALENDAR_DATE_VALUE_KEY);
+        var date = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
 
         $($cell).trigger("dxclick");
 
@@ -2532,7 +2533,7 @@ QUnit.test("click on other view cell forces view change", function(assert) {
         $element = this.$element;
 
     var $cell = $element.find(toSelector(CALENDAR_CELL_CLASS)).eq(2),
-        expectedDate = $cell.data(CALENDAR_DATE_VALUE_KEY);
+        expectedDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
 
     expectedDate.setDate(1);
     $($cell).trigger("dxclick");
@@ -2550,7 +2551,7 @@ QUnit.test("click on other view cell must set value and contoured date on bounda
         $element = this.$element;
 
     var $cell = $element.find(toSelector(CALENDAR_CELL_CLASS)).eq(1),
-        expectedDate = $cell.data(CALENDAR_DATE_VALUE_KEY);
+        expectedDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
 
     $($element).trigger("focusin");
     $($cell).trigger("dxclick");
@@ -2571,7 +2572,7 @@ QUnit.test("Click on other view cell must set value correctly", function(assert)
             var $cellLastPrevMonth = $(calendar._view.element().find(toSelector(CALENDAR_CELL_CLASS)).not(toSelector(CALENDAR_OTHER_VIEW_CLASS)).first().prev());
 
             if($cellLastPrevMonth.length) {
-                var expected = $cellLastPrevMonth.data(CALENDAR_DATE_VALUE_KEY);
+                var expected = dataUtils.data($cellLastPrevMonth.get(0), CALENDAR_DATE_VALUE_KEY);
                 $($cellLastPrevMonth).trigger("dxclick");
 
                 assert.deepEqual(calendar.option("value"), expected, "view is changed and value is correct");

@@ -775,7 +775,7 @@ QUnit.module("keyboard navigation", {
             focusStateEnabled: true,
             keyStep: 10
         });
-        this.instance = this.$element.data("dxColorView");
+        this.instance = this.$element.dxColorView("instance");
         this.$element.trigger("focus");
         this.keyboard = keyboardMock(this.$element);
         this.$hueMarker = this.$element.find(".dx-colorview-hue-scale-handle");

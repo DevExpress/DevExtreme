@@ -1,6 +1,6 @@
 "use strict";
 
-var dataUtils = require("./element_data");
+var dataUtils = require("./element_data").getDataStrategy();
 var rendererStrategy = require("./native_renderer_strategy");
 var typeUtils = require("./utils/type");
 var styleUtils = require("./utils/style");

@@ -10,7 +10,8 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     keyboardMock = require("../../helpers/keyboardMock.js"),
     pointerMock = require("../../helpers/pointerMock.js"),
-    config = require("core/config");
+    config = require("core/config"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 require("common.css!");
 
@@ -92,7 +93,7 @@ require("common.css!");
 
     QUnit.test("option 'visible' - default", function(assert) {
         var element = $("#widget").dxWidget(),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
 
         assert.ok(instance.option("visible"));
         assert.ok(element.is(":visible"));
@@ -169,7 +170,7 @@ require("common.css!");
 
     QUnit.test("option 'visible' - false on start", function(assert) {
         var element = $("#widget").dxWidget({ visible: false }),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
 
         assert.ok(!element.is(":visible"));
 
@@ -180,7 +181,7 @@ require("common.css!");
 
     QUnit.test("option 'hoverStateEnabled' - default", function(assert) {
         var element = $("#widget").dxWidget(),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
 
         element.trigger("dxhoverstart");
         assert.ok(!instance.option("hoverStateEnabled"));
@@ -193,7 +194,7 @@ require("common.css!");
 
     QUnit.test("option 'hoverStateEnabled' when disabled", function(assert) {
         var element = $("#widget").dxWidget({ hoverStateEnabled: true, disabled: true }),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
 
         element.trigger("dxhoverstart");
         assert.ok(!element.hasClass(HOVER_STATE_CLASS));
@@ -250,11 +251,11 @@ require("common.css!");
 
     QUnit.test("widget has class dx-state-hover when child widget lose cursor", function(assert) {
         var parentElement = $("#jQueryContainerWidget").dxWidget(),
-            parentInstance = parentElement.data("dxWidget");
+            parentInstance = parentElement.dxWidget("instance");
         parentInstance.option("hoverStateEnabled", true);
 
         var childElement = $("<div>").appendTo($("#jQueryContainerWidget")).dxWidget(),
-            childInstance = childElement.data("dxWidget");
+            childInstance = childElement.dxWidget("instance");
         childInstance.option("hoverStateEnabled", true);
 
         parentElement.trigger("dxhoverstart");
@@ -271,7 +272,7 @@ require("common.css!");
 
     QUnit.test("options 'width'&'height'", function(assert) {
         var element = $("#widget").dxWidget(),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
 
         assert.strictEqual(instance.option("width"), undefined);
         assert.strictEqual(instance.option("height"), undefined);
@@ -302,7 +303,7 @@ require("common.css!");
                     padding: "3px"
                 })
                 .dxWidget(),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
 
         instance.option("width", 100);
         instance.option("height", 150);
@@ -317,7 +318,7 @@ require("common.css!");
         });
 
         var element = $("#wrappedWidget").dxWidget(),
-            instance = element.data("dxWidget"),
+            instance = element.dxWidget("instance"),
             $parentElement = $("#parentWrapper");
 
         instance.option("width", "50%");
@@ -328,7 +329,7 @@ require("common.css!");
 
     QUnit.test("set dimensions as function", function(assert) {
         var element = $("#widget").dxWidget(),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
 
         instance.option("width", function() { return 50; });
         instance.option("height", function() { return 100; });
@@ -517,7 +518,7 @@ require("common.css!");
 
     QUnit.test("option activeStateEnabled", function(assert) {
         var element = this.element.dxWidget({ activeStateEnabled: true }),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
         assert.ok(!element.hasClass(ACTIVE_STATE_CLASS));
 
         this.mouse.active();
@@ -559,7 +560,7 @@ require("common.css!");
                 activeStateEnabled: true,
                 disabled: true
             }),
-            instance = el.data("dxWidget");
+            instance = el.dxWidget("instance");
 
         instance.option("disabled", false);
         assert.ok(!el.hasClass(DISABLED_STATE_CLASS));
@@ -586,7 +587,7 @@ require("common.css!");
 
     QUnit.test("widget with ui feedback support, disabled option changing after mousedown", function(assert) {
         var el = this.element.dxWidget({ activeStateEnabled: true }),
-            instance = el.data("dxWidget");
+            instance = el.dxWidget("instance");
 
         this.mouse.start("touch").down();
         instance.option("disabled", true);
@@ -616,7 +617,7 @@ require("common.css!");
 
     QUnit.test("remove hover state on mouse down", function(assert) {
         var element = this.element.dxWidget({ hoverStateEnabled: true, activeStateEnabled: true }),
-            instance = element.data("dxWidget");
+            instance = element.dxWidget("instance");
 
         element.trigger("dxhoverstart");
         this.mouse.active();
@@ -656,7 +657,7 @@ require("common.css!");
             var el = this.element.dxWidget({
                     activeStateEnabled: true
                 }),
-                instance = el.data("dxWidget");
+                instance = el.dxWidget("instance");
 
             this.mouse.active();
             assert.ok(!el.hasClass(ACTIVE_STATE_CLASS));
@@ -686,7 +687,7 @@ require("common.css!");
         this.mouse.active();
         assert.equal(activeEl.hasClass(ACTIVE_STATE_CLASS), true);
 
-        disablingEl.data("dxWidget").option("disabled", true);
+        disablingEl.dxWidget("instance").option("disabled", true);
         assert.equal(activeEl.hasClass(ACTIVE_STATE_CLASS), true);
 
         this.mouse.inactive();
@@ -1065,7 +1066,11 @@ require("common.css!");
         });
     });
 
-    $.each({ node: $("<span>").data("key", "value").get(0), jquery: $("<span>").data("key", "value") }, function(name, element) {
+    $.each({ node: document.createElement("span"), jquery: $("<span>") }, function(name, element) {
+        if(name === "jquery") {
+            element = element.get(0);
+        }
+        dataUtils.data(element, "key", "value");
         QUnit.test("dynamically created " + name + " template should save data associated with it", function(assert) {
             var testContainer = new TestContainer("#container", {
                     template: function() {

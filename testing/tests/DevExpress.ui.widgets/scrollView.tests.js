@@ -113,8 +113,8 @@ QUnit.test("dxLoadIndicator was created", function(assert) {
         $loadIndicatorTop = $topPocket.find(".dx-loadindicator"),
         $loadIndicatorBottom = $bottomPocket.find(".dx-loadindicator");
 
-    var top = $loadIndicatorTop.data("dxLoadIndicator"),
-        bottom = $loadIndicatorBottom.data("dxLoadIndicator");
+    var top = $loadIndicatorTop.dxLoadIndicator("instance"),
+        bottom = $loadIndicatorBottom.dxLoadIndicator("instance");
 
     assert.notEqual(top, null, "dxLoadIndicator was created");
     assert.notEqual(bottom, null, "dxLoadIndicator was created");

@@ -36,7 +36,8 @@ var $ = require("jquery"),
     PivotGridDataSource = require("ui/pivot_grid/data_source"),
     domUtils = require("core/utils/dom"),
     dateLocalization = require("localization/date"),
-    devices = require("core/devices");
+    devices = require("core/devices"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 function sumArray(array) {
     var sum = 0;
@@ -608,12 +609,12 @@ QUnit.test("show field chooser popup on field chooser button click", function(as
     this.clock.tick(500);
     //assert
     assert.ok($(".dx-fieldchooser-popup").is(":visible"), 'fieldChooser popup is visible');
-    assert.strictEqual($(".dx-fieldchooser-popup").data("dxPopup").option("showCloseButton"), true);
-    assert.strictEqual(pivotGrid.getFieldChooserPopup(), $(".dx-fieldchooser-popup").data("dxPopup"));
+    assert.strictEqual(dataUtils.data($(".dx-fieldchooser-popup")[0], "dxPopup").option("showCloseButton"), true);
+    assert.strictEqual(pivotGrid.getFieldChooserPopup(), dataUtils.data($(".dx-fieldchooser-popup")[0], "dxPopup"));
     assert.strictEqual($fieldChooserButton.dxButton("option", "hint"), "Show Field Chooser");
     //T249095
-    assert.strictEqual($(".dx-fieldchooser-popup").data("dxPopup").option("minHeight"), 250);
-    assert.strictEqual($(".dx-fieldchooser-popup").data("dxPopup").option("minWidth"), 250);
+    assert.strictEqual(dataUtils.data($(".dx-fieldchooser-popup")[0], "dxPopup").option("minHeight"), 250);
+    assert.strictEqual(dataUtils.data($(".dx-fieldchooser-popup")[0], "dxPopup").option("minWidth"), 250);
 
     assert.strictEqual($(".dx-pivotgrid-toolbar").find(".dx-button").length, 1);
     assert.strictEqual($(".dx-pivotgrid-toolbar").parent()[0], pivotGrid.element().find(".dx-area-description-cell")[0]);
@@ -668,7 +669,7 @@ QUnit.test("fieldChooser layout change at runtime should not hide popup", functi
     //assert
     assert.ok(fieldChooserPopup.option("visible"), 'fieldChooser popup is visible');
     assert.strictEqual(fieldChooserPopup.option("width"), 900);
-    assert.strictEqual(fieldChooserPopup.content().data("dxPivotGridFieldChooser").option("layout"), 1);
+    assert.strictEqual(fieldChooserPopup.content().dxPivotGridFieldChooser("instance").option("layout"), 1);
 });
 
 QUnit.test("Dragging between PivotGrid and FieldChooser", function(assert) {
@@ -839,11 +840,11 @@ QUnit.test("rtlEnabled assign for all children widgets", function(assert) {
 
     $.each($widgets, function() {
         var $widget = $(this),
-            componentNames = $widget.data("dxComponents");
+            componentNames = dataUtils.data($widget[0], "dxComponents");
 
         $.each(componentNames, function(index, componentName) {
             if(componentName.indexOf("dxPrivateComponent") === -1 && componentName !== "dxToolbarBase") {
-                assert.ok($widget.data(componentName).option("rtlEnabled"), "rtlEnabled for " + componentName + " assigned");
+                assert.ok(dataUtils.data($widget[0], componentName).option("rtlEnabled"), "rtlEnabled for " + componentName + " assigned");
             }
         });
     });
@@ -874,11 +875,11 @@ QUnit.test("changing rtlEnabled for all children widgets", function(assert) {
 
     $.each($widgets, function() {
         var $widget = $(this),
-            componentNames = $widget.data("dxComponents");
+            componentNames = dataUtils.data($widget[0], "dxComponents");
 
         $.each(componentNames, function(index, componentName) {
             if(componentName !== "dxCheckBox" && componentName !== "dxButton") {
-                assert.ok(!$widget.data(componentName).option("rtlEnabled"), "rtlEnabled disabled for " + componentName);
+                assert.ok(!dataUtils.data($widget[0], componentName).option("rtlEnabled"), "rtlEnabled disabled for " + componentName);
             }
         });
     });

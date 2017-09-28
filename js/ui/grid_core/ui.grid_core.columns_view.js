@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    dataUtils = require("../../core/element_data"),
+    dataUtils = require("../../core/element_data").getDataStrategy(),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
@@ -174,7 +174,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             });
 
             if($fieldItemContent.length) {
-                formItemOptions = $fieldItemContent.data("dxFormItem");
+                formItemOptions = $fieldItemContent.data("dx-form-item");
                 if(formItemOptions.column) {
                     resultOptions.column = formItemOptions.column;
                     resultOptions.columnIndex = that._columnsController.getVisibleIndex(resultOptions.column.index);

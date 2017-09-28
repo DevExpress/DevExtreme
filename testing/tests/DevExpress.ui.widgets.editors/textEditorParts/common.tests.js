@@ -29,7 +29,7 @@ var moduleConfig = {
     beforeEach: function() {
         this.element = $("#texteditor").dxTextEditor({});
         this.input = this.element.find("." + INPUT_CLASS);
-        this.instance = this.element.data("dxTextEditor");
+        this.instance = this.element.dxTextEditor("instance");
         this.keyboard = keyboardMock(this.input);
         this.clock = sinon.useFakeTimers();
     },
@@ -149,7 +149,7 @@ QUnit.test("render placeholder", function(assert) {
     var element = $("#texteditor").dxTextEditor({
             placeholder: "enter value"
         }),
-        instance = element.data("dxTextEditor"),
+        instance = element.dxTextEditor("instance"),
         input = element.find("input"),
         $placeholderDiv = element.find("." + PLACEHOLDER_CLASS);
 
@@ -906,7 +906,7 @@ QUnit.test("Enter key event raising (B238135)", function(assert) {
 
     $("#texteditor").dxTextEditor({
         onEnterKey: handler
-    }).data("dxTextEditor");
+    }).dxTextEditor("instance");
 
     $("#texteditor input").trigger($.Event("keyup", { which: 13 }));
 
@@ -915,7 +915,7 @@ QUnit.test("Enter key event raising (B238135)", function(assert) {
 });
 
 QUnit.test("Enter key event changing handler (B238135)", function(assert) {
-    var instance = $("#texteditor").dxTextEditor({}).data("dxTextEditor");
+    var instance = $("#texteditor").dxTextEditor({}).dxTextEditor("instance");
     var once = true;
 
     instance.option("onEnterKey", function(e) {

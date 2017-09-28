@@ -1213,7 +1213,7 @@ QUnit.test("min value behaviour", function(assert) {
         useInkRipple: false
     }).css("width", 500);
 
-    var slider = $element.data("dxSlider");
+    var slider = $element.dxSlider("instance");
 
     pointerMock($element).start().move(250 + $element.offset().left).down();
     assert.equal(slider.option("value"), 350);
@@ -1242,7 +1242,7 @@ QUnit.test("B232111, B233180 - disabled state doesn't work", function(assert) {
             disabled: true,
             useInkRipple: false
         }),
-        slider = $element.data("dxSlider");
+        slider = $element.dxSlider("instance");
 
     assert.ok($element.hasClass("dx-state-disabled"));
     pointerMock($element).start().move(250 + $element.offset().left).down();
@@ -1256,7 +1256,7 @@ QUnit.test("B233256 - incorrect options", function(assert) {
             max: 100,
             useInkRipple: false
         }),
-        slider = $element.data("dxSlider");
+        slider = $element.dxSlider("instance");
 
     slider.option("min", 110);
 
@@ -1275,7 +1275,7 @@ QUnit.test("B233288 - incorrect behavior when swipe on handle", function(assert)
 
     var $handle = $element.find("." + SLIDER_HANDLE_CLASS),
         handleX = $handle.offset().left + $handle.outerWidth() / 2,
-        instance = $element.data("dxSlider");
+        instance = $element.dxSlider("instance");
 
     assert.equal(instance.option("value"), 250);
     pointerMock($handle).start().move(handleX).down().move(2).up();
@@ -1292,7 +1292,7 @@ QUnit.test("B234545 dxRangeSlider/dxSlider - incorrect behavior with negative mi
         useInkRipple: false
     });
 
-    var slider = $element.data("dxSlider");
+    var slider = $element.dxSlider("instance");
 
     var $range = $element.find("." + SLIDER_RANGE_CLASS);
 
@@ -1313,7 +1313,7 @@ QUnit.test("B234766 dxSlider - incorrect value calculation with fractional step"
         useInkRipple: false
     });
 
-    var slider = $element.data("dxSlider");
+    var slider = $element.dxSlider("instance");
 
     var $handle = $element.find("." + SLIDER_HANDLE_CLASS),
         $range = $element.find("." + SLIDER_RANGE_CLASS);
@@ -1341,7 +1341,7 @@ QUnit.test("incorrect when step is NAN or empty string", function(assert) {
                 value: 250,
                 useInkRipple: false
             }),
-        slider = $element.data("dxSlider");
+        slider = $element.dxSlider("instance");
 
     slider.option("step", "NANstring");
 
@@ -1369,7 +1369,7 @@ QUnit.test("Q374462 dxSlider - It is impossible to set the step option to the fl
                 value: 0,
                 useInkRipple: false
             }),
-        slider = $element.data("dxSlider");
+        slider = $element.dxSlider("instance");
 
     slider.option("step", 0.01);
     var $handle = $element.find("." + SLIDER_HANDLE_CLASS),
@@ -1401,7 +1401,7 @@ QUnit.test("step depends on min value after swipe", function(assert) {
                 step: 1,
                 useInkRipple: false
             }),
-        slider = $element.data("dxSlider");
+        slider = $element.dxSlider("instance");
 
     var $handle = $element.find("." + SLIDER_HANDLE_CLASS),
         handleX = $handle.offset().left + $handle.outerWidth() / 2;
@@ -1452,7 +1452,7 @@ QUnit.test("render value", function(assert) {
         useInkRipple: false
     });
 
-    var slider = $element.data("dxSlider"),
+    var slider = $element.dxSlider("instance"),
         $range = $element.find("." + SLIDER_RANGE_CLASS);
 
     assert.equal($range.position().left, 960);

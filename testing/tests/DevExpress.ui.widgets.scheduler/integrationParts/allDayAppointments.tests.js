@@ -9,7 +9,8 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     CustomStore = require("data/custom_store"),
-    Query = require("data/query");
+    Query = require("data/query"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 require("ui/scheduler/ui.scheduler");
 
@@ -59,8 +60,8 @@ QUnit.test("AllDay tasks should not be filtered by start day hour", function(ass
     var $appointments = $(this.instance.element()).find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 2, "There are two appointments");
-    assert.deepEqual($appointments.eq(0).data("dxItemData"), tasks[0], "The first appointment is OK");
-    assert.deepEqual($appointments.eq(1).data("dxItemData"), tasks[1], "The second appointment is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData"), tasks[0], "The first appointment is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData"), tasks[1], "The second appointment is OK");
 });
 
 QUnit.test("AllDay tasks should not be filtered by end day hour", function(assert) {
@@ -264,7 +265,7 @@ QUnit.test("End date of appointment should be calculated if it's dragged off fro
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
-    var appointmentData = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+    var appointmentData = dataUtils.data($(this.instance.element()).find(".dx-scheduler-appointment").get(0), "dxItemData");
 
     assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 8, 0, 0), "Start date is correct");
     assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 8, 0, 30), "End date is correct");
@@ -1262,10 +1263,10 @@ QUnit.test("All-day & common appointments should have a right sorting", function
         $simpleAppointment = $element.find(".dx-scheduler-appointment").last(),
         cellWidth = $element.find(".dx-scheduler-date-table-cell").outerWidth();
 
-    assert.equal($appointments.eq(0).data("dxItemData").text, "Short 1", "Data is right");
-    assert.equal($appointments.eq(1).data("dxItemData").text, "Short 2", "Data is right");
-    assert.equal($appointments.eq(2).data("dxItemData").text, "Short 3", "Data is right");
-    assert.equal($appointments.eq(3).data("dxItemData").text, "Short 4", "Data is right");
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "Short 1", "Data is right");
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "Short 2", "Data is right");
+    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "Short 3", "Data is right");
+    assert.equal(dataUtils.data($appointments.get(3), "dxItemData").text, "Short 4", "Data is right");
 
     assert.roughEqual(translator.locate($simpleAppointment).left, 100, 1.001, "Appointment position is OK");
     assert.roughEqual($simpleAppointment.outerWidth(), cellWidth - 25, 1.001, "Appointment size is OK");
@@ -1318,10 +1319,10 @@ QUnit.test("All-day appointments should have a right sorting", function(assert) 
     var $element = $(this.instance.element()),
         $appointments = $element.find(".dx-scheduler-appointment-compact");
 
-    assert.equal($appointments.eq(0).data("dxItemData").text, "Short 1", "Data is right");
-    assert.equal($appointments.eq(1).data("dxItemData").text, "Short 2", "Data is right");
-    assert.equal($appointments.eq(2).data("dxItemData").text, "Short 3", "Data is right");
-    assert.equal($appointments.eq(3).data("dxItemData").text, "Short 4", "Data is right");
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "Short 1", "Data is right");
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "Short 2", "Data is right");
+    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "Short 3", "Data is right");
+    assert.equal(dataUtils.data($appointments.get(3), "dxItemData").text, "Short 4", "Data is right");
 });
 
 QUnit.test("dropDown appointment should have correct container & position", function(assert) {

@@ -9,7 +9,8 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     DataSource = require("data/data_source/data_source").DataSource,
     appointmentTooltip = require("ui/scheduler/ui.scheduler.appointment_tooltip"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+    keyboardMock = require("../../../helpers/keyboardMock.js"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 require("ui/scheduler/ui.scheduler");
 
@@ -124,13 +125,13 @@ QUnit.test("Shown tooltip should have right boundary", function(assert) {
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data });
 
     var $firstAppointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1),
-        firstItemData = $firstAppointment.data("dxItemData");
+        firstItemData = dataUtils.data($firstAppointment[0], "dxItemData");
 
     this.instance.showAppointmentTooltip(firstItemData, $firstAppointment);
     assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), this.instance.getWorkSpace().element().find(".dx-scrollable-container").get(0), "Boundary is correct");
 
     var $secondAppointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0),
-        secondItemData = $secondAppointment.data("dxItemData");
+        secondItemData = dataUtils.data($secondAppointment[0], "dxItemData");
 
     this.instance.showAppointmentTooltip(secondItemData, $secondAppointment);
     assert.deepEqual(Tooltip.getInstance($(".dx-tooltip")).option("position").boundary.get(0), $(this.instance.element()).get(0), "Boundary of allDay appointment is correct");

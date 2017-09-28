@@ -194,7 +194,7 @@ QUnit.test("Correct start scroll position when RTL and detached container of the
     clock.tick();
 
     $("#container").append($dataGrid);
-    $dataGrid.data("dxDataGrid").updateDimensions();
+    $dataGrid.dxDataGrid("instance").updateDimensions();
     scrollLeft = $(".dx-scrollable").dxScrollable("instance").scrollLeft();
 
     //assert
@@ -2437,7 +2437,7 @@ QUnit.test("Resize columns for virtual scrolling", function(assert) {
                 { dataField: "field4" }
             ]
         }),
-        dataGrid = $dataGrid.data("dxDataGrid"),
+        dataGrid = $dataGrid.dxDataGrid("instance"),
         $tables,
         columnsResizer = dataGrid.getController("columnsResizer");
 
@@ -2680,7 +2680,7 @@ QUnit.test("columns width when all columns have width and dataGrid with fixed wi
             loadingTimeout: undefined,
             dataSource: [{ field1: "1", field2: "2", field3: "3", field4: "4" }]
         }),
-        dataGridInstance = $dataGrid.data("dxDataGrid");
+        dataGridInstance = $dataGrid.dxDataGrid("instance");
 
     //act
     dataGridInstance.option("columns", [
@@ -4991,7 +4991,7 @@ QUnit.test("Updating after changing the option", function(assert) {
         dataSource: {
             store: [{ field1: "1", field2: "2" }, { field1: "3", field2: "4" }, { field1: "5", field2: "6" }]
         }
-    }).data("dxDataGrid");
+    }).dxDataGrid("instance");
 
     this.clock.tick();
 
@@ -5022,7 +5022,7 @@ QUnit.test("Correct update group panel items runtime", function(assert) {
         dataSource: {
             store: [{ field1: "1", field2: "2" }, { field1: "3", field2: "4" }, { field1: "5", field2: "6" }]
         }
-    }).data("dxDataGrid");
+    }).dxDataGrid("instance");
 
     this.clock.tick();
 

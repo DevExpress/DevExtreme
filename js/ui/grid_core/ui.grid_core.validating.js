@@ -16,7 +16,8 @@ var $ = require("../../core/renderer"),
     ValidationEngine = require("../validation_engine"),
     Validator = require("../validator"),
     Tooltip = require("../tooltip"),
-    Overlay = require("../overlay");
+    Overlay = require("../overlay"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 var INVALIDATE_CLASS = "invalid",
     REVERT_TOOLTIP_CLASS = "revert-tooltip",
@@ -461,7 +462,7 @@ module.exports = {
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
                     var result = this.callBase(rowIndex, columnIndex, item),
                         $cell = this.component.getCellElement(rowIndex, columnIndex),
-                        validator = $cell && $cell.data("dxValidator"),
+                        validator = $cell && dataUtils.data($cell[0], "dxValidator"),
                         value = validator && validator.option("adapter").getValue();
 
                     if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || value !== undefined && validator.validate().isValid)) {
@@ -514,7 +515,7 @@ module.exports = {
                         validator;
 
                     if(!skipValidation) {
-                        validator = $cell.data("dxValidator");
+                        validator = dataUtils.data($cell[0], "dxValidator");
                         if(validator) {
                             isValid = validator.validate().isValid;
                         }
@@ -641,8 +642,10 @@ module.exports = {
                 focus: function($element, hideBorder) {
                     var that = this,
                         $focus = $element && $element.closest(that._getFocusCellSelector()),
+                        //validator = $focus && (dataUtils.data($focus[0], "dxValidator") || dataUtils.data($element.find(".dx-validator").get(0), "dxValidator")),
                         validator = $focus && ($focus.data("dxValidator") || $element.find(".dx-validator").eq(0).data("dxValidator")),
                         rowOptions = $focus && $focus.closest(".dx-row").data("options"),
+                        //rowOptions = $focus && dataUtils.data($focus.closest(".dx-row")[0], "options"),
                         editData = rowOptions ? that.getController("editing").getEditDataByKey(rowOptions.key) : null,
                         validationResult,
                         $tooltips = $focus && $focus.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector()),
@@ -650,7 +653,6 @@ module.exports = {
                         showValidationMessage = false,
                         revertTooltip,
                         column = $cell && that.getController("columns").getVisibleColumns()[$cell.index()];
-
                     if(!arguments.length) return that.callBase();
 
                     $tooltips && $tooltips.remove();
@@ -667,7 +669,6 @@ module.exports = {
                             }
                         }
                     }
-
                     if((validationResult && !validationResult.isValid) || (editData && editData.type === "update")) {
                         if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
                             revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);

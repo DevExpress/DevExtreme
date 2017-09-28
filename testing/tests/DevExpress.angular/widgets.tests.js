@@ -1095,7 +1095,7 @@ QUnit.test("Scope for template with 'noModel' option is not destroyed after clea
 
     initMarkup($markup, function() {}, this);
 
-    var instance = $markup.data("dxTestContainerNoModel"),
+    var instance = $markup.dxTestContainerNoModel("instance"),
         scope = $markup.scope();
 
     assert.ok(scope.$root);

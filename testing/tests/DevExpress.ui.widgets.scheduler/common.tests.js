@@ -18,7 +18,8 @@ var $ = require("jquery"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
-    SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones");
+    SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 require("common.css!");
 require("generic_light.css!");
@@ -2816,7 +2817,7 @@ QUnit.testStart(function() {
         var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
 
         assert.equal($appointments.length, 1, "There is only one appt");
-        assert.deepEqual($appointments.data("dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
+        assert.deepEqual(dataUtils.data($appointments[0], "dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
     });
 
     QUnit.test("Scheduler should filter data on client side if the remoteFiltering option is false and forceIsoDateParsing", function(assert) {
@@ -2841,7 +2842,7 @@ QUnit.testStart(function() {
             var $appointments = $(this.instance.element().find(".dx-scheduler-appointment"));
 
             assert.equal($appointments.length, 1, "There is only one appt");
-            assert.deepEqual($appointments.data("dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
+            assert.deepEqual(dataUtils.data($appointments[0], "dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
         } finally {
             config().forceIsoDateParsing = defaultForceIsoDateParsing;
         }
