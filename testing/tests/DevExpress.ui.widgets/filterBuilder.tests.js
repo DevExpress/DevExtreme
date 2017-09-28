@@ -57,23 +57,10 @@ var condition2 = ["CompanyName", "=", "Super Mart of the West2"];
 var condition3 = ["CompanyName", "=", "Super Mart of the West3"];
 
 var FILTER_BUILDER_CLASS = "dx-filterbuilder",
-    FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group",
-    FILTER_BUILDER_GROUP_ITEM_CLASS = "dx-filterbuilder-group-item",
-    FILTER_BUILDER_GROUP_CONTENT_CLASS = "dx-filterbuilder-group-content",
-    FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
-    FILTER_BUILDER_ACTION_CLASS = "dx-filterbuilder-action",
-    FILTER_BUILDER_IMAGE_CLASS = "dx-filterbuilder-action-icon",
     FILTER_BUILDER_ITEM_TEXT_CLASS = "dx-filterbuilder-text",
-    FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
-    FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
     FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
-    FILTER_BUILDER_ITEM_OPERATOR_CLASS = "dx-filterbuilder-item-operator",
-    ACTIVE_CLASS = "dx-state-active",
-
-    ACTIONS = [
-        "onEditorPreparing", "onEditorPrepared"
-    ];
+    FILTER_BUILDER_ITEM_OPERATOR_CLASS = "dx-filterbuilder-item-operator";
 
 QUnit.test("markup init", function(assert) {
     var etalon =
@@ -294,6 +281,11 @@ QUnit.test("removeItem", function(assert) {
 QUnit.test("isGroup", function(assert) {
     assert.ok(utils.isGroup([[], "And", []]));
     assert.ok(utils.isGroup(["And"]));
+});
+
+QUnit.test("getAvailableOperations", function(assert) {
+    var operations = utils.getAvailableOperations(["=", "<>", "contains"]);
+    assert.equal(operations[2].text, "contains");
 });
 
 QUnit.test("addItem", function(assert) {
