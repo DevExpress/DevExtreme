@@ -2195,3 +2195,34 @@
 
 @fieldset-field-label-color: @base-label-color;
 @fieldset-field-value-invalid-color: @base-invalid-color;
+
+// FilterBuilder
+@filterbuilder-bg: @base-bg;
+
+@filterbuilder-plus-icon-focus-color: @base-success;
+@filterbuilder-plus-icon-color: fade(@filterbuilder-plus-icon-focus-color, 80%);
+@filterbuilder-plus-icon-hover-color: fade(@filterbuilder-plus-icon-focus-color, 70%);
+
+@filterbuilder-remove-icon-focus-color: @base-danger;
+
+@filterbuilder-remove-icon-color: fade(@filterbuilder-remove-icon-focus-color, 80%);
+@filterbuilder-remove-icon-hover-color: fade(@filterbuilder-remove-icon-focus-color, 70%);
+
+@filterbuilder-group-operation-color: @filterbuilder-remove-icon-color;
+@filterbuilder-group-operation-hover-color: @filterbuilder-remove-icon-hover-color;
+@filterbuilder-group-operation-focus-color: @filterbuilder-remove-icon-focus-color;
+
+@filterbuilder-item-field-focus-color: @base-accent;
+@filterbuilder-item-field-color: fade(@filterbuilder-item-field-focus-color, 80%);
+@filterbuilder-item-field-hover-color: fade(@filterbuilder-item-field-focus-color, 70%);
+
+@filterbuilder-item-operator-color: @filterbuilder-plus-icon-color;
+@filterbuilder-item-operator-hover-color: @filterbuilder-plus-icon-hover-color;
+@filterbuilder-item-operator-focus-color: @filterbuilder-plus-icon-focus-color;
+
+@filterbuilder-item-value-focus-color: #cccccc;
+@filterbuilder-item-value-color: fade(@filterbuilder-item-value-focus-color, 80%);
+@filterbuilder-item-value-hover-color: fade(@filterbuilder-item-value-focus-color, 70%);
+
+@filterbuilder-text-color: #000000;
+@filterbuilder-text-focus-color: @filterbuilder-text-color;

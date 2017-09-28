@@ -20,40 +20,28 @@ var fields = [{
     dataType: "string",
     format: undefined,
     filterOperations: ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
-    defaultFilterOperation: "",
-    customizeText: function(args) {
-
-    }
+    defaultFilterOperation: ""
 }, {
     caption: "Date",
     dataField: "Date",
     dataType: "date",
     format: "shortDate",
     filterOperations: ["=", "<>", "<", ">", "<=", ">="],
-    defaultFilterOperation: "",
-    customizeText: function(args) {
-
-    }
+    defaultFilterOperation: ""
 }, {
     caption: "State",
     dataField: "State",
     dataType: "string",
     format: undefined,
     filterOperations: ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
-    defaultFilterOperation: "",
-    customizeText: function(args) {
-
-    }
+    defaultFilterOperation: ""
 }, {
     caption: "Zipcode",
     dataField: "Zipcode",
     dataType: "number",
     format: undefined,
     filterOperations: ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
-    defaultFilterOperation: ["=", "<>", "<", ">", "<=", ">="],
-    customizeText: function(args) {
-
-    }
+    defaultFilterOperation: ["=", "<>", "<", ">", "<=", ">="]
 },
 {
     caption: "Contributor",
@@ -61,24 +49,76 @@ var fields = [{
     dataType: "boolean",
     format: undefined,
     filterOperations: [],
-    defaultFilterOperation: "",
-    customizeText: function(args) {
-
-    }
+    defaultFilterOperation: ""
 }];
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"];
 var condition2 = ["CompanyName", "=", "Super Mart of the West2"];
 var condition3 = ["CompanyName", "=", "Super Mart of the West3"];
 
+var FILTER_BUILDER_CLASS = "dx-filterbuilder",
+    FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group",
+    FILTER_BUILDER_GROUP_ITEM_CLASS = "dx-filterbuilder-group-item",
+    FILTER_BUILDER_GROUP_CONTENT_CLASS = "dx-filterbuilder-group-content",
+    FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
+    FILTER_BUILDER_ACTION_CLASS = "dx-filterbuilder-action",
+    FILTER_BUILDER_IMAGE_CLASS = "dx-filterbuilder-action-icon",
+    FILTER_BUILDER_ITEM_TEXT_CLASS = "dx-filterbuilder-text",
+    FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
+    FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
+    FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
+    FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
+    FILTER_BUILDER_ITEM_OPERATOR_CLASS = "dx-filterbuilder-item-operator",
+    ACTIVE_CLASS = "dx-state-active",
+
+    ACTIONS = [
+        "onEditorPreparing", "onEditorPrepared"
+    ];
+
 QUnit.test("markup init", function(assert) {
+    var etalon =
+    '<div id="container" class="dx-filterbuilder dx-widget" style="width: 400px; height: 300px;">'
+        + '<div class="dx-filterbuilder-group">'
+            + '<div class="dx-filterbuilder-group-item">'
+                + '<div class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
+                + '<div class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
+            + '</div>'
+            + '<div class="dx-filterbuilder-group-content"></div>'
+        + '</div>'
+    + '</div>';
+
     var element = $("#container").dxFilterBuilder();
+    assert.equal(element.parent().html(), etalon);
+});
 
-    // assert
-    assert.ok(element.hasClass(FILTER_BUILDER_CLASS), "widget has dx-filterbuilder class");
-    assert.equal(element.width(), 400, "default widget width");
-    assert.equal(element.height(), 300, "default widget height");
+QUnit.test("markup is initialized by filter value", function(assert) {
+    var container = $("#container");
+    container.dxFilterBuilder({
+        filter: [
+            ["CompanyName", "=", "K&S Music"],
+            "Or",
+            ["Zipcode", "=", "98027"],
+            "Or",
+            ["CompanyName", "=", "Screen Shop"]
+        ],
+        fields: fields
+    }).dxFilterBuilder("instance");
 
+    assert.ok(container.hasClass(FILTER_BUILDER_CLASS));
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).html(), "Company Name");
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATOR_CLASS).html(), "=");
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0).text(), "K&S Music");
+
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).eq(1).html(), "Zipcode");
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATOR_CLASS).eq(1).html(), "=");
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(1).html(), "98027");
+
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).eq(2).html(), "Company Name");
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATOR_CLASS).eq(2).html(), "=");
+    var rowValue = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(2);
+    assert.equal(rowValue.text(), "Screen Shop");
+    rowValue.click();
+    assert.ok($("." + FILTER_BUILDER_ITEM_TEXT_CLASS + " .dx-textbox").dxTextBox("instance"));
 });
 
 QUnit.test("throws", function(assert) {
@@ -117,6 +157,21 @@ QUnit.test("getGroupValue", function(assert) {
 
     group = ["!", group];
     groupValue = utils.getGroupValue(group);
+    assert.equal(groupValue, "!And");
+});
+
+QUnit.test("getGroupText", function(assert) {
+    var filterBuilder = $("#container").dxFilterBuilder().dxFilterBuilder("instance");
+    var group = ["!",
+        [
+            condition1,
+            "And",
+            condition2,
+            "And",
+            condition3
+        ]
+    ];
+    var groupValue = utils.getGroupText(group, filterBuilder._getGroupOperations());
     assert.equal(groupValue, "Not And");
 });
 
@@ -136,7 +191,7 @@ QUnit.test("setGroupValue", function(assert) {
     assert.equal(group[3], "Or");
     assert.equal(group[4], condition3);
 
-    group = utils.setGroupValue(group, "Not Or");
+    group = utils.setGroupValue(group, "!Or");
     // assert
     assert.equal(group[0], "!");
     assert.equal(group.length, 2);
@@ -332,6 +387,9 @@ QUnit.test("get current value text", function(assert) {
     var field = {},
         value = "";
     assert.equal(utils.getCurrentValueText({}, ""), "");
+
+    value = "Text";
+    assert.equal(utils.getCurrentValueText({}, "Text"), "Text");
 
     field = { format: "shortDate" };
     value = new Date(2017, 8, 5);
