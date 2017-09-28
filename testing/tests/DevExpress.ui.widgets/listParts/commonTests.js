@@ -2,6 +2,8 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     fx = require("animation/fx"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
@@ -1268,7 +1270,8 @@ QUnit.test("onGroupRendered should fired with correct params", function(assert) 
         });
 
     assert.equal(groupRendered, 1, "event triggered");
-    assert.strictEqual(eventData.groupElement[0], $list.find(".dx-list-group")[0], "groupElement is correct");
+    assert.strictEqual(isRenderer(eventData.groupElement), config().useJQueryRenderer, "groupElement is correct");
+    assert.strictEqual($(eventData.groupElement)[0], $list.find(".dx-list-group")[0], "groupElement is correct");
     assert.strictEqual(eventData.groupData, items[0], "groupData is correct");
     assert.strictEqual(eventData.groupIndex, 0, "groupIndex is correct");
 });
