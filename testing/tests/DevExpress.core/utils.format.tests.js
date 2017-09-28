@@ -147,11 +147,21 @@ QUnit.test("float with precision formatting", function(assert) {
     assert.strictEqual(formatter(null), "", "format an empty value");
     assert.strictEqual(formatter(0), "0.00", "format zero");
     assert.strictEqual(formatter(123), "123.00", "format integer");
+    assert.strictEqual(formatter(123.05), "123.05", "format rounded float with zero");
     assert.strictEqual(formatter(123.5), "123.50", "format rounded float");
     assert.strictEqual(formatter(123.57), "123.57", "format float");
     assert.strictEqual(formatter(123.576), "123.58", "rounding float");
     assert.strictEqual(formatter(123.573), "123.57", "rounding float back");
     assert.strictEqual(formatter(-123.57), "-123.57", "format negative float");
+});
+
+QUnit.test("test different formats", function(assert) {
+    var formatter = generateNumberFormat("#0.00");
+
+    assert.strictEqual(formatter(5), "5.00", "format integer");
+    assert.strictEqual(formatter(0.1), "0.10", "format float");
+    assert.strictEqual(formatter(15.15), "15.15", "format float with 2 digits after point");
+    assert.strictEqual(formatter(-15.15), "-15.15", "format negative float");
 });
 
 QUnit.test("different positive and negative formatting", function(assert) {

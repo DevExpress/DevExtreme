@@ -5,9 +5,7 @@ var GROUP_SEPARATOR = ",";
 var ESCAPING_CHAR = "'";
 
 function escapeFormat(formatString) {
-    var charsToEscape = /([\\\/\.\*\+\?\|\(\)\[\]\{\}])/g;
-
-    return formatString.replace(charsToEscape, "\\$1");
+    return formatString.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
 }
 
 function getGroupSizes(formatString) {
@@ -131,7 +129,7 @@ var formatRules = {
 };
 
 function getFormatString(format, value) {
-    var stringValue = value.toString() || "",
+    var stringValue = (value || "").toString(),
         specialFormatChars = Object.keys(formatRules),
         isProcessingPrevented = false,
         resultString = "";
@@ -161,6 +159,10 @@ function getFormatString(format, value) {
     return resultString;
 }
 
+function reverseString(str) {
+    return str.toString().split("").reverse().join("");
+}
+
 function isPercentFormat(format) {
     return format.indexOf("%") !== -1 && !format.match(/'[^']*%[^']*'/g);
 }
@@ -187,8 +189,8 @@ function generateNumberFormatter(format) {
         value = Math.round(value * Math.pow(10, maxFloatPrecision)) / Math.pow(10, maxFloatPrecision);
 
         var valueIntegerPart = parseInt(Math.abs(value)),
-            valueFloatPart = parseInt(value.toString().split(FLOAT_SEPARATOR)[1]),
-            integerString = getFormatString(floatParts[0], valueIntegerPart),
+            valueFloatPart = value.toString().split(FLOAT_SEPARATOR)[1],
+            integerString = reverseString(getFormatString(reverseString(floatParts[0]), reverseString(valueIntegerPart))),
             floatString = maxFloatPrecision ? getFormatString(floatParts[1], valueFloatPart) : "";
 
         if(!integerString.match(/\d/)) integerString += "0";

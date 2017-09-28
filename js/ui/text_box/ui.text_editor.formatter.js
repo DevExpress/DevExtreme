@@ -4,25 +4,25 @@ var eventsEngine = require("../../events/core/events_engine"),
     caret = require("./utils.caret"),
     extend = require("../../core/utils/extend").extend,
     type = require("../../core/utils/type"),
-    localization = require("../../localization"),
+    numberParserGenerator = require("../../core/utils/number_parser_generator"),
     TextEditorBase = require("./ui.text_editor.base"),
     eventUtils = require("../../events/utils");
 
 var MASK_FORMATTER_NAMESPACE = "dxMaskFormatter";
 
 var TextEditorFormatter = TextEditorBase.inherit({
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-
-        });
-    },
 
     _supportedKeys: function() {
         var that = this;
 
         return extend(this.callBase(), {
-            backspace: that._backSpaceHandler
+            backspace: that._removeHandler.bind(this),
+            del: that._removeHandler.bind(this)
         });
+    },
+
+    _removeHandler: function(e) {
+        this._lastKey = e.key;
     },
 
     _renderInput: function() {
@@ -31,8 +31,8 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _renderFormatter: function() {
-        this._formatter = localization.number.format;
-        this._parser = localization.number.parse;
+        this._formatter = numberParserGenerator.generateNumberFormatter(this.option("displayFormat"));
+        this._parser = numberParserGenerator.generateNumberParser(this.option("displayFormat"));
 
         this._detachFormatterEvents();
         this._attachFormatterEvents();
@@ -46,83 +46,152 @@ var TextEditorFormatter = TextEditorBase.inherit({
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace("input", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace("dxclick", MASK_FORMATTER_NAMESPACE), this._clickHandler.bind(this));
     },
 
-    _getDefaultValue: function() {
-        return "";
+    _replaceForward: function(text, position) {
+        if(position >= text.length) return text;
+
+        var replaceFrom = text.charAt(position + 1),
+            replaceTo = text.charAt(position),
+            isDigitFrom = !!replaceFrom.match(/^\d$/),
+            isDigitTo = !!replaceTo.match(/^\d$/);
+
+        if((!replaceFrom || !replaceTo) || (isDigitFrom && !isDigitTo || !isDigitFrom && isDigitTo)) {
+            return null;
+
+        }
+
+        var result = text.substr(0, position) + replaceTo + text.substr(position + 2, text.length);
+
+        return result;
     },
 
-    _getStubsByString: function(text) {
-        return text.replace(/[0-9+-]/g, "");
+    _tryToReplaceChar: function() {
+        var caret = this._caret(),
+            text = this._input().val(),
+            replacedText = this._replaceForward(text, caret.start - 1);
+
+        return replacedText;
     },
 
-    _shouldSelectAfterCaret: function() {
-        var displayFormat = this.option("displayFormat"),
-            formatType = type.isObject(displayFormat) ? displayFormat.type : displayFormat,
-            complexFormats = ["exponential", "percent", "currency", "fixedpoint"],
-            isComplexFormat = complexFormats.indexOf(formatType) >= 0;
-
-        return displayFormat.replaceAfterCaret || isComplexFormat;
+    _adjustCaret: function() {
+        var value = this.option("value");
+        if(!type.isDefined(value)) this._caret(0);
     },
 
-    _adjustCaret: function(initialCaret, oldValue, value) {
-
-        if(!this._shouldSelectAfterCaret()) return;
-
-        var oldStubCount = this._getStubsByString(oldValue.slice(0, initialCaret.start)).length,
-            newStubCount = this._getStubsByString(value.slice(0, initialCaret.start)).length,
-            caretPosition = initialCaret.start + (newStubCount - oldStubCount);
-
-        this._caret({
-            start: caretPosition,
-            end: value.length
-        });
+    _clickHandler: function() {
+        this._adjustCaret();
     },
 
-    _backSpaceHandler: function(e) {
-        var caret = this._caret();
+    _applyValue: function(value, forced, caret) {
+        caret = caret || this._caret();
 
-        this._caret({
-            start: caret.start - 1,
-            end: caret.end
-        });
+        if(this._parsedValue === value && !forced) {
+            return;
+        } else if(value === null && !forced) {
+            this._input().val(this._formattedValue);
+        } else {
+            this._parsedValue = value;
+            this._formattedValue = this._formatter(value);
+            this._input().val(this._formattedValue);
+        }
+
+        this._caret(caret);
     },
 
-    _isValueIncomplete: function(value) {
-        var incompleteRegex = /(^-$)|(^-?\d*\.$)|(\d+e-?$)/i;
-        return incompleteRegex.test(value);
+    _formatFirstInputIfNeed: function(text) {
+        if(!this._formattedValue) {
+            var formattedValue = this._formatter(parseInt(text));
+
+            if(formattedValue) {
+                var caretPosition = formattedValue.indexOf(text) + 1;
+
+                return {
+                    text: formattedValue,
+                    caret: { start: caretPosition, end: caretPosition }
+                };
+            }
+        }
     },
 
     _formatValue: function() {
-        var format = this.option("displayFormat");
+        if(!this.option("displayFormat")) return;
 
-        if(!format) return;
+        var text = this._input().val(),
+            caret;
 
-        var value = this._input().val(),
-            parsedValue = this._parser(value, format),
-            formattedValue = this._formatter(isNaN(parsedValue) ? this._getDefaultValue() : parsedValue, format);
+        if(!text.length) return;
 
-        var initialCaret = this._caret();
+        var firstInputResult = this._formatFirstInputIfNeed(text);
 
-        if(!value || !isNaN(parsedValue)) {
-            this._input().val(formattedValue);
-            this._formattedValue = formattedValue;
-        } else if(this._isValueIncomplete(value) && !this._valueChangeEventInstance) {
-            return;
-        } else {
-            this._input().val(this._formattedValue || "");
+        if(firstInputResult) {
+            text = firstInputResult.text;
+            caret = firstInputResult.caret;
         }
 
-        this._adjustCaret(initialCaret, value, formattedValue);
+        var parsedValue = this._parser(text),
+            operation = "insert";
+
+        var offset;
+
+        if(parsedValue === null && this._lastKey === "Delete") {
+            // 12|.34 -> 12|34
+            caret = this._caret();
+            text = this._formattedValue;
+
+            text = text.substr(0, caret.start) + text.substr(caret.start).replace(/\d/, "0");
+            parsedValue = this._parser(text);
+            if(text !== null) {
+                offset = text.substr(caret.start).indexOf("0") + 1;
+                caret.start += offset;
+                caret.end += offset;
+                operation = "replace";
+            }
+        }
+
+        function reverseString(str) {
+            return str.split("").reverse().join("");
+        }
+
+        if(parsedValue === null && this._lastKey === "Backspace") {
+            // 12.3|4 -> 12.|4
+            caret = this._caret();
+            text = this._formattedValue;
+
+            caret.start++;
+            caret.end++;
+
+            text = reverseString(reverseString(text.substr(0, caret.start)).replace(/\d/, "0")) + text.substr(caret.start);
+            parsedValue = this._parser(text);
+            if(text !== null) {
+                offset = reverseString(text.substr(0, caret.start)).indexOf("0") + 1;
+                caret.start -= offset;
+                caret.end -= offset;
+                operation = "replace";
+            }
+        }
+
+        this._lastKey = null;
+
+        if(parsedValue === null) {
+            var replacedText = this._tryToReplaceChar();
+            parsedValue = this._parser(replacedText);
+            if(replacedText !== null) {
+                operation = "replace";
+            }
+        }
+
+        this._applyValue(parsedValue, operation === "replace", caret);
     },
 
     _renderValue: function() {
         this.callBase();
-        this._formatValue();
+        this._applyValue(this.option("value"));
     },
 
     _valueChangeEventHandler: function(e) {
-        this.callBase(e, this._parser(this._input().val(), this.option("displayFormat")));
+        this.callBase(e, this._parser(this._input().val()));
         this._formatValue();
     },
 
@@ -136,6 +205,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "displayFormat":
+                this._renderFormatter();
                 this._formatValue();
                 break;
             default:
@@ -145,7 +215,10 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
     _clean: function() {
         delete this._formatter;
-        delete this._parser; this.callBase();
+        delete this._parser;
+        delete this._formattedValue;
+        delete this._parsedValue;
+        this.callBase();
     }
 
 });
