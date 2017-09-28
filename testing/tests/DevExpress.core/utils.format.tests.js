@@ -149,6 +149,7 @@ QUnit.test("float with precision formatting", function(assert) {
     assert.strictEqual(formatter(123), "123.00", "format integer");
     assert.strictEqual(formatter(123.5), "123.50", "format rounded float");
     assert.strictEqual(formatter(123.57), "123.57", "format float");
+    assert.strictEqual(formatter(123.576), "123.58", "rounding float");
     assert.strictEqual(formatter(-123.57), "-123.57", "format negative float");
 });
 
@@ -174,7 +175,7 @@ QUnit.test("percent formatting", function(assert) {
     assert.strictEqual(formatter(0), "0%", "format zero");
     assert.strictEqual(formatter(0.1), "10%", "format less than 100");
     assert.strictEqual(formatter(2.578), "257.8%", "format more than 100");
-    assert.strictEqual(formatter(2.5785), "257.85%", "format more than 100");
+    assert.strictEqual(formatter(2.5785), "257.9%", "rounding percents");
     assert.strictEqual(formatter(-0.45), "(45%)", "format negative value");
 });
 

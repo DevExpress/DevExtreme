@@ -165,6 +165,11 @@ function isPercentFormat(format) {
     return format.indexOf("%") !== -1 && !format.match(/'[^']*%[^']*'/g);
 }
 
+function getMaxPrecision(floatFormat) {
+    if(!floatFormat) return 0;
+    return floatFormat.replace(/[^#0]/g, "").length;
+}
+
 function generateNumberFormatter(format) {
     return function(value) {
         if(typeof value !== "number") return "";
@@ -177,10 +182,14 @@ function generateNumberFormatter(format) {
         }
 
         var floatParts = numberFormat.split(FLOAT_SEPARATOR),
-            valueIntegerPart = parseInt(Math.abs(value)),
+            maxFloatPrecision = getMaxPrecision(floatParts[1]);
+
+        value = Math.round(value * Math.pow(10, maxFloatPrecision)) / Math.pow(10, maxFloatPrecision);
+
+        var valueIntegerPart = parseInt(Math.abs(value)),
             valueFloatPart = parseInt(value.toString().split(FLOAT_SEPARATOR)[1]),
             integerString = getFormatString(floatParts[0], valueIntegerPart),
-            floatString = floatParts[1] ? getFormatString(floatParts[1], valueFloatPart) : "";
+            floatString = maxFloatPrecision ? getFormatString(floatParts[1], valueFloatPart) : "";
 
         if(!integerString.match(/\d/)) integerString += "0";
 
