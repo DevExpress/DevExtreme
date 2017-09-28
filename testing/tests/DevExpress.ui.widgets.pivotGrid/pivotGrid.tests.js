@@ -647,6 +647,70 @@ QUnit.test("create field chooser with search", function(assert) {
     assert.ok(treeViewInstance.option("searchEnabled"), 'treeview with search');
 });
 
+QUnit.test("Field panel should be updated on change headerFilter at runtime", function(assert) {
+    var pivotGrid = createPivotGrid({
+        dataSource: this.dataSource,
+        allowFiltering: true,
+        headerFilter: {
+            allowSearch: true,
+        },
+        fieldPanel: {
+            visible: true
+        }
+    }, assert);
+
+    this.clock.tick();
+
+    $("#pivotGrid").find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    assert.ok($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter has searchBox");
+
+    //act
+    pivotGrid.option("headerFilter.allowSearch", false);
+
+    $("#pivotGrid").find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    assert.notOk($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter hasn't searchBox");
+});
+
+QUnit.test("Field chooser should be updated on change headerFilter at runtime", function(assert) {
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            allowFiltering: true,
+            headerFilter: {
+                allowSearch: true,
+            },
+            fieldChooser: {
+                enabled: true
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    fieldChooserPopup.content().find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    assert.ok($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter has searchBox");
+
+    //act
+    pivotGrid.option("headerFilter.allowSearch", false);
+
+    fieldChooserPopup.content().find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    assert.notOk($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter hasn't searchBox");
+});
+
 QUnit.test("fieldChooser layout change at runtime should not hide popup", function(assert) {
     var pivotGrid = createPivotGrid({
             dataSource: {
