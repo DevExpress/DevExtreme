@@ -159,7 +159,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderTimePanel();
         this._renderDateTable();
 
-        this._$sidebarTable.appendTo(this._sidebarScrollable.content());
+        this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
 
         this._setGroupHeaderCellsHeight();
         this._applyCellTemplates(groupCellTemplates);

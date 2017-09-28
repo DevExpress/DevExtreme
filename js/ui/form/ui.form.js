@@ -849,7 +849,7 @@ var Form = Widget.inherit({
     },
 
     _getContent: function() {
-        return this.option("scrollingEnabled") ? this._scrollable.content() : this.$element();
+        return this.option("scrollingEnabled") ? this._scrollable.$content() : this.$element();
     },
 
     _renderValidationSummary: function() {

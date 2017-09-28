@@ -226,8 +226,8 @@ var NativeStrategy = Class.inherit({
             width: this._$container.width()
         };
         this._componentContentSize = {
-            height: this._component.content().height(),
-            width: this._component.content().width()
+            height: this._component.$content().height(),
+            width: this._component.$content().width()
         };
         this._contentSize = {
             height: this._$content.height(),

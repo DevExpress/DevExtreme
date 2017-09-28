@@ -2434,8 +2434,8 @@ QUnit.test("Initial horizontal scroll position when rtl is enabled", function(as
     var columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
     assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
     assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
-    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
-    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
 });
 
 //T529461
@@ -2466,8 +2466,8 @@ QUnit.test("Initial horizontal scroll position when rtl is enabled and scrolling
     var columnAreaContentTable = pivotGrid.$element().find(".dx-pivotgrid-horizontal-headers .dx-scrollable-content > table");
     assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
     assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
-    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
-    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
     assert.equal(dataAreaFakeTable.css("right"), "0px");
     assert.equal(columnAreaFakeTable.css("right"), "0px");
     assert.equal(dataAreaContentTable.css("right"), "0px");
@@ -2508,8 +2508,8 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
         assert.ok(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
         assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
-        assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+        assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
 
         done();
     };

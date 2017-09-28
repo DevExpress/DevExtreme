@@ -441,7 +441,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 this._dataController.pageIndex(pageIndex + pageStep);
                 eventArgs.originalEvent.preventDefault();
             }
-        } else if(scrollable && scrollable._container().height() < scrollable.content().height()) {
+        } else if(scrollable && scrollable._container().height() < scrollable.$content().height()) {
             this._scrollBy(scrollable._container().height() * pageStep);
             eventArgs.originalEvent.preventDefault();
         }
