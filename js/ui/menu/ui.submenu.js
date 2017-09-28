@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     positionUtils = require("../../animation/position"),
     extend = require("../../core/utils/extend").extend,
     ContextMenu = require("../context_menu");
@@ -69,7 +70,7 @@ var Submenu = ContextMenu.inherit({
 
     _drawSubmenu: function($rootItem) {
         this._actions.onShowing({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: this
         });
         this.callBase($rootItem);
@@ -81,24 +82,24 @@ var Submenu = ContextMenu.inherit({
 
     _hideAllShownSubmenus: function($rootItem) {
         this._actions.onHiding({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: this
         });
         this.callBase($rootItem);
         this._actions.onHidden({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: this
         });
     },
 
     _hideSubmenu: function($rootItem) {
         this._actions.onHiding({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: this
         });
         this.callBase($rootItem);
         this._actions.onHidden({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: this
         });
     },
