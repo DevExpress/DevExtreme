@@ -4952,7 +4952,7 @@ QUnit.test('setVirtualContentParams.', function(assert) {
     assert.strictEqual(virtualContent.css("display"), "block");
     assert.strictEqual(virtualContent.css("width"), "500px");
     assert.strictEqual(virtualContent.css("height"), "250px");
-    assert.strictEqual(area._getScrollable().content().css("height"), "250px");
+    assert.strictEqual(area._getScrollable().$content().css("height"), "250px");
 });
 
 //T465337
@@ -4976,7 +4976,7 @@ QUnit.test('Reset with virtual scrolling', function(assert) {
     //act
     area.reset();
     //assert
-    assert.strictEqual(area._getScrollable().content().get(0).style.height, "auto");
+    assert.strictEqual(area._getScrollable().$content().get(0).style.height, "auto");
 });
 
 QUnit.test('scrollTo with virtual scrolling. Horizontal scrolling', function(assert) {
