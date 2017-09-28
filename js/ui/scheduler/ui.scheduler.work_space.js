@@ -847,9 +847,16 @@ var SchedulerWorkSpace = Widget.inherit({
             headerHeight = this.invoke("getHeaderHeight"),
             allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this.getAllDayHeight() : 0;
 
+        headerPanelHeight && this._headerScrollable && this._headerScrollable.element().height(headerPanelHeight + allDayPanelHeight);
+
         headerPanelHeight && this._dateTableScrollable.element().css({
             "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
             "margin-bottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
+        });
+
+        headerPanelHeight && this._sidebarScrollable && this._sidebarScrollable.element().css({
+            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "marginBottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
 
         this._$allDayTitle && this._$allDayTitle.css("top", headerHeight + headerPanelHeight + "px");
