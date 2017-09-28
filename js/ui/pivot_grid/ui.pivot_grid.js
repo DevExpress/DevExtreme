@@ -228,12 +228,12 @@ var PivotGrid = Widget.inherit({
                  */
                 enabled: true,
                 /**
-                 * @name dxPivotGridOptions_fieldChooser_searchEnabled
-                 * @publicName searchEnabled
+                 * @name dxPivotGridOptions_fieldChooser_allowSearch
+                 * @publicName allowSearch
                  * @type boolean
                  * @default false
                  */
-                searchEnabled: false,
+                allowSearch: false,
                 /**
                  * @name dxPivotGridOptions_fieldChooser_layout
                  * @publicName layout
@@ -1065,7 +1065,7 @@ var PivotGrid = Widget.inherit({
                 layout: fieldChooserOptions.layout,
                 texts: fieldChooserOptions.texts || {},
                 dataSource: that.getDataSource(),
-                searchEnabled: fieldChooserOptions.searchEnabled,
+                searchEnabled: fieldChooserOptions.allowSearch,
                 width: undefined,
                 height: undefined
             },

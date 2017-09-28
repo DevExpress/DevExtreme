@@ -628,7 +628,7 @@ QUnit.test("create field chooser with search", function(assert) {
                 values: []
             },
             fieldChooser: {
-                searchEnabled: true,
+                allowSearch: true,
             }
         }, assert),
         fieldChooserPopup = pivotGrid.getFieldChooserPopup();

@@ -140,12 +140,12 @@ var FieldChooser = BaseFieldChooser.inherit({
             */
             onContextMenuPreparing: null,
             /**
-            * @name dxPivotGridFieldChooserOptions_searchEnabled
-            * @publicName searchEnabled
+            * @name dxPivotGridFieldChooserOptions_allowSearch
+            * @publicName allowSearch
             * @type boolean
             * @default false
             */
-            searchEnabled: false,
+            allowSearch: false,
             /**
              * @name dxPivotGridFieldChooserOptions_texts
              * @publicName texts
@@ -245,7 +245,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                 break;
             case "layout":
             case "texts":
-            case "searchEnabled":
+            case "allowSearch":
                 that._invalidate();
                 break;
             case "onContextMenuPreparing":
@@ -466,7 +466,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             treeView = that._createComponent(container, TreeView, {
                 dataSource: that._createFieldsDataSource(dataSource),
                 showCheckBoxesMode: 'normal',
-                searchEnabled: that.option("searchEnabled"),
+                searchEnabled: that.option("allowSearch"),
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     if(itemData.icon) {
                         iconUtils.getImageContainer(itemData.icon).appendTo(itemElement);

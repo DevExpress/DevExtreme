@@ -1539,7 +1539,7 @@ QUnit.test("Show header filter with search bar", function(assert) {
         list,
         testElement = $("#container");
 
-    that.options.headerFilter.searchEnabled = true;
+    that.options.headerFilter.allowSearch = true;
 
     //act
     that.setupDataGrid();
@@ -1562,7 +1562,7 @@ QUnit.test("Show header filter when column with dataType date with search bar", 
         treeView,
         testElement = $("#container");
 
-    that.options.headerFilter.searchEnabled = true;
+    that.options.headerFilter.allowSearch = true;
     that.columns[0].dataType = "date";
 
     //act
@@ -1578,16 +1578,16 @@ QUnit.test("Show header filter when column with dataType date with search bar", 
     assert.ok(treeView.option("searchEnabled"), "treeView with search bar");
 });
 
-QUnit.test("HeaderFilter should be without search bar when column searchEnabled is disabled", function(assert) {
+QUnit.test("HeaderFilter should be without search bar when column allowSearch is disabled", function(assert) {
     //arrange
     var that = this,
         list,
         $popupContent,
         testElement = $("#container");
 
-    that.options.headerFilter.searchEnabled = true;
+    that.options.headerFilter.allowSearch = true;
     that.columns[0].headerFilter = {
-        searchEnabled: false
+        allowSearch: false
     };
 
     //act
@@ -1613,7 +1613,7 @@ QUnit.test("Check select all state after filtering", function(assert) {
         testElement = $("#container"),
         $popupContent;
 
-    that.options.headerFilter.searchEnabled = true;
+    that.options.headerFilter.allowSearch = true;
 
     that.items = [{ Test1: "test1", Test2: "test2" }, { Test1: "test3", Test2: "test4" }];
     that.setupDataGrid();
@@ -1649,7 +1649,7 @@ QUnit.test("Check select all state after filtering if column dataType is date", 
         testElement = $("#container"),
         $popupContent;
 
-    that.options.headerFilter.searchEnabled = true;
+    that.options.headerFilter.allowSearch = true;
     that.columns[0].dataType = "date";
     that.items = [{ Test1: new Date(1986, 0, 1), Test2: "test2" }, { Test1: new Date(1986, 0, 4), Test2: "test4" }, { Test1: null, Test2: "test6" }];
 
@@ -1752,7 +1752,7 @@ QUnit.test("Search when custom dataSource to headerFilter is specified", functio
         testElement = $("#container"),
         $popupContent;
 
-    that.options.headerFilter.searchEnabled = true;
+    that.options.headerFilter.allowSearch = true;
     that.columns[0].headerFilter = {
         dataSource: [{ text: "Test1", value: 1 }, { text: "Test2", value: 2 }]
     };
@@ -1782,7 +1782,7 @@ QUnit.test("Search by custom column", function(assert) {
         testElement = $("#container"),
         $popupContent;
 
-    that.options.headerFilter.searchEnabled = true;
+    that.options.headerFilter.allowSearch = true;
     that.columns[0] = {
         selector: function(data) {
             return data.Test2;

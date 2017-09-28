@@ -38,11 +38,11 @@ function updateSelectAllState(e, filterValues) {
 function isSearchEnabled(that, options) {
     var headerFilter = options.headerFilter;
 
-    if(headerFilter && isDefined(headerFilter.searchEnabled)) {
-        return headerFilter.searchEnabled;
+    if(headerFilter && isDefined(headerFilter.allowSearch)) {
+        return headerFilter.allowSearch;
     }
 
-    return that.option("headerFilter.searchEnabled");
+    return that.option("headerFilter.allowSearch");
 }
 
 exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch, isExcludeFilter) {
