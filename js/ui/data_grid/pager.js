@@ -269,7 +269,7 @@ var Pager = Widget.inherit({
             $separator,
             pagesLength = pages.length,
             clickPagesIndexAction = that._createAction(function(args) {
-                var e = args.Event,
+                var e = args.event,
                     pageNumber = $(e.target).text(),
                     pageIndex = pageNumber === '>' ? that.option("pageCount") + 1 : Number(pageNumber);
 
@@ -283,7 +283,7 @@ var Pager = Widget.inherit({
 
         if(pagesLength > 1) {
             that._pageClickHandler = function(e) {
-                clickPagesIndexAction({ Event: e });
+                clickPagesIndexAction({ event: e });
             };
             eventsEngine.on(that._$pagesChooser, eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), '.' + PAGER_PAGE_CLASS, that._pageClickHandler);
         }
@@ -347,7 +347,7 @@ var Pager = Widget.inherit({
             .text(pageCount);
 
         eventsEngine.on($pageCount, eventUtils.addNamespace(clickEvent.name, that.Name + "PagesCount"), function(e) {
-            clickAction({ Event: e });
+            clickAction({ event: e });
         });
 
         $pageCount.appendTo($container);
@@ -407,7 +407,7 @@ var Pager = Widget.inherit({
             currentPageSize = that.option("pageSize"),
             $pageSize,
             clickPagesSizeAction = that._createAction(function(args) {
-                var e = args.Event;
+                var e = args.event;
 
                 pageSizeValue = parseInt($(e.target).text());
 
@@ -423,7 +423,7 @@ var Pager = Widget.inherit({
         ///#ENDDEBUG
 
         eventsEngine.on(that._$pagesSizeChooser, eventUtils.addNamespace(clickEvent.name, that.Name + "PageSize"), '.' + PAGER_PAGE_SIZE_CLASS, function(e) {
-            clickPagesSizeAction({ Event: e });
+            clickPagesSizeAction({ event: e });
         });
 
         for(i = 0; i < pagesSizesLength; i++) {
@@ -517,7 +517,7 @@ var Pager = Widget.inherit({
             $button = $("<div>").addClass(PAGER_NAVIGATE_BUTTON);
 
             eventsEngine.on($button, eventUtils.addNamespace(clickEvent.name, that.Name + "Pages"), function(e) {
-                clickAction({ Event: e });
+                clickAction({ event: e });
             });
 
             that.setAria({

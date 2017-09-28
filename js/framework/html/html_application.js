@@ -515,7 +515,7 @@ var HtmlApplication = Application.inherit({
     },
 
     _getTargetNode: function(viewInfo) {
-        var dxEvent = (viewInfo.navigateOptions || {}).Event;
+        var dxEvent = (viewInfo.navigateOptions || {}).event;
         return dxEvent ? $(dxEvent.target) : undefined;
     },
 

@@ -255,7 +255,7 @@ QUnit.test("ui interaction validator should prevent all action handlers by valid
     });
 
     action.execute({
-        Event: $.Event("click", { target: $(".dx-state-disabled .dx-click-target").get(0) }),
+        event: $.Event("click", { target: $(".dx-state-disabled .dx-click-target").get(0) }),
         customElement: $(".dx-state-disabled")
     });
 
@@ -270,7 +270,7 @@ QUnit.test("ui interaction validator should prevent all ui action handlers by 'd
     var action = new Action(handlerSpy);
 
     action.execute({
-        Event: $.Event("click", { target: $targetElement.get(0) }),
+        event: $.Event("click", { target: $targetElement.get(0) }),
         element: $targetElement
     });
 

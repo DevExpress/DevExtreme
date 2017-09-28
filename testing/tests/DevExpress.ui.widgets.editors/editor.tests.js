@@ -158,7 +158,7 @@ var Fixture = Class.inherit({
         var newValue = "new",
             _valueChangeEventInstance = "something",
             onValueChanged = function(options) {
-                assert.strictEqual(options.Event, _valueChangeEventInstance, "Event is ok");
+                assert.strictEqual(options.event, _valueChangeEventInstance, "Event is ok");
             };
 
         var editor = this.fixture.createEditor();

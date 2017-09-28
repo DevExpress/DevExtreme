@@ -34,7 +34,7 @@ var CheckBox = Editor.inherit({
     _supportedKeys: function() {
         var click = function(e) {
             e.preventDefault();
-            this._clickAction({ Event: e });
+            this._clickAction({ event: e });
         };
         return extend(this.callBase(), {
             space: click
@@ -164,7 +164,7 @@ var CheckBox = Editor.inherit({
 
         var config = {
             element: element,
-            Event: dxEvent,
+            event: dxEvent,
             wave: waveIndex
         };
 
@@ -220,14 +220,14 @@ var CheckBox = Editor.inherit({
 
         eventsEngine.off(that.$element(), eventName);
         eventsEngine.on(that.$element(), eventName, function(e) {
-            that._clickAction({ Event: e });
+            that._clickAction({ event: e });
         });
     },
 
     _clickHandler: function(args) {
         var that = args.component;
 
-        that._saveValueChangeEvent(args.Event);
+        that._saveValueChangeEvent(args.event);
         that.option("value", !that.option("value"));
     },
 

@@ -10,7 +10,7 @@ var $ = require("jquery"),
 function prepareNavigateOptions(options, actionArguments) {
     if(actionArguments.args) {
         var sourceEventArguments = actionArguments.args[0];
-        options.Event = sourceEventArguments.Event;
+        options.event = sourceEventArguments.event;
     }
     if((actionArguments.component || {}).NAME === "dxCommand") {
         extend(options, actionArguments.component.option());
@@ -50,7 +50,7 @@ var createActionExecutors = function(app) {
                     uri = app.router.format(routeValues);
 
                     prepareNavigateOptions(options, e);
-                    preventDefaultLinkBehavior(options.Event);
+                    preventDefaultLinkBehavior(options.event);
                     app.navigate(uri, options);
                     e.handled = true;
                 }
@@ -93,7 +93,7 @@ var createActionExecutors = function(app) {
 
                 var options = {};
                 prepareNavigateOptions(options, e);
-                preventDefaultLinkBehavior(options.Event);
+                preventDefaultLinkBehavior(options.event);
                 app.navigate(uri, options);
                 e.handled = true;
             }

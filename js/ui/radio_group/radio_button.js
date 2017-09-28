@@ -27,7 +27,7 @@ var RadioButton = Editor.inherit({
     _supportedKeys: function() {
         var click = function(e) {
             e.preventDefault();
-            this._clickAction({ Event: e });
+            this._clickAction({ event: e });
         };
         return extend(this.callBase(), {
             space: click
@@ -96,7 +96,7 @@ var RadioButton = Editor.inherit({
 
         var config = {
             element: element,
-            Event: dxEvent,
+            event: dxEvent,
             wave: waveIndex
         };
 
@@ -133,13 +133,13 @@ var RadioButton = Editor.inherit({
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
         this._clickAction = this._createAction((function(args) {
-            this._clickHandler(args.Event);
+            this._clickHandler(args.event);
         }).bind(this));
 
 
         eventsEngine.off(this.$element(), eventName);
         eventsEngine.on(this.$element(), eventName, (function(e) {
-            this._clickAction({ Event: e });
+            this._clickAction({ event: e });
         }).bind(this));
     },
 

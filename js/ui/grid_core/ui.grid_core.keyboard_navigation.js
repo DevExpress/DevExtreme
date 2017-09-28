@@ -102,7 +102,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
     },
 
     _clickHandler: function(e) {
-        var event = e.Event,
+        var event = e.event,
             $cell = $(event.currentTarget),
             $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent(),
             data = event.data;
@@ -611,7 +611,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             needStopPropagation = true,
             args = {
                 handled: false,
-                Event: e.originalEvent
+                event: e.originalEvent
             };
 
         this.executeAction("onKeyDown", args);
@@ -623,7 +623,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._isNeedFocus = true;
         this._isNeedScroll = true;
 
-        this._updateFocusedCellPosition(this._getCellElementFromTarget(args.Event.target));
+        this._updateFocusedCellPosition(this._getCellElementFromTarget(args.event.target));
 
         if(!args.handled) {
             switch(e.key) {
@@ -844,7 +844,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             that._initFocusedViews();
 
             that._documentClickHandler = that.createAction(function(e) {
-                var $target = $(e.Event.target);
+                var $target = $(e.event.target);
                 if(!$target.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).length && !$target.closest("." + DROPDOWN_EDITOR_OVERLAY_CLASS).length) {
                     that._resetFocusedCell();
                 }

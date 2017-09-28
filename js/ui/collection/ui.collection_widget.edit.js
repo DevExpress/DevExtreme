@@ -448,12 +448,12 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
     _itemClickHandler: function(e) {
         this._createAction((function(e) {
-            this._itemSelectHandler(e.Event);
+            this._itemSelectHandler(e.event);
         }).bind(this), {
             validatingTargetName: "itemElement"
         })({
             itemElement: $(e.currentTarget),
-            Event: e
+            event: e
         });
 
         this.callBase.apply(this, arguments);

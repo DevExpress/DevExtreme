@@ -128,7 +128,7 @@ var ModuleItem = Class.inherit({
         if(isFunction(actionName)) {
             action = this.component._createAction(actionName.bind(this), config);
             return function(e) {
-                action({ Event: e });
+                action({ event: e });
             };
         } else {
             this._actions[actionName] = this.component._createActionByOption(actionName, config);

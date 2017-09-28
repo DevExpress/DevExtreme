@@ -74,7 +74,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
                 window.clearTimeout(data.valueChangeTimeout);
 
-                if(e.Event && e.Event.type === "keyup" && !options.updateValueImmediately) {
+                if(e.event && e.event.type === "keyup" && !options.updateValueImmediately) {
                     if(options.parentType === "filterRow" || options.parentType === "searchPanel") {
                         sharedData.valueChangeTimeout = data.valueChangeTimeout = window.setTimeout(function() {
                             updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
@@ -93,7 +93,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                 }
             },
             onKeyDown: function(e) {
-                if(isEnterBug && isValueChanged && e.Event.keyCode === 13) {
+                if(isEnterBug && isValueChanged && e.event.keyCode === 13) {
                     isValueChanged = false;
                     options.setValue(e.component.option("value"));
                 }
@@ -111,7 +111,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                 options.setValue(args.value);
             },
             onKeyDown: function(e) {
-                if(checkEnterBug() && e.Event.keyCode === 13) {
+                if(checkEnterBug() && e.event.keyCode === 13) {
                     e.component.blur();
                     e.component.focus();
                 }
@@ -299,7 +299,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
         _updateFocus: function(e) {
             var that = this,
-                isFocusOverlay = e && e.Event && $(e.Event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+                isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
             that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
 

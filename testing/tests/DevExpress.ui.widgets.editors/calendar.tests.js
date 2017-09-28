@@ -968,7 +968,7 @@ QUnit.test("Event should be passed to the valueChanged action after selecting a 
     keyboard.press("enter");
 
     var params = valueChangedHandler.getCall(1).args[0];
-    assert.ok(params.Event, "Event should be passed");
+    assert.ok(params.event, "Event should be passed");
     assert.ok(params.component, "Component should be passed");
     assert.ok(params.element, "Element should be passed");
 });
@@ -1517,7 +1517,7 @@ QUnit.test("onCellClick return not 'undefined' after click on cell", function(as
 
     var params = clickHandler.getCall(0).args[0];
     assert.ok(params, "Event params should be passed");
-    assert.ok(params.Event, "Event should be passed");
+    assert.ok(params.event, "Event should be passed");
     assert.ok(params.component, "Component should be passed");
     assert.ok(params.element, "Element should be passed");
 });
@@ -1535,7 +1535,7 @@ QUnit.test("Event should be passed to the valueChanged action after click on a c
     $($cell).trigger("dxclick");
 
     var params = valueChangedHandler.getCall(0).args[0];
-    assert.ok(params.Event, "Event should be passed");
+    assert.ok(params.event, "Event should be passed");
     assert.ok(params.component, "Component should be passed");
     assert.ok(params.element, "Element should be passed");
 });

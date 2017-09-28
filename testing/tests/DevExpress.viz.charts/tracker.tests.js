@@ -890,13 +890,13 @@ QUnit.test("dxpointermove on series, click", function(assert) {
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(this.options.eventTrigger.withArgs("pointClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("pointClick").lastCall.args[1], { target: this.point, Event: clickEvent });
+    assert.deepEqual(this.options.eventTrigger.withArgs("pointClick").lastCall.args[1], { target: this.point, event: clickEvent });
     assert.ok(!this.options.eventTrigger.withArgs("seriesClick").calledOnce);
 
     this.options.eventTrigger.withArgs("pointClick").lastCall.args[2]();
 
     assert.ok(this.options.eventTrigger.withArgs("seriesClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, Event: clickEvent }, "series event arg");
+    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, event: clickEvent }, "series event arg");
 });
 
 QUnit.test("dxpointermove on series, click, pointClick with cancel seriesClick", function(assert) {
@@ -908,7 +908,7 @@ QUnit.test("dxpointermove on series, click, pointClick with cancel seriesClick",
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(this.options.eventTrigger.withArgs("pointClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("pointClick").lastCall.args[1], { target: this.point, Event: clickEvent });
+    assert.deepEqual(this.options.eventTrigger.withArgs("pointClick").lastCall.args[1], { target: this.point, event: clickEvent });
     assert.ok(!this.options.eventTrigger.withArgs("seriesClick").calledOnce);
     clickEvent.cancel = true;
     this.options.eventTrigger.withArgs("pointClick").lastCall.args[2]();
@@ -926,7 +926,7 @@ QUnit.test("dxpointermove on series, click far from point ", function(assert) {
 
     assert.ok(!this.options.eventTrigger.withArgs("pointClick").called);
     assert.ok(this.options.eventTrigger.withArgs("seriesClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, Event: clickEvent }, "series event arg");
+    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, event: clickEvent }, "series event arg");
 });
 
 QUnit.test("stop propagation event after dispose series on pointClick", function(assert) {
@@ -983,13 +983,13 @@ QUnit.test("dxpointermove on series, mouseout from series but in point tracker r
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(this.options.eventTrigger.withArgs("pointClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("pointClick").lastCall.args[1], { target: this.point, Event: clickEvent });
+    assert.deepEqual(this.options.eventTrigger.withArgs("pointClick").lastCall.args[1], { target: this.point, event: clickEvent });
     assert.ok(!this.options.eventTrigger.withArgs("seriesClick").calledOnce);
 
     this.options.eventTrigger.withArgs("pointClick").lastCall.args[2]();
 
     assert.ok(this.options.eventTrigger.withArgs("seriesClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, Event: clickEvent }, "series event arg");
+    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, event: clickEvent }, "series event arg");
 });
 
 QUnit.test("On touch devices on click get series from clicked target, not sticked series. T514138", function(assert) {
@@ -1008,7 +1008,7 @@ QUnit.test("On touch devices on click get series from clicked target, not sticke
     $(this.renderer.root.element).trigger(clickEvent);
 
     assert.ok(this.options.eventTrigger.withArgs("seriesClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, Event: clickEvent }, "series event arg");
+    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.point.series, event: clickEvent }, "series event arg");
 });
 
 QUnit.test("dxpointermove on series, mouseout from series click", function(assert) {
@@ -1248,14 +1248,14 @@ QUnit.test("legendClick", function(assert) {
     $(this.renderer.root.element).trigger(event);
 
     assert.ok(this.options.eventTrigger.withArgs("legendClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("legendClick").lastCall.args[1], { target: this.series, Event: event });
+    assert.deepEqual(this.options.eventTrigger.withArgs("legendClick").lastCall.args[1], { target: this.series, event: event });
 
     assert.ok(!this.options.eventTrigger.withArgs("seriesClick").calledOnce);
 
     this.options.eventTrigger.withArgs("legendClick").lastCall.args[2]();
 
     assert.ok(this.options.eventTrigger.withArgs("seriesClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.series, Event: event }, "series event arg");
+    assert.deepEqual(this.options.eventTrigger.withArgs("seriesClick").lastCall.args[1], { target: this.series, event: event }, "series event arg");
 });
 
 QUnit.test("click on legend with chancel in legendClick handler", function(assert) {
@@ -1270,7 +1270,7 @@ QUnit.test("click on legend with chancel in legendClick handler", function(asser
     $(this.renderer.root.element).trigger(event);
 
     assert.ok(this.options.eventTrigger.withArgs("legendClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("legendClick").lastCall.args[1], { target: this.series, Event: event });
+    assert.deepEqual(this.options.eventTrigger.withArgs("legendClick").lastCall.args[1], { target: this.series, event: event });
 
     assert.ok(!this.options.eventTrigger.withArgs("seriesClick").calledOnce);
 
@@ -1356,7 +1356,7 @@ QUnit.test("click on argument axis element. Axis hoverMode is 'none'", function(
     $(this.renderer.root.element).trigger(event);
 
     assert.ok(this.options.eventTrigger.withArgs("argumentAxisClick").calledOnce);
-    assert.deepEqual(this.options.eventTrigger.withArgs("argumentAxisClick").lastCall.args[1], { argument: "argument1", Event: event });
+    assert.deepEqual(this.options.eventTrigger.withArgs("argumentAxisClick").lastCall.args[1], { argument: "argument1", event: event });
 });
 
 QUnit.test("pointermove on axis element. Axis hoverMode is 'none'", function(assert) {
@@ -2941,7 +2941,7 @@ QUnit.test("point click", function(assert) {
     $(this.renderer.root.element).trigger(event);
 
     assert.ok(this.options.eventTrigger.withArgs("pointClick").calledOnce);
-    strictEqualForAllFields(assert, this.options.eventTrigger.withArgs("pointClick").lastCall.args[1], { target: this.point, Event: event });
+    strictEqualForAllFields(assert, this.options.eventTrigger.withArgs("pointClick").lastCall.args[1], { target: this.point, event: event });
 });
 
 QUnit.test("legend item click. One series", function(assert) {
@@ -2959,7 +2959,7 @@ QUnit.test("legend item click. One series", function(assert) {
     assert.ok(legendClick.calledOnce, "legendClick");
     assert.strictEqual(legendClick.lastCall.args[1].target, "argument1", "argument");
     assert.deepEqual(legendClick.lastCall.args[1].points, [this.point], "points");
-    assert.strictEqual(legendClick.lastCall.args[1].Event, event, "event");
+    assert.strictEqual(legendClick.lastCall.args[1].event, event, "event");
 });
 
 QUnit.test("legend item click, several series", function(assert) {
@@ -2988,7 +2988,7 @@ QUnit.test("legend item click, several series", function(assert) {
     assert.ok(legendClick.calledOnce, "legendClick");
     assert.strictEqual(legendClick.lastCall.args[1].target, argument, "argument");
     assert.deepEqual(legendClick.lastCall.args[1].points, points, "points");
-    assert.strictEqual(legendClick.lastCall.args[1].Event, event, "event");
+    assert.strictEqual(legendClick.lastCall.args[1].event, event, "event");
     assert.ok(!this.options.eventTrigger.withArgs("pointClick").called, "pointClick");
 });
 

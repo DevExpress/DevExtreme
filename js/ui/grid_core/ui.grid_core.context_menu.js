@@ -49,7 +49,7 @@ var ContextMenuController = modules.ViewController.inherit({
                 columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
                 rowOptions = $targetRowElement.data("options");
                 options = {
-                    Event: dxEvent,
+                    event: dxEvent,
                     targetElement: $targetElement,
                     target: viewName[this],
                     rowIndex: rowIndex,
@@ -82,7 +82,7 @@ var ContextMenuView = modules.View.inherit({
         this._createComponent(that.element().addClass(CONTEXT_MENU),
             ContextMenu, {
                 onPositioning: function(actionArgs) {
-                    var event = actionArgs.Event,
+                    var event = actionArgs.event,
                         contextMenuInstance = actionArgs.component,
                         items = that.getController("contextMenu").getContextMenuItems(event);
 

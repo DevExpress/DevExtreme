@@ -283,7 +283,7 @@ var SelectBox = DropDownList.inherit({
 
         var config = {
             element: this._inputWrapper(),
-            Event: e
+            event: e
         };
 
         if(value) {
@@ -616,7 +616,7 @@ var SelectBox = DropDownList.inherit({
     _listItemClickHandler: function(e) {
         var previousValue = this._getCurrentValue();
 
-        this._saveValueChangeEvent(e.Event);
+        this._saveValueChangeEvent(e.event);
         this._completeSelection(this._valueGetter(e.itemData));
 
         if(this._shouldCloseOnItemClick()) {

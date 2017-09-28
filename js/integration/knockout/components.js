@@ -39,7 +39,7 @@ ko.bindingHandlers.dxAction = {
                     var getter = compileGetter(expression);
                     return getter(context);
                 },
-                Event: e
+                event: e
             });
 
             if(!actionOptions.bubbling) {

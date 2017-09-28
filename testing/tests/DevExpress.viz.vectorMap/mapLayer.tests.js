@@ -721,7 +721,7 @@ QUnit.test("raiseClick", function(assert) {
 
     this.layer.raiseClick(2, event);
 
-    assert.deepEqual(this.eventTrigger.lastCall.args, ["click", { target: this.items[2].proxy, Event: event }]);
+    assert.deepEqual(this.eventTrigger.lastCall.args, ["click", { target: this.items[2].proxy, event: event }]);
 });
 
 QUnit.test("hoverItem", function(assert) {

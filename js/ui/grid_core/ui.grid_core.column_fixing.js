@@ -460,7 +460,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         var that = this,
             attachHoverEvent = function($table) {
                 eventsEngine.on($table, "mouseover mouseout", ".dx-data-row", that.createAction(function(args) {
-                    var event = args.Event,
+                    var event = args.event,
                         rowIndex = that.getRowIndex($(event.target).closest(".dx-row")),
                         isHover = event.type === "mouseover";
 

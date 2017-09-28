@@ -459,7 +459,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 _rowClick: function(e) {
-                    var $targetElement = $(e.Event.target);
+                    var $targetElement = $(e.event.target);
 
                     if(this.isExpandIcon($targetElement)) {
                         this.callBase.apply(this, arguments);

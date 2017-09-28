@@ -28,7 +28,7 @@ QUnit.test("inkRipple is rendered after the first 'showWave' call", function(ass
 
     assert.equal($element.find("." + INKRIPPLE_CLASS).length, 0, "inkRipple element is not rendered before first active event");
 
-    inkRippleInstance.showWave({ element: $element, Event: {} });
+    inkRippleInstance.showWave({ element: $element, event: {} });
     assert.equal($element.find("." + INKRIPPLE_CLASS).length, 1, "inkRipple element is rendered inside element");
 });
 
@@ -36,14 +36,14 @@ QUnit.test("wave class depend on called method", function(assert) {
     var $element = $("<div>"),
         inkRippleInstance = inkRipple.render();
 
-    inkRippleInstance.showWave({ element: $element, Event: {} });
+    inkRippleInstance.showWave({ element: $element, event: {} });
     var $wave = $element.find("." + INKRIPPLE_WAVE_CLASS);
     this.clock.tick();
 
     assert.ok($wave.hasClass(INKRIPPLE_WAVE_SHOWING_CLASS), "wave has showing class after the 'showWave' method call");
     assert.ok(!$wave.hasClass(INKRIPPLE_WAVE_HIDING_CLASS), "wave has no hiding class after the 'showWave' method call");
 
-    inkRippleInstance.hideWave({ element: $element, Event: {} });
+    inkRippleInstance.hideWave({ element: $element, event: {} });
     this.clock.tick();
 
     assert.ok($wave.hasClass(INKRIPPLE_WAVE_HIDING_CLASS), "wave has hiding class after the 'hideWave' method call");
@@ -57,7 +57,7 @@ QUnit.test("number of waves depend on 'wavesNumber' option", function(assert) {
             wavesNumber: wavesNumber
         });
 
-    inkRippleInstance.showWave({ element: $element, Event: {} });
+    inkRippleInstance.showWave({ element: $element, event: {} });
     var $waves = $element.find("." + INKRIPPLE_WAVE_CLASS);
     assert.equal($waves.length, wavesNumber, "the number of waves is correct");
 });
@@ -76,7 +76,7 @@ QUnit.test("ink ripple wave has correct size", function(assert) {
             waveSizeCoefficient: waveSizeCoefficient
         });
 
-    inkRippleInstance.showWave({ element: $element, Event: {} });
+    inkRippleInstance.showWave({ element: $element, event: {} });
     var $wave = $element.find("." + INKRIPPLE_WAVE_CLASS);
 
     assert.equal($wave.height(), waveSize * waveSizeCoefficient, "wave height is correct");
@@ -95,7 +95,7 @@ QUnit.test("ink ripple wave size is diagonal size of element", function(assert) 
             waveSizeCoefficient: 1
         });
 
-    inkRippleInstance.showWave({ element: $element, Event: {} });
+    inkRippleInstance.showWave({ element: $element, event: {} });
     var $wave = $element.find("." + INKRIPPLE_WAVE_CLASS);
 
     assert.equal($wave.height(), $wave.width(), "wave height and width are equal");
@@ -117,7 +117,7 @@ QUnit.test("wave is rendered in the center of ink ripple if the 'isCentered' opt
             isCentered: true
         });
 
-    inkRippleInstance.showWave({ element: $element, Event: {} });
+    inkRippleInstance.showWave({ element: $element, event: {} });
 
     var $wave = $element.find("." + INKRIPPLE_WAVE_CLASS),
         expectedLeft = (elementWidth - rippleSize) / 2,
@@ -148,7 +148,7 @@ QUnit.test("wave is rendered in place of click by default", function(assert) {
             pageY: pageY
         });
 
-    inkRippleInstance.showWave({ element: $element, Event: e });
+    inkRippleInstance.showWave({ element: $element, event: e });
 
     var $wave = $element.find("." + INKRIPPLE_WAVE_CLASS),
         wavePosition = $wave.position();

@@ -178,7 +178,7 @@ var GoogleStaticProvider = Provider.inherit({
 
         eventsEngine.off(this._$container, eventName);
         eventsEngine.on(this._$container, eventName, function(e) {
-            that._fireClickAction({ Event: e });
+            that._fireClickAction({ event: e });
         });
     }
 

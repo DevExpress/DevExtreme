@@ -611,7 +611,7 @@ var Widget = DOMComponent.inherit({
                 that._updateFocusState(e, true);
             },
             excludeValidators: ["readOnly"]
-        })({ Event: e });
+        })({ event: e });
     },
 
     _focusOutHandler: function(e) {
@@ -622,7 +622,7 @@ var Widget = DOMComponent.inherit({
                 that._updateFocusState(e, false);
             },
             excludeValidators: ["readOnly", "disabled"]
-        })({ Event: e });
+        })({ event: e });
     },
 
     _updateFocusState: function(e, isFocused) {
@@ -746,7 +746,7 @@ var Widget = DOMComponent.inherit({
             var feedbackActionHandler = function(args) {
                 var $element = args.element,
                     value = args.value,
-                    dxEvent = args.Event;
+                    dxEvent = args.event;
 
                 that._toggleActiveState($element, value, dxEvent);
             };
@@ -756,7 +756,7 @@ var Widget = DOMComponent.inherit({
                 feedbackAction.execute({
                     element: $(e.currentTarget),
                     value: true,
-                    Event: e
+                    event: e
                 });
             });
             eventsEngine.on(that._eventBindingTarget(), inactiveEventName, feedbackSelector, { timeout: that._feedbackHideTimeout }, function(e) {
@@ -764,7 +764,7 @@ var Widget = DOMComponent.inherit({
                 feedbackActionDisabled.execute({
                     element: $(e.currentTarget),
                     value: false,
-                    Event: e
+                    event: e
                 });
             });
         }

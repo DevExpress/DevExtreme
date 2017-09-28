@@ -72,7 +72,7 @@ module.exports = {
                     var $table = this.callBase.apply(this, arguments);
 
                     eventsEngine.on($table, "mousedown selectstart", this.createAction(function(e) {
-                        var event = e.Event;
+                        var event = e.event;
 
                         if(event.shiftKey) {
                             event.preventDefault();

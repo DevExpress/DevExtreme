@@ -236,12 +236,12 @@ var NumberBox = TextEditor.inherit({
         var eventName = eventUtils.addNamespace(wheelEvent.name, this.NAME);
 
         var mouseWheelAction = this._createAction((function(e) {
-            this._mouseWheelHandler(e.Event);
+            this._mouseWheelHandler(e.event);
         }).bind(this));
 
         eventsEngine.off(this._input(), eventName);
         eventsEngine.on(this._input(), eventName, function(e) {
-            mouseWheelAction({ Event: e });
+            mouseWheelAction({ event: e });
         });
     },
 
@@ -345,7 +345,7 @@ var NumberBox = TextEditor.inherit({
 
         eventsEngine.off($spinContainer, eventName);
         eventsEngine.on($spinContainer, eventName, function(e) {
-            pointerDownAction({ Event: e });
+            pointerDownAction({ event: e });
         });
 
         this._$spinUp = $("<div>").appendTo($spinContainer);
@@ -366,13 +366,13 @@ var NumberBox = TextEditor.inherit({
 
     _spinUpChangeHandler: function(e) {
         if(!this.option("readOnly")) {
-            this._spinValueChange(1, e.Event || e);
+            this._spinValueChange(1, e.event || e);
         }
     },
 
     _spinDownChangeHandler: function(e) {
         if(!this.option("readOnly")) {
-            this._spinValueChange(-1, e.Event || e);
+            this._spinValueChange(-1, e.event || e);
         }
     },
 

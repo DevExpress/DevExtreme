@@ -792,7 +792,7 @@ var SimulatedStrategy = Class.inherit({
         };
 
         return {
-            Event: this._eventForUserAction,
+            event: this._eventForUserAction,
             scrollOffset: this._scrollOffset,
             reachedLeft: scrollerX && scrollerX._reachedMax(),
             reachedRight: scrollerX && scrollerX._reachedMin(),

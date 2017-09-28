@@ -1116,7 +1116,7 @@ MapLayer.prototype = _extend({
     raiseClick: function(i, dxEvent) {
         this._params.eventTrigger("click", {
             target: this._handles[i].proxy,
-            Event: dxEvent
+            event: dxEvent
         });
     },
 
@@ -1519,7 +1519,7 @@ MapLayerCollection.prototype = {
                 if(layer) {
                     layer.raiseClick(arg.data.index, arg.$event);
                 } else if(arg.data.name === "background") {
-                    eventTrigger("click", { Event: arg.$event });
+                    eventTrigger("click", { event: arg.$event });
                 }
             },
             "hover-on": function(arg) {

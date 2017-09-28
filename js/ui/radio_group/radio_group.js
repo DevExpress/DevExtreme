@@ -203,12 +203,12 @@ var RadioGroup = Editor.inherit({
         if(value) {
             this._inkRipple.showWave({
                 element: $element.find("." + RADIO_BUTTON_ICON_CLASS),
-                Event: e
+                event: e
             });
         } else {
             this._inkRipple.hideWave({
                 element: $element.find("." + RADIO_BUTTON_ICON_CLASS),
-                Event: e
+                event: e
             });
         }
     },
@@ -273,7 +273,7 @@ var RadioGroup = Editor.inherit({
     },
 
     _itemClickHandler: function(e) {
-        this._saveValueChangeEvent(e.Event);
+        this._saveValueChangeEvent(e.event);
         this.option("value", this._getItemValue(e.itemData));
     },
 

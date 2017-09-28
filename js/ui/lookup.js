@@ -721,7 +721,7 @@ var Lookup = DropDownList.inherit({
 
         this._$field = $("<div>").addClass(LOOKUP_FIELD_CLASS);
         eventsEngine.on(this._$field, eventUtils.addNamespace(clickEvent.name, this.NAME), function(e) {
-            fieldClickAction({ Event: e });
+            fieldClickAction({ event: e });
         });
 
         var $arrow = $("<div>").addClass(LOOKUP_ARROW_CLASS);
@@ -747,7 +747,7 @@ var Lookup = DropDownList.inherit({
 
         var config = {
             element: this._inputWrapper(),
-            Event: e
+            event: e
         };
 
         if(value) {
@@ -1128,7 +1128,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _listItemClickHandler: function(e) {
-        this._selectListItem(e.itemData, e.Event.currentTarget);
+        this._selectListItem(e.itemData, e.event.currentTarget);
     },
 
     _selectListItem: function(itemData, target) {

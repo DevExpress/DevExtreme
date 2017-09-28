@@ -66,11 +66,11 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
     },
 
     moveHeader: function(args) {
-        args.Event.data.that.callMoveCounter++;
+        args.event.data.that.callMoveCounter++;
     },
 
     dropHeader: function(args) {
-        args.Event.data.that.callDropCounter++;
+        args.event.data.that.callDropCounter++;
     }
 });
 
@@ -695,7 +695,7 @@ var TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
 
 function getEvent(options) {
     return {
-        Event: $.extend({}, {
+        event: $.extend({}, {
             preventDefault: noop,
             stopPropagation: noop
         }, options)
@@ -877,7 +877,7 @@ function getEvent(options) {
         resizeController._columnsSeparatorView.render($container);
         resizeController._$parentContainer = $container;
         resizeController._moveSeparator({
-            Event: {
+            event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -971,7 +971,7 @@ function getEvent(options) {
 
         //act
         resizeController._moveSeparator({
-            Event: {
+            event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -1004,7 +1004,7 @@ function getEvent(options) {
         resizeController._columnsSeparatorView.render($container);
         resizeController._$parentContainer = $container;
         resizeController._moveSeparator({
-            Event: {
+            event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -1026,7 +1026,7 @@ function getEvent(options) {
         resizeController._columnsSeparatorView.render($container);
         resizeController._$parentContainer = $container;
         resizeController._moveSeparator({
-            Event: {
+            event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -1388,7 +1388,7 @@ function getEvent(options) {
         resizeController._targetPoint = { columnIndex: 0 };
         resizeController._isResizing = true;
         resizeController._endResizing({
-            Event: {
+            event: {
                 data: resizeController
             }
         });
@@ -1416,7 +1416,7 @@ function getEvent(options) {
         //act
         var $container = $("#container").width(500),
             args = {
-                Event: {
+                event: {
                     data: resizeController,
                     pageY: -9995
                 }
@@ -1565,7 +1565,7 @@ function getEvent(options) {
         //act
         resizeController._$parentContainer = testElement;
         resizeController._moveSeparator({
-            Event: {
+            event: {
                 data: resizeController,
                 pageY: -9995
             }
@@ -1637,7 +1637,7 @@ function getEvent(options) {
         resizeController._isReadyResizing = true;
         resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
         resizeController._startResizing({
-            Event: {
+            event: {
                 data: resizeController,
                 type: 'mousedown',
                 pageX: -9750,
@@ -1671,7 +1671,7 @@ function getEvent(options) {
             resizeController._isReadyResizing = true;
             resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
             resizeController._startResizing({
-                Event: {
+                event: {
                     data: resizeController,
                     type: 'mousedown',
                     pageX: -9750,
@@ -1707,7 +1707,7 @@ function getEvent(options) {
             resizeController._isReadyResizing = true;
             resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
             resizeController._startResizing({
-                Event: {
+                event: {
                     data: resizeController,
                     type: 'mousedown',
                     pageX: -9750,
@@ -1743,7 +1743,7 @@ function getEvent(options) {
             resizeController._isReadyResizing = true;
             resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
             resizeController._startResizing({
-                Event: {
+                event: {
                     data: resizeController,
                     type: 'mousedown',
                     pageX: -9750,
@@ -2183,7 +2183,7 @@ function getEvent(options) {
         //arrange
         var resizeController = this.createColumnsResizerViewController(),
             args = {
-                Event: {
+                event: {
                     data: resizeController,
                     pageY: -9995
                 }
@@ -3268,7 +3268,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3316,7 +3316,7 @@ function getEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3374,7 +3374,7 @@ function getEvent(options) {
         //act
 
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3439,7 +3439,7 @@ function getEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3451,7 +3451,7 @@ function getEvent(options) {
             }
         });
 
-        draggingHeader.dropHeader({ Event: { data: { that: draggingHeader } } });
+        draggingHeader.dropHeader({ event: { data: { that: draggingHeader } } });
 
         $draggingHeader = $(".dx-datagrid-drag-header");
 
@@ -3513,7 +3513,7 @@ function getEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3526,7 +3526,7 @@ function getEvent(options) {
         });
 
         draggingHeader.dropHeader({
-            Event: {
+            event: {
                 data: { that: draggingHeader }
             }
         });
@@ -3588,7 +3588,7 @@ function getEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3602,7 +3602,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.dropHeader({
-            Event: {
+            event: {
                 data: { that: draggingHeader }
             }
         });
@@ -3645,7 +3645,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3693,7 +3693,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3745,7 +3745,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3795,7 +3795,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3851,7 +3851,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3864,7 +3864,7 @@ function getEvent(options) {
         });
 
         draggingHeader.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3954,7 +3954,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -3967,7 +3967,7 @@ function getEvent(options) {
         });
 
         draggingHeader.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -4055,7 +4055,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -4068,7 +4068,7 @@ function getEvent(options) {
         });
 
         draggingHeader.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -4120,7 +4120,7 @@ function getEvent(options) {
     //    });
     //
     //    draggingHeader.dropHeader({
-    //        Event: {
+    //        event: {
     //            data: {
     //                that: draggingHeader,
     //                rootElement: testElement
@@ -4198,7 +4198,7 @@ function getEvent(options) {
         });
 
         draggingHeader.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
@@ -4216,7 +4216,7 @@ function getEvent(options) {
 
         //act
         draggingHeader.dropHeader({
-            Event: {
+            event: {
                 data: { that: draggingHeader }
             }
         });
@@ -4234,7 +4234,7 @@ function getEvent(options) {
             moveHeaderDataSelfArgs = [];
 
         controller1._draggingHeaderView.moveHeader = function(args) {
-            moveHeaderDataSelfArgs.push(args.Event.data.that);
+            moveHeaderDataSelfArgs.push(args.event.data.that);
         };
 
         that.renderViews($("#container"));
@@ -4250,7 +4250,7 @@ function getEvent(options) {
         var controller2 = that.createDraggingHeaderViewController([{ caption: 'Column 3', width: 300 }, { caption: 'Column 4', width: 400 }]);
 
         controller2._draggingHeaderView.moveHeader = function(args) {
-            moveHeaderDataSelfArgs.push(args.Event.data.that);
+            moveHeaderDataSelfArgs.push(args.event.data.that);
         };
 
         that.renderViews($("#container2").height(500));
@@ -4353,7 +4353,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4413,7 +4413,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4426,7 +4426,7 @@ function getEvent(options) {
         });
 
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -4487,7 +4487,7 @@ function getEvent(options) {
         });
 
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4501,7 +4501,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -4545,7 +4545,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4589,7 +4589,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4641,7 +4641,7 @@ function getEvent(options) {
         });
 
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4655,7 +4655,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -4701,7 +4701,7 @@ function getEvent(options) {
         //act
         this.columnsResizerController._isResizing = true;
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4751,7 +4751,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4797,7 +4797,7 @@ function getEvent(options) {
         $blockSeparator = $('.dx-datagrid').children('.dx-block-separator');
 
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4847,7 +4847,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4900,7 +4900,7 @@ function getEvent(options) {
         });
 
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -4919,7 +4919,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -4974,7 +4974,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -4991,7 +4991,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5045,7 +5045,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5100,7 +5100,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5117,7 +5117,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5169,7 +5169,7 @@ function getEvent(options) {
         });
 
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5223,7 +5223,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5372,7 +5372,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5431,7 +5431,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5444,7 +5444,7 @@ function getEvent(options) {
         });
 
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5504,7 +5504,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5517,7 +5517,7 @@ function getEvent(options) {
         });
 
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5579,7 +5579,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5592,7 +5592,7 @@ function getEvent(options) {
         });
 
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5636,7 +5636,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5680,7 +5680,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5729,7 +5729,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5779,7 +5779,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5832,7 +5832,7 @@ function getEvent(options) {
         });
 
         this.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView,
                     rootElement: testElement
@@ -5851,7 +5851,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -5901,7 +5901,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5918,7 +5918,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5967,7 +5967,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement
@@ -5984,7 +5984,7 @@ function getEvent(options) {
 
         //act
         this.draggingHeaderView.dropHeader({
-            Event: {
+            event: {
                 data: {
                     that: this.draggingHeaderView
                 },
@@ -6030,7 +6030,7 @@ function getEvent(options) {
 
         //act
         that.draggingHeaderView.moveHeader({
-            Event: {
+            event: {
                 data: {
                     that: that.draggingHeaderView,
                     rootElement: testElement

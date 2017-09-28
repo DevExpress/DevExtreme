@@ -597,7 +597,7 @@ var TagBox = SelectBox.inherit({
 
         eventsEngine.off($container, eventName);
         eventsEngine.on($container, eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
-            tagRemoveAction({ Event: e });
+            tagRemoveAction({ event: e });
         });
 
         this._renderTypingEvent();
@@ -938,7 +938,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _removeTagHandler: function(args) {
-        var e = args.Event;
+        var e = args.event;
 
         e.stopPropagation();
 

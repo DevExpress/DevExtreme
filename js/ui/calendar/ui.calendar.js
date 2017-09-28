@@ -704,10 +704,10 @@ var Calendar = Editor.inherit({
         var isMaxZoomLevel = this._isMaxZoomLevel();
 
         if(nextView && !isMaxZoomLevel) {
-            this._navigateDown(e.Event.currentTarget);
+            this._navigateDown(e.event.currentTarget);
         } else {
             var newValue = this._updateTimeComponent(e.value);
-            this._dateValue(newValue, e.Event);
+            this._dateValue(newValue, e.event);
             this._cellClickAction(e);
         }
     },
@@ -833,8 +833,8 @@ var Calendar = Editor.inherit({
     _swipeStartHandler: function(e) {
         fx.stop(this._$viewsWrapper, true);
 
-        e.Event.maxLeftOffset = this._getRequiredView("next") ? 1 : 0;
-        e.Event.maxRightOffset = this._getRequiredView("prev") ? 1 : 0;
+        e.event.maxLeftOffset = this._getRequiredView("next") ? 1 : 0;
+        e.event.maxRightOffset = this._getRequiredView("prev") ? 1 : 0;
     },
 
     _getRequiredView: function(name) {
@@ -851,14 +851,14 @@ var Calendar = Editor.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        var offset = e.Event.offset;
+        var offset = e.event.offset;
 
         translator.move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
         this._updateNavigatorCaption(offset);
     },
 
     _swipeEndHandler: function(e) {
-        var targetOffset = e.Event.targetOffset,
+        var targetOffset = e.event.targetOffset,
             moveOffset = !targetOffset ? 0 : targetOffset / Math.abs(targetOffset);
 
         if(moveOffset === 0) {

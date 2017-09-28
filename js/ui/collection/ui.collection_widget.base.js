@@ -882,7 +882,7 @@ var CollectionWidget = Widget.inherit({
 
         eventsEngine.on($itemElement, clickEvent.name, (function(e) {
             this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
-                Event: e
+                event: e
             });
         }).bind(this));
     },
@@ -1017,7 +1017,7 @@ var CollectionWidget = Widget.inherit({
 
     _itemDXEventHandler: function(dxEvent, handlerOptionName, actionArgs, actionConfig) {
         this._itemEventHandler(dxEvent.target, handlerOptionName, extend(actionArgs, {
-            Event: dxEvent
+            event: dxEvent
         }), actionConfig);
     },
 

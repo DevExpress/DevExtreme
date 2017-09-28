@@ -117,7 +117,7 @@ var SwitchableEditDecorator = EditDecorator.inherit({
     },
 
     _cancelScrolling: function(args) {
-        args.Event.cancel = true;
+        args.event.cancel = true;
     },
 
     _cacheReadyToDeleteItem: function($itemElement, cache) {

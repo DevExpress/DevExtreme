@@ -140,7 +140,7 @@ var RowsViewExtender = extend({}, editingModule.extenders.views.rowsView, {
     },
 
     _rowClick: function(e) {
-        var $targetElement = $(e.Event.target);
+        var $targetElement = $(e.event.target);
 
         if($targetElement.closest("." + SELECT_CHECKBOX_CLASS).length) {
             return;

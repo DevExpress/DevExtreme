@@ -2461,7 +2461,7 @@ QUnit.test("Key down event - default key handler is canceled", function(assert) 
     //assert
     assert.deepEqual(keyDownInfo, {
         handled: true,
-        Event: {
+        event: {
             isDefaultPrevented: commonUtils.noop,
             stopPropagation: commonUtils.noop
         }
@@ -2499,7 +2499,7 @@ QUnit.test("Key down event", function(assert) {
     //assert
     assert.deepEqual(keyDownInfo, {
         handled: false,
-        Event: {
+        event: {
             isDefaultPrevented: commonUtils.noop,
             stopPropagation: commonUtils.noop
         }

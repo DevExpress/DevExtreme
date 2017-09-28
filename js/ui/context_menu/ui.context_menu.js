@@ -462,15 +462,15 @@ var ContextMenu = MenuBase.inherit((function() {
 
                 if(delay) {
                     setTimeout(function() {
-                        that._show(e.Event);
+                        that._show(e.event);
                     }, delay);
                 } else {
-                    that._show(e.Event);
+                    that._show(e.event);
                 }
             }).bind(that), { validatingTargetName: "target" });
 
             handler = function(e) {
-                contextMenuAction({ Event: e, target: $(e.currentTarget) });
+                contextMenuAction({ event: e, target: $(e.currentTarget) });
             };
 
             contextMenuAction = that._createAction(contextMenuAction);
@@ -941,7 +941,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             actionArgs = {
                 position: position,
-                Event: jQEvent
+                event: jQEvent
             };
 
             positioningAction(actionArgs);
@@ -949,8 +949,8 @@ var ContextMenu = MenuBase.inherit((function() {
             if(actionArgs.cancel) {
                 position = null;
             } else {
-                if(actionArgs.Event) {
-                    actionArgs.Event.cancel = true;
+                if(actionArgs.event) {
+                    actionArgs.event.cancel = true;
                     jQEvent.preventDefault();
                 }
             }

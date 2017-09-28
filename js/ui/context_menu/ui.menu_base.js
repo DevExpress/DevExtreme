@@ -452,7 +452,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
         var config = {
             element: $element,
-            Event: e
+            event: e
         };
 
         if(value) {

@@ -311,7 +311,7 @@ var ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterCore.headerFi
 
         if(indicatorName === "headerFilter") {
             eventsEngine.on($indicator, clickEvent.name, that.createAction(function(e) {
-                var event = e.Event;
+                var event = e.event;
 
                 event.stopPropagation();
                 that.getController("headerFilter").showHeaderFilterMenu(column.index, false);
@@ -358,7 +358,7 @@ var HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
             });
 
             $headerFilterIndicator && eventsEngine.on($headerFilterIndicator, clickEvent.name, that.createAction(function(e) {
-                var event = e.Event;
+                var event = e.event;
 
                 event.stopPropagation();
                 that.getController("headerFilter").showHeaderFilterMenu(groupColumn.index, true);

@@ -245,7 +245,7 @@ var SlideOutView = Widget.inherit({
 
     _swipeStartHandler: function(e) {
         animation.complete(this.content());
-        var event = e.Event,
+        var event = e.event,
             menuVisible = this.option("menuVisible"),
             rtl = this._isRightMenuPosition();
 
@@ -256,7 +256,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _swipeUpdateHandler: function(e) {
-        var event = e.Event,
+        var event = e.event,
             offset = this.option("menuVisible") ? event.offset + 1 * this._getRTLSignCorrection() : event.offset;
 
         offset *= this._getRTLSignCorrection();
@@ -264,7 +264,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _swipeEndHandler: function(e) {
-        var targetOffset = e.Event.targetOffset * this._getRTLSignCorrection() + this.option("menuVisible"),
+        var targetOffset = e.event.targetOffset * this._getRTLSignCorrection() + this.option("menuVisible"),
             menuVisible = targetOffset !== 0;
 
         if(this.option("menuVisible") === menuVisible) {

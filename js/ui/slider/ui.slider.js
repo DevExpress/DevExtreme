@@ -321,7 +321,7 @@ var Slider = TrackBar.inherit({
 
         var config = {
             element: element,
-            Event: dxEvent,
+            event: dxEvent,
             wave: waveIndex
         };
 
@@ -485,7 +485,7 @@ var Slider = TrackBar.inherit({
         eventsEngine.off($element, pointerDownEventName);
         eventsEngine.on($element, pointerDownEventName, function(e) {
             if(eventUtils.isMouseEvent(e)) {
-                startAction({ Event: e });
+                startAction({ event: e });
             }
         });
         eventsEngine.off($element, clickEventName);
@@ -496,7 +496,7 @@ var Slider = TrackBar.inherit({
                 eventsEngine.trigger($handle, "focusin");
                 eventsEngine.trigger($handle, "focus");
             }
-            startAction({ Event: e });
+            startAction({ event: e });
         }).bind(this));
     },
 
@@ -509,8 +509,8 @@ var Slider = TrackBar.inherit({
             startOffset,
             endOffset;
 
-        if(eventUtils.isTouchEvent(e.Event)) {
-            this._createAction(this._startHandler.bind(this))({ Event: e.Event });
+        if(eventUtils.isTouchEvent(e.event)) {
+            this._createAction(this._startHandler.bind(this))({ event: e.event });
         }
 
         this._feedbackDeferred = new Deferred();
@@ -520,8 +520,8 @@ var Slider = TrackBar.inherit({
         this._startOffset = this._currentRatio;
         startOffset = this._startOffset * this._swipePixelRatio();
         endOffset = (1 - this._startOffset) * this._swipePixelRatio();
-        e.Event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
-        e.Event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
+        e.event.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
+        e.event.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 
         this._itemWidthRatio = this.$element().width() / this._swipePixelRatio();
 
@@ -534,7 +534,7 @@ var Slider = TrackBar.inherit({
 
         var offsetDirection = this.option("rtlEnabled") ? -1 : 1;
         delete this._needPreventAnimation;
-        this._changeValueOnSwipe(this._startOffset + offsetDirection * e.Event.targetOffset / this._swipePixelRatio());
+        this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
         delete this._startOffset;
         this._renderValue();
     },
@@ -551,7 +551,7 @@ var Slider = TrackBar.inherit({
     _updateHandlePosition: function(e) {
         var offsetDirection = this.option("rtlEnabled") ? -1 : 1;
 
-        var newRatio = this._startOffset + offsetDirection * e.Event.offset / this._swipePixelRatio();
+        var newRatio = this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio();
 
         this._$range.width(newRatio * 100 + "%");
 
@@ -614,7 +614,7 @@ var Slider = TrackBar.inherit({
     },
 
     _startHandler: function(args) {
-        var e = args.Event;
+        var e = args.event;
 
         this._currentRatio = (eventUtils.eventData(e).x - this._$bar.offset().left) / this._$bar.width();
 

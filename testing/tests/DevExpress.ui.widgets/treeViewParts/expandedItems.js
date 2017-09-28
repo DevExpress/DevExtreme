@@ -9,7 +9,7 @@ var $ = require("jquery"),
 QUnit.module("Expanded items", {
     beforeEach: function() {
         this.checkFunctionArguments = function(assert, actualArgs, expectedArgs) {
-            assert.strictEqual(actualArgs.Event, expectedArgs.Event, "arg is OK");
+            assert.strictEqual(actualArgs.event, expectedArgs.event, "arg is OK");
             assert.deepEqual(actualArgs.itemData, expectedArgs.itemData, "arg is OK");
             assert.deepEqual(actualArgs.node, expectedArgs.node, "arg is OK");
             assert.deepEqual(actualArgs.itemElement.get(0), expectedArgs.itemElement.get(0), "arg is OK");
@@ -65,7 +65,7 @@ QUnit.test("onItemExpanded callback", function(assert) {
     var args = itemExpandedHandler.getCall(0).args[0];
 
     this.checkFunctionArguments(assert, args, {
-        Event: undefined,
+        event: undefined,
         itemData: data[0],
         node: treeView.getNodes()[0],
         itemElement: $firstItem
@@ -108,7 +108,7 @@ QUnit.test("onItemExpanded callback after click should have correct arguments", 
 
     var args = itemExpandedHandler.getCall(0).args[0];
     this.checkFunctionArguments(assert, args, {
-        Event: event,
+        event: event,
         itemData: data[0],
         node: $treeView.dxTreeView("instance").getNodes()[0],
         itemElement: $firstItem
@@ -133,7 +133,7 @@ QUnit.test("onItemCollapsed callback", function(assert) {
 
     var args = itemCollapsedHandler.getCall(0).args[0];
     this.checkFunctionArguments(assert, args, {
-        Event: undefined,
+        event: undefined,
         itemData: data[0],
         node: treeView.getNodes()[0],
         itemElement: $firstItem
@@ -158,7 +158,7 @@ QUnit.test("onItemCollapsed callback after click should have correct arguments",
 
     var args = itemCollapsedHandler.getCall(0).args[0];
     this.checkFunctionArguments(assert, args, {
-        Event: event,
+        event: event,
         itemData: data[0],
         node: treeView.getNodes()[0],
         itemElement: $firstItem

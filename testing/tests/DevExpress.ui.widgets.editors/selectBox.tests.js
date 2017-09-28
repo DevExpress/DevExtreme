@@ -1257,7 +1257,7 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter", funct
             value: 1,
             opened: true,
             onValueChanged: function(e) {
-                jQueryEvent = e.Event;
+                jQueryEvent = e.event;
             }
         }),
         selectBox = $selectBox.dxSelectBox("instance");

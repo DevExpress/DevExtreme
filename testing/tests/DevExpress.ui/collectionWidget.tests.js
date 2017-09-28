@@ -922,7 +922,7 @@ QUnit.test("onClick option in item", function(assert) {
     assert.equal(args.component, component, "component provided");
     assert.equal(args.itemData, item, "item data provided");
     assert.equal(args.itemIndex, 0, "item index provided");
-    assert.ok(args.Event, "jQuery event provided");
+    assert.ok(args.event, "jQuery event provided");
     assert.ok(args.itemElement, "item element provided");
 });
 
@@ -1037,7 +1037,7 @@ QUnit.test("default page scroll should be prevented for space key", function(ass
         focusStateEnabled: true,
         items: ["0"],
         onItemClick: function(args) {
-            assert.ok(args.Event.isDefaultPrevented(), "default scroll is prevented");
+            assert.ok(args.event.isDefaultPrevented(), "default scroll is prevented");
         }
     });
 

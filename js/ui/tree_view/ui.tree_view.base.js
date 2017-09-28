@@ -287,7 +287,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             element: jQuery.fn.init[1]
             itemData: Object
             itemElement: jQuery.fn.init[1]
-            Event: jQuery.Event
+            event: jQuery.Event
             */
 
             focusStateEnabled: false,
@@ -1210,7 +1210,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._itemDXEventHandler(e, optionName, { node: this._dataAdapter.getPublicNode(node) });
         } else {
             target = this._getNodeElement(node);
-            this._itemEventHandler(target, optionName, { Event: e, node: this._dataAdapter.getPublicNode(node) });
+            this._itemEventHandler(target, optionName, { event: e, node: this._dataAdapter.getPublicNode(node) });
         }
     },
 
@@ -1317,7 +1317,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        this._updateItemSelection(value, item, e.Event);
+        this._updateItemSelection(value, item, e.event);
     },
 
     _isSingleSelection: function() {

@@ -120,7 +120,7 @@ var dropDownAppointments = Class.inherit({
                         onAppointmentClick.call(that.instance._appointments, args);
                     }
 
-                    args.Event.stopPropagation();
+                    args.event.stopPropagation();
                     that.instance.fire("showEditAppointmentPopup", { data: args.itemData });
                 },
                 activeStateEnabled: false,
@@ -278,7 +278,7 @@ var dropDownAppointments = Class.inherit({
                 height: 25,
                 width: 25,
                 onClick: (function(e) {
-                    e.Event.stopPropagation();
+                    e.event.stopPropagation();
                     this.instance.deleteAppointment(appointmentData);
                 }).bind(this)
             });

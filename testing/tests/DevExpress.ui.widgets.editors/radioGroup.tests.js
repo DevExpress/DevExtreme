@@ -298,7 +298,7 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter", funct
         $radioGroup = $("#radioGroup").dxRadioGroup({
             items: [1, 2, 3],
             onValueChanged: function(e) {
-                jQueryEvent = e.Event;
+                jQueryEvent = e.event;
             }
         }),
         radioGroup = $radioGroup.dxRadioGroup("instance");

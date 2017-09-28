@@ -334,7 +334,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
 
         return {
-            Event: dxEvent,
+            event: dxEvent,
             field: field,
             area: area,
             items: []
@@ -351,7 +351,7 @@ var FieldChooser = BaseFieldChooser.inherit({
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
             onPositioning: function(actionArgs) {
-                var event = actionArgs.Event,
+                var event = actionArgs.event,
                     args;
 
                 if(!event) {

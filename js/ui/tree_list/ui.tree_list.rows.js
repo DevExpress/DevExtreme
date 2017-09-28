@@ -85,7 +85,7 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
 
         _rowClick: function(e) {
             var dataController = this._dataController,
-                $targetElement = $(e.Event.target),
+                $targetElement = $(e.event.target),
                 isExpandIcon = this.isExpandIcon($targetElement),
                 item = dataController && dataController.items()[e.rowIndex];
 

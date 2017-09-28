@@ -126,7 +126,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
         }
 
         if(dateBox.option("applyValueMode") === "instantly") {
-            this.dateBoxValue(this.getValue(), e.Event);
+            this.dateBoxValue(this.getValue(), e.event);
         }
     },
 
@@ -149,7 +149,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
 
         if(dateBox.option("applyValueMode") === "instantly") {
             dateBox.option("opened", false);
-            this.dateBoxValue(this.getValue(), e.Event);
+            this.dateBoxValue(this.getValue(), e.event);
         }
     },
 

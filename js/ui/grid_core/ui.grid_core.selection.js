@@ -663,7 +663,7 @@ module.exports = {
             },
             contextMenu: {
                 _contextMenuPrepared: function(options) {
-                    var dxEvent = options.Event;
+                    var dxEvent = options.event;
 
                     if(dxEvent.originalEvent && dxEvent.originalEvent.type !== "dxhold" || options.items && options.items.length > 0) return;
 
@@ -736,7 +736,7 @@ module.exports = {
                             var allowSelectAll = that.option("selection.allowSelectAll");
                             e.component.option("visible", allowSelectAll || e.component.option("value") !== false);
 
-                            if(!e.Event || selectionController.isSelectAll() === value) {
+                            if(!e.event || selectionController.isSelectAll() === value) {
                                 return;
                             }
 
@@ -746,7 +746,7 @@ module.exports = {
                                 e.value ? selectionController.selectAll() : selectionController.deselectAll();
                             }
 
-                            e.Event.preventDefault();
+                            e.event.preventDefault();
                         }
                     }));
 
@@ -755,7 +755,7 @@ module.exports = {
 
                 _attachSelectAllCheckBoxClickEvent: function($element) {
                     eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
-                        var event = e.Event;
+                        var event = e.event;
 
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
                             eventsEngine.trigger($(event.currentTarget).children(), clickEvent.name);
@@ -799,7 +799,7 @@ module.exports = {
                         value: value,
                         tabIndex: -1,
                         setValue: function(value, e) {
-                            if(e && e.Event && e.Event.type === "keydown") {
+                            if(e && e.event && e.event.type === "keydown") {
                                 eventsEngine.trigger(container, clickEvent.name, e);
                             }
                         }
@@ -811,7 +811,7 @@ module.exports = {
                 _attachCheckBoxClickEvent: function($element) {
                     eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
                         var selectionController = this.getController("selection"),
-                            event = e.Event,
+                            event = e.event,
                             rowIndex = this.getRowIndex($(event.currentTarget).closest("." + ROW_CLASS));
 
                         if(rowIndex >= 0) {
@@ -868,13 +868,13 @@ module.exports = {
                         if(that.option(SHOW_CHECKBOXES_MODE) === "onLongTap" || !support.touch) {
                             //TODO Not working timeout by hold when it is larger than other timeouts by hold
                             eventsEngine.on($table, eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
-                                processLongTap(that.component, e.Event);
+                                processLongTap(that.component, e.event);
 
-                                e.Event.stopPropagation();
+                                e.event.stopPropagation();
                             }));
                         }
                         eventsEngine.on($table, "mousedown selectstart", that.createAction(function(e) {
-                            var event = e.Event;
+                            var event = e.event;
 
                             if(event.shiftKey) {
                                 event.preventDefault();
@@ -902,7 +902,7 @@ module.exports = {
 
                 _rowClick: function(e) {
                     var that = this,
-                        dxEvent = e.Event,
+                        dxEvent = e.event,
                         isSelectionDisabled = $(dxEvent.target).closest("." + SELECTION_DISABLED_CLASS).length;
 
                     if(!that.isClickableElement($(dxEvent.target))) {

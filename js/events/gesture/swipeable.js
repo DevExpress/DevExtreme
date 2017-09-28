@@ -58,7 +58,7 @@ var Swipeable = DOMComponent.inherit({
             eventName = eventUtils.addNamespace(eventName, NAME);
 
             eventsEngine.on(this.$element(), eventName, this._eventData, function(e) {
-                return action({ Event: e });
+                return action({ event: e });
             });
         }).bind(this));
     },

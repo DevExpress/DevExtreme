@@ -209,7 +209,7 @@ var RangeSlider = Slider.inherit({
     },
 
     _startHandler: function(args) {
-        var e = args.Event,
+        var e = args.event,
             $range = this._$range,
             rangeWidth = $range.width(),
             eventOffsetX = eventUtils.eventData(e).x - this._$bar.offset().left,
@@ -238,7 +238,7 @@ var RangeSlider = Slider.inherit({
             max = this.option("max"),
             min = this.option("min");
 
-        var newRatio = this._startOffset + offsetDirection * e.Event.offset / this._swipePixelRatio();
+        var newRatio = this._startOffset + offsetDirection * e.event.offset / this._swipePixelRatio();
         newRatio = newRatio.toPrecision(12); //NOTE: android 2.3 has problems with mathematics
 
         var newValue = newRatio * (max - min) + min;
@@ -368,7 +368,7 @@ var RangeSlider = Slider.inherit({
                     start: start,
                     end: end,
                     value: [start, end],
-                    Event: this._valueChangeEventInstance
+                    event: this._valueChangeEventInstance
                 });
                 this._saveValueChangeEvent(undefined);
                 break;

@@ -30,7 +30,7 @@ var ErrorHandlingController = modules.ViewController.inherit({
             $closeButton = $("<div>").addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
             eventsEngine.on($closeButton, clickEvent.name, that.createAction(function(args) {
-                var e = args.Event,
+                var e = args.event,
                     $errorRow,
                     errorRowIndex = $(e.currentTarget).closest("." + ERROR_ROW_CLASS).index();
 

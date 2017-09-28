@@ -267,7 +267,7 @@ QUnit.test("jQuery event should be specified on value change when value is not v
         value: 1,
         valueChangeEvent: "keyup",
         onValueChanged: function(e) {
-            assert.ok(e.Event, "jQuery event specified");
+            assert.ok(e.event, "jQuery event specified");
         }
     });
 
@@ -1269,7 +1269,7 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter when sp
     this.instance.option({
         showSpinButtons: true,
         onValueChanged: function(e) {
-            jQueryEvent = e.Event;
+            jQueryEvent = e.event;
         }
     });
 
@@ -1294,7 +1294,7 @@ QUnit.testInActiveWindow("onValueChanged option should get jQuery event as a par
     this.instance.option({
         showSpinButtons: true,
         onValueChanged: function(e) {
-            jQueryEvent = e.Event;
+            jQueryEvent = e.event;
         }
     });
 
@@ -1317,7 +1317,7 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter when up
     this.instance.option({
         showSpinButtons: true,
         onValueChanged: function(e) {
-            jQueryEvent = e.Event;
+            jQueryEvent = e.event;
         }
     });
 
