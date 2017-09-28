@@ -2,6 +2,7 @@
 
 var FLOAT_SEPARATOR = ".";
 var GROUP_SEPARATOR = ",";
+var ESCAPING_CHAR = "'";
 
 function escapeFormat(formatString) {
     var charsToEscape = /([\\\/\.\*\+\?\|\(\)\[\]\{\}])/g;
@@ -130,17 +131,20 @@ var formatRules = {
 };
 
 function getFormatString(format, value) {
-    value = value || 0;
-
-    var stringValue = value.toString(),
+    var stringValue = value.toString() || "",
         specialFormatChars = Object.keys(formatRules),
+        isProcessingPrevented = false,
         resultString = "";
 
     for(var i = 0; i < format.length; i++) {
         var formatChar = format.charAt(i);
 
-        if(specialFormatChars.indexOf(formatChar) === -1) {
-            resultString += formatChar;
+        if(formatChar === ESCAPING_CHAR) {
+            isProcessingPrevented = !isProcessingPrevented;
+        }
+
+        if(isProcessingPrevented || specialFormatChars.indexOf(formatChar) === -1) {
+            if(formatChar !== ESCAPING_CHAR) resultString += formatChar;
             stringValue = stringValue.replace(new RegExp("^" + escapeFormat(formatChar)), "");
             continue;
         }
@@ -157,19 +161,30 @@ function getFormatString(format, value) {
     return resultString;
 }
 
+function isPercentFormat(format) {
+    return format.indexOf("%") !== -1 && !format.match(/'[^']*%[^']*'/g);
+}
+
 function generateNumberFormatter(format) {
     return function(value) {
+        if(typeof value !== "number") return "";
+
         var signParts = getSignParts(format),
-            numberFormat = signParts[value >= 0 ? 0 : 1],
-            floatParts = numberFormat.split(FLOAT_SEPARATOR),
+            numberFormat = signParts[value >= 0 ? 0 : 1];
+
+        if(isPercentFormat(numberFormat)) {
+            value = value * 100;
+        }
+
+        var floatParts = numberFormat.split(FLOAT_SEPARATOR),
             valueIntegerPart = parseInt(Math.abs(value)),
-            valueFloatPart = parseInt((value || 0).toString().split(FLOAT_SEPARATOR)[1]),
+            valueFloatPart = parseInt(value.toString().split(FLOAT_SEPARATOR)[1]),
             integerString = getFormatString(floatParts[0], valueIntegerPart),
-            floatString = floatParts[1] ? FLOAT_SEPARATOR + getFormatString(floatParts[1], valueFloatPart) : "";
+            floatString = floatParts[1] ? getFormatString(floatParts[1], valueFloatPart) : "";
 
         if(!integerString.match(/\d/)) integerString += "0";
 
-        var formatString = integerString + floatString;
+        var formatString = integerString + (floatString.match(/\d/) ? FLOAT_SEPARATOR : "") + floatString;
 
         return formatString;
     };

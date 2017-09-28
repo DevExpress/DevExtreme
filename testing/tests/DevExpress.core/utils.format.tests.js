@@ -144,7 +144,7 @@ QUnit.module("number formatter");
 QUnit.test("float with precision formatting", function(assert) {
     var formatter = generateNumberFormat("#.00");
 
-    assert.strictEqual(formatter(null), "0.00", "format an empty value");
+    assert.strictEqual(formatter(null), "", "format an empty value");
     assert.strictEqual(formatter(0), "0.00", "format zero");
     assert.strictEqual(formatter(123), "123.00", "format integer");
     assert.strictEqual(formatter(123.5), "123.50", "format rounded float");
@@ -155,9 +155,33 @@ QUnit.test("float with precision formatting", function(assert) {
 QUnit.test("different positive and negative formatting", function(assert) {
     var formatter = generateNumberFormat("#.000;(#.000)");
 
-    assert.strictEqual(formatter(null), "0.000", "format an empty value");
     assert.strictEqual(formatter(0), "0.000", "format zero");
     assert.strictEqual(formatter(123), "123.000", "format integer");
     assert.strictEqual(formatter(123.57), "123.570", "format float");
+    assert.strictEqual(formatter(123.576), "123.576", "format float with 3 digits after point");
     assert.strictEqual(formatter(-123.57), "(123.570)", "format negative float");
+});
+
+QUnit.test("escaping format", function(assert) {
+    var formatter = generateNumberFormat("#'x #0% x'");
+
+    assert.strictEqual(formatter(15), "15x #0% x", "special chars was escaped");
+});
+
+QUnit.test("percent formatting", function(assert) {
+    var formatter = generateNumberFormat("#.#%;(#.#%)");
+
+    assert.strictEqual(formatter(0), "0%", "format zero");
+    assert.strictEqual(formatter(0.1), "10%", "format less than 100");
+    assert.strictEqual(formatter(2.578), "257.8%", "format more than 100");
+    assert.strictEqual(formatter(2.5785), "257.85%", "format more than 100");
+    assert.strictEqual(formatter(-0.45), "(45%)", "format negative value");
+});
+
+QUnit.test("escaped percent formatting", function(assert) {
+    var formatter = generateNumberFormat("#.#'%'");
+    assert.strictEqual(formatter(0.5), "0.5%", "percent was escaped");
+
+    formatter = generateNumberFormat("#.#'x % x'");
+    assert.strictEqual(formatter(0.5), "0.5x % x", "percent with text was escaped");
 });
