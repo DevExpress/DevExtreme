@@ -150,6 +150,7 @@ QUnit.test("float with precision formatting", function(assert) {
     assert.strictEqual(formatter(123.5), "123.50", "format rounded float");
     assert.strictEqual(formatter(123.57), "123.57", "format float");
     assert.strictEqual(formatter(123.576), "123.58", "rounding float");
+    assert.strictEqual(formatter(123.573), "123.57", "rounding float back");
     assert.strictEqual(formatter(-123.57), "-123.57", "format negative float");
 });
 
