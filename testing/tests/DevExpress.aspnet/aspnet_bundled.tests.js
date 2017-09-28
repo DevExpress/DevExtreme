@@ -1,9 +1,5 @@
 "use strict";
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 SystemJS.config({
     meta: {
         "/testing/*": { format: "global" },
