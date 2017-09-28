@@ -488,12 +488,12 @@ module.exports = {
                  */
                 height: 325,
                 /**
-                 * @name GridBaseOptions_headerFilter_searchEnabled
-                 * @publicName searchEnabled
+                 * @name GridBaseOptions_headerFilter_allowSearch
+                 * @publicName allowSearch
                  * @type boolean
                  * @default false
                  */
-                searchEnabled: false,
+                allowSearch: false,
                 /**
                  * @name GridBaseOptions_headerFilter_texts
                  * @publicName texts

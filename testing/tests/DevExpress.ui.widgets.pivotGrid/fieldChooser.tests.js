@@ -1436,12 +1436,12 @@ QUnit.test("The 'contentReady' event fires after all data is loaded", function(a
 });
 
 QUnit.test("Enable search", function(assert) {
-    this.setup({}, { searchEnabled: true });
+    this.setup({}, { allowSearch: true });
 
     var treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
     assert.ok(treeview.option("searchEnabled"), "treeview with search");
 
-    this.fieldChooser.option("searchEnabled", false);
+    this.fieldChooser.option("allowSearch", false);
     treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
     assert.ok(!treeview.option("searchEnabled"), "treeview without search");
 });

@@ -187,7 +187,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 itemTemplate: "item",
                 showCheckBoxesMode: "none",
                 rootValue: null,
-                searchEnabled: columnChooser.searchEnabled
+                searchEnabled: columnChooser.allowSearch
             };
 
 
@@ -398,12 +398,12 @@ module.exports = {
                  */
                 enabled: false,
                 /**
-                 * @name GridBaseOptions_columnChooser_searchEnabled
-                 * @publicName searchEnabled
+                 * @name GridBaseOptions_columnChooser_allowSearch
+                 * @publicName allowSearch
                  * @type boolean
                  * @default false
                  */
-                searchEnabled: false,
+                allowSearch: false,
                 /**
                  * @name GridBaseOptions_columnChooser_mode
                  * @publicName mode

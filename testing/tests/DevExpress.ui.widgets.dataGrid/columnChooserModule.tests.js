@@ -514,7 +514,7 @@ QUnit.test("Enable search", function(assert) {
 
     this.setTestElement(testElement);
 
-    this.options.columnChooser.searchEnabled = true;
+    this.options.columnChooser.allowSearch = true;
 
     //act
     this.renderColumnChooser();
