@@ -16,8 +16,7 @@ var $ = require("../../core/renderer"),
     ValidationEngine = require("../validation_engine"),
     Validator = require("../validator"),
     Tooltip = require("../tooltip"),
-    Overlay = require("../overlay"),
-    dataUtils = require("../../core/element_data").getDataStrategy();
+    Overlay = require("../overlay");
 
 var INVALIDATE_CLASS = "invalid",
     REVERT_TOOLTIP_CLASS = "revert-tooltip",
@@ -462,7 +461,7 @@ module.exports = {
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
                     var result = this.callBase(rowIndex, columnIndex, item),
                         $cell = this.component.getCellElement(rowIndex, columnIndex),
-                        validator = $cell && dataUtils.data($cell[0], "dxValidator"),
+                        validator = $cell && $cell.data("dxValidator"),
                         value = validator && validator.option("adapter").getValue();
 
                     if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || value !== undefined && validator.validate().isValid)) {
@@ -515,7 +514,7 @@ module.exports = {
                         validator;
 
                     if(!skipValidation) {
-                        validator = dataUtils.data($cell[0], "dxValidator");
+                        validator = $cell.data("dxValidator");
                         if(validator) {
                             isValid = validator.validate().isValid;
                         }

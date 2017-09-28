@@ -6,8 +6,7 @@ var $ = require("../../core/renderer"),
     positionUtils = require("../../animation/position"),
     each = require("../../core/utils/iterator").each,
     Class = require("../../core/class"),
-    Deferred = require("../../core/utils/deferred").Deferred,
-    dataUtils = require("../../core/element_data").getDataStrategy();
+    Deferred = require("../../core/utils/deferred").Deferred;
 
 var SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual";
@@ -68,7 +67,7 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
 
     function subscribeToScrollEvents($scrollElement) {
         var isDocument = $scrollElement.get(0).nodeName === "#document";
-        var scrollable = dataUtils.data($scrollElement.get(0), "dxScrollable");
+        var scrollable = $scrollElement.data("dxScrollable");
         var eventsStrategy = widgetScrollStrategy;
 
         if(!scrollable) {
