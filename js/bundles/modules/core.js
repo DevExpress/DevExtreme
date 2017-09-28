@@ -129,5 +129,6 @@ DevExpress.events.utils = require("../../events/utils");
 DevExpress.events.GestureEmitter = require("../../events/gesture/emitter.gesture");
 
 DevExpress.localization = require("../../localization");
+DevExpress.events = require("../../events");
 
 module.exports = DevExpress;
