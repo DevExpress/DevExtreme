@@ -7,7 +7,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     Class = require("../../core/class"),
     Deferred = require("../../core/utils/deferred").Deferred,
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("../../core/element_data").getDataStrategy();
 
 var SCROLLING_MODE_INFINITE = "infinite",
     SCROLLING_MODE_VIRTUAL = "virtual";
