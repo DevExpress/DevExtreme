@@ -9314,7 +9314,7 @@ QUnit.module('Editing with scrolling', {
             dataSource: generateDataSource(11, 2),
             columns: [{ dataField: "column1", allowEditing: true }, "column2"],
             onRowPrepared: function(e) {
-                e.rowElement.height(34);
+                $(e.rowElement).height(34);
             },
             paging: {
                 pageSize: 4

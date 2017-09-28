@@ -203,7 +203,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 e.rowIndex = that.getRowIndex(jQueryEvent.currentTarget);
 
                 if(e.rowIndex >= 0) {
-                    e.rowElement = $(jQueryEvent.currentTarget);
+                    e.rowElement = getPublicElement($(jQueryEvent.currentTarget));
                     e.columns = that.getColumns();
                     that._rowClick(e);
                 }
@@ -442,7 +442,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _rowPrepared: function($row, options) {
         dataUtils.data($row.get(0), "options", options);
 
-        options.rowElement = $row;
+        options.rowElement = getPublicElement($row);
         this.executeAction("onRowPrepared", options);
     },
 

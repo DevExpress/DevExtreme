@@ -1656,7 +1656,7 @@ QUnit.test("Call the onRowPrepared for main and fixed table", function(assert) {
 
     that.options.onRowPrepared = function(rowInfo) {
         countCallOnRowPrepared++;
-        rowInfo.rowElement.attr("test", "test");
+        $(rowInfo.rowElement).attr("test", "test");
     };
     that.setupDataGrid();
 

@@ -33,6 +33,7 @@ var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
+    config = require("core/config"),
     support = require("core/utils/support"),
     browser = require("core/utils/browser"),
     pointerMock = require("../../helpers/pointerMock.js"),
@@ -1794,7 +1795,8 @@ QUnit.test('onRowClick event handling', function(assert) {
     rows.eq(1).trigger("dxclick");
 
     //assert
-    assert.deepEqual(rowClickArgs.rowElement[0], rows[1], "row element");
+    assert.equal(typeUtils.isRenderer(rowClickArgs.rowElement), config().useJQueryRenderer, "row element");
+    assert.deepEqual($(rowClickArgs.rowElement)[0], rows[1], "row element");
     assert.deepEqual(rowClickArgs.data, { name: 'test2', id: 2, date: new Date(2002, 1, 2) });
     assert.equal(rowClickArgs.columns.length, 3, "count columns");
     assert.equal(rowClickArgs.dataIndex, 1, "dataIndex");
@@ -3362,7 +3364,7 @@ QUnit.test("Rows with option onRowPrepared", function(assert) {
     this.options.onRowPrepared = function(options) {
         countCallRowPrepared++;
         if(options.rowIndex === 1) {
-            resultRow = options.rowElement.find("td").addClass("TestRowPrepared");
+            resultRow = $(options.rowElement).find("td").addClass("TestRowPrepared");
             resultOptions = options;
         }
     };
@@ -3376,7 +3378,8 @@ QUnit.test("Rows with option onRowPrepared", function(assert) {
     //assert
     assert.equal(this.dataGrid.__actionConfigs.onRowPrepared.category, "rendering", "onRowPrepared category");
     assert.equal(countCallRowPrepared, 3, "countCallRowPrepared");
-    assert.ok(resultOptions.rowElement.data("options"), "has row options");
+    assert.equal(typeUtils.isRenderer(resultOptions.rowElement), config().useJQueryRenderer, "correct row element");
+    assert.ok($(resultOptions.rowElement).data("options"), "has row options");
     assert.equal(resultOptions.columns.length, 3, "count columns");
     assert.equal(resultOptions.rowIndex, 1, "rowIndex");
     assert.equal(resultOptions.dataIndex, 1, "dataIndex");
@@ -3427,7 +3430,7 @@ QUnit.test("onRowPrepared for group rows", function(assert) {
 
     //assert
     assert.equal(countCallRowPrepared, 3, "countCallCellPrepared");
-    assert.ok(resultOptions.rowElement.data("options"), "has row options");
+    assert.ok($(resultOptions.rowElement).data("options"), "has row options");
     assert.equal(resultOptions.rowIndex, 0, "rowIndex");
     assert.equal(resultOptions.groupIndex, 0, "columnIndex");
     assert.equal(resultOptions.columns.length, 3, "columns");
