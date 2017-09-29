@@ -3651,15 +3651,6 @@ QUnit.module("Keyboard navigation", {
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     },
 
-    triggerTabKey: function($focusableElement, shiftKey) {
-        var e = $.Event('keydown');
-        e.which = 9;
-        e.shiftKey = shiftKey;
-        this.getActiveInputElement().trigger(e);
-
-        $focusableElement && $focusableElement.focus();
-    },
-
     getActiveInputElement: function() {
         return this.$dataGrid.find("input");
     },
@@ -3679,79 +3670,57 @@ QUnit.module("Keyboard navigation", {
     }
 }, function() {
     QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
-        var that = this,
-            done = assert.async();
-
         //arrange
-        that.triggerFormItemClick(0);
+        this.triggerFormItemClick(0);
 
         //assert
-        var $itemContent = $(".dx-field-item-content"),
-            focusHandler = function() {
-                $itemContent.off("focusin", focusHandler);
-                setTimeout(function() {
-                    assert.equal(that.getActiveInputElement().val(), "Full Name", "value of FullName");
-                    that.editingController.dispose();
-                    done();
-                });
-            };
-
-        $itemContent.on("focusin", focusHandler);
+        var $nextItemContent = this.getActiveInputElement().closest(".dx-item").next().find(".dx-field-item-content");
+        assert.equal($nextItemContent.text(), "Full Name", "next item text");
+        assert.equal($nextItemContent.attr("tabindex"), 0, "next item has tabindex");
 
         //act
-        that.clock.restore();
-        that.triggerTabKey($itemContent.eq(1));
+        $nextItemContent.triggerHandler("focus");
+        this.clock.tick();
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Full Name", "current input is correct");
     });
 
     QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
-        var that = this,
-            done = assert.async();
-
         //arrange
-        that.triggerFormItemClick(1);
+        this.triggerFormItemClick(1);
 
         //assert
-        var $itemContent = $(".dx-field-item-content"),
-            focusHandler = function() {
-                $itemContent.off("focusin", focusHandler);
-                setTimeout(function() {
-                    assert.equal(that.getActiveInputElement().val(), "Psy", "value of LastName");
-                    that.editingController.dispose();
-                    done();
-                });
-            };
-
-        $itemContent.on("focusin", focusHandler);
+        var $nextItemContent = this.getActiveInputElement().closest(".dx-item").prev().find(".dx-field-item-content");
+        assert.equal($nextItemContent.text(), "Psy", "next item text");
+        assert.equal($nextItemContent.attr("tabindex"), 0, "next item has tabindex");
 
         //act
-        that.clock.restore();
-        that.triggerTabKey($(".dx-field-item-content").first(), true);
+        $nextItemContent.triggerHandler("focus");
+        this.clock.tick();
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Psy", "current input is correct");
     });
 
     QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
-        var that = this,
-            done = assert.async();
-
         //arrange
-        that.triggerFormItemClick(1);
-
-        var $cell = that.$dataGrid.find("td:not([class])").eq(1),
-            focusHandler = function() {
-                $cell.off("focusin", focusHandler);
-                setTimeout(function() {
-                    var $input = that.getActiveInputElement();
-                    assert.equal($input.length, 1, "inputs count");
-                    assert.equal($input.val(), "Super", "value of FirstName");
-                    that.editingController.dispose();
-                    done();
-                });
-            };
-
-        $cell.on("focusin", focusHandler);
+        this.triggerFormItemClick(1);
 
         //act
-        that.clock.restore();
-        that.triggerTabKey($cell);
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+        this.clock.tick();
+
+        var $cell = this.$dataGrid.find("td:not([class])").eq(1);
+        $cell.triggerHandler("focus");
+        this.clock.tick();
+
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Super", "current input is correct");
     });
 
     QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
@@ -3760,7 +3729,9 @@ QUnit.module("Keyboard navigation", {
         this.clock.tick();
 
         //act
-        this.triggerTabKey();
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
 
         //assert
         assert.equal(this.getActiveInputElement().val(), "Super");
