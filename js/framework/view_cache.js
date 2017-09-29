@@ -17,7 +17,7 @@ var ViewCache = Class.inherit({
     /**
      * @name ViewCacheevents_viewRemoved
      * @publicName viewRemoved
-     * @type EVENT
+     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field1 viewInfo:object
      */

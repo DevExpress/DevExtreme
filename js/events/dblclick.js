@@ -3,7 +3,7 @@
 /**
   * @name ui events_dxdblclick
   * @publicName dxdblclick
-  * @type jQuery.Event
+  * @type function
   * @type_function_param1 event:jQuery.event
   * @module events/dblclick
 */
