@@ -2877,6 +2877,30 @@ declare module DevExpress.ui {
             /** @docid dxPivotGridFieldChooserOptions_texts_allFields */
             allFields?: string;
         };
+
+        /** @docid dxPivotGridFieldChooserOptions_headerFilter */
+        headerFilter?: {
+            /** @docid dxPivotGridFieldChooserOptions_headerFilter_height */
+            height?: number;
+
+            /** @docid dxPivotGridFieldChooserOptions_headerFilter_width */
+            width?: number;
+
+            /** @docid dxPivotGridFieldChooserOptions_headerFilter_allowSearch */
+            allowSearch?: boolean;
+
+            /** @docid dxPivotGridFieldChooserOptions_headerFilter_texts */
+            texts?: {
+                /** @docid dxPivotGridFieldChooserOptions_headerFilter_texts_emptyValue */
+                emptyValue?: string;
+
+                /** @docid dxPivotGridFieldChooserOptions_headerFilter_texts_ok */
+                ok?: string;
+
+                /** @docid dxPivotGridFieldChooserOptions_headerFilter_texts_cancel */
+                cancel?: string;
+            };
+        };
     }
 
     /** @docid dxPivotGridFieldChooser */
