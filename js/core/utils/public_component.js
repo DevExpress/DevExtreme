@@ -1,6 +1,6 @@
 "use strict";
 
-var dataUtils = require("../../core/element_data").getDataStrategy(),
+var dataUtils = require("../../core/element_data"),
     eventsEngine = require("../../events/core/events_engine"),
     WeakMap = require("../polyfills/weak_map"),
     isDefined = require("./type").isDefined,
