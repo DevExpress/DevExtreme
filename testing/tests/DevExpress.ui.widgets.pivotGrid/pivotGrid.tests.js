@@ -695,7 +695,7 @@ QUnit.test("Field chooser should be updated on change headerFilter at runtime", 
     fieldChooserPopup.show();
     this.clock.tick(500);
 
-    fieldChooserPopup.content().find(".dx-header-filter").first().trigger("dxclick");
+    $(fieldChooserPopup.content()).find(".dx-header-filter").first().trigger("dxclick");
     this.clock.tick(500);
 
     //assert
@@ -704,7 +704,7 @@ QUnit.test("Field chooser should be updated on change headerFilter at runtime", 
     //act
     pivotGrid.option("headerFilter.allowSearch", false);
 
-    fieldChooserPopup.content().find(".dx-header-filter").first().trigger("dxclick");
+    $(fieldChooserPopup.content()).find(".dx-header-filter").first().trigger("dxclick");
     this.clock.tick(500);
 
     //assert
