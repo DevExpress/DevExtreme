@@ -217,7 +217,7 @@ var sendRequest = function(protocolVersion, request, options) {
                 d.reject(new errors.Error("E4018"));
             }
 
-        } else if(nextUrl) {
+        } else if(nextUrl && !options.isPaged) {
             if(!isAbsoluteUrl(nextUrl)) {
                 nextUrl = toAbsoluteUrl(ajaxOptions.url, nextUrl);
             }
