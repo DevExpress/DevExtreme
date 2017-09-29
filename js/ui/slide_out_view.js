@@ -6,6 +6,7 @@ var $ = require("../core/renderer"),
     fx = require("../animation/fx"),
     clickEvent = require("../events/click"),
     translator = require("../animation/translator"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     hideTopOverlayCallback = require("../mobile/hide_top_overlay").hideCallback,
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
@@ -196,10 +197,10 @@ var SlideOutView = Widget.inherit({
             contentTemplate = this._getTemplate(this.option("contentTemplate"));
 
         menuTemplate && menuTemplate.render({
-            container: this.menuContent()
+            container: $(this.menuContent())
         });
         contentTemplate && contentTemplate.render({
-            container: this.content(),
+            container: this.$content(),
             noModel: true
         });
     },
@@ -219,14 +220,14 @@ var SlideOutView = Widget.inherit({
 
     _renderShield: function() {
         this._$shield = this._$shield || $("<div>").addClass(SLIDEOUTVIEW_SHIELD_CLASS);
-        this._$shield.appendTo(this.content());
+        this._$shield.appendTo(this.$content());
         eventsEngine.off(this._$shield, clickEvent.name);
         eventsEngine.on(this._$shield, clickEvent.name, this.hideMenu.bind(this));
         this._toggleShieldVisibility(this.option("menuVisible"));
     },
 
     _initSwipeHandlers: function() {
-        this._createComponent(this.content(), Swipeable, {
+        this._createComponent(this.$content(), Swipeable, {
             disabled: !this.option("swipeEnabled"),
             elastic: false,
             itemSizeFunc: this._getMenuWidth.bind(this),
@@ -244,7 +245,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _swipeStartHandler: function(e) {
-        animation.complete(this.content());
+        animation.complete(this.$content());
         var event = e.jQueryEvent,
             menuVisible = this.option("menuVisible"),
             rtl = this._isRightMenuPosition();
@@ -290,9 +291,9 @@ var SlideOutView = Widget.inherit({
 
         if(animate) {
             this._toggleShieldVisibility(true);
-            animation.moveTo(this.content(), pos, this._animationCompleteHandler.bind(this));
+            animation.moveTo(this.$content(), pos, this._animationCompleteHandler.bind(this));
         } else {
-            translator.move(this.content(), { left: pos });
+            translator.move(this.$content(), { left: pos });
         }
     },
 
@@ -303,9 +304,10 @@ var SlideOutView = Widget.inherit({
 
     _getMenuWidth: function() {
         if(!this._menuWidth) {
-            var maxMenuWidth = this.$element().width() - this.option("contentOffset");
-            this.menuContent().css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
-            var currentMenuWidth = this.menuContent().width();
+            var maxMenuWidth = this.$element().width() - this.option("contentOffset"),
+                menuContent = $(this.menuContent());
+            menuContent.css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
+            var currentMenuWidth = menuContent.width();
 
             this._menuWidth = Math.min(currentMenuWidth, maxMenuWidth);
         }
@@ -334,7 +336,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _dispose: function() {
-        animation.complete(this.content());
+        animation.complete(this.$content());
         this._toggleHideMenuCallback(false);
         this.callBase();
     },
@@ -382,13 +384,17 @@ var SlideOutView = Widget.inherit({
         }
     },
 
+    $content: function() {
+        return this._$container;
+    },
+
     /**
     * @name dxSlideOutViewMethods_menuContent
     * @publicName menuContent()
     * @return jQuery
     */
     menuContent: function() {
-        return this._$menu;
+        return getPublicElement(this._$menu);
     },
 
     /**
@@ -397,7 +403,7 @@ var SlideOutView = Widget.inherit({
     * @return jQuery
     */
     content: function() {
-        return this._$container;
+        return getPublicElement(this._$container);
     },
 
     /**

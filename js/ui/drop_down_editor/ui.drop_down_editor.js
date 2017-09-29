@@ -862,7 +862,7 @@ var DropDownEditor = TextBox.inherit({
     * @return jQuery
     */
     content: function() {
-        return this._popup ? this._popup.$content() : null;
+        return this._popup ? this._popup.content() : null;
     }
 });
 

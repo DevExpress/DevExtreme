@@ -49,7 +49,7 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _getElements: function() {
-        return this.content().find("*");
+        return $(this.content()).find("*");
     },
 
     _getDefaultOptions: function() {

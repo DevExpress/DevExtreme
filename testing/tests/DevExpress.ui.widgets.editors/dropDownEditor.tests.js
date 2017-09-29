@@ -338,7 +338,7 @@ QUnit.test("content method returning overlay content", function(assert) {
 
     dropDownEditor.open();
 
-    var $content = dropDownEditor.content();
+    var $content = $(dropDownEditor.content());
 
     assert.ok($content.hasClass("dx-popup-content"), "content has class dx-popup-content");
 });

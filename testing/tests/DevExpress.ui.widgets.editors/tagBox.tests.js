@@ -2833,11 +2833,12 @@ QUnit.test("popup changes its position when field height changed", function(asse
 
     var initialHeight = $tagBox.height();
     var $selectAllItem = $(".dx-list-select-all"),
-        popupContentTop = tagBox.content().offset().top;
+        popupContent = $(tagBox.content()),
+        popupContentTop = popupContent.offset().top;
 
     $($selectAllItem).trigger("dxclick");
 
-    assert.roughEqual(tagBox.content().offset().top, popupContentTop - initialHeight + $tagBox.height(), 1, "selectAll moved");
+    assert.roughEqual(popupContent.offset().top, popupContentTop - initialHeight + $tagBox.height(), 1, "selectAll moved");
 });
 
 QUnit.test("refresh popup size after dataSource loaded", function(assert) {
@@ -3616,7 +3617,7 @@ QUnit.test("list should save it's scroll position after value changed", function
         showSelectionControls: true
     });
 
-    var $content = this.instance.content(),
+    var $content = $(this.instance.content()),
         $list = $content.find("." + LIST_CLASS),
         list = $list.dxList("instance"),
         scrollView = $list.dxScrollView("instance");
