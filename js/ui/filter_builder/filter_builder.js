@@ -156,19 +156,6 @@ var FilterBuilder = Widget.inherit({
             .appendTo(this.element());
     },
 
-    _createGroupElement: function(criteria, parent) {
-        var $groupItem = this._createGroupItem(criteria, parent),
-            $groupContent = $("<div>").addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS),
-            $group = $("<div>").addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
-
-        if(parent != null) {
-            this._createRemoveButton(parent, criteria, $groupItem, $group);
-        }
-        this._createAddButton(criteria, $group, $groupItem, $groupContent);
-
-        return $group;
-    },
-
     _createConditionElement: function(condition, parent) {
         return $("<div>")
             .addClass(FILTER_BUILDER_GROUP_CLASS)
@@ -193,8 +180,43 @@ var FilterBuilder = Widget.inherit({
         return $group;
     },
 
-    _getAvailableFields: function() {
-        return this.option("fields");
+    _createGroupElement: function(criteria, parent) {
+        var $groupItem = this._createGroupItem(criteria, parent),
+            $groupContent = $("<div>").addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS),
+            $group = $("<div>").addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
+
+        if(parent != null) {
+            this._createRemoveButton(function() {
+                utils.removeItem(parent, criteria);
+                $group.remove();
+            }).prependTo($groupItem);
+        }
+        this._createAddButton(criteria, $groupContent)
+            .appendTo($groupItem);
+
+        return $group;
+    },
+
+    _createGroupItem: function(group, parent) {
+        var that = this,
+            $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
+
+        var $operationButton = this._createButtonWithMenu({
+            caption: utils.getGroupText(group, that._getGroupOperations()),
+            contextMenu: {
+                items: that._getGroupOperations(),
+                displayExpr: "text",
+                onItemClick: function(e) {
+                    utils.setGroupValue(group, e.itemData.value);
+                    $operationButton.html(utils.getGroupText(group, that._getGroupOperations()));
+                }
+            }
+        }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+            .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
+            .attr("tabindex", 0)
+            .appendTo($item);
+
+        return $item;
     },
 
     _createButtonWithMenu: function(options) {
@@ -234,37 +256,37 @@ var FilterBuilder = Widget.inherit({
         return $button;
     },
 
-    _createConditionItem: function(condition, parent) {
-        var that = this,
-            $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
-            field = utils.getField(condition[0], this._getAvailableFields());
-
-        var createOperationButtonWithMenu = function(condition, field) {
-            var $operationButton = that._createButtonWithMenu({
-                caption: condition[1],
-                contextMenu: {
-                    items: utils.getAvailableOperations(field.filterOperations),
-                    displayExpr: "text",
-                    onItemClick: function(e) {
-                        condition[1] = e.itemData.text;
-                        $operationButton.html(e.itemData.text);
-                    }
+    _createOperationButtonWithMenu: function(condition, field) {
+        var $operationButton = this._createButtonWithMenu({
+            caption: condition[1],
+            contextMenu: {
+                items: utils.getAvailableOperations(field.filterOperations),
+                displayExpr: "text",
+                onItemClick: function(e) {
+                    condition[1] = e.itemData.text;
+                    $operationButton.html(e.itemData.text);
                 }
-            }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-                .addClass(FILTER_BUILDER_ITEM_OPERATOR_CLASS)
-                .attr("tabindex", 0)
-                .appendTo($item);
-        };
+            }
+        }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+            .addClass(FILTER_BUILDER_ITEM_OPERATOR_CLASS)
+            .attr("tabindex", 0);
 
-        var createOperationAndValueButtons = function(condition, field, $item) {
-            createOperationButtonWithMenu(condition, field);
-            that._createEditor(condition, field, $item);
-        };
+        return $operationButton;
+    },
 
+    _createOperationAndValueButtons: function(condition, field, $item) {
+        this._createOperationButtonWithMenu(condition, field)
+            .appendTo($item);
+        this._createEditor(condition, field)
+            .appendTo($item);
+    },
+
+    _createFieldButtonWithMenu: function(condition, field) {
+        var that = this;
         var $fieldButton = this._createButtonWithMenu({
             caption: field.caption,
             contextMenu: {
-                items: that._getAvailableFields(),
+                items: this.option("fields"),
                 displayExpr: "caption",
                 onItemClick: function(e) {
                     if(field.dataType !== e.itemData.dataType
@@ -272,21 +294,34 @@ var FilterBuilder = Widget.inherit({
                         condition[1] = utils.getDefaultOperation(e.itemData);
                         condition[2] = null;
 
-                        $item.find("." + FILTER_BUILDER_ITEM_TEXT_CLASS + ":not(." + FILTER_BUILDER_ITEM_FIELD_CLASS + ")").remove();
-                        createOperationAndValueButtons(condition, e.itemData, $item);
+                        $fieldButton.siblings("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
+                        that._createOperationAndValueButtons(condition, e.itemData, $fieldButton.parent());
                     }
                     condition[0] = e.itemData.dataField;
+                    field = e.itemData;
                     $fieldButton.html(e.itemData.caption);
                 }
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
             .addClass(FILTER_BUILDER_ITEM_FIELD_CLASS)
-            .attr("tabindex", 0)
+            .attr("tabindex", 0);
+
+        return $fieldButton;
+    },
+
+    _createConditionItem: function(condition, parent) {
+        var $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
+            field = utils.getField(condition[0], this.option("fields"));
+
+        this._createFieldButtonWithMenu(condition, field)
             .appendTo($item);
 
-        createOperationAndValueButtons(condition, field, $item);
+        this._createOperationAndValueButtons(condition, field, $item);
 
-        this._createRemoveButton(parent, condition, $item, $item);
+        this._createRemoveButton(function() {
+            utils.removeItem(parent, condition);
+            $item.remove();
+        }).prependTo($item);
 
         return $item;
     },
@@ -307,43 +342,17 @@ var FilterBuilder = Widget.inherit({
         }];
     },
 
-    _createGroupItem: function(group, parent) {
-        var that = this,
-            $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
-
-        var $operationButton = this._createButtonWithMenu({
-            caption: utils.getGroupText(group, that._getGroupOperations()),
-            contextMenu: {
-                items: that._getGroupOperations(),
-                displayExpr: "text",
-                onItemClick: function(e) {
-                    utils.setGroupValue(group, e.itemData.value);
-                    $operationButton.html(utils.getGroupText(group, that._getGroupOperations()));
-                }
-            }
-        }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-            .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
-            .attr("tabindex", 0)
-            .appendTo($item);
-
-        return $item;
-    },
-
-    _createRemoveButton: function(parent, item, $item, $group) {
+    _createRemoveButton: function(handler) {
         var $removeButton = $("<div>")
                 .addClass(FILTER_BUILDER_IMAGE_CLASS)
                 .addClass(FILTER_BUILDER_IMAGE_REMOVE_CLASS)
                 .addClass(FILTER_BUILDER_ACTION_CLASS)
-                .attr("tabindex", 0)
-                .prependTo($item);
-        var handler = function() {
-            utils.removeItem(parent, item);
-            $group.remove();
-        };
+                .attr("tabindex", 0);
         this._subscribeOnClickAndEnterKey($removeButton, handler);
+        return $removeButton;
     },
 
-    _createAddButton: function(group, $group, $item, $groupContent) {
+    _createAddButton: function(groupCriteria, $groupContent) {
         var that = this;
 
         var availableValues = [
@@ -351,30 +360,27 @@ var FilterBuilder = Widget.inherit({
                 caption: messageLocalization.format("dxFilterBuilder-addGroup"),
                 click: function() {
                     var newGroup = utils.createEmptyGroup(that.option("defaultGroupOperation"));
-                    utils.addItem(newGroup, group);
+                    utils.addItem(newGroup, groupCriteria);
 
-                    that._createGroupElement(newGroup, group).appendTo($groupContent);
+                    that._createGroupElement(newGroup, groupCriteria).appendTo($groupContent);
                 }
             },
             {
                 caption: messageLocalization.format("dxFilterBuilder-addCondition"),
                 click: function() {
-                    var firstField = that._getAvailableFields()[0];
+                    var firstField = that.option("fields")[0];
                     var availableOperations = utils.getDefaultOperation(firstField);
 
                     var condition = utils.createCondition(firstField.dataField, availableOperations[0], "");
-                    utils.addItem(condition, group);
+                    utils.addItem(condition, groupCriteria);
 
-                    // TODO: it is copy
-                    $("<div>")
-                        .addClass(FILTER_BUILDER_GROUP_CLASS)
-                        .append(that._createConditionItem(condition, group))
+                    that._createConditionElement(condition, groupCriteria)
                         .appendTo($groupContent);
                 }
             }
         ];
 
-        this._createButtonWithMenu({
+        return this._createButtonWithMenu({
             contextMenu: {
                 items: availableValues,
                 displayExpr: "caption",
@@ -385,11 +391,10 @@ var FilterBuilder = Widget.inherit({
         }).addClass(FILTER_BUILDER_IMAGE_CLASS)
             .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)
             .addClass(FILTER_BUILDER_ACTION_CLASS)
-            .attr("tabindex", 0)
-            .appendTo($item);
+            .attr("tabindex", 0);
     },
 
-    _createEditor: function(item, field, $item) {
+    _createEditor: function(item, field) {
         var that = this,
             $container = $("<div>")
                 .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS);
@@ -450,7 +455,7 @@ var FilterBuilder = Widget.inherit({
         };
 
         setText(item, field, $container);
-        $container.appendTo($item);
+        return $container;
     },
 
     _createContextMenu: function($container, options) {
