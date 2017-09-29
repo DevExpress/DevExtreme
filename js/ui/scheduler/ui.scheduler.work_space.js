@@ -762,7 +762,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateTimeIndication();
 
-        //this._setIndicatorUpdateInterval();
+        this._setIndicationUpdateInterval();
     },
 
     _dispose: function() {
@@ -770,7 +770,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    _setIndicatorUpdateInterval: function() {
+    _setIndicationUpdateInterval: function() {
         if(!this.option("showCurrentTimeIndicator")) {
             return;
         }
