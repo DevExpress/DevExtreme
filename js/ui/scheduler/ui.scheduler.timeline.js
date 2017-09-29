@@ -159,8 +159,8 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderTimePanel();
         this._renderDateTable();
 
-        this._renderDateTimeIndicator();
-        this._setIndicatorUpdateInterval();
+        this._renderDateTimeIndication();
+        //this._setIndicatorUpdateInterval();
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.content());
 
@@ -168,10 +168,22 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._applyCellTemplates(groupCellTemplates);
     },
 
-    _renderDateTimeIndicator: function() {
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            this._dateTimeIndicator.render(this);
-        }
+    _getShaderWidth: function() {
+        var today = this._getToday(),
+            cellWidth = this.getCellWidth(),
+            date = this._getDateForIndicator(),
+            hiddenInterval = this._getHiddenInterval(),
+            timeDiff = today.getTime() - date.getTime();
+
+        var differenceInDays = Math.ceil(timeDiff / toMs("day")) - 1,
+            duration = timeDiff - differenceInDays * hiddenInterval,
+            cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellWidth;
+    },
+
+    _isVerticalShader: function() {
+        return false;
     },
 
     _isCurrentTimeHeaderCell: function(headerIndex) {

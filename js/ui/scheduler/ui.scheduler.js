@@ -558,6 +558,7 @@ var Scheduler = Widget.inherit({
             showCurrentTimeIndicator: true,
             indicatorTime: undefined,
             indicatorUpdateInterval: 10000,
+            showShader: true,
 
                 /**
                 * @name dxSchedulerOptions_recurrenceEditMode
