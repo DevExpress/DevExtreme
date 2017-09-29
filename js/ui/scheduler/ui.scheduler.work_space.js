@@ -22,7 +22,7 @@ var $ = require("../../core/renderer"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     tableCreator = require("./ui.scheduler.table_creator"),
-    DateTimeIndicator = require("./ui.scheduler.currentTimeIndicator");
+    DateTimeShader = require("./ui.scheduler.currentTimeShader");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
@@ -72,6 +72,8 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     SCHEDULER_HEADER_SCROLLABLE_CLASS = "dx-scheduler-header-scrollable",
     SCHEDULER_SIDEBAR_SCROLLABLE_CLASS = "dx-scheduler-sidebar-scrollable",
     SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS = "dx-scheduler-date-table-scrollable",
+
+    SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
 
     SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, "dxSchedulerWorkSpace"),
 
@@ -368,7 +370,8 @@ var SchedulerWorkSpace = Widget.inherit({
             dateCellTemplate: null,
             allowMultipleCellSelection: true,
             indicatorTime: new Date(),
-            indicatorUpdateInterval: 10000
+            indicatorUpdateInterval: 10000,
+            showShader: true
         });
     },
 
@@ -395,14 +398,14 @@ var SchedulerWorkSpace = Widget.inherit({
                 break;
             case "showAllDayPanel":
                 this._toggleAllDayVisibility();
-                this._refreshDateTimeIndicator();
+                this._refreshDateTimeIndication();
                 break;
             case "allDayExpanded":
                 this._changeAllDayVisibility();
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
                 this.headerPanelOffsetRecalculate();
-                this._refreshDateTimeIndicator();
+                this._refreshDateTimeIndication();
                 break;
             case "onCellClick":
                 this._createCellClickAction();
@@ -414,7 +417,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
-                this._refreshDateTimeIndicator();
+                this._refreshDateTimeIndication();
                 break;
             case "width":
                 this.callBase(args);
@@ -452,7 +455,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._createWorkSpaceElements();
 
-        this._dateTimeIndicator = new DateTimeIndicator();
+        this._dateTimeShader = new DateTimeShader();
     },
 
     _toggleHorizontalScrollClass: function() {
@@ -717,7 +720,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
 
-        this._refreshDateTimeIndicator();
+        this._refreshDateTimeIndication();
     },
 
     _getElementClass: noop,
@@ -757,9 +760,9 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateTable();
 
-        this._renderDateTimeIndicator();
+        this._renderDateTimeIndication();
 
-        this._setIndicatorUpdateInterval();
+        //this._setIndicatorUpdateInterval();
     },
 
     _dispose: function() {
@@ -775,7 +778,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._clearIndicatorUpdateInterval();
 
         this._indicatorInterval = setInterval(function() {
-            that._refreshDateTimeIndicator();
+            that._refreshDateTimeIndication();
         }, this.option("indicatorUpdateInterval"));
     },
 
@@ -786,10 +789,65 @@ var SchedulerWorkSpace = Widget.inherit({
         }
     },
 
-    _renderDateTimeIndicator: function() {
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            this._dateTimeIndicator.render(this, true);
+    _isVerticalShader: function() {
+        return true;
+    },
+
+    _renderDateTimeIndication: function() {
+        if(this._needRenderDateTimeIndicator()) {
+            var isVertical = this._isVerticalShader();
+
+            if(this.option("showShader")) {
+                this._dateTimeShader.render(this, isVertical);
+            }
+
+            if(this.option("showCurrentTimeIndicator")) {
+                var groupCount = isVertical && this._getGroupCount() || 1,
+                    $container = this._dateTableScrollable.content(),
+                    width = this._getShaderWidth();
+
+                for(var i = 0; i < groupCount; i++) {
+                    var $indicator = $("<div>").addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+
+                    if(isVertical) {
+                        $indicator.width(this.getCellWidth());
+                        $indicator.css("left", this._getCellCount() * this.getCellWidth() * i + (width - this.getCellWidth()));
+                    } else {
+                        $indicator.height($container.outerHeight());
+                        $indicator.css("left", width);
+                    }
+
+                    $container.append($indicator);
+                }
+            }
         }
+    },
+
+    _getShaderHeight: function() {
+        var today = this._getToday(),
+            cellHeight = this.getCellHeight(),
+            date = new Date(this._firstViewDate);
+
+        if(this._needRenderDateTimeIndicatorCells()) {
+            date.setDate(today.getDate());
+        }
+
+        var duration = today.getTime() - date.getTime(),
+            cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellHeight;
+    },
+
+    _getShaderWidth: function() {
+        var today = this._getToday(),
+            firstViewDate = new Date(this._firstViewDate),
+            maxWidth = this.getCellWidth() * this._getCellCount();
+
+        var timeDiff = today.getTime() - firstViewDate.getTime(),
+            difference = Math.ceil(timeDiff / toMs("day")),
+            width = difference * this.getCellWidth();
+
+        return maxWidth < width ? maxWidth : width;
     },
 
     _getToday: function() {
@@ -1444,16 +1502,22 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
-        this._dateTimeIndicator.clean();
+        this._dateTimeShader.clean();
+        this._cleanDateTimeIndicator();
         this._$timePanel.empty();
         this._$allDayTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
     },
 
-    _refreshDateTimeIndicator: function() {
-        this._dateTimeIndicator.clean();
-        this._renderDateTimeIndicator();
+    _refreshDateTimeIndication: function() {
+        this._cleanDateTimeIndicator();
+        this._dateTimeShader.clean();
+        this._renderDateTimeIndication();
+    },
+
+    _cleanDateTimeIndicator: function() {
+        this.element().find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
     },
 
     getWorkArea: function() {

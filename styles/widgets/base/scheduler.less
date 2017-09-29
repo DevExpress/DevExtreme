@@ -450,7 +450,7 @@
     color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
 }
 
-.dx-scheduler-date-time-indicator-all-day {
+.dx-scheduler-date-time-shader-all-day {
     margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
     width: 100%;
     background-color: @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
@@ -458,7 +458,7 @@
     pointer-events: none;
 }
 
-.dx-scheduler-date-time-indicator-line {
+.dx-scheduler-date-time-indicator {
         background-color:  @SCHEDULER_APPOINTMENT_BASE_COLOR;
         position: absolute;
         box-shadow: @SCHEDULER_TIME_INDICATOR_SHADOW;
@@ -477,18 +477,18 @@
 .dx-scheduler-work-space-week, 
 .dx-scheduler-work-space-work-week,
 .dx-scheduler-work-space-day {
-    .dx-scheduler-date-time-indicator-line {
+    .dx-scheduler-date-time-indicator {
         margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
         height: 1px;
         .dx-icon-spinright;
     }
 
-    .dx-scheduler-date-time-indicator{
+    .dx-scheduler-date-time-shader{
         margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
     }
 
-    .dx-scheduler-date-time-indicator-top,
-    .dx-scheduler-date-time-indicator-bottom {
+    .dx-scheduler-date-time-shader-top,
+    .dx-scheduler-date-time-shader-bottom {
          &:before {
              width: inherit;
              height: inherit;
@@ -502,14 +502,14 @@
     }
 
     &.dx-scheduler-work-space-both-scrollbar {
+        .dx-scheduler-date-time-shader,
         .dx-scheduler-date-time-indicator,
-        .dx-scheduler-date-time-indicator-line,
-        .dx-scheduler-date-time-indicator-all-day {
+        .dx-scheduler-date-time-shader-all-day {
             margin-left: 0;
         }
 
-        .dx-scheduler-date-time-indicator-top,
-        .dx-scheduler-date-time-indicator-bottom {
+        .dx-scheduler-date-time-shader-top,
+        .dx-scheduler-date-time-shader-bottom {
             &:before {
                 margin-left: 0;
             }
@@ -519,17 +519,18 @@
 }
 
 .dx-scheduler-timeline {
-    .dx-scheduler-date-time-indicator{
+    .dx-scheduler-date-time-indicator {
+        width: 1px;
+        top: 0;
+        .dx-icon-spindown;
+
+        &:before {
+            margin-top: -12px;
+        }
+    }
+    .dx-scheduler-date-time-shader{
         height: 100%;
 
-        .dx-scheduler-date-time-indicator-line {
-            width: 1px;
-            .dx-icon-spindown;
-
-            &:before {
-                margin-top: -12px;
-            }
-        }
 
         &:before {
             width: inherit;
