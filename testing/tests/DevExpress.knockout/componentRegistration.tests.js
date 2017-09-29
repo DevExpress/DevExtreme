@@ -9,7 +9,7 @@ var $ = require("jquery"),
     KoTemplate = require("integration/knockout/template"),
     CollectionWidget = require("ui/collection/ui.collection_widget.edit"),
     config = require("core/config"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("ui/select_box");
 require("ui/lookup");

@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("jquery");
-var dataUtils = require("core/element_data").getDataStrategy();
+var dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     var markup = '<div><div id="container" class="dx-datagrid"></div></div>';

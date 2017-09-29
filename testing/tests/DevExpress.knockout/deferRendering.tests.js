@@ -4,7 +4,7 @@ require("integration/knockout");
 
 var $ = require("jquery"),
     ko = require("knockout"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("ui/defer_rendering");
 

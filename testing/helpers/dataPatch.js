@@ -2,7 +2,7 @@
 
 "use strict";
 
-var dataStrategy = require("core/element_data").getDataStrategy();
+var dataStrategy = require("core/element_data");
 
 if(!QUnit.urlParams["nojquery"]) {
     return;

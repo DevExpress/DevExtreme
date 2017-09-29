@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    dataUtils = require("../../core/element_data").getDataStrategy(),
+    dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,

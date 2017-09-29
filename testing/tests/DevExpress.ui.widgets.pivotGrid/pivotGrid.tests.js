@@ -37,7 +37,7 @@ var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     dateLocalization = require("localization/date"),
     devices = require("core/devices"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 function sumArray(array) {
     var sum = 0;

@@ -5,7 +5,7 @@ var $ = require("jquery"),
     Class = require("core/class"),
     ValidationEngine = require("ui/validation_engine"),
     hoverEvents = require("events/hover"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 

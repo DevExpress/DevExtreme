@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    dataUtils = require("../../core/element_data").getDataStrategy(),
+    dataUtils = require("../../core/element_data"),
     translator = require("../../animation/translator"),
     dateUtils = require("../../core/utils/date"),
     commonUtils = require("../../core/utils/common"),

@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    dataUtils = require("../core/element_data").getDataStrategy(),
+    dataUtils = require("../core/element_data"),
     wrapToArray = require("../core/utils/array").wrapToArray,
     inArray = require("../core/utils/array").inArray,
     iteratorUtils = require("../core/utils/iterator"),

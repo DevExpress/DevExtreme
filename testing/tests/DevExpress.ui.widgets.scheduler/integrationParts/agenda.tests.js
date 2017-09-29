@@ -9,7 +9,7 @@ var $ = require("jquery"),
     AgendaAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.agenda"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("ui/scheduler/ui.scheduler");
 

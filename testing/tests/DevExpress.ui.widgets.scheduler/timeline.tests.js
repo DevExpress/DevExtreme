@@ -17,7 +17,7 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
     dateUtils = require("core/utils/date"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-timeline"></div>\

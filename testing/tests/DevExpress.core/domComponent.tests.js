@@ -13,7 +13,7 @@ var $ = require("jquery"),
     coreConfig = require("core/config"),
     eventsEngine = require("events/core/events_engine"),
     browser = require("core/utils/browser"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     var markup = '<div id="component"></div>' + '<div id="anotherComponent"></div>';

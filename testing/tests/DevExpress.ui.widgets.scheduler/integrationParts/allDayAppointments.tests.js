@@ -10,7 +10,7 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store"),
     CustomStore = require("data/custom_store"),
     Query = require("data/query"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("ui/scheduler/ui.scheduler");
 

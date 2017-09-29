@@ -19,7 +19,7 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
     SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 require("generic_light.css!");

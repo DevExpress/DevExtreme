@@ -14,7 +14,7 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     Query = require("data/query"),
     fx = require("animation/fx"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 require("generic_light.css!");

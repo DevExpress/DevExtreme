@@ -14,7 +14,7 @@ var $ = require("jquery"),
     HorizontalAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal"),
     HorizontalMonthLineAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month_line"),
     Color = require("color"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 var APPOINTMENT_DEFAULT_OFFSET = 25;
 

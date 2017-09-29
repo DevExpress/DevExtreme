@@ -11,7 +11,7 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     pointerMock = require("../../helpers/pointerMock.js"),
     config = require("core/config"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 

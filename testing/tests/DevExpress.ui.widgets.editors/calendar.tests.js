@@ -17,7 +17,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     browser = require("core/utils/browser"),
     dateSerialization = require("core/utils/date_serialization"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 var camelize = inflector.camelize;
 

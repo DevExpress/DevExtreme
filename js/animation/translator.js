@@ -1,6 +1,6 @@
 "use strict";
 
-var dataUtils = require("../core/element_data").getDataStrategy(),
+var dataUtils = require("../core/element_data"),
     type = require("../core/utils/type").type;
 
 var TRANSLATOR_DATA_KEY = "dxTranslator",

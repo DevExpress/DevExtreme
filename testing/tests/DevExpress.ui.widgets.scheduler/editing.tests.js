@@ -5,7 +5,7 @@ var $ = require("jquery"),
     tooltip = require("ui/tooltip/ui.tooltip"),
     fx = require("animation/fx"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 require("generic_light.css!");

@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    dataUtils = require("../../core/element_data").getDataStrategy(),
+    dataUtils = require("../../core/element_data"),
     Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,

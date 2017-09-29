@@ -13,7 +13,7 @@ var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     domUtils = require("core/utils/dom"),
     devices = require("core/devices"),
-    dataUtils = require("core/element_data").getDataStrategy(),
+    dataUtils = require("core/element_data"),
     renderer = require("core/renderer");
 
 var createMockDataSource = function(options) {

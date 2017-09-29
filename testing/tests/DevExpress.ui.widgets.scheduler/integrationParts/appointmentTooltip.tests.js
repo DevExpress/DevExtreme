@@ -10,7 +10,7 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     appointmentTooltip = require("ui/scheduler/ui.scheduler.appointment_tooltip"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("ui/scheduler/ui.scheduler");
 

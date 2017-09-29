@@ -1,6 +1,6 @@
 "use strict";
 
-var dataUtils = require("core/element_data").getDataStrategy();
+var dataUtils = require("core/element_data");
 require("integration/jquery");
 
 QUnit.module("Data");

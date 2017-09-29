@@ -12,7 +12,7 @@ var $ = require("../core/renderer"),
     typeUtils = require("./utils/type"),
     inArray = require("./utils/array").inArray,
     publicComponentUtils = require("./utils/public_component"),
-    dataUtils = require("./element_data").getDataStrategy(),
+    dataUtils = require("./element_data"),
     Component = require("./component"),
     abstract = Component.abstract;
 

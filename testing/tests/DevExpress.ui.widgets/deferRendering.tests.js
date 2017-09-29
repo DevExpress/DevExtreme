@@ -2,7 +2,7 @@
 
 var $ = require("jquery"),
     TransitionExecutorModule = require("animation/transition_executor/transition_executor"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 require("ui/defer_rendering");

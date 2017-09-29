@@ -1,6 +1,6 @@
 "use strict";
 
-var dataUtils = require("../core/element_data").getDataStrategy(),
+var dataUtils = require("../core/element_data"),
     Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),
     DOMComponent = require("../core/dom_component"),

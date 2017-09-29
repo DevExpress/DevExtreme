@@ -21,7 +21,7 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 var Pager = require("ui/data_grid/pager");
 
