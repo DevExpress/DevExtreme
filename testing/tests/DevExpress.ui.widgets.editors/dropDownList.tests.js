@@ -47,7 +47,7 @@ QUnit.module("focus policy", {
             focusStateEnabled: true,
             dataSource: ["item 1", "item 2", "item 3"]
         });
-        this.instance = this.$element.data("dxDropDownList");
+        this.instance = this.$element.dxDropDownList("instance");
         this.$input = this.$element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },
@@ -131,7 +131,7 @@ QUnit.module("keyboard navigation", {
             dataSource: ["item 1", "item 2", "item 3"],
             applyValueMode: "instantly"
         });
-        this.instance = this.$element.data("dxDropDownList");
+        this.instance = this.$element.dxDropDownList("instance");
         this.$input = this.$element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.popup = this.instance._popup;
         this.$list = this.instance._$list;

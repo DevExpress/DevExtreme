@@ -570,7 +570,7 @@ module.exports = {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
-                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay:visible").length,
+                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 

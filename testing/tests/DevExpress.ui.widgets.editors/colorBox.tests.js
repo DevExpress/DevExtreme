@@ -120,7 +120,7 @@ QUnit.test("Render with hex value", function(assert) {
         $input = $colorBox.find("." + COLOR_BOX_INPUT_CLASS);
 
     assert.equal($input.val(), "#000000");
-    $colorBox.data("dxColorBox").option("value", "#ff0000");
+    $colorBox.dxColorBox("instance").option("value", "#ff0000");
     assert.equal($input.val(), "#ff0000");
 });
 
@@ -162,7 +162,7 @@ QUnit.test("If value is set as 'null' color result preview should not have backg
 
     var $overlay = getColorBoxOverlay(),
         $applyButton = $overlay.find(".dx-colorview-buttons-container .dx-colorview-apply-button"),
-        colorBoxInstance = this.element.data("dxColorBox");
+        colorBoxInstance = this.element.dxColorBox("instance");
 
     colorBoxInstance._colorView._currentColor = new Color("#ff0000");
     $($applyButton).trigger("dxclick");
@@ -227,7 +227,7 @@ QUnit.test("Click on apply button", function(assert) {
 
     var $overlayContent = getColorBoxOverlayContent(),
         $applyButton = $overlayContent.find(".dx-colorview-buttons-container .dx-colorview-apply-button"),
-        colorBoxInstance = this.element.data("dxColorBox"),
+        colorBoxInstance = this.element.dxColorBox("instance"),
         newColor = "#A600F3".toLowerCase();
 
     colorBoxInstance._colorView.option("value", newColor);
@@ -570,7 +570,7 @@ QUnit.module("keyboard navigation", {
             editAlphaChannel: true,
             focusStateEnabled: true
         });
-        this.instance = this.$element.data("dxColorBox");
+        this.instance = this.$element.dxColorBox("instance");
         this.$input = this.$element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },

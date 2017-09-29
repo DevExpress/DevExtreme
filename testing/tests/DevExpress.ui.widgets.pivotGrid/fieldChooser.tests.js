@@ -12,7 +12,9 @@ require("ui/pivot_grid/ui.pivot_grid.field_chooser");
 var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     domUtils = require("core/utils/dom"),
-    devices = require("core/devices");
+    devices = require("core/devices"),
+    dataUtils = require("core/element_data"),
+    renderer = require("core/renderer");
 
 var createMockDataSource = function(options) {
     $.each(options.fields || [], function(index, field) {
@@ -1130,9 +1132,9 @@ QUnit.test("Dragging Fields", function(assert) {
 
         //assert
 
-        assert.strictEqual($targetGroup.hasClass("dx-drag-target"), !cancelExpected, "target group has target class " + field.data("field").dataField + " " + area);
+        assert.strictEqual($targetGroup.hasClass("dx-drag-target"), !cancelExpected, "target group has target class " + dataUtils.data(field.get(0), "field").dataField + " " + area);
 
-        assert.ok((getBorderColor($targetGroup) === areaBorderColor) && cancelExpected || (getBorderColor($targetGroup) !== areaBorderColor) && !cancelExpected, "target group border color is correct " + field.data("field").dataField + " " + area);
+        assert.ok((getBorderColor($targetGroup) === areaBorderColor) && cancelExpected || (getBorderColor($targetGroup) !== areaBorderColor) && !cancelExpected, "target group border color is correct " + dataUtils.data(field.get(0), "field").dataField + " " + area);
 
         pointer.move(offset.left, offset.top).up();
 
@@ -1142,19 +1144,19 @@ QUnit.test("Dragging Fields", function(assert) {
     assert.ok(true);
     assert.strictEqual(fields.length, 3);
 
-    assert.strictEqual(fields.eq(0).data("field").dataField, "Field1");
+    assert.strictEqual(dataUtils.data(fields.get(0), "field").dataField, "Field1");
     assertDragging(fields.eq(0), "filter", true);
     assertDragging(fields.eq(0), "data", false);
     assertDragging(fields.eq(0), "row", true);
     assertDragging(fields.eq(0), "column", true);
 
-    assert.strictEqual(fields.eq(1).data("field").dataField, "Field2");
+    assert.strictEqual(dataUtils.data(fields.get(1), "field").dataField, "Field2");
     assertDragging(fields.eq(1), "filter", false);
     assertDragging(fields.eq(1), "data", true);
     assertDragging(fields.eq(1), "row", false);
     assertDragging(fields.eq(1), "column", false);
 
-    assert.strictEqual(fields.eq(2).data("field").dataField, "Field3");
+    assert.strictEqual(dataUtils.data(fields.get(2), "field").dataField, "Field3");
     assertDragging(fields.eq(2), "filter", false);
     assertDragging(fields.eq(2), "data", false);
     assertDragging(fields.eq(2), "row", false);
@@ -1195,11 +1197,11 @@ QUnit.test("rtlEnabled assign for all children widgets", function(assert) {
 
     $.each($widgets, function() {
         var $widget = $(this),
-            componentNames = $widget.data("dxComponents");
+            componentNames = dataUtils.data($widget[0], "dxComponents");
 
         $.each(componentNames, function(index, componentName) {
             if(componentName.indexOf("dxPrivateComponent") === -1 && componentName !== "dxToolbar") {
-                assert.ok($widget.data(componentName).option("rtlEnabled"), "rtlEnabled for " + componentName + " assigned");
+                assert.ok(dataUtils.data($widget[0], componentName).option("rtlEnabled"), "rtlEnabled for " + componentName + " assigned");
             }
         });
     });
@@ -1350,7 +1352,7 @@ QUnit.test("change group position", function(assert) {
 
     this.setup(dataSourceOptions);
 
-    changedArgs.sourceElement = this.$container.find(".dx-area-field").eq(2);
+    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(2));
 
     var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged");

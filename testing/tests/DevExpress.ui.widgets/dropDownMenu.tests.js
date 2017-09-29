@@ -45,7 +45,7 @@ var moduleConfig = function(usePopover) {
             this.element = $("#dropDownMenu").dxDropDownMenu({
                 usePopover: usePopover
             });
-            this.ddMenu = this.element.data("dxDropDownMenu");
+            this.ddMenu = this.element.dxDropDownMenu("instance");
 
             this.button = this.ddMenu._button;
             this.$button = $(this.button.$element());
@@ -370,7 +370,7 @@ QUnit.test("check position for LTR and RTL", function(assert) {
         instance = element.dxDropDownMenu("instance"),
         positionConfig;
 
-    $(element.data("dxDropDownMenu")._button.$element()).trigger("dxclick");
+    $(element.dxDropDownMenu("instance")._button.$element()).trigger("dxclick");
 
     positionConfig = instance._popup.option("position");
     assert.equal(positionConfig, instance.option("popupPosition"));
@@ -436,12 +436,12 @@ QUnit.test("click on list item is not outside click for popup", function(assert)
 QUnit.module("integration");
 
 QUnit.test("list defaults", function(assert) {
-    var list = $("#dropDownMenu").dxList().data("dxList");
+    var list = $("#dropDownMenu").dxList().dxList("instance");
     assert.strictEqual(list.option("pullRefreshEnabled"), false);
 });
 
 QUnit.test("button defaults", function(assert) {
-    var button = $("#dropDownMenu").dxButton().data("dxButton");
+    var button = $("#dropDownMenu").dxButton().dxButton("instance");
     assert.strictEqual(button.option("type"), "normal");
     assert.strictEqual(button.option("text"), "");
 });
@@ -679,7 +679,7 @@ QUnit.module("keyboard navigation", {
             focusStateEnabled: true,
             opened: true
         });
-        this.instance = this.element.data("dxDropDownMenu");
+        this.instance = this.element.dxDropDownMenu("instance");
 
         this.button = this.instance._button;
         this.$button = $(this.button.$element());

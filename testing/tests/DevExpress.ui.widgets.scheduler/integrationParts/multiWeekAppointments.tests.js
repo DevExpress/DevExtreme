@@ -489,9 +489,9 @@ QUnit.test("Multi-week appointments should have correct resizable handles", func
 
     var $appointments = $(this.instance.$element()).find(".dx-scheduler-appointment");
 
-    assert.equal($appointments.eq(0).data("dxResizable").option("handles"), "left", "Appointment head has a right resizable handles");
-    assert.strictEqual($appointments.eq(1).data("dxResizable").option("handles"), "", "Appointment body isn't resizable");
-    assert.equal($appointments.eq(2).data("dxResizable").option("handles"), "right", "Appointment tail has a right resizable handles");
+    assert.equal($appointments.eq(0).dxResizable("instance").option("handles"), "left", "Appointment head has a right resizable handles");
+    assert.strictEqual($appointments.eq(1).dxResizable("instance").option("handles"), "", "Appointment body isn't resizable");
+    assert.equal($appointments.eq(2).dxResizable("instance").option("handles"), "right", "Appointment tail has a right resizable handles");
 });
 
 QUnit.test("Multi-week appointments should have correct resizable handles in rtl mode", function(assert) {
@@ -512,9 +512,9 @@ QUnit.test("Multi-week appointments should have correct resizable handles in rtl
 
     var $appointments = $(this.instance.$element()).find(".dx-scheduler-appointment");
 
-    assert.equal($appointments.eq(0).data("dxResizable").option("handles"), "right", "Appointment head has a right resizable handles");
-    assert.strictEqual($appointments.eq(1).data("dxResizable").option("handles"), "", "Appointment body isn't resizable");
-    assert.equal($appointments.eq(2).data("dxResizable").option("handles"), "left", "Appointment tail has a right resizable handles");
+    assert.equal($appointments.eq(0).dxResizable("instance").option("handles"), "right", "Appointment head has a right resizable handles");
+    assert.strictEqual($appointments.eq(1).dxResizable("instance").option("handles"), "", "Appointment body isn't resizable");
+    assert.equal($appointments.eq(2).dxResizable("instance").option("handles"), "left", "Appointment tail has a right resizable handles");
 });
 
 QUnit.test("Multi-week appointments should have correct CSS classes", function(assert) {

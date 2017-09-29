@@ -1382,7 +1382,7 @@ QUnit.module("keyboard navigation", {
         this.$element = $("<div>")
             .appendTo("#qunit-fixture")
             .dxTagBox(options);
-        this.instance = this.$element.data("dxTagBox");
+        this.instance = this.$element.dxTagBox("instance");
         this.$input = this.$element.find("." + TEXTBOX_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },

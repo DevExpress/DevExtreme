@@ -216,7 +216,7 @@ QUnit.module("option change handlers", {
 });
 
 QUnit.test("items", function(assert) {
-    var instance = this.element.dxToolbar({ items: [{ location: "center", text: "0" }] }).data("dxToolbar");
+    var instance = this.element.dxToolbar({ items: [{ location: "center", text: "0" }] }).dxToolbar("instance");
 
     instance.option("items", [{ location: "center", text: "1" }]);
     assert.equal(this.element.text(), "1");
@@ -709,7 +709,7 @@ QUnit.test("it should be possible to expand toolbar with no items in submenu", f
 QUnit.module("regressions", {
     beforeEach: function() {
         this.element = $("#toolbar").dxToolbar({});
-        this.instance = this.element.data("dxToolbar");
+        this.instance = this.element.dxToolbar("instance");
     }
 });
 

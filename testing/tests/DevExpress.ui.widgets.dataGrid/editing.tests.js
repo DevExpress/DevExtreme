@@ -1,7 +1,9 @@
 "use strict";
 
-var $ = require("jquery"),
-    noop = require("core/utils/common").noop;
+var $ = require("jquery");
+var noop = require("core/utils/common").noop;
+var renderer = require("core/renderer");
+var eventsEngine = require("events/core/events_engine");
 
 QUnit.testStart(function() {
     var markup =
@@ -1839,7 +1841,7 @@ QUnit.test('Close Editing Cell when grid in popup', function(assert) {
             contentTemplate: function($contentElement) {
                 rowsView.render($("<div/>").appendTo($contentElement));
             }
-        }).data("dxPopup");
+        }).dxPopup("instance");
 
     that.options.editing = {
         allowUpdating: true,
@@ -2381,7 +2383,7 @@ QUnit.test('Not apply column options to cell editor', function(assert) {
     testElement.find('td').first().trigger('dxclick');
 
     //assert
-    textEditor = testElement.find('td').first().find(".dx-texteditor").first().data("dxTextBox");
+    textEditor = testElement.find('td').first().find(".dx-texteditor").first().dxTextBox("instance");
     assert.ok(textEditor, "textBox");
     assert.ok(!textEditor.option("disabled"), "disabled false");
 });
@@ -2404,7 +2406,7 @@ QUnit.test('Apply column editorOptions to cell editor', function(assert) {
     testElement.find('td').first().trigger('dxclick');
 
     //assert
-    textEditor = testElement.find('td').first().find(".dx-texteditor").first().data("dxTextBox");
+    textEditor = testElement.find('td').first().find(".dx-texteditor").first().dxTextBox("instance");
     assert.ok(textEditor, "textBox");
     assert.ok(textEditor.option("disabled"), "disabled true");
 });
@@ -4924,7 +4926,7 @@ QUnit.testInActiveWindow('Save edit data in cell mode on value change when showE
     rowsView.render(testElement);
     that.columnsController.init();
 
-    selectBoxInstance = rowsView.getCellElement(0, 0).find(".dx-selectbox").data("dxSelectBox");
+    selectBoxInstance = rowsView.getCellElement(0, 0).find(".dx-selectbox").dxSelectBox("instance");
 
     //assert
     assert.strictEqual(selectBoxInstance.NAME, "dxSelectBox", "has selectBox");
@@ -4972,7 +4974,7 @@ QUnit.testInActiveWindow('Cell should save focus state after data saving in cell
 
     that.editCell(0, 0);
 
-    editor = rowsView.getCellElement(0, 0).find(".dx-textbox").data("dxTextBox");
+    editor = rowsView.getCellElement(0, 0).find(".dx-textbox").dxTextBox("instance");
 
     //act
     editor.option("value", "test2");
@@ -5011,7 +5013,7 @@ QUnit.testInActiveWindow('Focus should not returns to previous cell after data s
 
     that.editCell(0, 0);
 
-    editor = rowsView.getCellElement(0, 0).find(".dx-textbox").data("dxTextBox");
+    editor = rowsView.getCellElement(0, 0).find(".dx-textbox").dxTextBox("instance");
 
     //act
     editor.option("value", "test2");
@@ -5602,7 +5604,7 @@ QUnit.testInActiveWindow("The lookup column should keep focus after changing val
     $cellElement = $(rowsView.element().find("tbody > tr").first().children().first());
     assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
 
-    lookupInstance = rowsView.element().find(".dx-selectbox").data("dxSelectBox");
+    lookupInstance = rowsView.element().find(".dx-selectbox").dxSelectBox("instance");
     assert.ok(lookupInstance, "has lookup");
 
     //act
@@ -6304,7 +6306,7 @@ QUnit.module('Editing with validation', {
         };
 
         this.$element = function() {
-            return $(".dx-datagrid");
+            return renderer(".dx-datagrid");
         };
 
         setupDataGridModules(this, ['data', 'columns', 'columnHeaders', 'rows', 'editing', 'masterDetail', 'grouping', 'editorFactory', 'errorHandling', 'validating', 'filterRow', 'adaptivity'], {
@@ -6733,7 +6735,7 @@ QUnit.test("Button inside the selectBox is not clicked", function(assert) {
     //act
     that.editCell(0, 0);
     that.clock.tick();
-    selectBoxButton = rowsView.getCellElement(0, 0).find(".dx-selectbox .dx-dropdowneditor-button").data("dxButton");
+    selectBoxButton = rowsView.getCellElement(0, 0).find(".dx-selectbox .dx-dropdowneditor-button").dxButton("instance");
     $(selectBoxButton.$element()).trigger("dxclick");
 
     //assert
@@ -7082,7 +7084,7 @@ QUnit.test("Show tooltip on focus with set validate in column and edit mode batc
     //arrange
     var that = this,
         rowsView = this.rowsView,
-        $testElement = $('#container'),
+        $testElement = renderer('#container'),
         $cells,
         $overlayElement,
         overlayInstance,
@@ -7175,7 +7177,7 @@ QUnit.test("Show tooltip on focus for last row with set validate in column and e
         $overlayContent,
         $highlightContainer,
         rowsView = that.rowsView,
-        testElement = $('#container'),
+        testElement = renderer('#container'),
         cells,
         inputElement;
 
@@ -7216,7 +7218,7 @@ QUnit.test("Show tooltip on focus for last row with set validate in column and e
     //act
     inputElement = getInputElements(testElement).first();
     inputElement.val(101);
-    inputElement.trigger('change');
+    eventsEngine.trigger(inputElement[0], "change");
 
     that.closeEditCell();
     that.clock.tick();
@@ -7251,7 +7253,7 @@ QUnit.test("Show tooltip on focus when one row with set validate in column and e
     //arrange
     var that = this,
         rowsView = that.rowsView,
-        testElement = $('#container'),
+        testElement = renderer('#container'),
         cells,
         inputElement;
 
@@ -7289,7 +7291,7 @@ QUnit.test("Show tooltip on focus when one row with set validate in column and e
     //act
     inputElement = getInputElements(testElement).first();
     inputElement.val(101);
-    inputElement.trigger('change');
+    eventsEngine.trigger(inputElement[0], "change");
 
     that.closeEditCell();
     that.clock.tick();
@@ -7320,7 +7322,7 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
         tooltipInstance,
         selectBoxInstance,
         rowsView = that.rowsView,
-        $testElement = $("#container");
+        $testElement = renderer("#container");
 
     rowsView.render($testElement);
     that.applyOptions({
@@ -7358,7 +7360,7 @@ QUnit.testInActiveWindow("Tooltip should be positioned by left side when the dro
     assert.strictEqual(tooltipInstance.option("position").at, "bottom left", "position.at of the tooltip");
 
     //act
-    getInputElements($testElement.find("tbody td").eq(2)).trigger("dxclick");
+    eventsEngine.trigger(getInputElements($testElement.find("tbody td").eq(2))[0], "dxclick");
     that.clock.tick();
 
     //assert
@@ -7378,7 +7380,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
         revertTooltipInstance,
         selectBoxInstance,
         rowsView = that.rowsView,
-        $testElement = $("#container");
+        $testElement = renderer("#container");
 
     rowsView.render($testElement);
     that.applyOptions({
@@ -7409,7 +7411,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     that.clock.tick();
 
     //act
-    getInputElements($testElement.find("tbody td").eq(0)).trigger("dxclick");
+    eventsEngine.trigger(getInputElements($testElement.find("tbody td").eq(0))[0], "dxclick");
     that.clock.tick();
 
     //assert
@@ -7432,7 +7434,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
         revertTooltipInstance,
         selectBoxInstance,
         rowsView = that.rowsView,
-        $testElement = $("#container");
+        $testElement = renderer("#container");
 
     $("#qunit-fixture").addClass("qunit-fixture-static").css("width", "auto");
 
@@ -7465,7 +7467,7 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     that.clock.tick();
 
     //act
-    getInputElements($testElement.find("tbody td").eq(2)).trigger("dxclick");
+    eventsEngine.trigger(getInputElements($testElement.find("tbody td").eq(2))[0], "dxclick");
     that.clock.tick();
 
     //assert
@@ -9912,7 +9914,7 @@ QUnit.test("Render detail form row", function(assert) {
     assert.equal(items[1].column.index, 1, "item 1 column index");
     assert.ok(items[1].template, "item 1 template is defined");
     assert.equal(items[1].label.text, "Age", "item 1 template is defined");
-    assert.ok($firstRow.find(".dx-texteditor").eq(1).data("dxNumberBox"), "item 1 editor type is number");
+    assert.ok($firstRow.find(".dx-texteditor").eq(1).dxNumberBox("instance"), "item 1 editor type is number");
     assert.strictEqual(this.columns[2].allowEditing, false, "column 2 allowEditing false");
     assert.ok($firstRow.find(".dx-texteditor").eq(2).hasClass("dx-state-readonly"), "column 2 is read only");
 });

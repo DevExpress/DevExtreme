@@ -174,7 +174,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             });
 
             if($fieldItemContent.length) {
-                formItemOptions = $fieldItemContent.data("dxFormItem");
+                formItemOptions = $fieldItemContent.data("dx-form-item");
                 if(formItemOptions.column) {
                     resultOptions.column = formItemOptions.column;
                     resultOptions.columnIndex = that._columnsController.getVisibleIndex(resultOptions.column.index);

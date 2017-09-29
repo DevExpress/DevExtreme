@@ -40,11 +40,11 @@ QUnit.module("action sheet", {
 
 QUnit.test("render popup", function(assert) {
     var popupElement = $(".dx-popup", this.element),
-        popup = popupElement.data("dxPopup"),
+        popup = popupElement.dxPopup("instance"),
         popupPosition = popup.option("position");
 
     assert.ok(popupElement.length, "Popup rendered");
-    assert.ok(popupElement.data("dxPopup"));
+    assert.ok(popupElement.dxPopup("instance"));
 
     assert.equal(popupPosition.my, "bottom");
     assert.equal(popupPosition.at, "bottom");
@@ -66,7 +66,7 @@ QUnit.test("popup position (B252842)", function(assert) {
 
     var $popup = $(".dx-popup", this.element),
         $overlayContent = $(".dx-overlay-content", $popup),
-        popup = $popup.data("dxPopup"),
+        popup = $popup.dxPopup("instance"),
         positionConfig = popup.option("position");
 
     this.instance.show().done(function() {
@@ -124,11 +124,11 @@ QUnit.test("Resize by option", function(assert) {
 });
 
 QUnit.test("render cancel", function(assert) {
-    var popup = $(".dx-popup", this.element).data("dxPopup");
+    var popup = $(".dx-popup", this.element).dxPopup("instance");
 
     this.instance.option("showCancelButton", true);
     var cancelButton = $(".dx-actionsheet-cancel", popup.content());
-    assert.ok(cancelButton.data("dxButton") && cancelButton.length, "Cancel button was rendered in popup content");
+    assert.ok(cancelButton.dxButton("instance") && cancelButton.length, "Cancel button was rendered in popup content");
 
     this.instance.option("showCancelButton", false);
     cancelButton = $(".dx-actionsheet-cancel", popup.content());
@@ -163,7 +163,7 @@ QUnit.test("render 'onCancelClick'", function(assert) {
 QUnit.test("show and hide methods are provided to popup", function(assert) {
     assert.expect(5);
 
-    var popup = $(".dx-popup", this.element).data("dxPopup"),
+    var popup = $(".dx-popup", this.element).dxPopup("instance"),
         instance = this.instance;
 
     assert.equal(popup.option("visible"), false, "hidden on init");
@@ -183,7 +183,7 @@ QUnit.test("show and hide methods are provided to popup", function(assert) {
 
 QUnit.test("cancel button click hides popup", function(assert) {
     var $cancelButton = $(".dx-actionsheet-cancel", this.element),
-        popup = $(".dx-popup", this.element).data("dxPopup");
+        popup = $(".dx-popup", this.element).dxPopup("instance");
 
     this.instance.show();
     assert.equal(popup.option("visible"), true, "shown before click");
@@ -216,18 +216,18 @@ QUnit.test("render items", function(assert) {
 
     this.instance.option("items", items);
     this.instance.show();
-    itemElements = $(".dx-actionsheet-item", $($(".dx-popup", this.element).data("dxPopup").content()));
+    itemElements = $(".dx-actionsheet-item", $($(".dx-popup", this.element).dxPopup("instance").content()));
     assert.equal(itemElements.length, 2, "correct items count");
 
     first = itemElements.find(".dx-button").eq(0);
-    assert.equal(first.data("dxButton").option("text"), items[0].text, "correct item text");
-    assert.equal(first.data("dxButton").option("type"), items[0].type, "correct item type");
+    assert.equal(first.dxButton("instance").option("text"), items[0].text, "correct item text");
+    assert.equal(first.dxButton("instance").option("type"), items[0].type, "correct item type");
 
     first.trigger("dxclick");
     assert.equal(clickedAction, 1, "correct item click handler");
 
     second = itemElements.find(".dx-button").eq(-1);
-    assert.ok(second.data("dxButton").option("disabled"), "correct item disabled state");
+    assert.ok(second.dxButton("instance").option("disabled"), "correct item disabled state");
 
     // NOTE: B233186
     assert.equal($(".dx-actionsheet-cancel").length, 1, "there is only one 'cancel' button");
@@ -251,7 +251,7 @@ QUnit.test("'onItemHold' should be fired after hold (T106668)", function(assert)
 });
 
 QUnit.test("title option", function(assert) {
-    var popup = $(".dx-popup", this.element).data("dxPopup");
+    var popup = $(".dx-popup", this.element).dxPopup("instance");
 
     assert.equal(popup.option("title"), "", "default value");
 
@@ -318,7 +318,7 @@ QUnit.test("regression: B233570 Menu isn't hidden after click on action", functi
     this.instance.option("items", items);
     this.instance.show();
 
-    itemElements = $(".dx-actionsheet-item", $($(".dx-popup", this.element).data("dxPopup").content()));
+    itemElements = $(".dx-actionsheet-item", $($(".dx-popup", this.element).dxPopup("instance").content()));
     first = itemElements.first();
     second = itemElements.last();
 
@@ -336,7 +336,7 @@ QUnit.test("regression: B233570 Menu isn't hidden after click on action", functi
 QUnit.test("popup toggling on option 'visible' change", function(assert) {
     assert.expect(4);
 
-    var popup = $(".dx-popup", this.element).data("dxPopup");
+    var popup = $(".dx-popup", this.element).dxPopup("instance");
 
     assert.equal(popup.option("visible"), false, "hidden on init");
 
@@ -348,7 +348,7 @@ QUnit.test("popup toggling on option 'visible' change", function(assert) {
 
     var anotherActionSheet = $("<div/>").appendTo($("#container"));
     anotherActionSheet.dxActionSheet({ visible: true });
-    assert.equal($(".dx-popup", anotherActionSheet).data("dxPopup").option("visible"), true, "shown on init");
+    assert.equal($(".dx-popup", anotherActionSheet).dxPopup("instance").option("visible"), true, "shown on init");
 
     anotherActionSheet.remove();
 });
@@ -467,7 +467,7 @@ QUnit.test("usePopover option change", function(assert) {
     var actionSheet = $("#actionSheet").dxActionSheet({
         usePopover: false,
         target: $container
-    }).data("dxActionSheet");
+    }).dxActionSheet("instance");
 
     assert.equal($(".dx-popover").length, 0, "popover is not selected");
 
@@ -549,7 +549,7 @@ QUnit.test("Q463379 - dxActionSheet adds duplicated items when they are added at
     $actionSheet.dxActionSheet("show");
     $actionSheet.dxActionSheet("option", "items", items);
 
-    $itemElements = $(".dx-actionsheet-item", $(".dx-popup", $actionSheet).data("dxPopup").content());
+    $itemElements = $(".dx-actionsheet-item", $(".dx-popup", $actionSheet).dxPopup("instance").content());
     assert.equal($itemElements.length, 2, "correct items count");
 });
 

@@ -1105,7 +1105,7 @@ QUnit.test('Update selection on changed dataController event', function(assert) 
 });
 
 var getCheckBoxInstance = function(element) {
-    return $(element).data("dxCheckBox");
+    return $(element).dxCheckBox("instance");
 };
 
 QUnit.test('Show column with check boxes', function(assert) {
