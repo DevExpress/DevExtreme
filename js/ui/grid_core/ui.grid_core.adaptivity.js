@@ -57,8 +57,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return row && row.modifiedValues && typeUtils.isDefined(row.modifiedValues[columnIndex]);
     },
 
-    _renderFormViewTemplate: function(item, cellOptions, $container) {
+    _renderFormViewTemplate: function(item, cellOptions, container) {
         var that = this,
+            $container = $(container),
             column = item.column,
             cellValue = column.calculateCellValue(cellOptions.data),
             focusAction = that.createAction(function() {
@@ -79,7 +80,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
             that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(document).length);
         } else {
-            var container = $container.get(0);
+            container = $container.get(0);
             if(column.encodeHtml) {
                 container.textContent = cellText;
             } else {

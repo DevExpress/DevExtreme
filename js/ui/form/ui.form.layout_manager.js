@@ -364,11 +364,12 @@ var LayoutManager = Widget.inherit({
                 }
                 that._fireContentReadyAction();
             },
-            itemTemplate: function(e, itemData, $itemElement) {
+            itemTemplate: function(e, itemData, itemElement) {
                 if(!e.location) {
                     return;
                 }
-                var itemRenderedCountInPreviousRows = e.location.row * colCount,
+                var $itemElement = $(itemElement),
+                    itemRenderedCountInPreviousRows = e.location.row * colCount,
                     item = that._items[e.location.col + itemRenderedCountInPreviousRows],
                     $fieldItem = $("<div>")
                         .addClass(item.cssClass)

@@ -103,7 +103,7 @@ var dropDownAppointments = Class.inherit({
         if(!DropDownMenu.getInstance($menu)) {
 
             itemTemplate = (function(appointmentData, index, appointmentElement) {
-                this._createDropDownAppointmentTemplate(appointmentData, appointmentElement, items.colors[index]);
+                this._createDropDownAppointmentTemplate(appointmentData, $(appointmentElement), items.colors[index]);
             }).bind(this);
 
             this.instance._createComponent($menu, DropDownMenu, {

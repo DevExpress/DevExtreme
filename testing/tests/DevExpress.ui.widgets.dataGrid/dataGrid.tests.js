@@ -3836,9 +3836,9 @@ QUnit.test("Toolbar templates should be called when toolbar is attached to dom",
         onToolbarPreparing: function(e) {
             toolbarPreparingCallCount++;
             e.toolbarOptions.items.push({
-                template: function(data, index, $container) {
+                template: function(data, index, container) {
                     toolbarTemplateCallCount++;
-                    assert.ok($container.closest(e.element).length, "toolbar item container is attached to grid element");
+                    assert.ok($(container).closest(e.element).length, "toolbar item container is attached to grid element");
                 }
             });
         },

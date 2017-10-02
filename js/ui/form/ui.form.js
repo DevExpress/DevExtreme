@@ -965,8 +965,9 @@ var Form = Widget.inherit({
                 onItemRendered: function(args) {
                     domUtils.triggerShownEvent(args.itemElement);
                 },
-                itemTemplate: function(itemData, e, $container) {
+                itemTemplate: function(itemData, e, container) {
                     var layoutManager,
+                        $container = $(container),
                         alignItemLabels = utils.ensureDefined(itemData.alignItemLabels, true);
 
                     layoutManager = that._renderLayoutManager(itemData.items, $container, {
