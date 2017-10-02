@@ -30,6 +30,7 @@ require("generic_light.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
+    dataUtils = require("core/element_data"),
     commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
@@ -3380,7 +3381,7 @@ QUnit.test("Rows with option onRowPrepared", function(assert) {
     assert.equal(this.dataGrid.__actionConfigs.onRowPrepared.category, "rendering", "onRowPrepared category");
     assert.equal(countCallRowPrepared, 3, "countCallRowPrepared");
     assert.equal(typeUtils.isRenderer(resultOptions.rowElement), config().useJQueryRenderer, "correct row element");
-    assert.ok($(resultOptions.rowElement).data("options"), "has row options");
+    assert.ok(dataUtils.data($(resultOptions.rowElement).get(0), "options"), "has row options");
     assert.equal(resultOptions.columns.length, 3, "count columns");
     assert.equal(resultOptions.rowIndex, 1, "rowIndex");
     assert.equal(resultOptions.dataIndex, 1, "dataIndex");
@@ -3431,7 +3432,7 @@ QUnit.test("onRowPrepared for group rows", function(assert) {
 
     //assert
     assert.equal(countCallRowPrepared, 3, "countCallCellPrepared");
-    assert.ok($(resultOptions.rowElement).data("options"), "has row options");
+    assert.ok(dataUtils.data($(resultOptions.rowElement).get(0), "options"), "has row options");
     assert.equal(resultOptions.rowIndex, 0, "rowIndex");
     assert.equal(resultOptions.groupIndex, 0, "columnIndex");
     assert.equal(resultOptions.columns.length, 3, "columns");
