@@ -35,7 +35,7 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
         return 0;
     },
 
-    _getDateForIndicator: function() {
+    _getIndicationFirstViewDate: function() {
         return dateUtils.trimTime(new Date(this._firstViewDate));
     },
 

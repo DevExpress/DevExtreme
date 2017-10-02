@@ -22,7 +22,7 @@ var $ = require("../../core/renderer"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     tableCreator = require("./ui.scheduler.table_creator"),
-    DateTimeShader = require("./ui.scheduler.currentTimeShader");
+    Shader = require("./ui.scheduler.currentTimeShader");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
@@ -370,7 +370,7 @@ var SchedulerWorkSpace = Widget.inherit({
             dateCellTemplate: null,
             allowMultipleCellSelection: true,
             indicatorTime: new Date(),
-            indicatorUpdateInterval: 10000,
+            indicatorUpdateInterval: 5 * toMs("minute"),
             shadeUntilNow: true
         });
     },
@@ -389,9 +389,6 @@ var SchedulerWorkSpace = Widget.inherit({
             case "currentDate":
             case "groups":
             case "startDate":
-            case "showCurrentTimeIndicator":
-            case "indicatorTime":
-            case "shadeUntilNow":
                 this._cleanWorkSpace();
                 break;
             case "indicatorUpdateInterval":
@@ -418,6 +415,11 @@ var SchedulerWorkSpace = Widget.inherit({
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
+                this._refreshDateTimeIndication();
+                break;
+            case "showCurrentTimeIndicator":
+            case "indicatorTime":
+            case "shadeUntilNow":
                 this._refreshDateTimeIndication();
                 break;
             case "width":
@@ -456,7 +458,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._createWorkSpaceElements();
 
-        this._dateTimeShader = new DateTimeShader();
+        this._shader = new Shader();
     },
 
     _toggleHorizontalScrollClass: function() {
@@ -795,18 +797,18 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderDateTimeIndication: function() {
-        if(this._needRenderDateTimeIndicator()) {
+        if(this._needRenderDateTimeIndication()) {
             var isVertical = this._isVerticalShader();
 
             if(this.option("shadeUntilNow")) {
-                this._dateTimeShader.render(this, isVertical);
+                this._shader.render(this, isVertical);
             }
 
-            if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
+            if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
                 var groupCount = isVertical && this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.content(),
                     width = this._getShaderWidth(),
-                    height = this._getShaderHeight();
+                    height = this._getIndicationHeight();
 
                 if(height > 0) {
                     for(var i = 0; i < groupCount; i++) {
@@ -841,12 +843,12 @@ var SchedulerWorkSpace = Widget.inherit({
         return width / cellsCount;
     },
 
-    _getShaderHeight: function() {
+    _getIndicationHeight: function() {
         var today = this._getToday(),
             cellHeight = this.getCellHeight(),
             date = new Date(this._firstViewDate);
 
-        if(this._needRenderDateTimeIndicatorCells()) {
+        if(this._needRenderDateTimeIndicator()) {
             date.setDate(today.getDate());
         }
 
@@ -856,7 +858,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return cellCount * cellHeight;
     },
 
-    _getShaderWidth: function() {
+    _getIndicationWidth: function() {
         var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate),
             maxWidth = this.getCellWidth() * this._getCellCount();
@@ -872,14 +874,14 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.option("indicatorTime") || new Date();
     },
 
-    _needRenderDateTimeIndicatorCells: function() {
+    _needRenderDateTimeIndicator: function() {
         var now = this._getToday(),
             endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
         return dateUtils.dateInRange(now, this._firstViewDate, new Date(endViewDate.getTime() + DAY_MS));
     },
 
-    _needRenderDateTimeIndicator: function() {
+    _needRenderDateTimeIndication: function() {
         var now = this._getToday();
 
         return now >= dateUtils.trimTime(new Date(this.getStartViewDate()));
@@ -1245,7 +1247,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _isCurrentTime: function(date) {
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
             var now = this._getToday(),
                 result = false;
             date = new Date(date);
@@ -1268,7 +1270,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         var result = false;
 
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
             var date = this._getDateByIndex(headerIndex),
                 now = this.option("indicatorTime") || new Date();
 
@@ -1527,7 +1529,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
-        this._dateTimeShader.clean();
+        this._shader.clean();
         this._cleanDateTimeIndicator();
         this._$timePanel.empty();
         this._$allDayTable.empty();
@@ -1537,7 +1539,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _refreshDateTimeIndication: function() {
         this._cleanDateTimeIndicator();
-        this._dateTimeShader.clean();
+        this._shader.clean();
         this._renderDateTimeIndication();
     },
 

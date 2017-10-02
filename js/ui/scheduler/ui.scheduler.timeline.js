@@ -168,10 +168,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._applyCellTemplates(groupCellTemplates);
     },
 
-    _getShaderWidth: function() {
+    _getIndicationWidth: function() {
         var today = this._getToday(),
             cellWidth = this.getCellWidth(),
-            date = this._getDateForIndicator(),
+            date = this._getIndicationFirstViewDate(),
             hiddenInterval = this._getHiddenInterval(),
             timeDiff = today.getTime() - date.getTime();
 
@@ -189,7 +189,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         var result = false;
 
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
             var date = this._getDateByIndex(headerIndex);
 
             var now = this._getToday();
@@ -318,7 +318,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return $cell.parent().index();
     },
 
-    _getDateForIndicator: function() {
+    _getIndicationFirstViewDate: function() {
         return new Date(this._firstViewDate);
     },
 

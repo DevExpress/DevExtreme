@@ -27,7 +27,7 @@ var currentTimeShader = Class.inherit({
     },
 
     _renderVerticalShader: function() {
-        var shaderHeight = this._workspace._getShaderHeight(),
+        var shaderHeight = this._workspace._getIndicationHeight(),
             maxHeight = this._$container.outerHeight();
 
         if(shaderHeight > maxHeight) {
@@ -38,7 +38,7 @@ var currentTimeShader = Class.inherit({
             this._$shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
             this._$shader.height(shaderHeight);
 
-            var shaderWidth = this._workspace._getShaderWidth();
+            var shaderWidth = this._workspace._getIndicationWidth();
             var groupCount = this._workspace._getGroupCount() || 1;
             for(var i = 0; i < groupCount; i++) {
                 this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
@@ -81,7 +81,7 @@ var currentTimeShader = Class.inherit({
     },
 
     _renderHorizontalShader: function() {
-        var shaderWidth = this._workspace._getShaderWidth(),
+        var shaderWidth = this._workspace._getIndicationWidth(),
             maxWidth = this._$container.outerWidth();
 
         if(shaderWidth > maxWidth) {
