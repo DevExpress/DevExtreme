@@ -136,8 +136,9 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("DateTimeIndicator should not be renderd if indicatorTime < startDayHour, Day view", function(assert) {
         this.instance.option({
-            indicatorTime: new Date(2017, 8, 5, 10, 45),
-            startDayHour: 11
+            indicatorTime: new Date(2017, 8, 6, 10, 45),
+            startDayHour: 11,
+            intervalCount: 3
         });
 
         var $element = this.instance.$element();

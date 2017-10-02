@@ -805,20 +805,23 @@ var SchedulerWorkSpace = Widget.inherit({
             if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
                 var groupCount = isVertical && this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.content(),
-                    width = this._getShaderWidth();
+                    width = this._getShaderWidth(),
+                    height = this._getShaderHeight();
 
-                for(var i = 0; i < groupCount; i++) {
-                    var $indicator = $("<div>").addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+                if(height > 0) {
+                    for(var i = 0; i < groupCount; i++) {
+                        var $indicator = $("<div>").addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
 
-                    if(isVertical) {
-                        $indicator.width(this.getCellWidth());
-                        $indicator.css("left", this._getCellCount() * this._getRoundedCellWidth() * i + (width - this._getRoundedCellWidth()));
-                    } else {
-                        $indicator.height($container.outerHeight());
-                        $indicator.css("left", width);
+                        if(isVertical) {
+                            $indicator.width(this.getCellWidth());
+                            $indicator.css("left", this._getCellCount() * this._getRoundedCellWidth() * i + (width - this._getRoundedCellWidth()));
+                        } else {
+                            $indicator.height($container.outerHeight());
+                            $indicator.css("left", width);
+                        }
+
+                        $container.append($indicator);
                     }
-
-                    $container.append($indicator);
                 }
             }
         }
