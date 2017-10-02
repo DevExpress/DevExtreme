@@ -812,7 +812,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
                     if(isVertical) {
                         $indicator.width(this.getCellWidth());
-                        $indicator.css("left", this._getCellCount() * this.getCellWidth() * i + (width - this.getCellWidth()));
+                        $indicator.css("left", this._getCellCount() * this._getRoundedCellWidth() * i + (width - this._getRoundedCellWidth()));
                     } else {
                         $indicator.height($container.outerHeight());
                         $indicator.css("left", width);
@@ -822,6 +822,20 @@ var SchedulerWorkSpace = Widget.inherit({
                 }
             }
         }
+    },
+
+    _getRoundedCellWidth: function() {
+        var $row = this.element().find("." + this._getDateTableRowClass()).eq(0),
+            width = 0,
+            $cells = $row.find("." + this._getDateTableCellClass()),
+            cellsCount = $cells.length;
+
+        $cells.each(function(_, cell) {
+
+            width = width + $(cell).outerWidth();
+        });
+
+        return width / cellsCount;
     },
 
     _getShaderHeight: function() {
@@ -842,11 +856,11 @@ var SchedulerWorkSpace = Widget.inherit({
     _getShaderWidth: function() {
         var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate),
-            maxWidth = this.getCellWidth() * this._getCellCount();
+            maxWidth = this._getRoundedCellWidth() * this._getCellCount();
 
         var timeDiff = today.getTime() - firstViewDate.getTime(),
             difference = Math.ceil(timeDiff / toMs("day")),
-            width = difference * this.getCellWidth();
+            width = difference * this._getRoundedCellWidth();
 
         return maxWidth < width ? maxWidth : width;
     },
