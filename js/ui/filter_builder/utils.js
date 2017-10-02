@@ -129,8 +129,9 @@ function removeItem(group, item) {
     return group;
 }
 
-function createCondition(field, operation, operand) {
-    return [field, operation, operand];
+function createCondition(field) {
+    var availableOperations = getDefaultOperation(field);
+    return [field.dataField, availableOperations, ""];
 }
 
 function createEmptyGroup(value) {
