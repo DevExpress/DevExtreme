@@ -93,6 +93,21 @@ var stubInvokeMethod = function(instance, options) {
         clearTimeout(timer);
     });
 
+    QUnit.test("Indication should not be updated by some timer if indicatorUpdateInterval = 0", function(assert) {
+        var renderIndicatorStub = sinon.stub(this.instance, "_renderDateTimeIndication");
+
+        this.instance.option({
+            indicatorUpdateInterval: 0
+        });
+
+        var timer = setTimeout(function() {
+            assert.equal(renderIndicatorStub.callCount, 0, "Indicator wasn't updated");
+        }, 40);
+
+        this.clock.tick(40);
+        clearTimeout(timer);
+    });
+
     QUnit.test("Indication should be updated on dimensionChanged", function(assert) {
         var renderIndicatorStub = sinon.stub(this.instance, "_renderDateTimeIndication");
 
