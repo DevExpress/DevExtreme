@@ -13,38 +13,76 @@ function getGroupCriteria(group) {
     return criteria;
 }
 
-function setGroupValue(group, value) {
-    var criteria,
-        i;
-
-    if(value.indexOf("!") !== -1) {
-        value = value.substring(1);
-        if(group.length > 1 && group[0] === "!") {
-            criteria = group[1];
-        } else {
-            criteria = [];
-            for(i = 0; i < group.length; i++) {
+function convertGroupToNewStructure(group, value) {
+    var isNegationValue = function(value) {
+            return value.indexOf("!") !== -1;
+        },
+        isNegationGroup = function(group) {
+            return group.length > 1 && group[0] === "!";
+        },
+        convertGroupToNegationGroup = function(group) {
+            var criteria = [];
+            for(var i = 0; i < group.length; i++) {
                 criteria.push(group[i]);
             }
             group.length = 0;
             group.push("!");
             group.push(criteria);
-        }
-    } else {
-        criteria = getGroupCriteria(group);
-        if(criteria !== group) {
+        },
+        convertNegationGroupToGroup = function(group) {
+            var criteria = getGroupCriteria(group);
             group.length = 0;
-            for(i = 0; i < criteria.length; i++) {
+            for(var i = 0; i < criteria.length; i++) {
                 group.push(criteria[i]);
             }
+        };
+
+    if(isNegationValue(value)) {
+        if(!isNegationGroup(group)) {
+            convertGroupToNegationGroup(group);
+        }
+    } else {
+        if(isNegationGroup(group)) {
+            convertNegationGroupToGroup(group);
         }
     }
+}
 
-    criteria = getGroupCriteria(group);
-    for(i = 0; i < criteria.length; i++) {
-        if(!Array.isArray(criteria[i])) {
-            criteria[i] = value;
-        }
+function setGroupValue(group, value) {
+    convertGroupToNewStructure(group, value);
+
+    var criteria = getGroupCriteria(group),
+        i,
+        getNormalizedGroupValue = function(value) {
+            return value.indexOf("!") === -1 ? value : value.substring(1);
+        },
+        changeCriteriaValue = function(criteria, value) {
+            for(i = 0; i < criteria.length; i++) {
+                if(!Array.isArray(criteria[i])) {
+                    criteria[i] = value;
+                }
+            }
+        },
+        addValueToCriteria = function(criteria, value) {
+            var buffer = [];
+            for(i = 0; i < criteria.length; i++) {
+                buffer.push(criteria[i]);
+            }
+            criteria.length = 0;
+            for(i = 0; i < buffer.length; i++) {
+                criteria.push(buffer[i]);
+                if(i !== buffer.length - 1) {
+                    criteria.push(value);
+                }
+            }
+        };
+
+    value = getNormalizedGroupValue(value);
+
+    if(isCriteriaContainValueItem(criteria)) {
+        changeCriteriaValue(criteria, value);
+    } else {
+        addValueToCriteria(criteria, value);
     }
     return group;
 }
@@ -81,18 +119,28 @@ function getGroupValue(group) {
     return value;
 }
 
+function isCriteriaContainValueItem(criteria) {
+    for(var i = 0; i < criteria.length; i++) {
+        var item = criteria[i];
+        if(!Array.isArray(item)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 function getAvailableOperations(filterOperations) {
     var operations = [];
-    var addItem = function(operations, item) {
+    var addItem = function(item, operations) {
         operations.push({ text: item });
     };
 
     if(filterOperations.length === 0) {
-        addItem(operations, "=");
-        addItem(operations, "<>");
+        addItem("=", operations);
+        addItem("<>", operations);
     } else {
         for(var i = 0; i < filterOperations.length; i++) {
-            addItem(operations, filterOperations[i]);
+            addItem(filterOperations[i], operations);
         }
     }
     return operations;
@@ -118,9 +166,10 @@ function removeItem(group, item) {
         }
         criteria.splice(index, 1);
     } else if(criteria.length === 2) {
-        var groupValue = getGroupValue(criteria);
-        var lastItemIsGroupOperation = criteria[group.length - 1] === groupValue;
-        if(!lastItemIsGroupOperation) {
+        var groupValue = getGroupValue(criteria),
+            lastItemIsGroupOperation = criteria[group.length - 1] === groupValue,
+            firstItemIsGroupOperation = criteria[0] === groupValue;
+        if(!lastItemIsGroupOperation && firstItemIsGroupOperation) {
             var groupOperation = criteria[0];
             criteria[0] = criteria[1];
             criteria[1] = groupOperation;
@@ -163,7 +212,9 @@ function addItem(item, group) {
                 criteria.push(item);
             }
         } else {
-            criteria.push(groupValue);
+            if(isCriteriaContainValueItem(criteria)) {
+                criteria.push(groupValue);
+            }
             criteria.push(item);
         }
     }
@@ -183,8 +234,7 @@ function isGroup(item) {
     var isGroup = item.length === 1;
     if(!isGroup) {
         for(var i = 0; i < item.length; i++) {
-            var isArray = Array.isArray(item[i]);
-            if(isArray) {
+            if(Array.isArray(item[i])) {
                 isGroup = true;
                 break;
             }
@@ -194,7 +244,16 @@ function isGroup(item) {
 }
 
 function isCondition(item) {
-    return Array.isArray(item);
+    var isCondition = Array.isArray(item) && item.length > 1;
+    if(isCondition) {
+        for(var i = 0; i < item.length; i++) {
+            if(Array.isArray(item[i])) {
+                isCondition = false;
+                break;
+            }
+        }
+    }
+    return isCondition;
 }
 
 function getNormalizedFilter(group) {

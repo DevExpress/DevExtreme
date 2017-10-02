@@ -17,13 +17,13 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
     FILTER_BUILDER_ACTION_CLASS = "dx-filterbuilder-action",
     FILTER_BUILDER_IMAGE_CLASS = "dx-filterbuilder-action-icon",
-    FILTER_BUILDER_ITEM_TEXT_CLASS = "dx-filterbuilder-text",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
+    FILTER_BUILDER_ITEM_TEXT_CLASS = "dx-filterbuilder-text",
     FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
+    FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
-    FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
     ACTIVE_CLASS = "dx-state-active",
 
     ACTIONS = [
@@ -397,11 +397,13 @@ var FilterBuilder = Widget.inherit({
                         if(e.keyCode === 13) {
                             item[2] = value;
                         }
-                        createValueText(item, field, $container);
-                        eventsEngine.trigger($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS), "focus");
+                        var $newTextElement = createValueText(item, field, $container);
+                        eventsEngine.trigger($newTextElement, "focus");
                     }
                 });
             }, "keyup");
+
+            return $text;
         };
 
         createValueText(item, field, $valueButton);
