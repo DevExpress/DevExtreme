@@ -1,9 +1,15 @@
+@TREEVIEW_SEARCHBOX_MARGIN_BOTTOM: 5px;
+
 .dx-treeview-loadindicator-wrapper {
     text-align: center;
 }
 
 .dx-treeview-node-loadindicator {
     position: absolute;
+}
+
+.dx-treeview-search {
+    margin-bottom: @TREEVIEW_SEARCHBOX_MARGIN_BOTTOM;
 }
 
 .dx-treeview {
@@ -13,10 +19,6 @@
 
     :focus {
         outline: none;
-    }
-
-    .dx-treeview-search {
-        margin-bottom: 5px;
     }
 
     .dx-scrollable:focus {
