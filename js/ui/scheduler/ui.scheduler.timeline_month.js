@@ -7,6 +7,8 @@ var registerComponent = require("../../core/component_registrator"),
 var TIMELINE_CLASS = "dx-scheduler-timeline-month",
     DAY_IN_MILLISECONDS = 86400000;
 
+var toMs = dateUtils.dateToMilliseconds;
+
 var SchedulerTimelineMonth = SchedulerTimeline.inherit({
 
     _renderView: function() {
@@ -27,6 +29,18 @@ var SchedulerTimelineMonth = SchedulerTimeline.inherit({
 
     _getDateHeaderTemplate: function() {
         return this.option("dateCellTemplate");
+    },
+
+    _getHiddenInterval: function() {
+        return 0;
+    },
+
+    _getDateForIndicator: function() {
+        return dateUtils.trimTime(new Date(this._firstViewDate));
+    },
+
+    getCellDuration: function() {
+        return toMs("day");
     },
 
     _getCellCount: function() {

@@ -159,10 +159,52 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderTimePanel();
         this._renderDateTable();
 
+        this._renderDateTimeIndication();
+        this._setIndicationUpdateInterval();
+
         this._$sidebarTable.appendTo(this._sidebarScrollable.content());
 
         this._setGroupHeaderCellsHeight();
         this._applyCellTemplates(groupCellTemplates);
+    },
+
+    _getShaderWidth: function() {
+        var today = this._getToday(),
+            cellWidth = this.getCellWidth(),
+            date = this._getDateForIndicator(),
+            hiddenInterval = this._getHiddenInterval(),
+            timeDiff = today.getTime() - date.getTime();
+
+        var differenceInDays = Math.ceil(timeDiff / toMs("day")) - 1,
+            duration = timeDiff - differenceInDays * hiddenInterval,
+            cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellWidth;
+    },
+
+    _isVerticalShader: function() {
+        return false;
+    },
+
+    _isCurrentTimeHeaderCell: function(headerIndex) {
+        var result = false;
+
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
+            var date = this._getDateByIndex(headerIndex);
+
+            var now = this._getToday();
+            date = new Date(date);
+
+            if(dateUtils.sameDate(now, date)) {
+                var startCellDate = new Date(date),
+                    endCellDate = new Date(date);
+                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
+
+                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
+            }
+        }
+
+        return result;
     },
 
     _cleanView: function() {
@@ -274,6 +316,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getGroupIndexByCell: function($cell) {
         return $cell.parent().index();
+    },
+
+    _getDateForIndicator: function() {
+        return new Date(this._firstViewDate);
     },
 
     _getIntervalBetween: function(currentDate, allDay) {
