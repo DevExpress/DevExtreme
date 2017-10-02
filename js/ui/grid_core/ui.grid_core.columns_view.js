@@ -12,6 +12,7 @@ var $ = require("../../core/renderer"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     devices = require("../../core/devices"),
     modules = require("./ui.grid_core.modules"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     gridCoreUtils = require("./ui.grid_core.utils"),
     columnStateMixin = require("./ui.grid_core.column_state_mixin"),
     noop = commonUtils.noop;
@@ -643,6 +644,21 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $row.children();
     },
 
+    _getCellElement: function(rowIndex, columnIdentifier) {
+        var that = this,
+            $cell,
+            $cells = that.getCellElements(rowIndex),
+            columnVisibleIndex = that._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
+
+        if($cells.length && columnVisibleIndex >= 0) {
+            $cell = $cells.eq(columnVisibleIndex);
+        }
+
+        if($cell && $cell.length) {
+            return $cell;
+        }
+    },
+
     /**
      * @name GridBaseMethods_getCellElement
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
@@ -658,18 +674,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @return jQuery|undefined
      */
     getCellElement: function(rowIndex, columnIdentifier) {
-        var that = this,
-            $cell,
-            $cells = that.getCellElements(rowIndex),
-            columnVisibleIndex = that._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
-
-        if($cells.length && columnVisibleIndex >= 0) {
-            $cell = $cells.eq(columnVisibleIndex);
-        }
-
-        if($cell && $cell.length) {
-            return $cell;
-        }
+        var cell = this._getCellElement(rowIndex, columnIdentifier);
+        return getPublicElement(cell);
     },
 
     /**

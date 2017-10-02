@@ -253,7 +253,7 @@ QUnit.testInActiveWindow("Ctrl + left/right keys should collapse/expand row", fu
 
     this.clock.tick();
 
-    treeList.focus(treeList.getCellElement(1, 0));
+    treeList.focus($(treeList.getCellElement(1, 0)));
     this.clock.tick();
 
     //act

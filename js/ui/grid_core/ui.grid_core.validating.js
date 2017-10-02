@@ -460,7 +460,7 @@ module.exports = {
 
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
                     var result = this.callBase(rowIndex, columnIndex, item),
-                        $cell = this.component.getCellElement(rowIndex, columnIndex),
+                        $cell = this._rowsView._getCellElement(rowIndex, columnIndex),
                         validator = $cell && $cell.data("dxValidator"),
                         value = validator && validator.option("adapter").getValue();
 

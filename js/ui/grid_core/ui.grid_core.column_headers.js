@@ -322,7 +322,7 @@ module.exports = {
 
                             each(visibleColumns, function(_, column) {
                                 rowIndex = isDefined(index) ? index : columnsController.getRowIndex(column.index);
-                                $cellElement = that.getCellElement(rowIndex, columnsController.getVisibleIndex(column.index, rowIndex));
+                                $cellElement = that._getCellElement(rowIndex, columnsController.getVisibleIndex(column.index, rowIndex));
                                 $cellElement && result.push($cellElement.get(0));
                             });
 

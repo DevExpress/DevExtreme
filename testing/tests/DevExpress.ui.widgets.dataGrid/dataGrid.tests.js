@@ -6243,28 +6243,28 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
         rowIndex: 2
     }, "Initial position is OK");
 
-    triggerTabPress(dataGrid.getCellElement(2, 2), true);
+    triggerTabPress($(dataGrid.getCellElement(2, 2)), true);
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 1
     }, "Reverse tabbing to second level group OK");
 
-    triggerTabPress(dataGrid.getCellElement(1, 2).parent(), true);
+    triggerTabPress($(dataGrid.getCellElement(1, 2)).parent(), true);
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 0
     }, "Reverse tabbing to first level group OK");
 
-    triggerTabPress(dataGrid.getCellElement(0, 1).parent());
+    triggerTabPress($(dataGrid.getCellElement(0, 1)).parent());
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 1
     }, "Tabbing to second level group OK, column index saved");
 
-    triggerTabPress(dataGrid.getCellElement(1, 2).parent());
+    triggerTabPress($(dataGrid.getCellElement(1, 2)).parent());
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
@@ -7146,7 +7146,7 @@ QUnit.test("Repaint row", function(assert) {
     assert.equal($updatedRowElements.length, 2, "count row");
     assert.ok(!$updatedRowElements.eq(0).is($rowElements.eq(0)), "first row is updated");
     assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test3", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test3", "first row - value of the first cell");
 });
 
 QUnit.test("Repaint rows", function(assert) {
@@ -7177,8 +7177,8 @@ QUnit.test("Repaint rows", function(assert) {
     //assert
     $rowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($rowElements.length, 4, "count row");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test1", "first row - value of the first cell");
-    assert.strictEqual(dataGrid.getCellElement(2, 0).text(), "test3", "third row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test1", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test3", "third row - value of the first cell");
 
     //act
     dataGrid.repaintRows([0, 2]);
@@ -7190,8 +7190,8 @@ QUnit.test("Repaint rows", function(assert) {
     assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
     assert.ok(!$updatedRowElements.eq(2).is($rowElements.eq(2)), "third row is updated");
     assert.ok($updatedRowElements.eq(3).is($rowElements.eq(3)), "fourth row isn't updated");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test5", "first row - value of the first cell");
-    assert.strictEqual(dataGrid.getCellElement(2, 0).text(), "test6", "third row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test5", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
 });
 
 //T443177
