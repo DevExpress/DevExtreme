@@ -856,11 +856,11 @@ var SchedulerWorkSpace = Widget.inherit({
     _getShaderWidth: function() {
         var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate),
-            maxWidth = this._getRoundedCellWidth() * this._getCellCount();
+            maxWidth = this.getCellWidth() * this._getCellCount();
 
         var timeDiff = today.getTime() - firstViewDate.getTime(),
             difference = Math.ceil(timeDiff / toMs("day")),
-            width = difference * this._getRoundedCellWidth();
+            width = difference * this.getCellWidth();
 
         return maxWidth < width ? maxWidth : width;
     },
