@@ -395,7 +395,7 @@ var BaseRenderingStrategy = Class.inherit({
         var appointmentCountPerCell = this._getMaxAppointmentCountPerCell();
         var compactCount = 0;
 
-        if(appointmentCountPerCell && item.index > appointmentCountPerCell - 1) {
+        if(appointmentCountPerCell !== undefined && item.index > appointmentCountPerCell - 1) {
             item.isCompact = true;
             compactCount = this._getCompactAppointmentParts(item.width);
             for(var k = 1; k < compactCount; k++) {
@@ -605,7 +605,7 @@ var BaseRenderingStrategy = Class.inherit({
     _getDynamicAppointmentCountPerCell: function() {
         var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_HEIGHT) / APPOINTMENT_DEFAULT_HEIGHT) || 1;
+        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_HEIGHT) / APPOINTMENT_DEFAULT_HEIGHT);
     }
 });
 
