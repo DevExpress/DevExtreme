@@ -389,6 +389,8 @@ var SchedulerWorkSpace = Widget.inherit({
             case "currentDate":
             case "groups":
             case "startDate":
+            case "showCurrentTimeIndicator":
+            case "indicatorTime":
                 this._cleanWorkSpace();
                 break;
             case "indicatorUpdateInterval":
@@ -417,8 +419,6 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
                 this._refreshDateTimeIndication();
                 break;
-            case "showCurrentTimeIndicator":
-            case "indicatorTime":
             case "shadeUntilNow":
                 this._refreshDateTimeIndication();
                 break;
