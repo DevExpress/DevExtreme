@@ -145,10 +145,10 @@ declare module DevExpress {
     /** @docid config#config(config) */
     export function config(config: Object): void;
 
-    /** @docid registerComponent#registerComponent(name,class) */
+    /** @docid registerComponent#registerComponent(name,componentClass) */
     export function registerComponent(name: string, componentClass: Object): void;
 
-    /** @docid registerComponent#registerComponent(name,namespace,class) */
+    /** @docid registerComponent#registerComponent(name,namespace,componentClass) */
     export function registerComponent(name: string, namespace: Object, componentClass: Object): void;
 
     /** @docid_ignore requestAnimationFrame */
