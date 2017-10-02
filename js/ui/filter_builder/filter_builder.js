@@ -6,9 +6,9 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
-    EditorFactoryController = require("../grid_core/ui.grid_core.editor_factory").controllers.editorFactory,
     utils = require("./utils"),
-    ContextMenu = require("../context_menu");
+    ContextMenu = require("../context_menu"),
+    EditorFactoryController = require("../grid_core/ui.grid_core.editor_factory").controllers.editorFactory;
 
 var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group",
@@ -22,7 +22,8 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
     FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
-    FILTER_BUILDER_ITEM_OPERATOR_CLASS = "dx-filterbuilder-item-operator",
+    FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
+    FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
     ACTIVE_CLASS = "dx-state-active",
 
     ACTIONS = [
@@ -88,20 +89,6 @@ var FilterBuilder = Widget.inherit({
              * @default []
              */
             filter: [],
-
-            /**
-             * @name dxFilterBuilderOptions_height
-             * @publicName height
-             * @default 300
-             */
-            height: 300,
-
-            /**
-             * @name dxFilterBuilderOptions_width
-             * @publicName width
-             * @default 400
-             */
-            width: 400
         });
     },
 
@@ -168,12 +155,12 @@ var FilterBuilder = Widget.inherit({
             groupCriteria = utils.getGroupCriteria(criteria);
 
         for(var i = 0; i < groupCriteria.length; i++) {
-            var condition = groupCriteria[i];
-            if(utils.isGroup(condition)) {
-                this._createGroupElementByCriteria(condition, groupCriteria)
+            var innerCriteria = groupCriteria[i];
+            if(utils.isGroup(innerCriteria)) {
+                this._createGroupElementByCriteria(innerCriteria, groupCriteria)
                     .appendTo($groupContent);
-            } else if(utils.isCondition(condition)) {
-                this._createConditionElement(condition, groupCriteria)
+            } else if(utils.isCondition(innerCriteria)) {
+                this._createConditionElement(innerCriteria, groupCriteria)
                     .appendTo($groupContent);
             }
         }
@@ -181,7 +168,8 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createGroupElement: function(criteria, parent) {
-        var $groupItem = this._createGroupItem(criteria, parent),
+        var that = this,
+            $groupItem = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
             $groupContent = $("<div>").addClass(FILTER_BUILDER_GROUP_CONTENT_CLASS),
             $group = $("<div>").addClass(FILTER_BUILDER_GROUP_CLASS).append($groupItem).append($groupContent);
 
@@ -189,69 +177,72 @@ var FilterBuilder = Widget.inherit({
             this._createRemoveButton(function() {
                 utils.removeItem(parent, criteria);
                 $group.remove();
-            }).prependTo($groupItem);
+            }).appendTo($groupItem);
         }
-        this._createAddButton(criteria, $groupContent)
-            .appendTo($groupItem);
-
-        return $group;
-    },
-
-    _createGroupItem: function(group, parent) {
-        var that = this,
-            $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
 
         var $operationButton = this._createButtonWithMenu({
-            caption: utils.getGroupText(group, that._getGroupOperations()),
+            caption: utils.getGroupText(criteria, this._getGroupOperations()),
             contextMenu: {
-                items: that._getGroupOperations(),
+                items: this._getGroupOperations(),
                 displayExpr: "text",
                 onItemClick: function(e) {
-                    utils.setGroupValue(group, e.itemData.value);
-                    $operationButton.html(utils.getGroupText(group, that._getGroupOperations()));
+                    utils.setGroupValue(criteria, e.itemData.value);
+                    $operationButton.html(e.itemData.text);
+                    // EVENT: groupValueChanged(e = {newValue, ?oldValue?})
                 }
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
             .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
             .attr("tabindex", 0)
-            .appendTo($item);
+            .appendTo($groupItem);
 
-        return $item;
+        this._createAddButton(function() {
+            var newGroup = utils.createEmptyGroup(that.option("defaultGroupOperation"));
+            utils.addItem(newGroup, criteria);
+            that._createGroupElement(newGroup, criteria).appendTo($groupContent);
+        }, function() {
+            var newCondition = utils.createCondition(that.option("fields")[0]);
+            utils.addItem(newCondition, criteria);
+            that._createConditionElement(newCondition, criteria).appendTo($groupContent);
+        }).appendTo($groupItem);
+
+        return $group;
     },
 
     _createButtonWithMenu: function(options) {
         var that = this,
-            $button = $("<div>")
-            .text(options.caption);
-
-        var removeContextMenu = function() {
-            that.element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
-            that.element().find(".dx-has-context-menu").remove();
-        };
-
-        var extendedMenuOptions = extend({
-            onHidden: function(e) {
-                $button.removeClass(ACTIVE_CLASS);
-                removeContextMenu();
+            $button = $("<div>").text(options.caption),
+            removeAllAvailableMenu = function() {
+                that.element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
+                that.element().find(".dx-has-context-menu").remove();
             },
-            target: $button
-        }, options.contextMenu);
+            contextMenuOnItemClickWrapper = function(handler) {
+                return function(e) {
+                    handler(e);
 
-        extendedMenuOptions.onItemClick = function(e) {
-            options.contextMenu.onItemClick(e);
+                    if(e.jQueryEvent.type === "keydown") {
+                        eventsEngine.trigger($button, "focus");
+                    }
+                };
+            },
+            extendedMenuOptions = extend(options.contextMenu, {
+                target: $button,
+                rtlEnabled: this.option("rtlEnabled"),
+                onHidden: function(e) {
+                    $button.removeClass(ACTIVE_CLASS);
+                    removeAllAvailableMenu();
+                },
+                onItemClick: contextMenuOnItemClickWrapper(options.contextMenu.onItemClick)
+            }),
+            showContextMenu = function() {
+                removeAllAvailableMenu();
+                $button.addClass(ACTIVE_CLASS);
+                that._createContextMenu(extendedMenuOptions)
+                    .appendTo(that.element())
+                    .dxContextMenu("show");
+            };
 
-            if(e.jQueryEvent.type === "keydown") {
-                eventsEngine.trigger($button, "focus");
-            }
-        };
-
-        var changeContextMenuState = function() {
-            removeContextMenu();
-            $button.addClass(ACTIVE_CLASS);
-            that._createContextMenu(that.element(), extendedMenuOptions);
-        };
-
-        this._subscribeOnClickAndEnterKey($button, changeContextMenuState);
+        this._subscribeOnClickAndEnterKey($button, showContextMenu);
 
         return $button;
     },
@@ -268,7 +259,7 @@ var FilterBuilder = Widget.inherit({
                 }
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-            .addClass(FILTER_BUILDER_ITEM_OPERATOR_CLASS)
+            .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
             .attr("tabindex", 0);
 
         return $operationButton;
@@ -277,7 +268,7 @@ var FilterBuilder = Widget.inherit({
     _createOperationAndValueButtons: function(condition, field, $item) {
         this._createOperationButtonWithMenu(condition, field)
             .appendTo($item);
-        this._createEditor(condition, field)
+        this._createValueButton(condition, field)
             .appendTo($item);
     },
 
@@ -313,15 +304,12 @@ var FilterBuilder = Widget.inherit({
         var $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
             field = utils.getField(condition[0], this.option("fields"));
 
-        this._createFieldButtonWithMenu(condition, field)
-            .appendTo($item);
-
-        this._createOperationAndValueButtons(condition, field, $item);
-
         this._createRemoveButton(function() {
             utils.removeItem(parent, condition);
             $item.remove();
-        }).prependTo($item);
+        }).appendTo($item);
+        this._createFieldButtonWithMenu(condition, field).appendTo($item);
+        this._createOperationAndValueButtons(condition, field, $item);
 
         return $item;
     },
@@ -352,37 +340,17 @@ var FilterBuilder = Widget.inherit({
         return $removeButton;
     },
 
-    _createAddButton: function(groupCriteria, $groupContent) {
-        var that = this;
-
-        var availableValues = [
-            {
-                caption: messageLocalization.format("dxFilterBuilder-addGroup"),
-                click: function() {
-                    var newGroup = utils.createEmptyGroup(that.option("defaultGroupOperation"));
-                    utils.addItem(newGroup, groupCriteria);
-
-                    that._createGroupElement(newGroup, groupCriteria).appendTo($groupContent);
-                }
-            },
-            {
-                caption: messageLocalization.format("dxFilterBuilder-addCondition"),
-                click: function() {
-                    var firstField = that.option("fields")[0];
-                    var availableOperations = utils.getDefaultOperation(firstField);
-
-                    var condition = utils.createCondition(firstField.dataField, availableOperations[0], "");
-                    utils.addItem(condition, groupCriteria);
-
-                    that._createConditionElement(condition, groupCriteria)
-                        .appendTo($groupContent);
-                }
-            }
-        ];
-
+    _createAddButton: function(addGroupHandler, addConditionHandler) {
         return this._createButtonWithMenu({
             contextMenu: {
-                items: availableValues,
+                items: [{
+                    caption: messageLocalization.format("dxFilterBuilder-addGroup"),
+                    click: addGroupHandler
+                },
+                {
+                    caption: messageLocalization.format("dxFilterBuilder-addCondition"),
+                    click: addConditionHandler
+                }],
                 displayExpr: "caption",
                 onItemClick: function(e) {
                     e.itemData.click();
@@ -394,83 +362,74 @@ var FilterBuilder = Widget.inherit({
             .attr("tabindex", 0);
     },
 
-    _createEditor: function(item, field) {
+    _createValueButton: function(item, field) {
         var that = this,
-            $container = $("<div>")
-                .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS);
+            $valueButton = $("<div>")
+                .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+                .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
 
-        var setText = function(item, field, $container, focus) {
+        var createValueText = function(item, field, $container) {
             var valueText = utils.getCurrentValueText(field, item[2]) || messageLocalization.format("dxFilterBuilder-enterValueText");
 
             var $text = $("<div>")
-                .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS)
+                .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
-                .text(valueText);
+                .text(valueText)
+                .appendTo($container);
 
             that._subscribeOnClickAndEnterKey($text, function() {
                 $container.empty();
-                createEditor(item, field, $container);
-            }, "keyup");
-            $text.attr("tabindex", 0)
-                .appendTo($container);
-
-            if(focus) {
-                eventsEngine.trigger($text, "focus");
-            }
-        };
-
-        var createEditor = function(item, field, $container) {
-            var $editor = $("<div>");
-            $editor.attr("tabindex", 0);
-            // TODO: it have to be in shared file
-            var value = item[2];
-            editorFactoryController.createEditor.call(that, $editor, extend({}, field, {
-                value: value,
-                parentType: "filterRow",
-                setValue: function(data) {
+                var value = item[2];
+                var $editor = that._createValueEditor(item[2], field, function(data) {
                     value = data;
-                },
-                lookup: field.lookup
-            }));
-            $editor.appendTo($container);
+                }).appendTo($container);
+                eventsEngine.trigger($editor.find("input"), "focus");
 
-            eventsEngine.on($editor, "focusout", function() {
-                $container.empty();
-                item[2] = value;
-                setText(item, field, $container);
-            });
-
-            eventsEngine.on($editor, "keyup", function(e) {
-                if(e.keyCode === 13 || e.keyCode === 27) {
-                    eventsEngine.off($editor, "focusout");
+                eventsEngine.on($editor, "focusout", function(e) {
                     $container.empty();
-                    if(e.keyCode === 13) {
-                        item[2] = value;
+                    item[2] = value;
+                    createValueText(item, field, $container);
+                });
+                eventsEngine.on($editor, "keyup", function(e) {
+                    if(e.keyCode === 13 || e.keyCode === 27) {
+                        eventsEngine.off($editor, "focusout");
+                        $container.empty();
+                        if(e.keyCode === 13) {
+                            item[2] = value;
+                        }
+                        createValueText(item, field, $container);
+                        eventsEngine.trigger($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS), "focus");
                     }
-                    setText(item, field, $container, true);
-                }
-            });
-
-            eventsEngine.trigger($editor.find("input"), "focus");
+                });
+            }, "keyup");
         };
 
-        setText(item, field, $container);
-        return $container;
+        createValueText(item, field, $valueButton);
+        return $valueButton;
     },
 
-    _createContextMenu: function($container, options) {
-        var $contextMenuElement = $("<div>").appendTo($container),
-            position;
-        if(this.option("rtlEnabled")) {
-            position = "right";
-        } else {
-            position = "left";
-        }
+    _createValueEditor: function(value, field, setValueHandler) {
+        var $editor = $("<div>").attr("tabindex", 0);
+        // TODO: it have to be in shared file
+        editorFactoryController.createEditor.call(this, $editor, extend({}, field, {
+            value: value,
+            parentType: "filterRow",
+            setValue: setValueHandler,
+            lookup: field.lookup
+        }));
+        return $editor;
+    },
+
+    _createContextMenu: function(options) {
+        var $contextMenuElement = $("<div>"),
+            position = options.rtlEnabled ? "right" : "left";
+
         this._createComponent($contextMenuElement, ContextMenu, extend({
             visible: false,
             focusStateEnabled: true,
             position: { my: position + " top", at: position + " bottom", offset: "0 1" }
-        }, options)).show();
+        }, options));
+        return $contextMenuElement;
     },
 
     _subscribeOnClickAndEnterKey: function($button, handler, keyEvent) {
