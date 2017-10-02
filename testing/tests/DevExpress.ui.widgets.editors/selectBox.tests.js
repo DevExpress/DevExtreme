@@ -4073,7 +4073,7 @@ QUnit.testInActiveWindow("dxSelectBox should not filter a dataSource when the wi
             acceptCustomValue: true,
             searchEnabled: true,
             onCustomItemCreating: function(e) {
-                e.element.remove();
+                $(e.element).remove();
                 return "";
             }
         }).dxSelectBox("instance"),
@@ -4150,7 +4150,7 @@ QUnit.test("widget disposing in focusOut event handler", function(assert) {
         searchEnabled: true,
         onFocusOut: function(e) {
             focusOutCallCount++;
-            e.element.remove();
+            $(e.element).remove();
         }
     });
 

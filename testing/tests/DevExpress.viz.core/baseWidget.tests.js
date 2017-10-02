@@ -949,7 +949,7 @@ QUnit.test('call with some arguments', function(assert) {
 
     assert.deepEqual(onIncidentOccurred.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         target: {
             id: "E100",
             args: ["argument1", "argument2"],
@@ -969,7 +969,7 @@ QUnit.test('call with some arguments. warning', function(assert) {
 
     assert.deepEqual(onIncidentOccurred.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         target: {
             id: "W100",
             args: ["argument1", "argument2"],
@@ -1037,7 +1037,7 @@ QUnit.test('with set drawn handler', function(assert) {
     //assert
     assert.deepEqual(onDrawnCallback.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element()
+        element: this.widget.element()
     }]);
 });
 
@@ -1096,7 +1096,7 @@ QUnit.test('Only binding', function(assert) {
 
     assert.deepEqual(callback.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         data: 'test'
     }]);
 });
@@ -1122,7 +1122,7 @@ QUnit.test('Only option', function(assert) {
 
     assert.deepEqual(callback.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         data: 10
     }]);
 });
@@ -1137,12 +1137,12 @@ QUnit.test('Option and binding', function(assert) {
 
     assert.deepEqual(callback1.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         data1: 'A', data2: 'B'
     }], 'option');
     assert.deepEqual(callback2.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         data1: 'A', data2: 'B'
     }], 'binding');
 });
@@ -1157,7 +1157,7 @@ QUnit.test('Several bindings', function(assert) {
 
     assert.deepEqual(callback1.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 1
     }], 'option / 1');
 
@@ -1166,12 +1166,12 @@ QUnit.test('Several bindings', function(assert) {
 
     assert.deepEqual(callback1.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 2
     }], 'option / 2');
     assert.deepEqual(callback2.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 2
     }], 'binding 1 / 2');
 
@@ -1180,17 +1180,17 @@ QUnit.test('Several bindings', function(assert) {
 
     assert.deepEqual(callback1.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 3
     }], 'option / 3');
     assert.deepEqual(callback2.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 3
     }], 'binding 1 / 3');
     assert.deepEqual(callback3.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 3
     }], 'binding 2 / 3');
 
@@ -1199,17 +1199,17 @@ QUnit.test('Several bindings', function(assert) {
 
     assert.deepEqual(callback1.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 4
     }], 'option / 4');
     assert.deepEqual(callback2.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 3
     }], 'binding 1 / 4');
     assert.deepEqual(callback3.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 4
     }], 'binding 2 / 4');
 });
@@ -1223,7 +1223,7 @@ QUnit.test('Option changing - set callback', function(assert) {
 
     assert.deepEqual(callback.lastCall.args, [{
         component: this.widget,
-        element: this.widget.$element(),
+        element: this.widget.element(),
         tag: 'data'
     }]);
 });

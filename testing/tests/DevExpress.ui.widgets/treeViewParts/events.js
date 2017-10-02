@@ -106,7 +106,7 @@ QUnit.test("onItemSelectionChanged should use correct set of arguments when item
 
     assert.deepEqual(args.itemData, items[0], "itemData is correct");
     assert.strictEqual(args.component, instance, "component is correct");
-    assert.ok(args.element.hasClass("dx-treeview"), "element is correct");
+    assert.ok($(args.element).hasClass("dx-treeview"), "element is correct");
     assert.strictEqual(args.model, undefined, "model is not defined in jquery approach");
     assert.deepEqual(args.node, nodes[0], "node is correct");
     assert.strictEqual(args.jQueryEvent, undefined, "jquery event is not defined when api used");
@@ -131,7 +131,7 @@ QUnit.test("onItemSelectionChanged should use correct set of arguments without c
 
     assert.deepEqual(args.itemData, items[0], "itemData is correct");
     assert.strictEqual(args.component, instance, "component is correct");
-    assert.ok(args.element.hasClass("dx-treeview"), "element is correct");
+    assert.ok($(args.element).hasClass("dx-treeview"), "element is correct");
     assert.strictEqual(args.model, undefined, "model is not defined in jquery approach");
     assert.deepEqual(args.node, nodes[0], "node is correct");
     assert.deepEqual(args.jQueryEvent.target, $item.get(0), "jquery event has correct target");

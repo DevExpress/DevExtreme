@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
     each = require("../../core/utils/iterator").each,
@@ -1351,7 +1352,7 @@ var PivotGrid = Widget.inherit({
                 area: $table.data("area"),
                 rowIndex: rowIndex,
                 columnIndex: columnIndex,
-                cellElement: $cellElement,
+                cellElement: getPublicElement($cellElement),
                 cell: cell
             };
         return args;

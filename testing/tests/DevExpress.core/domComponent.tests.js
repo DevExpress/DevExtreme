@@ -783,8 +783,9 @@ $.each(["onInitialized", "onOptionChanged", "onDisposing"], function(_, action) 
         var config = {
             value: true
         };
-        config[action] = function() {
+        config[action] = function(e) {
             assert.ok(true, "action fired");
+            assert.equal(e.element, e.component.element(), "action has correct element");
         };
 
         var $component = $("#component");

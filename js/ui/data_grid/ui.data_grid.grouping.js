@@ -369,7 +369,7 @@ var GroupingHeaderPanelExtender = (function() {
         _appendGroupingItem: function(items) {
             var that = this,
                 groupPanelRenderedCallback = function(e) {
-                    that._updateGroupPanelContent(e.itemElement.find("." + DATAGRID_GROUP_PANEL_CLASS));
+                    that._updateGroupPanelContent($(e.itemElement).find("." + DATAGRID_GROUP_PANEL_CLASS));
                 };
 
             if(that._isGroupPanelVisible()) {
@@ -488,7 +488,7 @@ var GroupingHeaderPanelExtender = (function() {
         getContextMenuItems: function(options) {
             var that = this,
                 contextMenuEnabled = that.option("grouping.contextMenuEnabled"),
-                $groupedColumnElement = options.targetElement.closest("." + DATAGRID_GROUP_PANEL_ITEM_CLASS),
+                $groupedColumnElement = $(options.targetElement).closest("." + DATAGRID_GROUP_PANEL_ITEM_CLASS),
                 items;
 
             if($groupedColumnElement.length) {

@@ -469,8 +469,8 @@ QUnit.test("Render checkbox before itemRendered is fired", function(assert) {
         showCheckBoxesMode: "normal",
         onItemRendered: function(e) {
             i++;
-            assert.equal(e.element.find("." + internals.NODE_CLASS).find(".dx-checkbox").length, i);
-            assert.equal(e.element.find("." + internals.NODE_CLASS + "." + internals.ITEM_WITH_CHECKBOX_CLASS).length, i);
+            assert.equal($(e.element).find("." + internals.NODE_CLASS).find(".dx-checkbox").length, i);
+            assert.equal($(e.element).find("." + internals.NODE_CLASS + "." + internals.ITEM_WITH_CHECKBOX_CLASS).length, i);
         }
     });
 

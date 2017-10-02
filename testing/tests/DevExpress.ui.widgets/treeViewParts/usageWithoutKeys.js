@@ -145,7 +145,7 @@ QUnit.test("expandItem method should not reset item data", function(assert) {
     var $treeView = initTree({
         items: [{ text: "Item 1", items: [{ text: "Nested item" }] }, { text: "Item 2" }],
         onItemClick: function(e) {
-            var el = e.itemElement;
+            var el = $(e.itemElement);
             var data = el.data();
             e.component.expandItem(e.itemElement);
 
@@ -193,7 +193,7 @@ QUnit.test("collapseItem method should not reset item data", function(assert) {
     var $treeView = initTree({
         items: [{ text: "Item 1", items: [{ text: "Nested item" }] }, { text: "Item 2" }],
         onItemClick: function(e) {
-            var el = e.itemElement;
+            var el = $(e.itemElement);
             var data = el.data();
             e.component.collapseItem(e.itemElement);
 

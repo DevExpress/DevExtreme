@@ -35,6 +35,8 @@ var $ = require("jquery"),
     getRealElementWidth = require("ui/pivot_grid/ui.pivot_grid.area_item").getRealElementWidth,
     PivotGridDataSource = require("ui/pivot_grid/data_source"),
     domUtils = require("core/utils/dom"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     dateLocalization = require("localization/date"),
     devices = require("core/devices"),
     dataUtils = require("core/element_data");
@@ -970,8 +972,9 @@ QUnit.test("onCellPrepared event", function(assert) {
     //assert
     assert.equal(cellPreparedArgs.length, 3, 'cellPreparedArgs count');
 
-    assert.strictEqual(cellPreparedArgs.row.cellElement.text(), "B", "row area cellElement");
-    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.$element(), "element");
+    assert.equal(isRenderer(cellPreparedArgs.row.cellElement), config().useJQueryRenderer, "row area cellElement");
+    assert.strictEqual($(cellPreparedArgs.row.cellElement).text(), "B", "row area cellElement");
+    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.element(), "element");
     assert.strictEqual(cellPreparedArgs.row.component, pivotGrid, "component");
     delete cellPreparedArgs.row.cellElement;
     delete cellPreparedArgs.row.element;
@@ -989,7 +992,7 @@ QUnit.test("onCellPrepared event", function(assert) {
         }
     }, 'row area cell prepared args');
 
-    assert.strictEqual(cellPreparedArgs.column.cellElement.text(), "Q1", "column area cellElement");
+    assert.strictEqual($(cellPreparedArgs.column.cellElement).text(), "Q1", "column area cellElement");
     delete cellPreparedArgs.column.cellElement;
     delete cellPreparedArgs.column.cellElement;
     delete cellPreparedArgs.column.element;
@@ -1007,7 +1010,7 @@ QUnit.test("onCellPrepared event", function(assert) {
         }
     }, 'column area cell prepared args');
 
-    assert.strictEqual(cellPreparedArgs.data.cellElement.text(), "$2", "data area cellElement");
+    assert.strictEqual($(cellPreparedArgs.data.cellElement).text(), "$2", "data area cellElement");
     delete cellPreparedArgs.data.cellElement;
     delete cellPreparedArgs.data.cellElement;
     delete cellPreparedArgs.data.element;
@@ -1052,8 +1055,8 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
     //assert
     assert.equal(cellPreparedArgs.length, 3, 'cellPreparedArgs count');
 
-    assert.strictEqual(cellPreparedArgs.row.cellElement.text(), "B", "row area cellElement");
-    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.$element(), "element");
+    assert.strictEqual($(cellPreparedArgs.row.cellElement).text(), "B", "row area cellElement");
+    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.element(), "element");
     assert.strictEqual(cellPreparedArgs.row.component, pivotGrid, "component");
     delete cellPreparedArgs.row.cellElement;
     delete cellPreparedArgs.row.element;
@@ -1071,7 +1074,7 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
         }
     }, 'row area cell prepared args');
 
-    assert.strictEqual(cellPreparedArgs.column.cellElement.text(), "Q1", "column area cellElement");
+    assert.strictEqual($(cellPreparedArgs.column.cellElement).text(), "Q1", "column area cellElement");
     delete cellPreparedArgs.column.cellElement;
     delete cellPreparedArgs.column.cellElement;
     delete cellPreparedArgs.column.element;
@@ -1089,7 +1092,7 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
         }
     }, 'column area cell prepared args');
 
-    assert.strictEqual(cellPreparedArgs.data.cellElement.text(), "$2", "data area cellElement");
+    assert.strictEqual($(cellPreparedArgs.data.cellElement).text(), "$2", "data area cellElement");
     delete cellPreparedArgs.data.cellElement;
     delete cellPreparedArgs.data.cellElement;
     delete cellPreparedArgs.data.element;
@@ -1122,8 +1125,8 @@ QUnit.test("onCellPrepared event cellElement must be attached to dom and have co
         dataSource: this.dataSource,
         onCellPrepared: function(e) {
             if(e.cell.text === "2010") {
-                assert.equal(e.cellElement.closest(document).length, 1, "cellElement is attached to dom");
-                assert.equal(e.cellElement.css("text-align"), "left", "cellElement text-align");
+                assert.equal($(e.cellElement).closest(document).length, 1, "cellElement is attached to dom");
+                assert.equal($(e.cellElement).css("text-align"), "left", "cellElement text-align");
                 isCellPreparedCalled = true;
             }
         }

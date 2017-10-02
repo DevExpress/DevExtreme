@@ -28,7 +28,7 @@ function updateSelectAllState(e, filterValues) {
     if(e.component.option("searchValue")) {
         return;
     }
-    var selectAllCheckBox = e.element.find(".dx-list-select-all-checkbox").data("dxCheckBox");
+    var selectAllCheckBox = $(e.element).find(".dx-list-select-all-checkbox").data("dxCheckBox");
 
     if(selectAllCheckBox && filterValues && filterValues.length) {
         selectAllCheckBox.option("value", undefined);

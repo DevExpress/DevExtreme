@@ -537,7 +537,7 @@ QUnit.test("the 'onItemRendered' option should be proxied to the list", function
         itemRenderedCallbackArgs = itemRenderedCallback.getCall(0).args[0];
 
     assert.equal(itemRenderedCallback.callCount, 2, "onItemRendered was fired");
-    assert.equal(dropDownMenu._list.$element(), itemRenderedCallbackArgs.element, "onItemRendered was fired in the right context");
+    assert.equal(dropDownMenu._list.element(), itemRenderedCallbackArgs.element, "onItemRendered was fired in the right context");
     assert.equal(dropDownMenu._list, itemRenderedCallbackArgs.component, "onItemRendered was fired in the right context");
 });
 

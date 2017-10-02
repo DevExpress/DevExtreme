@@ -2,6 +2,8 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     registerComponent = require("core/component_registrator"),
     DataSource = require("data/data_source/data_source").DataSource,
     Store = require("data/abstract_store"),
@@ -633,7 +635,8 @@ QUnit.test("onItemClick should be fired when item is clicked", function(assert) 
 
     $item.trigger("dxclick");
     assert.ok(actionFired, "action fired");
-    assert.strictEqual(actionData.itemElement[0], $item[0], "correct element passed");
+    assert.equal(isRenderer(actionData.itemElement), config().useJQueryRenderer, "correct element passed");
+    assert.strictEqual($(actionData.itemElement)[0], $item[0], "correct element passed");
     assert.strictEqual(actionData.itemData, "1", "correct element passed");
     assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
 });
@@ -712,7 +715,7 @@ QUnit.test("Action should be fired when item is held", function(assert) {
 
     $item.trigger(holdEvent.name);
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -787,7 +790,7 @@ QUnit.test("onItemContextMenu should be fired when item is held or right clicked
 
     $item.trigger("dxcontextmenu");
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -808,7 +811,7 @@ QUnit.test("itemContextMenu event should be fired when item is held or right cli
 
     $item.trigger("dxcontextmenu");
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -893,7 +896,7 @@ QUnit.test("'onItemRendered' event should be fired with correct arguments", func
         $item = $element.find(".item")[0];
 
     assert.ok(eventTriggered, "action fired");
-    assert.strictEqual(eventData.itemElement[0], $item, "itemElement is correct");
+    assert.strictEqual($(eventData.itemElement)[0], $item, "itemElement is correct");
     assert.strictEqual(eventData.itemData, items[0], "itemData is correct");
     assert.equal(eventData.itemIndex, 0, "itemIndex is correct");
 

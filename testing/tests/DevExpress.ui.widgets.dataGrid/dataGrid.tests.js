@@ -411,15 +411,15 @@ QUnit.test("cellClick/cellHoverChanged handler should be executed when define vi
     dataGrid.on("cellClick", function(e) {
         cellClickCount++;
 
-        assert.equal(e.cellElement.get(0).tagName, "TD", "correct cell element tag");
-        assert.equal(e.cellElement.text(), "1", "correct cell content");
+        assert.equal($(e.cellElement).get(0).tagName, "TD", "correct cell element tag");
+        assert.equal($(e.cellElement).text(), "1", "correct cell content");
     });
 
     dataGrid.on("cellHoverChanged", function(e) {
         cellHoverChangedCount++;
 
-        assert.equal(e.cellElement.get(0).tagName, "TD", "correct cell element tag");
-        assert.equal(e.cellElement.text(), "1", "correct cell content");
+        assert.equal($(e.cellElement).get(0).tagName, "TD", "correct cell element tag");
+        assert.equal($(e.cellElement).text(), "1", "correct cell content");
     });
 
     $(dataGrid.$element())
@@ -1820,7 +1820,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
             },
             onCellPrepared: function(e) {
                 if(e.rowType === "data" && e.column.command === "edit" && e.row.removed) {
-                    e.cellElement.parent().css({ display: 'none' });
+                    $(e.cellElement).parent().css({ display: 'none' });
                 }
             }
         }),
