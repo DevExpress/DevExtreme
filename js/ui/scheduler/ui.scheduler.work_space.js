@@ -807,7 +807,7 @@ var SchedulerWorkSpace = Widget.inherit({
             if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
                 var groupCount = isVertical && this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.content(),
-                    width = this._getShaderWidth(),
+                    width = this._getIndicationWidth(),
                     height = this._getIndicationHeight();
 
                 if(height > 0) {
