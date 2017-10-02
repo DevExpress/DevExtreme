@@ -3914,6 +3914,51 @@ QUnit.test("Custom toolbar item should be aligned", function(assert) {
     assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-toolbar .dx-datebox").offset().top, "toolbar custom item is aligned");
 });
 
+//T558301
+QUnit.testInActiveWindow("Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled", function(assert) {
+    //arrange
+    var $tableElements,
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ Test: "" }],
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            scrolling: {
+                mode: "virtual"
+            },
+            columns: [{
+                dataField: "Test",
+                validationRules: [{ type: "required" }]
+            }]
+        });
+
+    //assert
+    $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 1.1, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 1.1, "height virtual table");
+
+    //act
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    //assert
+    $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 1.1, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 68, 1.1, "height virtual table");
+
+    dataGrid.closeEditCell();
+    clock.tick();
+
+    //assert
+    $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 1.1, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 1.1, "height virtual table");
+    clock.restore();
+});
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
