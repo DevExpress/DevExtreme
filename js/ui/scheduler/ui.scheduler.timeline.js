@@ -160,7 +160,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderDateTable();
 
         this._renderDateTimeIndication();
-        this._setIndicatorUpdateInterval();
+        this._setIndicationUpdateInterval();
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.content());
 

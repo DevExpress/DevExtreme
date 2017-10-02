@@ -371,7 +371,7 @@ var SchedulerWorkSpace = Widget.inherit({
             allowMultipleCellSelection: true,
             indicatorTime: new Date(),
             indicatorUpdateInterval: 10000,
-            showShader: true
+            shadeUntilNow: true
         });
     },
 
@@ -391,6 +391,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "startDate":
             case "showCurrentTimeIndicator":
             case "indicatorTime":
+            case "shadeUntilNow":
                 this._cleanWorkSpace();
                 break;
             case "indicatorUpdateInterval":
@@ -797,7 +798,7 @@ var SchedulerWorkSpace = Widget.inherit({
         if(this._needRenderDateTimeIndicator()) {
             var isVertical = this._isVerticalShader();
 
-            if(this.option("showShader")) {
+            if(this.option("shadeUntilNow")) {
                 this._dateTimeShader.render(this, isVertical);
             }
 
