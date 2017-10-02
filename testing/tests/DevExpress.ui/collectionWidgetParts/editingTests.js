@@ -551,6 +551,24 @@ var runTests = function() {
         }
     });
 
+    QUnit.test("selectedItems should be cleared if datasource instance has been changed", function(assert) {
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            selectedItemKeys: [1, 2]
+        });
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems is correct");
+        assert.deepEqual(instance.option("selectedItem"), 1, "selectedItem is correct");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItem is correct");
+
+        instance.option("dataSource", null);
+
+        assert.deepEqual(instance.option("selectedItems"), [], "selectedItems was cleared");
+        assert.strictEqual(instance.option("selectedItem"), undefined, "selectedItem was cleared");
+        assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys was cleared");
+    });
+
 
     QUnit.module("selecting of item keys", {
         beforeEach: function() {
