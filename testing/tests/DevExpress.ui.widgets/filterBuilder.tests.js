@@ -84,6 +84,19 @@ QUnit.test("markup init", function(assert) {
     assert.equal(element.parent().html(), etalon);
 });
 
+QUnit.test("create filterbuilder by different filter values", function(assert) {
+    var element = $("#container").dxFilterBuilder({ fields: fields });
+    var instance = element.dxFilterBuilder("instance");
+    instance.option("filter", []);
+    assert.ok(instance);
+    instance.option("filter", ["Or"]);
+    assert.ok(instance);
+    instance.option("filter", [["CompanyName", "=", "K&S Music"], ["CompanyName", "=", "K&S Music"]]);
+    assert.ok(instance);
+    instance.option("filter", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
+    assert.ok(instance);
+});
+
 QUnit.test("filter Content init", function(assert) {
     var etalon =
     '<div class=\"dx-filterbuilder-group\">'
@@ -278,8 +291,7 @@ QUnit.test("getGroupText", function(assert) {
             condition3
         ]
     ];
-    var groupValue = utils.getGroupText(group, filterBuilder._getGroupOperations());
-    assert.equal(groupValue, "Not And");
+    assert.equal(utils.getGroupText(group, filterBuilder._getGroupOperations()), "Not And");
 });
 
 QUnit.test("setGroupValue", function(assert) {
@@ -306,7 +318,6 @@ QUnit.test("setGroupValue", function(assert) {
     assert.equal(group[1][1], "Or");
     assert.equal(group[1].length, 5);
 
-
     group = utils.setGroupValue(group, "And");
     // assert
     assert.equal(group[0], condition1);
@@ -315,6 +326,19 @@ QUnit.test("setGroupValue", function(assert) {
     assert.equal(group[3], "And");
     assert.equal(group[4], condition3);
     assert.equal(group.length, 5);
+
+    group = [
+        condition1,
+        condition2
+    ];
+    group = utils.setGroupValue(group, "!Or");
+    // assert
+    assert.equal(group[0], "!");
+    assert.equal(group.length, 2);
+    assert.equal(group[1][0], condition1);
+    assert.equal(group[1][1], "Or");
+    assert.equal(group[1][2], condition2);
+    assert.equal(group[1].length, 3);
 });
 
 QUnit.test("removeItem", function(assert) {
@@ -396,11 +420,30 @@ QUnit.test("removeItem", function(assert) {
     assert.equal(group[1][1], "And");
     assert.equal(group[1][2], condition3);
     assert.equal(group[1].length, 3);
+
+    group = ["!", [
+        condition1,
+        condition2,
+        condition3
+    ]];
+    group = utils.removeItem(group, condition2);
+    assert.equal(group[0], "!");
+    assert.equal(group.length, 2);
+    assert.equal(group[1][0], condition1);
+    assert.equal(group[1][1], condition3);
+    assert.equal(group[1].length, 2);
 });
 
 QUnit.test("isGroup", function(assert) {
     assert.ok(utils.isGroup([[], "And", []]));
     assert.ok(utils.isGroup(["And"]));
+});
+
+QUnit.test("isCondition", function(assert) {
+    assert.ok(utils.isCondition(["Column1", "=", "value"]));
+    assert.ok(utils.isCondition(["Column1", "="]));
+    assert.ok(!utils.isCondition([[], "And", []]));
+    assert.ok(!utils.isCondition(["And"]));
 });
 
 QUnit.test("getAvailableOperations", function(assert) {
@@ -443,6 +486,13 @@ QUnit.test("addItem", function(assert) {
     assert.equal(group[1][3], "And");
     assert.equal(group[1][4], condition3);
     assert.equal(group[1].length, 5);
+
+    group = ["!", [condition1, condition2]];
+    group = utils.addItem(condition3, group);
+    assert.equal(group[0], "!");
+    assert.equal(group.length, 2);
+    assert.equal(group[1][2], condition3);
+    assert.equal(group[1].length, 3);
 });
 
 QUnit.test("get normalized filter", function(assert) {
@@ -494,6 +544,14 @@ QUnit.test("get normalized filter", function(assert) {
     assert.equal(group[1].length, 3);
 });
 
+QUnit.test("get group value", function(assert) {
+    assert.equal(utils.getGroupValue([]), "And");
+    assert.equal(utils.getGroupValue(["Or"]), "Or");
+    assert.equal(utils.getGroupValue(["!", ["Or"]]), "!Or");
+    assert.equal(utils.getGroupValue(["!", ["And"]]), "!And");
+    assert.equal(utils.getGroupValue([["column", "operation", "value"]]), "And");
+    assert.equal(utils.getGroupValue([["column", "operation", "value"], ["column", "operation", "value"]]), "And");
+});
 
 QUnit.test("get current value text", function(assert) {
     var field = {},
