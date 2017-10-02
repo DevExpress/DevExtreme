@@ -1,9 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
-    dateUtils = require("../../core/utils/date"),
-    toMs = dateUtils.dateToMilliseconds;
+    Class = require("../../core/class");
 
 var DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader",
     DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",
@@ -94,20 +92,6 @@ var currentTimeShader = Class.inherit({
             this._$shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
             this._$shader.width(shaderWidth);
         }
-    },
-
-    _getHorizontalShaderWidth: function() {
-        var today = this._workspace._getToday(),
-            cellWidth = this._workspace.getCellWidth(),
-            date = this._workspace._getDateForIndicator(),
-            hiddenInterval = this._workspace._getHiddenInterval(),
-            timeDiff = today.getTime() - date.getTime();
-
-        var differenceInDays = Math.ceil(timeDiff / toMs("day")) - 1,
-            duration = timeDiff - differenceInDays * hiddenInterval,
-            cellCount = duration / this._workspace.getCellDuration();
-
-        return cellCount * cellWidth;
     },
 
     clean: function() {

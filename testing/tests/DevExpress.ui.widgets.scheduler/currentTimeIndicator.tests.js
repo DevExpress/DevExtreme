@@ -155,7 +155,7 @@ var stubInvokeMethod = function(instance, options) {
 
         this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
 
-        var $element = this.instance.element(),
+        var $element = this.instance.$element(),
             $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
 
         assert.equal($indicators.length, 2, "Indicator count is correct");

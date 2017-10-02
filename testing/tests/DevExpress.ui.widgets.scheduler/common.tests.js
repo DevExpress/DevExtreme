@@ -1043,7 +1043,7 @@ QUnit.testStart(function() {
         assert.equal(this.instance.option("showAllDayPanel"), true, "showAllDayPanel option value is right on init");
     });
 
-    QUnit.test("showCurrentTimeIndicator option value = true on init", function(assert) {
+    QUnit.test("showCurrentTimeIndicator should have right default", function(assert) {
         this.createInstance();
 
         assert.equal(this.instance.option("showCurrentTimeIndicator"), true, "showCurrentTimeIndicator option value is right on init");
@@ -1055,7 +1055,7 @@ QUnit.testStart(function() {
             showCurrentTimeIndicator: false
         });
 
-        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+        var workSpaceWeek = this.instance.getWorkSpace();
 
         assert.equal(workSpaceWeek.option("showCurrentTimeIndicator"), false, "workspace has correct showCurrentTimeIndicator");
 
@@ -1070,7 +1070,7 @@ QUnit.testStart(function() {
             indicatorTime: new Date(2017, 8, 19)
         });
 
-        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+        var workSpaceWeek = this.instance.getWorkSpace();
 
         assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 19), "workspace has correct indicatorTime");
 
@@ -1079,13 +1079,21 @@ QUnit.testStart(function() {
         assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 20), "workspace has correct indicatorTime");
     });
 
+    QUnit.test("indicatorUpdateInterval should have right default", function(assert) {
+        this.createInstance({
+            currentView: "week"
+        });
+
+        assert.equal(this.instance.option("indicatorUpdateInterval"), 300000, "workspace has correct indicatorUpdateInterval");
+    });
+
     QUnit.test("indicatorUpdateInterval option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
             indicatorUpdateInterval: 2000
         });
 
-        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+        var workSpaceWeek = this.instance.getWorkSpace();
 
         assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 2000, "workspace has correct indicatorUpdateInterval");
 
@@ -1094,13 +1102,21 @@ QUnit.testStart(function() {
         assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 3000, "workspace has correct indicatorUpdateInterval");
     });
 
+    QUnit.test("shadeUntilNow should have right default", function(assert) {
+        this.createInstance({
+            currentView: "week"
+        });
+
+        assert.equal(this.instance.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
+    });
+
     QUnit.test("shadeUntilNow option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
             shadeUntilNow: false
         });
 
-        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+        var workSpaceWeek = this.instance.getWorkSpace();
 
         assert.equal(workSpaceWeek.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
 

@@ -557,8 +557,8 @@ var Scheduler = Widget.inherit({
                 */
             showCurrentTimeIndicator: true,
             indicatorTime: undefined,
-            indicatorUpdateInterval: 10000,
-            shadeUntilNow: true,
+            indicatorUpdateInterval: dateUtils.dateToMilliseconds("minute") * 5,
+            shadeUntilNow: false,
 
                 /**
                 * @name dxSchedulerOptions_recurrenceEditMode

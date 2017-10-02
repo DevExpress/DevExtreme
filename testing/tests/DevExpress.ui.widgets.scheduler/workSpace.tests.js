@@ -737,7 +737,9 @@ QUnit.testStart(function() {
 
     QUnit.module("Work Space Week", {
         beforeEach: function() {
-            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek().dxSchedulerWorkSpaceWeek("instance");
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
+                showCurrentTimeIndicator: true
+            }).dxSchedulerWorkSpaceWeek("instance");
             stubInvokeMethod(this.instance);
         }
     });
