@@ -1094,6 +1094,21 @@ QUnit.testStart(function() {
         assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 3000, "workspace has correct indicatorUpdateInterval");
     });
 
+    QUnit.test("shadeUntilNow option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            shadeUntilNow: false
+        });
+
+        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+
+        assert.equal(workSpaceWeek.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
+
+        this.instance.option("shadeUntilNow", true);
+
+        assert.equal(workSpaceWeek.option("shadeUntilNow"), true, "workspace has correct shadeUntilNow");
+    });
+
     QUnit.test("appointments should be repainted after scheduler dimensions changing", function(assert) {
         var data = [{
             id: 1, text: "abc", startDate: new Date(2015, 1, 9, 10), endDate: new Date(2015, 1, 9, 10, 30)
