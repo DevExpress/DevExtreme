@@ -772,7 +772,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _setIndicationUpdateInterval: function() {
-        if(!this.option("showCurrentTimeIndicator")) {
+        if(!this.option("showCurrentTimeIndicator") || this.option("indicatorUpdateInterval") === 0) {
             return;
         }
         var that = this;
