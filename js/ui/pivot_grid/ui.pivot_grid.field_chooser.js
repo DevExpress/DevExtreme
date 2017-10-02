@@ -188,6 +188,52 @@ var FieldChooser = BaseFieldChooser.inherit({
                  */
                 allFields: messageLocalization.format("dxPivotGrid-allFields")
             }
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter
+             * @publicName headerFilter
+             * @type object
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_width
+             * @publicName width
+             * @type number
+             * @default 252
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_height
+             * @publicName height
+             * @type number
+             * @default 325
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_allowSearch
+             * @publicName allowSearch
+             * @type boolean
+             * @default undefined
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_texts
+             * @publicName texts
+             * @type object
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_emptyValue
+             * @publicName emptyValue
+             * @type string
+             * @default "(Blanks)"
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_ok
+             * @publicName ok
+             * @type string
+             * @default "Ok"
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_cancel
+             * @publicName cancel
+             * @type string
+             * @default "Cancel"
+             */
         });
     },
 

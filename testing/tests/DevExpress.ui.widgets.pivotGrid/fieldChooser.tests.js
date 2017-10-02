@@ -1799,3 +1799,117 @@ QUnit.test("change group position", function(assert) {
     assert.strictEqual(changedArgs.removeTargetElement, true);
     assert.strictEqual(changedArgs.removeSourceClass, false);
 });
+
+QUnit.test("Show search box in headerFilter", function(assert) {
+    var that = this,
+        list,
+        fieldElements,
+        fields = [
+            { caption: "Field 1", area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
+        ],
+        dataSourceOptions = {
+            columnFields: fields,
+            fieldValues: [
+                [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
+            ]
+        };
+
+    this.setup(dataSourceOptions, {
+        headerFilter: {
+            allowSearch: true
+        }
+    });
+
+    $.each(fields, function(_, field) {
+        that.$container.append(that.fieldChooser.renderField(field));
+    });
+
+    fieldElements = that.$container.find(".dx-area-field");
+
+    //act
+    fieldElements.first().find(".dx-header-filter").trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    list = $(".dx-list").dxList("instance");
+    assert.ok(list.option("searchEnabled"), "list with search bar");
+    assert.equal(list.option("searchExpr"), "text", "expr is correct");
+});
+
+QUnit.test("HeaderFilter should be without search bar when column allowSearch is disabled", function(assert) {
+    var that = this,
+        list,
+        fieldElements,
+        fields = [
+            { caption: "Field 1", area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true,
+                headerFilter: {
+                    allowSearch: false
+                }
+            }
+        ],
+        dataSourceOptions = {
+            columnFields: fields,
+            fieldValues: [
+                [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
+            ]
+        };
+
+    this.setup(dataSourceOptions, {
+        headerFilter: {
+            allowSearch: true
+        }
+    });
+
+    $.each(fields, function(_, field) {
+        that.$container.append(that.fieldChooser.renderField(field));
+    });
+
+    fieldElements = that.$container.find(".dx-area-field");
+
+    //act
+    fieldElements.first().find(".dx-header-filter").trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    list = $(".dx-list").dxList("instance");
+    assert.notOk(list.option("searchEnabled"), "list without search bar");
+});
+
+QUnit.test("Search in headerFilter", function(assert) {
+    var that = this,
+        list,
+        $listItems,
+        fieldElements,
+        fields = [
+            { caption: "Field 1", area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
+        ],
+        dataSourceOptions = {
+            columnFields: fields,
+            fieldValues: [
+                [{ value: 1, text: "test1" }, { value: 2, text: "test2" }, { value: 3, text: "test3" }, { value: 4, text: "test4" }]
+            ]
+        };
+
+    this.setup(dataSourceOptions, {
+        headerFilter: {
+            allowSearch: true
+        }
+    });
+
+    $.each(fields, function(_, field) {
+        that.$container.append(that.fieldChooser.renderField(field));
+    });
+
+    fieldElements = that.$container.find(".dx-area-field");
+    fieldElements.first().find(".dx-header-filter").trigger("dxclick");
+    this.clock.tick(500);
+
+    //act
+    list = $(".dx-list").dxList("instance");
+    list.option("searchValue", "t2");
+
+    //assert
+    $listItems = list.$element().find(".dx-list-item");
+    assert.strictEqual($listItems.length, 1, "list item's count");
+    assert.strictEqual($listItems.text(), "test2", "correct item's text");
+});

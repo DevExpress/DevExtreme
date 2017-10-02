@@ -150,9 +150,10 @@ exports.HeaderFilterView = modules.View.inherit({
 
     _getSearchExpr: function(options) {
         var lookup = options.lookup,
+            useDefaultSearchExpr = options.useDefaultSearchExpr,
             headerFilterDataSource = options.headerFilter && options.headerFilter.dataSource;
 
-        if(isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
+        if(useDefaultSearchExpr || isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
             return DEFAULT_SEARCH_EXPRESSION;
         }
 

@@ -21,8 +21,14 @@ var $ = require("../../core/renderer"),
     inArray = inArray,
     each = iteratorUtils.each,
     IE_FIELD_WIDTH_CORRECTION = 1,
-    DIV = "<div>",
-    HeaderFilterView = headerFilter.HeaderFilterView;
+    DIV = "<div>";
+
+var HeaderFilterView = headerFilter.HeaderFilterView.inherit({
+    _getSearchExpr: function(options) {
+        options.useDefaultSearchExpr = true;
+        return this.callBase(options);
+    }
+});
 
 var processItems = function(groupItems, field) {
     var filterValues = [],
@@ -266,6 +272,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
                     that._headerFilterView.showHeaderFilterMenu($(e.currentTarget), extend(mainGroupField, {
                         type: mainGroupField.groupName ? 'tree' : 'list',
                         dataSource: {
+                            useDefaultSearch: true,
                             //paginate: false,
                             load: function(options) {
                                 var userData = options.userData;
