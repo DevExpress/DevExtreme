@@ -828,7 +828,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getRoundedCellWidth: function() {
-        var $row = this.element().find("." + this._getDateTableRowClass()).eq(0),
+        var $row = this.$element().find("." + this._getDateTableRowClass()).eq(0),
             width = 0,
             $cells = $row.find("." + this._getDateTableCellClass()),
             cellsCount = $cells.length;
@@ -1542,7 +1542,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _cleanDateTimeIndicator: function() {
-        this.element().find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
+        this.$element().find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
     },
 
     getWorkArea: function() {

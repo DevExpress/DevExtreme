@@ -175,7 +175,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             hiddenInterval = this._getHiddenInterval(),
             timeDiff = today.getTime() - date.getTime();
 
-        var differenceInDays = Math.ceil(timeDiff / toMs("day")) - 1,
+        var differenceInDays = Math.floor(timeDiff / toMs("day")) || 1,
             duration = timeDiff - differenceInDays * hiddenInterval,
             cellCount = duration / this.getCellDuration();
 
