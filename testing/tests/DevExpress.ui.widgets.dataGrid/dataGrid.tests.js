@@ -3908,8 +3908,8 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
 
     //assert
     $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
-    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 1.1, "height main table");
-    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 1.1, "height virtual table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
 
     //act
     dataGrid.editCell(0, 0);
@@ -3917,16 +3917,16 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
 
     //assert
     $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
-    assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 1.1, "height main table");
-    assert.roughEqual($tableElements.eq(1).outerHeight(), 68, 1.1, "height virtual table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 68, 3, "height virtual table");
 
     dataGrid.closeEditCell();
     clock.tick();
 
     //assert
     $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
-    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 1.1, "height main table");
-    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 1.1, "height virtual table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
     clock.restore();
 });
 
