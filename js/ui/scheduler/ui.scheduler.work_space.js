@@ -395,7 +395,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._cleanWorkSpace();
                 break;
             case "indicatorUpdateInterval":
-                this._setIndicatorUpdateInterval();
+                this._setIndicationUpdateInterval();
                 break;
             case "showAllDayPanel":
                 this._toggleAllDayVisibility();
