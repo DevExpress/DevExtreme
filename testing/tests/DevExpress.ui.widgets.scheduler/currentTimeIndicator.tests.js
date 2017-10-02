@@ -119,6 +119,19 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 0, "Indicator wasn't rendered");
     });
 
+    QUnit.test("DateTimeIndicator should not be renderd if indicatorTime < startDayHour, Day view", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 10, 45),
+            startDayHour: 11
+        });
+
+        var $element = this.instance.$element();
+        assert.equal($element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 0, "Indicator wasn't rendered");
+
+        this.instance.option("startDayHour", 8);
+        assert.equal($element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 1, "Indicator is rendered");
+    });
+
     QUnit.test("Shader should be rendered if needed, Day view", function(assert) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45),

@@ -802,7 +802,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._dateTimeShader.render(this, isVertical);
             }
 
-            if(this.option("showCurrentTimeIndicator")) {
+            if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicatorCells()) {
                 var groupCount = isVertical && this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.content(),
                     width = this._getShaderWidth();
@@ -858,7 +858,8 @@ var SchedulerWorkSpace = Widget.inherit({
     _needRenderDateTimeIndicatorCells: function() {
         var now = this._getToday(),
             endViewDate = dateUtils.trimTime(this.getEndViewDate());
-        return dateUtils.dateInRange(now, dateUtils.trimTime(this.getStartViewDate()), new Date(endViewDate.getTime() + DAY_MS));
+
+        return dateUtils.dateInRange(now, this._firstViewDate, new Date(endViewDate.getTime() + DAY_MS));
     },
 
     _needRenderDateTimeIndicator: function() {
