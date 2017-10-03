@@ -376,7 +376,7 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
-        var $popupContent = this._popup.content();
+        var $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, "mousedown");
         eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
     },
@@ -541,7 +541,7 @@ var DropDownList = DropDownEditor.inherit({
         this._listId = "dx-" + new Guid()._value;
 
         var $list = this._$list = $("<div>").attr("id", this._listId)
-            .appendTo(this._popup.content());
+            .appendTo(this._popup.$content());
 
         this._list = this._createComponent($list, List, this._listConfig());
 

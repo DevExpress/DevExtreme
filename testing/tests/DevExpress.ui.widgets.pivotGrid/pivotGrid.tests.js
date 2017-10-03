@@ -285,7 +285,7 @@ QUnit.test("Loading DataSource", function(assert) {
     assert.strictEqual(pivotGrid.isReady(), false);
     assert.ok(!onContentReadyCallback.called, "contentReady should not be called");
 
-    var loadIndicatorElement = pivotGrid._loadPanel.content(),
+    var loadIndicatorElement = pivotGrid._loadPanel.$content(),
         dataAreaGroupElement = pivotGrid._dataArea.groupElement(),
         loadIndicatorElementOffset = loadIndicatorElement.offset(),
         dataAreaGroupElementOffset = dataAreaGroupElement.offset();
@@ -642,8 +642,9 @@ QUnit.test("create field chooser with search", function(assert) {
     fieldChooserPopup.show();
     this.clock.tick(500);
 
-    var fieldChooser = fieldChooserPopup.content().data("dxPivotGridFieldChooser"),
-        treeViewInstance = fieldChooserPopup.content().find(".dx-treeview").dxTreeView("instance");
+
+    var fieldChooser = fieldChooserPopup.$content().data("dxPivotGridFieldChooser"),
+        treeViewInstance = fieldChooserPopup.$content().find(".dx-treeview").dxTreeView("instance");
 
     //assert
     assert.ok(fieldChooser.option("allowSearch"), 'fieldChooser with search');
@@ -737,7 +738,7 @@ QUnit.test("fieldChooser layout change at runtime should not hide popup", functi
     //assert
     assert.ok(fieldChooserPopup.option("visible"), 'fieldChooser popup is visible');
     assert.strictEqual(fieldChooserPopup.option("width"), 900);
-    assert.strictEqual(fieldChooserPopup.content().dxPivotGridFieldChooser("instance").option("layout"), 1);
+    assert.strictEqual(fieldChooserPopup.$content().dxPivotGridFieldChooser("instance").option("layout"), 1);
 });
 
 QUnit.test("Dragging between PivotGrid and FieldChooser", function(assert) {
@@ -825,7 +826,7 @@ QUnit.test("T257099. Hide fieldChooser popup on dataSource changed", function(as
     this.clock.tick(500);
     //assert
     assert.ok(!$(".dx-fieldchooser-popup").is(":visible"), 'fieldChooser popup is not visible after change dataSource');
-    assert.strictEqual(pivotGrid.getFieldChooserPopup().content().dxPivotGridFieldChooser("option", "dataSource"), pivotGrid.getDataSource(), "dataSource changed");
+    assert.strictEqual(pivotGrid.getFieldChooserPopup().$content().dxPivotGridFieldChooser("option", "dataSource"), pivotGrid.getDataSource(), "dataSource changed");
 
 });
 
@@ -2504,8 +2505,8 @@ QUnit.test("Initial horizontal scroll position when rtl is enabled", function(as
     var columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
     assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
     assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
-    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
-    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
 });
 
 //T529461
@@ -2536,8 +2537,8 @@ QUnit.test("Initial horizontal scroll position when rtl is enabled and scrolling
     var columnAreaContentTable = pivotGrid.$element().find(".dx-pivotgrid-horizontal-headers .dx-scrollable-content > table");
     assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
     assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
-    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
-    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
     assert.equal(dataAreaFakeTable.css("right"), "0px");
     assert.equal(columnAreaFakeTable.css("right"), "0px");
     assert.equal(dataAreaContentTable.css("right"), "0px");
@@ -2578,8 +2579,8 @@ QUnit.test("Horizontal scroll position after scroll when rtl is enabled", functi
         assert.ok(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
         assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
         assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
-        assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
-        assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+        assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + columnAreaScrollable._container().width(), columnAreaScrollable.$content().width(), 1, "scrollLeft is in max right position");
 
         done();
     };
@@ -5022,7 +5023,7 @@ QUnit.test('setVirtualContentParams.', function(assert) {
     assert.strictEqual(virtualContent.css("display"), "block");
     assert.strictEqual(virtualContent.css("width"), "500px");
     assert.strictEqual(virtualContent.css("height"), "250px");
-    assert.strictEqual(area._getScrollable().content().css("height"), "250px");
+    assert.strictEqual(area._getScrollable().$content().css("height"), "250px");
 });
 
 //T465337
@@ -5046,7 +5047,7 @@ QUnit.test('Reset with virtual scrolling', function(assert) {
     //act
     area.reset();
     //assert
-    assert.strictEqual(area._getScrollable().content().get(0).style.height, "auto");
+    assert.strictEqual(area._getScrollable().$content().get(0).style.height, "auto");
 });
 
 QUnit.test('scrollTo with virtual scrolling. Horizontal scrolling', function(assert) {

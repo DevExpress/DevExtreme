@@ -77,7 +77,7 @@ QUnit.test("popup should not focus when we selecting an item", function(assert) 
     assert.expect(1);
 
     this.instance.option("opened", true);
-    var popupContent = $(this.instance._popup.content()),
+    var popupContent = $(this.instance._popup.$content()),
         isDefaultPrevented = false;
 
     popupContent.on("mousedown", function(e) {
@@ -1148,7 +1148,7 @@ QUnit.module(
 
             window
                 .waitFor(function() {
-                    var popup = $("#test-drop-down").dxDropDownList("instance")._popup.content(),
+                    var popup = $("#test-drop-down").dxDropDownList("instance")._popup.$content(),
                         items = popup.find(".dx-list-item");
 
                     return items.length === 1 && $(items[0]).text() === "z";

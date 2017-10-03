@@ -65,6 +65,7 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
+    config = require("core/config"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
@@ -3642,7 +3643,7 @@ QUnit.test("row alternation should be correct if virtual scrolling is enabled an
     });
 
     var alternatedRowIndexes = [0, 1, 2, 3, 4, 5].filter(function(index) {
-        return dataGrid.getRowElement(index).hasClass("dx-row-alt");
+        return $(dataGrid.getRowElement(index)).hasClass("dx-row-alt");
     });
 
     //assert
@@ -6194,7 +6195,8 @@ QUnit.test("getRowElement", function(assert) {
         });
 
     //act, assert
-    $rowElement = dataGrid.getRowElement(1);
+    $rowElement = $(dataGrid.getRowElement(1));
+    assert.equal(typeUtils.isRenderer(dataGrid.getRowElement(1)), config().useJQueryRenderer, "rowElement is correct");
     assert.equal($rowElement.length, 1, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr")[1], "correct row element");
 });
@@ -6215,7 +6217,7 @@ QUnit.test("getRowElement when there is fixed column", function(assert) {
         });
 
     //act, assert
-    $rowElement = dataGrid.getRowElement(1);
+    $rowElement = $(dataGrid.getRowElement(1));
     assert.equal($rowElement.length, 2, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview .dx-datagrid-content").not(".dx-datagrid-content-fixed").find("tbody > tr")[1], "correct row element of the main table");
     assert.deepEqual($rowElement[1], $("#dataGrid").find(".dx-datagrid-rowsview .dx-datagrid-content-fixed").find("tbody > tr")[1], "correct row element of the fixed table");
@@ -6323,28 +6325,28 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
         rowIndex: 2
     }, "Initial position is OK");
 
-    triggerTabPress(dataGrid.getCellElement(2, 2), true);
+    triggerTabPress($(dataGrid.getCellElement(2, 2)), true);
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 1
     }, "Reverse tabbing to second level group OK");
 
-    triggerTabPress(dataGrid.getCellElement(1, 2).parent(), true);
+    triggerTabPress($(dataGrid.getCellElement(1, 2)).parent(), true);
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 0
     }, "Reverse tabbing to first level group OK");
 
-    triggerTabPress(dataGrid.getCellElement(0, 1).parent());
+    triggerTabPress($(dataGrid.getCellElement(0, 1)).parent());
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 1
     }, "Tabbing to second level group OK, column index saved");
 
-    triggerTabPress(dataGrid.getCellElement(1, 2).parent());
+    triggerTabPress($(dataGrid.getCellElement(1, 2)).parent());
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
@@ -6505,7 +6507,7 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     this.clock.tick();
 
     //assert
-    var $rows = dataGrid.getRowElement(1);
+    var $rows = $(dataGrid.getRowElement(1));
 
     assert.equal($rows.length, 2, "two rows: main row + fixed row");
     assert.ok($rows.eq(0).hasClass("dx-master-detail-row"), "first row is master detail");
@@ -6687,21 +6689,21 @@ QUnit.test("Cancel editing should works correctly if editing mode is form and ma
     dataGrid.expandRow(items[0]);
     dataGrid.editRow(0);
 
-    assert.ok(dataGrid.getRowElement(0).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
+    assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
     assert.ok(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
 
     //act
     dataGrid.cancelEditData();
 
     //assert
-    assert.ok(dataGrid.getRowElement(0).hasClass("dx-data-row"), "row 0 is data row");
+    assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-data-row"), "row 0 is data row");
     assert.notOk(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
 
-    assert.ok(dataGrid.getRowElement(1).hasClass("dx-master-detail-row"), "row 1 is master detail row");
-    assert.notOk(dataGrid.getRowElement(1).hasClass("dx-datagrid-edit-form"), "row 1 is not edit form row");
+    assert.ok($(dataGrid.getRowElement(1)).hasClass("dx-master-detail-row"), "row 1 is master detail row");
+    assert.notOk($(dataGrid.getRowElement(1)).hasClass("dx-datagrid-edit-form"), "row 1 is not edit form row");
     assert.notOk(dataGrid.getVisibleRows()[1].isEditing, "row 1 isEditing");
 
-    assert.ok(dataGrid.getRowElement(2).hasClass("dx-data-row"), "row 2 is data row");
+    assert.ok($(dataGrid.getRowElement(2)).hasClass("dx-data-row"), "row 2 is data row");
 });
 
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {
@@ -7226,7 +7228,7 @@ QUnit.test("Repaint row", function(assert) {
     assert.equal($updatedRowElements.length, 2, "count row");
     assert.ok(!$updatedRowElements.eq(0).is($rowElements.eq(0)), "first row is updated");
     assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test3", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test3", "first row - value of the first cell");
 });
 
 QUnit.test("Repaint rows", function(assert) {
@@ -7257,8 +7259,8 @@ QUnit.test("Repaint rows", function(assert) {
     //assert
     $rowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($rowElements.length, 4, "count row");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test1", "first row - value of the first cell");
-    assert.strictEqual(dataGrid.getCellElement(2, 0).text(), "test3", "third row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test1", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test3", "third row - value of the first cell");
 
     //act
     dataGrid.repaintRows([0, 2]);
@@ -7270,8 +7272,8 @@ QUnit.test("Repaint rows", function(assert) {
     assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
     assert.ok(!$updatedRowElements.eq(2).is($rowElements.eq(2)), "third row is updated");
     assert.ok($updatedRowElements.eq(3).is($rowElements.eq(3)), "fourth row isn't updated");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test5", "first row - value of the first cell");
-    assert.strictEqual(dataGrid.getCellElement(2, 0).text(), "test6", "third row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test5", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
 });
 
 //T443177

@@ -64,7 +64,7 @@ var DateBoxStrategy = Class.inherit({
         var popup = this._getPopup();
         this._renderWidget();
 
-        var $popupContent = popup.content().parent();
+        var $popupContent = popup.$content().parent();
         eventsEngine.off($popupContent, "mousedown");
         eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
     },
@@ -78,7 +78,7 @@ var DateBoxStrategy = Class.inherit({
     },
 
     _getWidgetContainer: function() {
-        return this._getPopup().content();
+        return this._getPopup().$content();
     },
 
     _getPopup: function() {
@@ -121,7 +121,7 @@ var DateBoxStrategy = Class.inherit({
         var popup = this._getPopup();
 
         if(popup) {
-            popup.content().empty();
+            popup.$content().empty();
         }
     },
 

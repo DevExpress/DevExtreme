@@ -62,7 +62,7 @@ registerDecorator(
         },
 
         _renderMenuContent: function(e) {
-            var $overlayContent = e.component.content();
+            var $overlayContent = e.component.$content();
 
             var items = this._menuItems().slice();
             if(this._deleteEnabled()) {

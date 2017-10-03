@@ -577,7 +577,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createWorkSpaceStaticElements: function() {
-        this._dateTableScrollable.content().append(this._$timePanel, this._$dateTable);
+        this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
         this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
     },
 
@@ -587,9 +587,9 @@ var SchedulerWorkSpace = Widget.inherit({
         this._createSidebarScrollable();
         this.$element().append(this._dateTableScrollable.$element());
 
-        this._headerScrollable.content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
-        this._dateTableScrollable.content().append(this._$dateTable);
-        this._sidebarScrollable.content().append(this._$timePanel);
+        this._headerScrollable.$content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
+        this._dateTableScrollable.$content().append(this._$dateTable);
+        this._sidebarScrollable.$content().append(this._$timePanel);
     },
 
     _createHeaderScrollable: function() {
@@ -1336,7 +1336,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getWorkArea: function() {
-        return this._dateTableScrollable.content();
+        return this._dateTableScrollable.$content();
     },
 
     getScrollable: function() {

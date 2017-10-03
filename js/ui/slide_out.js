@@ -196,7 +196,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _itemContainer: function() {
-        return this._slideOutView.content();
+        return $(this._slideOutView.content());
     },
 
     _init: function() {
@@ -259,7 +259,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderList: function() {
-        var $list = this._list && this._list.$element() || $("<div>").addClass(SLIDEOUT_MENU).appendTo(this._slideOutView.menuContent());
+        var $list = this._list && this._list.$element() || $("<div>").addClass(SLIDEOUT_MENU).appendTo($(this._slideOutView.menuContent()));
 
         this._renderItemClickAction();
 

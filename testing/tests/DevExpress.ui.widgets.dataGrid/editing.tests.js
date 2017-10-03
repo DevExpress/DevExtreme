@@ -41,7 +41,9 @@ var fx = require("animation/fx"),
     getCells = dataGridMocks.getCells,
     devices = require("core/devices"),
     device = devices.real(),
-    browser = require("core/utils/browser");
+    browser = require("core/utils/browser"),
+    typeUtils = require("core/utils/type"),
+    config = require("core/config");
 
 function getInputElements($container) {
     return $container.find("input:not([type='hidden'])");
@@ -4926,7 +4928,7 @@ QUnit.testInActiveWindow('Save edit data in cell mode on value change when showE
     rowsView.render(testElement);
     that.columnsController.init();
 
-    selectBoxInstance = rowsView.getCellElement(0, 0).find(".dx-selectbox").dxSelectBox("instance");
+    selectBoxInstance = $(rowsView.getCellElement(0, 0)).find(".dx-selectbox").dxSelectBox("instance");
 
     //assert
     assert.strictEqual(selectBoxInstance.NAME, "dxSelectBox", "has selectBox");
@@ -4939,8 +4941,8 @@ QUnit.testInActiveWindow('Save edit data in cell mode on value change when showE
 
     //assert
     assert.equal(saveEditDataCallCount, 1, "save edit data called once");
-    assert.strictEqual(getInputElements(rowsView.getCellElement(0, 0)).val(), "test2", "value input");
-    assert.ok(rowsView.getCellElement(0, 0).find(".dx-selectbox").hasClass("dx-state-focused"), "editor is focused");
+    assert.strictEqual(getInputElements($(rowsView.getCellElement(0, 0))).val(), "test2", "value input");
+    assert.ok($(rowsView.getCellElement(0, 0)).find(".dx-selectbox").hasClass("dx-state-focused"), "editor is focused");
 });
 
 //T425994, T429166, T469944
@@ -4974,7 +4976,7 @@ QUnit.testInActiveWindow('Cell should save focus state after data saving in cell
 
     that.editCell(0, 0);
 
-    editor = rowsView.getCellElement(0, 0).find(".dx-textbox").dxTextBox("instance");
+    editor = $(rowsView.getCellElement(0, 0)).find(".dx-textbox").dxTextBox("instance");
 
     //act
     editor.option("value", "test2");
@@ -4984,8 +4986,8 @@ QUnit.testInActiveWindow('Cell should save focus state after data saving in cell
 
     //assert
     assert.equal(saveEditDataCallCount, 1, "save edit data called once");
-    assert.strictEqual(rowsView.getCellElement(0, 0).text(), "test2", "value input");
-    assert.ok(rowsView.getCellElement(0, 1).find(".dx-widget").hasClass("dx-state-focused"), "editor is focused");
+    assert.strictEqual($(rowsView.getCellElement(0, 0)).text(), "test2", "value input");
+    assert.ok($(rowsView.getCellElement(0, 1)).find(".dx-widget").hasClass("dx-state-focused"), "editor is focused");
 });
 
 //T463800
@@ -5013,7 +5015,7 @@ QUnit.testInActiveWindow('Focus should not returns to previous cell after data s
 
     that.editCell(0, 0);
 
-    editor = rowsView.getCellElement(0, 0).find(".dx-textbox").dxTextBox("instance");
+    editor = $(rowsView.getCellElement(0, 0)).find(".dx-textbox").dxTextBox("instance");
 
     //act
     editor.option("value", "test2");
@@ -5021,8 +5023,8 @@ QUnit.testInActiveWindow('Focus should not returns to previous cell after data s
     that.clock.tick(30);
 
     //assert
-    assert.strictEqual(rowsView.getCellElement(0, 0).find("input").val(), "test2", "value input");
-    assert.ok(rowsView.getCellElement(0, 1).find(".dx-widget").hasClass("dx-state-focused"), "editor is focused");
+    assert.strictEqual($(rowsView.getCellElement(0, 0)).find("input").val(), "test2", "value input");
+    assert.ok($(rowsView.getCellElement(0, 1)).find(".dx-widget").hasClass("dx-state-focused"), "editor is focused");
 });
 
 //T383760
@@ -5072,8 +5074,8 @@ QUnit.testInActiveWindow('Update be called once in cell mode on value change for
 
     //assert
     assert.equal(updateCallCount, 1, "update called once");
-    assert.ok(rowsView.getCellElement(0, 0).find(".dx-checkbox").hasClass("dx-checkbox-checked"), "value is changed");
-    assert.ok(rowsView.getCellElement(0, 0).find(".dx-checkbox").hasClass("dx-state-focused"), "editor is focused");
+    assert.ok($(rowsView.getCellElement(0, 0)).find(".dx-checkbox").hasClass("dx-checkbox-checked"), "value is changed");
+    assert.ok($(rowsView.getCellElement(0, 0)).find(".dx-checkbox").hasClass("dx-state-focused"), "editor is focused");
 });
 
 //T246542
@@ -5218,7 +5220,7 @@ QUnit.test('Focus position should be correct after editing in cell editing mode 
     assert.ok(!this.hasEditData(), 'edit data is empty');
     assert.equal(that.array[0].name, "Test", "value is saved");
     assert.ok($(":focus").hasClass("dx-texteditor-input"), "editor is focused");
-    assert.ok(this.getCellElement(0, 1).hasClass("dx-focused"), "new edit cell is focused");
+    assert.ok($(this.getCellElement(0, 1)).hasClass("dx-focused"), "new edit cell is focused");
 });
 
 QUnit.test('Focus position should be retured after editing in cell editing mode if remote updating return error', function(assert) {
@@ -5263,7 +5265,7 @@ QUnit.test('Focus position should be retured after editing in cell editing mode 
     //assert
     assert.ok(this.hasEditData(), 'edit data is not empty');
     assert.ok($(":focus").hasClass("dx-texteditor-input"), "editor is focused");
-    assert.ok(this.getCellElement(0, 0).hasClass("dx-focused"), "new edit cell is focused");
+    assert.ok($(this.getCellElement(0, 0)).hasClass("dx-focused"), "new edit cell is focused");
 });
 
 QUnit.test("Add edit data with save array without extend_T256598", function(assert) {
@@ -5825,7 +5827,7 @@ if(!devices.win8) {
         //act
         that.editCell(0, 5);
         that.clock.tick();
-        var $selectBox = rowsView.getCellElement(0, 5).find(".dx-selectbox");
+        var $selectBox = $(rowsView.getCellElement(0, 5)).find(".dx-selectbox");
         $selectBox.dxSelectBox("instance").option("value", 2);
         that.closeEditCell();
         that.clock.tick();
@@ -5864,7 +5866,7 @@ if(!devices.win8) {
         //act
         that.editCell(0, 5);
         that.clock.tick();
-        var $selectBox = rowsView.getCellElement(0, 5).find(".dx-selectbox");
+        var $selectBox = $(rowsView.getCellElement(0, 5)).find(".dx-selectbox");
         var $cellBeforeChange = testElement.find(".dx-row").first().children("td").eq(5);
         $selectBox.dxSelectBox("instance").option("value", 2);
         that.clock.tick();
@@ -5901,7 +5903,7 @@ if(!devices.win8) {
         //act
         that.editRow(0);
 
-        var $selectBox = rowsView.getCellElement(0, 5).find(".dx-selectbox");
+        var $selectBox = $(rowsView.getCellElement(0, 5)).find(".dx-selectbox");
 
         $selectBox.dxSelectBox("instance").open();
         $selectBox.dxSelectBox("instance").close();
@@ -5913,7 +5915,7 @@ if(!devices.win8) {
         that.saveEditData();
 
         //assert
-        var $cell = rowsView.getCellElement(0, 5);
+        var $cell = $(rowsView.getCellElement(0, 5));
         assert.equal(testElement.find("input").length, 0, "no editors");
         assert.ok($cell.is(":visible"), "cell is visible");
         assert.equal($cell.find(".dx-selectbox").length, 0, "no selectbox");
@@ -5954,7 +5956,7 @@ if(!devices.win8) {
         that.clock.tick();
 
         //assert
-        var $selectBox = rowsView.getCellElement(0, 5).find(".dx-selectbox");
+        var $selectBox = $(rowsView.getCellElement(0, 5)).find(".dx-selectbox");
 
         assert.equal($selectBox.length, 1, 'selectbox is created');
         assert.equal(dataSourceArgs.key, that.array[0], 'dataSource arg key');
@@ -6735,7 +6737,7 @@ QUnit.test("Button inside the selectBox is not clicked", function(assert) {
     //act
     that.editCell(0, 0);
     that.clock.tick();
-    selectBoxButton = rowsView.getCellElement(0, 0).find(".dx-selectbox .dx-dropdowneditor-button").dxButton("instance");
+    selectBoxButton = $(rowsView.getCellElement(0, 0)).find(".dx-selectbox .dx-dropdowneditor-button").dxButton("instance");
     $(selectBoxButton.$element()).trigger("dxclick");
 
     //assert
@@ -7422,8 +7424,8 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
-    assert.ok(selectBoxInstance.$element().offset().left + selectBoxInstance.$element().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after selectbox");
-    assert.ok(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width() < invalidTooltipInstance.content().offset().left, "invalid tooltip is shown after revert tooltip");
+    assert.ok(selectBoxInstance.$element().offset().left + selectBoxInstance.$element().width() < revertTooltipInstance.$content().offset().left, "revert tooltip is shown after selectbox");
+    assert.ok(revertTooltipInstance.$content().offset().left + revertTooltipInstance.$content().width() < invalidTooltipInstance.$content().offset().left, "invalid tooltip is shown after revert tooltip");
 });
 
 //T523770
@@ -7478,8 +7480,8 @@ QUnit.test("Invalid message and revert button should not be overlapped when the 
     assert.ok(selectBoxInstance.option("opened"), "drop-down editor is shown");
     assert.ok(invalidTooltipInstance.option("visible"), "invalid message tooltip is visible");
     assert.ok(revertTooltipInstance.option("visible"), "revert tooltip is visible");
-    assert.ok(invalidTooltipInstance.content().offset().left + invalidTooltipInstance.content().width() < revertTooltipInstance.content().offset().left, "revert tooltip is shown after invalid tooltip");
-    assert.roughEqual(revertTooltipInstance.content().offset().left + revertTooltipInstance.content().width(), selectBoxInstance.$element().offset().left, 1, "selectbox is shown after revert tooltip");
+    assert.ok(invalidTooltipInstance.$content().offset().left + invalidTooltipInstance.$content().width() < revertTooltipInstance.$content().offset().left, "revert tooltip is shown after invalid tooltip");
+    assert.roughEqual(revertTooltipInstance.$content().offset().left + revertTooltipInstance.$content().width(), selectBoxInstance.$element().offset().left, 1, "selectbox is shown after revert tooltip");
 
     $("#qunit-fixture").removeClass("qunit-fixture-static").css("width", "");
 });
@@ -8884,7 +8886,7 @@ QUnit.test("Show error message on save inserted rows when edit mode is 'popup'",
 
     this.editRow(0);
 
-    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").content();
+    $popupContent = $(".dx-datagrid").find(".dx-datagrid-edit-popup").dxPopup("instance").$content();
     $inputElement = $popupContent.find("input").first();
     $inputElement.val("");
     $($inputElement).trigger("change");
@@ -9556,7 +9558,7 @@ QUnit.test("Position of the inserted row if masterDetail is used", function(asse
     this.expandRow(this.options.dataSource[1]);
     this.expandRow(this.options.dataSource[2]);
 
-    var y = this.rowsView.getRowElement(4).offset().top - this.rowsView.getRowElement(0).offset().top;
+    var y = $(this.rowsView.getRowElement(4)).offset().top - $(this.rowsView.getRowElement(0)).offset().top;
 
     this.rowsView.scrollTo({ y: y });
 
@@ -10435,8 +10437,9 @@ QUnit.test("getCellElement", function(assert) {
     //assert
     $editorElements = $testElement.find(".dx-datagrid-edit-form-item");
     assert.equal($editorElements.length, 5, "count editor of the form");
-    assert.deepEqual(that.getCellElement(1, 0)[0], $editorElements[0], "first editor");
-    assert.deepEqual(that.getCellElement(1, "age")[0], $editorElements[1], "second editor");
+    assert.equal(typeUtils.isRenderer(that.getCellElement(1, 0)), config().useJQueryRenderer, "getCellElement is correct");
+    assert.deepEqual($(that.getCellElement(1, 0))[0], $editorElements[0], "first editor");
+    assert.deepEqual($(that.getCellElement(1, "age"))[0], $editorElements[1], "second editor");
 });
 
 //T425138
@@ -10463,8 +10466,8 @@ QUnit.test("getCellElement when form with custom items", function(assert) {
     //assert
     $editorElements = $testElement.find(".dx-datagrid-edit-form-item");
     assert.equal($editorElements.length, 2, "count editor of the form");
-    assert.deepEqual(that.getCellElement(0, 0)[0], $editorElements[1], "second editor");
-    assert.deepEqual(that.getCellElement(0, "age")[0], $editorElements[0], "first editor");
+    assert.deepEqual($(that.getCellElement(0, 0))[0], $editorElements[1], "second editor");
+    assert.deepEqual($(that.getCellElement(0, "age"))[0], $editorElements[0], "first editor");
 });
 
 //T435429
@@ -10579,7 +10582,7 @@ QUnit.module('Editing - "popup" mode', {
         this.preparePopupHelpers = function() {
             this.$editPopup = this.$testElement.find(".dx-datagrid-edit-popup");
             this.editPopupInstance = this.$editPopup.dxPopup("instance");
-            this.getEditPopupContent = function() { return this.editPopupInstance.content(); };
+            this.getEditPopupContent = function() { return this.editPopupInstance.$content(); };
             this.isEditingPopupVisible = function() { return this.editPopupInstance.option("visible"); };
         };
     },

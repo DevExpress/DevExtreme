@@ -1933,7 +1933,7 @@ var Scheduler = Widget.inherit({
     },
 
     _popupContent: function(appointmentData, processTimeZone) {
-        var $popupContent = this._popup.content();
+        var $popupContent = this._popup.$content();
         this._createAppointmentForm(appointmentData, $popupContent, processTimeZone);
 
         return $popupContent;

@@ -576,7 +576,7 @@ exports.AreaItem = Class.inherit({
         if(scrollable) {
             scrollable.on(eventName, function(e) {
                 if(that.option("rtlEnabled")) {
-                    e.scrollOffset.left = scrollable.content().width() - scrollable._container().width() - e.scrollOffset.left;
+                    e.scrollOffset.left = scrollable.$content().width() - scrollable._container().width() - e.scrollOffset.left;
                 }
                 handler(e);
             });
@@ -598,9 +598,9 @@ exports.AreaItem = Class.inherit({
         if(scrollable) {
             if(this.option("rtlEnabled")) {
                 if(this._getAreaName() === "column") {
-                    scrollablePos = scrollable.content().width() - scrollable._container().width() - pos;
+                    scrollablePos = scrollable.$content().width() - scrollable._container().width() - pos;
                 } else if(this._getAreaName() === "data") {
-                    scrollablePos = { x: scrollable.content().width() - scrollable._container().width() - pos.x, y: pos.y };
+                    scrollablePos = { x: scrollable.$content().width() - scrollable._container().width() - pos.x, y: pos.y };
                 }
             }
             scrollable.scrollTo(scrollablePos);

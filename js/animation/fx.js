@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     errors = require("../core/errors"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),
@@ -675,7 +676,8 @@ var setupAnimationOnElement = function() {
     animation.strategy.initAnimation($element, config);
 
     if(config.start) {
-        config.start.apply(this, [$element, config]);
+        var element = getPublicElement($element);
+        config.start.apply(this, [element, config]);
     }
 };
 
@@ -685,7 +687,8 @@ var onElementAnimationComplete = function(animation) {
 
     $element.removeData(ANIM_DATA_KEY);
     if(config.complete) {
-        config.complete.apply(this, [$element, config]);
+        var element = getPublicElement($element);
+        config.complete.apply(this, [element, config]);
     }
     animation.deferred.resolveWith(this, [$element, config]);
 };

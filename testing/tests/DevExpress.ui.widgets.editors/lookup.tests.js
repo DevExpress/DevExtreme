@@ -464,12 +464,12 @@ QUnit.test("change value expr refresh selected item", function(assert) {
 
     this.togglePopup();
 
-    var $selectedItem = $(this.popup.content().find("." + LIST_ITEM_SELECTED_CLASS));
+    var $selectedItem = $(this.popup.$content().find("." + LIST_ITEM_SELECTED_CLASS));
     assert.equal($selectedItem.text(), "item1");
     assert.equal(this.$field.text(), "item1");
 
     $lookup.dxLookup("option", "valueExpr", "param2");
-    $selectedItem = $(this.popup.content().find("." + LIST_ITEM_SELECTED_CLASS));
+    $selectedItem = $(this.popup.$content().find("." + LIST_ITEM_SELECTED_CLASS));
     assert.equal($selectedItem.text(), "item2");
     assert.equal(this.$field.text(), "item2");
 });
@@ -2057,7 +2057,7 @@ QUnit.test("search wrapper should not be rendered if the 'searchEnabled' option 
         opened: true
     }).dxLookup("instance");
 
-    assert.equal(instance.content().find("." + LOOKUP_SEARCH_WRAPPER_CLASS).length, 0, "search wrapper is not rendered");
+    assert.equal($(instance.content()).find("." + LOOKUP_SEARCH_WRAPPER_CLASS).length, 0, "search wrapper is not rendered");
 });
 
 QUnit.test("search wrapper should be rendered if the 'searchEnabled' option is true", function(assert) {
@@ -2066,7 +2066,7 @@ QUnit.test("search wrapper should be rendered if the 'searchEnabled' option is t
         opened: true
     }).dxLookup("instance");
 
-    assert.equal(instance.content().find("." + LOOKUP_SEARCH_WRAPPER_CLASS).length, 1, "search wrapper is rendered");
+    assert.equal($(instance.content()).find("." + LOOKUP_SEARCH_WRAPPER_CLASS).length, 1, "search wrapper is rendered");
 });
 
 
@@ -2545,7 +2545,7 @@ QUnit.testInActiveWindow("T338144 - focused element should not be reset after po
             opened: true,
             searchEnabled: false
         }).dxLookup("instance"),
-        $list = $(instance.content().find(".dx-list")),
+        $list = $($(instance.content()).find(".dx-list")),
         $listItems = $list.find(".dx-item"),
         list = $list.dxList("instance");
 
@@ -2602,7 +2602,7 @@ QUnit.test("lookup should not lose focus when clicking inside popup", function(a
             opened: true
         }),
         instance = $element.dxLookup("instance"),
-        $content = $(instance._popup.content());
+        $content = $(instance._popup.$content());
 
     $($content).on("dxpointerdown", function(e) {
         assert.ok(!e.isDefaultPrevented(), "elements inside popup get focus");
@@ -2849,7 +2849,7 @@ QUnit.test("T320459 - the 'space' key press should prevent default behavior whil
             opened: true,
             focusStateEnabled: true
         }).dxLookup("instance"),
-        $popupInput = $(lookup.content().find("input")),
+        $popupInput = $($(lookup.content()).find("input")),
         keyboard = keyboardMock($popupInput),
         event;
 

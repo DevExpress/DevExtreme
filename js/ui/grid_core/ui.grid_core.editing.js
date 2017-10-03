@@ -222,7 +222,7 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         getFirstEditableCellInRow: function(rowIndex) {
-            return this.getView("rowsView").getCellElement(rowIndex ? rowIndex : 0, this.getFirstEditableColumnIndex());
+            return this.getView("rowsView")._getCellElement(rowIndex ? rowIndex : 0, this.getFirstEditableColumnIndex());
         },
 
         getFocusedCellInRow: function(rowIndex) {
@@ -308,7 +308,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 popupVisible = this._editPopup && this._editPopup.option("visible");
 
             if(editMode === EDIT_MODE_POPUP && popupVisible) {
-                return this._editPopup.content();
+                return this._editPopup.$content();
             }
         },
 
@@ -634,7 +634,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
                 that._editPopup.on("hidden", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
-                    eventsEngine.trigger(e.component.content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
+                    eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
                 });
             }
 
@@ -777,7 +777,7 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             //TODO no focus border when call editCell via API
-            var $cell = rowsView && rowsView.getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
+            var $cell = rowsView && rowsView._getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
             if($cell && !$cell.find(":focus").length) {
                 that._focusEditingCell(function() {
                     that._editCellInProgress = false;
@@ -818,7 +818,7 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this,
                 rowsView = that.getView("rowsView");
 
-            $editCell = $editCell || rowsView && rowsView.getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex);
+            $editCell = $editCell || rowsView && rowsView._getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex);
             that._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
         },
 
@@ -1361,7 +1361,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 this._editForm.repaint();
 
                 if(columnIndex >= 0) {
-                    $focusedItemElement = rowsView.getCellElement(rowIndex, columnIndex);
+                    $focusedItemElement = rowsView._getCellElement(rowIndex, columnIndex);
                     this._delayedInputFocus($focusedItemElement);
                 }
             }

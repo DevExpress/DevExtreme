@@ -180,7 +180,7 @@ var Submenu = ContextMenu.inherit({
     },
 
     getOverlayContent: function() {
-        return this._overlay.content();
+        return this._overlay.$content();
     }
 });
 

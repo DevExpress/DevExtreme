@@ -700,7 +700,7 @@ module.exports = {
                     this._adaptiveColumnsController.applyStylesForHiddenColumns(this);
                 },
 
-                getCellElement: function(rowIndex, columnIdentifier) {
+                _getCellElement: function(rowIndex, columnIdentifier) {
                     var item = this._dataController.items()[rowIndex];
 
                     if(item && item.rowType === ADAPTIVE_ROW_TYPE) {

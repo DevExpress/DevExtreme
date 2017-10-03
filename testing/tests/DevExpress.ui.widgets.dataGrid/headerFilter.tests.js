@@ -305,7 +305,7 @@ QUnit.test("Show header filter", function(assert) {
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.equal($("body").children(".dx-header-filter-menu").length, 1, "has wrapper header filter menu");
     assert.ok($popupContent.is(":visible"), "visible popup");
@@ -337,7 +337,7 @@ QUnit.test("Show header filter when no dataSource", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.equal($("body").children(".dx-header-filter-menu").length, 1, "has wrapper header filter menu");
     assert.ok($popupContent.is(":visible"), "visible popup");
@@ -392,7 +392,7 @@ QUnit.test("Show header filter when column with dataType date", function(assert)
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.equal($("body").children(".dx-header-filter-menu").length, 1, "has wrapper header filter menu");
     assert.ok($popupContent.is(":visible"), "visible popup");
@@ -421,7 +421,7 @@ QUnit.test("Show header filter when column with encodeHtml is false", function(a
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     assert.equal($("body").children(".dx-header-filter-menu").length, 1, "has wrapper header filter menu");
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -453,7 +453,7 @@ QUnit.test("Show header filter when column with encodeHtml is true", function(as
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     assert.equal($("body").children(".dx-header-filter-menu").length, 1, "has wrapper header filter menu");
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -481,7 +481,7 @@ QUnit.test("Hide header filter", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.equal($("body").children(".dx-header-filter-menu").length, 1, "has wrapper header filter menu");
     assert.ok($popupContent.is(":visible"), "visible popup");
@@ -514,7 +514,7 @@ QUnit.test("Header filter with items", function(assert) {
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
     assert.equal($popupContent.find(".dx-list-select-all").length, 1, "has list select all");
@@ -540,7 +540,7 @@ QUnit.test("Header filter with items where many duplicate values", function(asse
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
     assert.equal($popupContent.find(".dx-list-select-all").length, 1, "has list select all");
@@ -566,7 +566,7 @@ QUnit.test("Header filter with items when column with dataType date", function(a
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-treeview").length, "has treeview in header filter menu");
     assert.equal($popupContent.find(".dx-treeview-select-all-item").length, 1, "has treeview select all");
@@ -611,7 +611,7 @@ QUnit.test("Header filter with items when column lookup with simple types", func
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
     assert.equal($popupContent.find(".dx-list-select-all").length, 1, "has list select all");
@@ -644,7 +644,7 @@ QUnit.test("Header filter with items when column lookup with object types", func
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
     assert.equal($popupContent.find(".dx-list-select-all").length, 1, "has list select all");
@@ -679,7 +679,7 @@ QUnit.test("Header filter with items when lookup dataSource as function", functi
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
     assert.equal($popupContent.find(".dx-list-select-all").length, 1, "has list select all");
@@ -709,7 +709,7 @@ QUnit.test("Header filter with items when column with dataType date and filterVa
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-treeview").length, "has treeview in header filter menu");
     assert.equal($popupContent.find(".dx-treeview-item").length, 1, "count treeview item");
@@ -746,7 +746,7 @@ QUnit.test("Save state when selecting", function(assert) {
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -801,7 +801,7 @@ QUnit.test("Update selecting for first page when filterValues for second page is
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -848,7 +848,7 @@ QUnit.test("Restore selecting state for second page when all items on first page
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -885,7 +885,7 @@ QUnit.test("Restore selecting state for second page when not all items on first 
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -922,7 +922,7 @@ QUnit.test("Restore selecting state for second page when no selected items on fi
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -958,7 +958,7 @@ QUnit.test("Second page selection after select all", function(assert) {
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -997,7 +997,7 @@ QUnit.test("Second page selection after unselect all", function(assert) {
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -1035,7 +1035,7 @@ QUnit.test("Save state when selecting for column with dataType date", function(a
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-treeview").length, "has treeview in header filter menu");
     assert.equal($popupContent.find(".dx-treeview-item").length, 1, "count treeview item");
@@ -1102,7 +1102,7 @@ QUnit.test("Save state when selecting for column with dataType date. filterType 
     that.clock.tick(500);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.find(".dx-treeview").length, "has treeview in header filter menu");
     assert.equal($popupContent.find(".dx-treeview-item").length, 1, "count treeview item");
@@ -1159,7 +1159,7 @@ QUnit.test("Update when select all items", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -1197,7 +1197,7 @@ QUnit.test("Update when selected all items and column with filterValues", functi
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -1225,7 +1225,7 @@ QUnit.test("Update when selected all items and column with filterValues", functi
     //act
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $(that.headerFilterView.getPopupContainer().content().parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
+    $(that.headerFilterView.getPopupContainer().$content().parent().find(".dx-button").eq(0)).trigger("dxclick"); // OK button
 
     //assert
     assert.equal(that.columnsController.updateOptions[0].columnIndex, 0, "column index");
@@ -1320,7 +1320,7 @@ QUnit.test("Header filter popup should be shown on header filter icon click in g
     $($headerFilter).trigger("dxclick");
 
     //assert
-    var $popupContent = that.headerFilterView.getPopupContainer().content();
+    var $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.equal($popupContent.find(".dx-list-item").length, 2, "list items count");
@@ -1369,7 +1369,7 @@ QUnit.test("Header filter popup should be shown on header filter icon click for 
     $($headerFilter).trigger("dxclick");
 
     //assert
-    var $popupContent = that.headerFilterView.getPopupContainer().content();
+    var $popupContent = that.headerFilterView.getPopupContainer().$content();
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.equal($popupContent.find(".dx-list-item").length, 2, "list items count");
     assert.equal($popupContent.find(".dx-list-item-selected").length, 1, "one selected list item");
@@ -1518,7 +1518,7 @@ QUnit.test("Checking filterValues of the column after deselect item of a loaded 
 
     this.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = this.headerFilterView.getPopupContainer().content();
+    $popupContent = this.headerFilterView.getPopupContainer().$content();
     $($popupContent.find(".dx-list-item").first()).trigger("dxclick"); // deselect first item
 
     //assert
@@ -1547,7 +1547,7 @@ QUnit.test("Show header filter with search bar", function(assert) {
     that.headerFilterView.render(testElement);
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
     //assert
@@ -1571,7 +1571,7 @@ QUnit.test("Show header filter when column with dataType date with search bar", 
     that.headerFilterView.render(testElement);
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     treeView = $popupContent.find(".dx-treeview").dxTreeView("instance");
 
     //assert
@@ -1596,7 +1596,7 @@ QUnit.test("HeaderFilter should be without search bar when column allowSearch is
     that.headerFilterView.render(testElement);
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
     //assert
@@ -1621,7 +1621,7 @@ QUnit.test("Check select all state after filtering", function(assert) {
     that.headerFilterView.render(testElement);
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
     //act
@@ -1658,7 +1658,7 @@ QUnit.test("Check select all state after filtering if column dataType is date", 
     that.headerFilterView.render(testElement);
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     treeView = $popupContent.find(".dx-treeview").dxTreeView("instance");
 
     //act
@@ -1695,7 +1695,7 @@ QUnit.test("Check filtering in column lookup with simple types", function(assert
     that.headerFilterView.render(testElement);
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
     //act
@@ -1731,7 +1731,7 @@ QUnit.test("Check filtering in column lookup with object types", function(assert
     that.headerFilterView.render(testElement);
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
     //act
@@ -1762,7 +1762,7 @@ QUnit.test("Search when custom dataSource to headerFilter is specified", functio
     that.headerFilterView.render(testElement);
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
     //act
@@ -1799,7 +1799,7 @@ QUnit.test("Search by custom column", function(assert) {
 
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     list = $popupContent.find(".dx-list").dxList("instance");
 
     //act
@@ -1870,7 +1870,7 @@ QUnit.test("Load data", function(assert) {
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.equal($("body").children(".dx-header-filter-menu").length, 1, "has wrapper header filter menu");
     assert.ok($popupContent.is(":visible"), "visible popup");
@@ -1962,7 +1962,7 @@ QUnit.test("Header filter with items when column with filterValues", function(as
 
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listElements = $popupContent.find(".dx-list-item");
 
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -2002,7 +2002,7 @@ QUnit.test("Header filter with filter row and apply filter button", function(ass
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $($popupContent.find(".dx-list-item").first()).trigger("dxclick");
 
     //assert
@@ -2035,7 +2035,7 @@ QUnit.test("Header filter when set format by column", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-list-item").first().text(), "$6", "item text");
@@ -2067,7 +2067,7 @@ QUnit.test("Filtering by empty null value", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-list-item").first().text(), "(Blanks)", "empty text item");
@@ -2112,7 +2112,7 @@ QUnit.test("Filtering by empty undefined value", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-list-item").first().text(), "(Blanks)", "empty text item");
@@ -2157,7 +2157,7 @@ QUnit.test("Filtering by empty string", function(assert) {
     //arrange
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.equal($popupContent.find(".dx-list-item").length, 2, "count item");
@@ -2204,7 +2204,7 @@ QUnit.test("Filtering by empty string with filterType is exclude", function(asse
     //arrange
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.equal($popupContent.find(".dx-list-item").length, 2, "count item");
@@ -2248,7 +2248,7 @@ QUnit.test("Header Filter when grid with CustomStore", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-list-item").length, 2, "header items count");
@@ -2282,7 +2282,7 @@ QUnit.test("Header Filter when grid with CustomStore when remoteOperations false
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-list-item").length, 2, "header items count. value14 is filtered locally");
@@ -2323,7 +2323,7 @@ QUnit.test("Header Filter when grid with CustomStore when remote grouping and re
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-list-item").length, 2, "header items count. value14 is filtered locally");
@@ -2369,7 +2369,7 @@ QUnit.test("Header Filter when grid with CustomStore when remote grouping and gr
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-list-item").length, 1, "header items count");
@@ -2407,7 +2407,7 @@ QUnit.test("Header Filter when grid with CustomStore when remote grouping and gr
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-treeview-item").length, 1, "header items count");
@@ -2446,7 +2446,7 @@ QUnit.test("Header Filter when grid with ODataStore with expand", function(asser
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     //assert
     assert.strictEqual($popupContent.find(".dx-list-item").length, 2, "header items count");
@@ -2562,7 +2562,7 @@ QUnit.test("Header Filter with CustomStore", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -2609,7 +2609,7 @@ QUnit.test("Header Filter - customStore value with filter data options", functio
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -2652,7 +2652,7 @@ QUnit.test("Header Filter - saving state when customStore value with filter data
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -2696,7 +2696,7 @@ QUnit.test("Header Filter - customization dataSource via event", function(assert
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -2748,7 +2748,7 @@ QUnit.test("Header Filter (List) - saving state with changed dataSource via even
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -2807,7 +2807,7 @@ QUnit.test("Header Filter (TreeView) - saving state with changed dataSource via 
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $treeViewItems = $popupContent.find(".dx-treeview-item");
 
     //assert
@@ -2889,7 +2889,7 @@ QUnit.test("Header Filter with customize text", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -2943,7 +2943,7 @@ QUnit.test("Header Filter with customize text for column with dataType the date"
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-treeview-item");
 
     assert.equal($listItems.length, 1, "count treeview item");
@@ -2998,7 +2998,7 @@ QUnit.test("Header Filter with calculateFilterExpression", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -3043,7 +3043,7 @@ QUnit.test("Apply header filter", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -3085,7 +3085,7 @@ QUnit.test("Header filter with group interval 'year' for column with dataType 'd
 
 
     listInstance = that.headerFilterView.getListContainer(),
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -3136,7 +3136,7 @@ QUnit.test("Header filter with group interval 'quarter' for column with dataType
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-treeview-item");
 
     assert.equal($listItems.length, 1, "count treeview item");
@@ -3192,7 +3192,7 @@ QUnit.test("Header filter with group interval for column with dataType 'number'"
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-treeview-item");
 
     assert.equal($listItems.length, 2, "count treeview item");
@@ -3249,7 +3249,7 @@ QUnit.test("Header filter with group interval for column with dataType 'number' 
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     assert.equal($listItems.length, 2, "count treeview item");
@@ -3303,7 +3303,7 @@ QUnit.test("HeaderFilter - customizeText with group interval for column with dat
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     assert.equal($listItems.length, 2, "count treeview item");
@@ -3338,7 +3338,7 @@ QUnit.test("Header filter should ignore calculateGroupValue column option", func
     that.headerFilterController.showHeaderFilterMenu(0);
 
 
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert
@@ -3420,7 +3420,7 @@ QUnit.test("Not apply filter when selected all items", function(assert) {
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
 
     assert.ok($popupContent.is(":visible"), "visible popup");
     assert.ok($popupContent.find(".dx-list").length, "has list in header filter menu");
@@ -3528,7 +3528,7 @@ QUnit.test("Header filter should consider the 'trueText' and 'falseText' column 
     that.headerFilterController.showHeaderFilterMenu(0);
 
     //assert
-    $itemElements = that.headerFilterView.getPopupContainer().content().find(".dx-list-item");
+    $itemElements = that.headerFilterView.getPopupContainer().$content().find(".dx-list-item");
     assert.equal($itemElements.length, 3, "count item");
     assert.strictEqual($itemElements.eq(0).text(), "(Blanks)", "text of the first item");
     assert.strictEqual($itemElements.eq(1).text(), "No", "text of the second item");
@@ -3561,7 +3561,7 @@ QUnit.test("Updating selection state should be correct when headerFilter.dataSou
 
     that.headerFilterController.showHeaderFilterMenu(0);
 
-    $popupContent = $(that.headerFilterView.getPopupContainer().content());
+    $popupContent = $(that.headerFilterView.getPopupContainer().$content());
     $listItems = $popupContent.find(".dx-list-item");
     $listItems.first().trigger("dxclick");
 
@@ -3573,7 +3573,7 @@ QUnit.test("Updating selection state should be correct when headerFilter.dataSou
     $cancelButton.trigger("dxclick");
 
     that.headerFilterController.showHeaderFilterMenu(0);
-    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $popupContent = that.headerFilterView.getPopupContainer().$content();
     $listItems = $popupContent.find(".dx-list-item");
 
     //assert

@@ -45,7 +45,7 @@ QUnit.test("Three scrollable elements should be rendered", function(assert) {
 QUnit.test("Header scrollable should contain header panel, all-day container and all-day panel", function(assert) {
     domUtils.triggerResizeEvent(this.instance.$element());
     var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
-        scrollableContent = headerScrollable.content();
+        scrollableContent = headerScrollable.$content();
 
     assert.equal(scrollableContent.find(".dx-scheduler-header-panel").length, 1, "Header panel exists");
     assert.equal(scrollableContent.find(".dx-scheduler-all-day-appointments").length, 1, "All-day container exists");
@@ -55,14 +55,14 @@ QUnit.test("Header scrollable should contain header panel, all-day container and
 QUnit.test("Date table scrollable should contain date table", function(assert) {
     domUtils.triggerResizeEvent(this.instance.$element());
     var dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
-        scrollableContent = dateTableScrollable.content();
+        scrollableContent = dateTableScrollable.$content();
 
     assert.equal(scrollableContent.find(".dx-scheduler-date-table").length, 1, "Date table exists");
 });
 
 QUnit.test("Time panel scrollable should contain time panel", function(assert) {
     var timePanelScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
-        scrollableContent = timePanelScrollable.content();
+        scrollableContent = timePanelScrollable.$content();
 
     assert.equal(scrollableContent.find(".dx-scheduler-time-panel").length, 1, "Time panel exists");
 });

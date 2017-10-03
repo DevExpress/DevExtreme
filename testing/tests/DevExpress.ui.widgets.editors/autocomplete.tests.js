@@ -679,7 +679,7 @@ QUnit.test("itemTemplate support", function(assert) {
         },
         minSearchLength: 0
     }).dxAutocomplete("instance");
-    var items = instance._popup.content().find(".dx-list-item");
+    var items = instance._popup.$content().find(".dx-list-item");
     assert.equal(items.length, 3);
     assert.equal(items.text(), "item0item1item2");
 });
@@ -699,19 +699,19 @@ QUnit.test("valueExpr option", function(assert) {
 
     var keyboard = keyboardMock(instance._input());
 
-    var items = instance._popup.content().find(".dx-list-item");
+    var items = instance._popup.$content().find(".dx-list-item");
     assert.equal(items.length, 0, "no items while value is empty");
 
     instance.option("value", "");
     keyboard.type("i");
-    items = instance._popup.content().find(".dx-list-item");
+    items = instance._popup.$content().find(".dx-list-item");
     assert.equal(items.eq(0).text(), "item 1");
 
     instance.option("valueExpr", "caption");
     instance.option("value", "");
     keyboard.type("q");
 
-    items = instance._popup.content().find(".dx-list-item");
+    items = instance._popup.$content().find(".dx-list-item");
     assert.equal(items.eq(0).text(), "qa");
 });
 
@@ -943,10 +943,10 @@ QUnit.test("popup height calculated correctly", function(assert) {
     var keyboard = this.keyboard;
     keyboard.type("item ");
 
-    var popupHeightWithAllItems = popup.content().height();
+    var popupHeightWithAllItems = popup.$content().height();
 
     keyboard.type("1");
-    var popupHeightWithSingleItem = popup.content().height();
+    var popupHeightWithSingleItem = popup.$content().height();
     assert.ok(popupHeightWithSingleItem < popupHeightWithAllItems, "height recalculated");
 });
 
@@ -958,7 +958,7 @@ QUnit.test("popup height is refreshed on window resize callback (B254555)", func
 
     popup.show();
 
-    var initialHeight = popup.content().height();
+    var initialHeight = popup.$content().height();
     var testHeight = initialHeight + 100;
 
     popup.option("height", testHeight);
@@ -1326,7 +1326,7 @@ QUnit.test("item initialization scenario", function(assert) {
         items: ["a", "b", "c"]
     }).dxAutocomplete("instance");
 
-    var items = instance._popup.content().find(".dx-list-item");
+    var items = instance._popup.$content().find(".dx-list-item");
     assert.equal(items.length, 3);
     assert.equal(items.text(), "abc");
 });
@@ -1338,7 +1338,7 @@ QUnit.test("item option change scenario", function(assert) {
         items;
 
     instance.option("items", ["a", "b", "c"]);
-    items = instance._popup.content().find(".dx-list-item");
+    items = instance._popup.$content().find(".dx-list-item");
 
     assert.equal(items.length, 3);
     assert.equal(items.text(), "abc");

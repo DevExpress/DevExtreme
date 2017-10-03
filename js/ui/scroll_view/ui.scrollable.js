@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     devices = require("../../core/devices"),
     registerComponent = require("../../core/component_registrator"),
     DOMComponent = require("../../core/dom_component"),
@@ -511,13 +512,17 @@ var Scrollable = DOMComponent.inherit({
         return this._$container;
     },
 
+    $content: function() {
+        return this._$content;
+    },
+
     /**
     * @name dxscrollablemethods_content
     * @publicName content()
     * @return jQuery
     */
     content: function() {
-        return this._$content;
+        return getPublicElement(this._$content);
     },
 
     /**
@@ -566,7 +571,7 @@ var Scrollable = DOMComponent.inherit({
     * @return numeric
     */
     scrollHeight: function() {
-        return this.content().outerHeight() - 2 * this._strategy.verticalOffset();
+        return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
     },
 
     /**
@@ -584,7 +589,7 @@ var Scrollable = DOMComponent.inherit({
     * @return numeric
     */
     scrollWidth: function() {
-        return this.content().outerWidth();
+        return this.$content().outerWidth();
     },
 
     /**
@@ -656,7 +661,7 @@ var Scrollable = DOMComponent.inherit({
     scrollToElement: function(element, offset) {
         offset = offset || {};
         var $element = $(element);
-        var elementInsideContent = this.content().find(element).length;
+        var elementInsideContent = this.$content().find(element).length;
         var elementIsInsideContent = ($element.parents("." + SCROLLABLE_CLASS).length - $element.parents("." + SCROLLABLE_CONTENT_CLASS).length) === 0;
         if(!elementInsideContent || !elementIsInsideContent) {
             return;
@@ -706,7 +711,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _hasScrollContent: function($element) {
-        var $content = this.content();
+        var $content = this.$content();
         return $element.closest($content).length && !$element.is($content);
     },
 

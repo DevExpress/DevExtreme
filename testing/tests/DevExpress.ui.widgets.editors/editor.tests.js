@@ -380,7 +380,7 @@ var Fixture = Class.inherit({
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message"), "Tooltip should be marked with auto");
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message-auto"), "Tooltip should be marked with auto");
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-always"), "Tooltip should not be marked with always");
-        assert.equal(editor._$validationMessage.dxOverlay("instance").content().text(), message, "Correct message should be set");
+        assert.equal(editor._$validationMessage.dxOverlay("instance").$content().text(), message, "Correct message should be set");
     });
 
     QUnit.test("Widget message (tooltip) should be created and always shown", function(assert) {

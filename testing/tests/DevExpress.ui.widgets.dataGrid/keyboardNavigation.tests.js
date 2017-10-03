@@ -4640,9 +4640,9 @@ QUnit.testInActiveWindow("Reset focused cell when click on expand column of mast
     //assert
     assert.ok(!keyboardNavigationController._isNeedFocus, "is key down");
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition is empty");
-    assert.strictEqual(rowsView.getCellElement(0, 0).attr("tabIndex"), undefined, "expand cell not have tab index");
+    assert.strictEqual($(rowsView.getCellElement(0, 0)).attr("tabIndex"), undefined, "expand cell not have tab index");
     assert.strictEqual(rowsView.element().attr("tabIndex"), "0", "rowsView has tabIndex");
-    assert.ok(!rowsView.getCellElement(0, 0).hasClass("dx-focused"), "expand cell is not focused");
+    assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-focused"), "expand cell is not focused");
     assert.ok(!this.dataGrid.editorFactoryController.focus(), "no focus overlay");
 });
 

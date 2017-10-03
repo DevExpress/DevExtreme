@@ -60,7 +60,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                 } else {
                     if(!this._$groupTable) {
                         this._initGroupTable();
-                        this._dateTableScrollable.content().prepend(this._$groupTable);
+                        this._dateTableScrollable.$content().prepend(this._$groupTable);
                     }
                 }
                 this.callBase(args);
@@ -150,7 +150,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         this._$noDataContainer = $("<div>").addClass(NODATA_CONTAINER_CLASS)
             .html(this.option("noDataText"));
 
-        this._dateTableScrollable.content().append(this._$noDataContainer);
+        this._dateTableScrollable.$content().append(this._$noDataContainer);
     },
 
     _setTableSizes: noop,
@@ -289,10 +289,10 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
     _createWorkSpaceStaticElements: function() {
         if(this._$groupTable) {
-            this._dateTableScrollable.content().prepend(this._$groupTable);
+            this._dateTableScrollable.$content().prepend(this._$groupTable);
         }
 
-        this._dateTableScrollable.content().append(this._$timePanel, this._$dateTable);
+        this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
         this.$element().append(this._dateTableScrollable.$element());
     },
 

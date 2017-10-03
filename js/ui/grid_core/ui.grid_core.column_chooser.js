@@ -105,7 +105,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
 
     _updateList: function(allowUpdate) {
         var items,
-            $popupContent = this._popupContainer.content(),
+            $popupContent = this._popupContainer.$content(),
             isSelectMode = this.option("columnChooser.mode") === "select",
             chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
 
@@ -289,7 +289,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             $item,
             isSelectMode = this.option("columnChooser.mode") === "select",
             chooserColumns = this._columnsController.getChooserColumns(isSelectMode),
-            $content = this._popupContainer && this._popupContainer.content(),
+            $content = this._popupContainer && this._popupContainer.$content(),
             $nodes = $content && $content.find(".dx-treeview-node");
 
         if($nodes) {
