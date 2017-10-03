@@ -201,7 +201,7 @@ QUnit.test("overlay should have hover class on content", function(assert) {
             hoverStateEnabled: true,
             visible: true
         }),
-        instance = element.data("dxOverlay"),
+        instance = element.dxOverlay("instance"),
         $content = $(instance.$content());
 
     $($content).trigger("dxhoverstart");
@@ -1783,7 +1783,7 @@ QUnit.test("content should not be moved to container before content ready action
 });
 
 QUnit.test("content should not be moved if overlay in container", function(assert) {
-    var overlay = $("#overlayInTargetContainer").dxOverlay().data("dxOverlay");
+    var overlay = $("#overlayInTargetContainer").dxOverlay().dxOverlay("instance");
 
     overlay.show();
     assert.equal(viewport().children(toSelector(OVERLAY_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);

@@ -341,7 +341,7 @@ QUnit.test("set actions by option", function(assert) {
             useNative: false,
             inertiaEnabled: false
         }),
-        instance = $scrollable.data("dxScrollable");
+        instance = $scrollable.dxScrollable("instance");
 
     instance.option("onStart", function(assert) { start++; });
     instance.option("onScroll", function(assert) { scroll++; });

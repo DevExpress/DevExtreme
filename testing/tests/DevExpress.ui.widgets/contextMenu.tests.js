@@ -1079,7 +1079,7 @@ QUnit.test("onItemContextMenu option when context menu initially hidden", functi
     $($items.eq(0)).trigger("dxcontextmenu");
 
     assert.equal(fired, 1, "event fired only in action");
-    assert.strictEqual(args.itemElement[0], $items[0], "item element is correct");
+    assert.strictEqual($(args.itemElement)[0], $items[0], "item element is correct");
     assert.equal(args.itemData.text, "1", "item data is correct");
 });
 

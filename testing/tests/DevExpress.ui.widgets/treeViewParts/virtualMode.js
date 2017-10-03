@@ -1052,7 +1052,7 @@ QUnit.test("load indicator should be removed after datasource is loaded even if 
             { id: 11, text: "Item 11", parentId: 1 }
         ],
         onContentReady: function(e) {
-            var $loadIndicator = e.element.find(".dx-treeview-loadindicator");
+            var $loadIndicator = $(e.element).find(".dx-treeview-loadindicator");
             assert.equal($loadIndicator.length, 0, "load indicator should be removed");
         },
         dataStructure: "plain",

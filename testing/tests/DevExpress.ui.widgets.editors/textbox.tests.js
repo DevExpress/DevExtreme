@@ -151,7 +151,7 @@ QUnit.module("options changing", {
     beforeEach: function() {
         this.element = $("#textbox").dxTextBox({});
         this.input = this.element.find("." + INPUT_CLASS);
-        this.instance = this.element.data("dxTextBox");
+        this.instance = this.element.dxTextBox("instance");
     }
 });
 

@@ -99,7 +99,7 @@ QUnit.test("visible changes visibility option", function(assert) {
         }),
         $content = element.dxLoadPanel("instance").$content();
 
-    var loadIndicator = element.data("dxLoadPanel");
+    var loadIndicator = element.dxLoadPanel("instance");
 
     assert.ok(!$content.is(":visible"));
 
@@ -117,7 +117,7 @@ QUnit.test("keep user defined position.of", function(assert) {
     var instance = $("#loadPanel").dxLoadPanel({
         targetContainer: "#container",
         position: { of: "body" }
-    }).data("dxLoadPanel");
+    }).dxLoadPanel("instance");
 
     assert.equal(instance.option("position.of"), "body");
 });
@@ -126,7 +126,7 @@ QUnit.test("keep user defined position.of", function(assert) {
 QUnit.module("options changed callbacks", {
     beforeEach: function() {
         this.element = $("#loadPanel").dxLoadPanel();
-        this.instance = this.element.data("dxLoadPanel");
+        this.instance = this.element.dxLoadPanel("instance");
     }
 });
 
@@ -189,7 +189,8 @@ QUnit.test("LoadPanel with custom indicator", function(assert) {
         })
         .dxLoadPanel("instance");
     instance.show();
-    var loadIndicatorInstance = this.instance.$content().find(".dx-loadindicator").dxLoadIndicator().data("dxLoadIndicator");
+
+    var loadIndicatorInstance = this.instance.$content().find(".dx-loadindicator").dxLoadIndicator().dxLoadIndicator("instance");
 
     assert.equal(loadIndicatorInstance.option("indicatorSrc"), url, "custom indicator option installed successfully");
     instance.option("indicatorSrc", "");

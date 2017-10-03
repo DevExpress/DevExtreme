@@ -73,7 +73,7 @@ var moduleConfig = {
         this.clock = sinon.useFakeTimers(new Date().valueOf());
 
         this.$element = $("#dateBox")[widgetName]({ pickerType: "native" });
-        this.instance = this.$element.data(widgetName);
+        this.instance = this.$element[widgetName]("instance");
         this.$input = $.proxy(this.instance._input, this.instance);
     },
     afterEach: function() {

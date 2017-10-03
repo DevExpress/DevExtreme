@@ -42,7 +42,7 @@ QUnit.test("markup init", function(assert) {
 
 QUnit.test("init with default options", function(assert) {
     var element = $("#checkbox").dxCheckBox(),
-        instance = element.data("dxCheckBox");
+        instance = element.dxCheckBox("instance");
 
     assert.equal(instance.option("value"), false, "checkbox has a false value by default");
     assert.ok(!element.hasClass(CHECKED_CLASS));
@@ -72,7 +72,7 @@ QUnit.test("click triggers user handler and changes state", function(assert) {
         }
     });
 
-    var instance = element.data("dxCheckBox");
+    var instance = element.dxCheckBox("instance");
 
     assert.ok(!checked);
     assert.ok(!instance.option("value"));
@@ -205,7 +205,7 @@ QUnit.module("regressions");
 
 QUnit.test("Q504139", function(assert) {
     var $element = $("#checkbox").dxCheckBox({ value: undefined }),
-        instance = $element.data("dxCheckBox");
+        instance = $element.dxCheckBox("instance");
     assert.ok(!$element.hasClass(CHECKED_CLASS));
 
     instance.option({ value: null });

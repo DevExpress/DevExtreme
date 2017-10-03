@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("jquery"),
-    TransitionExecutorModule = require("animation/transition_executor/transition_executor");
+    TransitionExecutorModule = require("animation/transition_executor/transition_executor"),
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 require("ui/defer_rendering");
@@ -121,7 +122,7 @@ QUnit.test("render delegate", function(assert) {
     assert.equal($test.find(".dx-pending-rendering").length, 1);
     assert.ok($test.find(".dx-pending-rendering").is(".dx-pending-rendering-manual"));
 
-    var render = $test.find(".dx-pending-rendering").data("dx-render-delegate");
+    var render = dataUtils.data($test.find(".dx-pending-rendering").get(0), "dx-render-delegate");
     render().done(function() {
         assert.ok($test.find(".item").is(":visible"));
         assert.equal($test.find(".dx-pending-rendering").length, 0);

@@ -2,6 +2,8 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     fx = require("animation/fx"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
@@ -1147,7 +1149,7 @@ QUnit.test("onItemClick should be fired when item is clicked in ungrouped list",
 
     $item.trigger("dxclick");
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -1180,7 +1182,7 @@ QUnit.test("onItemClick should be fired when item is clicked in grouped list", f
 
     assert.ok(actionFired, "action fired");
 
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual(items[1].items[0], actionData.itemData, "correct element passed");
     assert.strictEqual(0, actionData.itemIndex.item, "correct element itemIndex passed");
     assert.strictEqual(1, actionData.itemIndex.group, "correct groupIndex passed");
@@ -1201,7 +1203,7 @@ QUnit.test("onItemHold should be fired when item is held", function(assert) {
 
     $item.trigger(holdEvent.name);
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -1223,7 +1225,7 @@ QUnit.test("onItemSwipe should be fired when item is swiped", function(assert) {
         offset: -1
     });
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
     assert.equal("left", actionData.direction, "correct direction passed");
 
@@ -1268,7 +1270,8 @@ QUnit.test("onGroupRendered should fired with correct params", function(assert) 
         });
 
     assert.equal(groupRendered, 1, "event triggered");
-    assert.strictEqual(eventData.groupElement[0], $list.find(".dx-list-group")[0], "groupElement is correct");
+    assert.strictEqual(isRenderer(eventData.groupElement), config().useJQueryRenderer, "groupElement is correct");
+    assert.strictEqual($(eventData.groupElement)[0], $list.find(".dx-list-group")[0], "groupElement is correct");
     assert.strictEqual(eventData.groupData, items[0], "groupData is correct");
     assert.strictEqual(eventData.groupIndex, 0, "groupIndex is correct");
 });
@@ -1756,7 +1759,7 @@ QUnit.test("infinite loading should not happen if widget element is hidden", fun
             pageSize: 2
         },
         onInitialized: function(e) {
-            e.element.dxScrollView("instance").isFull = function() {
+            $(e.element).dxScrollView("instance").isFull = function() {
                 return false;
             };
         }
@@ -1776,7 +1779,7 @@ QUnit.test("infinite loading should happen when widget element is shown", functi
             pageSize: 2
         },
         onInitialized: function(e) {
-            e.element.dxScrollView("instance").isFull = function() {
+            $(e.element).dxScrollView("instance").isFull = function() {
                 return false;
             };
         }
@@ -2007,7 +2010,7 @@ QUnit.test("list should try to load next page if scrollView is not full after di
         scrollingEnabled: true,
         onInitialized: function(e) {
             var list = e.component,
-                $list = e.element;
+                $list = $(e.element);
 
             $list.dxScrollView("instance").isFull = function() {
                 var height = list.option("height");

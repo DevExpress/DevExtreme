@@ -35,8 +35,11 @@ var $ = require("jquery"),
     getRealElementWidth = require("ui/pivot_grid/ui.pivot_grid.area_item").getRealElementWidth,
     PivotGridDataSource = require("ui/pivot_grid/data_source"),
     domUtils = require("core/utils/dom"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     dateLocalization = require("localization/date"),
-    devices = require("core/devices");
+    devices = require("core/devices"),
+    dataUtils = require("core/element_data");
 
 function sumArray(array) {
     var sum = 0;
@@ -608,12 +611,12 @@ QUnit.test("show field chooser popup on field chooser button click", function(as
     this.clock.tick(500);
     //assert
     assert.ok($(".dx-fieldchooser-popup").is(":visible"), 'fieldChooser popup is visible');
-    assert.strictEqual($(".dx-fieldchooser-popup").data("dxPopup").option("showCloseButton"), true);
-    assert.strictEqual(pivotGrid.getFieldChooserPopup(), $(".dx-fieldchooser-popup").data("dxPopup"));
+    assert.strictEqual(dataUtils.data($(".dx-fieldchooser-popup")[0], "dxPopup").option("showCloseButton"), true);
+    assert.strictEqual(pivotGrid.getFieldChooserPopup(), dataUtils.data($(".dx-fieldchooser-popup")[0], "dxPopup"));
     assert.strictEqual($fieldChooserButton.dxButton("option", "hint"), "Show Field Chooser");
     //T249095
-    assert.strictEqual($(".dx-fieldchooser-popup").data("dxPopup").option("minHeight"), 250);
-    assert.strictEqual($(".dx-fieldchooser-popup").data("dxPopup").option("minWidth"), 250);
+    assert.strictEqual(dataUtils.data($(".dx-fieldchooser-popup")[0], "dxPopup").option("minHeight"), 250);
+    assert.strictEqual(dataUtils.data($(".dx-fieldchooser-popup")[0], "dxPopup").option("minWidth"), 250);
 
     assert.strictEqual($(".dx-pivotgrid-toolbar").find(".dx-button").length, 1);
     assert.strictEqual($(".dx-pivotgrid-toolbar").parent()[0], pivotGrid.$element().find(".dx-area-description-cell")[0]);
@@ -639,10 +642,77 @@ QUnit.test("create field chooser with search", function(assert) {
     fieldChooserPopup.show();
     this.clock.tick(500);
 
-    var fieldChooser = fieldChooserPopup.$content().data("dxPivotGridFieldChooser");
+
+    var fieldChooser = fieldChooserPopup.$content().data("dxPivotGridFieldChooser"),
+        treeViewInstance = fieldChooserPopup.$content().find(".dx-treeview").dxTreeView("instance");
 
     //assert
-    assert.ok(fieldChooser.option("searchEnabled"), 'fieldChooser with search');
+    assert.ok(fieldChooser.option("allowSearch"), 'fieldChooser with search');
+    assert.ok(treeViewInstance.option("searchEnabled"), 'treeview with search');
+});
+
+QUnit.test("Field panel should be updated on change headerFilter at runtime", function(assert) {
+    var pivotGrid = createPivotGrid({
+        dataSource: this.dataSource,
+        allowFiltering: true,
+        headerFilter: {
+            allowSearch: true,
+        },
+        fieldPanel: {
+            visible: true
+        }
+    }, assert);
+
+    this.clock.tick();
+
+    $("#pivotGrid").find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    assert.ok($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter has searchBox");
+
+    //act
+    pivotGrid.option("headerFilter.allowSearch", false);
+
+    $("#pivotGrid").find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    assert.notOk($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter hasn't searchBox");
+});
+
+QUnit.test("Field chooser should be updated on change headerFilter at runtime", function(assert) {
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            allowFiltering: true,
+            headerFilter: {
+                allowSearch: true,
+            },
+            fieldChooser: {
+                enabled: true
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    $(fieldChooserPopup.content()).find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    assert.ok($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter has searchBox");
+
+    //act
+    pivotGrid.option("headerFilter.allowSearch", false);
+
+    $(fieldChooserPopup.content()).find(".dx-header-filter").first().trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    assert.notOk($(".dx-header-filter-menu").find(".dx-list-search").length, "headerFilter hasn't searchBox");
 });
 
 QUnit.test("fieldChooser layout change at runtime should not hide popup", function(assert) {
@@ -668,7 +738,7 @@ QUnit.test("fieldChooser layout change at runtime should not hide popup", functi
     //assert
     assert.ok(fieldChooserPopup.option("visible"), 'fieldChooser popup is visible');
     assert.strictEqual(fieldChooserPopup.option("width"), 900);
-    assert.strictEqual(fieldChooserPopup.$content().data("dxPivotGridFieldChooser").option("layout"), 1);
+    assert.strictEqual(fieldChooserPopup.$content().dxPivotGridFieldChooser("instance").option("layout"), 1);
 });
 
 QUnit.test("Dragging between PivotGrid and FieldChooser", function(assert) {
@@ -839,11 +909,11 @@ QUnit.test("rtlEnabled assign for all children widgets", function(assert) {
 
     $.each($widgets, function() {
         var $widget = $(this),
-            componentNames = $widget.data("dxComponents");
+            componentNames = dataUtils.data($widget[0], "dxComponents");
 
         $.each(componentNames, function(index, componentName) {
             if(componentName.indexOf("dxPrivateComponent") === -1 && componentName !== "dxToolbarBase") {
-                assert.ok($widget.data(componentName).option("rtlEnabled"), "rtlEnabled for " + componentName + " assigned");
+                assert.ok(dataUtils.data($widget[0], componentName).option("rtlEnabled"), "rtlEnabled for " + componentName + " assigned");
             }
         });
     });
@@ -874,11 +944,11 @@ QUnit.test("changing rtlEnabled for all children widgets", function(assert) {
 
     $.each($widgets, function() {
         var $widget = $(this),
-            componentNames = $widget.data("dxComponents");
+            componentNames = dataUtils.data($widget[0], "dxComponents");
 
         $.each(componentNames, function(index, componentName) {
             if(componentName !== "dxCheckBox" && componentName !== "dxButton") {
-                assert.ok(!$widget.data(componentName).option("rtlEnabled"), "rtlEnabled disabled for " + componentName);
+                assert.ok(!dataUtils.data($widget[0], componentName).option("rtlEnabled"), "rtlEnabled disabled for " + componentName);
             }
         });
     });
@@ -903,8 +973,9 @@ QUnit.test("onCellPrepared event", function(assert) {
     //assert
     assert.equal(cellPreparedArgs.length, 3, 'cellPreparedArgs count');
 
-    assert.strictEqual(cellPreparedArgs.row.cellElement.text(), "B", "row area cellElement");
-    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.$element(), "element");
+    assert.equal(isRenderer(cellPreparedArgs.row.cellElement), config().useJQueryRenderer, "row area cellElement");
+    assert.strictEqual($(cellPreparedArgs.row.cellElement).text(), "B", "row area cellElement");
+    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.element(), "element");
     assert.strictEqual(cellPreparedArgs.row.component, pivotGrid, "component");
     delete cellPreparedArgs.row.cellElement;
     delete cellPreparedArgs.row.element;
@@ -922,7 +993,7 @@ QUnit.test("onCellPrepared event", function(assert) {
         }
     }, 'row area cell prepared args');
 
-    assert.strictEqual(cellPreparedArgs.column.cellElement.text(), "Q1", "column area cellElement");
+    assert.strictEqual($(cellPreparedArgs.column.cellElement).text(), "Q1", "column area cellElement");
     delete cellPreparedArgs.column.cellElement;
     delete cellPreparedArgs.column.cellElement;
     delete cellPreparedArgs.column.element;
@@ -940,7 +1011,7 @@ QUnit.test("onCellPrepared event", function(assert) {
         }
     }, 'column area cell prepared args');
 
-    assert.strictEqual(cellPreparedArgs.data.cellElement.text(), "$2", "data area cellElement");
+    assert.strictEqual($(cellPreparedArgs.data.cellElement).text(), "$2", "data area cellElement");
     delete cellPreparedArgs.data.cellElement;
     delete cellPreparedArgs.data.cellElement;
     delete cellPreparedArgs.data.element;
@@ -985,8 +1056,8 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
     //assert
     assert.equal(cellPreparedArgs.length, 3, 'cellPreparedArgs count');
 
-    assert.strictEqual(cellPreparedArgs.row.cellElement.text(), "B", "row area cellElement");
-    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.$element(), "element");
+    assert.strictEqual($(cellPreparedArgs.row.cellElement).text(), "B", "row area cellElement");
+    assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.element(), "element");
     assert.strictEqual(cellPreparedArgs.row.component, pivotGrid, "component");
     delete cellPreparedArgs.row.cellElement;
     delete cellPreparedArgs.row.element;
@@ -1004,7 +1075,7 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
         }
     }, 'row area cell prepared args');
 
-    assert.strictEqual(cellPreparedArgs.column.cellElement.text(), "Q1", "column area cellElement");
+    assert.strictEqual($(cellPreparedArgs.column.cellElement).text(), "Q1", "column area cellElement");
     delete cellPreparedArgs.column.cellElement;
     delete cellPreparedArgs.column.cellElement;
     delete cellPreparedArgs.column.element;
@@ -1022,7 +1093,7 @@ QUnit.test("subscribe to onCellPrepared event", function(assert) {
         }
     }, 'column area cell prepared args');
 
-    assert.strictEqual(cellPreparedArgs.data.cellElement.text(), "$2", "data area cellElement");
+    assert.strictEqual($(cellPreparedArgs.data.cellElement).text(), "$2", "data area cellElement");
     delete cellPreparedArgs.data.cellElement;
     delete cellPreparedArgs.data.cellElement;
     delete cellPreparedArgs.data.element;
@@ -1055,8 +1126,8 @@ QUnit.test("onCellPrepared event cellElement must be attached to dom and have co
         dataSource: this.dataSource,
         onCellPrepared: function(e) {
             if(e.cell.text === "2010") {
-                assert.equal(e.cellElement.closest(document).length, 1, "cellElement is attached to dom");
-                assert.equal(e.cellElement.css("text-align"), "left", "cellElement text-align");
+                assert.equal($(e.cellElement).closest(document).length, 1, "cellElement is attached to dom");
+                assert.equal($(e.cellElement).css("text-align"), "left", "cellElement text-align");
                 isCellPreparedCalled = true;
             }
         }

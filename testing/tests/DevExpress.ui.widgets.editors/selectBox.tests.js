@@ -80,7 +80,7 @@ QUnit.module("rendering", moduleSetup);
 
 QUnit.test("markup init", function(assert) {
     var $element = $("#selectBox").dxSelectBox(),
-        instance = $element.data("dxSelectBox"),
+        instance = $element.dxSelectBox("instance"),
         $list = $element.find(".dx-list"),
         $popup = $(instance._popup.$element());
 
@@ -316,7 +316,7 @@ QUnit.test("changing the 'value' option must set 'selected' class on correct ite
             items: ["first", "second", "third"],
             value: "first"
         }),
-        instance = $element.data("dxSelectBox"),
+        instance = $element.dxSelectBox("instance"),
         $list = $element.find(".dx-list");
 
     this.clock.tick(TIME_TO_WAIT);
@@ -896,7 +896,7 @@ QUnit.test("option onValueChanged", function(assert) {
                 count++;
             }
         }),
-        instance = $element.data("dxSelectBox");
+        instance = $element.dxSelectBox("instance");
 
     this.clock.tick(TIME_TO_WAIT);
     assert.ok($element.find("." + LIST_ITEM_CLASS).length === 3, "find 3 items");
@@ -4073,7 +4073,7 @@ QUnit.testInActiveWindow("dxSelectBox should not filter a dataSource when the wi
             acceptCustomValue: true,
             searchEnabled: true,
             onCustomItemCreating: function(e) {
-                e.element.remove();
+                $(e.element).remove();
                 return "";
             }
         }).dxSelectBox("instance"),
@@ -4099,7 +4099,7 @@ QUnit.module("focus policy", {
             focusStateEnabled: true,
             items: [1, 2, 3]
         });
-        this.instance = this.$element.data("dxSelectBox");
+        this.instance = this.$element.dxSelectBox("instance");
         this.$input = this.$element.find("." + TEXTBOX_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },
@@ -4150,7 +4150,7 @@ QUnit.test("widget disposing in focusOut event handler", function(assert) {
         searchEnabled: true,
         onFocusOut: function(e) {
             focusOutCallCount++;
-            e.element.remove();
+            $(e.element).remove();
         }
     });
 
