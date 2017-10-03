@@ -6,6 +6,7 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     config = require("core/config"),
     support = require("core/utils/support"),
+    isRenderer = require("core/utils/type").isRenderer,
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
@@ -529,7 +530,7 @@ QUnit.test("Enter and escape key press does not prevent default when popup in no
 
 QUnit.test("Keyboard navigation with field template", function(assert) {
     this.dropDownEditor.option("fieldTemplate", function(data, container) {
-        container.append($("<div>").dxTextBox({ value: data }));
+        $(container).append($("<div>").dxTextBox({ value: data }));
     });
 
     this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { which: 40, altKey: true }));
@@ -551,7 +552,7 @@ QUnit.testInActiveWindow("Focus policy with field template", function(assert) {
     }
 
     this.dropDownEditor.option("fieldTemplate", function(data, container) {
-        container.append($("<div>").dxTextBox({ value: data }));
+        $(container).append($("<div>").dxTextBox({ value: data }));
     });
 
     this.$rootElement.find(".dx-texteditor-input").focus();
@@ -765,11 +766,12 @@ QUnit.test("field template should be correctly removed after it is been applied 
             opened: true,
             value: [1],
             searchEnabled: true,
-            fieldTemplate: function(itemData, $container) {
+            fieldTemplate: function(itemData, container) {
                 var $textBox = $("<div>").dxTextBox(),
                     $field = $('<div>Test<div/>');
 
-                $container.append($field).append($textBox);
+                assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+                $(container).append($field).append($textBox);
             }
         }).dxDropDownEditor("instance");
 

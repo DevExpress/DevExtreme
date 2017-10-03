@@ -1106,7 +1106,7 @@ QUnit.test("Field should be updated if fieldTemplate is used", function(assert) 
             { ID: 2, name: 'Second' },
             { ID: 3, name: 'Third' }
         ],
-        fieldTemplate: function(selectedItem, fieldElement) {
+        fieldTemplate: function(selectedItem) {
             return $("<div id='myfield'>").dxTextBox({
                 value: selectedItem ? selectedItem.ID + ' - ' + selectedItem.name : ''
             });
@@ -2758,7 +2758,7 @@ QUnit.test("the list item value should not be displayed in input after click on 
             var textBox = $("<div>").dxTextBox({
                 value: selectedItem ? selectedItem.id : ''
             });
-            fieldElement.append(textBox);
+            $(fieldElement).append(textBox);
         }
     });
 
