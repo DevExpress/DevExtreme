@@ -881,7 +881,7 @@ var ListBase = CollectionWidget.inherit({
             renderArgs = {
                 index: index,
                 itemData: group,
-                container: $groupHeaderElement
+                container: getPublicElement($groupHeaderElement)
             };
 
         this._createItemByTemplate(groupTemplate, renderArgs);

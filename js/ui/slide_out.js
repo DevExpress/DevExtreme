@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
     registerComponent = require("../core/component_registrator"),
@@ -302,7 +303,7 @@ var SlideOut = CollectionWidget.inherit({
 
         var itemsLength = this._itemContainer().html().length;
         this._getTemplateByOption("contentTemplate").render({
-            container: this._itemContainer()
+            container: getPublicElement(this._itemContainer())
         });
         this._singleContent = this._itemContainer().html().length !== itemsLength;
     },
