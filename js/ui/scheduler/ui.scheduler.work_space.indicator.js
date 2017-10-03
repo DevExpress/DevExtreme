@@ -16,16 +16,16 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _needRenderDateTimeIndicator: function() {
-        var now = this._getToday(),
+        var today = this._getToday(),
             endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
-        return dateUtils.dateInRange(now, this._firstViewDate, new Date(endViewDate.getTime() + toMs("day")));
+        return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs("day")));
     },
 
     needRenderDateTimeIndication: function() {
-        var now = this._getToday();
+        var today = this._getToday();
 
-        return now >= dateUtils.trimTime(new Date(this.getStartViewDate()));
+        return today >= dateUtils.trimTime(new Date(this.getStartViewDate()));
     },
 
     _renderDateTimeIndication: function() {
@@ -65,12 +65,12 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         if(!this.option("showCurrentTimeIndicator") || this.option("indicatorUpdateInterval") === 0) {
             return;
         }
-        var that = this;
+
         this._clearIndicatorUpdateInterval();
 
         this._indicatorInterval = setInterval(function() {
-            that._refreshDateTimeIndication();
-        }, this.option("indicatorUpdateInterval"));
+            this._refreshDateTimeIndication();
+        }, this.option("indicatorUpdateInterval")).bind(this);
     },
 
     _clearIndicatorUpdateInterval: function() {
@@ -100,14 +100,14 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         var $row = this.$element().find("." + this._getDateTableRowClass()).eq(0),
             width = 0,
             $cells = $row.find("." + this._getDateTableCellClass()),
-            cellsCount = $cells.length;
+            cellCount = $cells.length;
 
         $cells.each(function(_, cell) {
 
             width = width + $(cell).outerWidth();
         });
 
-        return width / cellsCount;
+        return width / cellCount;
     },
 
     _getIndicationHeight: function() {
@@ -138,20 +138,20 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
     _isCurrentTime: function(date) {
         if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            var now = this._getToday(),
+            var today = this._getToday(),
                 result = false;
             date = new Date(date);
 
-            date.setFullYear(now.getFullYear(), now.getMonth(), now.getDate());
+            date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
 
             var startCellDate = new Date(date),
                 endCellDate = new Date(date);
 
-            if(dateUtils.sameDate(now, date)) {
+            if(dateUtils.sameDate(today, date)) {
                 startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration());
                 endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
 
-                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
+                result = dateUtils.dateInRange(today, startCellDate, endCellDate);
             }
             return result;
         }
@@ -163,9 +163,9 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
         if(this._isCurrentTime(startViewDate)) {
             return cellClass + " " + TIME_PANEL_CURRENT_TIME_CELL_CLASS;
-        } else {
-            return cellClass;
         }
+
+        return cellClass;
     },
 
     _cleanView: function() {
