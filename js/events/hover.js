@@ -95,7 +95,7 @@ var HoverEnd = Hover.inherit({
 /**
  * @name ui events_dxhoverstart
  * @publicName dxhoverstart
- * @type function
+ * @type jQuery.Event
  * @type_function_param1 event:jQuery.event
  * @module events/hover
 */
@@ -103,7 +103,7 @@ var HoverEnd = Hover.inherit({
 /**
  * @name ui events_dxhoverend
  * @publicName dxhoverend
- * @type function
+ * @type jQuery.Event
  * @type_function_param1 event:jQuery.event
  * @module events/hover
 */

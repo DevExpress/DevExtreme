@@ -172,7 +172,7 @@ var TransformEmitter = Emitter.inherit({
 /**
  * @name ui events_dxtransformstart
  * @publicName dxtransformstart
- * @type function
+ * @type EVENT
  * @type_function_param1 event:jQuery.event
  * @type_function_param1_field1 cancel:boolean
  * @module events/transform
@@ -180,7 +180,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxtransform
   * @publicName dxtransform
-  * @type function
+  * @type EVENT
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 scale:number
   * @type_function_param1_field2 deltaScale:number
@@ -194,7 +194,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxtransformend
   * @publicName dxtransformend
-  * @type function
+  * @type EVENT
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 scale:number
   * @type_function_param1_field2 deltaScale:number
@@ -209,7 +209,7 @@ var TransformEmitter = Emitter.inherit({
 /**
  * @name ui events_dxtranslatestart
  * @publicName dxtranslatestart
- * @type function
+ * @type EVENT
  * @type_function_param1 event:jQuery.event
  * @type_function_param1_field1 cancel:boolean
  * @module events/transform
@@ -217,7 +217,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxtranslate
   * @publicName dxtranslate
-  * @type function
+  * @type EVENT
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 translation:object
   * @type_function_param1_field2 deltaTranslation:object
@@ -227,7 +227,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxtranslateend
   * @publicName dxtranslateend
-  * @type function
+  * @type EVENT
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 translation:object
   * @type_function_param1_field2 deltaTranslation:object
@@ -238,7 +238,7 @@ var TransformEmitter = Emitter.inherit({
 /**
  * @name ui events_dxzoomstart
  * @publicName dxzoomstart
- * @type function
+ * @type EVENT
  * @deprecated ui events_dxpinchstart
  * @type_function_param1 event:jQuery.event
  * @type_function_param1_field1 cancel:boolean
@@ -247,7 +247,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxzoom
   * @publicName dxzoom
-  * @type function
+  * @type EVENT
   * @deprecated ui events_dxpinch
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 scale:number
@@ -258,7 +258,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxzoomend
   * @publicName dxzoomend
-  * @type function
+  * @type EVENT
   * @deprecated ui events_dxpinchend
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 scale:number
@@ -270,7 +270,7 @@ var TransformEmitter = Emitter.inherit({
 /**
 * @name ui events_dxpinchstart
 * @publicName dxpinchstart
-* @type function
+* @type EVENT
 * @type_function_param1 event:jQuery.event
 * @type_function_param1_field1 cancel:boolean
 * @module events/transform
@@ -278,7 +278,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxpinch
   * @publicName dxpinch
-  * @type function
+  * @type EVENT
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 scale:number
   * @type_function_param1_field2 deltaScale:number
@@ -288,7 +288,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxpinchend
   * @publicName dxpinchend
-  * @type function
+  * @type EVENT
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 scale:number
   * @type_function_param1_field2 deltaScale:number
@@ -299,7 +299,7 @@ var TransformEmitter = Emitter.inherit({
 /**
  * @name ui events_dxrotatestart
  * @publicName dxrotatestart
- * @type function
+ * @type EVENT
  * @type_function_param1 event:jQuery.event
  * @type_function_param1_field1 cancel:boolean
  * @module events/transform
@@ -307,7 +307,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxrotate
   * @publicName dxrotate
-  * @type function
+  * @type EVENT
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 rotation:number
   * @type_function_param1_field2 deltaRotation:number
@@ -317,7 +317,7 @@ var TransformEmitter = Emitter.inherit({
 /**
   * @name ui events_dxrotateend
   * @publicName dxrotateend
-  * @type function
+  * @type EVENT
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 rotation:number
   * @type_function_param1_field2 deltaRotation:number

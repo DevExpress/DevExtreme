@@ -271,12 +271,12 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_initialized
     * @publicName initialized
-    * @type function
+    * @type EVENT
     */
     /**
     * @name HtmlApplicationevents_navigatingBack
     * @publicName navigatingBack
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 cancel:Boolean
     * @type_function_param1_field2 isHardwareButton:Boolean
@@ -284,7 +284,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_navigating
     * @publicName navigating
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 currentUri:string
     * @type_function_param1_field2 uri:string
@@ -294,28 +294,28 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_beforeViewSetup
     * @publicName beforeViewSetup
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_afterViewSetup
     * @publicName afterViewSetup
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_viewRendered
     * @publicName viewRendered
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_viewShowing
     * @publicName viewShowing
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     * @type_function_param1_field2 direction:string
@@ -323,7 +323,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_viewShown
     * @publicName viewShown
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     * @type_function_param1_field2 direction:string
@@ -331,28 +331,28 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_viewHidden
     * @publicName viewHidden
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_viewDisposing
     * @publicName viewDisposing
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_viewDisposed
     * @publicName viewDisposed
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_resolveLayoutController
     * @publicName resolveLayoutController
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     * @type_function_param1_field2 layoutController:object
@@ -361,7 +361,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_resolveViewCacheKey
     * @publicName resolveViewCacheKey
-    * @type function
+    * @type EVENT
     * @type_function_param1 e:object
     * @type_function_param1_field1 key:string
     * @type_function_param1_field2 navigationItem:object
