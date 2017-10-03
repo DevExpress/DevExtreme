@@ -2,7 +2,8 @@
 
 /* global fields */
 
-var $ = require("jquery");
+var $ = require("jquery"),
+    fx = require("animation/fx");
 
 require("ui/filter_builder/filter_builder");
 
@@ -106,51 +107,53 @@ QUnit.test("markup is initialized by filter value", function(assert) {
 });
 
 QUnit.test("value and operations depend on selected field", function(assert) {
-    var container = $("#container");
-    container.dxFilterBuilder({
-        filter: [
-            ["CompanyName", "=", "K&S Music"]
-        ],
-        fields: fields
-    });
-    var fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-    assert.ok(!fieldButton.hasClass(ACTIVE_CLASS));
-    assert.equal(fieldButton.html(), "Company Name");
+    try {
+        fx.off = true;
 
-    var operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-    assert.equal(operationButton.text(), "=");
+        var container = $("#container");
+        container.dxFilterBuilder({
+            filter: [
+                ["CompanyName", "=", "K&S Music"]
+            ],
+            fields: fields
+        });
+        var fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        assert.ok(!fieldButton.hasClass(ACTIVE_CLASS));
+        assert.equal(fieldButton.html(), "Company Name");
 
-    var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
-    assert.equal(valueButton.text(), "K&S Music");
+        var operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        assert.equal(operationButton.text(), "=");
 
-    var $menu = container.children(".dx-has-context-menu");
-    assert.ok($menu.length === 0);
+        var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
+        assert.equal(valueButton.text(), "K&S Music");
 
-    fieldButton.click();
-    assert.ok(fieldButton.hasClass(ACTIVE_CLASS));
+        var $menu = container.children(".dx-has-context-menu");
+        assert.ok($menu.length === 0);
 
-    $menu = container.children(".dx-has-context-menu");
-    assert.ok($menu.length === 1);
+        fieldButton.click();
+        assert.ok(fieldButton.hasClass(ACTIVE_CLASS));
 
-    var $dateMenuItem = $(".dx-menu-item-text").eq(2);
-    assert.equal($dateMenuItem.html(), "State");
+        $menu = container.children(".dx-has-context-menu");
+        assert.ok($menu.length === 1);
 
-    $dateMenuItem.click();
-    assert.equal(fieldButton.html(), "State");
+        var $dateMenuItem = $(".dx-menu-item-text").eq(2);
+        assert.equal($dateMenuItem.html(), "State");
 
-    operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-    assert.equal(operationButton.text(), "contains");
+        $dateMenuItem.click();
+        assert.equal(fieldButton.html(), "State");
 
-    valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
-    assert.equal(valueButton.text(), "<enter a value>");
+        operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        assert.equal(operationButton.text(), "contains");
 
-    var menuClosed = assert.async();
-    setTimeout(function() {
+        valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
+        assert.equal(valueButton.text(), "<enter a value>");
+
         assert.ok(!fieldButton.hasClass(ACTIVE_CLASS));
         $menu = container.children(".dx-has-context-menu");
         assert.ok($menu.length === 0);
-        menuClosed();
-    }, 500);
+    } finally {
+        fx.off = false;
+    }
 });
 
 QUnit.test("editor field depends on field type", function(assert) {
