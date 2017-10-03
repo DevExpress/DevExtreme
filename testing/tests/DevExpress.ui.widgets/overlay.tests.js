@@ -1310,7 +1310,7 @@ QUnit.test("overlay should be hidden after click outside was present", function(
             visible: true
         })
         .dxOverlay("instance"),
-        $content = $(overlay.content());
+        $content = overlay.$content();
 
     $($content).trigger("dxpointerdown");
     assert.equal(overlay.option("visible"), true, "overlay is not hidden");

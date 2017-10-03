@@ -65,6 +65,7 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
+    config = require("core/config"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
@@ -6115,6 +6116,7 @@ QUnit.test("getRowElement", function(assert) {
 
     //act, assert
     $rowElement = $(dataGrid.getRowElement(1));
+    assert.equal(typeUtils.isRenderer(dataGrid.getRowElement(1)), config().useJQueryRenderer, "rowElement is correct");
     assert.equal($rowElement.length, 1, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr")[1], "correct row element");
 });

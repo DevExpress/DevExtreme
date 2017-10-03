@@ -9,6 +9,7 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config");
 
 require("common.css!");
@@ -347,6 +348,7 @@ QUnit.test("field method returning overlay content", function(assert) {
     var dropDownEditor = this.dropDownEditor,
         $field = $(dropDownEditor.field());
 
+    assert.equal(isRenderer(dropDownEditor.field()), config().useJQueryRenderer, "fieldElement is correct");
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
 });

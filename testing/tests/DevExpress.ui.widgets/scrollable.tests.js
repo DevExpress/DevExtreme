@@ -17,7 +17,8 @@ var $ = require("jquery"),
     config = require("core/config"),
     viewPort = require("core/utils/view_port").value,
     pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer;
 
 require("common.css!");
 
@@ -1870,7 +1871,10 @@ QUnit.test("content", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         useNative: false
     });
-    assert.ok($scrollable.dxScrollable("instance").$content().hasClass(SCROLLABLE_CONTENT_CLASS), "returns content");
+    var content = $scrollable.dxScrollable("instance").content();
+
+    assert.equal(isRenderer(content), config().useJQueryRenderer, "content is correct");
+    assert.ok($(content).hasClass(SCROLLABLE_CONTENT_CLASS), "returns content");
 });
 
 QUnit.test("scrollBy with plain object", function(assert) {
