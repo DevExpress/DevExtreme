@@ -197,10 +197,10 @@ var SlideOutView = Widget.inherit({
             contentTemplate = this._getTemplate(this.option("contentTemplate"));
 
         menuTemplate && menuTemplate.render({
-            container: $(this.menuContent())
+            container: this.menuContent()
         });
         contentTemplate && contentTemplate.render({
-            container: $(this.content()),
+            container: this.content(),
             noModel: true
         });
     },
