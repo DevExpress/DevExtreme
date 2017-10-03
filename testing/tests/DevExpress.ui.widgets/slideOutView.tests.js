@@ -118,7 +118,7 @@ QUnit.test("custom content template for content should be rendered correctly", f
     var $element = $("#contentTemplate").dxSlideOutView({
             contentTemplate: "customContent"
         }),
-        $content = $element.dxSlideOutView("instance").$content();
+        $content = $($element.dxSlideOutView("instance").content());
 
     assert.equal($.trim($content.text()), "Test Content Template", "content text is correct");
 });
@@ -129,7 +129,7 @@ QUnit.test("render right menu position", function(assert) {
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menuContent = $(instance.menuContent());
 
     assert.notOk($menuContent.hasClass(SLIDEOUTVIEW_CLASS + "-left"), "there is no left menu position class");
@@ -157,7 +157,7 @@ QUnit.test("content() function", function(assert) {
         instance = $element.dxSlideOutView("instance"),
         $content = $element.find("." + SLIDEOUTVIEW_CONTENT_CLASS).eq(0);
 
-    assert.equal($content.get(0), instance.$content().get(0), "content function return correct DOMNode");
+    assert.equal($content.get(0), $(instance.content()).get(0), "content function return correct DOMNode");
 });
 
 QUnit.test("showMenu and hideMenu functions", function(assert) {
@@ -208,7 +208,7 @@ QUnit.test("content container should have correct position if menu isn't visible
             menuVisible: false
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content();
+        $content = $(instance.content());
 
     assert.equal(position($content), 0, "container rendered at correct position");
 });
@@ -218,7 +218,7 @@ QUnit.test("content container should have correct position if menu is visible", 
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menu = $(instance.menuContent());
 
     assert.equal(position($content), $menu.width(), "container rendered at correct position");
@@ -230,7 +230,7 @@ QUnit.test("content container should have correct position if menu is lager than
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content();
+        $content = $(instance.content());
 
     assert.equal(position($content), $element.width() - instance.option("contentOffset"), "container rendered at correct position");
 });
@@ -254,7 +254,7 @@ QUnit.test("content container should have correct position after resize", functi
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         elementWidth = $element.width();
 
     $("#slideOutViewContainer").width(elementWidth * 2);
@@ -273,7 +273,7 @@ QUnit.test("content container should have correct position if it is rendered in 
             width: "100%",
             menuVisible: true
         }).dxSlideOutView("instance"),
-        $content = instance.$content();
+        $content = $(instance.content());
 
     $container.appendTo("#qunit-fixture");
     $element.trigger("dxshown");
@@ -317,7 +317,7 @@ QUnit.test("content container should be moved by swipe", function(assert) {
             menuVisible: false
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menu = $(instance.menuContent()),
         pointer = pointerMock($content).start();
 
@@ -335,7 +335,7 @@ QUnit.test("content should be moved by swipe with inverted position", function(a
             menuPosition: 'inverted'
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menu = $(instance.menuContent()),
         pointer = pointerMock($content).start();
 
@@ -346,7 +346,7 @@ QUnit.test("content should be moved by swipe with inverted position", function(a
 QUnit.test("content container should not be moved out of menu", function(assert) {
     var $element = $("#slideOutView").dxSlideOutView({}),
         instance = $element.dxSlideOutView("instance"),
-        pointer = pointerMock(instance.$content()).start();
+        pointer = pointerMock($(instance.content())).start();
 
     var lastEvent = pointer.swipeStart().lastEvent();
     assert.strictEqual(lastEvent.maxLeftOffset, 0, "container will not move out of menu");
@@ -365,7 +365,7 @@ QUnit.test("swipeEnabled option", function(assert) {
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         pointer = pointerMock($content).start();
 
     var startPosition = position($content);
@@ -380,7 +380,7 @@ QUnit.test("swipeEnabled option dynamic change", function(assert) {
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         pointer = pointerMock($content).start();
 
     var startPosition = position($content);
@@ -399,7 +399,7 @@ QUnit.test("content container should not be moved in design mode", function(asse
                 menuVisible: true
             }),
             instance = $element.dxSlideOutView("instance"),
-            $content = instance.$content(),
+            $content = $(instance.content()),
             pointer = pointerMock($content).start();
 
         var startPosition = position($content);
@@ -424,7 +424,7 @@ QUnit.module("animation", {
 QUnit.test("showing menu should be animated", function(assert) {
     var $element = $("#slideOutView").dxSlideOutView({}),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menu = $(instance.menuContent()),
         pointer = pointerMock($content).start();
 
@@ -438,7 +438,7 @@ QUnit.test("showing menu should be animated", function(assert) {
 QUnit.test("animation should be stopped after swipe start", function(assert) {
     var $element = $("#slideOutView").dxSlideOutView({}),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         pointer = pointerMock($content).start();
 
     animationCapturing.teardown();
@@ -452,7 +452,7 @@ QUnit.test("hiding menu should be animated", function(assert) {
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menu = $(instance.menuContent()),
         pointer = pointerMock($content).start();
 
@@ -508,7 +508,7 @@ QUnit.test("shield should be visible during swipe", function(assert) {
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $shield = $element.find("." + SLIDEOUTVIEW_SHIELD_CLASS),
         pointer = pointerMock($content).start();
 
@@ -532,7 +532,7 @@ QUnit.test("shield should have correct position", function(assert) {
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $shield = $element.find("." + SLIDEOUTVIEW_SHIELD_CLASS);
 
     assert.equal($shield.offset().left, $content.offset().left, "shield has correct position");
@@ -544,7 +544,7 @@ QUnit.test("shield should have correct position after widget resize", function(a
             menuVisible: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $shield = $element.find("." + SLIDEOUTVIEW_SHIELD_CLASS),
         menuWidth = $(instance.menuContent()).width();
 
@@ -563,7 +563,7 @@ QUnit.test("content should have correct position if menu is visible in rtl mode"
             rtlEnabled: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menu = $(instance.menuContent());
 
     assert.equal(position($content), -$menu.width(), "container rendered at correct position");
@@ -575,7 +575,7 @@ QUnit.test("content should be moved by swipe in rtl", function(assert) {
             rtlEnabled: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menu = $(instance.menuContent()),
         pointer = pointerMock($content).start();
 
@@ -590,7 +590,7 @@ QUnit.test("content should be moved by swipe in rtl with inverted position", fun
             menuPosition: 'inverted'
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         $menu = $(instance.menuContent()),
         pointer = pointerMock($content).start();
 
@@ -619,7 +619,7 @@ QUnit.test("content should not be moved out of menu", function(assert) {
             rtlEnabled: true
         }),
         instance = $element.dxSlideOutView("instance"),
-        $content = instance.$content(),
+        $content = $(instance.content()),
         pointer = pointerMock($content).start();
 
     var lastEvent = pointer.swipeStart().lastEvent();

@@ -200,7 +200,7 @@ var SlideOutView = Widget.inherit({
             container: $(this.menuContent())
         });
         contentTemplate && contentTemplate.render({
-            container: this.$content(),
+            container: $(this.content()),
             noModel: true
         });
     },
@@ -220,14 +220,14 @@ var SlideOutView = Widget.inherit({
 
     _renderShield: function() {
         this._$shield = this._$shield || $("<div>").addClass(SLIDEOUTVIEW_SHIELD_CLASS);
-        this._$shield.appendTo(this.$content());
+        this._$shield.appendTo(this.content());
         eventsEngine.off(this._$shield, clickEvent.name);
         eventsEngine.on(this._$shield, clickEvent.name, this.hideMenu.bind(this));
         this._toggleShieldVisibility(this.option("menuVisible"));
     },
 
     _initSwipeHandlers: function() {
-        this._createComponent(this.$content(), Swipeable, {
+        this._createComponent($(this.content()), Swipeable, {
             disabled: !this.option("swipeEnabled"),
             elastic: false,
             itemSizeFunc: this._getMenuWidth.bind(this),
@@ -245,7 +245,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _swipeStartHandler: function(e) {
-        animation.complete(this.$content());
+        animation.complete($(this.content()));
         var event = e.jQueryEvent,
             menuVisible = this.option("menuVisible"),
             rtl = this._isRightMenuPosition();
@@ -291,9 +291,9 @@ var SlideOutView = Widget.inherit({
 
         if(animate) {
             this._toggleShieldVisibility(true);
-            animation.moveTo(this.$content(), pos, this._animationCompleteHandler.bind(this));
+            animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
         } else {
-            translator.move(this.$content(), { left: pos });
+            translator.move($(this.content()), { left: pos });
         }
     },
 
@@ -336,7 +336,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _dispose: function() {
-        animation.complete(this.$content());
+        animation.complete($(this.content()));
         this._toggleHideMenuCallback(false);
         this.callBase();
     },
@@ -382,10 +382,6 @@ var SlideOutView = Widget.inherit({
             default:
                 this.callBase(args);
         }
-    },
-
-    $content: function() {
-        return this._$container;
     },
 
     /**
