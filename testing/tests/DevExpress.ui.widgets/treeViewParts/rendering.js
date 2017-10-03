@@ -805,3 +805,19 @@ QUnit.test("Render Search editor", function(assert) {
     assert.ok($searchEditor.hasClass("dx-treeview-search"), "has search editor");
     assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "2", "editor value");
 });
+
+QUnit.test("Render Search editor with default options", function(assert) {
+    var searchEditorInstance,
+        treeViewInstance = initTree({
+            items: $.extend(true, [], DATA[1]),
+            keyExpr: "key",
+            searchEnabled: true
+        }).dxTreeView("instance");
+
+    searchEditorInstance = treeViewInstance.$element().children().first().dxTextBox("instance");
+    assert.equal(searchEditorInstance.option("placeholder"), "Search");
+    assert.equal(searchEditorInstance.option("value"), "");
+    assert.equal(searchEditorInstance.option("valueChangeEvent"), "input");
+    assert.equal(searchEditorInstance.option("mode"), "search");
+    assert.equal(searchEditorInstance.option("tabIndex"), 0);
+});
