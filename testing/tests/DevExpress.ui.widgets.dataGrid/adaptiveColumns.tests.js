@@ -1487,6 +1487,19 @@ QUnit.test("Apply a hidden css class on cell prepared event of rows view", funct
     assert.ok($cells.eq(1).hasClass("dx-datagrid-hidden-column"));
 });
 
+QUnit.test("Row elements are should get only once when CSS for hidden column is applied", function(assert) {
+    //arrange, act
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    sinon.spy(this.rowsView, "_getRowElements");
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.ok(this.rowsView._getRowElements.calledOnce);
+});
+
 QUnit.module("API", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
