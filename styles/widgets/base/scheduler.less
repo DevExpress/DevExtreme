@@ -521,6 +521,24 @@
         }
 
     }
+
+    &.dx-rtl {
+        .dx-scheduler-date-time-indicator {
+            margin-left: 0;
+            .dx-icon-spinleft;
+
+             &:before {
+                margin-right: @SCHEDULER_TIME_INDICATOR_LEFT;
+            }
+        }
+
+        .dx-scheduler-date-time-shader-top,
+        .dx-scheduler-date-time-shader-bottom {
+            &:before {
+                margin-left: 0;
+            }
+        }
+    }
 }
 
 .dx-scheduler-timeline {
@@ -2072,6 +2090,11 @@
 }
 
 .dx-rtl {
+    .dx-scheduler-date-time-shader-all-day {
+        margin-left: 0;
+        margin-right: @SCHEDULER_LEFT_COLUMN_WIDTH;
+    }
+
     .dx-scheduler-navigator {
         float: right;
         padding-left: 0;

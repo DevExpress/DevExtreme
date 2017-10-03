@@ -36,7 +36,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
         width && this._$topShader.width(width) && this._$topShader.height(height);
 
         this._$topShader.css("marginTop", -this._$container.outerHeight() * i);
-        this._$topShader.css("left", this._workspace._getCellCount() * this._workspace._getRoundedCellWidth() * i);
+        this._$topShader.css("left", this._getShaderOffset(i, width));
 
         $shader.append(this._$topShader);
     },
@@ -45,7 +45,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
         this._$bottomShader = $("<div>").addClass(DATE_TIME_SHADER_BOTTOM_CLASS);
         this._$bottomShader.width(width - this._workspace.getCellWidth()) && this._$bottomShader.height(height);
 
-        this._$bottomShader.css("left", this._workspace._getCellCount() * this._workspace._getRoundedCellWidth() * i);
+        this._$bottomShader.css("left", this._getShaderOffset(i, width - this._workspace.getCellWidth()));
 
         $shader.append(this._$bottomShader);
     },
@@ -55,10 +55,15 @@ var VerticalCurrentTimeShader = Shader.inherit({
             this._$allDayIndicator = $("<div>").addClass(DATE_TIME_SHADER_ALL_DAY_CLASS);
             this._$allDayIndicator.height(this._workspace.getAllDayHeight());
             this._$allDayIndicator.width(shaderWidth);
-            this._$allDayIndicator.css("left", this._workspace._getCellCount() * this._workspace._getRoundedCellWidth() * i);
+            this._$allDayIndicator.css("left", this._getShaderOffset(i, shaderWidth));
 
             this._workspace._$allDayPanel.prepend(this._$allDayIndicator);
         }
+    },
+
+    _getShaderOffset: function(i, width) {
+        var offset = this._workspace._getCellCount() * this._workspace._getRoundedCellWidth() * i;
+        return this._workspace.option("rtlEnabled") ? this._$container.outerWidth() - offset - this._workspace.getTimePanelWidth() - width : offset;
     },
 
     clean: function() {

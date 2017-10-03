@@ -20,7 +20,7 @@ require("ui/scheduler/ui.scheduler.timeline_week"),
 require("ui/scheduler/ui.scheduler.timeline_work_week"),
 require("ui/scheduler/ui.scheduler.timeline_month"),
 QUnit.testStart(function() {
-    $("#qunit-fixture").html('<div id="scheduler-work-space"></div>');
+    $("#qunit-fixture").html('<div id="scheduler-work-space"></div><div id="scheduler-work-space-rtl"></div>');
 });
 
 var stubInvokeMethod = function(instance, options) {
@@ -458,6 +458,28 @@ var stubInvokeMethod = function(instance, options) {
             $cell = $element.find(".dx-scheduler-header-panel-cell").eq(4);
 
         assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
+    });
+
+    QUnit.test("DateTimeIndicator and shader should have correct positions, Day view with groups & intervalCount, rtl mode", function(assert) {
+        var workspace = $("#scheduler-work-space-rtl").dxSchedulerWorkSpaceWeek({
+            showCurrentTimeIndicator: true,
+            currentDate: new Date(2017, 8, 5),
+            startDayHour: 8,
+            indicatorTime: new Date(2017, 8, 5, 12, 45),
+            rtlEnabled: true,
+            intervalCount: 3
+        }).dxSchedulerWorkSpaceWeek("instance");
+
+        var $element = workspace.$element(),
+            $indicator = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
+            $topShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
+            $bottomShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+
+        assert.equal($indicator.length, 1, "Indicator count is correct");
+        assert.roughEqual($indicator.eq(0).position().left, 773, 1.5, "Indicator left is OK");
+        assert.equal($indicator.eq(0).position().top, 475, "Indicator top is OK");
+        assert.roughEqual($topShader.position().left, 872, 1, "Top indicator has correct left");
+        assert.roughEqual($bottomShader.position().left, 914, 1, "Bottom indicator has correct left");
     });
 })("DateTime indicator on Week View");
 

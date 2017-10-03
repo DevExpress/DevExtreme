@@ -40,18 +40,20 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
                 var groupCount = isVertical && this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.content(),
                     width = this._getIndicationWidth(),
-                    height = this._getIndicationHeight();
+                    height = this._getIndicationHeight(),
+                    rtlOffset = this._getRtlOffset(this.getCellWidth());
 
                 if(height > 0) {
                     for(var i = 0; i < groupCount; i++) {
-                        var $indicator = $("<div>").addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+                        var $indicator = $("<div>").addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS),
+                            offset = this._getCellCount() * this._getRoundedCellWidth() * i + (width - this._getRoundedCellWidth());
 
                         if(isVertical) {
                             $indicator.width(this.getCellWidth());
-                            $indicator.css("left", this._getCellCount() * this._getRoundedCellWidth() * i + (width - this._getRoundedCellWidth()));
+                            $indicator.css("left", rtlOffset ? rtlOffset - offset : offset);
                         } else {
                             $indicator.height($container.outerHeight());
-                            $indicator.css("left", width);
+                            $indicator.css("left", rtlOffset ? rtlOffset - width : width);
                         }
 
                         $container.append($indicator);
@@ -59,6 +61,10 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
                 }
             }
         }
+    },
+
+    _getRtlOffset: function(width) {
+        return this.option("rtlEnabled") ? this._dateTableScrollable.content().outerWidth() - this.getTimePanelWidth() - width : 0;
     },
 
     _setIndicationUpdateInterval: function() {
