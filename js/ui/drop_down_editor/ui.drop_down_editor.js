@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    domUtils = require("../../core/utils/dom"),
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -370,7 +371,7 @@ var DropDownEditor = TextBox.inherit({
 
         fieldTemplate.render({
             model: data,
-            container: $container
+            container: domUtils.getPublicElement($container)
         });
 
         if(!this._input().length) {

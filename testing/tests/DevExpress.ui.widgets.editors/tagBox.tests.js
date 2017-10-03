@@ -3134,13 +3134,13 @@ QUnit.test("value should be cleared after deselect all items if fieldTemplate an
             opened: true,
             value: [1],
             searchEnabled: true,
-            fieldTemplate: function(itemData, $container) {
+            fieldTemplate: function(itemData, container) {
                 var $textBox = $("<div>").dxTextBox();
 
                 itemData = Array.isArray(itemData) ? itemData : [itemData];
                 $field.text(itemData[0] || "");
 
-                $container.append($field).append($textBox);
+                $(container).append($field).append($textBox);
             }
         }),
         $items = $("." + LIST_ITEM_CLASS);
