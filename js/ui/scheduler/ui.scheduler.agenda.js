@@ -308,7 +308,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     _attachEvents: noop,
     _cleanCellDataCache: noop,
 
-    _needRenderDateTimeIndication: function() {
+    needRenderDateTimeIndication: function() {
         return false;
     },
 

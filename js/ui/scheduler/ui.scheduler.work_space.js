@@ -22,7 +22,7 @@ var $ = require("../../core/renderer"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
     tableCreator = require("./ui.scheduler.table_creator"),
-    Shader = require("./ui.scheduler.currentTimeShader");
+    VerticalShader = require("./ui.scheduler.currentTimeShader.vertical");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
@@ -457,8 +457,6 @@ var SchedulerWorkSpace = Widget.inherit({
         this._initDateTableScrollable();
 
         this._createWorkSpaceElements();
-
-        this._shader = new Shader();
     },
 
     _toggleHorizontalScrollClass: function() {
@@ -763,6 +761,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateTable();
 
+        this._shader = new VerticalShader();
         this._renderDateTimeIndication();
 
         this._setIndicationUpdateInterval();
@@ -797,11 +796,11 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderDateTimeIndication: function() {
-        if(this._needRenderDateTimeIndication()) {
+        if(this.needRenderDateTimeIndication()) {
             var isVertical = this._isVerticalShader();
 
             if(this.option("shadeUntilNow")) {
-                this._shader.render(this, isVertical);
+                this._shader.render(this);
             }
 
             if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
@@ -881,7 +880,7 @@ var SchedulerWorkSpace = Widget.inherit({
         return dateUtils.dateInRange(now, this._firstViewDate, new Date(endViewDate.getTime() + DAY_MS));
     },
 
-    _needRenderDateTimeIndication: function() {
+    needRenderDateTimeIndication: function() {
         var now = this._getToday();
 
         return now >= dateUtils.trimTime(new Date(this.getStartViewDate()));

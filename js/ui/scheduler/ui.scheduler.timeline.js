@@ -6,7 +6,8 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
     dateUtils = require("../../core/utils/date"),
-    tableCreator = require("./ui.scheduler.table_creator");
+    tableCreator = require("./ui.scheduler.table_creator"),
+    HorizontalShader = require("./ui.scheduler.currentTimeShader.horizontal");
 
 var TIMELINE_CLASS = "dx-scheduler-timeline",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
@@ -159,6 +160,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderTimePanel();
         this._renderDateTable();
 
+        this._shader = new HorizontalShader();
         this._renderDateTimeIndication();
         this._setIndicationUpdateInterval();
 
