@@ -8,7 +8,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     utils = require("./utils"),
     ContextMenu = require("../context_menu"),
-    EditorFactoryController = require("../grid_core/ui.grid_core.editor_factory").controllers.editorFactory;
+    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
 
 var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group",
@@ -29,8 +29,6 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     ACTIONS = [
         "onEditorPreparing", "onEditorPrepared"
     ];
-
-var editorFactoryController = new EditorFactoryController();
 
 var FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {
@@ -117,16 +115,17 @@ var FilterBuilder = Widget.inherit({
         this._initActions();
         this.callBase();
     },
-    // TODO
+
     _initActions: function() {
         var that = this;
-        this._actions = {};
+
+        that._actions = {};
 
         ACTIONS.forEach(function(action) {
-            that._actions[action] = that._createActionByOption(action);
+            that._actions[action] = that._createActionByOption(action, { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
         });
     },
-    // TODO: from ui.grid_core.modules
+
     executeAction: function(actionName, options) {
         var action = this._actions[actionName];
 
@@ -413,7 +412,7 @@ var FilterBuilder = Widget.inherit({
     _createValueEditor: function(value, field, setValueHandler) {
         var $editor = $("<div>").attr("tabindex", 0);
         // TODO: it have to be in shared file
-        editorFactoryController.createEditor.call(this, $editor, extend({}, field, {
+        this.createEditor($editor, extend({}, field, {
             value: value,
             parentType: "filterRow",
             setValue: setValueHandler,
@@ -442,7 +441,7 @@ var FilterBuilder = Widget.inherit({
             }
         });
     }
-});
+}).include(EditorFactoryMixin);
 
 registerComponent("dxFilterBuilder", FilterBuilder);
 
