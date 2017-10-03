@@ -1023,9 +1023,9 @@ QUnit.test("T560045 - ignore next link when $top is specified", function(assert)
     var done = assert.async(),
         urlPrefix = "https://graph.microsoft.com/v1.0/me/messages";
 
-    $.mockjax({
+    ajaxMock.setup({
         url: urlPrefix,
-        response: function(bag) {
+        callback: function(bag) {
             this.responseText = {
                 "@odata.nextLink": urlPrefix + "?$top=1&$skip=" + (bag.data.$top + bag.data.$skip),
                 "value": [ 1 ]
