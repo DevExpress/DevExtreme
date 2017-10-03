@@ -38,7 +38,7 @@ QUnit.test("parser should work with strict formats", function(assert) {
 });
 
 QUnit.test("format should be applied on input", function(assert) {
-    this.keyboard.type("12e-3.456");
+    this.keyboard.type("12e*3.456");
     assert.equal(this.input.val(), "123.45", "value is correct");
 });
 
@@ -73,7 +73,7 @@ QUnit.test("parser should be refreshed when displayFormat option changed", funct
     }
 });
 
-QUnit.test("removing a symbol should try replace it to 0", function(assert) {
+QUnit.skip("removing required symbol should try replace it to 0", function(assert) {
     this.instance.option({
         displayFormat: "#.000",
         value: 123.456
@@ -87,4 +87,17 @@ QUnit.test("removing a symbol should try replace it to 0", function(assert) {
 
     this.keyboard.press("del").input();
     assert.equal(this.input.val(), "12.006", "char was replaced to 0");
+});
+
+QUnit.test("pressing '-' button should revert the number", function(assert) {
+    this.instance.option({
+        displayFormat: "#.000",
+        value: 123.456
+    });
+
+    this.keyboard.press("-");
+    assert.equal(this.input.val(), "-123.456", "value is correct");
+
+    this.keyboard.caret(2).press("-");
+    assert.equal(this.input.val(), "123.456", "value is correct");
 });

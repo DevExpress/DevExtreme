@@ -16,8 +16,9 @@ var TextEditorFormatter = TextEditorBase.inherit({
         var that = this;
 
         return extend(this.callBase(), {
-            backspace: that._removeHandler.bind(this),
-            del: that._removeHandler.bind(this)
+            backspace: that._removeHandler.bind(that),
+            del: that._removeHandler.bind(that),
+            minus: that._revertNumber.bind(that)
         });
     },
 
@@ -113,6 +114,10 @@ var TextEditorFormatter = TextEditorBase.inherit({
                 };
             }
         }
+    },
+
+    _revertNumber: function() {
+        this._applyValue(-1 * this._parsedValue);
     },
 
     _formatValue: function() {

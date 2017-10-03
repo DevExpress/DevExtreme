@@ -175,35 +175,8 @@ var browser;
             '?': '/'
         },
 
-        SYMBOLS_KEYS_CHAR_CODES: {
-            109: 45,
-            173: 45,
-            186: 59,
-            187: 61,
-            188: 44,
-            189: 45,
-            190: 46,
-            191: 47,
-            192: 96,
-            219: 91,
-            220: 92,
-            221: 93,
-            222: 39,
-
-            110: 46,
-            96: 48,
-            97: 49,
-            98: 50,
-            99: 51,
-            100: 52,
-            101: 53,
-            102: 54,
-            103: 55,
-            104: 56,
-            105: 57,
-            107: 43,
-            106: 42,
-            111: 47
+        NON_STANDARD_CHAR_CODES: {
+            '-': 189
         }
     };
 
@@ -227,6 +200,8 @@ var browser;
     var getKeyCodeByChar = function(keyChar, toUpperCase) {
         if(isLetter(keyChar) && toUpperCase) {
             return keyChar.toUpperCase().charCodeAt(0);
+        } else if(KEYS_MAPS.NON_STANDARD_CHAR_CODES.hasOwnProperty(keyChar)) {
+            return KEYS_MAPS.NON_STANDARD_CHAR_CODES[keyChar];
         }
         return keyChar.charCodeAt(0);
     };
