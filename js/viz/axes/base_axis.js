@@ -1356,7 +1356,8 @@ Axis.prototype = {
             rangeMin,
             rangeMax,
             rangeMinVisible,
-            rangeMaxVisible;
+            rangeMaxVisible,
+            synchronizedValue = options.synchronizedValue;
 
         if(type === constants.logarithmic) {
             min = min <= 0 ? undefined : min;
@@ -1372,6 +1373,11 @@ Axis.prototype = {
             }
             rangeMinVisible = _isDefined(zoomArgs.min) ? zoomArgs.min : rangeMin;
             rangeMaxVisible = _isDefined(zoomArgs.max) ? zoomArgs.max : rangeMax;
+
+            if(_isDefined(synchronizedValue)) {
+                rangeMin = _isDefined(rangeMin) && (rangeMin < synchronizedValue) ? rangeMin : synchronizedValue;
+                rangeMax = _isDefined(rangeMax) && (rangeMax > synchronizedValue) ? rangeMax : synchronizedValue;
+            }
         } else {
             rangeMinVisible = _isDefined(zoomArgs.min) ? zoomArgs.min : min;
             rangeMaxVisible = _isDefined(zoomArgs.max) ? zoomArgs.max : max;
