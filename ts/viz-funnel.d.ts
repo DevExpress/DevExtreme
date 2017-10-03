@@ -21,9 +21,6 @@ declare module DevExpress.viz.funnel {
         /** @docid dxfunnelItemfields_argument */
         argument: any;
 
-        /** @docid dxfunnelItemfields_id */
-        id: number;
-
         /** @docid dxfunnelItemfields_percent */
         percent: number;
 

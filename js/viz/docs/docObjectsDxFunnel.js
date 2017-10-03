@@ -17,12 +17,6 @@ var Item = {
     */
     data: undefined,
     /**
-    * @name dxfunnelItemfields_id
-    * @publicName id
-    * @type number
-    */
-    id: undefined,
-    /**
     * @name dxfunnelItemfields_percent
     * @publicName percent
     * @type number
