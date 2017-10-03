@@ -92,7 +92,7 @@ QUnit.test("Fixed column should be rendered in separate table", function(assert)
     this.clock.tick();
 
     //assert
-    var $rowElement = treeList.getRowElement(0);
+    var $rowElement = $(treeList.getRowElement(0));
     assert.equal($rowElement.length, 2, "two row elements for one row");
     assert.notEqual($rowElement.eq(0).closest("table").get(0), $rowElement.eq(1).closest("table").get(0), "row elements are in different tables");
 });

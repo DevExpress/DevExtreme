@@ -3607,7 +3607,7 @@ QUnit.test("row alternation should be correct if virtual scrolling is enabled an
     });
 
     var alternatedRowIndexes = [0, 1, 2, 3, 4, 5].filter(function(index) {
-        return dataGrid.getRowElement(index).hasClass("dx-row-alt");
+        return $(dataGrid.getRowElement(index)).hasClass("dx-row-alt");
     });
 
     //assert
@@ -6114,7 +6114,7 @@ QUnit.test("getRowElement", function(assert) {
         });
 
     //act, assert
-    $rowElement = dataGrid.getRowElement(1);
+    $rowElement = $(dataGrid.getRowElement(1));
     assert.equal($rowElement.length, 1, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr")[1], "correct row element");
 });
@@ -6135,7 +6135,7 @@ QUnit.test("getRowElement when there is fixed column", function(assert) {
         });
 
     //act, assert
-    $rowElement = dataGrid.getRowElement(1);
+    $rowElement = $(dataGrid.getRowElement(1));
     assert.equal($rowElement.length, 2, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview .dx-datagrid-content").not(".dx-datagrid-content-fixed").find("tbody > tr")[1], "correct row element of the main table");
     assert.deepEqual($rowElement[1], $("#dataGrid").find(".dx-datagrid-rowsview .dx-datagrid-content-fixed").find("tbody > tr")[1], "correct row element of the fixed table");
@@ -6425,7 +6425,7 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     this.clock.tick();
 
     //assert
-    var $rows = dataGrid.getRowElement(1);
+    var $rows = $(dataGrid.getRowElement(1));
 
     assert.equal($rows.length, 2, "two rows: main row + fixed row");
     assert.ok($rows.eq(0).hasClass("dx-master-detail-row"), "first row is master detail");
@@ -6607,21 +6607,21 @@ QUnit.test("Cancel editing should works correctly if editing mode is form and ma
     dataGrid.expandRow(items[0]);
     dataGrid.editRow(0);
 
-    assert.ok(dataGrid.getRowElement(0).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
+    assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
     assert.ok(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
 
     //act
     dataGrid.cancelEditData();
 
     //assert
-    assert.ok(dataGrid.getRowElement(0).hasClass("dx-data-row"), "row 0 is data row");
+    assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-data-row"), "row 0 is data row");
     assert.notOk(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
 
-    assert.ok(dataGrid.getRowElement(1).hasClass("dx-master-detail-row"), "row 1 is master detail row");
-    assert.notOk(dataGrid.getRowElement(1).hasClass("dx-datagrid-edit-form"), "row 1 is not edit form row");
+    assert.ok($(dataGrid.getRowElement(1)).hasClass("dx-master-detail-row"), "row 1 is master detail row");
+    assert.notOk($(dataGrid.getRowElement(1)).hasClass("dx-datagrid-edit-form"), "row 1 is not edit form row");
     assert.notOk(dataGrid.getVisibleRows()[1].isEditing, "row 1 isEditing");
 
-    assert.ok(dataGrid.getRowElement(2).hasClass("dx-data-row"), "row 2 is data row");
+    assert.ok($(dataGrid.getRowElement(2)).hasClass("dx-data-row"), "row 2 is data row");
 });
 
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {

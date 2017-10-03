@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
+    config = require("../../core/config"),
     typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
@@ -659,6 +660,20 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
+    _getRowElement: function(rowIndex) {
+        var that = this,
+            $rowElement = $(),
+            $tableElements = that.getTableElements();
+
+        iteratorUtils.each($tableElements, function(_, tableElement) {
+            $rowElement = $rowElement.add(that._getRowElements($(tableElement)).eq(rowIndex));
+        });
+
+        if($rowElement.length) {
+            return $rowElement;
+        }
+    },
+
     /**
      * @name GridBaseMethods_getCellElement
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
@@ -674,8 +689,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @return jQuery|undefined
      */
     getCellElement: function(rowIndex, columnIdentifier) {
-        var cell = this._getCellElement(rowIndex, columnIdentifier);
-        return getPublicElement(cell);
+        return getPublicElement(this._getCellElement(rowIndex, columnIdentifier));
     },
 
     /**
@@ -685,17 +699,17 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @return jQuery|undefined
      */
     getRowElement: function(rowIndex) {
-        var that = this,
-            $rowElement = $(),
-            $tableElements = that.getTableElements();
+        var $rows = this._getRowElement(rowIndex),
+            elements = [];
 
-        iteratorUtils.each($tableElements, function(_, tableElement) {
-            $rowElement = $rowElement.add(that._getRowElements($(tableElement)).eq(rowIndex));
-        });
-
-        if($rowElement.length) {
-            return $rowElement;
+        if($rows && !config().useJQueryRenderer) {
+            for(var i = 0; i < $rows.length; i++) {
+                elements.push($rows[i]);
+            }
+        } else {
+            elements = $rows;
         }
+        return elements;
     },
 
     _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {

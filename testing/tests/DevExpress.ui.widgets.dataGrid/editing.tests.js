@@ -9556,7 +9556,7 @@ QUnit.test("Position of the inserted row if masterDetail is used", function(asse
     this.expandRow(this.options.dataSource[1]);
     this.expandRow(this.options.dataSource[2]);
 
-    var y = this.rowsView.getRowElement(4).offset().top - this.rowsView.getRowElement(0).offset().top;
+    var y = $(this.rowsView.getRowElement(4)).offset().top - $(this.rowsView.getRowElement(0)).offset().top;
 
     this.rowsView.scrollTo({ y: y });
 
