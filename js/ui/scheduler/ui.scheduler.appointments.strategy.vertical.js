@@ -230,7 +230,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         }
 
         var config = this.callBase(coordinates);
-        if(coordinates.count <= 2) {
+        if(coordinates.count <= APPOINTMENT_COUNT_PER_CELL) {
             config.offset = 0;
         }
 
