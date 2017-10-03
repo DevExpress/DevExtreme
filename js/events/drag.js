@@ -310,7 +310,7 @@ var DragEmitter = GestureEmitter.inherit({
 /**
  * @name ui events_dxdragstart
  * @publicName dxdragstart
- * @type classEventType
+ * @type eventType
  * @type_function_param1 event:jQuery.event
  * @type_function_param1_field1 cancel:boolean
  * @module events/drag
@@ -318,7 +318,7 @@ var DragEmitter = GestureEmitter.inherit({
 /**
   * @name ui events_dxdrag
   * @publicName dxdrag
-  * @type classEventType
+  * @type eventType
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 offset:number
   * @type_function_param1_field2 cancel:boolean
@@ -327,7 +327,7 @@ var DragEmitter = GestureEmitter.inherit({
 /**
   * @name ui events_dxdragend
   * @publicName dxdragend
-  * @type classEventType
+  * @type eventType
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 offset:number
   * @type_function_param1_field2 cancel:boolean
