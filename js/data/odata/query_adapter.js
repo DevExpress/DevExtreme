@@ -376,7 +376,8 @@ var createODataQueryAdapter = function(queryOptions) {
                     withCredentials: queryOptions.withCredentials,
                     countOnly: _countQuery,
                     deserializeDates: queryOptions.deserializeDates,
-                    fieldTypes: queryOptions.fieldTypes
+                    fieldTypes: queryOptions.fieldTypes,
+                    isPaged: isFinite(_take)
                 }
             );
         },
