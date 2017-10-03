@@ -112,7 +112,7 @@ module.exports = {
             placeholder: messageLocalization.format("Search"),
             tabIndex: that.option("tabIndex"),
             value: that.option("searchValue"),
-            valueChangeEvent: "keyup",
+            valueChangeEvent: "input",
             onValueChanged: function(e) {
                 that.option("searchValue", e.value);
             }
