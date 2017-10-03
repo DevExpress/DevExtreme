@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Class = require("../../core/class"),
     eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
     registerComponent = require("../../core/component_registrator"),
@@ -8,7 +9,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     utils = require("./utils"),
     ContextMenu = require("../context_menu"),
-    EditorFactoryController = require("../grid_core/ui.grid_core.editor_factory").controllers.editorFactory;
+    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
 
 var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group",
@@ -30,7 +31,32 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
         "onEditorPreparing", "onEditorPrepared"
     ];
 
-var editorFactoryController = new EditorFactoryController();
+var EditorFactory = Class.inherit(EditorFactoryMixin).inherit({
+    _createComponent: function() {
+        return this._component._createComponent.apply(this._component, arguments);
+    },
+
+    ctor: function(component) {
+        var that = this;
+
+        that._component = component;
+        that._actions = {};
+
+        ACTIONS.forEach(function(action) {
+            that._actions[action] = component._createActionByOption(action, { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
+        });
+    },
+
+    executeAction: function(actionName, options) {
+        var action = this._actions[actionName];
+
+        return action && action(options);
+    },
+
+    option: function() {
+        return this._component.option.apply(this._component, arguments);
+    }
+});
 
 var FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {
@@ -114,33 +140,22 @@ var FilterBuilder = Widget.inherit({
     },
 
     _init: function() {
-        this._initActions();
+        this._initEditorFactory();
         this.callBase();
     },
-    // TODO
-    _initActions: function() {
-        var that = this;
-        this._actions = {};
 
-        ACTIONS.forEach(function(action) {
-            that._actions[action] = that._createActionByOption(action);
-        });
-    },
-    // TODO: from ui.grid_core.modules
-    executeAction: function(actionName, options) {
-        var action = this._actions[actionName];
-
-        return action && action(options);
+    _initEditorFactory: function() {
+        this._editorFactory = new EditorFactory(this);
     },
 
     _render: function() {
-        this.element().addClass(FILTER_BUILDER_CLASS);
+        this.$element().addClass(FILTER_BUILDER_CLASS);
         this.callBase();
     },
 
     _renderContentImpl: function() {
         this._createGroupElementByCriteria(this.option("filter"))
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _createConditionElement: function(condition, parent) {
@@ -213,8 +228,8 @@ var FilterBuilder = Widget.inherit({
         var that = this,
             $button = $("<div>").text(options.caption),
             removeAllAvailableMenu = function() {
-                that.element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
-                that.element().find(".dx-has-context-menu").remove();
+                that.$element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
+                that.$element().find(".dx-has-context-menu").remove();
             },
             contextMenuOnItemClickWrapper = function(handler) {
                 return function(e) {
@@ -238,7 +253,7 @@ var FilterBuilder = Widget.inherit({
                 removeAllAvailableMenu();
                 $button.addClass(ACTIVE_CLASS);
                 that._createContextMenu(extendedMenuOptions)
-                    .appendTo(that.element())
+                    .appendTo(that.$element())
                     .dxContextMenu("show");
             };
 
@@ -413,7 +428,7 @@ var FilterBuilder = Widget.inherit({
     _createValueEditor: function(value, field, setValueHandler) {
         var $editor = $("<div>").attr("tabindex", 0);
         // TODO: it have to be in shared file
-        editorFactoryController.createEditor.call(this, $editor, extend({}, field, {
+        this._editorFactory.createEditor($editor, extend({}, field, {
             value: value,
             parentType: "filterRow",
             setValue: setValueHandler,

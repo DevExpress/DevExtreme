@@ -2,497 +2,221 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    noop = require("../../core/utils/common").noop,
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
-    typeUtils = require("../../core/utils/type"),
-    isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
-    compileGetter = require("../../core/utils/data").compileGetter,
     modules = require("./ui.grid_core.modules"),
-    browser = require("../../core/utils/browser"),
-    extend = require("../../core/utils/extend").extend,
-    devices = require("../../core/devices"),
-    positionUtils = require("../../animation/position"),
-    eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
     contextMenuEvent = require("../../events/contextmenu"),
     pointerEvents = require("../../events/pointer"),
-    normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
-    addNamespace = eventUtils.addNamespace;
+    positionUtils = require("../../animation/position"),
+    eventUtils = require("../../events/utils"),
+    addNamespace = eventUtils.addNamespace,
+    browser = require("../../core/utils/browser"),
+    extend = require("../../core/utils/extend").extend,
+    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
 
-require("../text_box");
-require("../number_box");
-require("../check_box");
-require("../select_box");
-require("../date_box");
-
-
-var CHECKBOX_SIZE_CLASS = "checkbox-size",
+var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
+    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     FOCUS_OVERLAY_CLASS = "focus-overlay",
     CONTENT_CLASS = "content",
-    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
-    EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
+    FOCUSED_ELEMENT_CLASS = "dx-focused",
     MODULE_NAMESPACE = "dxDataGridEditorFactory",
     UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, "focusin", clickEvent.name].join(" "), MODULE_NAMESPACE),
-    FOCUSED_ELEMENT_CLASS = "dx-focused",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
     FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus",
     DX_HIDDEN = "dx-hidden",
     TAB_KEY = 9;
 
-var EditorFactoryController = modules.ViewController.inherit((function() {
+var EditorFactory = modules.ViewController.inherit({
+    _getFocusedElement: function($dataGridElement) {
+        //T181706
+        return $dataGridElement.find(FOCUSED_ELEMENT_SELECTOR);
+    },
 
-    var getResultConfig = function(config, options) {
-        return extend(config, {
-            readOnly: options.readOnly,
-            placeholder: options.placeholder,
-            inputAttr: {
-                id: options.id
-            },
-            tabIndex: options.tabIndex
-        }, options.editorOptions);
-    };
+    _getFocusCellSelector: function() {
+        return ".dx-row > td";
+    },
 
-    var checkEnterBug = function() {
-        return (browser.msie && parseInt(browser.version) <= 11) || devices.real().ios;//T344096, T249363, T314719 rid off after fix https://connect.microsoft.com/IE/feedback/details/1552272/
-    };
+    _updateFocusCore: function() {
+        var $focus = this._$focusedElement,
+            $dataGridElement = this.component && this.component.$element(),
+            $focusCell,
+            hideBorders;
 
-    var getTextEditorConfig = function(options) {
-        var isValueChanged = false,
-            data = {},
-            isEnterBug = checkEnterBug(),
-            sharedData = options.sharedData || data;
+        if($dataGridElement) {
+            //this selector is specific to IE
+            $focus = this._getFocusedElement($dataGridElement);
 
-        return getResultConfig({
-            placeholder: options.placeholder,
-            width: options.width,
-            value: options.value,
-            onValueChanged: function(e) {
-                var updateValue = function(e, notFireEvent) {
-                    isValueChanged = false;
-                    options && options.setValue(e.value, notFireEvent);
-                };
+            if($focus.length) {
+                if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
+                    $focusCell = $focus.closest(this._getFocusCellSelector() + ", ." + CELL_FOCUS_DISABLED_CLASS);
+                    hideBorders = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
+                    $focus = $focusCell;
+                }
 
-                window.clearTimeout(data.valueChangeTimeout);
+                if($focus.length && !$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
+                    this.focus($focus, hideBorders);
+                    return;
+                }
+            }
+        }
 
-                if(e.jQueryEvent && e.jQueryEvent.type === "keyup" && !options.updateValueImmediately) {
-                    if(options.parentType === "filterRow" || options.parentType === "searchPanel") {
-                        sharedData.valueChangeTimeout = data.valueChangeTimeout = window.setTimeout(function() {
-                            updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
-                        }, typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
-                    } else {
-                        isValueChanged = true;
-                    }
+        this.loseFocus();
+    },
+
+    _updateFocus: function(e) {
+        var that = this,
+            isFocusOverlay = e && e.jQueryEvent && $(e.jQueryEvent.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+
+        that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
+
+        clearTimeout(that._updateFocusTimeoutID);
+
+        that._updateFocusTimeoutID = setTimeout(function() {
+            delete that._updateFocusTimeoutID;
+            if(!that._isFocusOverlay) {
+                that._updateFocusCore();
+            }
+            that._isFocusOverlay = false;
+        });
+    },
+
+    _updateFocusOverlaySize: function($element, position) {
+        var location = positionUtils.calculate($element, extend({ collision: "fit" }, position));
+
+        if(location.h.oversize > 0) {
+            $element.outerWidth($element.outerWidth() - location.h.oversize);
+        }
+
+        if(location.v.oversize > 0) {
+            $element.outerHeight($element.outerHeight() - location.v.oversize);
+        }
+    },
+
+    callbackNames: function() {
+        return ["focused"];
+    },
+
+    focus: function($element, hideBorder) {
+        var that = this;
+
+        if($element === undefined) {
+            return that._$focusedElement;
+        } else if($element) {
+            that._focusTimeoutID = setTimeout(function() {
+                delete that._focusTimeoutID;
+                var $focusOverlay = that._$focusOverlay = that._$focusOverlay || $("<div>")
+                    .addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS),
+                    focusOverlayPosition;
+
+                if(hideBorder) {
+                    that._$focusOverlay && that._$focusOverlay.addClass(DX_HIDDEN);
                 } else {
-                    updateValue(e);
-                }
-            },
-            onFocusOut: function(e) {
-                if(isEnterBug && isValueChanged) {
-                    isValueChanged = false;
-                    options.setValue(e.component.option("value"));
-                }
-            },
-            onKeyDown: function(e) {
-                if(isEnterBug && isValueChanged && e.jQueryEvent.keyCode === 13) {
-                    isValueChanged = false;
-                    options.setValue(e.component.option("value"));
-                }
-            },
-            valueChangeEvent: "change" + (options.parentType === "filterRow" || isEnterBug ? " keyup" : "")
-        }, options);
-    };
+                    // align "left bottom" for IE, align "right bottom" for Mozilla
+                    var align = browser.msie ? "left bottom" : browser.mozilla ? "right bottom" : "left top",
+                        $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS));
 
-    var prepareDateBox = function(options) {
-        options.editorName = "dxDateBox";
+                    $focusOverlay
+                        .removeClass(DX_HIDDEN)
+                        .appendTo($content)
+                        .outerWidth($element.outerWidth() + 1)
+                        .outerHeight($element.outerHeight() + 1);
 
-        options.editorOptions = getResultConfig({
-            value: options.value,
-            onValueChanged: function(args) {
-                options.setValue(args.value);
-            },
-            onKeyDown: function(e) {
-                if(checkEnterBug() && e.jQueryEvent.keyCode === 13) {
-                    e.component.blur();
-                    e.component.focus();
-                }
-            },
-            displayFormat: options.format,
-            type: options.dataType,
-            formatWidthCalculator: null,
-            width: "auto"
-        }, options);
-    };
-
-    var prepareTextBox = function(options) {
-        var config = getTextEditorConfig(options),
-            isSearching = options.parentType === "searchPanel",
-            toString = function(value) {
-                return typeUtils.isDefined(value) ? value.toString() : "";
-            };
-
-        config.value = toString(options.value);
-        config.valueChangeEvent += (isSearching ? " keyup search" : "");
-        config.mode = isSearching ? "search" : "text";
-
-        options.editorName = "dxTextBox";
-        options.editorOptions = config;
-        //$container.dxTextBox(config);
-        //$container.dxTextBox("instance").registerKeyHandler("enter", commonUtils.noop);
-    };
-
-    var prepareNumberBox = function(options) {
-        var config = getTextEditorConfig(options);
-
-        config.value = typeUtils.isDefined(options.value) ? options.value : null;
-
-        options.editorName = "dxNumberBox";
-
-        options.editorOptions = config;
-    };
-
-    var prepareBooleanEditor = function(options) {
-        if(options.parentType === "filterRow") {
-            prepareSelectBox(extend(options, {
-                lookup: {
-                    displayExpr: function(data) {
-                        if(data === true) {
-                            return options.trueText || "true";
-                        } else if(data === false) {
-                            return options.falseText || "false";
-                        }
-                    },
-                    dataSource: [true, false]
-                }
-            }));
-        } else {
-            prepareCheckBox(options);
-        }
-    };
-
-    var prepareSelectBox = function(options) {
-        var lookup = options.lookup,
-            displayGetter,
-            dataSource,
-            postProcess,
-            isFilterRow = options.parentType === "filterRow";
-
-        if(lookup) {
-            displayGetter = compileGetter(lookup.displayExpr);
-            dataSource = lookup.dataSource;
-
-            if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
-                dataSource = dataSource(options.row || {});
-            }
-
-            if(typeUtils.isObject(dataSource) || Array.isArray(dataSource)) {
-                dataSource = normalizeDataSourceOptions(dataSource);
-                if(isFilterRow) {
-                    postProcess = dataSource.postProcess;
-                    dataSource.postProcess = function(items) {
-                        if(this.pageIndex() === 0) {
-                            items = items.slice(0);
-                            items.unshift(null);
-                        }
-                        if(postProcess) {
-                            return postProcess.call(this, items);
-                        }
-                        return items;
+                    focusOverlayPosition = {
+                        precise: true,
+                        my: align,
+                        at: align,
+                        of: $element,
+                        boundary: $content.length && $content
                     };
+
+                    that._updateFocusOverlaySize($focusOverlay, focusOverlayPosition);
+                    positionUtils.setup($focusOverlay, focusOverlayPosition);
+
+                    $focusOverlay.css("visibility", "visible"); // for ios
                 }
-            }
 
-            var allowClearing = Boolean(lookup.allowClearing && !isFilterRow);
-
-            options.editorName = "dxSelectBox";
-            options.editorOptions = getResultConfig({
-                searchEnabled: true,
-                value: options.value,
-                valueExpr: options.lookup.valueExpr,
-                searchExpr: options.lookup.searchExpr || options.lookup.displayExpr,
-                allowClearing: allowClearing,
-                showClearButton: allowClearing,
-                displayExpr: function(data) {
-                    if(data === null) {
-                        return options.showAllText;
-                    }
-                    return displayGetter(data);
-                },
-                dataSource: dataSource,
-                onValueChanged: function(e) {
-                    var params = [e.value];
-
-                    !isFilterRow && params.push(e.component.option("text"));
-                    options.setValue.apply(this, params);
-                }
-            }, options);
-        }
-    };
-
-    var prepareCheckBox = function(options) {
-        options.editorName = "dxCheckBox";
-        options.editorOptions = getResultConfig({
-            value: typeUtils.isDefined(options.value) ? options.value : undefined,
-            hoverStateEnabled: !options.readOnly,
-            focusStateEnabled: !options.readOnly,
-            activeStateEnabled: false,
-            onValueChanged: function(e) {
-                options.setValue && options.setValue(e.value, e);
-            },
-        }, options);
-    };
-
-    var createEditorCore = function(that, options) {
-        var $editorElement = $(options.editorElement);
-        if(options.editorName && options.editorOptions && $editorElement[options.editorName]) {
-            if(options.editorName === "dxCheckBox") {
-                if(!options.isOnForm) {
-                    $editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
-                    $editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
-                }
-                if(options.command || options.editorOptions.readOnly) {
-                    $editorElement.parent().addClass(CELL_FOCUS_DISABLED_CLASS);
-                }
-            }
-
-            that._createComponent($editorElement, options.editorName, options.editorOptions);
-
-            if(options.editorName === "dxTextBox") {
-                $editorElement.dxTextBox("instance").registerKeyHandler("enter", noop);
-            }
-        }
-    };
-    return {
-        _getFocusedElement: function($dataGridElement) {
-            //T181706
-            return $dataGridElement.find(FOCUSED_ELEMENT_SELECTOR);
-        },
-
-        _getFocusCellSelector: function() {
-            return ".dx-row > td";
-        },
-
-        _updateFocusCore: function() {
-            var $focus = this._$focusedElement,
-                $dataGridElement = this.component && this.component.$element(),
-                $focusCell,
-                hideBorders;
-
-            if($dataGridElement) {
-                //this selector is specific to IE
-                $focus = this._getFocusedElement($dataGridElement);
-
-                if($focus.length) {
-                    if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
-                        $focusCell = $focus.closest(this._getFocusCellSelector() + ", ." + CELL_FOCUS_DISABLED_CLASS);
-                        hideBorders = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
-                        $focus = $focusCell;
-                    }
-
-                    if($focus.length && !$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
-                        this.focus($focus, hideBorders);
-                        return;
-                    }
-                }
-            }
-
-            this.loseFocus();
-        },
-
-        _updateFocus: function(e) {
-            var that = this,
-                isFocusOverlay = e && e.jQueryEvent && $(e.jQueryEvent.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
-
-            that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
-
-            clearTimeout(that._updateFocusTimeoutID);
-
-            that._updateFocusTimeoutID = setTimeout(function() {
-                delete that._updateFocusTimeoutID;
-                if(!that._isFocusOverlay) {
-                    that._updateFocusCore();
-                }
-                that._isFocusOverlay = false;
+                that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
+                $element.addClass(FOCUSED_ELEMENT_CLASS);
+                that._$focusedElement = $element;
+                that.focused.fire($element);
             });
-        },
+        }
+    },
 
-        _updateFocusOverlaySize: function($element, position) {
-            var location = positionUtils.calculate($element, extend({ collision: "fit" }, position));
+    resize: function() {
+        var $focusedElement = this._$focusedElement;
 
-            if(location.h.oversize > 0) {
-                $element.outerWidth($element.outerWidth() - location.h.oversize);
-            }
+        if($focusedElement) {
+            this.focus($focusedElement);
+        }
+    },
 
-            if(location.v.oversize > 0) {
-                $element.outerHeight($element.outerHeight() - location.v.oversize);
-            }
-        },
+    loseFocus: function() {
+        this._$focusedElement && this._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
+        this._$focusedElement = null;
+        this._$focusOverlay && this._$focusOverlay.addClass(DX_HIDDEN);
+    },
 
-        callbackNames: function() {
-            return ["focused"];
-        },
+    init: function() {
+        this.createAction("onEditorPreparing", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
+        this.createAction("onEditorPrepared", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
 
-        focus: function($element, hideBorder) {
-            var that = this;
+        this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
+        eventsEngine.on(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
-            if($element === undefined) {
-                return that._$focusedElement;
-            } else if($element) {
-                that._focusTimeoutID = setTimeout(function() {
-                    delete that._focusTimeoutID;
-                    var $focusOverlay = that._$focusOverlay = that._$focusOverlay || $("<div>")
-                        .addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + " " + POINTER_EVENTS_TARGET_CLASS),
-                        focusOverlayPosition;
+        this._attachContainerEventHandlers();
+    },
 
-                    if(hideBorder) {
-                        that._$focusOverlay && that._$focusOverlay.addClass(DX_HIDDEN);
-                    } else {
-                        // align "left bottom" for IE, align "right bottom" for Mozilla
-                        var align = browser.msie ? "left bottom" : browser.mozilla ? "right bottom" : "left top",
-                            $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS));
+    _attachContainerEventHandlers: function() {
+        var that = this,
+            $container = that.component && that.component.$element(),
+            isIE10OrLower = browser.msie && parseInt(browser.version) < 11;
 
-                        $focusOverlay
-                            .removeClass(DX_HIDDEN)
-                            .appendTo($content)
-                            .outerWidth($element.outerWidth() + 1)
-                            .outerHeight($element.outerHeight() + 1);
-
-                        focusOverlayPosition = {
-                            precise: true,
-                            my: align,
-                            at: align,
-                            of: $element,
-                            boundary: $content.length && $content
-                        };
-
-                        that._updateFocusOverlaySize($focusOverlay, focusOverlayPosition);
-                        positionUtils.setup($focusOverlay, focusOverlayPosition);
-
-                        $focusOverlay.css("visibility", "visible"); // for ios
-                    }
-
-                    that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
-                    $element.addClass(FOCUSED_ELEMENT_CLASS);
-                    that._$focusedElement = $element;
-                    that.focused.fire($element);
-                });
-            }
-        },
-
-        resize: function() {
-            var $focusedElement = this._$focusedElement;
-
-            if($focusedElement) {
-                this.focus($focusedElement);
-            }
-        },
-
-        loseFocus: function() {
-            this._$focusedElement && this._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
-            this._$focusedElement = null;
-            this._$focusOverlay && this._$focusOverlay.addClass(DX_HIDDEN);
-        },
-
-        init: function() {
-            this.createAction("onEditorPreparing", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
-            this.createAction("onEditorPrepared", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
-
-            this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-            eventsEngine.on(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
-
-            this._attachContainerEventHandlers();
-        },
-
-        _attachContainerEventHandlers: function() {
-            var that = this,
-                $container = that.component && that.component.$element(),
-                isIE10OrLower = browser.msie && parseInt(browser.version) < 11;
-
-            if($container) {
-                //T179518
-                eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
-                    if(e.which === TAB_KEY) {
-                        that._updateFocusHandler(e);
-                    }
-                });
-
-                //T112103, T110581, T174768, T551322
-                isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name, contextMenuEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
-            }
-        },
-
-        _focusOverlayEventProxy: function(e) {
-            var $target = $(e.target),
-                $currentTarget = $(e.currentTarget),
-                element,
-                needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
-
-            if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
-
-            $currentTarget.addClass(DX_HIDDEN);
-
-            element = $target.get(0).ownerDocument.elementFromPoint(e.clientX, e.clientY);
-
-            eventUtils.fireEvent({
-                originalEvent: e,
-                target: element
+        if($container) {
+            //T179518
+            eventsEngine.on($container, addNamespace("keydown", MODULE_NAMESPACE), function(e) {
+                if(e.which === TAB_KEY) {
+                    that._updateFocusHandler(e);
+                }
             });
 
-            e.stopPropagation();
-
-            $currentTarget.removeClass(DX_HIDDEN);
-
-            if(e.type === clickEvent.name && element.tagName === "INPUT") {
-                eventsEngine.trigger($(element), "focus");
-            }
-        },
-
-        dispose: function() {
-            clearTimeout(this._focusTimeoutID);
-            clearTimeout(this._updateFocusTimeoutID);
-            eventsEngine.off(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
-        },
-
-        createEditor: function($container, options) {
-            options.cancel = false;
-            options.editorElement = getPublicElement($container);
-
-            if(!typeUtils.isDefined(options.tabIndex)) {
-                options.tabIndex = this.option("tabIndex");
-            }
-
-            if(options.lookup) {
-                prepareSelectBox(options);
-            } else {
-                switch(options.dataType) {
-                    case "date":
-                    case "datetime":
-                        prepareDateBox(options);
-                        break;
-                    case "boolean":
-                        prepareBooleanEditor(options);
-                        break;
-                    case "number":
-                        prepareNumberBox(options);
-                        break;
-                    default:
-                        prepareTextBox(options);
-                        break;
-                }
-            }
-
-            this.executeAction("onEditorPreparing", options);
-
-            if(options.cancel) {
-                return;
-            }
-
-            createEditorCore(this, options);
-
-            this.executeAction("onEditorPrepared", options);
+            //T112103, T110581, T174768, T551322
+            isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name, contextMenuEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
         }
-    };
-})());
+    },
+
+    _focusOverlayEventProxy: function(e) {
+        var $target = $(e.target),
+            $currentTarget = $(e.currentTarget),
+            element,
+            needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
+
+        if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
+
+        $currentTarget.addClass(DX_HIDDEN);
+
+        element = $target.get(0).ownerDocument.elementFromPoint(e.clientX, e.clientY);
+
+        eventUtils.fireEvent({
+            originalEvent: e,
+            target: element
+        });
+
+        e.stopPropagation();
+
+        $currentTarget.removeClass(DX_HIDDEN);
+
+        if(e.type === clickEvent.name && element.tagName === "INPUT") {
+            eventsEngine.trigger($(element), "focus");
+        }
+    },
+
+    dispose: function() {
+        clearTimeout(this._focusTimeoutID);
+        clearTimeout(this._updateFocusTimeoutID);
+        eventsEngine.off(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+    }
+}).inherit(EditorFactoryMixin);
 
 module.exports = {
     defaultOptions: function() {
@@ -585,7 +309,7 @@ module.exports = {
         };
     },
     controllers: {
-        editorFactory: EditorFactoryController
+        editorFactory: EditorFactory
     },
     extenders: {
         controllers: {
