@@ -523,7 +523,8 @@ var BaseRenderingStrategy = Class.inherit({
     _customizeCoordinates: function(coordinates, ratio, appointmentCountPerCell, topOffset, maxHeight, isAllDay) {
         var index = coordinates.index,
             height = ratio * maxHeight / appointmentCountPerCell,
-            top = topOffset + coordinates.top + (index * height),
+            appointmentTop = coordinates.top + (index * height),
+            top = appointmentTop + topOffset,
             width = coordinates.width,
             left = coordinates.left,
             compactAppointmentDefaultSize,

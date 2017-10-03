@@ -229,7 +229,12 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             coordinates.skipResizing = true;
         }
 
-        return this.callBase(coordinates);
+        var config = this.callBase(coordinates);
+        if(coordinates.count <= 2) {
+            config.offset = 0;
+        }
+
+        return config;
     },
 
     _getAppointmentCount: function(overlappingMode, coordinates) {

@@ -5,7 +5,7 @@ var noop = require("../../core/utils/common").noop,
     HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line");
 
 var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
-    MONTH_APPOINTMENT_MIN_OFFSET = 21,
+    MONTH_APPOINTMENT_MIN_OFFSET = 26,
     MONTH_APPOINTMENT_MAX_OFFSET = 30;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({

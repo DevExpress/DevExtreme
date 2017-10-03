@@ -1864,6 +1864,34 @@ QUnit.test("Appointment should have an unchangeable height, Day view, 'auto' mod
     assert.roughEqual($appointment.eq(1).outerHeight(), appointmentHeight, 1.5, "appointment has a correct height");
 });
 
+QUnit.test("Appointment should have a right top position, Day view, 'auto' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "day",
+            views: [{
+                type: "day",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            height: 500,
+            dataSource: items
+        }
+    );
+
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-all-day-appointment")),
+        $header = $(this.instance.$element().find(".dx-scheduler-header"));
+
+    assert.roughEqual($appointment.eq(0).position().top, $header.outerHeight(), 1.5, "appointment has a correct position");
+
+    this.instance.addAppointment({ text: "Task 2", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true });
+    $appointment = $(this.instance.$element().find(".dx-scheduler-all-day-appointment"));
+
+    assert.roughEqual($appointment.eq(0).position().top, $header.outerHeight(), 1.5, "appointment has a correct position");
+    assert.roughEqual($appointment.eq(1).position().top, $header.outerHeight() + $appointment.outerHeight(), 1.5, "appointment has a correct position");
+});
+
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Week view, 'unlimited' mode", function(assert) {
     var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true },
         { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0), allDay: true },
