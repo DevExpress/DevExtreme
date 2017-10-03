@@ -99,7 +99,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                                     }
 
                                     var markup = $("<div>").attr("data-bind", widgetName + ": options").get(0);
-                                    options.container.append(markup);
+                                    $(options.container).append(markup);
                                     ko.applyBindings(options.model, markup);
                                 }
                             }

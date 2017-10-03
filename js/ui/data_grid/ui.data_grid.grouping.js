@@ -16,6 +16,7 @@ var $ = require("../../core/renderer"),
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
     DATAGRID_GROUP_PANEL_ITEM_CLASS = "dx-group-panel-item",
+    DATAGRID_GROUP_PANEL_LABEL_CLASS = "dx-toolbar-label",
     DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
     DATAGRID_GROUP_CLOSED_CLASS = "dx-datagrid-group-closed",
     DATAGRID_EXPAND_CLASS = "dx-datagrid-expand",
@@ -447,6 +448,9 @@ var GroupingHeaderPanelExtender = (function() {
                     .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
                     .text(groupPanelOptions.emptyPanelText)
                     .appendTo($groupPanel);
+
+                $groupPanel.closest("." + DATAGRID_GROUP_PANEL_LABEL_CLASS).css("maxWidth", "none");
+                that.updateToolbarDimensions();
             }
         },
 

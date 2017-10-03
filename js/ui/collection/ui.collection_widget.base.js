@@ -856,7 +856,7 @@ var CollectionWidget = Widget.inherit({
         var renderContentPromise = this._renderItemContent({
             index: index,
             itemData: itemData,
-            container: $itemContent,
+            container: getPublicElement($itemContent),
             contentClass: this._itemContentClass(),
             defaultTemplateName: this.option("itemTemplate")
         });
@@ -902,8 +902,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItemContentByNode: function(args, $node) {
-        args.container.replaceWith($node);
-        args.container = $node;
+        $(args.container).replaceWith($node);
+        args.container = getPublicElement($node);
         this._addItemContentClasses(args);
 
         return $node;
@@ -915,7 +915,7 @@ var CollectionWidget = Widget.inherit({
             args.contentClass
         ];
 
-        args.container.addClass(classes.join(" "));
+        $(args.container).addClass(classes.join(" "));
     },
 
     _renderItemFrame: function(index, itemData, $container, $itemToReplace) {

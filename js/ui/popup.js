@@ -529,14 +529,14 @@ var Popup = Overlay.inherit({
     },
 
     _getCloseButtonRenderer: function() {
-        return (function(_, __, $container) {
+        return (function(_, __, container) {
             var $button = $("<div>").addClass(POPUP_TITLE_CLOSEBUTTON_CLASS);
             this._createComponent($button, Button, {
                 icon: 'close',
                 onClick: this._createToolbarItemAction(undefined),
                 integrationOptions: {}
             });
-            $container.append($button);
+            $(container).append($button);
         }).bind(this);
     },
 
@@ -603,8 +603,8 @@ var Popup = Overlay.inherit({
         this._toolbarItemClasses.push(itemClass);
 
         return {
-            template: function(_, __, $container) {
-                var $toolbarItem = $("<div>").addClass(itemClass).appendTo($container);
+            template: function(_, __, container) {
+                var $toolbarItem = $("<div>").addClass(itemClass).appendTo(container);
                 that._createComponent($toolbarItem, Button, itemConfig);
             }
         };

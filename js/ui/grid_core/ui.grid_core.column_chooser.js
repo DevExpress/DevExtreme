@@ -227,8 +227,8 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             activeStateEnabled: false,
             focusStateEnabled: false,
             hoverStateEnabled: false,
-            itemTemplate: function(data, index, $item) {
-                $item
+            itemTemplate: function(data, index, item) {
+                $(item)
                     .text(data.text)
                     .parent()
                     .addClass(data.cssClass)
